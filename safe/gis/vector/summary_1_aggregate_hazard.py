@@ -1,8 +1,6 @@
 # coding=utf-8
 
-"""
-Aggregate the impact table to the aggregate hazard.
-"""
+"""Aggregate the impact table to the aggregate hazard."""
 from PyQt4.QtCore import QPyNullVariant
 from qgis.core import QGis, QgsFeatureRequest
 
@@ -104,6 +102,8 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
     fields = ['aggregation_id', 'hazard_id']
     absolute_values = create_absolute_values_structure(impact, fields)
 
+    # We need to know what kind of exposure we are going to count.
+    # the size, or the number of features or population.
     field_index = report_on_field(impact)
 
     aggregate_hazard.startEditing()

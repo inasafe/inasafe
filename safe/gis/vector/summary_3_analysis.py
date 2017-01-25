@@ -1,8 +1,6 @@
 # coding=utf-8
 
-"""
-Aggregate the aggregate hazard to the analysis layer.
-"""
+"""Aggregate the aggregate hazard to the analysis layer."""
 
 from PyQt4.QtCore import QPyNullVariant
 from qgis.core import QGis, QgsFeatureRequest
@@ -14,13 +12,15 @@ from safe.definitions.fields import (
     aggregation_name_field,
     hazard_id_field,
     hazard_class_field,
-    total_field,
     total_affected_field,
     total_unaffected_field,
+    total_not_exposed_field,
+    total_field,
     hazard_count_field,
 )
 from safe.definitions.processing_steps import (
     summary_3_analysis_steps)
+from safe.definitions.hazard_classifications import null_hazard_value
 from safe.definitions.layer_purposes import layer_purpose_analysis_impacted
 from safe.definitions.post_processors import post_processor_affected_function
 from safe.gis.vector.summary_tools import (
@@ -129,14 +129,23 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
 
     shift = analysis.fields().count()
 
+    counts = [
+        total_affected_field,
+        total_unaffected_field,
+        total_not_exposed_field,
+        total_field]
+
     add_fields(
         analysis,
         absolute_values,
-        [total_affected_field, total_unaffected_field, total_field],
+        counts,
         unique_hazard,
         hazard_count_field)
 
     affected_sum = 0
+    unaffected_sum = 0
+    not_exposed_sum = 0
+
     for area in analysis.getFeatures(request):
         total = 0
         for i, val in enumerate(unique_hazard):
@@ -148,24 +157,39 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
 
             affected = post_processor_affected_function(
                     classification=classification, hazard_class=val)
-            if affected:
+            if affected == null_hazard_value:
+                not_exposed_sum += sum
+            elif affected:
                 affected_sum += sum
+            else:
+                unaffected_sum += sum
 
+        # Affected field
         analysis.changeAttributeValue(
             area.id(), shift + len(unique_hazard), affected_sum)
 
+        # Not affected field
         analysis.changeAttributeValue(
-            area.id(), shift + len(unique_hazard) + 1, total - affected_sum)
+            area.id(), shift + len(unique_hazard) + 1, unaffected_sum)
 
+        # Not exposed field
         analysis.changeAttributeValue(
-            area.id(), shift + len(unique_hazard) + 2, total)
+            area.id(), shift + len(unique_hazard) + 2, not_exposed_sum)
 
+        # Total field
+        analysis.changeAttributeValue(
+            area.id(), shift + len(unique_hazard) + 3, total)
+
+        # Any absolute postprocessors
         for i, field in enumerate(absolute_values.itervalues()):
             value = field[0].get_value(
                 all='all'
             )
             analysis.changeAttributeValue(
-                area.id(), shift + len(unique_hazard) + 3 + i, value)
+                area.id(), shift + len(unique_hazard) + 4 + i, value)
+
+    # Let's check that everything is normal.
+    assert total == affected_sum + unaffected_sum + not_exposed_sum
 
     analysis.commitChanges()
 

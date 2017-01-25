@@ -139,7 +139,7 @@ class TestImpactReport(unittest.TestCase):
                             'key': 'total_affected_field'
                         },
                         {
-                            'value': 4,
+                            'value': 0,
                             'name': u'Total Unaffected',
                             'key': 'total_unaffected_field'
                         },
@@ -279,10 +279,10 @@ class TestImpactReport(unittest.TestCase):
                     [u'other', 0, 1, 1, 0, 1],
                     [u'government', 0, 1, 1, 0, 1],
                     [u'commercial', 1, 0, 1, 0, 1],
-                    [u'education', 2, 0, 2, 3, 5],
+                    [u'education', 2, 0, 2, 0, 5],
                     [u'health', 1, 0, 1, 0, 1]
                 ],
-                'footers': [u'Total', 4, 2, 6, 3, 9]
+                'footers': [u'Total', 4, 2, 6, 0, 9]
             }
         }
         actual_context = analysis_breakdown.context

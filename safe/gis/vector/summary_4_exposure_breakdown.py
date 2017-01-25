@@ -1,8 +1,6 @@
 # coding=utf-8
 
-"""
-Aggregate the aggregate hazard to the analysis layer.
-"""
+"""Aggregate the aggregate hazard to the analysis layer."""
 
 from PyQt4.QtCore import QPyNullVariant
 from qgis.core import QGis, QgsFeatureRequest, QgsFeature
@@ -14,17 +12,19 @@ from safe.definitions.fields import (
     hazard_id_field,
     hazard_class_field,
     exposure_type_field,
-    total_field,
     total_affected_field,
+    total_unaffected_field,
+    total_not_exposed_field,
+    total_field,
     affected_field,
     hazard_count_field,
     exposure_count_field,
-    total_unaffected_field,
 )
 from safe.definitions.processing_steps import (
     summary_4_exposure_breakdown_steps)
 from safe.definitions.post_processors import post_processor_affected_function
 from safe.definitions.layer_purposes import layer_purpose_exposure_breakdown
+from safe.definitions.hazard_classifications import null_hazard_value
 from safe.gis.vector.tools import (
     create_field_from_definition,
     read_dynamic_inasafe_field,
@@ -155,6 +155,11 @@ def exposure_type_breakdown(aggregate_hazard, callback=None):
     tabular.keywords['inasafe_fields'][total_unaffected_field['key']] = (
         total_unaffected_field['field_name'])
 
+    field = create_field_from_definition(total_not_exposed_field)
+    tabular.addAttribute(field)
+    tabular.keywords['inasafe_fields'][total_not_exposed_field['key']] = (
+        total_not_exposed_field['field_name'])
+
     field = create_field_from_definition(total_field)
     tabular.addAttribute(field)
     tabular.keywords['inasafe_fields'][total_field['key']] = (
@@ -173,6 +178,8 @@ def exposure_type_breakdown(aggregate_hazard, callback=None):
         feature = QgsFeature()
         attributes = [exposure_type]
         total_affected = 0
+        total_not_affected = 0
+        total_not_exposed = 0
         total = 0
         for hazard_class in unique_hazard:
             if not hazard_class or isinstance(hazard_class, QPyNullVariant):
@@ -183,13 +190,18 @@ def exposure_type_breakdown(aggregate_hazard, callback=None):
             )
             attributes.append(value)
 
-            if hazard_affected[hazard_class]:
+            if hazard_affected[hazard_class] == null_hazard_value:
+                total_not_exposed += value
+            elif hazard_affected[hazard_class]:
                 total_affected += value
+            else:
+                total_not_affected += value
 
             total += value
 
         attributes.append(total_affected)
-        attributes.append(total - total_affected)
+        attributes.append(total_not_affected)
+        attributes.append(total_not_exposed)
         attributes.append(total)
 
         for i, field in enumerate(absolute_values.itervalues()):
@@ -200,6 +212,8 @@ def exposure_type_breakdown(aggregate_hazard, callback=None):
 
         feature.setAttributes(attributes)
         tabular.addFeature(feature)
+
+    assert total == total_affected + total_not_affected + total_not_exposed
 
     tabular.commitChanges()
 
