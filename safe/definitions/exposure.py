@@ -316,8 +316,9 @@ exposure_land_cover = {
         # these are additional generic notes for landcover - IF has more
         caveat_incomplete_data,
         tr('Areas reported for land cover have been rounded to the nearest '
-           '10 if the total is less than 1,000; nearest 100 if more than 1,000 '
-           'and less than 100,000; and nearest 1000 if more than 100,000.'),
+           '10 hectares if the total is less than 1,000; nearest 100 hectares '
+           'if more than 1,000 and less than 100,000; and nearest 1000 '
+           'hectares if more than 100,000.'),
         tr('Rounding is applied to all land cover areas, which may cause '
            'discrepancies between subtotals and totals.'),
     ],
