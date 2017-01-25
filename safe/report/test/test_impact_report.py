@@ -193,8 +193,7 @@ class TestImpactReport(unittest.TestCase):
             'items': [
                 u'The impacts on roads, people, buildings and other '
                 u'exposure elements may be underestimated if the exposure '
-                u'data are incomplete.',
-                u'Numbers reported for structures have not been rounded.'
+                u'data are incomplete.'
             ]
         }
         actual_context = notes_assumptions.context
