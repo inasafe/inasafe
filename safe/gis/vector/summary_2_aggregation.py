@@ -1,8 +1,6 @@
 # coding=utf-8
 
-"""
-Aggregate the aggregate hazard to the aggregation layer.
-"""
+"""Aggregate the aggregate hazard to the aggregation layer."""
 
 from PyQt4.QtCore import QPyNullVariant
 from qgis.core import QGis, QgsFeatureRequest

@@ -79,6 +79,17 @@ class Folder(DataStore):
         if default_format in VECTOR_EXTENSIONS:
             self._default_vector_format = default_format
 
+    @property
+    def uri_path(self):
+        """Return the URI of the datastore as a path. It's not a layer URI.
+
+        :return: The URI.
+        :rtype: str
+
+        .. versionadded:: 4.0
+        """
+        return self.uri.absolutePath()
+
     def is_writable(self):
         """Check if the folder is writable.
 

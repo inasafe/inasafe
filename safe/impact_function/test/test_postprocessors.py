@@ -3,12 +3,14 @@
 
 import unittest
 
-from safe.definitions.exposure import exposure_population
-from safe.definitions.hazard_classifications import generic_hazard_classes
 from safe.test.utilities import get_qgis_app
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
+from safe.definitions.exposure import exposure_population
+from safe.definitions.hazard_classifications import (
+    generic_hazard_classes,
+    flood_hazard_classes)
 from safe.definitions.fields import (
     female_count_field,
     youth_count_field,
@@ -17,7 +19,11 @@ from safe.definitions.fields import (
     feature_value_field,
     size_field,
     affected_field,
-    exposure_count_field, population_count_field)
+    exposure_count_field,
+    population_count_field,
+    displaced_field,
+    hygiene_packs_count_field,
+    additional_rice_count_field)
 from safe.definitions.post_processors import (
     post_processor_gender,
     post_processor_youth,
@@ -28,13 +34,15 @@ from safe.definitions.post_processors import (
     post_processor_affected,
     field_input_type,
     dynamic_field_input_type,
-    needs_profile_input_type)
+    needs_profile_input_type,
+    post_processor_displaced,
+    post_processor_hygiene_packs,
+    post_processor_additional_rice)
 from safe.test.utilities import load_test_vector_layer
 from safe.impact_function.postprocessors import (
     run_single_post_processor,
     evaluate_formula,
-    enough_input
-)
+    enough_input)
 
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -52,6 +60,36 @@ class TestPostProcessors(unittest.TestCase):
         """Patch class for testings."""
 
         pass
+
+    def test_displaced_post_processor(self):
+        """Test displaced post processor."""
+        impact_layer = load_test_vector_layer(
+            'impact',
+            'indivisible_polygon_impact.geojson',
+            clone_to_memory=True)
+        self.assertIsNotNone(impact_layer)
+
+        # delete already existing displaced field
+        field_name = impact_layer.keywords['inasafe_fields'][
+            displaced_field['key']]
+        field_index = impact_layer.fieldNameIndex(field_name)
+        impact_layer.startEditing()
+        impact_layer.deleteAttribute(field_index)
+        impact_layer.commitChanges()
+
+        # patch necessary keywords
+        impact_layer.keywords['hazard_keywords'] = {
+            'classification': flood_hazard_classes['key']
+        }
+
+        result, message = run_single_post_processor(
+            impact_layer,
+            post_processor_displaced)
+        self.assertTrue(result, message)
+
+        # Check if new field is added
+        impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
+        self.assertIn(displaced_field['field_name'], impact_fields)
 
     def test_gender_post_processor(self):
         """Test gender post processor."""
@@ -121,6 +159,55 @@ class TestPostProcessors(unittest.TestCase):
         impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
         self.assertIn(elderly_count_field['field_name'], impact_fields)
 
+    def test_weekly_hygiene_post_processor(self):
+        """Test weekly hygiene post processor."""
+        impact_layer = load_test_vector_layer(
+            'impact',
+            'indivisible_polygon_impact.geojson',
+            clone_to_memory=True)
+        self.assertIsNotNone(impact_layer)
+
+        # Need to run gender post processor first
+        result, message = run_single_post_processor(
+            impact_layer,
+            post_processor_gender)
+        self.assertTrue(result, message)
+
+        # run female hygiene post processor
+        result, message = run_single_post_processor(
+            impact_layer,
+            post_processor_hygiene_packs)
+        self.assertTrue(result, message)
+
+        # Check if new field is added
+        impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
+        self.assertIn(hygiene_packs_count_field['field_name'], impact_fields)
+
+    def test_additional_rice_post_processor(self):
+        """Test weekly hygiene post processor."""
+        impact_layer = load_test_vector_layer(
+            'impact',
+            'indivisible_polygon_impact.geojson',
+            clone_to_memory=True)
+        self.assertIsNotNone(impact_layer)
+
+        # Need to run gender post processor first
+        result, message = run_single_post_processor(
+            impact_layer,
+            post_processor_gender)
+        self.assertTrue(result, message)
+
+        # run female hygiene post processor
+        result, message = run_single_post_processor(
+            impact_layer,
+            post_processor_additional_rice)
+        self.assertTrue(result, message)
+
+        # Check if new field is added
+        impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
+        self.assertIn(
+            additional_rice_count_field['field_name'], impact_fields)
+
     def test_size_post_processor(self):
         """Test size  post processor."""
         impact_layer = load_test_vector_layer(
@@ -181,7 +268,7 @@ class TestPostProcessors(unittest.TestCase):
         # Gender postprocessor with female ratio missing.
         layer.keywords = {
             'inasafe_fields': {
-                'population_count_field': 'population'
+                'displaced_field': 'displaced'
             }
         }
         # noinspection PyTypeChecker
@@ -191,7 +278,7 @@ class TestPostProcessors(unittest.TestCase):
         # Gender postprocessor with female ratio presents.
         layer.keywords = {
             'inasafe_fields': {
-                'population_count_field': 'population',
+                'displaced_field': 'displaced',
                 'female_ratio_field': 'female_r'
             }
         }
@@ -209,7 +296,7 @@ class TestPostProcessors(unittest.TestCase):
                 # listed source. Pick the first available
                 'population': [
                     {
-                        'value': population_count_field,
+                        'value': displaced_field,
                         'type': field_input_type,
                     },
                     {
@@ -230,10 +317,10 @@ class TestPostProcessors(unittest.TestCase):
             layer, post_processor_input_alternatives['input'])
         self.assertFalse(result)
 
-        # Minimum needs postprocesseor with population_count_field present
+        # Minimum needs postprocesseor with displaced_field present
         layer.keywords = {
             'inasafe_fields': {
-                'population_count_field': 'population'
+                'displaced_field': 'displaced'
             }
         }
 

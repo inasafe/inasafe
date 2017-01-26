@@ -966,6 +966,33 @@ total_unaffected_field = {
     'replace_null': False
 }
 
+# Total not exposed field to store the number of not exposed by the hazard
+total_not_exposed_field = {
+    'key': 'total_not_exposed_field',
+    'name': tr('Total Not Exposed'),
+    'field_name': 'total_not_exposed',
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': 2,
+    'absolute': True,
+    'help_text': tr(
+        'The total not exposed field stores the cumulative total number of '
+        'not exposed features or entities.'),
+    'description': tr(
+        'The total not exposed field is added to the analysis layer, '
+        'aggregate impact layer and aggregate hazard impact layer during the '
+        'impact analysis. It represents the cumulative count of not exposed '
+        'exposure features (e.g. buildings) or entities (e.g. people) for '
+        'each area.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
 
 # # # # # # # # # #
 # Count, dynamics, outputs (Absolute values)
@@ -1188,6 +1215,8 @@ exposure_breakdown_fields = [
     exposure_class_field,
     hazard_count_field,
     total_affected_field,
+    total_unaffected_field,
+    total_not_exposed_field,
     total_field,
 ]
 
@@ -1196,6 +1225,8 @@ analysis_fields = [
     analysis_name_field,
     hazard_count_field,
     total_affected_field,
+    total_unaffected_field,
+    total_not_exposed_field,
     total_field
 ]
 
