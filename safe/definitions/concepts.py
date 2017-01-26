@@ -342,6 +342,55 @@ concepts = {
             }
         ],
       },
+     'male': {
+        'key': 'male',
+        'description': tr(
+            'Relating to the characteristics of men.'),
+        'citations': [
+            {
+                'text': tr(
+                    'Oxford Dictionary.'),
+                'link': 'https://en.oxforddictionaries.com/definition/female'
+            }
+        ],
+      },
+    'infant': {
+        'key': 'infant',
+        'description': tr(
+            'A very young child or baby.'),
+        'citations': [
+            {
+                'text': tr(
+                    'Oxford Dictionary.'),
+                'link': 'https://en.oxforddictionaries.com/definition/infant'
+            }
+        ],
+      },
+    'disabled': {
+        'key': 'disabled',
+        'description': tr(
+            'A person having a physical or mental condition that limits their '
+            'movements, senses, or activities.'),
+        'citations': [
+            {
+                'text': tr(
+                    'Oxford Dictionary.'),
+                'link': 'https://en.oxforddictionaries.com/definition/disabled'
+            }
+        ],
+      },
+    'pregnant': {
+        'key': 'pregnant',
+        'description': tr(
+            'A female having a child developing in the uterus.'),
+        'citations': [
+            {
+                'text': tr(
+                    'Oxford Dictionary.'),
+                'link': 'https://en.oxforddictionaries.com/definition/pregnant'
+            }
+        ],
+      },
     'rice': {
         'key': 'rice',
         'description': tr(
