@@ -290,7 +290,7 @@ post_processor_displaced = {
 
 post_processor_gender = {
     'key': 'post_processor_gender',
-    'name': tr('Gender'),
+    'name': tr('Gender Post Processor'),
     'description': tr(
         'A post processor to calculate the number of affected females. '
         '"Female" is defined as: ' + concepts['female']['description']
@@ -362,7 +362,8 @@ post_processor_hygiene_packs = {
 post_processor_additional_rice = {
     'key': 'post_processor_additional_rice',
     'name': tr(
-        'Additional Weekly Rice kg for Pregnant and Lactating Women '
+        'Additional Weekly Rice kg for Pregnant and Lactating Women Post '
+        'Processor'
     ),
     'description': tr(
         'A post processor to calculate additional rice for pregnant and '
@@ -594,7 +595,8 @@ def initialize_minimum_needs_post_processors():
 
         processor = {
             'key': 'post_processor_{key}'.format(key=field_key),
-            'name': field_name,
+            'name': '{field_name} Post Processor'.format(
+                field_name=field_name),
             'description': field_description,
             'input': {
                 'population': {
