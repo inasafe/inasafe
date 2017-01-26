@@ -20,7 +20,7 @@ from safe.definitions.fields import (
 )
 from safe.definitions.processing_steps import (
     summary_3_analysis_steps)
-from safe.definitions.hazard_classifications import null_hazard_value
+from safe.definitions.hazard_classifications import not_exposed_class
 from safe.definitions.layer_purposes import layer_purpose_analysis_impacted
 from safe.definitions.post_processors import post_processor_affected_function
 from safe.gis.vector.summary_tools import (
@@ -157,7 +157,7 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
 
             affected = post_processor_affected_function(
                     classification=classification, hazard_class=val)
-            if affected == null_hazard_value:
+            if affected == not_exposed_class['key']:
                 not_exposed_sum += sum
             elif affected:
                 affected_sum += sum

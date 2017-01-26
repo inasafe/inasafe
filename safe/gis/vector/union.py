@@ -16,10 +16,9 @@ from qgis.core import (
 )
 
 from safe.utilities.i18n import tr
-from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
 from safe.definitions.processing_steps import union_steps
 from safe.definitions.fields import hazard_class_field, aggregation_id_field
-from safe.definitions.hazard_classifications import null_hazard_value
+from safe.definitions.hazard_classifications import not_exposed_class
 from safe.gis.vector.tools import (
     create_memory_layer, wkb_type_groups, create_spatial_index)
 from safe.gis.vector.clean_geometry import geometry_checker
@@ -321,7 +320,10 @@ def fill_hazard_class(layer):
     layer.startEditing()
 
     for feature in layer.getFeatures(request):
-        layer.changeAttributeValue(feature.id(), index, null_hazard_value)
+        layer.changeAttributeValue(
+            feature.id(),
+            index,
+            not_exposed_class['key'])
     layer.commitChanges()
 
     return layer

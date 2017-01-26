@@ -18,7 +18,7 @@ from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
 from safe.definitions.layer_purposes import layer_purpose_exposure_impacted
 from safe.definitions.fields import hazard_class_field
 from safe.definitions.hazard_classifications import (
-    hazard_classification, null_hazard_value)
+    hazard_classification, not_exposed_class)
 from safe.definitions.processing_steps import assign_highest_value_steps
 from safe.gis.vector.tools import create_spatial_index
 from safe.utilities.profiling import profile
@@ -96,7 +96,7 @@ def assign_highest_value(exposure, hazard, callback=None):
 
     # Get a ordered list of classes like ['high', 'medium', 'low']
     levels = [key['key'] for key in layer_classification['classes']]
-    levels.append(null_hazard_value)
+    levels.append(not_exposed_class['key'])
 
     # Let's loop over the hazard layer, from high to low hazard zone.
     for hazard_value in levels:

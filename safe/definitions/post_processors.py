@@ -8,7 +8,7 @@ from collections import OrderedDict
 
 from PyQt4.QtCore import QPyNullVariant
 
-from safe.definitions.hazard_classifications import null_hazard_value
+from safe.definitions.hazard_classifications import not_exposed_class
 from safe.definitions.exposure import exposure_population
 from safe.definitions.minimum_needs import minimum_needs_fields
 from safe.utilities.i18n import tr
@@ -99,7 +99,7 @@ def post_processor_affected_function(**kwargs):
             affected = level['affected']
             break
     else:
-        affected = null_hazard_value
+        affected = not_exposed_class['key']
 
     return affected
 
