@@ -7,7 +7,7 @@ from PyQt4.QtCore import pyqtSignature
 
 from safe.definitions.hazard import hazard_all
 from safe.definitions.exposure import exposure_all
-from safe.definitions.colors import (
+from safe.definitions.styles import (
     available_option_color, unavailable_option_color)
 from safe.definitions.font import big_font
 from safe.gui.tools.wizard.wizard_step import WizardStep

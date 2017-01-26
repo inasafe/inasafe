@@ -1,5 +1,5 @@
 # coding=utf-8
-"""Colors which are used in InaSAFE."""
+"""Styles and colors which are used in InaSAFE."""
 
 from PyQt4.QtGui import QColor
 
@@ -10,7 +10,6 @@ __revision__ = '$Format:%H$'
 
 # Hazard classes as specified in reporting standards :
 # https://github.com/inasafe/inasafe/issues/2920#issuecomment-229874044
-
 grey = QColor('#8C8C8C')  # Used for not exposed.
 green = QColor('#1A9641')
 light_green = QColor('#A6D96A')

@@ -12,7 +12,7 @@ from qgis.core import (
     QgsConditionalStyle,
 )
 
-from safe.definitions.colors import (
+from safe.definitions.styles import (
     line_width_exposure,
     template_without_thresholds,
     template_with_minimum_thresholds,
