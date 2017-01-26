@@ -175,15 +175,16 @@ class TestDefinitionsUtilities(unittest.TestCase):
         """Test get_non_compulsory_field method."""
         non_compulsory_fields = get_non_compulsory_fields(
             'exposure', 'structure')
-        expected_fields = [field for field in exposure_structure['fields'] if
-                           not field['replace_null']]
-        expected_fields += [field for field in
-                            exposure_structure['extra_fields'] if
-                           not field['replace_null']]
+        expected_fields = [
+            field for field in exposure_structure['fields'] if not field[
+                'replace_null']]
+        expected_fields += [
+            field for field in exposure_structure['extra_fields'] if not
+            field['replace_null']]
 
         for field in expected_fields:
             if field.get('replace_null'):
-                expected_fields.replace(field)
+                expected_fields.remove(field)
         self.assertListEqual(non_compulsory_fields, expected_fields)
 
     def test_get_fields(self):
