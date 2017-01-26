@@ -1574,13 +1574,16 @@ class ImpactFunction(object):
                 valid, message = run_single_post_processor(
                     layer, post_processor)
                 if valid:
-                    msg = str('Post processor for %s' % post_processor['name'])
-                    self.set_state_process('post_processor', msg)
-                    LOGGER.info(msg)
-                else:
-                    LOGGER.info(message)
+                    self.set_state_process(
+                        'post_processor', post_processor['name'])
+                    message = '{name} : Running'.format(
+                        name=post_processor['name'])
+
             else:
-                LOGGER.info(message)
+                message = '{name} : Could not run : {reason}'.format(
+                    name=post_processor['name'], reason=message)
+
+            LOGGER.info(message)
 
     @profile
     def summary_calculation(self):
