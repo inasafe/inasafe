@@ -333,3 +333,31 @@ def postprocessor_output_field(postprocessor_definition):
     :rtype: dict
     """
     return postprocessor_definition['output'].items()[0][1]['value']
+
+
+def classification_thresholds(classification, unit=None):
+    """Helper to get thresholds from classification or unit.
+
+    :param classification: Classification definition.
+    :type classification: dict
+
+    :param unit: Unit definition.
+    :type unit: dict
+
+    :returns: Dictionary with key = the class key and value = list of
+        default numeric minimum and maximum value.
+    :rtype: dict
+    """
+    thresholds = {}
+    for hazard_class in classification['classes']:
+        if isinstance(hazard_class['numeric_default_min'], dict):
+            min_value = hazard_class['numeric_default_min'][unit['key']]
+        else:
+            min_value = hazard_class['numeric_default_min']
+        if isinstance(hazard_class['numeric_default_max'], dict):
+            max_value = hazard_class['numeric_default_max'][unit['key']]
+        else:
+            max_value = hazard_class['numeric_default_max']
+        thresholds[hazard_class['key']] = [min_value, max_value]
+
+    return thresholds
