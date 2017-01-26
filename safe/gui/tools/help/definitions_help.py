@@ -698,13 +698,13 @@ def definition_to_message(definition, heading_style=None):
             else:
                 row.add(m.Cell(tr('unspecified')))
 
-            # Min may be a single value or a dict of values so we need
+            # Max may be a single value or a dict of values so we need
             # to check type and deal with it accordingly
             if 'numeric_default_max' in inasafe_class:
                 if isinstance(inasafe_class['numeric_default_max'], dict):
                     bullets = m.BulletedList()
-                    minima = inasafe_class['numeric_default_max']
-                    for key, value in minima.iteritems():
+                    maxima = inasafe_class['numeric_default_max']
+                    for key, value in maxima.iteritems():
                         bullets.add(u'%s : %s' % (key, value))
                     row.add(m.Cell(bullets))
                 else:
@@ -716,8 +716,18 @@ def definition_to_message(definition, heading_style=None):
             # Description goes in its own row with spanning
             row = m.Row()
             row.add(m.Cell(''))
-            row.add(m.Cell(inasafe_class['description'], span=4))
+            row.add(m.Cell(inasafe_class['description'], span=5))
             table.add(row)
+        # For hazard classes we also add the 'not affected' class manually:
+        if definition['type'] == definitions.hazard_classification_type:
+            row = m.Row()
+            colour = definitions.not_exposed_class['color'].name()
+            row.add(m.Cell(
+                u'', attributes='style="background: %s;"' % colour))
+            description = definitions.not_exposed_class['description']
+            row.add(m.Cell(description, span=5))
+            table.add(row)
+
         message.add(table)
 
     if 'affected' in definition:

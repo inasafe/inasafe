@@ -29,6 +29,9 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 # This class will be automatically added to a hazard classification on runtime.
+# We do not include it in the classes below because we do not want the user
+# to be presented with not exposed in the keywords when setting up
+# their classes.
 not_exposed_class = {
     'key': 'not exposed',
     'name': tr('Not exposed'),
@@ -36,10 +39,13 @@ not_exposed_class = {
     'color': grey,
 }
 
+hazard_classification_type = tr('Hazard Classification')
+
 generic_hazard_classes = {
     'key': 'generic_hazard_classes',
     'name': tr('Generic classes'),
     'description': concepts['generic_hazard']['description'],
+    'type': hazard_classification_type,
     'citations': concepts['generic_hazard']['citations'],
     'classes': [
         {
@@ -109,6 +115,7 @@ earthquake_mmi_hazard_classes = {
     'description': tr(
         'Three classes are supported for earthquake vector hazard data: '
         '<b>low</b>, <b>medium</b>, or <b>high</b>.'),
+    'type': hazard_classification_type,
     'citations': [
         {
             'text': None,
@@ -176,6 +183,7 @@ volcano_hazard_classes = {
     'description': tr(
         'Three classes are supported for volcano vector hazard data: '
         '<b>low</b>, <b>medium</b>, or <b>high</b>.'),
+    'type': hazard_classification_type,
     'citations': [
         {
             'text': None,
@@ -245,6 +253,7 @@ flood_hazard_classes = {
         '<b>wet</b> (affected by flood water) or <b>dry</b> (not affected '
         'by flood water). This unit does not describe how <b>wet</b> or '
         '<b>dry</b> an area is.'),
+    'type': hazard_classification_type,
     'citations': [
         {
             'text': None,
@@ -301,6 +310,7 @@ ash_hazard_classes = {
         'Three classes are supported for ash vector hazard data: '
         '<b>very low</b>, <b>low</b>, <b>medium</b>, <b>high</b> or '
         '<b>very high</b>.'),
+    'type': hazard_classification_type,
     'unit': unit_centimetres,
     'citations': [
         {
@@ -401,6 +411,7 @@ tsunami_hazard_classes = {
         '<b>high</b>, or <b>very high</b> for tsunami hazard classification. '
         'The following description for these classes is provided by Badan '
         'Geologi based on BNPB Perka 2/2012'),
+    'type': hazard_classification_type,
     'citations': [
         {
             'text': None,
@@ -532,6 +543,7 @@ cyclone_au_bom_hazard_classes = {
         'land or water. This is sometimes referred to as the maximum '
         'sustained wind and will be experienced around the eye-wall of the '
         'cyclone.'),
+    'type': hazard_classification_type,
     'citations': [
         {
             'text': tr(
@@ -735,6 +747,7 @@ cyclone_sshws_hazard_classes = {
         'storms are still dangerous, however, and require preventative '
         'measures. In the western North Pacific, the term "super typhoon" is '
         'used for tropical cyclones with sustained winds exceeding 150 mph.'),
+    'type': hazard_classification_type,
     'citations': [
         {
             'text': tr('NOAA - NHC'),
@@ -925,9 +938,15 @@ hazard_classification = {
     'key': 'hazard_classification',
     'name': tr('Classes'),
     'description': tr(
-        'Hazard classes are a way to group values in a continuous hazard '
-        'dataset. Each class will represent a discrete hazard level such as '
-        'high hazard level, medium hazard level and so on.'),
+        'A hazard classification is used to define a range of severity '
+        'thresholds (classes) for a continuous hazard layer. The '
+        'classification will be used to create zones of data that each '
+        'present a similar hazard level. During the analysis, each exposure '
+        'feature will be assessed to determine which hazard class it '
+        'coincides with, and then a determination will be made as to '
+        'whether and how the exposure feature is likely to be impacted by '
+        'the hazard.'),
+    'type': hazard_classification_type,
     'citations': [
         {
             'text': None,
