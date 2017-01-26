@@ -29,7 +29,9 @@ from safe.definitions import (
     layer_geometry_raster,
     layer_geometry_line,
     layer_geometry_point,
-    layer_geometry_polygon
+    layer_geometry_polygon,
+    cyclone_au_bom_hazard_classes,
+    unit_knots
 )
 from safe.definitions.hazard import hazard_cyclone
 
@@ -46,7 +48,8 @@ from safe.definitions.utilities import (
     get_allowed_geometries,
     all_default_fields,
     get_compulsory_fields,
-    get_non_compulsory_fields
+    get_non_compulsory_fields,
+    classification_thresholds
 )
 
 
@@ -247,6 +250,26 @@ class TestDefinitionsUtilities(unittest.TestCase):
             self.assertTrue(default_field.get('replace_null'), False)
             self.assertIsNotNone(default_field.get('default_value'))
 
+    def test_classification_thresholds(self):
+        """Test for classification_thresholds method."""
+        thresholds = classification_thresholds(flood_hazard_classes)
+        expected = {
+            'dry': [0, 0.9999999999999999],
+            'wet': [1, 9999999999]
+        }
+        self.assertDictEqual(thresholds, expected)
+
+        thresholds = classification_thresholds(
+            cyclone_au_bom_hazard_classes, unit_knots)
+        expected = {
+            'category_1': [34, 47.0],
+            'category_2': [47, 63.0],
+            'category_3': [63, 85.0],
+            'category_4': [85, 107.0],
+            'category_5': [107, 9999999999],
+            'tropical_depression': [0, 34.0]
+        }
+        self.assertDictEqual(thresholds, expected)
 
 if __name__ == '__main__':
     unittest.main()
