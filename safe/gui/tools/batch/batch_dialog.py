@@ -64,7 +64,7 @@ from safe.report.report_metadata import ReportMetadata
 from safe.report.impact_report import ImpactReport
 from safe.gui.analysis_utilities import generate_impact_report
 
-INFO_STYLE = styles.INFO_STYLE
+INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
 LOGGER = logging.getLogger('InaSAFE')
 FORM_CLASS = get_ui_class('batch_dialog_base.ui')
 

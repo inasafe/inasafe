@@ -5,8 +5,8 @@ from safe.utilities.i18n import tr
 from safe import messaging as m
 from safe.messaging import styles
 
-SUBSECTION_STYLE = styles.SUBSECTION_STYLE
-INFO_STYLE = styles.INFO_STYLE
+SUBSECTION_STYLE = styles.SUBSECTION_LEVEL_3_STYLE
+INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
 
 __author__ = 'ismailsunni'
 

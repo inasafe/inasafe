@@ -30,11 +30,11 @@ from . import (
     NumberedList,
     Paragraph)
 from .styles import (
-    SUGGESTION_STYLE,
-    DETAILS_STYLE,
+    GREEN_LEVEL_4_STYLE,
+    ORANGE_LEVEL_5_STYLE,
     TRACEBACK_STYLE,
     TRACEBACK_ITEMS_STYLE,
-    PROBLEM_STYLE)
+    ORANGE_LEVEL_4_STYLE)
 
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -156,7 +156,7 @@ class ErrorMessage(MessageElement):
             Errors are propagated
         """
         message = Message()
-        message.add(Heading(tr('Problem'), **PROBLEM_STYLE))
+        message.add(Heading(tr('Problem'), **ORANGE_LEVEL_4_STYLE))
         message.add(Paragraph(tr(
             'The following problem(s) were encountered whilst running the '
             'analysis.')))
@@ -166,7 +166,7 @@ class ErrorMessage(MessageElement):
             items.add(p)
         message.add(items)
 
-        message.add(Heading(tr('Suggestion'), **SUGGESTION_STYLE))
+        message.add(Heading(tr('Suggestion'), **GREEN_LEVEL_4_STYLE))
         message.add(Paragraph(tr(
             'You can try the following to resolve the issue:')))
         if len(self.suggestions) < 1:
@@ -182,7 +182,7 @@ class ErrorMessage(MessageElement):
         if len(self.details) > 0:
             items = BulletedList()
             message.add(Heading(
-                tr('Details'), **DETAILS_STYLE))
+                tr('Details'), **ORANGE_LEVEL_5_STYLE))
             message.add(Paragraph(tr(
                 'These additional details were reported when the problem '
                 'occurred.')))

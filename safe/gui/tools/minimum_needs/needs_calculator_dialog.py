@@ -39,7 +39,7 @@ from safe.utilities.qgis_utilities import display_critical_message_box
 from safe.utilities.resources import html_footer, html_header, get_ui_class
 from safe.utilities.utilities import humanise_exception
 
-INFO_STYLE = styles.INFO_STYLE
+INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
 LOGGER = logging.getLogger('InaSAFE')
 FORM_CLASS = get_ui_class('needs_calculator_dialog_base.ui')
 

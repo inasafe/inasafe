@@ -54,7 +54,7 @@ concepts = {
             {
                 'text': tr(
                     ''),
-                'link': ''
+                'link': u''
             }
         ],
     },
@@ -71,7 +71,7 @@ concepts = {
             {
                 'text': tr(
                     'UNISDR (2009) Terminology on disaster risk reduction.'),
-                'link': 'https://www.unisdr.org/we/inform/terminology'
+                'link': u'https://www.unisdr.org/we/inform/terminology'
             }
         ],
     },
@@ -86,7 +86,7 @@ concepts = {
             {
                 'text': tr(
                     'UNISDR (2009) Terminology on disaster risk reduction.'),
-                'link': 'https://www.unisdr.org/we/inform/terminology'
+                'link': u'https://www.unisdr.org/we/inform/terminology'
             }
         ],
     },
@@ -102,7 +102,7 @@ concepts = {
             {
                 'text': tr(
                     ''),
-                'link': ''
+                'link': u''
             }
         ],
     },
@@ -118,8 +118,8 @@ concepts = {
                 'text': tr(
                     'UNISDR (2015)Proposed Updated Terminology on Disaster '
                     'Risk Reduction: A Technical Review'),
-                'link': 'http://www.preventionweb.net/files/'
-                        '45462_backgoundpaperonterminologyaugust20.pdf'
+                'link': u'http://www.preventionweb.net/files/'
+                        u'45462_backgoundpaperonterminologyaugust20.pdf'
              }
         ],
     },
@@ -133,7 +133,7 @@ concepts = {
             {
                 'text': tr(
                     'UNISDR (2009)Terminology on Disaster'),
-                'link': 'https://www.unisdr.org/we/inform/terminology'
+                'link': u'https://www.unisdr.org/we/inform/terminology'
              }
         ],
     },
@@ -151,8 +151,8 @@ concepts = {
                 'text': tr(
                     'UNISDR (2015)Proposed Updated Terminology on Disaster '
                     'Risk Reduction: A Technical Review'),
-                'link': 'http://www.preventionweb.net/files/'
-                        '45462_backgoundpaperonterminologyaugust20.pdf'
+                'link': u'http://www.preventionweb.net/files/'
+                        u'45462_backgoundpaperonterminologyaugust20.pdf'
              }
         ],
     },
@@ -169,8 +169,8 @@ concepts = {
                 'text': tr(
                     'UNISDR (2015)Proposed Updated Terminology on Disaster '
                     'Risk Reduction: A Technical Review'),
-                'link': 'http://www.preventionweb.net/files/'
-                        '45462_backgoundpaperonterminologyaugust20.pdf'
+                'link': u'http://www.preventionweb.net/files/'
+                        u'45462_backgoundpaperonterminologyaugust20.pdf'
              }
         ],
     },
@@ -188,8 +188,8 @@ concepts = {
                 'text': tr(
                     'UNISDR (2015)Proposed Updated Terminology on Disaster '
                     'Risk Reduction: A Technical Review'),
-                'link': 'http://www.preventionweb.net/files/'
-                        '45462_backgoundpaperonterminologyaugust20.pdf'
+                'link': u'http://www.preventionweb.net/files/'
+                        u'45462_backgoundpaperonterminologyaugust20.pdf'
              }
         ],
     },
@@ -205,8 +205,8 @@ concepts = {
                 'text': tr(
                     'UNISDR (2015)Proposed Updated Terminology on Disaster '
                     'Risk Reduction: A Technical Review'),
-                'link': 'http://www.preventionweb.net/files/'
-                        '45462_backgoundpaperonterminologyaugust20.pdf'
+                'link': u'http://www.preventionweb.net/files/'
+                        u'45462_backgoundpaperonterminologyaugust20.pdf'
             }
         ],
     },
@@ -227,8 +227,8 @@ concepts = {
                 'text': tr(
                     'UNISDR (2015)Proposed Updated Terminology on Disaster '
                     'Risk Reduction: A Technical Review'),
-                'link': 'http://www.preventionweb.net/files/'
-                        '45462_backgoundpaperonterminologyaugust20.pdf'
+                'link': u'http://www.preventionweb.net/files/'
+                        u'45462_backgoundpaperonterminologyaugust20.pdf'
             }
         ],
     },
@@ -243,8 +243,8 @@ concepts = {
                 'text': tr(
                     'UNISDR (2015)Proposed Updated Terminology on Disaster '
                     'Risk Reduction: A Technical Review'),
-                'link': 'http://www.preventionweb.net/files/'
-                        '45462_backgoundpaperonterminologyaugust20.pdf'
+                'link': u'http://www.preventionweb.net/files/'
+                        u'45462_backgoundpaperonterminologyaugust20.pdf'
             }
         ],
     },
@@ -259,8 +259,8 @@ concepts = {
                 'text': tr(
                     'UNISDR (2015)Proposed Updated Terminology on Disaster '
                     'Risk Reduction: A Technical Review'),
-                'link': 'http://www.preventionweb.net/files/'
-                        '45462_backgoundpaperonterminologyaugust20.pdf'
+                'link': u'http://www.preventionweb.net/files/'
+                        u'45462_backgoundpaperonterminologyaugust20.pdf'
             }
         ],
       },
@@ -274,8 +274,8 @@ concepts = {
                 'text': tr(
                     'UNISDR (2015)Proposed Updated Terminology on Disaster '
                     'Risk Reduction: A Technical Review'),
-                'link': 'http://www.preventionweb.net/files/'
-                        '45462_backgoundpaperonterminologyaugust20.pdf'
+                'link': u'http://www.preventionweb.net/files/'
+                        u'45462_backgoundpaperonterminologyaugust20.pdf'
             }
         ],
       },
@@ -287,8 +287,8 @@ concepts = {
             {
                 'text': tr(
                     'CIA (2016)The World Factbook.'),
-                'link': 'https://www.cia.gov/library/publications/'
-                        'resources/the-world-factbook/'
+                'link': u'https://www.cia.gov/library/publications/'
+                        u'resources/the-world-factbook/'
             }
         ],
       },
@@ -300,8 +300,8 @@ concepts = {
             {
                 'text': tr(
                     'CIA (2016)The World Factbook.'),
-                'link': 'https://www.cia.gov/library/publications/'
-                        'resources/the-world-factbook/'
+                'link': u'https://www.cia.gov/library/publications/'
+                        u'resources/the-world-factbook/'
             }
         ],
       },
@@ -313,8 +313,8 @@ concepts = {
             {
                 'text': tr(
                     'CIA (2016)The World Factbook.'),
-                'link': 'https://www.cia.gov/library/publications/'
-                        'resources/the-world-factbook/'
+                'link': u'https://www.cia.gov/library/publications/'
+                        u'resources/the-world-factbook/'
             }
         ],
       },
@@ -326,7 +326,7 @@ concepts = {
             {
                 'text': tr(
                     'Oxford Dictionary.'),
-                'link': 'https://en.oxforddictionaries.com/definition/people'
+                'link': u'https://en.oxforddictionaries.com/definition/people'
             }
         ],
       },
@@ -338,7 +338,7 @@ concepts = {
             {
                 'text': tr(
                     'Oxford Dictionary.'),
-                'link': 'https://en.oxforddictionaries.com/definition/female'
+                'link': u'https://en.oxforddictionaries.com/definition/female'
             }
         ],
       },
@@ -350,7 +350,7 @@ concepts = {
             {
                 'text': tr(
                     'Oxford Dictionary.'),
-                'link': 'https://en.oxforddictionaries.com/definition/rice'
+                'link': u'https://en.oxforddictionaries.com/definition/rice'
             }
         ],
       },
@@ -362,8 +362,8 @@ concepts = {
             {
                 'text': tr(
                     'Oxford Dictionary.'),
-                'link': 'https://en.oxforddictionaries.com/definition/'
-                        'drinking_water'
+                'link': u'https://en.oxforddictionaries.com/definition/'
+                        u'drinking_water'
             }
         ],
       },
@@ -376,7 +376,7 @@ concepts = {
             {
                 'text': tr(
                     ''),
-                'link': ''
+                'link': u''
             }
         ],
       },
@@ -388,7 +388,7 @@ concepts = {
             {
                 'text': tr(
                     'BNPB Perka 7/2008'),
-                'link': 'http://tinyurl.com/BNPB-Perka-7-2008'
+                'link': u'http://tinyurl.com/BNPB-Perka-7-2008'
             }
         ],
       },
@@ -401,7 +401,7 @@ concepts = {
             {
                 'text': tr(
                     'Oxford Dictionary.'),
-                'link': 'https://en.oxforddictionaries.com/definition/hygiene'
+                'link': u'https://en.oxforddictionaries.com/definition/hygiene'
             }
         ],
       },
@@ -414,8 +414,8 @@ concepts = {
             {
                 'text': tr(
                     'Oxford Dictionary.'),
-                'link': 'https://en.oxforddictionaries.com/definition/'
-                        'toilet'
+                'link': u'https://en.oxforddictionaries.com/definition/'
+                        u'toilet'
             }
         ],
       },

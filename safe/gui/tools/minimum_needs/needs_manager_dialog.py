@@ -51,7 +51,7 @@ from safe_extras.parameters.qt_widgets.parameter_container import (
 from safe_extras.parameters.string_parameter import StringParameter
 from safe_extras.parameters.text_parameter import TextParameter
 
-INFO_STYLE = styles.INFO_STYLE
+INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
 FORM_CLASS = get_ui_class('needs_manager_dialog_base.ui')
 
 

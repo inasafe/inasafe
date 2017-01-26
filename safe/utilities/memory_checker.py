@@ -31,8 +31,8 @@ from safe.common.signals import send_dynamic_message, send_static_message
 from safe_extras.pydispatch import dispatcher
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
-SUGGESTION_STYLE = styles.SUGGESTION_STYLE
-WARNING_STYLE = styles.WARNING_STYLE
+SUGGESTION_STYLE = styles.GREEN_LEVEL_4_STYLE
+WARNING_STYLE = styles.RED_LEVEL_4_STYLE
 KEYWORD_STYLE = styles.KEYWORD_STYLE
 
 LOGGER = logging.getLogger('InaSAFE')
