@@ -1625,31 +1625,11 @@ class ImpactFunction(object):
 
     def style(self):
         """Function to apply some styles to the layers."""
-        # Let's style the hazard class in each layers.
-        classification = self.hazard.keywords['classification']
-        classification = definition(classification)
-
-        # Let's check if there is some thresholds:
-        thresholds = self.hazard.keywords.get('thresholds')
-        if thresholds:
-            hazard_unit = self.hazard.keywords.get('continuous_hazard_unit')
-            hazard_unit = definition(hazard_unit)
-        else:
-            hazard_unit = None
-
-        # TODO We need to work on the unit from the exposure.
-        exposure = self.exposure.keywords['exposure']
-        exposure_unit = definition(exposure)['units'][0]
-
-        # In debug mode we don't round number.
-        enable_rounding = not self.debug_mode
         classes = generate_classified_legend(
             self.analysis_impacted,
-            classification,
-            thresholds,
-            exposure_unit,
-            hazard_unit,
-            enable_rounding)
+            self.exposure,
+            self.hazard,
+            self.debug_mode)
 
         # Let's style layers which have a geometry and have hazard_class
         hazard_class = hazard_class_field['key']

@@ -148,6 +148,7 @@ exposure_population = {
         elderly_count_field
     ],
     'layer_modes': [layer_mode_continuous],
+    'display_not_exposed': False,
     'layer_legend_title': tr('Number of people'),
     'measure_question': tr('how many')
 }
@@ -206,6 +207,7 @@ exposure_road = {
         feature_rate_field
     ],
     'layer_modes': [layer_mode_classified],
+    'display_not_exposed': True,
     'layer_legend_title': tr('Length of roads'),
     'measure_question': tr('what length of')
 }
@@ -264,6 +266,7 @@ exposure_structure = {
         feature_rate_field
     ],
     'layer_modes': [layer_mode_classified],
+    'display_not_exposed': True,
     'layer_legend_title': tr('Number of buildings'),
     'measure_question': tr('how many')
 }
@@ -302,6 +305,7 @@ exposure_place = {
         exposure_name_field
     ],
     'layer_modes': [layer_mode_classified],
+    'display_not_exposed': True,
     'layer_legend_title': tr('Number of places'),
     'measure_question': tr('how many')
 }
@@ -361,6 +365,7 @@ exposure_land_cover = {
         feature_rate_field
     ],
     'layer_modes': [layer_mode_classified],
+    'display_not_exposed': False,
     'layer_legend_title': tr('Area of landcover'),
     'measure_question': tr('what area of')
 }

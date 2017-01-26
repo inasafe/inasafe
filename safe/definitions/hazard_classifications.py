@@ -32,6 +32,8 @@ __revision__ = '$Format:%H$'
 # We do not include it in the classes below because we do not want the user
 # to be presented with not exposed in the keywords when setting up
 # their classes.
+# This class is not displayed if it's a polygon exposure (landcover and
+# population) in the legend.
 not_exposed_class = {
     'key': 'not exposed',
     'name': tr('Not exposed'),
