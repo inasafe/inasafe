@@ -54,7 +54,7 @@ def hazards_for_layer(layer_geometry_key, hazard_category_key=None):
     :param layer_geometry_key: The geometry id
     :type layer_geometry_key: str
 
-    :param hazard_category_key: The hazard ca   tegory
+    :param hazard_category_key: The hazard category
     :type hazard_category_key: str
 
     :returns: List of hazard
