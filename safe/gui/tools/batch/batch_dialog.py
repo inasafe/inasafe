@@ -473,6 +473,11 @@ class BatchDialog(QDialog, FORM_CLASS):
                         reg.instance().addMapLayers(layer_list, False)
                         for layer in layer_list:
                             self.layer_group.addLayer(layer)
+
+                        # somehow InaSAFE or QGIS won't recognized added layer
+                        # until we print the layer list in mapCanvas
+                        for layer in self.iface.mapCanvas().layers():
+                            print layer
                         # generate map report and impact report
                         # map report is still waiting update from lucernae
                         try:
