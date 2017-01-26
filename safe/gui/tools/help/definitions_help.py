@@ -308,16 +308,16 @@ def content():
         tr('Layer Geometry Types'))
     header = m.Heading(tr('Vector'), **SUBSECTION_STYLE)
     message.add(header)
-    message.add(
-        definition_to_message(definitions.layer_geometry_point, BLUE_CHAPTER_STYLE))
-    message.add(
-        definition_to_message(definitions.layer_geometry_line, BLUE_CHAPTER_STYLE))
-    message.add(
-        definition_to_message(definitions.layer_geometry_polygon, BLUE_CHAPTER_STYLE))
+    message.add(definition_to_message(
+        definitions.layer_geometry_point, BLUE_CHAPTER_STYLE))
+    message.add(definition_to_message(
+        definitions.layer_geometry_line, BLUE_CHAPTER_STYLE))
+    message.add(definition_to_message(
+        definitions.layer_geometry_polygon, BLUE_CHAPTER_STYLE))
     header = m.Heading(tr('Raster'), **SUBSECTION_STYLE)
     message.add(header)
-    message.add(
-        definition_to_message(definitions.layer_geometry_raster, BLUE_CHAPTER_STYLE))
+    message.add(definition_to_message(
+        definitions.layer_geometry_raster, BLUE_CHAPTER_STYLE))
 
     ##
     #  Layer Modes

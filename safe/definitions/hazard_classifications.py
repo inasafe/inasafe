@@ -76,7 +76,8 @@ generic_hazard_classes = {
             'color': yellow,
             'name': tr('Low hazard zone'),
             'affected': True,
-            'description': tr('The locations where the lowest impact occured.'),
+            'description': tr(
+                'The locations where the lowest impact occurred.'),
             'string_defaults': ['low'],
             'numeric_default_min': 0,
             'numeric_default_max': (2 - small_number),
@@ -526,7 +527,8 @@ cyclone_au_bom_hazard_classes = {
             'text': tr(
                 'Australian Bureau of Meteorology - Tropical Cyclone '
                 'Intensity and Impacts'),
-            'link': u'http://www.bom.gov.au/cyclone/about/intensity.shtml#WindC'
+            'link':
+                u'http://www.bom.gov.au/cyclone/about/intensity.shtml#WindC'
         },
         {
             'text': tr('Tropical cyclone scales - wikpedia'),
