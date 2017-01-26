@@ -62,7 +62,9 @@ from safe.gui.tools.help.batch_help import batch_help
 from safe.impact_function.impact_function import ImpactFunction
 from safe.report.report_metadata import ReportMetadata
 from safe.report.impact_report import ImpactReport
-from safe.gui.analysis_utilities import generate_impact_report
+from safe.gui.analysis_utilities import (
+    generate_impact_report,
+    generate_impact_map_report)
 
 INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
 LOGGER = logging.getLogger('InaSAFE')
@@ -92,6 +94,7 @@ class BatchDialog(QDialog, FORM_CLASS):
         self.setWindowModality(Qt.ApplicationModal)
         self.iface = iface
         self.dock = dock
+        self.legend = iface.legendInterface()
 
         header_view = self.table.horizontalHeader()
         header_view.setResizeMode(0, QtGui.QHeaderView.Stretch)
@@ -473,17 +476,26 @@ class BatchDialog(QDialog, FORM_CLASS):
                         reg.instance().addMapLayers(layer_list, False)
                         for layer in layer_list:
                             self.layer_group.addLayer(layer)
-
+                        # TODO:: Find proper way to recognize layer.
                         # somehow InaSAFE or QGIS won't recognized added layer
                         # until we print the layer list in mapCanvas
+                        print "printing layer count and layer list"
+                        print self.iface.mapCanvas().layerCount()
                         for layer in self.iface.mapCanvas().layers():
                             print layer
+                            # turn of layer visibility if not impact layer
+                            if layer.id() == impact_layer.id():
+                                self.legend.setLayerVisible(layer, True)
+                            else:
+                                self.legend.setLayerVisible(layer, False)
                         # generate map report and impact report
-                        # map report is still waiting update from lucernae
                         try:
                             # this line is to save the impact report in default
                             # InaSAFE directory.
                             generate_impact_report(impact_function, self.iface)
+                            generate_impact_map_report(
+                                impact_function,
+                                self.iface)
                             # this line is to save the report in user specified
                             # directory.
                             self.generate_pdf_report(
