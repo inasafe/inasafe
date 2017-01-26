@@ -352,7 +352,8 @@ def content():
     message.add(definition_to_message(
         definitions.layer_purpose_aggregation_impacted, BLUE_CHAPTER_STYLE))
     message.add(definition_to_message(
-        definitions.layer_purpose_aggregate_hazard_impacted, BLUE_CHAPTER_STYLE))
+        definitions.layer_purpose_aggregate_hazard_impacted,
+        BLUE_CHAPTER_STYLE))
     message.add(definition_to_message(
         definitions.layer_purpose_profiling, BLUE_CHAPTER_STYLE))
 
