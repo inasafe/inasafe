@@ -328,7 +328,8 @@ def content():
         table_of_contents,
         'layer-modes',
         tr('Layer Modes'))
-    message.add(definition_to_message(definitions.layer_mode))
+    message.add(definition_to_message(
+        definitions.layer_mode, SUBSECTION_STYLE))
 
     ##
     #  Layer Purposes
@@ -340,22 +341,22 @@ def content():
         'layer-purposes',
         tr('Layer Purposes'))
     message.add(definition_to_message(
-        definitions.layer_purpose_hazard, BLUE_CHAPTER_STYLE))
+        definitions.layer_purpose_hazard, SUBSECTION_STYLE))
     message.add(definition_to_message(
-        definitions.layer_purpose_exposure, BLUE_CHAPTER_STYLE))
+        definitions.layer_purpose_exposure, SUBSECTION_STYLE))
     message.add(definition_to_message(
-        definitions.layer_purpose_aggregation, BLUE_CHAPTER_STYLE))
+        definitions.layer_purpose_aggregation, SUBSECTION_STYLE))
     message.add(definition_to_message(
-        definitions.layer_purpose_exposure_impacted, BLUE_CHAPTER_STYLE))
+        definitions.layer_purpose_exposure_impacted, SUBSECTION_STYLE))
     message.add(definition_to_message(
-        definitions.layer_purpose_exposure_breakdown, BLUE_CHAPTER_STYLE))
+        definitions.layer_purpose_exposure_breakdown, SUBSECTION_STYLE))
     message.add(definition_to_message(
-        definitions.layer_purpose_aggregation_impacted, BLUE_CHAPTER_STYLE))
+        definitions.layer_purpose_aggregation_impacted, SUBSECTION_STYLE))
     message.add(definition_to_message(
         definitions.layer_purpose_aggregate_hazard_impacted,
-        BLUE_CHAPTER_STYLE))
+        SUBSECTION_STYLE))
     message.add(definition_to_message(
-        definitions.layer_purpose_profiling, BLUE_CHAPTER_STYLE))
+        definitions.layer_purpose_profiling, SUBSECTION_STYLE))
 
     ##
     # All units
@@ -391,25 +392,29 @@ def content():
         table_of_contents,
         'post-processors',
         tr('Post Processors'))
-    message.add(m.Paragraph(tr('Post Processor Input Types')))
+    header = m.Heading(tr('Post Processor Input Types'), **SUBSECTION_STYLE)
+    message.add(header)
     table = _create_post_processor_subtable(
         definitions.post_processor_input_types
     )
     message.add(table)
 
-    message.add(m.Paragraph(tr('Post Processor Input Values')))
+    header = m.Heading(tr('Post Processor Input Values'), **SUBSECTION_STYLE)
+    message.add(header)
     table = _create_post_processor_subtable(
         definitions.post_processor_input_values
     )
     message.add(table)
 
-    message.add(m.Paragraph(tr('Post Processor Process Types')))
+    header = m.Heading(tr('Post Processor Process Types'), **SUBSECTION_STYLE)
+    message.add(header)
     table = _create_post_processor_subtable(
         definitions.post_processor_process_types
     )
     message.add(table)
 
-    message.add(m.Paragraph(tr('Post Processors')))
+    header = m.Heading(tr('Post Processors'), **SUBSECTION_STYLE)
+    message.add(header)
     post_processors = definitions.post_processors
     table = m.Table(style_class='table table-condensed table-striped')
     row = m.Row()
@@ -640,7 +645,7 @@ def definition_to_message(definition, heading_style=None):
         message.add(table)
 
     if 'extra_fields' and 'fields' in definition:
-        message.add(m.Paragraph(tr('Fields')))
+        message.add(m.Paragraph(m.ImportantText(tr('Fields:'))))
         table = _create_fields_table()
         all_fields = definition['fields'] + definition['extra_fields']
         for field in all_fields:
@@ -651,13 +656,15 @@ def definition_to_message(definition, heading_style=None):
         message.add(m.Heading(
             tr('Hazard classifications'),
             **DETAILS_STYLE))
+        message.add(m.Paragraph(
+            definitions.hazard_classification['description']))
         for inasafe_class in definition['classifications']:
             message.add(definition_to_message(
                 inasafe_class,
                 DETAILS_SUBGROUP_STYLE))
 
     if 'classes' in definition:
-        message.add(m.Paragraph(tr('Classes')))
+        message.add(m.Paragraph(m.ImportantText(tr('Classes:'))))
         table = _make_defaults_table()
         for inasafe_class in definition['classes']:
             row = m.Row()
