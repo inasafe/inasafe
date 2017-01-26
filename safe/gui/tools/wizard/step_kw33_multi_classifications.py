@@ -71,6 +71,11 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         # self.classifications = {}
         self.value_maps = {}
         self.thresholds = {}
+
+        # Temporary attributes
+        self.threshold_classes = OrderedDict()
+        self.active_exposure = None
+
     def is_ready_to_next_step(self):
         """Check if the step is complete.
 
@@ -210,6 +215,9 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         if self.mode == CHOOSE_MODE:
             # Change mode
             self.mode = EDIT_MODE
+            LOGGER.debug('Set active exposure to %s' % exposure['name'])
+            # Set active exposure
+            self.active_exposure = exposure
             # Disable all edit button
             for exposure_edit_button in self.exposure_edit_buttons:
                 exposure_edit_button.setEnabled(False)
@@ -261,13 +269,27 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             table.add(header)
             classification = self.get_classification(
                 self.exposure_combo_boxes[i])
-            thresholds = classification_thresholds(classification, unit)
-            for class_key, threshold in thresholds.items():
+            default_thresholds = classification_thresholds(classification, unit)
+            thresholds = self.thresholds.get(self.exposures[i]['key'])
+            if not thresholds:
+                thresholds = default_thresholds
+            classes = classification.get('classes')
+            # Sort by value, put the lowest first
+            classes = sorted(classes, key=lambda k: k['value'])
+            for the_class in classes:
+                threshold = thresholds[the_class['key']]
                 row = m.Row()
-                row.add(m.Cell(class_key))
+                row.add(m.Cell(the_class['name']))
                 row.add(m.Cell(threshold[0]))
                 row.add(m.Cell(threshold[1]))
                 table.add(row)
+            #
+            # for class_key, threshold in thresholds.items():
+            #     row = m.Row()
+            #     row.add(m.Cell(class_key))
+            #     row.add(m.Cell(threshold[0]))
+            #     row.add(m.Cell(threshold[1]))
+            #     table.add(row)
             message.add(table)
 
         status_text_edit = QTextBrowser(None)
@@ -306,10 +328,8 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         """
         return combo_box.itemData(combo_box.currentIndex(), Qt.UserRole)
 
-
     def setup_thresholds_panel(self, classification):
         """Setup threshold panel in the right panel."""
-
         LOGGER.debug('Setup threshold panel')
 
         # Set text in the label
@@ -340,6 +360,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
                 min_value_layer,
                 max_value_layer)
 
+        # Set description
         description_label = QLabel(text)
         description_label.setWordWrap(True)
         self.right_layout.addWidget(description_label)
@@ -347,7 +368,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         thresholds = self.parent.get_existing_keyword('thresholds')
         selected_unit = self.parent.step_kw_unit.selected_unit()['key']
 
-        self.classes = OrderedDict()
+        self.threshold_classes = OrderedDict()
         classes = classification.get('classes')
         # Sort by value, put the lowest first
         classes = sorted(classes, key=lambda k: k['value'])
@@ -411,7 +432,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             grid_layout_thresholds.addWidget(class_label, i, 0)
             grid_layout_thresholds.addLayout(class_layout, i, 1)
 
-            self.classes[the_class['key']] = [min_value_input, max_value_input]
+            self.threshold_classes[the_class['key']] = [min_value_input, max_value_input]
 
         grid_layout_thresholds.setColumnStretch(0, 1)
         grid_layout_thresholds.setColumnStretch(0, 2)
@@ -426,20 +447,20 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             :type the_string: str
             """
             if the_string == 'Max value':
-                current_max_value = self.classes.values()[index][1]
-                target_min_value = self.classes.values()[index + 1][0]
+                current_max_value = self.threshold_classes.values()[index][1]
+                target_min_value = self.threshold_classes.values()[index + 1][0]
                 if current_max_value.value() != target_min_value.value():
                     target_min_value.setValue(current_max_value.value())
             elif the_string == 'Min value':
-                current_min_value = self.classes.values()[index][0]
-                target_max_value = self.classes.values()[index - 1][1]
+                current_min_value = self.threshold_classes.values()[index][0]
+                target_max_value = self.threshold_classes.values()[index - 1][1]
                 if current_min_value.value() != target_max_value.value():
                     target_max_value.setValue(current_min_value.value())
 
         # Set behaviour
-        for k, v in self.classes.items():
-            index = self.classes.keys().index(k)
-            if index < len(self.classes) - 1:
+        for k, v in self.threshold_classes.items():
+            index = self.threshold_classes.keys().index(k)
+            if index < len(self.threshold_classes) - 1:
                 # Max value changed
                 v[1].valueChanged.connect(partial(
                     min_max_changed, index=index, the_string='Max value'))
@@ -459,6 +480,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
 
         # Action for buttons
         cancel_button.clicked.connect(self.cancel_button_clicked)
+        save_button.clicked.connect(self.save_button_clicked)
 
         button_layout = QHBoxLayout()
         button_layout.addWidget(load_default_button)
@@ -474,7 +496,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         self.right_layout.addLayout(button_layout)
 
     def cancel_button_clicked(self):
-        """Slot for cancel button clicked."""
+        """Action for cancel button clicked."""
         # Change mode
         self.mode = CHOOSE_MODE
         # Enable all edit button
@@ -490,3 +512,23 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         clear_layout(self.right_layout)
         # Show current state
         self.show_current_state()
+        # Unset active exposure
+        self.active_exposure = None
+
+    def save_button_clicked(self):
+        """Action for save button clicked."""
+        # Save current edit
+        self.thresholds[self.active_exposure['key']] = self.get_threshold()
+        # Back to choose mode
+        self.cancel_button_clicked()
+
+    def get_threshold(self):
+        """Return threshold based on current state."""
+        value_map = dict()
+        for key, value in self.threshold_classes.items():
+            value_map[key] = [
+                value[0].value(),
+                value[1].value(),
+            ]
+        return value_map
+
