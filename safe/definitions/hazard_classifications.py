@@ -10,6 +10,7 @@ from safe.utilities.i18n import tr
 from safe.definitions.units import unit_centimetres, unit_miles_per_hour, \
     unit_kilometres_per_hour, unit_knots
 from safe.definitions.colors import (
+    grey,
     green,
     light_green,
     yellow,
@@ -23,8 +24,13 @@ __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
-null_hazard_value = 'not exposed'
-null_hazard_legend = tr('Not exposed')
+# This class will be automatically added to a hazard classification on runtime.
+not_exposed_class = {
+    'key': 'not exposed',
+    'name': tr('Not exposed'),
+    'description': tr('Not exposed'),
+    'color': grey,
+}
 
 generic_hazard_classes = {
     'key': 'generic_hazard_classes',
