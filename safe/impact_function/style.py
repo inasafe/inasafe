@@ -12,8 +12,7 @@ from qgis.core import (
     QgsConditionalStyle,
 )
 
-from safe.definitions.colors import (
-    grey,
+from safe.definitions.styles import (
     line_width_exposure,
     template_without_thresholds,
     template_with_minimum_thresholds,
@@ -21,8 +20,7 @@ from safe.definitions.colors import (
     template_with_range_thresholds,
 )
 from safe.definitions.fields import hazard_class_field, hazard_count_field
-from safe.definitions.hazard_classifications import (
-    null_hazard_value, null_hazard_legend)
+from safe.definitions.hazard_classifications import not_exposed_class
 from safe.definitions.utilities import definition
 from safe.utilities.gis import is_line_layer
 from safe.utilities.rounding import round_affected_number
@@ -52,7 +50,7 @@ def hazard_class_style(layer, classification, display_null=False):
     attribute_table_styles = []
 
     for hazard_class, (color, label) in classification.iteritems():
-        if hazard_class == null_hazard_value and not display_null:
+        if hazard_class == not_exposed_class['key'] and not display_null:
             # We don't want to display the null value (not exposed).
             # We skip it.
             continue
@@ -170,7 +168,8 @@ def generate_classified_legend(
         classes[hazard_class['key']] = (hazard_class['color'], label)
 
     # We add the not exposed class at the end.
-    not_exposed_field = hazard_count_field['field_name'] % null_hazard_value
+    not_exposed_field = (
+        hazard_count_field['field_name'] % not_exposed_class['key'])
     try:
         value = analysis_row[not_exposed_field]
     except KeyError:
@@ -178,11 +177,11 @@ def generate_classified_legend(
         value = 0
     value = round_affected_number(value, enable_rounding, True)
     label = format_label(
-        hazard_class=null_hazard_legend,
+        hazard_class=not_exposed_class['name'],
         value=value,
         exposure_unit=exposure_unit['abbreviation'])
 
-    classes[null_hazard_value] = (grey, label)
+    classes[not_exposed_class['key']] = (not_exposed_class['color'], label)
 
     return classes
 

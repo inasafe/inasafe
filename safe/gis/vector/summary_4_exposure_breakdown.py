@@ -24,7 +24,7 @@ from safe.definitions.processing_steps import (
     summary_4_exposure_breakdown_steps)
 from safe.definitions.post_processors import post_processor_affected_function
 from safe.definitions.layer_purposes import layer_purpose_exposure_breakdown
-from safe.definitions.hazard_classifications import null_hazard_value
+from safe.definitions.hazard_classifications import not_exposed_class
 from safe.gis.vector.tools import (
     create_field_from_definition,
     read_dynamic_inasafe_field,
@@ -190,7 +190,7 @@ def exposure_type_breakdown(aggregate_hazard, callback=None):
             )
             attributes.append(value)
 
-            if hazard_affected[hazard_class] == null_hazard_value:
+            if hazard_affected[hazard_class] == not_exposed_class['key']:
                 total_not_exposed += value
             elif hazard_affected[hazard_class]:
                 total_affected += value

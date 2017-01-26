@@ -64,6 +64,9 @@ class TestImpactReport(unittest.TestCase):
             actual_string = actual_file.read().strip()
             self.assertEquals(control_string, actual_string)
 
+    def setUp(self):
+        self.maxDiff = None
+
     def test_analysis_result_from_impact_function(self):
         """Test generate analysis result from impact function."""
 
