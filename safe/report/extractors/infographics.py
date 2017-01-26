@@ -7,7 +7,7 @@ from jinja2.exceptions import TemplateError
 
 from safe.common.parameters.resource_parameter import ResourceParameter
 from safe.common.utilities import safe_dir
-from safe.definitions.colors import green
+from safe.definitions.styles import green
 from safe.definitions.exposure import exposure_population
 from safe.definitions.fields import (
     total_affected_field,

@@ -7,9 +7,13 @@ to have a table showing you classes of each kind of hazard.
 """
 from safe.definitions import concepts, small_number
 from safe.utilities.i18n import tr
-from safe.definitions.units import unit_centimetres, unit_miles_per_hour, \
-    unit_kilometres_per_hour, unit_knots
-from safe.definitions.colors import (
+from safe.definitions.units import (
+    unit_centimetres,
+    unit_miles_per_hour,
+    unit_kilometres_per_hour,
+    unit_knots,
+)
+from safe.definitions.styles import (
     grey,
     green,
     light_green,
