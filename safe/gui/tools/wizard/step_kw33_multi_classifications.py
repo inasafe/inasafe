@@ -51,13 +51,14 @@ INFO_STYLE = styles.INFO_STYLE
 CHOOSE_MODE = 0
 EDIT_MODE = 1
 
+
 class StepKwMultiClassifications(WizardStep, FORM_CLASS):
     """Keyword Wizard Step: Multi Classification."""
 
     def __init__(self, parent=None):
         """Constructor for the tab.
 
-        :param parent: parent - widget to use as parent (Wizard Dialog).
+        :param parent: widget to use as parent (Wizard Dialog).
         :type parent: QWidget
 
         """
@@ -143,7 +144,6 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
                 subcategory['name'], layer_purpose['name'], field)
 
         self.multi_classifications_label.setText(text_label)
-
 
     def setup_left_panel(self):
         """Setup the UI for left panel.
@@ -269,7 +269,8 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             table.add(header)
             classification = self.get_classification(
                 self.exposure_combo_boxes[i])
-            default_thresholds = classification_thresholds(classification, unit)
+            default_thresholds = classification_thresholds(
+                classification, unit)
             thresholds = self.thresholds.get(self.exposures[i]['key'])
             if not thresholds:
                 thresholds = default_thresholds
@@ -283,13 +284,6 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
                 row.add(m.Cell(threshold[0]))
                 row.add(m.Cell(threshold[1]))
                 table.add(row)
-            #
-            # for class_key, threshold in thresholds.items():
-            #     row = m.Row()
-            #     row.add(m.Cell(class_key))
-            #     row.add(m.Cell(threshold[0]))
-            #     row.add(m.Cell(threshold[1]))
-            #     table.add(row)
             message.add(table)
 
         status_text_edit = QTextBrowser(None)
@@ -432,7 +426,8 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             grid_layout_thresholds.addWidget(class_label, i, 0)
             grid_layout_thresholds.addLayout(class_layout, i, 1)
 
-            self.threshold_classes[the_class['key']] = [min_value_input, max_value_input]
+            self.threshold_classes[the_class['key']] = [
+                min_value_input, max_value_input]
 
         grid_layout_thresholds.setColumnStretch(0, 1)
         grid_layout_thresholds.setColumnStretch(0, 2)
@@ -448,12 +443,14 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             """
             if the_string == 'Max value':
                 current_max_value = self.threshold_classes.values()[index][1]
-                target_min_value = self.threshold_classes.values()[index + 1][0]
+                target_min_value = self.threshold_classes.values()[
+                    index + 1][0]
                 if current_max_value.value() != target_min_value.value():
                     target_min_value.setValue(current_max_value.value())
             elif the_string == 'Min value':
                 current_min_value = self.threshold_classes.values()[index][0]
-                target_max_value = self.threshold_classes.values()[index - 1][1]
+                target_max_value = self.threshold_classes.values()[
+                    index - 1][1]
                 if current_min_value.value() != target_max_value.value():
                     target_max_value.setValue(current_min_value.value())
 
@@ -531,4 +528,3 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
                 value[1].value(),
             ]
         return value_map
-
