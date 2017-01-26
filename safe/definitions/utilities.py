@@ -54,7 +54,7 @@ def hazards_for_layer(layer_geometry_key, hazard_category_key=None):
     :param layer_geometry_key: The geometry id
     :type layer_geometry_key: str
 
-    :param hazard_category_key: The hazard category
+    :param hazard_category_key: The hazard ca   tegory
     :type hazard_category_key: str
 
     :returns: List of hazard
@@ -225,6 +225,9 @@ def get_non_compulsory_fields(layer_purpose, layer_subcategory=None):
 
     :param layer_purpose: The layer purpose.
     :type layer_purpose: str
+
+    :param layer_subcategory: Exposure or hazard value.
+    :type layer_subcategory: str
 
     :returns: Compulsory fields
     :rtype: list

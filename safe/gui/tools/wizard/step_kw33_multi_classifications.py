@@ -3,10 +3,15 @@
 
 import logging
 from functools import partial
+from collections import OrderedDict
+import numpy
 
-from PyQt4.QtGui import QLabel, QHBoxLayout, QComboBox, QPushButton, QTextBrowser
+from PyQt4.QtGui import (
+    QLabel, QHBoxLayout, QComboBox, QPushButton, QTextBrowser,
+    QDoubleSpinBox, QGridLayout)
 from PyQt4.QtCore import Qt
-from PyQt4.QtWebKit import QWebView
+from osgeo import gdal
+from osgeo.gdalconst import GA_ReadOnly
 
 
 import safe.messaging as m
@@ -29,7 +34,9 @@ from safe.gui.tools.wizard.wizard_strings import (
     multiple_classified_hazard_classifications_raster,
     multiple_continuous_hazard_classifications_raster)
 from safe.gui.tools.wizard.wizard_utils import clear_layout, skip_inasafe_field
-from safe.utilities.resources import html_footer, html_header, resources_path
+from safe.utilities.resources import html_footer, html_header
+from safe.gui.tools.wizard.wizard_strings import (
+    continuous_raster_question, continuous_vector_question)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -197,6 +204,9 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         """Method to handle edit button."""
         LOGGER.debug(exposure['key'])
         LOGGER.debug(self.get_classification(exposure_combo_box)['key'])
+        layer_mode = self.parent.step_kw_layermode.selected_layermode()
+        classification = self.get_classification(exposure_combo_box)
+
         if self.mode == CHOOSE_MODE:
             # Change mode
             self.mode = EDIT_MODE
@@ -212,26 +222,17 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             edit_button.setText(tr('Cancel'))
 
             # Clear right panel
+            clear_layout(self.right_layout)
             # Show edit threshold or value mapping
+            if layer_mode == layer_mode_continuous:
+                LOGGER.debug('Layer mode continuous, setup thresholds panel')
+                self.setup_thresholds_panel(classification)
+            else:
+                LOGGER.debug('Layer mode classified, setup value map panel')
 
         elif self.mode == EDIT_MODE:
-            # Change mode
-            self.mode = CHOOSE_MODE
-            # Enable all edit button
-            for exposure_edit_button in self.exposure_edit_buttons:
-                exposure_edit_button.setEnabled(True)
-            # Enable all combo box
-            for exposure_combo_box in self.exposure_combo_boxes:
-                exposure_combo_box.setEnabled(True)
-            # Revert back the text of the edit button.
-            edit_button.setText(tr('Edit'))
-
-            # Clear right panel
-            # Show current state
-
-    def setup_thresholds_panel(self):
-        """Setup threshold panel in the right panel."""
-
+            # Behave the same as cancel button clicked.
+            self.cancel_button_clicked()
 
     def show_current_state(self):
         """Setup the UI for QTextEdit to show the current state."""
@@ -304,3 +305,188 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         :rtype: dict
         """
         return combo_box.itemData(combo_box.currentIndex(), Qt.UserRole)
+
+
+    def setup_thresholds_panel(self, classification):
+        """Setup threshold panel in the right panel."""
+
+        LOGGER.debug('Setup threshold panel')
+
+        # Set text in the label
+        layer_purpose = self.parent.step_kw_purpose.selected_purpose()
+        layer_subcategory = self.parent.step_kw_subcategory.\
+            selected_subcategory()
+
+        if is_raster_layer(self.parent.layer):
+            dataset = gdal.Open(self.parent.layer.source(), GA_ReadOnly)
+            min_value_layer = numpy.amin(numpy.array(
+                dataset.GetRasterBand(1).ReadAsArray()))
+            max_value_layer = numpy.amax(numpy.array(
+                dataset.GetRasterBand(1).ReadAsArray()))
+            text = continuous_raster_question % (
+                layer_purpose['name'],
+                layer_subcategory['name'],
+                classification['name'], min_value_layer, max_value_layer)
+        else:
+            field_name = self.parent.step_kw_field.selected_field()
+            field_index = self.parent.layer.fieldNameIndex(field_name)
+            min_value_layer = self.parent.layer.minimumValue(field_index)
+            max_value_layer = self.parent.layer.maximumValue(field_index)
+            text = continuous_vector_question % (
+                layer_purpose['name'],
+                layer_subcategory['name'],
+                field_name,
+                classification['name'],
+                min_value_layer,
+                max_value_layer)
+
+        description_label = QLabel(text)
+        description_label.setWordWrap(True)
+        self.right_layout.addWidget(description_label)
+
+        thresholds = self.parent.get_existing_keyword('thresholds')
+        selected_unit = self.parent.step_kw_unit.selected_unit()['key']
+
+        self.classes = OrderedDict()
+        classes = classification.get('classes')
+        # Sort by value, put the lowest first
+        classes = sorted(classes, key=lambda k: k['value'])
+
+        grid_layout_thresholds = QGridLayout()
+
+        for i, the_class in enumerate(classes):
+            class_layout = QHBoxLayout()
+
+            # Class label
+            class_label = QLabel(the_class['name'])
+
+            # Min label
+            min_label = QLabel(tr('Min'))
+
+            # Min value as double spin
+            min_value_input = QDoubleSpinBox()
+            # TODO(IS) We can set the min and max depends on the unit, later
+            min_value_input.setMinimum(0)
+            min_value_input.setMaximum(999999)
+            if thresholds.get(the_class['key']):
+                min_value_input.setValue(thresholds[the_class['key']][0])
+            else:
+                default_min = the_class['numeric_default_min']
+                if isinstance(default_min, dict):
+                    default_min = the_class[
+                        'numeric_default_min'][selected_unit]
+                min_value_input.setValue(default_min)
+            min_value_input.setSingleStep(0.1)
+
+            # Max label
+            max_label = QLabel(tr('Max <='))
+
+            # Max value as double spin
+            max_value_input = QDoubleSpinBox()
+            # TODO(IS) We can set the min and max depends on the unit, later
+            max_value_input.setMinimum(0)
+            max_value_input.setMaximum(999999)
+            if thresholds.get(the_class['key']):
+                max_value_input.setValue(thresholds[the_class['key']][1])
+            else:
+                default_max = the_class['numeric_default_max']
+                if isinstance(default_max, dict):
+                    default_max = the_class[
+                        'numeric_default_max'][selected_unit]
+                max_value_input.setValue(default_max)
+            max_value_input.setSingleStep(0.1)
+
+            # Add to class_layout
+            class_layout.addWidget(min_label)
+            class_layout.addWidget(min_value_input)
+            class_layout.addWidget(max_label)
+            class_layout.addWidget(max_value_input)
+
+            class_layout.setStretch(0, 1)
+            class_layout.setStretch(1, 2)
+            class_layout.setStretch(2, 1)
+            class_layout.setStretch(3, 2)
+
+            # Add to grid_layout
+            grid_layout_thresholds.addWidget(class_label, i, 0)
+            grid_layout_thresholds.addLayout(class_layout, i, 1)
+
+            self.classes[the_class['key']] = [min_value_input, max_value_input]
+
+        grid_layout_thresholds.setColumnStretch(0, 1)
+        grid_layout_thresholds.setColumnStretch(0, 2)
+
+        def min_max_changed(index, the_string):
+            """Slot when min or max value change.
+
+            :param index: The index of the double spin.
+            :type index: int
+
+            :param the_string: The flag to indicate the min or max value.
+            :type the_string: str
+            """
+            if the_string == 'Max value':
+                current_max_value = self.classes.values()[index][1]
+                target_min_value = self.classes.values()[index + 1][0]
+                if current_max_value.value() != target_min_value.value():
+                    target_min_value.setValue(current_max_value.value())
+            elif the_string == 'Min value':
+                current_min_value = self.classes.values()[index][0]
+                target_max_value = self.classes.values()[index - 1][1]
+                if current_min_value.value() != target_max_value.value():
+                    target_max_value.setValue(current_min_value.value())
+
+        # Set behaviour
+        for k, v in self.classes.items():
+            index = self.classes.keys().index(k)
+            if index < len(self.classes) - 1:
+                # Max value changed
+                v[1].valueChanged.connect(partial(
+                    min_max_changed, index=index, the_string='Max value'))
+            if index > 0:
+                # Min value
+                v[0].valueChanged.connect(partial(
+                    min_max_changed, index=index, the_string='Min value'))
+
+        grid_layout_thresholds.setSpacing(0)
+
+        self.right_layout.addLayout(grid_layout_thresholds)
+
+        # Add 3 buttons: Load default, Cancel, Save
+        load_default_button = QPushButton(tr('Load Default'))
+        cancel_button = QPushButton(tr('Cancel'))
+        save_button = QPushButton(tr('Save'))
+
+        # Action for buttons
+        cancel_button.clicked.connect(self.cancel_button_clicked)
+
+        button_layout = QHBoxLayout()
+        button_layout.addWidget(load_default_button)
+        button_layout.addStretch(1)
+        button_layout.addWidget(cancel_button)
+        button_layout.addWidget(save_button)
+
+        button_layout.setStretch(0, 1)
+        button_layout.setStretch(1, 1)
+        button_layout.setStretch(2, 1)
+        button_layout.setStretch(3, 1)
+
+        self.right_layout.addLayout(button_layout)
+
+    def cancel_button_clicked(self):
+        """Slot for cancel button clicked."""
+        # Change mode
+        self.mode = CHOOSE_MODE
+        # Enable all edit button
+        for exposure_edit_button in self.exposure_edit_buttons:
+            exposure_edit_button.setEnabled(True)
+            exposure_edit_button.setText(tr('Edit'))
+
+        # Enable all combo box
+        for exposure_combo_box in self.exposure_combo_boxes:
+            exposure_combo_box.setEnabled(True)
+
+        # Clear right panel
+        clear_layout(self.right_layout)
+        # Show current state
+        self.show_current_state()
