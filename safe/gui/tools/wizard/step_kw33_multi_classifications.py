@@ -4,8 +4,10 @@
 import logging
 from functools import partial
 
-from PyQt4.QtGui import QLabel, QHBoxLayout, QComboBox, QPushButton, QTextEdit
+from PyQt4.QtGui import QLabel, QHBoxLayout, QComboBox, QPushButton, QTextBrowser
 from PyQt4.QtCore import Qt
+from PyQt4.QtWebKit import QWebView
+
 
 import safe.messaging as m
 from safe.messaging import styles
@@ -16,8 +18,10 @@ from safe.definitions.font import big_font
 from safe.definitions.layer_purposes import layer_purpose_aggregation
 from safe.gui.tools.wizard.wizard_step import (
     WizardStep, get_wizard_step_ui_class)
+from safe.gui.widgets.message_viewer import MessageViewer
 from safe.utilities.gis import is_raster_layer
-from safe.definitions.utilities import get_fields, get_non_compulsory_fields
+from safe.definitions.utilities import (
+    get_fields, get_non_compulsory_fields, classification_thresholds)
 from safe.definitions.layer_modes import layer_mode_continuous
 from safe.gui.tools.wizard.wizard_strings import (
     multiple_classified_hazard_classifications_vector,
@@ -52,10 +56,14 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         """
         WizardStep.__init__(self, parent)
         self.exposures = []
+        self.exposure_labels = []
         self.exposure_combo_boxes = []
         self.exposure_edit_buttons = []
         self.mode = 0
-
+        # Store the current representative state of the UI.
+        # self.classifications = {}
+        self.value_maps = {}
+        self.thresholds = {}
     def is_ready_to_next_step(self):
         """Check if the step is complete.
 
@@ -130,6 +138,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
 
         Generate all exposure, combobox, and edit button.
         """
+        layer_mode = self.parent.step_kw_layermode.selected_layermode()
         subcategory = self.parent.step_kw_subcategory.selected_subcategory()
         left_panel_heading = QLabel(tr('Classifications'))
         left_panel_heading.setFont(big_font)
@@ -150,16 +159,15 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             for i, hazard_classification in enumerate(hazard_classifications):
                 exposure_combo_box.addItem(hazard_classification['name'])
                 exposure_combo_box.setItemData(
-                    i, hazard_classification['key'], Qt.UserRole)
+                    i, hazard_classification, Qt.UserRole)
 
             # Add edit button
             exposure_edit_button = QPushButton(tr('Edit'))
             exposure_edit_button.clicked.connect(
                 partial(self.edit_button_clicked,
-                        edit_button=exposure_edit_button))
-            # exposure_edit_button.pressed.connect(
-            #     lambda: display_information_message_box(
-            #         title=title, message=more_details))
+                        edit_button=exposure_edit_button,
+                        exposure_combo_box=exposure_combo_box,
+                        exposure=exposure))
 
             # Arrange in layout
             exposure_layout.addWidget(exposure_label)
@@ -176,9 +184,19 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             self.exposures.append(exposure)
             self.exposure_combo_boxes.append((exposure_combo_box))
             self.exposure_edit_buttons.append(exposure_edit_button)
+            self.exposure_labels.append(label)
 
-    def edit_button_clicked(self, edit_button):
+            # Set the current thresholds
+            if layer_mode == layer_mode_continuous:
+                unit = self.parent.step_kw_unit.selected_unit()
+                thresholds = classification_thresholds(
+                    self.get_classification(exposure_combo_box), unit)
+                self.thresholds[exposure['key']] = thresholds
+
+    def edit_button_clicked(self, edit_button, exposure_combo_box, exposure):
         """Method to handle edit button."""
+        LOGGER.debug(exposure['key'])
+        LOGGER.debug(self.get_classification(exposure_combo_box)['key'])
         if self.mode == CHOOSE_MODE:
             # Change mode
             self.mode = EDIT_MODE
@@ -192,6 +210,10 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
                 exposure_combo_box.setEnabled(False)
             # Change the edit button to cancel
             edit_button.setText(tr('Cancel'))
+
+            # Clear right panel
+            # Show edit threshold or value mapping
+
         elif self.mode == EDIT_MODE:
             # Change mode
             self.mode = CHOOSE_MODE
@@ -204,24 +226,51 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             # Revert back the text of the edit button.
             edit_button.setText(tr('Edit'))
 
-    def show_viewer(self):
+            # Clear right panel
+            # Show current state
+
+    def setup_thresholds_panel(self):
+        """Setup threshold panel in the right panel."""
+
+
+    def show_current_state(self):
         """Setup the UI for QTextEdit to show the current state."""
+        layer_mode = self.parent.step_kw_layermode.selected_layermode()
         right_panel_heading = QLabel(tr('Status'))
         right_panel_heading.setFont(big_font)
         self.right_layout.addWidget(right_panel_heading)
 
         message = m.Message()
-        message.add(m.Heading(tr('InaSAFE Lorem Ipsum'), **INFO_STYLE))
-        paragraph = m.Paragraph(tr(
-            'InaSAFE is free software that produces realistic natural hazard '
-            'impact scenarios for better planning, preparedness and response '
-            'activities. It provides a simple but rigourous way to combine data '
-            'from scientists, local governments and communities to provide '
-            'insights into the likely impacts of future disaster events.'
-        ))
-        message.add(paragraph)
+        if layer_mode == layer_mode_continuous:
+            unit = self.parent.step_kw_unit.selected_unit()
+            title = tr('Thresholds')
+        else:
+            unit = None
+            title = tr('Value maps')
 
-        status_text_edit = QTextEdit()
+        message.add(m.Heading(title, **INFO_STYLE))
+
+        for i in range(len(self.exposures)):
+            message.add(m.Text(self.exposure_labels[i]))
+            table = m.Table(style_class='table table-condensed table-striped')
+            header = m.Row()
+            header.add(m.Cell(tr('Class name')))
+            header.add(m.Cell(tr('Minimum')))
+            header.add(m.Cell(tr('Maximum')))
+            table.add(header)
+            classification = self.get_classification(
+                self.exposure_combo_boxes[i])
+            thresholds = classification_thresholds(classification, unit)
+            for class_key, threshold in thresholds.items():
+                row = m.Row()
+                row.add(m.Cell(class_key))
+                row.add(m.Cell(threshold[0]))
+                row.add(m.Cell(threshold[1]))
+                table.add(row)
+            message.add(table)
+
+        status_text_edit = QTextBrowser(None)
+        # status_text_edit = MessageViewer(None)
         html_string = html_header() + message.to_html() + html_footer()
         status_text_edit.setHtml(html_string)
         self.right_layout.addWidget(status_text_edit)
@@ -235,9 +284,23 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         self.setup_left_panel()
 
         # Set the right panel, for the beginning show the viewer
-        self.show_viewer()
+        self.show_current_state()
 
     def clear(self):
         """Clear current state."""
         clear_layout(self.left_layout)
         clear_layout(self.right_layout)
+
+    def get_current_state(self):
+        """Obtain current classification and value map / threshold."""
+
+    def get_classification(self, combo_box):
+        """Helper to obtain the classification from a combo box.
+
+        :param combo_box: A classification combo box.
+        :type combo_box: QComboBox.
+
+        :returns: Classification definitions.
+        :rtype: dict
+        """
+        return combo_box.itemData(combo_box.currentIndex(), Qt.UserRole)
