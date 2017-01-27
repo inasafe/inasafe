@@ -746,8 +746,12 @@ class WizardDialog(QDialog, FORM_CLASS):
             get_current_state()
         keywords['classifications'] = multi_classifications.get(
             'classifications')
-        keywords['value_maps'] = multi_classifications.get('value_maps')
-        keywords['thresholds'] = multi_classifications.get('thresholds')
+        value_maps = multi_classifications.get('value_maps')
+        if value_maps:
+            keywords['value_maps'] = value_maps
+        thresholds = multi_classifications.get('thresholds')
+        if thresholds:
+            keywords['thresholds'] = thresholds
 
         if self.step_kw_source.leSource.text():
             keywords['source'] = get_unicode(

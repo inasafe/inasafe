@@ -20,7 +20,12 @@ from safe.definitions.layer_purposes import (
     layer_purpose_hazard, layer_purpose_exposure, layer_purpose_aggregation)
 from safe.definitions.hazard import (
     hazard_volcano, hazard_flood, hazard_earthquake)
-from safe.definitions.exposure import exposure_structure, exposure_population
+from safe.definitions.exposure import (
+    exposure_structure,
+    exposure_population,
+    exposure_land_cover,
+    exposure_place,
+    exposure_road)
 from safe.definitions.hazard_category import hazard_category_multiple_event
 from safe.definitions.hazard_classifications import (
     volcano_hazard_classes, generic_hazard_classes, flood_hazard_classes)
@@ -39,6 +44,7 @@ from safe.definitions.units import count_exposure_unit, unit_metres
 
 from safe.gui.tools.wizard.wizard_dialog import WizardDialog
 from safe.definitions.utilities import get_compulsory_fields
+from safe.utilities.unicode import byteify
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -1632,21 +1638,10 @@ class TestKeywordWizard(unittest.TestCase):
         # Click next to select unit metres
         dialog.pbnNext.click()
 
-        # Check if in select classification step
-        self.check_current_step(dialog.step_kw_classification)
+        # Check if in select multi classifications step
+        self.check_current_step(dialog.step_kw_multi_classifications)
 
-        # select flood hazard classification
-        self.select_from_list_widget(
-            flood_hazard_classes['name'],
-            dialog.step_kw_classification.lstClassifications)
-
-        # Click next to select flood classification
-        dialog.pbnNext.click()
-
-        # Check if in thresholds step
-        self.check_current_step(dialog.step_kw_threshold)
-
-        # Click next to finish threshold step
+        # Click next to finish multi classifications step
         dialog.pbnNext.click()
 
         # Check if in source step
@@ -1678,7 +1673,13 @@ class TestKeywordWizard(unittest.TestCase):
 
         # Checking Keyword Created
         expected_keyword = {
-            'classification': flood_hazard_classes['key'],
+            'classifications': {
+                exposure_land_cover['key']: flood_hazard_classes['key'],
+                exposure_place['key']: flood_hazard_classes['key'],
+                exposure_population['key']: flood_hazard_classes['key'],
+                exposure_road['key']: flood_hazard_classes['key'],
+                exposure_structure['key']: flood_hazard_classes['key']
+            },
             'continuous_hazard_unit': 'metres',
             'date': source_date,
             'hazard': hazard_flood['key'],
@@ -1689,13 +1690,34 @@ class TestKeywordWizard(unittest.TestCase):
             'license': source_license,
             'scale': source_scale,
             'source': source,
-            'thresholds': {'dry': [0.0, 1.0], 'wet': [1.0, 999999.0]},
+            'thresholds': {
+                exposure_land_cover['key']: {
+                    'dry': [0, 0.9999999999999999],
+                    'wet': [1, 9999999999L]
+                },
+                exposure_place['key']: {
+                    'dry': [0, 0.9999999999999999],
+                    'wet': [1, 9999999999L]
+                },
+                exposure_population['key']: {
+                    'dry': [0, 0.9999999999999999],
+                    'wet': [1, 9999999999L]
+                },
+                exposure_road['key']: {
+                    'dry': [0, 0.9999999999999999],
+                    'wet': [1, 9999999999L]
+                },
+                exposure_structure['key']: {
+                    'dry': [0, 0.9999999999999999],
+                    'wet': [1, 9999999999L]
+                }
+            },
             'title': layer_title,
             'url': source_url,
         }
 
         real_keywords = dialog.get_keywords()
-        self.assertDictEqual(real_keywords, expected_keyword)
+        self.assertDictEqual(byteify(real_keywords), byteify(expected_keyword))
 
     def test_continuous_vector(self):
         """Test continuous vector for keyword wizard."""
