@@ -374,7 +374,8 @@ concepts = {
             {
                 'text': tr(
                     'Oxford Dictionary.'),
-                'link': u'https://en.oxforddictionaries.com/definition/disabled'
+                'link': u'https://en.oxforddictionaries.com/definition/'
+                        u'disabled'
             }
         ],
     },
@@ -386,7 +387,8 @@ concepts = {
             {
                 'text': tr(
                     'Oxford Dictionary.'),
-                'link': u'https://en.oxforddictionaries.com/definition/pregnant'
+                'link': u'https://en.oxforddictionaries.com/definition/'
+                        u'pregnant'
             }
         ],
     },
