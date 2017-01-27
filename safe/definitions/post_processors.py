@@ -104,9 +104,9 @@ def post_processor_affected_function(**kwargs):
     return affected
 
 
-def post_processor_displaced_function(
+def post_processor_displacement_function(
         classification=None, hazard_class=None, population=None):
-    """Private function used in the displaced postprocessor.
+    """Private function used in the displacement postprocessor.
 
     :param classification: The hazard classification to use.
     :type classification: str
@@ -125,13 +125,13 @@ def post_processor_displaced_function(
 
     for hazard_class_def in classification:
         if hazard_class_def['key'] == hazard_class:
-            displaced_ratio = hazard_class_def.get('displaced_rates', 0)
+            displaced_rate = hazard_class_def.get('displacement_rate', 0)
             break
     else:
-        displaced_ratio = 0
+        displaced_rate = 0
 
     try:
-        return population * displaced_ratio
+        return population * displaced_rate
     except:  # pylint: disable=broad-except
         # intended, return 0 if calculation fails
         return 0
@@ -251,7 +251,7 @@ post_processor_process_types = [
 # A postprocessor can be defined with a formula or with a python function.
 
 post_processor_displaced = {
-    'key': 'post_processor_displaced',
+    'key': 'post_processor_displacement',
     'name': tr('Displaced Post Processor'),
     'description': tr(
         'A post processor to calculate the number of displaced people.'
@@ -283,7 +283,7 @@ post_processor_displaced = {
         'displaced': {
             'value': displaced_field,
             'type': function_process,
-            'function': post_processor_displaced_function
+            'function': post_processor_displacement_function
         }
     }
 }
