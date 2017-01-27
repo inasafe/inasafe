@@ -255,7 +255,7 @@ class Plugin(object):
 
     def _create_multi_buffer_action(self):
         """Create action for multi buffer dialog."""
-        icon = resources_path('img', 'icons', 'show-minimum-needs.svg')
+        icon = resources_path('img', 'icons', 'show-multi-buffer.svg')
         self.action_multi_buffer = QAction(
             QIcon(icon),
             self.tr('Multi Buffer'), self.iface.mainWindow())

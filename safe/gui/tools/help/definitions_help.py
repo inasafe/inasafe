@@ -20,6 +20,7 @@ from safe.gui.tools.help.osm_downloader_help import content as osm_help
 from safe.gui.tools.help.peta_jakarta_help import content as petajakarta_help
 from safe.gui.tools.help.shakemap_converter_help \
     import content as shakemap_help
+from safe.gui.tools.help.multi_buffer_help import content as multi_buffer_help
 from safe.utilities.resources import resource_url, resources_path
 LOGGER = logging.getLogger('InaSAFE')
 # For chapter sections
@@ -149,6 +150,10 @@ def content():
     header = m.Heading(tr('The Shakemap Converter'), **SUBSECTION_STYLE)
     message.add(header)
     message.add(shakemap_help())
+
+    header = m.Heading(tr('The Multi Buffer Tool'), **SUBSECTION_STYLE)
+    message.add(header)
+    message.add(multi_buffer_help())
 
     # Keep this last in the tool section please as it has subsections
     # and so uses the top level section style

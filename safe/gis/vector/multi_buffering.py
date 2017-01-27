@@ -13,7 +13,7 @@ from qgis.core import (
 
 from safe.common.utilities import get_utm_epsg
 from safe.gis.vector.tools import create_memory_layer
-from safe.definitions.fields import hazard_class_field
+from safe.definitions.fields import hazard_class_field, buffer_distance_field
 from safe.definitions.processing_steps import buffer_steps
 from safe.utilities.profiling import profile
 
@@ -60,10 +60,15 @@ def multi_buffering(layer, radii, callback=None):
     input_crs = layer.crs()
     feature_count = layer.featureCount()
 
-    # Set the new hazard value field
+    # Set the new hazard class field.
     fields = layer.fields()
     field_type = hazard_class_field['type']
     field_name = hazard_class_field['field_name']
+    new_field = QgsField(field_name, field_type)
+    fields.append(new_field)
+    # Set the new buffer distances field.
+    field_type = buffer_distance_field['type']
+    field_name = buffer_distance_field['field_name']
     new_field = QgsField(field_name, field_type)
     fields.append(new_field)
 
@@ -95,6 +100,8 @@ def multi_buffering(layer, radii, callback=None):
 
             # We add the hazard value name to the attribute table.
             attributes.append(radii[radius])
+            # We add the value of buffer distance to the attribute table.
+            attributes.append(radius)
 
             circle = geom.buffer(radius, 30)
 

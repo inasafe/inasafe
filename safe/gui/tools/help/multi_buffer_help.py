@@ -9,7 +9,7 @@ SUBSECTION_STYLE = styles.SUBSECTION_LEVEL_3_STYLE
 
 
 def multi_buffer_help():
-    """Help message for hazar layer generator dialog.
+    """Help message for multi buffer dialog.
 
     .. versionadded:: 4.0.0
 
@@ -45,36 +45,40 @@ def content():
     This method was added so that the text could be reused in the
     dock_help module.
 
-    .. versionadded:: 3.2.2
+    .. versionadded:: 4.0.0
 
     :returns: A message object without brand element.
     :rtype: safe.messaging.message.Message
     """
     message = m.Message()
     message.add(m.Paragraph(tr(
-        'This tool will generate polygon layer by multi-buffering input layer.'
-        ' To use this tool effectively:'
+        'This tool will generate a polygon layer by multi-buffering the input '
+        'layer. '
+        'To use this tool effectively:'
     )))
     tips = m.BulletedList()
     tips.add(tr(
-        'Load a point or multiline layer in QGIS. Typically the layer will '
+        'Load a point or line layer in QGIS. Typically, the layer will '
         'represent hazard source such as volcano and river.'
     ))
     tips.add(tr(
-        'Choose where to put the ouput layer to.'
+        'Choose where to save the output layer to.'
     ))
     tips.add(tr(
-        'Create a classification for every buffer distance you fill in radius '
-        'form, for example: high, medium, and low. Click add (+) button to '
-        'record your classification.'
+        'Create one or more entries in the classes list, and define '
+        'the appropriate distances for each buffer. You should give '
+        'each buffer distance a corresponding name '
+        'e.g. "high", "medium", "low". Click the add (+) button to '
+        'record your entries.'
     ))
     tips.add(tr(
         'To remove the classification, select the classification you want to '
-        'remove, then click remove (-) button.'
+        'remove, then click the remove (-) button.'
     ))
     tips.add(tr(
         'A new layer will be added to QGIS after the buffering is complete. '
-        'The layer will contain new buffer polygon(s) and the class name.'
+        'The layer will contain new buffer polygon(s) and the class name will '
+        'be stored as an attribute of each polygon.'
     ))
     message.add(tips)
     return message

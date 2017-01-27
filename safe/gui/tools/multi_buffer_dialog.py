@@ -1,17 +1,15 @@
 # coding=utf-8
-"""**Volcano Buffer Implementation.**
-
-"""
+"""**Multi Buffer Tool Implementation.**"""
 
 import logging
 import os
 
-from qgis.core import QgsVectorFileWriter, QgsMapLayerRegistry, QgsVectorLayer
+from qgis.core import QgsMapLayerRegistry
 from qgis.gui import QgsMapLayerProxyModel
 from PyQt4 import QtGui
 from PyQt4.QtCore import pyqtSignature, pyqtSlot
 from PyQt4.QtGui import QFileDialog, QIcon
-from safe.common.version import get_version
+from safe.datastore.folder import Folder
 from safe.gis.vector.multi_buffering import multi_buffering
 from safe.gui.tools.help.multi_buffer_help import (
     multi_buffer_help)
@@ -33,21 +31,20 @@ class MultiBufferDialog(QtGui.QDialog, FORM_CLASS):
     def __init__(self, parent=None):
         """Constructor for the multi buffer dialog.
 
-        :param parent: Parent widget of this dialog
+        :param parent: Parent widget of this dialog.
         :type parent: QWidget
         """
         QtGui.QDialog.__init__(self, parent)
         self.setupUi(self)
-        self.setWindowTitle(self.tr(
-            'InaSAFE %s Multi Buffer Tool' % get_version()))
+        self.setWindowTitle(self.tr('InaSAFE Multi Buffer Tool'))
+
+        self.output_layer = None
 
         # set icon
         self.add_class_button.setIcon(
-            QIcon(os.path.join(
-                resources_path(), 'img', 'icons', 'add.svg')))
+            QIcon(resources_path('img', 'icons', 'add.svg')))
         self.remove_class_button.setIcon(
-            QIcon(os.path.join(
-                resources_path(), 'img', 'icons', 'remove.svg')))
+            QIcon(resources_path('img', 'icons', 'remove.svg')))
 
         # prepare dialog initialisation
         self.layer.setFilters(QgsMapLayerProxyModel.VectorLayer)
@@ -89,33 +86,30 @@ class MultiBufferDialog(QtGui.QDialog, FORM_CLASS):
         """Process the layer for multi buffering and generate a new layer.
 
         .. note:: This is called on OK click.
-
         """
         # set parameter from dialog
         input_layer = self.layer.currentLayer()
         output_path = self.output_form.text()
+        file_name = os.path.splitext(output_path)[0].split('/')[-1]
         radius = self.get_classification()
         # monkey patch keywords so layer works on multi buffering function
         input_layer.keywords = {'inasafe_fields': {}}
 
         # run multi buffering
-        output_layer = multi_buffering(input_layer, radius)
+        self.output_layer = multi_buffering(input_layer, radius)
 
-        # setting up output format
+        # save output layer to datastore
+        data_store = Folder(os.path.dirname(output_path))
         if self.output_form.text().endswith('.shp'):
-            QgsVectorFileWriter.writeAsVectorFormat(
-                output_layer, output_path, 'CP1250', None, 'ESRI Shapefile')
+            data_store.add_layer(self.output_layer, file_name)
         elif self.output_form.text().endswith('.geojson'):
-            QgsVectorFileWriter.writeAsVectorFormat(
-                output_layer, output_path, 'CP1250', None, 'GeoJSON')
-
-        output_layer = QgsVectorLayer(
-            output_path,
-            os.path.basename(output_path),
-            'ogr')
+            data_store.default_vector_format = 'geojson'
+            data_store.add_layer(self.output_layer, file_name)
 
         # add output layer to map canvas
-        QgsMapLayerRegistry.instance().addMapLayers([output_layer])
+        self.output_layer = data_store.layer(file_name)
+        QgsMapLayerRegistry.instance().addMapLayers(
+            [self.output_layer])
         self.done(QtGui.QDialog.Accepted)
 
     @pyqtSignature('')  # prevents actions being handled twice
@@ -147,8 +141,8 @@ class MultiBufferDialog(QtGui.QDialog, FORM_CLASS):
 
     def populate_hazard_classification(self):
         """Populate hazard classification on hazard class form."""
-        new_class = '%s - %s' % (self.radius_form.value(),
-                                 self.class_form.text())
+        new_class = '%s - %s' % (
+            self.radius_form.value(), self.class_form.text())
         self.hazard_class_form.addItem(new_class)
         self.radius_form.setValue(0)
         self.class_form.clear()
@@ -165,7 +159,7 @@ class MultiBufferDialog(QtGui.QDialog, FORM_CLASS):
         """Get all hazard class created by user.
 
         :return: Hazard class definition created by user.
-        :rtype: Dictionary
+        :rtype: dict
         """
         classification = {}
         for index in xrange(self.hazard_class_form.count()):
