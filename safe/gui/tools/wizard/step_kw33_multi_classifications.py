@@ -310,6 +310,28 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
 
     def get_current_state(self):
         """Obtain current classification and value map / threshold."""
+        classifications = {}
+        for i in range(len(self.exposures)):
+            # Only store the key
+            classifications[self.exposures[i]['key']] = self.get_classification(
+                self.exposure_combo_boxes[i])['key']
+
+        layer_mode = self.parent.step_kw_layermode.selected_layermode()
+
+        if layer_mode == layer_mode_continuous:
+            return {
+                'classifications': classifications,
+                'thresholds': self.thresholds,
+                'value_maps': None
+            }
+        else:
+            return {
+                'classifications': classifications,
+                'thresholds': None,
+                'value_maps': self.value_maps
+            }
+
+
 
     def get_classification(self, combo_box):
         """Helper to obtain the classification from a combo box.
