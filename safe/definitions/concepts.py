@@ -350,7 +350,7 @@ concepts = {
             {
                 'text': tr(
                     'Oxford Dictionary.'),
-                'link': 'https://en.oxforddictionaries.com/definition/female'
+                'link': 'https://en.oxforddictionaries.com/definition/male'
             }
         ],
       },
