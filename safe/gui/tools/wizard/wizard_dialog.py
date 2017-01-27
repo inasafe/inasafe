@@ -13,8 +13,11 @@ from qgis.core import QgsMapLayerRegistry
 
 from safe.definitions.layer_purposes import (
     layer_purpose_exposure, layer_purpose_aggregation, layer_purpose_hazard)
-from safe.definitions.layer_modes import (
-    layer_mode_continuous, layer_mode_classified)
+from safe.definitions.layer_geometry import (
+    layer_geometry_raster,
+    layer_geometry_line,
+    layer_geometry_point,
+    layer_geometry_polygon)
 from safe.definitions.units import exposure_unit
 from safe.definitions.hazard import continuous_hazard_unit
 from safe.definitions.utilities import get_compulsory_fields
@@ -40,7 +43,6 @@ from safe.utilities.gis import (
     is_raster_layer,
     is_point_layer,
     is_polygon_layer)
-from safe.definitions import layer_geometry_raster
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.resources import get_ui_class, resources_path
 from safe.utilities.unicode import get_unicode
@@ -488,13 +490,13 @@ class WizardDialog(QDialog, FORM_CLASS):
         if not layer:
             layer = self.layer
         if is_raster_layer(layer):
-            return 'raster'
+            return layer_geometry_raster['key']
         elif is_point_layer(layer):
-            return 'point'
+            return layer_geometry_point['key']
         elif is_polygon_layer(layer):
-            return 'polygon'
+            return layer_geometry_polygon['key']
         else:
-            return 'line'
+            return layer_geometry_line['key']
 
     def get_existing_keyword(self, keyword):
         """Obtain an existing keyword's value.
@@ -740,16 +742,12 @@ class WizardDialog(QDialog, FORM_CLASS):
             keywords['classification'] = self.step_kw_classification.\
                 selected_classification()['key']
 
-        if self.step_kw_layermode.selected_layermode():
-            layer_mode = self.step_kw_layermode.selected_layermode()
-            if layer_mode == layer_mode_continuous:
-                thresholds = self.step_kw_threshold.get_threshold()
-                if thresholds:
-                    keywords['thresholds'] = thresholds
-            elif layer_mode == layer_mode_classified:
-                value_map = self.step_kw_classify.selected_mapping()
-                if value_map:
-                    keywords['value_map'] = value_map
+        multi_classifications = self.step_kw_multi_classifications.\
+            get_current_state()
+        keywords['classifications'] = multi_classifications.get(
+            'classifications')
+        keywords['value_maps'] = multi_classifications.get('value_maps')
+        keywords['thresholds'] = multi_classifications.get('thresholds')
 
         if self.step_kw_source.leSource.text():
             keywords['source'] = get_unicode(
