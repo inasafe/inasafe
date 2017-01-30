@@ -7,9 +7,10 @@ from safe.definitions.fields import (
     exposure_type_field,
     exposure_class_field)
 from safe.gis.vector.tools import read_dynamic_inasafe_field
-from safe.report.extractors.util import layer_definition_type
+from safe.report.extractors.util import (
+    layer_definition_type,
+    resolve_from_dictionary)
 from safe.utilities.rounding import round_affected_number
-from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -36,6 +37,7 @@ def aggregation_result_extractor(impact_report, component_metadata):
 
     """Initializations"""
 
+    extra_args = component_metadata.extra_args
     # Find out aggregation report type
     exposure_layer = impact_report.exposure
     analysis_layer = impact_report.analysis
@@ -183,18 +185,23 @@ def aggregation_result_extractor(impact_report, component_metadata):
         use_population_rounding=use_population_rounding)
 
     """Generate and format the context"""
+    aggregation_area_default_header = resolve_from_dictionary(
+        extra_args, 'aggregation_area_default_header')
+    header_label = (
+        aggregation_impacted.title() or aggregation_area_default_header)
 
-    header_label = aggregation_impacted.title() or tr('Aggregation area')
-
-    context['header'] = tr('Aggregation Result')
-    context['notes'] = tr(
-        'Columns and rows containing only 0 or "No data" values are '
-        'excluded from the tables.')
+    section_header = resolve_from_dictionary(extra_args, 'header')
+    notes = resolve_from_dictionary(extra_args, 'notes')
+    total_header = resolve_from_dictionary(extra_args, 'total_header')
+    total_in_aggregation_header = resolve_from_dictionary(
+        extra_args, 'total_in_aggregation_header')
+    context['header'] = section_header
+    context['notes'] = notes
     context['aggregation_result'] = {
         'header_label': header_label,
         'type_header_labels': type_header_labels,
-        'total_label': tr('Total'),
-        'total_in_aggregation': tr('Total in aggregation areas'),
+        'total_label': total_header,
+        'total_in_aggregation_area_label': total_in_aggregation_header,
         'rows': rows,
         'type_total_values': type_total_values,
         'total_all': total_all,

@@ -1,11 +1,12 @@
 # coding=utf-8
-from safe.definitions.styles import green
 from safe.definitions.fields import hazard_count_field, total_unaffected_field
 from safe.definitions.hazard_classifications import hazard_classes_all
+from safe.definitions.styles import green
 from safe.report.extractors.infographic_elements.svg_charts import \
     DonutChartContext
-from safe.report.extractors.util import value_from_field_name
-from safe.utilities.i18n import tr
+from safe.report.extractors.util import (
+    value_from_field_name,
+    resolve_from_dictionary)
 from safe.utilities.rounding import round_affected_number
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -30,6 +31,7 @@ def population_chart_extractor(impact_report, component_metadata):
     :rtype: dict
     """
     context = {}
+    extra_args = component_metadata.extra_args
 
     hazard_layer = impact_report.hazard
     analysis_layer = impact_report.analysis
@@ -99,14 +101,16 @@ def population_chart_extractor(impact_report, component_metadata):
     colors.append(green.name())
 
     # add number for total unaffected
+    chart_title = resolve_from_dictionary(extra_args, 'chart_title')
+    total_header = resolve_from_dictionary(extra_args, 'total_header')
     donut_context = DonutChartContext(
         data=data,
         labels=labels,
         colors=colors,
         inner_radius_ratio=0.5,
         stroke_color='#fff',
-        title=tr('Estimated total population'),
-        total_header=tr('Population'),
+        title=chart_title,
+        total_header=total_header,
         as_file=True)
 
     context['context'] = donut_context

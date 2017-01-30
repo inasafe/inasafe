@@ -3,8 +3,9 @@ from safe.common.parameters.resource_parameter import ResourceParameter
 from safe.definitions.minimum_needs import (
     minimum_needs_fields,
     minimum_needs_namespace)
-from safe.utilities.rounding import round_affected_number
+from safe.report.extractors.util import resolve_from_dictionary
 from safe.utilities.i18n import tr
+from safe.utilities.rounding import round_affected_number
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -28,7 +29,7 @@ def minimum_needs_extractor(impact_report, component_metadata):
     :rtype: dict
     """
     context = {}
-
+    extra_args = component_metadata.extra_args
     analysis_layer = impact_report.analysis
     analysis_keywords = analysis_layer.keywords['inasafe_fields']
     debug_mode = impact_report.impact_function.debug_mode
@@ -57,11 +58,16 @@ def minimum_needs_extractor(impact_report, component_metadata):
 
     needs = []
     analysis_feature = analysis_layer.getFeatures().next()
+    header_frequency_format = resolve_from_dictionary(
+        extra_args, 'header_frequency_format')
+    total_header = resolve_from_dictionary(extra_args, 'total_header')
+    need_header_format = resolve_from_dictionary(
+        extra_args, 'need_header_format')
     # group the needs by frequency
     for key, frequency in frequencies.iteritems():
         group = {
-            'header': tr('Relief items to be provided %s') % tr(key),
-            'total_header': tr('Total'),
+            'header': header_frequency_format.format(frequency=tr(key)),
+            'total_header': total_header,
             'needs': []
         }
         for field in frequency:
@@ -79,8 +85,9 @@ def minimum_needs_extractor(impact_report, component_metadata):
             """:type: ResourceParameter"""
             header = need_parameter.name
             if need_parameter.unit.abbreviation:
-                header = '%s [%s]' % (
-                    header, need_parameter.unit.abbreviation)
+                header = need_header_format.format(
+                    name=header,
+                    unit_abbreviation=need_parameter.unit.abbreviation)
             item = {
                 'header': header,
                 'value': value
@@ -88,8 +95,8 @@ def minimum_needs_extractor(impact_report, component_metadata):
             group['needs'].append(item)
         needs.append(group)
 
-    # TODO: perhaps title needs to be specific to exposure type
-    context['header'] = tr('Minimum needs')
+    header = resolve_from_dictionary(extra_args, 'header')
+    context['header'] = header
     context['needs'] = needs
 
     return context
