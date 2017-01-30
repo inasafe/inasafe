@@ -387,7 +387,7 @@ class TestImpactFunction(unittest.TestCase):
         }
 
         # If we want to invert the selection.
-        invert = True
+        invert = False
 
         path = standard_data_path('scenario')
         for scenario, enabled in scenarii.iteritems():
