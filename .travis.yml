@@ -20,6 +20,7 @@ env:
 
     # Tags from kartoza
     - QGIS_VERSION_TAG=boundlessgeo-2.14.7
+    - QGIS_VERSION_TAG=boundlessgeo-2.18
 
 language: python
 
