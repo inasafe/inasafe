@@ -90,31 +90,22 @@ def layer_title(layer):
 
 def generate_classified_legend(
         analysis,
-        hazard_classification,
-        thresholds,
-        exposure_unit,
-        hazard_unit,
-        enable_rounding):
+        exposure,
+        hazard,
+        debug_mode):
     """Generate an ordered python structure with the classified symbology.
 
     :param analysis: The analysis layer.
     :type analysis: QgsVectorLayer
 
-    :param hazard_classification: The hazard classification to use.
-    :type hazard_classification: safe.definitions.hazard_classifications
+    :param exposure: The exposure layer.
+    :type exposure: QgsVectorLayer
 
-    :param thresholds: Thresholds used on the hazard. It can be null if the
-        does not have any thresholds.
-    :type thresholds: dict
+    :param hazard: The hazard layer.
+    :type hazard: QgsVectorLayer
 
-    :param exposure_unit: The unit to use from the exposure.
-    :type exposure_unit: safe.definitions.units
-
-    :param hazard_unit: The unit to use from the hazard.
-    :type hazard_unit: safe.definitions.units
-
-    :param enable_rounding: Boolean if we should round numbers.
-    :type enable_rounding: bool
+    :param debug_mode: Boolean if run in debug mode.
+    :type debug_mode: bool
 
     :return: The ordered dictionary to use to build the classified style.
     :rtype: OrderedDict
@@ -122,10 +113,27 @@ def generate_classified_legend(
     # We need to read the analysis layer to get the number of features.
     analysis_row = analysis.getFeatures().next()
 
+    # Let's style the hazard class in each layers.
+    hazard_classification = hazard.keywords['classification']
+    hazard_classification = definition(hazard_classification)
+
+    # Let's check if there is some thresholds:
+    thresholds = hazard.keywords.get('thresholds')
     if thresholds:
-        hazard_unit = hazard_unit['abbreviation']
+        hazard_unit = hazard.keywords.get('continuous_hazard_unit')
+        hazard_unit = definition(hazard_unit)['abbreviation']
+    else:
+        hazard_unit = None
+
+    # TODO We need to work on the unit from the exposure.
+    exposure = exposure.keywords['exposure']
+    exposure_definitions = definition(exposure)
+    exposure_unit = exposure_definitions['units'][0]['abbreviation']
 
     classes = OrderedDict()
+
+    # In debug mode we don't round number.
+    enable_rounding = not debug_mode
 
     for i, hazard_class in enumerate(hazard_classification['classes']):
         # Get the hazard class name.
@@ -140,33 +148,51 @@ def generate_classified_legend(
             value = 0
         value = round_affected_number(value, enable_rounding, True)
 
+        minimum = None
+        maximum = None
+
         # Check if we need to add thresholds.
         if thresholds:
             if i == 0:
                 minimum = thresholds[hazard_class['key']][0]
-                maximum = None
             elif i == len(hazard_classification['classes']) - 1:
-                minimum = None
                 maximum = thresholds[hazard_class['key']][1]
             else:
                 minimum = thresholds[hazard_class['key']][0]
                 maximum = thresholds[hazard_class['key']][1]
 
-            label = format_label(
-                hazard_class=hazard_class['name'],
-                value=value,
-                exposure_unit=exposure_unit['abbreviation'],
-                minimum=minimum,
-                maximum=maximum,
-                hazard_unit=hazard_unit)
-        else:
-            label = format_label(
-                hazard_class=hazard_class['name'],
-                value=value,
-                exposure_unit=exposure_unit['abbreviation'])
+        label = _format_label(
+            hazard_class=hazard_class['name'],
+            value=value,
+            exposure_unit=exposure_unit,
+            minimum=minimum,
+            maximum=maximum,
+            hazard_unit=hazard_unit)
 
         classes[hazard_class['key']] = (hazard_class['color'], label)
 
+    if exposure_definitions['display_not_exposed'] or debug_mode:
+        classes[not_exposed_class['key']] = _add_not_exposed(
+            analysis_row, enable_rounding, exposure_unit)
+
+    return classes
+
+
+def _add_not_exposed(analysis_row, enable_rounding, exposure_unit):
+    """Helper to add the `not exposed` item to the legend.
+
+    :param analysis_row: The analysis row as a list.
+    :type analysis_row: list
+
+    :param enable_rounding: If we need to do a rounding.
+    :type enable_rounding: bool
+
+    :param exposure_unit: The exposure unit.
+    :type exposure_unit: safe.definitions.units
+
+    :return: A tuple with the color and the formatted label.
+    :rtype: tuple
+    """
     # We add the not exposed class at the end.
     not_exposed_field = (
         hazard_count_field['field_name'] % not_exposed_class['key'])
@@ -176,17 +202,15 @@ def generate_classified_legend(
         # The field might not exist if there is not feature not exposed.
         value = 0
     value = round_affected_number(value, enable_rounding, True)
-    label = format_label(
+    label = _format_label(
         hazard_class=not_exposed_class['name'],
         value=value,
-        exposure_unit=exposure_unit['abbreviation'])
+        exposure_unit=exposure_unit)
 
-    classes[not_exposed_class['key']] = (not_exposed_class['color'], label)
-
-    return classes
+    return not_exposed_class['color'], label
 
 
-def format_label(
+def _format_label(
         hazard_class,
         value,
         exposure_unit,
