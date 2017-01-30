@@ -1,21 +1,4 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool by AusAid -**Internationalisation
-utilities.**
-
-The module provides utilities function to convert between unicode and byte
-string for Python 2.x. When we move to Python 3, this module and its usage
-should be removed as string in Python 3 is already stored in unicode.
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
-
 
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
@@ -26,11 +9,10 @@ import logging
 
 from safe.utilities.unicode import get_unicode
 
-__author__ = 'tim@kartoza.com'
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
-__date__ = '02/24/15'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
 
 LOGGER = logging.getLogger('InaSAFE')
 

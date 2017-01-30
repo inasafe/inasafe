@@ -1,16 +1,17 @@
 # coding=utf-8
 
-__copyright__ = "Copyright 2016, The InaSAFE Project"
-__license__ = "GPL version 3"
-__email__ = "info@inasafe.org"
-__revision__ = '$Format:%H$'
-
 import logging
 import random
 import unittest
 
 from safe.utilities.rounding import (
-    population_rounding_full, population_rounding)
+    population_rounding_full, population_rounding, add_separators)
+from safe.utilities.i18n import locale
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -41,6 +42,25 @@ class TestCore(unittest.TestCase):
                 population_rounding(n),
                 population_rounding_full(n)[0])
 
+    def test_format_int(self):
+        """Test formatting integer"""
+        lang = locale()
+
+        number = 10000000
+        formatted_int = add_separators(number)
+        if lang == 'id':
+            expected_str = '10.000.000'
+        else:
+            expected_str = '10,000,000'
+        self.assertEqual(expected_str, formatted_int)
+
+        number = 1234
+        formatted_int = add_separators(number)
+        if lang == 'id':
+            expected_str = '1.234'
+        else:
+            expected_str = '1,234'
+        self.assertEqual(expected_str, formatted_int)
 
 if __name__ == '__main__':
     unittest.main()
