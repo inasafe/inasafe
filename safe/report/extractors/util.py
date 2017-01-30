@@ -89,3 +89,31 @@ def value_from_field_name(field_name, analysis_layer):
     """
     field_index = analysis_layer.fieldNameIndex(field_name)
     return analysis_layer.getFeatures().next()[field_index]
+
+
+def resolve_from_dictionary(dictionary, key_list, default_value=None):
+    """Take value from a given key list from dictionary.
+
+    Example: given dictionary d, key_list = ['foo', 'bar'],
+    it will try to resolve d['foo']['bar']. If not possible,
+    return default_value.
+
+    :param dictionary: A dictionary to resolve
+    :type dictionary: dict
+
+    :param key_list: A list of key to resolve
+    :type key_list: list[str], str
+
+    :param default_value: Any arbitrary default value to return
+
+    :return: intended value, if fails, return default_value
+    """
+    try:
+        current_value = dictionary
+        key_list = key_list if isinstance(key_list, list) else [key_list]
+        for key in key_list:
+            current_value = current_value[key]
+
+        return current_value
+    except KeyError:
+        return default_value

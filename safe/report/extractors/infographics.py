@@ -22,8 +22,8 @@ from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
 from safe.report.extractors.composer import QGISComposerContext
 from safe.report.extractors.util import (
     jinja2_output_as_string,
-    value_from_field_name)
-from safe.utilities.i18n import tr
+    value_from_field_name,
+    resolve_from_dictionary)
 from safe.utilities.resources import resource_url, resources_path
 from safe.utilities.rounding import round_affected_number
 
@@ -111,6 +111,7 @@ def population_infographic_extractor(impact_report, component_metadata):
     :rtype: dict
     """
     context = {}
+    extra_args = component_metadata.extra_args
 
     """Initializations"""
     analysis_layer = impact_report.analysis
@@ -148,11 +149,17 @@ def population_infographic_extractor(impact_report, component_metadata):
 
     """People Section"""
 
+    # Take default value from definitions
+    people_header = resolve_from_dictionary(
+        extra_args, ['sections', 'people', 'header'])
+    sub_header = resolve_from_dictionary(
+        extra_args, ['sections', 'people', 'sub_header'])
+
     sections['people'] = {
-        'header': tr('People'),
+        'header': people_header,
         'items': [
             PeopleInfographicElement(
-                header=tr('Affected'),
+                header=sub_header,
                 icon=icons.get(
                     total_affected_field['key']),
                 number=total_affected
@@ -161,23 +168,31 @@ def population_infographic_extractor(impact_report, component_metadata):
     }
 
     """Vulnerability Section"""
+
+    # Take default value from definitions
+    vulnerability_headers = resolve_from_dictionary(
+        extra_args,
+        ['sections', 'vulnerability', 'items', 'headers'])
+
+    vulnerability_section_header = resolve_from_dictionary(
+        extra_args,
+        ['sections', 'vulnerability', 'header'])
+
+    vulnerability_section_sub_header_format = resolve_from_dictionary(
+        extra_args,
+        ['sections', 'vulnerability', 'sub_header_format'])
+
+    vulnerability_fields = [
+        female_count_field,
+        youth_count_field,
+        adult_count_field,
+        elderly_count_field]
+
     vulnerability_items = [{
-            'field': female_count_field,
-            'header': tr('Female'),
-        },
-        {
-            'field': youth_count_field,
-            'header': tr('Youth'),
-        },
-        {
-            'field': adult_count_field,
-            'header': tr('Adult'),
-        },
-        {
-            'field': elderly_count_field,
-            'header': tr('Elderly')
-        }
-    ]
+            'field': field,
+            'header': header,
+        } for field, header in zip(
+        vulnerability_fields, vulnerability_headers)]
 
     vulnerability_items = [
         item for item in vulnerability_items
@@ -215,14 +230,20 @@ def population_infographic_extractor(impact_report, component_metadata):
         use_population_rounding=True)
 
     sections['vulnerability'] = {
-        'header': tr('Vulnerability'),
-        'small_header': tr(
-            'from {number_affected:,d} affected').format(
+        'header': vulnerability_section_header,
+        'small_header': vulnerability_section_sub_header_format.format(
                 number_affected=total_affected_rounded),
         'items': infographic_elements
     }
 
     """Minimum Needs Section"""
+
+    minimum_needs_header = resolve_from_dictionary(
+        extra_args,
+        ['sections', 'minimum_needs', 'header'])
+    empty_unit_string = resolve_from_dictionary(
+        extra_args,
+        ['sections', 'minimum_needs', 'empty_unit_string'])
 
     items = []
 
@@ -238,7 +259,7 @@ def population_infographic_extractor(impact_report, component_metadata):
                     unit=need.unit.abbreviation,
                     frequency=need.frequency)
             else:
-                unit_string = tr('units')
+                unit_string = empty_unit_string
 
             item = PeopleMinimumNeedsInfographicElement(
                 header=item['name'],
@@ -252,7 +273,7 @@ def population_infographic_extractor(impact_report, component_metadata):
     needs_profile = NeedsProfile()
 
     sections['minimum_needs'] = {
-        'header': tr('Minimum needs'),
+        'header': minimum_needs_header,
         'small_header': needs_profile.provenance,
         'items': items,
     }
@@ -310,7 +331,8 @@ def infographic_layout_extractor(impact_report, component_metadata):
     """
     context = {}
     extra_args = component_metadata.extra_args
-    infographics = extra_args['infographics']
+
+    infographics = resolve_from_dictionary(extra_args, ['infographics'])
     provenance = impact_report.impact_function.provenance
 
     infographic_result = ''
@@ -330,9 +352,7 @@ def infographic_layout_extractor(impact_report, component_metadata):
     date_time = provenance['datetime']
     date = date_time.strftime('%Y-%m-%d')
     time = date_time.strftime('%H:%M')
-    footer_format = tr(
-        'InaSAFE {version} | {analysis_date} | {analysis_time} | '
-        'info@inasafe.org | BNPB-AusAid-World Bank-GFDRR-DMInnovation')
+    footer_format = resolve_from_dictionary(extra_args, 'footer_format')
     context['footer'] = footer_format.format(
         version=version, analysis_date=date, analysis_time=time)
     return context

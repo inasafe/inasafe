@@ -100,7 +100,10 @@ class TestImpactReport(unittest.TestCase):
             report_metadata,
             impact_function=impact_function)
         impact_report.output_folder = output_folder
-        impact_report.process_component()
+        return_code, message = impact_report.process_component()
+
+        self.assertEqual(
+            return_code, ImpactReport.REPORT_GENERATION_SUCCESS, message)
 
         """Checking generated context"""
         empty_component_output_message = 'Empty component output'
@@ -120,17 +123,17 @@ class TestImpactReport(unittest.TestCase):
                     'rows': [
                         {
                             'value': 4,
-                            'name': u'Total High hazard zone',
+                            'name': u'High hazard zone',
                             'key': 'high'
                         },
                         {
                             'value': 1,
-                            'name': u'Total Medium hazard zone',
+                            'name': u'Medium hazard zone',
                             'key': 'medium'
                         },
                         {
                             'value': 0,
-                            'name': u'Total Low hazard zone',
+                            'name': u'Low hazard zone',
                             'key': 'low'
                         }
                     ],
@@ -143,6 +146,11 @@ class TestImpactReport(unittest.TestCase):
                             'value': 5,
                             'name': u'Total Affected',
                             'key': 'total_affected_field'
+                        },
+                        {
+                            'value': 4,
+                            'name': u'Total Not Exposed',
+                            'key': 'total_not_exposed_field',
                         },
                         {
                             'value': 0,
@@ -258,7 +266,10 @@ class TestImpactReport(unittest.TestCase):
             report_metadata,
             impact_function=impact_function)
         impact_report.output_folder = output_folder
-        impact_report.process_component()
+        return_code, message = impact_report.process_component()
+
+        self.assertEqual(
+            return_code, ImpactReport.REPORT_GENERATION_SUCCESS, message)
 
         """Checking generated context"""
         empty_component_output_message = 'Empty component output'
@@ -278,17 +289,18 @@ class TestImpactReport(unittest.TestCase):
                     u'High hazard zone',
                     u'Medium hazard zone',
                     u'Total Affected',
+                    u'Total Not Exposed',
                     u'Total Unaffected',
                     u'Total'
                 ],
                 'details': [
-                    [u'other', 0, 1, 1, 0, 1],
-                    [u'government', 0, 1, 1, 0, 1],
-                    [u'commercial', 1, 0, 1, 0, 1],
-                    [u'education', 2, 0, 2, 0, 5],
-                    [u'health', 1, 0, 1, 0, 1]
+                    [u'other', 0, 1, 1, 0, 0, 1],
+                    [u'government', 0, 1, 1, 0, 0, 1],
+                    [u'commercial', 1, 0, 1, 0, 0, 1],
+                    [u'education', 2, 0, 2, 3, 0, 5],
+                    [u'health', 1, 0, 1, 0, 0, 1]
                 ],
-                'footers': [u'Total', 4, 2, 6, 0, 9]
+                'footers': [u'Total', 4, 2, 6, 3, 0, 9]
             }
         }
         actual_context = analysis_breakdown.context
@@ -334,7 +346,7 @@ class TestImpactReport(unittest.TestCase):
                 'type_total_values': [1, 1, 1, 2, 1],
                 'total_label': u'Total',
                 'total_all': 6,
-                'total_in_aggregation': u'Total in aggregation areas'},
+                'total_in_aggregation_area_label': u'Total'},
             'header': u'Aggregation Result'}
         actual_context = aggregate_result.context
 
@@ -385,7 +397,10 @@ class TestImpactReport(unittest.TestCase):
             report_metadata,
             impact_function=impact_function)
         impact_report.output_folder = output_folder
-        impact_report.process_component()
+        return_code, message = impact_report.process_component()
+
+        self.assertEqual(
+            return_code, ImpactReport.REPORT_GENERATION_SUCCESS, message)
 
         """Checking generated context"""
         empty_component_output_message = 'Empty component output'
@@ -482,7 +497,10 @@ class TestImpactReport(unittest.TestCase):
             report_metadata,
             impact_function=impact_function)
         impact_report.output_folder = output_folder
-        impact_report.process_component()
+        return_code, message = impact_report.process_component()
+
+        self.assertEqual(
+            return_code, ImpactReport.REPORT_GENERATION_SUCCESS, message)
 
         """Checking generated context"""
         empty_component_output_message = 'Empty component output'
@@ -608,7 +626,10 @@ class TestImpactReport(unittest.TestCase):
             report_metadata,
             impact_function=impact_function)
         impact_report.output_folder = output_folder
-        impact_report.process_component()
+        return_code, message = impact_report.process_component()
+
+        self.assertEqual(
+            return_code, ImpactReport.REPORT_GENERATION_SUCCESS, message)
 
         """Checking generated context"""
         empty_component_output_message = 'Empty component output'
@@ -731,7 +752,10 @@ class TestImpactReport(unittest.TestCase):
             report_metadata,
             impact_function=impact_function)
         impact_report.output_folder = output_folder
-        impact_report.process_component()
+        return_code, message = impact_report.process_component()
+
+        self.assertEqual(
+            return_code, ImpactReport.REPORT_GENERATION_SUCCESS, message)
 
         """Checking generated context"""
         empty_component_output_message = 'Empty component output'
@@ -915,7 +939,10 @@ class TestImpactReport(unittest.TestCase):
             report_metadata,
             impact_function=impact_function)
         impact_report.output_folder = output_folder
-        impact_report.process_component()
+        return_code, message = impact_report.process_component()
+
+        self.assertEqual(
+            return_code, ImpactReport.REPORT_GENERATION_SUCCESS, message)
 
         output_path = impact_report.component_absolute_output_path(
             'impact-report-pdf')
@@ -968,7 +995,10 @@ class TestImpactReport(unittest.TestCase):
         impact_report.qgis_composition_context.extent = \
             rendered_layer.extent()
 
-        impact_report.process_component()
+        return_code, message = impact_report.process_component()
+
+        self.assertEqual(
+            return_code, ImpactReport.REPORT_GENERATION_SUCCESS, message)
 
         output_path = impact_report.component_absolute_output_path(
             'a4-portrait-blue')
