@@ -1,9 +1,98 @@
+# coding=utf-8
 from math import ceil
+
+from safe.utilities.i18n import locale
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
+
+
+def format_number(x, enable_rounding=True):
+    """Format a number according to the standards.
+
+    :param x: A number to be formatted in a locale friendly way.
+    :type x: int
+
+    :param enable_rounding: Flag to enable a population rounding.
+    :type enable_rounding: bool
+
+    :returns: A locale friendly formatted string e.g. 1,000,0000.00
+        representing the original x. If a ValueError exception occurs,
+        x is simply returned.
+    :rtype: basestring
+    """
+    if enable_rounding:
+        x = population_rounding(x)
+
+    number = add_separators(x)
+    return number
+
+
+def add_separators(x):
+    """Format integer with separator between thousands.
+
+    :param x: A number to be formatted in a locale friendly way.
+    :type x: int
+
+    :returns: A locale friendly formatted string e.g. 1,000,0000.00
+        representing the original x. If a ValueError exception occurs,
+        x is simply returned.
+    :rtype: basestring
+
+
+    From http://
+    stackoverflow.com/questions/5513615/add-thousands-separators-to-a-number
+
+    Instead use this:
+    http://docs.python.org/library/string.html#formatspec
+    """
+    try:
+        s = '{0:,}'.format(x)
+        # s = '{0:n}'.format(x)  # n means locale aware (read up on this)
+    # see issue #526
+    except ValueError:
+        return x
+
+    # Quick solution for the moment
+    if locale() in ['id', 'fr']:
+        # Replace commas with the correct thousand separator.
+        s = s.replace(',', thousand_separator())
+    return s
+
+
+def decimal_separator():
+    """Return decimal separator according to the locale.
+
+    :return: The decimal separator.
+    :rtype: basestring
+    """
+    lang = locale()
+
+    if lang in ['id', 'fr']:
+        return ','
+
+    else:
+        return '.'
+
+
+def thousand_separator():
+    """Return thousand separator according to the locale.
+
+    :return: The thousand separator.
+    :rtype: basestring
+    """
+    lang = locale()
+
+    if lang in ['id']:
+        return '.'
+
+    elif lang in ['fr']:
+        return ' '
+
+    else:
+        return ','
 
 
 def round_affected_number(
