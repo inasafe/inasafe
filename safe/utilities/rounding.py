@@ -1,4 +1,7 @@
 # coding=utf-8
+"""Rounding and number formatting."""
+
+
 from math import ceil
 
 from safe.utilities.i18n import locale
