@@ -80,18 +80,25 @@ def tr(text, context='@default'):
 def locale():
     """Get the name of the currently active locale.
 
-    :returns: Name of hte locale e.g. 'id'
+    :returns: Name of the locale e.g. 'id'
     :rtype: str
     """
     override_flag = QSettings().value(
         'locale/overrideFlag', True, type=bool)
 
+    default = 'en_US'
+
     if override_flag:
-        locale_name = QSettings().value('locale/userLocale', 'en_US', type=str)
+        locale_name = QSettings().value('locale/userLocale', default, type=str)
     else:
         # noinspection PyArgumentList
         locale_name = QLocale.system().name()
-        # NOTES: we split the locale name because we need the first two
-        # character i.e. 'id', 'af, etc
-        locale_name = str(locale_name).split('_')[0]
+
+    if locale_name == 'C':
+        # On travis, locale/userLocale is equal to C. We want 'en'.
+        locale_name = default
+
+    # NOTES: we split the locale name because we need the first two
+    # character i.e. 'id', 'af, etc
+    locale_name = str(locale_name).split('_')[0]
     return locale_name
