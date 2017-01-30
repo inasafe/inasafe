@@ -179,6 +179,21 @@ standard_impact_report_metadata_html = {
     'template_folder': safe_dir(sub_dir='../resources/report-templates/'),
     'components': impact_report_component_metadata + [
         population_infographic_component,
+        # Infographic Layout HTML
+        {
+            'key': 'infographic-layout',
+            'type': ReportComponentsMetadata.AvailableComponent.Jinja2,
+            'processor': jinja2_renderer,
+            'extractor': infographic_layout_extractor,
+            'output_format': Jinja2ComponentsMetadata.OutputFormat.File,
+            'output_path': 'infographic.html',
+            'extra_args': {
+                'infographics': [population_infographic_component['key']]
+            },
+            'template': 'standard-template/'
+                        'jinja2/'
+                        'infographic-layout.html',
+        },
         {
             'key': 'impact-report',
             'type': ReportComponentsMetadata.AvailableComponent.Jinja2,
@@ -294,8 +309,7 @@ report_a4_blue = {
             'processor': qgis_composer_renderer,
             'extractor': qgis_composer_extractor,
             'output_format': QgisComposerComponentsMetadata.OutputFormat.PDF,
-            'template': 'standard-template/'
-                        'qgis-composer/'
+            'template': '../qgis-composer-templates/'
                         'a4-portrait-blue.qpt',
             'output_path': 'a4-portrait-blue.pdf',
         },
@@ -305,8 +319,7 @@ report_a4_blue = {
             'processor': qgis_composer_renderer,
             'extractor': qgis_composer_extractor,
             'output_format': QgisComposerComponentsMetadata.OutputFormat.PDF,
-            'template': 'standard-template/'
-                        'qgis-composer/'
+            'template': '../qgis-composer-templates/'
                         'a4-landscape-blue.qpt',
             'output_path': 'a4-landscape-blue.pdf',
             'orientation': 'landscape',

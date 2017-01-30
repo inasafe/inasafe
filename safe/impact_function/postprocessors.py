@@ -14,8 +14,8 @@ from safe.definitions.post_processors import (
     needs_profile_input_type,
     layer_property_input_type,
     layer_crs_input_value,
-    size_calculator_input_value)
-from safe.gisv4.vector.tools import (
+    size_calculator_input_value, constant_input_type)
+from safe.gis.vector.tools import (
     create_field_from_definition, size_calculator)
 from safe.utilities.i18n import tr
 from safe.utilities.profiling import profile
@@ -119,6 +119,8 @@ def run_single_post_processor(layer, post_processor):
         for key, values in post_processor['input'].items():
             values = values if isinstance(values, list) else [values]
             for value in values:
+                is_constant_input = (
+                    value['type'] == constant_input_type)
                 is_field_input = (
                     value['type'] == field_input_type or
                     value['type'] == dynamic_field_input_type)
@@ -130,7 +132,10 @@ def run_single_post_processor(layer, post_processor):
                     value['type'] == needs_profile_input_type)
                 is_layer_property_input = (
                     value['type'] == layer_property_input_type)
-                if is_field_input:
+                if is_constant_input:
+                    default_parameters[key] = value['value']
+                    break
+                elif is_field_input:
                     if value['type'] == dynamic_field_input_type:
                         key_template = value['value']['key']
                         field_param = value['field_param']
@@ -269,6 +274,7 @@ def enough_input(layer, post_processor_input):
             input_values if isinstance(input_values, list) else [input_values])
         msg = None
         for input_value in input_values:
+            is_constant_input = input_value['type'] == constant_input_type
             is_field_input = input_value['type'] == field_input_type
             is_dynamic_input = input_value['type'] == dynamic_field_input_type
             is_needs_input = input_value['type'] == needs_profile_input_type
@@ -276,7 +282,10 @@ def enough_input(layer, post_processor_input):
             is_layer_input = input_value['type'] == layer_property_input_type
             is_geometry_input = (
                 input_value['type'] == geometry_property_input_type)
-            if is_field_input:
+            if is_constant_input:
+                # constant input doesn't need any check
+                break
+            elif is_field_input:
                 key = input_value['value']['key']
                 if key in impact_fields:
                     break

@@ -23,8 +23,8 @@
     "post_processor":{
       "info": {},
       "process":[
-        "Post processor for Size Value Post Processor",
-        "Post processor for Affected Post Processor"
+        "Size Value Post Processor",
+        "Affected Post Processor"
       ]
     },
     "aggregation":{

@@ -3,9 +3,11 @@
 """
 from collections import OrderedDict
 
+from jinja2.exceptions import TemplateError
+
 from safe.common.parameters.resource_parameter import ResourceParameter
 from safe.common.utilities import safe_dir
-from safe.definitions.colors import green
+from safe.definitions.styles import green
 from safe.definitions.exposure import exposure_population
 from safe.definitions.fields import (
     total_affected_field,
@@ -18,17 +20,17 @@ from safe.definitions.fields import (
     analysis_name_field,
     hazard_count_field,
     total_unaffected_field)
-from safe.definitions.hazard_classifications import all_hazard_classes
+from safe.definitions.hazard_classifications import hazard_classes_all
 from safe.definitions.minimum_needs import minimum_needs_fields
 from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
 from safe.report.extractors.composer import QGISComposerContext
 from safe.report.extractors.infographic_elements.svg_charts import \
     DonutChartContext
 from safe.report.extractors.util import (
-    round_affecter_number,
     jinja2_output_as_string,
     value_from_field_name)
 from safe.utilities.i18n import tr
+from safe.utilities.rounding import round_affected_number
 from safe.utilities.resources import resource_url, resources_path
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -59,7 +61,7 @@ class PeopleInfographicElement(object):
     @property
     def number(self):
         """Number to be displayed for the element."""
-        return round_affecter_number(
+        return round_affected_number(
             self._number,
             enable_rounding=True,
             use_population_rounding=True)
@@ -132,8 +134,8 @@ def population_infographic_extractor(impact_report, component_metadata):
         exposure_count_field['key'] % (exposure_population['key'], ),
     ] + [f['key'] for f in minimum_needs_fields]
 
-    for field in population_fields:
-        if field in analysis_layer_fields:
+    for item in population_fields:
+        if item in analysis_layer_fields:
             break
     else:
         return context
@@ -144,10 +146,10 @@ def population_infographic_extractor(impact_report, component_metadata):
         total_affected_field['key']
     ]
 
-    for field in total_affected_fields:
-        if field in analysis_layer_fields:
+    for item in total_affected_fields:
+        if item in analysis_layer_fields:
             total_affected = value_from_field_name(
-                analysis_layer_fields[field],
+                analysis_layer_fields[item],
                 analysis_layer)
             break
     else:
@@ -170,78 +172,72 @@ def population_infographic_extractor(impact_report, component_metadata):
     }
 
     """Vulnerability Section"""
+    vulnerability_items = [{
+            'field': female_count_field,
+            'header': tr('Female'),
+        },
+        {
+            'field': youth_count_field,
+            'header': tr('Youth'),
+        },
+        {
+            'field': adult_count_field,
+            'header': tr('Adult'),
+        },
+        {
+            'field': elderly_count_field,
+            'header': tr('Elderly')
+        }
+    ]
 
-    female_affected = value_from_field_name(
-        female_count_field['field_name'],
-        analysis_layer)
+    vulnerability_items = [
+        item for item in vulnerability_items
+        if item['field']['key'] in analysis_layer_fields]
 
-    female_percentage = female_affected * 100.0 / total_affected
+    infographic_elements = []
+    for item in vulnerability_items:
+        field = item['field']
+        field_key = field['key']
+        header = item['header']
+        try:
+            field_name = analysis_layer_fields[field_key]
+            value = value_from_field_name(
+                field_name, analysis_layer)
+        except KeyError:
+            # It means the field is not there
+            value = 0
 
-    youth_affected = value_from_field_name(
-        youth_count_field['field_name'],
-        analysis_layer)
+        if value:
+            value_percentage = value * 100.0 / total_affected
+        else:
+            value_percentage = 0
 
-    youth_percentage = youth_affected * 100.0 / total_affected
-
-    adult_affected = value_from_field_name(
-        adult_count_field['field_name'],
-        analysis_layer)
-
-    adult_percentage = adult_affected * 100.0 / total_affected
-
-    elderly_affected = value_from_field_name(
-        elderly_count_field['field_name'],
-        analysis_layer)
-
-    elderly_percentage = elderly_affected * 100.0 / total_affected
+        infographic_element = PeopleVulnerabilityInfographicElement(
+            header=header,
+            icon=icons.get(field_key),
+            number=value,
+            percentage=value_percentage
+        )
+        infographic_elements.append(infographic_element)
 
     sections['vulnerability'] = {
         'header': tr('Vulnerability'),
         'small_header': tr(
             'from {number_affected} affected').format(
                 number_affected=total_affected),
-        'items': [
-            PeopleVulnerabilityInfographicElement(
-                header=tr('Female'),
-                icon=icons.get(
-                    female_count_field['key']),
-                number=female_affected,
-                percentage=female_percentage
-            ),
-            PeopleVulnerabilityInfographicElement(
-                header=tr('Youth'),
-                icon=icons.get(
-                    youth_count_field['key']),
-                number=youth_affected,
-                percentage=youth_percentage
-            ),
-            PeopleVulnerabilityInfographicElement(
-                header=tr('Adult'),
-                icon=icons.get(
-                    adult_count_field['key']),
-                number=adult_affected,
-                percentage=adult_percentage
-            ),
-            PeopleVulnerabilityInfographicElement(
-                header=tr('Elderly'),
-                icon=icons.get(
-                    elderly_count_field['key']),
-                number=elderly_affected,
-                percentage=elderly_percentage
-            ),
-        ]
+        'items': infographic_elements
     }
 
     """Minimum Needs Section"""
 
     items = []
 
-    for field in minimum_needs_fields:
-        need = field['need_parameter']
+    for item in minimum_needs_fields:
+        need = item['need_parameter']
         if isinstance(need, ResourceParameter):
 
             needs_count = value_from_field_name(
-                field['field_name'], analysis_layer)
+                item['field_name'], analysis_layer)
 
             if need.unit.abbreviation:
                 unit_string = '{unit}/{frequency}'.format(
@@ -251,9 +247,9 @@ def population_infographic_extractor(impact_report, component_metadata):
                 unit_string = tr('units')
 
             item = PeopleMinimumNeedsInfographicElement(
-                header=field['name'],
+                header=item['name'],
                 icon=icons.get(
-                    field['key']),
+                    item['key']),
                 number=needs_count,
                 unit=unit_string)
             items.append(item)
@@ -272,7 +268,7 @@ def population_infographic_extractor(impact_report, component_metadata):
     # create context for the donut chart
 
     # retrieve hazard classification from hazard layer
-    for classification in all_hazard_classes:
+    for classification in hazard_classes_all:
         classification_name = hazard_layer.keywords['classification']
         if classification_name == classification['key']:
             hazard_classification = classification
@@ -303,7 +299,7 @@ def population_infographic_extractor(impact_report, component_metadata):
             # Hazard label taken from translated hazard count field
             # label, string-formatted with translated hazard class label
             hazard_value = value_from_field_name(field_name, analysis_layer)
-            hazard_value = round_affecter_number(
+            hazard_value = round_affected_number(
                 hazard_value,
                 enable_rounding=True,
                 use_population_rounding=True)
@@ -363,12 +359,14 @@ def infographic_layout_extractor(impact_report, component_metadata):
     context = {}
     extra_args = component_metadata.extra_args
     infographics = extra_args['infographics']
+    provenance = impact_report.impact_function.provenance
 
     infographic_result = ''
 
     for component_key in infographics:
         result = jinja2_output_as_string(impact_report, component_key)
-        infographic_result += result
+        if result:
+            infographic_result += result
 
     if not infographic_result:
         return context
@@ -376,10 +374,15 @@ def infographic_layout_extractor(impact_report, component_metadata):
     resources_dir = safe_dir(sub_dir='../resources')
     context['inasafe_resources_base_dir'] = resources_dir
     context['infographic_content'] = infographic_result
+    version = provenance['inasafe_version']
+    date_time = provenance['datetime']
+    date = date_time.strftime('%Y-%m-%d')
+    time = date_time.strftime('%H:%M')
     footer_format = tr(
-        '{version} | {analysis_date} | {analysis_time} | '
+        'InaSAFE {version} | {analysis_date} | {analysis_time} | '
         'info@inasafe.org | BNPB-AusAid-World Bank-GFDRR-DMInnovation')
-    context['footer'] = footer_format
+    context['footer'] = footer_format.format(
+        version=version, analysis_date=date, analysis_time=time)
     return context
 
 
@@ -407,15 +410,22 @@ def infographic_pdf_extractor(impact_report, component_metadata):
     context = QGISComposerContext()
 
     # we only have html elements for this
-    html_frame_elements = [
-        {
-            'id': 'infographic',
-            'mode': 'text',
-            'text': jinja2_output_as_string(
-                impact_report, 'infographic-layout'),
-            'margin_left': 10,
-            'margin_right': 10,
-        }
-    ]
-    context.html_frame_elements = html_frame_elements
+    try:
+        infographic_html = jinja2_output_as_string(
+            impact_report, 'infographic-layout')
+    except TemplateError:
+        return context
+
+    if infographic_html.strip():
+        html_frame_elements = [
+            {
+                'id': 'infographic',
+                'mode': 'text',
+                'text': jinja2_output_as_string(
+                    impact_report, 'infographic-layout'),
+                'margin_left': 10,
+                'margin_right': 10,
+            }
+        ]
+        context.html_frame_elements = html_frame_elements
     return context

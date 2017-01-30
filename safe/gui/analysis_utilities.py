@@ -52,7 +52,7 @@ def generate_impact_report(impact_function, iface):
     # We will generate it on the fly without storing it after datastore
     # supports
     impact_report.output_folder = os.path.join(layer_dir, 'output')
-    impact_report.process_component()
+    return impact_report.process_component()
 
 
 def generate_impact_map_report(impact_function, iface):
@@ -73,18 +73,18 @@ def generate_impact_map_report(impact_function, iface):
         impact_function=impact_function)
 
     # Get other setting
-    settings = QSettings()
-    logo_path = settings.value(
-        'inasafe/organisation_logo_path', '', type=str)
-    impact_report.inasafe_context.organisation_logo = logo_path
-
-    disclaimer_text = settings.value(
-        'inasafe/reportDisclaimer', '', type=str)
-    impact_report.inasafe_context.disclaimer = disclaimer_text
-
-    north_arrow_path = settings.value(
-        'inasafe/north_arrow_path', '', type=str)
-    impact_report.inasafe_context.north_arrow = north_arrow_path
+    # settings = QSettings()
+    # logo_path = settings.value(
+    #     'inasafe/organisation_logo_path', '', type=str)
+    # impact_report.inasafe_context.organisation_logo = logo_path
+    #
+    # disclaimer_text = settings.value(
+    #     'inasafe/reportDisclaimer', '', type=str)
+    # impact_report.inasafe_context.disclaimer = disclaimer_text
+    #
+    # north_arrow_path = settings.value(
+    #     'inasafe/north_arrow_path', '', type=str)
+    # impact_report.inasafe_context.north_arrow = north_arrow_path
 
     # get the extent of impact layer
     impact_report.qgis_composition_context.extent = \
@@ -103,7 +103,7 @@ def generate_impact_map_report(impact_function, iface):
     # We will generate it on the fly without storing it after datastore
     # supports
     impact_report.output_folder = os.path.join(layer_dir, 'output')
-    impact_report.process_component()
+    return impact_report.process_component()
 
 
 def add_impact_layers_to_canvas(impact_function, iface):

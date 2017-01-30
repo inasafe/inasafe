@@ -39,7 +39,7 @@ from safe.gui.tools.shake_grid.shake_grid import convert_mmi_data
 from safe.gui.tools.help.shakemap_converter_help import shakemap_converter_help
 
 
-INFO_STYLE = styles.INFO_STYLE
+INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
 LOGGER = logging.getLogger('InaSAFE')
 FORM_CLASS = get_ui_class('shakemap_importer_dialog_base.ui')
 

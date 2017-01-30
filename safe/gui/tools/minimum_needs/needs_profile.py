@@ -296,7 +296,7 @@ class NeedsProfile(MinimumNeeds):
                 self._root_directory = None
             if self._root_directory is None or self._root_directory == '':
                 self._root_directory = os.path.join(
-                    os.environ['HOME'], '.qgis2')
+                    os.path.expanduser('~'), '.qgis2')
         return self._root_directory
 
     @staticmethod

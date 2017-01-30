@@ -1,2 +1,0 @@
-tzlocal==1.2.2
-python-dateutil==2.5.3

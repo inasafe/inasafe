@@ -7,7 +7,8 @@ from safe.messaging import styles
 from safe.utilities.resources import resources_path
 from safe.gui.tools.help.function_options_help import content as options
 from safe.gui.tools.help.impact_report_help import content as report
-INFO_STYLE = styles.INFO_STYLE
+SUBSECTION_STYLE = styles.SUBSECTION_LEVEL_3_STYLE
+INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
 SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
 
 __author__ = 'ismailsunni'
@@ -40,7 +41,7 @@ def heading():
     :returns: A heading object.
     :rtype: safe.messaging.heading.Heading
     """
-    message = m.Heading(tr('InaSAFE dock help'), **INFO_STYLE)
+    message = m.Heading(tr('InaSAFE dock help'), **SUBSECTION_STYLE)
     return message
 
 

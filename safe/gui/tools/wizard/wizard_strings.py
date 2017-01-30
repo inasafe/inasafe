@@ -161,15 +161,16 @@ continuous_vector_question = tr(
     'You have selected <b>%s %s</b> as a <b>continuous</b> layer and the '
     'attribute is <b>%s</b> with <b>%s</b>. '
     'Please input the minimum and maximum value for each class below. '
-    'The minimum value from the layer is <b>%s</b> and the maximum value is '
-    '<b>%s</b>.'  #
+    'Minimum value will be included in the range, while maximum value will be '
+    'excluded. The minimum value from the layer is <b>%s</b> and the maximum '
+    'value is <b>%s</b>.'
 )  # (subcategory, category, field, classification, min value, max value)
 continuous_raster_question = tr(
     'You have selected <b>%s %s</b> as a <b>continuous</b> layer with '
-    '<b>%s</b>. '
-    'Please input the minimum and maximum value for each class below. '
-    'The minimum value from the layer is <b>%s</b> and the maximum value is '
-    '<b>%s</b>.'  #
+    '<b>%s</b>. Minimum value will be included in the range, while maximum '
+    'value will be excluded. Please input the minimum and maximum value for '
+    'each class below. The minimum value from the layer is <b>%s</b> and the '
+    'maximum value is <b>%s</b>.'
 )  # (subcategory, category, classification, min value, max value)
 select_function_constraints2_question = tr(
     'You selected <b>%s</b> hazard and <b>%s</b> exposure. Now, select the '

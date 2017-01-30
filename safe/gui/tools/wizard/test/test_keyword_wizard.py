@@ -28,7 +28,6 @@ from safe.definitions.constants import no_field
 from safe.definitions.fields import (
     aggregation_name_field,
     exposure_type_field,
-    female_ratio_field,
     hazard_name_field,
     hazard_value_field,
     population_count_field)
@@ -405,9 +404,9 @@ class TestKeywordWizard(unittest.TestCase):
         default_classes = classification['classes']
         unassigned_values = []  # no need to check actually, not save in file
         assigned_values = {
-            'low' : ['Low Hazard Zone'],
-            'medium' : ['Medium Hazard Zone'],
-            'high' : ['High hazard Zone']
+            'low': ['Low Hazard Zone'],
+            'medium': ['Medium Hazard Zone'],
+            'high': ['High hazard Zone']
         }
         dialog.step_kw_classify.populate_classified_values(
             unassigned_values, assigned_values, default_classes)
@@ -1118,14 +1117,7 @@ class TestKeywordWizard(unittest.TestCase):
         # Check if in InaSAFE field step
         self.check_current_step(dialog.step_kw_inasafe_fields)
 
-        # Click next to finish inasafe fields step and go to inasafe default
-        # field step
-        dialog.pbnNext.click()
-
-        # Check if in InaSAFE Default field step
-        self.check_current_step(dialog.step_kw_default_inasafe_fields)
-
-        # Click next to finish InaSAFE Default Field step and go to source step
+        # Click next to finish InaSAFE Field step and go to source step
         dialog.pbnNext.click()
 
         # Check if in source step
@@ -1263,14 +1255,8 @@ class TestKeywordWizard(unittest.TestCase):
         # Check if in InaSAFE field step
         self.check_current_step(dialog.step_kw_inasafe_fields)
 
-        # Click next to finish inasafe fields step and go to inasafe default
+        # Click next to finish inasafe fields step and go to source step
         # field step
-        dialog.pbnNext.click()
-
-        # Check if in InaSAFE Default field step
-        self.check_current_step(dialog.step_kw_default_inasafe_fields)
-
-        # Click next to finish InaSAFE Default Field step and go to source step
         dialog.pbnNext.click()
 
         # Check if in source step

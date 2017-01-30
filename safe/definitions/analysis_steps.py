@@ -25,7 +25,7 @@ analysis_steps['initialisation'] = {
     'citations': [
         {
             'text': tr(''),
-            'link': ''
+            'link': u''
         }
     ]
 }
@@ -39,7 +39,7 @@ analysis_steps['data_store'] = {
     'citations': [
         {
             'text': tr(''),
-            'link': ''
+            'link': u''
         }
     ]
 }
@@ -53,7 +53,7 @@ analysis_steps['hazard_preparation'] = {
     'citations': [
         {
             'text': tr(''),
-            'link': ''
+            'link': u''
         }
     ]
 }
@@ -68,7 +68,7 @@ analysis_steps['exposure_preparation'] = {
     'citations': [
         {
             'text': tr(''),
-            'link': ''
+            'link': u''
         }
     ]
 }
@@ -83,7 +83,7 @@ analysis_steps['aggregation_preparation'] = {
     'citations': [
         {
             'text': tr(''),
-            'link': ''
+            'link': u''
         }
     ]
 }
@@ -99,7 +99,7 @@ analysis_steps['aggregate_hazard_preparation'] = {
     'citations': [
         {
             'text': tr(''),
-            'link': ''
+            'link': u''
         }
     ]
 }
@@ -116,7 +116,7 @@ analysis_steps['combine_hazard_exposure'] = {
     'citations': [
         {
             'text': tr(''),
-            'link': ''
+            'link': u''
         }
     ]
 }
@@ -131,7 +131,7 @@ analysis_steps['post_processing'] = {
     'citations': [
         {
             'text': tr(''),
-            'link': ''
+            'link': u''
         }
     ]
 }
@@ -145,7 +145,7 @@ analysis_steps['summary_calculation'] = {
     'citations': [
         {
             'text': tr(''),
-            'link': ''
+            'link': u''
         }
     ]
 }
@@ -159,7 +159,7 @@ analysis_steps['profiling'] = {
     'citations': [
         {
             'text': tr(''),
-            'link': ''
+            'link': u''
         }
     ]
 }

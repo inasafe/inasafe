@@ -9,7 +9,6 @@ from safe.definitions.constants import qvariant_whole_numbers
 from safe.definitions.fields import default_field_length
 from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
 
-
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
@@ -53,7 +52,9 @@ def _initializes_minimum_needs_fields():
     needs_profile.load()
     fields = []
 
-    for need_parameter in needs_profile.get_needs_parameters():
+    needs_parameters = needs_profile.get_needs_parameters()
+
+    for need_parameter in needs_parameters:
         if isinstance(need_parameter, ResourceParameter):
             format_args = {
                 'namespace': minimum_needs_namespace,
@@ -83,6 +84,7 @@ def _initializes_minimum_needs_fields():
                 'absolute': absolute,
                 'description': description,
                 'replace_null': replace_null,
+                'unit_abbreviation': need_parameter.unit.abbreviation,
                 # Link to need_parameter
                 'need_parameter': need_parameter
             }

@@ -6,7 +6,8 @@ from safe import messaging as m
 from safe.messaging import styles
 from safe.utilities.resources import resources_path
 
-INFO_STYLE = styles.INFO_STYLE
+SUBSECTION_STYLE = styles.SUBSECTION_LEVEL_3_STYLE
+INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
 SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
 
 __author__ = 'ismailsunni'
@@ -39,7 +40,7 @@ def heading():
     :returns: A heading object.
     :rtype: safe.messaging.heading.Heading
     """
-    message = m.Heading(tr('InaSAFE options help'), **INFO_STYLE)
+    message = m.Heading(tr('InaSAFE options help'), **SUBSECTION_STYLE)
     return message
 
 
@@ -55,12 +56,12 @@ def content():
     :rtype: safe.messaging.message.Message
     """
     message = m.Message()
-    message.add(tr(
+    message.add(m.Paragraph(tr(
         'The InaSAFE options dialog is used to control various aspects of '
         'the InaSAFE analysis and reporting environment. Here are brief '
         'descriptions of all the options available, grouped by the tab '
         'page on which they occur.'
-    ))
+    )))
 
     header = m.Heading(tr('Basic options tab'), **INFO_STYLE)
     message.add(header)

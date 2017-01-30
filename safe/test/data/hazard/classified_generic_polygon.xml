@@ -176,7 +176,7 @@
             <gco:CharacterString>multiple_event</gco:CharacterString>
           </hazard_category>
           <classification>
-            <gco:CharacterString/>
+            <gco:CharacterString>earthquake_mmi_hazard_classes</gco:CharacterString>
           </classification>
           <thresholds>
             <gco:Dictionary/>
@@ -185,7 +185,7 @@
             <gco:CharacterString/>
           </continuous_hazard_unit>
           <inasafe_fields>
-            <gco:Dictionary/>
+            <gco:Dictionary>{&quot;hazard_value_field&quot;: &quot;h_zone&quot;}</gco:Dictionary>
           </inasafe_fields>
           <inasafe_default_values>
             <gco:Dictionary/>

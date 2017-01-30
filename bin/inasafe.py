@@ -36,6 +36,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.utilities.gis import qgis_version, validate_geo_array
 from safe.utilities.osm_downloader import download
+from safe.impact_function.impact_function import ImpactFunction
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -231,9 +232,7 @@ def impact_function_setup(
     :raises: Exception
     """
     # IF
-    impact_function_manager = ImpactFunctionManager()
-    impact_function = impact_function_manager.get(
-        command_line_arguments.impact_function)
+    impact_function = ImpactFunction()
 
     impact_function.hazard = hazard
     impact_function.exposure = exposure

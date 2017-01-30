@@ -13,7 +13,9 @@ import logging
 from os.path import join, isfile
 from os import listdir
 
+from safe.definitions.layer_purposes import layer_purpose_profiling
 from safe.definitions.minimum_needs import minimum_needs_fields
+from safe.definitions.utilities import definition
 from safe.test.utilities import (
     get_control_text,
     load_test_raster_layer,
@@ -26,20 +28,24 @@ from safe.test.utilities import (
 from safe.common.version import get_version
 from safe.test.debug_helper import print_attribute_table
 
+from safe.impact_function.provenance_utilities import (
+    get_map_title,
+    get_analysis_question,
+    get_report_question
+)
+
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from qgis.core import (
     QgsVectorLayer,
     QgsRasterLayer,
+    QgsMapLayer,
     QgsCoordinateReferenceSystem,
     QGis)
 from osgeo import gdal
 from PyQt4.QtCore import QT_VERSION_STR
 from PyQt4.Qt import PYQT_VERSION_STR
-from safe.definitions.fields import (
-    population_count_field,
-    exposure_type_field,
-)
+from safe.definitions.fields import exposure_type_field
 from safe.definitions.post_processors import (
     post_processor_gender,
     post_processor_youth,
@@ -142,7 +148,8 @@ def run_scenario(scenario, use_debug=False):
         return status, message, None
 
     for layer in impact_function.outputs:
-        check_inasafe_fields(layer)
+        if layer.type() == QgsMapLayer.VectorLayer:
+            check_inasafe_fields(layer)
 
     return status, impact_function.state, impact_function.outputs
 
@@ -163,7 +170,6 @@ class TestImpactFunction(unittest.TestCase):
 
         expected_inasafe_fields = {
             exposure_type_field['key']: 'TYPE',
-            population_count_field['key']: 'pop_count'
         }
         self.assertDictEqual(
             exposure_layer.keywords['inasafe_fields'], expected_inasafe_fields)
@@ -174,7 +180,6 @@ class TestImpactFunction(unittest.TestCase):
             fields
         )
         inasafe_fields = exposure_layer.keywords['inasafe_fields']
-        self.assertIn(inasafe_fields['population_count_field'], fields)
 
     def test_impact_function_behaviour(self):
         """Test behaviour of impact function."""
@@ -348,7 +353,11 @@ class TestImpactFunction(unittest.TestCase):
             scenario_path)
         status, steps, outputs = run_scenario(scenario, use_debug)
         self.assertEqual(0, status, steps)
-        self.assertDictEqual(expected_steps, steps)
+        # self.assertDictEqual(expected_steps, steps, scenario_path)
+        try:
+            self.assertDictEqual(expected_steps, steps)
+        except AssertionError as e:
+            raise AssertionError(e.message + '\nThe file is ' + scenario_path)
         # - 1 because I added the profiling table, and this table is not
         # counted in the JSON file.
         self.assertEqual(len(outputs) - 1, expected_outputs['count'])
@@ -363,7 +372,6 @@ class TestImpactFunction(unittest.TestCase):
         which scenario you want to launch.
         """
         scenarii = {
-            'earthquake_raster_on_raster_population': False,
             'polygon_classified_on_line': False,
             'polygon_classified_on_point': False,
             'polygon_classified_on_vector_population': False,
@@ -393,7 +401,7 @@ class TestImpactFunction(unittest.TestCase):
 
         json_files = [
             join(path, f) for f in listdir(path)
-            if isfile(join(path, f)) and f.endswith('json')
+            if isfile(join(path, f)) and f.endswith('.json')
         ]
 
         count = 0
@@ -416,6 +424,9 @@ class TestImpactFunction(unittest.TestCase):
 
         impact_layer.keywords['hazard_keywords'] = {
             'classification': 'flood_hazard_classes'
+        }
+        impact_layer.keywords['exposure_keywords'] = {
+            'exposure': 'structure',
         }
 
         impact_function = ImpactFunction()
@@ -448,9 +459,15 @@ class TestImpactFunction(unittest.TestCase):
         aggregation_layer = load_test_vector_layer(
             'gisv4', 'aggregation', 'small_grid.geojson')
 
+        hazard = definition(hazard_layer.keywords['hazard'])
+        exposure = definition(exposure_layer.keywords['exposure'])
+        hazard_category = definition(hazard_layer.keywords['hazard_category'])
+
         expected_provenance = {
             'gdal_version': gdal.__version__,
             'host_name': gethostname(),
+            'map_title': get_map_title(hazard, exposure, hazard_category),
+            'map_legend_title': exposure['layer_legend_title'],
             'user': getpass.getuser(),
             'os': platform.version(),
             'pyqt_version': PYQT_VERSION_STR,
@@ -463,6 +480,8 @@ class TestImpactFunction(unittest.TestCase):
             'exposure_layer': exposure_layer.source(),
             'hazard_keywords': deepcopy(hazard_layer.keywords),
             'hazard_layer': hazard_layer.source(),
+            'analysis_question': get_analysis_question(hazard, exposure),
+            'report_question': get_report_question(exposure)
         }
 
         # Set up impact function
@@ -499,9 +518,15 @@ class TestImpactFunction(unittest.TestCase):
         exposure_layer = load_test_vector_layer(
             'gisv4', 'exposure', 'building-points.geojson')
 
+        hazard = definition(hazard_layer.keywords['hazard'])
+        exposure = definition(exposure_layer.keywords['exposure'])
+        hazard_category = definition(hazard_layer.keywords['hazard_category'])
+
         expected_provenance = {
             'gdal_version': gdal.__version__,
             'host_name': gethostname(),
+            'map_title': get_map_title(hazard, exposure, hazard_category),
+            'map_legend_title': exposure['layer_legend_title'],
             'inasafe_version': get_version(),
             'pyqt_version': PYQT_VERSION_STR,
             'qgis_version': QGis.QGIS_VERSION,
@@ -514,6 +539,8 @@ class TestImpactFunction(unittest.TestCase):
             'exposure_layer': exposure_layer.source(),
             'hazard_keywords': deepcopy(hazard_layer.keywords),
             'hazard_layer': hazard_layer.source(),
+            'analysis_question': get_analysis_question(hazard, exposure),
+            'report_question': get_report_question(exposure)
         }
 
         # Set up impact function
@@ -658,10 +685,11 @@ class TestImpactFunction(unittest.TestCase):
     def _check_minimum_fields_exists(self, impact_function):
         """Private methods for checking existing minimum fields."""
         message = '{field_key} not exists'
-        layers = (
-            layer for layer in impact_function.outputs
-            if not layer.name() == 'profiling')
-        for layer in layers:
+        skip_layers = [layer_purpose_profiling['key']]
+        for layer in impact_function.outputs:
+            if layer.keywords['layer_purpose'] in skip_layers:
+                continue
+
             inasafe_fields = layer.keywords['inasafe_fields']
             for field in minimum_needs_fields:
                 # check fields exists

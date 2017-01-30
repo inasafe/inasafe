@@ -12,7 +12,10 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+import logging
+
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
+from safe.gui.tools.extent_selector_dialog import ExtentSelectorDialog
 from safe.gui.tools.wizard.wizard_step import WizardStep
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -20,8 +23,9 @@ __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
-
 FORM_CLASS = get_wizard_step_ui_class(__file__)
+
+LOGGER = logging.getLogger('InaSAFE')
 
 
 class StepFcExtent(WizardStep, FORM_CLASS):
@@ -95,13 +99,11 @@ class StepFcExtent(WizardStep, FORM_CLASS):
 
     def set_widgets(self):
         """Set widgets on the Extent tab"""
-        # import here only so that it is AFTER i18n set up
-        from safe.gui.tools.extent_selector_dialog import ExtentSelectorDialog
         self.extent_dialog = ExtentSelectorDialog(
             self.parent.iface,
             self.parent.iface.mainWindow(),
             extent=self.parent.dock.extent.user_extent,
-            crs=self.parent.dock.extent.user_extent_crs)
+            crs=self.parent.dock.extent.crs)
         self.extent_dialog.tool.rectangle_created.disconnect(
             self.extent_dialog.stop_capture)
         self.extent_dialog.clear_extent.connect(

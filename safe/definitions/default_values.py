@@ -53,7 +53,7 @@ feature_rate_default_value = {
 
 youth_ratio_default_value = {
     'key': 'youth_ratio_default_value',
-    'name': tr('Youth Ratio Default Value'),
+    'name': tr('Youth Ratio Global Default'),
     # Updated from 0.263 to 0.254 in InaSAFE 4.0
     'default_value': 0.254,
     'min_value': 0,
@@ -63,7 +63,7 @@ youth_ratio_default_value = {
 
 adult_ratio_default_value = {
     'key': 'adult_ratio_default_value',
-    'name': tr('Adult Ratio Default Value'),
+    'name': tr('Adult Ratio Global Default'),
     'default_value': 0.659,
     'min_value': 0,
     'max_value': 1,
@@ -72,7 +72,7 @@ adult_ratio_default_value = {
 
 elderly_ratio_default_value = {
     'key': 'elderly_ratio_default_value',
-    'name': tr('Eldery Ratio Default Value'),
+    'name': tr('Elderly Ratio Global Default'),
     # Updated from 0.078 to 0.087 in InaSAFE 4.0
     'default_value': 0.087,
     'min_value': 0,

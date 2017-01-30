@@ -24,8 +24,8 @@
     "post_processor":{
       "info": {},
       "process":[
-        "Post processor for Size Value Post Processor",
-        "Post processor for Affected Post Processor"
+        "Size Value Post Processor",
+        "Affected Post Processor"
       ]
     },
     "aggregation":{
@@ -45,6 +45,7 @@
         "use_same_projection":false
       },
       "process":[
+        "Clip raster by analysis bounding box",
         "Classify continuous raster hazard",
         "Polygonize classified raster hazard",
         "Reproject hazard layer to exposure CRS",

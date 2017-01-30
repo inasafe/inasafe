@@ -23,6 +23,16 @@ class MinimumNeeds(object):
     .. versionadded:: 2.2.
     """
 
+    # Default Name for minimum needs items
+    Rice = tr('Rice')
+    Drinking_water = tr('Drinking Water')
+    Water = tr('Clean Water')
+    Family_kits = tr('Family Kits')
+    Toilets = tr('Toilets')
+    Weekly_hygiene_packs = tr("Weekly Hygiene Packs")
+    Additional_rice = tr(
+        'Additional Weekly Rice kg for Pregnant and Lactating Women')
+
     def get_need(self, resource):
         """Get a resource from the minimum_needs.
 
@@ -108,17 +118,12 @@ class MinimumNeeds(object):
         self.minimum_needs = minimum_needs
         return 0
 
-    @staticmethod
-    def _defaults():
+    @classmethod
+    def _defaults(cls):
         """Helper to get the default minimum needs.
 
         .. note:: Key names will be translated.
         """
-        rice = tr('Rice')
-        drinking_water = tr('Drinking Water')
-        water = tr('Clean Water')
-        family_kits = tr('Family Kits')
-        toilets = tr('Toilets')
         minimum_needs = {
             "resources": [
                 {
@@ -126,7 +131,7 @@ class MinimumNeeds(object):
                     "Minimum allowed": "0",
                     "Maximum allowed": "100",
                     "Frequency": "weekly",
-                    "Resource name": rice,
+                    "Resource name": cls.Rice,
                     "Resource description": "Basic food",
                     "Unit": "kilogram",
                     "Units": "kilograms",
@@ -140,7 +145,7 @@ class MinimumNeeds(object):
                     "Minimum allowed": "0",
                     "Maximum allowed": "100",
                     "Frequency": "weekly",
-                    "Resource name": drinking_water,
+                    "Resource name": cls.Drinking_water,
                     "Resource description": "For drinking",
                     "Unit": "litre",
                     "Units": "litres",
@@ -155,7 +160,7 @@ class MinimumNeeds(object):
                     "Minimum allowed": "10",
                     "Maximum allowed": "100",
                     "Frequency": "weekly",
-                    "Resource name": water,
+                    "Resource name": cls.Water,
                     "Resource description": "For washing",
                     "Unit": "litre",
                     "Units": "litres",
@@ -170,7 +175,7 @@ class MinimumNeeds(object):
                     "Minimum allowed": "0.1",
                     "Maximum allowed": "1",
                     "Frequency": "weekly",
-                    "Resource name": family_kits,
+                    "Resource name": cls.Family_kits,
                     "Resource description": "Hygiene kits",
                     "Unit": "",
                     "Units": "",
@@ -184,7 +189,7 @@ class MinimumNeeds(object):
                     "Minimum allowed": "0.02",
                     "Maximum allowed": "1",
                     "Frequency": "single",
-                    "Resource name": toilets,
+                    "Resource name": cls.Toilets,
                     "Resource description": "",
                     "Unit": "",
                     "Units": "",

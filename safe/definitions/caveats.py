@@ -22,10 +22,14 @@ caveat_incomplete_data = tr(
     'The impacts on roads, people, buildings and other exposure '
     'elements may be underestimated if the exposure data are incomplete.')
 caveat_analysis_extent = tr(
-    'The impact layer extent is limited to the extent of the aggregation '
+    'The analysis extent is limited to the extent of the aggregation '
     'layer or analysis extent. Hazard and exposure data outside the analysis '
     'extent are not included in the impact layer, impact map or impact '
     'reports.')
+caveat_analysis_ommission = tr(
+    'Structures overlapping the analysis extent may be assigned a hazard '
+    'status lower than that to which they are exposed outside the analysis '
+    'area.')
 no_data_warning = [
     tr(
         'The layers contained "no data" values. This missing data '

@@ -18,7 +18,7 @@ from qgis.core import (
     QgsRasterLayer,
 )
 
-from safe.gis.gdal_ogr_tools import QGIS_OGR_GEOMETRY_MAP
+from safe.definitions.gis import QGIS_OGR_GEOMETRY_MAP
 from safe.datastore.datastore import DataStore
 from safe.common.exceptions import ErrorDataStore
 
@@ -64,6 +64,17 @@ class GeoPackage(DataStore):
             path = self.uri.absoluteFilePath()
             datasource = self.vector_driver.CreateDataSource(path)
             del datasource
+
+    @property
+    def uri_path(self):
+        """Return the URI of the datastore as a path. It's not a layer URI.
+
+        :return: The URI.
+        :rtype: str
+
+        .. versionadded:: 4.0
+        """
+        return self.uri.absolutePath()
 
     def is_writable(self):
         """Check if the folder is writable.

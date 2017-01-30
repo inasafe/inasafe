@@ -3,7 +3,7 @@ from safe.common.parameters.resource_parameter import ResourceParameter
 from safe.definitions.minimum_needs import (
     minimum_needs_fields,
     minimum_needs_namespace)
-from safe.report.extractors.util import round_affecter_number
+from safe.utilities.rounding import round_affected_number
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -70,7 +70,7 @@ def minimum_needs_extractor(impact_report, component_metadata):
             if field_idx == -1:
                 # skip if field doesn't exists
                 continue
-            value = round_affecter_number(
+            value = round_affected_number(
                 analysis_feature[field_idx],
                 enable_rounding=is_rounding,
                 use_population_rounding=False)

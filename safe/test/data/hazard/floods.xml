@@ -176,7 +176,7 @@
             <gco:CharacterString>single_event</gco:CharacterString>
           </hazard_category>
           <classification>
-            <gco:CharacterString/>
+            <gco:CharacterString>flood_hazard_classes</gco:CharacterString>
           </classification>
           <thresholds>
             <gco:Dictionary/>
@@ -185,7 +185,7 @@
             <gco:CharacterString/>
           </continuous_hazard_unit>
           <inasafe_fields>
-            <gco:Dictionary/>
+            <gco:Dictionary>{&quot;hazard_value_field&quot;: &quot;FLOODPRONE&quot;}</gco:Dictionary>
           </inasafe_fields>
           <inasafe_default_values>
             <gco:Dictionary/>
@@ -200,7 +200,7 @@
             <gco:CharacterString>NBS</gco:CharacterString>
           </source>
           <value_map>
-            <gco:Dictionary>{&quot;high&quot;: [&quot;YES&quot;]}</gco:Dictionary>
+            <gco:Dictionary>{&quot;wet&quot;: [&quot;YES&quot;]}</gco:Dictionary>
           </value_map>
           <layer_geometry>
             <gco:CharacterString>polygon</gco:CharacterString>

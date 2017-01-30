@@ -5,7 +5,7 @@ from safe.utilities.i18n import tr
 from safe import messaging as m
 from safe.messaging import styles
 
-INFO_STYLE = styles.INFO_STYLE
+SUBSECTION_STYLE = styles.SUBSECTION_LEVEL_3_STYLE
 
 
 def peta_jakarta_help():
@@ -35,7 +35,7 @@ def heading():
     :returns: A heading object.
     :rtype: safe.messaging.heading.Heading
     """
-    message = m.Heading(tr('Peta Jakarta downloader help'), **INFO_STYLE)
+    message = m.Heading(tr('Peta Jakarta downloader help'), **SUBSECTION_STYLE)
     return message
 
 

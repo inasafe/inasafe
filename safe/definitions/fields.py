@@ -652,7 +652,7 @@ female_ratio_field = {
     'precision': default_ratio_field_precision,
     'absolute': False,
     'description': tr(
-        'The rate of females for each feature.'),
+        'The proportion of females for each feature.'),
     'help_text': tr(
         '"Female" is defined as: ' + concepts['female']['description'] +
         'In cases where population data is available, InaSAFE will calculate '
@@ -682,7 +682,7 @@ youth_ratio_field = {
     'precision': default_ratio_field_precision,
     'absolute': False,
     'description': tr(
-        'The number of young people for each feature.'),
+        'The proportion of young people for each feature.'),
     'help_text': tr(
         '"Youth" is defined as: ' + concepts['youth']['description'] +
         'In cases where population data is available, InaSAFE will calculate '
@@ -712,7 +712,7 @@ adult_ratio_field = {
     'precision': default_ratio_field_precision,
     'absolute': False,
     'description': tr(
-        'The number of adults for each feature.'),
+        'The proportion of adults for each feature.'),
     'help_text': tr(
         '"Adult" is defined as: ' + concepts['adult']['description'] +
         'In cases where population data is available, InaSAFE will calculate '
@@ -742,7 +742,7 @@ elderly_ratio_field = {
     'precision': default_ratio_field_precision,
     'absolute': False,
     'description': tr(
-        'The number of elderly people for each feature.'),
+        'The proportion of elderly people for each feature.'),
     'help_text': tr(
         '"Elderly" is defined as: ' + concepts['elderly']['description'] +
         'In cases where population data is available, InaSAFE will calculate '
@@ -820,6 +820,97 @@ total_field = {
     'replace_null': False
 }
 
+# Fatalities
+fatalities_field = {
+    'key': 'fatalities_field',
+    'name': tr('Fatalities'),
+    'field_name': 'fatalities',
+    'type': QVariant.Int,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'help_text': tr('Number of fatalities.'),
+    'description': tr('Number of fatalities.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+
+# Displaced
+displaced_field = {
+    'key': 'displaced_field',
+    'name': tr('Displaced'),
+    'field_name': 'displaced',
+    'type': QVariant.Int,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'help_text': tr('Number of displaced.'),
+    'description': tr('Number of displaced.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+# Female hygiene packs
+hygiene_packs_count_field = {
+    'key': 'hygiene_packs_field',
+    'name': tr('Weekly Hygiene Packs'),
+    'field_name': 'hygiene_packs',
+    'type': QVariant.Int,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'help_text': tr('Number of Hygiene Packs Weekly for Women.'),
+    'description': tr('Number of Hygiene Packs Weekly for Women.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+# Additional Rice for Pregnant and Lactating Women
+additional_rice_count_field = {
+    'key': 'additional_rice_field',
+    'name': tr('Additional Weekly Rice kg for Pregnant and Lactating Women'),
+    'field_name': 'additional_rice',
+    'type': QVariant.Int,
+    'length': default_field_length,
+    'unit': {
+        'name': 'Kilogram',
+        'abbreviation': 'kg'
+    },
+    'precision': 0,
+    'absolute': True,
+    'help_text': tr(
+        'Additional Weekly Rice kg for Pregnant and Lactating Women.'),
+    'description': tr(
+        'Additional Weekly Rice kg for Pregnant and Lactating Women.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
 # Total affected field to store the total affected by the hazard
 total_affected_field = {
     'key': 'total_affected_field',
@@ -875,6 +966,33 @@ total_unaffected_field = {
     'replace_null': False
 }
 
+# Total not exposed field to store the number of not exposed by the hazard
+total_not_exposed_field = {
+    'key': 'total_not_exposed_field',
+    'name': tr('Total Not Exposed'),
+    'field_name': 'total_not_exposed',
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': 2,
+    'absolute': True,
+    'help_text': tr(
+        'The total not exposed field stores the cumulative total number of '
+        'not exposed features or entities.'),
+    'description': tr(
+        'The total not exposed field is added to the analysis layer, '
+        'aggregate impact layer and aggregate hazard impact layer during the '
+        'impact analysis. It represents the cumulative count of not exposed '
+        'exposure features (e.g. buildings) or entities (e.g. people) for '
+        'each area.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
 
 # # # # # # # # # #
 # Count, dynamics, outputs (Absolute values)
@@ -955,9 +1073,6 @@ hazard_count_field = {
         'impact layer and aggregate hazard impact layer during the impact '
         'analysis. It represents the cumulative count of hazard'
         'features for each area.'),
-    'description': tr(
-        'Attribute where the total of the count is located.'
-    ),
     'citations': [
         {
             'text': None,
@@ -968,12 +1083,76 @@ hazard_count_field = {
     'replace_null': False
 }
 
+# Count of population exposed after an EQ for a given MMI level.
+population_exposed_per_mmi_field = {
+    'key': 'mmi_%s_exposed',
+    'name': tr('MMI %s exposed'),
+    'field_name': 'mmi_%s_exposed',
+    'type': QVariant.Int,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'help_text': tr('The number of exposed population for a given MMI level.'),
+    'description': tr(
+        'The number of exposed population for a given MMI level.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+# Count of fatalities after an EQ for a given MMI level.
+fatalities_per_mmi_field = {
+    'key': 'mmi_%s_fatalities',
+    'name': tr('MMI %s fatalities'),
+    'field_name': 'mmi_%s_fatalities',
+    'type': QVariant.Int,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'help_text': tr('The number of fatalities for a given MMI level.'),
+    'description': tr(
+        'The number of fatalities for a given MMI level.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+# Count of population displaced after an EQ for a given MMI level.
+population_displaced_per_mmi = {
+    'key': 'mmi_%s_displaced',
+    'name': tr('MMI %s displaced'),
+    'field_name': 'mmi_%s_displaced',
+    'type': QVariant.Int,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'help_text': tr(
+        'The number of displaced population for a given MMI level.'),
+    'description': tr(
+        'The number of displaced population for a given MMI level.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
 
 # Inputs
 exposure_fields = [
     exposure_id_field,
-    feature_value_field,
-    feature_rate_field
 ]
 
 hazard_fields = [
@@ -1036,6 +1215,8 @@ exposure_breakdown_fields = [
     exposure_class_field,
     hazard_count_field,
     total_affected_field,
+    total_unaffected_field,
+    total_not_exposed_field,
     total_field,
 ]
 
@@ -1044,6 +1225,8 @@ analysis_fields = [
     analysis_name_field,
     hazard_count_field,
     total_affected_field,
+    total_unaffected_field,
+    total_not_exposed_field,
     total_field
 ]
 
@@ -1052,8 +1235,12 @@ from safe.definitions.minimum_needs import minimum_needs_fields  # noqa
 count_fields = [
     feature_value_field,
     population_count_field,
+    displaced_field,
+    fatalities_field,
     female_count_field,
     male_count_field,
+    hygiene_packs_count_field,
+    additional_rice_count_field,
     youth_count_field,
     adult_count_field,
     elderly_count_field,

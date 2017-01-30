@@ -193,6 +193,22 @@ class ReportComponentsMetadata(object):
         """
         self._extra_args = value
 
+    @property
+    def info(self):
+        """
+        :return: Returned dictionary of information about the component.
+        :rtype: dict
+        """
+        return {
+            'key': self.key,
+            'processor': self.processor,
+            'extractor': self.extractor,
+            'output_path': self.output_path,
+            'output_format': self.output_format,
+            'template': self.template,
+            'type': type(self)
+        }
+
 
 class Jinja2ComponentsMetadata(ReportComponentsMetadata):
 
@@ -290,6 +306,19 @@ class QgisComposerComponentsMetadata(ReportComponentsMetadata):
         """
         return self._page_height
 
+    @property
+    def info(self):
+        """
+        :return: Returned dictionary of information about the component.
+        :rtype: dict
+        """
+        return super(QgisComposerComponentsMetadata, self).info.update({
+            'orientation': self.orientation,
+            'page_dpi': self.page_dpi,
+            'page_width': self.page_width,
+            'page_height': self.page_height
+        })
+
 
 class ReportMetadata(object):
 
@@ -322,36 +351,15 @@ class ReportMetadata(object):
 
     @classmethod
     def _load_components(cls, component_metadata):
-        # key = component_metadata.get('key')
         component_type = component_metadata.get('type')
-        # processor = component_metadata.get('processor')
-        # extractor = component_metadata.get('extractor')
-        # output_format = component_metadata.get('output_format')
         template = component_metadata.get('template')
-        # output_path = component_metadata.get('output_path')
-        # extra_args = component_metadata.get('extra_args', {})
         kwargs = component_metadata
         kwargs['template'] = template
         if (component_type ==
                 ReportComponentsMetadata.AvailableComponent.Jinja2):
-            # return Jinja2ComponentsMetadata(
-            #     key, processor, extractor, output_format, template,
-            #     output_path, extra_args=extra_args)
             return Jinja2ComponentsMetadata(**kwargs)
         elif (component_type ==
                 ReportComponentsMetadata.AvailableComponent.QGISComposer):
-            # page_dpi = component_metadata.get('page_dpi', None)
-            # page_height = component_metadata.get('page_height', None)
-            # page_width = component_metadata.get('page_width', None)
-            # orientation = component_metadata.get('orientation', None)
-            # return QgisComposerComponentsMetadata(
-            #     key, processor, extractor, output_format, template,
-            #     output_path,
-            #     orientation=orientation,
-            #     page_dpi=page_dpi,
-            #     page_height=page_height,
-            #     page_width=page_width,
-            #     extra_args=extra_args)
             return QgisComposerComponentsMetadata(**kwargs)
 
     @property
@@ -405,7 +413,7 @@ class ReportMetadata(object):
         A list of report components that needed to be generated each
 
         :return: list of ReportComponentsMetadata
-        :rtype: [ReportComponentsMetadata]
+        :rtype: list[ReportComponentsMetadata]
         """
         return self._components
 

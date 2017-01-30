@@ -4,13 +4,16 @@
 # This is disabled for typehinting docstring.
 
 """Definitions relating to post-processing."""
+from collections import OrderedDict
 
 from PyQt4.QtCore import QPyNullVariant
 
+from safe.definitions.hazard_classifications import not_exposed_class
 from safe.definitions.exposure import exposure_population
 from safe.definitions.minimum_needs import minimum_needs_fields
 from safe.utilities.i18n import tr
 from safe.definitions.fields import (
+    displaced_field,
     female_ratio_field,
     population_count_field,
     female_count_field,
@@ -26,8 +29,9 @@ from safe.definitions.fields import (
     hazard_class_field,
     affected_field,
     exposure_count_field,
-    male_count_field)
-from safe.definitions.hazard_classifications import all_hazard_classes
+    male_count_field, hygiene_packs_count_field, additional_rice_count_field)
+from safe.definitions import concepts
+from safe.definitions.hazard_classifications import hazard_classes_all
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -83,10 +87,10 @@ def post_processor_affected_function(**kwargs):
 
     :param hazard_class: The hazard class to check.
 
-    :return: If this hazard class is affected or not.
+    :return: If this hazard class is affected or not. It can be `not exposed`.
     :rtype: bool
     """
-    for hazard in all_hazard_classes:
+    for hazard in hazard_classes_all:
         if hazard['key'] == kwargs['classification']:
             classification = hazard['classes']
 
@@ -95,10 +99,42 @@ def post_processor_affected_function(**kwargs):
             affected = level['affected']
             break
     else:
-        affected = False
+        affected = not_exposed_class['key']
 
     return affected
 
+
+def post_processor_displaced_function(
+        classification=None, hazard_class=None, population=None):
+    """Private function used in the displaced postprocessor.
+
+    :param classification: The hazard classification to use.
+    :type classification: str
+
+    :param hazard_class: The hazard class of the feature.
+    :type hazard_class: str
+
+    :param population: Number of affected population
+    :type population: float, int
+
+    :return:
+    """
+    for hazard in hazard_classes_all:
+        if hazard['key'] == classification:
+            classification = hazard['classes']
+
+    for hazard_class_def in classification:
+        if hazard_class_def['key'] == hazard_class:
+            displaced_ratio = hazard_class_def.get('displaced_rates', 0)
+            break
+    else:
+        displaced_ratio = 0
+
+    try:
+        return population * displaced_ratio
+    except:  # pylint: disable=broad-except
+        # intended, return 0 if calculation fails
+        return 0
 
 # # #
 # Post processors related definitions
@@ -107,6 +143,11 @@ def post_processor_affected_function(**kwargs):
 # # #
 # Input
 # # #
+constant_input_type = {
+    'key': 'constant',
+    'description': tr('This type of input gives a constant value.')
+}
+
 field_input_type = {
     'key': 'field',
     'description': tr('This type of input takes a value from a field.')
@@ -141,11 +182,13 @@ geometry_property_input_type = {
 layer_property_input_type = {
     'key': 'layer_property',
     'description': tr(
-        'This type of input takes it\'s value from s layer property.')
+        'This type of input takes it\'s value from a layer property. For '
+        'example the layer Coordinate Reference System of the layer.')
 }
 
 
 post_processor_input_types = [
+    constant_input_type,
     field_input_type,
     dynamic_field_input_type,
     keyword_input_type,
@@ -155,7 +198,6 @@ post_processor_input_types = [
 ]
 
 # Input values
-# TODO: @ismailsunni please give better explanation of these
 
 size_calculator_input_value = {
     'key': 'size_calculator',
@@ -167,9 +209,9 @@ size_calculator_input_value = {
 layer_crs_input_value = {
     'key': 'layer_crs',
     'description': tr(
-        'This is a value for layer_crs input type. Retrieve layer CRS')
+        'This is a value for layer_crs input type. It retrieves the layer '
+        'Coordinate Reference System (CRS).')
 }
-
 
 layer_property_input_values = [
     size_calculator_input_value,
@@ -185,15 +227,15 @@ post_processor_input_values = [
 formula_process = {
     'key': 'formula',
     'description': tr(
-        'This type of process takes inputs as arguments and process it '
-        'according to python expressions described.')
+        'This type of process takes inputs as arguments and processes them '
+        'according to a python expression provided by the processor.')
 }
 
 function_process = {
     'key': 'function',
     'description': tr(
-        'This type of process takes inputs as arguments and process it '
-        'using python function referenced.')
+        'This type of process takes inputs as arguments and processes them '
+        'by passing them as arguments to a python function.')
 }
 
 
@@ -201,17 +243,19 @@ post_processor_process_types = [
     formula_process, function_process
 ]
 
+
 # # #
 # Post processors
 # # #
 
 # A postprocessor can be defined with a formula or with a python function.
 
-post_processor_gender = {
-    'key': 'post_processor_gender',
-    'name': tr('Gender Post Processor'),
+post_processor_displaced = {
+    'key': 'post_processor_displaced',
+    'name': tr('Displaced Post Processor'),
     'description': tr(
-        'Post processor to calculate the number of affected females'),
+        'A post processor to calculate the number of displaced people.'
+    ),
     'input': {
         # input as a list means, try to get the input from the
         # listed source. Pick the first available
@@ -225,6 +269,39 @@ post_processor_gender = {
                 'field_param': exposure_population['key'],
                 'type': dynamic_field_input_type,
             }],
+        # Taking hazard classification
+        'classification': {
+            'type': keyword_input_type,
+            'value': ['hazard_keywords', 'classification']
+        },
+        'hazard_class': {
+            'type': field_input_type,
+            'value': hazard_class_field,
+        }
+    },
+    'output': {
+        'displaced': {
+            'value': displaced_field,
+            'type': function_process,
+            'function': post_processor_displaced_function
+        }
+    }
+}
+
+post_processor_gender = {
+    'key': 'post_processor_gender',
+    'name': tr('Gender Post Processor'),
+    'description': tr(
+        'A post processor to calculate the number of affected females. '
+        '"Female" is defined as: ' + concepts['female']['description']
+    ),
+    'input': {
+        'population': {
+            'value': displaced_field,
+            'type': field_input_type,
+        },
+        # input as a list means, try to get the input from the
+        # listed source. Pick the first available
         'gender_ratio': [{
                 'value': female_ratio_field,
                 'type': field_input_type
@@ -237,17 +314,81 @@ post_processor_gender = {
                 ],
             }]
     },
-    'output': {
-        'female': {
+    # output is described as ordered dict because the order is important
+    # and the postprocessor produce two fields.
+    'output': OrderedDict([
+        ('female', {
             'value': female_count_field,
             'type': formula_process,
             'formula': 'population * gender_ratio'
-        },
-        'male': {
+        }),
+        ('male', {
             'value': male_count_field,
             'type': formula_process,
             'formula': 'population * (1 - gender_ratio)'
-        }
+        })
+    ])
+}
+
+post_processor_hygiene_packs = {
+    'key': 'post_processor_hygiene_packs',
+    'name': tr('Weekly Hygiene Packs Post Processor'),
+    'description': tr(
+        'A post processor to calculate needed hygiene packs weekly for women.'
+    ),
+    'input': {
+        'female_population':
+            {
+                'value': female_count_field,
+                'type': field_input_type,
+            },
+        'hygiene_packs_ratio':
+            {
+                'type': constant_input_type,
+                'value': 0.7937,
+            }
+    },
+    'output': {
+        # The formula:
+        # displaced_female * 0.7937 * (week/intended_day_use)
+        'hygiene_packs': {
+            'value': hygiene_packs_count_field,
+            'type': function_process,
+            'function': multiply
+        },
+    }
+}
+
+post_processor_additional_rice = {
+    'key': 'post_processor_additional_rice',
+    'name': tr(
+        'Additional Weekly Rice kg for Pregnant and Lactating Women Post '
+        'Processor'
+    ),
+    'description': tr(
+        'A post processor to calculate additional rice for pregnant and '
+        'lactating women.'
+    ),
+    'input': {
+        'female_population':
+            {
+                'value': female_count_field,
+                'type': field_input_type,
+            },
+        'additional_rice_ratio':
+            {
+                'type': constant_input_type,
+                'value': 2 * (0.033782 + 0.01281),
+            }
+    },
+    'output': {
+        # The formula:
+        # displaced_female * 2 * (0.033782 + 0.01281)
+        'additional_rice': {
+            'value': additional_rice_count_field,
+            'type': function_process,
+            'function': multiply
+        },
     }
 }
 
@@ -255,20 +396,15 @@ post_processor_youth = {
     'key': 'post_processor_youth',
     'name': tr('Youth Post Processor'),
     'description': tr(
-        'Post processor to calculate the number of affected youth'),
+        'A post processor to calculate the number of affected youth. '
+        '"Youth" is defined as: ' + concepts['youth']['description']),
     'input': {
+        'population': {
+            'value': displaced_field,
+            'type': field_input_type,
+        },
         # input as a list means, try to get the input from the
         # listed source. Pick the first available
-        'population': [
-            {
-                'value': population_count_field,
-                'type': field_input_type,
-            },
-            {
-                'value': exposure_count_field,
-                'field_param': exposure_population['key'],
-                'type': dynamic_field_input_type,
-            }],
         'youth_ratio': [{
                 'value': youth_ratio_field,
                 'type': field_input_type
@@ -294,20 +430,15 @@ post_processor_adult = {
     'key': 'post_processor_adult',
     'name': tr('Adult Post Processor'),
     'description': tr(
-        'Post processor to calculate the number of affected adults'),
+        'A post processor to calculate the number of affected adults. '
+        '"Adult" is defined as: ' + concepts['adult']['description']),
     'input': {
+        'population': {
+            'value': displaced_field,
+            'type': field_input_type,
+        },
         # input as a list means, try to get the input from the
         # listed source. Pick the first available
-        'population': [
-            {
-                'value': population_count_field,
-                'type': field_input_type,
-            },
-            {
-                'value': exposure_count_field,
-                'field_param': exposure_population['key'],
-                'type': dynamic_field_input_type,
-            }],
         'adult_ratio': [{
                 'value': adult_ratio_field,
                 'type': field_input_type
@@ -333,20 +464,15 @@ post_processor_elderly = {
     'key': 'post_processor_elderly',
     'name': tr('Elderly Post Processor'),
     'description': tr(
-        'Post processor to calculate the number of affected elderly'),
+        'A post processor to calculate the number of affected elderly people. '
+        '"Elderly" is defined as: ' + concepts['elderly']['description']),
     'input': {
+        'population': {
+            'value': displaced_field,
+            'type': field_input_type,
+        },
         # input as a list means, try to get the input from the
         # listed source. Pick the first available
-        'population': [
-            {
-                'value': population_count_field,
-                'type': field_input_type,
-            },
-            {
-                'value': exposure_count_field,
-                'field_param': exposure_population['key'],
-                'type': dynamic_field_input_type,
-            }],
         'elderly_ratio': [{
                 'value': elderly_ratio_field,
                 'type': field_input_type
@@ -372,8 +498,9 @@ post_processor_size = {
     'key': 'post_processor_size',
     'name': tr('Size Value Post Processor'),
     'description': tr(
-        'Post processor to calculate the size of the feature. If the feature '
-        'is a polygon we use m^2. If the feature is a line we use metres.'),
+        'A post processor to calculate the size of the feature. If the '
+        'feature is a polygon, the result will be area in m^2. If the feature '
+        'is a line we use length in metres.'),
     'input': {
         'size_calculator': {
             'type': layer_property_input_type,
@@ -396,8 +523,8 @@ post_processor_size_rate = {
     'key': 'post_processor_size_rate',
     'name': tr('Size Rate Post Processor'),
     'description': tr(
-        'Post processor to calculate the value of a feature based on the size '
-        'of the feature. If feature is a polygon the size is calculated as '
+        'A post processor to calculate the value of a feature based on its'
+        'size. If feature is a polygon the size is calculated as '
         'the area in m^2. If the feature is a line we use length in metres.'),
     'input': {
         'size': {
@@ -426,8 +553,8 @@ post_processor_affected = {
     'key': 'post_processor_affected',
     'name': tr('Affected Post Processor'),
     'description': tr(
-        'Post processor to determine of the feature is affected or not '
-        'according to the hazard classification.'),
+        'A post processor to determine if a feature is affected or not '
+        '(according to the hazard classification).'),
     'input': {
         'hazard_class': {
             'value': hazard_class_field,
@@ -465,23 +592,17 @@ def initialize_minimum_needs_post_processors():
         need_parameter = field['need_parameter']
         """:type: safe.common.parameters.resource_parameter.ResourceParameter
         """
+
         processor = {
             'key': 'post_processor_{key}'.format(key=field_key),
-            'name': field_name,
+            'name': '{field_name} Post Processor'.format(
+                field_name=field_name),
             'description': field_description,
             'input': {
-                # input as a list means, try to get the input from the
-                # listed source. Pick the first available
-                'population': [
-                    {
-                        'value': population_count_field,
-                        'type': field_input_type,
-                    },
-                    {
-                        'value': exposure_count_field,
-                        'field_param': exposure_population['key'],
-                        'type': dynamic_field_input_type,
-                    }],
+                'population': {
+                    'value': displaced_field,
+                    'type': field_input_type,
+                },
                 'amount': {
                     'type': needs_profile_input_type,
                     'value': need_parameter.name,
@@ -501,21 +622,24 @@ def initialize_minimum_needs_post_processors():
 
 minimum_needs_post_processors = initialize_minimum_needs_post_processors()
 
-
 # This is the order of execution, so the order is important.
 # For instance, the size post processor must run before size_rate.
-post_processors = [
-    post_processor_size,
+# and hygiene packs post processor must run after gender post processor
+female_postprocessors = [
     post_processor_gender,
-    post_processor_youth,
-    post_processor_adult,
-    post_processor_elderly,
-    post_processor_size_rate,
-    post_processor_affected,
-] + minimum_needs_post_processors
+    post_processor_hygiene_packs,
+    post_processor_additional_rice
+]
 
 age_postprocessors = [
     post_processor_youth,
     post_processor_adult,
     post_processor_elderly,
 ]
+
+post_processors = [
+    post_processor_size,
+    post_processor_size_rate,
+    post_processor_affected,
+    post_processor_displaced,
+] + female_postprocessors + age_postprocessors + minimum_needs_post_processors

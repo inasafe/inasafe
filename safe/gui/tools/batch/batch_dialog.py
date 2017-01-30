@@ -44,18 +44,27 @@ from PyQt4.QtGui import (
     QPushButton,
     QDialogButtonBox)
 
-from safe.definitions.constants import ANALYSIS_SUCCESS
-from safe.gui.tools.batch import scenario_runner
+from safe.definitions.constants import (
+    ANALYSIS_SUCCESS,
+    PREPARE_SUCCESS,
+    ANALYSIS_FAILED_BAD_CODE,
+    ANALYSIS_FAILED_BAD_INPUT)
+from safe.definitions.report import (
+    standard_impact_report_metadata_pdf,
+    report_a4_blue)
 from safe.utilities.gis import extent_string_to_array
 from safe.common.exceptions import FileNotFoundError
 from safe.common.utilities import temp_dir
 from safe.utilities.resources import (
     html_footer, html_header, get_ui_class)
 from safe.messaging import styles
-from safe.utilities.resources import resources_path
 from safe.gui.tools.help.batch_help import batch_help
+from safe.impact_function.impact_function import ImpactFunction
+from safe.report.report_metadata import ReportMetadata
+from safe.report.impact_report import ImpactReport
+from safe.gui.analysis_utilities import generate_impact_report
 
-INFO_STYLE = styles.INFO_STYLE
+INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
 LOGGER = logging.getLogger('InaSAFE')
 FORM_CLASS = get_ui_class('batch_dialog_base.ui')
 
@@ -229,6 +238,7 @@ class BatchDialog(QDialog, FORM_CLASS):
                 # insert scenarios from file into table widget
                 try:
                     scenarios = read_scenarios(absolute_path)
+                    validate_scenario(scenarios, scenario_directory)
                     for key, value in scenarios.iteritems():
                         append_row(self.table, key, value)
                     parsed_files.append(current_path)
@@ -271,99 +281,267 @@ class BatchDialog(QDialog, FORM_CLASS):
         else:
             function()
 
-    def run_scenario(self, items):
-        """Run a simple scenario.
-
-        :param items: A dictionary containing the scenario configuration
-            as table items.
-        :type items: dict
-
-        :return: A tuple with the status of the IF and an error message if
-            needed.
-            The status is ANALYSIS_SUCCESS if everything was fine.
-            The status is ANALYSIS_FAILED_BAD_INPUT if the client should fix
-                something.
-            The status is ANALYSIS_FAILED_BAD_CODE if something went wrong
-                from the code.
-        :rtype: (int, m.Message)
-        """
-        # LOGGER.info('Run simple task' + str(items))
-        scenario_directory = str(self.source_directory.text())
-
-        paths = []
-        if 'aggregation' in items:
-            paths.append(items['aggregation'])
-        if 'exposure' in items:
-            paths.append(items['exposure'])
-            # add access to exposure layer source so we can access it later
-            self.exposure_source = os.path.normpath(
-                os.path.join(scenario_directory, items['exposure']))
-        if 'hazard' in items:
-            paths.append(items['hazard'])
-
-        # always run in new project
-        if self.start_in_new_project:
-            self.iface.newProject()
-
-        try:
-            # create layer group
-            group_name = items['scenario_name']
-            self.layer_group = self.root.addGroup(group_name)
-            self.layer_group_container.append(self.layer_group)
-            # add layer to group
-            scenario_runner.add_layers(
-                scenario_directory,
-                paths,
-                self.iface,
-                self.layer_group)
-        except FileNotFoundError:
-            # set status to 'fail'
-            LOGGER.exception('Loading layers failed: \nRoot: %s\n%s' % (
-                scenario_directory, paths))
-            return False
-
-        if 'aggregation' in items:
-            aggregation_path = scenario_runner.extract_path(
-                scenario_directory, items['aggregation'])[0]
-            result = scenario_runner.set_aggregation_layer(
-                aggregation_path, self.dock)
-            if not result:
-                return False
-
-        # Set extent CRS if it exists
-        if 'extent_crs' in items:
-            crs = QgsCoordinateReferenceSystem(items['extent_crs'])
-        else:
-            # assume crs is Geo/WGS84
-            crs = QgsCoordinateReferenceSystem('EPSG:4326')
-        # set extent if exist
-        if 'extent' in items:
-            # split extent string
-            coordinates = items['extent']
-            coordinates = extent_string_to_array(coordinates)
-
-            # set the extent according the value
-            self.iface.mapCanvas().mapRenderer().setProjectionsEnabled(True)
-
-            extent = QgsRectangle(*coordinates)
-
-            self.dock.define_user_analysis_extent(extent, crs)
-
-            message = 'set layer extent to %s ' % extent.asWktCoordinates()
-            # LOGGER.info(message)
-
-            self.iface.mapCanvas().setExtent(extent)
-
-        status, message = scenario_runner.run_scenario(self.dock)
-
-        return status, message
-
     def reset_status(self):
         """Set all scenarios' status to empty in the table
         """
         for row in range(self.table.rowCount()):
             status_item = self.table.item(row, 1)
             status_item.setText(self.tr(''))
+
+    def prepare_task(self, items):
+        """Prepare scenario for impact function variable.
+
+        :param items: Dictionary containing settings for impact function.
+        :type items: Python dictionary.
+
+        :return: QgsVectorLayer, QgsRasterLayer, extent, extent_crs
+        """
+
+        status = True
+        # get hazard
+        if 'hazard' in items:
+            LOGGER.info('Hazard path is found')
+            hazard_path = items['hazard']
+            hazard = self.define_layer(hazard_path)
+            if not hazard:
+                status = False
+        else:
+            hazard = None
+            LOGGER.warning('Scenario does not contain hazard path')
+
+        # get exposure
+        if 'exposure' in items:
+            LOGGER.info('Exposure path is found')
+            exposure_path = items['exposure']
+            exposure = self.define_layer(exposure_path)
+            if not exposure:
+                status = False
+        else:
+            exposure = None
+            LOGGER.warning('Scenario does not contain hazard path')
+
+        # get aggregation
+        if 'aggregation' in items:
+            LOGGER.info('Aggregation path is found')
+            aggregation_path = items['aggregation']
+            aggregation = self.define_layer(aggregation_path)
+        else:
+            aggregation = None
+            LOGGER.info('Scenario does not contain aggregation path')
+
+        # get extent
+        if 'extent' in items:
+            LOGGER.info('Extent coordinate is found')
+            coordinates = items['extent']
+            array_coord = extent_string_to_array(coordinates)
+            extent = QgsRectangle(*array_coord)
+        else:
+            extent = None
+            LOGGER.info('Scenario does not contain extent coordinates')
+
+        # get extent crs id
+        if 'extent_crs' in items:
+            LOGGER.info('Extent CRS is found')
+            crs = items['extent_crs']
+            extent_crs = QgsCoordinateReferenceSystem(crs)
+        else:
+            LOGGER.info('Extent crs is not found, assuming crs to EPSG:4326')
+            extent_crs = QgsCoordinateReferenceSystem('EPSG:4326')
+
+        # make sure at least hazard and exposure data are available in
+        # scenario. Aggregation and extent checking will be done when
+        # assigning layer to impact_function
+        if status:
+            return hazard, exposure, aggregation, extent, extent_crs
+        else:
+            return status
+
+    def define_layer(self, layer_path):
+        """Create QGIS layer (either vector or raster) from file path input.
+
+        :param layer_path: Full path to layer file.
+        :type layer_path: path
+
+        :return: QgsMapLayer
+        """
+
+        scenario_dir = str(self.source_directory.text())
+        joined_path = os.path.join(scenario_dir, layer_path)
+        full_path = os.path.normpath(joined_path)
+        file_name = os.path.split(layer_path)[-1]
+
+        # get extension and basename to create layer
+        base_name, extension = os.path.splitext(file_name)
+
+        # check if raster or vector layer from extension
+        if extension in ['.asc', '.tif']:
+            layer = QgsRasterLayer(full_path, base_name)
+            if layer.isValid():
+                return layer
+            else:
+                LOGGER.critical('Failed to create layer from scenario')
+                return
+        elif extension in ['.shp']:
+            layer = QgsVectorLayer(full_path, base_name, 'ogr')
+            if layer.isValid():
+                return layer
+            else:
+                LOGGER.critical('Failed to create layer from scenario')
+                return
+        else:
+            LOGGER.warning('Input extension in scenario is not recognized')
+            return
+
+    def run_task(self, task_item, status_item, count=0, index=''):
+        """Run a single task.
+
+        :param task_item: Table task_item containing task name / details.
+        :type task_item: QTableWidgetItem
+
+        :param status_item: Table task_item that holds the task status.
+        :type status_item: QTableWidgetItem
+
+        :param count: Count of scenarios that have been run already.
+        :type count:
+
+        :param index: The index for the table item that will be run.
+        :type index: int
+
+        :returns: Flag indicating if the task succeeded or not.
+        :rtype: bool
+        """
+
+        self.enable_busy_cursor()
+        for layer_group in self.layer_group_container:
+            layer_group.setVisible(False)
+
+        # set status to 'running'
+        status_item.setText(self.tr('Running'))
+
+        # .. see also:: :func:`appendRow` to understand the next 2 lines
+        variant = task_item.data(QtCore.Qt.UserRole)
+        value = variant[0]
+        result = True
+
+        if isinstance(value, str):
+            filename = value
+            # run script
+            try:
+                self.run_script(filename)
+                # set status to 'OK'
+                status_item.setText(self.tr('Script OK'))
+            except Exception as e:  # pylint: disable=W0703
+                # set status to 'fail'
+                status_item.setText(self.tr('Script Fail'))
+
+                LOGGER.exception('Running macro failed. The exception: ' +
+                    str(e))
+                result = False
+        elif isinstance(value, dict):
+            # path = str(self.output_directory.text())
+            # title = str(task_item.text())
+
+            # create layer group
+            group_name = value['scenario_name']
+            self.layer_group = self.root.addGroup(group_name)
+            self.layer_group_container.append(self.layer_group)
+
+            # Its a dict containing files for a scenario
+            hazard, exposure, aggregation, extent, extent_crs = \
+                self.prepare_task(value)
+            impact_function = ImpactFunction()
+            impact_function.hazard = hazard
+            impact_function.exposure = exposure
+            if aggregation:
+                impact_function.aggregation = aggregation
+            elif extent:
+                impact_function.requested_extent = extent
+                impact_function.requested_extent_crs = extent_crs
+            prepare_status, prepare_message = impact_function.prepare()
+            if prepare_status == PREPARE_SUCCESS:
+                LOGGER.info('Impact function ready')
+                status, message = impact_function.run()
+                if status == ANALYSIS_SUCCESS:
+                    status_item.setText(self.tr('Analysis Success'))
+                    impact_layer = impact_function.impact
+                    if impact_layer.isValid():
+                        layer_list = [
+                            impact_layer,
+                            hazard,
+                            exposure,
+                            aggregation]
+                        reg.instance().addMapLayers(layer_list, False)
+                        for layer in layer_list:
+                            self.layer_group.addLayer(layer)
+                        # generate map report and impact report
+                        # map report is still waiting update from lucernae
+                        try:
+                            # this line is to save the impact report in default
+                            # InaSAFE directory.
+                            generate_impact_report(impact_function, self.iface)
+                            # this line is to save the report in user specified
+                            # directory.
+                            self.generate_pdf_report(
+                                impact_function,
+                                self.iface,
+                                group_name)
+                        except:
+                            status_item.setText('Report failed to generate')
+                    else:
+                        LOGGER.info('Impact layer is invalid')
+                elif status == ANALYSIS_FAILED_BAD_INPUT:
+                    LOGGER.info('Bad input detected')
+                    LOGGER.info(message)
+                elif status == ANALYSIS_FAILED_BAD_CODE:
+                    LOGGER.info('Impact function encountered a bug')
+                    LOGGER.info(message)
+            else:
+                LOGGER.warning('Impact function not ready with message:')
+                LOGGER.info(prepare_message)
+
+        else:
+            LOGGER.exception('Data type not supported: "%s"' % value)
+            result = False
+
+        self.disable_busy_cursor()
+        return result
+
+    def show_parser_results(self, parsed_list, unparsed_list):
+        """Compile a formatted list of un/successfully parsed files.
+
+        :param parsed_list: A list of files that were parsed successfully.
+        :type parsed_list: list(str)
+
+        :param unparsed_list: A list of files that were not parsable.
+        :type unparsed_list: list(str)
+
+        :returns: A formatted message outlining what could be parsed.
+        :rtype: str
+        """
+        parsed_message = self.tr(
+            'The file(s) below were parsed successfully:\n')
+        unparsed_message = self.tr(
+            'The file(s) below were not parsed successfully:\n')
+        parsed_contents = '\n'.join(parsed_list)
+        unparsed_contents = '\n'.join(unparsed_list)
+        if parsed_contents == '':
+            parsed_contents = 'No successfully parsed files\n'
+        if unparsed_contents == '':
+            unparsed_contents = 'No failures in parsing files\n'
+        full_messages = (
+            parsed_message + parsed_contents + '\n\n' +
+            unparsed_message + unparsed_contents)
+        return full_messages
+
+    @pyqtSignature('')
+    def run_selected_clicked(self):
+        """Run the selected scenario."""
+        self.enable_busy_cursor()
+        current_row = self.table.currentRow()
+        item = self.table.item(current_row, 0)
+        status_item = self.table.item(current_row, 1)
+        self.run_task(item, status_item)
+        self.disable_busy_cursor()
 
     @pyqtSignature('')
     def run_all_clicked(self):
@@ -453,6 +631,43 @@ class BatchDialog(QDialog, FORM_CLASS):
         except IOError:
             raise IOError
 
+    def generate_pdf_report(self, impact_function, iface, scenario_name):
+        """Generate and store map and impact report from impact function.
+
+        Directory where the report stored is specified by user input from the
+        dialog. This function is adapted from analysis_utilities.py
+        :param impact_function: Impact Function
+        :param iface: iface
+        """
+        # output folder
+        output_dir = self.output_directory.text()
+        file_path = os.path.join(output_dir, scenario_name)
+
+        # create impact table report instance
+        table_report_metadata = ReportMetadata(
+            metadata_dict=standard_impact_report_metadata_pdf)
+        impact_table_report = ImpactReport(
+            iface,
+            table_report_metadata,
+            impact_function=impact_function)
+        impact_table_report.output_folder = file_path
+        impact_table_report.process_component()
+
+        # create impact map report instance
+        map_report_metadata = ReportMetadata(
+            metadata_dict=report_a4_blue)
+        impact_map_report = ImpactReport(
+            iface,
+            map_report_metadata,
+            impact_function=impact_function)
+        # TODO: Get from settings file
+
+        # get the extent of impact layer
+        impact_map_report.qgis_composition_context.extent = \
+            impact_function.impact.extent()
+        impact_map_report.output_folder = file_path
+        impact_map_report.process_component()
+
     def show_report(self, report_path):
         """Show batch report file in batchReportFileName using an external app.
 
@@ -470,196 +685,6 @@ class BatchDialog(QDialog, FORM_CLASS):
             report = open(report_path).read()
             # LOGGER.info(report)
 
-    def run_task(self, task_item, status_item, count=0, index=''):
-        """Run a single task.
-
-        :param task_item: Table task_item containing task name / details.
-        :type task_item: QTableWidgetItem
-
-        :param status_item: Table task_item that holds the task status.
-        :type status_item: QTableWidgetItem
-
-        :param count: Count of scenarios that have been run already.
-        :type count:
-
-        :param index: The index for the table item that will be run.
-        :type index: int
-
-        :returns: Flag indicating if the task succeeded or not.
-        :rtype: bool
-        """
-
-        self.enable_busy_cursor()
-        for layer_group in self.layer_group_container:
-            layer_group.setVisible(False)
-        # set status to 'running'
-        status_item.setText(self.tr('Running'))
-
-        # .. see also:: :func:`appendRow` to understand the next 2 lines
-        variant = task_item.data(QtCore.Qt.UserRole)
-        value = variant[0]
-        result = True
-
-        if isinstance(value, str):
-            filename = value
-            # run script
-            try:
-                self.run_script(filename)
-                # set status to 'OK'
-                status_item.setText(self.tr('Script OK'))
-            except Exception as e:  # pylint: disable=W0703
-                # set status to 'fail'
-                status_item.setText(self.tr('Script Fail'))
-
-                LOGGER.exception('Running macro failed. The exception: ' +
-                                 str(e))
-                result = False
-        elif isinstance(value, dict):
-            path = str(self.output_directory.text())
-            title = str(task_item.text())
-
-            # Its a dict containing files for a scenario
-            status, message = self.run_scenario(value)
-            if status != ANALYSIS_SUCCESS:
-                status_item.setText(self.tr('Analysis Fail'))
-                logging.exception(message)
-            else:
-                # NOTE(gigih):
-                # Usually after analysis is done, the impact layer
-                # become the active layer. <--- WRONG
-                # noinspection PyUnresolvedReferences
-                impact_function = self.dock.impact_function
-                impact_layer = impact_function.impact
-                impact_layer_source = impact_layer.source()
-                LOGGER.info('Impact layer source: "%s"' % impact_layer_source)
-                legend_interface = self.iface.legendInterface()
-                # turn off exposure layer visibility
-                exposure_layer = self.identify_layer(self.exposure_source)
-                legend_interface.setLayerVisible(exposure_layer, False)
-                # Move layer group created from the analysis to layer group
-                # created by batchrunner
-                scenario_group = self.root.children()[0]
-                cloned_group = scenario_group.clone()
-                self.layer_group.insertChildNode(0, cloned_group)
-                self.root.removeChildNode(scenario_group)
-                # noinspection PyBroadException
-                try:
-                    status_item.setText(self.tr('Analysis Ok'))
-                    # Etienne 20/12/16 Let's disable the PDF until V4 can do it
-                    # self.create_pdf(
-                    #     title, path, impact_layer, count, index)
-                    LOGGER.info('Map has been rendered: "%s"' % value)
-                    # status_item.setText(self.tr('Report Ok'))
-                except Exception:  # pylint: disable=W0703
-                    LOGGER.exception('Unable to render map: "%s"' % value)
-                    status_item.setText(self.tr('Report Failed'))
-                    result = False
-        else:
-            LOGGER.exception('Data type not supported: "%s"' % value)
-            result = False
-
-        self.disable_busy_cursor()
-        return result
-
-    def check_removed(self):
-        """Function to check whether layer removal is properly run or not
-         it will assign legend_impact_layer_is_removed value to True
-        :return:
-        """
-        LOGGER.info('Legend impact layer has been removed')
-        self.legend_impact_layer_is_removed = True
-
-    # noinspection PyMethodMayBeStatic
-    def report_path(self, directory, title, count=0, index=None):
-        """Get PDF report filename given directory, title and optional index.
-
-        :param directory: Directory of pdf report file.
-        :type directory: str
-
-        :param title: Title of report.
-        :type title: str
-
-        :param count: The number of scenario run.
-        :type count: int
-
-        :param index: A sequential number for the beginning of the file name.
-        :type index: int, None
-
-        :returns: A tuple containing the pdf report filenames like this:
-            ('/home/foo/data/title.pdf', '/home/foo/data/title_table.pdf')
-        :rtype: tuple
-        """
-        if index is not None:
-            index = str(index) + '_'
-        file_name = title.replace(' ', '_')
-        if count != 0:
-            file_name += '_' + str(count)
-        file_name += '.pdf'
-        map_path = os.path.join(directory, index + file_name)
-        table_path = os.path.splitext(map_path)[0] + '_table.pdf'
-
-        return map_path, table_path
-
-    def create_pdf(
-            self,
-            title,
-            output_directory,
-            impact_layer,
-            count=0,
-            index=None):
-        """Create PDF report from impact layer.
-
-        Create map & table report PDF based from impact_layer data.
-
-        :param title: Report title.
-        :type title: str
-
-        :param output_directory: Output directory.
-        :type output_directory: str
-
-        :param impact_layer: Impact layer instance.
-        :type impact_layer: QgsMapLayer
-
-        :param count: The number of scenarios that were run.
-        :type count: int
-
-        :param index: A sequential number to place at the beginning of the
-            file name.
-        :type index: int, None
-
-        See also:
-            Dock.printMap()
-        """
-        # FIXME: To do with InaSAFE V4
-        LOGGER.debug('Not working yet with InaSAFE V4')
-
-    def show_parser_results(self, parsed_list, unparsed_list):
-        """Compile a formatted list of un/successfully parsed files.
-
-        :param parsed_list: A list of files that were parsed successfully.
-        :type parsed_list: list(str)
-
-        :param unparsed_list: A list of files that were not parsable.
-        :type unparsed_list: list(str)
-
-        :returns: A formatted message outlining what could be parsed.
-        :rtype: str
-        """
-        parsed_message = self.tr(
-            'The file(s) below were parsed successfully:\n')
-        unparsed_message = self.tr(
-            'The file(s) below were not parsed successfully:\n')
-        parsed_contents = '\n'.join(parsed_list)
-        unparsed_contents = '\n'.join(unparsed_list)
-        if parsed_contents == '':
-            parsed_contents = 'No successfully parsed files\n'
-        if unparsed_contents == '':
-            unparsed_contents = 'No failures in parsing files\n'
-        full_messages = (
-            parsed_message + parsed_contents + '\n\n' +
-            unparsed_message + unparsed_contents)
-        return full_messages
-
     def update_default_output_dir(self):
         """Update output dir if set to default
         """
@@ -675,16 +700,6 @@ class BatchDialog(QDialog, FORM_CLASS):
     def disable_busy_cursor(self):
         """Disable the hourglass cursor."""
         QtGui.qApp.restoreOverrideCursor()
-
-    @pyqtSignature('')
-    def run_selected_clicked(self):
-        """Run the selected scenario. """
-        self.enable_busy_cursor()
-        current_row = self.table.currentRow()
-        item = self.table.item(current_row, 0)
-        status_item = self.table.item(current_row, 1)
-        self.run_task(item, status_item)
-        self.disable_busy_cursor()
 
     @pyqtSignature('bool')
     def on_scenario_directory_radio_toggled(self, flag):
@@ -758,24 +773,6 @@ class BatchDialog(QDialog, FORM_CLASS):
 
         self.help_web_view.setHtml(string)
 
-    def identify_layer(self, layer_source):
-        """Identify impact layer created from dock so we can access it
-
-        :param impact_layer_source: the source of impact layer
-            created from dock. we will use this to match with the source of
-            each in layer legend.
-        :type label: str
-        :return QgsVectorLayer
-        """
-
-        # iterate legend layer to match with input layer
-        reg_layers = reg.instance().mapLayers().iteritems()
-        for key, value in reg_layers:
-            if value.source() == layer_source:
-                return value
-        else:
-            raise Exception('Can not identify impact layer from layer source')
-
 
 def read_scenarios(filename):
     """Read keywords dictionary from file
@@ -837,6 +834,43 @@ def read_scenarios(filename):
     return blocks
 
 
+def validate_scenario(blocks, scenario_directory):
+    """Function to validate input layer stored in scenario file.
+
+    Check whether the files that are used in scenario file need to be
+    updated or not.
+
+    :param blocks: dictionary from read_scenarios
+    :type blocks: dictionary
+
+    :param scenario_directory: directory where scenario text file is saved
+    :type scenario_directory: file directory
+
+    :return: pass message to dialog and log detailed status
+    """
+    # dictionary to temporary contain status message
+    blocks_update = {}
+    for section, section_item in blocks.iteritems():
+        ready = True
+        for item in section_item:
+            if item in ['hazard', 'exposure', 'aggregation']:
+                # get relative path
+                rel_path = section_item[item]
+                full_path = os.path.join(scenario_directory, rel_path)
+                filepath = os.path.normpath(full_path)
+                if not os.path.exists(filepath):
+                    blocks_update[section] = {
+                        'status': 'Please update scenario'}
+                    LOGGER.info(section + ' needs to be updated')
+                    LOGGER.info('Unable to find ' + filepath)
+                    ready = False
+        if ready:
+            blocks_update[section] = {'status': 'Scenario ready'}
+            # LOGGER.info(section + " scenario is ready")
+    for section, section_item in blocks_update.iteritems():
+        blocks[section]['status'] = blocks_update[section]['status']
+
+
 def append_row(table, label, data):
     """Append new row to table widget.
 
@@ -864,8 +898,8 @@ def append_row(table, label, data):
     # To retrieve it again you would need to do:
     # value = myVariant.toPyObject()[0]
     items.setData(Qt.UserRole, variant)
-
+    # set scenario status (ready or not) into table
     # noinspection PyUnresolvedReferences
     table.setItem(count, 0, items)
     # noinspection PyUnresolvedReferences
-    table.setItem(count, 1, QTableWidgetItem(''))
+    table.setItem(count, 1, QTableWidgetItem(data['status']))

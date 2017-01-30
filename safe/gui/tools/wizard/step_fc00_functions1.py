@@ -1,14 +1,14 @@
 # coding=utf-8
-"""InaSAFE Wizard Step for Choosing Exposure and Hazard"""
+"""InaSAFE Wizard Step for Choosing Exposure and Hazard."""
 
 from copy import deepcopy
-# noinspection PyPackageRequirements
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import pyqtSignature
 
 from safe.definitions.hazard import hazard_all
 from safe.definitions.exposure import exposure_all
-from safe.definitions.colors import available_option_color
+from safe.definitions.styles import (
+    available_option_color, unavailable_option_color)
 from safe.definitions.font import big_font
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
@@ -16,6 +16,7 @@ from safe.gui.tools.wizard.wizard_utils import RoleHazard, RoleExposure
 from safe.definitions.layer_purposes import (
     layer_purpose_exposure, layer_purpose_hazard)
 from safe.utilities.resources import resources_path
+from safe.utilities.settings import setting
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -95,7 +96,7 @@ class StepFcFunctions1(WizardStep, FORM_CLASS):
 
     # pylint: disable=W0613
     # noinspection PyPep8Naming
-    def on_tblFunctions1_cellDoubleClicked(self, row, column):
+    def on_tblFunctions1_cellDoubleClicked(self):
         """Choose selected hazard x exposure combination and go ahead.
 
         .. note:: This is an automatic Qt slot
@@ -106,13 +107,7 @@ class StepFcFunctions1(WizardStep, FORM_CLASS):
 
     def populate_function_table_1(self):
         """Populate the tblFunctions1 table with available functions."""
-        # The hazard category radio buttons are now removed -
-        # make this parameter of IFM.available_hazards() optional
         hazards = deepcopy(hazard_all)
-        # Remove 'generic' from hazards
-        for hazard in hazards:
-            if hazard['key'] == 'generic':
-                hazards.remove(hazard)
         exposures = exposure_all
 
         self.lblAvailableFunctions1.clear()
@@ -136,11 +131,21 @@ class StepFcFunctions1(WizardStep, FORM_CLASS):
                 % (exposure['key'] or 'notset'))))
             item.setText(exposure['name'].capitalize())
             self.tblFunctions1.setVerticalHeaderItem(i, item)
-
+        developer_mode = setting('developer_mode', False, bool)
         for hazard in hazards:
             for exposure in exposures:
                 item = QtGui.QTableWidgetItem()
-                background_colour = available_option_color
+                if (exposure in hazard['disabled_exposures'] and not
+                        developer_mode):
+                    background_colour = unavailable_option_color
+                    # Set it disable and un-selectable
+                    item.setFlags(
+                        item.flags() & ~
+                        QtCore.Qt.ItemIsEnabled & ~
+                        QtCore.Qt.ItemIsSelectable
+                    )
+                else:
+                    background_colour = available_option_color
                 item.setBackground(QtGui.QBrush(background_colour))
                 item.setFont(big_font)
                 item.setTextAlignment(

@@ -31,9 +31,11 @@ from safe.definitions.constants import (
     ANALYSIS_SUCCESS,
     PREPARE_FAILED_BAD_INPUT,
     PREPARE_FAILED_INSUFFICIENT_OVERLAP,
+    PREPARE_FAILED_BAD_LAYER,
     PREPARE_SUCCESS,
 )
 from safe.defaults import supporters_logo_path
+from safe.report.impact_report import ImpactReport
 from safe.utilities.gis import wkt_to_rectangle
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
@@ -85,10 +87,10 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
-INFO_STYLE = styles.INFO_STYLE
-WARNING_STYLE = styles.WARNING_STYLE
+INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
+WARNING_STYLE = styles.RED_LEVEL_4_STYLE
 KEYWORD_STYLE = styles.KEYWORD_STYLE
-SUGGESTION_STYLE = styles.SUGGESTION_STYLE
+SUGGESTION_STYLE = styles.GREEN_LEVEL_4_STYLE
 SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
 LOGO_ELEMENT = m.Brand()
 
@@ -151,13 +153,15 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.organisation_logo_path = None
 
         self.print_button.setEnabled(False)
-        self.runtime_keywords_dialog = None
 
         self.setup_button_connectors()
 
         self.iface.layerSavedAs.connect(self.save_auxiliary_files)
 
         canvas = self.iface.mapCanvas()
+
+        # Current aggregation layer
+        self._aggregation = None
 
         # Enable on the fly projection by default
         canvas.setCrsTransformEnabled(True)
@@ -170,9 +174,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # debug_mode is a check box to know if we run the IF with debug mode.
         self.debug_mode.setVisible(self.developer_mode)
         self.debug_mode.setChecked(False)
-
-        # Current aggregation layer
-        self._aggregation = None
 
         # Check the validity
         self.validate_impact_function()
@@ -378,8 +379,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         self.iface.mapCanvas().layersChanged.connect(self.get_layers)
         self.iface.currentLayerChanged.connect(self.layer_changed)
-        self.iface.mapCanvas().extentsChanged.connect(
-            self.validate_impact_function)
+
+        if not self._aggregation:
+            self.iface.mapCanvas().extentsChanged.connect(
+                self.validate_impact_function)
 
     # pylint: disable=W0702
     def disconnect_layer_listener(self):
@@ -394,8 +397,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         self.iface.mapCanvas().layersChanged.disconnect(self.get_layers)
         self.iface.currentLayerChanged.disconnect(self.layer_changed)
-        self.iface.mapCanvas().extentsChanged.disconnect(
-            self.validate_impact_function)
+
+        if not self._aggregation:
+            self.iface.mapCanvas().extentsChanged.disconnect(
+                self.validate_impact_function)
 
     @pyqtSlot(QgsMapLayer, str)
     def save_auxiliary_files(self, layer, destination):
@@ -790,12 +795,21 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         add_impact_layers_to_canvas(self.impact_function, self.iface)
 
         # Generate impact report
-        generate_impact_report(self.impact_function, self.iface)
-        try:
-            generate_impact_map_report(self.impact_function, self.iface)
-        except:
-            # it might not work on mac now, due to linking issue.
-            pass
+        error_code, message = generate_impact_report(
+            self.impact_function, self.iface)
+
+        if error_code == ImpactReport.REPORT_GENERATION_FAILED:
+            LOGGER.info(tr(
+                'The impact report could not be generated.'))
+            send_error_message(self, message)
+
+        error_code, message = generate_impact_map_report(
+            self.impact_function, self.iface)
+
+        if error_code == ImpactReport.REPORT_GENERATION_FAILED:
+            LOGGER.info(tr(
+                'The impact report could not be generated.'))
+            send_error_message(self, message)
 
         if self.zoom_to_impact_flag:
             self.iface.zoomToActiveLayer()
@@ -1036,33 +1050,40 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # Get output path from datastore
         # Fetch report for pdfs report
         report_path = os.path.dirname(impact_layer.source())
-        table_pdf_path = os.path.join(
-            report_path, 'output/impact-report-output.pdf')
-        map_pdf_path = os.path.join(
-            report_path, 'output/a4-portrait-blue.pdf')
+        output_paths = [
+            os.path.join(
+                report_path,
+                'output/impact-report-output.pdf'),
+            os.path.join(
+                report_path,
+                'output/a4-portrait-blue.pdf'),
+            os.path.join(
+                report_path,
+                'output/a4-landscape-blue.pdf'),
+        ]
 
         # Make sure the file paths can wrap nicely:
-        wrapped_map_path = map_pdf_path.replace(os.sep, '<wbr>' + os.sep)
-        wrapped_table_path = table_pdf_path.replace(
-            os.sep, '<wbr>' + os.sep)
+        wrapped_output_paths = [
+            path.replace(os.sep, '<wbr>' + os.sep) for path in
+            output_paths]
+
+        # create message to user
         status = m.Message(
             m.Heading(self.tr('Map Creator'), **INFO_STYLE),
             m.Paragraph(self.tr(
                 'Your PDF was created....opening using the default PDF '
                 'viewer on your system. The generated pdfs were saved '
-                'as:')),
-            m.Paragraph(wrapped_map_path),
-            m.Paragraph(self.tr('and')),
-            m.Paragraph(wrapped_table_path))
+                'as:')))
+
+        for path in wrapped_output_paths:
+            status.add(m.Paragraph(path))
 
         send_static_message(self, status)
 
-        # noinspection PyCallByClass,PyTypeChecker,PyTypeChecker
-        QtGui.QDesktopServices.openUrl(
-            QtCore.QUrl.fromLocalFile(table_pdf_path))
-        # noinspection PyCallByClass,PyTypeChecker,PyTypeChecker
-        QtGui.QDesktopServices.openUrl(
-            QtCore.QUrl.fromLocalFile(map_pdf_path))
+        for path in output_paths:
+            # noinspection PyCallByClass,PyTypeChecker,PyTypeChecker
+            QtGui.QDesktopServices.openUrl(
+                QtCore.QUrl.fromLocalFile(path))
 
     @pyqtSlot('QgsRectangle', 'QgsCoordinateReferenceSystem')
     def define_user_analysis_extent(self, extent, crs):
@@ -1201,6 +1222,12 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.run_button.setEnabled(True)
             LOGGER.info('The impact function is ready.')
             return impact_function
+
+        elif status == PREPARE_FAILED_BAD_LAYER:
+            self.extent.clear_next_analysis_extent()
+            send_error_message(self, message)
+            self.run_button.setEnabled(False)
+            return None
 
         elif status == PREPARE_FAILED_INSUFFICIENT_OVERLAP:
             self.extent.clear_next_analysis_extent()

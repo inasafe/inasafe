@@ -5,21 +5,18 @@ from safe.definitions.concepts import concepts
 from safe.definitions.caveats import (
     caveat_incomplete_data)
 from safe.definitions.units import (
-    count_exposure_unit, density_exposure_unit)
+    count_exposure_unit, unit_metres, unit_square_metres)
 from safe.definitions.fields import (
     adult_count_field,
-    adult_ratio_field,
     elderly_count_field,
-    elderly_ratio_field,
     exposure_fields,
     exposure_name_field,
-    female_ratio_field,
     female_count_field,
     youth_count_field,
-    youth_ratio_field,
     population_count_field,
     exposure_type_field,
-    total_affected_field, total_field, total_unaffected_field)
+    feature_value_field,
+    feature_rate_field)
 from safe.definitions.layer_modes import (
     layer_mode_classified, layer_mode_continuous)
 from safe.definitions.exposure_classifications import (
@@ -132,7 +129,7 @@ exposure_population = {
                 'text': tr(
                     'The Sphere Handbook: Humanitarian Charter and Minimum '
                     'Standards in Humanitarian Response'),
-                'link': 'http://www.spherehandbook.org/'
+                'link': u'http://www.spherehandbook.org/'
         }
     ],
     'allowed_geometries': [
@@ -148,24 +145,28 @@ exposure_population = {
         female_count_field,
         youth_count_field,
         adult_count_field,
-        elderly_count_field,
-        female_ratio_field,
-        youth_ratio_field,
-        adult_ratio_field,
-        elderly_ratio_field
+        elderly_count_field
     ],
-    'layer_modes': [layer_mode_continuous]
+    'layer_modes': [layer_mode_continuous],
+    'display_not_exposed': False,
+    'layer_legend_title': tr('Number of people'),
+    'measure_question': tr('how many')
 }
 
 exposure_road = {
     'key': 'road',
     'name': tr('Roads'),
     'description': tr(
-        'A <b>road</b> is a defined route used by a vehicle or people to '
+        'A <b>road</b> is defined as a route used by a vehicle or people to '
         'travel between two or more points.'),
     'notes': [  # these are additional generic notes for roads - IF has more
         caveat_incomplete_data,
-        tr('Numbers for road lengths have been rounded to the nearest metre.'),
+        tr('Numbers for road lengths have been rounded to the nearest 10 '
+           'metres if the total is less than 1,000; nearest 100 metres if '
+           'more than 1,000 and less than 100,000; and nearest 1000 metres if '
+           'more than 100,000.'),
+        tr('Rounding is applied to all road lengths, which may cause '
+           'discrepancies between subtotals and totals.'),
         tr('Roads marked as not affected may still be unusable due to network '
            'isolation. Roads marked as affected may still be usable if they '
            'are elevated above the local landscape.'),
@@ -197,12 +198,18 @@ exposure_road = {
     'allowed_geometries': [
         'line'
     ],
-    'units': [],
+    'units': [unit_metres],
     'classifications': [generic_road_classes],
     'compulsory_fields': [exposure_type_field],
     'fields': exposure_fields,
-    'extra_fields': [],
-    'layer_modes': [layer_mode_classified]
+    'extra_fields': [
+        feature_value_field,
+        feature_rate_field
+    ],
+    'layer_modes': [layer_mode_classified],
+    'display_not_exposed': True,
+    'layer_legend_title': tr('Length of roads'),
+    'measure_question': tr('what length of')
 }
 exposure_structure = {
     'key': 'structure',
@@ -214,7 +221,14 @@ exposure_structure = {
         'bridge.'),
     'notes': [  # additional generic notes for structures - IF has more
         caveat_incomplete_data,
-        tr('Numbers reported for structures have not been rounded.')
+        tr('Structures overlapping the analysis extent may be assigned a '
+           'hazard status lower than that to which they are exposed outside '
+           'the analysis area.'),
+        tr('Numbers reported for structures have been rounded to the nearest '
+           '10 if the total is less than 1,000; nearest 100 if more than 1,000'
+           'and less than 100,000; and nearest 1000 if more than 100,000.'),
+        tr('Rounding is applied to all structure counts, which may cause '
+           'discrepancies between subtotals and totals.'),
     ],
     'continuous_notes': [  # notes specific to continuous data
     ],
@@ -243,22 +257,18 @@ exposure_structure = {
         'polygon',
         'point'
     ],
-    'units': [],
+    'units': [count_exposure_unit],
     'classifications': [generic_structure_classes],
     'compulsory_fields': [exposure_type_field],
     'fields': exposure_fields,
     'extra_fields': [
-        population_count_field,
-        female_count_field,
-        youth_count_field,
-        adult_count_field,
-        elderly_count_field,
-        female_ratio_field,
-        youth_ratio_field,
-        adult_ratio_field,
-        elderly_ratio_field
+        feature_value_field,
+        feature_rate_field
     ],
-    'layer_modes': [layer_mode_classified]
+    'layer_modes': [layer_mode_classified],
+    'display_not_exposed': True,
+    'layer_legend_title': tr('Number of buildings'),
+    'measure_question': tr('how many')
 }
 exposure_place = {
     'key': 'place',
@@ -287,23 +297,17 @@ exposure_place = {
     'allowed_geometries': [
         'point'
     ],
-    'units': [],
+    'units': [count_exposure_unit],
     'classifications': [generic_place_classes],
     'compulsory_fields': [exposure_type_field],
     'fields': exposure_fields,
     'extra_fields': [
-        population_count_field,
-        exposure_name_field,
-        female_count_field,
-        youth_count_field,
-        adult_count_field,
-        elderly_count_field,
-        female_ratio_field,
-        youth_ratio_field,
-        adult_ratio_field,
-        elderly_ratio_field
+        exposure_name_field
     ],
-    'layer_modes': [layer_mode_classified]
+    'layer_modes': [layer_mode_classified],
+    'display_not_exposed': True,
+    'layer_legend_title': tr('Number of places'),
+    'measure_question': tr('how many')
 }
 exposure_land_cover = {
     'key': 'land_cover',
@@ -315,7 +319,12 @@ exposure_land_cover = {
     'notes': [
         # these are additional generic notes for landcover - IF has more
         caveat_incomplete_data,
-        tr('Areas reported for land cover have not been rounded.'),
+        tr('Areas reported for land cover have been rounded to the nearest '
+           '10 hectares if the total is less than 1,000; nearest 100 hectares '
+           'if more than 1,000 and less than 100,000; and nearest 1000 '
+           'hectares if more than 100,000.'),
+        tr('Rounding is applied to all land cover areas, which may cause '
+           'discrepancies between subtotals and totals.'),
     ],
     'continuous_notes': [  # notes specific to continuous data
     ],
@@ -345,14 +354,20 @@ exposure_land_cover = {
     ],
     'allowed_geometries': [
         'polygon',
-        'raster'
+        # 'raster'  # Disable per #3600
     ],
-    'units': [],
+    'units': [unit_square_metres],  # We need to update to hectare.
     'classifications': [generic_landcover_classes],
     'compulsory_fields': [exposure_type_field],
     'fields': exposure_fields,
-    'extra_fields': [],
-    'layer_modes': [layer_mode_classified]
+    'extra_fields': [
+        feature_value_field,
+        feature_rate_field
+    ],
+    'layer_modes': [layer_mode_classified],
+    'display_not_exposed': False,
+    'layer_legend_title': tr('Area of landcover'),
+    'measure_question': tr('what area of')
 }
 
 indivisible_exposure = [

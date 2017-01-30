@@ -78,6 +78,17 @@ class DataStore(object):
         """
         return self._uri
 
+    @property
+    def uri_path(self):
+        """Return the URI of the datastore as a path. It's not a layer URI.
+
+        :return: The URI.
+        :rtype: str
+
+        .. versionadded:: 4.0
+        """
+        raise NotImplementedError
+
     def add_layer(self, layer, layer_name):
         """Add a layer to the datastore.
 

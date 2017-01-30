@@ -1,17 +1,5 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
-
-This module provides: Keyword Wizard Step: Field
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
+"""InaSAFE Keyword Wizard Field Step."""
 
 import re
 
@@ -29,7 +17,7 @@ from safe.gui.tools.wizard.wizard_strings import (
     field_question_aggregation)
 from safe.gui.tools.wizard.wizard_utils import get_question_text
 from safe.utilities.gis import is_raster_layer
-from safe.definitions.utilities import get_fields
+from safe.definitions.utilities import get_fields, get_compulsory_fields
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -40,11 +28,12 @@ FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
 class StepKwField(WizardStep, FORM_CLASS):
-    """Keyword Wizard Step: Field"""
+    """InaSAFE Keyword Wizard Field Step."""
 
     def is_ready_to_next_step(self):
-        """Check if the step is complete. If so, there is
-            no reason to block the Next button.
+        """Check if the step is complete.
+
+        If so, there is no reason to block the Next button.
 
         :returns: True if new step may be enabled.
         :rtype: bool
@@ -55,7 +44,7 @@ class StepKwField(WizardStep, FORM_CLASS):
         """Find the proper step when user clicks the Next button.
 
         :returns: The step to be switched to
-        :rtype: WizardStep instance or None
+        :rtype: WizardStep
         """
         if self.parent.step_kw_layermode.\
                 selected_layermode() == layer_mode_classified:
@@ -77,20 +66,28 @@ class StepKwField(WizardStep, FORM_CLASS):
         else:
             subcategory = {'key': None}
 
-        # Check if it can go to inasafe field step
+        # Get all fields with replace_null = False
         inasafe_fields = get_fields(
             layer_purpose['key'], subcategory['key'], replace_null=False)
-        if inasafe_fields:
+        # remove compulsory field since it has been set in previous step
+        try:
+            inasafe_fields.remove(get_compulsory_fields(
+                layer_purpose['key'], subcategory['key']))
+        except ValueError:
+            pass
+
+        # Check if possible to skip inasafe field step
+        if self.skip_inasafe_field(inasafe_fields):
+            default_inasafe_fields = get_fields(
+                layer_purpose['key'], subcategory['key'], replace_null=True)
+            # Check if it can go to inasafe default step
+            if default_inasafe_fields:
+                return self.parent.step_kw_default_inasafe_fields
+            # Else, go to source step
+            else:
+                return self.parent.step_kw_source
+        else:
             return self.parent.step_kw_inasafe_fields
-
-        # Check if it can go to inasafe default field step
-        default_inasafe_fields = get_fields(
-            layer_purpose['key'], subcategory['key'], replace_null=True)
-        if default_inasafe_fields:
-            return self.parent.step_kw_default_inasafe_fields
-
-        # Any other case
-        return self.parent.step_kw_source
 
     # noinspection PyPep8Naming
     def on_lstFields_itemSelectionChanged(self):
@@ -199,3 +196,27 @@ class StepKwField(WizardStep, FORM_CLASS):
                 if field in fields:
                     self.lstFields.setCurrentRow(fields.index(field))
             self.auto_select_one_item(self.lstFields)
+
+    def skip_inasafe_field(self, inasafe_fields):
+        """Check if it possible to skip inasafe field step.
+
+        The function will check if the layer has a specified field type.
+
+        :param inasafe_fields: List of InaSAFE fields.
+        :type inasafe_fields: list
+
+        :returns: True if there are no specified field type.
+        :rtype: bool
+        """
+        layer_data_provider = self.parent.layer.dataProvider()
+        # Iterate through all inasafe fields
+        for inasafe_field in inasafe_fields:
+            for field in layer_data_provider.fields():
+                # Check the field type
+                if isinstance(inasafe_field['type'], list):
+                    if field.type() in inasafe_field['type']:
+                        return False
+                else:
+                    if field.type() == inasafe_field['type']:
+                        return False
+        return True

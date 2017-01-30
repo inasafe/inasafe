@@ -13,36 +13,6 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
-def round_affecter_number(
-        number,
-        enable_rounding=False,
-        use_population_rounding=False):
-    """Tries to convert and round the number.
-
-    Rounded using population rounding rule.
-
-    :param number: number represented as string or float
-    :type number: str, float
-
-    :param enable_rounding: flag to enable rounding
-    :type enable_rounding: bool
-
-    :param use_population_rounding: flag to enable population rounding scheme
-    :type use_population_rounding: bool
-
-    :return: rounded number
-    """
-    decimal_number = float(number)
-    rounded_number = int(math.ceil(decimal_number))
-    if enable_rounding and use_population_rounding:
-        # if uses population rounding
-        return population_rounding(rounded_number)
-    elif enable_rounding:
-        return rounded_number
-
-    return decimal_number
-
-
 def layer_definition_type(layer):
     """Returned relevant layer definition based on layer purpose.
 
@@ -89,7 +59,7 @@ def jinja2_output_as_string(impact_report, component_key):
     for c in metadata.components:
         if c.key == component_key:
             if c.output_format == 'string':
-                return c.output
+                return c.output or ''
             elif c.output_format == 'file':
                 try:
                     filename = os.path.join(
@@ -107,6 +77,7 @@ def jinja2_output_as_string(impact_report, component_key):
 
 def value_from_field_name(field_name, analysis_layer):
     """Get the value of analysis layer based on field name.
+    Can also be used for any layer with one feature.
 
     :param field_name: Field name of analysis layer that we want to get
     :type field_name: str

@@ -5,6 +5,7 @@ from PyQt4.QtCore import Qt
 from PyQt4.QtGui import (
     QHBoxLayout, QGridLayout, QDoubleSpinBox,
     QRadioButton, QButtonGroup, QWidget, QLabel)
+from safe.utilities.i18n import tr
 
 from safe_extras.parameters.qt_widgets.select_parameter_widget import (
     SelectParameterWidget)
@@ -30,7 +31,7 @@ class DefaultSelectParameterWidget(SelectParameterWidget):
         self.radio_button_layout = QHBoxLayout()
         self.radio_button_widget = QWidget()
 
-        self._default_label = QLabel('Use default')
+        self._default_label = QLabel(tr('Default'))
 
         # Add label for default
         # self.radio_button_layout.addWidget(self._default_label)
