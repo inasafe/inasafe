@@ -370,6 +370,8 @@ class TestImpactFunction(unittest.TestCase):
 
         This function is like test_directory, but you can control manually
         which scenario you want to launch.
+
+        Let's keep booleans to False by default.
         """
         scenarii = {
             'polygon_classified_on_line': False,
@@ -384,9 +386,12 @@ class TestImpactFunction(unittest.TestCase):
             'raster_continuous_on_raster_population': False,
         }
 
+        # If we want to invert the selection.
+        invert = True
+
         path = standard_data_path('scenario')
         for scenario, enabled in scenarii.iteritems():
-            if enabled:
+            if (not invert and enabled) or (invert and not enabled):
                 self.test_scenario(join(path, scenario + '.json'))
 
         json_files = [

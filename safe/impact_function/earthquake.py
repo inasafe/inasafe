@@ -345,7 +345,7 @@ def make_summary_layer(exposed, aggregation, fatality_rate):
         value = population_displaced_per_mmi['field_name'] % mmi
         inasafe_fields[population_displaced_per_mmi['key'] % mmi] = value
 
-        exposed_per_agg_zone = {}
+    exposed_per_agg_zone = {}
     for (mmi, agg), count in exposed.iteritems():
         if agg not in exposed_per_agg_zone:
             exposed_per_agg_zone[agg] = {}
