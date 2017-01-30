@@ -194,26 +194,26 @@ include a **unit**. The table below lists the units for each exposure type.
 
 The **"People affected by tsunami event"** map legend might look like:
 
-https://cloud.githubusercontent.com/assets/13621886/22283066/a6fa9658-e312-11e6-8eed-f7c29c6c7bd5.png
+![image]https://cloud.githubusercontent.com/assets/13621886/22283066/a6fa9658-e312-11e6-8eed-f7c29c6c7bd5.png
 
 The **"People affected by volcanic ash event"** map legend might look like:
 
-https://cloud.githubusercontent.com/assets/13621886/22282998/3ebfc770-e312-11e6-92e4-d0dd7530b245.png
+![image]https://cloud.githubusercontent.com/assets/13621886/22282998/3ebfc770-e312-11e6-92e4-d0dd7530b245.png
 
 The **"Buildings affected by tsunami event"** map legend might look like:
 
-https://cloud.githubusercontent.com/assets/13621886/22276836/2351acac-e2e9-11e6-98db-e74f2437ee5c.png
+![image]https://cloud.githubusercontent.com/assets/13621886/22276836/2351acac-e2e9-11e6-98db-e74f2437ee5c.png
 
 Note: the dry legend class is only used for building and road exposures  with
 flood or tsunami hazards.
 
 The **"Landcover affected by tsunami hazard"** map legend might look like:
 
-https://cloud.githubusercontent.com/assets/13621886/22283082/c4995ae6-e312-11e6-96c0-452a7df3846d.png
+![image]https://cloud.githubusercontent.com/assets/13621886/22283082/c4995ae6-e312-11e6-96c0-452a7df3846d.png
 
 The **"Roads affected by tsunami hazard"** map legend might look like:
 
-https://cloud.githubusercontent.com/assets/13621886/22276858/3b5d7646-e2e9-11e6-94f4-487abe3cc2af.png
+![image]https://cloud.githubusercontent.com/assets/13621886/22276858/3b5d7646-e2e9-11e6-94f4-487abe3cc2af.png
 
 Note: thresholds are not included in the legend label for multiple event hazard
  data.
