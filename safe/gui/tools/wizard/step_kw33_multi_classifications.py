@@ -150,11 +150,14 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
 
         Generate all exposure, combobox, and edit button.
         """
+        current_classifications = self.parent.get_existing_keyword(
+            'classifications')
         layer_mode = self.parent.step_kw_layermode.selected_layermode()
         subcategory = self.parent.step_kw_subcategory.selected_subcategory()
         left_panel_heading = QLabel(tr('Classifications'))
         left_panel_heading.setFont(big_font)
         self.left_layout.addWidget(left_panel_heading)
+
         for exposure in exposure_all:
             exposure_layout = QHBoxLayout()
 
@@ -167,11 +170,17 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             # Add combo box
             exposure_combo_box = QComboBox()
             hazard_classifications = subcategory.get('classifications')
+            current_index = 0
             # Iterate through all available hazard classifications
             for i, hazard_classification in enumerate(hazard_classifications):
                 exposure_combo_box.addItem(hazard_classification['name'])
                 exposure_combo_box.setItemData(
                     i, hazard_classification, Qt.UserRole)
+                if hazard_classification['key'] == \
+                        current_classifications.get(exposure['key']):
+                    current_index = i
+            # Set current classification
+            exposure_combo_box.setCurrentIndex(current_index)
 
             # Add edit button
             exposure_edit_button = QPushButton(tr('Edit'))
@@ -200,9 +209,13 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
 
             # Set the current thresholds
             if layer_mode == layer_mode_continuous:
-                unit = self.parent.step_kw_unit.selected_unit()
-                thresholds = classification_thresholds(
-                    self.get_classification(exposure_combo_box), unit)
+                thresholds = self.parent.get_existing_keyword(
+                    'thresholds').get(exposure['key'])
+                # If empty, use threshold from default
+                if not thresholds:
+                    unit = self.parent.step_kw_unit.selected_unit()
+                    thresholds = classification_thresholds(
+                        self.get_classification(exposure_combo_box), unit)
                 self.thresholds[exposure['key']] = thresholds
 
     def edit_button_clicked(self, edit_button, exposure_combo_box, exposure):
@@ -269,11 +282,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             table.add(header)
             classification = self.get_classification(
                 self.exposure_combo_boxes[i])
-            default_thresholds = classification_thresholds(
-                classification, unit)
             thresholds = self.thresholds.get(self.exposures[i]['key'])
-            if not thresholds:
-                thresholds = default_thresholds
             classes = classification.get('classes')
             # Sort by value, put the lowest first
             classes = sorted(classes, key=lambda k: k['value'])
@@ -294,8 +303,11 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
 
     def set_widgets(self):
         """Set widgets on the Multi classification step."""
+        self.set_current_state()
         # Set the step description
         self.set_wizard_step_description()
+
+        # Update current state from current keywords
 
         # Set the left panel
         self.setup_left_panel()
@@ -330,8 +342,6 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
                 'thresholds': None,
                 'value_maps': self.value_maps
             }
-
-
 
     def get_classification(self, combo_box):
         """Helper to obtain the classification from a combo box.
@@ -550,3 +560,11 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
                 value[1].value(),
             ]
         return value_map
+
+    def set_current_state(self):
+        """"Helper to set the state of the step from current keywords."""
+        if not self.thresholds:
+            self.thresholds = self.parent.get_existing_keyword('thresholds')
+        LOGGER.debug('Thresholds')
+        LOGGER.debug(self.thresholds)
+        self.value_maps = self.parent.get_existing_keyword('value_maps')
