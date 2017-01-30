@@ -51,6 +51,10 @@ INFO_STYLE = styles.INFO_STYLE
 CHOOSE_MODE = 0
 EDIT_MODE = 1
 
+# Min and Max QDoubleEdit
+MIN_VALUE_MODE = 0
+MAX_VALUE_MODE = 1
+
 
 class StepKwMultiClassifications(WizardStep, FORM_CLASS):
     """Keyword Wizard Step: Multi Classification."""
@@ -203,7 +207,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
 
             # Adding to step's attribute
             self.exposures.append(exposure)
-            self.exposure_combo_boxes.append((exposure_combo_box))
+            self.exposure_combo_boxes.append(exposure_combo_box)
             self.exposure_edit_buttons.append(exposure_edit_button)
             self.exposure_labels.append(label)
 
@@ -264,10 +268,8 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
 
         message = m.Message()
         if layer_mode == layer_mode_continuous:
-            unit = self.parent.step_kw_unit.selected_unit()
             title = tr('Thresholds')
         else:
-            unit = None
             title = tr('Value maps')
 
         message.add(m.Heading(title, **INFO_STYLE))
@@ -464,22 +466,22 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         grid_layout_thresholds.setColumnStretch(0, 1)
         grid_layout_thresholds.setColumnStretch(0, 2)
 
-        def min_max_changed(index, the_string):
+        def min_max_changed(index, mode):
             """Slot when min or max value change.
 
             :param index: The index of the double spin.
             :type index: int
 
-            :param the_string: The flag to indicate the min or max value.
-            :type the_string: str
+            :param mode: The flag to indicate the min or max value.
+            :type mode: int
             """
-            if the_string == 'Max value':
+            if mode == MAX_VALUE_MODE:
                 current_max_value = self.threshold_classes.values()[index][1]
                 target_min_value = self.threshold_classes.values()[
                     index + 1][0]
                 if current_max_value.value() != target_min_value.value():
                     target_min_value.setValue(current_max_value.value())
-            elif the_string == 'Min value':
+            elif mode == MIN_VALUE_MODE:
                 current_min_value = self.threshold_classes.values()[index][0]
                 target_max_value = self.threshold_classes.values()[
                     index - 1][1]
@@ -492,11 +494,11 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             if index < len(self.threshold_classes) - 1:
                 # Max value changed
                 v[1].valueChanged.connect(partial(
-                    min_max_changed, index=index, the_string='Max value'))
+                    min_max_changed, index=index, mode=MAX_VALUE_MODE))
             if index > 0:
                 # Min value
                 v[0].valueChanged.connect(partial(
-                    min_max_changed, index=index, the_string='Min value'))
+                    min_max_changed, index=index, mode=MIN_VALUE_MODE))
 
         grid_layout_thresholds.setSpacing(0)
 
