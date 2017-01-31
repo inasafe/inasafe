@@ -86,6 +86,7 @@ from safe.definitions.constants import (
     PREPARE_SUCCESS,
     PREPARE_FAILED_BAD_INPUT,
     PREPARE_FAILED_INSUFFICIENT_OVERLAP,
+    PREPARE_FAILED_INSUFFICIENT_OVERLAP_REQUESTED_EXTENT,
     PREPARE_FAILED_BAD_LAYER,
     PREPARE_FAILED_BAD_CODE)
 from safe.definitions.versions import inasafe_keyword_version
@@ -112,6 +113,7 @@ from safe.impact_function.style import (
     hazard_class_style,
     simple_polygon_without_brush,
 )
+from safe.gui.widgets.message import no_overlap_message
 from safe.utilities.gis import is_vector_layer, is_raster_layer
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
@@ -894,7 +896,9 @@ class ImpactFunction(object):
                             'The requested analysis extent is not overlaping '
                             'the exposure and the hazard.'))
                     )
-                    return PREPARE_FAILED_INSUFFICIENT_OVERLAP, message
+                    return (
+                        PREPARE_FAILED_INSUFFICIENT_OVERLAP_REQUESTED_EXTENT,
+                        message)
                 else:
                     self._analysis_extent = hazard_exposure.intersection(
                         user_bounding_box)
