@@ -1,10 +1,11 @@
 # coding=utf-8
 import datetime
 
-from safe.definitions.fields import analysis_name_field
-from safe.report.extractors.util import value_from_field_name
-from safe.utilities.i18n import tr
 from safe.common.version import get_version
+from safe.definitions.fields import analysis_name_field
+from safe.report.extractors.util import (
+    value_from_field_name,
+    resolve_from_dictionary)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -169,6 +170,7 @@ def qgis_composer_extractor(impact_report, component_metadata):
     qgis_context = impact_report.qgis_composition_context
     inasafe_context = impact_report.inasafe_context
     provenance = impact_report.impact_function.provenance
+    extra_args = component_metadata.extra_args
 
     context = QGISComposerContext()
 
@@ -212,12 +214,13 @@ def qgis_composer_extractor(impact_report, component_metadata):
     context.html_frame_elements = html_frame_elements
 
     # Set default map to resize
-
+    layers = [impact_report.impact_function.impact]
     map_elements = [
         {
             'id': 'impact-map',
             'extent': qgis_context.extent,
             'grid_split_count': 5,
+            'layers': layers
         }
     ]
     context.map_elements = map_elements
@@ -256,9 +259,11 @@ def qgis_composer_extractor(impact_report, component_metadata):
     # process substitution map
     date_time = provenance['datetime']
     """:type: datetime.datetime"""
+    date_format = resolve_from_dictionary(extra_args, 'date-format')
+    time_format = resolve_from_dictionary(extra_args, 'time-format')
     if isinstance(date_time, datetime.datetime):
-        date = date_time.strftime('%Y-%m-%d')
-        time = date_time.strftime('%H:%M')
+        date = date_time.strftime(date_format)
+        time = date_time.strftime(time_format)
     else:
         date = ''
         time = ''
@@ -269,17 +274,25 @@ def qgis_composer_extractor(impact_report, component_metadata):
     title = provenance['map_title']
 
     # Set source
+    unknown_source_text = resolve_from_dictionary(
+        extra_args, ['defaults', 'unknown_source'])
+    aggregation_not_used = resolve_from_dictionary(
+        extra_args, ['defaults', 'aggregation_not_used'])
+
     hazard_source = (
-        provenance['hazard_keywords'].get('source') or tr('Unknown'))
+        provenance['hazard_keywords'].get('source') or unknown_source_text)
     exposure_source = (
-        provenance['exposure_keywords'].get('source') or tr('Unknown'))
+        provenance['exposure_keywords'].get('source') or unknown_source_text)
     if provenance['aggregation_layer']:
         aggregation_source = (
-            provenance['aggregation_keywords'].get('source') or tr('Unknown'))
+            provenance['aggregation_keywords'].get('source') or
+            unknown_source_text)
     else:
-        aggregation_source = tr('Not used')
+        aggregation_source = aggregation_not_used
 
-    reference_name = tr('Geographic Coordinates - {crs}').format(
+    spatial_reference_format = resolve_from_dictionary(
+        extra_args, 'spatial-reference-format')
+    reference_name = spatial_reference_format.format(
         crs=impact_report.impact_function.impact.crs().authid())
 
     analysis_layer = impact_report.analysis
@@ -287,6 +300,23 @@ def qgis_composer_extractor(impact_report, component_metadata):
         analysis_name_field['field_name'], analysis_layer)
 
     # Prepare the substitution map
+    version_title = resolve_from_dictionary(extra_args, 'version-title')
+    disclaimer_title = resolve_from_dictionary(extra_args, 'disclaimer-title')
+    date_title = resolve_from_dictionary(extra_args, 'date-title')
+    time_title = resolve_from_dictionary(extra_args, 'time-title')
+    caution_title = resolve_from_dictionary(extra_args, 'caution-title')
+    caution_text = resolve_from_dictionary(extra_args, 'caution-text')
+    version_text = resolve_from_dictionary(extra_args, 'version-text')
+    legend_section_title = resolve_from_dictionary(
+        extra_args, 'legend-title')
+    information_title = resolve_from_dictionary(
+        extra_args, 'information-title')
+    supporters_title = resolve_from_dictionary(
+        extra_args, 'supporters-title')
+    source_title = resolve_from_dictionary(extra_args, 'source-title')
+    analysis_title = resolve_from_dictionary(extra_args, 'analysis-title')
+    reference_title = resolve_from_dictionary(
+        extra_args, 'spatial-reference-title')
     substitution_map = {
         'impact-title': title,
         'date': date,
@@ -294,25 +324,21 @@ def qgis_composer_extractor(impact_report, component_metadata):
         'safe-version': version,  # deprecated
         'disclaimer': inasafe_context.disclaimer,
         # These added in 3.2
-        'version-title': tr('Software Version'),
+        'version-title': version_title,
         'inasafe-version': version,
-        'disclaimer-title': tr('Disclaimer'),
-        'date-title': tr('Date'),
-        'time-title': tr('Time'),
-        'caution-title': tr('Note'),
-        'caution-text': tr(
-            'This assessment is a guide - we strongly recommend that you '
-            'ground truth the results shown here before deploying '
-            'resources and / or personnel.'),
-        'version-text': tr(
-            'InaSAFE %s' % version),
-        'legend-title': tr('Legend'),
-        'information-title': tr('Analysis information'),
-        'supporters-title': tr('Report produced by'),
-        'source-title': tr('Data Source'),
-        'analysis-title': tr('Analysis Name'),
+        'disclaimer-title': disclaimer_title,
+        'date-title': date_title,
+        'time-title': time_title,
+        'caution-title': caution_title,
+        'caution-text': caution_text,
+        'version-text': version_text.format(version=version),
+        'legend-title': legend_section_title,
+        'information-title': information_title,
+        'supporters-title': supporters_title,
+        'source-title': source_title,
+        'analysis-title': analysis_title,
         'analysis-name': analysis_name,
-        'reference-title': tr('Spatial Reference'),
+        'reference-title': reference_title,
         'reference-name': reference_name,
         'hazard-source': hazard_source,
         'exposure-source': exposure_source,

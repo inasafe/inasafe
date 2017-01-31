@@ -1,10 +1,12 @@
 # coding=utf-8
 
 from __future__ import absolute_import
+
 from safe.common.utilities import safe_dir
 from safe.report.extractors.composer import QGISComposerContext
-from safe.report.extractors.util import jinja2_output_as_string
-from safe.utilities.i18n import tr
+from safe.report.extractors.util import (
+    jinja2_output_as_string,
+    resolve_from_dictionary)
 from safe.utilities.resources import (
     resource_url,
     resources_path)
@@ -31,6 +33,7 @@ def impact_table_extractor(impact_report, component_metadata):
     :rtype: dict
     """
     context = {}
+    extra_args = component_metadata.extra_args
 
     # Imported here to avoid cyclic dependencies
     from safe.definitions.report import (
@@ -70,23 +73,25 @@ def impact_table_extractor(impact_report, component_metadata):
     # TODO: taken from hazard and exposure provenance
     hazard_keywords = impact_report.impact_function.provenance[
         'hazard_keywords']
+    default_provenance_source = resolve_from_dictionary(
+        extra_args, ['defaults', 'provenance_source'])
+    provenance_format = resolve_from_dictionary(
+        extra_args, 'provenance_format')
+
     hazard_provenance = (
         hazard_keywords.get('source') or
-        tr('an unknown source'))
+        default_provenance_source)
     exposure_keywords = impact_report.impact_function.provenance[
         'exposure_keywords']
     exposure_provenance = (
         exposure_keywords.get('source') or
-        tr('an unknown source'))
+        default_provenance_source)
     provenance_details = {
         'hazard_provenance': hazard_provenance,
         'exposure_provenance': exposure_provenance
     }
-    context['analysis_details'] = tr(
-        'Hazard details'
-        '<p>%(hazard_provenance)s</p>'
-        'Exposure details'
-        '<p>%(exposure_provenance)s</p>') % provenance_details
+    context['analysis_details'] = provenance_format.format(
+        **provenance_details)
 
     resources_dir = safe_dir(sub_dir='../resources')
     context['inasafe_resources_base_dir'] = resources_dir

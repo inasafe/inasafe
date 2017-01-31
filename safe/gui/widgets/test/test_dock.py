@@ -1,5 +1,5 @@
 # coding=utf-8
-"""Test Dock"""
+"""Test Dock."""
 
 import codecs
 import logging
@@ -25,8 +25,9 @@ from safe.test.utilities import get_qgis_app, get_dock
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from safe.definitions.constants import (
     HAZARD_EXPOSURE_VIEW, HAZARD_EXPOSURE, HAZARD_EXPOSURE_BOUNDINGBOX)
-from safe.common.utilities import format_int, unique_filename
+from safe.common.utilities import unique_filename
 from safe.utilities.qgis_utilities import add_above_layer, layer_legend_index
+from safe.utilities.rounding import add_separators
 from safe.test.utilities import (
     standard_data_path,
     load_standard_layers,
@@ -272,7 +273,7 @@ class TestDock(TestCase):
 
         message = 'Result not as expected: %s' % result
         # searching for values 6700 clean water [l] in result
-        self.assertTrue(format_int(6700) in result, message)
+        self.assertTrue(add_separators(6700) in result, message)
 
     @unittest.expectedFailure
     def test_issue306(self):
@@ -488,7 +489,7 @@ class TestDock(TestCase):
         result = self.dock.results_webview.page_to_text()
 
         message = 'Result not as expected: %s' % result
-        self.assertTrue(format_int(33) in result, message)
+        self.assertTrue(add_separators(33) in result, message)
 
     @unittest.expectedFailure
     def test_issue581(self):

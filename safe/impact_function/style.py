@@ -23,7 +23,7 @@ from safe.definitions.fields import hazard_class_field, hazard_count_field
 from safe.definitions.hazard_classifications import not_exposed_class
 from safe.definitions.utilities import definition
 from safe.utilities.gis import is_line_layer
-from safe.utilities.rounding import round_affected_number
+from safe.utilities.rounding import format_number
 
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -146,7 +146,7 @@ def generate_classified_legend(
             # The field might not exist if no feature impacted in this hazard
             # zone.
             value = 0
-        value = round_affected_number(value, enable_rounding, True)
+        value = format_number(value, enable_rounding)
 
         minimum = None
         maximum = None
@@ -201,7 +201,7 @@ def _add_not_exposed(analysis_row, enable_rounding, exposure_unit):
     except KeyError:
         # The field might not exist if there is not feature not exposed.
         value = 0
-    value = round_affected_number(value, enable_rounding, True)
+    value = format_number(value, enable_rounding)
     label = _format_label(
         hazard_class=not_exposed_class['name'],
         value=value,

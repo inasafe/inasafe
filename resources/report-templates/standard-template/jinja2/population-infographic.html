@@ -20,13 +20,13 @@
 
     .section-header{
         color: #7f7f7f;
-        background-color: #fdeada;
+        background-color: #dceef4;
         padding-bottom: 5px;
         padding-top: 5px;
     }
 
     .number-element{
-        color: #f87f0b;
+        color: #1eb1ed;
         font-size: 18pt;
         font-weight: bold;
     }
@@ -47,7 +47,7 @@
     }
 
     .percentage-element{
-        color: #fbd5b5;
+        color: #dceef4;
         font-size: 18pt;
         font-weight: bold;
     }
@@ -58,7 +58,7 @@
     }
 
     #population-chart{
-        padding: 8px;
+        padding-bottom: 16px;
     }
 
     .total-value, .slice-value, .slice-percentage {
@@ -71,13 +71,28 @@
     }
 
     .chart-title{
-        font-size: 18pt;
+        font-size: 14px;
+        font-weight: bold;
+        color: #7f7f7f;
     }
 
     .legend-label{
-        font-size: 14pt;
+        font-size: 8pt;
+        font-weight: bold;
+        margin-right: 8px;
     }
 
+{% if sections['population_chart']['context'] %}
+    {% for slice in sections['population_chart']['context'].slices %}
+    .hazard-class.label-class-{{ sections.population_chart.css_label_classes[loop.index] }}{
+        width: 8px;
+        height: 8px;
+        display: inline-block;
+        margin: 0 8px;
+        background-color: {{ slice.fill }};
+    }
+    {% endfor %}
+{% endif %}
 
 </style>
 
@@ -93,10 +108,18 @@
 <div class="row">
     <div class="col-xs-12 col-md-4">
         <div id="population-chart">
-        {% with %}
-            {% set context = sections['population_donut'] %}
-            {% include 'standard-template/jinja2/svg/donut-chart.svg' %}
-        {% endwith %}
+            <div class="chart-title">{{ sections.population_chart.context.title }}</div>
+            <img src="{{ sections.population_chart.img_path }}">
+            {% if sections['population_chart']['context'] %}
+            <div>
+                {% for slice in sections['population_chart']['context'].slices %}
+                <span class="legend-label">
+                    <span class="hazard-class label-class-{{ sections.population_chart.css_label_classes[loop.index] }}"></span>
+                    {{ slice.label }}
+                </span>
+                {% endfor %}
+            </div>
+            {% endif %}
         </div>
     </div>
     <div class="col-xs-12 col-md-8 people-section">

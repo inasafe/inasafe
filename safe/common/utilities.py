@@ -1,6 +1,5 @@
 # coding=utf-8
-"""Utilities for InaSAFE
-"""
+"""Utilities for InaSAFE."""
 import os
 import sys
 import platform
@@ -23,7 +22,8 @@ from qgis.core import (
     QgsPoint)
 
 from safe.common.exceptions import VerificationError
-from safe.utilities.i18n import locale
+from safe.utilities.rounding import (
+    thousand_separator, decimal_separator, add_separators)
 
 
 import logging
@@ -264,42 +264,6 @@ def get_free_memory_osx():
         return int(inactive) + int(free)
 
 
-def format_int(x):
-    """Format integer with separator between thousands.
-
-    :param x: A number to be formatted in a locale friendly way.
-    :type x: int
-
-    :returns: A locale friendly formatted string e.g. 1,000,0000.00
-        representing the original x. If a ValueError exception occurs,
-        x is simply returned.
-    :rtype: basestring
-
-
-    From http://stackoverflow.com/questions/5513615/
-                add-thousands-separators-to-a-number
-
-    # FIXME (Ole)
-    Currently not using locale coz broken
-
-    Instead use this:
-    http://docs.python.org/library/string.html#formatspec
-
-    """
-    try:
-        s = '{0:,}'.format(x)
-        # s = '{0:n}'.format(x)  # n means locale aware (read up on this)
-    # see issue #526
-    except ValueError:
-        return x
-
-    # Quick solution for the moment
-    if locale() == 'id':
-        # Replace commas with dots
-        s = s.replace(',', '.')
-    return s
-
-
 def humanize_min_max(min_value, max_value, interval):
     """Return humanize value format for max and min.
 
@@ -324,8 +288,8 @@ def humanize_min_max(min_value, max_value, interval):
     current_interval = max_value - min_value
     if interval > 1:
         # print 'case 1. Current interval : ', current_interval
-        humanize_min_value = format_int(int(round(min_value)))
-        humanize_max_value = format_int(int(round(max_value)))
+        humanize_min_value = add_separators(int(round(min_value)))
+        humanize_max_value = add_separators(int(round(max_value)))
 
     else:
         # print 'case 2. Current interval : ', current_interval
@@ -345,7 +309,7 @@ def format_decimal(interval, value):
     """
     interval = get_significant_decimal(interval)
     if isinstance(interval, Integral) or isinstance(value, Integral):
-        return format_int(int(value))
+        return add_separators(int(value))
     if interval != interval:
         # nan
         return str(value)
@@ -357,26 +321,8 @@ def format_decimal(interval, value):
     my_number_decimal = str(value).split('.')[1][:decimal_places]
     if len(set(my_number_decimal)) == 1 and my_number_decimal[-1] == '0':
         return my_number_int
-    return (format_int(int(my_number_int)) + get_decimal_separator() +
+    return (add_separators(int(my_number_int)) + decimal_separator() +
             my_number_decimal)
-
-
-def get_decimal_separator():
-    """Return decimal separator according to the locale."""
-    lang = os.getenv('LANG')
-    if lang == 'id':
-        return ','
-    else:
-        return '.'
-
-
-def get_thousand_separator():
-    """Return decimal separator according to the locale."""
-    lang = os.getenv('LANG')
-    if lang == 'id':
-        return '.'
-    else:
-        return ','
 
 
 def get_significant_decimal(my_decimal):
@@ -479,7 +425,7 @@ def unhumanize_number(number):
     @param number:
     """
     try:
-        number = number.replace(get_thousand_separator(), '')
+        number = number.replace(thousand_separator(), '')
         number = int(float(number))
     except (AttributeError, ValueError):
         pass
