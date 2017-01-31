@@ -29,8 +29,7 @@ from ConfigParser import ConfigParser, MissingSectionHeaderError, ParsingError
 from qgis.core import (
     QgsRectangle,
     QgsCoordinateReferenceSystem,
-    QgsMapLayer,
-    QgsMapLayerRegistry as reg,
+    QgsMapLayerRegistry,
     QgsProject,
     QgsVectorLayer,
     QgsRasterLayer)
@@ -49,11 +48,14 @@ from safe.definitions.constants import (
     PREPARE_SUCCESS,
     ANALYSIS_FAILED_BAD_CODE,
     ANALYSIS_FAILED_BAD_INPUT)
+from safe.definitions.layer_purposes import (
+    layer_purpose_hazard,
+    layer_purpose_exposure,
+    layer_purpose_aggregation)
 from safe.definitions.report import (
     standard_impact_report_metadata_pdf,
     report_a4_blue)
 from safe.utilities.gis import extent_string_to_array
-from safe.common.exceptions import FileNotFoundError
 from safe.common.utilities import temp_dir
 from safe.utilities.resources import (
     html_footer, html_header, get_ui_class)
@@ -65,6 +67,7 @@ from safe.report.impact_report import ImpactReport
 from safe.gui.analysis_utilities import (
     generate_impact_report,
     generate_impact_map_report)
+from safe.utilities.qgis_utilities import display_critical_message_box
 
 INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
 LOGGER = logging.getLogger('InaSAFE')
@@ -297,7 +300,9 @@ class BatchDialog(QDialog, FORM_CLASS):
         :param items: Dictionary containing settings for impact function.
         :type items: Python dictionary.
 
-        :return: QgsVectorLayer, QgsRasterLayer, extent, extent_crs
+        :return: A tuple containing True and dictionary containing parameters
+                 if post processor success. Or False and an error message
+                 if something went wrong.
         """
 
         status = True
@@ -308,6 +313,9 @@ class BatchDialog(QDialog, FORM_CLASS):
             hazard = self.define_layer(hazard_path)
             if not hazard:
                 status = False
+                message = self.tr(
+                    'Unable to find {hazard_path} ').format(
+                    hazard_path=hazard_path)
         else:
             hazard = None
             LOGGER.warning('Scenario does not contain hazard path')
@@ -319,6 +327,9 @@ class BatchDialog(QDialog, FORM_CLASS):
             exposure = self.define_layer(exposure_path)
             if not exposure:
                 status = False
+                message += self.tr(
+                    '\nUnable to find {exposure_path} ').format(
+                    exposure_path=exposure_path)
         else:
             exposure = None
             LOGGER.warning('Scenario does not contain hazard path')
@@ -355,9 +366,20 @@ class BatchDialog(QDialog, FORM_CLASS):
         # scenario. Aggregation and extent checking will be done when
         # assigning layer to impact_function
         if status:
-            return hazard, exposure, aggregation, extent, extent_crs
+            parameters = {
+                layer_purpose_hazard['key']: hazard,
+                layer_purpose_exposure['key']: exposure,
+                layer_purpose_aggregation['key']: aggregation,
+                'extent': extent,
+                'crs': extent_crs
+            }
+            return True, parameters
         else:
-            return status
+            LOGGER.warning(message)
+            display_critical_message_box(
+                title=self.tr('Error while preparing scenario'),
+                message=message)
+            return False, None
 
     def define_layer(self, layer_path):
         """Create QGIS layer (either vector or raster) from file path input.
@@ -377,14 +399,14 @@ class BatchDialog(QDialog, FORM_CLASS):
         base_name, extension = os.path.splitext(file_name)
 
         # check if raster or vector layer from extension
-        if extension in ['.asc', '.tif']:
+        if extension in ['.asc', '.tif', '.tiff']:
             layer = QgsRasterLayer(full_path, base_name)
             if layer.isValid():
                 return layer
             else:
                 LOGGER.critical('Failed to create layer from scenario')
                 return
-        elif extension in ['.shp']:
+        elif extension in ['.shp', '.geojson', '.gpkg']:
             layer = QgsVectorLayer(full_path, base_name, 'ogr')
             if layer.isValid():
                 return layer
@@ -441,8 +463,6 @@ class BatchDialog(QDialog, FORM_CLASS):
                     str(e))
                 result = False
         elif isinstance(value, dict):
-            # path = str(self.output_directory.text())
-            # title = str(task_item.text())
 
             # create layer group
             group_name = value['scenario_name']
@@ -450,16 +470,23 @@ class BatchDialog(QDialog, FORM_CLASS):
             self.layer_group_container.append(self.layer_group)
 
             # Its a dict containing files for a scenario
-            hazard, exposure, aggregation, extent, extent_crs = \
-                self.prepare_task(value)
+            success, parameters = self.prepare_task(value)
+            if not success:
+                # set status to 'running'
+                status_item.setText(self.tr('Please update scenario'))
+                self.disable_busy_cursor()
+                return False
+            # If impact function parameters loaded successfully, initiate IF.
             impact_function = ImpactFunction()
-            impact_function.hazard = hazard
-            impact_function.exposure = exposure
-            if aggregation:
-                impact_function.aggregation = aggregation
-            elif extent:
-                impact_function.requested_extent = extent
-                impact_function.requested_extent_crs = extent_crs
+            impact_function.hazard = parameters[layer_purpose_hazard['key']]
+            impact_function.exposure = (
+                parameters[layer_purpose_exposure['key']])
+            if parameters[layer_purpose_aggregation['key']]:
+                impact_function.aggregation = (
+                    parameters[layer_purpose_aggregation['key']])
+            elif parameters['extent']:
+                impact_function.requested_extent = parameters['extent']
+                impact_function.requested_extent_crs = parameters['crs']
             prepare_status, prepare_message = impact_function.prepare()
             if prepare_status == PREPARE_SUCCESS:
                 LOGGER.info('Impact function ready')
@@ -470,24 +497,23 @@ class BatchDialog(QDialog, FORM_CLASS):
                     if impact_layer.isValid():
                         layer_list = [
                             impact_layer,
-                            hazard,
-                            exposure,
-                            aggregation]
-                        reg.instance().addMapLayers(layer_list, False)
+                            parameters[layer_purpose_hazard['key']],
+                            parameters[layer_purpose_exposure['key']],
+                            parameters[layer_purpose_aggregation['key']]]
+                        QgsMapLayerRegistry.instance().addMapLayers(
+                            layer_list, False)
                         for layer in layer_list:
                             self.layer_group.addLayer(layer)
-                        # TODO:: Find proper way to recognize layer.
-                        # somehow InaSAFE or QGIS won't recognized added layer
-                        # until we print the layer list in mapCanvas
-                        print "printing layer count and layer list"
-                        print self.iface.mapCanvas().layerCount()
-                        for layer in self.iface.mapCanvas().layers():
-                            print layer
+                        map_canvas = QgsMapLayerRegistry.instance().mapLayers()
+                        for layer in map_canvas:
                             # turn of layer visibility if not impact layer
-                            if layer.id() == impact_layer.id():
-                                self.legend.setLayerVisible(layer, True)
+                            if map_canvas[layer].id() == impact_layer.id():
+                                self.legend.setLayerVisible(
+                                    map_canvas[layer], True)
                             else:
-                                self.legend.setLayerVisible(layer, False)
+                                self.legend.setLayerVisible(
+                                    map_canvas[layer], False)
+
                         # generate map report and impact report
                         try:
                             # this line is to save the impact report in default
