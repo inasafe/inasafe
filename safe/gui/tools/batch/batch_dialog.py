@@ -579,11 +579,15 @@ class BatchDialog(QDialog, FORM_CLASS):
     @pyqtSignature('')
     def run_selected_clicked(self):
         """Run the selected scenario."""
+        rows = sorted(set(index.row() for index in
+                          self.table.selectedIndexes()))
         self.enable_busy_cursor()
-        current_row = self.table.currentRow()
-        item = self.table.item(current_row, 0)
-        status_item = self.table.item(current_row, 1)
-        self.run_task(item, status_item)
+        for row in rows:
+            # current_row = self.table.currentRow()
+            current_row = row
+            item = self.table.item(current_row, 0)
+            status_item = self.table.item(current_row, 1)
+            self.run_task(item, status_item)
         self.disable_busy_cursor()
 
     @pyqtSignature('')
