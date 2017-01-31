@@ -9,7 +9,7 @@ import numpy
 from PyQt4.QtGui import (
     QLabel, QHBoxLayout, QComboBox, QPushButton, QTextBrowser,
     QDoubleSpinBox, QGridLayout, QListWidget, QTreeWidget, QAbstractItemView,
-    QListWidgetItem, QFont, QTreeWidgetItem)
+    QListWidgetItem, QFont, QTreeWidgetItem, QSpacerItem, QSizePolicy)
 from PyQt4.QtCore import Qt, QPyNullVariant
 
 from osgeo import gdal
@@ -239,6 +239,8 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             exposure_layout.setStretch(0, 1)
             self.left_layout.addLayout(exposure_layout)
 
+            self.left_layout.addStretch(1)
+
             # Adding to step's attribute
             self.exposures.append(exposure)
             self.exposure_combo_boxes.append(exposure_combo_box)
@@ -302,29 +304,50 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
 
             classification = self.get_classification(
                 self.exposure_combo_boxes[i])
-            thresholds = self.thresholds.get(self.exposures[i]['key'])
-            # thresholds[classification['key']]['classes']
-            if not thresholds:
-                message.add(m.Paragraph(tr('No classifications set.')))
-                continue
-            table = m.Table(style_class='table table-condensed table-striped')
-            header = m.Row()
-            header.add(m.Cell(tr('Class name')))
-            header.add(m.Cell(tr('Minimum')))
-            header.add(m.Cell(tr('Maximum')))
-            table.add(header)
-            classes = classification.get('classes')
-            # Sort by value, put the lowest first
-            classes = sorted(classes, key=lambda k: k['value'])
-            for the_class in classes:
-                # threshold = thresholds[the_class['key']]['classes']
-                threshold = thresholds[classification['key']]['classes'][
-                    the_class['key']]
-                row = m.Row()
-                row.add(m.Cell(the_class['name']))
-                row.add(m.Cell(threshold[0]))
-                row.add(m.Cell(threshold[1]))
-                table.add(row)
+            if self.layer_mode == layer_mode_continuous:
+                thresholds = self.thresholds.get(self.exposures[i]['key'])
+                if not thresholds:
+                    message.add(m.Paragraph(tr('No classifications set.')))
+                    continue
+                table = m.Table(
+                    style_class='table table-condensed table-striped')
+                header = m.Row()
+                header.add(m.Cell(tr('Class name')))
+                header.add(m.Cell(tr('Minimum')))
+                header.add(m.Cell(tr('Maximum')))
+                table.add(header)
+                classes = classification.get('classes')
+                # Sort by value, put the lowest first
+                classes = sorted(classes, key=lambda k: k['value'])
+                for the_class in classes:
+                    threshold = thresholds[classification['key']]['classes'][
+                        the_class['key']]
+                    row = m.Row()
+                    row.add(m.Cell(the_class['name']))
+                    row.add(m.Cell(threshold[0]))
+                    row.add(m.Cell(threshold[1]))
+                    table.add(row)
+            else:
+                value_maps = self.value_maps.get(self.exposures[i]['key'])
+                if not value_maps:
+                    message.add(m.Paragraph(tr('No classifications set.')))
+                    continue
+                table = m.Table(
+                    style_class='table table-condensed table-striped')
+                header = m.Row()
+                header.add(m.Cell(tr('Class name')))
+                header.add(m.Cell(tr('Value')))
+                table.add(header)
+                classes = classification.get('classes')
+                # Sort by value, put the lowest first
+                classes = sorted(classes, key=lambda k: k['value'])
+                for the_class in classes:
+                    value_map = value_maps[classification['key']][
+                        'classes'].get(the_class['key'], [])
+                    row = m.Row()
+                    row.add(m.Cell(the_class['name']))
+                    row.add(m.Cell(', '.join([str(v) for v in value_map])))
+                    table.add(row)
             message.add(table)
 
         status_text_edit = QTextBrowser(None)
@@ -546,8 +569,6 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         grid_layout_thresholds.setSpacing(0)
 
         self.right_layout.addLayout(grid_layout_thresholds)
-
-        self.add_buttons(classification)
 
     def add_buttons(self, classification):
         """Helper to setup 3 buttons.
@@ -871,6 +892,5 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         """"Helper to set the state of the step from current keywords."""
         if not self.thresholds:
             self.thresholds = self.parent.get_existing_keyword('thresholds')
-        LOGGER.debug('Thresholds')
-        LOGGER.debug(self.thresholds)
-        self.value_maps = self.parent.get_existing_keyword('value_maps')
+        if not self.value_maps:
+            self.value_maps = self.parent.get_existing_keyword('value_maps')
