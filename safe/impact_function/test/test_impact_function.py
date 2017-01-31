@@ -22,7 +22,6 @@ from safe.test.utilities import (
     get_qgis_app,
     standard_data_path,
     load_test_vector_layer,
-    check_inasafe_fields,
     compare_wkt
 )
 from safe.common.version import get_version
@@ -60,6 +59,7 @@ from safe.definitions.constants import (
 )
 from safe.utilities.unicode import byteify
 from safe.utilities.gis import wkt_to_rectangle
+from safe.utilities.utilities import check_inasafe_fields
 from safe.impact_function.impact_function import ImpactFunction
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -365,13 +365,15 @@ class TestImpactFunction(unittest.TestCase):
     @unittest.skipIf(
         os.environ.get('ON_TRAVIS', False),
         'Duplicate test of test_scenario_directory.')
-    def test_scenarii(self):
+    def test_scenarios(self):
         """Test manually a directory.
 
         This function is like test_directory, but you can control manually
         which scenario you want to launch.
+
+        Let's keep booleans to False by default.
         """
-        scenarii = {
+        scenarios = {
             'polygon_classified_on_line': False,
             'polygon_classified_on_point': False,
             'polygon_classified_on_vector_population': False,
@@ -384,16 +386,19 @@ class TestImpactFunction(unittest.TestCase):
             'raster_continuous_on_raster_population': False,
         }
 
+        # If we want to invert the selection.
+        invert = False
+
         path = standard_data_path('scenario')
-        for scenario, enabled in scenarii.iteritems():
-            if enabled:
+        for scenario, enabled in scenarios.iteritems():
+            if (not invert and enabled) or (invert and not enabled):
                 self.test_scenario(join(path, scenario + '.json'))
 
         json_files = [
             join(path, f) for f in listdir(path)
             if isfile(join(path, f)) and f.endswith('.json')
         ]
-        self.assertEqual(len(json_files), len(scenarii))
+        self.assertEqual(len(json_files), len(scenarios))
 
     def test_scenario_directory(self):
         """Run test scenario in directory."""

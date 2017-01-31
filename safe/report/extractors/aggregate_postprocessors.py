@@ -5,17 +5,18 @@ from safe.common.parameters.resource_parameter import ResourceParameter
 from safe.definitions.exposure import exposure_population
 from safe.definitions.fields import (
     aggregation_name_field,
-    female_count_field,
     population_count_field,
     affected_exposure_count_field,
     total_affected_field)
 from safe.definitions.minimum_needs import minimum_needs_fields
-from safe.definitions.post_processors import age_postprocessors, \
-    female_postprocessors
+from safe.definitions.post_processors import (
+    age_postprocessors,
+    female_postprocessors)
 from safe.definitions.utilities import postprocessor_output_field
-from safe.report.extractors.util import value_from_field_name
+from safe.report.extractors.util import (
+    value_from_field_name,
+    resolve_from_dictionary)
 from safe.utilities.rounding import round_affected_number
-from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -44,6 +45,7 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
 
     """Initializations"""
 
+    extra_args = component_metadata.extra_args
     # Find out aggregation report type
     aggregation_impacted = impact_report.aggregation_impacted
     analysis_layer = impact_report.analysis
@@ -53,28 +55,36 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
 
     context['use_aggregation'] = use_aggregation
     if not use_aggregation:
-        context['header'] = tr('Detailed demographic breakdown')
+        context['header'] = resolve_from_dictionary(
+            extra_args, 'header')
 
     age_fields = [postprocessor_output_field(p) for p in age_postprocessors]
     gender_fields = [
         postprocessor_output_field(p) for p in female_postprocessors]
 
+    age_section_header = resolve_from_dictionary(
+        extra_args, ['sections', 'age', 'header'])
     context['sections']['age'] = create_section(
         aggregation_impacted,
         analysis_layer,
         age_fields,
-        tr('Detailed Age Report'),
+        age_section_header,
         use_aggregation=use_aggregation,
         debug_mode=debug_mode,
-        population_rounding=False)
+        population_rounding=True,
+        extra_component_args=extra_args)
+
+    gender_section_header = resolve_from_dictionary(
+        extra_args, ['sections', 'gender', 'header'])
     context['sections']['gender'] = create_section(
         aggregation_impacted,
         analysis_layer,
         gender_fields,
-        tr('Detailed Gender Report'),
+        gender_section_header,
         use_aggregation=use_aggregation,
         debug_mode=debug_mode,
-        population_rounding=False)
+        population_rounding=True,
+        extra_component_args=extra_args)
 
     # Only provides minimum needs breakdown if there is aggregation layer
     if use_aggregation:
@@ -86,20 +96,23 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
             if isinstance(need, ResourceParameter):
                 unit = None
                 unit_abbreviation = need.unit.abbreviation
-                if unit_abbreviation and not unit_abbreviation == tr('units'):
+                if unit_abbreviation:
                     unit_format = '{unit}'
                     unit = unit_format.format(
                         unit=unit_abbreviation)
                 units_label.append(unit)
 
+        minimum_needs_section_header = resolve_from_dictionary(
+            extra_args, ['sections', 'minimum_needs', 'header'])
         context['sections']['minimum_needs'] = create_section(
             aggregation_impacted,
             analysis_layer,
             minimum_needs_fields,
-            tr('Detailed Minimum Needs Report'),
+            minimum_needs_section_header,
             units_label=units_label,
             debug_mode=debug_mode,
-            population_rounding=False)
+            population_rounding=True,
+            extra_component_args=extra_args)
     else:
         sections_not_empty = True
         for _, value in context['sections'].iteritems():
@@ -119,7 +132,8 @@ def create_section(
         use_aggregation=True,
         units_label=None,
         debug_mode=False,
-        population_rounding=False):
+        population_rounding=False,
+        extra_component_args=None):
     """Create demographic section context.
 
     :param aggregation_impacted: Aggregation impacted
@@ -147,6 +161,10 @@ def create_section(
         postprocessor represents population number
     :type population_rounding: bool
 
+    :param extra_component_args: extra_args passed from report component
+        metadata
+    :type extra_component_args: dict
+
     :return: context for gender section
     :rtype: dict
     """
@@ -156,14 +174,16 @@ def create_section(
             section_header,
             units_label=units_label,
             debug_mode=debug_mode,
-            population_rounding=population_rounding)
+            population_rounding=population_rounding,
+            extra_component_args=extra_component_args)
     else:
         return create_section_without_aggregation(
             aggregation_impacted, analysis_layer, postprocessor_fields,
             section_header,
             units_label=units_label,
             debug_mode=debug_mode,
-            population_rounding=population_rounding)
+            population_rounding=population_rounding,
+            extra_component_args=extra_component_args)
 
 
 def create_section_with_aggregation(
@@ -171,7 +191,8 @@ def create_section_with_aggregation(
         section_header,
         units_label=None,
         debug_mode=False,
-        population_rounding=False):
+        population_rounding=False,
+        extra_component_args=None):
     """Create demographic section context with aggregation breakdown.
 
     :param aggregation_impacted: Aggregation impacted
@@ -195,6 +216,10 @@ def create_section_with_aggregation(
     :param population_rounding: flag population rounding, used when
         postprocessor represents population number
     :type population_rounding: bool
+
+    :param extra_component_args: extra_args passed from report component
+        metadata
+    :type extra_component_args: dict
 
     :return: context for gender section
     :rtype: dict
@@ -241,9 +266,13 @@ def create_section_with_aggregation(
     """Generating header name for columns"""
 
     # First column header is aggregation title
+    default_aggregation_header = resolve_from_dictionary(
+        extra_component_args, ['defaults', 'aggregation_header'])
+    total_population_header = resolve_from_dictionary(
+        extra_component_args, ['defaults', 'total_population_header'])
     columns = [
-        aggregation_impacted.title() or tr('Aggregation area'),
-        tr('Total Population'),
+        aggregation_impacted.title() or default_aggregation_header,
+        total_population_header,
     ]
     row_values = []
 
@@ -320,8 +349,10 @@ def create_section_with_aggregation(
         feature[total_affected_population_index],
         enable_rounding=enable_rounding,
         use_population_rounding=population_rounding)
+    total_header = resolve_from_dictionary(
+        extra_component_args, ['defaults', 'total_header'])
     totals = [
-        tr('Total'),
+        total_header,
         value
     ]
     for output_field in postprocessors_fields_found:
@@ -333,10 +364,10 @@ def create_section_with_aggregation(
             use_population_rounding=population_rounding)
         totals.append(value)
 
+    notes = resolve_from_dictionary(
+        extra_component_args, ['defaults', 'notes'])
     return {
-        'notes': tr(
-            'Columns and rows containing only 0 or "No data" values are '
-            'excluded from the tables.'),
+        'notes': notes,
         'header': section_header,
         'columns': columns,
         'rows': row_values,
@@ -349,7 +380,8 @@ def create_section_without_aggregation(
         section_header,
         units_label=None,
         debug_mode=False,
-        population_rounding=False):
+        population_rounding=False,
+        extra_component_args=None):
     """Create demographic section context without aggregation.
 
     :param aggregation_impacted: Aggregation impacted
@@ -373,6 +405,10 @@ def create_section_without_aggregation(
     :param population_rounding: flag population rounding, used when
         postprocessor represents population number
     :type population_rounding: bool
+
+    :param extra_component_args: extra_args passed from report component
+        metadata
+    :type extra_component_args: dict
 
     :return: context for gender section
     :rtype: dict
@@ -419,9 +455,11 @@ def create_section_without_aggregation(
     """Generating header name for columns"""
 
     # First column header is aggregation title
+    total_population_header = resolve_from_dictionary(
+        extra_component_args, ['defaults', 'total_population_header'])
     columns = [
         section_header,
-        tr('Total Affected'),
+        total_population_header,
     ]
 
     """Generating values for rows"""

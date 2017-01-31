@@ -1,36 +1,34 @@
 # coding=utf-8
-"""Helper module for gui test suite
-"""
+"""Helper module for gui test suite."""
+import codecs
+import hashlib
+import inspect
+import logging
 import os
 import re
-import sys
-import hashlib
-import logging
 import shutil
-import inspect
-from tempfile import mkdtemp
-from os.path import exists, splitext, basename, join
+import sys
+from PyQt4 import QtGui  # pylint: disable=W0621
 from itertools import izip
+from os.path import exists, splitext, basename, join
+from tempfile import mkdtemp
+
 from qgis.core import (
     QgsVectorLayer,
     QgsRasterLayer,
     QgsRectangle,
     QgsCoordinateReferenceSystem,
     QgsMapLayerRegistry)
-# noinspection PyPackageRequirements
-from PyQt4 import QtGui  # pylint: disable=W0621
 from qgis.utils import iface
 
-from safe.definitions.constants import HAZARD_EXPOSURE
-from safe.utilities.numerics import axes_to_points
+from safe.common.exceptions import NoKeywordsFoundError
 from safe.common.utilities import unique_filename, temp_dir
-from safe.common.exceptions import NoKeywordsFoundError, MetadataReadError
-
+from safe.definitions.constants import HAZARD_EXPOSURE
 from safe.gis.vector.tools import create_memory_layer, copy_layer
-from safe.utilities.metadata import read_iso19115_metadata
-from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.i18n import tr
-import codecs
+from safe.utilities.metadata import read_iso19115_metadata
+from safe.utilities.utilities import monkey_patch_keywords
+from safe.utilities.numerics import axes_to_points
 
 QGIS_APP = None  # Static variable used to hold hand to running QGIS app
 CANVAS = None
@@ -45,7 +43,7 @@ DEVNULL = open(os.devnull, 'w')
 # inasafe_data and just use data in standard_data_path. But until that is done,
 # we still keep TESTDATA, HAZDATA, EXPDATA, and BOUNDATA below
 
-# Assuming test data three lvls up
+# Assuming test data three levels up
 pardir = os.path.abspath(os.path.join(
     os.path.realpath(os.path.dirname(__file__)),
     '..',
@@ -61,6 +59,11 @@ TESTDATA = os.path.join(DATADIR, 'test')  # Artificial datasets
 HAZDATA = os.path.join(DATADIR, 'hazard')  # Real hazard layers
 EXPDATA = os.path.join(DATADIR, 'exposure')  # Real exposure layers
 BOUNDDATA = os.path.join(DATADIR, 'boundaries')  # Real exposure layers
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 
 def qgis_iface():
@@ -179,33 +182,6 @@ def get_dock():
             return DockObject(iface)
     else:
         return DockObject(IFACE)
-
-
-def check_inasafe_fields(layer):
-    """Helper to check inasafe_fields.
-
-    :param layer: The layer to check.
-    :type layer: QgsVectorLayer
-
-    :raises: Exception with a message if the layer is not correct.
-    """
-    inasafe_fields = layer.keywords['inasafe_fields']
-
-    real_fields = [field.name() for field in layer.fields().toList()]
-
-    difference = set(inasafe_fields.values()).difference(real_fields)
-    if len(difference):
-        message = tr(
-            'inasafe_fields has more fields than the layer %s itself : %s'
-            % (layer.keywords['layer_purpose'], difference))
-        raise Exception(message)
-
-    difference = set(real_fields).difference(inasafe_fields.values())
-    if len(difference):
-        message = tr(
-            'The layer %s has more fields than inasafe_fields : %s'
-            % (layer.title(), difference))
-        raise Exception(message)
 
 
 def assert_hash_for_file(hash_string, filename):
@@ -376,24 +352,6 @@ def load_path_vector_layer(path, **kwargs):
         return memory_layer
     else:
         return layer
-
-
-def monkey_patch_keywords(layer):
-    """In InaSAFE V4, we do monkey patching for keywords.
-
-    :param layer: The layer to monkey patch keywords.
-    :type layer: QgsMapLayer
-    """
-    keyword_io = KeywordIO()
-    try:
-        layer.keywords = keyword_io.read_keywords(layer)
-    except (NoKeywordsFoundError, MetadataReadError):
-        layer.keywords = {}
-
-    try:
-        layer.keywords['inasafe_fields']
-    except KeyError:
-        layer.keywords['inasafe_fields'] = {}
 
 
 def load_local_raster_layer(test_file, **kwargs):

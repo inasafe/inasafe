@@ -4,15 +4,13 @@ from safe.definitions.fields import (
     hazard_count_field,
     total_affected_field,
     total_field,
-    total_unaffected_field)
-from safe.definitions.hazard import hazard_generic
-from safe.definitions.hazard_category import (
-    hazard_category_single_event,
-    hazard_category_multiple_event)
+    total_unaffected_field,
+    total_not_exposed_field)
 from safe.definitions.hazard_classifications import hazard_classes_all
-from safe.report.extractors.util import layer_definition_type
+from safe.report.extractors.util import (
+    layer_definition_type,
+    resolve_from_dictionary)
 from safe.utilities.rounding import round_affected_number
-from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -36,11 +34,13 @@ def analysis_result_extractor(impact_report, component_metadata):
     :rtype: dict
     """
     context = {}
+    extra_args = component_metadata.extra_args
 
     # figure out analysis report type
     hazard_layer = impact_report.hazard
     exposure_layer = impact_report.exposure
     analysis_layer = impact_report.analysis
+    provenance = impact_report.impact_function.provenance
     debug_mode = impact_report.impact_function.debug_mode
 
     exposure_type = layer_definition_type(exposure_layer)
@@ -53,6 +53,10 @@ def analysis_result_extractor(impact_report, component_metadata):
 
     analysis_feature = analysis_layer.getFeatures().next()
     analysis_inasafe_fields = analysis_layer.keywords['inasafe_fields']
+
+    hazard_header = resolve_from_dictionary(extra_args, 'hazard_header')
+    value_header = resolve_from_dictionary(extra_args, 'value_header')
+
     # in case there is a classification
     if 'classification' in hazard_layer.keywords:
 
@@ -78,8 +82,7 @@ def analysis_result_extractor(impact_report, component_metadata):
                 field_index = analysis_layer.fieldNameIndex(field_name)
                 # Hazard label taken from translated hazard count field
                 # label, string-formatted with translated hazard class label
-                hazard_label = hazard_count_field['name'] % (
-                    hazard_class['name'], )
+                hazard_label = hazard_class['name']
                 hazard_value = round_affected_number(
                     analysis_feature[field_index],
                     enable_rounding=is_rounded,
@@ -91,8 +94,7 @@ def analysis_result_extractor(impact_report, component_metadata):
                 }
             except KeyError:
                 # in case the field was not found
-                hazard_label = hazard_count_field['name'] % (
-                    hazard_class['name'], )
+                hazard_label = hazard_class['name']
                 stats = {
                     'key': hazard_class['key'],
                     'name': hazard_label,
@@ -102,10 +104,10 @@ def analysis_result_extractor(impact_report, component_metadata):
             hazard_stats.append(stats)
 
         summary.append({
-            'header_label': tr('Hazard Zone'),
+            'header_label': hazard_header,
             # This should depend on exposure unit
             # TODO: Change this so it can take the unit dynamically
-            'value_label': tr('Count'),
+            'value_label': value_header,
             'rows': hazard_stats
         })
 
@@ -114,6 +116,7 @@ def analysis_result_extractor(impact_report, component_metadata):
 
     report_fields = [
         total_affected_field,
+        total_not_exposed_field,
         total_unaffected_field,
         total_field
     ]
@@ -140,36 +143,16 @@ def analysis_result_extractor(impact_report, component_metadata):
         'header_label': header_label,
         # This should depend on exposure unit
         # TODO: Change this so it can take the unit dynamically
-        'value_label': tr('Count'),
+        'value_label': value_header,
         'rows': report_stats
     })
 
     # Proper title from reporting standard
-    question_template = ''
-    hazard_type = layer_definition_type(hazard_layer)
-    exposure_title = exposure_layer.title() or exposure_type['name']
-    if hazard_type['key'] == hazard_generic['key']:
-        question_template = tr('%(exposure)s affected')
-        analysis_title = question_template % {
-            'exposure': exposure_title
-        }
-    else:
-        hazard_category = hazard_layer.keywords['hazard_category']
-        if hazard_category == hazard_category_single_event['key']:
-            question_template = tr(
-                '%(exposure)s affected by %(hazard)s event')
-        elif hazard_category == hazard_category_multiple_event['key']:
-            question_template = tr(
-                '%(exposure)s affected by %(hazard)s hazard')
-        hazard_title = hazard_layer.title() or hazard_type['name']
-        analysis_title = question_template % {
-            'exposure': exposure_title,
-            'hazard': hazard_title
-        }
+    analysis_title = provenance['analysis_question']
 
-    analysis_title = analysis_title.capitalize()
+    header = resolve_from_dictionary(extra_args, ['header'])
 
-    context['header'] = tr('Analysis Results')
+    context['header'] = header
     context['summary'] = summary
     context['title'] = analysis_title
 

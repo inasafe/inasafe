@@ -13,7 +13,6 @@ __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
-
 concepts = {
     'analysis': {
         'key': 'analysis',
@@ -61,12 +60,12 @@ concepts = {
     'hazard': {
         'key': 'hazard',
         'description': tr(
-             'A <b>hazard</b> represents a natural process or phenomenon '
-             'that may cause loss of life, injury or other health impacts, '
-             'property damage, loss of livelihoods and services, social and '
-             'economic disruption, or environmental damage. For example; '
-             'flood, earthquake, tsunami and volcano are all examples of '
-             'hazards.'),
+            'A <b>hazard</b> represents a natural process or phenomenon '
+            'that may cause loss of life, injury or other health impacts, '
+            'property damage, loss of livelihoods and services, social and '
+            'economic disruption, or environmental damage. For example; '
+            'flood, earthquake, tsunami and volcano are all examples of '
+            'hazards.'),
         'citations': [
             {
                 'text': tr(
@@ -120,7 +119,7 @@ concepts = {
                     'Risk Reduction: A Technical Review'),
                 'link': u'http://www.preventionweb.net/files/'
                         u'45462_backgoundpaperonterminologyaugust20.pdf'
-             }
+            }
         ],
     },
     'exposed_people': {
@@ -134,7 +133,7 @@ concepts = {
                 'text': tr(
                     'UNISDR (2009)Terminology on Disaster'),
                 'link': u'https://www.unisdr.org/we/inform/terminology'
-             }
+            }
         ],
     },
     'affected_people': {
@@ -153,7 +152,7 @@ concepts = {
                     'Risk Reduction: A Technical Review'),
                 'link': u'http://www.preventionweb.net/files/'
                         u'45462_backgoundpaperonterminologyaugust20.pdf'
-             }
+            }
         ],
     },
     'directly_affected_people': {
@@ -171,7 +170,7 @@ concepts = {
                     'Risk Reduction: A Technical Review'),
                 'link': u'http://www.preventionweb.net/files/'
                         u'45462_backgoundpaperonterminologyaugust20.pdf'
-             }
+            }
         ],
     },
     'indirectly_affected_people': {
@@ -190,7 +189,7 @@ concepts = {
                     'Risk Reduction: A Technical Review'),
                 'link': u'http://www.preventionweb.net/files/'
                         u'45462_backgoundpaperonterminologyaugust20.pdf'
-             }
+            }
         ],
     },
     'displaced_people': {
@@ -263,7 +262,7 @@ concepts = {
                         u'45462_backgoundpaperonterminologyaugust20.pdf'
             }
         ],
-      },
+    },
     'killed_people': {
         'key': 'killed_people',
         'description': tr(
@@ -278,7 +277,7 @@ concepts = {
                         u'45462_backgoundpaperonterminologyaugust20.pdf'
             }
         ],
-      },
+    },
     'youth': {
         'key': 'youth',
         'description': tr(
@@ -291,7 +290,7 @@ concepts = {
                         u'resources/the-world-factbook/'
             }
         ],
-      },
+    },
     'adult': {
         'key': 'adult',
         'description': tr(
@@ -304,7 +303,7 @@ concepts = {
                         u'resources/the-world-factbook/'
             }
         ],
-      },
+    },
     'elderly': {
         'key': 'elderly',
         'description': tr(
@@ -317,7 +316,7 @@ concepts = {
                         u'resources/the-world-factbook/'
             }
         ],
-      },
+    },
     'people': {
         'key': 'people',
         'description': tr(
@@ -329,7 +328,7 @@ concepts = {
                 'link': u'https://en.oxforddictionaries.com/definition/people'
             }
         ],
-      },
+    },
     'female': {
         'key': 'female',
         'description': tr(
@@ -341,7 +340,58 @@ concepts = {
                 'link': u'https://en.oxforddictionaries.com/definition/female'
             }
         ],
-      },
+    },
+    'male': {
+        'key': 'male',
+        'description': tr(
+            'Relating to the characteristics of men.'),
+        'citations': [
+            {
+                'text': tr(
+                    'Oxford Dictionary.'),
+                'link': u'https://en.oxforddictionaries.com/definition/male'
+            }
+        ],
+    },
+    'infant': {
+        'key': 'infant',
+        'description': tr(
+            'A very young child or baby.'),
+        'citations': [
+            {
+                'text': tr(
+                    'Oxford Dictionary.'),
+                'link': u'https://en.oxforddictionaries.com/definition/infant'
+            }
+        ],
+    },
+    'disabled': {
+        'key': 'disabled',
+        'description': tr(
+            'A person having a physical or mental condition that limits their '
+            'movements, senses, or activities.'),
+        'citations': [
+            {
+                'text': tr(
+                    'Oxford Dictionary.'),
+                'link': u'https://en.oxforddictionaries.com/definition/'
+                        u'disabled'
+            }
+        ],
+    },
+    'pregnant': {
+        'key': 'pregnant',
+        'description': tr(
+            'A female having a child developing in the uterus.'),
+        'citations': [
+            {
+                'text': tr(
+                    'Oxford Dictionary.'),
+                'link': u'https://en.oxforddictionaries.com/definition/'
+                        u'pregnant'
+            }
+        ],
+    },
     'rice': {
         'key': 'rice',
         'description': tr(
@@ -353,7 +403,7 @@ concepts = {
                 'link': u'https://en.oxforddictionaries.com/definition/rice'
             }
         ],
-      },
+    },
     'drinking_water': {
         'key': 'drinking_water',
         'description': tr(
@@ -366,7 +416,7 @@ concepts = {
                         u'drinking_water'
             }
         ],
-      },
+    },
     'clean_water': {
         'key': 'clean_water',
         'description': tr(
@@ -379,7 +429,7 @@ concepts = {
                 'link': u''
             }
         ],
-      },
+    },
     'family_kit': {
         'key': 'family_kit',
         'description': tr(
@@ -391,7 +441,7 @@ concepts = {
                 'link': u'http://tinyurl.com/BNPB-Perka-7-2008'
             }
         ],
-      },
+    },
     'hygiene_pack': {
         'key': 'hygiene_pack',
         'description': tr(
@@ -404,7 +454,7 @@ concepts = {
                 'link': u'https://en.oxforddictionaries.com/definition/hygiene'
             }
         ],
-      },
+    },
     'toilet': {
         'key': 'toilet',
         'description': tr(
@@ -418,7 +468,7 @@ concepts = {
                         u'toilet'
             }
         ],
-      },
+    },
     # Boilerplate for adding a new concept...
     #  '': {
     #    'description': tr(

@@ -1,21 +1,5 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool developed by AusAid -
-**Import Dialog.**
-
-Contact : etienne@kartoza.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
-__author__ = 'etienne@kartoza.com'
-__revision__ = '$Format:%H$'
-__date__ = '25/06/2015'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
+"""OSM Downloader tool."""
 
 import zipfile
 import os
@@ -26,11 +10,16 @@ from PyQt4.QtNetwork import QNetworkReply
 from PyQt4.QtGui import QDialog
 from PyQt4.QtCore import QSettings
 
-from safe.utilities.i18n import tr
+from safe.utilities.i18n import tr, locale
 from safe.utilities.gis import qgis_version
 from safe.utilities.file_downloader import FileDownloader
 from safe.common.exceptions import DownloadError, CanceledImportDialogError
 from safe.common.version import get_version, release_status
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 # If it's not a final release and the developer mode is ON, we use the staging
 # version for OSM-Reporter.
@@ -67,7 +56,6 @@ def download(feature_type, output_base_path, extent, progress_dialog=None):
 
     :raises: ImportDialogError, CanceledImportDialogError
     """
-
     # preparing necessary data
     min_longitude = extent[0]
     min_latitude = extent[1]
@@ -83,16 +71,22 @@ def download(feature_type, output_base_path, extent, progress_dialog=None):
             max_latitude=max_latitude
     )
 
-    url = URL_OSM_PREFIX + feature_type + URL_OSM_SUFFIX
-    url = '{url}?bbox={box}&qgis_version={qgis}'.format(
-        url=url, box=box, qgis=qgis_version())
-
-    url += '&inasafe_version=%s' % get_version()
-
-    if 'LANG' in os.environ:
-        # Get the language only : eg 'en_US' -> 'en'
-        env_lang = os.environ['LANG'].split('_')[0]
-        url += '&lang=%s' % env_lang
+    url = (
+        '{url_osm_prefix}'
+        '{feature_type}'
+        '{url_osm_suffix}?'
+        'bbox={box}&'
+        'qgis_version={qgis}&'
+        'lang={lang}&'
+        'inasafe_version={inasafe_version}'.format(
+            url_osm_prefix=URL_OSM_PREFIX,
+            feature_type=feature_type,
+            url_osm_suffix=URL_OSM_SUFFIX,
+            url=url,
+            box=box,
+            qgis=qgis_version(),
+            lang=locale(),
+            inasafe_version=get_version()))
 
     path = tempfile.mktemp('.shp.zip')
 
