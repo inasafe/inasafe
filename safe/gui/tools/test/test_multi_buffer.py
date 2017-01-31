@@ -12,31 +12,38 @@ from PyQt4 import QtGui
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
+from safe.common.utilities import temp_dir
 from safe.gui.tools.multi_buffer_dialog import (
     MultiBufferDialog)
-
-output_path = standard_data_path(
-    'hazard', 'volcano_point_multi_buffer.geojson')
-data_store = Folder(os.path.dirname(output_path))
 
 
 class MultiBufferTest(unittest.TestCase):
 
     def setUp(self):
         """Test initialisation run before each test."""
+        self.output_path = standard_data_path(
+            'hazard', 'volcano_point_multi_buffer.geojson')
         pass
 
     def tearDown(self):
         """Run after each test."""
         pass
 
-    def test_multi_buffer(self):
-        """Test the functionality of the multi buffer tool."""
+    def multi_buffer_test(self, output_path):
+        """Function to test the functionality of multi buffer tool.
+
+        :param output_path: The output path given by user on multi buffer
+                            dialog.
+        :type output_path: str
+        """
         dialog = MultiBufferDialog(PARENT)
         layer = load_test_vector_layer('hazard', 'volcano_point.geojson')
         QgsMapLayerRegistry.instance().addMapLayers([layer])
 
         dialog.layer.setLayer(layer)
+        if output_path:
+            dialog.output_form.setText(output_path)
+
         self.assertEqual(output_path, dialog.output_form.text())
 
         classification = {
@@ -54,7 +61,7 @@ class MultiBufferTest(unittest.TestCase):
 
         dialog.accept()
 
-        layer = data_store.layer(dialog.output_layer.name())
+        layer = dialog.data_store.layer(dialog.output_filename)
 
         self.assertEqual(len(classification), layer.featureCount())
 
@@ -67,6 +74,16 @@ class MultiBufferTest(unittest.TestCase):
         new_field_names = actual_field_names[-2:]
 
         self.assertEqual(expected_fields_name, new_field_names)
+
+    def test_temp_output(self):
+        """Test the multi buffer tool if user do not provide
+           specific output path.
+        """
+        self.multi_buffer_test('')
+
+    def test_user_output(self):
+        """Test the multi buffer tool if user provide specific output path."""
+        self.multi_buffer_test(self.output_path)
 
     def test_button_behaviour(self):
         """Test behaviour of each button on multi buffer dialog."""

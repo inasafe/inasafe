@@ -9,6 +9,7 @@ from qgis.gui import QgsMapLayerProxyModel
 from PyQt4 import QtGui
 from PyQt4.QtCore import pyqtSignature, pyqtSlot
 from PyQt4.QtGui import QFileDialog, QIcon
+from safe.common.utilities import unique_filename, temp_dir
 from safe.datastore.folder import Folder
 from safe.gis.vector.multi_buffering import multi_buffering
 from safe.gui.tools.help.multi_buffer_help import (
@@ -38,6 +39,11 @@ class MultiBufferDialog(QtGui.QDialog, FORM_CLASS):
         self.setupUi(self)
         self.setWindowTitle(self.tr('InaSAFE Multi Buffer Tool'))
 
+        # output file properties initialisation
+        self.data_store = None
+        self.output_directory = None
+        self.output_filename = None
+        self.output_extension = None
         self.output_layer = None
 
         # set icon
@@ -48,12 +54,13 @@ class MultiBufferDialog(QtGui.QDialog, FORM_CLASS):
 
         # prepare dialog initialisation
         self.layer.setFilters(QgsMapLayerProxyModel.VectorLayer)
-        self.directory_button.setEnabled(False)
-        self.add_class_button.setEnabled(False)
-        self.button_box.button(QtGui.QDialogButtonBox.Ok).setEnabled(False)
+        self.directory_button_status()
+        self.add_class_button_status()
+        self.ok_button_status()
+        self.output_form.setPlaceholderText(
+            self.tr('[Create a temporary layer]'))
 
         # set signal
-        self.layer.layerChanged.connect(self.get_output_from_input)
         self.layer.layerChanged.connect(self.directory_button_status)
         self.layer.layerChanged.connect(self.ok_button_status)
         self.output_form.textChanged.connect(self.ok_button_status)
@@ -75,7 +82,7 @@ class MultiBufferDialog(QtGui.QDialog, FORM_CLASS):
         self.help_button.toggled.connect(self.help_toggled)
         self.main_stacked_widget.setCurrentIndex(1)
 
-        # Fix for issue 1699 - cancel button does noth  ing
+        # Fix for issue 1699 - cancel button does nothing
         cancel_button = self.button_box.button(QtGui.QDialogButtonBox.Cancel)
         cancel_button.clicked.connect(self.reject)
         # Fix ends
@@ -90,7 +97,6 @@ class MultiBufferDialog(QtGui.QDialog, FORM_CLASS):
         # set parameter from dialog
         input_layer = self.layer.currentLayer()
         output_path = self.output_form.text()
-        file_name = os.path.splitext(output_path)[0].split('/')[-1]
         radius = self.get_classification()
         # monkey patch keywords so layer works on multi buffering function
         input_layer.keywords = {'inasafe_fields': {}}
@@ -98,16 +104,36 @@ class MultiBufferDialog(QtGui.QDialog, FORM_CLASS):
         # run multi buffering
         self.output_layer = multi_buffering(input_layer, radius)
 
-        # save output layer to datastore
-        data_store = Folder(os.path.dirname(output_path))
-        if self.output_form.text().endswith('.shp'):
-            data_store.add_layer(self.output_layer, file_name)
-        elif self.output_form.text().endswith('.geojson'):
-            data_store.default_vector_format = 'geojson'
-            data_store.add_layer(self.output_layer, file_name)
+        # save output layer to data store and check whether user
+        # provide the output path.
+        if output_path:
+            self.output_directory, self.output_filename = (
+                os.path.split(output_path))
+            self.output_filename, self.output_extension = (
+                os.path.splitext(self.output_filename))
+
+        # if user do not provide the output path, create a temporary file.
+        else:
+            self.output_directory = temp_dir(sub_dir='work')
+            self.output_filename = (
+                unique_filename(
+                    prefix='hazard_layer',
+                    suffix='.geojson',
+                    dir=self.output_directory))
+            self.output_filename = os.path.split(self.output_filename)[1]
+            self.output_filename, self.output_extension = (
+                os.path.splitext(self.output_filename))
+
+        self.data_store = Folder(self.output_directory)
+        if self.output_extension == '.shp':
+            self.data_store.default_vector_format = 'shp'
+        elif self.output_extension == '.geojson':
+            self.data_store.default_vector_format = 'geojson'
+        self.data_store.add_layer(self.output_layer, self.output_filename)
 
         # add output layer to map canvas
-        self.output_layer = data_store.layer(file_name)
+        self.output_layer = self.data_store.layer(self.output_filename)
+
         QgsMapLayerRegistry.instance().addMapLayers(
             [self.output_layer])
         self.done(QtGui.QDialog.Accepted)
@@ -118,14 +144,16 @@ class MultiBufferDialog(QtGui.QDialog, FORM_CLASS):
         # noinspection PyCallByClass,PyTypeChecker
         # set up parameter from dialog
         input_path = self.layer.currentLayer().source()
-        input_path = os.path.splitext(input_path)
-        output_name = input_path[0].split('/')[-1]
-        output_extension = input_path[1]
-        # show file directory dialog
+        input_directory, self.output_filename = os.path.split(input_path)
+        file_extension = os.path.splitext(self.output_filename)[1]
+        self.output_filename = os.path.splitext(self.output_filename)[0]
+        # show Qt file directory dialog
         output_path = QFileDialog.getSaveFileName(
             self,
             self.tr('Output file'),
-            '%s_multi_buffer%s' % (output_name, output_extension),
+            '%s_multi_buffer%s' % (
+                os.path.join(input_directory, self.output_filename),
+                file_extension),
             self.tr('GeoJSON (*.geojson);;Shapefile (*.shp)'))
         # set selected path to the dialog
         self.output_form.setText(output_path)
@@ -172,14 +200,14 @@ class MultiBufferDialog(QtGui.QDialog, FORM_CLASS):
 
     def directory_button_status(self):
         """Function to enable or disable directory button."""
-        if len(self.layer.currentLayer().name()) > 0:
+        if self.layer.currentLayer():
             self.directory_button.setEnabled(True)
         else:
             self.directory_button.setEnabled(False)
 
     def add_class_button_status(self):
         """Function to enable or disable add class button."""
-        if len(self.class_form.text()) > 0 and self.radius_form >= 0:
+        if self.class_form.text() and self.radius_form >= 0:
             self.add_class_button.setEnabled(True)
         else:
             self.add_class_button.setEnabled(False)
@@ -187,8 +215,8 @@ class MultiBufferDialog(QtGui.QDialog, FORM_CLASS):
     def ok_button_status(self):
         """Function to enable or disable OK button."""
         if (self.hazard_class_form.count() > 0 and
-                len(self.layer.currentLayer().name()) > 0 and
-                    len(self.output_form.text()) > 0):
+                self.layer.currentLayer().name() and
+                    len(self.output_form.text()) >= 0):
             self.button_box.button(QtGui.QDialogButtonBox.Ok).setEnabled(True)
         else:
             self.button_box.button(QtGui.QDialogButtonBox.Ok).setEnabled(False)
