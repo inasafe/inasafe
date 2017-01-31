@@ -24,6 +24,7 @@ from collections import OrderedDict
 
 from PyQt4.QtCore import QPyNullVariant
 
+from common.exceptions import NoKeywordsFoundError, MetadataReadError
 from safe.definitions.versions import inasafe_keyword_version, \
     keyword_version_compatibilities
 from safe.definitions.messages import disclaimer
@@ -34,6 +35,7 @@ from safe.messaging import styles, Message
 from safe.messaging.error_message import ErrorMessage
 from safe.utilities.i18n import tr
 from safe.utilities.unicode import get_unicode
+from safe.utilities.keyword_io import KeywordIO
 
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
@@ -387,3 +389,21 @@ def human_sorting(the_list):
 
     the_list.sort(key=alphanum_key)
     return the_list
+
+
+def monkey_patch_keywords(layer):
+    """In InaSAFE V4, we do monkey patching for keywords.
+
+    :param layer: The layer to monkey patch keywords.
+    :type layer: QgsMapLayer
+    """
+    keyword_io = KeywordIO()
+    try:
+        layer.keywords = keyword_io.read_keywords(layer)
+    except (NoKeywordsFoundError, MetadataReadError):
+        layer.keywords = {}
+
+    try:
+        layer.keywords['inasafe_fields']
+    except KeyError:
+        layer.keywords['inasafe_fields'] = {}
