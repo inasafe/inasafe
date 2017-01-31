@@ -120,7 +120,7 @@ from safe.utilities.utilities import (
 from safe.utilities.profiling import (
     profile, clear_prof_data, profiling_log)
 from safe.utilities.settings import setting
-from safe.test.utilities import check_inasafe_fields
+from safe.utilities.utilities import check_inasafe_fields
 from safe import messaging as m
 from safe.messaging import styles
 from safe.gui.widgets.message import generate_input_error_message

@@ -22,7 +22,6 @@ from safe.test.utilities import (
     get_qgis_app,
     standard_data_path,
     load_test_vector_layer,
-    check_inasafe_fields,
     compare_wkt
 )
 from safe.common.version import get_version
@@ -60,6 +59,7 @@ from safe.definitions.constants import (
 )
 from safe.utilities.unicode import byteify
 from safe.utilities.gis import wkt_to_rectangle
+from safe.utilities.utilities import check_inasafe_fields
 from safe.impact_function.impact_function import ImpactFunction
 
 LOGGER = logging.getLogger('InaSAFE')

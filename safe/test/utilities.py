@@ -184,33 +184,6 @@ def get_dock():
         return DockObject(IFACE)
 
 
-def check_inasafe_fields(layer):
-    """Helper to check inasafe_fields.
-
-    :param layer: The layer to check.
-    :type layer: QgsVectorLayer
-
-    :raises: Exception with a message if the layer is not correct.
-    """
-    inasafe_fields = layer.keywords['inasafe_fields']
-
-    real_fields = [field.name() for field in layer.fields().toList()]
-
-    difference = set(inasafe_fields.values()).difference(real_fields)
-    if len(difference):
-        message = tr(
-            'inasafe_fields has more fields than the layer %s itself : %s'
-            % (layer.keywords['layer_purpose'], difference))
-        raise Exception(message)
-
-    difference = set(real_fields).difference(inasafe_fields.values())
-    if len(difference):
-        message = tr(
-            'The layer %s has more fields than inasafe_fields : %s'
-            % (layer.title(), difference))
-        raise Exception(message)
-
-
 def assert_hash_for_file(hash_string, filename):
     """Assert that a files hash matches its expected hash.
     :param filename:
