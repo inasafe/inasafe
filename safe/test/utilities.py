@@ -43,7 +43,7 @@ DEVNULL = open(os.devnull, 'w')
 # inasafe_data and just use data in standard_data_path. But until that is done,
 # we still keep TESTDATA, HAZDATA, EXPDATA, and BOUNDATA below
 
-# Assuming test data three lvls up
+# Assuming test data three levels up
 pardir = os.path.abspath(os.path.join(
     os.path.realpath(os.path.dirname(__file__)),
     '..',

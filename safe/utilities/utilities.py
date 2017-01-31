@@ -1,16 +1,5 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool developed by AusAid -
-  **IS Utilities implementation.**
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
+"""Utilities module."""
 
 import re
 import codecs
@@ -20,13 +9,13 @@ import sys
 import traceback
 import unicodedata
 import webbrowser
-from collections import OrderedDict
 
 from PyQt4.QtCore import QPyNullVariant
 
-from common.exceptions import NoKeywordsFoundError, MetadataReadError
-from safe.definitions.versions import inasafe_keyword_version, \
-    keyword_version_compatibilities
+from safe.common.exceptions import NoKeywordsFoundError, MetadataReadError
+from safe.definitions.versions import (
+    inasafe_keyword_version,
+    keyword_version_compatibilities)
 from safe.definitions.messages import disclaimer
 from safe import messaging as m
 from safe.common.utilities import unique_filename
@@ -37,11 +26,10 @@ from safe.utilities.i18n import tr
 from safe.utilities.unicode import get_unicode
 from safe.utilities.keyword_io import KeywordIO
 
-__author__ = 'tim@kartoza.com'
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
-__date__ = '29/01/2011'
-__copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
-__copyright__ += 'Disaster Reduction'
 
 INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
 
