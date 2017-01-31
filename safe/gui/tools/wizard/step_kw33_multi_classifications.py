@@ -6,14 +6,14 @@ from functools import partial
 from collections import OrderedDict
 import numpy
 
-from PyQt4 import QtCore, QtGui
 from PyQt4.QtGui import (
     QLabel, QHBoxLayout, QComboBox, QPushButton, QTextBrowser,
-    QDoubleSpinBox, QGridLayout, QListWidget, QTreeWidget)
+    QDoubleSpinBox, QGridLayout, QListWidget, QTreeWidget, QAbstractItemView,
+    QListWidgetItem, QFont, QTreeWidgetItem)
 from PyQt4.QtCore import Qt, QPyNullVariant
+
 from osgeo import gdal
 from osgeo.gdalconst import GA_ReadOnly
-
 
 import safe.messaging as m
 from safe.messaging import styles
@@ -76,6 +76,10 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         self.exposure_combo_boxes = []
         self.exposure_edit_buttons = []
         self.mode = 0
+
+        self.layer_purpose = None
+        self.layer_mode = None
+
         # Store the current representative state of the UI.
         # self.classifications = {}
         self.value_maps = {}
@@ -100,8 +104,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         :returns: The step to be switched to
         :rtype: WizardStep instance or None
         """
-        layer_purpose = self.parent.step_kw_purpose.selected_purpose()
-        if layer_purpose != layer_purpose_aggregation:
+        if self.layer_purpose != layer_purpose_aggregation:
             subcategory = self.parent.step_kw_subcategory.\
                 selected_subcategory()
         else:
@@ -112,14 +115,14 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
 
         # Check if it can go to inasafe field step
         inasafe_fields = get_non_compulsory_fields(
-            layer_purpose['key'], subcategory['key'])
+            self.layer_purpose['key'], subcategory['key'])
 
         if not skip_inasafe_field(self.parent.layer, inasafe_fields):
             return self.parent.step_kw_inasafe_fields
 
         # Check if it can go to inasafe default field step
         default_inasafe_fields = get_fields(
-            layer_purpose['key'], subcategory['key'], replace_null=True)
+            self.layer_purpose['key'], subcategory['key'], replace_null=True)
         if default_inasafe_fields:
             return self.parent.step_kw_default_inasafe_fields
 
@@ -128,28 +131,26 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
 
     def set_wizard_step_description(self):
         """Set the text for description."""
-        layer_mode = self.parent.step_kw_layermode.selected_layermode()
-        layer_purpose = self.parent.step_kw_purpose.selected_purpose()
         subcategory = self.parent.step_kw_subcategory.selected_subcategory()
         field = self.parent.step_kw_field.selected_field()
         is_raster = is_raster_layer(self.parent.layer)
 
         if is_raster:
-            if layer_mode == layer_mode_continuous:
+            if self.layer_mode == layer_mode_continuous:
                 text_label = multiple_continuous_hazard_classifications_raster
             else:
                 text_label = multiple_classified_hazard_classifications_raster
             # noinspection PyAugmentAssignment
             text_label = text_label % (
-                subcategory['name'], layer_purpose['name'])
+                subcategory['name'], self.layer_purpose['name'])
         else:
-            if layer_mode == layer_mode_continuous:
+            if self.layer_mode == layer_mode_continuous:
                 text_label = multiple_continuous_hazard_classifications_vector
             else:
                 text_label = multiple_classified_hazard_classifications_vector
             # noinspection PyAugmentAssignment
             text_label = text_label % (
-                subcategory['name'], layer_purpose['name'], field)
+                subcategory['name'], self.layer_purpose['name'], field)
 
         self.multi_classifications_label.setText(text_label)
 
@@ -158,9 +159,6 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
 
         Generate all exposure, combobox, and edit button.
         """
-        # current_classifications = self.parent.get_existing_keyword(
-        #     'classifications')
-        layer_mode = self.parent.step_kw_layermode.selected_layermode()
         subcategory = self.parent.step_kw_subcategory.selected_subcategory()
         left_panel_heading = QLabel(tr('Classifications'))
         left_panel_heading.setFont(big_font)
@@ -251,7 +249,6 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         """Method to handle edit button."""
         LOGGER.debug(exposure['key'])
         LOGGER.debug(self.get_classification(exposure_combo_box)['key'])
-        layer_mode = self.parent.step_kw_layermode.selected_layermode()
         classification = self.get_classification(exposure_combo_box)
 
         if self.mode == CHOOSE_MODE:
@@ -274,12 +271,13 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             # Clear right panel
             clear_layout(self.right_layout)
             # Show edit threshold or value mapping
-            if layer_mode == layer_mode_continuous:
+            if self.layer_mode == layer_mode_continuous:
                 LOGGER.debug('Layer mode continuous, setup thresholds panel')
                 self.setup_thresholds_panel(classification)
             else:
                 LOGGER.debug('Layer mode classified, setup value map panel')
                 self.setup_value_mapping_panels(classification)
+            self.add_buttons(classification)
 
         elif self.mode == EDIT_MODE:
             # Behave the same as cancel button clicked.
@@ -287,13 +285,12 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
 
     def show_current_state(self):
         """Setup the UI for QTextEdit to show the current state."""
-        layer_mode = self.parent.step_kw_layermode.selected_layermode()
         right_panel_heading = QLabel(tr('Status'))
         right_panel_heading.setFont(big_font)
         self.right_layout.addWidget(right_panel_heading)
 
         message = m.Message()
-        if layer_mode == layer_mode_continuous:
+        if self.layer_mode == layer_mode_continuous:
             title = tr('Thresholds')
         else:
             title = tr('Value maps')
@@ -339,11 +336,12 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
     def set_widgets(self):
         """Set widgets on the Multi classification step."""
         self.clear()
+        self.layer_mode = self.parent.step_kw_layermode.selected_layermode()
+        self.layer_purpose = self.parent.step_kw_purpose.selected_purpose()
         self.set_current_state()
+
         # Set the step description
         self.set_wizard_step_description()
-
-        # Update current state from current keywords
 
         # Set the left panel
         self.setup_left_panel()
@@ -358,9 +356,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
 
     def get_current_state(self):
         """Obtain current classification and value map / threshold."""
-        layer_mode = self.parent.step_kw_layermode.selected_layermode()
-
-        if layer_mode == layer_mode_continuous:
+        if self.layer_mode == layer_mode_continuous:
             return {
                 'thresholds': self.thresholds,
                 'value_maps': None
@@ -551,6 +547,14 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
 
         self.right_layout.addLayout(grid_layout_thresholds)
 
+        self.add_buttons(classification)
+
+    def add_buttons(self, classification):
+        """Helper to setup 3 buttons.
+
+        :param classification: The current classification.
+        :type classification: dict
+        """
         # Add 3 buttons: Load default, Cancel, Save
         load_default_button = QPushButton(tr('Load Default'))
         cancel_button = QPushButton(tr('Cancel'))
@@ -621,7 +625,12 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         self.right_layout.addWidget(description_label)
 
         self.list_unique_values = QListWidget()
+        self.list_unique_values.setDragDropMode(QAbstractItemView.DragDrop)
+        self.list_unique_values.setDefaultDropAction(Qt.MoveAction)
+
         self.tree_mapping_widget = QTreeWidget()
+        self.tree_mapping_widget.setDragDropMode(QAbstractItemView.DragDrop)
+        self.tree_mapping_widget.setDefaultDropAction(Qt.MoveAction)
 
         self.tree_mapping_widget.itemChanged.connect(
             self.update_dragged_item_flags)
@@ -694,9 +703,9 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         # Treat var as unused
         _ = column
 
-        if int(item.flags() & QtCore.Qt.ItemIsDropEnabled) \
-                and int(item.flags() & QtCore.Qt.ItemIsDragEnabled):
-            item.setFlags(item.flags() & ~QtCore.Qt.ItemIsDropEnabled)
+        if int(item.flags() & Qt.ItemIsDropEnabled) \
+                and int(item.flags() & Qt.ItemIsDragEnabled):
+            item.setFlags(item.flags() & ~Qt.ItemIsDropEnabled)
 
     def populate_classified_values(
             self, unassigned_values, assigned_values, default_classes,
@@ -724,30 +733,30 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         # Populate the unique values list
         list_unique_values.clear()
         list_unique_values.setSelectionMode(
-            QtGui.QAbstractItemView.ExtendedSelection)
+            QAbstractItemView.ExtendedSelection)
         for value in unassigned_values:
             value_as_string = value is not None and unicode(value) or 'NULL'
-            list_item = QtGui.QListWidgetItem(list_unique_values)
+            list_item = QListWidgetItem(list_unique_values)
             list_item.setFlags(
-                QtCore.Qt.ItemIsEnabled |
-                QtCore.Qt.ItemIsSelectable |
-                QtCore.Qt.ItemIsDragEnabled)
-            list_item.setData(QtCore.Qt.UserRole, value)
+                Qt.ItemIsEnabled |
+                Qt.ItemIsSelectable |
+                Qt.ItemIsDragEnabled)
+            list_item.setData(Qt.UserRole, value)
             list_item.setText(value_as_string)
             list_unique_values.addItem(list_item)
         # Populate assigned values tree
         tree_mapping_widget.clear()
-        bold_font = QtGui.QFont()
+        bold_font = QFont()
         bold_font.setItalic(True)
         bold_font.setBold(True)
         bold_font.setWeight(75)
         tree_mapping_widget.invisibleRootItem().setFlags(
-            QtCore.Qt.ItemIsEnabled)
+            Qt.ItemIsEnabled)
         for default_class in default_classes:
             # Create branch for class
-            tree_branch = QtGui.QTreeWidgetItem(tree_mapping_widget)
+            tree_branch = QTreeWidgetItem(tree_mapping_widget)
             tree_branch.setFlags(
-                QtCore.Qt.ItemIsDropEnabled | QtCore.Qt.ItemIsEnabled)
+                Qt.ItemIsDropEnabled | Qt.ItemIsEnabled)
             tree_branch.setExpanded(True)
             tree_branch.setFont(0, bold_font)
             if 'name' in default_class:
@@ -755,18 +764,18 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             else:
                 default_class_name = default_class['key']
             tree_branch.setText(0, default_class_name)
-            tree_branch.setData(0, QtCore.Qt.UserRole, default_class['key'])
+            tree_branch.setData(0, Qt.UserRole, default_class['key'])
             if 'description' in default_class:
                 tree_branch.setToolTip(0, default_class['description'])
             # Assign known values
             for value in assigned_values[default_class['key']]:
                 string_value = value is not None and unicode(value) or 'NULL'
-                tree_leaf = QtGui.QTreeWidgetItem(tree_branch)
+                tree_leaf = QTreeWidgetItem(tree_branch)
                 tree_leaf.setFlags(
-                    QtCore.Qt.ItemIsEnabled |
-                    QtCore.Qt.ItemIsSelectable |
-                    QtCore.Qt.ItemIsDragEnabled)
-                tree_leaf.setData(0, QtCore.Qt.UserRole, value)
+                    Qt.ItemIsEnabled |
+                    Qt.ItemIsSelectable |
+                    Qt.ItemIsDragEnabled)
+                tree_leaf.setData(0, Qt.UserRole, value)
                 tree_leaf.setText(0, string_value)
 
     def cancel_button_clicked(self):
@@ -796,21 +805,38 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         :type classification: dict
         """
         # Save current edit
-        thresholds = self.get_threshold()
-        classification_class = {
-            'classes': thresholds,
-            'active': True
-        }
-        if self.thresholds.get(self.active_exposure['key']):
-            # Set other class to not active
-            for current_classification in self.thresholds.get(
-                    self.active_exposure['key']).values():
-                current_classification['active'] = False
-        else:
-            self.thresholds[self.active_exposure['key']] = {}
+        if self.layer_mode == layer_mode_continuous:
+            thresholds = self.get_threshold()
+            classification_class = {
+                'classes': thresholds,
+                'active': True
+            }
+            if self.thresholds.get(self.active_exposure['key']):
+                # Set other class to not active
+                for current_classification in self.thresholds.get(
+                        self.active_exposure['key']).values():
+                    current_classification['active'] = False
+            else:
+                self.thresholds[self.active_exposure['key']] = {}
 
-        self.thresholds[self.active_exposure['key']][classification['key']] =\
-            classification_class
+            self.thresholds[self.active_exposure['key']][
+                classification['key']] = classification_class
+        else:
+            value_maps = self.get_value_map()
+            classification_class = {
+                'classes': value_maps,
+                'active': True
+            }
+            if self.value_maps.get(self.active_exposure['key']):
+                # Set other class to not active
+                for current_classification in self.thresholds.get(
+                        self.active_exposure['key']).values():
+                    current_classification['active'] = False
+            else:
+                self.value_maps[self.active_exposure['key']] = {}
+
+            self.value_maps[self.active_exposure['key']][
+                classification['key']] = classification_class
         # Back to choose mode
         self.cancel_button_clicked()
 
@@ -822,6 +848,23 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
                 value[0].value(),
                 value[1].value(),
             ]
+        return value_map
+
+    def get_value_map(self):
+        """Obtain the value-to-class mapping set by user.
+
+        :returns: The complete mapping as a dict of lists.
+        :rtype: dict
+        """
+        value_map = {}
+        tree_clone = self.tree_mapping_widget.invisibleRootItem().clone()
+        for tree_branch in tree_clone.takeChildren():
+            value_list = []
+            for tree_leaf in tree_branch.takeChildren():
+                value_list += [tree_leaf.data(0, Qt.UserRole)]
+            if value_list:
+                value_map[tree_branch.data(0, Qt.UserRole)] = value_list
+        LOGGER.debug(value_map)
         return value_map
 
     def set_current_state(self):
