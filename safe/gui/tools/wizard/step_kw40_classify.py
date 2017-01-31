@@ -133,9 +133,10 @@ class StepKwClassify(WizardStep, FORM_CLASS):
         purpose = self.parent.step_kw_purpose.selected_purpose()
         subcategory = self.parent.step_kw_subcategory.selected_subcategory()
 
-        sel_cl = self.parent.step_kw_classification.selected_classification()
-        default_classes = sel_cl['classes']
-        classification_name = sel_cl['name']
+        classification = self.parent.step_kw_classification.\
+            selected_classification()
+        default_classes = classification['classes']
+        classification_name = classification['name']
 
         if is_raster_layer(self.parent.layer):
             self.lblClassify.setText(classify_raster_question % (

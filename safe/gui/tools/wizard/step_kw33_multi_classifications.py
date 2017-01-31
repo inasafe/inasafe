@@ -6,10 +6,11 @@ from functools import partial
 from collections import OrderedDict
 import numpy
 
+from PyQt4 import QtCore, QtGui
 from PyQt4.QtGui import (
     QLabel, QHBoxLayout, QComboBox, QPushButton, QTextBrowser,
-    QDoubleSpinBox, QGridLayout)
-from PyQt4.QtCore import Qt
+    QDoubleSpinBox, QGridLayout, QListWidget, QTreeWidget)
+from PyQt4.QtCore import Qt, QPyNullVariant
 from osgeo import gdal
 from osgeo.gdalconst import GA_ReadOnly
 
@@ -36,7 +37,10 @@ from safe.gui.tools.wizard.wizard_strings import (
 from safe.gui.tools.wizard.wizard_utils import clear_layout, skip_inasafe_field
 from safe.utilities.resources import html_footer, html_header
 from safe.gui.tools.wizard.wizard_strings import (
-    continuous_raster_question, continuous_vector_question)
+    continuous_raster_question,
+    continuous_vector_question,
+    classify_raster_question,
+    classify_vector_question)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -45,7 +49,7 @@ __revision__ = '$Format:%H$'
 
 LOGGER = logging.getLogger('InaSAFE')
 FORM_CLASS = get_wizard_step_ui_class(__file__)
-INFO_STYLE = styles.INFO_STYLE
+INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
 
 # Mode
 CHOOSE_MODE = 0
@@ -275,6 +279,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
                 self.setup_thresholds_panel(classification)
             else:
                 LOGGER.debug('Layer mode classified, setup value map panel')
+                self.setup_value_mapping_panels(classification)
 
         elif self.mode == EDIT_MODE:
             # Behave the same as cancel button clicked.
@@ -396,7 +401,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
                 dataset.GetRasterBand(1).ReadAsArray()))
             max_value_layer = numpy.amax(numpy.array(
                 dataset.GetRasterBand(1).ReadAsArray()))
-            text = continuous_raster_question % (
+            description_text = continuous_raster_question % (
                 layer_purpose['name'],
                 layer_subcategory['name'],
                 classification['name'], min_value_layer, max_value_layer)
@@ -405,7 +410,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             field_index = self.parent.layer.fieldNameIndex(field_name)
             min_value_layer = self.parent.layer.minimumValue(field_index)
             max_value_layer = self.parent.layer.maximumValue(field_index)
-            text = continuous_vector_question % (
+            description_text = continuous_vector_question % (
                 layer_purpose['name'],
                 layer_subcategory['name'],
                 field_name,
@@ -414,7 +419,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
                 max_value_layer)
 
         # Set description
-        description_label = QLabel(text)
+        description_label = QLabel(description_text)
         description_label.setWordWrap(True)
         self.right_layout.addWidget(description_label)
 
@@ -568,6 +573,201 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         button_layout.setStretch(3, 1)
 
         self.right_layout.addLayout(button_layout)
+
+    def setup_value_mapping_panels(self, classification):
+        """Setup value mapping panel in the right panel.
+
+        :param classification: Classification definition.
+        :type classification: dict
+        """
+        LOGGER.debug('Setup value mapping panel')
+
+        # Set text in the label
+        layer_purpose = self.parent.step_kw_purpose.selected_purpose()
+        layer_subcategory = self.parent.step_kw_subcategory. \
+            selected_subcategory()
+
+        if is_raster_layer(self.parent.layer):
+            description_text = classify_raster_question % (
+                layer_subcategory['name'],
+                layer_purpose['name'],
+                classification['name'])
+
+            dataset = gdal.Open(self.parent.layer.source(), GA_ReadOnly)
+            unique_values = numpy.unique(numpy.array(
+                dataset.GetRasterBand(1).ReadAsArray()))
+            field_type = 0
+            # Convert datatype to a json serializable type
+            if numpy.issubdtype(unique_values.dtype, float):
+                unique_values = [float(i) for i in unique_values]
+            else:
+                unique_values = [int(i) for i in unique_values]
+        else:
+            field = self.parent.step_kw_field.selected_field()
+            field_index = self.parent.layer.dataProvider().fields(). \
+                indexFromName(field)
+            field_type = self.parent.layer.dataProvider(). \
+                fields()[field_index].type()
+            description_text = classify_vector_question % (
+                layer_subcategory['name'],
+                layer_purpose['name'],
+                classification['name'],
+                field.upper())
+            unique_values = self.parent.layer.uniqueValues(field_index)
+
+        # Set description
+        description_label = QLabel(description_text)
+        description_label.setWordWrap(True)
+        self.right_layout.addWidget(description_label)
+
+        self.list_unique_values = QListWidget()
+        self.tree_mapping_widget = QTreeWidget()
+
+        self.tree_mapping_widget.itemChanged.connect(
+            self.update_dragged_item_flags)
+
+        value_mapping_layout = QHBoxLayout()
+        value_mapping_layout.addWidget(self.list_unique_values)
+        value_mapping_layout.addWidget(self.tree_mapping_widget)
+
+        self.right_layout.addLayout(value_mapping_layout)
+
+        default_classes = classification['classes']
+        classification_name = classification['name']
+
+        # Assign unique values to classes (according to default)
+        unassigned_values = list()
+        assigned_values = dict()
+        for default_class in default_classes:
+            assigned_values[default_class['key']] = list()
+        for unique_value in unique_values:
+            if unique_value is None or isinstance(
+                    unique_value, QPyNullVariant):
+                # Don't classify features with NULL value
+                continue
+            # Capitalization of the value and removing '_' (raw OSM data).
+            value_as_string = unicode(unique_value).upper().replace('_', ' ')
+            assigned = False
+            for default_class in default_classes:
+                if 'string_defaults' in default_class:
+                    condition_1 = (
+                        field_type > 9 and
+                        value_as_string in [
+                            c.upper() for c in
+                            default_class['string_defaults']])
+                else:
+                    condition_1 = False
+                condition_2 = (
+                    field_type < 10 and
+                    'numeric_default_min' in default_class and
+                    'numeric_default_max' in default_class and (
+                        default_class['numeric_default_min'] <= unique_value <
+                        default_class['numeric_default_max']))
+                if condition_1 or condition_2:
+                    assigned_values[default_class['key']] += [unique_value]
+                    assigned = True
+            if not assigned:
+                # add to unassigned values list otherwise
+                unassigned_values += [unique_value]
+        self.populate_classified_values(
+            unassigned_values,
+            assigned_values,
+            default_classes,
+            self.list_unique_values,
+            self.tree_mapping_widget
+        )
+
+    # noinspection PyMethodMayBeStatic
+    def update_dragged_item_flags(self, item, column):
+        """Fix the drop flag after the item is dropped.
+
+        Check if it looks like an item dragged from QListWidget
+        to QTreeWidget and disable the drop flag.
+        For some reasons the flag is set when dragging.
+
+        :param item:
+        :param column:
+
+        .. note:: This is a slot executed when the item change.
+        """
+
+        # Treat var as unused
+        _ = column
+
+        if int(item.flags() & QtCore.Qt.ItemIsDropEnabled) \
+                and int(item.flags() & QtCore.Qt.ItemIsDragEnabled):
+            item.setFlags(item.flags() & ~QtCore.Qt.ItemIsDropEnabled)
+
+    def populate_classified_values(
+            self, unassigned_values, assigned_values, default_classes,
+            list_unique_values, tree_mapping_widget):
+        """Populate lstUniqueValues and treeClasses.from the parameters.
+
+        :param unassigned_values: List of values that haven't been assigned
+            to a class. It will be put in list_unique_values.
+        :type unassigned_values: list
+
+        :param assigned_values: Dictionary with class as the key and list of
+            value as the value of the dictionary. It will be put in
+            tree_mapping_widget.
+        :type assigned_values: dict
+
+        :param default_classes: Default classes from unit.
+        :type default_classes: list
+
+        :param list_unique_values: List Widget for unique values
+        :type list_unique_values: QListWidget
+
+        :param tree_mapping_widget: Tree Widget for classifying.
+        :type tree_mapping_widget: QTreeWidget
+        """
+        # Populate the unique values list
+        list_unique_values.clear()
+        list_unique_values.setSelectionMode(
+            QtGui.QAbstractItemView.ExtendedSelection)
+        for value in unassigned_values:
+            value_as_string = value is not None and unicode(value) or 'NULL'
+            list_item = QtGui.QListWidgetItem(list_unique_values)
+            list_item.setFlags(
+                QtCore.Qt.ItemIsEnabled |
+                QtCore.Qt.ItemIsSelectable |
+                QtCore.Qt.ItemIsDragEnabled)
+            list_item.setData(QtCore.Qt.UserRole, value)
+            list_item.setText(value_as_string)
+            list_unique_values.addItem(list_item)
+        # Populate assigned values tree
+        tree_mapping_widget.clear()
+        bold_font = QtGui.QFont()
+        bold_font.setItalic(True)
+        bold_font.setBold(True)
+        bold_font.setWeight(75)
+        tree_mapping_widget.invisibleRootItem().setFlags(
+            QtCore.Qt.ItemIsEnabled)
+        for default_class in default_classes:
+            # Create branch for class
+            tree_branch = QtGui.QTreeWidgetItem(tree_mapping_widget)
+            tree_branch.setFlags(
+                QtCore.Qt.ItemIsDropEnabled | QtCore.Qt.ItemIsEnabled)
+            tree_branch.setExpanded(True)
+            tree_branch.setFont(0, bold_font)
+            if 'name' in default_class:
+                default_class_name = default_class['name']
+            else:
+                default_class_name = default_class['key']
+            tree_branch.setText(0, default_class_name)
+            tree_branch.setData(0, QtCore.Qt.UserRole, default_class['key'])
+            if 'description' in default_class:
+                tree_branch.setToolTip(0, default_class['description'])
+            # Assign known values
+            for value in assigned_values[default_class['key']]:
+                string_value = value is not None and unicode(value) or 'NULL'
+                tree_leaf = QtGui.QTreeWidgetItem(tree_branch)
+                tree_leaf.setFlags(
+                    QtCore.Qt.ItemIsEnabled |
+                    QtCore.Qt.ItemIsSelectable |
+                    QtCore.Qt.ItemIsDragEnabled)
+                tree_leaf.setData(0, QtCore.Qt.UserRole, value)
+                tree_leaf.setText(0, string_value)
 
     def cancel_button_clicked(self):
         """Action for cancel button clicked."""
