@@ -15,7 +15,7 @@ from abc import ABCMeta, abstractmethod
 from qgis.core import QgsMapLayer, QgsRasterLayer, QgsVectorLayer, QGis
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.i18n import tr
-from safe.test.utilities import monkey_patch_keywords
+from safe.utilities.utilities import monkey_patch_keywords
 
 
 class DataStore(object):

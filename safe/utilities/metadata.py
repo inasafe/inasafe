@@ -2,17 +2,17 @@
 """Metadata Utilities."""
 import os
 
-from safe.definitions.versions import inasafe_keyword_version
+from safe.common.exceptions import (
+    MetadataReadError,
+    KeywordNotFoundError,
+    NoKeywordsFoundError)
 from safe.definitions.layer_purposes import (
     layer_purpose_hazard,
     layer_purpose_exposure,
     layer_purpose_aggregation,
     layer_purpose_exposure_impacted
 )
-from safe.common.exceptions import (
-    MetadataReadError,
-    KeywordNotFoundError,
-    NoKeywordsFoundError)
+from safe.definitions.versions import inasafe_keyword_version
 from safe.metadata import (
     ExposureLayerMetadata,
     HazardLayerMetadata,
