@@ -49,7 +49,8 @@ from safe.definitions.utilities import (
     all_default_fields,
     get_compulsory_fields,
     get_non_compulsory_fields,
-    classification_thresholds
+    default_classification_thresholds,
+    default_classification_value_maps
 )
 
 
@@ -253,14 +254,14 @@ class TestDefinitionsUtilities(unittest.TestCase):
 
     def test_classification_thresholds(self):
         """Test for classification_thresholds method."""
-        thresholds = classification_thresholds(flood_hazard_classes)
+        thresholds = default_classification_thresholds(flood_hazard_classes)
         expected = {
             'dry': [0, 0.9999999999999999],
             'wet': [1, 9999999999]
         }
         self.assertDictEqual(thresholds, expected)
 
-        thresholds = classification_thresholds(
+        thresholds = default_classification_thresholds(
             cyclone_au_bom_hazard_classes, unit_knots)
         expected = {
             'category_1': [34, 47.0],
@@ -271,6 +272,28 @@ class TestDefinitionsUtilities(unittest.TestCase):
             'tropical_depression': [0, 34.0]
         }
         self.assertDictEqual(thresholds, expected)
+
+    def test_classification_value_maps(self):
+        """Test for classification_value_maps method"""
+        value_maps = default_classification_value_maps(flood_hazard_classes)
+        expected = {
+            'dry': ['dry', '0', 'No', 'n', 'no'],
+            'wet': ['wet', '1', 'YES', 'y', 'yes']
+        }
+        self.assertDictEqual(value_maps, expected)
+
+        value_maps = default_classification_value_maps(
+            cyclone_au_bom_hazard_classes)
+        expected = {
+            'category_1': [],
+            'category_2': [],
+            'category_3': [],
+            'category_4': [],
+            'category_5': [],
+            'tropical_depression': []
+        }
+        self.assertDictEqual(value_maps, expected)
+
 
 if __name__ == '__main__':
     unittest.main()
