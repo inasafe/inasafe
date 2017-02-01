@@ -7,10 +7,11 @@ from collections import OrderedDict
 import numpy
 
 from PyQt4.QtGui import (
-    QLabel, QHBoxLayout, QComboBox, QPushButton, QTextBrowser,
+    QLabel, QHBoxLayout, QComboBox, QPushButton,
     QDoubleSpinBox, QGridLayout, QListWidget, QTreeWidget, QAbstractItemView,
-    QListWidgetItem, QFont, QTreeWidgetItem, QSpacerItem, QSizePolicy)
+    QListWidgetItem, QFont, QTreeWidgetItem, QSizePolicy)
 from PyQt4.QtCore import Qt, QPyNullVariant
+from PyQt4.QtWebKit import QWebView
 
 from osgeo import gdal
 from osgeo.gdalconst import GA_ReadOnly
@@ -24,7 +25,6 @@ from safe.definitions.font import big_font
 from safe.definitions.layer_purposes import layer_purpose_aggregation
 from safe.gui.tools.wizard.wizard_step import (
     WizardStep, get_wizard_step_ui_class)
-from safe.gui.widgets.message_viewer import MessageViewer
 from safe.utilities.gis import is_raster_layer
 from safe.definitions.utilities import (
     get_fields,
@@ -92,6 +92,9 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         # Temporary attributes
         self.threshold_classes = OrderedDict()
         self.active_exposure = None
+
+        self.list_unique_values = None
+        self.tree_mapping_widget = None
 
     def is_ready_to_next_step(self):
         """Check if the step is complete.
@@ -288,6 +291,8 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         """Setup the UI for QTextEdit to show the current state."""
         right_panel_heading = QLabel(tr('Status'))
         right_panel_heading.setFont(big_font)
+        right_panel_heading.setSizePolicy(
+            QSizePolicy.Maximum, QSizePolicy.Maximum)
         self.right_layout.addWidget(right_panel_heading)
 
         message = m.Message()
@@ -349,8 +354,15 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
                     table.add(row)
             message.add(table)
 
-        status_text_edit = QTextBrowser(None)
-        # status_text_edit = MessageViewer(None)
+        # status_text_edit = QTextBrowser(None)
+        status_text_edit = QWebView(None)
+        status_text_edit.setSizePolicy(
+            QSizePolicy.Ignored,
+            QSizePolicy.Ignored)
+
+        status_text_edit.page().mainFrame().setScrollBarPolicy(
+            Qt.Horizontal,
+            Qt.ScrollBarAlwaysOff)
         html_string = html_header() + message.to_html() + html_footer()
         status_text_edit.setHtml(html_string)
         self.right_layout.addWidget(status_text_edit)
