@@ -338,8 +338,8 @@ def postprocessor_output_field(postprocessor_definition):
     return postprocessor_definition['output'].items()[0][1]['value']
 
 
-def classification_thresholds(classification, unit=None):
-    """Helper to get thresholds from classification or unit.
+def default_classification_thresholds(classification, unit=None):
+    """Helper to get default thresholds from classification and unit.
 
     :param classification: Classification definition.
     :type classification: dict
@@ -364,3 +364,20 @@ def classification_thresholds(classification, unit=None):
         thresholds[hazard_class['key']] = [min_value, max_value]
 
     return thresholds
+
+
+def default_classification_value_maps(classification):
+    """Helper to get default value maps from classification.
+
+    :param classification: Classification definition.
+    :type classification: dict
+
+    :returns: Dictionary with key = the class key and value = default strings
+    :rtype: dict
+    """
+    value_maps = {}
+    for hazard_class in classification['classes']:
+        value_maps[hazard_class['key']] = hazard_class.get(
+            'string_defaults', [])
+
+    return value_maps
