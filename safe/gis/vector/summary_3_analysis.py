@@ -23,6 +23,7 @@ from safe.definitions.processing_steps import (
 from safe.definitions.hazard_classifications import not_exposed_class
 from safe.definitions.layer_purposes import layer_purpose_analysis_impacted
 from safe.definitions.post_processors import post_processor_affected_function
+from safe.common.exceptions import ComputationError
 from safe.gis.vector.summary_tools import (
     check_inputs, create_absolute_values_structure, add_fields)
 from safe.utilities.profiling import profile
@@ -188,8 +189,11 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
             analysis.changeAttributeValue(
                 area.id(), shift + len(unique_hazard) + 4 + i, value)
 
-    # Let's check that everything is normal.
-    assert total == affected_sum + unaffected_sum + not_exposed_sum
+    # Sanity check ± 1 to the result.
+    total_computed = (
+        affected_sum + unaffected_sum + not_exposed_sum)
+    if not -1 < (total_computed - total) < 1:
+        raise ComputationError
 
     analysis.commitChanges()
 
