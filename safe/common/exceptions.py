@@ -248,6 +248,13 @@ class TranslationLoadError(InaSAFEError):
     pass
 
 
+class ComputationError(InaSAFEError):
+
+    """Custom exception when a calculation went wrong."""
+
+    pass
+
+
 class NoFeaturesInExtentError(InaSAFEError):
 
     """An exception that gets thrown when no features are within

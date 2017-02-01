@@ -25,6 +25,7 @@ from safe.definitions.processing_steps import (
 from safe.definitions.post_processors import post_processor_affected_function
 from safe.definitions.layer_purposes import layer_purpose_exposure_breakdown
 from safe.definitions.hazard_classifications import not_exposed_class
+from safe.common.exceptions import ComputationError
 from safe.gis.vector.tools import (
     create_field_from_definition,
     read_dynamic_inasafe_field,
@@ -213,7 +214,11 @@ def exposure_type_breakdown(aggregate_hazard, callback=None):
         feature.setAttributes(attributes)
         tabular.addFeature(feature)
 
-    assert total == total_affected + total_not_affected + total_not_exposed
+        # Sanity check ± 1 to the result.
+        total_computed = (
+            total_affected + total_not_affected + total_not_exposed)
+        if not -1 < (total_computed - total) < 1:
+            raise ComputationError
 
     tabular.commitChanges()
 
