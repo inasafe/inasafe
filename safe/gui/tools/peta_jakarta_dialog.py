@@ -479,7 +479,7 @@ class PetaJakartaDialog(QDialog, FORM_CLASS):
 
         self.iface.addVectorLayer(path, feature_type, 'ogr')
 
-        canvas_srid = self.canvas.mapRenderer().destinationCrs().srsid()
+        canvas_srid = self.canvas.mapSettings().destinationCrs().srsid()
         on_the_fly_projection = self.canvas.hasCrsTransformEnabled()
         if canvas_srid != 4326 and not on_the_fly_projection:
             if QGis.QGIS_VERSION_INT >= 20400:
