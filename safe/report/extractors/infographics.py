@@ -25,7 +25,7 @@ from safe.report.extractors.util import (
     value_from_field_name,
     resolve_from_dictionary)
 from safe.utilities.resources import resource_url, resources_path
-from safe.utilities.rounding import round_affected_number
+from safe.utilities.rounding import format_number
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -56,10 +56,9 @@ class PeopleInfographicElement(object):
     def number(self):
         """Number to be displayed for the element."""
         thousand_separator_format = '{0:,}'
-        value = round_affected_number(
+        value = format_number(
             self._number,
-            enable_rounding=True,
-            use_population_rounding=True)
+            enable_rounding=True)
         return thousand_separator_format.format(value)
 
 
@@ -224,10 +223,9 @@ def population_infographic_extractor(impact_report, component_metadata):
         )
         infographic_elements.append(infographic_element)
 
-    total_affected_rounded = round_affected_number(
+    total_affected_rounded = format_number(
         total_affected,
-        enable_rounding=True,
-        use_population_rounding=True)
+        enable_rounding=True)
 
     sections['vulnerability'] = {
         'header': vulnerability_section_header,

@@ -16,7 +16,7 @@ from safe.definitions.utilities import postprocessor_output_field
 from safe.report.extractors.util import (
     value_from_field_name,
     resolve_from_dictionary)
-from safe.utilities.rounding import round_affected_number
+from safe.utilities.rounding import format_number
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -311,10 +311,9 @@ def create_section_with_aggregation(
             affected_population_name)
 
         aggregation_name = feature[aggregation_name_index]
-        total_affected = round_affected_number(
+        total_affected = format_number(
             feature[affected_population_index],
-            enable_rounding=enable_rounding,
-            use_population_rounding=population_rounding)
+            enable_rounding=enable_rounding)
 
         row = [
             aggregation_name,
@@ -326,10 +325,9 @@ def create_section_with_aggregation(
         for output_field in postprocessors_fields_found:
             field_name = aggregation_impacted_fields[output_field['key']]
             field_index = aggregation_impacted.fieldNameIndex(field_name)
-            value = round_affected_number(
+            value = format_number(
                 feature[field_index],
-                enable_rounding=enable_rounding,
-                use_population_rounding=population_rounding)
+                enable_rounding=enable_rounding)
             row.append(value)
 
             if not value == 0:
@@ -345,10 +343,9 @@ def create_section_with_aggregation(
         total_affected_population_field]
     total_affected_population_index = analysis_layer.fieldNameIndex(
         total_affected_population_name)
-    value = round_affected_number(
+    value = format_number(
         feature[total_affected_population_index],
-        enable_rounding=enable_rounding,
-        use_population_rounding=population_rounding)
+        enable_rounding=enable_rounding)
     total_header = resolve_from_dictionary(
         extra_component_args, ['defaults', 'total_header'])
     totals = [
@@ -358,10 +355,9 @@ def create_section_with_aggregation(
     for output_field in postprocessors_fields_found:
         field_name = analysis_layer_fields[output_field['key']]
         field_index = analysis_layer.fieldNameIndex(field_name)
-        value = round_affected_number(
+        value = format_number(
             feature[field_index],
-            enable_rounding=enable_rounding,
-            use_population_rounding=population_rounding)
+            enable_rounding=enable_rounding)
         totals.append(value)
 
     notes = resolve_from_dictionary(
@@ -495,10 +491,9 @@ def create_section_without_aggregation(
         value = value_from_field_name(
             field_name,
             analysis_layer)
-        value = round_affected_number(
+        value = format_number(
             value,
-            enable_rounding=enable_rounding,
-            use_population_rounding=population_rounding)
+            enable_rounding=enable_rounding)
         row.append(value)
 
         row_values.append(row)

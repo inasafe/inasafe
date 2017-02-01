@@ -7,7 +7,7 @@ from safe.report.extractors.infographic_elements.svg_charts import \
 from safe.report.extractors.util import (
     value_from_field_name,
     resolve_from_dictionary)
-from safe.utilities.rounding import round_affected_number
+from safe.utilities.rounding import format_number, round_affected_number
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

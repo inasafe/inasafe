@@ -122,12 +122,12 @@ class TestImpactReport(unittest.TestCase):
                     'header_label': u'Hazard Zone',
                     'rows': [
                         {
-                            'value': 4,
+                            'value': '10',
                             'name': u'High hazard zone',
                             'key': 'high'
                         },
                         {
-                            'value': 1,
+                            'value': '10',
                             'name': u'Medium hazard zone',
                             'key': 'medium'
                         },
@@ -137,33 +137,33 @@ class TestImpactReport(unittest.TestCase):
                             'key': 'low'
                         }
                     ],
-                    'value_label': u'Count'
+                    'value_label': 'Count'
                 },
                 {
                     'header_label': u'Structures',
                     'rows': [
                         {
-                            'value': 5,
+                            'value': '10',
                             'name': u'Total Affected',
                             'key': 'total_affected_field'
                         },
                         {
-                            'value': 4,
-                            'name': u'Total Not Exposed',
-                            'key': 'total_not_exposed_field',
-                        },
-                        {
-                            'value': 0,
+                            'value': '0',
                             'name': u'Total Unaffected',
                             'key': 'total_unaffected_field'
                         },
                         {
-                            'value': 9,
+                            'value': '10',
+                            'name': u'Total Not Exposed',
+                            'key': 'total_not_exposed_field',
+                        },
+                        {
+                            'value': '10',
                             'name': u'Total',
                             'key': 'total_field'
                         }
                     ],
-                    'value_label': u'Count'
+                    'value_label': 'Count'
                 }
             ]
         }
@@ -289,18 +289,18 @@ class TestImpactReport(unittest.TestCase):
                     u'High hazard zone',
                     u'Medium hazard zone',
                     u'Total Affected',
-                    u'Total Not Exposed',
                     u'Total Unaffected',
+                    u'Total Not Exposed',
                     u'Total'
                 ],
                 'details': [
-                    [u'other', 0, 1, 1, 0, 0, 1],
-                    [u'government', 0, 1, 1, 0, 0, 1],
-                    [u'commercial', 1, 0, 1, 0, 0, 1],
-                    [u'education', 2, 0, 2, 3, 0, 5],
-                    [u'health', 1, 0, 1, 0, 0, 1]
+                    [u'other', '0', '10', '10', '0', '0', '10'],
+                    [u'government', '0', '10', '10', '0', '0', '10'],
+                    [u'commercial', '10', '0', '10', '0', '0', '10'],
+                    [u'education', '10', '0', '10', '0', '10', '10'],
+                    [u'health', '10', '0', '10', '0', '0', '10']
                 ],
-                'footers': [u'Total', 4, 2, 6, 3, 0, 9]
+                'footers': [u'Total', '10', '10', '10', '0', '10', '10']
             }
         }
         actual_context = analysis_breakdown.context
@@ -321,18 +321,18 @@ class TestImpactReport(unittest.TestCase):
                 'header_label': u'Aggregation area',
                 'rows': [
                     {
-                        'type_values': [1, 0, 1, 1, 0],
-                        'total': 3,
+                        'type_values': ['10', '0', '10', '10', '0'],
+                        'total': '10',
                         'name': u'area 1'
                     },
                     {
-                        'type_values': [0, 1, 0, 0, 0],
-                        'total': 1,
+                        'type_values': ['0', '10', '0', '0', '0'],
+                        'total': '10',
                         'name': u'area 2'
                     },
                     {
-                        'type_values': [0, 0, 0, 1, 1],
-                        'total': 2,
+                        'type_values': ['0', '0', '0', '10', '10'],
+                        'total': '10',
                         'name': u'area 3'
                     }
                 ],
@@ -343,9 +343,9 @@ class TestImpactReport(unittest.TestCase):
                     u'Education',
                     u'Health'
                 ],
-                'type_total_values': [1, 1, 1, 2, 1],
+                'type_total_values': ['10', '10', '10', '10', '10'],
                 'total_label': u'Total',
-                'total_all': 6,
+                'total_all': '10',
                 'total_in_aggregation_area_label': u'Total'},
             'header': u'Aggregation Result'}
         actual_context = aggregate_result.context

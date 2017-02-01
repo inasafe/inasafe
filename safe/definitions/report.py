@@ -60,7 +60,6 @@ analysis_result_component = {
     'extra_args': {
         'header': tr('Analysis Results'),
         'hazard_header': tr('Hazard Zone'),
-        'value_header': tr('Count'),
     }
 }
 
