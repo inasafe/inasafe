@@ -10,7 +10,7 @@ from safe.gis.vector.tools import read_dynamic_inasafe_field
 from safe.report.extractors.util import (
     layer_definition_type,
     resolve_from_dictionary)
-from safe.utilities.rounding import round_affected_number
+from safe.utilities.rounding import format_number
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -96,10 +96,9 @@ def aggregation_result_extractor(impact_report, component_metadata):
         type_field_index.append(type_index)
 
     for feat in aggregation_impacted.getFeatures():
-        total_affected_value = round_affected_number(
+        total_affected_value = format_number(
             feat[total_field_index],
-            enable_rounding=is_rounded,
-            use_population_rounding=use_population_rounding)
+            enable_rounding=is_rounded)
         if total_affected_value == 0:
             # skip aggregation type if the total affected is zero
             continue
@@ -112,10 +111,9 @@ def aggregation_result_extractor(impact_report, component_metadata):
         # Type values is the values for each column in each row
         type_values = []
         for idx in type_field_index:
-            affected_value = round_affected_number(
+            affected_value = format_number(
                 feat[idx],
-                enable_rounding=is_rounded,
-                use_population_rounding=use_population_rounding)
+                enable_rounding=is_rounded)
             type_values.append(affected_value)
         item['type_values'] = type_values
         rows.append(item)
@@ -148,10 +146,12 @@ def aggregation_result_extractor(impact_report, component_metadata):
     # Fetch total affected for each breakdown name
     value_dict = {}
     for feat in exposure_breakdown.getFeatures():
-        affected_value = round_affected_number(
-            feat[affected_field_index],
-            enable_rounding=is_rounded,
-            use_population_rounding=use_population_rounding)
+        # exposure breakdown is in csv format, so the field returned is always
+        # in text format
+        affected_value = int(float(feat[affected_field_index]))
+        affected_value = format_number(
+            affected_value,
+            enable_rounding=is_rounded)
         value_dict[feat[breakdown_field_index]] = affected_value
 
     if value_dict:
@@ -179,10 +179,9 @@ def aggregation_result_extractor(impact_report, component_metadata):
     analysis_feature = analysis_layer.getFeatures().next()
     field_index = analysis_layer.fieldNameIndex(
         total_affected_field['field_name'])
-    total_all = round_affected_number(
+    total_all = format_number(
         analysis_feature[field_index],
-        enable_rounding=is_rounded,
-        use_population_rounding=use_population_rounding)
+        enable_rounding=is_rounded)
 
     """Generate and format the context"""
     aggregation_area_default_header = resolve_from_dictionary(

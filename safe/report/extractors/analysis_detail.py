@@ -12,7 +12,7 @@ from safe.report.extractors.util import (
     layer_definition_type,
     resolve_from_dictionary,
     value_from_field_name)
-from safe.utilities.rounding import round_affected_number
+from safe.utilities.rounding import format_number
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -110,8 +110,8 @@ def analysis_detail_extractor(impact_report, component_metadata):
     # affected, not exposed, unaffected, total header
     report_fields = [
         total_affected_field,
-        total_not_exposed_field,
         total_unaffected_field,
+        total_not_exposed_field,
         total_field
     ]
     for report_field in report_fields:
@@ -141,54 +141,35 @@ def analysis_detail_extractor(impact_report, component_metadata):
                 # class
                 field_name = exposure_breakdown_fields[field_key_name]
                 field_index = exposure_breakdown.fieldNameIndex(field_name)
-                count_value = round_affected_number(
-                    feat[field_index],
-                    enable_rounding=is_rounding,
-                    use_population_rounding=use_population_rounding)
+                # exposure breakdown is in csv format, so the field
+                # returned is always in text format
+                count_value = int(float(feat[field_index]))
+                count_value = format_number(
+                    count_value,
+                    enable_rounding=is_rounding)
                 row.append(count_value)
             except KeyError:
                 # in case the field was not found
                 # assume value 0
                 row.append(0)
 
-        # Get Affected count
-        field_index = exposure_breakdown.fieldNameIndex(
-            total_affected_field['field_name'])
-        total_affected = round_affected_number(
-            feat[field_index],
-            enable_rounding=is_rounding,
-            use_population_rounding=use_population_rounding)
-        if total_affected == 0:
-            # if total affected == 0, skip the row
+        skip_row = False
+
+        for field in report_fields:
+            field_index = exposure_breakdown.fieldNameIndex(
+                field['field_name'])
+            total_count = int(float(feat[field_index]))
+            total_count = format_number(
+                total_count,
+                enable_rounding=is_rounding)
+            if total_count == 0 and field == total_affected_field:
+                skip_row = True
+                break
+
+            row.append(total_count)
+
+        if skip_row:
             continue
-        row.append(total_affected)
-
-        # Get Not Exposed count
-        field_index = exposure_breakdown.fieldNameIndex(
-            total_not_exposed_field['field_name'])
-        total_not_exposed = round_affected_number(
-            feat[field_index],
-            enable_rounding=is_rounding,
-            use_population_rounding=use_population_rounding)
-        row.append(total_not_exposed)
-
-        # Get Unaffected count
-        field_index = exposure_breakdown.fieldNameIndex(
-            total_unaffected_field['field_name'])
-        total_unaffected = round_affected_number(
-            feat[field_index],
-            enable_rounding=is_rounding,
-            use_population_rounding=use_population_rounding)
-        row.append(total_unaffected)
-
-        # Get Total count
-        field_index = exposure_breakdown.fieldNameIndex(
-            total_field['field_name'])
-        total = round_affected_number(
-            feat[field_index],
-            enable_rounding=is_rounding,
-            use_population_rounding=use_population_rounding)
-        row.append(total)
 
         details.append(row)
 
@@ -208,10 +189,9 @@ def analysis_detail_extractor(impact_report, component_metadata):
             # class
             field_name = analysis_layer_fields[field_key_name]
             field_index = analysis_layer.fieldNameIndex(field_name)
-            count_value = round_affected_number(
+            count_value = format_number(
                 analysis_feature[field_index],
-                enable_rounding=is_rounding,
-                use_population_rounding=use_population_rounding)
+                enable_rounding=is_rounding)
         except KeyError:
             # in case the field was not found
             # assume value 0
@@ -229,43 +209,15 @@ def analysis_detail_extractor(impact_report, component_metadata):
                 details[row_idx] = row
             continue
         footers.append(count_value)
-    # total for affected
-    total_affected = value_from_field_name(
-        total_affected_field['field_name'],
-        analysis_layer)
-    total_affected = round_affected_number(
-        total_affected,
-        enable_rounding=is_rounding,
-        use_population_rounding=use_population_rounding)
-    footers.append(total_affected)
 
-    # total for exposed
-    total_not_exposed = value_from_field_name(
-        total_not_exposed_field['field_name'],
-        analysis_layer)
-    total_not_exposed = round_affected_number(
-        total_not_exposed,
-        enable_rounding=is_rounding,
-        use_population_rounding=use_population_rounding)
-    footers.append(total_not_exposed)
-
-    # total Unaffected count
-    field_index = analysis_layer.fieldNameIndex(
-        total_unaffected_field['field_name'])
-    total_unaffected = round_affected_number(
-        analysis_feature[field_index],
-        enable_rounding=is_rounding,
-        use_population_rounding=use_population_rounding)
-    footers.append(total_unaffected)
-
-    # total count
-    field_index = analysis_layer.fieldNameIndex(
-        total_field['field_name'])
-    total = round_affected_number(
-        analysis_feature[field_index],
-        enable_rounding=is_rounding,
-        use_population_rounding=use_population_rounding)
-    footers.append(total)
+    # for footers
+    for field in report_fields:
+        total_count = value_from_field_name(
+            field['field_name'], analysis_layer)
+        total_count = format_number(
+            total_count,
+            enable_rounding=is_rounding)
+        footers.append(total_count)
 
     header = resolve_from_dictionary(
         extra_args, 'header')
