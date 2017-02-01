@@ -31,6 +31,7 @@ from safe.definitions.constants import (
     ANALYSIS_SUCCESS,
     PREPARE_FAILED_BAD_INPUT,
     PREPARE_FAILED_INSUFFICIENT_OVERLAP,
+    PREPARE_FAILED_INSUFFICIENT_OVERLAP_REQUESTED_EXTENT,
     PREPARE_FAILED_BAD_LAYER,
     PREPARE_SUCCESS,
 )
@@ -63,7 +64,6 @@ from safe.common.exceptions import (
     NoKeywordsFoundError,
     InvalidParameterError,
     HashNotFoundError,
-    UnsupportedProviderError,
     MetadataReadError)
 from safe.impact_function.impact_function import ImpactFunction
 from safe.gui.tools.about_dialog import AboutDialog
@@ -1229,6 +1229,16 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.run_button.setEnabled(False)
             return None
 
+        elif status == PREPARE_FAILED_INSUFFICIENT_OVERLAP_REQUESTED_EXTENT:
+            self.extent.clear_next_analysis_extent()
+            show_warnings = setting('show_extent_warnings', True, bool)
+            if show_warnings:
+                display_warning_message_bar(
+                    'InaSAFE',
+                    tr('The requested extent is not overlapping your layers.'))
+            self.run_button.setEnabled(False)
+            return None
+
         elif status == PREPARE_FAILED_INSUFFICIENT_OVERLAP:
             self.extent.clear_next_analysis_extent()
             show_warnings = setting('show_extent_warnings', True, bool)
@@ -1236,7 +1246,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 display_warning_message_bar(
                     'InaSAFE',
                     self.tr('No overlapping extents'),
-                    no_overlap_message)
+                    no_overlap_message())
             self.run_button.setEnabled(False)
             return None
 

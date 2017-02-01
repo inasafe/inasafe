@@ -610,6 +610,27 @@ size_field = {
     'replace_null': False
 }
 
+buffer_distance_field = {
+    'key': 'buffer_distance_field',
+    'name': tr('Buffer Distance'),
+    'field_name': 'buffer_distance_m',
+    'type': QVariant.Int,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': False,
+    'description': tr(
+        'The distance of the buffer for each feature.'),
+    'help_text': tr(''),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
 # # # # # # # # # #
 # Rate (Not absolute values)
 # # # # # # # # # #
