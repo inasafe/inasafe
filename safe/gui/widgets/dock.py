@@ -26,6 +26,7 @@ from safe.definitions.layer_purposes import (
 from safe.definitions.constants import (
     inasafe_keyword_version_key,
     HAZARD_EXPOSURE_VIEW,
+    HAZARD_EXPOSURE_BOUNDINGBOX,
     ANALYSIS_FAILED_BAD_INPUT,
     ANALYSIS_FAILED_BAD_CODE,
     ANALYSIS_SUCCESS,
@@ -268,7 +269,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             if not crs.isValid():
                 crs = None
 
-        if crs and extent:
+        mode = setting('analysis_extents_mode', HAZARD_EXPOSURE_VIEW)
+        if crs and extent and mode == HAZARD_EXPOSURE_BOUNDINGBOX:
             self.extent.set_user_extent(extent, crs)
 
         # It's better to set the show_rubber_bands after setting the user
@@ -497,7 +499,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 if not crs.isValid():
                     crs = None
 
-            if crs and extent:
+            mode = setting('analysis_extents_mode', HAZARD_EXPOSURE_VIEW)
+            if crs and extent and mode == HAZARD_EXPOSURE_BOUNDINGBOX:
                 self.extent.set_user_extent(extent, crs)
 
         else:

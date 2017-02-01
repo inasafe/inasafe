@@ -19,6 +19,7 @@ from safe.definitions.styles import (
     next_analysis_width,
     last_analysis_width
 )
+from safe.utilities.settings import set_setting
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -90,7 +91,7 @@ class Extent(object):
         :return: The map canvas CRS.
         :rtype: QgsCoordinateTransform
         """
-        return self._map_canvas.mapRenderer().destinationCrs()
+        return self._map_canvas.mapSettings().destinationCrs()
 
     @property
     def user_extent(self):
@@ -116,6 +117,8 @@ class Extent(object):
         transform = QgsCoordinateTransform(crs, self.crs)
         extent.transform(transform)
         self._user_extent = extent
+        set_setting('user_extent', extent.exportToWkt())
+        set_setting('user_extent_crs', crs.authid())
         if self._show_rubber_bands:
             self.display_user_extent()
 
