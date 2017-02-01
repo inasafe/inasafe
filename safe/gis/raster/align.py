@@ -99,7 +99,9 @@ def align_rasters(hazard_layer, exposure_layer, extent):
         exposure_output, output_layer_name % 'exposure')
 
     aligned_hazard_layer.keywords = dict(hazard_layer.keywords)
+    aligned_hazard_layer.keywords['title'] = output_layer_name % 'hazard'
     aligned_exposure_layer.keywords = dict(exposure_layer.keywords)
+    aligned_exposure_layer.keywords['title'] = output_layer_name % 'exposure'
 
     # avoid any possible further rescaling of exposure data by correctly
     # setting original resolution to be the same as current resolution

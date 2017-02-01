@@ -1,16 +1,7 @@
 # coding=utf-8
-"""Buffer a vector layer using a single radius."""
+"""Try to make a layer valid."""
 
-from qgis.core import (
-    QgsVectorLayer,
-    QgsCoordinateReferenceSystem,
-    QgsCoordinateTransform,
-    QgsGeometry,
-    QgsFeature,
-    QGis,
-    QgsField,
-)
-
+from safe.definitions.processing_steps import clean_geometry_steps
 from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -34,6 +25,10 @@ def clean_layer(layer, callback=None):
     :return: The buffered vector layer.
     :rtype: QgsVectorLayer
     """
+    output_layer_name = clean_geometry_steps['output_layer_name']
+    processing_step = clean_geometry_steps['step_name']
+    output_layer_name = output_layer_name % layer.keywords['layer_purpose']
+
     # start editing
     layer.startEditing()
 
@@ -44,6 +39,8 @@ def clean_layer(layer, callback=None):
 
     # save changes
     layer.commitChanges()
+
+    layer.keywords['title'] = output_layer_name
 
     return layer
 

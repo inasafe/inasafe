@@ -34,6 +34,11 @@ buffer_steps = {
     'output_layer_name': 'buffer',
 }
 
+clean_geometry_steps = {
+    'step_name': tr('Cleaning geometry'),
+    'output_layer_name': '%s_geometry_cleaned',
+}
+
 clip_steps = {
     'step_name': tr('Clipping'),
     'output_layer_name': '%s_clipped',
