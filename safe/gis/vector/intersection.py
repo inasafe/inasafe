@@ -127,6 +127,7 @@ def intersection(source, mask, callback=None):
     writer.commitChanges()
 
     writer.keywords = dict(source.keywords)
+    writer.keywords['title'] = output_layer_name
     writer.keywords['layer_purpose'] = layer_purpose_exposure_impacted['key']
     writer.keywords['inasafe_fields'] = dict(source.keywords['inasafe_fields'])
     writer.keywords['inasafe_fields'].update(mask.keywords['inasafe_fields'])
