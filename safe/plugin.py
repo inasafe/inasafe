@@ -73,6 +73,7 @@ class Plugin(object):
         self.action_shake_converter = None
         self.action_minimum_needs = None
         self.action_minimum_needs_config = None
+        self.action_multi_buffer = None
         self.key_action = None
         self.action_options = None
         self.action_keywords_wizard = None
@@ -251,6 +252,21 @@ class Plugin(object):
         self.action_minimum_needs.triggered.connect(self.show_minimum_needs)
         self.add_action(
             self.action_minimum_needs, add_to_toolbar=self.full_toolbar)
+
+    def _create_multi_buffer_action(self):
+        """Create action for multi buffer dialog."""
+        icon = resources_path('img', 'icons', 'show-multi-buffer.svg')
+        self.action_multi_buffer = QAction(
+            QIcon(icon),
+            self.tr('Multi Buffer'), self.iface.mainWindow())
+        self.action_multi_buffer.setStatusTip(self.tr(
+            'Open InaSAFE multi buffer'))
+        self.action_multi_buffer.setWhatsThis(self.tr(
+            'Open InaSAFE multi buffer'))
+        self.action_multi_buffer.triggered.connect(
+            self.show_multi_buffer)
+        self.add_action(self.action_multi_buffer,
+            add_to_toolbar=self.full_toolbar)
 
     def _create_minimum_needs_options_action(self):
         """Create action for global minimum needs dialog."""
@@ -522,6 +538,7 @@ class Plugin(object):
         self._create_add_petajakarta_layer_action()
         self._create_shakemap_converter_action()
         self._create_minimum_needs_action()
+        self._create_multi_buffer_action()
         self._create_test_layers_action()
         self._create_run_test_action()
         self._add_spacer_to_menu()
@@ -771,6 +788,13 @@ class Plugin(object):
             ShakemapConverterDialog)
 
         dialog = ShakemapConverterDialog(self.iface.mainWindow())
+        dialog.exec_()  # modal
+
+    def show_multi_buffer(self):
+        from safe.gui.tools.multi_buffer_dialog import (
+            MultiBufferDialog)
+
+        dialog = MultiBufferDialog(self.iface.mainWindow())
         dialog.exec_()  # modal
 
     def show_osm_downloader(self):

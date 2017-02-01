@@ -10,7 +10,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from qgis.core import QGis
 from safe.gis.vector.multi_buffering import multi_buffering
-from safe.definitions.fields import hazard_class_field
+from safe.definitions.fields import hazard_class_field, buffer_distance_field
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -52,12 +52,18 @@ class TestMultiBuffering(unittest.TestCase):
         expected_feature_count = layer.featureCount() * len(radii)
         self.assertEqual(result.featureCount(), expected_feature_count)
 
-        # We can check the new field added about the hazard class name.
-        expected_fields_count = layer.fields().count() + 1
+        # We can check the new fields added about the hazard class name
+        # and the buffer distances.
+        expected_fields_count = layer.fields().count() + 2
 
         self.assertEqual(result.fields().count(), expected_fields_count)
 
         # Check if the field name is correct.
-        self.assertEqual(
-            result.fields().at(expected_fields_count - 1).name(),
-            expected_name_field)
+        expected_fields_name = [
+            hazard_class_field['field_name'],
+            buffer_distance_field['field_name']]
+
+        actual_field_names = [field.name() for field in result.pendingFields()]
+        new_field_names = actual_field_names[-2:]
+
+        self.assertEqual(expected_fields_name, new_field_names)
