@@ -25,8 +25,8 @@
      <widget class="QWidget" name="page">
       <layout class="QGridLayout" name="gridLayout_5">
        <item row="0" column="0">
-        <widget class="QWebView" name="help_web_view">
-         <property name="url">
+        <widget class="QWebView" name="help_web_view" native="true">
+         <property name="url" stdset="0">
           <url>
            <string>about:blank</string>
           </url>
@@ -85,7 +85,7 @@
              <string>Run each scenario in new project</string>
             </property>
             <property name="checked">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
            </widget>
           </item>
