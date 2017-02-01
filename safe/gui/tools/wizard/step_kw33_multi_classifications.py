@@ -27,7 +27,11 @@ from safe.gui.tools.wizard.wizard_step import (
 from safe.gui.widgets.message_viewer import MessageViewer
 from safe.utilities.gis import is_raster_layer
 from safe.definitions.utilities import (
-    get_fields, get_non_compulsory_fields, classification_thresholds)
+    get_fields,
+    get_non_compulsory_fields,
+    default_classification_thresholds,
+    default_classification_value_maps
+)
 from safe.definitions.layer_modes import layer_mode_continuous
 from safe.gui.tools.wizard.wizard_strings import (
     multiple_classified_hazard_classifications_vector,
@@ -186,8 +190,12 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
                 exposure_combo_box.addItem(hazard_classification['name'])
                 exposure_combo_box.setItemData(
                     i + 1, hazard_classification, Qt.UserRole)
-                current_hazard_classifications = self.thresholds.get(
-                    exposure['key'])
+                if self.layer_mode == layer_mode_continuous:
+                    current_hazard_classifications = self.thresholds.get(
+                        exposure['key'])
+                else:
+                    current_hazard_classifications = self.value_maps.get(
+                        exposure['key'])
                 if current_hazard_classifications:
                     current_hazard_classification = \
                         current_hazard_classifications.get(
@@ -210,22 +218,13 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
                 # Disable if there is no classification chosen.
                 exposure_edit_button.setEnabled(False)
 
-            def classifications_combo_box_changed(index, edit_button):
-                """Action when classification combo box changed
-
-                :param index: The index of the combo box.
-                :type index: int
-
-                :param edit_button: The edit button associate with combo box.
-                :type edit_button: QPushButton
-                """
-                # Disable button if it's no classification
-                edit_button.setEnabled(bool(index))
-
             exposure_combo_box.currentIndexChanged.connect(
                 partial(
-                    classifications_combo_box_changed,
-                    edit_button=exposure_edit_button)
+                    self.classifications_combo_box_changed,
+                    exposure=exposure,
+                    exposure_combo_box=exposure_combo_box,
+                    edit_button=exposure_edit_button,
+                    )
             )
 
             # Arrange in layout
@@ -306,7 +305,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
                 self.exposure_combo_boxes[i])
             if self.layer_mode == layer_mode_continuous:
                 thresholds = self.thresholds.get(self.exposures[i]['key'])
-                if not thresholds:
+                if not thresholds or not classification:
                     message.add(m.Paragraph(tr('No classifications set.')))
                     continue
                 table = m.Table(
@@ -329,7 +328,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
                     table.add(row)
             else:
                 value_maps = self.value_maps.get(self.exposures[i]['key'])
-                if not value_maps:
+                if not value_maps or not classification:
                     message.add(m.Paragraph(tr('No classifications set.')))
                     continue
                 table = m.Table(
@@ -469,6 +468,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             # TODO(IS) We can set the min and max depends on the unit, later
             min_value_input.setMinimum(0)
             min_value_input.setMaximum(999999)
+
             if thresholds.get(self.active_exposure['key']):
                 exposure_thresholds = thresholds.get(
                     self.active_exposure['key'])
@@ -478,6 +478,12 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
                     min_value_input.setValue(
                         exposure_thresholds_classifications['classes'][
                             the_class['key']][0])
+                else:
+                    default_min = the_class['numeric_default_min']
+                    if isinstance(default_min, dict):
+                        default_min = the_class[
+                            'numeric_default_min'][selected_unit]
+                    min_value_input.setValue(default_min)
             else:
                 default_min = the_class['numeric_default_min']
                 if isinstance(default_min, dict):
@@ -503,6 +509,12 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
                     max_value_input.setValue(
                         exposure_thresholds_classifications['classes'][
                             the_class['key']][1])
+                else:
+                    default_max = the_class['numeric_default_max']
+                    if isinstance(default_max, dict):
+                        default_max = the_class[
+                            'numeric_default_max'][selected_unit]
+                    max_value_input.setValue(default_max)
             else:
                 default_max = the_class['numeric_default_max']
                 if isinstance(default_max, dict):
@@ -850,7 +862,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             }
             if self.value_maps.get(self.active_exposure['key']):
                 # Set other class to not active
-                for current_classification in self.thresholds.get(
+                for current_classification in self.value_maps.get(
                         self.active_exposure['key']).values():
                     current_classification['active'] = False
             else:
@@ -894,3 +906,81 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             self.thresholds = self.parent.get_existing_keyword('thresholds')
         if not self.value_maps:
             self.value_maps = self.parent.get_existing_keyword('value_maps')
+
+    def classifications_combo_box_changed(
+            self, index, exposure, exposure_combo_box, edit_button):
+        """Action when classification combo box changed
+
+        :param index: The index of the combo box.
+        :type index: int
+
+        :param exposure: The exposure associated with the combo box
+        :type exposure: dict
+
+        :param exposure_combo_box: Combo box for the classification.
+        :type exposure_combo_box: QComboBox
+
+        :param edit_button: The edit button associate with combo box.
+        :type edit_button: QPushButton
+        """
+        LOGGER.debug('Combo box changed')
+        # Disable button if it's no classification
+        edit_button.setEnabled(bool(index))
+
+        classification = self.get_classification(exposure_combo_box)
+        self.activate_classification(exposure, classification)
+        clear_layout(self.right_layout)
+        self.show_current_state()
+
+    def activate_classification(self, exposure, classification=None):
+        """Set active to True for classification for the exposure.
+
+        If classification = None, all classification set active = False.
+
+        :param exposure: Exposure definition.
+        :type exposure: dict
+
+        :param classification: Classification definition.
+        :type classification: dict
+        """
+        LOGGER.debug('Activate classification')
+        if self.layer_mode == layer_mode_continuous:
+            selected_unit = self.parent.step_kw_unit.selected_unit()['key']
+            target = self.thresholds.get(exposure['key'])
+            if target is None:
+                self.thresholds[exposure['key']] = {}
+            target = self.thresholds.get(exposure['key'])
+        else:
+            selected_unit = None
+            target = self.value_maps.get(exposure['key'])
+            if target is None:
+                self.value_maps[exposure['key']] = {}
+            target = self.value_maps.get(exposure['key'])
+
+        if classification is not None:
+            if classification['key'] not in target:
+                if self.layer_mode == layer_mode_continuous:
+                    default_classes = default_classification_thresholds(
+                        classification, selected_unit)
+                    target[classification['key']] = {
+                        'classes': default_classes,
+                        'active': True
+                    }
+                else:
+                    default_classes = default_classification_value_maps(
+                        classification)
+                    target[classification['key']] = {
+                        'classes': default_classes,
+                        'active': True
+                    }
+                return
+
+        for classification_key, value in target.items():
+            if classification is None:
+                value['active'] = False
+                continue
+
+            if classification_key == classification['key']:
+                value['active'] = True
+            else:
+                value['active'] = False
