@@ -5,7 +5,7 @@ from safe.common.version import get_version
 from safe.definitions.fields import analysis_name_field
 from safe.report.extractors.util import (
     value_from_field_name,
-    resolve_from_dictionary)
+    resolve_from_dictionary, value_from_inasafe_settings)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -215,6 +215,13 @@ def qgis_composer_extractor(impact_report, component_metadata):
 
     # Set default map to resize
     layers = [impact_report.impact_function.impact]
+    # check hide exposure settings
+    hide_exposure_flag = value_from_inasafe_settings(
+        'setHideExposureFlag')
+    if not hide_exposure_flag:
+        # place exposure at the bottom
+        layers.append(impact_report.impact_function.exposure)
+
     map_elements = [
         {
             'id': 'impact-map',
