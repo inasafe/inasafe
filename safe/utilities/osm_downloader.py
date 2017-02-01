@@ -82,7 +82,6 @@ def download(feature_type, output_base_path, extent, progress_dialog=None):
             url_osm_prefix=URL_OSM_PREFIX,
             feature_type=feature_type,
             url_osm_suffix=URL_OSM_SUFFIX,
-            url=url,
             box=box,
             qgis=qgis_version(),
             lang=locale(),
