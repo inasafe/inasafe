@@ -110,6 +110,8 @@ class StepKwPurpose(WizardStep, FORM_CLASS):
         self.parent.step_kw_default_inasafe_fields.clear()
         self.parent.step_kw_inasafe_raster_default_values.clear()
 
+        self.parent.step_kw_multi_classifications.clear()
+
     def set_widgets(self):
         """Set widgets on the layer purpose tab."""
         self.clear_further_steps()

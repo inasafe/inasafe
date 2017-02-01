@@ -79,7 +79,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         self.exposure_labels = []
         self.exposure_combo_boxes = []
         self.exposure_edit_buttons = []
-        self.mode = 0
+        self.mode = CHOOSE_MODE
 
         self.layer_purpose = None
         self.layer_mode = None
@@ -385,6 +385,25 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
 
     def clear(self):
         """Clear current state."""
+        self.exposures = []
+        self.exposure_labels = []
+        self.exposure_combo_boxes = []
+        self.exposure_edit_buttons = []
+        self.mode = CHOOSE_MODE
+
+        self.layer_purpose = None
+        self.layer_mode = None
+
+        self.value_maps = {}
+        self.thresholds = {}
+
+        # Temporary attributes
+        self.threshold_classes = OrderedDict()
+        self.active_exposure = None
+
+        self.list_unique_values = None
+        self.tree_mapping_widget = None
+
         clear_layout(self.left_layout)
         clear_layout(self.right_layout)
 
@@ -827,14 +846,14 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         """Action for cancel button clicked."""
         # Change mode
         self.mode = CHOOSE_MODE
-        # Enable all edit button
-        for exposure_edit_button in self.exposure_edit_buttons:
-            exposure_edit_button.setEnabled(True)
-            exposure_edit_button.setText(tr('Edit'))
-
-        # Enable all combo box
-        for exposure_combo_box in self.exposure_combo_boxes:
-            exposure_combo_box.setEnabled(True)
+        # Enable all edit buttons and combo boxes
+        for i in range(len(self.exposures)):
+            if self.get_classification(self.exposure_combo_boxes[i]):
+                self.exposure_edit_buttons[i].setEnabled(True)
+            else:
+                self.exposure_edit_buttons[i].setEnabled(False)
+            self.exposure_edit_buttons[i].setText(tr('Edit'))
+            self.exposure_combo_boxes[i].setEnabled(True)
 
         # Clear right panel
         clear_layout(self.right_layout)
