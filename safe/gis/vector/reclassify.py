@@ -1,16 +1,17 @@
 # coding=utf-8
-
-"""
-Reclassify a continuous vector layer.
-"""
+"""Reclassify a continuous vector layer."""
 
 from PyQt4.QtCore import QPyNullVariant
-from qgis.core import QGis, QgsField
+from qgis.core import QgsField
 
 from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
+from safe.definitions.layer_purposes import (
+    layer_purpose_hazard, layer_purpose_exposure)
 from safe.definitions.utilities import definition
 from safe.definitions.fields import hazard_class_field, hazard_value_field
 from safe.definitions.processing_steps import reclassify_vector_steps
+from safe.utilities.metadata import (
+    active_thresholds_value_maps, active_classification)
 from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -20,7 +21,7 @@ __revision__ = '$Format:%H$'
 
 
 @profile
-def reclassify(layer, callback=None):
+def reclassify(layer, exposure_key=None, callback=None):
     """Reclassify a continuous vector layer.
 
     This function will modify the input.
@@ -42,6 +43,9 @@ def reclassify(layer, callback=None):
     :param layer: The raster layer.
     :type layer: QgsRasterLayer
 
+    :param exposure_key: The exposure key.
+    :type exposure_key: str
+
     :param callback: A function to all to indicate progress. The function
         should accept params 'current' (int), 'maximum' (int) and 'step' (str).
         Defaults to None.
@@ -60,7 +64,11 @@ def reclassify(layer, callback=None):
     inasafe_fields = layer.keywords['inasafe_fields']
     continuous_column = inasafe_fields[hazard_value_field['key']]
 
-    ranges = layer.keywords.get('thresholds')
+    if exposure_key:
+        ranges = active_thresholds_value_maps(layer.keywords, exposure_key)
+    else:
+        ranges = layer.keywords.get('thresholds')
+
     if not ranges:
         raise InvalidKeywordsForProcessingAlgorithm(
             'thresholds are missing from the layer %s'
@@ -98,7 +106,12 @@ def reclassify(layer, callback=None):
         hazard_class_field['field_name'])
 
     value_map = {}
-    classifications = layer.keywords.get('classification')
+    if exposure_key:
+        classifications = active_classification(
+            layer.keywords, exposure_key)
+    else:
+        classifications = layer.keywords.get('classification')
+
     hazard_classes = definition(classifications)['classes']
     for hazard_class in reversed(hazard_classes):
         value_map[hazard_class['key']] = [hazard_class['value']]

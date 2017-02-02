@@ -10,6 +10,8 @@ from safe.definitions.fields import (
     exposure_type_field,
     exposure_class_field
 )
+from safe.definitions.layer_purposes import (
+    layer_purpose_hazard, layer_purpose_exposure)
 from safe.definitions.processing_steps import assign_inasafe_values_steps
 from safe.gis.vector.tools import remove_fields
 from safe.utilities.metadata import active_thresholds_value_maps
@@ -42,19 +44,19 @@ def update_value_map(layer, exposure_key=None, callback=None):
     .. versionadded:: 4.0
     """
     output_layer_name = assign_inasafe_values_steps['output_layer_name']
-    # processing_step = assign_inasafe_values_steps['step_name']
+    processing_step = assign_inasafe_values_steps['step_name']
     output_layer_name = output_layer_name % layer.keywords['layer_purpose']
 
     keywords = layer.keywords
     inasafe_fields = keywords['inasafe_fields']
 
-    if keywords['layer_purpose'] == 'hazard':
+    if keywords['layer_purpose'] == layer_purpose_hazard['key']:
         if not inasafe_fields.get(hazard_value_field['key']):
             raise InvalidKeywordsForProcessingAlgorithm
         old_field = hazard_value_field
         new_field = hazard_class_field
 
-    elif keywords['layer_purpose'] == 'exposure':
+    elif keywords['layer_purpose'] == layer_purpose_exposure['key']:
         if not inasafe_fields.get(exposure_type_field['key']):
             raise InvalidKeywordsForProcessingAlgorithm
         old_field = exposure_type_field
@@ -67,6 +69,7 @@ def update_value_map(layer, exposure_key=None, callback=None):
         if not active_thresholds_value_maps(keywords, exposure_key):
             raise InvalidKeywordsForProcessingAlgorithm
         value_map = active_thresholds_value_maps(keywords, exposure_key)
+    # It's exposure layer
     else:
         if not keywords.get('value_map'):
             raise InvalidKeywordsForProcessingAlgorithm
