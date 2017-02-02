@@ -172,66 +172,51 @@
       <gmd:supplementalInformation>
         <inasafe_keywords/>
         <inasafe>
-          <thresholds>
-            <gco:Dictionary>{&quot;dry&quot;: [0.0, 1.0], &quot;wet&quot;: [1.0, 2.5]}</gco:Dictionary>
-          </thresholds>
           <hazard_category>
             <gco:CharacterString>single_event</gco:CharacterString>
           </hazard_category>
-          <raster_hazard_classification>
-            <gco:CharacterString/>
-          </raster_hazard_classification>
-          <classification>
-            <gco:CharacterString>flood_hazard_classes</gco:CharacterString>
-          </classification>
-          <prob_fatality_mag>
-            <gco:Tuple/>
-          </prob_fatality_mag>
+          <multipart_polygon>
+            <gco:Boolean/>
+          </multipart_polygon>
+          <thresholds>
+            <gco:Dictionary>{&quot;dry&quot;: [0.0, 1.0], &quot;land_cover&quot;: {&quot;flood_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;dry&quot;: [0.0, 1.0], &quot;wet&quot;: [1.0, 2.5]}}}, &quot;place&quot;: {&quot;flood_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;dry&quot;: [0.0, 1.0], &quot;wet&quot;: [1.0, 2.5]}}}, &quot;structure&quot;: {&quot;flood_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;dry&quot;: [0.0, 1.0], &quot;wet&quot;: [1.0, 2.5]}}}, &quot;wet&quot;: [1.0, 2.5], &quot;road&quot;: {&quot;flood_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;dry&quot;: [0.0, 1.0], &quot;wet&quot;: [1.0, 2.5]}}}, &quot;population&quot;: {&quot;flood_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;dry&quot;: [0.0, 1.0], &quot;wet&quot;: [1.0, 2.5]}}}}</gco:Dictionary>
+          </thresholds>
+          <continuous_hazard_unit>
+            <gco:CharacterString>metres</gco:CharacterString>
+          </continuous_hazard_unit>
           <inasafe_fields>
             <gco:Dictionary>{&quot;hazard_value_field&quot;: &quot;depth&quot;}</gco:Dictionary>
           </inasafe_fields>
           <inasafe_default_values>
             <gco:Dictionary/>
           </inasafe_default_values>
-          <volcano_name_field>
-            <gco:CharacterString/>
-          </volcano_name_field>
-          <multipart_polygon>
-            <gco:Boolean/>
-          </multipart_polygon>
-          <field>
-            <gco:CharacterString/>
-          </field>
-          <value_map>
-            <gco:Dictionary/>
-          </value_map>
-          <vector_hazard_classification>
-            <gco:CharacterString/>
-          </vector_hazard_classification>
-          <layer_geometry>
-            <gco:CharacterString>polygon</gco:CharacterString>
-          </layer_geometry>
-          <hazard>
-            <gco:CharacterString>flood</gco:CharacterString>
-          </hazard>
           <scale>
             <gco:CharacterString/>
           </scale>
+          <source>
+            <gco:CharacterString/>
+          </source>
+          <layer_geometry>
+            <gco:CharacterString>polygon</gco:CharacterString>
+          </layer_geometry>
+          <value_map>
+            <gco:Dictionary/>
+          </value_map>
+          <hazard>
+            <gco:CharacterString>flood</gco:CharacterString>
+          </hazard>
           <report>
             <gco:CharacterString/>
           </report>
-          <continuous_hazard_unit>
-            <gco:CharacterString>metres</gco:CharacterString>
-          </continuous_hazard_unit>
+          <classifications>
+            <gco:Dictionary/>
+          </classifications>
           <keyword_version>
             <gco:CharacterString>4.0</gco:CharacterString>
           </keyword_version>
           <datatype>
             <gco:CharacterString/>
           </datatype>
-          <source>
-            <gco:CharacterString/>
-          </source>
           <layer_purpose>
             <gco:CharacterString>hazard</gco:CharacterString>
           </layer_purpose>
