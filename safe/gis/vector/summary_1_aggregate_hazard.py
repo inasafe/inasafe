@@ -1,6 +1,7 @@
 # coding=utf-8
 
 """Aggregate the impact table to the aggregate hazard."""
+import logging
 from PyQt4.QtCore import QPyNullVariant
 from qgis.core import QGis, QgsFeatureRequest
 
@@ -33,6 +34,8 @@ __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
+
+LOGGER = logging.getLogger('InaSAFE')
 
 
 @profile
@@ -121,19 +124,19 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
 
     request = QgsFeatureRequest()
     request.setFlags(QgsFeatureRequest.NoGeometry)
-    for f in impact.getFeatures(request):
-
+    LOGGER.debug('Computing the aggregate hazard summary.')
+    for feature in impact.getFeatures(request):
         # Field_index can be equal to 0.
         if field_index is not None:
-            value = f[field_index]
+            value = feature[field_index]
         else:
             value = 1
 
-        aggregation_value = f[aggregation_id]
-        hazard_value = f[hazard_id]
+        aggregation_value = feature[aggregation_id]
+        hazard_value = feature[hazard_id]
         if not hazard_value or isinstance(hazard_value, QPyNullVariant):
             hazard_value = not_exposed_class['key']
-        exposure_value = f[exposure_class]
+        exposure_value = feature[exposure_class]
         if not exposure_value or isinstance(exposure_value, QPyNullVariant):
             exposure_value = 'NULL'
 
@@ -146,9 +149,7 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
 
         # We summarize every absolute values.
         for field, field_definition in absolute_values.iteritems():
-            if field not in f:
-                continue
-            value = f[field]
+            value = feature[field]
             if not value or isinstance(value, QPyNullVariant):
                 value = 0
             field_definition[0].add_value(
