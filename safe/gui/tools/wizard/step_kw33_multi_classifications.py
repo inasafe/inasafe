@@ -409,16 +409,27 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
 
     def get_current_state(self):
         """Obtain current classification and value map / threshold."""
+        def clean_state(dictionary):
+            """Clean dictionary from bad value.
+
+            :param dictionary: Dictionary of value maps or thresholds.
+            :type dictionary: dict
+
+            :returns: Clean state.
+            :rtype: dict
+            """
+            clean_dictionary = {
+                k: v for k, v in dictionary.items()
+                if isinstance(v, dict)}
+
+            return clean_dictionary
+
         if self.layer_mode == layer_mode_continuous:
-            return {
-                'thresholds': self.thresholds,
-                'value_maps': None
-            }
+            output = {'thresholds': clean_state(self.thresholds)}
         else:
-            return {
-                'thresholds': None,
-                'value_maps': self.value_maps
-            }
+            output = {'value_maps': clean_state(self.value_maps)}
+
+        return output
 
     def get_classification(self, combo_box):
         """Helper to obtain the classification from a combo box.

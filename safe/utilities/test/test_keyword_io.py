@@ -13,7 +13,6 @@ from safe.test.utilities import (
     standard_data_path,
     clone_raster_layer)
 from safe.utilities.keyword_io import KeywordIO
-from safe.definitions.utilities import definition
 from safe.utilities.metadata import read_iso19115_metadata
 from safe.utilities.unicode import get_unicode
 
@@ -113,7 +112,6 @@ class KeywordIOTest(unittest.TestCase):
             source_directory=standard_data_path('hazard'))
         layer.keywords = {
             'hazard_category': u'single_event',
-            'classification': u'tsunami_hazard_classes',
             'title': u'tsunami_wgs84',
             'keyword_version': u'3.5',
             'hazard': u'tsunami',
@@ -129,7 +127,6 @@ class KeywordIOTest(unittest.TestCase):
         self.keyword_io.update_keywords(layer, new_keywords)
         keywords = self.keyword_io.read_keywords(layer)
         expected_keywords = {
-            'classification': 'tsunami_hazard_classes',
             'hazard_category': 'multiple_event',
             'title': 'tsunami_wgs84',
             'hazard': 'tsunami',
@@ -138,11 +135,66 @@ class KeywordIOTest(unittest.TestCase):
             'layer_purpose': 'hazard',
             'layer_mode': 'continuous',
             'thresholds': {
-                'dry': [0.0, 0.1],
-                'high': [3.0, 8.0],
-                'low': [0.1, 1.0],
-                'medium': [1.0, 3.0],
-                'very high': [8.0, 16.68]
+                'road': {
+                    'tsunami_hazard_classes': {
+                        'active': True,
+                        'classes': {
+                            'dry': [0.0, 0.1],
+                            'high': [3.0, 8.0],
+                            'medium': [1.0, 3.0],
+                            'low': [0.1, 1.0],
+                            'very high': [8.0, 16.68]
+                        }
+                    }
+                },
+                'structure': {
+                    'tsunami_hazard_classes': {
+                        'active': True,
+                        'classes': {
+                            'dry': [0.0, 0.1],
+                            'high': [3.0, 8.0],
+                            'medium': [1.0, 3.0],
+                            'low': [0.1, 1.0],
+                            'very high': [8.0, 16.68]
+                        }
+                    }
+                },
+                'place': {
+                    'tsunami_hazard_classes': {
+                        'active': True,
+                        'classes': {
+                            'dry': [0.0, 0.1],
+                            'high': [3.0, 8.0],
+                            'medium': [1.0, 3.0],
+                            'low': [0.1, 1.0],
+                            'very high': [8.0, 16.68]
+                        }
+                    }
+                },
+                'land_cover': {
+                    'tsunami_hazard_classes': {
+                        'active': True,
+                        'classes': {
+                            'dry': [0.0, 0.1],
+                            'high': [3.0, 8.0],
+                            'medium': [1.0, 3.0],
+                            'low': [0.1, 1.0],
+                            'very high': [8.0, 16.68]
+                        }
+                    }
+                },
+                'population': {
+                    'tsunami_hazard_classes': {
+                        'active': True,
+                        'classes': {
+                            'dry': [0.0, 0.1],
+                            'high': [3.0, 8.0],
+                            'medium': [1.0, 3.0],
+                            'low': [0.1, 1.0],
+                            'very high': [8.0, 16.68]
+                        }
+                    }
+                }
             },
             'keyword_version': inasafe_keyword_version
         }
