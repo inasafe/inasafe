@@ -262,9 +262,7 @@ class TestKeywordWizard(unittest.TestCase):
             'title': layer_title,
             'hazard': hazard_earthquake['key'],
             'inasafe_fields':
-                {
-                    hazard_value_field['key']: u'h_zone'
-                },
+                {hazard_value_field['key']: u'h_zone'},
             'value_maps': layer.keywords['value_maps'],
             'date': source_date,
             'layer_geometry': layer_geometry_polygon['key'],
@@ -912,7 +910,7 @@ class TestKeywordWizard(unittest.TestCase):
         self.assertDictEqual(real_keywords, expected_keyword)
 
     def test_aggregation_existing_keyword(self):
-        """Test Aggregation Keywords"""
+        """Test Keyword wizard for aggregation layer with keywords."""
         layer = load_test_vector_layer(
             'gisv4', 'aggregation', 'small_grid.geojson', clone_to_memory=True)
 
@@ -1113,7 +1111,7 @@ class TestKeywordWizard(unittest.TestCase):
         self.assertDictEqual(real_keywords, expected_keyword)
 
     def test_exposure_population_polygon_existing_keyword(self):
-        """Test existing exposure population polygon keyword"""
+        """Test existing exposure population polygon with keyword."""
         layer = load_test_vector_layer(
             'exposure', 'census.geojson', clone_to_memory=True)
         expected_keyword = {

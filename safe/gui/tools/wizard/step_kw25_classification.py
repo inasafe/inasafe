@@ -14,7 +14,6 @@ from safe.definitions.layer_modes import (
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_strings import classification_question
-from safe.utilities.gis import is_raster_layer
 from safe.definitions.utilities import definition, get_classifications
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

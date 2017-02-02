@@ -148,11 +148,10 @@ class TestMetadataUtilities(unittest.TestCase):
 
         thresholds = active_thresholds_value_maps(keywords, 'population')
         expected_thresholds = {
-                                  'low': [1, 2.5],
-                                  'medium': [2.5, 4],
-                                  'high': [4, 6],
-                                  'very_high': [6, 8]
-                              }
+            'low': [1, 2.5],
+            'medium': [2.5, 4],
+            'high': [4, 6],
+            'very_high': [6, 8]}
         self.assertDictEqual(thresholds, expected_thresholds)
 
         classification = active_thresholds_value_maps(keywords, 'road')

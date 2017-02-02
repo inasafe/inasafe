@@ -226,7 +226,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
                     self.classifications_combo_box_changed,
                     exposure=exposure,
                     exposure_combo_box=exposure_combo_box,
-                    edit_button=exposure_edit_button,
+                    edit_button=exposure_edit_button
                     )
             )
 
@@ -706,7 +706,6 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         self.right_layout.addLayout(value_mapping_layout)
 
         default_classes = classification['classes']
-        classification_name = classification['name']
 
         # Assign unique values to classes (according to default)
         unassigned_values = list()
@@ -940,7 +939,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
 
     def classifications_combo_box_changed(
             self, index, exposure, exposure_combo_box, edit_button):
-        """Action when classification combo box changed
+        """Action when classification combo box changed.
 
         :param index: The index of the combo box.
         :type index: int

@@ -4,7 +4,7 @@
 import logging
 import re
 from PyQt4 import QtCore
-from PyQt4.QtGui import QWidgetItem, QSpacerItem, QLayoutItem, QLayout
+from PyQt4.QtGui import QWidgetItem, QSpacerItem, QLayout
 
 from qgis.core import QgsCoordinateTransform
 
