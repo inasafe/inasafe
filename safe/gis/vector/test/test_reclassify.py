@@ -20,7 +20,7 @@ __revision__ = '$Format:%H$'
 
 
 class TestReclassifyVector(unittest.TestCase):
-
+    """Test Reclassify Vector."""
     def setUp(self):
         pass
 

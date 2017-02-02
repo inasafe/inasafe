@@ -1,5 +1,4 @@
 # coding=utf-8
-
 """Aggregate the aggregate hazard to the analysis layer."""
 
 from PyQt4.QtCore import QPyNullVariant
@@ -27,6 +26,7 @@ from safe.gis.vector.summary_tools import (
     check_inputs, create_absolute_values_structure, add_fields)
 from safe.utilities.profiling import profile
 from safe.utilities.pivot_table import FlatTable
+from safe.utilities.metadata import active_classification
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -35,7 +35,7 @@ __revision__ = '$Format:%H$'
 
 
 @profile
-def analysis_summary(aggregate_hazard, analysis, callback=None):
+def analysis_summary(aggregate_hazard, analysis, exposure_key, callback=None):
     """Compute the summary from the aggregate hazard to analysis.
 
     Source layer :
@@ -52,6 +52,9 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
 
     :param analysis: The target vector layer where to write statistics.
     :type analysis: QgsVectorLayer
+
+    :param exposure_key: The exposure key.
+    :type exposure_key: str
 
     :param callback: A function to all to indicate progress. The function
         should accept params 'current' (int), 'maximum' (int) and 'step' (str).
@@ -92,7 +95,7 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
     unique_hazard = aggregate_hazard.uniqueValues(hazard_class_index)
 
     hazard_keywords = aggregate_hazard.keywords['hazard_keywords']
-    classification = hazard_keywords['classification']
+    classification = active_classification(hazard_keywords, exposure_key)
 
     total = source_fields[total_field['key']]
 

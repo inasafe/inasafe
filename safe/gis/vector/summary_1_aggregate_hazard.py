@@ -1,5 +1,4 @@
 # coding=utf-8
-
 """Aggregate the impact table to the aggregate hazard."""
 from PyQt4.QtCore import QPyNullVariant
 from qgis.core import QGis, QgsFeatureRequest
@@ -28,6 +27,7 @@ from safe.gis.vector.summary_tools import (
 from safe.utilities.profiling import profile
 from safe.utilities.pivot_table import FlatTable
 from safe.utilities.i18n import tr
+from safe.utilities.metadata import active_classification
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -36,7 +36,8 @@ __revision__ = '$Format:%H$'
 
 
 @profile
-def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
+def aggregate_hazard_summary(
+        impact, aggregate_hazard, exposure_key, callback=None):
     """Compute the summary from the source layer to the aggregate_hazard layer.
 
     Source layer :
@@ -55,6 +56,9 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
     :param aggregate_hazard: The aggregate_hazard vector layer where to write
         statistics.
     :type aggregate_hazard: QgsVectorLayer
+
+    :param exposure_key: The exposure key.
+    :type exposure_key: str
 
     :param callback: A function to all to indicate progress. The function
         should accept params 'current' (int), 'maximum' (int) and 'step' (str).
@@ -158,7 +162,7 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
             )
 
     hazard_keywords = aggregate_hazard.keywords['hazard_keywords']
-    classification = hazard_keywords['classification']
+    classification = active_classification(hazard_keywords, exposure_key)
 
     for area in aggregate_hazard.getFeatures(request):
         aggregation_value = area[aggregation_id]

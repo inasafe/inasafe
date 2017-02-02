@@ -122,7 +122,7 @@ def update_value_map(layer, exposure_key=None, callback=None):
         value_map_key = 'value_maps'
     else:
         value_map_key = 'value_map'
-    layer.keywords.pop(value_map_key)
+    # layer.keywords.pop(value_map_key)
     layer.keywords['title'] = output_layer_name
 
     return layer
