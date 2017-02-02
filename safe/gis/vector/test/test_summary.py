@@ -54,7 +54,7 @@ class TestAggregateSummary(unittest.TestCase):
         aggregate_hazard.keywords['hazard_keywords'] = {
             'thresholds': {
                 exposure_structure['key']: {
-                    generic_hazard_classes['key']:{
+                    generic_hazard_classes['key']: {
                         'classes': [],
                         'active': True
                     }
@@ -133,7 +133,7 @@ class TestAggregateSummary(unittest.TestCase):
         aggregate_hazard.keywords['hazard_keywords'] = {
             'thresholds': {
                 exposure_structure['key']: {
-                    generic_hazard_classes['key']:{
+                    generic_hazard_classes['key']: {
                         'classes': [],
                         'active': True
                     }
@@ -182,7 +182,7 @@ class TestAggregateSummary(unittest.TestCase):
         aggregate_hazard.keywords['hazard_keywords'] = {
             'thresholds': {
                 exposure_structure['key']: {
-                    generic_hazard_classes['key']:{
+                    generic_hazard_classes['key']: {
                         'classes': [],
                         'active': True
                     }
