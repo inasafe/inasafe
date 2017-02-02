@@ -200,7 +200,7 @@
             <gco:CharacterString>polygon</gco:CharacterString>
           </layer_geometry>
           <value_map>
-            <gco:Dictionary>{&quot;medium&quot;: [&quot;Medium Hazard Zone&quot;], &quot;land_cover&quot;: {&quot;earthquake_mmi_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [&quot;High Hazard Zone&quot;], &quot;medium&quot;: [&quot;Medium Hazard Zone&quot;], &quot;low&quot;: [&quot;Low Hazard Zone&quot;]}}}, &quot;structure&quot;: {&quot;earthquake_mmi_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [&quot;High Hazard Zone&quot;], &quot;medium&quot;: [&quot;Medium Hazard Zone&quot;], &quot;low&quot;: [&quot;Low Hazard Zone&quot;]}}}, &quot;high&quot;: [&quot;High Hazard Zone&quot;], &quot;place&quot;: {&quot;earthquake_mmi_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [&quot;High Hazard Zone&quot;], &quot;medium&quot;: [&quot;Medium Hazard Zone&quot;], &quot;low&quot;: [&quot;Low Hazard Zone&quot;]}}}, &quot;low&quot;: [&quot;Low Hazard Zone&quot;], &quot;road&quot;: {&quot;earthquake_mmi_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [&quot;High Hazard Zone&quot;], &quot;medium&quot;: [&quot;Medium Hazard Zone&quot;], &quot;low&quot;: [&quot;Low Hazard Zone&quot;]}}}, &quot;population&quot;: {&quot;earthquake_mmi_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [&quot;High Hazard Zone&quot;], &quot;medium&quot;: [&quot;Medium Hazard Zone&quot;], &quot;low&quot;: [&quot;Low Hazard Zone&quot;]}}}}</gco:Dictionary>
+            <gco:Dictionary>{&quot;structure&quot;: {&quot;earthquake_mmi_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [&quot;High Hazard Zone&quot;], &quot;medium&quot;: [&quot;Medium Hazard Zone&quot;], &quot;low&quot;: [&quot;Low Hazard Zone&quot;]}}}, &quot;place&quot;: {&quot;earthquake_mmi_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [&quot;High Hazard Zone&quot;], &quot;medium&quot;: [&quot;Medium Hazard Zone&quot;], &quot;low&quot;: [&quot;Low Hazard Zone&quot;]}}}, &quot;land_cover&quot;: {&quot;earthquake_mmi_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [&quot;High Hazard Zone&quot;], &quot;medium&quot;: [&quot;Medium Hazard Zone&quot;], &quot;low&quot;: [&quot;Low Hazard Zone&quot;]}}}, &quot;road&quot;: {&quot;earthquake_mmi_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [&quot;High Hazard Zone&quot;], &quot;medium&quot;: [&quot;Medium Hazard Zone&quot;], &quot;low&quot;: [&quot;Low Hazard Zone&quot;]}}}, &quot;population&quot;: {&quot;earthquake_mmi_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [&quot;High Hazard Zone&quot;], &quot;medium&quot;: [&quot;Medium Hazard Zone&quot;], &quot;low&quot;: [&quot;Low Hazard Zone&quot;]}}}}</gco:Dictionary>
           </value_map>
           <hazard>
             <gco:CharacterString>earthquake</gco:CharacterString>
@@ -208,9 +208,6 @@
           <report>
             <gco:CharacterString/>
           </report>
-          <classifications>
-            <gco:Dictionary/>
-          </classifications>
           <keyword_version>
             <gco:CharacterString>4.0</gco:CharacterString>
           </keyword_version>

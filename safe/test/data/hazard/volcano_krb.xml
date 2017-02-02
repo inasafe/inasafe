@@ -200,7 +200,7 @@
             <gco:CharacterString>polygon</gco:CharacterString>
           </layer_geometry>
           <value_map>
-            <gco:Dictionary>{&quot;medium&quot;: [&quot;Kawasan Rawan Bencana II&quot;], &quot;land_cover&quot;: {&quot;volcano_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [&quot;Kawasan Rawan Bencana III&quot;], &quot;medium&quot;: [&quot;Kawasan Rawan Bencana II&quot;], &quot;low&quot;: [&quot;Kawasan Rawan Bencana I&quot;]}}}, &quot;structure&quot;: {&quot;volcano_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [&quot;Kawasan Rawan Bencana III&quot;], &quot;medium&quot;: [&quot;Kawasan Rawan Bencana II&quot;], &quot;low&quot;: [&quot;Kawasan Rawan Bencana I&quot;]}}}, &quot;high&quot;: [&quot;Kawasan Rawan Bencana III&quot;], &quot;place&quot;: {&quot;volcano_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [&quot;Kawasan Rawan Bencana III&quot;], &quot;medium&quot;: [&quot;Kawasan Rawan Bencana II&quot;], &quot;low&quot;: [&quot;Kawasan Rawan Bencana I&quot;]}}}, &quot;low&quot;: [&quot;Kawasan Rawan Bencana I&quot;], &quot;road&quot;: {&quot;volcano_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [&quot;Kawasan Rawan Bencana III&quot;], &quot;medium&quot;: [&quot;Kawasan Rawan Bencana II&quot;], &quot;low&quot;: [&quot;Kawasan Rawan Bencana I&quot;]}}}, &quot;population&quot;: {&quot;volcano_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [&quot;Kawasan Rawan Bencana III&quot;], &quot;medium&quot;: [&quot;Kawasan Rawan Bencana II&quot;], &quot;low&quot;: [&quot;Kawasan Rawan Bencana I&quot;]}}}}</gco:Dictionary>
+            <gco:Dictionary>{&quot;structure&quot;: {&quot;volcano_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [&quot;Kawasan Rawan Bencana III&quot;], &quot;medium&quot;: [&quot;Kawasan Rawan Bencana II&quot;], &quot;low&quot;: [&quot;Kawasan Rawan Bencana I&quot;]}}}, &quot;place&quot;: {&quot;volcano_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [&quot;Kawasan Rawan Bencana III&quot;], &quot;medium&quot;: [&quot;Kawasan Rawan Bencana II&quot;], &quot;low&quot;: [&quot;Kawasan Rawan Bencana I&quot;]}}}, &quot;land_cover&quot;: {&quot;volcano_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [&quot;Kawasan Rawan Bencana III&quot;], &quot;medium&quot;: [&quot;Kawasan Rawan Bencana II&quot;], &quot;low&quot;: [&quot;Kawasan Rawan Bencana I&quot;]}}}, &quot;road&quot;: {&quot;volcano_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [&quot;Kawasan Rawan Bencana III&quot;], &quot;medium&quot;: [&quot;Kawasan Rawan Bencana II&quot;], &quot;low&quot;: [&quot;Kawasan Rawan Bencana I&quot;]}}}, &quot;population&quot;: {&quot;volcano_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [&quot;Kawasan Rawan Bencana III&quot;], &quot;medium&quot;: [&quot;Kawasan Rawan Bencana II&quot;], &quot;low&quot;: [&quot;Kawasan Rawan Bencana I&quot;]}}}}</gco:Dictionary>
           </value_map>
           <hazard>
             <gco:CharacterString>volcano</gco:CharacterString>
@@ -208,9 +208,6 @@
           <report>
             <gco:CharacterString/>
           </report>
-          <classifications>
-            <gco:Dictionary/>
-          </classifications>
           <keyword_version>
             <gco:CharacterString>4.0</gco:CharacterString>
           </keyword_version>
