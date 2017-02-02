@@ -59,6 +59,7 @@ class FileDownloader(object):
             self.prefix_text = self.progress_dialog.labelText()
         self.output_file = None
         self.reply = None
+        self.result = None
         self.downloaded_file_buffer = None
         self.finished_flag = False
 
@@ -80,13 +81,14 @@ class FileDownloader(object):
 
         # Request the url
         request = QNetworkRequest(self.url)
+        self.result = None
         self.reply = self.manager.get(request)
         self.reply.readyRead.connect(self.get_buffer)
         self.reply.finished.connect(self.write_data)
         self.manager.requestTimedOut.connect(self.request_timeout)
 
         if self.progress_dialog:
-            # progress bar
+            # Function called when  bar
             def progress_event(received, total):
                 """Update progress.
 
@@ -111,11 +113,11 @@ class FileDownloader(object):
                 self.progress_dialog.setMaximum(total)
                 self.progress_dialog.setValue(received)
 
-            # cancel
+            # Function called when we press the cancel button.
             def cancel_action():
                 """Cancel download."""
                 self.reply.abort()
-                self.reply.deleteLater()
+                self.result = QNetworkReply.OperationCanceledError
 
             self.reply.downloadProgress.connect(progress_event)
             self.progress_dialog.canceled.connect(cancel_action)
@@ -128,21 +130,20 @@ class FileDownloader(object):
             # noinspection PyArgumentList
             QCoreApplication.processEvents()
 
-        result = self.reply.error()
-        try:
+        if not self.result:
+            self.result = self.reply.error()
             http_code = int(self.reply.attribute(
                 QNetworkRequest.HttpStatusCodeAttribute))
-        except TypeError:
-            # If the user cancels the request, the HTTP response will be None.
-            http_code = None
+            self.reply.abort()
 
-        self.reply.abort()
         self.reply.deleteLater()
 
-        if result == QNetworkReply.NoError:
+        if self.result in [
+                QNetworkReply.NoError, QNetworkReply.OperationCanceledError]:
+            # The requested finished successfully or has been cancelled.
             return True, None
 
-        elif result == QNetworkReply.UnknownNetworkError:
+        elif self.result == QNetworkReply.UnknownNetworkError:
             return False, tr(
                 'The network is unreachable. Please check your internet '
                 'connection.')
@@ -161,18 +162,18 @@ class FileDownloader(object):
             LOGGER.debug(msg)
             return False, msg
 
-        elif result == QNetworkReply.ProtocolUnknownError or \
-                result == QNetworkReply.HostNotFoundError:
+        elif self.result == QNetworkReply.ProtocolUnknownError or \
+                self.result == QNetworkReply.HostNotFoundError:
             LOGGER.exception('Host not found : %s' % self.url.encodedHost())
             return False, tr(
                 'Sorry, the server is unreachable. Please try again later.')
 
-        elif result == QNetworkReply.ContentNotFoundError:
+        elif self.result == QNetworkReply.ContentNotFoundError:
             LOGGER.exception('Path not found : %s' % self.url.path())
             return False, tr('Sorry, the layer was not found on the server.')
 
         else:
-            return result, self.reply.errorString()
+            return self.result, self.reply.errorString()
 
     def get_buffer(self):
         """Get buffer from self.reply and store it to our buffer container."""
