@@ -1,6 +1,7 @@
 # coding=utf-8
 """Test for utilities module."""
 import unittest
+from copy import deepcopy
 
 from safe.definitions import (
     hazard_flood,
@@ -191,27 +192,27 @@ class TestDefinitionsUtilities(unittest.TestCase):
     def test_get_fields(self):
         """Test get_fields method."""
         fields = get_fields('exposure', 'structure')
-        expected_fields = exposure_structure['compulsory_fields']
+        expected_fields = deepcopy(exposure_structure['compulsory_fields'])
         expected_fields += exposure_structure['fields']
         expected_fields += exposure_structure['extra_fields']
         self.assertListEqual(fields, expected_fields)
 
         fields = get_fields('hazard', 'flood')
-        expected_fields = hazard_flood['compulsory_fields']
+        expected_fields = deepcopy(hazard_flood['compulsory_fields'])
         expected_fields += hazard_flood['fields']
         expected_fields += hazard_flood['extra_fields']
         self.assertListEqual(fields, expected_fields)
 
         fields = get_fields('hazard')
-        expected_fields = hazard_fields
+        expected_fields = deepcopy(hazard_fields)
         self.assertListEqual(fields, expected_fields)
 
         fields = get_fields('exposure')
-        expected_fields = exposure_fields
+        expected_fields = deepcopy(exposure_fields)
         self.assertListEqual(fields, expected_fields)
 
         fields = get_fields('aggregation')
-        expected_fields = aggregation_fields
+        expected_fields = deepcopy(aggregation_fields)
         self.assertListEqual(fields, expected_fields)
 
         fields = get_fields('aggregation', replace_null=True)
