@@ -18,6 +18,8 @@ from safe.definitions.layer_geometry import (
     layer_geometry_line,
     layer_geometry_point,
     layer_geometry_polygon)
+from safe.definitions.layer_modes import (
+    layer_mode_continuous, layer_mode_classified)
 from safe.definitions.units import exposure_unit
 from safe.definitions.hazard import continuous_hazard_unit
 from safe.definitions.utilities import get_compulsory_fields
@@ -752,6 +754,17 @@ class WizardDialog(QDialog, FORM_CLASS):
             thresholds = multi_classifications.get('thresholds')
             if thresholds is not None:
                 keywords['thresholds'] = thresholds
+        else:
+            if self.step_kw_layermode.selected_layermode():
+                layer_mode = self.step_kw_layermode.selected_layermode()
+                if layer_mode == layer_mode_continuous:
+                    thresholds = self.step_kw_threshold.get_threshold()
+                    if thresholds:
+                        keywords['thresholds'] = thresholds
+                elif layer_mode == layer_mode_classified:
+                    value_map = self.step_kw_classify.selected_mapping()
+                    if value_map:
+                        keywords['value_map'] = value_map
 
         if self.step_kw_source.leSource.text():
             keywords['source'] = get_unicode(

@@ -45,15 +45,9 @@ class StepKwClassification(WizardStep, FORM_CLASS):
         """
         layer_mode = self.parent.step_kw_layermode.selected_layermode()
         if layer_mode == layer_mode_classified:
-            if is_raster_layer(self.parent.layer):
-                new_step = self.parent.step_kw_classify
-            else:
-                new_step = self.parent.step_kw_field
+            new_step = self.parent.step_kw_classify
         elif layer_mode == layer_mode_continuous:
-            if is_raster_layer(self.parent.layer):
-                new_step = self.parent.step_kw_threshold
-            else:
-                new_step = self.parent.step_kw_field
+            new_step = self.parent.step_kw_threshold
         else:
             message = tr('Layer mode should be continuous or classified')
             raise InvalidWizardStep(message)
@@ -122,7 +116,6 @@ class StepKwClassification(WizardStep, FORM_CLASS):
         """ Clear all further steps
             in order to properly calculate the prev step
         """
-        self.parent.step_kw_field.lstFields.clear()
         self.parent.step_kw_classify.treeClasses.clear()
 
     def set_widgets(self):

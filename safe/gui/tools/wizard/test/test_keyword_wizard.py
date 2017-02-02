@@ -611,7 +611,6 @@ class TestKeywordWizard(unittest.TestCase):
         self.assertDictEqual(
             layer.keywords['value_map'], dialog.get_keywords()['value_map'])
 
-    @unittest.skip('Fix wizard first')
     def test_exposure_structure_polygon_keyword(self):
         """Test keyword wizard for exposure structure polygon"""
         layer = clone_shp_layer(
@@ -658,6 +657,16 @@ class TestKeywordWizard(unittest.TestCase):
         # Click next to select classified
         dialog.pbnNext.click()
 
+        # Check if in select field step
+        self.check_current_step(dialog.step_kw_field)
+
+        # select TYPE field
+        self.select_from_list_widget(
+            'TYPE', dialog.step_kw_field.lstFields)
+
+        # Click next to select TYPE
+        dialog.pbnNext.click()
+
         # Check if in select classification step
         self.check_current_step(dialog.step_kw_classification)
 
@@ -667,16 +676,6 @@ class TestKeywordWizard(unittest.TestCase):
             dialog.step_kw_classification.lstClassifications)
 
         # Click next to select the classifications
-        dialog.pbnNext.click()
-
-        # Check if in select field step
-        self.check_current_step(dialog.step_kw_field)
-
-        # select TYPE field
-        self.select_from_list_widget(
-            'TYPE', dialog.step_kw_field.lstFields)
-
-        # Click next to select TYPE
         dialog.pbnNext.click()
 
         # Check if in classify step
@@ -766,7 +765,6 @@ class TestKeywordWizard(unittest.TestCase):
 
         self.assertDictEqual(real_keywords, expected_keyword)
 
-    @unittest.skip('Fix wizard first')
     def test_exposure_structure_polygon_existing_keywords(self):
         """Test existing keyword for exposure structure polygon."""
         layer = load_test_vector_layer(
@@ -808,6 +806,15 @@ class TestKeywordWizard(unittest.TestCase):
         # Click next to select classified
         dialog.pbnNext.click()
 
+        # Check if in select field step
+        self.check_current_step(dialog.step_kw_field)
+
+        # Check if TYPE is selected
+        self.check_current_text('TYPE', dialog.step_kw_field.lstFields)
+
+        # Click next to select TYPE
+        dialog.pbnNext.click()
+
         # Check if in select classification step
         self.check_current_step(dialog.step_kw_classification)
 
@@ -817,15 +824,6 @@ class TestKeywordWizard(unittest.TestCase):
             dialog.step_kw_classification.lstClassifications)
 
         # Click next to select the classifications
-        dialog.pbnNext.click()
-
-        # Check if in select field step
-        self.check_current_step(dialog.step_kw_field)
-
-        # Check if TYPE is selected
-        self.check_current_text('TYPE', dialog.step_kw_field.lstFields)
-
-        # Click next to select TYPE
         dialog.pbnNext.click()
 
         # Check if in classify step
