@@ -19,6 +19,9 @@ from safe.gis.vector.summary_3_analysis import analysis_summary
 from safe.gis.vector.summary_4_exposure_breakdown import (
     exposure_type_breakdown)
 from safe.utilities.utilities import check_inasafe_fields
+from safe.definitions.exposure import exposure_structure
+from safe.definitions.hazard_classifications import generic_hazard_classes
+from safe.definitions.layer_modes import layer_mode_continuous
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -49,7 +52,15 @@ class TestAggregateSummary(unittest.TestCase):
             clone=True)
 
         aggregate_hazard.keywords['hazard_keywords'] = {
-            'classification': 'generic_hazard_classes'
+            'thresholds': {
+                exposure_structure['key']: {
+                    generic_hazard_classes['key']:{
+                        'classes': [],
+                        'active': True
+                    }
+                }
+            },
+            'layer_mode': layer_mode_continuous['key']
         }
         impact.keywords['classification'] = {
             'classification': 'generic_structure_classes'
@@ -57,7 +68,8 @@ class TestAggregateSummary(unittest.TestCase):
 
         number_of_fields = aggregate_hazard.fields().count()
 
-        layer = aggregate_hazard_summary(impact, aggregate_hazard)
+        layer = aggregate_hazard_summary(
+            impact, aggregate_hazard, exposure_structure['key'])
 
         self.assertIn(total_field['key'], layer.keywords['inasafe_fields'])
 
@@ -119,7 +131,15 @@ class TestAggregateSummary(unittest.TestCase):
             'aggregate_classified_hazard_summary.geojson')
 
         aggregate_hazard.keywords['hazard_keywords'] = {
-            'classification': 'generic_hazard_classes'
+            'thresholds': {
+                exposure_structure['key']: {
+                    generic_hazard_classes['key']:{
+                        'classes': [],
+                        'active': True
+                    }
+                }
+            },
+            'layer_mode': layer_mode_continuous['key']
         }
 
         analysis = load_test_vector_layer(
@@ -130,7 +150,10 @@ class TestAggregateSummary(unittest.TestCase):
 
         number_of_fields = analysis.fields().count()
 
-        layer = analysis_summary(aggregate_hazard, analysis)
+        layer = analysis_summary(
+            aggregate_hazard,
+            analysis,
+            exposure_structure['key'])
 
         check_inasafe_fields(layer)
 
@@ -157,7 +180,15 @@ class TestAggregateSummary(unittest.TestCase):
             'aggregate_classified_hazard_summary.geojson')
 
         aggregate_hazard.keywords['hazard_keywords'] = {
-            'classification': 'generic_hazard_classes'
+            'thresholds': {
+                exposure_structure['key']: {
+                    generic_hazard_classes['key']:{
+                        'classes': [],
+                        'active': True
+                    }
+                }
+            },
+            'layer_mode': layer_mode_continuous['key']
         }
 
         # I need the number of unique exposure
@@ -171,7 +202,8 @@ class TestAggregateSummary(unittest.TestCase):
         hazard_class_index = aggregate_hazard.fieldNameIndex(hazard_class)
         unique_hazard = aggregate_hazard.uniqueValues(hazard_class_index)
 
-        layer = exposure_type_breakdown(aggregate_hazard)
+        layer = exposure_type_breakdown(
+            aggregate_hazard, exposure_structure['key'])
 
         check_inasafe_fields(layer)
 
