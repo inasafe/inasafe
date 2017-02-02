@@ -16,21 +16,17 @@ no_field = tr('No Field')
 no_data_value = 200
 zero_default_value = 0.0
 
-# Number in QVariant
-qvariant_numbers = [
-    QVariant.Int,
-    QVariant.Double,
-    QVariant.UInt,
-    QVariant.LongLong,
-    QVariant.ULongLong
-]
-
 # Whole Number in QVariant / Integer as in math
 qvariant_whole_numbers = [
     QVariant.Int,
     QVariant.UInt,
     QVariant.LongLong,
     QVariant.ULongLong
+]
+
+# Number in QVariant
+qvariant_numbers = qvariant_whole_numbers + [
+    QVariant.Double,
 ]
 
 # Extent selector
