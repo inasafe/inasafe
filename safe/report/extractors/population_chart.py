@@ -6,8 +6,10 @@ from safe.report.extractors.infographic_elements.svg_charts import \
     DonutChartContext
 from safe.report.extractors.util import (
     value_from_field_name,
-    resolve_from_dictionary)
+    resolve_from_dictionary,
+    layer_definition_type)
 from safe.utilities.rounding import round_affected_number
+from safe.utilities.metadata import active_classification
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -43,7 +45,9 @@ def population_chart_extractor(impact_report, component_metadata):
 
     # retrieve hazard classification from hazard layer
     for classification in hazard_classes_all:
-        classification_name = hazard_layer.keywords['classification']
+        exposure_key = layer_definition_type(impact_report.exposure)['key']
+        classification_name = active_classification(
+            hazard_layer.keywords, exposure_key)
         if classification_name == classification['key']:
             hazard_classification = classification
             break
