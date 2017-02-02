@@ -14,6 +14,7 @@ from safe.definitions.fields import (
     exposure_type_field,
     exposure_class_field
 )
+from safe.definitions.exposure import exposure_structure
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -38,7 +39,7 @@ class TestUpdateValueMap(unittest.TestCase):
         self.assertIn(
             hazard_value_field['key'], hazard.keywords['inasafe_fields'])
 
-        layer = update_value_map(hazard)
+        layer = update_value_map(hazard, exposure_structure['key'])
 
         self.assertNotIn(
             hazard_value_field['key'], hazard.keywords['inasafe_fields'])
