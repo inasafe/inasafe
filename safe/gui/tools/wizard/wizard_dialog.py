@@ -717,10 +717,11 @@ class WizardDialog(QDialog, FORM_CLASS):
             key = self.step_kw_purpose.selected_purpose()['key']
             keywords[key] = self.step_kw_subcategory.\
                 selected_subcategory()['key']
-        if self.step_kw_hazard_category.selected_hazard_category():
-            keywords['hazard_category'] \
-                = self.step_kw_hazard_category.\
-                selected_hazard_category()['key']
+        if keywords['layer_purpose'] == layer_purpose_hazard['key']:
+            if self.step_kw_hazard_category.selected_hazard_category():
+                keywords['hazard_category'] \
+                    = self.step_kw_hazard_category.\
+                    selected_hazard_category()['key']
         if self.step_kw_layermode.selected_layermode():
             keywords['layer_mode'] = self.step_kw_layermode.\
                 selected_layermode()['key']
@@ -742,14 +743,15 @@ class WizardDialog(QDialog, FORM_CLASS):
             keywords['classification'] = self.step_kw_classification.\
                 selected_classification()['key']
 
-        multi_classifications = self.step_kw_multi_classifications.\
-            get_current_state()
-        value_maps = multi_classifications.get('value_maps')
-        if value_maps is not None:
-            keywords['value_maps'] = value_maps
-        thresholds = multi_classifications.get('thresholds')
-        if thresholds is not None:
-            keywords['thresholds'] = thresholds
+        if keywords['layer_purpose'] == layer_purpose_hazard['key']:
+            multi_classifications = self.step_kw_multi_classifications.\
+                get_current_state()
+            value_maps = multi_classifications.get('value_maps')
+            if value_maps is not None:
+                keywords['value_maps'] = value_maps
+            thresholds = multi_classifications.get('thresholds')
+            if thresholds is not None:
+                keywords['thresholds'] = thresholds
 
         if self.step_kw_source.leSource.text():
             keywords['source'] = get_unicode(
