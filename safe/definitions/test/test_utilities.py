@@ -274,7 +274,7 @@ class TestDefinitionsUtilities(unittest.TestCase):
         self.assertDictEqual(thresholds, expected)
 
     def test_classification_value_maps(self):
-        """Test for classification_value_maps method"""
+        """Test for classification_value_maps method."""
         value_maps = default_classification_value_maps(flood_hazard_classes)
         expected = {
             'dry': ['dry', '0', 'No', 'n', 'no'],

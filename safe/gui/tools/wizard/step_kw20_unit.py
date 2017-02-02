@@ -10,7 +10,7 @@ from safe.definitions.exposure import exposure_population
 from safe.definitions.units import exposure_unit
 from safe.definitions.hazard import continuous_hazard_unit
 from safe.definitions.utilities import (
-    definition, hazard_units, exposure_units, get_classifications, get_fields)
+    definition, hazard_units, exposure_units, get_classifications)
 from safe.gui.tools.wizard.wizard_step import (
     get_wizard_step_ui_class, WizardStep)
 from safe.gui.tools.wizard.wizard_strings import unit_question
@@ -42,7 +42,6 @@ class StepKwUnit(WizardStep, FORM_CLASS):
         :returns: The step to be switched to
         :rtype: WizardStep instance or None
         """
-        layer_purpose = self.parent.step_kw_purpose.selected_purpose()
         subcategory = self.parent.step_kw_subcategory.selected_subcategory()
         is_raster = is_raster_layer(self.parent.layer)
         has_classifications = get_classifications(subcategory['key'])

@@ -173,7 +173,7 @@ def active_thresholds_value_maps(keywords, exposure_key):
         classifications = keywords['value_maps'].get(exposure_key)
     if classifications is None:
         return None
-    for classification, value in classifications.items():
+    for value in classifications.values():
         if value['active']:
             return value['classes']
     return None
