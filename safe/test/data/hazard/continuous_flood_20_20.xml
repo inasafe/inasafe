@@ -179,7 +179,7 @@
             <gco:Boolean/>
           </multipart_polygon>
           <thresholds>
-            <gco:Dictionary>{&quot;road&quot;: {&quot;dry&quot;: [0, 0.9999999999999999], &quot;wet&quot;: [1, 9999999999]}, &quot;place&quot;: {&quot;dry&quot;: [0, 0.9999999999999999], &quot;wet&quot;: [1, 9999999999]}, &quot;land_cover&quot;: {&quot;high&quot;: [3.0, 4.0], &quot;medium&quot;: [2.5, 3.0], &quot;low&quot;: [0.0, 2.5]}, &quot;structure&quot;: {&quot;dry&quot;: [0, 0.9999999999999999], &quot;wet&quot;: [1, 9999999999]}, &quot;population&quot;: {&quot;high&quot;: [2.7, 4.0], &quot;medium&quot;: [2.0, 2.7], &quot;low&quot;: [0.0, 2.0]}}</gco:Dictionary>
+            <gco:Dictionary>{&quot;road&quot;: {&quot;flood_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;dry&quot;: [0, 0.9999999999999999], &quot;wet&quot;: [1, 9999999999]}}}, &quot;place&quot;: {&quot;flood_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;dry&quot;: [0, 0.9999999999999999], &quot;wet&quot;: [1, 9999999999]}}}, &quot;land_cover&quot;: {&quot;flood_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;dry&quot;: [0.0, 1.0], &quot;wet&quot;: [1.0, 999999.0]}}}, &quot;structure&quot;: {&quot;flood_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;dry&quot;: [0, 0.9999999999999999], &quot;wet&quot;: [1, 9999999999]}}}, &quot;population&quot;: {&quot;flood_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;dry&quot;: [0, 0.9999999999999999], &quot;wet&quot;: [1, 9999999999]}}}}</gco:Dictionary>
           </thresholds>
           <continuous_hazard_unit>
             <gco:CharacterString>metres</gco:CharacterString>
@@ -194,7 +194,7 @@
             <gco:CharacterString/>
           </scale>
           <source>
-            <gco:CharacterString>Akbar Gumbira</gco:CharacterString>
+            <gco:CharacterString/>
           </source>
           <layer_geometry>
             <gco:CharacterString>raster</gco:CharacterString>
@@ -208,9 +208,6 @@
           <report>
             <gco:CharacterString/>
           </report>
-          <classifications>
-            <gco:Dictionary>{&quot;structure&quot;: &quot;flood_hazard_classes&quot;, &quot;place&quot;: &quot;flood_hazard_classes&quot;, &quot;land_cover&quot;: &quot;generic_hazard_classes&quot;, &quot;road&quot;: &quot;flood_hazard_classes&quot;, &quot;population&quot;: &quot;generic_hazard_classes&quot;}</gco:Dictionary>
-          </classifications>
           <keyword_version>
             <gco:CharacterString>4.0</gco:CharacterString>
           </keyword_version>
