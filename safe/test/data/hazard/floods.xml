@@ -200,7 +200,7 @@
             <gco:CharacterString>polygon</gco:CharacterString>
           </layer_geometry>
           <value_map>
-            <gco:Dictionary>{&quot;land_cover&quot;: {&quot;flood_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;wet&quot;: [&quot;YES&quot;]}}}, &quot;place&quot;: {&quot;flood_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;wet&quot;: [&quot;YES&quot;]}}}, &quot;road&quot;: {&quot;flood_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;wet&quot;: [&quot;YES&quot;]}}}, &quot;wet&quot;: [&quot;YES&quot;], &quot;structure&quot;: {&quot;flood_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;wet&quot;: [&quot;YES&quot;]}}}, &quot;population&quot;: {&quot;flood_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;wet&quot;: [&quot;YES&quot;]}}}}</gco:Dictionary>
+            <gco:Dictionary>{&quot;structure&quot;: {&quot;flood_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;wet&quot;: [&quot;YES&quot;]}}}, &quot;place&quot;: {&quot;flood_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;wet&quot;: [&quot;YES&quot;]}}}, &quot;land_cover&quot;: {&quot;flood_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;wet&quot;: [&quot;YES&quot;]}}}, &quot;road&quot;: {&quot;flood_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;wet&quot;: [&quot;YES&quot;]}}}, &quot;population&quot;: {&quot;flood_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;wet&quot;: [&quot;YES&quot;]}}}}</gco:Dictionary>
           </value_map>
           <hazard>
             <gco:CharacterString>flood</gco:CharacterString>
@@ -208,9 +208,6 @@
           <report>
             <gco:CharacterString/>
           </report>
-          <classifications>
-            <gco:Dictionary/>
-          </classifications>
           <keyword_version>
             <gco:CharacterString>4.0</gco:CharacterString>
           </keyword_version>
