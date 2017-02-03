@@ -1,7 +1,6 @@
 # coding=utf-8
 
-"""Tests for definitions help.
-"""
+"""Tests for definitions help."""
 
 import unittest
 import logging
@@ -18,13 +17,13 @@ __revision__ = '$Format:%H$'
 
 
 class TestDefinitionsHelp(unittest.TestCase):
-    """Test Defintions Help Generation
-    """
+
+    """Test Definitions Help Generation."""
+
     test_subdefinition1 = {
         'key': 'test_subdefinition1',
-        'name': tr('Super Nice SubDefinition1'),
-        'description': tr(
-            'Some nice kind of description 1.'),
+        'name': 'Super Nice SubDefinition1',
+        'description': 'Some nice kind of description 1.',
         'citations': [
             {
                 'text': None,
@@ -36,9 +35,8 @@ class TestDefinitionsHelp(unittest.TestCase):
     }
     test_subdefinition2 = {
         'key': 'test_subdefinition2',
-        'name': tr('Super Nice SubDefinition2'),
-        'description': tr(
-            'Some nice kind of description 2.'),
+        'name': 'Super Nice SubDefinition2',
+        'description': 'Some nice kind of description 2.',
         'citations': [
             {
                 'text': None,
@@ -50,9 +48,8 @@ class TestDefinitionsHelp(unittest.TestCase):
     }
     test_definition = {
         'key': 'test_definition',
-        'name': tr('Super Nice Definition'),
-        'description': tr(
-            'Some nice kind of description.'),
+        'name': 'Super Nice Definition',
+        'description': 'Some nice kind of description.',
         'citations': [
             {
                 'text': None,
