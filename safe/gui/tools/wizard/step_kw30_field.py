@@ -125,11 +125,8 @@ class StepKwField(WizardStep, FORM_CLASS):
             return None
 
     def clear_further_steps(self):
-        """ Clear all further steps
-            in order to properly calculate the prev step
-        """
+        """Clear all further steps to re-init widget."""
         self.parent.step_kw_classify.treeClasses.clear()
-        # self.parent.step_kw_classification.clear()
 
     def set_widgets(self):
         """Set widgets on the Field tab."""

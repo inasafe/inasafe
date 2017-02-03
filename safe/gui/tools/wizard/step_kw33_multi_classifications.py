@@ -1,7 +1,6 @@
 # coding=utf-8
 """InaSAFE Keyword Wizard Step for Multi Classifications."""
 
-import logging
 from functools import partial
 from collections import OrderedDict
 import numpy
@@ -51,7 +50,6 @@ __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
-LOGGER = logging.getLogger('InaSAFE')
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
 
@@ -65,6 +63,7 @@ MAX_VALUE_MODE = 1
 
 
 class StepKwMultiClassifications(WizardStep, FORM_CLASS):
+
     """Keyword Wizard Step: Multi Classification."""
 
     def __init__(self, parent=None):
@@ -102,13 +101,12 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         :returns: True if new step may be enabled.
         :rtype: bool
         """
-        # TODO(IS): Update this if the development is finished
         return True
 
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.
 
-        :returns: The step to be switched to
+        :returns: The step to be switched to.
         :rtype: WizardStep instance or None
         """
         if self.layer_purpose != layer_purpose_aggregation:
@@ -251,14 +249,11 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
 
     def edit_button_clicked(self, edit_button, exposure_combo_box, exposure):
         """Method to handle edit button."""
-        LOGGER.debug(exposure['key'])
-        LOGGER.debug(self.get_classification(exposure_combo_box)['key'])
         classification = self.get_classification(exposure_combo_box)
 
         if self.mode == CHOOSE_MODE:
             # Change mode
             self.mode = EDIT_MODE
-            LOGGER.debug('Set active exposure to %s' % exposure['name'])
             # Set active exposure
             self.active_exposure = exposure
             # Disable all edit button
@@ -276,10 +271,8 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             clear_layout(self.right_layout)
             # Show edit threshold or value mapping
             if self.layer_mode == layer_mode_continuous:
-                LOGGER.debug('Layer mode continuous, setup thresholds panel')
                 self.setup_thresholds_panel(classification)
             else:
-                LOGGER.debug('Layer mode classified, setup value map panel')
                 self.setup_value_mapping_panels(classification)
             self.add_buttons(classification)
 
@@ -448,8 +441,6 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         :param classification: Classification definition.
         :type classification: dict
         """
-        LOGGER.debug('Setup threshold panel')
-
         # Set text in the label
         layer_purpose = self.parent.step_kw_purpose.selected_purpose()
         layer_subcategory = self.parent.step_kw_subcategory.\
@@ -659,8 +650,6 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         :param classification: Classification definition.
         :type classification: dict
         """
-        LOGGER.debug('Setup value mapping panel')
-
         # Set text in the label
         layer_purpose = self.parent.step_kw_purpose.selected_purpose()
         layer_subcategory = self.parent.step_kw_subcategory. \
@@ -761,22 +750,18 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         )
 
     # noinspection PyMethodMayBeStatic
-    def update_dragged_item_flags(self, item, column):
+    def update_dragged_item_flags(self, item):
         """Fix the drop flag after the item is dropped.
 
         Check if it looks like an item dragged from QListWidget
         to QTreeWidget and disable the drop flag.
         For some reasons the flag is set when dragging.
 
-        :param item:
-        :param column:
+        :param item: Item which is dragged.
+        :type item: QTreeWidgetItem
 
         .. note:: This is a slot executed when the item change.
         """
-
-        # Treat var as unused
-        _ = column
-
         if int(item.flags() & Qt.ItemIsDropEnabled) \
                 and int(item.flags() & Qt.ItemIsDragEnabled):
             item.setFlags(item.flags() & ~Qt.ItemIsDropEnabled)
@@ -875,7 +860,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
     def save_button_clicked(self, classification):
         """Action for save button clicked.
 
-        :param classification: The classification that being edited
+        :param classification: The classification that being edited.
         :type classification: dict
         """
         # Save current edit
@@ -938,7 +923,6 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
                 value_list += [tree_leaf.data(0, Qt.UserRole)]
             if value_list:
                 value_map[tree_branch.data(0, Qt.UserRole)] = value_list
-        LOGGER.debug(value_map)
         return value_map
 
     def set_current_state(self):
@@ -955,7 +939,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         :param index: The index of the combo box.
         :type index: int
 
-        :param exposure: The exposure associated with the combo box
+        :param exposure: The exposure associated with the combo box.
         :type exposure: dict
 
         :param exposure_combo_box: Combo box for the classification.
@@ -964,7 +948,6 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         :param edit_button: The edit button associate with combo box.
         :type edit_button: QPushButton
         """
-        LOGGER.debug('Combo box changed')
         # Disable button if it's no classification
         edit_button.setEnabled(bool(index))
 
@@ -984,7 +967,6 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         :param classification: Classification definition.
         :type classification: dict
         """
-        LOGGER.debug('Activate classification')
         if self.layer_mode == layer_mode_continuous:
             selected_unit = self.parent.step_kw_unit.selected_unit()['key']
             target = self.thresholds.get(exposure['key'])

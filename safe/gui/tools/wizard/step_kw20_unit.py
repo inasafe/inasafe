@@ -29,6 +29,7 @@ class StepKwUnit(WizardStep, FORM_CLASS):
 
     def is_ready_to_next_step(self):
         """Check if the step is complete.
+
         If so, there is no reason to block the Next button.
 
         :returns: True if new step may be enabled.

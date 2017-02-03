@@ -372,7 +372,7 @@ def default_classification_value_maps(classification):
     :param classification: Classification definition.
     :type classification: dict
 
-    :returns: Dictionary with key = the class key and value = default strings
+    :returns: Dictionary with key = the class key and value = default strings.
     :rtype: dict
     """
     value_maps = {}
