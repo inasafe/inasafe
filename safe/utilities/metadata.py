@@ -143,6 +143,8 @@ def active_classification(keywords, exposure_key):
     :returns: The active classification key. None if there is no active one.
     :rtype: str
     """
+    if 'classification' in keywords:
+        return keywords['classification']
     if keywords['layer_mode'] == layer_mode_continuous['key']:
         classifications = keywords['thresholds'].get(exposure_key)
     else:
@@ -167,6 +169,11 @@ def active_thresholds_value_maps(keywords, exposure_key):
     :returns: Active thresholds or value maps.
     :rtype: dict
     """
+    if 'classification' in keywords:
+        if keywords['layer_mode'] == layer_mode_continuous['key']:
+            return keywords['thresholds']
+        else:
+            return keywords['value_map']
     if keywords['layer_mode'] == layer_mode_continuous['key']:
         classifications = keywords['thresholds'].get(exposure_key)
     else:

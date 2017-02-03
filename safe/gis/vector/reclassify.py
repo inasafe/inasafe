@@ -65,11 +65,16 @@ def reclassify(layer, exposure_key=None, callback=None):
     continuous_column = inasafe_fields[hazard_value_field['key']]
 
     if exposure_key:
-        ranges = active_thresholds_value_maps(layer.keywords, exposure_key)
+        classification_key = active_classification(
+            layer.keywords, exposure_key)
+        thresholds = active_thresholds_value_maps(layer.keywords, exposure_key)
+        layer.keywords['thresholds'] = thresholds
+        layer.keywords['classification'] = classification_key
     else:
-        ranges = layer.keywords.get('thresholds')
+        classification_key = layer.keywords.get('classification')
+        thresholds = layer.keywords.get('thresholds')
 
-    if not ranges:
+    if not thresholds:
         raise InvalidKeywordsForProcessingAlgorithm(
             'thresholds are missing from the layer %s'
             % layer.keywords['layer_purpose'])
@@ -90,7 +95,7 @@ def reclassify(layer, exposure_key=None, callback=None):
     for feature in layer.getFeatures():
         attributes = feature.attributes()
         source_value = attributes[continuous_index]
-        classified_value = _classified_value(source_value, ranges)
+        classified_value = _classified_value(source_value, thresholds)
         if not classified_value:
             layer.deleteFeature(feature.id())
         else:
@@ -106,17 +111,12 @@ def reclassify(layer, exposure_key=None, callback=None):
         hazard_class_field['field_name'])
 
     value_map = {}
-    if exposure_key:
-        classifications = active_classification(
-            layer.keywords, exposure_key)
-    else:
-        classifications = layer.keywords.get('classification')
 
-    hazard_classes = definition(classifications)['classes']
+    hazard_classes = definition(classification_key)['classes']
     for hazard_class in reversed(hazard_classes):
         value_map[hazard_class['key']] = [hazard_class['value']]
-    layer.keywords['value_map'] = value_map
 
+    layer.keywords['value_map'] = value_map
     layer.keywords['title'] = output_layer_name
 
     return layer

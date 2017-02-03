@@ -1360,7 +1360,8 @@ class ImpactFunction(object):
                 self.set_state_process(
                     'hazard', 'Classify continuous raster hazard')
                 # noinspection PyTypeChecker
-                self.hazard = reclassify_raster(self.hazard)
+                self.hazard = reclassify_raster(
+                    self.hazard, self.exposure.keywords['exposure'])
                 if self.debug_mode:
                     self.debug_layer(self.hazard)
 
@@ -1399,7 +1400,8 @@ class ImpactFunction(object):
             self.set_state_process(
                 'hazard',
                 'Classify continuous hazard and assign class names')
-            self.hazard = reclassify_vector(self.hazard)
+            self.hazard = reclassify_vector(
+                self.hazard, self.exposure.keywords['exposure'])
             if self.debug_mode:
                 self.debug_layer(self.hazard)
 
