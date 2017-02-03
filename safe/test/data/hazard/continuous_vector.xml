@@ -179,7 +179,7 @@
             <gco:Boolean/>
           </multipart_polygon>
           <thresholds>
-            <gco:Dictionary>{&quot;dry&quot;: [0.0, 1.0], &quot;land_cover&quot;: {&quot;flood_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;dry&quot;: [0.0, 1.0], &quot;wet&quot;: [1.0, 2.5]}}}, &quot;place&quot;: {&quot;flood_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;dry&quot;: [0.0, 1.0], &quot;wet&quot;: [1.0, 2.5]}}}, &quot;structure&quot;: {&quot;flood_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;dry&quot;: [0.0, 1.0], &quot;wet&quot;: [1.0, 2.5]}}}, &quot;wet&quot;: [1.0, 2.5], &quot;road&quot;: {&quot;flood_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;dry&quot;: [0.0, 1.0], &quot;wet&quot;: [1.0, 2.5]}}}, &quot;population&quot;: {&quot;flood_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;dry&quot;: [0.0, 1.0], &quot;wet&quot;: [1.0, 2.5]}}}}</gco:Dictionary>
+            <gco:Dictionary>{&quot;road&quot;: {&quot;flood_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;dry&quot;: [0.0, 1.0], &quot;wet&quot;: [1.0, 2.5]}}}, &quot;place&quot;: {&quot;flood_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;dry&quot;: [0.0, 1.0], &quot;wet&quot;: [1.0, 2.5]}}}, &quot;land_cover&quot;: {&quot;flood_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;dry&quot;: [0.0, 1.0], &quot;wet&quot;: [1.0, 2.5]}}}, &quot;structure&quot;: {&quot;flood_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;dry&quot;: [0.0, 1.0], &quot;wet&quot;: [1.0, 2.5]}}}, &quot;population&quot;: {&quot;flood_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;dry&quot;: [0.0, 1.0], &quot;wet&quot;: [1.0, 2.5]}}}}</gco:Dictionary>
           </thresholds>
           <continuous_hazard_unit>
             <gco:CharacterString>metres</gco:CharacterString>
@@ -208,9 +208,6 @@
           <report>
             <gco:CharacterString/>
           </report>
-          <classifications>
-            <gco:Dictionary/>
-          </classifications>
           <keyword_version>
             <gco:CharacterString>4.0</gco:CharacterString>
           </keyword_version>
