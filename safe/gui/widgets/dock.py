@@ -1172,7 +1172,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         if not flag:
             send_static_message(self, message)
             self.run_button.setEnabled(False)
-            return None
+            self.extent.clear_next_analysis_extent()
+            return False, None
 
         # Finally, we need to check if an IF can run.
         impact_function = ImpactFunction()
