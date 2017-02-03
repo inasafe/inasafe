@@ -14,7 +14,8 @@ from safe.definitions.layer_purposes import (
     layer_purpose_hazard, layer_purpose_exposure)
 from safe.definitions.processing_steps import assign_inasafe_values_steps
 from safe.gis.vector.tools import remove_fields
-from safe.utilities.metadata import active_thresholds_value_maps
+from safe.utilities.metadata import (
+    active_thresholds_value_maps, active_classification)
 from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -50,11 +51,13 @@ def update_value_map(layer, exposure_key=None, callback=None):
     keywords = layer.keywords
     inasafe_fields = keywords['inasafe_fields']
 
+    classification = None
     if keywords['layer_purpose'] == layer_purpose_hazard['key']:
         if not inasafe_fields.get(hazard_value_field['key']):
             raise InvalidKeywordsForProcessingAlgorithm
         old_field = hazard_value_field
         new_field = hazard_class_field
+        classification = active_classification(layer.keywords, exposure_key)
 
     elif keywords['layer_purpose'] == layer_purpose_exposure['key']:
         if not inasafe_fields.get(exposure_type_field['key']):
@@ -124,5 +127,7 @@ def update_value_map(layer, exposure_key=None, callback=None):
         value_map_key = 'value_map'
     layer.keywords.pop(value_map_key)
     layer.keywords['title'] = output_layer_name
+    if classification:
+        layer.keywords['classification'] = classification
 
     return layer

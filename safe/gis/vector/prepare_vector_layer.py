@@ -1,8 +1,6 @@
 # coding=utf-8
+"""Prepare layers for InaSAFE."""
 
-"""
-Prepare layers for InaSAFE.
-"""
 import logging
 from PyQt4.QtCore import QPyNullVariant
 from qgis.core import (
@@ -46,6 +44,8 @@ from safe.impact_function.postprocessors import run_single_post_processor
 from safe.definitions.post_processors import post_processor_size
 from safe.utilities.i18n import tr
 from safe.utilities.profiling import profile
+from safe.utilities.metadata import (
+    active_thresholds_value_maps, active_classification)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -127,21 +127,37 @@ def prepare_vector_layer(layer, callback=None):
 
 
 @profile
-def _check_value_mapping(layer):
+def _check_value_mapping(layer, exposure_key=None):
     """Loop over the exposure type field and check if the value map is correct.
 
     :param layer: The layer
     :type layer: QgsVectorLayer
+
+    :param exposure_key: The exposure key.
+    :type exposure_key: str
     """
     index = layer.fieldNameIndex(exposure_type_field['field_name'])
     unique_exposure = layer.uniqueValues(index)
-    value_map = layer.keywords.get('value_map')
+    if layer.keywords['layer_purpose'] == layer_purpose_hazard['key']:
+        if not exposure_key:
+            message = tr('Hazard value mapping missing exposure key.')
+            raise InvalidKeywordsForProcessingAlgorithm(message)
+        value_map = active_thresholds_value_maps(layer.keywords, exposure_key)
+    else:
+        value_map = layer.keywords.get('value_map')
 
     if not value_map:
         # The exposure do not have a value_map, we can skip the layer.
         return layer
 
-    classification = layer.keywords['classification']
+    if layer.keywords['layer_purpose'] == layer_purpose_hazard['key']:
+        if not exposure_key:
+            message = tr('Hazard classification missing exposure key.')
+            raise InvalidKeywordsForProcessingAlgorithm(message)
+        classification = active_classification(layer.keywords, exposure_key)
+    else:
+        classification = layer.keywords['classification']
+
     exposure_classification = definition(classification)
     other = exposure_classification['classes'][-1]['key']
 
@@ -157,6 +173,7 @@ def _check_value_mapping(layer):
         value_map[other] = diff
 
     layer.keywords['value_map'] = value_map
+    layer.keywords['classification'] = classification
     return layer
 
 
