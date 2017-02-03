@@ -193,6 +193,7 @@ def clear_layout(layout):
     """Clear layout content.
 
     # Adapted from http://stackoverflow.com/a/9375273/1198772
+
     :param layout: A layout.
     :type layout: QLayout
     """
@@ -218,7 +219,7 @@ def skip_inasafe_field(layer, inasafe_fields):
 
     The function will check if the layer has a specified field type.
 
-    :param layer: A Qgis Vector Layer
+    :param layer: A Qgis Vector Layer.
     :type layer: QgsVectorLayer
 
     :param inasafe_fields: List of non compulsory InaSAFE fields default.

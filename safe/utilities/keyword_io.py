@@ -1,11 +1,5 @@
 # coding=utf-8
-"""**Keyword IO implementation.**
-
-.. tip:: Provides functionality for reading and writing keywords from within
-   QGIS. It is an abstraction for the keywords system used by the underlying
-   library.
-
-"""
+"""Keyword IO implementation."""
 
 import logging
 import os
@@ -488,16 +482,6 @@ class KeywordIO(QObject):
         row.add(m.Cell(str(keyword_value)))
         table.add(row)
         return table
-
-        # for key, value in keyword_value.items():
-        #     row = m.Row()
-        #     name = definition(key)['name'] if definition(key) else key
-        #     row.add(m.Cell(m.ImportantText(name)))
-        #     pretty_value = tr('%s to %s' % (value[0], value[1]))
-        #     row.add(m.Cell(pretty_value))
-        #
-        #     table.add(row)
-        # return table
 
     def _dict_to_row(self, keyword_value):
         """Helper to make a message row from a keyword where value is a dict.

@@ -22,7 +22,9 @@ __revision__ = '$Format:%H$'
 
 
 class TestReclassifyRaster(unittest.TestCase):
+
     """Test Reclassify Raster."""
+
     maxDiff = None
 
     def setUp(self):

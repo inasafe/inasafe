@@ -274,7 +274,7 @@ class TestKeywordWizard(unittest.TestCase):
         self.assertDictEqual(real_keywords, expected_keyword)
 
     def test_hazard_volcano_polygon_keyword(self):
-        """Test keyword wizard for volcano hazard polygon"""
+        """Test keyword wizard for volcano hazard polygon."""
         layer = clone_shp_layer(
             name='volcano_krb',
             include_keywords=False,

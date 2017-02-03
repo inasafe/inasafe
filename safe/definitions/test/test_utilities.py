@@ -256,42 +256,86 @@ class TestDefinitionsUtilities(unittest.TestCase):
     def test_classification_thresholds(self):
         """Test for classification_thresholds method."""
         thresholds = default_classification_thresholds(flood_hazard_classes)
+        wet_class = flood_hazard_classes['classes'][0]
+        dry_class = flood_hazard_classes['classes'][1]
+
         expected = {
-            'dry': [0, 0.9999999999999999],
-            'wet': [1, 9999999999]
+            'dry': [
+                dry_class['numeric_default_min'],
+                dry_class['numeric_default_max']
+            ],
+            'wet': [
+                wet_class['numeric_default_min'],
+                wet_class['numeric_default_max']
+            ]
         }
         self.assertDictEqual(thresholds, expected)
 
         thresholds = default_classification_thresholds(
             cyclone_au_bom_hazard_classes, unit_knots)
+        unit_knots_key = unit_knots['key']
+        category_5_class = cyclone_au_bom_hazard_classes['classes'][0]
+        category_4_class = cyclone_au_bom_hazard_classes['classes'][1]
+        category_3_class = cyclone_au_bom_hazard_classes['classes'][2]
+        category_2_class = cyclone_au_bom_hazard_classes['classes'][3]
+        category_1_class = cyclone_au_bom_hazard_classes['classes'][4]
+        tropical_depression_class = cyclone_au_bom_hazard_classes['classes'][5]
         expected = {
-            'category_1': [34, 47.0],
-            'category_2': [47, 63.0],
-            'category_3': [63, 85.0],
-            'category_4': [85, 107.0],
-            'category_5': [107, 9999999999],
-            'tropical_depression': [0, 34.0]
+            'tropical_depression': [
+                tropical_depression_class['numeric_default_min'],
+                tropical_depression_class['numeric_default_max'][
+                    unit_knots_key]
+            ],
+            'category_1': [
+                category_1_class['numeric_default_min'][unit_knots_key],
+                category_1_class['numeric_default_max'][unit_knots_key]
+            ],
+            'category_2': [
+                category_2_class['numeric_default_min'][unit_knots_key],
+                category_2_class['numeric_default_max'][unit_knots_key]
+            ],
+            'category_3': [
+                category_3_class['numeric_default_min'][unit_knots_key],
+                category_3_class['numeric_default_max'][unit_knots_key]
+            ],
+            'category_4': [
+                category_4_class['numeric_default_min'][unit_knots_key],
+                category_4_class['numeric_default_max'][unit_knots_key]
+            ],
+            'category_5': [
+                category_5_class['numeric_default_min'][unit_knots_key],
+                category_5_class['numeric_default_max']
+            ]
         }
         self.assertDictEqual(thresholds, expected)
 
     def test_classification_value_maps(self):
         """Test for classification_value_maps method."""
         value_maps = default_classification_value_maps(flood_hazard_classes)
+        wet_class = flood_hazard_classes['classes'][0]
+        dry_class = flood_hazard_classes['classes'][1]
         expected = {
-            'dry': ['dry', '0', 'No', 'n', 'no'],
-            'wet': ['wet', '1', 'YES', 'y', 'yes']
+            'dry': dry_class['string_defaults'],
+            'wet': wet_class['string_defaults']
         }
         self.assertDictEqual(value_maps, expected)
 
         value_maps = default_classification_value_maps(
             cyclone_au_bom_hazard_classes)
+        category_5_class = cyclone_au_bom_hazard_classes['classes'][0]
+        category_4_class = cyclone_au_bom_hazard_classes['classes'][1]
+        category_3_class = cyclone_au_bom_hazard_classes['classes'][2]
+        category_2_class = cyclone_au_bom_hazard_classes['classes'][3]
+        category_1_class = cyclone_au_bom_hazard_classes['classes'][4]
+        tropical_depression_class = cyclone_au_bom_hazard_classes['classes'][5]
         expected = {
-            'category_1': [],
-            'category_2': [],
-            'category_3': [],
-            'category_4': [],
-            'category_5': [],
-            'tropical_depression': []
+            'category_1': category_1_class.get('string_defaults', []),
+            'category_2': category_2_class.get('string_defaults', []),
+            'category_3': category_3_class.get('string_defaults', []),
+            'category_4': category_4_class.get('string_defaults', []),
+            'category_5': category_5_class.get('string_defaults', []),
+            'tropical_depression': tropical_depression_class.get(
+                'string_defaults', [])
         }
         self.assertDictEqual(value_maps, expected)
 
