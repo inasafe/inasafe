@@ -1,5 +1,4 @@
 # coding=utf-8
-
 """Styles."""
 
 from collections import OrderedDict
@@ -24,6 +23,7 @@ from safe.definitions.hazard_classifications import not_exposed_class
 from safe.definitions.utilities import definition
 from safe.utilities.gis import is_line_layer
 from safe.utilities.rounding import format_number
+from safe.utilities.metadata import active_classification
 
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -114,7 +114,8 @@ def generate_classified_legend(
     analysis_row = analysis.getFeatures().next()
 
     # Let's style the hazard class in each layers.
-    hazard_classification = hazard.keywords['classification']
+    hazard_classification = active_classification(
+        hazard.keywords, exposure.keywords['exposure'])
     hazard_classification = definition(hazard_classification)
 
     # Let's check if there is some thresholds:

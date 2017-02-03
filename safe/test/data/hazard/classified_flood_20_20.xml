@@ -175,9 +175,9 @@
           <hazard_category>
             <gco:CharacterString>multiple_event</gco:CharacterString>
           </hazard_category>
-          <classification>
-            <gco:CharacterString>generic_hazard_classes</gco:CharacterString>
-          </classification>
+          <multipart_polygon>
+            <gco:Boolean/>
+          </multipart_polygon>
           <thresholds>
             <gco:Dictionary/>
           </thresholds>
@@ -193,18 +193,15 @@
           <scale>
             <gco:CharacterString/>
           </scale>
-          <multipart_polygon>
-            <gco:Boolean/>
-          </multipart_polygon>
           <source>
             <gco:CharacterString>Akbar Gumbira</gco:CharacterString>
           </source>
-          <value_map>
-            <gco:Dictionary>{&quot;high&quot;: [3.0], &quot;medium&quot;: [2.0], &quot;low&quot;: [1.0]}</gco:Dictionary>
-          </value_map>
           <layer_geometry>
             <gco:CharacterString>raster</gco:CharacterString>
           </layer_geometry>
+          <value_map>
+            <gco:Dictionary>{&quot;road&quot;: {&quot;generic_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [3.0], &quot;medium&quot;: [2.0], &quot;low&quot;: [1.0]}}}, &quot;place&quot;: {&quot;generic_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [3.0], &quot;medium&quot;: [2.0], &quot;low&quot;: [1.0]}}}, &quot;land_cover&quot;: {&quot;flood_hazard_classes&quot;: {&quot;active&quot;: false, &quot;classes&quot;: {&quot;dry&quot;: [&quot;dry&quot;, &quot;0&quot;, &quot;No&quot;, &quot;n&quot;, &quot;no&quot;], &quot;wet&quot;: [&quot;wet&quot;, &quot;1&quot;, &quot;YES&quot;, &quot;y&quot;, &quot;yes&quot;]}}, &quot;generic_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [3.0], &quot;medium&quot;: [2.0], &quot;low&quot;: [1.0]}}}, &quot;structure&quot;: {&quot;generic_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [3.0], &quot;medium&quot;: [2.0], &quot;low&quot;: [1.0]}}}, &quot;population&quot;: {&quot;generic_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [3.0], &quot;medium&quot;: [2.0], &quot;low&quot;: [1.0]}}}}</gco:Dictionary>
+          </value_map>
           <hazard>
             <gco:CharacterString>flood</gco:CharacterString>
           </hazard>

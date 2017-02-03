@@ -1,6 +1,7 @@
 # coding=utf-8
 """Test for utilities module."""
 import unittest
+from copy import deepcopy
 
 from safe.definitions import (
     hazard_flood,
@@ -29,7 +30,9 @@ from safe.definitions import (
     layer_geometry_raster,
     layer_geometry_line,
     layer_geometry_point,
-    layer_geometry_polygon
+    layer_geometry_polygon,
+    cyclone_au_bom_hazard_classes,
+    unit_knots
 )
 from safe.definitions.hazard import hazard_cyclone
 
@@ -44,7 +47,11 @@ from safe.definitions.utilities import (
     get_fields,
     get_classifications,
     get_allowed_geometries,
-    all_default_fields
+    all_default_fields,
+    get_compulsory_fields,
+    get_non_compulsory_fields,
+    default_classification_thresholds,
+    default_classification_value_maps
 )
 
 
@@ -160,30 +167,52 @@ class TestDefinitionsUtilities(unittest.TestCase):
         self.assertItemsEqual(
             get_classifications('flood'), expected)
 
+    def test_get_compulsory_field(self):
+        """Test get_compulsory_field method."""
+        compulsory_field = get_compulsory_fields('exposure', 'structure')
+        expected_fields = exposure_structure['compulsory_fields']
+        self.assertListEqual([compulsory_field], expected_fields)
+
+    def test_get_not_compulsory_field(self):
+        """Test get_non_compulsory_field method."""
+        non_compulsory_fields = get_non_compulsory_fields(
+            'exposure', 'structure')
+        expected_fields = [
+            field for field in exposure_structure['fields'] if not field[
+                'replace_null']]
+        expected_fields += [
+            field for field in exposure_structure['extra_fields'] if not
+            field['replace_null']]
+
+        for field in expected_fields:
+            if field.get('replace_null'):
+                expected_fields.remove(field)
+        self.assertListEqual(non_compulsory_fields, expected_fields)
+
     def test_get_fields(self):
         """Test get_fields method."""
         fields = get_fields('exposure', 'structure')
-        expected_fields = exposure_structure['compulsory_fields']
+        expected_fields = deepcopy(exposure_structure['compulsory_fields'])
         expected_fields += exposure_structure['fields']
         expected_fields += exposure_structure['extra_fields']
         self.assertListEqual(fields, expected_fields)
 
         fields = get_fields('hazard', 'flood')
-        expected_fields = hazard_flood['compulsory_fields']
+        expected_fields = deepcopy(hazard_flood['compulsory_fields'])
         expected_fields += hazard_flood['fields']
         expected_fields += hazard_flood['extra_fields']
         self.assertListEqual(fields, expected_fields)
 
         fields = get_fields('hazard')
-        expected_fields = hazard_fields
+        expected_fields = deepcopy(hazard_fields)
         self.assertListEqual(fields, expected_fields)
 
         fields = get_fields('exposure')
-        expected_fields = exposure_fields
+        expected_fields = deepcopy(exposure_fields)
         self.assertListEqual(fields, expected_fields)
 
         fields = get_fields('aggregation')
-        expected_fields = aggregation_fields
+        expected_fields = deepcopy(aggregation_fields)
         self.assertListEqual(fields, expected_fields)
 
         fields = get_fields('aggregation', replace_null=True)
@@ -223,6 +252,48 @@ class TestDefinitionsUtilities(unittest.TestCase):
         for default_field in default_fields:
             self.assertTrue(default_field.get('replace_null'), False)
             self.assertIsNotNone(default_field.get('default_value'))
+
+    def test_classification_thresholds(self):
+        """Test for classification_thresholds method."""
+        thresholds = default_classification_thresholds(flood_hazard_classes)
+        expected = {
+            'dry': [0, 0.9999999999999999],
+            'wet': [1, 9999999999]
+        }
+        self.assertDictEqual(thresholds, expected)
+
+        thresholds = default_classification_thresholds(
+            cyclone_au_bom_hazard_classes, unit_knots)
+        expected = {
+            'category_1': [34, 47.0],
+            'category_2': [47, 63.0],
+            'category_3': [63, 85.0],
+            'category_4': [85, 107.0],
+            'category_5': [107, 9999999999],
+            'tropical_depression': [0, 34.0]
+        }
+        self.assertDictEqual(thresholds, expected)
+
+    def test_classification_value_maps(self):
+        """Test for classification_value_maps method."""
+        value_maps = default_classification_value_maps(flood_hazard_classes)
+        expected = {
+            'dry': ['dry', '0', 'No', 'n', 'no'],
+            'wet': ['wet', '1', 'YES', 'y', 'yes']
+        }
+        self.assertDictEqual(value_maps, expected)
+
+        value_maps = default_classification_value_maps(
+            cyclone_au_bom_hazard_classes)
+        expected = {
+            'category_1': [],
+            'category_2': [],
+            'category_3': [],
+            'category_4': [],
+            'category_5': [],
+            'tropical_depression': []
+        }
+        self.assertDictEqual(value_maps, expected)
 
 
 if __name__ == '__main__':

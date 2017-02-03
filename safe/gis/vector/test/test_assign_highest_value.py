@@ -1,4 +1,5 @@
 # coding=utf-8
+"""Test Assign Highest Value Vector."""
 
 import unittest
 
@@ -10,6 +11,9 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from qgis.core import QgsFeatureRequest
 
 from safe.definitions.fields import hazard_class_field
+from safe.definitions.exposure import exposure_structure
+from safe.definitions.hazard_classifications import generic_hazard_classes
+from safe.definitions.layer_modes import layer_mode_continuous
 from safe.gis.vector.assign_highest_value import assign_highest_value
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -19,12 +23,7 @@ __revision__ = '$Format:%H$'
 
 
 class TestAssignHighestValueVector(unittest.TestCase):
-
-    def setUp(self):
-        pass
-
-    def tearDown(self):
-        pass
+    """Test Assign Highest Value Vector."""
 
     def test_assign_highest_value_vector(self):
         """Test we can assign the highest value to a feature."""
@@ -37,7 +36,15 @@ class TestAssignHighestValueVector(unittest.TestCase):
 
         # Monkey patching classification. We should remove this line
         # when we will have aggregate_hazard definitions.
-        aggregate_hazard.keywords['classification'] = 'generic_hazard_classes'
+        aggregate_hazard.keywords['thresholds'] = {
+                exposure_structure['key']: {
+                    generic_hazard_classes['key']: {
+                        'classes': [],
+                        'active': True
+                    }
+                }
+            }
+        aggregate_hazard.keywords['layer_mode'] = layer_mode_continuous['key']
 
         aggregate_hazard.keywords['aggregation_keywords'] = {}
         aggregate_hazard.keywords['hazard_keywords'] = {}

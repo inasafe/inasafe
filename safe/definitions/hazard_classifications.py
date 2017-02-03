@@ -1,5 +1,4 @@
 # coding=utf-8
-
 """Definitions relating to hazards classifications.
 
 See https://github.com/inasafe/inasafe/issues/2920#issuecomment-229874044
@@ -22,6 +21,12 @@ from safe.definitions.styles import (
     red,
     dark_red,
     very_dark_red)
+from safe.definitions.exposure import (
+    exposure_land_cover,
+    exposure_place,
+    exposure_population,
+    exposure_road,
+    exposure_structure)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -108,6 +113,13 @@ generic_hazard_classes = {
                 }
             ],
         }
+    ],
+    'exposures': [
+        exposure_land_cover,
+        exposure_place,
+        exposure_population,
+        exposure_road,
+        exposure_structure
     ]
 }
 
@@ -188,6 +200,13 @@ earthquake_mmi_hazard_classes = {
                 }
             ]
         }
+    ],
+    'exposures': [
+        exposure_land_cover,
+        exposure_place,
+        exposure_population,
+        exposure_road,
+        exposure_structure
     ]
 }
 
@@ -262,6 +281,13 @@ volcano_hazard_classes = {
                 }
             ]
         }
+    ],
+    'exposures': [
+        exposure_land_cover,
+        exposure_place,
+        exposure_population,
+        exposure_road,
+        exposure_structure
     ]
 }
 
@@ -319,6 +345,13 @@ flood_hazard_classes = {
                 }
             ]
         }
+    ],
+    'exposures': [
+        exposure_land_cover,
+        exposure_place,
+        exposure_population,
+        exposure_road,
+        exposure_structure
     ]
 }
 
@@ -569,6 +602,13 @@ tsunami_hazard_classes = {
                 }
             ]
         },
+    ],
+    'exposures': [
+        exposure_land_cover,
+        exposure_place,
+        exposure_population,
+        exposure_road,
+        exposure_structure
     ]
 }
 
@@ -783,6 +823,13 @@ cyclone_au_bom_hazard_classes = {
                 }
             ]
         },
+    ],
+    'exposures': [
+        exposure_land_cover,
+        exposure_place,
+        exposure_population,
+        exposure_road,
+        exposure_structure
     ]
 }
 
@@ -994,6 +1041,13 @@ cyclone_sshws_hazard_classes = {
                 }
             ]
         },
+    ],
+    'exposures': [
+        exposure_land_cover,
+        exposure_place,
+        exposure_population,
+        exposure_road,
+        exposure_structure
     ]
 }
 

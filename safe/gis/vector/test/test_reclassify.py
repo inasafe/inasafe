@@ -1,4 +1,5 @@
 # coding=utf-8
+"""Test Vector Reclassify."""
 
 import unittest
 from osgeo import gdal
@@ -10,6 +11,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.gis.vector.reclassify import reclassify
 from safe.definitions.fields import hazard_class_field
+from safe.definitions.exposure import exposure_structure
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -18,7 +20,7 @@ __revision__ = '$Format:%H$'
 
 
 class TestReclassifyVector(unittest.TestCase):
-
+    """Test Reclassify Vector."""
     def setUp(self):
         pass
 
@@ -31,11 +33,19 @@ class TestReclassifyVector(unittest.TestCase):
     def test_reclassify_vector(self):
         """Test we can reclassify a continuous vector layer."""
 
-        ranges = {
+        classes = {
             1: [None, 0.0],  # value <= 0.0
             2: [0.0, 1],  # 0.0 < value <= 1
             10: [1, 1.5],  # 1 < value <= 1.5 and gap in output classes
             11: [1.3, None]  # value > 1.5
+        }
+        ranges = {
+            exposure_structure['key']: {
+                'flood_hazard_classes': {
+                    'active': True,
+                    'classes': classes
+                }
+            }
         }
 
         # Let's add a vector layer.
@@ -44,7 +54,7 @@ class TestReclassifyVector(unittest.TestCase):
         layer.keywords['thresholds'] = ranges
 
         self.assertEqual(layer.featureCount(), 400)
-        classified = reclassify(layer)
+        classified = reclassify(layer, exposure_structure['key'])
         self.assertEqual(layer.featureCount(), 375)
 
         expected_field = hazard_class_field['field_name']

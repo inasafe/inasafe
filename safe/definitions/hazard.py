@@ -367,7 +367,7 @@ hazard_volcano = {
     'compulsory_fields': [hazard_value_field],
     'fields': hazard_fields,
     'extra_fields': [hazard_name_field],
-    'layer_modes': [layer_mode_classified, layer_mode_continuous],
+    'layer_modes': [layer_mode_classified],
     'disabled_exposures': [exposure_place]
 }
 hazard_all = [

@@ -1,10 +1,7 @@
 # coding=utf-8
+"""Reclassify a continuous vector layer."""
 
-"""
-Reclassify a continuous vector layer.
-"""
-
-from qgis.core import QGis, QgsField
+from qgis.core import QgsField
 
 from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
 from safe.definitions.fields import (
@@ -13,8 +10,11 @@ from safe.definitions.fields import (
     exposure_type_field,
     exposure_class_field
 )
+from safe.definitions.layer_purposes import (
+    layer_purpose_hazard, layer_purpose_exposure)
 from safe.definitions.processing_steps import assign_inasafe_values_steps
 from safe.gis.vector.tools import remove_fields
+from safe.utilities.metadata import active_thresholds_value_maps
 from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -24,11 +24,14 @@ __revision__ = '$Format:%H$'
 
 
 @profile
-def update_value_map(layer, callback=None):
+def update_value_map(layer, exposure_key=None, callback=None):
     """Assign inasafe values according to definitions for a vector layer.
 
     :param layer: The vector layer.
     :type layer: QgsVectorLayer
+
+    :param exposure_key: The exposure key.
+    :type exposure_key: str
 
     :param callback: A function to all to indicate progress. The function
         should accept params 'current' (int), 'maximum' (int) and 'step' (str).
@@ -47,13 +50,13 @@ def update_value_map(layer, callback=None):
     keywords = layer.keywords
     inasafe_fields = keywords['inasafe_fields']
 
-    if keywords['layer_purpose'] == 'hazard':
+    if keywords['layer_purpose'] == layer_purpose_hazard['key']:
         if not inasafe_fields.get(hazard_value_field['key']):
             raise InvalidKeywordsForProcessingAlgorithm
         old_field = hazard_value_field
         new_field = hazard_class_field
 
-    elif keywords['layer_purpose'] == 'exposure':
+    elif keywords['layer_purpose'] == layer_purpose_exposure['key']:
         if not inasafe_fields.get(exposure_type_field['key']):
             raise InvalidKeywordsForProcessingAlgorithm
         old_field = exposure_type_field
@@ -61,13 +64,20 @@ def update_value_map(layer, callback=None):
     else:
         raise InvalidKeywordsForProcessingAlgorithm
 
-    if not keywords.get('value_map'):
-        raise InvalidKeywordsForProcessingAlgorithm
+    # It's a hazard layer
+    if exposure_key:
+        if not active_thresholds_value_maps(keywords, exposure_key):
+            raise InvalidKeywordsForProcessingAlgorithm
+        value_map = active_thresholds_value_maps(keywords, exposure_key)
+    # It's exposure layer
+    else:
+        if not keywords.get('value_map'):
+            raise InvalidKeywordsForProcessingAlgorithm
+        value_map = keywords.get('value_map')
 
     unclassified_column = inasafe_fields[old_field['key']]
     unclassified_index = layer.fieldNameIndex(unclassified_column)
 
-    value_map = keywords['value_map']
     reversed_value_map = {}
     for inasafe_class, values in value_map.iteritems():
         for val in values:
@@ -108,7 +118,11 @@ def update_value_map(layer, callback=None):
 
     layer.keywords = keywords
     layer.keywords['inasafe_fields'] = inasafe_fields
-    layer.keywords.pop('value_map')
+    if exposure_key:
+        value_map_key = 'value_maps'
+    else:
+        value_map_key = 'value_map'
+    # layer.keywords.pop(value_map_key)
     layer.keywords['title'] = output_layer_name
 
     return layer

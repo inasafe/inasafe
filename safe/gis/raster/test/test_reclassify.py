@@ -1,4 +1,6 @@
 # coding=utf-8
+"""Test Reclassify Raster."""
+
 import unittest
 
 from safe.test.utilities import (
@@ -10,6 +12,8 @@ from qgis.core import QgsRasterBandStats
 
 from safe.definitions.processing_steps import reclassify_raster_steps
 from safe.gis.raster.reclassify import reclassify
+from safe.definitions.exposure import exposure_structure
+from safe.definitions.hazard_classifications import generic_hazard_classes
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -18,6 +22,7 @@ __revision__ = '$Format:%H$'
 
 
 class TestReclassifyRaster(unittest.TestCase):
+    """Test Reclassify Raster."""
 
     def setUp(self):
         pass
@@ -29,14 +34,22 @@ class TestReclassifyRaster(unittest.TestCase):
         """Test we can reclassify a raster layer."""
         layer = load_test_raster_layer('hazard', 'continuous_flood_20_20.asc')
 
-        ranges = {
+        classes = {
             'low': [None, 0.2],  # value <= 0.2
             'medium': [0.2, 1],  # 0.2 < value <= 1
             'high': [1, None],  # 1 < value
         }
 
+        ranges = {
+            exposure_structure['key']: {
+                generic_hazard_classes['key']: {
+                    'active': True,
+                    'classes': classes
+                }
+            }
+        }
+
         layer.keywords['thresholds'] = ranges
-        layer.keywords['classification'] = 'generic_hazard_classes'
 
         expected_keywords = layer.keywords.copy()
         title = reclassify_raster_steps['output_layer_name'] % (
@@ -49,7 +62,7 @@ class TestReclassifyRaster(unittest.TestCase):
         }
         expected_keywords['title'] = title
 
-        reclassified = reclassify(layer, ranges)
+        reclassified = reclassify(layer, exposure_structure['key'])
 
         self.assertDictEqual(reclassified.keywords, expected_keywords)
 

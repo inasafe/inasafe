@@ -22,6 +22,7 @@ from safe.definitions.hazard_classifications import (
 from safe.definitions.processing_steps import assign_highest_value_steps
 from safe.gis.vector.tools import create_spatial_index
 from safe.utilities.profiling import profile
+from safe.utilities.metadata import active_classification
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -63,8 +64,12 @@ def assign_highest_value(exposure, hazard, callback=None):
 
     hazard_inasafe_fields = hazard.keywords['inasafe_fields']
 
-    if not hazard.keywords.get('classification'):
+    if not active_classification(
+            hazard.keywords, exposure.keywords['exposure']):
         raise InvalidKeywordsForProcessingAlgorithm
+    else:
+        the_classification = active_classification(
+            hazard.keywords, exposure.keywords['exposure'])
     if not hazard_inasafe_fields.get(hazard_class_field['key']):
         raise InvalidKeywordsForProcessingAlgorithm
 
@@ -90,7 +95,7 @@ def assign_highest_value(exposure, hazard, callback=None):
 
     layer_classification = None
     for classification in hazard_classification['types']:
-        if classification['key'] == hazard.keywords['classification']:
+        if classification['key'] == the_classification:
             layer_classification = classification
             break
 

@@ -1,4 +1,5 @@
 # coding=utf-8
+"""Summary 4 Exposure Breakdown."""
 from safe.definitions.exposure import exposure_all, exposure_population
 from safe.definitions.fields import (
     exposure_type_field,
@@ -13,6 +14,7 @@ from safe.report.extractors.util import (
     resolve_from_dictionary,
     value_from_field_name)
 from safe.utilities.rounding import round_affected_number
+from safe.utilities.metadata import active_classification
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -55,7 +57,9 @@ def analysis_detail_extractor(impact_report, component_metadata):
     hazard_classification = None
     # retrieve hazard classification from hazard layer
     for classification in hazard_classes_all:
-        classification_name = hazard_layer.keywords['classification']
+        exposure_key = layer_definition_type(impact_report.exposure)['key']
+        classification_name = active_classification(
+            hazard_layer.keywords, exposure_key)
         if classification_name == classification['key']:
             hazard_classification = classification
             break

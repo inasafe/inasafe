@@ -1,28 +1,13 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
-
-This module provides: Keyword Wizard Step: Layer Mode
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
+"""InaSAFE Keyword Wizard Layer Mode Step."""
 
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore
 from PyQt4.QtGui import QListWidgetItem
 
 from safe.common.exceptions import InvalidWizardStep
-from safe.utilities.i18n import tr
-from safe.definitions.layer_purposes import (
-    layer_purpose_exposure, layer_purpose_hazard)
-from safe.gui.tools.wizard.wizard_step import WizardStep
-from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
+from safe.gui.tools.wizard.wizard_step import (
+    get_wizard_step_ui_class, WizardStep)
 from safe.gui.tools.wizard.wizard_strings import (
     layer_mode_raster_question,
     layer_mode_vector_question,
@@ -30,9 +15,7 @@ from safe.gui.tools.wizard.wizard_strings import (
     layer_mode_vector_continuous_confirm)
 from safe.utilities.gis import is_raster_layer
 from safe.definitions.utilities import definition, get_layer_modes
-from safe.definitions.layer_modes import (
-    layer_mode_classified, layer_mode_continuous)
-from safe.definitions.utilities import get_classifications
+from safe.definitions.layer_modes import layer_mode_continuous
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -43,11 +26,12 @@ FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
 class StepKwLayerMode(WizardStep, FORM_CLASS):
-    """Keyword Wizard Step: Layer Mode"""
+    """Keyword Wizard Step: Layer Mode."""
 
     def is_ready_to_next_step(self):
-        """Check if the step is complete. If so, there is
-            no reason to block the Next button.
+        """Check if the step is complete.
+
+        If so, there is no reason to block the Next button.
 
         :returns: True if new step may be enabled.
         :rtype: bool
@@ -60,41 +44,23 @@ class StepKwLayerMode(WizardStep, FORM_CLASS):
         :returns: The step to be switched to
         :rtype: WizardStep instance or None
         """
-        # Check if there is classifications or no
-        layer_purpose = self.parent.step_kw_purpose.selected_purpose()
-        layer_mode = self.selected_layermode()
+        is_raster = is_raster_layer(self.parent.layer)
+        subcategory = self.parent.step_kw_subcategory.selected_subcategory()
+        has_unit = subcategory.get('units') or subcategory.get(
+            'continuous_hazard_units')
+        selected_layer_mode = self.selected_layermode()
 
-        if layer_purpose in [
-            layer_purpose_hazard, layer_purpose_exposure]:
-            subcategory = self.parent.step_kw_subcategory.\
-                selected_subcategory()
-            if layer_mode == layer_mode_classified:
-                if get_classifications(subcategory['key']):
-                    new_step = self.parent.step_kw_classification
-                else:  # No classifications
-                    if is_raster_layer(self.parent.layer):
-                        new_step = self.parent.step_kw_source
-                    else:  # Vector
-                        new_step = self.parent.step_kw_field
-
-            elif layer_mode == layer_mode_continuous:
-                if (subcategory.get('units') or
-                        subcategory.get('continuous_hazard_units')):
-                    new_step = self.parent.step_kw_unit
-                else:  # Continuous but no unit
-                    if get_classifications(subcategory['key']):
-                        new_step = self.parent.step_kw_classification
-                    else:  # Continuous, no unit, no classification
-                        if is_raster_layer(self.parent.layer):
-                            new_step = self.parent.step_kw_source
-                        else:  # Vector
-                            new_step = self.parent.step_kw_field
-            else:
-                message = tr('Layer mode should be continuous or classified')
-                raise InvalidWizardStep(message)
+        # continuous
+        if selected_layer_mode == layer_mode_continuous and has_unit:
+            new_step = self.parent.step_kw_unit
+        # no unit and vector
+        elif not is_raster:
+            new_step = self.parent.step_kw_field
+        # no unit and raster
+        elif is_raster:
+            new_step = self.parent.step_kw_multi_classifications
         else:
-            message = tr('Layer purpose should be hazard or exposure')
-            raise InvalidWizardStep(message)
+            raise InvalidWizardStep
 
         return new_step
 

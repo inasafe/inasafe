@@ -12,6 +12,7 @@ from safe.definitions.layer_purposes import (
     layer_purpose_aggregation,
     layer_purpose_exposure_impacted
 )
+from safe.definitions.layer_modes import layer_mode_continuous
 from safe.definitions.versions import inasafe_keyword_version
 from safe.metadata import (
     ExposureLayerMetadata,
@@ -128,3 +129,51 @@ def read_iso19115_metadata(layer_uri, keyword=None):
     if isinstance(metadata, ExposureImpactedLayerMetadata):
         keywords['if_provenance'] = metadata.provenance
     return keywords
+
+
+def active_classification(keywords, exposure_key):
+    """Helper to retrieve active classification for an exposure.
+
+    :param keywords: Hazard layer keywords.
+    :type keywords: dict
+
+    :param exposure_key: The exposure key.
+    :type exposure_key: str
+
+    :returns: The active classification key. None if there is no active one.
+    :rtype: str
+    """
+    if keywords['layer_mode'] == layer_mode_continuous['key']:
+        classifications = keywords['thresholds'].get(exposure_key)
+    else:
+        classifications = keywords['value_maps'].get(exposure_key)
+    if classifications is None:
+        return None
+    for classification, value in classifications.items():
+        if value['active']:
+            return classification
+    return None
+
+
+def active_thresholds_value_maps(keywords, exposure_key):
+    """Helper to retrieve active value maps or thresholds for an exposure.
+
+    :param keywords: Hazard layer keywords.
+    :type keywords: dict
+
+    :param exposure_key: The exposure key.
+    :type exposure_key: str
+
+    :returns: Active thresholds or value maps.
+    :rtype: dict
+    """
+    if keywords['layer_mode'] == layer_mode_continuous['key']:
+        classifications = keywords['thresholds'].get(exposure_key)
+    else:
+        classifications = keywords['value_maps'].get(exposure_key)
+    if classifications is None:
+        return None
+    for value in classifications.values():
+        if value['active']:
+            return value['classes']
+    return None

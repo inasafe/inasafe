@@ -1360,7 +1360,8 @@ class ImpactFunction(object):
                 self.set_state_process(
                     'hazard', 'Classify continuous raster hazard')
                 # noinspection PyTypeChecker
-                self.hazard = reclassify_raster(self.hazard)
+                self.hazard = reclassify_raster(
+                    self.hazard, self.exposure.keywords['exposure'])
                 if self.debug_mode:
                     self.debug_layer(self.hazard)
 
@@ -1399,13 +1400,15 @@ class ImpactFunction(object):
             self.set_state_process(
                 'hazard',
                 'Classify continuous hazard and assign class names')
-            self.hazard = reclassify_vector(self.hazard)
+            self.hazard = reclassify_vector(
+                self.hazard, self.exposure.keywords['exposure'])
             if self.debug_mode:
                 self.debug_layer(self.hazard)
 
         self.set_state_process(
             'hazard', 'Assign classes based on value map')
-        self.hazard = update_value_map(self.hazard)
+        self.hazard = update_value_map(
+            self.hazard, self.exposure.keywords['exposure'])
         if self.debug_mode:
             self.debug_layer(self.hazard)
 
@@ -1598,7 +1601,9 @@ class ImpactFunction(object):
                 'impact function',
                 'Aggregate the impact summary')
             self._aggregate_hazard_impacted = aggregate_hazard_summary(
-                self.exposure_impacted, self._aggregate_hazard_impacted)
+                self.exposure_impacted,
+                self._aggregate_hazard_impacted,
+                self.exposure.keywords['exposure'])
 
         if self._aggregate_hazard_impacted:
             self.set_state_process(
@@ -1611,14 +1616,17 @@ class ImpactFunction(object):
                 'impact function',
                 'Aggregate the analysis summary')
             self._analysis_impacted = analysis_summary(
-                self._aggregate_hazard_impacted, self._analysis_impacted)
+                self._aggregate_hazard_impacted,
+                self._analysis_impacted,
+                self.exposure.keywords['exposure'])
 
             if self._exposure.keywords.get('classification'):
                 self.set_state_process(
                     'impact function',
                     'Build the exposure breakdown')
                 self._exposure_breakdown = exposure_type_breakdown(
-                    self._aggregate_hazard_impacted)
+                    self._aggregate_hazard_impacted,
+                    self.exposure.keywords['exposure'])
         else:
             # We are running EQ raster on population raster.
             self.set_state_process(

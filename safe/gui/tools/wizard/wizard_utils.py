@@ -4,6 +4,7 @@
 import logging
 import re
 from PyQt4 import QtCore
+from PyQt4.QtGui import QWidgetItem, QSpacerItem, QLayout
 
 from qgis.core import QgsCoordinateTransform
 
@@ -186,3 +187,55 @@ def get_inasafe_default_value_fields(qsetting, field_key):
     ]
 
     return labels, values
+
+
+def clear_layout(layout):
+    """Clear layout content.
+
+    # Adapted from http://stackoverflow.com/a/9375273/1198772
+    :param layout: A layout.
+    :type layout: QLayout
+    """
+    for i in reversed(range(layout.count())):
+        item = layout.itemAt(i)
+
+        if isinstance(item, QWidgetItem):
+            item.widget().close()
+        elif isinstance(item, QLayout):
+            clear_layout(item.layout())
+        elif isinstance(item, QSpacerItem):
+            # No need to do anything
+            pass
+        else:
+            pass
+
+        # Remove the item from layout
+        layout.removeItem(item)
+
+
+def skip_inasafe_field(layer, inasafe_fields):
+    """Check if it possible to skip inasafe field step.
+
+    The function will check if the layer has a specified field type.
+
+    :param layer: A Qgis Vector Layer
+    :type layer: QgsVectorLayer
+
+    :param inasafe_fields: List of non compulsory InaSAFE fields default.
+    :type inasafe_fields: list
+
+    :returns: True if there are no specified field type.
+    :rtype: bool
+    """
+    layer_data_provider = layer.dataProvider()
+    # Iterate through all inasafe fields
+    for inasafe_field in inasafe_fields:
+        for field in layer_data_provider.fields():
+            # Check the field type
+            if isinstance(inasafe_field['type'], list):
+                if field.type() in inasafe_field['type']:
+                    return False
+            else:
+                if field.type() == inasafe_field['type']:
+                    return False
+    return True

@@ -1,17 +1,5 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
-
-This module provides: Keyword Wizard Step: Classification Selector
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
+"""InaSAFE Keyword Wizard Step for Choosing Classifications."""
 
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore
@@ -26,7 +14,6 @@ from safe.definitions.layer_modes import (
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_strings import classification_question
-from safe.utilities.gis import is_raster_layer
 from safe.definitions.utilities import definition, get_classifications
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -38,7 +25,7 @@ FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
 class StepKwClassification(WizardStep, FORM_CLASS):
-    """Keyword Wizard Step: Classification Selector"""
+    """Keyword Wizard Step: Classification Selector."""
 
     def is_ready_to_next_step(self):
         """Check if the step is complete. If so, there is
@@ -57,15 +44,9 @@ class StepKwClassification(WizardStep, FORM_CLASS):
         """
         layer_mode = self.parent.step_kw_layermode.selected_layermode()
         if layer_mode == layer_mode_classified:
-            if is_raster_layer(self.parent.layer):
-                new_step = self.parent.step_kw_classify
-            else:
-                new_step = self.parent.step_kw_field
+            new_step = self.parent.step_kw_classify
         elif layer_mode == layer_mode_continuous:
-            if is_raster_layer(self.parent.layer):
-                new_step = self.parent.step_kw_threshold
-            else:
-                new_step = self.parent.step_kw_field
+            new_step = self.parent.step_kw_threshold
         else:
             message = tr('Layer mode should be continuous or classified')
             raise InvalidWizardStep(message)
@@ -134,7 +115,6 @@ class StepKwClassification(WizardStep, FORM_CLASS):
         """ Clear all further steps
             in order to properly calculate the prev step
         """
-        self.parent.step_kw_field.lstFields.clear()
         self.parent.step_kw_classify.treeClasses.clear()
 
     def set_widgets(self):
