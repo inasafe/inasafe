@@ -1405,7 +1405,8 @@ class ImpactFunction(object):
 
         self.set_state_process(
             'hazard', 'Assign classes based on value map')
-        self.hazard = update_value_map(self.hazard)
+        self.hazard = update_value_map(
+            self.hazard, self.exposure.keywords['exposure'])
         if self.debug_mode:
             self.debug_layer(self.hazard)
 
