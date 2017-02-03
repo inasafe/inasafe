@@ -68,26 +68,27 @@ def reclassify(layer, exposure_key=None, callback=None):
     output_layer_name = output_layer_name % layer.keywords['layer_purpose']
 
     if exposure_key:
+        classification_key = active_classification(
+            layer.keywords, exposure_key)
         thresholds = active_thresholds_value_maps(layer.keywords, exposure_key)
+        layer.keywords['thresholds'] = thresholds
+        layer.keywords['classification'] = classification_key
     else:
+        classification_key = layer.keywords.get('classification')
         thresholds = layer.keywords.get('thresholds')
     if not thresholds:
         raise InvalidKeywordsForProcessingAlgorithm(
             'thresholds are missing from the layer %s'
             % layer.keywords['layer_purpose'])
 
-    if exposure_key:
-        classifications = active_classification(layer.keywords, exposure_key)
-    else:
-        classifications = layer.keywords.get('classification')
-    if not classifications:
+    if not classification_key:
         raise InvalidKeywordsForProcessingAlgorithm(
             'classification is missing from the layer %s'
             % layer.keywords['layer_purpose'])
 
     ranges = {}
     value_map = {}
-    hazard_classes = definition(classifications)['classes']
+    hazard_classes = definition(classification_key)['classes']
     for hazard_class in hazard_classes:
         ranges[hazard_class['value']] = thresholds[hazard_class['key']]
         value_map[hazard_class['key']] = [hazard_class['value']]
@@ -141,11 +142,8 @@ def reclassify(layer, exposure_key=None, callback=None):
     reclassified.keywords['layer_mode'] = 'classified'
 
     value_map = {}
-    if exposure_key:
-        classifications = active_classification(layer.keywords, exposure_key)
-    else:
-        classifications = layer.keywords.get('classification')
-    hazard_classes = definition(classifications)['classes']
+
+    hazard_classes = definition(classification_key)['classes']
     for hazard_class in reversed(hazard_classes):
         value_map[hazard_class['key']] = [hazard_class['value']]
 

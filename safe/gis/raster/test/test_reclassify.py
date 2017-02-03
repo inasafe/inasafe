@@ -23,6 +23,7 @@ __revision__ = '$Format:%H$'
 
 class TestReclassifyRaster(unittest.TestCase):
     """Test Reclassify Raster."""
+    maxDiff = None
 
     def setUp(self):
         pass
@@ -61,6 +62,8 @@ class TestReclassifyRaster(unittest.TestCase):
             'medium': [2]
         }
         expected_keywords['title'] = title
+        expected_keywords['classification'] = generic_hazard_classes['key']
+        expected_keywords['thresholds'] = classes
 
         reclassified = reclassify(layer, exposure_structure['key'])
 
