@@ -4,6 +4,7 @@
 import os
 import shutil
 import logging
+import codecs
 
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import Qt, pyqtSlot
@@ -879,7 +880,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             # We can display an impact report.
             LOGGER.debug('Showing Impact Report')
 
-            with open(report_path) as report_file:
+            # We need to open the file in UTF-8, the HTML may have some accents
+            with codecs.open(report_path, 'r', 'utf-8') as report_file:
                 report = report_file.read()
 
             self.print_button.setEnabled(True)
