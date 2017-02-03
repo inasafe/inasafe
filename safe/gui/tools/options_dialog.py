@@ -128,6 +128,13 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         self.custom_org_disclaimer_checkbox.toggled.connect(
             self.set_org_disclaimer)
 
+        # Set up listener for restore defaults button
+        self.restore_defaults = self.button_box_restore_defaults.button(
+            QtGui.QDialogButtonBox.RestoreDefaults)
+        self.restore_defaults.setCheckable(True)
+        self.restore_defaults.clicked.connect(
+            self.restore_defaults_ratio)
+
     def save_boolean_setting(self, key, check_box):
         """Save boolean setting according to check_box state.
 
@@ -487,6 +494,11 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
 
     def restore_default_values_page(self):
         """Setup UI for default values setting."""
+        # Clear parameters so it doesn't add parameters when
+        # restore from changes.
+        if self.default_value_parameters:
+            self.default_value_parameters = []
+
         default_fields = all_default_fields()
         for default_field in default_fields:
             if default_field.get('type') == QVariant.Double:
@@ -545,3 +557,14 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
                 parameter.guid,
                 parameter.value
             )
+
+    def restore_defaults_ratio(self):
+        '''Restore InaSAFE default ratio.'''
+        # remove current default ratio
+        for i in reversed(range(self.default_values_layout.count())):
+            widget = self.default_values_layout.itemAt(i).widget()
+            if widget is not None:
+                widget.setParent(None)
+
+        # reload default ratio
+        self.restore_default_values_page()
