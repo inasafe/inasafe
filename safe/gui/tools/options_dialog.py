@@ -79,6 +79,9 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         self.default_value_parameters = []
         self.default_value_parameter_container = None
 
+        # Flag for restore default values
+        self.is_restore_default = False
+
         # List of setting key and control
         self.boolean_settings = {
             # 'useThreadingFlag': self.
@@ -524,17 +527,22 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             parameter.maximum_allowed_value = default_value.get(
                 'max_value', 100000000)
             parameter.help_text = default_value.get('description')
-            # Current value
-            qsetting_default_value = get_inasafe_default_value_qsetting(
-                self.settings, GLOBAL, default_field['key'])
 
-            # To avoid python error
-            if qsetting_default_value > parameter.maximum_allowed_value:
-                qsetting_default_value = parameter.maximum_allowed_value
-            if qsetting_default_value < parameter.minimum_allowed_value:
-                qsetting_default_value = parameter.minimum_allowed_value
+            # Check if user ask to restore to the most default value.
+            if self.is_restore_default:
+                parameter._value = default_value.get('default_value')
+            else:
+                # Current value
+                qsetting_default_value = get_inasafe_default_value_qsetting(
+                    self.settings, GLOBAL, default_field['key'])
 
-            parameter.value = qsetting_default_value
+                # To avoid python error
+                if qsetting_default_value > parameter.maximum_allowed_value:
+                    qsetting_default_value = parameter.maximum_allowed_value
+                if qsetting_default_value < parameter.minimum_allowed_value:
+                    qsetting_default_value = parameter.minimum_allowed_value
+
+                parameter.value = qsetting_default_value
 
             self.default_value_parameters.append(parameter)
 
@@ -559,7 +567,9 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             )
 
     def restore_defaults_ratio(self):
-        '''Restore InaSAFE default ratio.'''
+        """Restore InaSAFE default ratio."""
+        # Set the flag to true because user ask to.
+        self.is_restore_default = True
         # remove current default ratio
         for i in reversed(range(self.default_values_layout.count())):
             widget = self.default_values_layout.itemAt(i).widget()
