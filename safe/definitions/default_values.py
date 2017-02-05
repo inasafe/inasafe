@@ -25,7 +25,7 @@ feature_rate_default_value = {
     'default_value': 1000000,
     'min_value': 0,
     'max_value': 1000000000,
-    'description': tr('Default value for feature rate per m^2')
+    'description': tr('Default value for feature rate per m²')
 }
 
 # Note(IS): I copy here to preserve the history
