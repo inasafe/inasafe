@@ -6,9 +6,6 @@ from zipfile import ZipFile
 
 import pytz
 import datetime
-import json
-from collections import OrderedDict
-
 import re
 from PyQt4.QtCore import (
     QObject,

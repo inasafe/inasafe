@@ -20,6 +20,9 @@ import traceback
 import unicodedata
 import webbrowser
 from collections import OrderedDict
+import json
+
+from PyQt4.QtCore import QPyNullVariant
 
 from PyQt4.QtCore import QPyNullVariant
 
