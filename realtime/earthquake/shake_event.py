@@ -1061,7 +1061,7 @@ class ShakeEvent(QObject):
         clipped_exposure_layer = safe_read_layer(
             str(clipped_exposure.source()))
 
-        function_id = 'ITBFatalityFunction'
+        function_id = 'ITBBayesianFatalityFunction'
         function = ImpactFunctionManager().get(function_id)
         function.hazard = clipped_hazard_layer
         function.exposure = clipped_exposure_layer
