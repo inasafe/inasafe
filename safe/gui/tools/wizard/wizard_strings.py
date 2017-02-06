@@ -74,38 +74,31 @@ allow_resampling_question = tr(
     'raster to the hazard layer resolution during analyses. Please select the '
     'check box below if you want to set the <i>allow_resampling</i> '
     'keyword to <i>False</i>.</p>')  # (subcategory, layer purpose, layer_mode)
-flood_metres_depth_question = tr(
-    'flood depth in metres')
-flood_feet_depth_question = tr(
-    'flood depth in feet')
-flood_wetdry_question = tr(
-    'flood extent as wet/dry')
-tsunami_metres_depth_question = tr(
-    'tsunami depth in metres')
-tsunami_feet_depth_question = tr(
-    'tsunami depth in feet')
-tsunami_wetdry_question = tr(
-    'tsunami extent as wet/dry')
-earthquake_mmi_question = tr(
-    'earthquake intensity in MMI')
-tephra_kgm2_question = tr(
-    'tephra intensity in kg/m<sup>2</sup>')
-volcano_volcano_categorical_question = tr(
-    'volcano hazard categorical level')
-cyclone_kilometres_per_hour_question = tr(
-    'wind speed in km/h')
-cyclone_miles_per_hour_question = tr(
-    'wind speed in mph')
-cyclone_knots_question = tr(
-    'wind speed in kn')
-population_count_question = tr(
-    'the number of people')
-population_density_question = tr(
-    'people density in people/km<sup>2</sup>')
-road_road_type_question = tr(
-    'type for your road')
-structure_building_type_question = tr(
-    'type for your building')
+
+flood_metres_question = tr('flood depth in metres')
+flood_feet_question = tr('flood depth in feet')
+flood_wetdry_question = tr('flood extent as wet/dry')
+
+tsunami_metres_question = tr('tsunami depth in metres')
+tsunami_feet_depth_question = tr('tsunami depth in feet')
+tsunami_wetdry_question = tr('tsunami extent as wet/dry')
+
+earthquake_mmi_question = tr('earthquake intensity in MMI')
+
+tephra_kgm2_question = tr('tephra intensity in kg/m<sup>2</sup>')
+
+volcano_volcano_categorical_question = tr('volcano hazard categorical level')
+
+cyclone_kilometres_per_hour_question = tr('wind speed in km/h')
+cyclone_miles_per_hour_question = tr('wind speed in mph')
+cyclone_knots_question = tr('wind speed in kn')
+
+population_count_question = tr('the number of people')
+population_density_question = tr('people density in people/km<sup>2</sup>')
+
+road_road_type_question = tr('type for your road')
+structure_building_type_question = tr('type for your building')
+
 field_question_subcategory_unit = tr(
     'You have selected a <b>%s %s</b> for the vector layer measured in '
     '<b>%s</b>. Please select the attribute in this layer that represents %s.'
