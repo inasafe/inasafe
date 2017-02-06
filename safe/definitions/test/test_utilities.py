@@ -2,6 +2,7 @@
 """Test for utilities module."""
 import unittest
 from copy import deepcopy
+from safe import definitions
 
 from safe.definitions import (
     hazard_flood,
@@ -338,6 +339,27 @@ class TestDefinitionsUtilities(unittest.TestCase):
                 'string_defaults', [])
         }
         self.assertDictEqual(value_maps, expected)
+
+    def test_unique_definition_key(self):
+        """Test to make sure all definitions have different key."""
+        keys = {}
+        for item in dir(definitions):
+            if not item.startswith("__"):
+                var = getattr(definitions, item)
+                if isinstance(var, dict):
+                    if not var.get('key'):
+                        continue
+                    if var.get('key') not in keys:
+                        keys[var.get('key')] = [var]
+                    else:
+                        keys[var.get('key')].append(var)
+        duplicate_keys = [k for k, v in keys.items() if len(v) > 1]
+        message = 'There are duplicate keys: %s\n' % ', '.join(duplicate_keys)
+        for duplicate_key in duplicate_keys:
+            message += 'Duplicate key: %s\n' % duplicate_key
+            for v in keys[duplicate_key]:
+                message += v['name'] + ' ' + v['description'] + '\n'
+        self.assertEqual(len(duplicate_keys), 0, message)
 
 
 if __name__ == '__main__':
