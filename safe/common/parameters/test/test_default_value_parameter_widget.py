@@ -55,7 +55,7 @@ class TestDefaultValueParameterWidget(unittest.TestCase):
         real_value = self.widget.get_parameter().value
         self.assertEqual(expected, real_value)
         self.assertFalse(self.widget.custom_value.isEnabled())
-        self.assertEqual(self.widget._input_button_group.checkedId(), 0)
+        self.assertEqual(self.widget.input_button_group.checkedId(), 0)
         self.assertEqual(self.widget.custom_value.value(), 0.2)
 
         expected = 0.2
@@ -63,7 +63,7 @@ class TestDefaultValueParameterWidget(unittest.TestCase):
         real_value = self.widget.get_parameter().value
         self.assertEqual(expected, real_value)
         self.assertTrue(self.widget.custom_value.isEnabled())
-        self.assertEqual(self.widget._input_button_group.checkedId(), 2)
+        self.assertEqual(self.widget.input_button_group.checkedId(), 2)
         self.assertEqual(self.widget.custom_value.value(), 0.2)
 
         expected = None
@@ -71,7 +71,7 @@ class TestDefaultValueParameterWidget(unittest.TestCase):
         real_value = self.widget.get_parameter().value
         self.assertEqual(expected, real_value)
         self.assertFalse(self.widget.custom_value.isEnabled())
-        self.assertEqual(self.widget._input_button_group.checkedId(), 1)
+        self.assertEqual(self.widget.input_button_group.checkedId(), 1)
         self.assertEqual(self.widget.custom_value.value(), 0.2)
 
         expected = 0.3
@@ -79,5 +79,5 @@ class TestDefaultValueParameterWidget(unittest.TestCase):
         real_value = self.widget.get_parameter().value
         self.assertEqual(expected, real_value)
         self.assertTrue(self.widget.custom_value.isEnabled())
-        self.assertEqual(self.widget._input_button_group.checkedId(), 2)
+        self.assertEqual(self.widget.input_button_group.checkedId(), 2)
         self.assertEqual(self.widget.custom_value.value(), 0.3)

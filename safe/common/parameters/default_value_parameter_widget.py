@@ -30,7 +30,7 @@ class DefaultValueParameterWidget(GenericParameterWidget):
         self.radio_button_widget = QWidget()
 
         # Create radio button group
-        self._input_button_group = QButtonGroup()
+        self.input_button_group = QButtonGroup()
 
         for i in range(len(self._parameter.labels)):
             if '%s' in self._parameter.labels[i]:
@@ -42,7 +42,7 @@ class DefaultValueParameterWidget(GenericParameterWidget):
 
             radio_button = QRadioButton(label)
             self.radio_button_layout.addWidget(radio_button)
-            self._input_button_group.addButton(radio_button, i)
+            self.input_button_group.addButton(radio_button, i)
             if self._parameter.value == \
                     self._parameter.options[i]:
                 radio_button.setChecked(True)
@@ -56,11 +56,11 @@ class DefaultValueParameterWidget(GenericParameterWidget):
 
         self.toggle_custom_value()
 
-        self._inner_input_layout.addLayout(self.radio_button_layout)
+        self.inner_input_layout.addLayout(self.radio_button_layout)
 
         # Connect
         # noinspection PyUnresolvedReferences
-        self._input_button_group.buttonClicked.connect(
+        self.input_button_group.buttonClicked.connect(
             self.toggle_custom_value)
 
     def raise_invalid_type_exception(self):
@@ -76,7 +76,7 @@ class DefaultValueParameterWidget(GenericParameterWidget):
         :returns: A DefaultValueParameter from the current state of widget
         :rtype: DefaultValueParameter
         """
-        radio_button_checked_id = self._input_button_group.checkedId()
+        radio_button_checked_id = self.input_button_group.checkedId()
         # No radio button checked, then default value = None
         if radio_button_checked_id == -1:
             self._parameter.value = None
@@ -104,10 +104,10 @@ class DefaultValueParameterWidget(GenericParameterWidget):
         # Find index of choice
         try:
             value_index = self._parameter.options.index(value)
-            self._input_button_group.button(value_index).setChecked(True)
+            self.input_button_group.button(value_index).setChecked(True)
         except ValueError:
             last_index = len(self._parameter.options) - 1
-            self._input_button_group.button(last_index).setChecked(
+            self.input_button_group.button(last_index).setChecked(
                 True)
             self.custom_value.setValue(value)
 
@@ -115,7 +115,7 @@ class DefaultValueParameterWidget(GenericParameterWidget):
 
     def toggle_custom_value(self):
         """Enable or disable the custom value line edit."""
-        radio_button_checked_id = self._input_button_group.checkedId()
+        radio_button_checked_id = self.input_button_group.checkedId()
         if (radio_button_checked_id ==
                 len(self._parameter.options) - 1):
             self.custom_value.setDisabled(False)
