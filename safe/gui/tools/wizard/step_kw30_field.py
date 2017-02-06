@@ -138,9 +138,13 @@ class StepKwField(WizardStep, FORM_CLASS):
             question_text = field_question_aggregation
         elif self.parent.step_kw_layermode.\
                 selected_layermode() == layer_mode_continuous and unit:
-            # unique values, continuous or categorical data
             subcategory_unit_relation = get_question_text(
                 '%s_%s_question' % (subcategory['key'], unit['key']))
+            if 'MISSING' in subcategory_unit_relation:
+                subcategory_unit_relation = self.tr(
+                    '{subcategory} in {unit} unit'.format(
+                        subcategory=subcategory['name'].lower(),
+                        unit=unit['plural_name']))
             question_text = field_question_subcategory_unit % (
                 purpose['name'],
                 subcategory['name'],
