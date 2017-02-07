@@ -5,12 +5,12 @@
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
 from PyQt4 import QtGui
+from PyQt4.QtCore import Qt
 
 from safe.common.version import get_version
 from safe.utilities.resources import (
     get_ui_class, html_footer, html_help_header)
 from safe.gui.tools.help.dock_help import dock_help
-from safe.gui.widgets import message_viewer
 
 FORM_CLASS = get_ui_class('help_dialog_base.ui')
 
@@ -33,7 +33,9 @@ class HelpDialog(QtGui.QDialog, FORM_CLASS):
         :type parent: QWidget
         """
 
-        QtGui.QDialog.__init__(self, parent)
+        QtGui.QDialog.__init__(
+            self, parent,
+            flags=Qt.WindowMinimizeButtonHint | Qt.WindowMaximizeButtonHint)
         self.setupUi(self)
         self.setWindowTitle(self.tr('InaSAFE %s Help' % get_version()))
         self.parent = parent
