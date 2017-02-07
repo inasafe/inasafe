@@ -35,7 +35,11 @@ def clean_layer(layer, callback=None):
     # iterate through all features
     for feature in layer.getFeatures():
         geom = feature.geometry()
-        feature.setGeometry(geometry_checker(geom))
+        geometry_cleaned = geometry_checker(geom)
+        if geometry_cleaned:
+            feature.setGeometry(geometry_cleaned)
+        else:
+            layer.deleteFeature(feature.id())
 
     # save changes
     layer.commitChanges()
