@@ -203,7 +203,7 @@
             <gco:Dictionary>{&quot;road&quot;: {&quot;generic_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [&quot;high&quot;], &quot;medium&quot;: [&quot;medium&quot;], &quot;low&quot;: [&quot;low&quot;]}}}, &quot;place&quot;: {&quot;generic_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [&quot;high&quot;], &quot;medium&quot;: [&quot;medium&quot;], &quot;low&quot;: [&quot;low&quot;]}}}, &quot;land_cover&quot;: {&quot;generic_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [&quot;high&quot;], &quot;medium&quot;: [&quot;medium&quot;], &quot;low&quot;: [&quot;low&quot;]}}}, &quot;structure&quot;: {&quot;generic_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [&quot;high&quot;], &quot;medium&quot;: [&quot;medium&quot;], &quot;low&quot;: [&quot;low&quot;]}}}, &quot;population&quot;: {&quot;generic_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [&quot;high&quot;], &quot;medium&quot;: [&quot;medium&quot;], &quot;low&quot;: [&quot;low&quot;]}}}}</gco:Dictionary>
           </value_map>
           <hazard>
-            <gco:CharacterString>generic</gco:CharacterString>
+            <gco:CharacterString>hazard_generic</gco:CharacterString>
           </hazard>
           <report>
             <gco:CharacterString/>
