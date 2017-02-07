@@ -113,9 +113,9 @@ from safe.impact_function.style import (
     hazard_class_style,
     simple_polygon_without_brush,
 )
-from safe.gui.widgets.message import no_overlap_message
 from safe.utilities.gis import is_vector_layer, is_raster_layer
 from safe.utilities.i18n import tr
+from safe.utilities.unicode import get_string
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.utilities import (
     replace_accentuated_characters, get_error_message)
@@ -1453,20 +1453,11 @@ class ImpactFunction(object):
                 if self.debug_mode:
                     self.debug_layer(self.exposure)
 
-        exposure = self.exposure.keywords.get('exposure')
-        indivisible_keys = [f['key'] for f in indivisible_exposure]
-        geometry = self.exposure.geometryType()
-        if exposure in indivisible_keys and geometry != QGis.Point:
-            self.set_state_process(
-                'exposure',
-                'Smart clip')
-            self.exposure = smart_clip(
-                self.exposure, self._analysis_impacted)
-        else:
-            self.set_state_process(
-                'exposure',
-                'Clip the exposure layer with the analysis layer')
-            self.exposure = clip(self.exposure, self._analysis_impacted)
+        # We may need to add the size of the original feature. So don't want to
+        # split the feature yet.
+        self.set_state_process('exposure', 'Smart clip')
+        self.exposure = smart_clip(
+            self.exposure, self._analysis_impacted)
         if self.debug_mode:
             self.debug_layer(self.exposure, False)
 
@@ -1477,6 +1468,19 @@ class ImpactFunction(object):
         self.exposure = prepare_vector_layer(self.exposure)
         if self.debug_mode:
             self.debug_layer(self.exposure)
+
+        exposure = self.exposure.keywords.get('exposure')
+        geometry = self.exposure.geometryType()
+        indivisible_keys = [f['key'] for f in indivisible_exposure]
+        if exposure not in indivisible_keys and geometry != QGis.Point:
+            # We can now split features because the `prepare_vector_layer`
+            # might have added the size field.
+            self.set_state_process(
+                'exposure',
+                'Clip the exposure layer with the analysis layer')
+            self.exposure = clip(self.exposure, self._analysis_impacted)
+            if self.debug_mode:
+                self.debug_layer(self.exposure)
 
         self.set_state_process('exposure', 'Add default values')
         self.exposure = add_default_values(self.exposure)
@@ -1582,7 +1586,7 @@ class ImpactFunction(object):
                     layer, post_processor)
                 if valid:
                     self.set_state_process(
-                        'post_processor', post_processor['name'])
+                        'post_processor', get_string(post_processor['name']))
                     message = '{name} : Running'.format(
                         name=post_processor['name'])
 
