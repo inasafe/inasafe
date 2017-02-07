@@ -12,15 +12,15 @@ from safe.definitions.hazard_classifications import (
     generic_hazard_classes,
     flood_hazard_classes)
 from safe.definitions.fields import (
-    female_count_field,
-    youth_count_field,
-    adult_count_field,
-    elderly_count_field,
+    male_displaced_count_field,
+    female_displaced_count_field,
+    youth_displaced_count_field,
+    adult_displaced_count_field,
+    elderly_displaced_count_field,
     feature_value_field,
     size_field,
     affected_field,
     exposure_count_field,
-    population_count_field,
     displaced_field,
     hygiene_packs_count_field,
     additional_rice_count_field)
@@ -106,7 +106,10 @@ class TestPostProcessors(unittest.TestCase):
 
         # Check if new field is added
         impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
-        self.assertIn(female_count_field['field_name'], impact_fields)
+        self.assertIn(
+            female_displaced_count_field['field_name'], impact_fields)
+        self.assertIn(
+            male_displaced_count_field['field_name'], impact_fields)
 
     def test_youth_post_processor(self):
         """Test youth post processor."""
@@ -123,7 +126,7 @@ class TestPostProcessors(unittest.TestCase):
 
         # Check if new field is added
         impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
-        self.assertIn(youth_count_field['field_name'], impact_fields)
+        self.assertIn(youth_displaced_count_field['field_name'], impact_fields)
 
     def test_adult_post_processor(self):
         """Test adult post processor."""
@@ -140,7 +143,7 @@ class TestPostProcessors(unittest.TestCase):
 
         # Check if new field is added
         impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
-        self.assertIn(adult_count_field['field_name'], impact_fields)
+        self.assertIn(adult_displaced_count_field['field_name'], impact_fields)
 
     def test_elderly_post_processor(self):
         """Test elderly post processor."""
@@ -157,7 +160,8 @@ class TestPostProcessors(unittest.TestCase):
 
         # Check if new field is added
         impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
-        self.assertIn(elderly_count_field['field_name'], impact_fields)
+        self.assertIn(
+            elderly_displaced_count_field['field_name'], impact_fields)
 
     def test_weekly_hygiene_post_processor(self):
         """Test weekly hygiene post processor."""
