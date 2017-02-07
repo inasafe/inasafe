@@ -58,8 +58,9 @@
     "exposure":{
       "info": {},
       "process":[
-        "Clip the exposure layer with the analysis layer",
+        "Smart clip",
         "Cleaning the vector exposure attribute table",
+        "Clip the exposure layer with the analysis layer",
         "Add default values",
         "Assign classes based on value map",
         "Make exposure layer valid"

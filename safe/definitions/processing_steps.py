@@ -71,7 +71,7 @@ recompute_counts_steps = {
 
 smart_clip_steps = {
     'step_name': tr('Smart clipping'),
-    'output_layer_name': 'indivisible_polygons_clipped',
+    'output_layer_name': 'exposure_intersect_hazard',
 }
 
 summary_1_aggregate_hazard_steps = {
