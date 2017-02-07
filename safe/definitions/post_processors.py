@@ -23,6 +23,11 @@ from safe.definitions.fields import (
     adult_count_field,
     elderly_ratio_field,
     elderly_count_field,
+    female_displaced_count_field,
+    male_displaced_count_field,
+    youth_displaced_count_field,
+    adult_displaced_count_field,
+    elderly_displaced_count_field,
     feature_rate_field,
     feature_value_field,
     size_field,
@@ -255,7 +260,9 @@ post_processor_displaced = {
     'key': 'post_processor_displacement',
     'name': tr('Displaced Post Processor'),
     'description': tr(
-        'A post processor to calculate the number of displaced people.'
+        'A post processor to calculate the number of displaced people. '
+        '"Displaced" is defined as: ' +
+        concepts['displaced_people']['description']
     ),
     'input': {
         # input as a list means, try to get the input from the
@@ -293,11 +300,15 @@ post_processor_gender = {
     'key': 'post_processor_gender',
     'name': tr('Gender Post Processor'),
     'description': tr(
-        'A post processor to calculate the number of affected females. '
-        '"Female" is defined as: ' + concepts['female']['description']
+        'A post processor to calculate the number of displaced females '
+        'and males. '
+        '"Female" is defined as: ' + concepts['female']['description'] + ' '
+        '"Male" is defined as: ' + concepts['male']['description'] + ' '
+        '"Displaced" is defined as: ' +
+        concepts['displaced_people']['description']
     ),
     'input': {
-        'population': {
+        'population_displaced': {
             'value': displaced_field,
             'type': field_input_type,
         },
@@ -318,15 +329,15 @@ post_processor_gender = {
     # output is described as ordered dict because the order is important
     # and the postprocessor produce two fields.
     'output': OrderedDict([
-        ('female', {
-            'value': female_count_field,
+        ('female_displaced', {
+            'value': female_displaced_count_field,
             'type': formula_process,
-            'formula': 'population * gender_ratio'
+            'formula': 'population_displaced * gender_ratio'
         }),
-        ('male', {
-            'value': male_count_field,
+        ('male_displaced', {
+            'value': male_displaced_count_field,
             'type': formula_process,
-            'formula': 'population * (1 - gender_ratio)'
+            'formula': 'population_displaced * (1 - gender_ratio)'
         })
     ])
 }
@@ -335,12 +346,15 @@ post_processor_hygiene_packs = {
     'key': 'post_processor_hygiene_packs',
     'name': tr('Weekly Hygiene Packs Post Processor'),
     'description': tr(
-        'A post processor to calculate needed hygiene packs weekly for women.'
+        'A post processor to calculate needed hygiene packs weekly for women'
+        'who are displaced. '
+        '"Displaced" is defined as: ' +
+        concepts['displaced_people']['description']
     ),
     'input': {
-        'female_population':
+        'female_displaced':
             {
-                'value': female_count_field,
+                'value': female_displaced_count_field,
                 'type': field_input_type,
             },
         'hygiene_packs_ratio':
@@ -368,12 +382,14 @@ post_processor_additional_rice = {
     ),
     'description': tr(
         'A post processor to calculate additional rice for pregnant and '
-        'lactating women.'
+        'lactating women who are displaced. '
+        '"Displaced" is defined as: ' +
+        concepts['displaced_people']['description']
     ),
     'input': {
-        'female_population':
+        'female_displaced':
             {
-                'value': female_count_field,
+                'value': female_displaced_count_field,
                 'type': field_input_type,
             },
         'additional_rice_ratio':
@@ -397,10 +413,13 @@ post_processor_youth = {
     'key': 'post_processor_youth',
     'name': tr('Youth Post Processor'),
     'description': tr(
-        'A post processor to calculate the number of affected youth. '
-        '"Youth" is defined as: ' + concepts['youth']['description']),
+        'A post processor to calculate the number of displaced youth. '
+        '"Youth" is defined as: ' + concepts['youth']['description'] + ' '
+        '"Displaced" is defined as: ' +
+        concepts['displaced_people']['description']
+    ),
     'input': {
-        'population': {
+        'population_displaced': {
             'value': displaced_field,
             'type': field_input_type,
         },
@@ -419,8 +438,8 @@ post_processor_youth = {
             }]
     },
     'output': {
-        'youth': {
-            'value': youth_count_field,
+        'youth_displaced': {
+            'value': youth_displaced_count_field,
             'type': function_process,
             'function': multiply
         }
@@ -431,10 +450,13 @@ post_processor_adult = {
     'key': 'post_processor_adult',
     'name': tr('Adult Post Processor'),
     'description': tr(
-        'A post processor to calculate the number of affected adults. '
-        '"Adult" is defined as: ' + concepts['adult']['description']),
+        'A post processor to calculate the number of displaced adults. '
+        '"Adult" is defined as: ' + concepts['adult']['description'] + ' '
+        '"Displaced" is defined as: ' +
+        concepts['displaced_people']['description']
+    ),
     'input': {
-        'population': {
+        'population_displaced': {
             'value': displaced_field,
             'type': field_input_type,
         },
@@ -453,8 +475,8 @@ post_processor_adult = {
             }]
     },
     'output': {
-        'adult': {
-            'value': adult_count_field,
+        'adult_displaced': {
+            'value': adult_displaced_count_field,
             'type': function_process,
             'function': multiply
         }
@@ -465,10 +487,14 @@ post_processor_elderly = {
     'key': 'post_processor_elderly',
     'name': tr('Elderly Post Processor'),
     'description': tr(
-        'A post processor to calculate the number of affected elderly people. '
-        '"Elderly" is defined as: ' + concepts['elderly']['description']),
+        'A post processor to calculate the number of displaced elderly '
+        'people. "Elderly" is defined as: ' +
+        concepts['elderly']['description'] + ' '
+        '"Displaced" is defined as: ' +
+        concepts['displaced_people']['description']
+    ),
     'input': {
-        'population': {
+        'population_displaced': {
             'value': displaced_field,
             'type': field_input_type,
         },
@@ -487,8 +513,8 @@ post_processor_elderly = {
             }]
     },
     'output': {
-        'elderly': {
-            'value': elderly_count_field,
+        'elderly_displaced': {
+            'value': elderly_displaced_count_field,
             'type': function_process,
             'function': multiply
         }
@@ -555,7 +581,9 @@ post_processor_affected = {
     'name': tr('Affected Post Processor'),
     'description': tr(
         'A post processor to determine if a feature is affected or not '
-        '(according to the hazard classification).'),
+        '(according to the hazard classification). It can be '
+        '"{not_exposed_value}".').format(
+        not_exposed_value=not_exposed_class['key']),
     'input': {
         'hazard_class': {
             'value': hazard_class_field,
@@ -626,6 +654,20 @@ minimum_needs_post_processors = initialize_minimum_needs_post_processors()
 # This is the order of execution, so the order is important.
 # For instance, the size post processor must run before size_rate.
 # and hygiene packs post processor must run after gender post processor
+
+# Postprocessor tree
+# |--- size
+# |   `--- size rate
+# |--- affected
+# |--- displaced
+# |   |--- gender
+# |   |   |--- hygiene packs
+# |   |   `--- additional rice
+# |   |--- youth
+# |   |--- adult
+# |   |--- elderly
+# |   `--- minimum needs
+
 female_postprocessors = [
     post_processor_gender,
     post_processor_hygiene_packs,

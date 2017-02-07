@@ -818,6 +818,110 @@ affected_field = {
     'replace_null': False
 }
 
+female_displaced_count_field = {
+    'key': 'female_displaced_count_field',
+    'name': tr('Female Displaced Count'),
+    'field_name': 'female_displaced',
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'description': tr(
+        'The number of displaced females for each feature.'),
+    'help_text': tr(''),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+male_displaced_count_field = {
+    'key': 'male_displaced_count_field',
+    'name': tr('Male Displaced Count'),
+    'field_name': 'male_displaced',
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'description': tr(
+        'Attribute where the number of displaced males for each feature.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+youth_displaced_count_field = {
+    'key': 'youth_displaced_count_field',
+    'name': tr('Youth Displaced Count'),
+    'field_name': 'youth_displaced',
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'description': tr(
+        'The number of young people displaced for each feature.'),
+    'help_text': tr(''),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+adult_displaced_count_field = {
+    'key': 'adult_displaced_count_field',
+    'name': tr('Adult Displaced Count'),
+    'field_name': 'adult_displaced',
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'description': tr(
+        'The number of adults displaced for each feature.'),
+    'help_text': tr(''),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+elderly_displaced_count_field = {
+    'key': 'elderly_displaced_count_field',
+    'name': tr('Elderly Displaced Count'),
+    'field_name': 'elderly_displaced',
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'description': tr(
+        'The number of elderly people displaced for each feature.'),
+    'help_text': tr(''),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
 # # # # # # # # # #
 # Count, outputs (Absolute values)
 # # # # # # # # # #
@@ -1273,6 +1377,11 @@ count_fields = [
     youth_count_field,
     adult_count_field,
     elderly_count_field,
+    female_displaced_count_field,
+    male_displaced_count_field,
+    youth_displaced_count_field,
+    adult_displaced_count_field,
+    elderly_displaced_count_field,
 ] + minimum_needs_fields
 
 ratio_fields = [
