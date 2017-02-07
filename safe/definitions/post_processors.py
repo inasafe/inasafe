@@ -4,6 +4,7 @@
 # This is disabled for typehinting docstring.
 
 """Definitions relating to post-processing."""
+
 from collections import OrderedDict
 
 from PyQt4.QtCore import QPyNullVariant
@@ -16,13 +17,9 @@ from safe.definitions.fields import (
     displaced_field,
     female_ratio_field,
     population_count_field,
-    female_count_field,
     youth_ratio_field,
-    youth_count_field,
     adult_ratio_field,
-    adult_count_field,
     elderly_ratio_field,
-    elderly_count_field,
     female_displaced_count_field,
     male_displaced_count_field,
     youth_displaced_count_field,
@@ -34,7 +31,9 @@ from safe.definitions.fields import (
     hazard_class_field,
     affected_field,
     exposure_count_field,
-    male_count_field, hygiene_packs_count_field, additional_rice_count_field)
+    hygiene_packs_count_field,
+    additional_rice_count_field,
+)
 from safe.definitions import concepts
 from safe.definitions.hazard_classifications import hazard_classes_all
 
@@ -583,7 +582,8 @@ post_processor_affected = {
         'A post processor to determine if a feature is affected or not '
         '(according to the hazard classification). It can be '
         '"{not_exposed_value}".').format(
-        not_exposed_value=not_exposed_class['key']),
+            not_exposed_value=not_exposed_class['key']
+    ),
     'input': {
         'hazard_class': {
             'value': hazard_class_field,
