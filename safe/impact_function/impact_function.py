@@ -1543,11 +1543,11 @@ class ImpactFunction(object):
                     'Intersect divisible features with the aggregate hazard')
                 self._exposure_impacted = intersection(
                     self._exposure, self._aggregate_hazard_impacted)
-                self.debug_layer(self._exposure)
+                self.debug_layer(self._exposure_impacted)
 
                 # If the layer has the size field, it means we need to
                 # recompute counts based on the old and new size.
-                fields = self.exposure.keywords['inasafe_fields']
+                fields = self._exposure_impacted.keywords['inasafe_fields']
                 if size_field['key'] in fields:
                     self.set_state_process(
                         'impact function',
@@ -1566,7 +1566,8 @@ class ImpactFunction(object):
                 self.debug_layer(self._exposure_impacted)
 
             if self._exposure_impacted:
-                self._exposure_impacted.keywords['title'] = 'exposure_impacted'
+                self._exposure_impacted.keywords['title'] = (
+                    layer_purpose_exposure_impacted['key'])
 
     @profile
     def post_process(self, layer):
