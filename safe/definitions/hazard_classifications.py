@@ -489,7 +489,7 @@ tsunami_hazard_classes = {
             'affected': True,
             'description': tr('Water above 8.0m.'),
             'string_defaults': [],
-            'displacement_rate': 0.0,
+            'displacement_rate': 0.01,
             'fatality_rate': 0.0,
             'numeric_default_min': 8,
             'numeric_default_max': 9999999999,
@@ -518,7 +518,7 @@ tsunami_hazard_classes = {
                 'breaker, tsunami protection walls and green belts will be '
                 'washed away.'),
             'string_defaults': [],
-            'displacement_rate': 0.0,
+            'displacement_rate': 0.01,
             'fatality_rate': 0.0,
             'numeric_default_min': 3,
             'numeric_default_max': 8 - small_number,
@@ -544,9 +544,9 @@ tsunami_hazard_classes = {
                 'ground. Small vessels drift and collide. Damage occurs to '
                 'some wooden houses, while most of them are safe.'),
             'string_defaults': [],
-            'displacement_rate': 0.0,
+            'displacement_rate': 0.01,
             'fatality_rate': 0.0,
-            'numeric_default_min': 1,
+            'numeric_default_min': 0.7,
             'numeric_default_max': 3 - small_number,
             'citations': [
                 {
@@ -575,7 +575,7 @@ tsunami_hazard_classes = {
             'displacement_rate': 0.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 0.1,
-            'numeric_default_max': 1 - small_number,
+            'numeric_default_max': 0.7 - small_number,
             'citations': [
                 {
                     'text': None,
