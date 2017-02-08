@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>663</width>
-    <height>335</height>
+    <width>672</width>
+    <height>502</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>InaSAFE Help</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="1" column="0">
