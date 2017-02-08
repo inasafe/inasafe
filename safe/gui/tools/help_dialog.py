@@ -37,7 +37,6 @@ class HelpDialog(QtGui.QDialog, FORM_CLASS):
             self, parent,
             flags=Qt.WindowMinimizeButtonHint | Qt.WindowMaximizeButtonHint)
         self.setupUi(self)
-        self.setWindowTitle(self.tr('InaSAFE %s Help' % get_version()))
         self.parent = parent
 
         header = html_help_header()
