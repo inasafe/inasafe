@@ -1227,6 +1227,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
             self.run_button.setEnabled(True)
             LOGGER.info('The impact function is ready.')
+            send_static_message(self, ready_message())
             return impact_function
 
         elif status == PREPARE_FAILED_BAD_LAYER:
@@ -1295,8 +1296,5 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         if hazard_index == -1 or exposure_index == -1:
             message = getting_started_message()
             return False, message
-
-        # Now check if extents are ok for #1811
         else:
-            message = ready_message()
-            return True, message
+            return True, None
