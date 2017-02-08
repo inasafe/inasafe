@@ -117,6 +117,7 @@ from safe.utilities.gis import is_vector_layer, is_raster_layer
 from safe.utilities.i18n import tr
 from safe.utilities.unicode import get_string
 from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.metadata import active_thresholds_value_maps
 from safe.utilities.utilities import (
     replace_accentuated_characters, get_error_message)
 from safe.utilities.profiling import (
@@ -799,6 +800,32 @@ class ImpactFunction(object):
                             'is not null.'))
                     )
                     return PREPARE_FAILED_BAD_INPUT, message
+
+            # We need to check if the hazard is OK to run on the exposure.
+            hazard_keywords = self.hazard.keywords
+            exposure_key = self.exposure.keywords['exposure']
+            if not active_thresholds_value_maps(hazard_keywords, exposure_key):
+                warning_heading = m.Heading(
+                    tr('Incompatible exposure/hazard'), **WARNING_STYLE)
+                warning_message = tr(
+                    'The hazard layer is not set up for this kind of '
+                    'exposure. In InaSAFE, you need to define keywords in the '
+                    'hazard layer for each exposure type that you want to use '
+                    'with the hazard.')
+                suggestion_heading = m.Heading(
+                    tr('Suggestion'), **SUGGESTION_STYLE)
+                suggestion = tr(
+                    'Please select the hazard layer in the legend and then '
+                    'run the keyword wizard to define the needed keywords for '
+                    '{exposure_type} exposure.').format(
+                        exposure_type=exposure_key)
+
+                message = m.Message()
+                message.add(warning_heading)
+                message.add(warning_message)
+                message.add(suggestion_heading)
+                message.add(suggestion)
+                return PREPARE_FAILED_BAD_INPUT, message
 
             status, message = self._compute_analysis_extent()
             if status != PREPARE_SUCCESS:
