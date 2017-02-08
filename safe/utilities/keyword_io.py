@@ -457,32 +457,114 @@ class KeywordIO(QObject):
         return row
 
     @staticmethod
-    def _threshold_to_row(keyword_value):
+    def _threshold_to_row(thresholds_keywords):
         """Helper to make a message row from a threshold
 
         We are expecting something like this:
 
-            "{'high': [0, 3], "
-            "'medium': [3, 5], "
-            "'low': [5, 10]}"
+        {
+            'thresholds': {
+                'structure': {
+                    'ina_structure_flood_hazard_classification': {
+                        'classes': {
+                            'low': [1, 2],
+                            'medium': [3, 4],
+                            'high': [5, 6]
+                        },
+                        'active': True
+                    },
+                    'ina_structure_flood_hazard_4_class_classification':
+                    {
+                        'classes': {
+                            'low': [1, 2],
+                            'medium': [3, 4],
+                            'high': [5, 6],
+                            'very_high': [7, 8]
+                        },
+                        'active': False
+
+                    }
+                },
+                'population': {
+                    'ina_population_flood_hazard_classification': {
+                        'classes': {
+                            'low': [1, 2.5],
+                            'medium': [2.5, 4.5],
+                            'high': [4.5, 6]
+                        },
+                        'active': False
+                    },
+                    'ina_population_flood_hazard_4_class_classification':
+                    {
+                        'classes': {
+                            'low': [1, 2.5],
+                            'medium': [2.5, 4],
+                            'high': [4, 6],
+                            'very_high': [6, 8]
+                        },
+                        'active': True
+                    }
+                },
+            },
 
         Each value is a list with exactly two element [a, b], where a <= b.
 
-        :param keyword_value: Value of the keyword to be rendered. This must
-            be a string representation of a dict, or a dict.
-        :type keyword_value: basestring, dict
+        :param thresholds_keywords: Value of the keyword to be rendered. This
+            must be a string representation of a dict, or a dict.
+        :type thresholds_keywords: basestring, dict
 
         :returns: A table to be added into a cell in the keywords table.
         :rtype: safe.messaging.items.table
         """
-        if isinstance(keyword_value, basestring):
-            keyword_value = literal_eval(keyword_value)
+        if isinstance(thresholds_keywords, basestring):
+            thresholds_keywords = literal_eval(thresholds_keywords)
 
-        # TODO(IS): Make it prettier
-        table = m.Table(style_class='table table-condensed')
-        row = m.Row()
-        row.add(m.Cell(str(keyword_value)))
-        table.add(row)
+        table = m.Table(style_class='table table-condensed table-striped')
+
+        for exposure_key, classifications in thresholds_keywords.items():
+            exposure = definition(exposure_key)
+            exposure_title = m.Row()
+            exposure_title.add(m.Cell(m.ImportantText(exposure['name'])))
+
+            active_classification = None
+            for classification, value in classifications.items():
+                if value.get('active'):
+                    active_classification = definition(classification)
+                    break
+
+            if not active_classification:
+                exposure_title.add(m.Cell(tr('No classifications set.')))
+                exposure_title.add(m.Cell(tr('')))
+                continue
+
+            exposure_title.add(m.Cell(active_classification['name']))
+            exposure_title.add(m.Cell(tr('')))
+
+            table.add(exposure_title)
+
+            header = m.Row()
+            header.add(m.Cell(tr('Class name')))
+            header.add(m.Cell(tr('Minimum')))
+            header.add(m.Cell(tr('Maximum')))
+            table.add(header)
+            classes = active_classification.get('classes')
+            # Sort by value, put the lowest first
+            classes = sorted(classes, key=lambda k: k['value'])
+            for the_class in classes:
+                threshold = classifications[active_classification['key']][
+                    'classes'][the_class['key']]
+                row = m.Row()
+                row.add(m.Cell(the_class['name']))
+                row.add(m.Cell(threshold[0]))
+                row.add(m.Cell(threshold[1]))
+                table.add(row)
+            # Empty row
+            empty_row = m.Row()
+            empty_row.add(m.Cell(''))
+            empty_row.add(m.Cell(''))
+            empty_row.add(m.Cell(''))
+            table.add(empty_row)
+
         return table
 
     def _dict_to_row(self, keyword_value):
