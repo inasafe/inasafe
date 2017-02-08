@@ -100,8 +100,9 @@ class KeywordIO(QObject):
         if keyword is None:
             return dictionary
         if keyword not in dictionary:
-            message = tr('No value was found in file %s for keyword %s' % (
-                filename, keyword))
+            message = tr(
+                'No value was found in file {filename} for keyword {keyword}'
+                .format(filename=filename, keyword=keyword))
             raise KeywordNotFoundError(message)
 
         return dictionary[keyword]
@@ -176,10 +177,10 @@ class KeywordIO(QObject):
         existing_keywords.update(keywords)
         try:
             self.write_keywords(layer, existing_keywords)
-        except OperationalError, e:
-            message = (
-                self.tr('Keyword database path: %s') %
-                self.keyword_db_path)
+        except OperationalError as e:
+            message = tr(
+                'Keyword database path: {keyword_db_path}'.format(
+                    keyword_db_path=self.keyword_db_path))
             raise KeywordDbError(str(e) + '\n' + message)
 
     def copy_keywords(
@@ -231,16 +232,17 @@ class KeywordIO(QObject):
                 keywords[key] = extra_keywords[key]
             write_iso19115_metadata(destination_file, keywords)
             # write_keywords_to_file(new_destination, keywords)
-        except Exception, e:
+        except Exception as e:
             message = self.tr(
                 'Failed to copy keywords file from : \n%s\nto\n%s: %s' % (
                     source_layer.source(), new_destination, str(e)))
             raise Exception(message)
         return
 
-# methods below here should be considered private
+    # methods below here should be considered private
 
-    def default_keyword_db_path(self):
+    @staticmethod
+    def default_keyword_db_path():
         """Helper to get the default path for the keywords file.
 
         :returns: The path to where the default location of the keywords

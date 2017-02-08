@@ -487,7 +487,15 @@ male_count_field = {
     'precision': 0,
     'absolute': True,
     'description': tr(
-        'Attribute where the number of males of the feature is located.'),
+        'The number of males for each feature.'),
+    'help_text': tr(
+        '"Male" is defined as: ' + concepts['male']['description'] +
+        'In cases where population data is available, InaSAFE will calculate '
+        'the number of males per exposure feature, aggregate hazard area, '
+        'aggregation area and for the analysis area as a whole. The male '
+        'count is calculated based on standard ratios either provided as a '
+        'global setting in InaSAFE, or (if available) counts or ratios in the '
+        'input analysis data.'),
     'citations': [
         {
             'text': None,

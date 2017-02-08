@@ -64,7 +64,7 @@ generic_structure_classes = {
             'key': 'education',
             'name': tr('Education'),
             'description': tr(
-                'A structure that provides a service in education.'
+                'A structure that provides a service in the education '
                 'sector.'),
             'string_defaults': [
                 'college',
@@ -335,7 +335,7 @@ generic_road_classes = {
             'key': 'primary',
             'name': tr('Primary'),
             'description': tr(
-                'A road that provides the main transportation link ofen '
+                'A road that provides the main transportation link, often '
                 'over a long distance travel characteristic and supporting a '
                 'high average velocity.'),
             'string_defaults': [
@@ -544,8 +544,7 @@ generic_place_classes = {
         {
             'key': 'other',
             'name': tr('Other'),
-            'description': tr(
-                'Other group.'),
+            'description': tr('Other'),
             'osm_downloader': [],
             'string_defaults': ['other'],
             'citations': [
