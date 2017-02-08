@@ -145,7 +145,7 @@ def post_processor_displacement_function(
 # # #
 constant_input_type = {
     'key': 'constant',
-    'description': tr('This type of input gives a constant value.')
+    'description': tr('This type of input takes a constant value.')
 }
 
 field_input_type = {
@@ -170,13 +170,14 @@ keyword_input_type = {
 needs_profile_input_type = {
     'key': 'needs_profile',
     'description': tr(
-        'This type of input takes a value from current InaSAFE needs profile.')
+        'This type of input takes a value from current InaSAFE minimum needs '
+        'profile.')
 }
 
 geometry_property_input_type = {
     'key': 'geometry_property',
     'description': tr(
-        'This type of input takes value from the geometry property.')
+        'This type of input takes a value from the geometry property.')
 }
 
 layer_property_input_type = {
@@ -499,7 +500,7 @@ post_processor_size = {
     'name': tr('Size Value Post Processor'),
     'description': tr(
         'A post processor to calculate the size of the feature. If the '
-        'feature is a polygon, the result will be area in m^2. If the feature '
+        'feature is a polygon, the result will be area in m². If the feature '
         'is a line we use length in metres.'),
     'input': {
         'size_calculator': {
@@ -525,7 +526,7 @@ post_processor_size_rate = {
     'description': tr(
         'A post processor to calculate the value of a feature based on its'
         'size. If feature is a polygon the size is calculated as '
-        'the area in m^2. If the feature is a line we use length in metres.'),
+        'the area in m². If the feature is a line we use length in metres.'),
     'input': {
         'size': {
             'type': field_input_type,
