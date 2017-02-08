@@ -1021,9 +1021,16 @@ class ImpactFunction(object):
             suggestion_heading = m.Heading(
                 tr('Suggestion'), **SUGGESTION_STYLE)
             suggestion = tr(
-                'Check in your .qgis2/python/plugins directory that you do '
-                'not have a processing folder. You should use the Processing '
-                'plugin provided by QGIS.')
+                'InaSAFE depends on the QGIS Processing plugin. This is a '
+                'core plugin that ships with QGIS. It used to be possible to '
+                'install the processing plugin from the QGIS Plugin Manager, '
+                'however we advise you not to use these version since the '
+                'Plugin Manager version may be incompatible with the '
+                'version needed by InaSAFE. To resolve this issue, check in '
+                'your .qgis2/python/plugins directory if you have a '
+                'processing folder. If you do, remove the processing folder '
+                'and then restart QGIS. If this issue persists, please '
+                'report the problem to the InaSAFE team.')
             message = m.Message()
             message.add(warning_heading)
             message.add(warning_message)
