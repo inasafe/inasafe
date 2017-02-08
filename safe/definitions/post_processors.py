@@ -259,9 +259,8 @@ post_processor_displaced = {
     'name': tr('Displaced Post Processor'),
     'description': tr(
         'A post processor to calculate the number of displaced people. '
-        '"Displaced" is defined as: ' +
-        concepts['displaced_people']['description']
-    ),
+        '"Displaced" is defined as: {displaced_concept}').format(
+            displaced_concept=concepts['displaced_people']['description']),
     'input': {
         # input as a list means, try to get the input from the
         # listed source. Pick the first available
@@ -300,11 +299,12 @@ post_processor_gender = {
     'description': tr(
         'A post processor to calculate the number of displaced females '
         'and males. '
-        '"Female" is defined as: ' + concepts['female']['description'] + ' '
-        '"Male" is defined as: ' + concepts['male']['description'] + ' '
-        '"Displaced" is defined as: ' +
-        concepts['displaced_people']['description']
-    ),
+        '"Female" is defined as: {female_concept} "Male" is defined as: '
+        '{male_concept} "Displaced" is defined as: '
+        '{displaced_concept}').format(
+            female_concept=concepts['female']['description'],
+            male_concept=concepts['male']['description'],
+            displaced_concept=concepts['displaced_people']['description']),
     'input': {
         'population_displaced': {
             'value': displaced_field,
@@ -345,10 +345,9 @@ post_processor_hygiene_packs = {
     'name': tr('Weekly Hygiene Packs Post Processor'),
     'description': tr(
         'A post processor to calculate needed hygiene packs weekly for women'
-        'who are displaced. '
-        '"Displaced" is defined as: ' +
-        concepts['displaced_people']['description']
-    ),
+        'who are displaced. "Displaced" is defined as: '
+        '{displaced_concept}').format(
+            displaced_concept=concepts['displaced_people']['description']),
     'input': {
         'female_displaced':
             {
@@ -381,9 +380,8 @@ post_processor_additional_rice = {
     'description': tr(
         'A post processor to calculate additional rice for pregnant and '
         'lactating women who are displaced. '
-        '"Displaced" is defined as: ' +
-        concepts['displaced_people']['description']
-    ),
+        '"Displaced" is defined as: {displaced_concept}').format(
+            displaced_concept=concepts['displaced_people']['description']),
     'input': {
         'female_displaced':
             {
@@ -412,10 +410,10 @@ post_processor_youth = {
     'name': tr('Youth Post Processor'),
     'description': tr(
         'A post processor to calculate the number of displaced youth. '
-        '"Youth" is defined as: ' + concepts['youth']['description'] + ' '
-        '"Displaced" is defined as: ' +
-        concepts['displaced_people']['description']
-    ),
+        '"Youth" is defined as: {youth_concept} "Displaced" is defined as: '
+        '{displaced_concept}').format(
+            youth_concept=concepts['youth']['description'],
+            displaced_concept=concepts['displaced_people']['description']),
     'input': {
         'population_displaced': {
             'value': displaced_field,
@@ -449,10 +447,10 @@ post_processor_adult = {
     'name': tr('Adult Post Processor'),
     'description': tr(
         'A post processor to calculate the number of displaced adults. '
-        '"Adult" is defined as: ' + concepts['adult']['description'] + ' '
-        '"Displaced" is defined as: ' +
-        concepts['displaced_people']['description']
-    ),
+        '"Adult" is defined as: {adult_concept}. "Displaced" is defined as: '
+        '{displaced_concept}').format(
+            adult_concept=concepts['adult']['description'],
+            displaced_concept=concepts['displaced_people']['description']),
     'input': {
         'population_displaced': {
             'value': displaced_field,
@@ -486,11 +484,10 @@ post_processor_elderly = {
     'name': tr('Elderly Post Processor'),
     'description': tr(
         'A post processor to calculate the number of displaced elderly '
-        'people. "Elderly" is defined as: ' +
-        concepts['elderly']['description'] + ' '
-        '"Displaced" is defined as: ' +
-        concepts['displaced_people']['description']
-    ),
+        'people. "Elderly" is defined as: {elderly_concept}. "Displaced" is '
+        'defined as: {displaced_concept}').format(
+            elderly_concept=concepts['elderly']['description'],
+            displaced_concept=concepts['displaced_people']['description']),
     'input': {
         'population_displaced': {
             'value': displaced_field,
