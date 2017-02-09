@@ -1008,6 +1008,9 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
 
         self.parent.pbnNext.setEnabled(self.is_ready_to_next_step())
 
+        # Open edit panel directly
+        edit_button.click()
+
     def activate_classification(self, exposure, classification=None):
         """Set active to True for classification for the exposure.
 
