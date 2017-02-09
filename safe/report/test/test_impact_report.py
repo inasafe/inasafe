@@ -377,9 +377,9 @@ class TestImpactReport(unittest.TestCase):
         # Minimum needs only occured when population is displaced
         # so, use flood hazard.
         hazard_layer = load_test_vector_layer(
-            'hazard', 'flood_multipart_polygons.shp')
-        exposure_layer = load_test_raster_layer(
-            'exposure', 'pop_binary_raster_20_20.asc')
+            'gisv4', 'hazard', 'flood_polygon.geojson')
+        exposure_layer = load_test_vector_layer(
+            'gisv4', 'exposure', 'high_population.geojson')
 
         impact_function = ImpactFunction()
         impact_function.exposure = exposure_layer
@@ -417,7 +417,7 @@ class TestImpactReport(unittest.TestCase):
                     'needs': [
                         {
                             'header': u'Toilets',
-                            'value': 0
+                            'value': 20
                         }],
                     'total_header': u'Total'
                 },
@@ -426,19 +426,19 @@ class TestImpactReport(unittest.TestCase):
                     'needs': [
                         {
                             'header': u'Rice [kg]',
-                            'value': 26
+                            'value': 830
                         },
                         {
                             'header': u'Drinking Water [l]',
-                            'value': 162
+                            'value': 5200
                         },
                         {
                             'header': u'Clean Water [l]',
-                            'value': 623
+                            'value': 19700
                         },
                         {
                             'header': u'Family Kits',
-                            'value': 1
+                            'value': 60
                         }],
                     'total_header': u'Total'
                 }
