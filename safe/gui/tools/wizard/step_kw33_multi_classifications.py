@@ -749,6 +749,45 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             self.tree_mapping_widget
         )
 
+        # Current value map for exposure and classification
+        available_classifications = self.value_maps.get(
+            self.active_exposure['key'])
+        if not available_classifications:
+            return
+        # Get active one
+        current_classification = available_classifications.get(
+            classification['key'])
+        if not current_classification:
+            return
+        current_value_map = current_classification.get('classes')
+        if not current_value_map:
+            return
+
+        unassigned_values = list()
+        assigned_values = dict()
+        for default_class in default_classes:
+            assigned_values[default_class['key']] = list()
+        for unique_value in unique_values:
+            if unique_value is None or isinstance(
+                    unique_value, QPyNullVariant):
+                # Don't classify features with NULL value
+                continue
+            # check in value map
+            assigned = False
+            for key, value_list in current_value_map.items():
+                if unique_value in value_list and key in assigned_values:
+                    assigned_values[key] += [unique_value]
+                    assigned = True
+            if not assigned:
+                unassigned_values += [unique_value]
+        self.populate_classified_values(
+            unassigned_values,
+            assigned_values,
+            default_classes,
+            self.list_unique_values,
+            self.tree_mapping_widget
+        )
+
     # noinspection PyMethodMayBeStatic
     def update_dragged_item_flags(self, item):
         """Fix the drop flag after the item is dropped.
