@@ -1327,16 +1327,17 @@ class ImpactFunction(object):
             if self.debug_mode:
                 self.debug_layer(self.aggregation)
 
-            # We need to check if we can add default ratios to the aggregation
+            # We need to check if we can add default ratios to the exposure.
             exposure = definition(self.exposure.keywords['exposure'])
             keywords = self.exposure.keywords
+            # inasafe_default_values will not exist as we can't use default in
+            # the exposure layer.
             keywords['inasafe_default_values'] = {}
-
-            for field in exposure['extra_fields']:
-                if field['key'] in count_ratio_mapping.keys():
-                    if field['key'] not in keywords['inasafe_fields']:
+            for count_field in exposure['extra_fields']:
+                if count_field['key'] in count_ratio_mapping.keys():
+                    if count_field['key'] not in keywords['inasafe_fields']:
                         # The exposure hasn't a count field, we should add it.
-                        ratio_field = count_ratio_mapping[field['key']]
+                        ratio_field = count_ratio_mapping[count_field['key']]
                         default = definition(ratio_field)['default_value']
                         keywords['inasafe_default_values'][ratio_field] = (
                             default['default_value'])
@@ -1354,11 +1355,6 @@ class ImpactFunction(object):
             if self.debug_mode:
                 self.debug_layer(self.aggregation)
 
-            self.set_state_process('aggregation', 'Add default values')
-            self.aggregation = add_default_values(self.aggregation)
-            if self.debug_mode:
-                self.debug_layer(self.aggregation)
-
             if self.aggregation.crs().authid() != self.exposure.crs().authid():
                 self.set_state_process(
                     'aggregation',
@@ -1373,6 +1369,53 @@ class ImpactFunction(object):
                 self.set_state_process(
                     'aggregation',
                     'Aggregation layer already in exposure CRS')
+
+            # We need to check if we can add default ratios to the exposure
+            # by looking also in the aggregation layer.
+            exposure_keywords = self.exposure.keywords
+            # The exposure might be a raster so without inasafe_fields.
+            exposure_fields = exposure_keywords.get('inasafe_fields', {})
+            exposure = definition(exposure_keywords['exposure'])
+            exposure_keywords['inasafe_default_values'] = {}
+            exposure_defaults = exposure_keywords['inasafe_default_values']
+            aggregation_keywords = self.aggregation.keywords
+            aggregation_fields = aggregation_keywords['inasafe_fields']
+            aggregation_default_fields = aggregation_keywords.get(
+                'inasafe_default_values', {})
+            for count_field in exposure['extra_fields']:
+                if count_field['key'] in count_ratio_mapping.keys():
+                    if count_field['key'] not in exposure_fields:
+                        ratio_field = count_ratio_mapping[count_field['key']]
+
+                        ratio_is_a_field = ratio_field in aggregation_fields
+                        ratio_is_a_constant = (
+                            ratio_field in aggregation_default_fields)
+
+                        if ratio_is_a_constant and ratio_is_a_field:
+                            # This should of course never happen! It would
+                            # be an error from the wizard. See #3809.
+                            # Let's raise an exception.
+                            raise Exception
+
+                        if ratio_is_a_field and not ratio_is_a_constant:
+                            # The ratio is a field, we do nothing here.
+                            # The ratio will be propagated to the
+                            # aggregate_hazard layer.
+                            # Let's skip to the next field.
+                            LOGGER.info(
+                                tr('{ratio} field detected, we will propagate '
+                                   'it to the exposure layer.').format(
+                                        ratio=ratio_field))
+                            continue
+
+                        if ratio_is_a_constant and not ratio_is_a_field:
+                            # It's a constant. We need to add to the exposure.
+                            exposure_defaults[ratio_field] = (
+                                aggregation_default_fields[ratio_field])
+                            LOGGER.info(
+                                tr('{ratio} constant detected, we will add it'
+                                   'to the exposure layer the exposure '
+                                   'layer.').format(ratio=ratio_field))
 
         self.set_state_process(
             'aggregation',

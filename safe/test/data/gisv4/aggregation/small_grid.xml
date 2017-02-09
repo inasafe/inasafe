@@ -197,7 +197,7 @@
             <gco:CharacterString>aggregation</gco:CharacterString>
           </layer_purpose>
           <inasafe_fields>
-            <gco:Dictionary>{&quot;aggregation_id_field&quot;: &quot;area_id&quot;, &quot;aggregation_name_field&quot;: &quot;area_name&quot;}</gco:Dictionary>
+            <gco:Dictionary>{&quot;aggregation_id_field&quot;: &quot;area_id&quot;, &quot;female_ratio_field&quot;: &quot;ratio_female&quot;, &quot;aggregation_name_field&quot;: &quot;area_name&quot;}</gco:Dictionary>
           </inasafe_fields>
           <inasafe_default_values>
             <gco:Dictionary/>

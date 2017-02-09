@@ -294,10 +294,10 @@ class TestImpactReport(unittest.TestCase):
                     u'Total'
                 ],
                 'details': [
-                    [u'other', '0', '10', '10', '0', '0', '10'],
                     [u'government', '0', '10', '10', '0', '0', '10'],
-                    [u'commercial', '10', '0', '10', '0', '0', '10'],
                     [u'education', '10', '0', '10', '0', '10', '10'],
+                    [u'other', '0', '10', '10', '0', '0', '10'],
+                    [u'commercial', '10', '0', '10', '0', '0', '10'],
                     [u'health', '10', '0', '10', '0', '0', '10']
                 ],
                 'footers': [u'Total', '10', '10', '10', '0', '10', '10']
@@ -321,12 +321,12 @@ class TestImpactReport(unittest.TestCase):
                 'header_label': u'Aggregation area',
                 'rows': [
                     {
-                        'type_values': ['10', '0', '10', '10', '0'],
+                        'type_values': ['0', '10', '10', '10', '0'],
                         'total': '10',
                         'name': u'area 1'
                     },
                     {
-                        'type_values': ['0', '10', '0', '0', '0'],
+                        'type_values': ['10', '0', '0', '0', '0'],
                         'total': '10',
                         'name': u'area 2'
                     },
@@ -337,8 +337,8 @@ class TestImpactReport(unittest.TestCase):
                     }
                 ],
                 'type_header_labels': [
-                    u'Other',
                     u'Government',
+                    u'Other',
                     u'Commercial',
                     u'Education',
                     u'Health'
