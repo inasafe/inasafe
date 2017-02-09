@@ -6,7 +6,10 @@ import os
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature, QSettings
 
+from qgis.utils import iface
+
 from safe.utilities.i18n import tr
+from safe.utilities.extent import Extent
 from safe.definitions.constants import (
     ANALYSIS_FAILED_BAD_INPUT,
     ANALYSIS_FAILED_BAD_CODE,
@@ -51,7 +54,9 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         WizardStep.__init__(self, parent)
 
         enable_messaging(self.results_webview)
+        self.iface = iface
         self.impact_function = None
+        self.extent = Extent(self.iface)
 
     def is_ready_to_next_step(self):
         """Check if the step is complete. If so, there is
