@@ -892,7 +892,7 @@ cyclone_sshws_hazard_classes = {
             'fatality_rate': 0.0,
             'numeric_default_min': {
                 unit_knots['key']: 136,
-                unit_metres_per_second['key']: 136,
+                unit_metres_per_second['key']: 70,
                 unit_miles_per_hour['key']: 156,
                 unit_kilometres_per_hour['key']: 251
             },
@@ -923,13 +923,13 @@ cyclone_sshws_hazard_classes = {
             'fatality_rate': 0.0,
             'numeric_default_min': {
                 unit_knots['key']: 112,
-                unit_metres_per_second['key']: 112,
+                unit_metres_per_second['key']: 58,
                 unit_miles_per_hour['key']: 129,
                 unit_kilometres_per_hour['key']: 208
             },
             'numeric_default_max': {
                 unit_knots['key']: 136 - small_number,
-                unit_metres_per_second['key']: 136 - small_number,
+                unit_metres_per_second['key']: 70 - small_number,
                 unit_miles_per_hour['key']: 156 - small_number,
                 unit_kilometres_per_hour['key']: 251 - small_number
             },
@@ -957,13 +957,13 @@ cyclone_sshws_hazard_classes = {
             'fatality_rate': 0.0,
             'numeric_default_min': {
                 unit_knots['key']: 95,
-                unit_metres_per_second['key']: 95,
+                unit_metres_per_second['key']: 50,
                 unit_miles_per_hour['key']: 110,
                 unit_kilometres_per_hour['key']: 177
             },
             'numeric_default_max': {
                 unit_knots['key']: 112 - small_number,
-                unit_metres_per_second['key']: 112 - small_number,
+                unit_metres_per_second['key']: 58 - small_number,
                 unit_miles_per_hour['key']: 129 - small_number,
                 unit_kilometres_per_hour['key']: 208 - small_number
             },
@@ -991,13 +991,13 @@ cyclone_sshws_hazard_classes = {
             'fatality_rate': 0.0,
             'numeric_default_min': {
                 unit_knots['key']: 82,
-                unit_metres_per_second['key']: 82,
+                unit_metres_per_second['key']: 42,
                 unit_miles_per_hour['key']: 95,
                 unit_kilometres_per_hour['key']: 153
             },
             'numeric_default_max': {
                 unit_knots['key']: 95 - small_number,
-                unit_metres_per_second['key']: 95 - small_number,
+                unit_metres_per_second['key']: 50 - small_number,
                 unit_miles_per_hour['key']: 110 - small_number,
                 unit_kilometres_per_hour['key']: 177 - small_number
             },
@@ -1025,13 +1025,13 @@ cyclone_sshws_hazard_classes = {
             'fatality_rate': 0.0,
             'numeric_default_min': {
                 unit_knots['key']: 64,
-                unit_metres_per_second['key']: 64,
+                unit_metres_per_second['key']: 33,
                 unit_miles_per_hour['key']: 74,
                 unit_kilometres_per_hour['key']: 119
             },
             'numeric_default_max': {
                 unit_knots['key']: 82 - small_number,
-                unit_metres_per_second['key']: 82 - small_number,
+                unit_metres_per_second['key']: 42 - small_number,
                 unit_miles_per_hour['key']: 95 - small_number,
                 unit_kilometres_per_hour['key']: 153 - small_number
             },
@@ -1054,7 +1054,7 @@ cyclone_sshws_hazard_classes = {
             'numeric_default_min': 0,
             'numeric_default_max': {
                 unit_knots['key']: 64 - small_number,
-                unit_metres_per_second['key']: 64 - small_number,
+                unit_metres_per_second['key']: 33 - small_number,
                 unit_miles_per_hour['key']: 74 - small_number,
                 unit_kilometres_per_hour['key']: 119 - small_number
             },
