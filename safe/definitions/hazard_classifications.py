@@ -661,7 +661,7 @@ cyclone_au_bom_hazard_classes = {
             'fatality_rate': 0.0,
             'numeric_default_min': {
                 unit_knots['key']: 107,
-                unit_metres_per_second['key']: 107,  # CONVERT ME from kt
+                unit_metres_per_second['key']: 55,
                 unit_miles_per_hour['key']: 123,
                 unit_kilometres_per_hour['key']: 198
             },
@@ -692,13 +692,13 @@ cyclone_au_bom_hazard_classes = {
             'fatality_rate': 0.0,
             'numeric_default_min': {
                 unit_knots['key']: 85,
-                unit_metres_per_second['key']: 85,  # CONVERT ME from kt
+                unit_metres_per_second['key']: 44,
                 unit_miles_per_hour['key']: 98,
                 unit_kilometres_per_hour['key']: 157
             },
             'numeric_default_max': {
                 unit_knots['key']: 107 - small_number,
-                unit_metres_per_second['key']: 107 - small_number,  # CONVERT ME from kt
+                unit_metres_per_second['key']: 55 - small_number,
                 unit_miles_per_hour['key']: 123 - small_number,
                 unit_kilometres_per_hour['key']: 198 - small_number
             },
@@ -726,13 +726,13 @@ cyclone_au_bom_hazard_classes = {
             'fatality_rate': 0.0,
             'numeric_default_min': {
                 unit_knots['key']: 63,
-                unit_metres_per_second['key']: 63,  # CONVERT ME from kt
+                unit_metres_per_second['key']: 33,
                 unit_miles_per_hour['key']: 72,
                 unit_kilometres_per_hour['key']: 117
             },
             'numeric_default_max': {
                 unit_knots['key']: 85 - small_number,
-                unit_metres_per_second['key']: 85 - small_number,  # CONVERT ME from kt
+                unit_metres_per_second['key']: 44 - small_number,
                 unit_miles_per_hour['key']: 98 - small_number,
                 unit_kilometres_per_hour['key']: 157 - small_number
             },
@@ -761,13 +761,13 @@ cyclone_au_bom_hazard_classes = {
             'fatality_rate': 0.0,
             'numeric_default_min': {
                 unit_knots['key']: 47,
-                unit_metres_per_second['key']: 47,  # CONVERT ME from kt
+                unit_metres_per_second['key']: 24,
                 unit_miles_per_hour['key']: 54,
                 unit_kilometres_per_hour['key']: 88
             },
             'numeric_default_max': {
                 unit_knots['key']: 63 - small_number,
-                unit_metres_per_second['key']: 63 - small_number,  # CONVERT ME from kt
+                unit_metres_per_second['key']: 33 - small_number,
                 unit_miles_per_hour['key']: 72 - small_number,
                 unit_kilometres_per_hour['key']: 117 - small_number
             },
@@ -794,13 +794,13 @@ cyclone_au_bom_hazard_classes = {
             'fatality_rate': 0.0,
             'numeric_default_min': {
                 unit_knots['key']: 34,
-                unit_metres_per_second['key']: 34,  # CONVERT ME from kt
+                unit_metres_per_second['key']: 17,
                 unit_miles_per_hour['key']: 39,
                 unit_kilometres_per_hour['key']: 63
             },
             'numeric_default_max': {
                 unit_knots['key']: 47 - small_number,
-                unit_metres_per_second['key']: 47 - small_number,  # CONVERT ME from kt
+                unit_metres_per_second['key']: 24 - small_number,
                 unit_miles_per_hour['key']: 54 - small_number,
                 unit_kilometres_per_hour['key']: 88 - small_number
             },
@@ -826,7 +826,7 @@ cyclone_au_bom_hazard_classes = {
             'numeric_default_min': 0,
             'numeric_default_max': {
                 unit_knots['key']: 34 - small_number,
-                unit_metres_per_second['key']: 34 - small_number,  # CONVERT ME from kt
+                unit_metres_per_second['key']: 17 - small_number,
                 unit_miles_per_hour['key']: 39 - small_number,
                 unit_kilometres_per_hour['key']: 63 - small_number
             },
@@ -892,7 +892,7 @@ cyclone_sshws_hazard_classes = {
             'fatality_rate': 0.0,
             'numeric_default_min': {
                 unit_knots['key']: 136,
-                unit_metres_per_second['key']: 136,  # CONVERT ME from kt
+                unit_metres_per_second['key']: 136,
                 unit_miles_per_hour['key']: 156,
                 unit_kilometres_per_hour['key']: 251
             },
@@ -923,13 +923,13 @@ cyclone_sshws_hazard_classes = {
             'fatality_rate': 0.0,
             'numeric_default_min': {
                 unit_knots['key']: 112,
-                unit_metres_per_second['key']: 112,  # CONVERT ME from kt
+                unit_metres_per_second['key']: 112,
                 unit_miles_per_hour['key']: 129,
                 unit_kilometres_per_hour['key']: 208
             },
             'numeric_default_max': {
                 unit_knots['key']: 136 - small_number,
-                unit_metres_per_second['key']: 136 - small_number,  # CONVERT ME from kt
+                unit_metres_per_second['key']: 136 - small_number,
                 unit_miles_per_hour['key']: 156 - small_number,
                 unit_kilometres_per_hour['key']: 251 - small_number
             },
@@ -957,13 +957,13 @@ cyclone_sshws_hazard_classes = {
             'fatality_rate': 0.0,
             'numeric_default_min': {
                 unit_knots['key']: 95,
-                unit_metres_per_second['key']: 95,  # CONVERT ME from kt
+                unit_metres_per_second['key']: 95,
                 unit_miles_per_hour['key']: 110,
                 unit_kilometres_per_hour['key']: 177
             },
             'numeric_default_max': {
                 unit_knots['key']: 112 - small_number,
-                unit_metres_per_second['key']: 112 - small_number,  # CONVERT ME from kt
+                unit_metres_per_second['key']: 112 - small_number,
                 unit_miles_per_hour['key']: 129 - small_number,
                 unit_kilometres_per_hour['key']: 208 - small_number
             },
@@ -991,13 +991,13 @@ cyclone_sshws_hazard_classes = {
             'fatality_rate': 0.0,
             'numeric_default_min': {
                 unit_knots['key']: 82,
-                unit_metres_per_second['key']: 82,  # CONVERT ME from kt
+                unit_metres_per_second['key']: 82,
                 unit_miles_per_hour['key']: 95,
                 unit_kilometres_per_hour['key']: 153
             },
             'numeric_default_max': {
                 unit_knots['key']: 95 - small_number,
-                unit_metres_per_second['key']: 95 - small_number,  # CONVERT ME from kt
+                unit_metres_per_second['key']: 95 - small_number,
                 unit_miles_per_hour['key']: 110 - small_number,
                 unit_kilometres_per_hour['key']: 177 - small_number
             },
@@ -1025,13 +1025,13 @@ cyclone_sshws_hazard_classes = {
             'fatality_rate': 0.0,
             'numeric_default_min': {
                 unit_knots['key']: 64,
-                unit_metres_per_second['key']: 64,  # CONVERT ME from kt
+                unit_metres_per_second['key']: 64,
                 unit_miles_per_hour['key']: 74,
                 unit_kilometres_per_hour['key']: 119
             },
             'numeric_default_max': {
                 unit_knots['key']: 82 - small_number,
-                unit_metres_per_second['key']: 82 - small_number,  # CONVERT ME from kt
+                unit_metres_per_second['key']: 82 - small_number,
                 unit_miles_per_hour['key']: 95 - small_number,
                 unit_kilometres_per_hour['key']: 153 - small_number
             },
@@ -1054,7 +1054,7 @@ cyclone_sshws_hazard_classes = {
             'numeric_default_min': 0,
             'numeric_default_max': {
                 unit_knots['key']: 64 - small_number,
-                unit_metres_per_second['key']: 64 - small_number,  # CONVERT ME from kt
+                unit_metres_per_second['key']: 64 - small_number,
                 unit_miles_per_hour['key']: 74 - small_number,
                 unit_kilometres_per_hour['key']: 119 - small_number
             },
