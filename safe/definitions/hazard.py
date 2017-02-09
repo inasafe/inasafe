@@ -23,7 +23,8 @@ from safe.definitions.units import (
     unit_mmi,
     unit_miles_per_hour,
     unit_kilometres_per_hour,
-    unit_knots)
+    unit_knots,
+    unit_metres_per_second)
 from safe.definitions.layer_modes import (
     layer_mode_classified, layer_mode_continuous)
 from safe.definitions.fields import (
@@ -59,7 +60,8 @@ continuous_hazard_unit = {
         unit_mmi,
         unit_kilometres_per_hour,
         unit_miles_per_hour,
-        unit_knots
+        unit_knots,
+        unit_metres_per_second
     ]
 }
 continuous_hazard_unit_all = continuous_hazard_unit['types']
@@ -226,7 +228,8 @@ hazard_cyclone = {
     'continuous_hazard_units': [
         unit_miles_per_hour,
         unit_kilometres_per_hour,
-        unit_knots
+        unit_knots,
+        unit_metres_per_second
     ],
     'allowed_geometries': [
         'polygon',

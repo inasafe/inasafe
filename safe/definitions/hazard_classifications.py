@@ -11,6 +11,7 @@ from safe.definitions.units import (
     unit_miles_per_hour,
     unit_kilometres_per_hour,
     unit_knots,
+    unit_metres_per_second
 )
 from safe.definitions.styles import (
     grey,
@@ -638,7 +639,10 @@ cyclone_au_bom_hazard_classes = {
         }
     ],
     'multiple_units': [
-        unit_miles_per_hour, unit_kilometres_per_hour, unit_knots],
+        unit_miles_per_hour, 
+        unit_kilometres_per_hour, 
+        unit_knots, 
+        unit_metres_per_second],
     'classes': [
         {
             'key': 'category_5',
@@ -649,7 +653,7 @@ cyclone_au_bom_hazard_classes = {
             'description': tr(
                 'Extremely dangerous with widespread destruction. A Category '
                 '5 cyclone\'s strongest winds are VERY DESTRUCTIVE winds with '
-                'typical gusts over open flat land of more than 151 kn. '
+                'typical gusts over open flat land of more than 151 kt. '
                 'These winds correspond to the highest category on the '
                 'Beaufort scale, Beaufort 12 (Hurricane).'
             ),
@@ -657,6 +661,7 @@ cyclone_au_bom_hazard_classes = {
             'fatality_rate': 0.0,
             'numeric_default_min': {
                 unit_knots['key']: 107,
+                unit_metres_per_second['key']: 107,  # CONVERT ME from kt
                 unit_miles_per_hour['key']: 123,
                 unit_kilometres_per_hour['key']: 198
             },
@@ -679,7 +684,7 @@ cyclone_au_bom_hazard_classes = {
                 'caravans destroyed and blown away. Dangerous airborne debris '
                 '. Widespread power failures. A Category 4 cyclone\'s '
                 'strongest winds are VERY DESTRUCTIVE winds with typical '
-                'gusts over open flat land of 122 - 151 kn. These winds '
+                'gusts over open flat land of 122 - 151 kt. These winds '
                 'correspond to the highest category on the Beaufort scale, '
                 'Beaufort 12 (Hurricane).'
             ),
@@ -687,11 +692,13 @@ cyclone_au_bom_hazard_classes = {
             'fatality_rate': 0.0,
             'numeric_default_min': {
                 unit_knots['key']: 85,
+                unit_metres_per_second['key']: 85,  # CONVERT ME from kt
                 unit_miles_per_hour['key']: 98,
                 unit_kilometres_per_hour['key']: 157
             },
             'numeric_default_max': {
                 unit_knots['key']: 107 - small_number,
+                unit_metres_per_second['key']: 107 - small_number,  # CONVERT ME from kt
                 unit_miles_per_hour['key']: 123 - small_number,
                 unit_kilometres_per_hour['key']: 198 - small_number
             },
@@ -712,18 +719,20 @@ cyclone_au_bom_hazard_classes = {
                 'Some roof and structural damage. Some caravans destroyed.'
                 'Power failures likely. A Category 3 cyclone\'s strongest '
                 'winds are VERY DESTRUCTIVE winds with typical gusts over '
-                'open flat land of 90 - 121 kn. These winds correspond to the '
+                'open flat land of 90 - 121 kt. These winds correspond to the '
                 'highest category on the Beaufort scale, Beaufort 12 ('
                 'Hurricane).'),
             'displacement_rate': 0.0,
             'fatality_rate': 0.0,
             'numeric_default_min': {
                 unit_knots['key']: 63,
+                unit_metres_per_second['key']: 63,  # CONVERT ME from kt
                 unit_miles_per_hour['key']: 72,
                 unit_kilometres_per_hour['key']: 117
             },
             'numeric_default_max': {
                 unit_knots['key']: 85 - small_number,
+                unit_metres_per_second['key']: 85 - small_number,  # CONVERT ME from kt
                 unit_miles_per_hour['key']: 98 - small_number,
                 unit_kilometres_per_hour['key']: 157 - small_number
             },
@@ -745,18 +754,20 @@ cyclone_au_bom_hazard_classes = {
                 'and caravans. Heavy damage to some crops. Risk of '
                 'power failure. Small craft may break moorings. A Category 2 '
                 'cyclone\'s strongest winds are DESTRUCTIVE winds with '
-                'typical gusts over open flat land of 68 - 89 kn. '
+                'typical gusts over open flat land of 68 - 89 kt. '
                 'These winds correspond to Beaufort 10 and 11 (Storm '
                 'and violent storm).'),
             'displacement_rate': 0.0,
             'fatality_rate': 0.0,
             'numeric_default_min': {
                 unit_knots['key']: 47,
+                unit_metres_per_second['key']: 47,  # CONVERT ME from kt
                 unit_miles_per_hour['key']: 54,
                 unit_kilometres_per_hour['key']: 88
             },
             'numeric_default_max': {
                 unit_knots['key']: 63 - small_number,
+                unit_metres_per_second['key']: 63 - small_number,  # CONVERT ME from kt
                 unit_miles_per_hour['key']: 72 - small_number,
                 unit_kilometres_per_hour['key']: 117 - small_number
             },
@@ -777,17 +788,19 @@ cyclone_au_bom_hazard_classes = {
                 'Negligible house damage. Damage to some crops, trees and '
                 'caravans. Craft may drag moorings. A Category 1 cyclone\'s '
                 'strongest winds are GALES with typical gusts over open '
-                'flat land of 49 - 67 kn. These winds correspond to Beaufort '
+                'flat land of 49 - 67 kt. These winds correspond to Beaufort '
                 '8 and 9 (Gales and strong gales).'),
             'displacement_rate': 0.0,
             'fatality_rate': 0.0,
             'numeric_default_min': {
                 unit_knots['key']: 34,
+                unit_metres_per_second['key']: 34,  # CONVERT ME from kt
                 unit_miles_per_hour['key']: 39,
                 unit_kilometres_per_hour['key']: 63
             },
             'numeric_default_max': {
                 unit_knots['key']: 47 - small_number,
+                unit_metres_per_second['key']: 47 - small_number,  # CONVERT ME from kt
                 unit_miles_per_hour['key']: 54 - small_number,
                 unit_kilometres_per_hour['key']: 88 - small_number
             },
@@ -807,12 +820,13 @@ cyclone_au_bom_hazard_classes = {
             'description': tr(
                 'A tropical depression is a tropical disturbance, that has a '
                 'clearly defined surface circulation, which has maximum '
-                'sustained winds of less than 34 kn.'),
+                'sustained winds of less than 34 kt.'),
             'displacement_rate': 0.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 0,
             'numeric_default_max': {
                 unit_knots['key']: 34 - small_number,
+                unit_metres_per_second['key']: 34 - small_number,  # CONVERT ME from kt
                 unit_miles_per_hour['key']: 39 - small_number,
                 unit_kilometres_per_hour['key']: 63 - small_number
             },
@@ -878,6 +892,7 @@ cyclone_sshws_hazard_classes = {
             'fatality_rate': 0.0,
             'numeric_default_min': {
                 unit_knots['key']: 136,
+                unit_metres_per_second['key']: 136,  # CONVERT ME from kt
                 unit_miles_per_hour['key']: 156,
                 unit_kilometres_per_hour['key']: 251
             },
@@ -908,11 +923,13 @@ cyclone_sshws_hazard_classes = {
             'fatality_rate': 0.0,
             'numeric_default_min': {
                 unit_knots['key']: 112,
+                unit_metres_per_second['key']: 112,  # CONVERT ME from kt
                 unit_miles_per_hour['key']: 129,
                 unit_kilometres_per_hour['key']: 208
             },
             'numeric_default_max': {
                 unit_knots['key']: 136 - small_number,
+                unit_metres_per_second['key']: 136 - small_number,  # CONVERT ME from kt
                 unit_miles_per_hour['key']: 156 - small_number,
                 unit_kilometres_per_hour['key']: 251 - small_number
             },
@@ -940,11 +957,13 @@ cyclone_sshws_hazard_classes = {
             'fatality_rate': 0.0,
             'numeric_default_min': {
                 unit_knots['key']: 95,
+                unit_metres_per_second['key']: 95,  # CONVERT ME from kt
                 unit_miles_per_hour['key']: 110,
                 unit_kilometres_per_hour['key']: 177
             },
             'numeric_default_max': {
                 unit_knots['key']: 112 - small_number,
+                unit_metres_per_second['key']: 112 - small_number,  # CONVERT ME from kt
                 unit_miles_per_hour['key']: 129 - small_number,
                 unit_kilometres_per_hour['key']: 208 - small_number
             },
@@ -972,11 +991,13 @@ cyclone_sshws_hazard_classes = {
             'fatality_rate': 0.0,
             'numeric_default_min': {
                 unit_knots['key']: 82,
+                unit_metres_per_second['key']: 82,  # CONVERT ME from kt
                 unit_miles_per_hour['key']: 95,
                 unit_kilometres_per_hour['key']: 153
             },
             'numeric_default_max': {
                 unit_knots['key']: 95 - small_number,
+                unit_metres_per_second['key']: 95 - small_number,  # CONVERT ME from kt
                 unit_miles_per_hour['key']: 110 - small_number,
                 unit_kilometres_per_hour['key']: 177 - small_number
             },
@@ -1004,11 +1025,13 @@ cyclone_sshws_hazard_classes = {
             'fatality_rate': 0.0,
             'numeric_default_min': {
                 unit_knots['key']: 64,
+                unit_metres_per_second['key']: 64,  # CONVERT ME from kt
                 unit_miles_per_hour['key']: 74,
                 unit_kilometres_per_hour['key']: 119
             },
             'numeric_default_max': {
                 unit_knots['key']: 82 - small_number,
+                unit_metres_per_second['key']: 82 - small_number,  # CONVERT ME from kt
                 unit_miles_per_hour['key']: 95 - small_number,
                 unit_kilometres_per_hour['key']: 153 - small_number
             },
@@ -1031,6 +1054,7 @@ cyclone_sshws_hazard_classes = {
             'numeric_default_min': 0,
             'numeric_default_max': {
                 unit_knots['key']: 64 - small_number,
+                unit_metres_per_second['key']: 64 - small_number,  # CONVERT ME from kt
                 unit_miles_per_hour['key']: 74 - small_number,
                 unit_kilometres_per_hour['key']: 119 - small_number
             },
