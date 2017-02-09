@@ -13,6 +13,8 @@ import logging
 from os.path import join, isfile
 from os import listdir
 
+from safe.definitions.fields import female_ratio_field, female_count_field
+from safe.definitions.default_values import female_ratio_default_value
 from safe.definitions.layer_purposes import layer_purpose_profiling
 from safe.definitions.minimum_needs import minimum_needs_fields
 from safe.definitions.utilities import definition
@@ -304,6 +306,39 @@ class TestImpactFunction(unittest.TestCase):
                 impact_function.analysis_extent.exportToWkt()),
             message
         )
+
+    def test_ratios(self):
+        """Test if we can add defaults to the exposure if no aggregation."""
+        hazard_layer = load_test_vector_layer(
+            'gisv4', 'hazard', 'classified_vector.geojson')
+        exposure_layer = load_test_vector_layer(
+            'gisv4', 'exposure', 'population.geojson')
+
+        # We check do not exist before in the exposure layer.
+        self.assertNotIn(
+            female_count_field['key'],
+            exposure_layer.keywords['inasafe_fields'])
+
+        # Set up impact function
+        impact_function = ImpactFunction()
+        impact_function.exposure = exposure_layer
+        impact_function.hazard = hazard_layer
+        status, message = impact_function.run()
+        self.assertEqual(ANALYSIS_FAILED_BAD_INPUT, status, message)
+        impact_function.prepare()
+        status, message = impact_function.run()
+        self.assertEqual(ANALYSIS_SUCCESS, status, message)
+
+        impact = impact_function.impact
+
+        # We check the field exist after the IF with only one value.
+        field = impact.fieldNameIndex(
+            female_ratio_field['field_name'])
+        self.assertNotEqual(-1, field)
+        unique_ratio = impact.uniqueValues(field)
+        self.assertEqual(1, len(unique_ratio))
+        self.assertEqual(
+            unique_ratio[0], female_ratio_default_value['default_value'])
 
     def test_profiling(self):
         """Test running impact function on test data."""

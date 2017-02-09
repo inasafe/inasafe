@@ -1391,3 +1391,12 @@ ratio_fields = [
     adult_ratio_field,
     elderly_ratio_field,
 ]
+
+# This table is useful when we need to match between counts and ratios.
+count_ratio_mapping = {
+    female_count_field['key']: female_ratio_field['key'],
+    youth_count_field['key']: youth_ratio_field['key'],
+    adult_count_field['key']: adult_ratio_field['key'],
+    elderly_count_field['key']: elderly_ratio_field['key'],
+    # feature_value_field['key']: feature_rate_field['key'], disable in V4.0 ET
+}

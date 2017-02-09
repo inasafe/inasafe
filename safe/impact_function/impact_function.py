@@ -64,6 +64,7 @@ from safe.definitions.fields import (
     size_field,
     exposure_class_field,
     hazard_class_field,
+    count_ratio_mapping,
 )
 from safe.definitions.layer_purposes import (
     layer_purpose_exposure_impacted,
@@ -1325,6 +1326,20 @@ class ImpactFunction(object):
                 self.analysis_extent, self.exposure.crs())
             if self.debug_mode:
                 self.debug_layer(self.aggregation)
+
+            # We need to check if we can add default ratios to the aggregation
+            exposure = definition(self.exposure.keywords['exposure'])
+            keywords = self.exposure.keywords
+            keywords['inasafe_default_values'] = {}
+
+            for field in exposure['extra_fields']:
+                if field['key'] in count_ratio_mapping.keys():
+                    if field['key'] not in keywords['inasafe_fields']:
+                        # The exposure hasn't a count field, we should add it.
+                        ratio_field = count_ratio_mapping[field['key']]
+                        default = definition(ratio_field)['default_value']
+                        keywords['inasafe_default_values'][ratio_field] = (
+                            default['default_value'])
 
         else:
             self.set_state_info('aggregation', 'provided', True)

@@ -1,21 +1,15 @@
 # coding=utf-8
 
 """Add default values."""
+
 import logging
 from PyQt4.QtCore import QPyNullVariant
-from qgis.core import (
-    QgsVectorLayer,
-    QgsField,
-    QgsFeatureRequest,
-    QGis,
-)
 
 from safe.common.exceptions import (
-    InvalidKeywordsForProcessingAlgorithm, NoFeaturesInExtentError)
+    InvalidKeywordsForProcessingAlgorithm)
 from safe.definitions.processing_steps import assign_default_values_steps
-from safe.definitions.utilities import (
-    definition,
-)
+from safe.definitions.utilities import definition
+from safe.gis.vector.tools import create_field_from_definition
 from safe.utilities.i18n import tr
 from safe.utilities.profiling import profile
 
@@ -29,7 +23,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 @profile
 def add_default_values(layer, callback=None):
-    """Add or fill default values to the layer, see #3325
+    """Add or fill default values to the layer, see #3325.
 
     1. It doesn't have inasafe_field and it doesn't have inasafe_default_value
         --> Do nothing.
@@ -85,11 +79,7 @@ def add_default_values(layer, callback=None):
                     **{'field': target_field['key'],
                        'value': defaults[default]})))
 
-            new_field = QgsField()
-            new_field.setName(target_field['field_name'])
-            new_field.setType(target_field['type'])
-            new_field.setPrecision(target_field['precision'])
-            new_field.setLength(target_field['length'])
+            new_field = create_field_from_definition(target_field)
 
             layer.addAttribute(new_field)
 
