@@ -1,14 +1,11 @@
 # coding=utf-8
 import logging
-import os
-from zipfile import ZipFile
 
 import requests
 
-from realtime.exceptions import RESTRequestFailedError
 from realtime.ash.ash_event import AshEvent
-from realtime.push_rest import (
-    InaSAFEDjangoREST)
+from realtime.exceptions import RESTRequestFailedError
+from realtime.push_rest import InaSAFEDjangoREST
 from realtime.utilities import realtime_logger_name
 
 __author__ = 'Rizky Maulana Nugraha "lucernae" <lana.pcfre@gmail.com>'
@@ -32,7 +29,7 @@ def push_ash_event_to_rest(ash_event, fail_silent=True):
     inasafe_django = InaSAFEDjangoREST()
     # check credentials exists in os.environ
     if not inasafe_django.is_configured():
-        LOGGER.info('Insufficient information to push shake map to '
+        LOGGER.info('Insufficient information to push ash event to '
                     'Django Realtime')
         LOGGER.info('Please set environment for INASAFE_REALTIME_REST_URL, '
                     'INASAFE_REALTIME_REST_LOGIN_URL, '
@@ -47,19 +44,6 @@ def push_ash_event_to_rest(ash_event, fail_silent=True):
     try:
         session = inasafe_django.rest
 
-        # Create a zipped impact layer
-        impact_zip_path = ash_event.working_dir_path('impact.zip')
-
-        with ZipFile(impact_zip_path, 'w') as zipf:
-            for root, dirs, files in os.walk(ash_event.working_dir):
-                for f in files:
-                    _, ext = os.path.splitext(f)
-                    if ('impact' in f and
-                            not f == 'impact.zip' and
-                            not ext == '.pdf'):
-                        filename = os.path.join(root, f)
-                        zipf.write(filename, arcname=f)
-
         # build the data request:
         dateformat = '%Y-%m-%d %H:%M:%S %z'
         timestring = '%Y%m%d%H%M%S%z'
@@ -69,14 +53,35 @@ def push_ash_event_to_rest(ash_event, fail_silent=True):
             'language': ash_event.locale,
         }
         ash_data_file = {
-            # 'impact_files': open(impact_zip_path),
-            # 'map_report': open(ash_event.map_report_path),
+            'impact_files': (
+                '%s-impact.zip' % ash_event.event_id,
+                open(ash_event.impact_zip_path)),
         }
 
         # modify headers
         headers = {
             'X-CSRFTOKEN': inasafe_django.csrf_token,
         }
+
+        # post impact results
+        # Update using PUT url
+        response = session.ash(
+            ash_data['volcano_name'],
+            ash_event.time.strftime(timestring)).PUT(
+            files=ash_data_file,
+            headers=headers)
+
+        if not (response.status_code == requests.codes.ok or
+                response.status_code == requests.codes.created):
+            error = RESTRequestFailedError(
+                url=response.url,
+                status_code=response.status_code,
+                files=ash_data_file)
+
+            if fail_silent:
+                LOGGER.warning(error.message)
+            else:
+                raise error
 
         # post the report
         # build report data

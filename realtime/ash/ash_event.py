@@ -4,6 +4,8 @@ import logging
 import os
 import datetime
 from collections import OrderedDict
+from zipfile import ZipFile
+
 import pytz
 import shutil
 from PyQt4.QtCore import QObject, QFileInfo, QUrl
@@ -110,6 +112,13 @@ class AshEvent(QObject):
         self.working_dir = working_dir
         if not os.path.exists(self.working_dir_path()):
             os.makedirs(self.working_dir_path())
+
+        dateformat = '%Y%m%d%H%M%S'
+        timestring = self.time.strftime(dateformat)
+        self.event_id = '%s-%s' % (timestring, self.volcano_name)
+
+        LOGGER.info('Ash ID: %s' % self.event_id)
+
         # save hazard layer
         self.hazard_path = self.working_dir_path('hazard.tif')
         self.save_hazard_layer(hazard_path)
@@ -125,6 +134,7 @@ class AshEvent(QObject):
         self.map_report_path = self.working_dir_path('report.pdf')
         self.project_path = self.working_dir_path('project.qgs')
         self.impact_exists = None
+        self.impact_zip_path = self.working_dir_path('impact.zip')
         self.locale = 'en'
 
         self.population_path = population_path
@@ -645,6 +655,17 @@ class AshEvent(QObject):
             self.airport_layer,
             'airport_impact')
         self.impact_exists = True
+        # Create a zipped impact layer
+
+        with ZipFile(self.impact_zip_path, 'w') as zipf:
+            for root, dirs, files in os.walk(self.working_dir_path()):
+                for f in files:
+                    _, ext = os.path.splitext(f)
+                    if ('impact' in f and
+                            not f == 'impact.zip' and
+                            not ext == '.pdf'):
+                        filename = os.path.join(root, f)
+                        zipf.write(filename, arcname=f)
 
     def generate_report(self):
         # Generate pdf report from impact/hazard

@@ -19,7 +19,7 @@ LOGGER = logging.getLogger(realtime_logger_name())
 
 
 def push_flood_event_to_rest(flood_event, fail_silent=True):
-    """Pushing shake event Grid.xml description files to REST server.
+    """Pushing flood event to REST server.
 
     :param flood_event: The flood event to push
     :type flood_event: FloodEvent
@@ -39,7 +39,7 @@ def push_flood_event_to_rest(flood_event, fail_silent=True):
     inasafe_django = InaSAFEDjangoREST()
     # check credentials exists in os.environ
     if not inasafe_django.is_configured():
-        LOGGER.info('Insufficient information to push shake map to '
+        LOGGER.info('Insufficient information to push flood event to '
                     'Django Realtime')
         LOGGER.info('Please set environment for INASAFE_REALTIME_REST_URL, '
                     'INASAFE_REALTIME_REST_LOGIN_URL, '
@@ -54,30 +54,22 @@ def push_flood_event_to_rest(flood_event, fail_silent=True):
     try:
         session = inasafe_django.rest
 
-        # Create a zipped impact layer
-        impact_zip_path = os.path.join(flood_event.report_path, 'impact.zip')
-
-        with ZipFile(impact_zip_path, 'w') as zipf:
-            for root, dirs, files in os.walk(flood_event.report_path):
-                for f in files:
-                    _, ext = os.path.splitext(f)
-                    if ('impact' in f and
-                            not f == 'impact.zip' and
-                            not ext == '.pdf'):
-                        filename = os.path.join(root, f)
-                        zipf.write(filename, arcname=f)
-
         # build the data request:
         flood_data = {
             'event_id': flood_event.report_id,
+            'data_source': flood_event.flood_data_source,
             'time': flood_event.time,
             'interval': flood_event.duration,
             'source': flood_event.source,
             'region': flood_event.region
         }
         flood_data_file = {
-            'hazard_layer': open(flood_event.hazard_zip_path),
-            'impact_layer': open(impact_zip_path)
+            'hazard_layer': (
+                '%s-hazard.zip' % flood_event.report_id,
+                open(flood_event.hazard_zip_path)),
+            'impact_layer': (
+                '%s-impact.zip' % flood_event.report_id,
+                open(flood_event.impact_zip_path))
         }
 
         # modify headers
@@ -85,7 +77,7 @@ def push_flood_event_to_rest(flood_event, fail_silent=True):
             'X-CSRFTOKEN': inasafe_django.csrf_token,
         }
 
-        # check does the shake event already exists?
+        # check does the flood event already exists?
         response = session.flood(
             flood_data['event_id']).GET()
         if response.status_code == requests.codes.ok:
@@ -124,7 +116,9 @@ def push_flood_event_to_rest(flood_event, fail_silent=True):
             'language': flood_event.locale
         }
         event_report_files = {
-            'impact_map': open(map_report_path),
+            'impact_map': (
+                '%s-map.pdf' % flood_event.report_id,
+                open(map_report_path)),
             # 'impact_report': open(table_report_path)
         }
         # check report exists
