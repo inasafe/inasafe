@@ -639,9 +639,9 @@ cyclone_au_bom_hazard_classes = {
         }
     ],
     'multiple_units': [
-        unit_miles_per_hour, 
-        unit_kilometres_per_hour, 
-        unit_knots, 
+        unit_miles_per_hour,
+        unit_kilometres_per_hour,
+        unit_knots,
         unit_metres_per_second],
     'classes': [
         {

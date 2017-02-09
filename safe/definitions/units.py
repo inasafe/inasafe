@@ -91,7 +91,7 @@ unit_metres_per_second = {
     'plural_name': tr('m/s'),
     'abbreviation': tr('m/s'),
     'description': tr(
-        '<b>The metre per second</b> is a unit of speed, expressing the '
+        '<b>The Metres per second</b> is a unit of speed, expressing the '
         'number of metres covered in one second.'),
     'citations': [
         {
