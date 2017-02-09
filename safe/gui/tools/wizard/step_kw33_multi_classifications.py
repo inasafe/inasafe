@@ -101,6 +101,9 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         :returns: True if new step may be enabled.
         :rtype: bool
         """
+        for combo_box in self.exposure_combo_boxes:
+            if combo_box.currentIndex() == 0:
+                return False
         return True
 
     def get_next_step(self):
@@ -995,6 +998,8 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         self.activate_classification(exposure, classification)
         clear_layout(self.right_layout)
         self.show_current_state()
+
+        self.parent.pbnNext.setEnabled(self.is_ready_to_next_step())
 
     def activate_classification(self, exposure, classification=None):
         """Set active to True for classification for the exposure.
