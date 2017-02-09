@@ -101,6 +101,9 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         :returns: True if new step may be enabled.
         :rtype: bool
         """
+        # Still editing
+        if self.mode == EDIT_MODE:
+            return False
         for combo_box in self.exposure_combo_boxes:
             if combo_box.currentIndex() == 0:
                 return False
@@ -282,6 +285,8 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         elif self.mode == EDIT_MODE:
             # Behave the same as cancel button clicked.
             self.cancel_button_clicked()
+
+        self.parent.pbnNext.setEnabled(self.is_ready_to_next_step())
 
     def show_current_state(self):
         """Setup the UI for QTextEdit to show the current state."""
@@ -899,6 +904,8 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         self.show_current_state()
         # Unset active exposure
         self.active_exposure = None
+
+        self.parent.pbnNext.setEnabled(self.is_ready_to_next_step())
 
     def save_button_clicked(self, classification):
         """Action for save button clicked.
