@@ -48,6 +48,8 @@ __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
 # Some default values for testing
 source = u'Source'
 source_scale = u'Source Scale'
@@ -149,7 +151,7 @@ class TestKeywordWizard(unittest.TestCase):
         self.assertIsNotNone(layer.dataProvider())
         # Initialize dialog
         # noinspection PyTypeChecker
-        dialog = WizardDialog()
+        dialog = WizardDialog(iface=IFACE)
         # It shouldn't raise any exception although the xml is invalid
         dialog.set_keywords_creation_mode(layer)
 
@@ -160,7 +162,7 @@ class TestKeywordWizard(unittest.TestCase):
             'hazard', 'classified_generic_polygon.shp', clone=True)
 
         # noinspection PyTypeChecker
-        dialog = WizardDialog()
+        dialog = WizardDialog(iface=IFACE)
         dialog.set_keywords_creation_mode(layer)
 
         # check if in select purpose step
@@ -281,7 +283,7 @@ class TestKeywordWizard(unittest.TestCase):
             source_directory=standard_data_path('hazard'))
 
         # noinspection PyTypeChecker
-        dialog = WizardDialog()
+        dialog = WizardDialog(iface=IFACE)
         dialog.set_keywords_creation_mode(layer)
 
         # Check if in select purpose step
@@ -423,7 +425,7 @@ class TestKeywordWizard(unittest.TestCase):
         layer = load_test_vector_layer(
             'hazard', 'volcano_krb.shp', clone=True)
         # noinspection PyTypeChecker
-        dialog = WizardDialog()
+        dialog = WizardDialog(iface=IFACE)
         dialog.set_keywords_creation_mode(layer)
 
         # Check if in select purpose step
@@ -553,7 +555,7 @@ class TestKeywordWizard(unittest.TestCase):
         self.assertIsNotNone(layer)
 
         # noinspection PyTypeChecker
-        dialog = WizardDialog()
+        dialog = WizardDialog(iface=IFACE)
         dialog.qsettings = None
         dialog.set_keywords_creation_mode(layer)
 
@@ -703,7 +705,7 @@ class TestKeywordWizard(unittest.TestCase):
         layer = load_test_vector_layer(
             'exposure', 'buildings.shp', clone=True)
         # noinspection PyTypeChecker
-        dialog = WizardDialog()
+        dialog = WizardDialog(iface=IFACE)
         dialog.set_keywords_creation_mode(layer)
 
         # Check if in select purpose step
@@ -841,7 +843,7 @@ class TestKeywordWizard(unittest.TestCase):
         layer.keywords = {}
 
         # noinspection PyTypeChecker
-        dialog = WizardDialog()
+        dialog = WizardDialog(iface=IFACE)
         dialog.set_keywords_creation_mode(layer)
 
         # Check if in select purpose step
@@ -925,7 +927,7 @@ class TestKeywordWizard(unittest.TestCase):
         layer.keywords = expected_keyword
 
         # noinspection PyTypeChecker
-        dialog = WizardDialog()
+        dialog = WizardDialog(iface=IFACE)
         dialog.set_keywords_creation_mode(layer)
 
         # Check if in select purpose step
@@ -996,7 +998,7 @@ class TestKeywordWizard(unittest.TestCase):
         self.assertIsNotNone(layer)
 
         # noinspection PyTypeChecker
-        dialog = WizardDialog()
+        dialog = WizardDialog(iface=IFACE)
         dialog.set_keywords_creation_mode(layer)
 
         # Check if in select purpose step
@@ -1134,7 +1136,7 @@ class TestKeywordWizard(unittest.TestCase):
         layer.keywords = expected_keyword
 
         # noinspection PyTypeChecker
-        dialog = WizardDialog()
+        dialog = WizardDialog(iface=IFACE)
         dialog.set_keywords_creation_mode(layer)
 
         # Check if in select purpose step
@@ -1248,7 +1250,7 @@ class TestKeywordWizard(unittest.TestCase):
         layer.keywords = {}
 
         # noinspection PyTypeChecker
-        dialog = WizardDialog()
+        dialog = WizardDialog(iface=IFACE)
         dialog.set_keywords_creation_mode(layer)
 
         # Check if in select purpose step
@@ -1373,7 +1375,7 @@ class TestKeywordWizard(unittest.TestCase):
         layer.keywords = expected_keyword
 
         # noinspection PyTypeChecker
-        dialog = WizardDialog()
+        dialog = WizardDialog(iface=IFACE)
         dialog.set_keywords_creation_mode(layer)
 
         # Check if in select purpose step
@@ -1474,7 +1476,7 @@ class TestKeywordWizard(unittest.TestCase):
         layer.keywords = {}
 
         # noinspection PyTypeChecker
-        dialog = WizardDialog()
+        dialog = WizardDialog(iface=IFACE)
         dialog.set_keywords_creation_mode(layer)
 
         # Check if in select purpose step
@@ -1623,7 +1625,7 @@ class TestKeywordWizard(unittest.TestCase):
         layer.keywords = original_keywords
 
         # noinspection PyTypeChecker
-        dialog = WizardDialog()
+        dialog = WizardDialog(iface=IFACE)
         dialog.set_keywords_creation_mode(layer)
 
         # Check if in select purpose step
@@ -1726,7 +1728,7 @@ class TestKeywordWizard(unittest.TestCase):
         self.assertIsNotNone(layer)
 
         # noinspection PyTypeChecker
-        dialog = WizardDialog()
+        dialog = WizardDialog(iface=IFACE)
         dialog.set_keywords_creation_mode(layer)
 
         # Check if in select purpose step
@@ -1865,7 +1867,7 @@ class TestKeywordWizard(unittest.TestCase):
         layer.keywords = {}
 
         # noinspection PyTypeChecker
-        dialog = WizardDialog()
+        dialog = WizardDialog(iface=IFACE)
         dialog.set_keywords_creation_mode(layer)
 
         # Check if in select purpose step
@@ -1991,7 +1993,7 @@ class TestKeywordWizard(unittest.TestCase):
             name='buildings',
             include_keywords=True,
             source_directory=standard_data_path('exposure'))
-        dialog = WizardDialog()
+        dialog = WizardDialog(iface=IFACE)
         dialog.set_keywords_creation_mode(layer)
 
         dialog.pbnNext.click()  # choose exposure
