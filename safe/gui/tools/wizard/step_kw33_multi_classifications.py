@@ -105,9 +105,10 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         if self.mode == EDIT_MODE:
             return False
         for combo_box in self.exposure_combo_boxes:
-            if combo_box.currentIndex() == 0:
-                return False
-        return True
+            # Enable if there is one that has classification
+            if combo_box.currentIndex() > 0:
+                return True
+        return False
 
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.
