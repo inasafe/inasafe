@@ -266,12 +266,12 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             for exposure_edit_button in self.exposure_edit_buttons:
                 exposure_edit_button.setEnabled(False)
             # Except one that was clicked
-            edit_button.setEnabled(True)
+            # edit_button.setEnabled(True)
             # Disable all combo box
             for exposure_combo_box in self.exposure_combo_boxes:
                 exposure_combo_box.setEnabled(False)
             # Change the edit button to cancel
-            edit_button.setText(tr('Cancel'))
+            # edit_button.setText(tr('Cancel'))
 
             # Clear right panel
             clear_layout(self.right_layout)
@@ -632,23 +632,23 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         # Add 3 buttons: Load default, Cancel, Save
         # TODO(IS) Disable load default button for now.
         # load_default_button = QPushButton(tr('Load Default'))
-        cancel_button = QPushButton(tr('Cancel'))
+        # cancel_button = QPushButton(tr('Cancel'))
         save_button = QPushButton(tr('Save'))
 
         # Action for buttons
-        cancel_button.clicked.connect(self.cancel_button_clicked)
+        # cancel_button.clicked.connect(self.cancel_button_clicked)
         save_button.clicked.connect(
             partial(self.save_button_clicked, classification=classification))
 
         button_layout = QHBoxLayout()
         # button_layout.addWidget(load_default_button)
         button_layout.addStretch(1)
-        button_layout.addWidget(cancel_button)
+        # button_layout.addWidget(cancel_button)
         button_layout.addWidget(save_button)
 
         button_layout.setStretch(0, 3)
         button_layout.setStretch(1, 1)
-        button_layout.setStretch(2, 1)
+        # button_layout.setStretch(2, 1)
         # button_layout.setStretch(3, 1)
 
         self.right_layout.addLayout(button_layout)
@@ -895,7 +895,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
                 self.exposure_edit_buttons[i].setEnabled(True)
             else:
                 self.exposure_edit_buttons[i].setEnabled(False)
-            self.exposure_edit_buttons[i].setText(tr('Edit'))
+            # self.exposure_edit_buttons[i].setText(tr('Edit'))
             self.exposure_combo_boxes[i].setEnabled(True)
 
         # Clear right panel
