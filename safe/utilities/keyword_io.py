@@ -424,7 +424,6 @@ class KeywordIO(QObject):
                 'inasafe_default_values']:
             value = self._dict_to_row(value)
         elif keyword == 'value_maps':
-            LOGGER.debug('Showing value maps')
             value = self._value_maps_row(value)
         elif keyword == 'thresholds':
             value = self._threshold_to_row(value)
@@ -462,8 +461,7 @@ class KeywordIO(QObject):
         row.add(m.Cell(value, wrap_slash=wrap_slash))
         return row
 
-    @staticmethod
-    def _threshold_to_row(thresholds_keyword):
+    def _threshold_to_row(self, thresholds_keyword):
         """Helper to make a message row from a threshold
 
         We are expecting something like this:
@@ -525,6 +523,22 @@ class KeywordIO(QObject):
         if isinstance(thresholds_keyword, basestring):
             thresholds_keyword = literal_eval(thresholds_keyword)
 
+        for k, v in thresholds_keyword.items():
+            # If the v is not dictionary, it should be the old value maps.
+            # To handle thresholds in the Impact Function.
+            if not isinstance(v, dict):
+                table = m.Table(style_class='table table-condensed')
+
+                for key, value in thresholds_keyword.items():
+                    row = m.Row()
+                    name = definition(key)['name'] if definition(key) else key
+                    row.add(m.Cell(m.ImportantText(name)))
+                    pretty_value = tr('%s to %s' % (value[0], value[1]))
+                    row.add(m.Cell(pretty_value))
+
+                    table.add(row)
+                return table
+
         table = m.Table(style_class='table table-condensed table-striped')
 
         i = 0
@@ -545,12 +559,12 @@ class KeywordIO(QObject):
                     active_classification = definition(classification)
                     classification_row.add(
                         m.Cell(active_classification['name']))
-                    classification_row.add(m.Cell(tr('')))
+                    classification_row.add(m.Cell(''))
                     break
 
             if not active_classification:
                 classification_row.add(m.Cell(tr('No classifications set.')))
-                classification_row.add(m.Cell(tr('')))
+                classification_row.add(m.Cell(''))
                 continue
 
             table.add(classification_row)
@@ -573,7 +587,6 @@ class KeywordIO(QObject):
                 table.add(row)
 
             if i < len(thresholds_keyword):
-                LOGGER.debug('Add empty')
                 # Empty row
                 empty_row = m.Row()
                 empty_row.add(m.Cell(''))
@@ -737,7 +750,6 @@ class KeywordIO(QObject):
 
             LOGGER.debug('%s of %s' % (i, len(value_maps_keyword)))
             if i < len(value_maps_keyword):
-                LOGGER.debug('Add empty')
                 # Empty row
                 empty_row = m.Row()
                 empty_row.add(m.Cell(''))
