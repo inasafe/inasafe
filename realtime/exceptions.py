@@ -129,7 +129,7 @@ class RESTRequestFailedError(Exception):
         return self.__unicode__()
 
 
-class PetaJakartaAPIError(Exception):
-    """Raised if PetaJakarta REST API can't be accessed
+class FloodDataSourceAPIError(Exception):
+    """Raised if Flood Data Source REST API can't be accessed
     """
     pass

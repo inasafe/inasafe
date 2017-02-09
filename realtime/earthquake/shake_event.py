@@ -12,6 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 import time
+from zipfile import ZipFile
 
 __author__ = 'tim@kartoza.com'
 __version__ = '0.5.0'
@@ -172,6 +173,8 @@ class ShakeEvent(QObject):
             self.data.extract()
             self.event_id = self.data.event_id
 
+        LOGGER.info('Shake ID: %s' % self.event_id)
+
         # Convert grid.xml (we'll give the title with event_id)
         # RM: convert event_id to str too. This avoid the layer name is
         # falsely read as int
@@ -215,6 +218,12 @@ class ShakeEvent(QObject):
         self.translator = None
         self.locale = locale
         self.setup_i18n()
+
+        # mmi zip path
+        self.mmi_zip_path = os.path.join(
+            shakemap_extract_dir(),
+            self.event_id,
+            'mmi_output.zip')
 
     # noinspection PyMethodMayBeStatic
     def check_environment(self):
@@ -1528,6 +1537,19 @@ class ShakeEvent(QObject):
             self.event_id,
             'project.qgs')
         qgs_project.write(QFileInfo(project_path))
+
+        # Create a zipped mmi data
+        extract_path = os.path.join(
+            shakemap_extract_dir(),
+            self.event_id)
+        with ZipFile(self.mmi_zip_path, 'w') as zipf:
+            for root, dirs, files in os.walk(extract_path):
+                for f in files:
+                    _, ext = os.path.splitext(f)
+                    if (f.startswith('mmi') and
+                            not f == 'mmi_output.zip'):
+                        filename = os.path.join(root, f)
+                        zipf.write(filename, arcname=f)
 
     def generate_result_path(self):
         """Generate path file for the result

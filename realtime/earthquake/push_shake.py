@@ -55,7 +55,7 @@ def push_shake_event_to_rest(shake_event, fail_silent=True):
     """Pushing shake event Grid.xml description files to REST server.
 
     :param shake_event: The shake event to push
-    :type shake_event: ShakeEvent
+    :type shake_event: realtime.earthquake.shake_event.ShakeEvent
 
     :param fail_silent: If set True, will still continue whan the push process
         failed. Default vaule to True. If False, this method will raise
@@ -104,10 +104,14 @@ def push_shake_event_to_rest(shake_event, fail_silent=True):
             },
             'location_description': event_dict.get('shake-grid-location')
         }
+
         earthquake_file = {
             'shake_grid': (
                 '%s-grid.xml' % shake_event.event_id,
                 open(shake_event.grid_file_path())),
+            'mmi_output': (
+                '%s-mmi-output.zip' % shake_event.event_id,
+                open(shake_event.mmi_zip_path))
         }
         # check does the shake event already exists?
         response = session.earthquake(
