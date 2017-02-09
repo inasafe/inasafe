@@ -704,6 +704,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         self.tree_mapping_widget = QTreeWidget()
         self.tree_mapping_widget.setDragDropMode(QAbstractItemView.DragDrop)
         self.tree_mapping_widget.setDefaultDropAction(Qt.MoveAction)
+        self.tree_mapping_widget.header().hide()
 
         self.tree_mapping_widget.itemChanged.connect(
             self.update_dragged_item_flags)
