@@ -25,7 +25,8 @@ from safe.definitions.exposure import (
     exposure_population,
     exposure_land_cover)
 from safe.definitions.hazard_category import hazard_category_multiple_event
-from safe.definitions.hazard_classifications import (flood_hazard_classes)
+from safe.definitions.hazard_classifications import (
+    flood_hazard_classes, volcano_hazard_classes)
 from safe.definitions.constants import no_field
 from safe.definitions.fields import (
     aggregation_name_field,
@@ -341,6 +342,13 @@ class TestKeywordWizard(unittest.TestCase):
         # Check if in multi classification step
         self.check_current_step(dialog.step_kw_multi_classifications)
 
+        # Change combo box
+        dialog.step_kw_multi_classifications.exposure_combo_boxes[
+            0].setCurrentIndex(1)
+
+        # Click save
+        dialog.step_kw_multi_classifications.save_button.click()
+
         # Click next to finish multi classifications step
         dialog.pbnNext.click()
 
@@ -410,7 +418,18 @@ class TestKeywordWizard(unittest.TestCase):
                     hazard_value_field['key']: u'KRB',
                     hazard_name_field['key']: u'volcano',
                  },
-            'value_maps': {},
+            'value_maps': {
+                exposure_land_cover['key']: {
+                    volcano_hazard_classes['key']: {
+                        'active': True,
+                        'classes': {
+                            u'high': [u'Kawasan Rawan Bencana III'],
+                            u'low': [u'Kawasan Rawan Bencana I'],
+                            u'medium': [u'Kawasan Rawan Bencana II']
+                        }
+                    }
+                }
+            },
             'date': source_date,
             'layer_geometry': layer_geometry_polygon['key'],
             'layer_purpose': layer_purpose_hazard['key'],
@@ -1299,6 +1318,13 @@ class TestKeywordWizard(unittest.TestCase):
         # Check if in multi classification step
         self.check_current_step(dialog.step_kw_multi_classifications)
 
+        # Change combo box
+        dialog.step_kw_multi_classifications.exposure_combo_boxes[
+            0].setCurrentIndex(1)
+
+        # Click save
+        dialog.step_kw_multi_classifications.save_button.click()
+
         # Click next to finish multi classifications step
         dialog.pbnNext.click()
 
@@ -1338,11 +1364,18 @@ class TestKeywordWizard(unittest.TestCase):
             'url': source_url,
             'title': layer_title,
             'hazard': hazard_flood['key'],
-            'value_maps': {},
             'date': source_date,
             'layer_geometry': layer_geometry_raster['key'],
             'layer_purpose': layer_purpose_hazard['key'],
-            'layer_mode': layer_mode_classified['key']
+            'layer_mode': layer_mode_classified['key'],
+            'value_maps': {
+                exposure_land_cover['key']: {
+                    flood_hazard_classes['key']: {
+                        'active': True,
+                        'classes': {}
+                    }
+                }
+            }
         }
 
         real_keywords = dialog.get_keywords()
@@ -1423,6 +1456,13 @@ class TestKeywordWizard(unittest.TestCase):
 
         # Check if in select classification step
         self.check_current_step(dialog.step_kw_multi_classifications)
+
+        # Change combo box
+        dialog.step_kw_multi_classifications.exposure_combo_boxes[
+            0].setCurrentIndex(1)
+
+        # Click save
+        dialog.step_kw_multi_classifications.save_button.click()
 
         # Click next to finish multi classifications step
         dialog.pbnNext.click()
@@ -1536,6 +1576,13 @@ class TestKeywordWizard(unittest.TestCase):
         # Check if in select multi classifications step
         self.check_current_step(dialog.step_kw_multi_classifications)
 
+        # Change combo box
+        dialog.step_kw_multi_classifications.exposure_combo_boxes[
+            0].setCurrentIndex(1)
+
+        # Click save
+        dialog.step_kw_multi_classifications.save_button.click()
+
         # Click next to finish multi classifications step
         dialog.pbnNext.click()
 
@@ -1578,9 +1625,19 @@ class TestKeywordWizard(unittest.TestCase):
             'license': source_license,
             'scale': source_scale,
             'source': source,
-            'thresholds': {},
             'title': layer_title,
             'url': source_url,
+            'thresholds': {
+                exposure_land_cover['key']: {
+                    flood_hazard_classes['key']: {
+                        'active': True,
+                        'classes': {
+                            'dry': [0.0, 1.0],
+                            'wet': [1.0, 999999.0]
+                        }
+                    }
+                }
+            }
         }
 
         real_keywords = dialog.get_keywords()
@@ -1800,6 +1857,13 @@ class TestKeywordWizard(unittest.TestCase):
         # Check if in multi classification step
         self.check_current_step(dialog.step_kw_multi_classifications)
 
+        # Change combo box
+        dialog.step_kw_multi_classifications.exposure_combo_boxes[
+            0].setCurrentIndex(1)
+
+        # Click save
+        dialog.step_kw_multi_classifications.save_button.click()
+
         # Click next to finish multi classifications step
         dialog.pbnNext.click()
 
@@ -1843,9 +1907,19 @@ class TestKeywordWizard(unittest.TestCase):
             'license': source_license,
             'scale': source_scale,
             'source': source,
-            'thresholds': {},
+            'thresholds': {
+                exposure_land_cover['key']: {
+                    flood_hazard_classes['key']: {
+                        'classes': {
+                            'dry': [0, 1],
+                            'wet': [1,  999999.0]
+                        },
+                        'active': True
+                    }
+                },
+            },
             'title': layer_title,
-            'url': source_url,
+            'url': source_url
         }
 
         real_keywords = dialog.get_keywords()
