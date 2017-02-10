@@ -1910,7 +1910,7 @@ class TestKeywordWizard(unittest.TestCase):
                     flood_hazard_classes['key']: {
                         'classes': {
                             'dry': [0, 1],
-                            'wet': [1,  999999.0]
+                            'wet': [1, 999999.0]
                         },
                         'active': True
                     }
