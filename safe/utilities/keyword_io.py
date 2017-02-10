@@ -742,7 +742,7 @@ class KeywordIO(QObject):
             classes = sorted(classes, key=lambda k: k['value'])
             for the_class in classes:
                 value_map = classifications[active_classification['key']][
-                    'classes'][the_class['key']]
+                    'classes'].get(the_class['key'], [])
                 row = m.Row()
                 row.add(m.Cell(the_class['name']))
                 row.add(m.Cell(', '.join([str(v) for v in value_map])))
