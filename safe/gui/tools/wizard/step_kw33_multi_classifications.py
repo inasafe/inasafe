@@ -95,6 +95,9 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         self.list_unique_values = None
         self.tree_mapping_widget = None
 
+        # GUI, good for testing
+        self.save_button = None
+
     def is_ready_to_next_step(self):
         """Check if the step is complete.
 
@@ -254,8 +257,22 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             self.exposure_edit_buttons.append(exposure_edit_button)
             self.exposure_labels.append(label)
 
+    # noinspection PyUnusedLocal
     def edit_button_clicked(self, edit_button, exposure_combo_box, exposure):
-        """Method to handle edit button."""
+        """Method to handle when an edit button is clicked.
+
+        :param edit_button: The edit button.
+        :type edit_button: QPushButton
+
+        :param exposure_combo_box: The combo box of the exposure, contains
+            list of classifications.
+        :type exposure_combo_box: QComboBox
+
+        :param exposure: Exposure definition.
+        :type exposure: dict
+        """
+        # Note(IS): Do not change the text of edit button for now until we
+        # have better behaviour.
         classification = self.get_classification(exposure_combo_box)
 
         if self.mode == CHOOSE_MODE:
@@ -433,7 +450,8 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
 
         return output
 
-    def get_classification(self, combo_box):
+    @staticmethod
+    def get_classification(combo_box):
         """Helper to obtain the classification from a combo box.
 
         :param combo_box: A classification combo box.
@@ -492,7 +510,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         self.threshold_classes = OrderedDict()
         classes = classification.get('classes')
         # Sort by value, put the lowest first
-        classes = sorted(classes, key=lambda k: k['value'])
+        classes = sorted(classes, key=lambda the_key: the_key['value'])
 
         grid_layout_thresholds = QGridLayout()
 
@@ -586,25 +604,27 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         grid_layout_thresholds.setColumnStretch(0, 1)
         grid_layout_thresholds.setColumnStretch(0, 2)
 
-        def min_max_changed(index, mode):
+        def min_max_changed(double_spin_index, mode):
             """Slot when min or max value change.
 
-            :param index: The index of the double spin.
-            :type index: int
+            :param double_spin_index: The index of the double spin.
+            :type double_spin_index: int
 
             :param mode: The flag to indicate the min or max value.
             :type mode: int
             """
             if mode == MAX_VALUE_MODE:
-                current_max_value = self.threshold_classes.values()[index][1]
+                current_max_value = self.threshold_classes.values()[
+                    double_spin_index][1]
                 target_min_value = self.threshold_classes.values()[
-                    index + 1][0]
+                    double_spin_index + 1][0]
                 if current_max_value.value() != target_min_value.value():
                     target_min_value.setValue(current_max_value.value())
             elif mode == MIN_VALUE_MODE:
-                current_min_value = self.threshold_classes.values()[index][0]
+                current_min_value = self.threshold_classes.values()[
+                    double_spin_index][0]
                 target_max_value = self.threshold_classes.values()[
-                    index - 1][1]
+                    double_spin_index - 1][1]
                 if current_min_value.value() != target_max_value.value():
                     target_max_value.setValue(current_min_value.value())
 
@@ -630,8 +650,9 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         :param classification: The current classification.
         :type classification: dict
         """
+        # Note(IS): Until we have good behaviour, we will disable load
+        # default and cancel button.
         # Add 3 buttons: Load default, Cancel, Save
-        # TODO(IS) Disable load default button for now.
         # load_default_button = QPushButton(tr('Load Default'))
         # cancel_button = QPushButton(tr('Cancel'))
         self.save_button = QPushButton(tr('Save'))
@@ -816,8 +837,9 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
                 and int(item.flags() & Qt.ItemIsDragEnabled):
             item.setFlags(item.flags() & ~Qt.ItemIsDropEnabled)
 
+    @staticmethod
     def populate_classified_values(
-            self, unassigned_values, assigned_values, default_classes,
+            unassigned_values, assigned_values, default_classes,
             list_unique_values, tree_mapping_widget):
         """Populate lstUniqueValues and treeClasses.from the parameters.
 
