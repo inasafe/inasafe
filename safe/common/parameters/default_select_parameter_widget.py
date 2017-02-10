@@ -156,7 +156,9 @@ class DefaultSelectParameterWidget(SelectParameterWidget):
     def toggle_input(self):
         """Change behaviour of radio button based on input."""
         # If input is a field, then disable all radio button.
-        if self.input.currentText() != 'No Field':
+        current_index = self.input.currentIndex()
+        if self.input.itemData(current_index, Qt.UserRole) != (
+                self.input.itemData(0, Qt.UserRole)):
             checked = self.default_input_button_group.checkedButton()
             if checked:
                 self.default_input_button_group.setExclusive(False)
