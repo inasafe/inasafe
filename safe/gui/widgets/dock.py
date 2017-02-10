@@ -865,54 +865,26 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         disable_busy_cursor()
         self.busy = False
 
-    def show_impact(self, layer):
-        """Show the report or keywords from an impact layer.
+    def show_impact(self, report_path):
+        """Show the report.
 
         .. versionadded: 4.0
 
-        :param layer: QgsMapLayer instance that is now active
-        :type layer: QgsMapLayer, QgsRasterLayer, QgsVectorLayer
+        :param report_path: The path to the report.
+        :type report_path: basestring
         """
-        report_path = os.path.dirname(layer.source())
-        report_path = os.path.join(
-            report_path, 'output/impact-report-output.html')
+        # We can display an impact report.
+        # We need to open the file in UTF-8, the HTML may have some accents
+        with codecs.open(report_path, 'r', 'utf-8') as report_file:
+            report = report_file.read()
 
-        if os.path.exists(report_path):
-            # We can display an impact report.
-            LOGGER.debug('Showing Impact Report')
-
-            # We need to open the file in UTF-8, the HTML may have some accents
-            with codecs.open(report_path, 'r', 'utf-8') as report_file:
-                report = report_file.read()
-
-            self.print_button.setEnabled(True)
-            # right now send the report as html texts, not message
-            send_static_message(self, report)
-            # also hide the question and show the show question button
-            self.show_question_button.setVisible(True)
-            self.question_group.setEnabled(True)
-            self.question_group.setVisible(False)
-
-        else:
-            # TODO : ET 9/12/16, need to check this with V4.
-            # There isn't report, we can display only keywords.
-            LOGGER.debug('Showing Impact Keywords')
-            keywords = self.keyword_io.read_keywords(layer)
-            if 'impact_summary' not in keywords:
-                return
-
-            report = m.Message()
-            report.add(LOGO_ELEMENT)
-            report.add(m.Heading(self.tr(
-                'Analysis Results'), **INFO_STYLE))
-            report.add(m.Text(keywords['impact_summary']))
-            report.add(impact_attribution(keywords))
-            self.print_button.setEnabled(True)
-            send_static_message(self, report)
-            # also hide the question and show the show question button
-            self.show_question_button.setVisible(True)
-            self.question_group.setEnabled(True)
-            self.question_group.setVisible(False)
+        self.print_button.setEnabled(True)
+        # right now send the report as html texts, not message
+        send_static_message(self, report)
+        # also hide the question and show the show question button
+        self.show_question_button.setVisible(True)
+        self.question_group.setEnabled(True)
+        self.question_group.setVisible(False)
 
     def show_generic_keywords(self, layer):
         """Show the keywords defined for the active layer.
@@ -967,9 +939,17 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 layer_purpose_exposure_breakdown['key'],
             ]
 
+            show_keywords = True
             if keywords.get('layer_purpose') in impacted_layer:
-                self.show_impact(layer)
-            else:
+                report_path = os.path.dirname(layer.source())
+                report_path = os.path.join(
+                    report_path, 'output/impact-report-output.html')
+
+                if os.path.exists(report_path):
+                    show_keywords = False
+                    self.show_impact(report_path)
+
+            if show_keywords:
                 if inasafe_keyword_version_key not in keywords.keys():
                     show_keyword_version_message(
                         self, 'No Version', self.inasafe_version)
