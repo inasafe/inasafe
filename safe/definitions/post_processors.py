@@ -677,6 +677,8 @@ age_postprocessors = [
     post_processor_elderly,
 ]
 
+vulnerability_postprocessors = [post_processor_gender] + age_postprocessors
+
 post_processors = [
     post_processor_size,
     post_processor_size_rate,

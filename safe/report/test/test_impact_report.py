@@ -11,6 +11,7 @@ from jinja2.environment import Template
 
 from safe.common.utilities import safe_dir
 from safe.definitions.constants import ANALYSIS_SUCCESS
+from safe.definitions.hazard_classifications import flood_hazard_classes
 from safe.impact_function.impact_function import ImpactFunction
 from safe.report.report_metadata import ReportMetadata
 from safe.test.utilities import (
@@ -67,6 +68,16 @@ class TestImpactReport(unittest.TestCase):
 
     def setUp(self):
         self.maxDiff = None
+        # change displacement rate so the result is easily distinguished
+        self.default_displacement_rate = flood_hazard_classes['classes'][0][
+            'displacement_rate']
+        flood_hazard_classes['classes'][0][
+            'displacement_rate'] = 0.90
+
+    def tearDown(self):
+        # restore displacement rate
+        flood_hazard_classes['classes'][0][
+            'displacement_rate'] = self.default_displacement_rate
 
     def test_analysis_result_from_impact_function(self):
         """Test generate analysis result from impact function."""
@@ -365,8 +376,7 @@ class TestImpactReport(unittest.TestCase):
 
         shutil.rmtree(output_folder, ignore_errors=True)
 
-    # expected to fail until postprocessor calculation in analysis
-    # impacted is fixed
+    # TODO: Fix if #3821 is fixed
     @unittest.expectedFailure
     def test_minimum_needs(self):
         """Test generate minimum needs section."""
@@ -417,7 +427,7 @@ class TestImpactReport(unittest.TestCase):
                     'needs': [
                         {
                             'header': u'Toilets',
-                            'value': 0
+                            'value': '10'
                         }],
                     'total_header': u'Total'
                 },
@@ -426,19 +436,19 @@ class TestImpactReport(unittest.TestCase):
                     'needs': [
                         {
                             'header': u'Rice [kg]',
-                            'value': 26
+                            'value': '60'
                         },
                         {
                             'header': u'Drinking Water [l]',
-                            'value': 162
+                            'value': '340'
                         },
                         {
                             'header': u'Clean Water [l]',
-                            'value': 623
+                            'value': '1,300'
                         },
                         {
                             'header': u'Family Kits',
-                            'value': 1
+                            'value': '10'
                         }],
                     'total_header': u'Total'
                 }
@@ -460,9 +470,6 @@ class TestImpactReport(unittest.TestCase):
 
         shutil.rmtree(output_folder, ignore_errors=True)
 
-    # expected to fail until postprocessor calculation in analysis
-    # impacted is fixed
-    @unittest.expectedFailure
     def test_aggregate_post_processors_vector(self):
         """Test generate aggregate postprocessors sections."""
 
@@ -512,66 +519,69 @@ class TestImpactReport(unittest.TestCase):
 
         # TODO: This has possible wrong number, expect to be fixed soon.
         expected_context = {
-            'sections': OrderedDict(
-                [
-                    ('age', {
-                        'header': u'Detailed Age Report',
-                        'rows': [[u'area 1', 20, 3, 9, 1],
-                                 [u'area 2', 20, 3, 9, 1],
-                                 [u'area 3', 20, 3, 7, 1]],
-                        'columns': [
-                            u'Aggregation area',
-                            u'Total Population',
-                            u'Youth Count',
-                            u'Adult Count',
-                            u'Elderly Count'],
-                        'totals': [
-                            u'Total',
-                            50,
-                            9,
-                            30,
-                            3]
-                    }),
-                    ('gender', {
-                         'header': u'Detailed Gender '
-                                   u'Report',
-                         'rows': [[u'area 1', 20, 7, 7],
-                                  [u'area 2', 20, 7, 7],
-                                  [u'area 3', 20, 6, 6]],
-                         'columns': [
-                             u'Aggregation area',
-                             u'Total Population',
-                             u'Female Count',
-                             u'Male Count'],
-                         'totals': [
-                             u'Total',
-                             50,
-                             20,
-                             20]
-                    }),
-                    ('minimum_needs', {
-                        'header': u'Detailed Minimum Needs Report',
-                        'rows': [[u'area 1', 15, 42, 262, 1005, 3, 0],
-                                 [u'area 2', 15, 42, 262, 1005, 3, 0],
-                                 [u'area 3', 12, 33, 210, 804, 2, 0]],
-                        'columns': [
-                            u'Aggregation area',
-                            u'Total Population',
-                            'Rice',
-                            'Drinking Water',
-                            'Clean Water',
-                            'Family Kits',
-                            'Toilets'],
-                        'totals': [
-                            u'Total',
-                            50,
-                            117,
-                            734,
-                            2814,
-                            7,
-                            1]
-                    })
-                ])
+            'sections': OrderedDict([
+                ('age', {
+                    'header': u'Detailed Age Report',
+                    'notes': u'Columns and rows containing only 0 or "No '
+                             u'data" values are excluded from the tables.',
+                    'rows': [[u'B', '3,000', '670', '1,800', '230'],
+                             [u'C', '7,200', '1,700', '4,300', '570'],
+                             [u'F', '7,900', '1,800', '4,700', '620'],
+                             [u'G', '10,600', '2,500', '6,300', '830']],
+                    'columns': [u'Aggregation area', u'Total Population',
+                                'Youth Displaced Count',
+                                'Adult Displaced Count',
+                                'Elderly Displaced Count'],
+                    'totals': [
+                        u'Total', '103,000', '6,600', '16,900', '2,300']}),
+                ('gender', {
+                    'header': u'Detailed Gender Report',
+                    'notes': u'Columns and rows containing only 0 or "No '
+                             u'data" values are excluded from the tables.',
+                    'rows': [
+                        [u'B', '3,000', '1,400', '1,100', '130'],
+                        [u'C', '7,200', '3,300', '2,600', '310'],
+                        [u'F', '7,900', '3,600', '2,800', '330'],
+                        [u'G', '10,600', '4,800', '3,800', '440']],
+                    'columns': [
+                        u'Aggregation area',
+                        u'Total Population',
+                        'Female Displaced Count',
+                        'Weekly Hygiene Packs',
+                        'Additional Weekly Rice kg for Pregnant and '
+                        'Lactating Women [kg]'],
+                    'totals': [
+                        u'Total', '103,000', '12,900', '10,200', '1,200']}),
+                ('minimum_needs', {
+                    'header': u'Detailed Minimum Needs Report',
+                    'notes': u'Columns and rows containing only 0 or "No '
+                             u'data" values are excluded from the tables.',
+                    'rows': [
+                        [u'B', '3,000', '7,400', '45,800', '176,000',
+                         '530', '140'],
+                        [u'C', '7,200', '18,200', '114,000', '434,000',
+                         '1,300', '330'],
+                        [u'F', '7,900', '19,800', '124,000', '473,000',
+                         '1,500', '360'],
+                        [u'G', '10,600', '26,500', '166,000', '634,000',
+                         '1,900', '480']],
+                    'columns': [
+                        u'Aggregation area',
+                        u'Total Population',
+                        'Rice [kg]',
+                        'Drinking Water [l]',
+                        'Clean Water [l]',
+                        'Family Kits',
+                        'Toilets'],
+                    'totals': [
+                        u'Total',
+                        '103,000',
+                        '71,700',
+                        '449,000',
+                        '1,716,000',
+                        '5,200',
+                        '1,300']})]),
+            'use_aggregation': True
         }
         actual_context = aggregation_postprocessors.context
 
@@ -589,11 +599,12 @@ class TestImpactReport(unittest.TestCase):
 
         shutil.rmtree(output_folder, ignore_errors=True)
 
-    # expected to fail until postprocessor calculation in analysis
-    # impacted is fixed
-    @unittest.expectedFailure
     def test_aggregate_post_processors_raster(self):
-        """Test generate aggregate postprocessors sections."""
+        """Test generate aggregate postprocessors sections.
+
+        This test is not using actual displacement rate in order to
+        distinguish the result more clearly.
+        """
 
         output_folder = self.fixtures_dir(
             '../output/aggregate_post_processors')
@@ -641,63 +652,57 @@ class TestImpactReport(unittest.TestCase):
 
         # TODO: This has possible wrong number, expect to be fixed soon.
         expected_context = {
-            'sections': OrderedDict(
-                [
-                    ('age', {
-                        'header': u'Detailed Age Report',
-                        'rows': [
-                            [u'Entire Area', 10, 2, 6, 0]],
-                        'columns': [
-                            u'Aggregation area',
-                            u'Total Population',
-                            u'Youth Count',
-                            u'Adult Count',
-                            u'Elderly Count'],
-                        'totals': [
-                            u'Total',
-                            10,
-                            2,
-                            6,
-                            0]
-                    }),
-                    ('gender', {
-                         'header': u'Detailed Gender '
-                                   u'Report',
-                         'rows': [
-                             [u'Entire Area', 10, 4, 4]],
-                         'columns': [
-                             u'Aggregation area',
-                             u'Total Population',
-                             u'Female Count',
-                             u'Male Count'],
-                         'totals': [
-                             u'Total',
-                             10,
-                             4,
-                             4]
-                    }),
-                    ('minimum_needs', {
-                        'header': u'Detailed Minimum Needs Report',
-                        'rows': [
-                            [u'Entire Area', 10, 25, 161, 616, 1, 0]],
-                        'columns': [
-                            u'Aggregation area',
-                            u'Total Population',
-                            'Rice',
-                            'Drinking Water',
-                            'Clean Water',
-                            'Family Kits',
-                            'Toilets'],
-                        'totals': [
-                            u'Total',
-                            10,
-                            25,
-                            161,
-                            616,
-                            1,
-                            0]
-                    })
-                ])
+            'sections': OrderedDict([
+                ('age', {
+                    'header': u'Detailed Age Report',
+                    'notes': u'Columns and rows containing only 0 or "No '
+                             u'data" values are excluded from the tables.',
+                    'rows': [[u'C', '10', '10', '10', '0'],
+                             [u'F', '10', '0', '10', '0'],
+                             [u'G', '10', '10', '10', '0'],
+                             [u'K', '10', '0', '10', '0']],
+                    'columns': [u'Aggregation area', u'Total Population',
+                                'Youth Displaced Count',
+                                'Adult Displaced Count',
+                                'Elderly Displaced Count'],
+                    'totals': [u'Total', '30', '10', '20', '10']}),
+                ('gender', {
+                    'header': u'Detailed Gender Report',
+                    'notes': u'Columns and rows containing only 0 or "No '
+                             u'data" values are excluded from the tables.',
+                    'rows': [[u'C', '10', '10', '10', '0'],
+                             [u'F', '10', '10', '10', '0'],
+                             [u'G', '10', '10', '10', '0']],
+                    'columns': [u'Aggregation area', u'Total Population',
+                                'Female Displaced Count',
+                                'Weekly Hygiene Packs',
+                                'Additional Weekly Rice kg for Pregnant and '
+                                'Lactating Women [kg]'],
+                    'totals': [u'Total', '30', '10', '10', '0']}),
+                ('minimum_needs', {
+                    'header': u'Detailed Minimum Needs Report',
+                    'notes': u'Columns and rows containing only 0 or "No '
+                             u'data" values are excluded from the tables.',
+                    'rows': [
+                        [u'B', '10', '10', '20', '80', '10', '10'],
+                        [u'C', '10', '20', '90', '340', '10', '10'],
+                        [u'D', '10', '10', '10', '20', '10', '10'],
+                        [u'F', '10', '20', '70', '260', '10', '10'],
+                        [u'G', '10', '20', '110', '420', '10', '10'],
+                        [u'H', '10', '10', '20', '60', '10', '10'],
+                        [u'K', '10', '10', '40', '130', '10', '10'],
+                        [u'L', '10', '10', '20', '70', '10', '10']],
+                    'columns': [u'Aggregation area',
+                                u'Total Population',
+                                'Rice [kg]',
+                                'Drinking Water [l]',
+                                'Clean Water [l]',
+                                'Family Kits',
+                                'Toilets'],
+                    'totals': [u'Total', '30', '60', '350', '1,400', '10',
+                               '10']
+                })]),
+            'use_aggregation': True
         }
         actual_context = aggregation_postprocessors.context
 
@@ -716,11 +721,12 @@ class TestImpactReport(unittest.TestCase):
 
         shutil.rmtree(output_folder, ignore_errors=True)
 
-    # expected to fail until postprocessor calculation in analysis
-    # impacted is fixed
-    @unittest.expectedFailure
     def test_population_infographic(self):
-        """Test population infographic generation."""
+        """Test population infographic generation.
+
+        This test is not using actual displacement rate in order to
+        distinguish the result more clearly.
+        """
         output_folder = self.fixtures_dir(
             '../output/population_infographic')
         shutil.rmtree(output_folder, ignore_errors=True)
@@ -758,8 +764,6 @@ class TestImpactReport(unittest.TestCase):
             return_code, ImpactReport.REPORT_GENERATION_SUCCESS, message)
 
         """Checking generated context"""
-        empty_component_output_message = 'Empty component output'
-
         # Check population infographic
         population_infographic = impact_report.metadata.component_by_key(
             population_infographic_component['key']).context
@@ -769,8 +773,8 @@ class TestImpactReport(unittest.TestCase):
 
         # Check population chart
         expected_context = {
-            'data': [30, 125.88367290531815],
-            'total_value': 155.883672905,
+            'data': [30, 40],
+            'total_value': 70,
             'labels': [u'Wet', u'Total Unaffected'],
             'colors': [u'#f03b20', u'#1a9641'],
         }
@@ -792,7 +796,7 @@ class TestImpactReport(unittest.TestCase):
 
         # Check people section
         expected_context = {
-            'number': 30
+            'number': '30'
         }
 
         people_context = population_infographic['sections']['people'][
@@ -811,24 +815,24 @@ class TestImpactReport(unittest.TestCase):
         expected_context = {
             'items': [
                 {
-                    'header': 'Female',
-                    'number': 80,
-                    'percentage': 50.0,
+                    'header': u'Female',
+                    'number': '10',
+                    'percentage': '47.4',
                 },
                 {
-                    'header': 'Youth',
-                    'number': 40,
-                    'percentage': 25.0,
+                    'header': u'Youth',
+                    'number': '10',
+                    'percentage': '26.3',
                 },
                 {
-                    'header': 'Adult',
-                    'number': 100,
-                    'percentage': 62.5,
+                    'header': u'Adult',
+                    'number': '20',
+                    'percentage': '68.4',
                 },
                 {
-                    'header': 'Elderly',
-                    'number': 20,
-                    'percentage': 12.5,
+                    'header': u'Elderly',
+                    'number': '10',
+                    'percentage': '5.3',
                 }
             ]
         }
@@ -837,11 +841,12 @@ class TestImpactReport(unittest.TestCase):
             'vulnerability']
 
         actual_context = {
-            'items': [{
-                'header': item.header,
-                'number': item.number,
-                'percentage': item.percentage
-            } for item in vulnerabilities_context['items']]
+            'items': [
+                {
+                    'header': item.header,
+                    'number': item.number,
+                    'percentage': item.percentage
+                } for item in vulnerabilities_context['items']]
         }
 
         self.assertDictEqual(
@@ -852,27 +857,27 @@ class TestImpactReport(unittest.TestCase):
             'items': [
                 {
                     'header': 'Rice',
-                    'number': 420,
+                    'number': '60',
                     'unit': 'kg/weekly',
                 },
                 {
                     'header': 'Drinking Water',
-                    'number': 2600,
+                    'number': '350',
                     'unit': 'l/weekly',
                 },
                 {
                     'header': 'Clean Water',
-                    'number': 10000,
+                    'number': '1,400',
                     'unit': 'l/weekly',
                 },
                 {
                     'header': 'Family Kits',
-                    'number': 30,
+                    'number': '10',
                     'unit': 'units',
                 },
                 {
                     'header': 'Toilets',
-                    'number': 10,
+                    'number': '10',
                     'unit': 'units',
                 },
             ]
@@ -882,20 +887,16 @@ class TestImpactReport(unittest.TestCase):
             'minimum_needs']
 
         actual_context = {
-            'items': [{
-                'header': item.header,
-                'number': item.number,
-                'percentage': item.percentage,
-            } for item in needs_context['items']]
+            'items': [
+                {
+                    'header': item.header,
+                    'number': item.number,
+                    'unit': item.unit,
+                } for item in needs_context['items']]
         }
 
         self.assertDictEqual(
             expected_context, actual_context)
-
-        # Check output
-
-        self.assertTrue(
-            population_infographic.output, empty_component_output_message)
 
         """Check generated report"""
 

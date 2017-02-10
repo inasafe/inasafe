@@ -806,6 +806,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 LOGGER.info(tr(
                     'The impact report could not be generated.'))
                 send_error_message(self, message)
+                return ANALYSIS_FAILED_BAD_CODE, message
 
             error_code, message = generate_impact_map_report(
                 self.impact_function, self.iface)
@@ -814,6 +815,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 LOGGER.info(tr(
                     'The impact report could not be generated.'))
                 send_error_message(self, message)
+                return ANALYSIS_FAILED_BAD_CODE, message
 
         if self.zoom_to_impact_flag:
             self.iface.zoomToActiveLayer()

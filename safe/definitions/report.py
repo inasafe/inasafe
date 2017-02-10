@@ -237,7 +237,7 @@ population_infographic_component = {
             },
             'vulnerability': {
                 'header': tr('Vulnerability'),
-                'sub_header_format': tr('from {number_affected:,d} affected'),
+                'sub_header_format': tr('from {number_affected} affected'),
                 'items': {
                     'headers': [
                         tr('Female'),
@@ -256,13 +256,13 @@ population_infographic_component = {
         'icons': {
             'total_affected_field': resource_url(resources_path(
                 'img/definitions/people.png')),
-            'female_count_field': resource_url(resources_path(
+            'female_displaced_count_field': resource_url(resources_path(
                 'img/definitions/female.png')),
-            'youth_count_field': resource_url(resources_path(
+            'youth_displaced_count_field': resource_url(resources_path(
                 'img/definitions/youth.png')),
-            'adult_count_field': resource_url(resources_path(
+            'adult_displaced_count_field': resource_url(resources_path(
                 'img/definitions/adult.png')),
-            'elderly_count_field': resource_url(resources_path(
+            'elderly_displaced_count_field': resource_url(resources_path(
                 'img/definitions/elderly.png')),
             'minimum_needs__rice_count_field': resource_url(resources_path(
                 'img/definitions/rice.png')),

@@ -325,13 +325,16 @@ def create_section_with_aggregation(
         for output_field in postprocessors_fields_found:
             field_name = aggregation_impacted_fields[output_field['key']]
             field_index = aggregation_impacted.fieldNameIndex(field_name)
-            value = format_number(
-                feature[field_index],
-                enable_rounding=enable_rounding)
-            row.append(value)
+            value = feature[field_index]
 
+            # check here first because it will be converted to string
             if not value == 0:
                 all_zeros = False
+
+            value = format_number(
+                value,
+                enable_rounding=enable_rounding)
+            row.append(value)
 
         if not all_zeros:
             row_values.append(row)
