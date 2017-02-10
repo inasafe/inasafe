@@ -65,6 +65,7 @@
       "process":[
         "Smart clip",
         "Cleaning the vector exposure attribute table",
+        "Compute ratios from counts",
         "Clip the exposure layer with the analysis layer",
         "Add default values",
         "Make exposure layer valid"

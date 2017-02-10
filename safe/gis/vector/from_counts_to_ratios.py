@@ -2,15 +2,12 @@
 
 """From counts to ratio."""
 
-from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
 from safe.definitions.utilities import definition
-from safe.definitions.fields import (
-    size_field, count_fields, count_ratio_mapping)
-from safe.definitions.post_processors import size
+from safe.definitions.fields import size_field, count_ratio_mapping
 from safe.definitions.processing_steps import (
     recompute_counts_steps)
 from safe.utilities.profiling import profile
-from safe.gis.vector.tools import size_calculator, create_field_from_definition
+from safe.gis.vector.tools import create_field_from_definition
 
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -42,10 +39,10 @@ def from_counts_to_ratios(layer, callback=None):
     exposure = definition(layer.keywords['exposure'])
     inasafe_fields = layer.keywords['inasafe_fields']
 
+    layer.keywords['title'] = output_layer_name
     layer.startEditing()
 
     mapping = {}
-
     for count_field in exposure['extra_fields']:
         exists = count_field['key'] in inasafe_fields
         if count_field['key'] in count_ratio_mapping.keys() and exists:
@@ -57,12 +54,16 @@ def from_counts_to_ratios(layer, callback=None):
             layer.keywords['inasafe_fields'][ratio_field['key']] = name
             mapping[count_field['field_name']] = layer.fieldNameIndex(name)
 
+    if len(mapping) == 0:
+        # There is not a count field. Let's skip this layer.
+        layer.commitChanges()
+        return layer
+
     size_field_name = inasafe_fields[size_field['key']]
 
     for feature in layer.getFeatures():
         size = feature[size_field_name]
 
-        # Cross multiplication for each field
         for count_field, index in mapping.iteritems():
             count = feature[count_field]
             try:
@@ -72,5 +73,4 @@ def from_counts_to_ratios(layer, callback=None):
             layer.changeAttributeValue(feature.id(), index, new_value)
 
     layer.commitChanges()
-    layer.keywords['title'] = output_layer_name
     return layer

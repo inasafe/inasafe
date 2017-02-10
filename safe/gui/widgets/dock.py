@@ -1,5 +1,5 @@
 # coding=utf-8
-"""InaSAFE Dock"""
+"""InaSAFE Dock."""
 
 import os
 import shutil
@@ -44,7 +44,6 @@ from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.utilities import (
     get_error_message,
-    impact_attribution,
     add_ordered_combo_item,
     is_keyword_version_supported,
 )

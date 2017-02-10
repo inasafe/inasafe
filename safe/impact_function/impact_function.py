@@ -30,6 +30,8 @@ from safe.common.utilities import temp_dir
 from safe.common.version import get_version
 from safe.datastore.folder import Folder
 from safe.datastore.datastore import DataStore
+from safe.gis.vector.tools import remove_fields
+from safe.gis.vector.from_counts_to_ratios import from_counts_to_ratios
 from safe.gis.vector.prepare_vector_layer import prepare_vector_layer
 from safe.gis.vector.clean_geometry import clean_layer
 from safe.gis.vector.reproject import reproject
@@ -983,7 +985,13 @@ class ImpactFunction(object):
                 .format(error_message=name))
 
         if isinstance(layer, QgsVectorLayer) and check_fields:
-            check_inasafe_fields(layer)
+            geometries = [QGis.Point, QGis.Line, QGis.Polygon, QGis.NoGeometry]
+            if layer.geometryType() not in geometries:
+                raise Exception(
+                    'Geometric Error with your layer : '
+                    '{source}'.format(source=layer.source()))
+            else:
+                check_inasafe_fields(layer)
 
         return name
 
@@ -1137,7 +1145,7 @@ class ImpactFunction(object):
                 self._datastore = Folder(temp_dir(sub_dir=self._unique_name))
 
             self._datastore.default_vector_format = 'geojson'
-            LOGGER.debug('Datastore : %s' % self.datastore.uri.absolutePath())
+        LOGGER.info('Datastore : %s' % self.datastore.uri_path)
 
         if self.debug_mode:
             self._datastore.use_index = True
@@ -1384,8 +1392,8 @@ class ImpactFunction(object):
                 'inasafe_default_values', {})
             for count_field in exposure['extra_fields']:
                 if count_field['key'] in count_ratio_mapping.keys():
+                    ratio_field = count_ratio_mapping[count_field['key']]
                     if count_field['key'] not in exposure_fields:
-                        ratio_field = count_ratio_mapping[count_field['key']]
 
                         ratio_is_a_field = ratio_field in aggregation_fields
                         ratio_is_a_constant = (
@@ -1416,6 +1424,16 @@ class ImpactFunction(object):
                                 tr('{ratio} constant detected, we will add it'
                                    'to the exposure layer the exposure '
                                    'layer.').format(ratio=ratio_field))
+
+                    else:
+                        if ratio_field in aggregation_fields:
+                            # The count field is in the exposure and the ratio
+                            # is in the aggregation. We need to remove it from
+                            # the aggregation. We remove the keyword too.
+                            remove_fields(
+                                self.aggregation,
+                                [aggregation_fields[ratio_field]])
+                            del aggregation_fields[ratio_field]
 
         self.set_state_process(
             'aggregation',
@@ -1558,6 +1576,11 @@ class ImpactFunction(object):
             'Cleaning the vector exposure attribute table')
         # noinspection PyTypeChecker
         self.exposure = prepare_vector_layer(self.exposure)
+        if self.debug_mode:
+            self.debug_layer(self.exposure)
+
+        self.set_state_process('exposure', 'Compute ratios from counts')
+        self.exposure = from_counts_to_ratios(self.exposure)
         if self.debug_mode:
             self.debug_layer(self.exposure)
 
@@ -1739,7 +1762,8 @@ class ImpactFunction(object):
         hazard_class = hazard_class_field['key']
         for layer in self.outputs:
             if is_vector_layer(layer):
-                if layer.geometryType() != QGis.NoGeometry:
+                without_geometries = [QGis.NoGeometry, QGis.UnknownGeometry]
+                if layer.geometryType() not in without_geometries:
                     display_not_exposed = False
                     if layer == self.impact or self.debug_mode:
                         display_not_exposed = True

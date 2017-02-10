@@ -1,5 +1,7 @@
 # coding=utf-8
 
+"""Test file for transform counts to ratios."""
+
 import unittest
 
 from safe.test.utilities import qgis_iface, load_test_vector_layer
@@ -19,15 +21,10 @@ qgis_iface()
 
 class TestRecomputeCounts(unittest.TestCase):
 
-    def setUp(self):
-        pass
-
-    def tearDown(self):
-        pass
+    """Test class."""
 
     def test_recompute_counts(self):
         """Test we can recompute counts in a layer."""
-
         layer = load_test_vector_layer(
             'gisv4', 'exposure', 'population.geojson',
             clone=True)
