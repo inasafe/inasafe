@@ -181,6 +181,8 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
         for parameter_widget in self.parameter_container.\
                 get_parameter_widgets():
             parameter_widget.widget().set_default(None)
+            # Set selected radio button to 'Do not use'
+            parameter_widget.widget().set_selected_radio_button()
         # Set default value from existing keywords
         if existing_inasafe_default_values:
             for guid, default in existing_inasafe_default_values.items():
@@ -188,6 +190,8 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
                     get_parameter_widget_by_guid(guid)
                 if isinstance(parameter_widget, DefaultSelectParameterWidget):
                     parameter_widget.set_default(default)
+                    # Set selected radio button to 'Do not use'
+                    parameter_widget.set_selected_radio_button()
 
     def get_inasafe_fields(self):
         """Return inasafe fields from the current wizard state.

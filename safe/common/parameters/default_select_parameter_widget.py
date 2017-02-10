@@ -144,8 +144,6 @@ class DefaultSelectParameterWidget(SelectParameterWidget):
             self.custom_value.setValue(default)
 
         self.toggle_custom_value()
-        # Set selected radio button to 'Do not use'
-        self.set_default_radio_button()
 
     def toggle_custom_value(self):
         radio_button_checked_id = self.default_input_button_group.checkedId()
@@ -172,10 +170,10 @@ class DefaultSelectParameterWidget(SelectParameterWidget):
         else:
             for button in self.default_input_button_group.buttons():
                 button.setEnabled(True)
-            self.set_default_radio_button()
+            self.set_selected_radio_button()
             self.custom_value.setEnabled(True)
 
-    def set_default_radio_button(self):
+    def set_selected_radio_button(self):
         """Set selected radio button to 'Do not use'."""
         dont_use_button = self.default_input_button_group.button(
             len(self._parameter.default_values) - 2)
