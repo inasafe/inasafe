@@ -49,8 +49,6 @@ __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-
 # Some default values for testing
 source = u'Source'
 source_scale = u'Source Scale'
@@ -156,7 +154,7 @@ class TestKeywordWizard(unittest.TestCase):
         # It shouldn't raise any exception although the xml is invalid
         dialog.set_keywords_creation_mode(layer)
 
-    def test_layer_without_inasafe_fields(self):
+    def test_hazard_without_inasafe_fields(self):
         """Test keyword wizard for layer without inasafe fields."""
         # cloning layer that has no inasafe fields
         layer = load_test_vector_layer(
@@ -275,6 +273,61 @@ class TestKeywordWizard(unittest.TestCase):
 
         real_keywords = dialog.get_keywords()
         self.assertDictEqual(real_keywords, expected_keyword)
+
+    def test_aggregation_without_inasafe_fields(self):
+        """Test keyword wizard for layer without inasafe fields."""
+        layer = load_test_vector_layer(
+            'aggregation', 'district_osm_jakarta.geojson', clone=True)
+
+        # noinspection PyTypeChecker
+        dialog = WizardDialog(iface=IFACE)
+        dialog.set_keywords_creation_mode(layer)
+
+        # check if in select purpose step
+        self.check_current_step(dialog.step_kw_purpose)
+
+        # Check aggregation
+        self.check_current_text(
+            layer_purpose_aggregation['name'],
+            dialog.step_kw_purpose.lstCategories)
+
+        # Click next
+        dialog.pbnNext.click()
+
+        # check if in step field
+        self.check_current_step(dialog.step_kw_field)
+
+        # Check aggregation
+        self.check_current_text(
+            layer.keywords['inasafe_fields']['aggregation_name_field'],
+            dialog.step_kw_field.lstFields)
+
+        # Click next
+        dialog.pbnNext.click()
+
+        # Check if in default inasafe fields
+        self.check_current_step(dialog.step_kw_default_inasafe_fields)
+
+        # Click next
+        dialog.pbnNext.click()
+
+        # Check if in source step
+        self.check_current_step(dialog.step_kw_source)
+
+        # Click next
+        dialog.pbnNext.click()
+
+        # Check if in title step
+        self.check_current_step(dialog.step_kw_title)
+
+        # Click next
+        dialog.pbnNext.click()
+
+        # Check if in summary step
+        self.check_current_step(dialog.step_kw_summary)
+
+        # Click next
+        dialog.pbnNext.click()
 
     def test_hazard_volcano_polygon_keyword(self):
         """Test keyword wizard for volcano hazard polygon."""

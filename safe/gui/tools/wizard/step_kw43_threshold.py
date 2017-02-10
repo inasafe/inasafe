@@ -11,10 +11,10 @@ from PyQt4.QtGui import QDoubleSpinBox, QHBoxLayout, QLabel
 from safe.utilities.i18n import tr
 from safe.definitions.layer_purposes import layer_purpose_aggregation
 from safe.definitions.layer_geometry import layer_geometry_raster
-from safe.definitions.utilities import get_fields
+from safe.definitions.utilities import get_fields, get_non_compulsory_fields
 from safe.gui.tools.wizard.wizard_step import (
     WizardStep, get_wizard_step_ui_class)
-from safe.gui.tools.wizard.wizard_utils import clear_layout
+from safe.gui.tools.wizard.wizard_utils import clear_layout, skip_inasafe_field
 from safe.gui.tools.wizard.wizard_strings import (
     continuous_raster_question, continuous_vector_question)
 from safe.utilities.gis import is_raster_layer
@@ -68,9 +68,9 @@ class StepKwThreshold(WizardStep, FORM_CLASS):
             subcategory = {'key': None}
 
         # Check if it can go to inasafe field step
-        inasafe_fields = get_fields(
-            layer_purpose['key'], subcategory['key'], replace_null=False)
-        if inasafe_fields:
+        non_compulsory_fields = get_non_compulsory_fields(
+            layer_purpose['key'], subcategory['key'])
+        if not skip_inasafe_field(self.parent.layer, non_compulsory_fields):
             return self.parent.step_kw_inasafe_fields
 
         # Check if it can go to inasafe default field step
