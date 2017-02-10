@@ -634,18 +634,18 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         # TODO(IS) Disable load default button for now.
         # load_default_button = QPushButton(tr('Load Default'))
         # cancel_button = QPushButton(tr('Cancel'))
-        save_button = QPushButton(tr('Save'))
+        self.save_button = QPushButton(tr('Save'))
 
         # Action for buttons
         # cancel_button.clicked.connect(self.cancel_button_clicked)
-        save_button.clicked.connect(
+        self.save_button.clicked.connect(
             partial(self.save_button_clicked, classification=classification))
 
         button_layout = QHBoxLayout()
         # button_layout.addWidget(load_default_button)
         button_layout.addStretch(1)
         # button_layout.addWidget(cancel_button)
-        button_layout.addWidget(save_button)
+        button_layout.addWidget(self.save_button)
 
         button_layout.setStretch(0, 3)
         button_layout.setStretch(1, 1)
