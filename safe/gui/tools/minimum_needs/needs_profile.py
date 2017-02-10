@@ -288,15 +288,19 @@ class NeedsProfile(MinimumNeeds):
         :rtype: QString
         """
         if self._root_directory is None or self._root_directory == '':
+            # Map the root directory to ~/.qgis2/inasafe so the minimum needs
+            # profile will be placed there (~/.qgis2/inasafe/minimum_needs).
             try:
                 # noinspection PyArgumentList
-                self._root_directory = QgsApplication.qgisSettingsDirPath()
+                self._root_directory = os.path.join(
+                    QgsApplication.qgisSettingsDirPath(),
+                    'inasafe')
             except NameError:
                 # This only happens when running only one test on its own
                 self._root_directory = None
             if self._root_directory is None or self._root_directory == '':
                 self._root_directory = os.path.join(
-                    os.path.expanduser('~'), '.qgis2')
+                    os.path.expanduser('~'), '.qgis2', 'inasafe')
         return self._root_directory
 
     @staticmethod
