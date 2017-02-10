@@ -1,4 +1,5 @@
 # coding=utf-8
+import json
 import logging
 import os
 import shutil
@@ -6,9 +7,6 @@ from zipfile import ZipFile
 
 import pytz
 import datetime
-import json
-from collections import OrderedDict
-
 import re
 from PyQt4.QtCore import (
     QObject,
@@ -28,9 +26,11 @@ from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsProject,
     QgsComposerHtml)
-from realtime.exceptions import PetaJakartaAPIError, MapComposerError
+from realtime.exceptions import (MapComposerError,
+    FloodDataSourceAPIError)
 from realtime.flood.dummy_source_api import DummySourceAPI
-from realtime.flood.peta_jakarta_api import PetaJakartaAPI
+
+from realtime.flood.flood_data_source import PetaBencanaAPI, PetaJakartaAPI
 from realtime.utilities import realtime_logger_name
 
 from safe.test.utilities import get_qgis_app
@@ -101,6 +101,8 @@ class FloodEvent(QObject):
             hour = int(result.group('hour'))
             duration = int(result.group('duration'))
             level = result.group('level')
+        else:
+            self.flood_data_source = 'petabencana'
 
         self.report_id = '%d%02d%02d%02d-%d-%s' % (
             year,
@@ -110,6 +112,8 @@ class FloodEvent(QObject):
             duration,
             level
         )
+
+        LOGGER.info('Flood ID: %s' % self.report_id)
 
         self.time = datetime.datetime(year, month, day, hour, tzinfo=pytz.utc)
         self.source = 'PetaJakarta - Jakarta'
@@ -128,6 +132,12 @@ class FloodEvent(QObject):
         self.population_path = population_path
         self.exposure_layer = None
 
+        self.metadata_path = os.path.join(self.report_path, 'metadata.json')
+        if self.dummy_report_folder:
+            self.load_metadata()
+        else:
+            self.write_metadata()
+
         if not os.path.exists(self.hazard_path) or self.dummy_report_folder:
             self.save_hazard_data()
 
@@ -145,6 +155,7 @@ class FloodEvent(QObject):
         self.function_id = 'ClassifiedPolygonHazardPolygonPeopleFunction'
         self.impact_path = os.path.join(self.report_path, 'impact.shp')
         self.impact_layer = None
+        self.impact_zip_path = os.path.join(self.report_path, 'impact.zip')
 
         # Setup i18n
         self.locale = locale
@@ -167,17 +178,57 @@ class FloodEvent(QObject):
     def impact_exists(self):
         return os.path.exists(self.impact_path)
 
+    def write_metadata(self):
+        """Write metadata file for this event folder.
+
+        write metadata
+        example metadata json:
+        {
+            'flood_data_source': 'petabencana'
+        }
+        """
+        metadata_dict = {
+            'flood_data_source': self.flood_data_source
+        }
+        with open(self.metadata_path, 'w') as f:
+            f.write(json.dumps(metadata_dict))
+
+    def load_metadata(self):
+        """Load metadata file for this event folder.
+
+        load metadata
+        example metadata json:
+        {
+            'flood_data_source': 'petabencana'
+        }
+        """
+        if os.path.exists(self.metadata_path):
+            with open(self.metadata_path, 'w') as f:
+                metadata_dict = json.loads(f.read())
+                self.flood_data_source = metadata_dict.get(
+                    'flood_data_source')
+
     def save_hazard_data(self):
         if self.dummy_report_folder:
             filename = os.path.join(
                 self.working_dir, self.dummy_report_folder, 'flood_data.json')
             hazard_geojson = DummySourceAPI.get_aggregate_report(filename)
-        else:
+            if not self.flood_data_source:
+                # old petajakarta data source
+                self.flood_data_source = 'petajakarta'
+        elif self.flood_data_source == 'petabencana':
+            hazard_geojson = PetaBencanaAPI.get_aggregate_report(
+                self.duration, self.level)
+        elif self.flood_data_source == 'petajakarta':
             hazard_geojson = PetaJakartaAPI.get_aggregate_report(
                 self.duration, self.level)
+        else:
+            hazard_geojson = None
 
         if not hazard_geojson:
-            raise PetaJakartaAPIError("Can't access PetaJakarta REST API")
+            raise FloodDataSourceAPIError(
+                "Can't access Flood data source REST API: %s" %
+                self.flood_data_source)
 
         with open(self.hazard_path, 'w+') as f:
             f.write(hazard_geojson)
@@ -328,6 +379,17 @@ class FloodEvent(QObject):
                     shutil.copy(source_filename, new_path)
 
         self.impact_layer = read_layer(self.impact_path)
+
+        # Create a zipped impact layer
+        with ZipFile(self.impact_zip_path, 'w') as zipf:
+            for root, dirs, files in os.walk(self.report_path):
+                for f in files:
+                    _, ext = os.path.splitext(f)
+                    if ('impact' in f and
+                            not f == 'impact.zip' and
+                            not ext == '.pdf'):
+                        filename = os.path.join(root, f)
+                        zipf.write(filename, arcname=f)
 
     def calculate_aggregate_impact(self, impact_function):
 
@@ -739,6 +801,15 @@ Telp. 121
         # get main map canvas on the composition and set extent
         map_canvas = composition.getComposerItemById('map-canvas')
         if map_canvas:
+            map_canvas.setKeepLayerSet(True)
+            impact_layers = [
+                population_affected_layer.id(),
+                boundary_mask.id(),
+                hazard_layer.id(),
+                boundary_layer.id(),
+                base_map.id(),
+            ]
+            map_canvas.setLayerSet(impact_layers)
             map_canvas.setNewExtent(map_canvas.currentMapExtent())
             map_canvas.renderModeUpdateCachedImage()
         else:

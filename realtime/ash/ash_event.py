@@ -2,14 +2,13 @@
 import json
 import logging
 import os
-
 import datetime
 from collections import OrderedDict
+from zipfile import ZipFile
 
 import pytz
 import shutil
-
-from PyQt4.QtCore import QObject, QFileInfo, QUrl, Qt
+from PyQt4.QtCore import QObject, QFileInfo, QUrl
 from PyQt4.QtXml import QDomDocument
 from qgis.core import (
     QgsProject,
@@ -19,7 +18,6 @@ from qgis.core import (
     QgsComposition,
     QgsPoint,
     QgsRectangle)
-
 from jinja2 import Template
 from headless.tasks.utilities import download_file
 from realtime.exceptions import MapComposerError
@@ -35,10 +33,10 @@ from safe.utilities.gis import get_wgs84_resolution
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.styling import set_vector_categorized_style, \
     set_vector_graduated_style, setRasterStyle
-
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from safe.common.version import get_version
 from safe.storage.core import read_qgis_layer
+
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 __author__ = 'Rizky Maulana Nugraha <lana.pcfre@gmail.com>'
 __date__ = '7/13/16'
@@ -114,6 +112,13 @@ class AshEvent(QObject):
         self.working_dir = working_dir
         if not os.path.exists(self.working_dir_path()):
             os.makedirs(self.working_dir_path())
+
+        dateformat = '%Y%m%d%H%M%S'
+        timestring = self.time.strftime(dateformat)
+        self.event_id = '%s-%s' % (timestring, self.volcano_name)
+
+        LOGGER.info('Ash ID: %s' % self.event_id)
+
         # save hazard layer
         self.hazard_path = self.working_dir_path('hazard.tif')
         self.save_hazard_layer(hazard_path)
@@ -129,6 +134,7 @@ class AshEvent(QObject):
         self.map_report_path = self.working_dir_path('report.pdf')
         self.project_path = self.working_dir_path('project.qgs')
         self.impact_exists = None
+        self.impact_zip_path = self.working_dir_path('impact.zip')
         self.locale = 'en'
 
         self.population_path = population_path
@@ -236,7 +242,8 @@ class AshEvent(QObject):
         tokens = coordinates.split(',')
         longitude_string = tokens[0]
         latitude_string = tokens[1]
-        current_time = datetime.datetime.utcnow().replace(tzinfo=pytz.utc)
+        current_time = datetime.datetime.utcnow().replace(
+            tzinfo=pytz.utc)
         elapsed_time = current_time - self.time
         elapsed_hour = elapsed_time.seconds / 3600
         elapsed_minute = (elapsed_time.seconds / 60) % 60
@@ -650,6 +657,17 @@ class AshEvent(QObject):
             self.airport_layer,
             'airport_impact')
         self.impact_exists = True
+        # Create a zipped impact layer
+
+        with ZipFile(self.impact_zip_path, 'w') as zipf:
+            for root, dirs, files in os.walk(self.working_dir_path()):
+                for f in files:
+                    _, ext = os.path.splitext(f)
+                    if ('impact' in f and
+                            not f == 'impact.zip' and
+                            not ext == '.pdf'):
+                        filename = os.path.join(root, f)
+                        zipf.write(filename, arcname=f)
 
     def generate_report(self):
         # Generate pdf report from impact/hazard
@@ -727,6 +745,15 @@ class AshEvent(QObject):
         # get main map canvas on the composition and set extent
         map_impact = composition.getComposerItemById('map-impact')
         if map_impact:
+            map_impact.setKeepLayerSet(True)
+            impact_layers = [
+                self.volcano_layer.id(),
+                self.airport_layer.id(),
+                self.cities_layer.id(),
+                hazard_layer.id(),
+                self.highlight_base_layer.id(),
+            ]
+            map_impact.setLayerSet(impact_layers)
             map_impact.zoomToExtent(hazard_layer.extent())
             map_impact.renderModeUpdateCachedImage()
         else:

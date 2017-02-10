@@ -15,7 +15,7 @@ qgisMaximumVersion=2.99
 description=InaSAFE is free software that allows disaster managers to study realistic natural hazard impact scenarios for better planning, preparedness and response activities.
 about=Developed for the Indonesian Government - BNPB, Australian Government - AIFDR and DMInnovation and, and World Bank - GFDRR
 
-version=3.5.0
+version=3.5.4
 # alpha, beta, rc or final
 status=alpha
 
@@ -25,49 +25,63 @@ status=alpha
 # Optional items:
 
 changelog=
-    Adding missing parameter and extent in provenance #2981
-    We need to write the parameters used into the keywords for impact layers #1315
-    Removing Impact Merge Tool
-    Update some definitions #2272
-    Fix Bug: Volcano point on buildings causes QGIS crash if all categories are < 1 km #2306
-    Remove zero or no data in the impact report #2318
-    Add value mapping for exposure, and use it for aggregating result
-    Fix BUG : The roads IF report still truncated #2373
-    Update references to 'Attribute values’ to ‘Attributes value map’ in the docs #2381
-    Less duplication on notes and action #2426
-    Use tick for action check list #2430
-    Fix BUG: PetaJakarta downloader py error #2669
-    Review all dialog #2704
-    Remove repeated figures in some reports #2746
-    Remove .keywords Support in version 3.5 #2773
-    Fix Attribute error on analysis using training dataset (None geometry) #2798
-    Make checking the analysis environment more efficient by not reading the full raster each time you pan or zoom #2804
-    Fix the aggregation result not appear in printed PDF. #2847
-    Fix symbology problem in Classified Volcanic Ash Raster on Vector exposure #2858
-    Handling Special Character for XML #2898
-    Fix Bug: we have lost the report headings #2902
-    Fix Bug IFCW: Cannot click next button after choose hazard data #2906
-    Fix Symbology of Peta Jarkarta Flood layer is not clearly visible #2911
-    Fix Empty report map when using IFCW on volcano on buildings #2925
-    More Checking on Layer's Keyword #2926
-    Fix Discrepancies in the building report about the threshold #2932
-    Fix MetadataReadError while loading a layer #2945
-    Fix The impact summary is different between road and building IF #2951
-    Single image type when defining custom options in inasafe options. #2966 (more image format accepted)
-    Fix Failure to use extent option properly when using IFCW tsunami raster on landcover #2967
-    Fix Bug : Minus number in the Not Affected Result #2969
-    Add notes to explain report summary #2973
-    Fix Remove duplicated definitions for hazard and exposure in definitions.py #3034
-    Review the definitions for population count and density #3069
-    FIX Error getting provenance step time in dock #3076
-    Define new concepts #3079
-    Make map titles consistent #3083
-    Add thousands separator in notes #3089
-    Switch to use the term hazard zone not hazard area #3090
-    Make Notes more granular for hazards #3109
-    Create citations for concepts #3117
-    Fix BUG: The mystery totals #3118
-    Add question mark in analysis results of InaSAFE report #3122
+    Version 3.5.4
+    - Fix error when multipart to single part produces none geometries.
+
+    Version 3.5.3
+    - Fix error with affected versus displaced counts in ITB EQ function
+
+    Version 3.5.2
+    - Fix TypeError when running volcanic ash in Bahasa Indonesia in QGIS (#3164)
+
+    Version 3.5.1
+    - Better Zero Impact message in Impact Function Centric Wizard (#3151)
+    - Handling NULL value in exposure layer (#3153)
+
+    Version 3.5.0
+    - Adding missing parameter and extent in provenance #2981
+    - We need to write the parameters used into the keywords for impact layers #1315
+    - Removing Impact Merge Tool
+    - Update some definitions #2272
+    - Fix Bug: Volcano point on buildings causes QGIS crash if all categories are < 1 km #2306
+    - Remove zero or no data in the impact report #2318
+    - Add value mapping for exposure, and use it for aggregating result
+    - Fix BUG : The roads IF report still truncated #2373
+    - Update references to 'Attribute values’ to ‘Attributes value map’ in the docs #2381
+    - Less duplication on notes and action #2426
+    - Use tick for action check list #2430
+    - Fix BUG: PetaJakarta downloader py error #2669
+    - Review all dialog #2704
+    - Remove repeated figures in some reports #2746
+    - Remove .keywords Support in version 3.5 #2773
+    - Fix Attribute error on analysis using training dataset (None geometry) #2798
+    - Make checking the analysis environment more efficient by not reading the full raster each time you pan or zoom #2804
+    - Fix the aggregation result not appear in printed PDF. #2847
+    - Fix symbology problem in Classified Volcanic Ash Raster on Vector exposure #2858
+    - Handling Special Character for XML #2898
+    - Fix Bug: we have lost the report headings #2902
+    - Fix Bug IFCW: Cannot click next button after choose hazard data #2906
+    - Fix Symbology of Peta Jarkarta Flood layer is not clearly visible #2911
+    - Fix Empty report map when using IFCW on volcano on buildings #2925
+    - More Checking on Layer's Keyword #2926
+    - Fix Discrepancies in the building report about the threshold #2932
+    - Fix MetadataReadError while loading a layer #2945
+    - Fix The impact summary is different between road and building IF #2951
+    - Single image type when defining custom options in inasafe options. #2966 (more image format accepted)
+    - Fix Failure to use extent option properly when using IFCW tsunami raster on landcover #2967
+    - Fix Bug : Minus number in the Not Affected Result #2969
+    - Add notes to explain report summary #2973
+    - Fix Remove duplicated definitions for hazard and exposure in definitions.py #3034
+    - Review the definitions for population count and density #3069
+    - FIX Error getting provenance step time in dock #3076
+    - Define new concepts #3079
+    - Make map titles consistent #3083
+    - Add thousands separator in notes #3089
+    - Switch to use the term hazard zone not hazard area #3090
+    - Make Notes more granular for hazards #3109
+    - Create citations for concepts #3117
+    - Fix BUG: The mystery totals #3118
+    - Add question mark in analysis results of InaSAFE report #3122
 
 # tags are comma separated with spaces allowed
 tags=contingency planning, impact assessments, disaster scenarios, natural hazards

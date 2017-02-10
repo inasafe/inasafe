@@ -12,6 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 import time
+from zipfile import ZipFile
 
 __author__ = 'tim@kartoza.com'
 __version__ = '0.5.0'
@@ -172,6 +173,8 @@ class ShakeEvent(QObject):
             self.data.extract()
             self.event_id = self.data.event_id
 
+        LOGGER.info('Shake ID: %s' % self.event_id)
+
         # Convert grid.xml (we'll give the title with event_id)
         # RM: convert event_id to str too. This avoid the layer name is
         # falsely read as int
@@ -215,6 +218,12 @@ class ShakeEvent(QObject):
         self.translator = None
         self.locale = locale
         self.setup_i18n()
+
+        # mmi zip path
+        self.mmi_zip_path = os.path.join(
+            shakemap_extract_dir(),
+            self.event_id,
+            'mmi_output.zip')
 
     # noinspection PyMethodMayBeStatic
     def check_environment(self):
@@ -1061,7 +1070,7 @@ class ShakeEvent(QObject):
         clipped_exposure_layer = safe_read_layer(
             str(clipped_exposure.source()))
 
-        function_id = 'ITBFatalityFunction'
+        function_id = 'ITBBayesianFatalityFunction'
         function = ImpactFunctionManager().get(function_id)
         function.hazard = clipped_hazard_layer
         function.exposure = clipped_exposure_layer
@@ -1311,8 +1320,9 @@ class ShakeEvent(QObject):
 
         # Make sure the map layers have all been removed before we
         # start otherwise in batch mode we will get overdraws.
+        map_registry = QgsMapLayerRegistry.instance()
         # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().removeAllMapLayers()
+        map_registry.removeAllMapLayers()
 
         mmi_shape_file = self.shake_grid.mmi_to_shapefile(
             force_flag=force_flag)
@@ -1355,10 +1365,12 @@ class ShakeEvent(QObject):
             project_path = os.environ['INASAFE_REALTIME_PROJECT']
         else:
             project_path = os.path.join(data_dir(), 'realtime.qgs')
+
+        qgs_project = QgsProject.instance()
         # noinspection PyArgumentList
-        QgsProject.instance().setFileName(project_path)
+        qgs_project.setFileName(project_path)
         # noinspection PyArgumentList
-        QgsProject.instance().read()
+        qgs_project.read()
 
         # Load the contours and cities shapefile into the map
         layers_to_add = []
@@ -1375,7 +1387,7 @@ class ShakeEvent(QObject):
                 # noinspection PyArgumentList
                 layers_to_add.append(cities_layer)
         # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().addMapLayers(layers_to_add)
+        map_registry.addMapLayers(layers_to_add)
 
         # Load our template
         if 'INASAFE_REALTIME_TEMPLATE' in os.environ:
@@ -1427,6 +1439,10 @@ class ShakeEvent(QObject):
         # its extents to the event.
         map_canvas = composition.getComposerItemById('main-map')
         if map_canvas is not None:
+            layer_list = [layer_id for layer_id in map_registry.mapLayers()]
+            layer_list.reverse()
+            map_canvas.setKeepLayerSet(True)
+            map_canvas.setLayerSet(layer_list)
             map_canvas.setNewExtent(self.extent_with_cities)
             map_canvas.renderModeUpdateCachedImage()
         else:
@@ -1516,12 +1532,24 @@ class ShakeEvent(QObject):
 
         # Save a QGIS project that you can open in QGIS
         # noinspection PyArgumentList
-        project = QgsProject.instance()
         project_path = os.path.join(
             shakemap_extract_dir(),
             self.event_id,
             'project.qgs')
-        project.write(QFileInfo(project_path))
+        qgs_project.write(QFileInfo(project_path))
+
+        # Create a zipped mmi data
+        extract_path = os.path.join(
+            shakemap_extract_dir(),
+            self.event_id)
+        with ZipFile(self.mmi_zip_path, 'w') as zipf:
+            for root, dirs, files in os.walk(extract_path):
+                for f in files:
+                    _, ext = os.path.splitext(f)
+                    if (f.startswith('mmi') and
+                            not f == 'mmi_output.zip'):
+                        filename = os.path.join(root, f)
+                        zipf.write(filename, arcname=f)
 
     def generate_result_path(self):
         """Generate path file for the result

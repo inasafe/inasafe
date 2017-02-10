@@ -484,8 +484,11 @@ class Vector(Layer):
             # Record coordinates ordered as Longitude, Latitude
             G = feature.GetGeometryRef()
             if G is None:
-                msg = ('Geometry was None in filename %s ' % filename)
-                raise ReadLayerError(msg)
+                # Updated in 3.5.4 to skip invalid features TS
+                LOGGER.warning('Skipping feature with invalid geometry')
+                continue
+                #msg = ('Geometry was None in filename %s ' % filename)
+                #raise ReadLayerError(msg)
             else:
                 self.geometry_type = G.GetGeometryType()
                 if self.is_point_data:
