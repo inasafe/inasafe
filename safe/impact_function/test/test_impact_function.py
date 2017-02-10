@@ -316,16 +316,14 @@ class TestImpactFunction(unittest.TestCase):
         exposure_layer = load_test_vector_layer(
             'gisv4', 'exposure', 'population.geojson')
 
-        # We check do not exist before in the exposure layer.
-        self.assertNotIn(
-            female_count_field['key'],
-            exposure_layer.keywords['inasafe_fields'])
-
         # Set up impact function
         impact_function = ImpactFunction()
         impact_function.exposure = exposure_layer
         impact_function.hazard = hazard_layer
         impact_function.prepare()
+        # Let's remove one field from keywords.
+        fields = impact_function.exposure.keywords['inasafe_fields']
+        del fields[female_count_field['key']]
         status, message = impact_function.run()
         self.assertEqual(ANALYSIS_SUCCESS, status, message)
 
