@@ -696,9 +696,8 @@ class ImpactFunction(object):
             message = generate_input_error_message(
                 tr('The %s layer do not have keywords.' % purpose),
                 m.Paragraph(tr(
-                    'The %s layer do not have keywords. Use the '
-                    'Use the wizard to assign keywords to the layer.'
-                    % purpose))
+                    'The %s layer do not have keywords. Use the wizard to '
+                    'assign keywords to the layer.' % purpose))
             )
             return PREPARE_FAILED_BAD_INPUT, message
 
