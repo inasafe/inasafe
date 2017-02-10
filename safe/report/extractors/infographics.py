@@ -12,12 +12,10 @@ from safe.definitions.fields import (
     total_affected_field,
     population_count_field,
     exposure_count_field,
-    female_count_field,
-    youth_count_field,
-    adult_count_field,
-    elderly_count_field,
-    analysis_name_field)
+    analysis_name_field, displaced_field)
 from safe.definitions.minimum_needs import minimum_needs_fields
+from safe.definitions.post_processors import vulnerability_postprocessors
+from safe.definitions.utilities import postprocessor_output_field
 from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
 from safe.report.extractors.composer import QGISComposerContext
 from safe.report.extractors.util import (
@@ -55,11 +53,10 @@ class PeopleInfographicElement(object):
     @property
     def number(self):
         """Number to be displayed for the element."""
-        thousand_separator_format = '{0:,}'
         value = format_number(
             self._number,
             enable_rounding=True)
-        return thousand_separator_format.format(value)
+        return value
 
 
 class PeopleVulnerabilityInfographicElement(PeopleInfographicElement):
@@ -144,6 +141,13 @@ def population_infographic_extractor(impact_report, component_metadata):
     else:
         return context
 
+    if displaced_field['key'] in analysis_layer_fields:
+        total_displaced = value_from_field_name(
+            analysis_layer_fields[displaced_field['key']],
+            analysis_layer)
+    else:
+        return context
+
     sections = OrderedDict()
 
     """People Section"""
@@ -182,10 +186,7 @@ def population_infographic_extractor(impact_report, component_metadata):
         ['sections', 'vulnerability', 'sub_header_format'])
 
     vulnerability_fields = [
-        female_count_field,
-        youth_count_field,
-        adult_count_field,
-        elderly_count_field]
+        postprocessor_output_field(p) for p in vulnerability_postprocessors]
 
     vulnerability_items = [{
             'field': field,
@@ -211,7 +212,7 @@ def population_infographic_extractor(impact_report, component_metadata):
             value = 0
 
         if value:
-            value_percentage = value * 100.0 / total_affected
+            value_percentage = value * 100.0 / total_displaced
         else:
             value_percentage = 0
 
