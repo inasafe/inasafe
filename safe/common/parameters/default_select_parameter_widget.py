@@ -79,6 +79,7 @@ class DefaultSelectParameterWidget(SelectParameterWidget):
 
         # Connect
         # noinspection PyUnresolvedReferences
+        self.input.currentIndexChanged.connect(self.toggle_input)
         self.default_input_button_group.buttonClicked.connect(
             self.toggle_custom_value)
 
@@ -143,6 +144,8 @@ class DefaultSelectParameterWidget(SelectParameterWidget):
             self.custom_value.setValue(default)
 
         self.toggle_custom_value()
+        # Set selected radio button to 'Do not use'
+        self.set_default_radio_button()
 
     def toggle_custom_value(self):
         radio_button_checked_id = self.default_input_button_group.checkedId()
@@ -151,3 +154,29 @@ class DefaultSelectParameterWidget(SelectParameterWidget):
             self.custom_value.setDisabled(False)
         else:
             self.custom_value.setDisabled(True)
+
+    def toggle_input(self):
+        """Change behaviour of radio button based on input."""
+        # If input is a field, then disable all radio button.
+        if self.input.currentText() != 'No Field':
+            checked = self.default_input_button_group.checkedButton()
+            if checked:
+                self.default_input_button_group.setExclusive(False)
+                checked.setChecked(False)
+                self.default_input_button_group.setExclusive(True)
+            for button in self.default_input_button_group.buttons():
+                button.setDisabled(True)
+            self.custom_value.setDisabled(True)
+        # Otherwise, enable all radio button set selected radio button to
+        # 'Do not use'.
+        else:
+            for button in self.default_input_button_group.buttons():
+                button.setEnabled(True)
+            self.set_default_radio_button()
+            self.custom_value.setEnabled(True)
+
+    def set_default_radio_button(self):
+        """Set selected radio button to 'Do not use'."""
+        dont_use_button = self.default_input_button_group.button(
+            len(self._parameter.default_values) - 2)
+        dont_use_button.setChecked(True)
