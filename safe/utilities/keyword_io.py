@@ -748,7 +748,6 @@ class KeywordIO(QObject):
                 row.add(m.Cell(', '.join([str(v) for v in value_map])))
                 table.add(row)
 
-            LOGGER.debug('%s of %s' % (i, len(value_maps_keyword)))
             if i < len(value_maps_keyword):
                 # Empty row
                 empty_row = m.Row()

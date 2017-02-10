@@ -13,6 +13,7 @@ inasafe_default_settings = {
     'template_warning_verbose': True,
     'showOrganisationLogoInDockFlag': False,
     'developer_mode': False,
+    'generate_report': True,
 
     'ISO19115_ORGANIZATION': 'InaSAFE.org',
     'ISO19115_URL': 'http://inasafe.org',

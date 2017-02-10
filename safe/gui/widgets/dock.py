@@ -798,22 +798,23 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # Add result layer to QGIS
         add_impact_layers_to_canvas(self.impact_function, self.iface)
 
-        # Generate impact report
-        error_code, message = generate_impact_report(
-            self.impact_function, self.iface)
+        if setting('generate_report', True, bool):
+            # Generate impact report
+            error_code, message = generate_impact_report(
+                self.impact_function, self.iface)
 
-        if error_code == ImpactReport.REPORT_GENERATION_FAILED:
-            LOGGER.info(tr(
-                'The impact report could not be generated.'))
-            send_error_message(self, message)
+            if error_code == ImpactReport.REPORT_GENERATION_FAILED:
+                LOGGER.info(tr(
+                    'The impact report could not be generated.'))
+                send_error_message(self, message)
 
-        error_code, message = generate_impact_map_report(
-            self.impact_function, self.iface)
+            error_code, message = generate_impact_map_report(
+                self.impact_function, self.iface)
 
-        if error_code == ImpactReport.REPORT_GENERATION_FAILED:
-            LOGGER.info(tr(
-                'The impact report could not be generated.'))
-            send_error_message(self, message)
+            if error_code == ImpactReport.REPORT_GENERATION_FAILED:
+                LOGGER.info(tr(
+                    'The impact report could not be generated.'))
+                send_error_message(self, message)
 
         if self.zoom_to_impact_flag:
             self.iface.zoomToActiveLayer()
@@ -1163,8 +1164,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         .. versionadded:: 4.0
         """
-        LOGGER.info(tr('Checking the state of the impact function.'))
-
         # First, we check if the dock is not busy.
         if self.busy:
             return False, None
@@ -1226,7 +1225,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 self.get_exposure_layer().crs())
 
             self.run_button.setEnabled(True)
-            LOGGER.info('The impact function is ready.')
             send_static_message(self, ready_message())
             return impact_function
 
