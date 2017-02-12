@@ -37,6 +37,7 @@ from qgis.core import (
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature, pyqtSlot, QSettings, Qt
 from PyQt4.QtGui import (
+    QAbstractItemView,
     QDialog,
     QFileDialog,
     QTableWidgetItem,
@@ -105,6 +106,9 @@ class BatchDialog(QDialog, FORM_CLASS):
 
         self.table.setColumnWidth(0, 200)
         self.table.setColumnWidth(1, 125)
+
+        # select the whole row instead of one cell
+        self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
 
         # initiate layer group creation
         self.root = QgsProject.instance().layerTreeRoot()
@@ -688,6 +692,7 @@ class BatchDialog(QDialog, FORM_CLASS):
         dialog. This function is adapted from analysis_utilities.py
         :param impact_function: Impact Function
         :param iface: iface
+        :param scenario_name: name of the scenario
         """
         # output folder
         output_dir = self.output_directory.text()
