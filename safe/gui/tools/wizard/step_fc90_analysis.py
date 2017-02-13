@@ -141,7 +141,7 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         if status == PREPARE_FAILED_BAD_CODE:
             self.hide_busy()
             LOGGER.exception(tr(
-                'The impact function will not be able to run because of a '
+                'The impact function was not able to be prepared because of a '
                 'bug.'))
             LOGGER.info(message.to_text())
             send_error_message(self, message)
