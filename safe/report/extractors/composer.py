@@ -222,12 +222,16 @@ def qgis_composer_extractor(impact_report, component_metadata):
         # place exposure at the bottom
         layers.append(impact_report.impact_function.exposure)
 
+    # default extent is analysis extent
+    if not qgis_context.extent:
+        qgis_context.extent = impact_report.impact_function.analysis_extent
+
     map_elements = [
         {
             'id': 'impact-map',
             'extent': qgis_context.extent,
             'grid_split_count': 5,
-            'layers': layers
+            'layers': layers,
         }
     ]
     context.map_elements = map_elements
