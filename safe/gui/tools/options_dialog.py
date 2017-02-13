@@ -112,6 +112,9 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         self.help_button.toggled.connect(self.help_toggled)
         self.main_stacked_widget.setCurrentIndex(1)
 
+        # Always set first tab to be open, 0-th index
+        self.tabWidget.setCurrentIndex(0)
+
         # Hide not implemented group
         self.grpNotImplemented.hide()
         self.adjustSize()
