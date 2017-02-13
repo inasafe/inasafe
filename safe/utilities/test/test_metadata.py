@@ -6,7 +6,10 @@ from safe.definitions.versions import inasafe_keyword_version
 from safe.test.utilities import standard_data_path, clone_shp_layer
 from safe.utilities.metadata import (
     write_iso19115_metadata,
-    read_iso19115_metadata)
+    read_iso19115_metadata,
+    active_classification,
+    active_thresholds_value_maps
+)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -86,6 +89,76 @@ class TestMetadataUtilities(unittest.TestCase):
             source_directory=standard_data_path('exposure'))
         write_iso19115_metadata(layer.source(), keywords)
 
+    def test_active_classification_thresholds_value_maps(self):
+        """Test for active_classification and thresholds value maps method."""
+        keywords = {
+            'layer_mode': 'continuous',
+            'thresholds': {
+                'structure': {
+                    'ina_structure_flood_hazard_classification': {
+                        'classes': {
+                            'low': [1, 2],
+                            'medium': [3, 4],
+                            'high': [5, 6]
+                        },
+                        'active': False
+                    },
+                    'ina_structure_flood_hazard_4_class_classification': {
+                        'classes': {
+                            'low': [1, 2],
+                            'medium': [3, 4],
+                            'high': [5, 6],
+                            'very_high': [7, 8]
+                        },
+                        'active': False
+
+                    }
+                },
+                'population': {
+                    'ina_population_flood_hazard_classification': {
+                        'classes': {
+                            'low': [1, 2.5],
+                            'medium': [2.5, 4.5],
+                            'high': [4.5, 6]
+                        },
+                        'active': False
+                    },
+                    'ina_population_flood_hazard_4_class_classification': {
+                        'classes': {
+                            'low': [1, 2.5],
+                            'medium': [2.5, 4],
+                            'high': [4, 6],
+                            'very_high': [6, 8]
+                        },
+                        'active': True
+                    }
+                }
+            }
+        }
+        classification = active_classification(keywords, 'population')
+        self.assertEqual(
+            classification,
+            'ina_population_flood_hazard_4_class_classification')
+
+        classification = active_classification(keywords, 'road')
+        self.assertIsNone(classification)
+
+        classification = active_classification(keywords, 'structure')
+        self.assertIsNone(classification)
+
+        thresholds = active_thresholds_value_maps(keywords, 'population')
+        expected_thresholds = {
+            'low': [1, 2.5],
+            'medium': [2.5, 4],
+            'high': [4, 6],
+            'very_high': [6, 8]}
+        self.assertDictEqual(thresholds, expected_thresholds)
+
+        classification = active_thresholds_value_maps(keywords, 'road')
+        self.assertIsNone(classification)
+
+        classification = active_thresholds_value_maps(keywords, 'structure')
+        self.assertIsNone(classification)
 
 if __name__ == '__main__':
     unittest.main()

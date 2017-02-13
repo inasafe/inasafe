@@ -10,7 +10,7 @@ from safe.definitions.hazard_classifications import hazard_classes_all
 from safe.report.extractors.util import (
     layer_definition_type,
     resolve_from_dictionary)
-from safe.utilities.rounding import round_affected_number
+from safe.utilities.rounding import format_number
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -45,7 +45,6 @@ def analysis_result_extractor(impact_report, component_metadata):
 
     exposure_type = layer_definition_type(exposure_layer)
     is_rounded = not debug_mode
-    use_population_rounding = exposure_type == exposure_population
 
     # find hazard class
     hazard_classification = None
@@ -54,8 +53,12 @@ def analysis_result_extractor(impact_report, component_metadata):
     analysis_feature = analysis_layer.getFeatures().next()
     analysis_inasafe_fields = analysis_layer.keywords['inasafe_fields']
 
+    exposure_unit = exposure_type['units'][0]
     hazard_header = resolve_from_dictionary(extra_args, 'hazard_header')
-    value_header = resolve_from_dictionary(extra_args, 'value_header')
+    if exposure_unit['abbreviation']:
+        value_header = '{name} ({abbreviation})'.format(**exposure_unit)
+    else:
+        value_header = '{name}'.format(**exposure_unit)
 
     # in case there is a classification
     if 'classification' in hazard_layer.keywords:
@@ -83,10 +86,10 @@ def analysis_result_extractor(impact_report, component_metadata):
                 # Hazard label taken from translated hazard count field
                 # label, string-formatted with translated hazard class label
                 hazard_label = hazard_class['name']
-                hazard_value = round_affected_number(
+
+                hazard_value = format_number(
                     analysis_feature[field_index],
-                    enable_rounding=is_rounded,
-                    use_population_rounding=use_population_rounding)
+                    enable_rounding=is_rounded)
                 stats = {
                     'key': hazard_class['key'],
                     'name': hazard_label,
@@ -105,8 +108,6 @@ def analysis_result_extractor(impact_report, component_metadata):
 
         summary.append({
             'header_label': hazard_header,
-            # This should depend on exposure unit
-            # TODO: Change this so it can take the unit dynamically
             'value_label': value_header,
             'rows': hazard_stats
         })
@@ -116,8 +117,8 @@ def analysis_result_extractor(impact_report, component_metadata):
 
     report_fields = [
         total_affected_field,
-        total_not_exposed_field,
         total_unaffected_field,
+        total_not_exposed_field,
         total_field
     ]
     for report_field in report_fields:
@@ -125,10 +126,9 @@ def analysis_result_extractor(impact_report, component_metadata):
             field_index = analysis_layer.fieldNameIndex(
                 report_field['field_name'])
             row_label = report_field['name']
-            row_value = round_affected_number(
+            row_value = format_number(
                 analysis_feature[field_index],
-                enable_rounding=is_rounded,
-                use_population_rounding=use_population_rounding)
+                enable_rounding=is_rounded)
             row_stats = {
                 'key': report_field['key'],
                 'name': row_label,

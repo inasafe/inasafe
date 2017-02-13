@@ -47,7 +47,7 @@
        <item row="0" column="0">
         <widget class="QTabWidget" name="tabWidget">
          <property name="currentIndex">
-          <number>0</number>
+          <number>4</number>
          </property>
          <widget class="QWidget" name="tab_basic">
           <attribute name="title">
@@ -200,6 +200,16 @@
                   <string>Not yet implemented</string>
                  </property>
                  <layout class="QGridLayout" name="gridLayout_3">
+                  <item row="0" column="0">
+                   <widget class="QCheckBox" name="cbxBubbleLayersUp">
+                    <property name="enabled">
+                     <bool>true</bool>
+                    </property>
+                    <property name="text">
+                     <string>Bubble exposure and hazard layers to top when selected</string>
+                    </property>
+                   </widget>
+                  </item>
                   <item row="8" column="0">
                    <layout class="QHBoxLayout" name="horizontalLayout_4">
                     <item>
@@ -220,26 +230,6 @@
                      </widget>
                     </item>
                    </layout>
-                  </item>
-                  <item row="7" column="0">
-                   <widget class="QLabel" name="label_4">
-                    <property name="enabled">
-                     <bool>true</bool>
-                    </property>
-                    <property name="text">
-                     <string>Organisation name (for maps, reports etc.)</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="0">
-                   <widget class="QCheckBox" name="cbxBubbleLayersUp">
-                    <property name="enabled">
-                     <bool>true</bool>
-                    </property>
-                    <property name="text">
-                     <string>Bubble exposure and hazard layers to top when selected</string>
-                    </property>
-                   </widget>
                   </item>
                   <item row="9" column="0">
                    <layout class="QHBoxLayout" name="horizontalLayout_5">
@@ -262,10 +252,13 @@
                     </item>
                    </layout>
                   </item>
-                  <item row="10" column="0">
-                   <widget class="QCheckBox" name="cbxUseThread">
+                  <item row="7" column="0">
+                   <widget class="QLabel" name="label_4">
+                    <property name="enabled">
+                     <bool>true</bool>
+                    </property>
                     <property name="text">
-                     <string>Run analysis in a separate thread (experimental)</string>
+                     <string>Organisation name (for maps, reports etc.)</string>
                     </property>
                    </widget>
                   </item>
@@ -520,6 +513,16 @@
             <layout class="QVBoxLayout" name="default_values_layout"/>
            </item>
            <item>
+            <widget class="QDialogButtonBox" name="button_box_restore_defaults">
+             <property name="layoutDirection">
+              <enum>Qt::RightToLeft</enum>
+             </property>
+             <property name="standardButtons">
+              <set>QDialogButtonBox::RestoreDefaults</set>
+             </property>
+            </widget>
+           </item>
+           <item>
             <spacer name="verticalSpacer_4">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
@@ -539,7 +542,7 @@
            <string>Advanced</string>
           </attribute>
           <layout class="QGridLayout" name="gridLayout_6">
-           <item row="5" column="0">
+           <item row="6" column="0">
             <spacer name="verticalSpacer_2">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
@@ -613,6 +616,16 @@ p, li { white-space: pre-wrap; }
               </widget>
              </item>
             </layout>
+           </item>
+           <item row="5" column="0">
+            <widget class="QCheckBox" name="checkbox_generate_reports">
+             <property name="text">
+              <string>Generate reports </string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>

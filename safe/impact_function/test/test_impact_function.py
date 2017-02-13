@@ -13,6 +13,9 @@ import logging
 from os.path import join, isfile
 from os import listdir
 
+from safe.definitions.fields import (
+    female_ratio_field, female_count_field, elderly_ratio_field)
+from safe.definitions.default_values import female_ratio_default_value
 from safe.definitions.layer_purposes import layer_purpose_profiling
 from safe.definitions.minimum_needs import minimum_needs_fields
 from safe.definitions.utilities import definition
@@ -304,6 +307,106 @@ class TestImpactFunction(unittest.TestCase):
                 impact_function.analysis_extent.exportToWkt()),
             message
         )
+
+    def test_ratios(self):
+        """Test if we can add defaults to the exposure."""
+        # First test, if we do not provide an aggregation,
+        hazard_layer = load_test_vector_layer(
+            'gisv4', 'hazard', 'classified_vector.geojson')
+        exposure_layer = load_test_vector_layer(
+            'gisv4', 'exposure', 'population.geojson')
+
+        # Set up impact function
+        impact_function = ImpactFunction()
+        impact_function.exposure = exposure_layer
+        impact_function.hazard = hazard_layer
+        impact_function.prepare()
+        # Let's remove one field from keywords.
+        # We monkey patch keywords for testing after `prepare` & before `run`.
+        fields = impact_function.exposure.keywords['inasafe_fields']
+        del fields[female_count_field['key']]
+        status, message = impact_function.run()
+        self.assertEqual(ANALYSIS_SUCCESS, status, message)
+
+        impact = impact_function.impact
+
+        # We check the field exist after the IF with only one value.
+        field = impact.fieldNameIndex(
+            female_ratio_field['field_name'])
+        self.assertNotEqual(-1, field)
+        unique_ratio = impact.uniqueValues(field)
+        self.assertEqual(1, len(unique_ratio))
+        self.assertEqual(
+            unique_ratio[0], female_ratio_default_value['default_value'])
+
+        # Second test, if we provide an aggregation without a default ratio 0.2
+        expected_ratio = 1.0
+        hazard_layer = load_test_vector_layer(
+            'gisv4', 'hazard', 'classified_vector.geojson')
+        exposure_layer = load_test_vector_layer(
+            'gisv4', 'exposure', 'population.geojson')
+        aggregation_layer = load_test_vector_layer(
+            'gisv4', 'aggregation', 'small_grid.geojson')
+
+        # Set up impact function
+        impact_function = ImpactFunction()
+        impact_function.aggregation = aggregation_layer
+        impact_function.exposure = exposure_layer
+        impact_function.hazard = hazard_layer
+        impact_function.debug_mode = True
+        impact_function.prepare()
+        # The `prepare` reads keywords from the file.
+        impact_function.aggregation.keywords['inasafe_default_values'] = {
+            elderly_ratio_field['key']: expected_ratio
+        }
+        fields = impact_function.exposure.keywords['inasafe_fields']
+        del fields[female_count_field['key']]
+        status, message = impact_function.run()
+        self.assertEqual(ANALYSIS_SUCCESS, status, message)
+        impact = impact_function.impact
+
+        # We check the field exist after the IF with only original values.
+        field = impact.fieldNameIndex(
+            female_ratio_field['field_name'])
+        self.assertNotEqual(-1, field)
+        unique_ratio = impact.uniqueValues(field)
+        self.assertEqual(3, len(unique_ratio))
+
+        # We check the field exist after the IF with only one value.
+        field = impact.fieldNameIndex(
+            elderly_ratio_field['field_name'])
+        self.assertNotEqual(-1, field)
+        unique_ratio = impact.uniqueValues(field)
+        self.assertEqual(1, len(unique_ratio))
+        self.assertEqual(expected_ratio, unique_ratio[0])
+
+        # Third test, if we provide an aggregation with a ratio and the
+        # exposure has a count.
+        hazard_layer = load_test_vector_layer(
+            'gisv4', 'hazard', 'classified_vector.geojson')
+        exposure_layer = load_test_vector_layer(
+            'gisv4', 'exposure', 'population.geojson')
+        aggregation_layer = load_test_vector_layer(
+            'gisv4', 'aggregation', 'small_grid.geojson')
+
+        # Set up impact function
+        impact_function = ImpactFunction()
+        impact_function.debug_mode = True
+        impact_function.exposure = exposure_layer
+        impact_function.hazard = hazard_layer
+        impact_function.aggregation = aggregation_layer
+        impact_function.prepare()
+        status, message = impact_function.run()
+        self.assertEqual(ANALYSIS_SUCCESS, status, message)
+
+        impact = impact_function.impact
+
+        # Check that we don't have only one unique value.
+        field = impact.fieldNameIndex(
+            female_ratio_field['field_name'])
+        self.assertNotEqual(-1, field)
+        unique_ratio = impact.uniqueValues(field)
+        self.assertNotEqual(1, len(unique_ratio))
 
     def test_profiling(self):
         """Test running impact function on test data."""

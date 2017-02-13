@@ -5,7 +5,7 @@ from safe.definitions.minimum_needs import (
     minimum_needs_namespace)
 from safe.report.extractors.util import resolve_from_dictionary
 from safe.utilities.i18n import tr
-from safe.utilities.rounding import round_affected_number
+from safe.utilities.rounding import format_number
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -76,10 +76,9 @@ def minimum_needs_extractor(impact_report, component_metadata):
             if field_idx == -1:
                 # skip if field doesn't exists
                 continue
-            value = round_affected_number(
+            value = format_number(
                 analysis_feature[field_idx],
-                enable_rounding=is_rounding,
-                use_population_rounding=True)
+                enable_rounding=is_rounding)
 
             need_parameter = field['need_parameter']
             """:type: ResourceParameter"""

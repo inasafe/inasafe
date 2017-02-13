@@ -157,7 +157,7 @@ def get_fields(layer_purpose, layer_subcategory=None, replace_null=None):
 
     :param replace_null: If None all fields are returned, if True only if
         it's True, if False only if it's False.
-    :type replace_null: None, bool
+    :type replace_null: None or bool
 
     :returns: List of fields.
     :rtype: list
@@ -199,6 +199,9 @@ def get_compulsory_fields(layer_purpose, layer_subcategory=None):
     :param layer_purpose: The layer purpose.
     :type layer_purpose: str
 
+    :param layer_subcategory: Exposure or hazard value.
+    :type layer_subcategory: str
+
     :returns: Compulsory field
     :rtype: dict
     """
@@ -213,6 +216,29 @@ def get_compulsory_fields(layer_purpose, layer_subcategory=None):
             return None
     else:
         return definition(layer_subcategory).get('compulsory_fields')[0]
+
+
+def get_non_compulsory_fields(layer_purpose, layer_subcategory=None):
+    """Get non compulsory field based on layer_purpose and layer_subcategory.
+
+    Used for get field in InaSAFE Fields step in wizard.
+
+    :param layer_purpose: The layer purpose.
+    :type layer_purpose: str
+
+    :param layer_subcategory: Exposure or hazard value.
+    :type layer_subcategory: str
+
+    :returns: Compulsory fields
+    :rtype: list
+    """
+    all_fields = get_fields(
+        layer_purpose, layer_subcategory, replace_null=False)
+    compulsory_field = get_compulsory_fields(
+        layer_purpose, layer_subcategory)
+    if compulsory_field in all_fields:
+        all_fields.remove(compulsory_field)
+    return all_fields
 
 
 def definition(keyword):
@@ -310,3 +336,48 @@ def postprocessor_output_field(postprocessor_definition):
     :rtype: dict
     """
     return postprocessor_definition['output'].items()[0][1]['value']
+
+
+def default_classification_thresholds(classification, unit=None):
+    """Helper to get default thresholds from classification and unit.
+
+    :param classification: Classification definition.
+    :type classification: dict
+
+    :param unit: Unit definition.
+    :type unit: dict
+
+    :returns: Dictionary with key = the class key and value = list of
+        default numeric minimum and maximum value.
+    :rtype: dict
+    """
+    thresholds = {}
+    for hazard_class in classification['classes']:
+        if isinstance(hazard_class['numeric_default_min'], dict):
+            min_value = hazard_class['numeric_default_min'][unit['key']]
+        else:
+            min_value = hazard_class['numeric_default_min']
+        if isinstance(hazard_class['numeric_default_max'], dict):
+            max_value = hazard_class['numeric_default_max'][unit['key']]
+        else:
+            max_value = hazard_class['numeric_default_max']
+        thresholds[hazard_class['key']] = [min_value, max_value]
+
+    return thresholds
+
+
+def default_classification_value_maps(classification):
+    """Helper to get default value maps from classification.
+
+    :param classification: Classification definition.
+    :type classification: dict
+
+    :returns: Dictionary with key = the class key and value = default strings.
+    :rtype: dict
+    """
+    value_maps = {}
+    for hazard_class in classification['classes']:
+        value_maps[hazard_class['key']] = hazard_class.get(
+            'string_defaults', [])
+
+    return value_maps

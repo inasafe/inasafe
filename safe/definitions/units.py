@@ -85,6 +85,21 @@ unit_miles_per_hour = {
         }
     ]
 }
+unit_metres_per_second = {
+    'key': 'metres_per_second',
+    'name': tr('m/s'),
+    'plural_name': tr('m/s'),
+    'abbreviation': tr('m/s'),
+    'description': tr(
+        '<b>The Metres per second</b> is a unit of speed, expressing the '
+        'number of metres covered in one second.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
 unit_knots = {
     'key': 'knots',
     'name': tr('kn'),
@@ -267,6 +282,7 @@ units_all = [
     unit_kilometres_per_hour,
     unit_miles_per_hour,
     unit_knots,
+    unit_metres_per_second,
     unit_kilometres,
     unit_metres,
     unit_millimetres,

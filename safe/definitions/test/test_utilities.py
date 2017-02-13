@@ -1,6 +1,8 @@
 # coding=utf-8
 """Test for utilities module."""
 import unittest
+from copy import deepcopy
+from safe import definitions
 
 from safe.definitions import (
     hazard_flood,
@@ -29,7 +31,9 @@ from safe.definitions import (
     layer_geometry_raster,
     layer_geometry_line,
     layer_geometry_point,
-    layer_geometry_polygon
+    layer_geometry_polygon,
+    cyclone_au_bom_hazard_classes,
+    unit_knots
 )
 from safe.definitions.hazard import hazard_cyclone
 
@@ -44,7 +48,11 @@ from safe.definitions.utilities import (
     get_fields,
     get_classifications,
     get_allowed_geometries,
-    all_default_fields
+    all_default_fields,
+    get_compulsory_fields,
+    get_non_compulsory_fields,
+    default_classification_thresholds,
+    default_classification_value_maps
 )
 
 
@@ -160,30 +168,52 @@ class TestDefinitionsUtilities(unittest.TestCase):
         self.assertItemsEqual(
             get_classifications('flood'), expected)
 
+    def test_get_compulsory_field(self):
+        """Test get_compulsory_field method."""
+        compulsory_field = get_compulsory_fields('exposure', 'structure')
+        expected_fields = exposure_structure['compulsory_fields']
+        self.assertListEqual([compulsory_field], expected_fields)
+
+    def test_get_not_compulsory_field(self):
+        """Test get_non_compulsory_field method."""
+        non_compulsory_fields = get_non_compulsory_fields(
+            'exposure', 'structure')
+        expected_fields = [
+            field for field in exposure_structure['fields'] if not field[
+                'replace_null']]
+        expected_fields += [
+            field for field in exposure_structure['extra_fields'] if not
+            field['replace_null']]
+
+        for field in expected_fields:
+            if field.get('replace_null'):
+                expected_fields.remove(field)
+        self.assertListEqual(non_compulsory_fields, expected_fields)
+
     def test_get_fields(self):
         """Test get_fields method."""
         fields = get_fields('exposure', 'structure')
-        expected_fields = exposure_structure['compulsory_fields']
+        expected_fields = deepcopy(exposure_structure['compulsory_fields'])
         expected_fields += exposure_structure['fields']
         expected_fields += exposure_structure['extra_fields']
         self.assertListEqual(fields, expected_fields)
 
         fields = get_fields('hazard', 'flood')
-        expected_fields = hazard_flood['compulsory_fields']
+        expected_fields = deepcopy(hazard_flood['compulsory_fields'])
         expected_fields += hazard_flood['fields']
         expected_fields += hazard_flood['extra_fields']
         self.assertListEqual(fields, expected_fields)
 
         fields = get_fields('hazard')
-        expected_fields = hazard_fields
+        expected_fields = deepcopy(hazard_fields)
         self.assertListEqual(fields, expected_fields)
 
         fields = get_fields('exposure')
-        expected_fields = exposure_fields
+        expected_fields = deepcopy(exposure_fields)
         self.assertListEqual(fields, expected_fields)
 
         fields = get_fields('aggregation')
-        expected_fields = aggregation_fields
+        expected_fields = deepcopy(aggregation_fields)
         self.assertListEqual(fields, expected_fields)
 
         fields = get_fields('aggregation', replace_null=True)
@@ -223,6 +253,113 @@ class TestDefinitionsUtilities(unittest.TestCase):
         for default_field in default_fields:
             self.assertTrue(default_field.get('replace_null'), False)
             self.assertIsNotNone(default_field.get('default_value'))
+
+    def test_classification_thresholds(self):
+        """Test for classification_thresholds method."""
+        thresholds = default_classification_thresholds(flood_hazard_classes)
+        wet_class = flood_hazard_classes['classes'][0]
+        dry_class = flood_hazard_classes['classes'][1]
+
+        expected = {
+            'dry': [
+                dry_class['numeric_default_min'],
+                dry_class['numeric_default_max']
+            ],
+            'wet': [
+                wet_class['numeric_default_min'],
+                wet_class['numeric_default_max']
+            ]
+        }
+        self.assertDictEqual(thresholds, expected)
+
+        thresholds = default_classification_thresholds(
+            cyclone_au_bom_hazard_classes, unit_knots)
+        unit_knots_key = unit_knots['key']
+        category_5_class = cyclone_au_bom_hazard_classes['classes'][0]
+        category_4_class = cyclone_au_bom_hazard_classes['classes'][1]
+        category_3_class = cyclone_au_bom_hazard_classes['classes'][2]
+        category_2_class = cyclone_au_bom_hazard_classes['classes'][3]
+        category_1_class = cyclone_au_bom_hazard_classes['classes'][4]
+        tropical_depression_class = cyclone_au_bom_hazard_classes['classes'][5]
+        expected = {
+            'tropical_depression': [
+                tropical_depression_class['numeric_default_min'],
+                tropical_depression_class['numeric_default_max'][
+                    unit_knots_key]
+            ],
+            'category_1': [
+                category_1_class['numeric_default_min'][unit_knots_key],
+                category_1_class['numeric_default_max'][unit_knots_key]
+            ],
+            'category_2': [
+                category_2_class['numeric_default_min'][unit_knots_key],
+                category_2_class['numeric_default_max'][unit_knots_key]
+            ],
+            'category_3': [
+                category_3_class['numeric_default_min'][unit_knots_key],
+                category_3_class['numeric_default_max'][unit_knots_key]
+            ],
+            'category_4': [
+                category_4_class['numeric_default_min'][unit_knots_key],
+                category_4_class['numeric_default_max'][unit_knots_key]
+            ],
+            'category_5': [
+                category_5_class['numeric_default_min'][unit_knots_key],
+                category_5_class['numeric_default_max']
+            ]
+        }
+        self.assertDictEqual(thresholds, expected)
+
+    def test_classification_value_maps(self):
+        """Test for classification_value_maps method."""
+        value_maps = default_classification_value_maps(flood_hazard_classes)
+        wet_class = flood_hazard_classes['classes'][0]
+        dry_class = flood_hazard_classes['classes'][1]
+        expected = {
+            'dry': dry_class['string_defaults'],
+            'wet': wet_class['string_defaults']
+        }
+        self.assertDictEqual(value_maps, expected)
+
+        value_maps = default_classification_value_maps(
+            cyclone_au_bom_hazard_classes)
+        category_5_class = cyclone_au_bom_hazard_classes['classes'][0]
+        category_4_class = cyclone_au_bom_hazard_classes['classes'][1]
+        category_3_class = cyclone_au_bom_hazard_classes['classes'][2]
+        category_2_class = cyclone_au_bom_hazard_classes['classes'][3]
+        category_1_class = cyclone_au_bom_hazard_classes['classes'][4]
+        tropical_depression_class = cyclone_au_bom_hazard_classes['classes'][5]
+        expected = {
+            'category_1': category_1_class.get('string_defaults', []),
+            'category_2': category_2_class.get('string_defaults', []),
+            'category_3': category_3_class.get('string_defaults', []),
+            'category_4': category_4_class.get('string_defaults', []),
+            'category_5': category_5_class.get('string_defaults', []),
+            'tropical_depression': tropical_depression_class.get(
+                'string_defaults', [])
+        }
+        self.assertDictEqual(value_maps, expected)
+
+    def test_unique_definition_key(self):
+        """Test to make sure all definitions have different key."""
+        keys = {}
+        for item in dir(definitions):
+            if not item.startswith("__"):
+                var = getattr(definitions, item)
+                if isinstance(var, dict):
+                    if not var.get('key'):
+                        continue
+                    if var.get('key') not in keys:
+                        keys[var.get('key')] = [var]
+                    else:
+                        keys[var.get('key')].append(var)
+        duplicate_keys = [k for k, v in keys.items() if len(v) > 1]
+        message = 'There are duplicate keys: %s\n' % ', '.join(duplicate_keys)
+        for duplicate_key in duplicate_keys:
+            message += 'Duplicate key: %s\n' % duplicate_key
+            for v in keys[duplicate_key]:
+                message += v['name'] + ' ' + v['description'] + '\n'
+        self.assertEqual(len(duplicate_keys), 0, message)
 
 
 if __name__ == '__main__':

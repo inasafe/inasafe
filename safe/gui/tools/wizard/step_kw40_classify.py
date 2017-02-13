@@ -16,6 +16,7 @@ from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_strings import (
     classify_raster_question, classify_vector_question)
+from safe.gui.tools.wizard.wizard_utils import skip_inasafe_field
 from safe.utilities.gis import is_raster_layer
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -76,7 +77,7 @@ class StepKwClassify(WizardStep, FORM_CLASS):
             pass
 
         # Check if possible to skip inasafe field step
-        if self.skip_inasafe_field(inasafe_fields):
+        if skip_inasafe_field(self.parent.layer, inasafe_fields):
             default_inasafe_fields = get_fields(
                 layer_purpose['key'], subcategory['key'], replace_null=True)
             # Check if it can go to inasafe default step
@@ -132,9 +133,10 @@ class StepKwClassify(WizardStep, FORM_CLASS):
         purpose = self.parent.step_kw_purpose.selected_purpose()
         subcategory = self.parent.step_kw_subcategory.selected_subcategory()
 
-        sel_cl = self.parent.step_kw_classification.selected_classification()
-        default_classes = sel_cl['classes']
-        classification_name = sel_cl['name']
+        classification = self.parent.step_kw_classification.\
+            selected_classification()
+        default_classes = classification['classes']
+        classification_name = classification['name']
 
         if is_raster_layer(self.parent.layer):
             self.lblClassify.setText(classify_raster_question % (
@@ -300,23 +302,3 @@ class StepKwClassify(WizardStep, FORM_CLASS):
                     QtCore.Qt.ItemIsDragEnabled)
                 tree_leaf.setData(0, QtCore.Qt.UserRole, value)
                 tree_leaf.setText(0, string_value)
-
-    def skip_inasafe_field(self, inasafe_fields):
-        """Check if it possible to skip inasafe field step.
-
-        The function will check if the layer has a specified field type.
-
-        :return: boolean. True if there are no specified field type.
-        """
-        layer_data_provider = self.parent.layer.dataProvider()
-        # Iterate through all inasafe fields
-        for inasafe_field in inasafe_fields:
-            for field in layer_data_provider.fields():
-                # Check the field type
-                if isinstance(inasafe_field['type'], list):
-                    if field.type() in inasafe_field['type']:
-                        return False
-                else:
-                    if field.type() == inasafe_field['type']:
-                        return False
-        return True

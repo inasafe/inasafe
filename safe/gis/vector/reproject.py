@@ -55,7 +55,7 @@ def reproject(layer, output_crs, callback=None):
 
     reprojected = create_memory_layer(
         output_layer_name, layer.geometryType(), output_crs, input_fields)
-    data_provider = reprojected.dataProvider()
+    reprojected.startEditing()
 
     crs_transform = QgsCoordinateTransform(input_crs, output_crs)
 
@@ -66,10 +66,12 @@ def reproject(layer, output_crs, callback=None):
         geom.transform(crs_transform)
         out_feature.setGeometry(geom)
         out_feature.setAttributes(feature.attributes())
-        data_provider.addFeatures([out_feature])
+        reprojected.addFeature(out_feature)
 
         if callback:
             callback(current=i, maximum=feature_count, step=processing_step)
+
+    reprojected.commitChanges()
 
     # We transfer keywords to the output.
     # We don't need to update keywords as the CRS is dynamic.

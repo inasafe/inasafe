@@ -1,9 +1,10 @@
 # coding=utf-8
-"""InaSAFE Dock"""
+"""InaSAFE Dock."""
 
 import os
 import shutil
 import logging
+import codecs
 
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import Qt, pyqtSlot
@@ -26,6 +27,7 @@ from safe.definitions.layer_purposes import (
 from safe.definitions.constants import (
     inasafe_keyword_version_key,
     HAZARD_EXPOSURE_VIEW,
+    HAZARD_EXPOSURE_BOUNDINGBOX,
     ANALYSIS_FAILED_BAD_INPUT,
     ANALYSIS_FAILED_BAD_CODE,
     ANALYSIS_SUCCESS,
@@ -42,7 +44,6 @@ from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.utilities import (
     get_error_message,
-    impact_attribution,
     add_ordered_combo_item,
     is_keyword_version_supported,
 )
@@ -268,7 +269,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             if not crs.isValid():
                 crs = None
 
-        if crs and extent:
+        mode = setting('analysis_extents_mode', HAZARD_EXPOSURE_VIEW)
+        if crs and extent and mode == HAZARD_EXPOSURE_BOUNDINGBOX:
             self.extent.set_user_extent(extent, crs)
 
         # It's better to set the show_rubber_bands after setting the user
@@ -497,7 +499,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 if not crs.isValid():
                     crs = None
 
-            if crs and extent:
+            mode = setting('analysis_extents_mode', HAZARD_EXPOSURE_VIEW)
+            if crs and extent and mode == HAZARD_EXPOSURE_BOUNDINGBOX:
                 self.extent.set_user_extent(extent, crs)
 
         else:
@@ -794,22 +797,23 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # Add result layer to QGIS
         add_impact_layers_to_canvas(self.impact_function, self.iface)
 
-        # Generate impact report
-        error_code, message = generate_impact_report(
-            self.impact_function, self.iface)
+        if setting('generate_report', True, bool):
+            # Generate impact report
+            error_code, message = generate_impact_report(
+                self.impact_function, self.iface)
 
-        if error_code == ImpactReport.REPORT_GENERATION_FAILED:
-            LOGGER.info(tr(
-                'The impact report could not be generated.'))
-            send_error_message(self, message)
+            if error_code == ImpactReport.REPORT_GENERATION_FAILED:
+                LOGGER.info(tr(
+                    'The impact report could not be generated.'))
+                send_error_message(self, message)
 
-        error_code, message = generate_impact_map_report(
-            self.impact_function, self.iface)
+            error_code, message = generate_impact_map_report(
+                self.impact_function, self.iface)
 
-        if error_code == ImpactReport.REPORT_GENERATION_FAILED:
-            LOGGER.info(tr(
-                'The impact report could not be generated.'))
-            send_error_message(self, message)
+            if error_code == ImpactReport.REPORT_GENERATION_FAILED:
+                LOGGER.info(tr(
+                    'The impact report could not be generated.'))
+                send_error_message(self, message)
 
         if self.zoom_to_impact_flag:
             self.iface.zoomToActiveLayer()
@@ -860,53 +864,26 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         disable_busy_cursor()
         self.busy = False
 
-    def show_impact(self, layer):
-        """Show the report or keywords from an impact layer.
+    def show_impact(self, report_path):
+        """Show the report.
 
         .. versionadded: 4.0
 
-        :param layer: QgsMapLayer instance that is now active
-        :type layer: QgsMapLayer, QgsRasterLayer, QgsVectorLayer
+        :param report_path: The path to the report.
+        :type report_path: basestring
         """
-        report_path = os.path.dirname(layer.source())
-        report_path = os.path.join(
-            report_path, 'output/impact-report-output.html')
+        # We can display an impact report.
+        # We need to open the file in UTF-8, the HTML may have some accents
+        with codecs.open(report_path, 'r', 'utf-8') as report_file:
+            report = report_file.read()
 
-        if os.path.exists(report_path):
-            # We can display an impact report.
-            LOGGER.debug('Showing Impact Report')
-
-            with open(report_path) as report_file:
-                report = report_file.read()
-
-            self.print_button.setEnabled(True)
-            # right now send the report as html texts, not message
-            send_static_message(self, report)
-            # also hide the question and show the show question button
-            self.show_question_button.setVisible(True)
-            self.question_group.setEnabled(True)
-            self.question_group.setVisible(False)
-
-        else:
-            # TODO : ET 9/12/16, need to check this with V4.
-            # There isn't report, we can display only keywords.
-            LOGGER.debug('Showing Impact Keywords')
-            keywords = self.keyword_io.read_keywords(layer)
-            if 'impact_summary' not in keywords:
-                return
-
-            report = m.Message()
-            report.add(LOGO_ELEMENT)
-            report.add(m.Heading(self.tr(
-                'Analysis Results'), **INFO_STYLE))
-            report.add(m.Text(keywords['impact_summary']))
-            report.add(impact_attribution(keywords))
-            self.print_button.setEnabled(True)
-            send_static_message(self, report)
-            # also hide the question and show the show question button
-            self.show_question_button.setVisible(True)
-            self.question_group.setEnabled(True)
-            self.question_group.setVisible(False)
+        self.print_button.setEnabled(True)
+        # right now send the report as html texts, not message
+        send_static_message(self, report)
+        # also hide the question and show the show question button
+        self.show_question_button.setVisible(True)
+        self.question_group.setEnabled(True)
+        self.question_group.setVisible(False)
 
     def show_generic_keywords(self, layer):
         """Show the keywords defined for the active layer.
@@ -961,9 +938,17 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 layer_purpose_exposure_breakdown['key'],
             ]
 
+            show_keywords = True
             if keywords.get('layer_purpose') in impacted_layer:
-                self.show_impact(layer)
-            else:
+                report_path = os.path.dirname(layer.source())
+                report_path = os.path.join(
+                    report_path, 'output/impact-report-output.html')
+
+                if os.path.exists(report_path):
+                    show_keywords = False
+                    self.show_impact(report_path)
+
+            if show_keywords:
                 if inasafe_keyword_version_key not in keywords.keys():
                     show_keyword_version_message(
                         self, 'No Version', self.inasafe_version)
@@ -1158,8 +1143,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         .. versionadded:: 4.0
         """
-        LOGGER.info(tr('Checking the state of the impact function.'))
-
         # First, we check if the dock is not busy.
         if self.busy:
             return False, None
@@ -1169,7 +1152,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         if not flag:
             send_static_message(self, message)
             self.run_button.setEnabled(False)
-            return None
+            self.extent.clear_next_analysis_extent()
+            return False, None
 
         # Finally, we need to check if an IF can run.
         impact_function = ImpactFunction()
@@ -1220,7 +1204,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 self.get_exposure_layer().crs())
 
             self.run_button.setEnabled(True)
-            LOGGER.info('The impact function is ready.')
+            send_static_message(self, ready_message())
             return impact_function
 
         elif status == PREPARE_FAILED_BAD_LAYER:
@@ -1289,8 +1273,5 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         if hazard_index == -1 or exposure_index == -1:
             message = getting_started_message()
             return False, message
-
-        # Now check if extents are ok for #1811
         else:
-            message = ready_message()
-            return True, message
+            return True, None

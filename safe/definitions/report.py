@@ -60,7 +60,6 @@ analysis_result_component = {
     'extra_args': {
         'header': tr('Analysis Results'),
         'hazard_header': tr('Hazard Zone'),
-        'value_header': tr('Count'),
     }
 }
 
@@ -411,7 +410,7 @@ map_report_extra_args = {
         'unknown_source': tr('Unknown'),
         'aggregation_not_used': tr('Not used')
     },
-    'version-title': tr('Software Version'),
+    'version-title': tr('Software'),
     'disclaimer-title': tr('Disclaimer'),
     'date-title': tr('Date'),
     'date-format': '%Y-%m-%d',
@@ -428,7 +427,7 @@ map_report_extra_args = {
     'supporters-title': tr('Report produced by'),
     'source-title': tr('Data Source'),
     'analysis-title': tr('Analysis Name'),
-    'spatial-reference-title': tr('Spatial Reference'),
+    'spatial-reference-title': tr('Reference'),
     'spatial-reference-format': tr(
         'Geographic Coordinates - {crs}')
 }

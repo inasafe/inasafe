@@ -34,6 +34,11 @@ buffer_steps = {
     'output_layer_name': 'buffer',
 }
 
+clean_geometry_steps = {
+    'step_name': tr('Cleaning geometry'),
+    'output_layer_name': '%s_geometry_cleaned',
+}
+
 clip_steps = {
     'step_name': tr('Clipping'),
     'output_layer_name': '%s_clipped',
@@ -66,7 +71,7 @@ recompute_counts_steps = {
 
 smart_clip_steps = {
     'step_name': tr('Smart clipping'),
-    'output_layer_name': 'indivisible_polygons_clipped',
+    'output_layer_name': 'exposure_intersect_hazard',
 }
 
 summary_1_aggregate_hazard_steps = {

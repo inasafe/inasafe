@@ -1,11 +1,11 @@
 # coding=utf-8
 import os
 
-import math
+from PyQt4 import QtCore
 from jinja2.exceptions import TemplateError
 
+from safe.definitions.default_settings import inasafe_default_settings
 from safe.definitions.utilities import definition
-from safe.utilities.rounding import population_rounding
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -117,3 +117,17 @@ def resolve_from_dictionary(dictionary, key_list, default_value=None):
         return current_value
     except KeyError:
         return default_value
+
+
+def value_from_inasafe_settings(key):
+    """Take value from InaSAFE settings.
+
+    :param key: settings key
+    :type key: str
+
+    :return: intended value
+    """
+    qsettings = QtCore.QSettings()
+    namespace = 'inasafe/{key}'
+    return qsettings.value(
+        namespace.format(key=key), inasafe_default_settings[key])

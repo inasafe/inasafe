@@ -54,7 +54,6 @@ def multi_buffering(layer, radii, callback=None):
     :return: The buffered vector layer.
     :rtype: QgsVectorLayer
     """
-
     # Layer output
     output_layer_name = buffer_steps['output_layer_name']
     processing_step = buffer_steps['step_name']

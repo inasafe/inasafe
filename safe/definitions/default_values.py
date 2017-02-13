@@ -10,7 +10,7 @@ __revision__ = '$Format:%H$'
 
 female_ratio_default_value = {
     'key': 'female_ratio_default_value',
-    'name': tr('Female Ratio Default Value'),
+    'name': tr('Female Ratio Global Default'),
     # https://www.cia.gov/library/publications/the-world-factbook/geos/xx.html
     # total population: 1.01 male(s)/female (2011 est.)
     'default_value': 0.5,
@@ -21,11 +21,11 @@ female_ratio_default_value = {
 
 feature_rate_default_value = {
     'key': 'feature_rate_default_value',
-    'name': tr('Feature Rate Default Value'),
+    'name': tr('Feature Rate Global Default'),
     'default_value': 1000000,
     'min_value': 0,
     'max_value': 1000000000,
-    'description': tr('Default value for feature rate per m^2')
+    'description': tr('Default value for feature rate per m²')
 }
 
 # Note(IS): I copy here to preserve the history
@@ -41,7 +41,8 @@ feature_rate_default_value = {
 # I wrote them and got this contact confirmation number: CTCU1K2
 
 # Default ratios for world population revised 21 December 2016.
-# https://www.cia.gov/library/publications/resources/the-world-factbook/fields/2010.html#4
+# https://www.cia.gov/library/publications/resources/the-world-factbook/
+# fields/2010.html#4
 
 # 0-14 years: 25.44% (male 963,981,944/female 898,974,458)
 # 15-24 years: 16.16% (male 611,311,930/female 572,229,547)

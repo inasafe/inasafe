@@ -79,9 +79,11 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         self.default_value_parameters = []
         self.default_value_parameter_container = None
 
+        # Flag for restore default values
+        self.is_restore_default = False
+
         # List of setting key and control
         self.boolean_settings = {
-            # 'useThreadingFlag': self.
             'visibleLayersOnlyFlag': self.cbxVisibleLayersOnly,
             'set_layer_from_title_flag': self.cbxSetLayerNameFromTitle,
             'setZoomToImpactFlag': self.cbxZoomToImpact,
@@ -91,7 +93,8 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             'template_warning_verbose': self.template_warning_checkbox,
             'showOrganisationLogoInDockFlag':
                 self.organisation_on_dock_checkbox,
-            'developer_mode': self.cbxDevMode
+            'developer_mode': self.cbxDevMode,
+            'generate_report': self.checkbox_generate_reports,
         }
         self.text_settings = {
             'keywordCachePath': self.leKeywordCachePath,
@@ -113,9 +116,10 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         self.grpNotImplemented.hide()
         self.adjustSize()
         self.restore_state()
-        # hack prevent showing use thread visible and set it false see #557
-        self.cbxUseThread.setChecked(True)
-        self.cbxUseThread.setVisible(False)
+
+        # Hide checkbox if not developers
+        if not self.cbxDevMode.isChecked():
+            self.checkbox_generate_reports.hide()
 
         # Set up listener for various UI
         self.custom_org_logo_checkbox.toggled.connect(
@@ -127,6 +131,13 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             self.set_templates_dir)
         self.custom_org_disclaimer_checkbox.toggled.connect(
             self.set_org_disclaimer)
+
+        # Set up listener for restore defaults button
+        self.restore_defaults = self.button_box_restore_defaults.button(
+            QtGui.QDialogButtonBox.RestoreDefaults)
+        self.restore_defaults.setCheckable(True)
+        self.restore_defaults.clicked.connect(
+            self.restore_defaults_ratio)
 
     def save_boolean_setting(self, key, check_box):
         """Save boolean setting according to check_box state.
@@ -178,9 +189,6 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
 
     def restore_state(self):
         """Reinstate the options based on the user's stored session info."""
-        flag = False
-        self.cbxUseThread.setChecked(flag)
-
         # Restore boolean setting as check box.
         for key, check_box in self.boolean_settings.items():
             self.restore_boolean_setting(key, check_box)
@@ -258,9 +266,6 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         # Save text settings
         for key, line_edit in self.text_settings.items():
             self.save_text_setting(key, line_edit)
-
-        self.settings.setValue(
-            'inasafe/useThreadingFlag', False)
 
         self.settings.setValue(
             'inasafe/north_arrow_path',
@@ -487,6 +492,11 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
 
     def restore_default_values_page(self):
         """Setup UI for default values setting."""
+        # Clear parameters so it doesn't add parameters when
+        # restore from changes.
+        if self.default_value_parameters:
+            self.default_value_parameters = []
+
         default_fields = all_default_fields()
         for default_field in default_fields:
             if default_field.get('type') == QVariant.Double:
@@ -512,17 +522,22 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             parameter.maximum_allowed_value = default_value.get(
                 'max_value', 100000000)
             parameter.help_text = default_value.get('description')
-            # Current value
-            qsetting_default_value = get_inasafe_default_value_qsetting(
-                self.settings, GLOBAL, default_field['key'])
 
-            # To avoid python error
-            if qsetting_default_value > parameter.maximum_allowed_value:
-                qsetting_default_value = parameter.maximum_allowed_value
-            if qsetting_default_value < parameter.minimum_allowed_value:
-                qsetting_default_value = parameter.minimum_allowed_value
+            # Check if user ask to restore to the most default value.
+            if self.is_restore_default:
+                parameter._value = default_value.get('default_value')
+            else:
+                # Current value
+                qsetting_default_value = get_inasafe_default_value_qsetting(
+                    self.settings, GLOBAL, default_field['key'])
 
-            parameter.value = qsetting_default_value
+                # To avoid python error
+                if qsetting_default_value > parameter.maximum_allowed_value:
+                    qsetting_default_value = parameter.maximum_allowed_value
+                if qsetting_default_value < parameter.minimum_allowed_value:
+                    qsetting_default_value = parameter.minimum_allowed_value
+
+                parameter.value = qsetting_default_value
 
             self.default_value_parameters.append(parameter)
 
@@ -545,3 +560,16 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
                 parameter.guid,
                 parameter.value
             )
+
+    def restore_defaults_ratio(self):
+        """Restore InaSAFE default ratio."""
+        # Set the flag to true because user ask to.
+        self.is_restore_default = True
+        # remove current default ratio
+        for i in reversed(range(self.default_values_layout.count())):
+            widget = self.default_values_layout.itemAt(i).widget()
+            if widget is not None:
+                widget.setParent(None)
+
+        # reload default ratio
+        self.restore_default_values_page()

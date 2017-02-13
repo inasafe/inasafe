@@ -1,16 +1,17 @@
 # coding=utf-8
-
-"""
-Reclassify a continuous vector layer.
-"""
+"""Reclassify a continuous vector layer."""
 
 from PyQt4.QtCore import QPyNullVariant
-from qgis.core import QGis, QgsField
+from qgis.core import QgsField
 
 from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
+from safe.definitions.layer_purposes import (
+    layer_purpose_hazard, layer_purpose_exposure)
 from safe.definitions.utilities import definition
 from safe.definitions.fields import hazard_class_field, hazard_value_field
 from safe.definitions.processing_steps import reclassify_vector_steps
+from safe.utilities.metadata import (
+    active_thresholds_value_maps, active_classification)
 from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -20,7 +21,7 @@ __revision__ = '$Format:%H$'
 
 
 @profile
-def reclassify(layer, callback=None):
+def reclassify(layer, exposure_key=None, callback=None):
     """Reclassify a continuous vector layer.
 
     This function will modify the input.
@@ -42,6 +43,9 @@ def reclassify(layer, callback=None):
     :param layer: The raster layer.
     :type layer: QgsRasterLayer
 
+    :param exposure_key: The exposure key.
+    :type exposure_key: str
+
     :param callback: A function to all to indicate progress. The function
         should accept params 'current' (int), 'maximum' (int) and 'step' (str).
         Defaults to None.
@@ -60,8 +64,17 @@ def reclassify(layer, callback=None):
     inasafe_fields = layer.keywords['inasafe_fields']
     continuous_column = inasafe_fields[hazard_value_field['key']]
 
-    ranges = layer.keywords.get('thresholds')
-    if not ranges:
+    if exposure_key:
+        classification_key = active_classification(
+            layer.keywords, exposure_key)
+        thresholds = active_thresholds_value_maps(layer.keywords, exposure_key)
+        layer.keywords['thresholds'] = thresholds
+        layer.keywords['classification'] = classification_key
+    else:
+        classification_key = layer.keywords.get('classification')
+        thresholds = layer.keywords.get('thresholds')
+
+    if not thresholds:
         raise InvalidKeywordsForProcessingAlgorithm(
             'thresholds are missing from the layer %s'
             % layer.keywords['layer_purpose'])
@@ -82,7 +95,7 @@ def reclassify(layer, callback=None):
     for feature in layer.getFeatures():
         attributes = feature.attributes()
         source_value = attributes[continuous_index]
-        classified_value = _classified_value(source_value, ranges)
+        classified_value = _classified_value(source_value, thresholds)
         if not classified_value:
             layer.deleteFeature(feature.id())
         else:
@@ -98,12 +111,12 @@ def reclassify(layer, callback=None):
         hazard_class_field['field_name'])
 
     value_map = {}
-    classifications = layer.keywords.get('classification')
-    hazard_classes = definition(classifications)['classes']
+
+    hazard_classes = definition(classification_key)['classes']
     for hazard_class in reversed(hazard_classes):
         value_map[hazard_class['key']] = [hazard_class['value']]
-    layer.keywords['value_map'] = value_map
 
+    layer.keywords['value_map'] = value_map
     layer.keywords['title'] = output_layer_name
 
     return layer

@@ -30,6 +30,8 @@ from safe.common.utilities import temp_dir
 from safe.common.version import get_version
 from safe.datastore.folder import Folder
 from safe.datastore.datastore import DataStore
+from safe.gis.vector.tools import remove_fields
+from safe.gis.vector.from_counts_to_ratios import from_counts_to_ratios
 from safe.gis.vector.prepare_vector_layer import prepare_vector_layer
 from safe.gis.vector.clean_geometry import clean_layer
 from safe.gis.vector.reproject import reproject
@@ -64,6 +66,7 @@ from safe.definitions.fields import (
     size_field,
     exposure_class_field,
     hazard_class_field,
+    count_ratio_mapping,
 )
 from safe.definitions.layer_purposes import (
     layer_purpose_exposure_impacted,
@@ -113,10 +116,11 @@ from safe.impact_function.style import (
     hazard_class_style,
     simple_polygon_without_brush,
 )
-from safe.gui.widgets.message import no_overlap_message
 from safe.utilities.gis import is_vector_layer, is_raster_layer
 from safe.utilities.i18n import tr
+from safe.utilities.unicode import get_string
 from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.metadata import active_thresholds_value_maps
 from safe.utilities.utilities import (
     replace_accentuated_characters, get_error_message)
 from safe.utilities.profiling import (
@@ -800,6 +804,32 @@ class ImpactFunction(object):
                     )
                     return PREPARE_FAILED_BAD_INPUT, message
 
+            # We need to check if the hazard is OK to run on the exposure.
+            hazard_keywords = self.hazard.keywords
+            exposure_key = self.exposure.keywords['exposure']
+            if not active_thresholds_value_maps(hazard_keywords, exposure_key):
+                warning_heading = m.Heading(
+                    tr('Incompatible exposure/hazard'), **WARNING_STYLE)
+                warning_message = tr(
+                    'The hazard layer is not set up for this kind of '
+                    'exposure. In InaSAFE, you need to define keywords in the '
+                    'hazard layer for each exposure type that you want to use '
+                    'with the hazard.')
+                suggestion_heading = m.Heading(
+                    tr('Suggestion'), **SUGGESTION_STYLE)
+                suggestion = tr(
+                    'Please select the hazard layer in the legend and then '
+                    'run the keyword wizard to define the needed keywords for '
+                    '{exposure_type} exposure.').format(
+                        exposure_type=exposure_key)
+
+                message = m.Message()
+                message.add(warning_heading)
+                message.add(warning_message)
+                message.add(suggestion_heading)
+                message.add(suggestion)
+                return PREPARE_FAILED_BAD_INPUT, message
+
             status, message = self._compute_analysis_extent()
             if status != PREPARE_SUCCESS:
                 return status, message
@@ -955,7 +985,13 @@ class ImpactFunction(object):
                 .format(error_message=name))
 
         if isinstance(layer, QgsVectorLayer) and check_fields:
-            check_inasafe_fields(layer)
+            geometries = [QGis.Point, QGis.Line, QGis.Polygon, QGis.NoGeometry]
+            if layer.geometryType() not in geometries:
+                raise Exception(
+                    'Geometric Error with your layer : '
+                    '{source}'.format(source=layer.source()))
+            else:
+                check_inasafe_fields(layer)
 
         return name
 
@@ -1021,9 +1057,16 @@ class ImpactFunction(object):
             suggestion_heading = m.Heading(
                 tr('Suggestion'), **SUGGESTION_STYLE)
             suggestion = tr(
-                'Check in your .qgis2/python/plugins directory that you do '
-                'not have a processing folder. You should use the Processing '
-                'plugin provided by QGIS.')
+                'InaSAFE depends on the QGIS Processing plugin. This is a '
+                'core plugin that ships with QGIS. It used to be possible to '
+                'install the processing plugin from the QGIS Plugin Manager, '
+                'however we advise you not to use these version since the '
+                'Plugin Manager version may be incompatible with the '
+                'version needed by InaSAFE. To resolve this issue, check in '
+                'your .qgis2/python/plugins directory if you have a '
+                'processing folder. If you do, remove the processing folder '
+                'and then restart QGIS. If this issue persists, please '
+                'report the problem to the InaSAFE team.')
             message = m.Message()
             message.add(warning_heading)
             message.add(warning_message)
@@ -1102,7 +1145,7 @@ class ImpactFunction(object):
                 self._datastore = Folder(temp_dir(sub_dir=self._unique_name))
 
             self._datastore.default_vector_format = 'geojson'
-            LOGGER.debug('Datastore : %s' % self.datastore.uri.absolutePath())
+        LOGGER.info('Datastore : %s' % self.datastore.uri_path)
 
         if self.debug_mode:
             self._datastore.use_index = True
@@ -1292,6 +1335,21 @@ class ImpactFunction(object):
             if self.debug_mode:
                 self.debug_layer(self.aggregation)
 
+            # We need to check if we can add default ratios to the exposure.
+            exposure = definition(self.exposure.keywords['exposure'])
+            keywords = self.exposure.keywords
+            # inasafe_default_values will not exist as we can't use default in
+            # the exposure layer.
+            keywords['inasafe_default_values'] = {}
+            for count_field in exposure['extra_fields']:
+                if count_field['key'] in count_ratio_mapping.keys():
+                    if count_field['key'] not in keywords['inasafe_fields']:
+                        # The exposure hasn't a count field, we should add it.
+                        ratio_field = count_ratio_mapping[count_field['key']]
+                        default = definition(ratio_field)['default_value']
+                        keywords['inasafe_default_values'][ratio_field] = (
+                            default['default_value'])
+
         else:
             self.set_state_info('aggregation', 'provided', True)
 
@@ -1302,11 +1360,6 @@ class ImpactFunction(object):
                 self.use_selected_features_only)
             # noinspection PyTypeChecker
             self.aggregation = prepare_vector_layer(self.aggregation)
-            if self.debug_mode:
-                self.debug_layer(self.aggregation)
-
-            self.set_state_process('aggregation', 'Add default values')
-            self.aggregation = add_default_values(self.aggregation)
             if self.debug_mode:
                 self.debug_layer(self.aggregation)
 
@@ -1324,6 +1377,63 @@ class ImpactFunction(object):
                 self.set_state_process(
                     'aggregation',
                     'Aggregation layer already in exposure CRS')
+
+            # We need to check if we can add default ratios to the exposure
+            # by looking also in the aggregation layer.
+            exposure_keywords = self.exposure.keywords
+            # The exposure might be a raster so without inasafe_fields.
+            exposure_fields = exposure_keywords.get('inasafe_fields', {})
+            exposure = definition(exposure_keywords['exposure'])
+            exposure_keywords['inasafe_default_values'] = {}
+            exposure_defaults = exposure_keywords['inasafe_default_values']
+            aggregation_keywords = self.aggregation.keywords
+            aggregation_fields = aggregation_keywords['inasafe_fields']
+            aggregation_default_fields = aggregation_keywords.get(
+                'inasafe_default_values', {})
+            for count_field in exposure['extra_fields']:
+                if count_field['key'] in count_ratio_mapping.keys():
+                    ratio_field = count_ratio_mapping[count_field['key']]
+                    if count_field['key'] not in exposure_fields:
+
+                        ratio_is_a_field = ratio_field in aggregation_fields
+                        ratio_is_a_constant = (
+                            ratio_field in aggregation_default_fields)
+
+                        if ratio_is_a_constant and ratio_is_a_field:
+                            # This should of course never happen! It would
+                            # be an error from the wizard. See #3809.
+                            # Let's raise an exception.
+                            raise Exception
+
+                        if ratio_is_a_field and not ratio_is_a_constant:
+                            # The ratio is a field, we do nothing here.
+                            # The ratio will be propagated to the
+                            # aggregate_hazard layer.
+                            # Let's skip to the next field.
+                            LOGGER.info(
+                                tr('{ratio} field detected, we will propagate '
+                                   'it to the exposure layer.').format(
+                                        ratio=ratio_field))
+                            continue
+
+                        if ratio_is_a_constant and not ratio_is_a_field:
+                            # It's a constant. We need to add to the exposure.
+                            exposure_defaults[ratio_field] = (
+                                aggregation_default_fields[ratio_field])
+                            LOGGER.info(
+                                tr('{ratio} constant detected, we will add it'
+                                   'to the exposure layer the exposure '
+                                   'layer.').format(ratio=ratio_field))
+
+                    else:
+                        if ratio_field in aggregation_fields:
+                            # The count field is in the exposure and the ratio
+                            # is in the aggregation. We need to remove it from
+                            # the aggregation. We remove the keyword too.
+                            remove_fields(
+                                self.aggregation,
+                                [aggregation_fields[ratio_field]])
+                            del aggregation_fields[ratio_field]
 
         self.set_state_process(
             'aggregation',
@@ -1360,7 +1470,8 @@ class ImpactFunction(object):
                 self.set_state_process(
                     'hazard', 'Classify continuous raster hazard')
                 # noinspection PyTypeChecker
-                self.hazard = reclassify_raster(self.hazard)
+                self.hazard = reclassify_raster(
+                    self.hazard, self.exposure.keywords['exposure'])
                 if self.debug_mode:
                     self.debug_layer(self.hazard)
 
@@ -1399,13 +1510,15 @@ class ImpactFunction(object):
             self.set_state_process(
                 'hazard',
                 'Classify continuous hazard and assign class names')
-            self.hazard = reclassify_vector(self.hazard)
+            self.hazard = reclassify_vector(
+                self.hazard, self.exposure.keywords['exposure'])
             if self.debug_mode:
                 self.debug_layer(self.hazard)
 
         self.set_state_process(
             'hazard', 'Assign classes based on value map')
-        self.hazard = update_value_map(self.hazard)
+        self.hazard = update_value_map(
+            self.hazard, self.exposure.keywords['exposure'])
         if self.debug_mode:
             self.debug_layer(self.hazard)
 
@@ -1450,20 +1563,11 @@ class ImpactFunction(object):
                 if self.debug_mode:
                     self.debug_layer(self.exposure)
 
-        exposure = self.exposure.keywords.get('exposure')
-        indivisible_keys = [f['key'] for f in indivisible_exposure]
-        geometry = self.exposure.geometryType()
-        if exposure in indivisible_keys and geometry != QGis.Point:
-            self.set_state_process(
-                'exposure',
-                'Smart clip')
-            self.exposure = smart_clip(
-                self.exposure, self._analysis_impacted)
-        else:
-            self.set_state_process(
-                'exposure',
-                'Clip the exposure layer with the analysis layer')
-            self.exposure = clip(self.exposure, self._analysis_impacted)
+        # We may need to add the size of the original feature. So don't want to
+        # split the feature yet.
+        self.set_state_process('exposure', 'Smart clip')
+        self.exposure = smart_clip(
+            self.exposure, self._analysis_impacted)
         if self.debug_mode:
             self.debug_layer(self.exposure, False)
 
@@ -1474,6 +1578,24 @@ class ImpactFunction(object):
         self.exposure = prepare_vector_layer(self.exposure)
         if self.debug_mode:
             self.debug_layer(self.exposure)
+
+        self.set_state_process('exposure', 'Compute ratios from counts')
+        self.exposure = from_counts_to_ratios(self.exposure)
+        if self.debug_mode:
+            self.debug_layer(self.exposure)
+
+        exposure = self.exposure.keywords.get('exposure')
+        geometry = self.exposure.geometryType()
+        indivisible_keys = [f['key'] for f in indivisible_exposure]
+        if exposure not in indivisible_keys and geometry != QGis.Point:
+            # We can now split features because the `prepare_vector_layer`
+            # might have added the size field.
+            self.set_state_process(
+                'exposure',
+                'Clip the exposure layer with the analysis layer')
+            self.exposure = clip(self.exposure, self._analysis_impacted)
+            if self.debug_mode:
+                self.debug_layer(self.exposure)
 
         self.set_state_process('exposure', 'Add default values')
         self.exposure = add_default_values(self.exposure)
@@ -1536,11 +1658,11 @@ class ImpactFunction(object):
                     'Intersect divisible features with the aggregate hazard')
                 self._exposure_impacted = intersection(
                     self._exposure, self._aggregate_hazard_impacted)
-                self.debug_layer(self._exposure)
+                self.debug_layer(self._exposure_impacted)
 
                 # If the layer has the size field, it means we need to
                 # recompute counts based on the old and new size.
-                fields = self.exposure.keywords['inasafe_fields']
+                fields = self._exposure_impacted.keywords['inasafe_fields']
                 if size_field['key'] in fields:
                     self.set_state_process(
                         'impact function',
@@ -1559,7 +1681,8 @@ class ImpactFunction(object):
                 self.debug_layer(self._exposure_impacted)
 
             if self._exposure_impacted:
-                self._exposure_impacted.keywords['title'] = 'exposure_impacted'
+                self._exposure_impacted.keywords['title'] = (
+                    layer_purpose_exposure_impacted['key'])
 
     @profile
     def post_process(self, layer):
@@ -1579,7 +1702,7 @@ class ImpactFunction(object):
                     layer, post_processor)
                 if valid:
                     self.set_state_process(
-                        'post_processor', post_processor['name'])
+                        'post_processor', get_string(post_processor['name']))
                     message = '{name} : Running'.format(
                         name=post_processor['name'])
 
@@ -1639,7 +1762,8 @@ class ImpactFunction(object):
         hazard_class = hazard_class_field['key']
         for layer in self.outputs:
             if is_vector_layer(layer):
-                if layer.geometryType() != QGis.NoGeometry:
+                without_geometries = [QGis.NoGeometry, QGis.UnknownGeometry]
+                if layer.geometryType() not in without_geometries:
                     display_not_exposed = False
                     if layer == self.impact or self.debug_mode:
                         display_not_exposed = True

@@ -1,11 +1,5 @@
 # coding=utf-8
-"""**Keyword IO implementation.**
-
-.. tip:: Provides functionality for reading and writing keywords from within
-   QGIS. It is an abstraction for the keywords system used by the underlying
-   library.
-
-"""
+"""Keyword IO implementation."""
 
 import logging
 import os
@@ -106,13 +100,15 @@ class KeywordIO(QObject):
         if keyword is None:
             return dictionary
         if keyword not in dictionary:
-            message = tr('No value was found in file %s for keyword %s' % (
-                filename, keyword))
+            message = tr(
+                'No value was found in file {filename} for keyword {keyword}'
+                .format(filename=filename, keyword=keyword))
             raise KeywordNotFoundError(message)
 
         return dictionary[keyword]
 
-    def read_keywords(self, layer, keyword=None):
+    @staticmethod
+    def read_keywords(layer, keyword=None):
         """Read keywords for a datasource and return them as a dictionary.
 
         This is a wrapper method that will 'do the right thing' to fetch
@@ -145,7 +141,8 @@ class KeywordIO(QObject):
         # Try to read from ISO metadata first.
         return read_iso19115_metadata(source, keyword)
 
-    def write_keywords(self, layer, keywords):
+    @staticmethod
+    def write_keywords(layer, keywords):
         """Write keywords for a datasource.
 
         This is a wrapper method that will 'do the right thing' to store
@@ -182,10 +179,10 @@ class KeywordIO(QObject):
         existing_keywords.update(keywords)
         try:
             self.write_keywords(layer, existing_keywords)
-        except OperationalError, e:
-            message = (
-                self.tr('Keyword database path: %s') %
-                self.keyword_db_path)
+        except OperationalError as e:
+            message = tr(
+                'Keyword database path: {keyword_db_path}'.format(
+                    keyword_db_path=self.keyword_db_path))
             raise KeywordDbError(str(e) + '\n' + message)
 
     def copy_keywords(
@@ -237,16 +234,17 @@ class KeywordIO(QObject):
                 keywords[key] = extra_keywords[key]
             write_iso19115_metadata(destination_file, keywords)
             # write_keywords_to_file(new_destination, keywords)
-        except Exception, e:
+        except Exception as e:
             message = self.tr(
                 'Failed to copy keywords file from : \n%s\nto\n%s: %s' % (
                     source_layer.source(), new_destination, str(e)))
             raise Exception(message)
         return
 
-# methods below here should be considered private
+    # methods below here should be considered private
 
-    def default_keyword_db_path(self):
+    @staticmethod
+    def default_keyword_db_path():
         """Helper to get the default path for the keywords file.
 
         :returns: The path to where the default location of the keywords
@@ -313,6 +311,7 @@ class KeywordIO(QObject):
             'continuous_hazard_unit',
             'value_map',  # attribute values
             'thresholds',  # attribute values
+            'value_maps',  # attribute values
             'inasafe_fields',
             'inasafe_default_values',
             'resample',
@@ -424,6 +423,8 @@ class KeywordIO(QObject):
                 'inasafe_fields',
                 'inasafe_default_values']:
             value = self._dict_to_row(value)
+        elif keyword == 'value_maps':
+            value = self._value_maps_row(value)
         elif keyword == 'thresholds':
             value = self._threshold_to_row(value)
         # In these KEYWORD cases we show the DESCRIPTION for
@@ -460,41 +461,142 @@ class KeywordIO(QObject):
         row.add(m.Cell(value, wrap_slash=wrap_slash))
         return row
 
-    @staticmethod
-    def _threshold_to_row(keyword_value):
+    def _threshold_to_row(self, thresholds_keyword):
         """Helper to make a message row from a threshold
 
         We are expecting something like this:
 
-            "{'high': [0, 3], "
-            "'medium': [3, 5], "
-            "'low': [5, 10]}"
+        {
+            'thresholds': {
+                'structure': {
+                    'ina_structure_flood_hazard_classification': {
+                        'classes': {
+                            'low': [1, 2],
+                            'medium': [3, 4],
+                            'high': [5, 6]
+                        },
+                        'active': True
+                    },
+                    'ina_structure_flood_hazard_4_class_classification':
+                    {
+                        'classes': {
+                            'low': [1, 2],
+                            'medium': [3, 4],
+                            'high': [5, 6],
+                            'very_high': [7, 8]
+                        },
+                        'active': False
+
+                    }
+                },
+                'population': {
+                    'ina_population_flood_hazard_classification': {
+                        'classes': {
+                            'low': [1, 2.5],
+                            'medium': [2.5, 4.5],
+                            'high': [4.5, 6]
+                        },
+                        'active': False
+                    },
+                    'ina_population_flood_hazard_4_class_classification':
+                    {
+                        'classes': {
+                            'low': [1, 2.5],
+                            'medium': [2.5, 4],
+                            'high': [4, 6],
+                            'very_high': [6, 8]
+                        },
+                        'active': True
+                    }
+                },
+            },
 
         Each value is a list with exactly two element [a, b], where a <= b.
 
-        :param keyword_value: Value of the keyword to be rendered. This must
-            be a string representation of a dict, or a dict.
-        :type keyword_value: basestring, dict
+        :param thresholds_keyword: Value of the keyword to be rendered. This
+            must be a string representation of a dict, or a dict.
+        :type thresholds_keyword: basestring, dict
 
         :returns: A table to be added into a cell in the keywords table.
         :rtype: safe.messaging.items.table
         """
-        if isinstance(keyword_value, basestring):
-            keyword_value = literal_eval(keyword_value)
+        if isinstance(thresholds_keyword, basestring):
+            thresholds_keyword = literal_eval(thresholds_keyword)
 
-        table = m.Table(style_class='table table-condensed')
+        for k, v in thresholds_keyword.items():
+            # If the v is not dictionary, it should be the old value maps.
+            # To handle thresholds in the Impact Function.
+            if not isinstance(v, dict):
+                table = m.Table(style_class='table table-condensed')
 
-        for key, value in keyword_value.items():
-            row = m.Row()
-            name = definition(key)['name'] if definition(key) else key
-            row.add(m.Cell(m.ImportantText(name)))
-            pretty_value = tr('%s to %s' % (value[0], value[1]))
-            row.add(m.Cell(pretty_value))
+                for key, value in thresholds_keyword.items():
+                    row = m.Row()
+                    name = definition(key)['name'] if definition(key) else key
+                    row.add(m.Cell(m.ImportantText(name)))
+                    pretty_value = tr('%s to %s' % (value[0], value[1]))
+                    row.add(m.Cell(pretty_value))
 
-            table.add(row)
+                    table.add(row)
+                return table
+
+        table = m.Table(style_class='table table-condensed table-striped')
+
+        i = 0
+        for exposure_key, classifications in thresholds_keyword.items():
+            i += 1
+            exposure = definition(exposure_key)
+            exposure_row = m.Row()
+            exposure_row.add(m.Cell(m.ImportantText('Exposure')))
+            exposure_row.add(m.Cell(m.Text(exposure['name'])))
+            exposure_row.add(m.Cell(''))
+            table.add(exposure_row)
+
+            active_classification = None
+            classification_row = m.Row()
+            classification_row.add(m.Cell(m.ImportantText('Classification')))
+            for classification, value in classifications.items():
+                if value.get('active'):
+                    active_classification = definition(classification)
+                    classification_row.add(
+                        m.Cell(active_classification['name']))
+                    classification_row.add(m.Cell(''))
+                    break
+
+            if not active_classification:
+                classification_row.add(m.Cell(tr('No classifications set.')))
+                classification_row.add(m.Cell(''))
+                continue
+
+            table.add(classification_row)
+
+            header = m.Row()
+            header.add(m.Cell(tr('Class name')))
+            header.add(m.Cell(tr('Minimum')))
+            header.add(m.Cell(tr('Maximum')))
+            table.add(header)
+            classes = active_classification.get('classes')
+            # Sort by value, put the lowest first
+            classes = sorted(classes, key=lambda k: k['value'])
+            for the_class in classes:
+                threshold = classifications[active_classification['key']][
+                    'classes'][the_class['key']]
+                row = m.Row()
+                row.add(m.Cell(the_class['name']))
+                row.add(m.Cell(threshold[0]))
+                row.add(m.Cell(threshold[1]))
+                table.add(row)
+
+            if i < len(thresholds_keyword):
+                # Empty row
+                empty_row = m.Row()
+                empty_row.add(m.Cell(''))
+                empty_row.add(m.Cell(''))
+                table.add(empty_row)
+
         return table
 
-    def _dict_to_row(self, keyword_value):
+    @staticmethod
+    def _dict_to_row(keyword_value):
         """Helper to make a message row from a keyword where value is a dict.
 
         .. versionadded:: 3.2
@@ -543,4 +645,114 @@ class KeywordIO(QObject):
                 row.add(m.Cell(value))
 
             table.add(row)
+        return table
+
+    @staticmethod
+    def _value_maps_row(value_maps_keyword):
+        """Helper to make a message row from a value maps.
+
+        Expected keywords:
+        'value_maps': {
+            'structure': {
+                'ina_structure_flood_hazard_classification': {
+                    'classes': {
+                        'low': [1, 2, 3],
+                        'medium': [4],
+                        'high': [5, 6]
+                    },
+                    'active': True
+                },
+                'ina_structure_flood_hazard_4_class_classification':
+                {
+                    'classes': {
+                        'low': [1],
+                        'medium': [2, 3, 4],
+                        'high': [5, 6, 7],
+                        'very_high': [8]
+                    },
+                    'active': False
+
+                }
+            },
+            'population': {
+                'ina_population_flood_hazard_classification': {
+                    'classes': {
+                        'low': [1],
+                        'medium': [2, 3],
+                        'high': [4, 5, 6]
+                    },
+                    'active': False
+                },
+                'ina_population_flood_hazard_4_class_classification':
+                {
+                    'classes': {
+                        'low': [1, 2],
+                        'medium': [3, 4],
+                        'high': [4, 5, 6],
+                        'very_high': [6, 7, 8]
+                    },
+                    'active': True
+                }
+            },
+        }
+
+        :param value_maps_keyword: Value of the keyword to be rendered. This
+            must be a string representation of a dict, or a dict.
+        :type value_maps_keyword: basestring, dict
+
+        :returns: A table to be added into a cell in the keywords table.
+        :rtype: safe.messaging.items.table
+        """
+        if isinstance(value_maps_keyword, basestring):
+            value_maps_keyword = literal_eval(value_maps_keyword)
+
+        table = m.Table(style_class='table table-condensed table-striped')
+
+        i = 0
+        for exposure_key, classifications in value_maps_keyword.items():
+            i += 1
+            exposure = definition(exposure_key)
+            exposure_row = m.Row()
+            exposure_row.add(m.Cell(m.ImportantText(tr('Exposure'))))
+            exposure_row.add(m.Cell(exposure['name']))
+            table.add(exposure_row)
+
+            classification_row = m.Row()
+            classification_row.add(m.Cell(m.ImportantText(tr(
+                'Classification'))))
+            active_classification = None
+            for classification, value in classifications.items():
+                if value.get('active'):
+                    active_classification = definition(classification)
+                    classification_row.add(
+                        m.Cell(active_classification['name']))
+                    break
+
+            if not active_classification:
+                classification_row.add(m.Cell(tr('No classifications set.')))
+                continue
+            table.add(classification_row)
+
+            header = m.Row()
+            header.add(m.Cell(tr('Class name')))
+            header.add(m.Cell(tr('Values')))
+            table.add(header)
+            classes = active_classification.get('classes')
+            # Sort by value, put the lowest first
+            classes = sorted(classes, key=lambda k: k['value'])
+            for the_class in classes:
+                value_map = classifications[active_classification['key']][
+                    'classes'].get(the_class['key'], [])
+                row = m.Row()
+                row.add(m.Cell(the_class['name']))
+                row.add(m.Cell(', '.join([str(v) for v in value_map])))
+                table.add(row)
+
+            if i < len(value_maps_keyword):
+                # Empty row
+                empty_row = m.Row()
+                empty_row.add(m.Cell(''))
+                empty_row.add(m.Cell(''))
+                table.add(empty_row)
+
         return table

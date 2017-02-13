@@ -20,10 +20,13 @@ from safe.definitions.layer_purposes import (
     layer_purpose_hazard, layer_purpose_exposure, layer_purpose_aggregation)
 from safe.definitions.hazard import (
     hazard_volcano, hazard_flood, hazard_earthquake)
-from safe.definitions.exposure import exposure_structure, exposure_population
+from safe.definitions.exposure import (
+    exposure_structure,
+    exposure_population,
+    exposure_land_cover)
 from safe.definitions.hazard_category import hazard_category_multiple_event
 from safe.definitions.hazard_classifications import (
-    volcano_hazard_classes, generic_hazard_classes, flood_hazard_classes)
+    flood_hazard_classes, volcano_hazard_classes)
 from safe.definitions.constants import no_field
 from safe.definitions.fields import (
     aggregation_name_field,
@@ -39,6 +42,7 @@ from safe.definitions.units import count_exposure_unit, unit_metres
 
 from safe.gui.tools.wizard.wizard_dialog import WizardDialog
 from safe.definitions.utilities import get_compulsory_fields
+from safe.utilities.unicode import byteify
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -146,19 +150,194 @@ class TestKeywordWizard(unittest.TestCase):
         self.assertIsNotNone(layer.dataProvider())
         # Initialize dialog
         # noinspection PyTypeChecker
-        dialog = WizardDialog()
+        dialog = WizardDialog(iface=IFACE)
         # It shouldn't raise any exception although the xml is invalid
         dialog.set_keywords_creation_mode(layer)
 
+    def test_hazard_without_inasafe_fields(self):
+        """Test keyword wizard for layer without inasafe fields."""
+        # cloning layer that has no inasafe fields
+        layer = load_test_vector_layer(
+            'hazard', 'classified_generic_polygon.shp', clone=True)
+
+        # noinspection PyTypeChecker
+        dialog = WizardDialog(iface=IFACE)
+        dialog.set_keywords_creation_mode(layer)
+
+        # check if in select purpose step
+        self.check_current_step(dialog.step_kw_purpose)
+
+        # Select hazard
+        self.select_from_list_widget(
+            layer_purpose_hazard['name'], dialog.step_kw_purpose.lstCategories)
+
+        # Click next to select hazard
+        dialog.pbnNext.click()
+
+        # Check if in select hazard step
+        self.check_current_step(dialog.step_kw_subcategory)
+
+        # select earthquake
+        self.select_from_list_widget(
+            hazard_earthquake['name'],
+            dialog.step_kw_subcategory.lstSubcategories)
+
+        # Click next to select earthquake
+        dialog.pbnNext.click()
+
+        # Check if in select hazard category step
+        self.check_current_step(dialog.step_kw_hazard_category)
+
+        # select multiple event
+        self.select_from_list_widget(
+            hazard_category_multiple_event['name'],
+            dialog.step_kw_hazard_category.lstHazardCategories)
+
+        # Click next to select multiple event
+        dialog.pbnNext.click()
+
+        # Check if in select layer mode step
+        self.check_current_step(dialog.step_kw_layermode)
+
+        # select classified mode
+        self.select_from_list_widget(
+            layer_mode_classified['name'],
+            dialog.step_kw_layermode.lstLayerModes)
+
+        # Click next to select classified
+        dialog.pbnNext.click()
+
+        # Check if in select field step
+        self.check_current_step(dialog.step_kw_field)
+
+        # select h_zone field
+        self.select_from_list_widget(
+            'h_zone',
+            dialog.step_kw_field.lstFields)
+
+        # Click next to select h_zone
+        dialog.pbnNext.click()
+
+        # Check if in multi classification step
+        self.check_current_step(dialog.step_kw_multi_classifications)
+
+        # Click next to finish multi classifications step
+        dialog.pbnNext.click()
+
+        # Check if in source step
+        self.check_current_step(dialog.step_kw_source)
+
+        # Fill source form
+        dialog.step_kw_source.leSource.setText(source)
+        dialog.step_kw_source.leSource_scale.setText(source_scale)
+        dialog.step_kw_source.leSource_url.setText(source_url)
+        dialog.step_kw_source.ckbSource_date.setChecked(True)
+        dialog.step_kw_source.dtSource_date.setDateTime(source_date)
+        dialog.step_kw_source.leSource_license.setText(source_license)
+
+        # Click next to finish source step and go to title step
+        dialog.pbnNext.click()
+
+        # Check if in title step
+        self.check_current_step(dialog.step_kw_title)
+
+        # Fill title form
+        dialog.step_kw_title.leTitle.setText(layer_title)
+
+        # Click next to finish title step and go to summary step
+        dialog.pbnNext.click()
+
+        # Check if in summary step
+        self.check_current_step(dialog.step_kw_summary)
+
+        # Click finish
+        dialog.pbnNext.click()
+
+        # Checking keyword created
+        expected_keyword = {
+            'scale': source_scale,
+            'hazard_category': hazard_category_multiple_event['key'],
+            'license': source_license,
+            'source': source,
+            'url': source_url,
+            'title': layer_title,
+            'hazard': hazard_earthquake['key'],
+            'inasafe_fields':
+                {hazard_value_field['key']: u'h_zone'},
+            'value_maps': layer.keywords['value_maps'],
+            'date': source_date,
+            'layer_geometry': layer_geometry_polygon['key'],
+            'layer_purpose': layer_purpose_hazard['key'],
+            'layer_mode': layer_mode_classified['key']
+        }
+
+        real_keywords = dialog.get_keywords()
+        self.assertDictEqual(real_keywords, expected_keyword)
+
+    def test_aggregation_without_inasafe_fields(self):
+        """Test keyword wizard for layer without inasafe fields."""
+        layer = load_test_vector_layer(
+            'aggregation', 'district_osm_jakarta.geojson', clone=True)
+
+        # noinspection PyTypeChecker
+        dialog = WizardDialog(iface=IFACE)
+        dialog.set_keywords_creation_mode(layer)
+
+        # check if in select purpose step
+        self.check_current_step(dialog.step_kw_purpose)
+
+        # Check aggregation
+        self.check_current_text(
+            layer_purpose_aggregation['name'],
+            dialog.step_kw_purpose.lstCategories)
+
+        # Click next
+        dialog.pbnNext.click()
+
+        # check if in step field
+        self.check_current_step(dialog.step_kw_field)
+
+        # Check aggregation
+        self.check_current_text(
+            layer.keywords['inasafe_fields']['aggregation_name_field'],
+            dialog.step_kw_field.lstFields)
+
+        # Click next
+        dialog.pbnNext.click()
+
+        # Check if in default inasafe fields
+        self.check_current_step(dialog.step_kw_default_inasafe_fields)
+
+        # Click next
+        dialog.pbnNext.click()
+
+        # Check if in source step
+        self.check_current_step(dialog.step_kw_source)
+
+        # Click next
+        dialog.pbnNext.click()
+
+        # Check if in title step
+        self.check_current_step(dialog.step_kw_title)
+
+        # Click next
+        dialog.pbnNext.click()
+
+        # Check if in summary step
+        self.check_current_step(dialog.step_kw_summary)
+
+        # Click next
+        dialog.pbnNext.click()
+
     def test_hazard_volcano_polygon_keyword(self):
-        """Test keyword wizard for volcano hazard polygon"""
+        """Test keyword wizard for volcano hazard polygon."""
         layer = clone_shp_layer(
             name='volcano_krb',
             include_keywords=False,
             source_directory=standard_data_path('hazard'))
 
         # noinspection PyTypeChecker
-        dialog = WizardDialog()
+        dialog = WizardDialog(iface=IFACE)
         dialog.set_keywords_creation_mode(layer)
 
         # Check if in select purpose step
@@ -204,17 +383,6 @@ class TestKeywordWizard(unittest.TestCase):
         # Click next to select classified
         dialog.pbnNext.click()
 
-        # Check if in select classification step
-        self.check_current_step(dialog.step_kw_classification)
-
-        # select volcano hazard classification
-        self.select_from_list_widget(
-            volcano_hazard_classes['name'],
-            dialog.step_kw_classification.lstClassifications)
-
-        # Click next to select volcano hazard classification
-        dialog.pbnNext.click()
-
         # Check if in select field step
         self.check_current_step(dialog.step_kw_field)
 
@@ -224,23 +392,17 @@ class TestKeywordWizard(unittest.TestCase):
         # Click next to select KRB
         dialog.pbnNext.click()
 
-        # Check if in classify step
-        self.check_current_step(dialog.step_kw_classify)
+        # Check if in multi classification step
+        self.check_current_step(dialog.step_kw_multi_classifications)
 
-        # select value map
-        classification = dialog.step_kw_classification.\
-            selected_classification()
-        default_classes = classification['classes']
-        unassigned_values = []  # no need to check actually, not save in file
-        assigned_values = {
-            'low': ['Kawasan Rawan Bencana I'],
-            'medium': ['Kawasan Rawan Bencana II'],
-            'high': ['Kawasan Rawan Bencana III']
-        }
-        dialog.step_kw_classify.populate_classified_values(
-            unassigned_values, assigned_values, default_classes)
+        # Change combo box
+        dialog.step_kw_multi_classifications.exposure_combo_boxes[
+            0].setCurrentIndex(1)
 
-        # Click next to finish value mapping
+        # Click save
+        dialog.step_kw_multi_classifications.save_button.click()
+
+        # Click next to finish multi classifications step
         dialog.pbnNext.click()
 
         # select inasafe fields step
@@ -309,9 +471,19 @@ class TestKeywordWizard(unittest.TestCase):
                     hazard_value_field['key']: u'KRB',
                     hazard_name_field['key']: u'volcano',
                  },
-            'value_map': assigned_values,
+            'value_maps': {
+                exposure_land_cover['key']: {
+                    volcano_hazard_classes['key']: {
+                        'active': True,
+                        'classes': {
+                            u'high': [u'Kawasan Rawan Bencana III'],
+                            u'low': [u'Kawasan Rawan Bencana I'],
+                            u'medium': [u'Kawasan Rawan Bencana II']
+                        }
+                    }
+                }
+            },
             'date': source_date,
-            'classification': volcano_hazard_classes['key'],
             'layer_geometry': layer_geometry_polygon['key'],
             'layer_purpose': layer_purpose_hazard['key'],
             'layer_mode': layer_mode_classified['key']
@@ -320,159 +492,12 @@ class TestKeywordWizard(unittest.TestCase):
         real_keywords = dialog.get_keywords()
         self.assertDictEqual(real_keywords, expected_keyword)
 
-    def test_layer_without_inasafe_fields(self):
-        """Test keyword wizard for layer without inasafe fields."""
-        # cloning layer that has no inasafe fields
-        layer = load_test_vector_layer(
-            'hazard', 'classified_generic_polygon.shp', clone=True)
-
-        # noinspection PyTypeChecker
-        dialog = WizardDialog()
-        dialog.set_keywords_creation_mode(layer)
-
-        # check if in select purpose step
-        self.check_current_step(dialog.step_kw_purpose)
-
-        # Select hazard
-        self.select_from_list_widget(
-            layer_purpose_hazard['name'], dialog.step_kw_purpose.lstCategories)
-
-        # Click next to select hazard
-        dialog.pbnNext.click()
-
-        # Check if in select hazard step
-        self.check_current_step(dialog.step_kw_subcategory)
-
-        # select earthquake
-        self.select_from_list_widget(
-            hazard_earthquake['name'],
-            dialog.step_kw_subcategory.lstSubcategories)
-
-        # Click next to select earthquake
-        dialog.pbnNext.click()
-
-        # Check if in select hazard category step
-        self.check_current_step(dialog.step_kw_hazard_category)
-
-        # select multiple event
-        self.select_from_list_widget(
-            hazard_category_multiple_event['name'],
-            dialog.step_kw_hazard_category.lstHazardCategories)
-
-        # Click next to select multiple event
-        dialog.pbnNext.click()
-
-        # Check if in select layer mode step
-        self.check_current_step(dialog.step_kw_layermode)
-
-        # select classified mode
-        self.select_from_list_widget(
-            layer_mode_classified['name'],
-            dialog.step_kw_layermode.lstLayerModes)
-
-        # Click next to select classified
-        dialog.pbnNext.click()
-
-        # Check if in select classification step
-        self.check_current_step(dialog.step_kw_classification)
-
-        # select generic hazard classification
-        self.select_from_list_widget(
-            generic_hazard_classes['name'],
-            dialog.step_kw_classification.lstClassifications)
-
-        # Click next to select generic hazard classification
-        dialog.pbnNext.click()
-
-        # Check if in select field step
-        self.check_current_step(dialog.step_kw_field)
-
-        # select h_zone field
-        self.select_from_list_widget(
-            'h_zone',
-            dialog.step_kw_field.lstFields)
-
-        # Click next to select h_zone
-        dialog.pbnNext.click()
-
-        # Check if in classify step
-        self.check_current_step(dialog.step_kw_classify)
-
-        # select value map
-        classification = dialog.step_kw_classification.\
-            selected_classification()
-        default_classes = classification['classes']
-        unassigned_values = []  # no need to check actually, not save in file
-        assigned_values = {
-            'low': ['Low Hazard Zone'],
-            'medium': ['Medium Hazard Zone'],
-            'high': ['High hazard Zone']
-        }
-        dialog.step_kw_classify.populate_classified_values(
-            unassigned_values, assigned_values, default_classes)
-
-        # Click next to finish value mapping
-        dialog.pbnNext.click()
-
-        # Check if in source step
-        self.check_current_step(dialog.step_kw_source)
-
-        # Fill source form
-        dialog.step_kw_source.leSource.setText(source)
-        dialog.step_kw_source.leSource_scale.setText(source_scale)
-        dialog.step_kw_source.leSource_url.setText(source_url)
-        dialog.step_kw_source.ckbSource_date.setChecked(True)
-        dialog.step_kw_source.dtSource_date.setDateTime(source_date)
-        dialog.step_kw_source.leSource_license.setText(source_license)
-
-        # Click next to finish source step and go to title step
-        dialog.pbnNext.click()
-
-        # Check if in title step
-        self.check_current_step(dialog.step_kw_title)
-
-        # Fill title form
-        dialog.step_kw_title.leTitle.setText(layer_title)
-
-        # Click next to finish title step and go to summary step
-        dialog.pbnNext.click()
-
-        # Check if in summary step
-        self.check_current_step(dialog.step_kw_summary)
-
-        # Click finish
-        dialog.pbnNext.click()
-
-        # Checking keyword created
-        expected_keyword = {
-            'scale': source_scale,
-            'hazard_category': hazard_category_multiple_event['key'],
-            'license': source_license,
-            'source': source,
-            'url': source_url,
-            'title': layer_title,
-            'hazard': hazard_earthquake['key'],
-            'inasafe_fields':
-                {
-                    hazard_value_field['key']: u'h_zone'
-                },
-            'value_map': assigned_values,
-            'date': source_date,
-            'classification': generic_hazard_classes['key'],
-            'layer_geometry': layer_geometry_polygon['key'],
-            'layer_purpose': layer_purpose_hazard['key'],
-            'layer_mode': layer_mode_classified['key']
-        }
-
-        real_keywords = dialog.get_keywords()
-        self.assertDictEqual(real_keywords, expected_keyword)
-
-    def test_existing_keywords_hazard_volcano_polygon(self):
+    def test_hazard_volcano_polygon_existing_keywords(self):
         """Test existing keyword for hazard volcano polygon."""
         layer = load_test_vector_layer(
             'hazard', 'volcano_krb.shp', clone=True)
         # noinspection PyTypeChecker
-        dialog = WizardDialog()
+        dialog = WizardDialog(iface=IFACE)
         dialog.set_keywords_creation_mode(layer)
 
         # Check if in select purpose step
@@ -518,17 +543,6 @@ class TestKeywordWizard(unittest.TestCase):
         # Click next to select classified
         dialog.pbnNext.click()
 
-        # Check if in select classification step
-        self.check_current_step(dialog.step_kw_classification)
-
-        # Check if volcano class is selected
-        self.check_current_text(
-            volcano_hazard_classes['name'],
-            dialog.step_kw_classification.lstClassifications)
-
-        # Click next to select volcano classes
-        dialog.pbnNext.click()
-
         # Check if in select field step
         self.check_current_step(dialog.step_kw_field)
 
@@ -538,10 +552,10 @@ class TestKeywordWizard(unittest.TestCase):
         # Click next to select KRB
         dialog.pbnNext.click()
 
-        # Check if in classify step
-        self.check_current_step(dialog.step_kw_classify)
+        # Check if in select classification step
+        self.check_current_step(dialog.step_kw_multi_classifications)
 
-        # Click next to finish value mapping
+        # Click next to finish multi classifications step
         dialog.pbnNext.click()
 
         # select additional keywords / inasafe fields step
@@ -602,7 +616,7 @@ class TestKeywordWizard(unittest.TestCase):
         dialog.pbnNext.click()
 
         self.assertDictEqual(
-            layer.keywords['value_map'], dialog.get_keywords()['value_map'])
+            layer.keywords['value_maps'], dialog.get_keywords()['value_maps'])
 
     def test_exposure_structure_polygon_keyword(self):
         """Test keyword wizard for exposure structure polygon"""
@@ -613,7 +627,7 @@ class TestKeywordWizard(unittest.TestCase):
         self.assertIsNotNone(layer)
 
         # noinspection PyTypeChecker
-        dialog = WizardDialog()
+        dialog = WizardDialog(iface=IFACE)
         dialog.qsettings = None
         dialog.set_keywords_creation_mode(layer)
 
@@ -650,6 +664,16 @@ class TestKeywordWizard(unittest.TestCase):
         # Click next to select classified
         dialog.pbnNext.click()
 
+        # Check if in select field step
+        self.check_current_step(dialog.step_kw_field)
+
+        # select TYPE field
+        self.select_from_list_widget(
+            'TYPE', dialog.step_kw_field.lstFields)
+
+        # Click next to select TYPE
+        dialog.pbnNext.click()
+
         # Check if in select classification step
         self.check_current_step(dialog.step_kw_classification)
 
@@ -659,16 +683,6 @@ class TestKeywordWizard(unittest.TestCase):
             dialog.step_kw_classification.lstClassifications)
 
         # Click next to select the classifications
-        dialog.pbnNext.click()
-
-        # Check if in select field step
-        self.check_current_step(dialog.step_kw_field)
-
-        # select TYPE field
-        self.select_from_list_widget(
-            'TYPE', dialog.step_kw_field.lstFields)
-
-        # Click next to select TYPE
         dialog.pbnNext.click()
 
         # Check if in classify step
@@ -758,12 +772,12 @@ class TestKeywordWizard(unittest.TestCase):
 
         self.assertDictEqual(real_keywords, expected_keyword)
 
-    def test_existing_keywords_exposure_structure_polygon(self):
+    def test_exposure_structure_polygon_existing_keywords(self):
         """Test existing keyword for exposure structure polygon."""
         layer = load_test_vector_layer(
             'exposure', 'buildings.shp', clone=True)
         # noinspection PyTypeChecker
-        dialog = WizardDialog()
+        dialog = WizardDialog(iface=IFACE)
         dialog.set_keywords_creation_mode(layer)
 
         # Check if in select purpose step
@@ -799,6 +813,15 @@ class TestKeywordWizard(unittest.TestCase):
         # Click next to select classified
         dialog.pbnNext.click()
 
+        # Check if in select field step
+        self.check_current_step(dialog.step_kw_field)
+
+        # Check if TYPE is selected
+        self.check_current_text('TYPE', dialog.step_kw_field.lstFields)
+
+        # Click next to select TYPE
+        dialog.pbnNext.click()
+
         # Check if in select classification step
         self.check_current_step(dialog.step_kw_classification)
 
@@ -808,15 +831,6 @@ class TestKeywordWizard(unittest.TestCase):
             dialog.step_kw_classification.lstClassifications)
 
         # Click next to select the classifications
-        dialog.pbnNext.click()
-
-        # Check if in select field step
-        self.check_current_step(dialog.step_kw_field)
-
-        # Check if TYPE is selected
-        self.check_current_text('TYPE', dialog.step_kw_field.lstFields)
-
-        # Click next to select TYPE
         dialog.pbnNext.click()
 
         # Check if in classify step
@@ -901,7 +915,7 @@ class TestKeywordWizard(unittest.TestCase):
         layer.keywords = {}
 
         # noinspection PyTypeChecker
-        dialog = WizardDialog()
+        dialog = WizardDialog(iface=IFACE)
         dialog.set_keywords_creation_mode(layer)
 
         # Check if in select purpose step
@@ -969,8 +983,8 @@ class TestKeywordWizard(unittest.TestCase):
         real_keywords = dialog.get_keywords()
         self.assertDictEqual(real_keywords, expected_keyword)
 
-    def test_existing_aggregation_keyword(self):
-        """Test Aggregation Keywords"""
+    def test_aggregation_existing_keyword(self):
+        """Test Keyword wizard for aggregation layer with keywords."""
         layer = load_test_vector_layer(
             'gisv4', 'aggregation', 'small_grid.geojson', clone_to_memory=True)
 
@@ -985,7 +999,7 @@ class TestKeywordWizard(unittest.TestCase):
         layer.keywords = expected_keyword
 
         # noinspection PyTypeChecker
-        dialog = WizardDialog()
+        dialog = WizardDialog(iface=IFACE)
         dialog.set_keywords_creation_mode(layer)
 
         # Check if in select purpose step
@@ -1056,7 +1070,7 @@ class TestKeywordWizard(unittest.TestCase):
         self.assertIsNotNone(layer)
 
         # noinspection PyTypeChecker
-        dialog = WizardDialog()
+        dialog = WizardDialog(iface=IFACE)
         dialog.set_keywords_creation_mode(layer)
 
         # Check if in select purpose step
@@ -1170,8 +1184,8 @@ class TestKeywordWizard(unittest.TestCase):
 
         self.assertDictEqual(real_keywords, expected_keyword)
 
-    def test_existing_exposure_population_polygon_keyword(self):
-        """Test existing exposure population polygon keyword"""
+    def test_exposure_population_polygon_existing_keyword(self):
+        """Test existing exposure population polygon with keyword."""
         layer = load_test_vector_layer(
             'exposure', 'census.geojson', clone_to_memory=True)
         expected_keyword = {
@@ -1194,7 +1208,7 @@ class TestKeywordWizard(unittest.TestCase):
         layer.keywords = expected_keyword
 
         # noinspection PyTypeChecker
-        dialog = WizardDialog()
+        dialog = WizardDialog(iface=IFACE)
         dialog.set_keywords_creation_mode(layer)
 
         # Check if in select purpose step
@@ -1294,8 +1308,8 @@ class TestKeywordWizard(unittest.TestCase):
 
         self.assertDictEqual(real_keywords, expected_keyword)
 
-    def test_classified_raster(self):
-        """Test classified raster."""
+    def test_classified_raster_keywords(self):
+        """Test keyword wizard for classified raster."""
         path = standard_data_path('hazard', 'classified_flood_20_20.asc')
         message = "Path %s is not found" % path
         self.assertTrue(os.path.exists(path), message)
@@ -1308,7 +1322,7 @@ class TestKeywordWizard(unittest.TestCase):
         layer.keywords = {}
 
         # noinspection PyTypeChecker
-        dialog = WizardDialog()
+        dialog = WizardDialog(iface=IFACE)
         dialog.set_keywords_creation_mode(layer)
 
         # Check if in select purpose step
@@ -1354,34 +1368,17 @@ class TestKeywordWizard(unittest.TestCase):
         # Click next to select classified
         dialog.pbnNext.click()
 
-        # Check if in select classification step
-        self.check_current_step(dialog.step_kw_classification)
+        # Check if in multi classification step
+        self.check_current_step(dialog.step_kw_multi_classifications)
 
-        # select generic hazard classification
-        self.select_from_list_widget(
-            generic_hazard_classes['name'],
-            dialog.step_kw_classification.lstClassifications)
+        # Change combo box
+        dialog.step_kw_multi_classifications.exposure_combo_boxes[
+            0].setCurrentIndex(1)
 
-        # Click next to select generic classification
-        dialog.pbnNext.click()
+        # Click save
+        dialog.step_kw_multi_classifications.save_button.click()
 
-        # Check if in classify step
-        self.check_current_step(dialog.step_kw_classify)
-
-        # select value map
-        classification = dialog.step_kw_classification. \
-            selected_classification()
-        default_classes = classification['classes']
-        unassigned_values = []  # no need to check actually, not save in file
-        assigned_values = {
-            u'low': [1.0],
-            u'medium': [2.0],
-            u'high': [3.0]
-        }
-        dialog.step_kw_classify.populate_classified_values(
-            unassigned_values, assigned_values, default_classes)
-
-        # Click next to finish value mapping
+        # Click next to finish multi classifications step
         dialog.pbnNext.click()
 
         # Check if in source step
@@ -1420,30 +1417,32 @@ class TestKeywordWizard(unittest.TestCase):
             'url': source_url,
             'title': layer_title,
             'hazard': hazard_flood['key'],
-            'value_map': assigned_values,
             'date': source_date,
-            'classification': generic_hazard_classes['key'],
             'layer_geometry': layer_geometry_raster['key'],
             'layer_purpose': layer_purpose_hazard['key'],
-            'layer_mode': layer_mode_classified['key']
+            'layer_mode': layer_mode_classified['key'],
+            'value_maps': {
+                exposure_land_cover['key']: {
+                    flood_hazard_classes['key']: {
+                        'active': True,
+                        'classes': {}
+                    }
+                }
+            }
         }
 
         real_keywords = dialog.get_keywords()
         self.assertDictEqual(real_keywords, expected_keyword)
 
-    def test_existing_keywords_classified_raster(self):
-        """Test existing keywords classified raster."""
+    def test_classified_raster_existing_keywords(self):
+        """Test keyword wizard for existing keywords classified raster."""
         layer = clone_raster_layer(
             name='classified_flood_20_20',
             extension='.asc',
             include_keywords=False,
             source_directory=standard_data_path('hazard'))
         self.assertIsNotNone(layer)
-        assigned_values = {
-            u'low': [1.0],
-            u'medium': [2.0],
-            u'high': [3.0]
-        }
+
         expected_keyword = {
             'scale': source_scale,
             'hazard_category': hazard_category_multiple_event['key'],
@@ -1452,9 +1451,8 @@ class TestKeywordWizard(unittest.TestCase):
             'url': source_url,
             'title': layer_title,
             'hazard': hazard_flood['key'],
-            'value_map': assigned_values,
+            'value_maps': {},
             'date': source_date,
-            'classification': generic_hazard_classes['key'],
             'layer_geometry': layer_geometry_raster['key'],
             'layer_purpose': layer_purpose_hazard['key'],
             'layer_mode': layer_mode_classified['key']
@@ -1463,7 +1461,7 @@ class TestKeywordWizard(unittest.TestCase):
         layer.keywords = expected_keyword
 
         # noinspection PyTypeChecker
-        dialog = WizardDialog()
+        dialog = WizardDialog(iface=IFACE)
         dialog.set_keywords_creation_mode(layer)
 
         # Check if in select purpose step
@@ -1510,20 +1508,16 @@ class TestKeywordWizard(unittest.TestCase):
         dialog.pbnNext.click()
 
         # Check if in select classification step
-        self.check_current_step(dialog.step_kw_classification)
+        self.check_current_step(dialog.step_kw_multi_classifications)
 
-        # Check if generic hazard is selected
-        self.check_current_text(
-            generic_hazard_classes['name'],
-            dialog.step_kw_classification.lstClassifications)
+        # Change combo box
+        dialog.step_kw_multi_classifications.exposure_combo_boxes[
+            0].setCurrentIndex(1)
 
-        # Click next to select generic classification
-        dialog.pbnNext.click()
+        # Click save
+        dialog.step_kw_multi_classifications.save_button.click()
 
-        # Check if in classify step
-        self.check_current_step(dialog.step_kw_classify)
-
-        # Click next to finish value mapping
+        # Click next to finish multi classifications step
         dialog.pbnNext.click()
 
         # Check if in source step
@@ -1561,7 +1555,7 @@ class TestKeywordWizard(unittest.TestCase):
 
         self.assertDictEqual(real_keywords, expected_keyword)
 
-    def test_continuous_raster(self):
+    def test_continuous_raster_keywords(self):
         """Test keyword wizard for continuous raster."""
         path = standard_data_path('hazard', 'continuous_flood_20_20.asc')
         message = "Path %s is not found" % path
@@ -1575,7 +1569,7 @@ class TestKeywordWizard(unittest.TestCase):
         layer.keywords = {}
 
         # noinspection PyTypeChecker
-        dialog = WizardDialog()
+        dialog = WizardDialog(iface=IFACE)
         dialog.set_keywords_creation_mode(layer)
 
         # Check if in select purpose step
@@ -1632,21 +1626,17 @@ class TestKeywordWizard(unittest.TestCase):
         # Click next to select unit metres
         dialog.pbnNext.click()
 
-        # Check if in select classification step
-        self.check_current_step(dialog.step_kw_classification)
+        # Check if in select multi classifications step
+        self.check_current_step(dialog.step_kw_multi_classifications)
 
-        # select flood hazard classification
-        self.select_from_list_widget(
-            flood_hazard_classes['name'],
-            dialog.step_kw_classification.lstClassifications)
+        # Change combo box
+        dialog.step_kw_multi_classifications.exposure_combo_boxes[
+            0].setCurrentIndex(1)
 
-        # Click next to select flood classification
-        dialog.pbnNext.click()
+        # Click save
+        dialog.step_kw_multi_classifications.save_button.click()
 
-        # Check if in thresholds step
-        self.check_current_step(dialog.step_kw_threshold)
-
-        # Click next to finish threshold step
+        # Click next to finish multi classifications step
         dialog.pbnNext.click()
 
         # Check if in source step
@@ -1678,7 +1668,6 @@ class TestKeywordWizard(unittest.TestCase):
 
         # Checking Keyword Created
         expected_keyword = {
-            'classification': flood_hazard_classes['key'],
             'continuous_hazard_unit': 'metres',
             'date': source_date,
             'hazard': hazard_flood['key'],
@@ -1689,13 +1678,156 @@ class TestKeywordWizard(unittest.TestCase):
             'license': source_license,
             'scale': source_scale,
             'source': source,
-            'thresholds': {'dry': [0.0, 1.0], 'wet': [1.0, 999999.0]},
             'title': layer_title,
             'url': source_url,
+            'thresholds': {
+                exposure_land_cover['key']: {
+                    flood_hazard_classes['key']: {
+                        'active': True,
+                        'classes': {
+                            'dry': [0.0, 1.0],
+                            'wet': [1.0, 999999.0]
+                        }
+                    }
+                }
+            }
         }
 
         real_keywords = dialog.get_keywords()
-        self.assertDictEqual(real_keywords, expected_keyword)
+        self.assertDictEqual(byteify(real_keywords), byteify(expected_keyword))
+
+    def test_continuous_raster_existing_keywords(self):
+        """Test keyword wizard for continuous raster with assigned keyword."""
+        path = standard_data_path('hazard', 'continuous_flood_20_20.asc')
+        message = "Path %s is not found" % path
+        self.assertTrue(os.path.exists(path), message)
+        layer = clone_raster_layer(
+            name='continuous_flood_20_20',
+            extension='.asc',
+            include_keywords=False,
+            source_directory=standard_data_path('hazard'))
+        self.assertIsNotNone(layer)
+        original_keywords = {
+            'continuous_hazard_unit': 'metres',
+            'date': source_date,
+            'hazard': hazard_flood['key'],
+            'hazard_category': hazard_category_multiple_event['key'],
+            'layer_geometry': layer_geometry_raster['key'],
+            'layer_mode': layer_mode_continuous['key'],
+            'layer_purpose': layer_purpose_hazard['key'],
+            'license': source_license,
+            'scale': source_scale,
+            'source': source,
+            'thresholds': {
+                exposure_land_cover['key']: {
+                    flood_hazard_classes['key']: {
+                        'classes': {
+                            'dry': [0, 1],
+                            'wet': [1, 9999999999L]
+                        },
+                        'active': True
+                    }
+                },
+            },
+            'title': layer_title,
+            'url': source_url,
+        }
+        layer.keywords = original_keywords
+
+        # noinspection PyTypeChecker
+        dialog = WizardDialog(iface=IFACE)
+        dialog.set_keywords_creation_mode(layer)
+
+        # Check if in select purpose step
+        self.check_current_step(dialog.step_kw_purpose)
+
+        # Select hazard
+        self.select_from_list_widget(
+            layer_purpose_hazard['name'], dialog.step_kw_purpose.lstCategories)
+
+        # Click next to select hazard
+        dialog.pbnNext.click()
+
+        # Check if in select hazard step
+        self.check_current_step(dialog.step_kw_subcategory)
+
+        # select flood
+        self.select_from_list_widget(
+            hazard_flood['name'],
+            dialog.step_kw_subcategory.lstSubcategories)
+
+        # Click next to select flood
+        dialog.pbnNext.click()
+
+        # Check if in select hazard category step
+        self.check_current_step(dialog.step_kw_hazard_category)
+
+        # select multiple_event
+        self.select_from_list_widget(
+            hazard_category_multiple_event['name'],
+            dialog.step_kw_hazard_category.lstHazardCategories)
+
+        # Click next to select multiple event
+        dialog.pbnNext.click()
+
+        # Check if in select layer mode step
+        self.check_current_step(dialog.step_kw_layermode)
+
+        # select continuous mode
+        self.select_from_list_widget(
+            layer_mode_continuous['name'],
+            dialog.step_kw_layermode.lstLayerModes)
+
+        # Click next to select continuous
+        dialog.pbnNext.click()
+
+        # Check if in select unit step
+        self.check_current_step(dialog.step_kw_unit)
+
+        # select unit metres
+        self.select_from_list_widget(
+            unit_metres['name'],
+            dialog.step_kw_unit.lstUnits)
+
+        # Click next to select unit metres
+        dialog.pbnNext.click()
+
+        # Check if in select multi classifications step
+        self.check_current_step(dialog.step_kw_multi_classifications)
+
+        # Click next to finish multi classifications step
+        dialog.pbnNext.click()
+
+        # Check if in source step
+        self.check_current_step(dialog.step_kw_source)
+
+        dialog.step_kw_source.leSource.setText(source)
+        dialog.step_kw_source.leSource_scale.setText(source_scale)
+        dialog.step_kw_source.leSource_url.setText(source_url)
+        dialog.step_kw_source.ckbSource_date.setChecked(True)
+        dialog.step_kw_source.dtSource_date.setDateTime(source_date)
+        dialog.step_kw_source.leSource_license.setText(source_license)
+
+        # Click next to finish source step and go to title step
+        dialog.pbnNext.click()
+
+        # Check if in title step
+        self.check_current_step(dialog.step_kw_title)
+
+        dialog.step_kw_title.leTitle.setText(layer_title)
+
+        # Click next to finish title step and go to kw summary step
+        dialog.pbnNext.click()
+
+        # Check if in title step
+        self.check_current_step(dialog.step_kw_summary)
+
+        # Click finish
+        dialog.pbnNext.click()
+
+        real_keywords = dialog.get_keywords()
+        self.assertDictEqual(
+            byteify(real_keywords), byteify(original_keywords))
 
     def test_continuous_vector(self):
         """Test continuous vector for keyword wizard."""
@@ -1706,7 +1838,7 @@ class TestKeywordWizard(unittest.TestCase):
         self.assertIsNotNone(layer)
 
         # noinspection PyTypeChecker
-        dialog = WizardDialog()
+        dialog = WizardDialog(iface=IFACE)
         dialog.set_keywords_creation_mode(layer)
 
         # Check if in select purpose step
@@ -1764,17 +1896,6 @@ class TestKeywordWizard(unittest.TestCase):
         # Click next to select metres
         dialog.pbnNext.click()
 
-        # Check if in select classification step
-        self.check_current_step(dialog.step_kw_classification)
-
-        # select flood hazard classification
-        self.select_from_list_widget(
-            flood_hazard_classes['name'],
-            dialog.step_kw_classification.lstClassifications)
-
-        # Click next to select flood classification
-        dialog.pbnNext.click()
-
         # Check if in select field step
         self.check_current_step(dialog.step_kw_field)
 
@@ -1783,20 +1904,20 @@ class TestKeywordWizard(unittest.TestCase):
         self.select_from_list_widget(
             depth_field, dialog.step_kw_field.lstFields)
 
-        # Click next to select population
+        # Click next to select depth
         dialog.pbnNext.click()
 
-        # Check if in thresholds step
-        self.check_current_step(dialog.step_kw_threshold)
+        # Check if in multi classification step
+        self.check_current_step(dialog.step_kw_multi_classifications)
 
-        # Click next to finish threshold step
-        dialog.pbnNext.click()
+        # Change combo box
+        dialog.step_kw_multi_classifications.exposure_combo_boxes[
+            0].setCurrentIndex(1)
 
-        # Check if in InaSAFE field step
-        self.check_current_step(dialog.step_kw_inasafe_fields)
+        # Click save
+        dialog.step_kw_multi_classifications.save_button.click()
 
-        # Click next to finish inasafe fields step and go to inasafe default
-        # field step
+        # Click next to finish multi classifications step
         dialog.pbnNext.click()
 
         # Check if in source step
@@ -1828,7 +1949,6 @@ class TestKeywordWizard(unittest.TestCase):
 
         # Checking Keyword Created
         expected_keyword = {
-            'classification': flood_hazard_classes['key'],
             'continuous_hazard_unit': unit_metres['key'],
             'date': source_date,
             'hazard': hazard_flood['key'],
@@ -1840,9 +1960,19 @@ class TestKeywordWizard(unittest.TestCase):
             'license': source_license,
             'scale': source_scale,
             'source': source,
-            'thresholds': {'dry': [0.0, 1.0], 'wet': [1.0, 999999.0]},
+            'thresholds': {
+                exposure_land_cover['key']: {
+                    flood_hazard_classes['key']: {
+                        'classes': {
+                            'dry': [0, 1],
+                            'wet': [1, 999999.0]
+                        },
+                        'active': True
+                    }
+                },
+            },
             'title': layer_title,
-            'url': source_url,
+            'url': source_url
         }
 
         real_keywords = dialog.get_keywords()
@@ -1864,7 +1994,7 @@ class TestKeywordWizard(unittest.TestCase):
         layer.keywords = {}
 
         # noinspection PyTypeChecker
-        dialog = WizardDialog()
+        dialog = WizardDialog(iface=IFACE)
         dialog.set_keywords_creation_mode(layer)
 
         # Check if in select purpose step
@@ -1990,7 +2120,7 @@ class TestKeywordWizard(unittest.TestCase):
             name='buildings',
             include_keywords=True,
             source_directory=standard_data_path('exposure'))
-        dialog = WizardDialog()
+        dialog = WizardDialog(iface=IFACE)
         dialog.set_keywords_creation_mode(layer)
 
         dialog.pbnNext.click()  # choose exposure

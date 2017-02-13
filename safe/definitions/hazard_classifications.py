@@ -1,5 +1,4 @@
 # coding=utf-8
-
 """Definitions relating to hazards classifications.
 
 See https://github.com/inasafe/inasafe/issues/2920#issuecomment-229874044
@@ -12,6 +11,7 @@ from safe.definitions.units import (
     unit_miles_per_hour,
     unit_kilometres_per_hour,
     unit_knots,
+    unit_metres_per_second
 )
 from safe.definitions.styles import (
     grey,
@@ -22,6 +22,12 @@ from safe.definitions.styles import (
     red,
     dark_red,
     very_dark_red)
+from safe.definitions.exposure import (
+    exposure_land_cover,
+    exposure_place,
+    exposure_population,
+    exposure_road,
+    exposure_structure)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -58,10 +64,10 @@ generic_hazard_classes = {
             'affected': True,
             'description': tr('The locations having the highest impact.'),
             'string_defaults': ['high'],
+            'displacement_rate': 0.0,
+            'fatality_rate': 0.0,
             'numeric_default_min': 3,
             'numeric_default_max': (4 - small_number),
-            'displaced_rates': 0.0,
-            'fatality_rates': 0.0,
             'citations': [
                 {
                     'text': None,
@@ -77,10 +83,10 @@ generic_hazard_classes = {
             'affected': True,
             'description': tr('The locations where there is a medium impact.'),
             'string_defaults': ['medium'],
+            'displacement_rate': 0.0,
+            'fatality_rate': 0.0,
             'numeric_default_min': 2,
             'numeric_default_max': (3 - small_number),
-            'displaced_rates': 0.0,
-            'fatality_rates': 0.0,
             'citations': [
                 {
                     'text': None,
@@ -97,10 +103,10 @@ generic_hazard_classes = {
             'description': tr(
                 'The locations where the lowest impact occurred.'),
             'string_defaults': ['low'],
+            'displacement_rate': 0.0,
+            'fatality_rate': 0.0,
             'numeric_default_min': 0,
             'numeric_default_max': (2 - small_number),
-            'displaced_rates': 0.0,
-            'fatality_rates': 0.0,
             'citations': [
                 {
                     'text': None,
@@ -108,6 +114,13 @@ generic_hazard_classes = {
                 }
             ],
         }
+    ],
+    'exposures': [
+        exposure_land_cover,
+        exposure_place,
+        exposure_population,
+        exposure_road,
+        exposure_structure
     ]
 }
 
@@ -133,6 +146,10 @@ earthquake_mmi_hazard_classes = {
             'affected': True,
             'description': tr('The highest hazard class.'),
             'string_defaults': ['high'],
+            # Not used because EQ algs take care of this
+            # 'displacement_rate': 0.0,
+            # Not used because EQ algs take care of this
+            # 'fatality_rate': 0.0,
             'numeric_default_min': 8,
             'numeric_default_max': 9999999999,
             'citations': [
@@ -150,6 +167,10 @@ earthquake_mmi_hazard_classes = {
             'affected': True,
             'description': tr('The medium hazard class.'),
             'string_defaults': ['medium'],
+            # Not used because EQ algs take care of this
+            # 'displacement_rate': 0.0,
+            # Not used because EQ algs take care of this
+            # 'fatality_rate': 0.0,
             'numeric_default_min': 7,
             'numeric_default_max': (8 - small_number),
             'citations': [
@@ -167,6 +188,10 @@ earthquake_mmi_hazard_classes = {
             'affected': True,
             'description': tr('The lowest hazard class.'),
             'string_defaults': ['low'],
+            # Not used because EQ algs take care of this
+            # 'displacement_rate': 0.0,
+            # Not used because EQ algs take care of this
+            # 'fatality_rate': 0.0,
             'numeric_default_min': 6,
             'numeric_default_max': (7 - small_number),
             'citations': [
@@ -176,6 +201,13 @@ earthquake_mmi_hazard_classes = {
                 }
             ]
         }
+    ],
+    'exposures': [
+        exposure_land_cover,
+        exposure_place,
+        exposure_population,
+        exposure_road,
+        exposure_structure
     ]
 }
 
@@ -201,6 +233,8 @@ volcano_hazard_classes = {
             'affected': True,
             'description': tr('The highest hazard class.'),
             'string_defaults': ['Kawasan Rawan Bencana III', 'high'],
+            'displacement_rate': 0.0,
+            'fatality_rate': 0.0,
             'numeric_default_min': 0,
             'numeric_default_max': (3 - small_number),
             'citations': [
@@ -218,6 +252,8 @@ volcano_hazard_classes = {
             'affected': True,
             'description': tr('The medium hazard class.'),
             'string_defaults': ['Kawasan Rawan Bencana II', 'medium'],
+            'displacement_rate': 0.0,
+            'fatality_rate': 0.0,
             'numeric_default_min': 3,
             'numeric_default_max': (5 - small_number),
             'citations': [
@@ -235,6 +271,8 @@ volcano_hazard_classes = {
             'affected': True,
             'description': tr('The lowest hazard class.'),
             'string_defaults': ['Kawasan Rawan Bencana I', 'low'],
+            'displacement_rate': 0.0,
+            'fatality_rate': 0.0,
             'numeric_default_min': 5,
             'numeric_default_max': 10,
             'citations': [
@@ -244,6 +282,13 @@ volcano_hazard_classes = {
                 }
             ]
         }
+    ],
+    'exposures': [
+        exposure_land_cover,
+        exposure_place,
+        exposure_population,
+        exposure_road,
+        exposure_structure
     ]
 }
 
@@ -271,11 +316,10 @@ flood_hazard_classes = {
             'affected': True,
             'description': tr('Water is present above ground height.'),
             'string_defaults': ['wet', '1', 'YES', 'y', 'yes'],
+            'displacement_rate': 0.01,
+            'fatality_rate': 0.0,
             'numeric_default_min': 1,
             'numeric_default_max': 9999999999,
-            # evacuation rate for flood
-            'displaced_rates': 0.01,
-            'fatality_rates': 0.0,
             'citations': [
                 {
                     'text': None,
@@ -291,10 +335,10 @@ flood_hazard_classes = {
             'affected': False,
             'description': tr('No water encountered above ground height.'),
             'string_defaults': ['dry', '0', 'No', 'n', 'no'],
+            'displacement_rate': 0.0,
+            'fatality_rate': 0.0,
             'numeric_default_min': 0,
             'numeric_default_max': (1 - small_number),
-            'displaced_rates': 0.0,
-            'fatality_rates': 0.0,
             'citations': [
                 {
                     'text': None,
@@ -302,6 +346,13 @@ flood_hazard_classes = {
                 }
             ]
         }
+    ],
+    'exposures': [
+        exposure_land_cover,
+        exposure_place,
+        exposure_population,
+        exposure_road,
+        exposure_structure
     ]
 }
 
@@ -328,6 +379,8 @@ ash_hazard_classes = {
             'name': tr('Very high'),
             'affected': True,
             'description': tr('Very High.'),
+            'displacement_rate': 0.0,
+            'fatality_rate': 0.0,
             'numeric_default_min': 10,
             'numeric_default_max': 9999999999,
             'citations': [
@@ -344,6 +397,8 @@ ash_hazard_classes = {
             'name': tr('High'),
             'affected': True,
             'description': tr('High'),
+            'displacement_rate': 0.0,
+            'fatality_rate': 0.0,
             'numeric_default_min': 5,
             'numeric_default_max': 10 - small_number,
             'citations': [
@@ -360,6 +415,8 @@ ash_hazard_classes = {
             'name': tr('Medium'),
             'affected': True,
             'description': tr('Medium'),
+            'displacement_rate': 0.0,
+            'fatality_rate': 0.0,
             'numeric_default_min': 2,
             'numeric_default_max': 5 - small_number,
             'citations': [
@@ -376,6 +433,8 @@ ash_hazard_classes = {
             'name': tr('Low'),
             'affected': False,
             'description': tr('Low'),
+            'displacement_rate': 0.0,
+            'fatality_rate': 0.0,
             'numeric_default_min': 0.1,
             'numeric_default_max': 2 - small_number,
             'citations': [
@@ -392,6 +451,8 @@ ash_hazard_classes = {
             'name': tr('Very low'),
             'affected': False,
             'description': tr('Very Low.'),
+            'displacement_rate': 0.0,
+            'fatality_rate': 0.0,
             'numeric_default_min': 0.01,
             'numeric_default_max': 0.1 - small_number,
             'citations': [
@@ -429,6 +490,8 @@ tsunami_hazard_classes = {
             'affected': True,
             'description': tr('Water above 8.0m.'),
             'string_defaults': [],
+            'displacement_rate': 0.0,
+            'fatality_rate': 0.0,
             'numeric_default_min': 8,
             'numeric_default_max': 9999999999,
             'citations': [
@@ -456,6 +519,8 @@ tsunami_hazard_classes = {
                 'breaker, tsunami protection walls and green belts will be '
                 'washed away.'),
             'string_defaults': [],
+            'displacement_rate': 0.0,
+            'fatality_rate': 0.0,
             'numeric_default_min': 3,
             'numeric_default_max': 8 - small_number,
             'citations': [
@@ -480,6 +545,8 @@ tsunami_hazard_classes = {
                 'ground. Small vessels drift and collide. Damage occurs to '
                 'some wooden houses, while most of them are safe.'),
             'string_defaults': [],
+            'displacement_rate': 0.0,
+            'fatality_rate': 0.0,
             'numeric_default_min': 1,
             'numeric_default_max': 3 - small_number,
             'citations': [
@@ -506,6 +573,8 @@ tsunami_hazard_classes = {
                 'some turn over. Sand is deposited and there is flooding of '
                 'areas close to the shore.'),
             'string_defaults': [],
+            'displacement_rate': 0.0,
+            'fatality_rate': 0.0,
             'numeric_default_min': 0.1,
             'numeric_default_max': 1 - small_number,
             'citations': [
@@ -523,6 +592,8 @@ tsunami_hazard_classes = {
             'affected': False,
             'description': tr('No water above ground height.'),
             'string_defaults': [],
+            'displacement_rate': 0.0,
+            'fatality_rate': 0.0,
             'numeric_default_min': 0,
             'numeric_default_max': 0.1 - small_number,
             'citations': [
@@ -532,6 +603,13 @@ tsunami_hazard_classes = {
                 }
             ]
         },
+    ],
+    'exposures': [
+        exposure_land_cover,
+        exposure_place,
+        exposure_population,
+        exposure_road,
+        exposure_structure
     ]
 }
 
@@ -561,7 +639,10 @@ cyclone_au_bom_hazard_classes = {
         }
     ],
     'multiple_units': [
-        unit_miles_per_hour, unit_kilometres_per_hour, unit_knots],
+        unit_miles_per_hour,
+        unit_kilometres_per_hour,
+        unit_knots,
+        unit_metres_per_second],
     'classes': [
         {
             'key': 'category_5',
@@ -572,12 +653,15 @@ cyclone_au_bom_hazard_classes = {
             'description': tr(
                 'Extremely dangerous with widespread destruction. A Category '
                 '5 cyclone\'s strongest winds are VERY DESTRUCTIVE winds with '
-                'typical gusts over open flat land of more than 151 kn. '
+                'typical gusts over open flat land of more than 151 kt. '
                 'These winds correspond to the highest category on the '
                 'Beaufort scale, Beaufort 12 (Hurricane).'
             ),
+            'displacement_rate': 0.0,
+            'fatality_rate': 0.0,
             'numeric_default_min': {
                 unit_knots['key']: 107,
+                unit_metres_per_second['key']: 55,
                 unit_miles_per_hour['key']: 123,
                 unit_kilometres_per_hour['key']: 198
             },
@@ -600,17 +684,21 @@ cyclone_au_bom_hazard_classes = {
                 'caravans destroyed and blown away. Dangerous airborne debris '
                 '. Widespread power failures. A Category 4 cyclone\'s '
                 'strongest winds are VERY DESTRUCTIVE winds with typical '
-                'gusts over open flat land of 122 - 151 kn. These winds '
+                'gusts over open flat land of 122 - 151 kt. These winds '
                 'correspond to the highest category on the Beaufort scale, '
                 'Beaufort 12 (Hurricane).'
             ),
+            'displacement_rate': 0.0,
+            'fatality_rate': 0.0,
             'numeric_default_min': {
                 unit_knots['key']: 85,
+                unit_metres_per_second['key']: 44,
                 unit_miles_per_hour['key']: 98,
                 unit_kilometres_per_hour['key']: 157
             },
             'numeric_default_max': {
                 unit_knots['key']: 107 - small_number,
+                unit_metres_per_second['key']: 55 - small_number,
                 unit_miles_per_hour['key']: 123 - small_number,
                 unit_kilometres_per_hour['key']: 198 - small_number
             },
@@ -631,16 +719,20 @@ cyclone_au_bom_hazard_classes = {
                 'Some roof and structural damage. Some caravans destroyed.'
                 'Power failures likely. A Category 3 cyclone\'s strongest '
                 'winds are VERY DESTRUCTIVE winds with typical gusts over '
-                'open flat land of 90 - 121 kn. These winds correspond to the '
+                'open flat land of 90 - 121 kt. These winds correspond to the '
                 'highest category on the Beaufort scale, Beaufort 12 ('
                 'Hurricane).'),
+            'displacement_rate': 0.0,
+            'fatality_rate': 0.0,
             'numeric_default_min': {
                 unit_knots['key']: 63,
+                unit_metres_per_second['key']: 33,
                 unit_miles_per_hour['key']: 72,
                 unit_kilometres_per_hour['key']: 117
             },
             'numeric_default_max': {
                 unit_knots['key']: 85 - small_number,
+                unit_metres_per_second['key']: 44 - small_number,
                 unit_miles_per_hour['key']: 98 - small_number,
                 unit_kilometres_per_hour['key']: 157 - small_number
             },
@@ -662,16 +754,20 @@ cyclone_au_bom_hazard_classes = {
                 'and caravans. Heavy damage to some crops. Risk of '
                 'power failure. Small craft may break moorings. A Category 2 '
                 'cyclone\'s strongest winds are DESTRUCTIVE winds with '
-                'typical gusts over open flat land of 68 - 89 kn. '
+                'typical gusts over open flat land of 68 - 89 kt. '
                 'These winds correspond to Beaufort 10 and 11 (Storm '
                 'and violent storm).'),
+            'displacement_rate': 0.0,
+            'fatality_rate': 0.0,
             'numeric_default_min': {
                 unit_knots['key']: 47,
+                unit_metres_per_second['key']: 24,
                 unit_miles_per_hour['key']: 54,
                 unit_kilometres_per_hour['key']: 88
             },
             'numeric_default_max': {
                 unit_knots['key']: 63 - small_number,
+                unit_metres_per_second['key']: 33 - small_number,
                 unit_miles_per_hour['key']: 72 - small_number,
                 unit_kilometres_per_hour['key']: 117 - small_number
             },
@@ -692,15 +788,19 @@ cyclone_au_bom_hazard_classes = {
                 'Negligible house damage. Damage to some crops, trees and '
                 'caravans. Craft may drag moorings. A Category 1 cyclone\'s '
                 'strongest winds are GALES with typical gusts over open '
-                'flat land of 49 - 67 kn. These winds correspond to Beaufort '
+                'flat land of 49 - 67 kt. These winds correspond to Beaufort '
                 '8 and 9 (Gales and strong gales).'),
+            'displacement_rate': 0.0,
+            'fatality_rate': 0.0,
             'numeric_default_min': {
                 unit_knots['key']: 34,
+                unit_metres_per_second['key']: 17,
                 unit_miles_per_hour['key']: 39,
                 unit_kilometres_per_hour['key']: 63
             },
             'numeric_default_max': {
                 unit_knots['key']: 47 - small_number,
+                unit_metres_per_second['key']: 24 - small_number,
                 unit_miles_per_hour['key']: 54 - small_number,
                 unit_kilometres_per_hour['key']: 88 - small_number
             },
@@ -720,10 +820,13 @@ cyclone_au_bom_hazard_classes = {
             'description': tr(
                 'A tropical depression is a tropical disturbance, that has a '
                 'clearly defined surface circulation, which has maximum '
-                'sustained winds of less than 34 kn.'),
+                'sustained winds of less than 34 kt.'),
+            'displacement_rate': 0.0,
+            'fatality_rate': 0.0,
             'numeric_default_min': 0,
             'numeric_default_max': {
                 unit_knots['key']: 34 - small_number,
+                unit_metres_per_second['key']: 17 - small_number,
                 unit_miles_per_hour['key']: 39 - small_number,
                 unit_kilometres_per_hour['key']: 63 - small_number
             },
@@ -734,6 +837,13 @@ cyclone_au_bom_hazard_classes = {
                 }
             ]
         },
+    ],
+    'exposures': [
+        exposure_land_cover,
+        exposure_place,
+        exposure_population,
+        exposure_road,
+        exposure_structure
     ]
 }
 
@@ -778,8 +888,11 @@ cyclone_sshws_hazard_classes = {
                 'possibly months. Most of the area will be uninhabitable for '
                 'weeks or months.'
             ),
+            'displacement_rate': 0.0,
+            'fatality_rate': 0.0,
             'numeric_default_min': {
                 unit_knots['key']: 136,
+                unit_metres_per_second['key']: 70,
                 unit_miles_per_hour['key']: 156,
                 unit_kilometres_per_hour['key']: 251
             },
@@ -806,13 +919,17 @@ cyclone_sshws_hazard_classes = {
                 'outages will last weeks to possibly months. Most of the '
                 'area will be uninhabitable for weeks or months.'
             ),
+            'displacement_rate': 0.0,
+            'fatality_rate': 0.0,
             'numeric_default_min': {
                 unit_knots['key']: 112,
+                unit_metres_per_second['key']: 58,
                 unit_miles_per_hour['key']: 129,
                 unit_kilometres_per_hour['key']: 208
             },
             'numeric_default_max': {
                 unit_knots['key']: 136 - small_number,
+                unit_metres_per_second['key']: 70 - small_number,
                 unit_miles_per_hour['key']: 156 - small_number,
                 unit_kilometres_per_hour['key']: 251 - small_number
             },
@@ -836,13 +953,17 @@ cyclone_sshws_hazard_classes = {
                 'blocking numerous roads. Electricity and water will be '
                 'unavailable for several days to weeks after the storm '
                 'passes.'),
+            'displacement_rate': 0.0,
+            'fatality_rate': 0.0,
             'numeric_default_min': {
                 unit_knots['key']: 95,
+                unit_metres_per_second['key']: 50,
                 unit_miles_per_hour['key']: 110,
                 unit_kilometres_per_hour['key']: 177
             },
             'numeric_default_max': {
                 unit_knots['key']: 112 - small_number,
+                unit_metres_per_second['key']: 58 - small_number,
                 unit_miles_per_hour['key']: 129 - small_number,
                 unit_kilometres_per_hour['key']: 208 - small_number
             },
@@ -866,13 +987,17 @@ cyclone_sshws_hazard_classes = {
                 'snapped or uprooted and block numerous roads. Near-total '
                 'power loss is expected with outages that could last from '
                 'several days to weeks.'),
+            'displacement_rate': 0.0,
+            'fatality_rate': 0.0,
             'numeric_default_min': {
                 unit_knots['key']: 82,
+                unit_metres_per_second['key']: 42,
                 unit_miles_per_hour['key']: 95,
                 unit_kilometres_per_hour['key']: 153
             },
             'numeric_default_max': {
                 unit_knots['key']: 95 - small_number,
+                unit_metres_per_second['key']: 50 - small_number,
                 unit_miles_per_hour['key']: 110 - small_number,
                 unit_kilometres_per_hour['key']: 177 - small_number
             },
@@ -896,13 +1021,17 @@ cyclone_sshws_hazard_classes = {
                 'and shallowly rooted trees may be toppled. Extensive damage '
                 'to power lines and poles likely will result in power outages '
                 'that could last a few to several days.'),
+            'displacement_rate': 0.0,
+            'fatality_rate': 0.0,
             'numeric_default_min': {
                 unit_knots['key']: 64,
+                unit_metres_per_second['key']: 33,
                 unit_miles_per_hour['key']: 74,
                 unit_kilometres_per_hour['key']: 119
             },
             'numeric_default_max': {
                 unit_knots['key']: 82 - small_number,
+                unit_metres_per_second['key']: 42 - small_number,
                 unit_miles_per_hour['key']: 95 - small_number,
                 unit_kilometres_per_hour['key']: 153 - small_number
             },
@@ -920,9 +1049,12 @@ cyclone_sshws_hazard_classes = {
             'name': tr('No hurricane'),
             'affected': False,
             'description': tr('Winds less than Category 1 Hurricane'),
+            'displacement_rate': 0.0,
+            'fatality_rate': 0.0,
             'numeric_default_min': 0,
             'numeric_default_max': {
                 unit_knots['key']: 64 - small_number,
+                unit_metres_per_second['key']: 33 - small_number,
                 unit_miles_per_hour['key']: 74 - small_number,
                 unit_kilometres_per_hour['key']: 119 - small_number
             },
@@ -933,6 +1065,13 @@ cyclone_sshws_hazard_classes = {
                 }
             ]
         },
+    ],
+    'exposures': [
+        exposure_land_cover,
+        exposure_place,
+        exposure_population,
+        exposure_road,
+        exposure_structure
     ]
 }
 

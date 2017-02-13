@@ -50,7 +50,7 @@ class TestResourceParameterWidget(unittest.TestCase):
         widget = ResourceParameterWidget(resource_parameter)
 
         expected_value = resource_parameter.name
-        real_value = widget._label.text()
+        real_value = widget.label.text()
         message = 'Expected %s get %s' % (expected_value, real_value)
         self.assertEqual(expected_value, real_value, message)
 

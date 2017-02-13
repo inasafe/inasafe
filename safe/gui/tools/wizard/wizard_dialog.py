@@ -13,6 +13,11 @@ from qgis.core import QgsMapLayerRegistry
 
 from safe.definitions.layer_purposes import (
     layer_purpose_exposure, layer_purpose_aggregation, layer_purpose_hazard)
+from safe.definitions.layer_geometry import (
+    layer_geometry_raster,
+    layer_geometry_line,
+    layer_geometry_point,
+    layer_geometry_polygon)
 from safe.definitions.layer_modes import (
     layer_mode_continuous, layer_mode_classified)
 from safe.definitions.units import exposure_unit
@@ -40,7 +45,6 @@ from safe.utilities.gis import (
     is_raster_layer,
     is_point_layer,
     is_polygon_layer)
-from safe.definitions import layer_geometry_raster
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.resources import get_ui_class, resources_path
 from safe.utilities.unicode import get_unicode
@@ -72,6 +76,7 @@ from step_kw15_layermode import StepKwLayerMode
 from step_kw20_unit import StepKwUnit
 from step_kw25_classification import StepKwClassification
 from step_kw30_field import StepKwField
+from step_kw33_multi_classifications import StepKwMultiClassifications
 from step_kw35_resample import StepKwResample
 from step_kw40_classify import StepKwClassify
 from step_kw43_threshold import StepKwThreshold
@@ -157,6 +162,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.step_kw_unit = StepKwUnit(self)
         self.step_kw_classification = StepKwClassification(self)
         self.step_kw_field = StepKwField(self)
+        self.step_kw_multi_classifications = StepKwMultiClassifications(self)
         self.step_kw_resample = StepKwResample(self)
         self.step_kw_classify = StepKwClassify(self)
         self.step_kw_threshold = StepKwThreshold(self)
@@ -193,6 +199,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.stackedWidget.addWidget(self.step_kw_unit)
         self.stackedWidget.addWidget(self.step_kw_classification)
         self.stackedWidget.addWidget(self.step_kw_field)
+        self.stackedWidget.addWidget(self.step_kw_multi_classifications)
         self.stackedWidget.addWidget(self.step_kw_resample)
         self.stackedWidget.addWidget(self.step_kw_classify)
         self.stackedWidget.addWidget(self.step_kw_threshold)
@@ -485,13 +492,13 @@ class WizardDialog(QDialog, FORM_CLASS):
         if not layer:
             layer = self.layer
         if is_raster_layer(layer):
-            return 'raster'
+            return layer_geometry_raster['key']
         elif is_point_layer(layer):
-            return 'point'
+            return layer_geometry_point['key']
         elif is_polygon_layer(layer):
-            return 'polygon'
+            return layer_geometry_polygon['key']
         else:
-            return 'line'
+            return layer_geometry_line['key']
 
     def get_existing_keyword(self, keyword):
         """Obtain an existing keyword's value.
@@ -712,10 +719,11 @@ class WizardDialog(QDialog, FORM_CLASS):
             key = self.step_kw_purpose.selected_purpose()['key']
             keywords[key] = self.step_kw_subcategory.\
                 selected_subcategory()['key']
-        if self.step_kw_hazard_category.selected_hazard_category():
-            keywords['hazard_category'] \
-                = self.step_kw_hazard_category.\
-                selected_hazard_category()['key']
+        if keywords['layer_purpose'] == layer_purpose_hazard['key']:
+            if self.step_kw_hazard_category.selected_hazard_category():
+                keywords['hazard_category'] \
+                    = self.step_kw_hazard_category.\
+                    selected_hazard_category()['key']
         if self.step_kw_layermode.selected_layermode():
             keywords['layer_mode'] = self.step_kw_layermode.\
                 selected_layermode()['key']
@@ -737,16 +745,26 @@ class WizardDialog(QDialog, FORM_CLASS):
             keywords['classification'] = self.step_kw_classification.\
                 selected_classification()['key']
 
-        if self.step_kw_layermode.selected_layermode():
-            layer_mode = self.step_kw_layermode.selected_layermode()
-            if layer_mode == layer_mode_continuous:
-                thresholds = self.step_kw_threshold.get_threshold()
-                if thresholds:
-                    keywords['thresholds'] = thresholds
-            elif layer_mode == layer_mode_classified:
-                value_map = self.step_kw_classify.selected_mapping()
-                if value_map:
-                    keywords['value_map'] = value_map
+        if keywords['layer_purpose'] == layer_purpose_hazard['key']:
+            multi_classifications = self.step_kw_multi_classifications.\
+                get_current_state()
+            value_maps = multi_classifications.get('value_maps')
+            if value_maps is not None:
+                keywords['value_maps'] = value_maps
+            thresholds = multi_classifications.get('thresholds')
+            if thresholds is not None:
+                keywords['thresholds'] = thresholds
+        else:
+            if self.step_kw_layermode.selected_layermode():
+                layer_mode = self.step_kw_layermode.selected_layermode()
+                if layer_mode == layer_mode_continuous:
+                    thresholds = self.step_kw_threshold.get_threshold()
+                    if thresholds:
+                        keywords['thresholds'] = thresholds
+                elif layer_mode == layer_mode_classified:
+                    value_map = self.step_kw_classify.selected_mapping()
+                    if value_map:
+                        keywords['value_map'] = value_map
 
         if self.step_kw_source.leSource.text():
             keywords['source'] = get_unicode(

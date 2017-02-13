@@ -4,9 +4,11 @@
 import re
 import sys
 
+from PyQt4.QtCore import QVariant
+
 from safe.common.parameters.resource_parameter import ResourceParameter
-from safe.definitions.constants import qvariant_whole_numbers
-from safe.definitions.fields import default_field_length
+from safe.definitions.fields import (
+    default_field_length, default_field_precision)
 from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -65,11 +67,12 @@ def _initializes_minimum_needs_fields():
 
             key = '{namespace}__{key}_count_field'.format(**format_args)
             name = '{name}'.format(**format_args)
-            field_name = '{namespace}__{field_name}'.format(
-                **format_args)
-            field_type = qvariant_whole_numbers
+            field_name = '{namespace}__{field_name}'.format(**format_args)
+            # It's easier to debug if we have the real value from the
+            # postprocessor. That's why I put a Double. ET.
+            field_type = QVariant.Double
             length = default_field_length
-            precision = 0
+            precision = default_field_precision
             absolute = True
             replace_null = False
             description = need_parameter.description

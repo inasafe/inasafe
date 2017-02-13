@@ -17,6 +17,8 @@ from safe.definitions.constants import no_data_value
 from safe.definitions.utilities import definition
 from safe.definitions.processing_steps import reclassify_raster_steps
 from safe.utilities.profiling import profile
+from safe.utilities.metadata import (
+    active_thresholds_value_maps, active_classification)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -25,7 +27,7 @@ __revision__ = '$Format:%H$'
 
 
 @profile
-def reclassify(layer, callback=None):
+def reclassify(layer, exposure_key=None, callback=None):
     """Reclassify a continuous raster layer.
 
     This function is a wrapper for the code from
@@ -48,6 +50,9 @@ def reclassify(layer, callback=None):
     :param layer: The raster layer.
     :type layer: QgsRasterLayer
 
+    :param exposure_key: The exposure key.
+    :type exposure_key: str
+
     :param callback: A function to all to indicate progress. The function
         should accept params 'current' (int), 'maximum' (int) and 'step' (str).
         Defaults to None.
@@ -62,21 +67,28 @@ def reclassify(layer, callback=None):
     processing_step = reclassify_raster_steps['step_name']
     output_layer_name = output_layer_name % layer.keywords['layer_purpose']
 
-    thresholds = layer.keywords.get('thresholds')
+    if exposure_key:
+        classification_key = active_classification(
+            layer.keywords, exposure_key)
+        thresholds = active_thresholds_value_maps(layer.keywords, exposure_key)
+        layer.keywords['thresholds'] = thresholds
+        layer.keywords['classification'] = classification_key
+    else:
+        classification_key = layer.keywords.get('classification')
+        thresholds = layer.keywords.get('thresholds')
     if not thresholds:
         raise InvalidKeywordsForProcessingAlgorithm(
             'thresholds are missing from the layer %s'
             % layer.keywords['layer_purpose'])
 
-    classifications = layer.keywords.get('classification')
-    if not classifications:
+    if not classification_key:
         raise InvalidKeywordsForProcessingAlgorithm(
             'classification is missing from the layer %s'
             % layer.keywords['layer_purpose'])
 
     ranges = {}
     value_map = {}
-    hazard_classes = definition(classifications)['classes']
+    hazard_classes = definition(classification_key)['classes']
     for hazard_class in hazard_classes:
         ranges[hazard_class['value']] = thresholds[hazard_class['key']]
         value_map[hazard_class['key']] = [hazard_class['value']]
@@ -130,8 +142,8 @@ def reclassify(layer, callback=None):
     reclassified.keywords['layer_mode'] = 'classified'
 
     value_map = {}
-    classifications = layer.keywords.get('classification')
-    hazard_classes = definition(classifications)['classes']
+
+    hazard_classes = definition(classification_key)['classes']
     for hazard_class in reversed(hazard_classes):
         value_map[hazard_class['key']] = [hazard_class['value']]
 

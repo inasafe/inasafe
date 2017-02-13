@@ -702,10 +702,6 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         self.minimum_needs.save_profile(minimum_needs['profile'])
         self.mark_current_profile_as_saved()
 
-        # Emit combobox function in dock
-        current_index = self.dock.cboFunction.currentIndex()
-        self.dock.cboFunction.currentIndexChanged.emit(current_index)
-
     def save_profile_as(self):
         """Save the minimum needs under a new profile name.
         """

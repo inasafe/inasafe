@@ -23,7 +23,8 @@ from safe.definitions.units import (
     unit_mmi,
     unit_miles_per_hour,
     unit_kilometres_per_hour,
-    unit_knots)
+    unit_knots,
+    unit_metres_per_second)
 from safe.definitions.layer_modes import (
     layer_mode_classified, layer_mode_continuous)
 from safe.definitions.fields import (
@@ -59,12 +60,13 @@ continuous_hazard_unit = {
         unit_mmi,
         unit_kilometres_per_hour,
         unit_miles_per_hour,
-        unit_knots
+        unit_knots,
+        unit_metres_per_second
     ]
 }
 continuous_hazard_unit_all = continuous_hazard_unit['types']
 hazard_generic = {
-    'key': 'generic',
+    'key': 'hazard_generic',
     'name': tr('Generic'),
     'description': tr(
         'A <b>generic hazard</b> can be used for any type of hazard where the '
@@ -226,7 +228,8 @@ hazard_cyclone = {
     'continuous_hazard_units': [
         unit_miles_per_hour,
         unit_kilometres_per_hour,
-        unit_knots
+        unit_knots,
+        unit_metres_per_second
     ],
     'allowed_geometries': [
         'polygon',
@@ -367,7 +370,7 @@ hazard_volcano = {
     'compulsory_fields': [hazard_value_field],
     'fields': hazard_fields,
     'extra_fields': [hazard_name_field],
-    'layer_modes': [layer_mode_classified, layer_mode_continuous],
+    'layer_modes': [layer_mode_classified],
     'disabled_exposures': [exposure_place]
 }
 hazard_all = [
