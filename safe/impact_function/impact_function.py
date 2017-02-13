@@ -1033,7 +1033,7 @@ class ImpactFunction(object):
             warning_heading = m.Heading(
                 tr('No features in the extent'), **WARNING_STYLE)
             warning_message = tr(
-                'There are no features in the analys extent.')
+                'There are no features in the analysis extent.')
             suggestion_heading = m.Heading(
                 tr('Suggestion'), **SUGGESTION_STYLE)
             suggestion = tr(
