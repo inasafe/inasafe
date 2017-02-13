@@ -13,7 +13,7 @@ from safe.definitions.fields import (
     hazard_class_field,
     exposure_type_field,
     total_affected_field,
-    total_unaffected_field,
+    total_not_affected_field,
     total_not_exposed_field,
     total_field,
     affected_field,
@@ -150,10 +150,10 @@ def exposure_type_breakdown(aggregate_hazard, callback=None):
     # essentially have the same value as NULL_hazard_count
     # but with this, make sure that it exists in layer so it can be used for
     # reporting, and can be referenced to fields.py to take the label.
-    field = create_field_from_definition(total_unaffected_field)
+    field = create_field_from_definition(total_not_affected_field)
     tabular.addAttribute(field)
-    tabular.keywords['inasafe_fields'][total_unaffected_field['key']] = (
-        total_unaffected_field['field_name'])
+    tabular.keywords['inasafe_fields'][total_not_affected_field['key']] = (
+        total_not_affected_field['field_name'])
 
     field = create_field_from_definition(total_not_exposed_field)
     tabular.addAttribute(field)

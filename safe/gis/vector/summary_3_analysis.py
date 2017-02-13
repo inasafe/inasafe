@@ -13,7 +13,7 @@ from safe.definitions.fields import (
     hazard_id_field,
     hazard_class_field,
     total_affected_field,
-    total_unaffected_field,
+    total_not_affected_field,
     total_not_exposed_field,
     total_field,
     hazard_count_field,
@@ -131,7 +131,7 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
 
     counts = [
         total_affected_field,
-        total_unaffected_field,
+        total_not_affected_field,
         total_not_exposed_field,
         total_field]
 
@@ -143,7 +143,7 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
         hazard_count_field)
 
     affected_sum = 0
-    unaffected_sum = 0
+    not_affected_sum = 0
     not_exposed_sum = 0
 
     for area in analysis.getFeatures(request):
@@ -162,7 +162,7 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
             elif affected:
                 affected_sum += sum
             else:
-                unaffected_sum += sum
+                not_affected_sum += sum
 
         # Affected field
         analysis.changeAttributeValue(
@@ -170,7 +170,7 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
 
         # Not affected field
         analysis.changeAttributeValue(
-            area.id(), shift + len(unique_hazard) + 1, unaffected_sum)
+            area.id(), shift + len(unique_hazard) + 1, not_affected_sum)
 
         # Not exposed field
         analysis.changeAttributeValue(
@@ -191,7 +191,7 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
     # Sanity check ± 1 to the result. Disabled for now as it seems ± 1 is not
     # enough. ET 13/02/17
     # total_computed = (
-    #     affected_sum + unaffected_sum + not_exposed_sum)
+    #     affected_sum + not_affected_sum + not_exposed_sum)
     # if not -1 < (total_computed - total) < 1:
     #     raise ComputationError
 

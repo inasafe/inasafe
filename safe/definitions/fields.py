@@ -1072,23 +1072,24 @@ total_affected_field = {
     'replace_null': False
 }
 
-# Total unaffected field to store the number of unaffected by the hazard
-total_unaffected_field = {
-    'key': 'total_unaffected_field',
-    'name': tr('Total Unaffected'),
-    'field_name': 'total_unaffected',
+# Total not affected field to store the number of not affected by the hazard
+total_not_affected_field = {
+    'key': 'total_not_affected_field',
+    'name': tr('Total Not Affected'),
+    'field_name': 'total_not_affected',
     'type': QVariant.Double,
     'length': default_field_length,
     'precision': 2,
     'absolute': False,
     'help_text': tr(
-        'The total unaffected field stores the cumulative total number of '
-        'unaffected features or entities.'),
+        'The total not affected field stores the cumulative total number of '
+        'not affected features or entities.'),
     'description': tr(
-        'The total unaffected field is added to the analysis layer, aggregate '
-        'impact layer and aggregate hazard impact layer during the impact '
-        'analysis. It represents the cumulative count of unaffected exposure '
-        'features (e.g. buildings) or entities (e.g. people) for each area.'),
+        'The total not affected field is added to the analysis layer, '
+        'aggregate impact layer and aggregate hazard impact layer during the '
+        'impact analysis. It represents the cumulative count of not affected '
+        'exposure features (e.g. buildings) or entities (e.g. people) for '
+        'each area.'),
     'citations': [
         {
             'text': None,
@@ -1348,7 +1349,7 @@ exposure_breakdown_fields = [
     exposure_class_field,
     hazard_count_field,
     total_affected_field,
-    total_unaffected_field,
+    total_not_affected_field,
     total_not_exposed_field,
     total_field,
 ]
@@ -1358,7 +1359,7 @@ analysis_fields = [
     analysis_name_field,
     hazard_count_field,
     total_affected_field,
-    total_unaffected_field,
+    total_not_affected_field,
     total_not_exposed_field,
     total_field
 ]

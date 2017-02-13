@@ -161,7 +161,7 @@ class TestImpactReport(unittest.TestCase):
                         {
                             'value': '0',
                             'name': u'Total Unaffected',
-                            'key': 'total_unaffected_field'
+                            'key': 'total_not_affected_field'
                         },
                         {
                             'value': '10',

@@ -1,5 +1,5 @@
 # coding=utf-8
-from safe.definitions.fields import hazard_count_field, total_unaffected_field
+from safe.definitions.fields import hazard_count_field, total_not_affected_field
 from safe.definitions.hazard_classifications import hazard_classes_all
 from safe.definitions.styles import green
 from safe.report.extractors.infographic_elements.svg_charts import \
@@ -88,8 +88,8 @@ def population_chart_extractor(impact_report, component_metadata):
         labels.append(hazard_class['name'])
         colors.append(hazard_class['color'].name())
 
-    # add total unaffected
-    field_name = analysis_layer_fields[total_unaffected_field['key']]
+    # add total not affected
+    field_name = analysis_layer_fields[total_not_affected_field['key']]
     hazard_value = value_from_field_name(field_name, analysis_layer)
     hazard_value = round_affected_number(
         hazard_value,
@@ -97,10 +97,10 @@ def population_chart_extractor(impact_report, component_metadata):
         use_population_rounding=True)
 
     data.append(hazard_value)
-    labels.append(total_unaffected_field['name'])
+    labels.append(total_not_affected_field['name'])
     colors.append(green.name())
 
-    # add number for total unaffected
+    # add number for total not affected
     chart_title = resolve_from_dictionary(extra_args, 'chart_title')
     total_header = resolve_from_dictionary(extra_args, 'total_header')
     donut_context = DonutChartContext(
