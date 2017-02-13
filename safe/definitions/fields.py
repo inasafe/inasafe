@@ -1399,5 +1399,5 @@ count_ratio_mapping = {
     youth_count_field['key']: youth_ratio_field['key'],
     adult_count_field['key']: adult_ratio_field['key'],
     elderly_count_field['key']: elderly_ratio_field['key'],
-    # feature_value_field['key']: feature_rate_field['key'], disable in V4.0 ET
+    # feature_value_field['key']: feature_rate_field['key'], disabled V4.0 ET
 }
