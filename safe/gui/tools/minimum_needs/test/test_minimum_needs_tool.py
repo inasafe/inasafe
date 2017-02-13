@@ -56,7 +56,7 @@ class MinimumNeedsTest(unittest.TestCase):
             if os.path.exists(path):
                 os.remove(path)
 
-    def test_minimum_needs(self):
+    def test_minimum_needs_calculator(self):
         """Test behaviour of the minimum needs function."""
         dialog = NeedsCalculatorDialog(PARENT)
         layer = QgsVectorLayer(

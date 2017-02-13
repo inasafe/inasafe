@@ -376,11 +376,8 @@ class TestImpactReport(unittest.TestCase):
 
         shutil.rmtree(output_folder, ignore_errors=True)
 
-    # TODO: Fix if #3821 is fixed
-    @unittest.expectedFailure
-    def test_minimum_needs(self):
+    def test_minimum_needs_outputs(self):
         """Test generate minimum needs section."""
-
         output_folder = self.fixtures_dir('../output/minimum_needs')
         shutil.rmtree(output_folder, ignore_errors=True)
 
