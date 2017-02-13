@@ -150,7 +150,7 @@ class BatchDialog(QDialog, FORM_CLASS):
             self.run_selected_button, QDialogButtonBox.ActionRole)
 
         # Set up new project settings
-        self.start_in_new_project = True
+        self.start_in_new_project = False
 
         # Set up context help
         self.help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
@@ -467,7 +467,9 @@ class BatchDialog(QDialog, FORM_CLASS):
                     str(e))
                 result = False
         elif isinstance(value, dict):
-
+            # start in new project if toggle is active
+            if self.start_in_new_project:
+                self.iface.newProject()
             # create layer group
             group_name = value['scenario_name']
             self.layer_group = self.root.addGroup(group_name)
