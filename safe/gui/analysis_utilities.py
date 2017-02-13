@@ -166,6 +166,8 @@ def add_debug_layers_to_canvas(impact_function):
     datastore = impact_function.datastore
     for layer in datastore.layers():
         qgis_layer = datastore.layer(layer)
+        if not isinstance(qgis_layer, QgsMapLayer):
+            continue
         QgsMapLayerRegistry.instance().addMapLayer(
             qgis_layer, False)
         layer_node = group_debug.insertLayer(0, qgis_layer)

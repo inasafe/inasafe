@@ -780,11 +780,13 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             LOGGER.info(tr(
                 'The impact function could not run because of the inputs.'))
             send_error_message(self, message)
+            LOGGER.info(message.to_text())
             return status, message
         elif status == ANALYSIS_FAILED_BAD_CODE:
             self.hide_busy()
             LOGGER.exception(tr(
                 'The impact function could not run because of a bug.'))
+            LOGGER.exception(message.to_text())
             send_error_message(self, message)
 
             # Even if we are not in debug mode, as we got an exception, we
@@ -806,6 +808,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 LOGGER.info(tr(
                     'The impact report could not be generated.'))
                 send_error_message(self, message)
+                LOGGER.info(message.to_text())
                 return ANALYSIS_FAILED_BAD_CODE, message
 
             error_code, message = generate_impact_map_report(
@@ -815,6 +818,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 LOGGER.info(tr(
                     'The impact report could not be generated.'))
                 send_error_message(self, message)
+                LOGGER.info(message.to_text())
                 return ANALYSIS_FAILED_BAD_CODE, message
 
         if self.zoom_to_impact_flag:
