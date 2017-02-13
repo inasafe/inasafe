@@ -180,7 +180,7 @@ exposure_road = {
     'actions': [  # these are additional generic actions - IF has more
         tr('Which roads can be used to evacuate people or to distribute '
            'logistics?'),
-        tr('What type of vehicles can use the unaffected roads?'),
+        tr('What type of vehicles can use the not affected roads?'),
         tr('What sort of equipment will be needed to reopen roads?'),
         tr('Where will we get the equipment needed to open roads?'),
         tr('Which government department is responsible for supplying '

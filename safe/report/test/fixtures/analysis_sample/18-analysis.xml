@@ -200,7 +200,7 @@
             <gco:CharacterString/>
           </report>
           <inasafe_fields>
-            <gco:Dictionary>{&quot;total_affected_field&quot;: &quot;total_affected&quot;, &quot;total_field&quot;: &quot;total&quot;, &quot;high_hazard_count_field&quot;: &quot;high_hazard_count&quot;, &quot;medium_hazard_count_field&quot;: &quot;medium_hazard_count&quot;, &quot;analysis_id_field&quot;: &quot;analysis_id&quot;, &quot;NULL_hazard_count_field&quot;: &quot;NULL_hazard_count&quot;, &quot;analysis_name_field&quot;: &quot;analysis_name&quot;, &quot;total_unaffected_field&quot;: &quot;total_unaffected&quot;}</gco:Dictionary>
+            <gco:Dictionary>{&quot;total_affected_field&quot;: &quot;total_affected&quot;, &quot;total_field&quot;: &quot;total&quot;, &quot;high_hazard_count_field&quot;: &quot;high_hazard_count&quot;, &quot;medium_hazard_count_field&quot;: &quot;medium_hazard_count&quot;, &quot;analysis_id_field&quot;: &quot;analysis_id&quot;, &quot;NULL_hazard_count_field&quot;: &quot;NULL_hazard_count&quot;, &quot;analysis_name_field&quot;: &quot;analysis_name&quot;, &quot;total_not_affected_field&quot;: &quot;total_not_affected&quot;}</gco:Dictionary>
           </inasafe_fields>
           <inasafe_default_values>
             <gco:Dictionary/>

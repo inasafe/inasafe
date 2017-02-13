@@ -773,7 +773,7 @@ class TestImpactFunction(unittest.TestCase):
             u'elderly': 0,
             u'total': 162.7667000000474,
             u'minimum_needs__family_kits': 1,
-            u'total_unaffected': 153.55850000000828,
+            u'total_not_affected': 153.55850000000828,
         }
 
         self._check_minimum_fields_value(expected_value, impact_function)
