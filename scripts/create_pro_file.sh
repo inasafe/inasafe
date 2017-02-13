@@ -1,7 +1,6 @@
 #!/bin/bash
 
 SAFE_PYFILES=`find safe -name "**.py**" | grep -v "pyc$" | grep -v test`
-REALTIME_PYFILES=`find realtime -name "**.py**" | grep -v "pyc$" | grep -v test`
 UI_FILES=`find safe -name "**.ui**"`
 
 PRO_FILE=inasafe.pro
@@ -13,22 +12,6 @@ for FILE in ${SAFE_PYFILES}
 do
   echo "    ${FILE} \\"  >> ${PRO_FILE}
 done
-
-# Now the realtime files - last file should not have a backslash
-# so we handle add some logic to detect if we are on the last file
-LAST_FILE=""
-for FILE in ${REALTIME_PYFILES}
-do
-        if [ ! -z ${LAST_FILE} ]
-        then
-                echo "    ${LAST_FILE} \\" >> ${PRO_FILE}
-        fi
-        LAST_FILE=${FILE}
-done
-if [ ! -z ${LAST_FILE} ]
-then
-        echo "    ${LAST_FILE}" >> ${PRO_FILE}
-fi
 
 echo "
 FORMS = \\" >> ${PRO_FILE}
