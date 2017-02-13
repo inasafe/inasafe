@@ -47,7 +47,7 @@
        <item row="0" column="0">
         <widget class="QTabWidget" name="tabWidget">
          <property name="currentIndex">
-          <number>4</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="tab_basic">
           <attribute name="title">
@@ -126,6 +126,13 @@
                 <widget class="QCheckBox" name="cbxUseSelectedFeaturesOnly">
                  <property name="text">
                   <string>Use selected features only with the aggregation layer</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="add_conditional_styling">
+                 <property name="text">
+                  <string>Add icon for the hazard class in the attribute table (may break the alignment)</string>
                  </property>
                 </widget>
                </item>

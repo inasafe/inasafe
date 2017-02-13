@@ -10,6 +10,7 @@ from qgis.core import (
     QgsCategorizedSymbolRendererV2,
     QgsSymbolLayerV2Registry,
     QgsConditionalStyle,
+    QGis,
 )
 
 from safe.definitions.styles import (
@@ -24,6 +25,7 @@ from safe.definitions.hazard_classifications import not_exposed_class
 from safe.definitions.utilities import definition
 from safe.utilities.gis import is_line_layer
 from safe.utilities.rounding import format_number
+from safe.utilities.settings import setting
 
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -47,6 +49,8 @@ def hazard_class_style(layer, classification, display_null=False):
     """
     categories = []
 
+    # Conditional styling
+    add_conditional_styling = setting('add_conditional_styling', False, bool)
     attribute_table_styles = []
 
     for hazard_class, (color, label) in classification.iteritems():
@@ -62,14 +66,19 @@ def hazard_class_style(layer, classification, display_null=False):
         category = QgsRendererCategoryV2(hazard_class, symbol, label)
         categories.append(category)
 
-        style = QgsConditionalStyle()
-        style.setName(hazard_class)
-        style.setBackgroundColor(color.lighter())
-        style.setRule("hazard_class='%s'" % hazard_class)
-        attribute_table_styles.append(style)
+        if add_conditional_styling:
+            style = QgsConditionalStyle()
+            style.setName(hazard_class)
+            style.setRule("hazard_class='%s'" % hazard_class)
+            symbol = QgsSymbolV2.defaultSymbol(QGis.Point)
+            symbol.setColor(color)
+            symbol.setSize(3)
+            style.setSymbol(symbol)
+            attribute_table_styles.append(style)
 
-    # Disabled until we improve it a little bit. ET 20/01/17.
-    # layer.conditionalStyles().setRowStyles(attribute_table_styles)
+    if add_conditional_styling:
+        layer.conditionalStyles().setFieldStyles(
+            'hazard_class', attribute_table_styles)
     renderer = QgsCategorizedSymbolRendererV2(
         hazard_class_field['field_name'], categories)
     layer.setRendererV2(renderer)
