@@ -302,7 +302,7 @@ class ImpactReport(object):
         map_settings = self._iface.mapCanvas().mapSettings()
 
         self._qgis_composition_context = QGISCompositionContext(
-            self._iface.mapCanvas().extent(),
+            None,
             map_settings,
             ImpactReport.DEFAULT_PAGE_DPI)
         self._keyword_io = KeywordIO()

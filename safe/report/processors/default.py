@@ -268,25 +268,33 @@ def qgis_composer_renderer(impact_report, component):
         item_id = map_el.get('id')
         split_count = map_el.get('grid_split_count')
         layers = map_el.get('layers')
+        map_extent_option = map_el.get('extent')
         composer_map = composition.getComposerItemById(item_id)
         """:type: qgis.core.QgsComposerMap"""
         if composer_map:
             composer_map.setKeepLayerSet(True)
             composer_map.setLayerSet(
                 [l.id() for l in layers])
-            # composer_map.zoomToExtent(square_extent)
-            extent = QgsRectangle()
-            extent.setMinimal()
-            for l in layers:
-                extent.combineExtentWith(l.extent())
+            if map_extent_option and isinstance(
+                    map_extent_option, QgsRectangle):
+                # use provided map extent
+                extent = map_extent_option
+            else:
+                # if map extent not provided, try to calculate extent
+                # from list of given layers. Combine it so all layers were
+                # shown properly
+                extent = QgsRectangle()
+                extent.setMinimal()
+                for l in layers:
+                    # combine extent if different layer is provided.
+                    extent.combineExtentWith(l.extent())
 
-            canvas_extent = extent
-            width = canvas_extent.width()
-            height = canvas_extent.height()
+            width = extent.width()
+            height = extent.height()
             longest_width = width if width > height else height
             half_length = longest_width / 2
             margin = half_length / 5
-            center = canvas_extent.center()
+            center = extent.center()
             min_x = center.x() - half_length - margin
             max_x = center.x() + half_length + margin
             min_y = center.y() - half_length - margin
