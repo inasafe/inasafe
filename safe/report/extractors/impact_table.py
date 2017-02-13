@@ -2,6 +2,8 @@
 
 from __future__ import absolute_import
 
+from collections import OrderedDict
+
 from safe.common.utilities import safe_dir
 from safe.report.extractors.composer import QGISComposerContext
 from safe.report.extractors.util import (
@@ -70,28 +72,75 @@ def impact_table_extractor(impact_report, component_metadata):
     context['aggregation_result'] = aggregation_result
     context['aggregation_postprocessors'] = aggregation_postprocessors
 
-    # TODO: taken from hazard and exposure provenance
-    hazard_keywords = impact_report.impact_function.provenance[
-        'hazard_keywords']
-    default_provenance_source = resolve_from_dictionary(
-        extra_args, ['defaults', 'provenance_source'])
-    provenance_format = resolve_from_dictionary(
+    default_source = resolve_from_dictionary(
+        extra_args, ['defaults', 'source'])
+    default_reference = resolve_from_dictionary(
+        extra_args, ['defaults', 'reference'])
+    provenance_format_args = resolve_from_dictionary(
         extra_args, 'provenance_format')
 
-    hazard_provenance = (
-        hazard_keywords.get('source') or
-        default_provenance_source)
+    hazard_keywords = impact_report.impact_function.provenance[
+        'hazard_keywords']
+    header = resolve_from_dictionary(
+        provenance_format_args, 'hazard_header')
+    provenance_format = resolve_from_dictionary(
+        provenance_format_args, 'hazard_format')
+    hazard_provenance = {
+        'header': header,
+        'provenance': provenance_format.format(
+            layer_name=hazard_keywords.get('title'),
+            source=hazard_keywords.get('source') or default_source)
+    }
+
     exposure_keywords = impact_report.impact_function.provenance[
         'exposure_keywords']
-    exposure_provenance = (
-        exposure_keywords.get('source') or
-        default_provenance_source)
-    provenance_details = {
-        'hazard_provenance': hazard_provenance,
-        'exposure_provenance': exposure_provenance
+    header = resolve_from_dictionary(
+        provenance_format_args, 'exposure_header')
+    provenance_format = resolve_from_dictionary(
+        provenance_format_args, 'exposure_format')
+    exposure_provenance = {
+        'header': header,
+        'provenance': provenance_format.format(
+            layer_name=exposure_keywords.get('title'),
+            source=exposure_keywords.get('source') or default_source)
     }
-    context['analysis_details'] = provenance_format.format(
-        **provenance_details)
+
+    aggregation_keywords = impact_report.impact_function.provenance[
+        'aggregation_keywords']
+    # only if aggregation layer used
+    if aggregation_keywords:
+        header = resolve_from_dictionary(
+            provenance_format_args, 'aggregation_header')
+        provenance_format = resolve_from_dictionary(
+            provenance_format_args, 'aggregation_format')
+        aggregation_provenance = {
+            'header': header,
+            'provenance': provenance_format.format(
+                layer_name=aggregation_keywords.get('title'),
+                source=aggregation_keywords.get('source') or default_source)
+        }
+    else:
+        aggregation_provenance = None
+
+    impact_function_name = impact_report.impact_function.name
+    header = resolve_from_dictionary(
+        provenance_format_args, 'impact_function_header')
+    provenance_format = resolve_from_dictionary(
+        provenance_format_args, 'impact_function_format')
+    impact_function_provenance = {
+        'header': header,
+        'provenance': provenance_format.format(
+            impact_function_name=impact_function_name,
+            reference=default_reference)
+    }
+
+    provenance_detail = OrderedDict()
+    provenance_detail['hazard'] = hazard_provenance
+    provenance_detail['exposure'] = exposure_provenance
+    provenance_detail['aggregation'] = aggregation_provenance
+    provenance_detail['impact_function'] = impact_function_provenance
+
+    context['analysis_details'] = provenance_detail
 
     resources_dir = safe_dir(sub_dir='../resources')
     context['inasafe_resources_base_dir'] = resources_dir

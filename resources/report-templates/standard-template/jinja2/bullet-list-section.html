@@ -3,8 +3,10 @@
     <i class="icon-info-sign icon-white"></i> {{ header }}
 </h5>
 {% endif %}
-{% for item in items %}
+{% if items %}
 <ul>
+    {% for item in items %}
     <li colspan="100%">{{ item }}</li>
+    {% endfor %}
 </ul>
-{% endfor %}
+{% endif %}

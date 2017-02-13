@@ -11,6 +11,11 @@ from jinja2.environment import Template
 
 from safe.common.utilities import safe_dir
 from safe.definitions.constants import ANALYSIS_SUCCESS
+from safe.definitions.fields import (
+    total_not_affected_field,
+    total_affected_field,
+    total_not_exposed_field,
+    total_field)
 from safe.definitions.hazard_classifications import flood_hazard_classes
 from safe.impact_function.impact_function import ImpactFunction
 from safe.report.report_metadata import ReportMetadata
@@ -125,7 +130,7 @@ class TestImpactReport(unittest.TestCase):
         """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
 
         expected_context = {
-            'header': u'Analysis Results',
+            'header': u'Estimated number of buildings',
             'title': u'In the event of a Generic, how many Structures might '
                      u'be affected?',
             'summary': [
@@ -155,23 +160,23 @@ class TestImpactReport(unittest.TestCase):
                     'rows': [
                         {
                             'value': '10',
-                            'name': u'Total Affected',
-                            'key': 'total_affected_field'
+                            'name': u'Affected',
+                            'key': total_affected_field['key']
                         },
                         {
                             'value': '0',
-                            'name': u'Total Not Affected',
-                            'key': 'total_not_affected_field'
+                            'name': u'Not Affected',
+                            'key': total_not_affected_field['key']
                         },
                         {
                             'value': '10',
-                            'name': u'Total Not Exposed',
-                            'key': 'total_not_exposed_field',
+                            'name': u'Not Exposed',
+                            'key': total_not_exposed_field['key']
                         },
                         {
                             'value': '10',
                             'name': u'Total',
-                            'key': 'total_field'
+                            'key': total_field['key']
                         }
                     ],
                     'value_label': 'Count'
@@ -219,15 +224,32 @@ class TestImpactReport(unittest.TestCase):
                 u'The impacts on roads, people, buildings and other exposure '
                 u'elements may be underestimated if the exposure data are '
                 u'incomplete.',
+
                 u'Structures overlapping the analysis extent may be assigned '
                 u'a hazard status lower than that to which they are exposed '
                 u'outside the analysis area.',
+
                 u'Numbers reported for structures have been rounded to the '
                 u'nearest 10 if the total is less than 1,000; nearest 100 if '
                 u'more than 1,000and less than 100,000; and nearest 1000 if '
                 u'more than 100,000.',
+
                 u'Rounding is applied to all structure counts, which may '
-                u'cause discrepancies between subtotals and totals.'
+                u'cause discrepancies between subtotals and totals.',
+
+                u'The extent and severity of the mapped scenario or hazard '
+                u'zones may not be consistent with future events.',
+
+                u'The impacts on roads, people, buildings and '
+                u'other exposure elements may differ from the '
+                u'analysis results due to local conditions '
+                u'such as terrain and infrastructure type.',
+
+                u'The analysis extent is limited to the extent '
+                u'of the aggregation layer or analysis extent. '
+                u'Hazard and exposure data outside the '
+                u'analysis extent are not included in the '
+                u'impact layer, impact map or impact reports.'
             ]
         }
         actual_context = notes_assumptions.context

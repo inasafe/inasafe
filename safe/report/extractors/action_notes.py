@@ -1,8 +1,6 @@
 # coding=utf-8
 
-from safe.report.extractors.util import (
-    layer_definition_type,
-    resolve_from_dictionary)
+from safe.report.extractors.util import resolve_from_dictionary
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -26,13 +24,11 @@ def action_checklist_extractor(impact_report, component_metadata):
     :rtype: dict
     """
     context = {}
+    provenance = impact_report.impact_function.provenance
     extra_args = component_metadata.extra_args
 
-    # figure out exposure type
-    exposure_type = layer_definition_type(impact_report.exposure)
-
     context['header'] = resolve_from_dictionary(extra_args, 'header')
-    context['items'] = exposure_type['actions']
+    context['items'] = provenance['action_checklist']
 
     return context
 
@@ -54,12 +50,10 @@ def notes_assumptions_extractor(impact_report, component_metadata):
     :rtype: dict
     """
     context = {}
+    provenance = impact_report.impact_function.provenance
     extra_args = component_metadata.extra_args
 
-    # figure out exposure type
-    exposure_type = layer_definition_type(impact_report.exposure)
-
     context['header'] = resolve_from_dictionary(extra_args, 'header')
-    context['items'] = exposure_type['notes']
+    context['items'] = provenance['notes']
 
     return context

@@ -1,9 +1,6 @@
 {% if use_aggregation %}
     {% for _, value in sections.iteritems() %}
         {% if value and value.rows %}
-        <div>
-            {{ value.notes }}
-        </div>
         <h5 class="info">
             <i class="icon-info-sign icon-white"></i> {{ value.header }}
         </h5>
@@ -42,10 +39,13 @@
                     {% else %}
                     <td class="text-right">{{ column }}</td>
                      {% endif %}
-            {% endfor %}
+                {% endfor %}
                 </tr>
             </tfoot>
         </table>
+        <div>
+            {{ value.notes }}
+        </div>
         {% endif %}
     {% endfor %}
 {% elif sections_not_empty %}

@@ -14,6 +14,12 @@
 <h5 class="info">
     <i class="icon-info-sign icon-white"></i> Analysis details
 </h5>
-{{ analysis_details }}
+{% for key, item in analysis_details.iteritems() %}
+{% if item %}
+<p>
+    <b>{{ item.header }}</b> {{ item.provenance }}
+</p>
+{% endif %}
+{% endfor %}
 
 {% include 'standard-template/jinja2/footer.html' %}
