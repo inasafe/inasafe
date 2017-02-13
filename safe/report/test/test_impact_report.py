@@ -160,7 +160,7 @@ class TestImpactReport(unittest.TestCase):
                         },
                         {
                             'value': '0',
-                            'name': u'Total Unaffected',
+                            'name': u'Total Not Affected',
                             'key': 'total_not_affected_field'
                         },
                         {
@@ -300,7 +300,7 @@ class TestImpactReport(unittest.TestCase):
                     u'High hazard zone',
                     u'Medium hazard zone',
                     u'Total Affected',
-                    u'Total Unaffected',
+                    u'Total Not Affected',
                     u'Total Not Exposed',
                     u'Total'
                 ],
@@ -772,7 +772,7 @@ class TestImpactReport(unittest.TestCase):
         expected_context = {
             'data': [30, 40],
             'total_value': 70,
-            'labels': [u'Wet', u'Total Unaffected'],
+            'labels': [u'Wet', u'Total Not Affected'],
             'colors': [u'#f03b20', u'#1a9641'],
         }
 
