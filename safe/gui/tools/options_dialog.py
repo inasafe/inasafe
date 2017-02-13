@@ -94,7 +94,6 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             'showOrganisationLogoInDockFlag':
                 self.organisation_on_dock_checkbox,
             'developer_mode': self.cbxDevMode,
-            'add_conditional_styling': self.add_conditional_styling,
             'generate_report': self.checkbox_generate_reports,
         }
         self.text_settings = {

@@ -14,7 +14,6 @@ inasafe_default_settings = {
     'showOrganisationLogoInDockFlag': False,
     'developer_mode': False,
     'generate_report': True,
-    'add_conditional_styling': False,
 
     'ISO19115_ORGANIZATION': 'InaSAFE.org',
     'ISO19115_URL': 'http://inasafe.org',
