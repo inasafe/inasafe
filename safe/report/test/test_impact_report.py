@@ -27,7 +27,7 @@ from safe.test.utilities import (
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from qgis.core import QgsMapLayerRegistry
-from safe.definitions.report import (
+from safe.definitions.reports.components import (
     report_a4_blue,
     standard_impact_report_metadata_html,
     standard_impact_report_metadata_pdf,
@@ -1216,11 +1216,13 @@ class TestImpactReport(unittest.TestCase):
             'a4-portrait-blue')
 
         # for now, test that output exists
-        self.assertTrue(os.path.exists(output_path))
+        for path in output_path.itervalues():
+            self.assertTrue(os.path.exists(path), msg=path)
 
         output_path = impact_report.component_absolute_output_path(
             'a4-landscape-blue')
 
-        self.assertTrue(os.path.exists(output_path))
+        for path in output_path.itervalues():
+            self.assertTrue(os.path.exists(path), msg=path)
 
         shutil.rmtree(output_folder, ignore_errors=True)

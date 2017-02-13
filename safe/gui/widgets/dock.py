@@ -38,7 +38,16 @@ from safe.definitions.constants import (
     PREPARE_SUCCESS,
 )
 from safe.defaults import supporters_logo_path
+from safe.definitions.reports import (
+    final_product_tag,
+    pdf_product_tag,
+    html_product_tag,
+    qpt_product_tag)
+from safe.definitions.reports.components import (
+    standard_impact_report_metadata_pdf,
+    report_a4_blue)
 from safe.report.impact_report import ImpactReport
+from safe.report.report_metadata import ReportMetadata
 from safe.utilities.gis import wkt_to_rectangle
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
@@ -954,37 +963,90 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # Get output path from datastore
         # Fetch report for pdfs report
         report_path = os.path.dirname(impact_layer.source())
-        output_paths = [
-            os.path.join(
-                report_path,
-                'output/impact-report-output.pdf'),
-            os.path.join(
-                report_path,
-                'output/a4-portrait-blue.pdf'),
-            os.path.join(
-                report_path,
-                'output/a4-landscape-blue.pdf'),
+
+        # TODO: temporary hack until Impact Function becomes serializable
+        # need to have impact report
+        standard_impact_report_metadata = ReportMetadata(
+            metadata_dict=standard_impact_report_metadata_pdf)
+        standard_map_report_metadata = ReportMetadata(
+            metadata_dict=report_a4_blue)
+
+        standard_report_metadata = [
+            standard_impact_report_metadata,
+            standard_map_report_metadata
         ]
 
-        # Make sure the file paths can wrap nicely:
-        wrapped_output_paths = [
-            path.replace(os.sep, '<wbr>' + os.sep) for path in
-            output_paths]
+        def retrieve_components(tags):
+            products = []
+            for report_metadata in standard_report_metadata:
+                products += (report_metadata.component_by_tags(tags))
+            return products
+
+        def retrieve_paths(products, suffix=None):
+            paths = []
+            for c in products:
+                path = ImpactReport.absolute_output_path(
+                    os.path.join(report_path, 'output'),
+                    products,
+                    c.key)
+                if isinstance(path, list):
+                    for p in path:
+                        paths.append(p)
+                elif isinstance(path, dict):
+                    for p in path.itervalues():
+                        paths.append(p)
+                else:
+                    paths.append(path)
+            if suffix:
+                paths = [p for p in paths if p.endswith(suffix)]
+
+            paths = [p for p in paths if os.path.exists(p)]
+            return paths
+
+        def wrap_output_paths(paths):
+            """Make sure the file paths can wrap nicely."""
+            return [p.replace(os.sep, '<wbr>' + os.sep) for p in paths]
+
+        pdf_products = retrieve_components(
+            [final_product_tag, pdf_product_tag])
+        pdf_output_paths = retrieve_paths(pdf_products, '.pdf')
+
+        html_products = retrieve_components(
+                [final_product_tag, html_product_tag])
+        html_output_paths = retrieve_paths(html_products, '.html')
+
+        qpt_products = retrieve_components(
+            [final_product_tag, qpt_product_tag])
+        qpt_output_paths = retrieve_paths(qpt_products, '.qpt')
 
         # create message to user
         status = m.Message(
             m.Heading(self.tr('Map Creator'), **INFO_STYLE),
             m.Paragraph(self.tr(
                 'Your PDF was created....opening using the default PDF '
-                'viewer on your system. The generated pdfs were saved '
+                'viewer on your system.')),
+            m.ImportantText(self.tr(
+                'The generated pdfs were saved '
                 'as:')))
 
-        for path in wrapped_output_paths:
+        for path in wrap_output_paths(pdf_output_paths):
+            status.add(m.Paragraph(path))
+
+        status.add(m.Paragraph(
+            m.ImportantText(self.tr('The generated htmls were saved as:'))))
+
+        for path in wrap_output_paths(html_output_paths):
+            status.add(m.Paragraph(path))
+
+        status.add(m.Paragraph(
+            m.ImportantText(self.tr('The generated qpts were saved as:'))))
+
+        for path in wrap_output_paths(qpt_output_paths):
             status.add(m.Paragraph(path))
 
         send_static_message(self, status)
 
-        for path in output_paths:
+        for path in pdf_output_paths:
             # noinspection PyCallByClass,PyTypeChecker,PyTypeChecker
             QtGui.QDesktopServices.openUrl(
                 QtCore.QUrl.fromLocalFile(path))

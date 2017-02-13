@@ -4,6 +4,10 @@ Module for class container of Report and ReportComponent Metadata.
 """
 from importlib import import_module
 
+from safe.definitions.reports import (
+    jinja2_component_type,
+    qgis_composer_component_type)
+
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
@@ -17,21 +21,10 @@ class ReportComponentsMetadata(object):
     Describing metadata for Report component
     """
 
-    class AvailableComponent(object):
-        """Class to hold available component.
-
-        Useful for referencing
-
-        """
-
-        Jinja2 = 'Jinja2'
-        QGISComposer = 'QGISComposer'
-        QtRenderer = 'QtRenderer'
-
     def __init__(
             self, key, processor, extractor,
             output_format, template, output_path,
-            context=None, extra_args=None, **kwargs):
+            tags=None, context=None, extra_args=None, **kwargs):
         """Base class for component metadata
 
         ReportComponentMetadata is a metadata about the component element of
@@ -79,6 +72,7 @@ class ReportComponentsMetadata(object):
         self._output_format = output_format
         self._output_path = output_path
         self._template = template
+        self._tags = tags or []
         self._output = None
         if context:
             self._component_context = context
@@ -137,9 +131,17 @@ class ReportComponentsMetadata(object):
 
         Relative to the output_folder property of ReportMetadata
 
-        :rtype: str
+        :rtype: str, dict, list
         """
         return self._output_path
+
+    @property
+    def tags(self):
+        """Tags for easy categorizations.
+
+        :return: list
+        """
+        return self._tags
 
     @property
     def output(self):
@@ -249,6 +251,11 @@ class QgisComposerComponentsMetadata(ReportComponentsMetadata):
 
         PDF = 'pdf'
         PNG = 'png'
+        QPT = 'qpt'
+
+        MAP_OUTPUT = [PDF, PNG]
+        TEMPLATE_OUTPUT = QPT
+        SUPPORTED_OUTPUT = [PDF, PNG, QPT]
 
     def __init__(
             self, key, processor, extractor,
@@ -344,6 +351,7 @@ class ReportMetadata(object):
             self._template_folder = metadata_dict.get('template_folder')
             self._key = metadata_dict.get('key')
             self._name = metadata_dict.get('name')
+            self._tags = metadata_dict.get('tags')
             _components = metadata_dict.get('components')
             self._components = []
             for c in _components:
@@ -360,11 +368,10 @@ class ReportMetadata(object):
         template = component_metadata.get('template')
         kwargs = component_metadata
         kwargs['template'] = template
-        if (component_type ==
-                ReportComponentsMetadata.AvailableComponent.Jinja2):
+
+        if component_type == jinja2_component_type:
             return Jinja2ComponentsMetadata(**kwargs)
-        elif (component_type ==
-                ReportComponentsMetadata.AvailableComponent.QGISComposer):
+        elif component_type == qgis_composer_component_type:
             return QgisComposerComponentsMetadata(**kwargs)
         else:
             return ReportComponentsMetadata(**kwargs)
@@ -436,3 +443,18 @@ class ReportMetadata(object):
         if filtered:
             return filtered[0]
         return None
+
+    def component_by_tags(self, tags):
+        """Retrieve components by tags.
+
+        :param tags: List of tags
+        :type tags: list
+
+        :return: List of ReportComponentsMetadata
+        :rtype: list[ReportComponentsMetadata]
+        """
+        tags_keys = [t['key'] for t in tags]
+        filtered = [
+            c for c in self.components
+            if set(tags_keys).issubset([ct['key'] for ct in c.tags])]
+        return filtered
