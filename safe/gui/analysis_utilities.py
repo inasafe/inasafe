@@ -148,14 +148,20 @@ def add_debug_layers_to_canvas(impact_function):
     group_debug.setExpanded(False)
 
     # Let's style the hazard class in each layers.
-    classification = (
-        impact_function.hazard.keywords['classification'])
-    classification = definition(classification)
+    # noinspection PyBroadException
+    try:
+        classification = (
+            impact_function.hazard.keywords['classification'])
+        classification = definition(classification)
 
-    classes = OrderedDict()
-    for f in reversed(classification['classes']):
-        classes[f['key']] = (f['color'], f['name'])
-    hazard_class = hazard_class_field['key']
+        classes = OrderedDict()
+        for f in reversed(classification['classes']):
+            classes[f['key']] = (f['color'], f['name'])
+        hazard_class = hazard_class_field['key']
+    except:
+        # We might not have a classification. But this is the debug group so
+        # let's not raise a new exception.
+        classification = None
 
     datastore = impact_function.datastore
     for layer in datastore.layers():
@@ -169,6 +175,6 @@ def add_debug_layers_to_canvas(impact_function):
         # Let's style layers which have a geometry and have
         # hazard_class
         if qgis_layer.type() == QgsMapLayer.VectorLayer:
-            if qgis_layer.geometryType() != QGis.NoGeometry:
+            if qgis_layer.geometryType() != QGis.NoGeometry and classification:
                 if qgis_layer.keywords['inasafe_fields'].get(hazard_class):
                     hazard_class_style(qgis_layer, classes, True)
