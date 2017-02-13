@@ -625,9 +625,8 @@ buffer_distance_field = {
     'type': QVariant.Int,
     'length': default_field_length,
     'precision': 0,
-    'absolute': False,
-    'description': tr(
-        'The distance of the buffer for each feature.'),
+    'absolute': True,
+    'description': tr('The distance of the buffer for each feature.'),
     'help_text': tr(''),
     'citations': [
         {
@@ -1080,7 +1079,7 @@ total_not_affected_field = {
     'type': QVariant.Double,
     'length': default_field_length,
     'precision': 2,
-    'absolute': False,
+    'absolute': True,
     'help_text': tr(
         'The total not affected field stores the cumulative total number of '
         'not affected features or entities.'),

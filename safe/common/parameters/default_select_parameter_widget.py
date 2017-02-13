@@ -58,6 +58,17 @@ class DefaultSelectParameterWidget(SelectParameterWidget):
         self.custom_value = QDoubleSpinBox()
         if self._parameter.default_values[-1]:
             self.custom_value.setValue(self._parameter.default_values[-1])
+        has_min = False
+        if self._parameter.minimum is not None:
+            has_min = True
+            self.custom_value.setMinimum(self._parameter.minimum)
+        has_max = False
+        if self._parameter.maximum is not None:
+            has_max = True
+            self.custom_value.setMaximum(self._parameter.maximum)
+        if has_min and has_max:
+            step = (self._parameter.maximum - self._parameter.minimum) / 100.0
+            self.custom_value.setSingleStep(step)
         self.radio_button_layout.addWidget(self.custom_value)
 
         self.toggle_custom_value()

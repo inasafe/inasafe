@@ -155,6 +155,10 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
                 self.parent.setting, inasafe_field['key'])[0]
             parameter.default_values = get_inasafe_default_value_fields(
                 self.parent.setting, inasafe_field['key'])[1]
+            parameter.minimum = inasafe_field['default_value'].get(
+                'min_value')
+            parameter.maximum = inasafe_field['default_value'].get(
+                'max_value')
             # Check if there is already value in the metadata.
             if existing_inasafe_field:
                 existing_value = existing_inasafe_field.get(
