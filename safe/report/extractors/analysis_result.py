@@ -1,11 +1,5 @@
 # coding=utf-8
-from safe.definitions.exposure import exposure_population
-from safe.definitions.fields import (
-    hazard_count_field,
-    total_affected_field,
-    total_field,
-    total_not_affected_field,
-    total_not_exposed_field)
+from safe.definitions.fields import hazard_count_field
 from safe.definitions.hazard_classifications import hazard_classes_all
 from safe.report.extractors.util import (
     layer_definition_type,
@@ -115,23 +109,20 @@ def analysis_result_extractor(impact_report, component_metadata):
     # retrieve affected column
     report_stats = []
 
-    report_fields = [
-        total_affected_field,
-        total_not_affected_field,
-        total_not_exposed_field,
-        total_field
-    ]
-    for report_field in report_fields:
-        if report_field['key'] in analysis_inasafe_fields:
+    reported_fields = resolve_from_dictionary(
+        extra_args, 'reported_fields')
+    for item in reported_fields:
+        header = item['header']
+        field = item['field']
+        if field['key'] in analysis_inasafe_fields:
             field_index = analysis_layer.fieldNameIndex(
-                report_field['field_name'])
-            row_label = report_field['name']
+                field['field_name'])
             row_value = format_number(
                 analysis_feature[field_index],
                 enable_rounding=is_rounded)
             row_stats = {
-                'key': report_field['key'],
-                'name': row_label,
+                'key': field['key'],
+                'name': header,
                 'value': row_value
             }
             report_stats.append(row_stats)
@@ -150,7 +141,9 @@ def analysis_result_extractor(impact_report, component_metadata):
     # Proper title from reporting standard
     analysis_title = provenance['analysis_question']
 
-    header = resolve_from_dictionary(extra_args, ['header'])
+    header_format = resolve_from_dictionary(extra_args, ['header_format'])
+    header = header_format.format(title=provenance['map_legend_title'])
+    header = header.capitalize()
 
     context['header'] = header
     context['summary'] = summary

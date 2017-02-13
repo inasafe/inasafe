@@ -1785,6 +1785,24 @@ class ImpactFunction(object):
         If the impact function is not ready (has not called prepare method),
         it will return empty dict to avoid miss information.
 
+        List of keys (for quick lookup):
+
+        [
+            'exposure_keywords',
+            'hazard_keywords',
+            'impact_function_name',
+            'impact_function_title',
+            'map_title',
+            'map_legend_title',
+            'analysis_question',
+            'report_question',
+            'requested_extent',
+            'analysis_extent',
+            'data_store_uri',
+            'notes',
+            'action_checklist',
+        ]
+
         :returns: Dictionary that contains all provenance.
         :rtype: dict
         """

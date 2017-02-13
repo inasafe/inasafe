@@ -5,9 +5,13 @@ Definitions for basic report
 """
 from __future__ import absolute_import
 
-from qgis.core import QgsComposition
-
 from safe.common.utilities import safe_dir
+from safe.definitions.fields import (
+    affected_field,
+    total_affected_field,
+    total_not_affected_field,
+    total_not_exposed_field,
+    total_field)
 from safe.report.extractors.action_notes import (
     action_checklist_extractor,
     notes_assumptions_extractor)
@@ -58,8 +62,30 @@ analysis_result_component = {
                 'jinja2/'
                 'analysis-result.html',
     'extra_args': {
-        'header': tr('Analysis Results'),
+        'header_format': tr('Estimated {title}'),
         'hazard_header': tr('Hazard Zone'),
+        # Used to customize header.
+        # See issue inasafe#3688: remove all 'total' words
+        'reported_fields': [
+            {
+                'header': affected_field['name'],
+                'field': total_affected_field
+            },
+            {
+                # specify it directly since there is no field for
+                # unaffected only.
+                'header': tr('Not Affected'),
+                'field': total_not_affected_field
+            },
+            {
+                'header': tr('Not Exposed'),
+                'field': total_not_exposed_field
+            },
+            {
+                'header': total_field['name'],
+                'field': total_field
+            }
+        ]
     }
 }
 
@@ -329,13 +355,30 @@ standard_impact_report_metadata_html = {
                         'impact-report-layout.html',
             'extra_args': {
                 'defaults': {
-                    'provenance_source': tr('an unknown source')
+                    'source': tr('source not available'),
+                    'reference': tr('reference unspecified')
                 },
-                'provenance_format': tr(
-                    'Hazard details'
-                    '<p>{hazard_provenance}</p>'
-                    'Exposure details'
-                    '<p>{exposure_provenance}</p>')
+                'provenance_format': {
+                    'hazard_header': tr(
+                        'Hazard source'),
+                    'hazard_format': tr(
+                        '{layer_name} - {source} - '),
+
+                    'exposure_header': tr(
+                        'Exposure source'),
+                    'exposure_format': tr(
+                        '{layer_name} - {source} - '),
+
+                    'aggregation_header': tr(
+                        'Aggregation source'),
+                    'aggregation_format': tr(
+                        '{layer_name} - {source} - '),
+
+                    'impact_function_header': tr(
+                        'Impact Function'),
+                    'impact_function_format': tr(
+                        '{impact_function_name} - {reference} - '),
+                }
             }
         }
     ]
