@@ -521,7 +521,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             class_label = QLabel(the_class['name'])
 
             # Min label
-            min_label = QLabel(tr('Min'))
+            min_label = QLabel(tr('Min >'))
 
             # Min value as double spin
             min_value_input = QDoubleSpinBox()
@@ -634,11 +634,15 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             if index < len(self.threshold_classes) - 1:
                 # Max value changed
                 v[1].valueChanged.connect(partial(
-                    min_max_changed, index=index, mode=MAX_VALUE_MODE))
+                    min_max_changed,
+                    double_spin_index=index,
+                    mode=MAX_VALUE_MODE))
             if index > 0:
                 # Min value
                 v[0].valueChanged.connect(partial(
-                    min_max_changed, index=index, mode=MIN_VALUE_MODE))
+                    min_max_changed,
+                    double_spin_index=index,
+                    mode=MIN_VALUE_MODE))
 
         grid_layout_thresholds.setSpacing(0)
 
