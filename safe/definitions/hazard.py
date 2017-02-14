@@ -6,7 +6,7 @@ from safe.definitions.hazard_classifications import (
     earthquake_mmi_hazard_classes,
     flood_hazard_classes,
     tsunami_hazard_classes,
-    ash_hazard_classes,
+    ash_thickness_hazard_classes,
     cyclone_au_bom_hazard_classes,
     cyclone_sshws_hazard_classes)
 from safe.definitions.caveats import (
@@ -277,10 +277,13 @@ hazard_volcanic_ash = {
     'classified_notes': [  # notes specific to classified data
     ],
     'single_event_notes': [  # notes specific to single event data
+        'Volcanic ash is modelled hazard data estimating the thickness of '
+        'ash on the ground following a volcanic eruption.'
     ],
     'multi_event_notes': [  # notes specific to multi event data
     ],
     'actions': [  # these are additional generic actions - IF has more
+        'What action can be taken to secure water supplies and protect crops?'
 
     ],
     'citations': [
@@ -294,7 +297,7 @@ hazard_volcanic_ash = {
         'polygon',
         'raster'
     ],
-    'classifications': [ash_hazard_classes, generic_hazard_classes],
+    'classifications': [ash_thickness_hazard_classes, generic_hazard_classes],
     'compulsory_fields': [hazard_value_field],
     'fields': hazard_fields,
     'extra_fields': [],

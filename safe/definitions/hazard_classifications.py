@@ -356,11 +356,11 @@ flood_hazard_classes = {
     ]
 }
 
-ash_hazard_classes = {
-    'key': 'ash_hazard_classes',
+ash_thickness_hazard_classes = {
+    'key': 'ash_thickness_hazard_classes',
     'name': tr('Ash classes'),
     'description': tr(
-        'Three classes are supported for ash vector hazard data: '
+        'Five classes are supported for volcanic ash hazard data: '
         '<b>very low</b>, <b>low</b>, <b>medium</b>, <b>high</b> or '
         '<b>very high</b>.'),
     'type': hazard_classification_type,
@@ -378,7 +378,8 @@ ash_hazard_classes = {
             'color': dark_red,
             'name': tr('Very high'),
             'affected': True,
-            'description': tr('Very High.'),
+            'description': tr('Dry loading on buildings causing structural '
+                              'collapse.'),
             'displacement_rate': 0.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 10,
@@ -396,7 +397,10 @@ ash_hazard_classes = {
             'color': red,
             'name': tr('High'),
             'affected': True,
-            'description': tr('High'),
+            'description': tr('Dry loading on buildings causing structural '
+                              'damage but not collapse; wet loading on '
+                              'buildings (i.e. ash loading + heavy rainfall) '
+                              'causing structural collapse.'),
             'displacement_rate': 0.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 5,
@@ -414,7 +418,11 @@ ash_hazard_classes = {
             'color': orange,
             'name': tr('Medium'),
             'affected': True,
-            'description': tr('Medium'),
+            'description': tr('Damage to less vulnerable agricultural crops '
+                              '(e.g. tea plantations) and destruction of more '
+                              'vulnerable crops; destruction of critical '
+                              'infrastructure; cosmetic (non-structural) '
+                              'damage to buildings'),
             'displacement_rate': 0.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 2,
@@ -432,7 +440,11 @@ ash_hazard_classes = {
             'color': yellow,
             'name': tr('Low'),
             'affected': False,
-            'description': tr('Low'),
+            'description': tr('Damage to transportation routes (e.g. '
+                              'airports, roads, railways); damage to critical '
+                              'infrastructure (e.g. electricity supply); '
+                              'damage to more vulnerable agricultural crops '
+                              '(e.g. rice fields)'),
             'displacement_rate': 0.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 0.1,
@@ -450,7 +462,8 @@ ash_hazard_classes = {
             'color': light_green,
             'name': tr('Very low'),
             'affected': False,
-            'description': tr('Very Low.'),
+            'description': tr('Impact on health (respiration), livestock, and '
+                              'contamination of water supply.'),
             'displacement_rate': 0.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 0.01,
@@ -462,6 +475,10 @@ ash_hazard_classes = {
                 }
             ]
         }
+    ],
+    'exposures': [
+        exposure_land_cover,
+        exposure_place
     ]
 }
 
