@@ -11,15 +11,14 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-import json
 import os
 import logging
 import time
-import requests
 
 from shutil import copy
 from PyQt4 import QtCore
 from PyQt4.QtCore import QVariant
+from PyQt4.QtNetwork import QNetworkReply
 # noinspection PyUnresolvedReferences
 # pylint: disable=unused-import
 from qgis.core import (
@@ -44,7 +43,9 @@ from PyQt4.QtGui import (
 
 from safe.common.exceptions import (
     CanceledImportDialogError,
+    DownloadError,
     FileMissingError)
+from safe.utilities.file_downloader import FileDownloader
 from safe.utilities.resources import (
     html_footer, html_header, get_ui_class, resources_path)
 from safe.utilities.qgis_utilities import (
@@ -196,7 +197,7 @@ class PetaJakartaDialog(QDialog, FORM_CLASS):
         QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
 
         source = (
-            'https://data.petabencana.id/floods'
+            'https://data-dev.petabencana.id/floods'
             '?city=jbd&geoformat=geojson&format=json&minimum_state=1')
         # save the file as json first
         name = 'jakarta_flood.json'
@@ -217,16 +218,9 @@ class PetaJakartaDialog(QDialog, FORM_CLASS):
             source=source)
 
         try:
-            response = requests.get(source)
-            if not response.ok:
-                raise Exception(request_failed_message)
+            self.download(source, output_base_file_path)
 
-            result_dict = response.json()
-            with open(output_base_file_path, mode='w') as json_file:
-                json_string = json.dumps(result_dict['result'])
-                json_file.write(json_string)
-
-            # Open json file as QgsMapLayer
+            # Open downloaded file as QgsMapLayer
             layer = QgsVectorLayer(
                 output_base_file_path, 'flood', 'ogr', False)
         except Exception as e:
@@ -537,3 +531,26 @@ class PetaJakartaDialog(QDialog, FORM_CLASS):
         # add our own logic here...
 
         super(PetaJakartaDialog, self).reject()
+
+    def download(self, url, output_path):
+        """Download file from url and write to output path.
+
+        :param url: URL of the zip bundle.
+        :type url: str
+
+        :param output_path: Path of output file,
+        :type output_path: str
+        """
+        downloader = FileDownloader(url, output_path)
+        try:
+            result = downloader.download()
+        except IOError as ex:
+            raise IOError(ex)
+
+        if result[0] is not True:
+            _, error_message = result
+
+            if result[0] == QNetworkReply.OperationCanceledError:
+                raise CanceledImportDialogError(error_message)
+            else:
+                raise DownloadError(error_message)
