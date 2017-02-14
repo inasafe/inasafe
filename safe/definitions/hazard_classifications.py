@@ -614,9 +614,9 @@ tsunami_hazard_classes = {
 }
 
 # duplicate classes for tsunami hazard; modified for population exposure
-tsunami_hazard_classes = {
-    'key': 'tsunami_hazard_classes',
-    'name': tr('Tsunami population classes'),
+tsunami_hazard_population_classes = {
+    'key': 'tsunami_hazard_population_classes',
+    'name': tr('Tsunami hazard population classes'),
     # note: these are default tsunami classes for population
     'description': tr(
         'Tsunami hazards can be classified into one of three classes for an '
@@ -724,9 +724,9 @@ tsunami_hazard_classes = {
     ]
 }
 # duplicate classes for tsunami hazard based on advice from Pak Hamza
-tsunami_hazard_classes = {
-    'key': 'tsunami_hazard_classes',
-    'name': tr('Tsunami classes'),
+tsunami_hazard_classes_ITB = {
+    'key': 'tsunami_hazard_classes_ITB',
+    'name': tr('Tsunami classes ITB'),
     'description': tr(
         'Tsunami hazards can be classified into one of five classes for an '
         'area. The area is either <b>dry</b>, <b>low</b>, <b>medium</b>, '
@@ -874,9 +874,9 @@ tsunami_hazard_classes = {
 
 # duplicate classes for tsunami hazard based on advice from Pak Hamza and
 # modified for population
-tsunami_hazard_classes = {
-    'key': 'tsunami_hazard_classes',
-    'name': tr('Tsunami classes'),
+tsunami_hazard_population_classes_ITB = {
+    'key': 'tsunami_hazard_population_classes_ITB',
+    'name': tr('Tsunami population classes ITB'),
     'description': tr(
         'Tsunami hazards can be classified into one of five classes for an '
         'area. The area is either <b>dry</b>, <b>low</b>, <b>medium</b>, '
@@ -1487,6 +1487,9 @@ hazard_classification = {
         flood_hazard_classes,
         earthquake_mmi_hazard_classes,
         tsunami_hazard_classes,
+        tsunami_hazard_population_classes,
+        tsunami_hazard_classes_ITB,
+        tsunami_hazard_population_classes_ITB,
         volcano_hazard_classes,
         ash_hazard_classes,
         cyclone_au_bom_hazard_classes,
