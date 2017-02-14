@@ -8,7 +8,7 @@ __copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import os
-from shutil import copy
+from shutil import copy, rmtree
 
 from PyQt4.QtCore import QSettings
 from qgis.core import QgsApplication
@@ -192,13 +192,15 @@ class NeedsProfile(MinimumNeeds):
         path_name = resources_path('minimum_needs')
         if not os.path.exists(locale_minimum_needs_dir):
             os.makedirs(locale_minimum_needs_dir)
+        # load default min needs profile
         for file_name in os.listdir(path_name):
             source_file = os.path.join(path_name, file_name)
             destination_file = os.path.join(
                 locale_minimum_needs_dir, file_name)
             if not os.path.exists(destination_file) or overwrite:
                 copy(source_file, destination_file)
-        self.load_old_profile(locale_minimum_needs_dir)
+        # move old min needs profile under .qgis2 to .qgis2/inasafe
+        self.move_old_profile(locale_minimum_needs_dir)
         profiles = [
             profile[:-5] for profile in
             os.listdir(locale_minimum_needs_dir) if
@@ -332,8 +334,10 @@ class NeedsProfile(MinimumNeeds):
                 str(self.root_directory), 'minimum_needs', profile + '.json')
         )
 
-    def load_old_profile(self, locale_minimum_needs_dir):
-        """Load old minimum needs profile under ~/.qgis2/minimum_needs.
+    def move_old_profile(self, locale_minimum_needs_dir):
+        """Move old minimum needs profile under ~/.qgis2/minimum_needs.
+           This function is to get rid the old min needs profile came
+           from InaSAFE < 4.0.
 
         :param locale_minimum_needs_dir: User local minimum needs profile path.
         :type locale_minimum_needs_dir: str
@@ -348,3 +352,7 @@ class NeedsProfile(MinimumNeeds):
                     locale_minimum_needs_dir, filename)
                 if not os.path.exists(destination_file):
                     copy(source_file, destination_file)
+                if os.path.exists(destination_file):
+                    os.remove(source_file)
+            # remove old profile path
+            rmtree(old_profile_path)
