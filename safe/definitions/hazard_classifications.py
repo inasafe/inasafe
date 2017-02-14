@@ -482,7 +482,8 @@ ash_hazard_classes = {
         exposure_place
     ]
 }
-# original tsunami hazard classes with displacement rates added
+
+# Original tsunami hazard classes with displacement rates added
 tsunami_hazard_classes = {
     'key': 'tsunami_hazard_classes',
     'name': tr('Tsunami classes'),
@@ -613,7 +614,7 @@ tsunami_hazard_classes = {
     ]
 }
 
-# duplicate classes for tsunami hazard; modified for population exposure
+# Duplicate classes for tsunami hazard; modified for population exposure
 tsunami_hazard_population_classes = {
     'key': 'tsunami_hazard_population_classes',
     'name': tr('Tsunami hazard population classes'),
@@ -634,7 +635,6 @@ tsunami_hazard_population_classes = {
         }
     ],
     'classes': [
-
         {
             'key': 'high',
             'value': 4,

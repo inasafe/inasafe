@@ -280,8 +280,8 @@ hazard_volcanic_ash = {
     'classified_notes': [  # notes specific to classified data
     ],
     'single_event_notes': [  # notes specific to single event data
-        tr ('Volcanic ash is modelled hazard data estimating the thickness of '
-        'ash on the ground following a volcanic eruption.')
+        tr('Volcanic ash is modelled hazard data estimating the thickness of '
+           'ash on the ground following a volcanic eruption.')
     ],
     'multi_event_notes': [  # notes specific to multi event data
     ],
@@ -350,7 +350,13 @@ hazard_tsunami = {
         'polygon',
         'raster'
     ],
-    'classifications': [tsunami_hazard_classes, generic_hazard_classes],
+    'classifications': [
+        tsunami_hazard_classes,
+        tsunami_hazard_population_classes,
+        tsunami_hazard_classes_ITB,
+        tsunami_hazard_population_classes_ITB,
+        generic_hazard_classes,
+    ],
     'compulsory_fields': [hazard_value_field],
     'fields': hazard_fields,
     'extra_fields': [],
