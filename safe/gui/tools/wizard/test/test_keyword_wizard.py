@@ -308,6 +308,10 @@ class TestKeywordWizard(unittest.TestCase):
         # Check if in default inasafe fields
         self.check_current_step(dialog.step_kw_default_inasafe_fields)
 
+        # Check behaviour
+        self.check_radio_button_behaviour(
+            dialog.step_kw_default_inasafe_fields)
+
         # Click next
         dialog.pbnNext.click()
 
@@ -945,6 +949,10 @@ class TestKeywordWizard(unittest.TestCase):
         # select inasafe fields step
         self.check_current_step(dialog.step_kw_inasafe_fields)
 
+        # Check behaviour
+        self.check_radio_button_behaviour(
+            dialog.step_kw_default_inasafe_fields)
+
         # Click next to finish inasafe fields step and go to inasafe default
         # field step
         dialog.pbnNext.click()
@@ -1027,6 +1035,10 @@ class TestKeywordWizard(unittest.TestCase):
 
         # select inasafe fields step
         self.check_current_step(dialog.step_kw_inasafe_fields)
+
+        # Check behaviour
+        self.check_radio_button_behaviour(
+            dialog.step_kw_default_inasafe_fields)
 
         # Click next to finish inasafe fields step and go to inasafe default
         # field step
@@ -2131,6 +2143,31 @@ class TestKeywordWizard(unittest.TestCase):
         num_item = dialog.step_kw_subcategory.lstSubcategories.count()
         self.assertTrue(num_item == 3)
 
+    def check_radio_button_behaviour(self, inasafe_default_dialog):
+        """Test radio button behaviour so they are disabled when user set the
+           ratio field and enabled when there is no field selected.
+        """
+        # Get the parameter container from dialog.
+        parameter_container = (
+            inasafe_default_dialog.parameter_container.get_parameter_widgets())
+        # Check every parameter widgets on the container.
+        for parameter_widget in parameter_container:
+            parameter_widget = parameter_widget.widget()
+
+            # Locate the 'Do not use' radio button.
+            dont_use_button = (
+                parameter_widget.default_input_button_group.button(
+                    len(parameter_widget._parameter.default_values) - 2))
+            # 'Do not use' button should be selected since the default
+            # selected input is 'No Field'.
+            self.assertTrue(dont_use_button.isChecked())
+            # Select ratio field on input.
+            current_index = parameter_widget.input.currentIndex()
+            parameter_widget.input.setCurrentIndex(current_index + 1)
+            self.assertFalse(dont_use_button.isChecked())
+
+            parameter_widget.input.setCurrentIndex(current_index)
+            self.assertTrue(dont_use_button.isChecked())
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestKeywordWizard)

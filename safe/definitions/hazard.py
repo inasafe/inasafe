@@ -29,7 +29,12 @@ from safe.definitions.layer_modes import (
     layer_mode_classified, layer_mode_continuous)
 from safe.definitions.fields import (
     hazard_name_field, hazard_fields, hazard_value_field)
-from safe.definitions.exposure import exposure_place
+from safe.definitions.exposure import (
+    exposure_place,
+    exposure_land_cover,
+    exposure_road,
+    exposure_population,
+    exposure_structure)
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -148,7 +153,10 @@ hazard_earthquake = {
     'fields': hazard_fields,
     'extra_fields': [],
     'layer_modes': [layer_mode_classified, layer_mode_continuous],
-    'disabled_exposures': [exposure_place]
+    'disabled_exposures': [
+        exposure_place,
+        exposure_land_cover,
+    ]
 }
 hazard_flood = {
     'key': 'flood',
@@ -244,7 +252,12 @@ hazard_cyclone = {
     'fields': hazard_fields,
     'extra_fields': [],
     'layer_modes': [layer_mode_classified, layer_mode_continuous],
-    'disabled_exposures': [exposure_place]
+    'disabled_exposures': [
+        exposure_place,
+        exposure_land_cover,
+        exposure_road,
+        exposure_population
+    ]
 }
 
 hazard_volcanic_ash = {
@@ -286,7 +299,11 @@ hazard_volcanic_ash = {
     'fields': hazard_fields,
     'extra_fields': [],
     'layer_modes': [layer_mode_classified, layer_mode_continuous],
-    'disabled_exposures': []
+    'disabled_exposures': [
+        exposure_population,
+        exposure_structure,
+        exposure_road
+    ]
 }
 hazard_tsunami = {
     'key': 'tsunami',

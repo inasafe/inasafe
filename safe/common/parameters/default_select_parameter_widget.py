@@ -36,6 +36,9 @@ class DefaultSelectParameterWidget(SelectParameterWidget):
         # Create radio button group
         self.default_input_button_group = QButtonGroup()
 
+        # Define string enabler for radio button
+        self.radio_button_enabler = self.input.itemData(0, Qt.UserRole)
+
         for i in range(len(self._parameter.default_labels)):
             if '%s' in self._parameter.default_labels[i]:
                 label = (
@@ -79,6 +82,7 @@ class DefaultSelectParameterWidget(SelectParameterWidget):
 
         # Connect
         # noinspection PyUnresolvedReferences
+        self.input.currentIndexChanged.connect(self.toggle_input)
         self.default_input_button_group.buttonClicked.connect(
             self.toggle_custom_value)
 
@@ -151,3 +155,40 @@ class DefaultSelectParameterWidget(SelectParameterWidget):
             self.custom_value.setDisabled(False)
         else:
             self.custom_value.setDisabled(True)
+
+    def toggle_input(self):
+        """Change behaviour of radio button based on input."""
+        current_index = self.input.currentIndex()
+        # If current input is not a radio button enabler, disable radio button.
+        if self.input.itemData(current_index, Qt.UserRole) != (
+                self.radio_button_enabler):
+            self.disable_radio_button()
+        # Otherwise, enable radio button.
+        else:
+            self.enable_radio_button()
+
+    def set_selected_radio_button(self):
+        """Set selected radio button to 'Do not use'."""
+        dont_use_button = self.default_input_button_group.button(
+            len(self._parameter.default_values) - 2)
+        dont_use_button.setChecked(True)
+
+    def disable_radio_button(self):
+        """Disable radio button group and custom value input area."""
+        checked = self.default_input_button_group.checkedButton()
+        if checked:
+            self.default_input_button_group.setExclusive(False)
+            checked.setChecked(False)
+            self.default_input_button_group.setExclusive(True)
+        for button in self.default_input_button_group.buttons():
+            button.setDisabled(True)
+        self.custom_value.setDisabled(True)
+
+    def enable_radio_button(self):
+        """Enable radio button and custom value input area then set selected
+           radio button to 'Do not use'.
+        """
+        for button in self.default_input_button_group.buttons():
+            button.setEnabled(True)
+        self.set_selected_radio_button()
+        self.custom_value.setEnabled(True)
