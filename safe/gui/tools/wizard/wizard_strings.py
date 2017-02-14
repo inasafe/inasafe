@@ -145,14 +145,14 @@ continuous_vector_question = tr(
     'You have selected <b>%s %s</b> as a <b>continuous</b> layer and the '
     'attribute is <b>%s</b> with <b>%s</b>. '
     'Please input the minimum and maximum value for each class below. '
-    'Minimum value will be included in the range, while maximum value will be '
-    'excluded. The minimum value from the layer is <b>%s</b> and the maximum '
+    'Minimum value will be excluded in the range, while maximum value will be '
+    'included. The minimum value from the layer is <b>%s</b> and the maximum '
     'value is <b>%s</b>.'
 )  # (subcategory, purpose, field, classification, min value, max value)
 continuous_raster_question = tr(
     'You have selected <b>%s %s</b> as a <b>continuous</b> layer with '
-    '<b>%s</b>. Minimum value will be included in the range, while maximum '
-    'value will be excluded. Please input the minimum and maximum value for '
+    '<b>%s</b>. Minimum value will be excluded in the range, while maximum '
+    'value will be included. Please input the minimum and maximum value for '
     'each class below. The minimum value from the layer is <b>%s</b> and the '
     'maximum value is <b>%s</b>.'
 )  # (subcategory, purpose, classification, min value, max value)
