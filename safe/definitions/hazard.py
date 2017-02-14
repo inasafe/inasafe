@@ -277,13 +277,14 @@ hazard_volcanic_ash = {
     'classified_notes': [  # notes specific to classified data
     ],
     'single_event_notes': [  # notes specific to single event data
-        'Volcanic ash is modelled hazard data estimating the thickness of '
-        'ash on the ground following a volcanic eruption.'
+        tr ('Volcanic ash is modelled hazard data estimating the thickness of '
+        'ash on the ground following a volcanic eruption.')
     ],
     'multi_event_notes': [  # notes specific to multi event data
     ],
     'actions': [  # these are additional generic actions - IF has more
-        'What action can be taken to secure water supplies and protect crops?'
+        tr('What action can be taken to secure water supplies and protect '
+           'crops?')
 
     ],
     'citations': [
@@ -327,8 +328,8 @@ hazard_tsunami = {
     'classified_notes': [  # notes specific to classified data
     ],
     'single_event_notes': [  # notes specific to single event data
-        'Tsunami hazard scenarios estimate the inundation of a tsunami wave on '
-        'land.'
+        tr('Tsunami hazard scenarios estimate the inundation of a tsunami '
+           'wave on land.')
     ],
     'multi_event_notes': [  # notes specific to multi event data
     ],
