@@ -356,7 +356,8 @@ standard_impact_report_metadata_html = {
             'extra_args': {
                 'defaults': {
                     'source': tr('source not available'),
-                    'reference': tr('reference unspecified')
+                    'reference': tr('reference unspecified'),
+                    'aggregation_not_used': tr('not used')
                 },
                 'provenance_format': {
                     'hazard_header': tr(
@@ -377,7 +378,7 @@ standard_impact_report_metadata_html = {
                     'impact_function_header': tr(
                         'Impact Function'),
                     'impact_function_format': tr(
-                        '{impact_function_name} - {reference} - '),
+                        '{impact_function_name}'),
                 }
             }
         }
