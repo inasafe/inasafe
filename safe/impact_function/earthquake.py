@@ -175,14 +175,62 @@ EARTHQUAKE_FUNCTIONS = (
     {
         'key': 'itb_bayesian_fatality_rates',
         'name': tr('ITB bayesian fatality rates'),
+        'description': tr('ITB fatality model based on a Bayesian approach.'
+                          'This model was developed by Institut Teknologi '
+                          'Bandung (ITB) and implemented by Dr. Hyeuk Ryu, '
+                          'Geoscience Australia.'
+        ),
+        'notes': 'The ITB bayesian fatality model is based on the ITB '
+                 'fatality model and uses Indonesian fatality data',
+        'citations': [
+            {
+                'text': tr('An Empirical Fatality Model for Indonesia Based '
+                           'on a Bayesian Approach by W. Sengara, M. '
+                           'Suarjana, M.A. Yulman, H. Ghasemi, and H. Ryu. '
+                           'submitted for Journal of the Geological Society.'),
+                'link': ''
+            }
+        ],
         'fatality_rates': itb_bayesian_fatality_rates
     }, {
         'key': 'itb_fatality_rates',
         'name': tr('ITB fatality rates'),
+        'description': tr('ITB fatality model is modified from the USGS Pager '
+                          'model.This model was developed by Institut '
+                          'Teknologi Bandung (ITB) and implemented by '
+                          'Dr. Hadi Ghasemi, Geoscience Australia.'
+        ),
+        'notes': 'The ITB fatality model is based on the USGS Pager model and '
+                 'modified to use a different source.',
+        'citations': [
+            {
+                'text': tr('Indonesian Earthquake Building-Damage and Fatality '
+                           'Models and Post Disaster Survey Guidelines '
+                           'Development,Bali, 27-28 February 2012, 54pp.,'),
+                'link': ''
+            }
+        ],
         'fatality_rates': itb_fatality_rates
     }, {
         'key': 'pager_fatality_rates',
         'name': tr('Pager fatality rates'),
+        'description': tr('USGS Pager fatality estimation model.'
+                          'This model was developed by Institut Teknologi '
+                          'Bandung (ITB) and implemented by Dr. Hyeuk Ryu, '
+                          'Geoscience Australia.'
+        ),
+        'notes': 'The USGS Pager fatality model using Indonesian country '
+                 'coefficients.',
+        'citations': [
+            {
+                'text': tr('Jaiswal, K. S., Wald, D. J., and Hearne, M. '
+                           '(2009a). Estimating casualties for large '
+                           'worldwide earthquakes using an empirical '
+                           'approach. U.S. Geological Survey Open-File '
+                           'Report 2009-1136.'),
+                'link': u'https://pubs.usgs.gov/of/2009/1136/pdf/'
+            }
+        ],
         'fatality_rates': pager_fatality_rates
     }
 )
@@ -190,6 +238,8 @@ EARTHQUAKE_FUNCTIONS = (
 
 def displacement_rate():
     """Return the displacement rate.
+    Note: displacement rates are specified here but are not a function of the
+    fatality models.
 
     :returns: The displacement rate.
     :rtype: dict
