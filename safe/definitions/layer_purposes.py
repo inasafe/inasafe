@@ -165,8 +165,8 @@ layer_purpose_exposure_breakdown = {
         'created for each hazard class encountered in the analysis and for '
         'analysis totals. For example there will be a column for the total '
         'number of buildings considered affected in the entire analysis area,'
-        'and further columns for unaffected total and the combined total of '
-        'unaffected + affected. This layer is used for generating reports '
+        'and further columns for not affected total and the combined total of '
+        'not affected + affected. This layer is used for generating reports '
         'and can also be easily exported to a spreadsheet for further '
         'analysis.'),
     'allowed_geometries': [],

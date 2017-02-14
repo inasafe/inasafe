@@ -180,7 +180,7 @@ exposure_road = {
     'actions': [  # these are additional generic actions - IF has more
         tr('Which roads can be used to evacuate people or to distribute '
            'logistics?'),
-        tr('What type of vehicles can use the unaffected roads?'),
+        tr('What type of vehicles can use the not affected roads?'),
         tr('What sort of equipment will be needed to reopen roads?'),
         tr('Where will we get the equipment needed to open roads?'),
         tr('Which government department is responsible for supplying '
@@ -201,8 +201,8 @@ exposure_road = {
     'compulsory_fields': [exposure_type_field],
     'fields': exposure_fields,
     'extra_fields': [
-        feature_value_field,
-        feature_rate_field
+        # feature_value_field, disabled in V4.0, ET 13/02/17
+        # feature_rate_field disabled in V4.0, ET 13/02/17
     ],
     'layer_modes': [layer_mode_classified],
     'display_not_exposed': True,
@@ -260,8 +260,8 @@ exposure_structure = {
     'compulsory_fields': [exposure_type_field],
     'fields': exposure_fields,
     'extra_fields': [
-        feature_value_field,
-        feature_rate_field
+        # feature_value_field, disabled in V4.0, ET 13/02/17
+        # feature_rate_field disabled in V4.0, ET 13/02/17
     ],
     'layer_modes': [layer_mode_classified],
     'display_not_exposed': True,
@@ -359,8 +359,8 @@ exposure_land_cover = {
     'compulsory_fields': [exposure_type_field],
     'fields': exposure_fields,
     'extra_fields': [
-        feature_value_field,
-        feature_rate_field
+        # feature_value_field, disabled in V4.0, ET 13/02/17
+        # feature_rate_field disabled in V4.0, ET 13/02/17
     ],
     'layer_modes': [layer_mode_classified],
     'display_not_exposed': False,

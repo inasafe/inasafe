@@ -4,7 +4,7 @@ from safe.definitions.fields import (
     hazard_count_field,
     total_affected_field,
     total_field,
-    total_unaffected_field,
+    total_not_affected_field,
     total_not_exposed_field)
 from safe.definitions.hazard_classifications import hazard_classes_all
 from safe.report.extractors.util import (
@@ -117,7 +117,7 @@ def analysis_result_extractor(impact_report, component_metadata):
 
     report_fields = [
         total_affected_field,
-        total_unaffected_field,
+        total_not_affected_field,
         total_not_exposed_field,
         total_field
     ]

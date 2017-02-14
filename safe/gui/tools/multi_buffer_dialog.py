@@ -154,7 +154,7 @@ class MultiBufferDialog(QtGui.QDialog, FORM_CLASS):
             '%s_multi_buffer%s' % (
                 os.path.join(input_directory, self.output_filename),
                 file_extension),
-            self.tr('GeoJSON (*.geojson);;Shapefile (*.shp)'))
+            'GeoJSON (*.geojson);;Shapefile (*.shp)')
         # set selected path to the dialog
         self.output_form.setText(output_path)
 

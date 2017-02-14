@@ -1,4 +1,5 @@
 # coding=utf-8
+
 """InaSAFE Function Centric Wizard Analysis Step."""
 
 import logging
@@ -51,10 +52,11 @@ FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
 class StepFcAnalysis(WizardStep, FORM_CLASS):
+
     """Function Centric Wizard Step: Analysis."""
 
     def __init__(self, parent):
-        """Init method"""
+        """Init method."""
         WizardStep.__init__(self, parent)
 
         enable_messaging(self.results_webview)
@@ -115,7 +117,7 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         LOGGER.debug('Open in composer Button is not implemented')
 
     def setup_and_run_analysis(self):
-        """Execute analysis after the tab is displayed"""
+        """Execute analysis after the tab is displayed."""
         # IFCW 4.0:
 
         # Show busy
@@ -133,13 +135,15 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
             LOGGER.info(tr(
                 'The impact function will not be able to run because of the '
                 'inputs.'))
+            LOGGER.info(message.to_text())
             send_error_message(self, message)
             return
         if status == PREPARE_FAILED_BAD_CODE:
             self.hide_busy()
             LOGGER.exception(tr(
-                'The impact function will not be able to run because of a '
+                'The impact function was not able to be prepared because of a '
                 'bug.'))
+            LOGGER.info(message.to_text())
             send_error_message(self, message)
             return
         # Start the analysis
@@ -149,12 +153,14 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
             self.hide_busy()
             LOGGER.info(tr(
                 'The impact function could not run because of the inputs.'))
+            LOGGER.info(message.to_text())
             send_error_message(self, message)
             return
         elif status == ANALYSIS_FAILED_BAD_CODE:
             self.hide_busy()
             LOGGER.exception(tr(
                 'The impact function could not run because of a bug.'))
+            LOGGER.exception(message.to_text())
             send_error_message(self, message)
             return
 
@@ -187,7 +193,7 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         self.setup_gui_analysis_done()
 
     def set_widgets(self):
-        """Set widgets on the Progress tab"""
+        """Set widgets on the Progress tab."""
         self.progress_bar.setValue(0)
         self.results_webview.setHtml('')
         self.pbnReportWeb.hide()

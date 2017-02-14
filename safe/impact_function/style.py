@@ -10,6 +10,7 @@ from qgis.core import (
     QgsCategorizedSymbolRendererV2,
     QgsSymbolLayerV2Registry,
     QgsConditionalStyle,
+    QGis,
 )
 
 from safe.definitions.styles import (
@@ -47,6 +48,7 @@ def hazard_class_style(layer, classification, display_null=False):
     """
     categories = []
 
+    # Conditional styling
     attribute_table_styles = []
 
     for hazard_class, (color, label) in classification.iteritems():
@@ -64,12 +66,15 @@ def hazard_class_style(layer, classification, display_null=False):
 
         style = QgsConditionalStyle()
         style.setName(hazard_class)
-        style.setBackgroundColor(color.lighter())
         style.setRule("hazard_class='%s'" % hazard_class)
+        symbol = QgsSymbolV2.defaultSymbol(QGis.Point)
+        symbol.setColor(color)
+        symbol.setSize(3)
+        style.setSymbol(symbol)
         attribute_table_styles.append(style)
 
-    # Disabled until we improve it a little bit. ET 20/01/17.
-    # layer.conditionalStyles().setRowStyles(attribute_table_styles)
+    layer.conditionalStyles().setFieldStyles(
+        'hazard_class', attribute_table_styles)
     renderer = QgsCategorizedSymbolRendererV2(
         hazard_class_field['field_name'], categories)
     layer.setRendererV2(renderer)

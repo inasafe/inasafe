@@ -696,9 +696,8 @@ class ImpactFunction(object):
             message = generate_input_error_message(
                 tr('The %s layer do not have keywords.' % purpose),
                 m.Paragraph(tr(
-                    'The %s layer do not have keywords. Use the '
-                    'Use the wizard to assign keywords to the layer.'
-                    % purpose))
+                    'The %s layer do not have keywords. Use the wizard to '
+                    'assign keywords to the layer.' % purpose))
             )
             return PREPARE_FAILED_BAD_INPUT, message
 
@@ -1033,7 +1032,7 @@ class ImpactFunction(object):
             warning_heading = m.Heading(
                 tr('No features in the extent'), **WARNING_STYLE)
             warning_message = tr(
-                'There are no features in the analys extent.')
+                'There are no features in the analysis extent.')
             suggestion_heading = m.Heading(
                 tr('Suggestion'), **SUGGESTION_STYLE)
             suggestion = tr(
@@ -1335,20 +1334,24 @@ class ImpactFunction(object):
             if self.debug_mode:
                 self.debug_layer(self.aggregation)
 
-            # We need to check if we can add default ratios to the exposure.
-            exposure = definition(self.exposure.keywords['exposure'])
-            keywords = self.exposure.keywords
-            # inasafe_default_values will not exist as we can't use default in
-            # the exposure layer.
-            keywords['inasafe_default_values'] = {}
-            for count_field in exposure['extra_fields']:
-                if count_field['key'] in count_ratio_mapping.keys():
-                    if count_field['key'] not in keywords['inasafe_fields']:
-                        # The exposure hasn't a count field, we should add it.
-                        ratio_field = count_ratio_mapping[count_field['key']]
-                        default = definition(ratio_field)['default_value']
-                        keywords['inasafe_default_values'][ratio_field] = (
-                            default['default_value'])
+            if is_vector_layer(self.exposure):
+                # We need to check if we can add default ratios to the
+                # exposure (only if it's a vector).
+                exposure = definition(self.exposure.keywords['exposure'])
+                keywords = self.exposure.keywords
+                # inasafe_default_values will not exist as we can't use
+                # default in the exposure layer.
+                keywords['inasafe_default_values'] = {}
+                for count_field in exposure['extra_fields']:
+                    count_key = count_field['key']
+                    if count_key in count_ratio_mapping.keys():
+                        if count_key not in keywords['inasafe_fields']:
+                            # The exposure hasn't a count field, we should add
+                            #  it.
+                            ratio_field = count_ratio_mapping[count_key]
+                            default = definition(ratio_field)['default_value']
+                            keywords['inasafe_default_values'][ratio_field] = (
+                                default['default_value'])
 
         else:
             self.set_state_info('aggregation', 'provided', True)

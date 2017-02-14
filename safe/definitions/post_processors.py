@@ -654,7 +654,7 @@ minimum_needs_post_processors = initialize_minimum_needs_post_processors()
 
 # Postprocessor tree
 # |--- size
-# |   `--- size rate
+# |   `--- size rate  disabled in V4.0, ET 13/02/17
 # |--- affected
 # |--- displaced
 # |   |--- gender
@@ -677,9 +677,11 @@ age_postprocessors = [
     post_processor_elderly,
 ]
 
+vulnerability_postprocessors = [post_processor_gender] + age_postprocessors
+
 post_processors = [
     post_processor_size,
-    post_processor_size_rate,
+    # post_processor_size_rate, disabled in V4.0, ET 13/02/17
     post_processor_affected,
     post_processor_displaced,
 ] + female_postprocessors + age_postprocessors + minimum_needs_post_processors

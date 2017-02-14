@@ -619,7 +619,7 @@ class TestKeywordWizard(unittest.TestCase):
             layer.keywords['value_maps'], dialog.get_keywords()['value_maps'])
 
     def test_exposure_structure_polygon_keyword(self):
-        """Test keyword wizard for exposure structure polygon"""
+        """Test keyword wizard for exposure structure polygon."""
         layer = clone_shp_layer(
             name='buildings',
             include_keywords=False,
@@ -716,10 +716,11 @@ class TestKeywordWizard(unittest.TestCase):
         dialog.pbnNext.click()
 
         # Check if in InaSAFE Default field step
-        self.check_current_step(dialog.step_kw_default_inasafe_fields)
+        # This step is disabled until we activate again value/rate fields.
+        # self.check_current_step(dialog.step_kw_default_inasafe_fields)
 
         # Click next to finish InaSAFE Default Field step and go to source step
-        dialog.pbnNext.click()
+        # dialog.pbnNext.click()
 
         # Check if in source step
         self.check_current_step(dialog.step_kw_source)
@@ -876,10 +877,11 @@ class TestKeywordWizard(unittest.TestCase):
         dialog.pbnNext.click()
 
         # Check if in InaSAFE Default field step
-        self.check_current_step(dialog.step_kw_default_inasafe_fields)
+        # This step is disabled until we activate again value/rate fields.
+        # self.check_current_step(dialog.step_kw_default_inasafe_fields)
 
         # Click next to finish InaSAFE Default Field step and go to source step
-        dialog.pbnNext.click()
+        # dialog.pbnNext.click()
 
         # Check if in source step
         self.check_current_step(dialog.step_kw_source)

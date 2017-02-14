@@ -11,9 +11,12 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+import json
 import os
 import logging
 import time
+import requests
+
 from shutil import copy
 from PyQt4 import QtCore
 from PyQt4.QtCore import QVariant
@@ -193,15 +196,47 @@ class PetaJakartaDialog(QDialog, FORM_CLASS):
         QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
 
         source = (
-            'https://rem.petajakarta.org/banjir/data/api/v2/rem/flooded')
-        layer = QgsVectorLayer(source, 'flood', 'ogr', False)
-        self.time_stamp = time.strftime('%d-%b-%Y %H:%M:%S')
-        # Now save as shp
-        name = 'jakarta_flood.shp'
+            'https://data.petabencana.id/floods'
+            '?city=jbd&geoformat=geojson&format=json&minimum_state=1')
+        # save the file as json first
+        name = 'jakarta_flood.json'
         output_directory = self.output_directory.text()
         output_prefix = self.filename_prefix.text()
         overwrite = self.overwrite_flag.isChecked()
         date_stamp_flag = self.include_date_flag.isChecked()
+        output_base_file_path = self.get_output_base_path(
+            output_directory,
+            output_prefix,
+            date_stamp_flag,
+            name,
+            overwrite)
+
+        title = self.tr("Can't access API")
+        request_failed_message = self.tr(
+            "Can't access PetaBencana API: {source}").format(
+            source=source)
+
+        try:
+            response = requests.get(source)
+            if not response.ok:
+                raise Exception(request_failed_message)
+
+            result_dict = response.json()
+            with open(output_base_file_path, mode='w') as json_file:
+                json_string = json.dumps(result_dict['result'])
+                json_file.write(json_string)
+
+            # Open json file as QgsMapLayer
+            layer = QgsVectorLayer(
+                output_base_file_path, 'flood', 'ogr', False)
+        except Exception as e:
+            self.disable_busy_cursor()
+            QMessageBox.critical(self, title, str(e))
+            return
+
+        self.time_stamp = time.strftime('%d-%b-%Y %H:%M:%S')
+        # Now save as shp
+        name = 'jakarta_flood.shp'
         output_base_file_path = self.get_output_base_path(
             output_directory,
             output_prefix,

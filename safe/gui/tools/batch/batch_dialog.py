@@ -306,15 +306,15 @@ class BatchDialog(QDialog, FORM_CLASS):
         """
 
         status = True
+        message = ''
         # get hazard
         if 'hazard' in items:
-            LOGGER.info('Hazard path is found')
             hazard_path = items['hazard']
             hazard = self.define_layer(hazard_path)
             if not hazard:
                 status = False
                 message = self.tr(
-                    'Unable to find {hazard_path} ').format(
+                    'Unable to find {hazard_path}').format(
                     hazard_path=hazard_path)
         else:
             hazard = None
@@ -322,13 +322,14 @@ class BatchDialog(QDialog, FORM_CLASS):
 
         # get exposure
         if 'exposure' in items:
-            LOGGER.info('Exposure path is found')
             exposure_path = items['exposure']
             exposure = self.define_layer(exposure_path)
             if not exposure:
                 status = False
+                if message:
+                    message += '\n'
                 message += self.tr(
-                    '\nUnable to find {exposure_path} ').format(
+                    'Unable to find {exposure_path}').format(
                     exposure_path=exposure_path)
         else:
             exposure = None
@@ -336,7 +337,6 @@ class BatchDialog(QDialog, FORM_CLASS):
 
         # get aggregation
         if 'aggregation' in items:
-            LOGGER.info('Aggregation path is found')
             aggregation_path = items['aggregation']
             aggregation = self.define_layer(aggregation_path)
         else:
