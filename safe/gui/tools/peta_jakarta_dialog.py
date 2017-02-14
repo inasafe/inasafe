@@ -530,24 +530,27 @@ class PetaJakartaDialog(QDialog, FORM_CLASS):
         super(PetaJakartaDialog, self).reject()
 
     def download(self, url, output_path):
-        """Download file from url and write to output path.
+        """Download file from API url and write to output path.
 
-        :param url: URL of the zip bundle.
+        :param url: URL of the API.
         :type url: str
 
         :param output_path: Path of output file,
         :type output_path: str
         """
+        request_failed_message = self.tr(
+            "Can't access PetaBencana API: {source}").format(
+            source=url)
         downloader = FileDownloader(url, output_path)
-        try:
-            result = downloader.download()
-        except IOError as ex:
-            raise IOError(ex)
+        result, message = downloader.download()
+        if not result:
+            display_warning_message_box(
+                self,
+                self.tr('Download error'),
+                self.tr(request_failed_message + '\n' + message))
 
-        if result[0] is not True:
-            _, error_message = result
-
-            if result[0] == QNetworkReply.OperationCanceledError:
-                raise CanceledImportDialogError(error_message)
-            else:
-                raise DownloadError(error_message)
+        if result == QNetworkReply.OperationCanceledError:
+            display_warning_message_box(
+                self,
+                self.tr('Download error'),
+                self.tr(message))
