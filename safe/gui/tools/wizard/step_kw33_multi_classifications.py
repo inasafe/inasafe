@@ -475,10 +475,9 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
 
         if is_raster_layer(self.parent.layer):
             dataset = gdal.Open(self.parent.layer.source(), GA_ReadOnly)
-            min_value_layer = numpy.amin(numpy.array(
-                dataset.GetRasterBand(1).ReadAsArray()))
-            max_value_layer = numpy.amax(numpy.array(
-                dataset.GetRasterBand(1).ReadAsArray()))
+            statistic = dataset.GetRasterBand(1).GetStatistics(True, True)
+            min_value_layer = statistic[0]
+            max_value_layer = statistic[1]
             description_text = continuous_raster_question % (
                 layer_purpose['name'],
                 layer_subcategory['name'],
