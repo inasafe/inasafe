@@ -197,7 +197,7 @@ class PetaJakartaDialog(QDialog, FORM_CLASS):
         QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
 
         source = (
-            'https://data-dev.petabencana.id/floods'
+            'https://data.petabencana.id/floods'
             '?city=jbd&geoformat=geojson&format=json&minimum_state=1')
         # save the file as json first
         name = 'jakarta_flood.json'
@@ -213,9 +213,6 @@ class PetaJakartaDialog(QDialog, FORM_CLASS):
             overwrite)
 
         title = self.tr("Can't access API")
-        request_failed_message = self.tr(
-            "Can't access PetaBencana API: {source}").format(
-            source=source)
 
         try:
             self.download(source, output_base_file_path)
