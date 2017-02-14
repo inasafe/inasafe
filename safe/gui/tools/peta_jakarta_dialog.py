@@ -11,15 +11,14 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-import json
 import os
 import logging
 import time
-import requests
 
 from shutil import copy
 from PyQt4 import QtCore
 from PyQt4.QtCore import QVariant
+from PyQt4.QtNetwork import QNetworkReply
 # noinspection PyUnresolvedReferences
 # pylint: disable=unused-import
 from qgis.core import (
@@ -44,7 +43,9 @@ from PyQt4.QtGui import (
 
 from safe.common.exceptions import (
     CanceledImportDialogError,
+    DownloadError,
     FileMissingError)
+from safe.utilities.file_downloader import FileDownloader
 from safe.utilities.resources import (
     html_footer, html_header, get_ui_class, resources_path)
 from safe.utilities.qgis_utilities import (
@@ -212,21 +213,11 @@ class PetaJakartaDialog(QDialog, FORM_CLASS):
             overwrite)
 
         title = self.tr("Can't access API")
-        request_failed_message = self.tr(
-            "Can't access PetaBencana API: {source}").format(
-            source=source)
 
         try:
-            response = requests.get(source)
-            if not response.ok:
-                raise Exception(request_failed_message)
+            self.download(source, output_base_file_path)
 
-            result_dict = response.json()
-            with open(output_base_file_path, mode='w') as json_file:
-                json_string = json.dumps(result_dict['result'])
-                json_file.write(json_string)
-
-            # Open json file as QgsMapLayer
+            # Open downloaded file as QgsMapLayer
             layer = QgsVectorLayer(
                 output_base_file_path, 'flood', 'ogr', False)
         except Exception as e:
@@ -537,3 +528,29 @@ class PetaJakartaDialog(QDialog, FORM_CLASS):
         # add our own logic here...
 
         super(PetaJakartaDialog, self).reject()
+
+    def download(self, url, output_path):
+        """Download file from API url and write to output path.
+
+        :param url: URL of the API.
+        :type url: str
+
+        :param output_path: Path of output file,
+        :type output_path: str
+        """
+        request_failed_message = self.tr(
+            "Can't access PetaBencana API: {source}").format(
+            source=url)
+        downloader = FileDownloader(url, output_path)
+        result, message = downloader.download()
+        if not result:
+            display_warning_message_box(
+                self,
+                self.tr('Download error'),
+                self.tr(request_failed_message + '\n' + message))
+
+        if result == QNetworkReply.OperationCanceledError:
+            display_warning_message_box(
+                self,
+                self.tr('Download error'),
+                self.tr(message))
