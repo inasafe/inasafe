@@ -35,10 +35,10 @@ def reclassify(layer, exposure_key=None, callback=None):
 
     For instance if you want to reclassify like this table :
             Original Value     |   Class
-            - ∞ <= val < 0     |     1
-            0   <= val < 0.5   |     2
-            0.5 <= val < 5     |     3
-            5   <= val < + ∞   |     6
+            - ∞ < val <= 0     |     1
+            0   < val <= 0.5   |     2
+            0.5 < val <= 5     |     3
+            5   < val <  + ∞   |     6
 
     You need a dictionary :
         ranges = OrderedDict()
@@ -108,13 +108,13 @@ def reclassify(layer, exposure_key=None, callback=None):
         v_max = interval[1]
 
         if v_min is None:
-            destination[np.where(source < v_max)] = value
+            destination[np.where(source <= v_max)] = value
 
         if v_max is None:
-            destination[np.where(source >= v_min)] = value
+            destination[np.where(source > v_min)] = value
 
         if v_min < v_max:
-            destination[np.where((v_min <= source) & (source < v_max))] = value
+            destination[np.where((v_min < source) & (source <= v_max))] = value
 
     # Tag no data cells
     destination[np.where(source == no_data)] = no_data_value

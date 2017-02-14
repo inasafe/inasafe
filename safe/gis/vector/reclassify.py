@@ -31,7 +31,7 @@ def reclassify(layer, exposure_key=None, callback=None):
             - ∞ < val <= 0     |     1
             0   < val <= 0.5   |     2
             0.5 < val <= 5     |     3
-            5   < val <= + ∞   |     6
+            5   < val <  + ∞   |     6
 
     You need a dictionary :
         ranges = OrderedDict()
@@ -106,7 +106,6 @@ def reclassify(layer, exposure_key=None, callback=None):
     layer.updateFields()
 
     # We transfer keywords to the output.
-    layer.keywords = layer.keywords
     inasafe_fields[hazard_class_field['key']] = (
         hazard_class_field['field_name'])
 
@@ -137,7 +136,6 @@ def _classified_value(value, ranges):
     :return: The classified value or None.
     :rtype: float or None
     """
-
     if value is None or value == '' or isinstance(value, QPyNullVariant):
         return None
 
