@@ -495,9 +495,9 @@ tsunami_hazard_classes = {
     'type': hazard_classification_type,
     'citations': [
         {
-            'text': 'BNPB Perka 2/2012',
-            'link': 'http://bpbd.kendalkab.go.id/docs/publikasi/'
-                    'perka_bnpb_no_2_tahun_2012_0.pdf'
+            'text': tr('BNPB Perka 2/2012'),
+            'link': u'http://bpbd.kendalkab.go.id/docs/publikasi/'
+                    u'perka_bnpb_no_2_tahun_2012_0.pdf'
         }
     ],
     'classes': [
@@ -627,9 +627,9 @@ tsunami_hazard_classes = {
     'type': hazard_classification_type,
     'citations': [
         {
-            'text': 'BNPB Perka 2/2012',
-            'link': 'http://bpbd.kendalkab.go.id/docs/publikasi/'
-                    'perka_bnpb_no_2_tahun_2012_0.pdf'
+            'text': tr('BNPB Perka 2/2012'),
+            'link': u'http://bpbd.kendalkab.go.id/docs/publikasi/'
+                    u'perka_bnpb_no_2_tahun_2012_0.pdf'
         }
     ],
     'classes': [
@@ -736,8 +736,8 @@ tsunami_hazard_classes = {
     'citations': [
         {
             'text': None,
-            'link': 'http://geology.about.com/od/tsunamis/a/'
-                    'Tsunami-Intensity-Scale-2001.htm'
+            'link': u'http://geology.about.com/od/tsunamis/a/'
+                    u'Tsunami-Intensity-Scale-2001.htm'
         }
     ],
     'classes': [
@@ -886,8 +886,8 @@ tsunami_hazard_classes = {
     'citations': [
         {
             'text': None,
-            'link': 'http://geology.about.com/od/tsunamis/a/'
-                    'Tsunami-Intensity-Scale-2001.htm'
+            'link': u'http://geology.about.com/od/tsunamis/a/'
+                    u'Tsunami-Intensity-Scale-2001.htm'
         }
     ],
     'classes': [
