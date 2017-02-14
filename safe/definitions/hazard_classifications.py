@@ -62,7 +62,7 @@ generic_hazard_classes = {
             'value': 3,
             'name': tr('High hazard zone'),
             'affected': True,
-            'description': tr('The locations having the highest impact.'),
+            'description': tr('The area with the highest hazard.'),
             'string_defaults': ['high'],
             'displacement_rate': 0.0,
             'fatality_rate': 0.0,
@@ -81,7 +81,7 @@ generic_hazard_classes = {
             'value': 2,
             'name': tr('Medium hazard zone'),
             'affected': True,
-            'description': tr('The locations where there is a medium impact.'),
+            'description': tr('The area with the medium hazard.'),
             'string_defaults': ['medium'],
             'displacement_rate': 0.0,
             'fatality_rate': 0.0,
@@ -101,7 +101,7 @@ generic_hazard_classes = {
             'name': tr('Low hazard zone'),
             'affected': True,
             'description': tr(
-                'The locations where the lowest impact occurred.'),
+                'The area with the lowest hazard.'),
             'string_defaults': ['low'],
             'displacement_rate': 0.0,
             'fatality_rate': 0.0,
@@ -495,8 +495,9 @@ tsunami_hazard_classes = {
     'type': hazard_classification_type,
     'citations': [
         {
-            'text': None,
-            'link': None
+            'text': 'BNPB Perka 2/2012',
+            'link': 'http://bpbd.kendalkab.go.id/docs/publikasi/'
+                    'perka_bnpb_no_2_tahun_2012_0.pdf'
         }
     ],
     'classes': [
@@ -510,7 +511,7 @@ tsunami_hazard_classes = {
             'description': tr(
                 'The area is potentially hit by a tsunami wave with an '
                 'inundation depth > 3 m or reach a tsunami intensity scale of '
-                'VII or more (Papadoupulos and Imamura, 2001). Tsunami wave '
+                'VII or more (Papadopoulos and Imamura, 2001). Tsunami wave '
                 'with 4 m inundation depth cause damage to small vessel, '
                 'a few ships are drifted inland, severe damage on most wooden '
                 'houses. Boulders are deposited on shore. If tsunami height '
@@ -538,7 +539,7 @@ tsunami_hazard_classes = {
             'description': tr(
                 'Water above 1.1m and less than 3.0m. The area is potentially '
                 'hit by a tsunami wave with an inundation depth of 1 - 3 '
-                'm or equal to V-VI tsunami intensity scale (Papadoupulos and '
+                'm or equal to V-VI tsunami intensity scale (Papadopoulos and '
                 'Imamura, 2001). Tsunami wave with a 3m inundation depth '
                 'causes most people frightened and to flee to higher '
                 'ground. Small vessels drift and collide. Damage occurs to '
@@ -565,7 +566,7 @@ tsunami_hazard_classes = {
                 'Water above ground height and less than 1.0m. The area is '
                 'potentially hit by a tsunami wave with an inundation '
                 'depth less than 1 m or similar to tsunami intensity scale of '
-                'V or less in (Papadoupulos and Imamura, 2001). Tsunami wave '
+                'V or less in (Papadopoulos and Imamura, 2001). Tsunami wave '
                 'of 1m height causes few people to be frightened and flee to '
                 'higher elevation. Felt by most people on large ship, '
                 'observed from shore. Small vessels drift and collide and '
@@ -626,8 +627,9 @@ tsunami_hazard_classes = {
     'type': hazard_classification_type,
     'citations': [
         {
-            'text': None,
-            'link': None
+            'text': 'BNPB Perka 2/2012',
+            'link': 'http://bpbd.kendalkab.go.id/docs/publikasi/'
+                    'perka_bnpb_no_2_tahun_2012_0.pdf'
         }
     ],
     'classes': [
@@ -641,7 +643,7 @@ tsunami_hazard_classes = {
             'description': tr(
                 'The area is potentially hit by a tsunami wave with an '
                 'inundation depth > 3 m or reach a tsunami intensity scale of '
-                'VII or more (Papadoupulos and Imamura, 2001). Tsunami wave '
+                'VII or more (Papadopoulos and Imamura, 2001). Tsunami wave '
                 'with 4 m inundation depth cause damage to small vessel, '
                 'a few ships are drifted inland, severe damage on most wooden '
                 'houses. Boulders are deposited on shore. If tsunami height '
@@ -669,7 +671,7 @@ tsunami_hazard_classes = {
             'description': tr(
                 'Water above 0.7m and less than 3.0m. The area is potentially '
                 'hit by a tsunami wave with an inundation depth of 1 - 3 '
-                'm or equal to V-VI tsunami intensity scale (Papadoupulos and '
+                'm or equal to V-VI tsunami intensity scale (Papadopoulos and '
                 'Imamura, 2001). Tsunami wave with a 3m inundation depth '
                 'causes most people frightened and to flee to higher '
                 'ground. Small vessels drift and collide. Damage occurs to '
@@ -696,7 +698,7 @@ tsunami_hazard_classes = {
                 'Water above ground height and less than 1.0m. The area is '
                 'potentially hit by a tsunami wave with an inundation '
                 'depth less than 1 m or similar to tsunami intensity scale of '
-                'V or less in (Papadoupulos and Imamura, 2001). Tsunami wave '
+                'V or less in (Papadopoulos and Imamura, 2001). Tsunami wave '
                 'of 1m height causes few people to be frightened and flee to '
                 'higher elevation. Felt by most people on large ship, '
                 'observed from shore. Small vessels drift and collide and '
@@ -729,12 +731,13 @@ tsunami_hazard_classes = {
         'area. The area is either <b>dry</b>, <b>low</b>, <b>medium</b>, '
         '<b>high</b>, or <b>very high</b> for tsunami hazard classification. '
         'The following description for these classes is provided by Pak '
-        'Hamza ITB based on Papadoupulos and Imamura, 2001.'),
+        'Hamza ITB based on Papadopoulos and Imamura, 2001.'),
     'type': hazard_classification_type,
     'citations': [
         {
             'text': None,
-            'link': None
+            'link': 'http://geology.about.com/od/tsunamis/a/'
+                    'Tsunami-Intensity-Scale-2001.htm'
         }
     ],
     'classes': [
@@ -767,7 +770,7 @@ tsunami_hazard_classes = {
                 'Water above 3.1m and less than 8.0m. The area is '
                 'potentially hit by a tsunami wave with an inundation '
                 'depth > 3 m or reach a tsunami intensity scale of VII or '
-                'even more (Papadoupulos and Imamura, 2001). Tsunami wave '
+                'even more (Papadopoulos and Imamura, 2001). Tsunami wave '
                 'with 4 m inundation depth cause damage to small vessel, '
                 'a few ships are drifted inland, severe damage on most wooden '
                 'houses. Boulders are deposited on shore. If tsunami height '
@@ -795,7 +798,7 @@ tsunami_hazard_classes = {
             'description': tr(
                 'Water above 1.1m and less than 3.0m. The area is potentially '
                 'hit by a tsunami wave with an inundation depth of 1 - 3 '
-                'm or equal to V-VI tsunami intensity scale (Papadoupulos and '
+                'm or equal to V-VI tsunami intensity scale (Papadopoulos and '
                 'Imamura, 2001). Tsunami wave with a 3m inundation depth '
                 'causes most people frightened and to flee to higher '
                 'ground. Small vessels drift and collide. Damage occurs to '
@@ -822,7 +825,7 @@ tsunami_hazard_classes = {
                 'Water above ground height and less than 1.0m. The area is '
                 'potentially hit by a tsunami wave with an inundation '
                 'depth less than 1 m or similar to tsunami intensity scale of '
-                'V or less in (Papadoupulos and Imamura, 2001). Tsunami wave '
+                'V or less in (Papadopoulos and Imamura, 2001). Tsunami wave '
                 'of 1m height causes few people to be frightened and flee to '
                 'higher elevation. Felt by most people on large ship, '
                 'observed from shore. Small vessels drift and collide and '
@@ -878,12 +881,13 @@ tsunami_hazard_classes = {
         'area. The area is either <b>dry</b>, <b>low</b>, <b>medium</b>, '
         '<b>high</b>, or <b>very high</b> for tsunami hazard classification. '
         'The following description for these classes is provided by Pak '
-        'Hamza ITB based on Papadoupulos and Imamura, 2001.'),
+        'Hamza ITB based on Papadopoulos and Imamura, 2001.'),
     'type': hazard_classification_type,
     'citations': [
         {
             'text': None,
-            'link': None
+            'link': 'http://geology.about.com/od/tsunamis/a/'
+                    'Tsunami-Intensity-Scale-2001.htm'
         }
     ],
     'classes': [
@@ -916,7 +920,7 @@ tsunami_hazard_classes = {
                 'Water above 3.1m and less than 8.0m. The area is '
                 'potentially hit by a tsunami wave with an inundation '
                 'depth > 3 m or reach a tsunami intensity scale of VII or '
-                'even more (Papadoupulos and Imamura, 2001). Tsunami wave '
+                'even more (Papadopoulos and Imamura, 2001). Tsunami wave '
                 'with 4 m inundation depth cause damage to small vessel, '
                 'a few ships are drifted inland, severe damage on most wooden '
                 'houses. Boulders are deposited on shore. If tsunami height '
@@ -944,7 +948,7 @@ tsunami_hazard_classes = {
             'description': tr(
                 'Water above 1.1m and less than 3.0m. The area is potentially '
                 'hit by a tsunami wave with an inundation depth of 1 - 3 '
-                'm or equal to V-VI tsunami intensity scale (Papadoupulos and '
+                'm or equal to V-VI tsunami intensity scale (Papadopoulos and '
                 'Imamura, 2001). Tsunami wave with a 3m inundation depth '
                 'causes most people frightened and to flee to higher '
                 'ground. Small vessels drift and collide. Damage occurs to '
@@ -971,7 +975,7 @@ tsunami_hazard_classes = {
                 'Water above ground height and less than 1.0m. The area is '
                 'potentially hit by a tsunami wave with an inundation '
                 'depth less than 1 m or similar to tsunami intensity scale of '
-                'V or less in (Papadoupulos and Imamura, 2001). Tsunami wave '
+                'V or less in (Papadopoulos and Imamura, 2001). Tsunami wave '
                 'of 1m height causes few people to be frightened and flee to '
                 'higher elevation. Felt by most people on large ship, '
                 'observed from shore. Small vessels drift and collide and '
