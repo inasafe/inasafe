@@ -356,8 +356,8 @@ flood_hazard_classes = {
     ]
 }
 
-ash_thickness_hazard_classes = {
-    'key': 'ash_thickness_hazard_classes',
+ash_hazard_classes = {
+    'key': 'ash_hazard_classes',
     'name': tr('Ash classes'),
     'description': tr(
         'Five classes are supported for volcanic ash hazard data: '
@@ -1117,7 +1117,7 @@ hazard_classification = {
         earthquake_mmi_hazard_classes,
         tsunami_hazard_classes,
         volcano_hazard_classes,
-        ash_thickness_hazard_classes,
+        ash_hazard_classes,
         cyclone_au_bom_hazard_classes,
         cyclone_sshws_hazard_classes,
     ]
