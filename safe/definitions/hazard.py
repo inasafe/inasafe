@@ -6,6 +6,9 @@ from safe.definitions.hazard_classifications import (
     earthquake_mmi_hazard_classes,
     flood_hazard_classes,
     tsunami_hazard_classes,
+    tsunami_hazard_population_classes,
+    tsunami_hazard_classes_ITB,
+    tsunami_hazard_population_classes_ITB,
     ash_hazard_classes,
     cyclone_au_bom_hazard_classes,
     cyclone_sshws_hazard_classes)
