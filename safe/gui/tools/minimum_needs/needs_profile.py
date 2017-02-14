@@ -198,6 +198,7 @@ class NeedsProfile(MinimumNeeds):
                 locale_minimum_needs_dir, file_name)
             if not os.path.exists(destination_file) or overwrite:
                 copy(source_file, destination_file)
+        self.load_old_profile(locale_minimum_needs_dir)
         profiles = [
             profile[:-5] for profile in
             os.listdir(locale_minimum_needs_dir) if
@@ -338,3 +339,20 @@ class NeedsProfile(MinimumNeeds):
             os.path.join(
                 str(self.root_directory), 'minimum_needs', profile + '.json')
         )
+
+    def load_old_profile(self, locale_minimum_needs_dir):
+        """Load old minimum needs profile under ~/.qgis2/minimum_needs.
+
+        :param locale_minimum_needs_dir: User local minimum needs profile path.
+        :type locale_minimum_needs_dir: str
+        """
+        old_profile_path = os.path.join(
+            QgsApplication.qgisSettingsDirPath(), 'minimum_needs')
+
+        if os.path.exists(old_profile_path):
+            for filename in os.listdir(old_profile_path):
+                source_file = os.path.join(old_profile_path, filename)
+                destination_file = os.path.join(
+                    locale_minimum_needs_dir, filename)
+                if not os.path.exists(destination_file):
+                    copy(source_file, destination_file)
