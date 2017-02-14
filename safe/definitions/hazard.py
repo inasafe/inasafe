@@ -6,6 +6,9 @@ from safe.definitions.hazard_classifications import (
     earthquake_mmi_hazard_classes,
     flood_hazard_classes,
     tsunami_hazard_classes,
+    tsunami_hazard_population_classes,
+    tsunami_hazard_classes_ITB,
+    tsunami_hazard_population_classes_ITB,
     ash_hazard_classes,
     cyclone_au_bom_hazard_classes,
     cyclone_sshws_hazard_classes)
@@ -277,10 +280,14 @@ hazard_volcanic_ash = {
     'classified_notes': [  # notes specific to classified data
     ],
     'single_event_notes': [  # notes specific to single event data
+        tr('Volcanic ash is modelled hazard data estimating the thickness of '
+           'ash on the ground following a volcanic eruption.')
     ],
     'multi_event_notes': [  # notes specific to multi event data
     ],
     'actions': [  # these are additional generic actions - IF has more
+        tr('What action can be taken to secure water supplies and protect '
+           'crops?')
 
     ],
     'citations': [
@@ -324,6 +331,8 @@ hazard_tsunami = {
     'classified_notes': [  # notes specific to classified data
     ],
     'single_event_notes': [  # notes specific to single event data
+        tr('Tsunami hazard scenarios estimate the inundation of a tsunami '
+           'wave on land.')
     ],
     'multi_event_notes': [  # notes specific to multi event data
     ],
@@ -341,7 +350,13 @@ hazard_tsunami = {
         'polygon',
         'raster'
     ],
-    'classifications': [tsunami_hazard_classes, generic_hazard_classes],
+    'classifications': [
+        tsunami_hazard_classes,
+        tsunami_hazard_population_classes,
+        tsunami_hazard_classes_ITB,
+        tsunami_hazard_population_classes_ITB,
+        generic_hazard_classes,
+    ],
     'compulsory_fields': [hazard_value_field],
     'fields': hazard_fields,
     'extra_fields': [],

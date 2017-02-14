@@ -62,7 +62,7 @@ generic_hazard_classes = {
             'value': 3,
             'name': tr('High hazard zone'),
             'affected': True,
-            'description': tr('The locations having the highest impact.'),
+            'description': tr('The area with the highest hazard.'),
             'string_defaults': ['high'],
             'displacement_rate': 0.0,
             'fatality_rate': 0.0,
@@ -81,7 +81,7 @@ generic_hazard_classes = {
             'value': 2,
             'name': tr('Medium hazard zone'),
             'affected': True,
-            'description': tr('The locations where there is a medium impact.'),
+            'description': tr('The area with the medium hazard.'),
             'string_defaults': ['medium'],
             'displacement_rate': 0.0,
             'fatality_rate': 0.0,
@@ -101,7 +101,7 @@ generic_hazard_classes = {
             'name': tr('Low hazard zone'),
             'affected': True,
             'description': tr(
-                'The locations where the lowest impact occurred.'),
+                'The area with the lowest hazard.'),
             'string_defaults': ['low'],
             'displacement_rate': 0.0,
             'fatality_rate': 0.0,
@@ -360,7 +360,7 @@ ash_hazard_classes = {
     'key': 'ash_hazard_classes',
     'name': tr('Ash classes'),
     'description': tr(
-        'Three classes are supported for ash vector hazard data: '
+        'Five classes are supported for volcanic ash hazard data: '
         '<b>very low</b>, <b>low</b>, <b>medium</b>, <b>high</b> or '
         '<b>very high</b>.'),
     'type': hazard_classification_type,
@@ -378,7 +378,8 @@ ash_hazard_classes = {
             'color': dark_red,
             'name': tr('Very high'),
             'affected': True,
-            'description': tr('Very High.'),
+            'description': tr(
+                'Dry loading on buildings causing structural collapse.'),
             'displacement_rate': 0.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 10,
@@ -396,7 +397,10 @@ ash_hazard_classes = {
             'color': red,
             'name': tr('High'),
             'affected': True,
-            'description': tr('High'),
+            'description': tr(
+                'Dry loading on buildings causing structural damage but not '
+                'collapse; wet loading on buildings (i.e. ash loading + heavy '
+                'rainfall) causing structural collapse.'),
             'displacement_rate': 0.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 5,
@@ -414,7 +418,11 @@ ash_hazard_classes = {
             'color': orange,
             'name': tr('Medium'),
             'affected': True,
-            'description': tr('Medium'),
+            'description': tr(
+                'Damage to less vulnerable agricultural crops (e.g. tea '
+                'plantations) and destruction of more vulnerable crops; '
+                'destruction of critical infrastructure; cosmetic '
+                '(non-structural) damage to buildings'),
             'displacement_rate': 0.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 2,
@@ -432,7 +440,11 @@ ash_hazard_classes = {
             'color': yellow,
             'name': tr('Low'),
             'affected': False,
-            'description': tr('Low'),
+            'description': tr(
+                'Damage to transportation routes (e.g. airports, roads, '
+                'railways); damage to critical infrastructure '
+                '(e.g. electricity supply); damage to more vulnerable '
+                'agricultural crops (e.g. rice fields)'),
             'displacement_rate': 0.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 0.1,
@@ -450,7 +462,9 @@ ash_hazard_classes = {
             'color': light_green,
             'name': tr('Very low'),
             'affected': False,
-            'description': tr('Very Low.'),
+            'description': tr(
+                'Impact on health (respiration), livestock, and contamination '
+                'of water supply.'),
             'displacement_rate': 0.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 0.01,
@@ -462,45 +476,34 @@ ash_hazard_classes = {
                 }
             ]
         }
+    ],
+    'exposures': [
+        exposure_land_cover,
+        exposure_place
     ]
 }
 
+# Original tsunami hazard classes with displacement rates added
 tsunami_hazard_classes = {
     'key': 'tsunami_hazard_classes',
     'name': tr('Tsunami classes'),
+    # note: these are default tsunami classes for everything except population
     'description': tr(
-        'Tsunami hazards can be classified into one of five classes for an '
-        'area. The area is either <b>dry</b>, <b>low</b>, <b>medium</b>, '
-        '<b>high</b>, or <b>very high</b> for tsunami hazard classification. '
+        'Tsunami hazards can be classified into one of three classes for an '
+        'area. The area is either <b>dry</b>, <b>low</b>, <b>medium</b>, or '
+        '<b>high</b>, for tsunami hazard classification. '
         'The following description for these classes is provided by Badan '
         'Geologi based on BNPB Perka 2/2012'),
     'type': hazard_classification_type,
     'citations': [
         {
-            'text': None,
-            'link': None
+            'text': tr('BNPB Perka 2/2012'),
+            'link': u'http://bpbd.kendalkab.go.id/docs/publikasi/'
+                    u'perka_bnpb_no_2_tahun_2012_0.pdf'
         }
     ],
     'classes': [
-        {
-            'key': 'very high',
-            'value': 5,
-            'color': dark_red,
-            'name': tr('Very high hazard zone'),
-            'affected': True,
-            'description': tr('Water above 8.0m.'),
-            'string_defaults': [],
-            'displacement_rate': 0.0,
-            'fatality_rate': 0.0,
-            'numeric_default_min': 8,
-            'numeric_default_max': 9999999999,
-            'citations': [
-                {
-                    'text': None,
-                    'link': None
-                }
-            ]
-        },
+
         {
             'key': 'high',
             'value': 4,
@@ -508,10 +511,9 @@ tsunami_hazard_classes = {
             'name': tr('High hazard zone'),
             'affected': True,
             'description': tr(
-                'Water above 3.1m and less than 8.0m. The area is '
-                'potentially hit by a tsunami wave with an inundation '
-                'depth > 3 m or reach a tsunami intensity scale of VII or '
-                'even more (Papadoupulos and Imamura, 2001). Tsunami wave '
+                'The area is potentially hit by a tsunami wave with an '
+                'inundation depth > 3 m or reach a tsunami intensity scale of '
+                'VII or more (Papadopoulos and Imamura, 2001). Tsunami wave '
                 'with 4 m inundation depth cause damage to small vessel, '
                 'a few ships are drifted inland, severe damage on most wooden '
                 'houses. Boulders are deposited on shore. If tsunami height '
@@ -519,7 +521,7 @@ tsunami_hazard_classes = {
                 'breaker, tsunami protection walls and green belts will be '
                 'washed away.'),
             'string_defaults': [],
-            'displacement_rate': 0.0,
+            'displacement_rate': 1.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 3,
             'numeric_default_max': 8 - small_number,
@@ -539,13 +541,13 @@ tsunami_hazard_classes = {
             'description': tr(
                 'Water above 1.1m and less than 3.0m. The area is potentially '
                 'hit by a tsunami wave with an inundation depth of 1 - 3 '
-                'm or equal to V-VI tsunami intensity scale (Papadoupulos and '
+                'm or equal to V-VI tsunami intensity scale (Papadopoulos and '
                 'Imamura, 2001). Tsunami wave with a 3m inundation depth '
                 'causes most people frightened and to flee to higher '
                 'ground. Small vessels drift and collide. Damage occurs to '
                 'some wooden houses, while most of them are safe.'),
             'string_defaults': [],
-            'displacement_rate': 0.0,
+            'displacement_rate': 1.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 1,
             'numeric_default_max': 3 - small_number,
@@ -566,7 +568,265 @@ tsunami_hazard_classes = {
                 'Water above ground height and less than 1.0m. The area is '
                 'potentially hit by a tsunami wave with an inundation '
                 'depth less than 1 m or similar to tsunami intensity scale of '
-                'V or less in (Papadoupulos and Imamura, 2001). Tsunami wave '
+                'V or less in (Papadopoulos and Imamura, 2001). Tsunami wave '
+                'of 1m height causes few people to be frightened and flee to '
+                'higher elevation. Felt by most people on large ship, '
+                'observed from shore. Small vessels drift and collide and '
+                'some turn over. Sand is deposited and there is flooding of '
+                'areas close to the shore.'),
+            'string_defaults': [],
+            'displacement_rate': 0.0,
+            'fatality_rate': 0.0,
+            'numeric_default_min': 0.1,
+            'numeric_default_max': 1 - small_number,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
+            'key': 'dry',
+            'value': 1,
+            'color': green,
+            'name': tr('Dry'),
+            'affected': False,
+            'description': tr('No water above ground height.'),
+            'string_defaults': [],
+            'displacement_rate': 0.0,
+            'fatality_rate': 0.0,
+            'numeric_default_min': 0,
+            'numeric_default_max': 0.1 - small_number,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+    ],
+    'exposures': [
+        exposure_land_cover,
+        exposure_place,
+        exposure_road,
+        exposure_structure
+    ]
+}
+
+# Duplicate classes for tsunami hazard; modified for population exposure
+tsunami_hazard_population_classes = {
+    'key': 'tsunami_hazard_population_classes',
+    'name': tr('Tsunami hazard population classes'),
+    # note: these are default tsunami classes for population
+    'description': tr(
+        'Tsunami hazards can be classified into one of three classes for an '
+        'area. The area is either <b>low</b>, <b>medium</b>, or '
+        '<b>high</b>, for tsunami hazard classification. '
+        'The following description for these classes is provided by Badan '
+        'Geologi based on BNPB Perka 2/2012, and modified for population by '
+        'Pak Hamza'),
+    'type': hazard_classification_type,
+    'citations': [
+        {
+            'text': tr('BNPB Perka 2/2012'),
+            'link': u'http://bpbd.kendalkab.go.id/docs/publikasi/'
+                    u'perka_bnpb_no_2_tahun_2012_0.pdf'
+        }
+    ],
+    'classes': [
+        {
+            'key': 'high',
+            'value': 4,
+            'color': red,
+            'name': tr('High hazard zone'),
+            'affected': True,
+            'description': tr(
+                'The area is potentially hit by a tsunami wave with an '
+                'inundation depth > 3 m or reach a tsunami intensity scale of '
+                'VII or more (Papadopoulos and Imamura, 2001). Tsunami wave '
+                'with 4 m inundation depth cause damage to small vessel, '
+                'a few ships are drifted inland, severe damage on most wooden '
+                'houses. Boulders are deposited on shore. If tsunami height '
+                'reaches 8 m, it will cause severe damage. Dykes, wave '
+                'breaker, tsunami protection walls and green belts will be '
+                'washed away.'),
+            'string_defaults': [],
+            'displacement_rate': 1.0,
+            'fatality_rate': 0.0,
+            'numeric_default_min': 3,
+            'numeric_default_max': 8 - small_number,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
+            'key': 'medium',
+            'value': 3,
+            'color': orange,
+            'name': tr('Medium hazard zone'),
+            'affected': True,
+            'description': tr(
+                'Water above 0.7m and less than 3.0m. The area is potentially '
+                'hit by a tsunami wave with an inundation depth of 1 - 3 '
+                'm or equal to V-VI tsunami intensity scale (Papadopoulos and '
+                'Imamura, 2001). Tsunami wave with a 3m inundation depth '
+                'causes most people frightened and to flee to higher '
+                'ground. Small vessels drift and collide. Damage occurs to '
+                'some wooden houses, while most of them are safe.'),
+            'string_defaults': [],
+            'displacement_rate': 1.0,
+            'fatality_rate': 0.0,
+            'numeric_default_min': 0.7,
+            'numeric_default_max': 3 - small_number,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
+            'key': 'low',
+            'value': 2,
+            'color': yellow,
+            'name': tr('Low hazard zone'),
+            'affected': False,
+            'description': tr(
+                'Water above ground height and less than 1.0m. The area is '
+                'potentially hit by a tsunami wave with an inundation '
+                'depth less than 1 m or similar to tsunami intensity scale of '
+                'V or less in (Papadopoulos and Imamura, 2001). Tsunami wave '
+                'of 1m height causes few people to be frightened and flee to '
+                'higher elevation. Felt by most people on large ship, '
+                'observed from shore. Small vessels drift and collide and '
+                'some turn over. Sand is deposited and there is flooding of '
+                'areas close to the shore.'),
+            'string_defaults': [],
+            'displacement_rate': 0.0,
+            'fatality_rate': 0.0,
+            'numeric_default_min': 0.1,
+            'numeric_default_max': 0.7 - small_number,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+
+    ],
+    'exposures': [
+        exposure_population
+    ]
+}
+# duplicate classes for tsunami hazard based on advice from Pak Hamza
+tsunami_hazard_classes_ITB = {
+    'key': 'tsunami_hazard_classes_ITB',
+    'name': tr('Tsunami classes ITB'),
+    'description': tr(
+        'Tsunami hazards can be classified into one of five classes for an '
+        'area. The area is either <b>dry</b>, <b>low</b>, <b>medium</b>, '
+        '<b>high</b>, or <b>very high</b> for tsunami hazard classification. '
+        'The following description for these classes is provided by Pak '
+        'Hamza ITB based on Papadopoulos and Imamura, 2001.'),
+    'type': hazard_classification_type,
+    'citations': [
+        {
+            'text': None,
+            'link': u'http://geology.about.com/od/tsunamis/a/'
+                    u'Tsunami-Intensity-Scale-2001.htm'
+        }
+    ],
+    'classes': [
+        {
+            'key': 'very high',
+            'value': 5,
+            'color': dark_red,
+            'name': tr('Very high hazard zone'),
+            'affected': True,
+            'description': tr('Water above 8.0m.'),
+            'string_defaults': [],
+            'displacement_rate': 1.0,
+            'fatality_rate': 0.0,
+            'numeric_default_min': 8,
+            'numeric_default_max': 9999999999,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
+            'key': 'high',
+            'value': 4,
+            'color': red,
+            'name': tr('High hazard zone'),
+            'affected': True,
+            'description': tr(
+                'Water above 3.1m and less than 8.0m. The area is '
+                'potentially hit by a tsunami wave with an inundation '
+                'depth > 3 m or reach a tsunami intensity scale of VII or '
+                'even more (Papadopoulos and Imamura, 2001). Tsunami wave '
+                'with 4 m inundation depth cause damage to small vessel, '
+                'a few ships are drifted inland, severe damage on most wooden '
+                'houses. Boulders are deposited on shore. If tsunami height '
+                'reaches 8 m, it will cause severe damage. Dykes, wave '
+                'breaker, tsunami protection walls and green belts will be '
+                'washed away.'),
+            'string_defaults': [],
+            'displacement_rate': 1.0,
+            'fatality_rate': 0.0,
+            'numeric_default_min': 3,
+            'numeric_default_max': 8 - small_number,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
+            'key': 'medium',
+            'value': 3,
+            'color': orange,
+            'name': tr('Medium hazard zone'),
+            'affected': True,
+            'description': tr(
+                'Water above 1.1m and less than 3.0m. The area is potentially '
+                'hit by a tsunami wave with an inundation depth of 1 - 3 '
+                'm or equal to V-VI tsunami intensity scale (Papadopoulos and '
+                'Imamura, 2001). Tsunami wave with a 3m inundation depth '
+                'causes most people frightened and to flee to higher '
+                'ground. Small vessels drift and collide. Damage occurs to '
+                'some wooden houses, while most of them are safe.'),
+            'string_defaults': [],
+            'displacement_rate': 1.0,
+            'fatality_rate': 0.0,
+            'numeric_default_min': 1,
+            'numeric_default_max': 3 - small_number,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
+            'key': 'low',
+            'value': 2,
+            'color': yellow,
+            'name': tr('Low hazard zone'),
+            'affected': False,
+            'description': tr(
+                'Water above ground height and less than 1.0m. The area is '
+                'potentially hit by a tsunami wave with an inundation '
+                'depth less than 1 m or similar to tsunami intensity scale of '
+                'V or less in (Papadopoulos and Imamura, 2001). Tsunami wave '
                 'of 1m height causes few people to be frightened and flee to '
                 'higher elevation. Felt by most people on large ship, '
                 'observed from shore. Small vessels drift and collide and '
@@ -607,9 +867,137 @@ tsunami_hazard_classes = {
     'exposures': [
         exposure_land_cover,
         exposure_place,
-        exposure_population,
         exposure_road,
         exposure_structure
+    ]
+}
+
+# duplicate classes for tsunami hazard based on advice from Pak Hamza and
+# modified for population
+tsunami_hazard_population_classes_ITB = {
+    'key': 'tsunami_hazard_population_classes_ITB',
+    'name': tr('Tsunami population classes ITB'),
+    'description': tr(
+        'Tsunami hazards can be classified into one of five classes for an '
+        'area. The area is either <b>dry</b>, <b>low</b>, <b>medium</b>, '
+        '<b>high</b>, or <b>very high</b> for tsunami hazard classification. '
+        'The following description for these classes is provided by Pak '
+        'Hamza ITB based on Papadopoulos and Imamura, 2001.'),
+    'type': hazard_classification_type,
+    'citations': [
+        {
+            'text': None,
+            'link': u'http://geology.about.com/od/tsunamis/a/'
+                    u'Tsunami-Intensity-Scale-2001.htm'
+        }
+    ],
+    'classes': [
+        {
+            'key': 'very high',
+            'value': 5,
+            'color': dark_red,
+            'name': tr('Very high hazard zone'),
+            'affected': True,
+            'description': tr('Water above 8.0m.'),
+            'string_defaults': [],
+            'displacement_rate': 1.0,
+            'fatality_rate': 0.0,
+            'numeric_default_min': 8,
+            'numeric_default_max': 9999999999,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
+            'key': 'high',
+            'value': 4,
+            'color': red,
+            'name': tr('High hazard zone'),
+            'affected': True,
+            'description': tr(
+                'Water above 3.1m and less than 8.0m. The area is '
+                'potentially hit by a tsunami wave with an inundation '
+                'depth > 3 m or reach a tsunami intensity scale of VII or '
+                'even more (Papadopoulos and Imamura, 2001). Tsunami wave '
+                'with 4 m inundation depth cause damage to small vessel, '
+                'a few ships are drifted inland, severe damage on most wooden '
+                'houses. Boulders are deposited on shore. If tsunami height '
+                'reaches 8 m, it will cause severe damage. Dykes, wave '
+                'breaker, tsunami protection walls and green belts will be '
+                'washed away.'),
+            'string_defaults': [],
+            'displacement_rate': 1.0,
+            'fatality_rate': 0.0,
+            'numeric_default_min': 3,
+            'numeric_default_max': 8 - small_number,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
+            'key': 'medium',
+            'value': 3,
+            'color': orange,
+            'name': tr('Medium hazard zone'),
+            'affected': True,
+            'description': tr(
+                'Water above 1.1m and less than 3.0m. The area is potentially '
+                'hit by a tsunami wave with an inundation depth of 1 - 3 '
+                'm or equal to V-VI tsunami intensity scale (Papadopoulos and '
+                'Imamura, 2001). Tsunami wave with a 3m inundation depth '
+                'causes most people frightened and to flee to higher '
+                'ground. Small vessels drift and collide. Damage occurs to '
+                'some wooden houses, while most of them are safe.'),
+            'string_defaults': [],
+            'displacement_rate': 1.0,
+            'fatality_rate': 0.0,
+            'numeric_default_min': 0.7,
+            'numeric_default_max': 3 - small_number,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
+            'key': 'low',
+            'value': 2,
+            'color': yellow,
+            'name': tr('Low hazard zone'),
+            'affected': False,
+            'description': tr(
+                'Water above ground height and less than 1.0m. The area is '
+                'potentially hit by a tsunami wave with an inundation '
+                'depth less than 1 m or similar to tsunami intensity scale of '
+                'V or less in (Papadopoulos and Imamura, 2001). Tsunami wave '
+                'of 1m height causes few people to be frightened and flee to '
+                'higher elevation. Felt by most people on large ship, '
+                'observed from shore. Small vessels drift and collide and '
+                'some turn over. Sand is deposited and there is flooding of '
+                'areas close to the shore.'),
+            'string_defaults': [],
+            'displacement_rate': 0.0,
+            'fatality_rate': 0.0,
+            'numeric_default_min': 0.1,
+            'numeric_default_max': 0.7 - small_number,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+
+    ],
+    'exposures': [
+        exposure_population
     ]
 }
 
@@ -1099,6 +1487,9 @@ hazard_classification = {
         flood_hazard_classes,
         earthquake_mmi_hazard_classes,
         tsunami_hazard_classes,
+        tsunami_hazard_population_classes,
+        tsunami_hazard_classes_ITB,
+        tsunami_hazard_population_classes_ITB,
         volcano_hazard_classes,
         ash_hazard_classes,
         cyclone_au_bom_hazard_classes,
