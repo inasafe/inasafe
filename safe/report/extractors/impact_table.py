@@ -107,20 +107,24 @@ def impact_table_extractor(impact_report, component_metadata):
 
     aggregation_keywords = impact_report.impact_function.provenance[
         'aggregation_keywords']
+    header = resolve_from_dictionary(
+        provenance_format_args, 'aggregation_header')
+    provenance_format = resolve_from_dictionary(
+        provenance_format_args, 'aggregation_format')
     # only if aggregation layer used
     if aggregation_keywords:
-        header = resolve_from_dictionary(
-            provenance_format_args, 'aggregation_header')
-        provenance_format = resolve_from_dictionary(
-            provenance_format_args, 'aggregation_format')
-        aggregation_provenance = {
-            'header': header,
-            'provenance': provenance_format.format(
-                layer_name=aggregation_keywords.get('title'),
-                source=aggregation_keywords.get('source') or default_source)
-        }
+        provenance_string = provenance_format.format(
+            layer_name=aggregation_keywords.get('title'),
+            source=aggregation_keywords.get('source') or default_source)
     else:
-        aggregation_provenance = None
+        aggregation_not_used = resolve_from_dictionary(
+            extra_args, ['defaults', 'aggregation_not_used'])
+        provenance_string = aggregation_not_used
+
+    aggregation_provenance = {
+        'header': header,
+        'provenance': provenance_string
+    }
 
     impact_function_name = impact_report.impact_function.name
     header = resolve_from_dictionary(
