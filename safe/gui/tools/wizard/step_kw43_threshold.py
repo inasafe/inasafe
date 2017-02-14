@@ -132,7 +132,7 @@ class StepKwThreshold(WizardStep, FORM_CLASS):
             class_label = QLabel(the_class['name'])
 
             # Min label
-            min_label = QLabel(tr('Min'))
+            min_label = QLabel(tr('Min >'))
 
             # Min value as double spin
             min_value_input = QDoubleSpinBox()
