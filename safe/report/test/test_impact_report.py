@@ -489,6 +489,201 @@ class TestImpactReport(unittest.TestCase):
 
         shutil.rmtree(output_folder, ignore_errors=True)
 
+    def test_aggregation_area_result_using_entire_area(self):
+        """Test generate aggregation area results.
+
+        This test should not handle postprocessors (covered in other tests).
+        """
+        output_folder = self.fixtures_dir(
+            '../output/aggregation_entire_area_result')
+        shutil.rmtree(output_folder, ignore_errors=True)
+
+        # Only flood and earthquake who deals with evacuated population report
+        hazard_layer = load_test_vector_layer(
+            'hazard', 'flood_multipart_polygons.shp')
+        exposure_layer = load_test_vector_layer(
+            'exposure', 'buildings.shp')
+        # Check when we doesn't use aggregation area.
+        # In other words, Entire Area aggregations.
+
+        impact_function = ImpactFunction()
+        impact_function.exposure = exposure_layer
+        impact_function.hazard = hazard_layer
+        impact_function.prepare()
+        return_code, message = impact_function.run()
+
+        self.assertEqual(return_code, ANALYSIS_SUCCESS, message)
+
+        report_metadata = ReportMetadata(
+            metadata_dict=standard_impact_report_metadata_html)
+
+        impact_report = ImpactReport(
+            IFACE,
+            report_metadata,
+            impact_function=impact_function)
+        impact_report.output_folder = output_folder
+        return_code, message = impact_report.process_component()
+
+        self.assertEqual(
+            return_code, ImpactReport.REPORT_GENERATION_SUCCESS, message)
+
+        """Check generated context"""
+        empty_component_output_message = 'Empty component output'
+
+        aggregation_result = impact_report.metadata.component_by_key(
+            aggregation_result_component['key'])
+        """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
+
+        expected_context = {
+            'aggregation_result': {
+                'header_label': u'Aggregation area',
+                'rows': [
+                    {
+                        'type_values': ['10', '30', '10', '10', '10', '10'],
+                        'total': '40',
+                        'name': u'Entire Area'
+                    }
+                ],
+                'type_header_labels': [
+                    u'Government',
+                    u'Residential',
+                    u'Commercial',
+                    u'Education',
+                    u'Place of worship',
+                    u'Health'
+                ],
+                'total_in_aggregation_area_label': u'Total',
+                'total_label': u'Total',
+                'total_all': '40',
+                'type_total_values': ['10', '30', '10', '10', '10', '10']
+            },
+            'header': u'Aggregation Result',
+            'notes': u'Columns and rows containing only 0 or "No data" '
+                     u'values are excluded from the tables.'
+        }
+
+        actual_context = aggregation_result.context
+
+        self.assertDictEqual(expected_context, actual_context)
+        self.assertTrue(
+            aggregation_result.output, empty_component_output_message)
+
+        """Check generated report"""
+
+        output_path = impact_report.component_absolute_output_path(
+            'impact-report')
+
+        # for now, test that output exists
+        self.assertTrue(os.path.exists(output_path))
+
+        shutil.rmtree(output_folder, ignore_errors=True)
+
+    def test_aggregation_area_result(self):
+        """Test generate aggregation area results.
+
+        This test should not handle postprocessors (covered in other tests).
+        """
+        output_folder = self.fixtures_dir(
+            '../output/aggregation_area_result')
+        shutil.rmtree(output_folder, ignore_errors=True)
+
+        # Only flood and earthquake who deals with evacuated population report
+        hazard_layer = load_test_vector_layer(
+            'hazard', 'flood_multipart_polygons.shp')
+        exposure_layer = load_test_vector_layer(
+            'exposure', 'buildings.shp')
+        # Check when we use aggregation area
+        aggregation_layer = load_test_vector_layer(
+            'aggregation', 'grid_jakarta.geojson')
+
+        impact_function = ImpactFunction()
+        impact_function.exposure = exposure_layer
+        impact_function.hazard = hazard_layer
+        impact_function.aggregation = aggregation_layer
+        impact_function.prepare()
+        return_code, message = impact_function.run()
+
+        self.assertEqual(return_code, ANALYSIS_SUCCESS, message)
+
+        report_metadata = ReportMetadata(
+            metadata_dict=standard_impact_report_metadata_html)
+
+        impact_report = ImpactReport(
+            IFACE,
+            report_metadata,
+            impact_function=impact_function)
+        impact_report.output_folder = output_folder
+        return_code, message = impact_report.process_component()
+
+        self.assertEqual(
+            return_code, ImpactReport.REPORT_GENERATION_SUCCESS, message)
+
+        """Check generated context"""
+        empty_component_output_message = 'Empty component output'
+
+        aggregation_result = impact_report.metadata.component_by_key(
+            aggregation_result_component['key'])
+        """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
+
+        expected_context = {
+            'aggregation_result': {
+                'header_label': u'Aggregation area',
+                'rows': [
+                    {
+                        'type_values': ['10', '0', '0', '10', '10', '0'],
+                        'total': '10',
+                        'name': u'B'
+                    },
+                    {
+                        'type_values': ['0', '10', '0', '0', '0', '0'],
+                        'total': '10',
+                        'name': u'C'
+                    },
+                    {
+                        'type_values': ['10', '10', '0', '10', '10', '0'],
+                        'total': '20',
+                        'name': u'F'
+                    },
+                    {
+                        'type_values': ['0', '20', '10', '0', '0', '10'],
+                        'total': '20',
+                        'name': u'G'
+                    }
+                ],
+                'type_header_labels': [
+                    u'Government',
+                    u'Residential',
+                    u'Commercial',
+                    u'Education',
+                    u'Place of worship',
+                    u'Health'
+                ],
+                'total_in_aggregation_area_label': u'Total',
+                'total_label': u'Total',
+                'total_all': '40',
+                'type_total_values': ['10', '30', '10', '10', '10', '10']
+            },
+            'header': u'Aggregation Result',
+            'notes': u'Columns and rows containing only 0 or "No data" '
+                     u'values are excluded from the tables.'
+        }
+
+        actual_context = aggregation_result.context
+
+        self.assertDictEqual(expected_context, actual_context)
+        self.assertTrue(
+            aggregation_result.output, empty_component_output_message)
+
+        """Check generated report"""
+
+        output_path = impact_report.component_absolute_output_path(
+            'impact-report')
+
+        # for now, test that output exists
+        self.assertTrue(os.path.exists(output_path))
+
+        shutil.rmtree(output_folder, ignore_errors=True)
+
     def test_aggregate_post_processors_vector(self):
         """Test generate aggregate postprocessors sections."""
 
@@ -536,7 +731,6 @@ class TestImpactReport(unittest.TestCase):
             aggregation_postprocessors_component['key'])
         """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
 
-        # TODO: This has possible wrong number, expect to be fixed soon.
         expected_context = {
             'sections': OrderedDict([
                 ('age', {
@@ -669,7 +863,6 @@ class TestImpactReport(unittest.TestCase):
             aggregation_postprocessors_component['key'])
         """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
 
-        # TODO: This has possible wrong number, expect to be fixed soon.
         expected_context = {
             'sections': OrderedDict([
                 ('age', {
@@ -787,8 +980,6 @@ class TestImpactReport(unittest.TestCase):
         population_infographic = impact_report.metadata.component_by_key(
             population_infographic_component['key']).context
         """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
-
-        # TODO: This has possible wrong number, expect to be fixed soon.
 
         # Check population chart
         expected_context = {
