@@ -21,7 +21,7 @@ from safe.definitions.default_settings import inasafe_default_settings
 from safe.definitions.messages import disclaimer
 from safe.common.utilities import temp_dir
 from safe.defaults import supporters_logo_path, default_north_arrow_path
-from safe.impact_function.earthquake import EARTHQUAKE_FUNCTIONS
+from safe.definitions.earthquake import EARTHQUAKE_FUNCTIONS
 from safe.utilities.i18n import tr
 from safe.utilities.resources import get_ui_class, html_header, html_footer
 from safe.utilities.settings import setting, set_setting

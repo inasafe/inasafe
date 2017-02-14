@@ -101,8 +101,8 @@ from safe.common.exceptions import (
     NoFeaturesInExtentError,
     ProcessingInstallationError,
 )
+from safe.definitions.earthquake import EARTHQUAKE_FUNCTIONS
 from safe.impact_function.earthquake import (
-    EARTHQUAKE_FUNCTIONS,
     exposed_people_stats,
     make_summary_layer,
 )
