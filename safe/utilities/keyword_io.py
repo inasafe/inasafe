@@ -11,6 +11,8 @@ from sqlite3 import OperationalError
 from PyQt4.QtCore import QObject, QSettings
 from PyQt4.QtCore import QUrl, QDateTime
 
+from qgis.core import QgsMapLayer
+
 from safe.definitions.utilities import definition
 from safe import messaging as m
 from safe.common.exceptions import (
@@ -159,6 +161,11 @@ class KeywordIO(QObject):
 
         :raises: UnsupportedProviderError
         """
+        if not isinstance(layer, QgsMapLayer):
+            raise Exception(
+                tr('The layer is not a QgsMapLayer : {type}').format(
+                    type=type(layer)))
+
         source = layer.source()
         write_iso19115_metadata(source, keywords)
 

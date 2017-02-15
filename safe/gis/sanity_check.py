@@ -2,7 +2,7 @@
 
 """Sanity check module."""
 
-from qgis.core import QGis
+from qgis.core import QGis, QgsWKBTypes
 
 from safe.common.exceptions import InvalidLayerError
 
@@ -56,7 +56,8 @@ def check_layer(layer, has_geometry=True):
     :type layer: QgsMapLayer
 
     :param has_geometry: If the layer must have a geometry. True by default.
-        If it's a raster layer, we will no check this parameter.
+        If it's a raster layer, we will no check this parameter. If we do not
+        want to check the geometry type, we can set it to None.
     :type has_geometry: bool
 
     :raise: InvalidLayerError
@@ -78,12 +79,18 @@ def check_layer(layer, has_geometry=True):
                 raise InvalidLayerError(
                     tr('The layer has not a valid geometry type.'))
 
-            if layer.hasGeometryType() != has_geometry:
+            if layer.wkbType() == QgsWKBTypes.Unknown:
                 raise InvalidLayerError(
-                    tr('The layer has not a correct geometry type.'))
+                    tr('The layer has not a valid geometry type.'))
+
+            if isinstance(has_geometry, bool):
+                if layer.hasGeometryType() != has_geometry:
+                    raise InvalidLayerError(
+                        tr('The layer has not a correct geometry type.'))
 
     else:
         raise InvalidLayerError(
-            tr('The layer is neither a raster nor a vector.'))
+            tr('The layer is neither a raster nor a vector : {type}').format(
+                type=type(layer)))
 
     return True
