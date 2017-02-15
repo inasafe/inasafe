@@ -243,9 +243,19 @@ class PetaBencanaDialog(QDialog, FORM_CLASS):
 
         self.copy_keywords(output_base_file_path)
         layer = self.add_flooded_field(output_base_file_path)
-        # add the layer to the map
-        registry = QgsMapLayerRegistry.instance()
-        registry.addMapLayer(layer)
+
+        # check if the layer has feature or not
+        if layer.featureCount() <= 0:
+            message = 'There are no floods data available at this time.'
+            display_warning_message_box(
+                self,
+                self.tr('No data'),
+                self.tr(message))
+        else:
+            # add the layer to the map
+            registry = QgsMapLayerRegistry.instance()
+            registry.addMapLayer(layer)
+
         self.disable_busy_cursor()
         self.done(QDialog.Accepted)
 
