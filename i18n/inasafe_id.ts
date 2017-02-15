@@ -2495,42 +2495,42 @@
         <translation>Anda telah memilih &lt;b&gt;%s&lt;/b&gt; untuk lapisan &lt;b&gt;%s&lt;/b&gt; ini. &lt;p&gt;Kami perlu mengkonfirmasi bahwa nilai atribut yang merepresentasikan data &lt;b&gt;kontinyu&lt;/b&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="peta_jakarta_help.py" line="38"/>
-        <source>Peta Jakarta downloader help</source>
-        <translation>Bantuan pengunduh Peta Jakarta</translation>
+        <location filename="peta_bencana_help.py" line="38"/>
+        <source>Peta Bencana downloader help</source>
+        <translation>Bantuan pengunduh Peta Bencana</translation>
     </message>
     <message>
-        <location filename="peta_jakarta_help.py" line="55"/>
+        <location filename="peta_bencana_help.py" line="55"/>
         <source>This tool will fetch current flood data for Jakarta from </source>
         <translation>Tool ini akan mengambil data banjir sekarang untuk Jakarta dari</translation>
     </message>
     <message>
-        <location filename="peta_jakarta_help.py" line="58"/>
+        <location filename="peta_bencana_help.py" line="58"/>
         <source>Check the output directory is correct. Note that the saved dataset will be called jakarta_flood.shp (and associated files).</source>
         <translation>Periksa direktori output yang benar. Perhatikan bahwa dataset yang tersimpan akan dinamai jakarta_flood.shp (dan file terkaitnya).</translation>
     </message>
     <message>
-        <location filename="peta_jakarta_help.py" line="62"/>
+        <location filename="peta_bencana_help.py" line="62"/>
         <source>If you wish you can specify a prefix to add in front of this default name. For example using a prefix of &apos;foo-&apos; will cause the downloaded files to be saved as e.g. &apos;foo-rw-jakarta-flood.shp&apos;. Note that the only allowed prefix characters are A-Z, a-z, 0-9 and the characters &apos;-&apos; and &apos;_&apos;. You can leave this blank if you prefer.</source>
         <translation>Anda dapat menggunakan prefix untuk ditambahkan di depan nama default ini,. Sebagai contoh, menggunakan prefix &apos;foo-&apos; akan mengubah file yang di-download menjadi &apos;foo-rw-jakarta-flood.shp&apos;. Sebagai catatan, prefix hanya dibolehkan untuk menggunakan karakter A-Z, a-z, 0-9 dan karakter &apos;-&apos;, dan &apos;_&apos;. Anda dapat mengosongkan pilihan ini.</translation>
     </message>
     <message>
-        <location filename="peta_jakarta_help.py" line="74"/>
+        <location filename="peta_bencana_help.py" line="74"/>
         <source>If the &quot;include date/time in output filename&quot; option is ticked, the filename will be prefixed with a time stamp e.g. &apos;foo-22-Mar-2015-08-01-2015-rw-jakarta-flood.shp&apos; where the date timestamp is in the form DD-MMM-YYYY.</source>
         <translation>Jika pilihan &quot;Ikutkan tanggal/waktu di berkas keluaran&quot; dicentang maka nama berkas akan diawali dengan keterangan waktu seperti &apos;foo-22-Mar-2015-08-01-2015-rw-jakarta-flood.shp&apos; dimana keterangan waktu ditulis dalam bentuk DD-MM-YYYY.</translation>
     </message>
     <message>
-        <location filename="peta_jakarta_help.py" line="80"/>
+        <location filename="peta_bencana_help.py" line="80"/>
         <source>This tool requires a working internet connection and fetching data will consume your bandwidth.</source>
         <translation>Tool ini memerlukan koneksi internet dan men-download data akan mengkonsumsi bandwidth Anda.</translation>
     </message>
     <message>
-        <location filename="peta_jakarta_help.py" line="83"/>
-        <source>Downloaded data is copyright the PetaJakarta contributors (click for more info).</source>
-        <translation>Data yang didownload adalah hak cipta kontributor PetaJakarta  (klik untuk info lebih lanjut).</translation>
+        <location filename="peta_bencana_help.py" line="83"/>
+        <source>Downloaded data is copyright the PetaBencana contributors (click for more info).</source>
+        <translation>Data yang didownload adalah hak cipta kontributor PetaBencana  (klik untuk info lebih lanjut).</translation>
     </message>
     <message>
-        <location filename="peta_jakarta_help.py" line="70"/>
+        <location filename="peta_bencana_help.py" line="70"/>
         <source>If a dataset already exists in the output directory it will be overwritten if the &quot;overwrite existing files&quot; checkbox is ticked.</source>
         <translation>Jika dataset sudah ada di direktori output maka dataset tersebut akan ditimpa jika cek box &quot;Tulis ulang apabila file ada&quot; dicentang.</translation>
     </message>
@@ -5029,8 +5029,8 @@
     </message>
     <message>
         <location filename="definitions_help.py" line="146"/>
-        <source>The PetaJakarta Downloader</source>
-        <translation>Pengunduh PetaJakarta</translation>
+        <source>The PetaBencana Downloader</source>
+        <translation>Pengunduh PetaBencana</translation>
     </message>
     <message>
         <location filename="definitions_help.py" line="150"/>
@@ -8374,122 +8374,122 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-    <name>PetaJakartaDialog</name>
+    <name>PetaBencanaDialog</name>
     <message>
-        <location filename="peta_jakarta_dialog.py" line="95"/>
-        <source>PetaJakarta Downloader</source>
-        <translation>Pengunduh PetaJakarta</translation>
+        <location filename="peta_bencana_dialog.py" line="95"/>
+        <source>PetaBencana Downloader</source>
+        <translation>Pengunduh PetaBencana</translation>
     </message>
     <message>
-        <location filename="peta_jakarta_dialog.py" line="123"/>
+        <location filename="peta_bencana_dialog.py" line="123"/>
         <source>Hide Help</source>
         <translation>Sembunyikan Bantuan</translation>
     </message>
     <message>
-        <location filename="peta_jakarta_dialog.py" line="126"/>
+        <location filename="peta_bencana_dialog.py" line="126"/>
         <source>Show Help</source>
         <translation>Tampilkan Bantuan</translation>
     </message>
     <message>
-        <location filename="peta_jakarta_dialog.py" line="182"/>
+        <location filename="peta_bencana_dialog.py" line="182"/>
         <source>Select download directory</source>
         <translation>Pilih direktori download</translation>
     </message>
     <message>
-        <location filename="peta_jakarta_dialog.py" line="279"/>
+        <location filename="peta_bencana_dialog.py" line="279"/>
         <source>Jakarta Floods</source>
         <translation>Banjir Jakarta</translation>
     </message>
     <message>
-        <location filename="peta_jakarta_dialog.py" line="329"/>
+        <location filename="peta_bencana_dialog.py" line="329"/>
         <source>Jakarta Floods - %s</source>
         <translation>Banjir Jakarta - %s</translation>
     </message>
     <message>
-        <location filename="peta_jakarta_dialog.py" line="473"/>
+        <location filename="peta_bencana_dialog.py" line="473"/>
         <source>Directory %s not exist</source>
         <translation>Direktori %s tidak ada</translation>
     </message>
     <message>
-        <location filename="peta_jakarta_dialog.py" line="474"/>
+        <location filename="peta_bencana_dialog.py" line="474"/>
         <source>Directory %s not exist. Do you want to create it?</source>
         <translation>Directory %s tidak ada. Apakah Anda ingin membuatnya?</translation>
     </message>
     <message>
-        <location filename="peta_jakarta_dialog.py" line="485"/>
+        <location filename="peta_bencana_dialog.py" line="485"/>
         <source>InaSAFE error</source>
         <translation>Kesalahan InaSAFE</translation>
     </message>
     <message>
-        <location filename="peta_jakarta_dialog.py" line="485"/>
+        <location filename="peta_bencana_dialog.py" line="485"/>
         <source>Output directory can not be empty.</source>
         <translation>Direktori output tidak boleh kosong.</translation>
     </message>
     <message>
-        <location filename="peta_jakarta_dialog.py" line="511"/>
+        <location filename="peta_bencana_dialog.py" line="511"/>
         <source>%s does not exist. The server does not have any data for this extent.</source>
         <translation>%s tidak ditemukan. Server tidak memiliki data untuk luasan ini.</translation>
     </message>
     <message>
-        <location filename="peta_jakarta_dialog.py" line="524"/>
+        <location filename="peta_bencana_dialog.py" line="524"/>
         <source>Enable &apos;on the fly&apos;</source>
         <translation>Izinkan &apos;on the fly&apos;</translation>
     </message>
     <message>
-        <location filename="peta_jakarta_dialog.py" line="524"/>
+        <location filename="peta_bencana_dialog.py" line="524"/>
         <source>Your current projection is different than EPSG:4326. You should enable &apos;on the fly&apos; to display correctly your layers</source>
         <translation>Proyeksi Anda sekarang bukan EPSG:4326. Anda harus mengizinkan pengaturan &apos;on the fly&apos; untuk menampilkan lapisan dengan benar</translation>
     </message>
     <message>
-        <location filename="peta_jakarta_dialog.py" line="215"/>
+        <location filename="peta_bencana_dialog.py" line="215"/>
         <source>Can&apos;t access API</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="peta_jakarta_dialog.py" line="216"/>
+        <location filename="peta_bencana_dialog.py" line="216"/>
         <source>Can&apos;t access PetaBencana API: {source}</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>PetaJakartaDialogBase</name>
+    <name>PetaBencanaDialogBase</name>
     <message>
-        <location filename="peta_jakarta_dialog_base.ui" line="14"/>
-        <source>PetaJakarta Downloader</source>
-        <translation>Pengunduh PetaJakarta</translation>
+        <location filename="peta_bencana_dialog_base.ui" line="14"/>
+        <source>PetaBencana Downloader</source>
+        <translation>Pengunduh PetaBencana</translation>
     </message>
     <message>
-        <location filename="peta_jakarta_dialog_base.ui" line="46"/>
+        <location filename="peta_bencana_dialog_base.ui" line="46"/>
         <source>about:blank</source>
         <translation>perihal:kosong</translation>
     </message>
     <message>
-        <location filename="peta_jakarta_dialog_base.ui" line="67"/>
+        <location filename="peta_bencana_dialog_base.ui" line="67"/>
         <source>Output to</source>
         <translation>Dikeluarkan ke</translation>
     </message>
     <message>
-        <location filename="peta_jakarta_dialog_base.ui" line="79"/>
+        <location filename="peta_bencana_dialog_base.ui" line="79"/>
         <source>File name prefix</source>
         <translation>Prefix dari nama file</translation>
     </message>
     <message>
-        <location filename="peta_jakarta_dialog_base.ui" line="112"/>
+        <location filename="peta_bencana_dialog_base.ui" line="112"/>
         <source>Output directory</source>
         <translation>Direktori hasil</translation>
     </message>
     <message>
-        <location filename="peta_jakarta_dialog_base.ui" line="122"/>
+        <location filename="peta_bencana_dialog_base.ui" line="122"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="peta_jakarta_dialog_base.ui" line="129"/>
+        <location filename="peta_bencana_dialog_base.ui" line="129"/>
         <source>Include date/time in output filename</source>
         <translation>Ikutkan tanggal/waktu di berkas keluaran</translation>
     </message>
     <message>
-        <location filename="peta_jakarta_dialog_base.ui" line="139"/>
+        <location filename="peta_bencana_dialog_base.ui" line="139"/>
         <source>Overwrite existing files</source>
         <translation>Tulis ulang apabila file ada</translation>
     </message>
@@ -8643,13 +8643,13 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="plugin.py" line="383"/>
-        <source>Add PetaJakarta Flood Layer</source>
-        <translation>Tambahkan Lapisan Banjir PetaJakarta</translation>
+        <source>Add PetaBencana Flood Layer</source>
+        <translation>Tambahkan Lapisan Banjir PetaBencana</translation>
     </message>
     <message>
         <location filename="plugin.py" line="385"/>
-        <source>Use this to add a PetaJakarta layer to your map. It needs internet access to function.</source>
-        <translation>Gunakan ini untuk menambahkan lapisan PetaJakarta ke dalam peta Anda. Ini membutuhkan akses internet supaya berfungsi.</translation>
+        <source>Use this to add a PetaBencana layer to your map. It needs internet access to function.</source>
+        <translation>Gunakan ini untuk menambahkan lapisan PetaBencana ke dalam peta Anda. Ini membutuhkan akses internet supaya berfungsi.</translation>
     </message>
     <message>
         <location filename="plugin.py" line="669"/>

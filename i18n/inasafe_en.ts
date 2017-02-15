@@ -2489,42 +2489,42 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="peta_jakarta_help.py" line="38"/>
-        <source>Peta Jakarta downloader help</source>
+        <location filename="peta_bencana_help.py" line="38"/>
+        <source>Peta Bencana downloader help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="peta_jakarta_help.py" line="55"/>
+        <location filename="peta_bencana_help.py" line="55"/>
         <source>This tool will fetch current flood data for Jakarta from </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="peta_jakarta_help.py" line="58"/>
+        <location filename="peta_bencana_help.py" line="58"/>
         <source>Check the output directory is correct. Note that the saved dataset will be called jakarta_flood.shp (and associated files).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="peta_jakarta_help.py" line="62"/>
+        <location filename="peta_bencana_help.py" line="62"/>
         <source>If you wish you can specify a prefix to add in front of this default name. For example using a prefix of &apos;foo-&apos; will cause the downloaded files to be saved as e.g. &apos;foo-rw-jakarta-flood.shp&apos;. Note that the only allowed prefix characters are A-Z, a-z, 0-9 and the characters &apos;-&apos; and &apos;_&apos;. You can leave this blank if you prefer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="peta_jakarta_help.py" line="74"/>
+        <location filename="peta_bencana_help.py" line="74"/>
         <source>If the &quot;include date/time in output filename&quot; option is ticked, the filename will be prefixed with a time stamp e.g. &apos;foo-22-Mar-2015-08-01-2015-rw-jakarta-flood.shp&apos; where the date timestamp is in the form DD-MMM-YYYY.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="peta_jakarta_help.py" line="80"/>
+        <location filename="peta_bencana_help.py" line="80"/>
         <source>This tool requires a working internet connection and fetching data will consume your bandwidth.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="peta_jakarta_help.py" line="83"/>
-        <source>Downloaded data is copyright the PetaJakarta contributors (click for more info).</source>
+        <location filename="peta_bencana_help.py" line="83"/>
+        <source>Downloaded data is copyright the PetaBencana contributors (click for more info).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="peta_jakarta_help.py" line="70"/>
+        <location filename="peta_bencana_help.py" line="70"/>
         <source>If a dataset already exists in the output directory it will be overwritten if the &quot;overwrite existing files&quot; checkbox is ticked.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5024,7 +5024,7 @@
     </message>
     <message>
         <location filename="definitions_help.py" line="146"/>
-        <source>The PetaJakarta Downloader</source>
+        <source>The PetaBencana Downloader</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8337,122 +8337,122 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-    <name>PetaJakartaDialog</name>
+    <name>PetaBencanaDialog</name>
     <message>
-        <location filename="peta_jakarta_dialog.py" line="95"/>
-        <source>PetaJakarta Downloader</source>
+        <location filename="peta_bencana_dialog.py" line="95"/>
+        <source>PetaBencana Downloader</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="peta_jakarta_dialog.py" line="123"/>
+        <location filename="peta_bencana_dialog.py" line="123"/>
         <source>Hide Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="peta_jakarta_dialog.py" line="126"/>
+        <location filename="peta_bencana_dialog.py" line="126"/>
         <source>Show Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="peta_jakarta_dialog.py" line="182"/>
+        <location filename="peta_bencana_dialog.py" line="182"/>
         <source>Select download directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="peta_jakarta_dialog.py" line="279"/>
+        <location filename="peta_bencana_dialog.py" line="279"/>
         <source>Jakarta Floods</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="peta_jakarta_dialog.py" line="329"/>
+        <location filename="peta_bencana_dialog.py" line="329"/>
         <source>Jakarta Floods - %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="peta_jakarta_dialog.py" line="473"/>
+        <location filename="peta_bencana_dialog.py" line="473"/>
         <source>Directory %s not exist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="peta_jakarta_dialog.py" line="474"/>
+        <location filename="peta_bencana_dialog.py" line="474"/>
         <source>Directory %s not exist. Do you want to create it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="peta_jakarta_dialog.py" line="485"/>
+        <location filename="peta_bencana_dialog.py" line="485"/>
         <source>InaSAFE error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="peta_jakarta_dialog.py" line="485"/>
+        <location filename="peta_bencana_dialog.py" line="485"/>
         <source>Output directory can not be empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="peta_jakarta_dialog.py" line="511"/>
+        <location filename="peta_bencana_dialog.py" line="511"/>
         <source>%s does not exist. The server does not have any data for this extent.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="peta_jakarta_dialog.py" line="524"/>
+        <location filename="peta_bencana_dialog.py" line="524"/>
         <source>Enable &apos;on the fly&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="peta_jakarta_dialog.py" line="524"/>
+        <location filename="peta_bencana_dialog.py" line="524"/>
         <source>Your current projection is different than EPSG:4326. You should enable &apos;on the fly&apos; to display correctly your layers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="peta_jakarta_dialog.py" line="215"/>
+        <location filename="peta_bencana_dialog.py" line="215"/>
         <source>Can&apos;t access API</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="peta_jakarta_dialog.py" line="216"/>
+        <location filename="peta_bencana_dialog.py" line="216"/>
         <source>Can&apos;t access PetaBencana API: {source}</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>PetaJakartaDialogBase</name>
+    <name>PetaBencanaDialogBase</name>
     <message>
-        <location filename="peta_jakarta_dialog_base.ui" line="14"/>
-        <source>PetaJakarta Downloader</source>
+        <location filename="peta_bencana_dialog_base.ui" line="14"/>
+        <source>PetaBencana Downloader</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="peta_jakarta_dialog_base.ui" line="46"/>
+        <location filename="peta_bencana_dialog_base.ui" line="46"/>
         <source>about:blank</source>
         <translation type="unfinished">about:blank</translation>
     </message>
     <message>
-        <location filename="peta_jakarta_dialog_base.ui" line="67"/>
+        <location filename="peta_bencana_dialog_base.ui" line="67"/>
         <source>Output to</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="peta_jakarta_dialog_base.ui" line="79"/>
+        <location filename="peta_bencana_dialog_base.ui" line="79"/>
         <source>File name prefix</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="peta_jakarta_dialog_base.ui" line="112"/>
+        <location filename="peta_bencana_dialog_base.ui" line="112"/>
         <source>Output directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="peta_jakarta_dialog_base.ui" line="122"/>
+        <location filename="peta_bencana_dialog_base.ui" line="122"/>
         <source>...</source>
         <translation type="unfinished">...</translation>
     </message>
     <message>
-        <location filename="peta_jakarta_dialog_base.ui" line="129"/>
+        <location filename="peta_bencana_dialog_base.ui" line="129"/>
         <source>Include date/time in output filename</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="peta_jakarta_dialog_base.ui" line="139"/>
+        <location filename="peta_bencana_dialog_base.ui" line="139"/>
         <source>Overwrite existing files</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8606,12 +8606,12 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="plugin.py" line="383"/>
-        <source>Add PetaJakarta Flood Layer</source>
+        <source>Add PetaBencana Flood Layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="plugin.py" line="385"/>
-        <source>Use this to add a PetaJakarta layer to your map. It needs internet access to function.</source>
+        <source>Use this to add a PetaBencana layer to your map. It needs internet access to function.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

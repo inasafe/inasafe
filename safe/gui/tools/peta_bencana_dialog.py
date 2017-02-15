@@ -51,12 +51,12 @@ from safe.utilities.resources import (
 from safe.utilities.qgis_utilities import (
     display_warning_message_box,
     display_warning_message_bar)
-from safe.gui.tools.help.peta_jakarta_help import peta_jakarta_help
+from safe.gui.tools.help.peta_bencana_help import peta_bencana_help
 
 
 LOGGER = logging.getLogger('InaSAFE')
 
-FORM_CLASS = get_ui_class('peta_jakarta_dialog_base.ui')
+FORM_CLASS = get_ui_class('peta_bencana_dialog_base.ui')
 
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
@@ -65,8 +65,8 @@ __copyright__ = ('Copyright 2015, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 
-class PetaJakartaDialog(QDialog, FORM_CLASS):
-    """Downloader for petajakarta data.
+class PetaBencanaDialog(QDialog, FORM_CLASS):
+    """Downloader for petabencana data.
 
     .. versionadded: 3.3
     """
@@ -86,14 +86,14 @@ class PetaJakartaDialog(QDialog, FORM_CLASS):
         self.parent = parent
         self.setupUi(self)
 
-        self.setWindowTitle(self.tr('PetaJakarta Downloader'))
+        self.setWindowTitle(self.tr('PetaBencana Downloader'))
 
         self.iface = iface
 
         # creating progress dialog for download
         self.progress_dialog = QProgressDialog(self)
         self.progress_dialog.setAutoClose(False)
-        title = self.tr('PetaJakarta Downloader')
+        title = self.tr('PetaBencana Downloader')
         self.progress_dialog.setWindowTitle(title)
 
         # Set up things for context help
@@ -146,7 +146,7 @@ class PetaJakartaDialog(QDialog, FORM_CLASS):
 
         string = header
 
-        message = peta_jakarta_help()
+        message = peta_bencana_help()
         string += message.to_html()
         string += footer
 
@@ -183,7 +183,7 @@ class PetaJakartaDialog(QDialog, FORM_CLASS):
             self, self.tr('Select download directory')))
 
     def accept(self):
-        """Do PetaJakarta download and display it in QGIS.
+        """Do PetaBencana download and display it in QGIS.
 
         .. versionadded: 3.3
         """
@@ -311,7 +311,7 @@ class PetaJakartaDialog(QDialog, FORM_CLASS):
             field added.
         :type shapefile_path: basestring
         """
-        source_xml_path = resources_path('petajakarta', 'flood-keywords.xml')
+        source_xml_path = resources_path('petabencana', 'flood-keywords.xml')
         output_xml_path = shapefile_path.replace('shp', 'xml')
         LOGGER.info('Copying xml to: %s' % output_xml_path)
 
@@ -337,7 +337,7 @@ class PetaJakartaDialog(QDialog, FORM_CLASS):
             added.
         :type shapefile_path: basestring
         """
-        source_qml_path = resources_path('petajakarta', 'flood-style.qml')
+        source_qml_path = resources_path('petabencana', 'flood-style.qml')
         output_qml_path = shapefile_path.replace('shp', 'qml')
         LOGGER.info('Copying qml to: %s' % output_qml_path)
         copy(source_qml_path, output_qml_path)
@@ -439,7 +439,7 @@ class PetaJakartaDialog(QDialog, FORM_CLASS):
             file_path_test = file_path
 
         if os.path.isfile(file_path_test):
-            return PetaJakartaDialog.get_unique_file_path_suffix(
+            return PetaBencanaDialog.get_unique_file_path_suffix(
                 file_path, separator, i + 1)
         else:
             return i
@@ -527,7 +527,7 @@ class PetaJakartaDialog(QDialog, FORM_CLASS):
         """
         # add our own logic here...
 
-        super(PetaJakartaDialog, self).reject()
+        super(PetaBencanaDialog, self).reject()
 
     def download(self, url, output_path):
         """Download file from API url and write to output path.

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>PetaJakartaDialogBase</class>
- <widget class="QDialog" name="PetaJakartaDialogBase">
+ <class>PetaBencanaDialogBase</class>
+ <widget class="QDialog" name="PetaBencanaDialogBase">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>PetaJakarta Downloader</string>
+   <string>PetaBencana Downloader</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_5">
    <property name="margin">
@@ -177,7 +177,7 @@
   <connection>
    <sender>button_box</sender>
    <signal>accepted()</signal>
-   <receiver>PetaJakartaDialogBase</receiver>
+   <receiver>PetaBencanaDialogBase</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -193,7 +193,7 @@
   <connection>
    <sender>button_box</sender>
    <signal>rejected()</signal>
-   <receiver>PetaJakartaDialogBase</receiver>
+   <receiver>PetaBencanaDialogBase</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
