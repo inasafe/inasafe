@@ -805,6 +805,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 self.impact_function, self.iface)
 
             if error_code == ImpactReport.REPORT_GENERATION_FAILED:
+                self.hide_busy()
                 LOGGER.info(tr(
                     'The impact report could not be generated.'))
                 send_error_message(self, message)
@@ -815,6 +816,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 self.impact_function, self.iface)
 
             if error_code == ImpactReport.REPORT_GENERATION_FAILED:
+                self.hide_busy()
                 LOGGER.info(tr(
                     'The impact report could not be generated.'))
                 send_error_message(self, message)
