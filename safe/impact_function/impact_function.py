@@ -120,7 +120,7 @@ from safe.impact_function.style import (
 )
 from safe.utilities.gis import is_vector_layer, is_raster_layer
 from safe.utilities.i18n import tr
-from safe.utilities.unicode import get_string
+from safe.utilities.unicode import get_unicode
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.metadata import active_thresholds_value_maps
 from safe.utilities.utilities import (
@@ -1703,19 +1703,18 @@ class ImpactFunction(object):
 
         for post_processor in post_processors:
             valid, message = enough_input(layer, post_processor['input'])
+            name = get_unicode(post_processor['name'])
 
             if valid:
                 valid, message = run_single_post_processor(
                     layer, post_processor)
                 if valid:
-                    self.set_state_process(
-                        'post_processor', get_string(post_processor['name']))
-                    message = '{name} : Running'.format(
-                        name=post_processor['name'])
+                    self.set_state_process('post_processor', name)
+                    message = u'{name} : Running'.format(name=name)
 
             else:
-                message = '{name} : Could not run : {reason}'.format(
-                    name=post_processor['name'], reason=message)
+                message = u'{name} : Could not run : {reason}'.format(
+                    name=name, reason=message)
 
             LOGGER.info(message)
 
