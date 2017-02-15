@@ -1450,7 +1450,7 @@ class ImpactFunction(object):
                             exposure_defaults[ratio_field] = (
                                 aggregation_default_fields[ratio_field])
                             LOGGER.info(
-                                tr('{ratio} constant detected, we will add it'
+                                tr('{ratio} constant detected, we will add it '
                                    'to the exposure layer the exposure '
                                    'layer.').format(ratio=ratio_field))
 

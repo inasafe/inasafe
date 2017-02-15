@@ -207,15 +207,15 @@ post_processor_input_types = [
 size_calculator_input_value = {
     'key': 'size_calculator',
     'description': tr(
-        'This is a value for the layer_property input type. Retrieve Size '
+        'This is a value for the layer_property input type. It retrieves Size '
         'Calculator of the layer CRS')
 }
 
 layer_crs_input_value = {
     'key': 'layer_crs',
     'description': tr(
-        'This is a value for layer_crs input type. It retrieves the layer '
-        'Coordinate Reference System (CRS).')
+        'This is a value for layer_property input type. It retrieves the '
+        'layer Coordinate Reference System (CRS).')
 }
 
 layer_property_input_values = [
@@ -232,15 +232,15 @@ post_processor_input_values = [
 formula_process = {
     'key': 'formula',
     'description': tr(
-        'This type of process takes inputs as arguments and processes them '
-        'according to a python expression provided by the processor.')
+        'This type of process is a formula which is interpreted and executed '
+        'by the post processor.')
 }
 
 function_process = {
     'key': 'function',
     'description': tr(
         'This type of process takes inputs as arguments and processes them '
-        'by passing them as arguments to a python function.')
+        'by passing them to a Python function.')
 }
 
 
