@@ -172,6 +172,7 @@ class Folder(DataStore):
             None,
             'CSV')
 
+        assert output.exists()
         return True, output.baseName()
 
     def _add_vector_layer(self, vector_layer, layer_name):
@@ -210,6 +211,7 @@ class Folder(DataStore):
             vector_layer.crs(),
             driver_mapping[self._default_vector_format])
 
+        assert output.exists()
         return True, output.baseName()
 
     def _add_raster_layer(self, raster_layer, layer_name):
@@ -259,4 +261,6 @@ class Folder(DataStore):
                 crs)
 
             del file_writer
+
+        assert output.exists()
         return True, output.baseName()

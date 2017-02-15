@@ -1,8 +1,6 @@
 # coding=utf-8
 
-"""
-Tools for vector layers.
-"""
+"""Tools for vector layers."""
 
 from uuid import uuid4
 from PyQt4.QtCore import QPyNullVariant

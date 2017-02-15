@@ -1,4 +1,5 @@
 # coding=utf-8
+
 """Impact Function."""
 
 import getpass
@@ -30,7 +31,7 @@ from safe.common.utilities import temp_dir
 from safe.common.version import get_version
 from safe.datastore.folder import Folder
 from safe.datastore.datastore import DataStore
-from safe.gis.sanity_check import check_inasafe_fields
+from safe.gis.sanity_check import check_inasafe_fields, check_layer
 from safe.gis.vector.tools import remove_fields
 from safe.gis.vector.from_counts_to_ratios import from_counts_to_ratios
 from safe.gis.vector.prepare_vector_layer import prepare_vector_layer
@@ -982,6 +983,9 @@ class ImpactFunction(object):
         :return: The name of the layer added in the datastore.
         :rtype: basestring
         """
+        # Temporary disable this check. ET 16/02/17
+        # check_layer(layer, has_geometry=None)
+
         if isinstance(layer, QgsVectorLayer) and check_fields:
             check_inasafe_fields(layer)
 
@@ -1037,7 +1041,6 @@ class ImpactFunction(object):
             name = self.debug_layer(
                 self._profiling_table, add_to_datastore=True)
             self._profiling_table = self.datastore.layer(name)
-            check_inasafe_fields(self._profiling_table)
 
             # Later, we should move this call.
             self.style()
@@ -1211,9 +1214,13 @@ class ImpactFunction(object):
         if self._exposure_impacted:
             self._exposure_impacted.keywords[
                 'provenance_data'] = self.provenance
-            _, name = self.datastore.add_layer(
+            result, name = self.datastore.add_layer(
                 self._exposure_impacted,
                 layer_purpose_exposure_impacted['key'])
+            if not result:
+                raise Exception(
+                    tr('Something went wrong with the datastore : '
+                       '{error_message}').format(error_message=name))
             self._exposure_impacted = self.datastore.layer(name)
             self.debug_layer(self._exposure_impacted, add_to_datastore=False)
 
@@ -1221,9 +1228,13 @@ class ImpactFunction(object):
         if self.aggregate_hazard_impacted:
             self.aggregate_hazard_impacted.keywords[
                 'provenance_data'] = self.provenance
-            _, name = self.datastore.add_layer(
+            result, name = self.datastore.add_layer(
                 self._aggregate_hazard_impacted,
                 layer_purpose_aggregate_hazard_impacted['key'])
+            if not result:
+                raise Exception(
+                    tr('Something went wrong with the datastore : '
+                       '{error_message}').format(error_message=name))
             self._aggregate_hazard_impacted = self.datastore.layer(name)
             self.debug_layer(
                 self._aggregate_hazard_impacted, add_to_datastore=False)
@@ -1232,24 +1243,36 @@ class ImpactFunction(object):
         if self._exposure.keywords.get('classification'):
             self._exposure_breakdown.keywords[
                 'provenance_data'] = self.provenance
-            _, name = self.datastore.add_layer(
+            result, name = self.datastore.add_layer(
                 self._exposure_breakdown,
                 layer_purpose_exposure_breakdown['key'])
+            if not result:
+                raise Exception(
+                    tr('Something went wrong with the datastore : '
+                       '{error_message}').format(error_message=name))
             self._exposure_breakdown = self.datastore.layer(name)
             self.debug_layer(self._exposure_breakdown, add_to_datastore=False)
 
         # Aggregation impacted
         self.aggregation_impacted.keywords['provenance_data'] = self.provenance
-        _, name = self.datastore.add_layer(
+        result, name = self.datastore.add_layer(
             self._aggregation_impacted,
             layer_purpose_aggregation_impacted['key'])
+        if not result:
+            raise Exception(
+                tr('Something went wrong with the datastore : '
+                   '{error_message}').format(error_message=name))
         self._aggregation_impacted = self.datastore.layer(name)
         self.debug_layer(self._aggregation_impacted, add_to_datastore=False)
 
         # Analysis impacted
         self.analysis_impacted.keywords['provenance_data'] = self.provenance
-        _, name = self.datastore.add_layer(
+        result, name = self.datastore.add_layer(
             self._analysis_impacted, layer_purpose_analysis_impacted['key'])
+        if not result:
+            raise Exception(
+                tr('Something went wrong with the datastore : '
+                   '{error_message}').format(error_message=name))
         self._analysis_impacted = self.datastore.layer(name)
         self.debug_layer(self._analysis_impacted, add_to_datastore=False)
 
@@ -1654,6 +1677,7 @@ class ImpactFunction(object):
                         'Recompute counts')
                     self._exposure_impacted = recompute_counts(
                         self._exposure_impacted)
+                    self.debug_layer(self._exposure_impacted)
 
             else:
                 self.set_state_process(
@@ -1661,8 +1685,7 @@ class ImpactFunction(object):
                     'Highest class of hazard is assigned to the exposure')
                 self._exposure_impacted = assign_highest_value(
                     self._exposure, self._aggregate_hazard_impacted)
-
-            self.debug_layer(self._exposure_impacted)
+                self.debug_layer(self._exposure_impacted)
 
             if self._exposure_impacted:
                 self._exposure_impacted.keywords['title'] = (

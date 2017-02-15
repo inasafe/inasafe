@@ -55,6 +55,8 @@ def intersection(source, mask, callback=None):
     .. versionadded:: 4.0
     """
     output_layer_name = intersection_steps['output_layer_name']
+    output_layer_name = output_layer_name % (
+        source.keywords['layer_purpose'])
     processing_step = intersection_steps['step_name']
 
     fields = source.fields()
