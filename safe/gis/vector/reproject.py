@@ -1,8 +1,6 @@
 # coding=utf-8
 
-"""
-Reproject a vector layer to a specific CRS.
-"""
+"""Reproject a vector layer to a specific CRS."""
 
 from qgis.core import (
     QgsVectorLayer,
@@ -12,6 +10,7 @@ from qgis.core import (
 )
 
 from safe.gis.vector.tools import create_memory_layer
+from safe.gis.sanity_check import check_layer
 from safe.definitions.processing_steps import reproject_steps
 from safe.utilities.profiling import profile
 
@@ -24,8 +23,7 @@ __revision__ = '$Format:%H$'
 
 @profile
 def reproject(layer, output_crs, callback=None):
-    """
-    Reproject a vector layer to a specific CRS.
+    """Reproject a vector layer to a specific CRS.
 
     Issue https://github.com/inasafe/inasafe/issues/3183
 
@@ -77,4 +75,5 @@ def reproject(layer, output_crs, callback=None):
     # We don't need to update keywords as the CRS is dynamic.
     reprojected.keywords = layer.keywords
     reprojected.keywords['title'] = output_layer_name
+    check_layer(reprojected)
     return reprojected

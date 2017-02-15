@@ -1,4 +1,5 @@
 # coding=utf-8
+
 """Utilities module."""
 
 import re
@@ -395,30 +396,3 @@ def monkey_patch_keywords(layer):
         layer.keywords['inasafe_fields']
     except KeyError:
         layer.keywords['inasafe_fields'] = {}
-
-
-def check_inasafe_fields(layer):
-    """Helper to check inasafe_fields.
-
-    :param layer: The layer to check.
-    :type layer: QgsVectorLayer
-
-    :raises: Exception with a message if the layer is not correct.
-    """
-    inasafe_fields = layer.keywords['inasafe_fields']
-
-    real_fields = [field.name() for field in layer.fields().toList()]
-
-    difference = set(inasafe_fields.values()).difference(real_fields)
-    if len(difference):
-        message = tr(
-            'inasafe_fields has more fields than the layer %s itself : %s'
-            % (layer.keywords['layer_purpose'], difference))
-        raise Exception(message)
-
-    difference = set(real_fields).difference(inasafe_fields.values())
-    if len(difference):
-        message = tr(
-            'The layer %s has more fields than inasafe_fields : %s'
-            % (layer.title(), difference))
-        raise Exception(message)

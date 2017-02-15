@@ -10,6 +10,7 @@ from safe.common.exceptions import (
 from safe.definitions.processing_steps import assign_default_values_steps
 from safe.definitions.utilities import definition
 from safe.gis.vector.tools import create_field_from_definition
+from safe.gis.sanity_check import check_layer
 from safe.utilities.i18n import tr
 from safe.utilities.profiling import profile
 
@@ -116,4 +117,5 @@ def add_default_values(layer, callback=None):
         layer.commitChanges()
         layer.keywords['title'] = output_layer_name
 
+    check_layer(layer)
     return layer

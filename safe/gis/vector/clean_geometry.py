@@ -1,7 +1,9 @@
 # coding=utf-8
+
 """Try to make a layer valid."""
 
 from safe.definitions.processing_steps import clean_geometry_steps
+from safe.gis.sanity_check import check_layer
 from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -46,6 +48,7 @@ def clean_layer(layer, callback=None):
 
     layer.keywords['title'] = output_layer_name
 
+    check_layer(layer)
     return layer
 
 

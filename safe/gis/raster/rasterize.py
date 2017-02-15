@@ -1,5 +1,7 @@
 # coding=utf-8
 
+"""Rasterize a vector layer."""
+
 from tempfile import mkdtemp
 from collections import OrderedDict
 from qgis.core import QgsRasterLayer
@@ -11,6 +13,7 @@ from safe.datastore.folder import Folder
 from safe.definitions.fields import aggregation_id_field
 from safe.definitions.processing_steps import rasterize_steps
 from safe.definitions.layer_purposes import layer_purpose_aggregation_impacted
+from safe.gis.sanity_check import check_layer
 from safe.utilities.gis import qgis_version
 from safe.utilities.profiling import profile
 
@@ -87,8 +90,6 @@ def rasterize_vector_layer(layer, width, height, extent):
 
     layer_aligned = QgsRasterLayer(output_filename, name, 'gdal')
 
-    assert layer_aligned.isValid()
-
     layer_aligned.keywords = keywords
     layer_aligned.keywords['title'] = (
         rasterize_steps['output_layer_name'] % 'aggregation')
@@ -96,4 +97,5 @@ def rasterize_vector_layer(layer, width, height, extent):
         layer_purpose_aggregation_impacted['key'])
     del layer_aligned.keywords['inasafe_fields']
 
+    check_layer(layer_aligned)
     return layer_aligned

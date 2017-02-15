@@ -1,10 +1,6 @@
 # coding=utf-8
 
-"""
-Clip and mask a hazard layer.
-
-Issue https://github.com/inasafe/inasafe/issues/3186
-"""
+"""Clip and mask a hazard layer."""
 
 import logging
 from qgis.core import (
@@ -17,6 +13,7 @@ from qgis.core import (
 
 from safe.definitions.processing_steps import smart_clip_steps
 from safe.gis.vector.tools import create_memory_layer
+from safe.gis.sanity_check import check_layer
 from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -31,6 +28,8 @@ LOGGER = logging.getLogger('InaSAFE')
 @profile
 def smart_clip(layer_to_clip, mask_layer, callback=None):
     """Smart clip a vector layer with another.
+
+    Issue https://github.com/inasafe/inasafe/issues/3186
 
     :param layer_to_clip: The vector layer to clip.
     :type layer_to_clip: QgsVectorLayer
@@ -84,4 +83,5 @@ def smart_clip(layer_to_clip, mask_layer, callback=None):
 
     writer.keywords = layer_to_clip.keywords.copy()
     writer.keywords['title'] = output_layer_name
+    check_layer(writer)
     return writer

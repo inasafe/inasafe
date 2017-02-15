@@ -19,6 +19,7 @@ from safe.definitions.processing_steps import (
 from safe.definitions.layer_purposes import layer_purpose_analysis_impacted
 from safe.gis.vector.summary_tools import check_inputs
 from safe.gis.vector.tools import create_field_from_definition
+from safe.gis.sanity_check import check_layer
 from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -113,4 +114,5 @@ def analysis_eartquake_summary(aggregation, analysis, callback=None):
     analysis.keywords['title'] = output_layer_name
     analysis.keywords['layer_purpose'] = layer_purpose_analysis_impacted['key']
 
+    check_layer(analysis)
     return analysis

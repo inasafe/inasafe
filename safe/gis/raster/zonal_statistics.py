@@ -1,13 +1,11 @@
 # coding=utf-8
-"""
-Zonal statistics on a raster layer.
 
-Issue https://github.com/inasafe/inasafe/issues/3190
-"""
+"""Zonal statistics on a raster layer."""
 
 import logging
 from qgis.analysis import QgsZonalStatistics
 
+from safe.gis.sanity_check import check_layer
 from safe.gis.vector.tools import copy_layer, create_memory_layer
 from safe.gis.vector.prepare_vector_layer import copy_fields, remove_fields
 from safe.definitions.fields import exposure_count_field, total_field
@@ -28,6 +26,9 @@ LOGGER = logging.getLogger('InaSAFE')
 @profile
 def zonal_stats(raster, vector, callback=None):
     """Reclassify a continuous raster layer.
+
+    Issue https://github.com/inasafe/inasafe/issues/3190
+
 
     :param raster: The raster layer.
     :type raster: QgsRasterLayer
@@ -90,4 +91,5 @@ def zonal_stats(raster, vector, callback=None):
 
     layer.keywords['title'] = output_layer_name
 
+    check_layer(layer)
     return layer

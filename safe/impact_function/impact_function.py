@@ -30,6 +30,7 @@ from safe.common.utilities import temp_dir
 from safe.common.version import get_version
 from safe.datastore.folder import Folder
 from safe.datastore.datastore import DataStore
+from safe.gis.sanity_check import check_inasafe_fields
 from safe.gis.vector.tools import remove_fields
 from safe.gis.vector.from_counts_to_ratios import from_counts_to_ratios
 from safe.gis.vector.prepare_vector_layer import prepare_vector_layer
@@ -126,7 +127,6 @@ from safe.utilities.utilities import (
 from safe.utilities.profiling import (
     profile, clear_prof_data, profiling_log)
 from safe.utilities.settings import setting
-from safe.utilities.utilities import check_inasafe_fields
 from safe import messaging as m
 from safe.messaging import styles
 from safe.gui.widgets.message import generate_input_error_message
