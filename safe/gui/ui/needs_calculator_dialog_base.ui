@@ -145,7 +145,7 @@
          <item row="9" column="0">
           <widget class="QLabel" name="label_4">
            <property name="text">
-            <string>Aggregation field id</string>
+            <string>Aggregation field ID</string>
            </property>
           </widget>
          </item>
