@@ -1,4 +1,5 @@
 # coding=utf-8
+
 """Test for Impact Function."""
 
 from copy import deepcopy
@@ -60,9 +61,9 @@ from safe.definitions.constants import (
     ANALYSIS_SUCCESS,
     ANALYSIS_FAILED_BAD_INPUT,
 )
+from safe.gis.sanity_check import check_inasafe_fields
 from safe.utilities.unicode import byteify
 from safe.utilities.gis import wkt_to_rectangle
-from safe.utilities.utilities import check_inasafe_fields
 from safe.impact_function.impact_function import ImpactFunction
 
 LOGGER = logging.getLogger('InaSAFE')

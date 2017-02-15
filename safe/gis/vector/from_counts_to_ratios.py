@@ -8,6 +8,7 @@ from safe.definitions.processing_steps import (
     recompute_counts_steps)
 from safe.utilities.profiling import profile
 from safe.gis.vector.tools import create_field_from_definition
+from safe.gis.sanity_check import check_layer
 
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -73,4 +74,5 @@ def from_counts_to_ratios(layer, callback=None):
             layer.changeAttributeValue(feature.id(), index, new_value)
 
     layer.commitChanges()
+    check_layer(layer)
     return layer

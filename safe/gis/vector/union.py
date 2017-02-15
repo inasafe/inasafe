@@ -1,10 +1,7 @@
 # coding=utf-8
 
-"""
-Clip and mask a hazard layer.
+"""Clip and mask a hazard layer."""
 
-Issue https://github.com/inasafe/inasafe/issues/3186
-"""
 import logging
 from PyQt4.QtCore import QPyNullVariant
 from qgis.core import (
@@ -22,6 +19,7 @@ from safe.definitions.hazard_classifications import not_exposed_class
 from safe.gis.vector.tools import (
     create_memory_layer, wkb_type_groups, create_spatial_index)
 from safe.gis.vector.clean_geometry import geometry_checker
+from safe.gis.sanity_check import check_layer
 from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -36,6 +34,8 @@ LOGGER = logging.getLogger('InaSAFE')
 @profile
 def union(union_a, union_b, callback=None):
     """Union of two vector layers.
+
+    Issue https://github.com/inasafe/inasafe/issues/3186
 
     Note : This algorithm is copied from :
     https://github.com/qgis/QGIS/blob/master/python/plugins/processing/algs/
@@ -264,6 +264,7 @@ def union(union_a, union_b, callback=None):
 
     fill_hazard_class(writer)
 
+    check_layer(writer)
     return writer
 
 

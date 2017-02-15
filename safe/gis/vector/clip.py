@@ -1,10 +1,6 @@
 # coding=utf-8
 
-"""
-Clip and mask a hazard layer.
-
-Issue https://github.com/inasafe/inasafe/issues/3186
-"""
+"""Clip and mask a hazard layer."""
 
 import logging
 from qgis.core import (
@@ -18,6 +14,7 @@ from qgis.core import (
 from safe.utilities.i18n import tr
 from safe.definitions.processing_steps import clip_steps
 from safe.gis.vector.tools import create_memory_layer
+from safe.gis.sanity_check import check_layer
 from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -32,6 +29,8 @@ LOGGER = logging.getLogger('InaSAFE')
 @profile
 def clip(layer_to_clip, mask_layer, callback=None):
     """Clip a vector layer with another.
+
+    Issue https://github.com/inasafe/inasafe/issues/3186
 
     Note : This algorithm is copied from :
     https://github.com/qgis/QGIS/blob/master/python/plugins/processing/algs/
@@ -170,4 +169,5 @@ def clip(layer_to_clip, mask_layer, callback=None):
 
     writer.keywords = layer_to_clip.keywords.copy()
     writer.keywords['title'] = output_layer_name
+    check_layer(writer)
     return writer

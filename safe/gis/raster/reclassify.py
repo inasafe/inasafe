@@ -1,9 +1,6 @@
 # coding=utf-8
-"""
-Reclassify a raster layer.
 
-Issue https://github.com/inasafe/inasafe/issues/3182
-"""
+"""Reclassify a raster layer."""
 
 import numpy as np
 from osgeo import gdal
@@ -16,6 +13,7 @@ from safe.common.utilities import unique_filename, temp_dir
 from safe.definitions.constants import no_data_value
 from safe.definitions.utilities import definition
 from safe.definitions.processing_steps import reclassify_raster_steps
+from safe.gis.sanity_check import check_layer
 from safe.utilities.profiling import profile
 from safe.utilities.metadata import (
     active_thresholds_value_maps, active_classification)
@@ -29,6 +27,9 @@ __revision__ = '$Format:%H$'
 @profile
 def reclassify(layer, exposure_key=None, callback=None):
     """Reclassify a continuous raster layer.
+
+    Issue https://github.com/inasafe/inasafe/issues/3182
+
 
     This function is a wrapper for the code from
     https://github.com/chiatt/gdal_reclassify
@@ -150,4 +151,5 @@ def reclassify(layer, exposure_key=None, callback=None):
     reclassified.keywords['value_map'] = value_map
     reclassified.keywords['title'] = output_layer_name
 
+    check_layer(reclassified)
     return reclassified

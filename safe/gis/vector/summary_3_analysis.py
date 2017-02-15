@@ -25,6 +25,7 @@ from safe.definitions.layer_purposes import layer_purpose_analysis_impacted
 from safe.definitions.post_processors import post_processor_affected_function
 from safe.gis.vector.summary_tools import (
     check_inputs, create_absolute_values_structure, add_fields)
+from safe.gis.sanity_check import check_layer
 from safe.utilities.profiling import profile
 from safe.utilities.pivot_table import FlatTable
 
@@ -200,4 +201,5 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
     analysis.keywords['title'] = output_layer_name
     analysis.keywords['layer_purpose'] = layer_purpose_analysis_impacted['key']
 
+    check_layer(analysis)
     return analysis

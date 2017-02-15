@@ -1,15 +1,15 @@
 # coding=utf-8
+
 """Reclassify a continuous vector layer."""
 
 from PyQt4.QtCore import QPyNullVariant
 from qgis.core import QgsField
 
 from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
-from safe.definitions.layer_purposes import (
-    layer_purpose_hazard, layer_purpose_exposure)
 from safe.definitions.utilities import definition
 from safe.definitions.fields import hazard_class_field, hazard_value_field
 from safe.definitions.processing_steps import reclassify_vector_steps
+from safe.gis.sanity_check import check_layer
 from safe.utilities.metadata import (
     active_thresholds_value_maps, active_classification)
 from safe.utilities.profiling import profile
@@ -118,6 +118,7 @@ def reclassify(layer, exposure_key=None, callback=None):
     layer.keywords['value_map'] = value_map
     layer.keywords['title'] = output_layer_name
 
+    check_layer(layer)
     return layer
 
 

@@ -22,6 +22,7 @@ from safe.definitions.processing_steps import (
 from safe.gis.vector.tools import read_dynamic_inasafe_field
 from safe.gis.vector.summary_tools import (
     check_inputs, create_absolute_values_structure, add_fields)
+from safe.gis.sanity_check import check_layer
 from safe.utilities.profiling import profile
 from safe.utilities.pivot_table import FlatTable
 from safe.utilities.i18n import tr
@@ -165,4 +166,5 @@ def aggregation_summary(aggregate_hazard, aggregation, callback=None):
     aggregation.keywords['layer_purpose'] = (
         layer_purpose_aggregation_impacted['key'])
 
+    check_layer(aggregation)
     return aggregation

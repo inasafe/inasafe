@@ -18,7 +18,7 @@ from safe.gis.vector.summary_2_aggregation import aggregation_summary
 from safe.gis.vector.summary_3_analysis import analysis_summary
 from safe.gis.vector.summary_4_exposure_breakdown import (
     exposure_type_breakdown)
-from safe.utilities.utilities import check_inasafe_fields
+from safe.gis.sanity_check import check_inasafe_fields
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

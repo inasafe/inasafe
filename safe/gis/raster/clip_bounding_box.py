@@ -1,7 +1,6 @@
 # coding=utf-8
-"""
-Clip a raster by bounding box.
-"""
+
+"""Clip a raster by bounding box."""
 
 import processing
 
@@ -10,6 +9,7 @@ from qgis.core import QgsRasterLayer
 from safe.common.exceptions import ProcessingInstallationError
 from safe.common.utilities import unique_filename, temp_dir
 from safe.definitions.processing_steps import quick_clip_steps
+from safe.gis.sanity_check import check_layer
 from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -20,8 +20,7 @@ __revision__ = '$Format:%H$'
 
 @profile
 def clip_by_extent(layer, extent, callback=None):
-    """
-    Clip a raster using a bounding box using processing.
+    """Clip a raster using a bounding box using processing.
 
     Issue https://github.com/inasafe/inasafe/issues/3183
 
@@ -84,4 +83,5 @@ def clip_by_extent(layer, extent, callback=None):
     clipped.keywords = layer.keywords.copy()
     clipped.keywords['title'] = output_layer_name
 
+    check_layer(clipped)
     return clipped

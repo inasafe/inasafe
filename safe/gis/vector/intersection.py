@@ -1,10 +1,6 @@
 # coding=utf-8
 
-"""
-Intersect two layers.
-
-Issue https://github.com/inasafe/inasafe/issues/3186
-"""
+"""Intersect two layers."""
 
 import logging
 from qgis.core import (
@@ -16,11 +12,11 @@ from qgis.core import (
 )
 
 from safe.utilities.i18n import tr
-from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
 from safe.definitions.layer_purposes import layer_purpose_exposure_impacted
 from safe.definitions.processing_steps import intersection_steps
 from safe.gis.vector.tools import (
     create_memory_layer, wkb_type_groups, create_spatial_index)
+from safe.gis.sanity_check import check_layer
 from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -35,6 +31,8 @@ LOGGER = logging.getLogger('InaSAFE')
 @profile
 def intersection(source, mask, callback=None):
     """Intersect two layers.
+
+    Issue https://github.com/inasafe/inasafe/issues/3186
 
     Note : This algorithm is copied from :
     https://github.com/qgis/QGIS/blob/master/python/plugins/processing/algs/
@@ -136,4 +134,5 @@ def intersection(source, mask, callback=None):
     writer.keywords['aggregation_keywords'] = dict(
         mask.keywords['aggregation_keywords'])
 
+    check_layer(writer)
     return writer

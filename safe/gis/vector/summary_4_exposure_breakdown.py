@@ -29,6 +29,7 @@ from safe.gis.vector.tools import (
     create_field_from_definition,
     read_dynamic_inasafe_field,
     create_memory_layer)
+from safe.gis.sanity_check import check_layer
 from safe.gis.vector.summary_tools import (
     check_inputs, create_absolute_values_structure)
 from safe.utilities.profiling import profile
@@ -225,4 +226,5 @@ def exposure_type_breakdown(aggregate_hazard, callback=None):
     tabular.keywords['title'] = output_layer_name
     tabular.keywords['layer_purpose'] = layer_purpose_exposure_breakdown['key']
 
+    check_layer(tabular, has_geometry=False)
     return tabular
