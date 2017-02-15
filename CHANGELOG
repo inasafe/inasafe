@@ -119,7 +119,7 @@ dd158fb (rizky/realtime_ash) Merge branch 'develop' of http://github.com/AIFDR/i
 3082b59 Merge pull request #3051 from Gustry/headings
 4f9c562 add headings for roads/places/buildingsin the impact summary
 b925fd4 Merge pull request #3048 from Gustry/metadate_exposure
-cb9ab92 fix #2911 - PetaBencana layer style not working (#3044)
+cb9ab92 fix #2911 - PetaJakarta layer style not working (#3044)
 b8ba37f Metadata definition cleanups from @easmetz (#3046)
 6b5e881 Merge pull request #3039 from ismailsunni/fix_2746_remove_entire_area
 8ba30ae update exposure layers with new keywords
@@ -172,7 +172,7 @@ a6883d9 Initial commit for realtime ash report test
 93bbf9f Add initial commit for Ash Raster Population IF.
 c35eda5 Add ash raster IF to loader.
 05177a5 Update keyword version.
-de17325 Merge pull request #3005 from ismailsunni/fix_2913_peta_bencana
+de17325 Merge pull request #3005 from ismailsunni/fix_2913_peta_jakarta
 a334e4f Fix docs
 045164e (rizky/develop_functionality) Merge branch 'develop' of github.com:AIFDR/inasafe into develop_functionality
 fda53e2 Move metadata definitions one level up.
@@ -707,7 +707,7 @@ a1c91e0 Refactor method name in impact report.
 b9000ef Merge branch 'develop' of http://github.com/AIFDR/inasafe into realtime-flood
 a8a85f3 Merge pull request #2707 from easmetz/develop
 ab00d75 (libby/develop) Merge remote-tracking branch 'upstream/develop' into develop
-1816ffe ###Problem Peta Bencana delivering python error
+1816ffe ###Problem Peta Jakarta delivering python error
 d2146c3 (libby/fix-2704) Changed name of help topic to match icon and gui title.
 f43d5c9 ###Problem
 8b1e7b5 Major feature Add:
@@ -752,7 +752,7 @@ e2e4d71 add units on each rows, not on columns in the road report
 1339811 update tsunami on buildings IF
 ee91870 add tsunami IF init
 46d0e56 Merge pull request #2690 from timlinux/fix-2689
-4024dcc (origin/fix-2689) Fix PetaBencana flood style to be consistent with PJ website
+4024dcc (origin/fix-2689) Fix PetaJakarta flood style to be consistent with PJ website
 9b29875 Merge pull request #2668 from Gustry/fix-2361-roads-postprocessing
 9f26536 update to "total affected" in the road type postprocessor
 90ee863 fix hide exposure layer after an IF in develop
@@ -834,7 +834,7 @@ bafaca7 fix delete network reply after a download
 Changelog for version 3.3.1
 ================================
 
-c3211e6 (HEAD -> master) ###Problem Peta Bencana delivering python error
+c3211e6 (HEAD -> master) ###Problem Peta Jakarta delivering python error
 
 Changelog for version 3.3.0
 ================================
@@ -844,7 +844,7 @@ Changelog for version 3.3.0
 2894f66 fix metadata tsunami on roads IF
 9fc441c Merge pull request #2693 from timlinux/master
 0b3fa7a unit in road postprocessor
-6981387 Fix PetaBencana flood style to be consistent with PJ website
+6981387 Fix PetaJakarta flood style to be consistent with PJ website
 c9697b2 Merge pull request #2692 from ismailsunni/translation-3.3.1
 c6d9649 compile translation.
 654c50c Update translation from transifex.
@@ -891,7 +891,7 @@ a777b48 Update translation from transifex.
 d27bf4e Merge branch 'develop' of github.com:inasafe/inasafe into translation-3.3
 5ea1cb3 Remove dead code. Styles.py.
 a13105f Merge pull request #2640 from timlinux/develop
-e4fb933 Small typo fix in petabencana help
+e4fb933 Small typo fix in petajakarta help
 9c9e1e1 Fix issue with styles for flood on polygon pop when class field is an int
 b4715a1 Merge pull request #2638 from timlinux/develop
 21f77c0 Merge pull request #2639 from ismailsunni/update_data_test
@@ -901,8 +901,8 @@ f37c3de Update translation from transifex
 c32f659 Merge branch 'develop' of github.com:inasafe/inasafe into translation-3.3
 2cdf084 Use FloatTuple for resolution in data test metadata xml.
 d5a8f4f Merge pull request #2472 from timlinux/fix-2471
-91771f1 (origin/fix-2471, fix-2471) Updated style and XML template for PetaBencana
-602577a Fixups for petabencana flood styles
+91771f1 (origin/fix-2471, fix-2471) Updated style and XML template for PetaJakarta
+602577a Fixups for petajakarta flood styles
 f1b8c82 Revert changes diverging from upstream
 b01c57c Merge changes from upstream
 4b9428d Metadata updates
@@ -1495,14 +1495,14 @@ d67bac1 Fix failed test: test_read_keywordless_layer.
 897f584 Merge branch 'develop' of github.com:inasafe/inasafe into develop
 22c1fe1 Remove old xml metadata.
 0459e99 Merge pull request #2486 from ismailsunni/wizard_additional_keywords
-b4c711c develop #2476: support for PetaBencana Floodmap
+b4c711c develop #2476: support for PetaJakarta Floodmap
 797aec1 [IFCW] After registering keywords in the KW sub-thread, don't display again the step from where it was called. Fixes #2347
 0e1ba07 pep8 and Pylint fixes
 6660f30 [Wizard] Add Keywords Creation Wizard confirmation step. Fixes #2422
 ca08c97 Merge branch 'develop' of github.com:AIFDR/inasafe into develop
 c3a093d passed pep8
 db1d325 Dont crash PJ downloader when @charlotte-morgan says she does not wish to create the non-existing download directory.
-e3dfead Refactor PetaBencana downloader to accommodate requests from @charlotte-morgan. See https://github.com/inasafe/inasafe/pull/2472
+e3dfead Refactor PetaJakarta downloader to accommodate requests from @charlotte-morgan. See https://github.com/inasafe/inasafe/pull/2472
 bb849bf (ismail/wizard_additional_keywords) Merge branch 'develop' of github.com:inasafe/inasafe into wizard_additional_keywords
 069fa03 Resolved merge conflicts
 8c3ed16 Add test for additional keywords.
@@ -1515,9 +1515,9 @@ b9e7942 Added wrap slash functions in messaging so that long filename cells can 
 964917d Working implementation of on the fly projection for polygon flood on building points/polys. fix #2475
 2d87c4d Merge branch 'develop' into fix-2475
 fd925f9 Initial implementation for #2475 - support On the fly projection in IF
-0acd4d5 Added an entry for PetaBencana downloader to metadata.txt
-a38e216 Implementation for #2471 - add support for loading PetaBencana data in QGIS
-c471a96 First order implementation prototype for adding petabencana data to InaSAFE
+0acd4d5 Added an entry for PetaJakarta downloader to metadata.txt
+a38e216 Implementation for #2471 - add support for loading PetaJakarta data in QGIS
+c471a96 First order implementation prototype for adding petajakarta data to InaSAFE
 dc2433e refactored run function in the new IF
 489bbad added icon for area
 1aead6b (ismail/master) Merge pull request #2466 from timlinux/master
