@@ -17,8 +17,13 @@ import time
 
 from shutil import copy
 from PyQt4 import QtCore
-from PyQt4.QtCore import QVariant
-from PyQt4.QtNetwork import QNetworkReply
+from PyQt4.QtScript import QScriptEngine, QScriptValueIterator
+from PyQt4.QtCore import QVariant, QUrl, Qt
+from PyQt4.QtNetwork import (
+    QNetworkAccessManager,
+    QNetworkRequest,
+    QNetworkReply)
+
 # noinspection PyUnresolvedReferences
 # pylint: disable=unused-import
 from qgis.core import (
@@ -52,6 +57,7 @@ from safe.utilities.qgis_utilities import (
     display_warning_message_box,
     display_warning_message_bar)
 from safe.gui.tools.help.peta_bencana_help import peta_bencana_help
+from safe.definitions.peta_bencana import development_api, production_api
 
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -89,6 +95,16 @@ class PetaBencanaDialog(QDialog, FORM_CLASS):
         self.setWindowTitle(self.tr('PetaBencana Downloader'))
 
         self.iface = iface
+
+        self.source = None
+
+        self.buttonGroup.setExclusive(True)
+        self.radioButton_prod.setChecked(True)
+        self.populate_combobox()
+
+        # signals
+        self.radioButton_prod.clicked.connect(self.populate_combobox)
+        self.radioButton_dev.clicked.connect(self.populate_combobox)
 
         # creating progress dialog for download
         self.progress_dialog = QProgressDialog(self)
@@ -196,9 +212,7 @@ class PetaBencanaDialog(QDialog, FORM_CLASS):
 
         QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
 
-        source = (
-            'https://data.petabencana.id/floods'
-            '?city=jbd&geoformat=geojson&format=json&minimum_state=1')
+        source = self.define_url()
         # save the file as json first
         name = 'jakarta_flood.json'
         output_directory = self.output_directory.text()
@@ -246,18 +260,19 @@ class PetaBencanaDialog(QDialog, FORM_CLASS):
 
         # check if the layer has feature or not
         if layer.featureCount() <= 0:
-            message = 'There are no floods data available at this time.'
+            message = self.tr(
+                'There are no floods data available at this time.')
             display_warning_message_box(
                 self,
                 self.tr('No data'),
-                self.tr(message))
+                message)
+            self.disable_busy_cursor()
         else:
             # add the layer to the map
             registry = QgsMapLayerRegistry.instance()
             registry.addMapLayer(layer)
-
-        self.disable_busy_cursor()
-        self.done(QDialog.Accepted)
+            self.disable_busy_cursor()
+            self.done(QDialog.Accepted)
 
     def add_flooded_field(self, shapefile_path):
         """Create the layer from the local shp adding the flooded field.
@@ -564,3 +579,57 @@ class PetaBencanaDialog(QDialog, FORM_CLASS):
                 self,
                 self.tr('Download error'),
                 self.tr(message))
+
+    def get_available_area(self):
+        """Function to automatically get the available area on API.
+           *still cannot get string data from QByteArray*
+        """
+        available_area = []
+        network_manager = QNetworkAccessManager()
+        api_url = QUrl('https://data.petabencana.id/cities')
+        api_request = QNetworkRequest(api_url)
+        api_response = network_manager.get(api_request)
+        data = api_response.readAll()
+        json_response = QScriptEngine().evaluate(data)
+        geometries = json_response.property('output').property('geometries')
+        iterator = QScriptValueIterator(geometries)
+        while iterator.hasNext():
+            iterator.next()
+            geometry = iterator.value()
+            geometry_code = (
+                geometry.property('properties').property('code').toString())
+            available_area.append(geometry_code)
+
+        display_warning_message_box(
+            self,
+            'output',
+            ', '.join(available_area)
+        )
+
+    def populate_combobox(self):
+        """Populate combobox."""
+        if self.radioButton_prod.isChecked():
+            self.source = production_api['url']
+            available_data = production_api['available_data']
+            self.comboBox.clear()
+            for index, data in enumerate(available_data):
+                self.comboBox.addItem(data['name'])
+                self.comboBox.setItemData(index, data['code'], Qt.UserRole)
+        else:
+            self.source = development_api['url']
+            available_data = development_api['available_data']
+            self.comboBox.clear()
+            for index, data in enumerate(available_data):
+                self.comboBox.addItem(data['name'])
+                self.comboBox.setItemData(index, data['code'], Qt.UserRole)
+
+    def define_url(self):
+        """Define API url based on which source is selected.
+
+        :return: Valid url of selected source.
+        :rtype: str
+        """
+        current_index = self.comboBox.currentIndex()
+        city_code = self.comboBox.itemData(current_index, Qt.UserRole)
+        source = (self.source).format(city_code=city_code)
+        return source

@@ -36,7 +36,7 @@ changelog=
     Update references to 'Attribute values’ to ‘Attributes value map’ in the docs #2381
     Less duplication on notes and action #2426
     Use tick for action check list #2430
-    Fix BUG: PetaBencana downloader py error #2669
+    Fix BUG: PetaJakarta downloader py error #2669
     Review all dialog #2704
     Remove repeated figures in some reports #2746
     Remove .keywords Support in version 3.5 #2773
