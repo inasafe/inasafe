@@ -99,6 +99,10 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         # GUI, good for testing
         self.save_button = None
 
+        # Has default threshold
+        # Trick for EQ raster for population #3853
+        self.default_thresholds = False
+
     def is_ready_to_next_step(self):
         """Check if the step is complete.
 
@@ -112,6 +116,9 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             # Enable if there is one that has classification
             if combo_box.currentIndex() > 0:
                 return True
+        # Trick for EQ raster for population #3853
+        if self.default_thresholds:
+            return True
         return False
 
     def get_next_step(self):
@@ -190,6 +197,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             # Trick for EQ raster for population #3853
             if exposure == exposure_population and hazard == hazard_earthquake:
                 if is_raster_layer(self.parent.layer):
+                    self.default_thresholds = True
                     continue
 
             # Add label
