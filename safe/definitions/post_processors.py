@@ -345,7 +345,7 @@ post_processor_hygiene_packs = {
     'key': 'post_processor_hygiene_packs',
     'name': tr('Weekly Hygiene Packs Post Processor'),
     'description': tr(
-        'A post processor to calculate needed hygiene packs weekly for women'
+        'A post processor to calculate needed hygiene packs weekly for women '
         'who are displaced. "Displaced" is defined as: '
         '{displaced_concept}').format(
             displaced_concept=concepts['displaced_people']['description']),
