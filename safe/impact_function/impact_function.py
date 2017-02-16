@@ -953,8 +953,8 @@ class ImpactFunction(object):
                     m.Paragraph(tr(
                         'The aggregation layer seems to have a problem. '
                         'Some features might be invalid. You should check the '
-                        'validity of this layer or use a selection within this'
-                        'layer.'))
+                        'validity of this layer or use a selection within '
+                        'this layer.'))
                 )
                 return PREPARE_FAILED_BAD_LAYER, message
 
