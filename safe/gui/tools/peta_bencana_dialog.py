@@ -580,31 +580,27 @@ class PetaBencanaDialog(QDialog, FORM_CLASS):
                 self.tr('Download error'),
                 self.tr(message))
 
-    def get_available_area(self):
-        """Function to automatically get the available area on API.
-           *still cannot get string data from QByteArray*
-        """
-        available_area = []
-        network_manager = QNetworkAccessManager()
-        api_url = QUrl('https://data.petabencana.id/cities')
-        api_request = QNetworkRequest(api_url)
-        api_response = network_manager.get(api_request)
-        data = api_response.readAll()
-        json_response = QScriptEngine().evaluate(data)
-        geometries = json_response.property('output').property('geometries')
-        iterator = QScriptValueIterator(geometries)
-        while iterator.hasNext():
-            iterator.next()
-            geometry = iterator.value()
-            geometry_code = (
-                geometry.property('properties').property('code').toString())
-            available_area.append(geometry_code)
+    # The function below might be usefull for future usage.
 
-        display_warning_message_box(
-            self,
-            'output',
-            ', '.join(available_area)
-        )
+    # def get_available_area(self):
+    #     """Function to automatically get the available area on API.
+    #        *still cannot get string data from QByteArray*
+    #     """
+    #     available_area = []
+    #     network_manager = QNetworkAccessManager()
+    #     api_url = QUrl('https://data.petabencana.id/cities')
+    #     api_request = QNetworkRequest(api_url)
+    #     api_response = network_manager.get(api_request)
+    #     data = api_response.readAll()
+    #     json_response = QScriptEngine().evaluate(data)
+    #     geometries = json_response.property('output').property('geometries')
+    #     iterator = QScriptValueIterator(geometries)
+    #     while iterator.hasNext():
+    #         iterator.next()
+    #         geometry = iterator.value()
+    #         geometry_code = (
+    #             geometry.property('properties').property('code').toString())
+    #         available_area.append(geometry_code)
 
     def populate_combobox(self):
         """Populate combobox."""
