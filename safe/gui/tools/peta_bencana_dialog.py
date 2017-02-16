@@ -17,12 +17,8 @@ import time
 
 from shutil import copy
 from PyQt4 import QtCore
-from PyQt4.QtScript import QScriptEngine, QScriptValueIterator
-from PyQt4.QtCore import QVariant, QUrl, Qt
-from PyQt4.QtNetwork import (
-    QNetworkAccessManager,
-    QNetworkRequest,
-    QNetworkReply)
+from PyQt4.QtCore import QVariant, Qt
+from PyQt4.QtNetwork import QNetworkReply
 
 # noinspection PyUnresolvedReferences
 # pylint: disable=unused-import
@@ -35,7 +31,8 @@ from qgis.core import (
     QgsVectorFileWriter,
     QgsField,
     QgsExpression,
-    QgsFeature)
+    QgsFeature,
+    QgsNetworkAccessManager)
 # pylint: enable=unused-import
 
 # noinspection PyPackageRequirements
@@ -44,20 +41,25 @@ from PyQt4 import QtGui
 from PyQt4.QtCore import QSettings, pyqtSignature, QRegExp, pyqtSlot
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import (
-    QDialog, QProgressDialog, QMessageBox, QFileDialog, QRegExpValidator)
+    QDialog,
+    QProgressDialog,
+    QMessageBox,
+    QFileDialog,
+    QRegExpValidator,
+    QButtonGroup)
 
 from safe.common.exceptions import (
     CanceledImportDialogError,
-    DownloadError,
     FileMissingError)
+from safe.definitions.peta_bencana import development_api, production_api
+from safe.gui.tools.help.peta_bencana_help import peta_bencana_help
 from safe.utilities.file_downloader import FileDownloader
 from safe.utilities.resources import (
     html_footer, html_header, get_ui_class, resources_path)
 from safe.utilities.qgis_utilities import (
     display_warning_message_box,
     display_warning_message_bar)
-from safe.gui.tools.help.peta_bencana_help import peta_bencana_help
-from safe.definitions.peta_bencana import development_api, production_api
+from safe.utilities.settings import setting
 
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -72,7 +74,7 @@ __copyright__ = ('Copyright 2015, Australia Indonesia Facility for '
 
 
 class PetaBencanaDialog(QDialog, FORM_CLASS):
-    """Downloader for petabencana data.
+    """Downloader for PetaBencana data.
 
     .. versionadded: 3.3
     """
@@ -92,24 +94,34 @@ class PetaBencanaDialog(QDialog, FORM_CLASS):
         self.parent = parent
         self.setupUi(self)
 
-        self.setWindowTitle(self.tr('PetaBencana Downloader'))
+        title = self.tr('PetaBencana Downloader')
+        self.setWindowTitle(title)
 
         self.iface = iface
 
         self.source = None
 
-        self.buttonGroup.setExclusive(True)
-        self.radioButton_prod.setChecked(True)
-        self.populate_combobox()
+        self.radio_button_group = QButtonGroup()
+        self.radio_button_group.addButton(self.radio_button_production)
+        self.radio_button_group.addButton(self.radio_button_development)
+
+        self.radio_button_group.setExclusive(True)
+        self.radio_button_production.setChecked(True)
+        self.populate_combo_box()
+
+        developer_mode = setting('developer_mode', False, bool)
+        if not developer_mode:
+            self.radio_button_widget.hide()
+            self.source_label.hide()
+            self.output_group.adjustSize()
 
         # signals
-        self.radioButton_prod.clicked.connect(self.populate_combobox)
-        self.radioButton_dev.clicked.connect(self.populate_combobox)
+        self.radio_button_production.clicked.connect(self.populate_combo_box)
+        self.radio_button_development.clicked.connect(self.populate_combo_box)
 
         # creating progress dialog for download
         self.progress_dialog = QProgressDialog(self)
         self.progress_dialog.setAutoClose(False)
-        title = self.tr('PetaBencana Downloader')
         self.progress_dialog.setWindowTitle(title)
 
         # Set up things for context help
@@ -260,8 +272,10 @@ class PetaBencanaDialog(QDialog, FORM_CLASS):
 
         # check if the layer has feature or not
         if layer.featureCount() <= 0:
+            city = self.city_combo_box.currentText()
             message = self.tr(
-                'There are no floods data available at this time.')
+                'There are no floods data available on {city} '
+                'at this time.'.format(city=city))
             display_warning_message_box(
                 self,
                 self.tr('No data'),
@@ -587,7 +601,7 @@ class PetaBencanaDialog(QDialog, FORM_CLASS):
     #        *still cannot get string data from QByteArray*
     #     """
     #     available_area = []
-    #     network_manager = QNetworkAccessManager()
+    #     network_manager = QgsNetworkAccessManager.instance()
     #     api_url = QUrl('https://data.petabencana.id/cities')
     #     api_request = QNetworkRequest(api_url)
     #     api_response = network_manager.get(api_request)
@@ -602,22 +616,24 @@ class PetaBencanaDialog(QDialog, FORM_CLASS):
     #             geometry.property('properties').property('code').toString())
     #         available_area.append(geometry_code)
 
-    def populate_combobox(self):
-        """Populate combobox."""
-        if self.radioButton_prod.isChecked():
+    def populate_combo_box(self):
+        """Populate combobox for selecting city."""
+        if self.radio_button_production.isChecked():
             self.source = production_api['url']
             available_data = production_api['available_data']
-            self.comboBox.clear()
+            self.city_combo_box.clear()
             for index, data in enumerate(available_data):
-                self.comboBox.addItem(data['name'])
-                self.comboBox.setItemData(index, data['code'], Qt.UserRole)
+                self.city_combo_box.addItem(data['name'])
+                self.city_combo_box.setItemData(
+                    index, data['code'], Qt.UserRole)
         else:
             self.source = development_api['url']
             available_data = development_api['available_data']
-            self.comboBox.clear()
+            self.city_combo_box.clear()
             for index, data in enumerate(available_data):
-                self.comboBox.addItem(data['name'])
-                self.comboBox.setItemData(index, data['code'], Qt.UserRole)
+                self.city_combo_box.addItem(data['name'])
+                self.city_combo_box.setItemData(
+                    index, data['code'], Qt.UserRole)
 
     def define_url(self):
         """Define API url based on which source is selected.
@@ -625,7 +641,7 @@ class PetaBencanaDialog(QDialog, FORM_CLASS):
         :return: Valid url of selected source.
         :rtype: str
         """
-        current_index = self.comboBox.currentIndex()
-        city_code = self.comboBox.itemData(current_index, Qt.UserRole)
+        current_index = self.city_combo_box.currentIndex()
+        city_code = self.city_combo_box.itemData(current_index, Qt.UserRole)
         source = (self.source).format(city_code=city_code)
         return source

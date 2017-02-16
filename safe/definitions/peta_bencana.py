@@ -1,3 +1,4 @@
+# coding=utf-8
 """Definitions relating to API that used in Peta Bencana downloader."""
 from safe.utilities.i18n import tr
 
@@ -11,6 +12,7 @@ development_api = {
     'name': tr('Development API'),
     'url': 'https://data-dev.petabencana.id/floods'
            '?city={city_code}&geoformat=geojson&format=json&minimum_state=1',
+    'help_url': 'https://docs.petabencana.id/',
     'available_data': [
         {
             'code': 'jbd',
@@ -28,10 +30,11 @@ development_api = {
 }
 
 production_api = {
-    'key': 'development_api',
-    'name': tr('Development API'),
+    'key': 'production_api',
+    'name': tr('Production API'),
     'url': 'https://data.petabencana.id/floods'
            '?city={city_code}&geoformat=geojson&format=json&minimum_state=1',
+    'help_url': 'https://docs.petabencana.id/',
     'available_data': [
         {
             'code': 'jbd',

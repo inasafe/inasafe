@@ -73,6 +73,9 @@
           <bool>false</bool>
          </property>
          <layout class="QGridLayout" name="gridLayout_3">
+          <item row="2" column="1">
+           <widget class="QComboBox" name="city_combo_box"/>
+          </item>
           <item row="4" column="0">
            <widget class="QLabel" name="filename_prefix_label">
             <property name="text">
@@ -140,46 +143,45 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="1">
-           <layout class="QHBoxLayout" name="horizontalLayout">
-            <item>
-             <widget class="QRadioButton" name="radioButton_prod">
-              <property name="text">
-               <string>Production API</string>
-              </property>
-              <attribute name="buttonGroup">
-               <string notr="true">buttonGroup</string>
-              </attribute>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="radioButton_dev">
-              <property name="text">
-               <string>Development API</string>
-              </property>
-              <attribute name="buttonGroup">
-               <string notr="true">buttonGroup</string>
-              </attribute>
-             </widget>
-            </item>
-           </layout>
-          </item>
           <item row="1" column="0">
-           <widget class="QLabel" name="label_2">
+           <widget class="QLabel" name="source_label">
             <property name="text">
              <string>Source</string>
             </property>
            </widget>
           </item>
           <item row="2" column="0">
-           <widget class="QLabel" name="label">
+           <widget class="QLabel" name="area_label">
             <property name="text">
              <string>Floods area</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="1">
-           <widget class="QComboBox" name="comboBox"/>
+          <item row="1" column="1">
+           <widget class="QWidget" name="radio_button_widget" native="true">
+            <layout class="QHBoxLayout" name="radio_button_layout">
+             <item>
+              <widget class="QRadioButton" name="radio_button_production">
+               <property name="text">
+                <string>Production API</string>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">buttonGroup</string>
+               </attribute>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="radio_button_development">
+               <property name="text">
+                <string>Development API</string>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">buttonGroup</string>
+               </attribute>
+              </widget>
+             </item>
+            </layout>
+           </widget>
           </item>
          </layout>
         </widget>
