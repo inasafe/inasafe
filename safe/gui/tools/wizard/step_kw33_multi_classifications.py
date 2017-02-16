@@ -19,7 +19,8 @@ import safe.messaging as m
 from safe.messaging import styles
 
 from safe.utilities.i18n import tr
-from safe.definitions.exposure import exposure_all
+from safe.definitions.exposure import exposure_all, exposure_population
+from safe.definitions.hazard import hazard_earthquake
 from safe.definitions.font import big_font
 from safe.definitions.layer_purposes import layer_purpose_aggregation
 from safe.gui.tools.wizard.wizard_step import (
@@ -174,23 +175,32 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
 
         Generate all exposure, combobox, and edit button.
         """
-        subcategory = self.parent.step_kw_subcategory.selected_subcategory()
+        hazard = self.parent.step_kw_subcategory.selected_subcategory()
         left_panel_heading = QLabel(tr('Classifications'))
         left_panel_heading.setFont(big_font)
         self.left_layout.addWidget(left_panel_heading)
 
         self.inner_left_layout = QGridLayout()
 
-        for row, exposure in enumerate(exposure_all):
+        row = 0
+        for exposure in exposure_all:
+            # Filter out unsupported exposure for the hazard
+            if exposure in hazard['disabled_exposures']:
+                continue
+            # Trick for EQ raster for population #3853
+            if exposure == exposure_population and hazard == hazard_earthquake:
+                if is_raster_layer(self.parent.layer):
+                    continue
+
             # Add label
             # Hazard on Exposure Classifications
             label = tr('%s on %s Classifications' % (
-                subcategory['name'], exposure['name']))
+                hazard['name'], exposure['name']))
             exposure_label = QLabel(label)
 
             # Add combo box
             exposure_combo_box = QComboBox()
-            hazard_classifications = subcategory.get('classifications')
+            hazard_classifications = hazard.get('classifications')
             exposure_combo_box.addItem(tr('No classifications'))
             exposure_combo_box.setItemData(
                 0, None, Qt.UserRole)
@@ -248,15 +258,17 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             self.inner_left_layout.addWidget(exposure_combo_box, row, 1)
             self.inner_left_layout.addWidget(exposure_edit_button, row, 2)
 
-            self.left_layout.addStretch(1)
-
             # Adding to step's attribute
             self.exposures.append(exposure)
             self.exposure_combo_boxes.append(exposure_combo_box)
             self.exposure_edit_buttons.append(exposure_edit_button)
             self.exposure_labels.append(label)
 
+            row += 1
+
         self.left_layout.addLayout(self.inner_left_layout)
+        # To push the inner_left_layout up
+        self.left_layout.addStretch(1)
 
     # noinspection PyUnusedLocal
     def edit_button_clicked(self, edit_button, exposure_combo_box, exposure):
