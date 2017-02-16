@@ -355,7 +355,6 @@ hazard_tsunami = {
         tsunami_hazard_population_classes,
         tsunami_hazard_classes_ITB,
         tsunami_hazard_population_classes_ITB,
-        generic_hazard_classes,
     ],
     'compulsory_fields': [hazard_value_field],
     'fields': hazard_fields,
