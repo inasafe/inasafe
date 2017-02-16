@@ -111,12 +111,15 @@ def intersection(source, mask, callback=None):
                     geom_types = wkb_type_groups[
                         wkb_type_groups[int_geom.wkbType()]]
                     if int_geom.wkbType() in geom_types:
-                        out_feature.setGeometry(int_geom)
-                        attrs = []
-                        attrs.extend(attributes)
-                        attrs.extend(mask_attributes)
-                        out_feature.setAttributes(attrs)
-                        writer.addFeature(out_feature)
+                        if int_geom.type() == source.geometryType():
+                            # We got some features which have not the same
+                            # kind of geometry. We want to skip them.
+                            out_feature.setGeometry(int_geom)
+                            attrs = []
+                            attrs.extend(attributes)
+                            attrs.extend(mask_attributes)
+                            out_feature.setAttributes(attrs)
+                            writer.addFeature(out_feature)
                 except:
                     LOGGER.debug(
                         tr('Feature geometry error: One or more output '

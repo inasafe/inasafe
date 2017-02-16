@@ -538,7 +538,20 @@ class TestImpactFunction(unittest.TestCase):
             'exposure': 'structure',
         }
 
+        def debug_layer(layer, add_to_datastore):
+            """Monkey patching because we can't check inasafe_fields.
+
+            :param layer: The layer.
+            :type layer: QgsVectorLayer
+
+            :param add_to_datastore: Flag
+            :type add_to_datastore: bool
+            """
+            # We do nothing here.
+            return layer, add_to_datastore
+
         impact_function = ImpactFunction()
+        impact_function.debug_layer = debug_layer
 
         impact_function.post_process(impact_layer)
 
