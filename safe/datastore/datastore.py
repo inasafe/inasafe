@@ -120,16 +120,16 @@ class DataStore(object):
             else:
                 result = self._add_vector_layer(layer, layer_name)
 
+        if result[0]:
+            LOGGER.info(
+                'Layer saved {layer_name}'.format(layer_name=result[1]))
+
         try:
             layer.keywords
             KeywordIO().write_keywords(
                 self.layer(result[1]), layer.keywords)
         except AttributeError:
             pass
-
-        if result[0]:
-            LOGGER.info(
-                'Layer saved {layer_name}'.format(layer_name=result[1]))
 
         return result
 

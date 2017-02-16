@@ -757,11 +757,13 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         """Execute analysis when run button is clicked."""
         # Start the analysis
         self.impact_function = self.validate_impact_function()
+        if not isinstance(self.impact_function, ImpactFunction):
+            return ANALYSIS_FAILED_BAD_CODE, None
         if not self.impact_function:
             # This should not happen as the "accept" button should disabled if
             # the impact function is not ready.
             LOGGER.info(tr('The impact function should not have been ready.'))
-            return
+            return ANALYSIS_FAILED_BAD_CODE, None
 
         self.show_busy()
         self.impact_function.callback = self.progress_callback
@@ -774,6 +776,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             # we want to re-raise it to get the first aid plugin popup.
             add_debug_layers_to_canvas(self.impact_function)
             disable_busy_cursor()
+            self.validate_impact_function()
             raise
         if status == ANALYSIS_FAILED_BAD_INPUT:
             self.hide_busy()
@@ -781,6 +784,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 'The impact function could not run because of the inputs.'))
             send_error_message(self, message)
             LOGGER.info(message.to_text())
+            self.validate_impact_function()
             return status, message
         elif status == ANALYSIS_FAILED_BAD_CODE:
             self.hide_busy()
@@ -788,6 +792,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 'The impact function could not run because of a bug.'))
             LOGGER.exception(message.to_text())
             send_error_message(self, message)
+            self.validate_impact_function()
             return status, message
 
         LOGGER.info(tr('The impact function could run without errors.'))
@@ -806,6 +811,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     'The impact report could not be generated.'))
                 send_error_message(self, message)
                 LOGGER.info(message.to_text())
+                self.validate_impact_function()
                 return ANALYSIS_FAILED_BAD_CODE, message
 
             error_code, message = generate_impact_map_report(
@@ -817,6 +823,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     'The impact report could not be generated.'))
                 send_error_message(self, message)
                 LOGGER.info(message.to_text())
+                self.validate_impact_function()
                 return ANALYSIS_FAILED_BAD_CODE, message
 
         if self.zoom_to_impact_flag:
@@ -835,7 +842,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.get_exposure_layer().crs())
 
         self.hide_busy()
-        self.impact_function = None
+        self.validate_impact_function()
         return ANALYSIS_SUCCESS, None
 
     def show_help(self):
@@ -1149,6 +1156,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         """
         # First, we check if the dock is not busy.
         if self.busy:
+            self.impact_function = None
             return False, None
 
         # Then, we need to check if the question area is correct.
@@ -1157,6 +1165,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             send_static_message(self, message)
             self.run_button.setEnabled(False)
             self.extent.clear_next_analysis_extent()
+            self.impact_function = None
             return False, None
 
         # Finally, we need to check if an IF can run.
@@ -1209,12 +1218,14 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
             self.run_button.setEnabled(True)
             send_static_message(self, ready_message())
+            self.impact_function = None
             return impact_function
 
         elif status == PREPARE_FAILED_BAD_LAYER:
             self.extent.clear_next_analysis_extent()
             send_error_message(self, message)
             self.run_button.setEnabled(False)
+            self.impact_function = None
             return None
 
         elif status == PREPARE_FAILED_INSUFFICIENT_OVERLAP_REQUESTED_EXTENT:
@@ -1225,6 +1236,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     'InaSAFE',
                     tr('The requested extent is not overlapping your layers.'))
             self.run_button.setEnabled(False)
+            self.impact_function = None
             return None
 
         elif status == PREPARE_FAILED_INSUFFICIENT_OVERLAP:
@@ -1236,6 +1248,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     self.tr('No overlapping extents'),
                     no_overlap_message())
             self.run_button.setEnabled(False)
+            self.impact_function = None
             return None
 
         elif status == PREPARE_FAILED_BAD_INPUT:
@@ -1243,6 +1256,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.extent.clear_next_analysis_extent()
             send_error_message(self, message)
             self.run_button.setEnabled(False)
+            self.impact_function = None
             return None
 
         else:
@@ -1250,6 +1264,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.extent.clear_next_analysis_extent()
             send_error_message(self, message)
             self.run_button.setEnabled(False)
+            self.impact_function = None
             return None
 
     def _validate_question_area(self):
