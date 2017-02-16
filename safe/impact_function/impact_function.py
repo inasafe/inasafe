@@ -983,8 +983,8 @@ class ImpactFunction(object):
         :return: The name of the layer added in the datastore.
         :rtype: basestring
         """
-        # Temporary disable this check. ET 16/02/17
-        # check_layer(layer, has_geometry=None)
+        # This one checks the memory layer.
+        check_layer(layer, has_geometry=None)
 
         if isinstance(layer, QgsVectorLayer) and check_fields:
             check_inasafe_fields(layer)
@@ -1008,6 +1008,10 @@ class ImpactFunction(object):
                 raise Exception(
                     'Something went wrong with the datastore : {error_message}'
                     .format(error_message=name))
+            if self.debug_mode:
+                # This one checks the GeoJSON file. We noticed some difference
+                # between checking a memory layer and a file based layer.
+                check_layer(self.datastore.layer(name))
 
             return name
 
@@ -1038,8 +1042,12 @@ class ImpactFunction(object):
 
             self._profiling_table = create_profile_layer(
                 self.performance_log_message())
-            name = self.debug_layer(
-                self._profiling_table, add_to_datastore=True)
+            result, name = self.datastore.add_layer(
+                self._profiling_table, self._profiling_table.keywords['title'])
+            if not result:
+                raise Exception(
+                    'Something went wrong with the datastore : {error_message}'
+                    .format(error_message=name))
             self._profiling_table = self.datastore.layer(name)
 
             # Later, we should move this call.
@@ -1718,6 +1726,8 @@ class ImpactFunction(object):
 
             LOGGER.info(message)
 
+        self.debug_layer(layer, add_to_datastore=False)
+
     @profile
     def summary_calculation(self):
         """Do the summary calculation.
@@ -1731,6 +1741,7 @@ class ImpactFunction(object):
                 'Aggregate the impact summary')
             self._aggregate_hazard_impacted = aggregate_hazard_summary(
                 self.exposure_impacted, self._aggregate_hazard_impacted)
+            self.debug_layer(self._exposure_impacted, add_to_datastore=False)
 
         if self._aggregate_hazard_impacted:
             self.set_state_process(
@@ -1738,12 +1749,15 @@ class ImpactFunction(object):
                 'Aggregate the aggregation summary')
             self._aggregation_impacted = aggregation_summary(
                 self._aggregate_hazard_impacted, self.aggregation)
+            self.debug_layer(
+                self._aggregation_impacted, add_to_datastore=False)
 
             self.set_state_process(
                 'impact function',
                 'Aggregate the analysis summary')
             self._analysis_impacted = analysis_summary(
                 self._aggregate_hazard_impacted, self._analysis_impacted)
+            self.debug_layer(self._analysis_impacted)
 
             if self._exposure.keywords.get('classification'):
                 self.set_state_process(
@@ -1751,6 +1765,8 @@ class ImpactFunction(object):
                     'Build the exposure breakdown')
                 self._exposure_breakdown = exposure_type_breakdown(
                     self._aggregate_hazard_impacted)
+                self.debug_layer(
+                    self._exposure_breakdown, add_to_datastore=False)
         else:
             # We are running EQ raster on population raster.
             self.set_state_process(
@@ -1758,6 +1774,7 @@ class ImpactFunction(object):
                 'Aggregate the analysis summary')
             self._analysis_impacted = analysis_eartquake_summary(
                 self.aggregation_impacted, self.analysis_impacted)
+            self.debug_layer(self._analysis_impacted, add_to_datastore=False)
 
     def style(self):
         """Function to apply some styles to the layers."""

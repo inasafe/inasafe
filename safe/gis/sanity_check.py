@@ -71,9 +71,13 @@ def check_layer(layer, has_geometry=True):
 
         if is_vector_layer(layer):
 
-            if len(layer.dataProvider().subLayers()) > 1:
+            sub_layers = layer.dataProvider().subLayers()
+            if len(sub_layers) > 1:
+                names = ';'.join(sub_layers)
+                source = layer.source()
                 raise InvalidLayerError(
-                    tr('The layer should not have many sublayers.'))
+                    tr('The layer should not have many sublayers : {source} : '
+                       '{names}').format(source=source, names=names))
 
             if layer.geometryType() == QGis.UnknownGeometry:
                 raise InvalidLayerError(
