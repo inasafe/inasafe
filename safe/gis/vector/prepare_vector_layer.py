@@ -154,7 +154,7 @@ def _check_value_mapping(layer, exposure_key=None):
 
     if layer.keywords['layer_purpose'] == layer_purpose_hazard['key']:
         if not exposure_key:
-            message = tr('Hazard classification missing exposure key.')
+            message = tr('Hazard classification is missing exposure key.')
             raise InvalidKeywordsForProcessingAlgorithm(message)
         classification = active_classification(layer.keywords, exposure_key)
     else:
