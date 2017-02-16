@@ -21,8 +21,12 @@ from safe.definitions.layer_geometry import (
 from safe.definitions.layer_modes import (
     layer_mode_continuous, layer_mode_classified)
 from safe.definitions.units import exposure_unit
-from safe.definitions.hazard import continuous_hazard_unit
-from safe.definitions.utilities import get_compulsory_fields
+from safe.definitions.hazard import continuous_hazard_unit, hazard_earthquake
+from safe.definitions.hazard_classifications import (
+    earthquake_mmi_hazard_classes)
+from safe.definitions.exposure import exposure_population
+from safe.definitions.utilities import (
+    get_compulsory_fields, default_classification_thresholds)
 from safe.definitions.constants import RECENT
 
 from safe.common.exceptions import (
@@ -804,6 +808,20 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         if inasafe_default_values:
             keywords['inasafe_default_values'] = inasafe_default_values
+
+        # For 3853
+        if keywords['layer_purpose'] == layer_purpose_hazard['key']:
+            if keywords['hazard'] == hazard_earthquake['key']:
+                if keywords['layer_geometry'] == layer_geometry_raster['key']:
+                    layer_mode = self.step_kw_layermode.selected_layermode()
+                    if layer_mode == layer_mode_continuous:
+                        keywords['thresholds'][exposure_population['key']] = {
+                            earthquake_mmi_hazard_classes['key']: {
+                                'classes': default_classification_thresholds(
+                                    earthquake_mmi_hazard_classes),
+                                'active': True
+                            }
+                        }
 
         return keywords
 
