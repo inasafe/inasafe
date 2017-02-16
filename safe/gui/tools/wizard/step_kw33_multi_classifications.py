@@ -179,9 +179,9 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         left_panel_heading.setFont(big_font)
         self.left_layout.addWidget(left_panel_heading)
 
-        for exposure in exposure_all:
-            exposure_layout = QHBoxLayout()
+        self.inner_left_layout = QGridLayout()
 
+        for row, exposure in enumerate(exposure_all):
             # Add label
             # Hazard on Exposure Classifications
             label = tr('%s on %s Classifications' % (
@@ -196,8 +196,12 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
                 0, None, Qt.UserRole)
 
             current_index = 0
+            i = 0
             # Iterate through all available hazard classifications
-            for i, hazard_classification in enumerate(hazard_classifications):
+            for hazard_classification in hazard_classifications:
+                # Skip if the classification is not for the exposure
+                if exposure not in hazard_classification['exposures']:
+                    continue
                 exposure_combo_box.addItem(hazard_classification['name'])
                 exposure_combo_box.setItemData(
                     i + 1, hazard_classification, Qt.UserRole)
@@ -215,6 +219,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
                         is_active = current_hazard_classification.get('active')
                         if is_active:
                             current_index = i + 1
+                i += 1
             # Set current classification
             exposure_combo_box.setCurrentIndex(current_index)
 
@@ -239,15 +244,9 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             )
 
             # Arrange in layout
-            exposure_layout.addWidget(exposure_label)
-            exposure_layout.addWidget(exposure_combo_box)
-            exposure_layout.addWidget(exposure_edit_button)
-
-            # Stretch
-            exposure_layout.setStretch(0, 0)
-            exposure_layout.setStretch(0, 0)
-            exposure_layout.setStretch(0, 1)
-            self.left_layout.addLayout(exposure_layout)
+            self.inner_left_layout.addWidget(exposure_label, row, 0)
+            self.inner_left_layout.addWidget(exposure_combo_box, row, 1)
+            self.inner_left_layout.addWidget(exposure_edit_button, row, 2)
 
             self.left_layout.addStretch(1)
 
@@ -256,6 +255,8 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             self.exposure_combo_boxes.append(exposure_combo_box)
             self.exposure_edit_buttons.append(exposure_edit_button)
             self.exposure_labels.append(label)
+
+        self.left_layout.addLayout(self.inner_left_layout)
 
     # noinspection PyUnusedLocal
     def edit_button_clicked(self, edit_button, exposure_combo_box, exposure):
