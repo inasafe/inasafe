@@ -187,26 +187,33 @@ class NeedsProfile(MinimumNeeds):
 
             return profiles_our_locale + profiles_remaining
 
-        locale_minimum_needs_dir = os.path.join(
-            str(self.root_directory), 'minimum_needs')
-        path_name = resources_path('minimum_needs')
-        if not os.path.exists(locale_minimum_needs_dir):
-            os.makedirs(locale_minimum_needs_dir)
-        # load default min needs profile
-        for file_name in os.listdir(path_name):
-            source_file = os.path.join(path_name, file_name)
-            destination_file = os.path.join(
-                locale_minimum_needs_dir, file_name)
-            if not os.path.exists(destination_file) or overwrite:
-                copy(source_file, destination_file)
-        # move old min needs profile under .qgis2 to .qgis2/inasafe
-        self.move_old_profile(locale_minimum_needs_dir)
-        profiles = [
-            profile[:-5] for profile in
-            os.listdir(locale_minimum_needs_dir) if
-            profile[-5:] == '.json']
-        profiles = sort_by_locale(profiles, self.locale)
-        return profiles
+        # We ignore empty root_directory to avoid load min needs profile
+        # to test directory when test is running.
+        if not self.root_directory:
+            profiles = []
+            return profiles
+
+        else:
+            locale_minimum_needs_dir = os.path.join(
+                str(self.root_directory), 'minimum_needs')
+            path_name = resources_path('minimum_needs')
+            if not os.path.exists(locale_minimum_needs_dir):
+                os.makedirs(locale_minimum_needs_dir)
+            # load default min needs profile
+            for file_name in os.listdir(path_name):
+                source_file = os.path.join(path_name, file_name)
+                destination_file = os.path.join(
+                    locale_minimum_needs_dir, file_name)
+                if not os.path.exists(destination_file) or overwrite:
+                    copy(source_file, destination_file)
+            # move old min needs profile under .qgis2 to .qgis2/inasafe
+            self.move_old_profile(locale_minimum_needs_dir)
+            profiles = [
+                profile[:-5] for profile in
+                os.listdir(locale_minimum_needs_dir) if
+                profile[-5:] == '.json']
+            profiles = sort_by_locale(profiles, self.locale)
+            return profiles
 
     def precision_of(self, number_as_text):
         """The number of digits after the decimal will be counted and used
@@ -291,11 +298,7 @@ class NeedsProfile(MinimumNeeds):
         :returns: root directory
         :rtype: QString
         """
-        if self._root_directory is None or self._root_directory == '':
-            # noinspection PyArgumentList
-            self._root_directory = os.path.join(
-                QgsApplication.qgisSettingsDirPath(),
-                'inasafe')
+
         return self._root_directory
 
     @staticmethod
