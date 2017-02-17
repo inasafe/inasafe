@@ -753,98 +753,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.progress_bar.setValue(current_value)
         QtGui.QApplication.processEvents()
 
-    def accept(self):
-        """Execute analysis when run button is clicked."""
-        # Start the analysis
-        self.impact_function = self.validate_impact_function()
-        if not isinstance(self.impact_function, ImpactFunction):
-            return ANALYSIS_FAILED_BAD_CODE, None
-        if not self.impact_function:
-            # This should not happen as the "accept" button should disabled if
-            # the impact function is not ready.
-            LOGGER.info(tr('The impact function should not have been ready.'))
-            return ANALYSIS_FAILED_BAD_CODE, None
-
-        self.show_busy()
-        self.impact_function.callback = self.progress_callback
-        self.impact_function.debug_mode = self.debug_mode.isChecked()
-        try:
-            status, message = self.impact_function.run()
-        except:
-            # We have an exception only if we are in debug mode.
-            # We want to display the datastore and then
-            # we want to re-raise it to get the first aid plugin popup.
-            add_debug_layers_to_canvas(self.impact_function)
-            disable_busy_cursor()
-            self.validate_impact_function()
-            raise
-        if status == ANALYSIS_FAILED_BAD_INPUT:
-            self.hide_busy()
-            LOGGER.info(tr(
-                'The impact function could not run because of the inputs.'))
-            send_error_message(self, message)
-            LOGGER.info(message.to_text())
-            self.validate_impact_function()
-            return status, message
-        elif status == ANALYSIS_FAILED_BAD_CODE:
-            self.hide_busy()
-            LOGGER.exception(tr(
-                'The impact function could not run because of a bug.'))
-            LOGGER.exception(message.to_text())
-            send_error_message(self, message)
-            self.validate_impact_function()
-            return status, message
-
-        LOGGER.info(tr('The impact function could run without errors.'))
-
-        # Add result layer to QGIS
-        add_impact_layers_to_canvas(self.impact_function, self.iface)
-
-        if setting('generate_report', True, bool):
-            # Generate impact report
-            error_code, message = generate_impact_report(
-                self.impact_function, self.iface)
-
-            if error_code == ImpactReport.REPORT_GENERATION_FAILED:
-                self.hide_busy()
-                LOGGER.info(tr(
-                    'The impact report could not be generated.'))
-                send_error_message(self, message)
-                LOGGER.info(message.to_text())
-                self.validate_impact_function()
-                return ANALYSIS_FAILED_BAD_CODE, message
-
-            error_code, message = generate_impact_map_report(
-                self.impact_function, self.iface)
-
-            if error_code == ImpactReport.REPORT_GENERATION_FAILED:
-                self.hide_busy()
-                LOGGER.info(tr(
-                    'The impact report could not be generated.'))
-                send_error_message(self, message)
-                LOGGER.info(message.to_text())
-                self.validate_impact_function()
-                return ANALYSIS_FAILED_BAD_CODE, message
-
-        if self.zoom_to_impact_flag:
-            self.iface.zoomToActiveLayer()
-
-        if self.impact_function.debug_mode:
-            add_debug_layers_to_canvas(self.impact_function)
-
-        if self.hide_exposure_flag:
-            legend = self.iface.legendInterface()
-            qgis_exposure = self.get_exposure_layer()
-            legend.setLayerVisible(qgis_exposure, False)
-
-        self.extent.set_last_analysis_extent(
-            self.impact_function.analysis_extent,
-            self.get_exposure_layer().crs())
-
-        self.hide_busy()
-        self.validate_impact_function()
-        return ANALYSIS_SUCCESS, None
-
     def show_help(self):
         """Open the help dialog."""
         # noinspection PyTypeChecker
@@ -1140,6 +1048,97 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 visible_count += 1
         return visible_count
 
+    def accept(self):
+        """Execute analysis when run button is clicked."""
+        # Start the analysis
+        self.impact_function = self.validate_impact_function()
+        if not isinstance(self.impact_function, ImpactFunction):
+            # This should not happen as the "accept" button should disabled if
+            # the impact function is not ready.
+            return ANALYSIS_FAILED_BAD_CODE, None
+        if not self.impact_function.is_ready:
+            LOGGER.info(tr('The impact function should not have been ready.'))
+            return ANALYSIS_FAILED_BAD_CODE, None
+
+        self.show_busy()
+        self.impact_function.callback = self.progress_callback
+        self.impact_function.debug_mode = self.debug_mode.isChecked()
+        try:
+            status, message = self.impact_function.run()
+        except:
+            # We have an exception only if we are in debug mode.
+            # We want to display the datastore and then
+            # we want to re-raise it to get the first aid plugin popup.
+            add_debug_layers_to_canvas(self.impact_function)
+            disable_busy_cursor()
+            self.validate_impact_function()
+            raise
+        if status == ANALYSIS_FAILED_BAD_INPUT:
+            self.hide_busy()
+            LOGGER.info(tr(
+                'The impact function could not run because of the inputs.'))
+            send_error_message(self, message)
+            LOGGER.info(message.to_text())
+            return status, message
+        elif status == ANALYSIS_FAILED_BAD_CODE:
+            self.hide_busy()
+            LOGGER.exception(tr(
+                'The impact function could not run because of a bug.'))
+            LOGGER.exception(message.to_text())
+            send_error_message(self, message)
+            self.validate_impact_function()
+            return status, message
+
+        LOGGER.info(tr('The impact function could run without errors.'))
+
+        # Add result layer to QGIS
+        add_impact_layers_to_canvas(self.impact_function, self.iface)
+
+        if setting('generate_report', True, bool):
+            # Generate impact report
+            error_code, message = generate_impact_report(
+                self.impact_function, self.iface)
+
+            if error_code == ImpactReport.REPORT_GENERATION_FAILED:
+                self.hide_busy()
+                LOGGER.info(tr(
+                    'The impact report could not be generated.'))
+                send_error_message(self, message)
+                LOGGER.info(message.to_text())
+                self.validate_impact_function()
+                return ANALYSIS_FAILED_BAD_CODE, message
+
+            error_code, message = generate_impact_map_report(
+                self.impact_function, self.iface)
+
+            if error_code == ImpactReport.REPORT_GENERATION_FAILED:
+                self.hide_busy()
+                LOGGER.info(tr(
+                    'The impact report could not be generated.'))
+                send_error_message(self, message)
+                LOGGER.info(message.to_text())
+                self.validate_impact_function()
+                return ANALYSIS_FAILED_BAD_CODE, message
+
+        if self.zoom_to_impact_flag:
+            self.iface.zoomToActiveLayer()
+
+        if self.impact_function.debug_mode:
+            add_debug_layers_to_canvas(self.impact_function)
+
+        if self.hide_exposure_flag:
+            legend = self.iface.legendInterface()
+            qgis_exposure = self.get_exposure_layer()
+            legend.setLayerVisible(qgis_exposure, False)
+
+        self.extent.set_last_analysis_extent(
+            self.impact_function.analysis_extent,
+            self.get_exposure_layer().crs())
+
+        self.hide_busy()
+        self.validate_impact_function()
+        return ANALYSIS_SUCCESS, None
+
     def validate_impact_function(self):
         """Helper method to evaluate the current state of the impact function.
 
@@ -1156,7 +1155,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         """
         # First, we check if the dock is not busy.
         if self.busy:
-            self.impact_function = None
             return False, None
 
         # Then, we need to check if the question area is correct.

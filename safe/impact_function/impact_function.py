@@ -325,6 +325,15 @@ class ImpactFunction(object):
         self._is_ready = False
 
     @property
+    def is_ready(self):
+        """Property to know if the impact function is ready.
+
+        :return: If the impact function is ready.
+        :rtype: bool
+        """
+        return self._is_ready
+
+    @property
     def outputs(self):
         """List of layers containing outputs from the IF.
 
@@ -1052,6 +1061,9 @@ class ImpactFunction(object):
 
             # Later, we should move this call.
             self.style()
+
+            # End of the impact function. We need to set this IF not ready.
+            self._is_ready = False
 
         except NoFeaturesInExtentError:
             warning_heading = m.Heading(
