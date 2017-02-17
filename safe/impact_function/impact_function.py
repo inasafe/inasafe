@@ -1658,6 +1658,26 @@ class ImpactFunction(object):
                 self.exposure, self._aggregate_hazard_impacted)
             self.debug_layer(self._aggregate_hazard_impacted)
 
+            # We can monkey patch keywords here for global defaults.
+            keywords = self._aggregate_hazard_impacted.keywords
+            keywords['inasafe_default_values'] = {}
+            for ratio in count_ratio_mapping.itervalues():
+                ratio_field = definition(ratio)
+                default = ratio_field['default_value']['default_value']
+                key = ratio_field['key']
+                keywords['inasafe_default_values'][key] = default
+                LOGGER.info(
+                    'Adding default {value} for {type} into keywords'.format(
+                        value=default, type=key))
+
+            # We add ratios to the agrgegate hazard layer, we do not need them
+            # for post processing as we will use the population count. It's
+            # easier for user to see this field in the attribute tabler.
+            self.set_state_process('impact function', 'Add default values')
+            self._aggregate_hazard_impacted = add_default_values(
+                self._aggregate_hazard_impacted)
+            self.debug_layer(self._aggregate_hazard_impacted)
+
             # I know it's redundant, it's just to be sure that we don't have
             # any impact layer for that IF.
             self._exposure_impacted = None

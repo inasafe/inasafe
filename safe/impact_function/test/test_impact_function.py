@@ -15,9 +15,19 @@ from os.path import join, isfile
 from os import listdir
 
 from safe.definitions.fields import (
-    female_ratio_field, female_count_field, elderly_ratio_field)
+    female_ratio_field,
+    female_count_field,
+    elderly_ratio_field,
+    female_displaced_count_field,
+    youth_displaced_count_field,
+    displaced_field,
+)
 from safe.definitions.default_values import female_ratio_default_value
-from safe.definitions.layer_purposes import layer_purpose_profiling
+from safe.definitions.layer_purposes import (
+    layer_purpose_profiling,
+    layer_purpose_analysis_impacted,
+    layer_purpose_aggregate_hazard_impacted,
+)
 from safe.definitions.minimum_needs import minimum_needs_fields
 from safe.definitions.utilities import definition
 from safe.test.utilities import (
@@ -309,8 +319,8 @@ class TestImpactFunction(unittest.TestCase):
             message
         )
 
-    def test_ratios(self):
-        """Test if we can add defaults to the exposure."""
+    def test_ratios_with_vector_exposure(self):
+        """Test if we can add defaults to a vector exposure."""
         # First test, if we do not provide an aggregation,
         hazard_layer = load_test_vector_layer(
             'gisv4', 'hazard', 'classified_vector.geojson')
@@ -408,6 +418,68 @@ class TestImpactFunction(unittest.TestCase):
         self.assertNotEqual(-1, field)
         unique_ratio = impact.uniqueValues(field)
         self.assertNotEqual(1, len(unique_ratio))
+
+    def test_ratios_with_raster_exposure(self):
+        """Test if we can add defaults to a raster exposure.
+
+        See ticket #3851 how to manage ratios with a raster exposure.
+        """
+        hazard_layer = load_test_vector_layer(
+            'gisv4', 'hazard', 'tsunami_vector.geojson')
+        exposure_layer = load_test_raster_layer(
+            'gisv4', 'exposure', 'raster', 'population.asc')
+
+        # Set up impact function
+        impact_function = ImpactFunction()
+        impact_function.debug_mode = True
+        impact_function.exposure = exposure_layer
+        impact_function.hazard = hazard_layer
+        impact_function.prepare()
+        status, message = impact_function.run()
+        self.assertEqual(ANALYSIS_SUCCESS, status, message)
+
+        for layer in impact_function.outputs:
+            if layer.keywords['layer_purpose'] == (
+                    layer_purpose_analysis_impacted['key']):
+                analysis = layer
+            if layer.keywords['layer_purpose'] == (
+                    layer_purpose_aggregate_hazard_impacted['key']):
+                impact = layer
+
+        # We check in the impact layer if we have :
+        # female default ratio with the default value
+        index = impact.fieldNameIndex(female_ratio_field['field_name'])
+        self.assertNotEqual(-1, index)
+        unique_values = impact.uniqueValues(index)
+        self.assertEqual(1, len(unique_values))
+        female_ratio = unique_values[0]
+
+        # female displaced count and youth displaced count
+        self.assertNotEqual(
+            -1, impact.fieldNameIndex(
+                female_displaced_count_field['field_name']))
+        self.assertNotEqual(
+            -1, impact.fieldNameIndex(
+                youth_displaced_count_field['field_name']))
+
+        # Check that we have more than 0 female displaced in the analysis layer
+        index = analysis.fieldNameIndex(
+            female_displaced_count_field['field_name'])
+        female_displaced = analysis.uniqueValues(index)[0]
+        self.assertGreater(female_displaced, 0)
+
+        # Let's check computation
+        index = analysis.fieldNameIndex(
+            displaced_field['field_name'])
+        displaced_population = analysis.uniqueValues(index)[0]
+        self.assertEqual(
+            displaced_population * female_ratio, female_displaced)
+
+        # Check that we have more than 0 youth displaced in the analysis layer
+        index = analysis.fieldNameIndex(
+            female_displaced_count_field['field_name'])
+        value = analysis.uniqueValues(index)[0]
+        self.assertGreater(value, 0)
 
     def test_profiling(self):
         """Test running impact function on test data."""

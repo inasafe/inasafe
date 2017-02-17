@@ -14,6 +14,7 @@
       "info": {},
       "process":[
         "Zonal stats between exposure and aggregate hazard",
+        "Add default values",
         "Aggregate the aggregation summary",
         "Aggregate the analysis summary"
       ]
