@@ -1471,8 +1471,8 @@ class ImpactFunction(object):
                                 aggregation_default_fields[ratio_field])
                             LOGGER.info(
                                 tr('{ratio} constant detected, we will add it '
-                                   'to the exposure layer the exposure '
-                                   'layer.').format(ratio=ratio_field))
+                                   'to the exposure layer.').format(
+                                    ratio=ratio_field))
 
                     else:
                         if ratio_field in aggregation_fields:

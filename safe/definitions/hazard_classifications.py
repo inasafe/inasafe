@@ -617,7 +617,7 @@ tsunami_hazard_classes = {
 # Duplicate classes for tsunami hazard; modified for population exposure
 tsunami_hazard_population_classes = {
     'key': 'tsunami_hazard_population_classes',
-    'name': tr('Tsunami hazard population classes'),
+    'name': tr('Tsunami population classes'),
     # note: these are default tsunami classes for population
     'description': tr(
         'Tsunami hazards can be classified into one of three classes for an '
