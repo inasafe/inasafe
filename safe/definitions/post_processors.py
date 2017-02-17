@@ -97,6 +97,7 @@ def post_processor_affected_function(**kwargs):
     for hazard in hazard_classes_all:
         if hazard['key'] == kwargs['classification']:
             classification = hazard['classes']
+            break
 
     for level in classification:
         if level['key'] == kwargs['hazard_class']:
@@ -126,6 +127,7 @@ def post_processor_displacement_function(
     for hazard in hazard_classes_all:
         if hazard['key'] == classification:
             classification = hazard['classes']
+            break
 
     for hazard_class_def in classification:
         if hazard_class_def['key'] == hazard_class:

@@ -286,15 +286,15 @@ def create_section_with_aggregation(
                 unit = output_field.get('unit').get('abbreviation')
 
             if unit:
-                header_format = '{name} [{unit}]'
+                header_format = u'{name} [{unit}]'
             else:
-                header_format = '{name}'
+                header_format = u'{name}'
 
             header = header_format.format(
                 name=name,
                 unit=unit)
         else:
-            header_format = '{name}'
+            header_format = u'{name}'
             header = header_format.format(name=name)
 
         columns.append(header)
@@ -475,15 +475,15 @@ def create_section_without_aggregation(
                 unit = output_field.get('unit').get('abbreviation')
 
             if unit:
-                header_format = '{name} [{unit}]'
+                header_format = u'{name} [{unit}]'
             else:
-                header_format = '{name}'
+                header_format = u'{name}'
 
             header = header_format.format(
                 name=name,
                 unit=unit)
         else:
-            header_format = '{name}'
+            header_format = u'{name}'
             header = header_format.format(name=name)
 
         row.append(header)
