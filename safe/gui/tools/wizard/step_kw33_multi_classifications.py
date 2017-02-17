@@ -32,6 +32,8 @@ from safe.definitions.utilities import (
     default_classification_thresholds,
     default_classification_value_maps
 )
+from safe.definitions.hazard_classifications import (
+    earthquake_mmi_hazard_classes)
 from safe.definitions.layer_modes import layer_mode_continuous
 from safe.gui.tools.wizard.wizard_strings import (
     multiple_classified_hazard_classifications_vector,
@@ -101,7 +103,9 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
 
         # Has default threshold
         # Trick for EQ raster for population #3853
-        self.default_thresholds = False
+        self.use_default_thresholds = False
+        # Index of the special case exposure classification
+        self.special_case_index = None
 
     def is_ready_to_next_step(self):
         """Check if the step is complete.
@@ -117,7 +121,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             if combo_box.currentIndex() > 0:
                 return True
         # Trick for EQ raster for population #3853
-        if self.default_thresholds:
+        if self.use_default_thresholds:
             return True
         return False
 
@@ -187,18 +191,28 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         left_panel_heading.setFont(big_font)
         self.left_layout.addWidget(left_panel_heading)
 
-        self.inner_left_layout = QGridLayout()
+        inner_left_layout = QGridLayout()
 
         row = 0
         for exposure in exposure_all:
+            special_case = False
             # Filter out unsupported exposure for the hazard
             if exposure in hazard['disabled_exposures']:
                 continue
             # Trick for EQ raster for population #3853
             if exposure == exposure_population and hazard == hazard_earthquake:
                 if is_raster_layer(self.parent.layer):
-                    self.default_thresholds = True
-                    continue
+                    if self.layer_mode == layer_mode_continuous:
+                        self.use_default_thresholds = True
+                        special_case = True
+                        # Set classification for EQ Raster for Population
+                        self.thresholds[exposure_population['key']] = {
+                            earthquake_mmi_hazard_classes['key']: {
+                                'classes': default_classification_thresholds(
+                                    earthquake_mmi_hazard_classes),
+                                'active': True
+                            }
+                        }
 
             # Add label
             # Hazard on Exposure Classifications
@@ -243,38 +257,53 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
 
             # Add edit button
             exposure_edit_button = QPushButton(tr('Edit'))
-            exposure_edit_button.clicked.connect(
-                partial(self.edit_button_clicked,
+
+            # For special case. Raster EQ on Population.
+            if special_case:
+                mmi_index = exposure_combo_box.findText(
+                    earthquake_mmi_hazard_classes['name'])
+                exposure_combo_box.setCurrentIndex(mmi_index)
+                exposure_combo_box.setEnabled(False)
+                exposure_edit_button.setEnabled(False)
+                tool_tip_message = tr(
+                    'InaSAFE use default classification for Raster Earthquake '
+                    'hazard on population.')
+                exposure_label.setToolTip(tool_tip_message)
+                exposure_combo_box.setToolTip(tool_tip_message)
+                exposure_edit_button.setToolTip(tool_tip_message)
+
+            else:
+                if current_index == 0:
+                    # Disable if there is no classification chosen.
+                    exposure_edit_button.setEnabled(False)
+                exposure_edit_button.clicked.connect(
+                    partial(self.edit_button_clicked,
                         edit_button=exposure_edit_button,
                         exposure_combo_box=exposure_combo_box,
                         exposure=exposure))
-            if current_index == 0:
-                # Disable if there is no classification chosen.
-                exposure_edit_button.setEnabled(False)
-
-            exposure_combo_box.currentIndexChanged.connect(
-                partial(
-                    self.classifications_combo_box_changed,
-                    exposure=exposure,
-                    exposure_combo_box=exposure_combo_box,
-                    edit_button=exposure_edit_button
-                    )
-            )
+                exposure_combo_box.currentIndexChanged.connect(
+                    partial(
+                        self.classifications_combo_box_changed,
+                        exposure=exposure,
+                        exposure_combo_box=exposure_combo_box,
+                        edit_button=exposure_edit_button))
 
             # Arrange in layout
-            self.inner_left_layout.addWidget(exposure_label, row, 0)
-            self.inner_left_layout.addWidget(exposure_combo_box, row, 1)
-            self.inner_left_layout.addWidget(exposure_edit_button, row, 2)
+            inner_left_layout.addWidget(exposure_label, row, 0)
+            inner_left_layout.addWidget(exposure_combo_box, row, 1)
+            inner_left_layout.addWidget(exposure_edit_button, row, 2)
 
             # Adding to step's attribute
             self.exposures.append(exposure)
             self.exposure_combo_boxes.append(exposure_combo_box)
             self.exposure_edit_buttons.append(exposure_edit_button)
             self.exposure_labels.append(label)
+            if special_case:
+                self.special_case_index = len(self.exposures) - 1
 
             row += 1
 
-        self.left_layout.addLayout(self.inner_left_layout)
+        self.left_layout.addLayout(inner_left_layout)
         # To push the inner_left_layout up
         self.left_layout.addStretch(1)
 
@@ -939,6 +968,10 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         self.mode = CHOOSE_MODE
         # Enable all edit buttons and combo boxes
         for i in range(len(self.exposures)):
+            if i == self.special_case_index:
+                self.exposure_edit_buttons[i].setEnabled(False)
+                self.exposure_combo_boxes[i].setEnabled(False)
+                continue
             if self.get_classification(self.exposure_combo_boxes[i]):
                 self.exposure_edit_buttons[i].setEnabled(True)
             else:
