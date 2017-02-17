@@ -62,9 +62,7 @@ analysis_steps['exposure_preparation'] = {
     'name': tr('Exposure preparation'),
     'description': tr(
         'During the exposure preparation phase of the analysis, we '
-        'convert the exposure data to a usable format for for the '
-        'analysis. In some cases this may include performing analysis '
-        'such as zonal statistics on the data.'),
+        'convert the exposure data to a usable format for the analysis.'),
     'citations': [
         {
             'text': tr(''),
