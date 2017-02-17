@@ -25,10 +25,11 @@ class TestIntersectionVector(unittest.TestCase):
 
     def test_intersection_mask_vector(self):
         """Test we can intersect two layers, like exposure and aggregation."""
-
         exposure = load_test_vector_layer(
             'gisv4', 'exposure', 'roads.geojson')
 
+        # This intersection algorithm needs a aggregate hazard layer so add
+        # hazard and aggregation keywords.
         aggregation = load_test_vector_layer(
             'gisv4', 'hazard', 'classified_vector.geojson')
         aggregation.keywords = {
