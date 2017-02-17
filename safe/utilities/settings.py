@@ -70,9 +70,17 @@ def general_setting(key, default=None, expected_type=None, qsettings=None):
         return default
 
     else:
+        if value in ['true', 'True', 'false', 'False']:
+            expected_type = bool
         if default is not None and \
                 expected_type and not isinstance(value, expected_type):
-            value = expected_type(value)
+            # If expected value is boolean, make sure it will return boolean.
+            if expected_type == bool and value in ['true', 'True']:
+                value = True
+            elif expected_type == bool:
+                value = False
+            else:
+                value = expected_type(value)
 
         return value
 

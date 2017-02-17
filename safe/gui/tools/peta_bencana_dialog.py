@@ -621,19 +621,16 @@ class PetaBencanaDialog(QDialog, FORM_CLASS):
         if self.radio_button_production.isChecked():
             self.source = production_api['url']
             available_data = production_api['available_data']
-            self.city_combo_box.clear()
-            for index, data in enumerate(available_data):
-                self.city_combo_box.addItem(data['name'])
-                self.city_combo_box.setItemData(
-                    index, data['code'], Qt.UserRole)
+
         else:
             self.source = development_api['url']
             available_data = development_api['available_data']
-            self.city_combo_box.clear()
-            for index, data in enumerate(available_data):
-                self.city_combo_box.addItem(data['name'])
-                self.city_combo_box.setItemData(
-                    index, data['code'], Qt.UserRole)
+
+        self.city_combo_box.clear()
+        for index, data in enumerate(available_data):
+            self.city_combo_box.addItem(data['name'])
+            self.city_combo_box.setItemData(
+                index, data['code'], Qt.UserRole)
 
     def define_url(self):
         """Define API url based on which source is selected.

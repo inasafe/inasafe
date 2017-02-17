@@ -6,6 +6,7 @@ from safe.test.utilities import get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from PyQt4.QtCore import QSettings
 from safe.definitions.constants import zero_default_value, RECENT
+from safe.definitions.default_settings import inasafe_default_settings
 from safe.utilities.settings import (
     setting,
     set_setting,
@@ -71,6 +72,23 @@ class TestSettings(unittest.TestCase):
             self.qsetting, RECENT, female_ratio_key)
         self.assertEqual(female_ratio_value, real_value)
 
+    def test_read_boolean_setting(self):
+        """Test read developer mode setting."""
+        set_setting(
+            'developer_mode',
+            inasafe_default_settings['developer_mode'])
+
+        actual_setting = setting(
+            'developer_mode', inasafe_default_settings['developer_mode'])
+        self.assertFalse(actual_setting)
+
+        set_setting(
+            'developer_mode',
+            not(inasafe_default_settings['developer_mode']))
+
+        actual_setting = setting(
+            'developer_mode', inasafe_default_settings['developer_mode'])
+        self.assertTrue(actual_setting)
 
 if __name__ == '__main__':
     unittest.main()
