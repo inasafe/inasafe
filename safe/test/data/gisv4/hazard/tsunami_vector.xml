@@ -47,7 +47,7 @@
       <gmd:citation>
         <gmd:CI_Citation>
           <gmd:title>
-            <gco:CharacterString>population vector</gco:CharacterString>
+            <gco:CharacterString>tsunami_vector</gco:CharacterString>
           </gmd:title>
           <gmd:date>
             <gmd:CI_Date>
@@ -172,11 +172,20 @@
       <gmd:supplementalInformation>
         <inasafe_keywords/>
         <inasafe>
-          <classification>
+          <hazard_category>
+            <gco:CharacterString>single_event</gco:CharacterString>
+          </hazard_category>
+          <multipart_polygon>
+            <gco:Boolean/>
+          </multipart_polygon>
+          <thresholds>
+            <gco:Dictionary/>
+          </thresholds>
+          <continuous_hazard_unit>
             <gco:CharacterString/>
-          </classification>
+          </continuous_hazard_unit>
           <inasafe_fields>
-            <gco:Dictionary>{&quot;exposure_id_field&quot;: &quot;exposure_id&quot;, &quot;population_count_field&quot;: &quot;population&quot;, &quot;female_count_field&quot;: &quot;women&quot;}</gco:Dictionary>
+            <gco:Dictionary>{&quot;hazard_value_field&quot;: &quot;hazard_value&quot;, &quot;hazard_id_field&quot;: &quot;hazard_id&quot;}</gco:Dictionary>
           </inasafe_fields>
           <inasafe_default_values>
             <gco:Dictionary/>
@@ -184,44 +193,35 @@
           <scale>
             <gco:CharacterString/>
           </scale>
-          <multipart_polygon>
-            <gco:Boolean/>
-          </multipart_polygon>
           <source>
-            <gco:CharacterString>Test layer</gco:CharacterString>
+            <gco:CharacterString/>
           </source>
-          <value_map>
-            <gco:Dictionary/>
-          </value_map>
           <layer_geometry>
             <gco:CharacterString>polygon</gco:CharacterString>
           </layer_geometry>
-          <exposure>
-            <gco:CharacterString>population</gco:CharacterString>
-          </exposure>
+          <value_map>
+            <gco:Dictionary>{&quot;road&quot;: {&quot;tsunami_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [&quot;high&quot;, &quot;very high&quot;], &quot;medium&quot;: [&quot;medium&quot;], &quot;low&quot;: [&quot;low&quot;]}}}, &quot;population&quot;: {&quot;tsunami_hazard_population_classes_ITB&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [&quot;high&quot;], &quot;very high&quot;: [&quot;very high&quot;], &quot;medium&quot;: [&quot;medium&quot;], &quot;low&quot;: [&quot;low&quot;]}}}}</gco:Dictionary>
+          </value_map>
+          <hazard>
+            <gco:CharacterString>tsunami</gco:CharacterString>
+          </hazard>
           <report>
             <gco:CharacterString/>
           </report>
-          <exposure_unit>
-            <gco:CharacterString>count</gco:CharacterString>
-          </exposure_unit>
           <keyword_version>
             <gco:CharacterString>4.0</gco:CharacterString>
           </keyword_version>
           <datatype>
             <gco:CharacterString/>
           </datatype>
-          <allow_resampling>
-            <gco:CharacterString/>
-          </allow_resampling>
           <layer_purpose>
-            <gco:CharacterString>exposure</gco:CharacterString>
+            <gco:CharacterString>hazard</gco:CharacterString>
           </layer_purpose>
           <resolution>
             <gco:FloatTuple/>
           </resolution>
           <layer_mode>
-            <gco:CharacterString>continuous</gco:CharacterString>
+            <gco:CharacterString>classified</gco:CharacterString>
           </layer_mode>
         </inasafe>
       </gmd:supplementalInformation>

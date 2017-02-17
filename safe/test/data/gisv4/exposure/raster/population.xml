@@ -47,7 +47,7 @@
       <gmd:citation>
         <gmd:CI_Citation>
           <gmd:title>
-            <gco:CharacterString>population vector</gco:CharacterString>
+            <gco:CharacterString>population raster</gco:CharacterString>
           </gmd:title>
           <gmd:date>
             <gmd:CI_Date>
@@ -176,7 +176,7 @@
             <gco:CharacterString/>
           </classification>
           <inasafe_fields>
-            <gco:Dictionary>{&quot;exposure_id_field&quot;: &quot;exposure_id&quot;, &quot;population_count_field&quot;: &quot;population&quot;, &quot;female_count_field&quot;: &quot;women&quot;}</gco:Dictionary>
+            <gco:Dictionary/>
           </inasafe_fields>
           <inasafe_default_values>
             <gco:Dictionary/>
@@ -188,13 +188,13 @@
             <gco:Boolean/>
           </multipart_polygon>
           <source>
-            <gco:CharacterString>Test layer</gco:CharacterString>
+            <gco:CharacterString/>
           </source>
           <value_map>
             <gco:Dictionary/>
           </value_map>
           <layer_geometry>
-            <gco:CharacterString>polygon</gco:CharacterString>
+            <gco:CharacterString>raster</gco:CharacterString>
           </layer_geometry>
           <exposure>
             <gco:CharacterString>population</gco:CharacterString>
