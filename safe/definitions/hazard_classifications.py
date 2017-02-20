@@ -4,7 +4,7 @@
 See https://github.com/inasafe/inasafe/issues/2920#issuecomment-229874044
 to have a table showing you classes of each kind of hazard.
 """
-from safe.definitions import concepts, small_number
+from safe.definitions import concepts
 from safe.utilities.i18n import tr
 from safe.definitions.units import (
     unit_centimetres,
@@ -79,7 +79,7 @@ generic_hazard_classes = {
             'displacement_rate': 0.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 3,
-            'numeric_default_max': (4 - small_number),
+            'numeric_default_max': 4,
             'citations': [
                 {
                     'text': None,
@@ -98,7 +98,7 @@ generic_hazard_classes = {
             'displacement_rate': 0.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 2,
-            'numeric_default_max': (3 - small_number),
+            'numeric_default_max': 3,
             'citations': [
                 {
                     'text': None,
@@ -118,7 +118,7 @@ generic_hazard_classes = {
             'displacement_rate': 0.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 0,
-            'numeric_default_max': (2 - small_number),
+            'numeric_default_max': 2,
             'citations': [
                 {
                     'text': None,
@@ -515,7 +515,7 @@ volcano_hazard_classes = {
             'displacement_rate': 0.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 0,
-            'numeric_default_max': (3 - small_number),
+            'numeric_default_max': 3,
             'citations': [
                 {
                     'text': None,
@@ -534,7 +534,7 @@ volcano_hazard_classes = {
             'displacement_rate': 0.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 3,
-            'numeric_default_max': (5 - small_number),
+            'numeric_default_max': 5,
             'citations': [
                 {
                     'text': None,
@@ -617,7 +617,7 @@ flood_hazard_classes = {
             'displacement_rate': 0.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 0,
-            'numeric_default_max': (1 - small_number),
+            'numeric_default_max': 1,
             'citations': [
                 {
                     'text': None,
@@ -782,7 +782,7 @@ ash_hazard_classes = {
             'displacement_rate': 0.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 5,
-            'numeric_default_max': 10 - small_number,
+            'numeric_default_max': 10,
             'citations': [
                 {
                     'text': None,
@@ -804,7 +804,7 @@ ash_hazard_classes = {
             'displacement_rate': 0.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 2,
-            'numeric_default_max': 5 - small_number,
+            'numeric_default_max': 5,
             'citations': [
                 {
                     'text': None,
@@ -826,7 +826,7 @@ ash_hazard_classes = {
             'displacement_rate': 0.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 0.1,
-            'numeric_default_max': 2 - small_number,
+            'numeric_default_max': 2,
             'citations': [
                 {
                     'text': None,
@@ -846,7 +846,7 @@ ash_hazard_classes = {
             'displacement_rate': 0.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 0.01,
-            'numeric_default_max': 0.1 - small_number,
+            'numeric_default_max': 0.1,
             'citations': [
                 {
                     'text': None,
@@ -902,7 +902,7 @@ tsunami_hazard_classes = {
             'displacement_rate': 1.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 3,
-            'numeric_default_max': 8 - small_number,
+            'numeric_default_max': 8,
             'citations': [
                 {
                     'text': None,
@@ -928,7 +928,7 @@ tsunami_hazard_classes = {
             'displacement_rate': 1.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 1,
-            'numeric_default_max': 3 - small_number,
+            'numeric_default_max': 3,
             'citations': [
                 {
                     'text': None,
@@ -956,7 +956,7 @@ tsunami_hazard_classes = {
             'displacement_rate': 0.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 0.1,
-            'numeric_default_max': 1 - small_number,
+            'numeric_default_max': 1,
             'citations': [
                 {
                     'text': None,
@@ -975,7 +975,7 @@ tsunami_hazard_classes = {
             'displacement_rate': 0.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 0,
-            'numeric_default_max': 0.1 - small_number,
+            'numeric_default_max': 0.1,
             'citations': [
                 {
                     'text': None,
@@ -1033,7 +1033,7 @@ tsunami_hazard_population_classes = {
             'displacement_rate': 1.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 3,
-            'numeric_default_max': 8 - small_number,
+            'numeric_default_max': 8,
             'citations': [
                 {
                     'text': None,
@@ -1059,7 +1059,7 @@ tsunami_hazard_population_classes = {
             'displacement_rate': 1.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 0.7,
-            'numeric_default_max': 3 - small_number,
+            'numeric_default_max': 3,
             'citations': [
                 {
                     'text': None,
@@ -1087,7 +1087,7 @@ tsunami_hazard_population_classes = {
             'displacement_rate': 0.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 0.1,
-            'numeric_default_max': 0.7 - small_number,
+            'numeric_default_max': 0.7,
             'citations': [
                 {
                     'text': None,
@@ -1160,7 +1160,7 @@ tsunami_hazard_classes_ITB = {
             'displacement_rate': 1.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 3,
-            'numeric_default_max': 8 - small_number,
+            'numeric_default_max': 8,
             'citations': [
                 {
                     'text': None,
@@ -1186,7 +1186,7 @@ tsunami_hazard_classes_ITB = {
             'displacement_rate': 1.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 1,
-            'numeric_default_max': 3 - small_number,
+            'numeric_default_max': 3,
             'citations': [
                 {
                     'text': None,
@@ -1214,7 +1214,7 @@ tsunami_hazard_classes_ITB = {
             'displacement_rate': 0.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 0.1,
-            'numeric_default_max': 1 - small_number,
+            'numeric_default_max': 1,
             'citations': [
                 {
                     'text': None,
@@ -1233,7 +1233,7 @@ tsunami_hazard_classes_ITB = {
             'displacement_rate': 0.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 0,
-            'numeric_default_max': 0.1 - small_number,
+            'numeric_default_max': 0.1,
             'citations': [
                 {
                     'text': None,
@@ -1310,7 +1310,7 @@ tsunami_hazard_population_classes_ITB = {
             'displacement_rate': 1.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 3,
-            'numeric_default_max': 8 - small_number,
+            'numeric_default_max': 8,
             'citations': [
                 {
                     'text': None,
@@ -1336,7 +1336,7 @@ tsunami_hazard_population_classes_ITB = {
             'displacement_rate': 1.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 0.7,
-            'numeric_default_max': 3 - small_number,
+            'numeric_default_max': 3,
             'citations': [
                 {
                     'text': None,
@@ -1364,7 +1364,7 @@ tsunami_hazard_population_classes_ITB = {
             'displacement_rate': 0.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 0.1,
-            'numeric_default_max': 0.7 - small_number,
+            'numeric_default_max': 0.7,
             'citations': [
                 {
                     'text': None,
@@ -1463,10 +1463,10 @@ cyclone_au_bom_hazard_classes = {
                 unit_kilometres_per_hour['key']: 157
             },
             'numeric_default_max': {
-                unit_knots['key']: 107 - small_number,
-                unit_metres_per_second['key']: 55 - small_number,
-                unit_miles_per_hour['key']: 123 - small_number,
-                unit_kilometres_per_hour['key']: 198 - small_number
+                unit_knots['key']: 107,
+                unit_metres_per_second['key']: 55,
+                unit_miles_per_hour['key']: 123,
+                unit_kilometres_per_hour['key']: 198
             },
             'citations': [
                 {
@@ -1497,10 +1497,10 @@ cyclone_au_bom_hazard_classes = {
                 unit_kilometres_per_hour['key']: 117
             },
             'numeric_default_max': {
-                unit_knots['key']: 85 - small_number,
-                unit_metres_per_second['key']: 44 - small_number,
-                unit_miles_per_hour['key']: 98 - small_number,
-                unit_kilometres_per_hour['key']: 157 - small_number
+                unit_knots['key']: 85,
+                unit_metres_per_second['key']: 44,
+                unit_miles_per_hour['key']: 98,
+                unit_kilometres_per_hour['key']: 157
             },
             'citations': [
                 {
@@ -1532,10 +1532,10 @@ cyclone_au_bom_hazard_classes = {
                 unit_kilometres_per_hour['key']: 88
             },
             'numeric_default_max': {
-                unit_knots['key']: 63 - small_number,
-                unit_metres_per_second['key']: 33 - small_number,
-                unit_miles_per_hour['key']: 72 - small_number,
-                unit_kilometres_per_hour['key']: 117 - small_number
+                unit_knots['key']: 63,
+                unit_metres_per_second['key']: 33,
+                unit_miles_per_hour['key']: 72,
+                unit_kilometres_per_hour['key']: 117
             },
             'citations': [
                 {
@@ -1565,10 +1565,10 @@ cyclone_au_bom_hazard_classes = {
                 unit_kilometres_per_hour['key']: 63
             },
             'numeric_default_max': {
-                unit_knots['key']: 47 - small_number,
-                unit_metres_per_second['key']: 24 - small_number,
-                unit_miles_per_hour['key']: 54 - small_number,
-                unit_kilometres_per_hour['key']: 88 - small_number
+                unit_knots['key']: 47,
+                unit_metres_per_second['key']: 24,
+                unit_miles_per_hour['key']: 54,
+                unit_kilometres_per_hour['key']: 88
             },
             'citations': [
                 {
@@ -1591,10 +1591,10 @@ cyclone_au_bom_hazard_classes = {
             'fatality_rate': 0.0,
             'numeric_default_min': 0,
             'numeric_default_max': {
-                unit_knots['key']: 34 - small_number,
-                unit_metres_per_second['key']: 17 - small_number,
-                unit_miles_per_hour['key']: 39 - small_number,
-                unit_kilometres_per_hour['key']: 63 - small_number
+                unit_knots['key']: 34,
+                unit_metres_per_second['key']: 17,
+                unit_miles_per_hour['key']: 39,
+                unit_kilometres_per_hour['key']: 63
             },
             'citations': [
                 {
@@ -1694,10 +1694,10 @@ cyclone_sshws_hazard_classes = {
                 unit_kilometres_per_hour['key']: 208
             },
             'numeric_default_max': {
-                unit_knots['key']: 136 - small_number,
-                unit_metres_per_second['key']: 70 - small_number,
-                unit_miles_per_hour['key']: 156 - small_number,
-                unit_kilometres_per_hour['key']: 251 - small_number
+                unit_knots['key']: 136,
+                unit_metres_per_second['key']: 70,
+                unit_miles_per_hour['key']: 156,
+                unit_kilometres_per_hour['key']: 251
             },
             'citations': [
                 {
@@ -1728,10 +1728,10 @@ cyclone_sshws_hazard_classes = {
                 unit_kilometres_per_hour['key']: 177
             },
             'numeric_default_max': {
-                unit_knots['key']: 112 - small_number,
-                unit_metres_per_second['key']: 58 - small_number,
-                unit_miles_per_hour['key']: 129 - small_number,
-                unit_kilometres_per_hour['key']: 208 - small_number
+                unit_knots['key']: 112,
+                unit_metres_per_second['key']: 58,
+                unit_miles_per_hour['key']: 129,
+                unit_kilometres_per_hour['key']: 208
             },
             'citations': [
                 {
@@ -1762,10 +1762,10 @@ cyclone_sshws_hazard_classes = {
                 unit_kilometres_per_hour['key']: 153
             },
             'numeric_default_max': {
-                unit_knots['key']: 95 - small_number,
-                unit_metres_per_second['key']: 50 - small_number,
-                unit_miles_per_hour['key']: 110 - small_number,
-                unit_kilometres_per_hour['key']: 177 - small_number
+                unit_knots['key']: 95,
+                unit_metres_per_second['key']: 50,
+                unit_miles_per_hour['key']: 110,
+                unit_kilometres_per_hour['key']: 177
             },
             'citations': [
                 {
@@ -1796,10 +1796,10 @@ cyclone_sshws_hazard_classes = {
                 unit_kilometres_per_hour['key']: 119
             },
             'numeric_default_max': {
-                unit_knots['key']: 82 - small_number,
-                unit_metres_per_second['key']: 42 - small_number,
-                unit_miles_per_hour['key']: 95 - small_number,
-                unit_kilometres_per_hour['key']: 153 - small_number
+                unit_knots['key']: 82,
+                unit_metres_per_second['key']: 42,
+                unit_miles_per_hour['key']: 95,
+                unit_kilometres_per_hour['key']: 153
             },
             'citations': [
                 {
@@ -1819,10 +1819,10 @@ cyclone_sshws_hazard_classes = {
             'fatality_rate': 0.0,
             'numeric_default_min': 0,
             'numeric_default_max': {
-                unit_knots['key']: 64 - small_number,
-                unit_metres_per_second['key']: 33 - small_number,
-                unit_miles_per_hour['key']: 74 - small_number,
-                unit_kilometres_per_hour['key']: 119 - small_number
+                unit_knots['key']: 64,
+                unit_metres_per_second['key']: 33,
+                unit_miles_per_hour['key']: 74,
+                unit_kilometres_per_hour['key']: 119
             },
             'citations': [
                 {
