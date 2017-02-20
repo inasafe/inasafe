@@ -3,6 +3,8 @@
 
 import logging
 import os
+from collections import OrderedDict
+from operator import itemgetter
 
 from qgis.core import QgsMapLayerRegistry
 from qgis.gui import QgsMapLayerProxyModel
@@ -45,6 +47,7 @@ class MultiBufferDialog(QtGui.QDialog, FORM_CLASS):
         self.output_filename = None
         self.output_extension = None
         self.output_layer = None
+        self.classification = []
 
         # set icon
         self.add_class_button.setIcon(
@@ -169,9 +172,19 @@ class MultiBufferDialog(QtGui.QDialog, FORM_CLASS):
 
     def populate_hazard_classification(self):
         """Populate hazard classification on hazard class form."""
-        new_class = '%s - %s' % (
-            self.radius_form.value(), self.class_form.text())
-        self.hazard_class_form.addItem(new_class)
+        new_class = {
+            'value': self.radius_form.value(),
+            'name': self.class_form.text()}
+        self.classification.append(new_class)
+        self.classification = sorted(
+            self.classification, key=itemgetter('value'))
+
+        self.hazard_class_form.clear()
+        for item in self.classification:
+            new_item = '{value} - {name}'.format(
+                value=item['value'], name=item['name'])
+            self.hazard_class_form.addItem(new_item)
+
         self.radius_form.setValue(0)
         self.class_form.clear()
         self.ok_button_status()
@@ -179,6 +192,9 @@ class MultiBufferDialog(QtGui.QDialog, FORM_CLASS):
     def remove_selected_classification(self):
         """Remove selected item on hazard class form."""
         removed_classes = self.hazard_class_form.selectedItems()
+        current_item = self.hazard_class_form.currentItem()
+        removed_index = self.hazard_class_form.indexFromItem(current_item)
+        del self.classification[removed_index.row()]
         for item in removed_classes:
             self.hazard_class_form.takeItem(
                 self.hazard_class_form.row(item))
@@ -187,16 +203,16 @@ class MultiBufferDialog(QtGui.QDialog, FORM_CLASS):
         """Get all hazard class created by user.
 
         :return: Hazard class definition created by user.
-        :rtype: dict
+        :rtype: OrderedDict
         """
-        classification = {}
-        for index in xrange(self.hazard_class_form.count()):
-            hazard_class = (
-                self.hazard_class_form.item(index).text().replace(' ', ''))
-            key = int(hazard_class.split('-')[0])
-            value = hazard_class.split('-')[1]
-            classification[key] = value
-        return classification
+        classification_dictionary = {}
+        for item in self.classification:
+            classification_dictionary[item['value']] = item['name']
+
+        classification_dictionary = OrderedDict(
+            sorted(classification_dictionary.items()))
+
+        return classification_dictionary
 
     def directory_button_status(self):
         """Function to enable or disable directory button."""
@@ -214,7 +230,9 @@ class MultiBufferDialog(QtGui.QDialog, FORM_CLASS):
 
     def ok_button_status(self):
         """Function to enable or disable OK button."""
-        if (self.hazard_class_form.count() > 0 and
+        if not self.layer.currentLayer():
+            self.button_box.button(QtGui.QDialogButtonBox.Ok).setEnabled(False)
+        elif (self.hazard_class_form.count() > 0 and
                 self.layer.currentLayer().name() and
                     len(self.output_form.text()) >= 0):
             self.button_box.button(QtGui.QDialogButtonBox.Ok).setEnabled(True)
