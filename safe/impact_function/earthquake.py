@@ -25,6 +25,7 @@ from safe.definitions.fields import (
 from safe.definitions.layer_purposes import (
     layer_purpose_aggregation_impacted, layer_purpose_exposure_impacted)
 from safe.definitions.earthquake import displacement_rate
+from safe.definitions.processing_steps import earthquake_displaced
 from safe.gis.vector.tools import create_field_from_definition
 from safe.gis.raster.write_raster import array_to_raster, make_array
 from safe.common.utilities import unique_filename
@@ -60,7 +61,10 @@ def exposed_people_stats(hazard, exposure, aggregation, fatality_rate):
         Tuple (mmi, agg_zone), value: number of exposed people
     :rtype: (dict, QgsRasterLayer)
     """
-    exposed_raster_filename = unique_filename(prefix='exposed', suffix='.tif')
+    output_layer_name = earthquake_displaced['output_layer_name']
+    processing_step = earthquake_displaced['step_name']
+    exposed_raster_filename = unique_filename(
+        prefix=output_layer_name, suffix='.tif')
 
     hazard_provider = hazard.dataProvider()
     extent = hazard.extent()
@@ -81,22 +85,26 @@ def exposed_people_stats(hazard, exposure, aggregation, fatality_rate):
     # of people in the combination of hazard zones and aggregation zones
     for i in xrange(width * height):
         hazard_mmi = hazard_block.value(long(i))
-        hazard_mmi = int(round(hazard_mmi))
-
         people_count = exposure_block.value(long(i))
 
-        mmi_fatalities = (
-            int(hazard_mmi * fatality_rate[hazard_mmi]))  # rounding down
-        mmi_displaced = (
-            (people_count - mmi_fatalities) * displacement_rate()[hazard_mmi])
+        if hazard_mmi >= 2.0 and people_count >= 0.0:
+            hazard_mmi = int(round(hazard_mmi))
+            mmi_fatalities = (
+                int(hazard_mmi * fatality_rate[hazard_mmi]))  # rounding down
+            mmi_displaced = (
+                (people_count - mmi_fatalities) *
+                displacement_rate()[hazard_mmi])
 
-        agg_zone_index = int(agg_block.value(long(i)))
+            agg_zone_index = int(agg_block.value(long(i)))
 
-        key = (hazard_mmi, agg_zone_index)
-        if key not in exposed:
-            exposed[key] = 0
+            key = (hazard_mmi, agg_zone_index)
+            if key not in exposed:
+                exposed[key] = 0
 
-        exposed[key] += people_count
+            exposed[key] += people_count
+        else:
+            # If hazard is less than 2 or population is less than 0
+            mmi_displaced = -1
 
         exposed_array[i / width, i % width] = mmi_displaced
 
@@ -109,7 +117,7 @@ def exposed_people_stats(hazard, exposure, aggregation, fatality_rate):
     exposed_raster.keywords = dict(exposure.keywords)
     exposed_raster.keywords['layer_purpose'] = (
         layer_purpose_exposure_impacted['key'])
-    exposed_raster.keywords['title'] = layer_purpose_exposure_impacted['key']
+    exposed_raster.keywords['title'] = processing_step
     exposed_raster.keywords['exposure_keywords'] = dict(exposure.keywords)
     exposed_raster.keywords['hazard_keywords'] = dict(hazard.keywords)
     exposed_raster.keywords['aggregation_keywords'] = dict(
