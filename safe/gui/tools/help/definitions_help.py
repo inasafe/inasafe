@@ -686,6 +686,14 @@ def definition_to_message(definition, heading_style=None):
                 row.add(m.Cell(inasafe_class['affected']))
             else:
                 row.add(m.Cell(tr('unspecified')))
+
+            if 'displacement_rate' in inasafe_class:
+                rate = inasafe_class['displacement_rate'] * 100
+                rate = u'%s%%' % rate
+                row.add(m.Cell(rate))
+            else:
+                row.add(m.Cell(tr('unspecified')))
+
             if 'string_defaults' in inasafe_class:
                 defaults = None
                 for default in inasafe_class['string_defaults']:
@@ -728,7 +736,7 @@ def definition_to_message(definition, heading_style=None):
             # Description goes in its own row with spanning
             row = m.Row()
             row.add(m.Cell(''))
-            row.add(m.Cell(inasafe_class['description'], span=5))
+            row.add(m.Cell(inasafe_class['description'], span=6))
             table.add(row)
         # For hazard classes we also add the 'not affected' class manually:
         if definition['type'] == definitions.hazard_classification_type:
@@ -857,6 +865,7 @@ def _make_defaults_table():
     row.add(m.Cell(tr('')), header_flag=True)
     row.add(m.Cell(tr('Name')), header_flag=True)
     row.add(m.Cell(tr('Affected')), header_flag=True)
+    row.add(m.Cell(tr('Displacement rate')), header_flag=True)
     row.add(m.Cell(tr('Default values')), header_flag=True)
     row.add(m.Cell(tr('Default min')), header_flag=True)
     row.add(m.Cell(tr('Default max')), header_flag=True)
