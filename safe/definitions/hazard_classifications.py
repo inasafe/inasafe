@@ -123,9 +123,9 @@ generic_hazard_classes = {
         exposure_structure
     ]
 }
-
-earthquake_mmi_hazard_classes = {
-    'key': 'earthquake_mmi_hazard_classes',
+# do not use these old classes until we can trace the origin
+earthquake_mmi_old_hazard_classes = {
+    'key': 'earthquake_mmi_old_hazard_classes',
     'name': tr('Earthquake MMI classes'),
     'description': tr(
         'Three classes are supported for earthquake vector hazard data: '
@@ -198,6 +198,276 @@ earthquake_mmi_hazard_classes = {
                 {
                     'text': None,
                     'link': None
+                }
+            ]
+        }
+    ],
+    'exposures': [
+        exposure_land_cover,
+        exposure_place,
+        exposure_population,
+        exposure_road,
+        exposure_structure
+    ]
+}
+
+earthquake_mmi_hazard_scale = {
+    'key': 'earthquake_mmi_hazard_scale',
+    'name': tr('Earthquake MMI scale'),
+    'description': tr(
+        'This scale, composed of increasing levels of intensity that range '
+        'from imperceptible shaking to catastrophic destruction, is designated '
+        'by Roman numerals. It does not have a mathematical basis; instead it '
+        'is an arbitrary ranking based on observed effects.'),
+    'type': hazard_classification_type,
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    'classes': [
+        {
+            'key': 'X',
+            'value': 10,
+            'color': red,
+            'name': tr('X'),
+            'affected': True,
+            'description':
+                tr('Some well-built wooden structures destroyed; most masonry '
+                   'and frame structures destroyed with foundations. '
+                   'Rails bent.'),
+            'string_defaults': ['Extreme'],
+            # Not used because EQ algs take care of this
+            # 'displacement_rate': 0.0,
+            # Not used because EQ algs take care of this
+            # 'fatality_rate': 0.0,
+            'numeric_default_min': 9.5,
+            'numeric_default_max': 10.5,
+            'citations': [
+                {
+                    'text': None,
+                    'link': u'https://earthquake.usgs.gov/learn/topics/mercalli.php'
+                }
+            ]
+        },
+        {
+            'key': 'IX',
+            'value': 9,
+            'color': orange,
+            'name': tr('IX'),
+            'affected': True,
+            'description':
+                tr('Damage considerable in specially designed structures; '
+                   'well-designed frame structures thrown out of plumb. '
+                   'Damage great in substantial buildings, with partial '
+                   'collapse. Buildings shifted off foundations.'),
+            'string_defaults': ['Violent'],
+            # Not used because EQ algs take care of this
+            # 'displacement_rate': 0.0,
+            # Not used because EQ algs take care of this
+            # 'fatality_rate': 0.0,
+            'numeric_default_min': 8.5,
+            'numeric_default_max': 9.5,
+            'citations': [
+                {
+                    'text': None,
+                    'link': u'https://earthquake.usgs.gov/learn/topics/mercalli.php'
+                }
+            ]
+        },
+        {
+            'key': 'VIII',
+            'value': 8,
+            'color': yellow,
+            'name': tr('VIII'),
+            'affected': True,
+            'description':
+                tr('Damage slight in specially designed structures; '
+                   'considerable damage in ordinary substantial buildings '
+                   'with partial collapse. Damage great in poorly built '
+                   'structures. Fall of chimneys, factory stacks, columns, '
+                   'monuments, walls. Heavy furniture overturned.'),
+            'string_defaults': ['Severe'],
+            # Not used because EQ algs take care of this
+            # 'displacement_rate': 0.0,
+            # Not used because EQ algs take care of this
+            # 'fatality_rate': 0.0,
+            'numeric_default_min': 7.5,
+            'numeric_default_max': 8.5,
+            'citations': [
+                {
+                    'text': None,
+                    'link': u'https://earthquake.usgs.gov/learn/topics/mercalli.php'
+                }
+            ]
+        },
+        {
+            'key': 'VII',
+            'value': 7,
+            'color': yellow,
+            'name': tr('VII'),
+            'affected': True,
+            'description':
+                tr('Damage negligible in buildings of good design and '
+                   'construction; slight to moderate in well-built ordinary '
+                   'structures; considerable damage in poorly built or badly '
+                   'designed structures; some chimneys broken.'),
+            'string_defaults': ['Very strong'],
+            # Not used because EQ algs take care of this
+            # 'displacement_rate': 0.0,
+            # Not used because EQ algs take care of this
+            # 'fatality_rate': 0.0,
+            'numeric_default_min': 6.5,
+            'numeric_default_max': 7.5,
+            'citations': [
+                {
+                    'text': None,
+                    'link': u'https://earthquake.usgs.gov/learn/topics/mercalli.php'
+                }
+            ]
+        },
+        {
+            'key': 'VI',
+            'value': 6,
+            'color': yellow,
+            'name': tr('VI'),
+            'affected': True,
+            'description':
+                tr('Felt by all, many frightened. Some heavy furniture moved; '
+                   'a few instances of fallen plaster. Damage slight.'),
+            'string_defaults': ['Strong'],
+            # Not used because EQ algs take care of this
+            # 'displacement_rate': 0.0,
+            # Not used because EQ algs take care of this
+            # 'fatality_rate': 0.0,
+            'numeric_default_min': 5.5,
+            'numeric_default_max': 6.5,
+            'citations': [
+                {
+                    'text': None,
+                    'link': u'https://earthquake.usgs.gov/learn/topics/mercalli.php'
+                }
+            ]
+        },
+        {
+            'key': 'V',
+            'value': 5,
+            'color': yellow,
+            'name': tr('V'),
+            'affected': True,
+            'description':
+                tr('Felt by nearly everyone; many awakened. Some dishes, '
+                   'windows broken. Unstable objects overturned. Pendulum '
+                   'clocks may stop.'),
+            'string_defaults': ['Moderate'],
+            # Not used because EQ algs take care of this
+            # 'displacement_rate': 0.0,
+            # Not used because EQ algs take care of this
+            # 'fatality_rate': 0.0,
+            'numeric_default_min': 4.5,
+            'numeric_default_max': 5.5,
+            'citations': [
+                {
+                    'text': None,
+                    'link': u'https://earthquake.usgs.gov/learn/topics/mercalli.php'
+                }
+            ]
+        },
+        {
+            'key': 'IV',
+            'value': 4,
+            'color': yellow,
+            'name': tr('IV'),
+            'affected': True,
+            'description':
+                tr('Felt indoors by many, outdoors by few during the day. '
+                   'At night, some awakened. Dishes, windows, doors disturbed; '
+                   'walls make cracking sound. Sensation like heavy truck '
+                   'striking building. Standing motor cars rocked noticeably.'),
+            'string_defaults': ['Light'],
+            # Not used because EQ algs take care of this
+            # 'displacement_rate': 0.0,
+            # Not used because EQ algs take care of this
+            # 'fatality_rate': 0.0,
+            'numeric_default_min': 3.5,
+            'numeric_default_max': 4.5,
+            'citations': [
+                {
+                    'text': None,
+                    'link': u'https://earthquake.usgs.gov/learn/topics/mercalli.php'
+                }
+            ]
+        },
+        {
+            'key': 'III',
+            'value': 3,
+            'color': yellow,
+            'name': tr('III'),
+            'affected': True,
+            'description':
+                tr('Felt quite noticeably by persons indoors, especially on '
+                   'upper floors of buildings. Many people do not recognize it '
+                   'as an earthquake. Standing motor cars may rock slightly. '
+                   'Vibrations similar to the passing of a truck. '
+                   'Duration estimated.'),
+            'string_defaults': ['Weak'],
+            # Not used because EQ algs take care of this
+            # 'displacement_rate': 0.0,
+            # Not used because EQ algs take care of this
+            # 'fatality_rate': 0.0,
+            'numeric_default_min': 2.5,
+            'numeric_default_max': 3.5,
+            'citations': [
+                {
+                    'text': None,
+                    'link': u'https://earthquake.usgs.gov/learn/topics/mercalli.php'
+                }
+            ]
+        },
+        {
+            'key': 'II',
+            'value': 2,
+            'color': yellow,
+            'name': tr('II'),
+            'affected': True,
+            'description':
+                tr('Felt only by a few persons at rest,especially on upper '
+                   'floors of buildings.'),
+            'string_defaults': ['Weak'],
+            # Not used because EQ algs take care of this
+            # 'displacement_rate': 0.0,
+            # Not used because EQ algs take care of this
+            # 'fatality_rate': 0.0,
+            'numeric_default_min': 1.5,
+            'numeric_default_max': 2.5,
+            'citations': [
+                {
+                    'text': None,
+                    'link': u'https://earthquake.usgs.gov/learn/topics/mercalli.php'
+                }
+            ]
+        },
+        {
+            'key': 'I',
+            'value': 1,
+            'color': yellow,
+            'name': tr('I'),
+            'affected': True,
+            'description':
+                tr('Not felt except by a very few under especially favorable '
+                   'conditions.'),
+            'string_defaults': ['Not felt'],
+            # Not used because EQ algs take care of this
+            # 'displacement_rate': 0.0,
+            # Not used because EQ algs take care of this
+            # 'fatality_rate': 0.0,
+            'numeric_default_min': 0.5,
+            'numeric_default_max': 1.5,
+            'citations': [
+                {
+                    'text': None,
+                    'link': u'https://earthquake.usgs.gov/learn/topics/mercalli.php'
                 }
             ]
         }
