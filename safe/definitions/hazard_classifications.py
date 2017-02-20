@@ -685,7 +685,7 @@ flood_petabencana_hazard_classes = {
             'displacement_rate': 0.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 0.7,
-            'numeric_default_max': 1.5 - small_number,
+            'numeric_default_max': 1.5,
             'string_defaults': ['medium'],
             'citations': [
                 {
@@ -705,7 +705,7 @@ flood_petabencana_hazard_classes = {
             'displacement_rate': 0.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 0.1,
-            'numeric_default_max': 0.7 - small_number,
+            'numeric_default_max': 0.7,
             'string_defaults': ['low'],
             'citations': [
                 {

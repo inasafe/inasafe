@@ -486,9 +486,14 @@ concepts = {
     'value_maps': {
         'key': 'value_maps',
         'description': tr(
-            'A mapping of a set of values to another set of unique values. '
-            'Each unique value represents a particular class. It is used for '
-            'doing classification for classified (non-continuous) data'),
+            'A conceptual mapping between one set of unique values and '
+            'another set of unique values. Each unique value represents a '
+            'particular class. It is used to express terms or concepts from '
+            'one classification system in another classification system and '
+            'only applies to non-continuous data. For example a value map can '
+            'be used to express local names for entities (e.g.street type: '
+            '"jalan") into generic concepts (e.g.street type: "residential").'
+        ),
         'citations': [
             {
                 'text': '',
