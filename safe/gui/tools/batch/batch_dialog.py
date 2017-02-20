@@ -53,7 +53,7 @@ from safe.definitions.layer_purposes import (
     layer_purpose_hazard,
     layer_purpose_exposure,
     layer_purpose_aggregation)
-from safe.definitions.report import (
+from safe.definitions.reports.components import (
     standard_impact_report_metadata_pdf,
     report_a4_blue)
 from safe.utilities.gis import extent_string_to_array
