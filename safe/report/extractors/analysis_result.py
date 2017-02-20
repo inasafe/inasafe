@@ -50,7 +50,7 @@ def analysis_result_extractor(impact_report, component_metadata):
     exposure_unit = exposure_type['units'][0]
     hazard_header = resolve_from_dictionary(extra_args, 'hazard_header')
     if exposure_unit['abbreviation']:
-        value_header = u'{name} ({abbreviation})'.format(**exposure_unit)
+        value_header = u'{measure} ({abbreviation})'.format(**exposure_unit)
     else:
         value_header = u'{name}'.format(**exposure_unit)
 

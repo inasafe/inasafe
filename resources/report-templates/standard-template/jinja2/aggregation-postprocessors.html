@@ -2,7 +2,7 @@
     {% for _, value in sections.iteritems() %}
         {% if value and value.rows %}
         <h5 class="info">
-            <i class="icon-info-sign icon-white"></i> {{ value.header }}
+            <i class="icon-info-sign icon-white"></i> {{ value.header|capitalize }}
         </h5>
         <table class="table table-striped condensed">
             <thead>
@@ -23,7 +23,7 @@
                 <tr>
                     {% for column in row %}
                         {% if loop.first %}
-                        <th class="text-left">{{ column }}</th>
+                        <th class="text-left">{{ column|capitalize }}</th>
                         {% else %}
                         <td class="text-right">{{ column }}</td>
                         {% endif %}
@@ -35,7 +35,7 @@
                 <tr>
                 {% for column in value.totals %}
                     {% if loop.first %}
-                    <th class="text-left">{{ column }}</th>
+                    <th class="text-left">{{ column|capitalize }}</th>
                     {% else %}
                     <td class="text-right">{{ column }}</td>
                      {% endif %}
@@ -50,7 +50,7 @@
     {% endfor %}
 {% elif sections_not_empty %}
 <h5 class="info">
-    <i class="icon-info-sign icon-white"></i> {{ header }}
+    <i class="icon-info-sign icon-white"></i> {{ header|capitalize }}
 </h5>
 <table class="table table-striped condensed">
     <tbody>
@@ -70,7 +70,7 @@
             <tr>
                 {% for column in row %}
                     {% if loop.first %}
-                    <td class="text-left">{{ column }}</td>
+                    <td class="text-left">{{ column|capitalize }}</td>
                     {% else %}
                     <td class="text-right">{{ column }}</td>
                     {% endif %}

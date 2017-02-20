@@ -1,18 +1,18 @@
 {% if needs %}
 <h5 class="info">
-    <i class="icon-info-sign icon-white"></i> {{ header }}
+    <i class="icon-info-sign icon-white"></i> {{ header|capitalize }}
 </h5>
 <table class="table table-striped condensed">
     <tbody>
         {% for group in needs %}
         <tr>
-            <th colspan="1" class="text-left">{{ group.header }}</th>
-            <th class="text-right" colspan=1>{{ group.total_header }}</th>
+            <th colspan="1" class="text-left">{{ group.header|capitalize }}</th>
+            <th class="text-right" colspan=1>{{ group.total_header|capitalize }}</th>
         </tr>
 
             {% for item in group.needs %}
             <tr>
-                <td colspan="1" class="text-left">{{ item.header }}</td>
+                <td colspan="1" class="text-left">{{ item.header|capitalize }}</td>
                 <td colspan="1" class="text-right">{{ item.value }}</td>
             </tr>
             {% endfor %}
