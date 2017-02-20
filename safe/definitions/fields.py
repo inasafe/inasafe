@@ -142,9 +142,9 @@ hazard_id_field = {
     'type': qvariant_whole_numbers,
     'length': default_field_length,
     'precision': 0,
-    'help_text': tr(  # short description
+    'description': tr(  # short description
         'An ID attribute in the hazard layer.'),
-    'description': tr(
+    'help_text': tr(
         'A unique identifier for each hazard feature. If you provide this '
         'we will persist these identifiers in the output datasets so that '
         'you can do a table join back to the original hazard layer if '

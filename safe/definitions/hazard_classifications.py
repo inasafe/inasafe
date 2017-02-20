@@ -294,7 +294,7 @@ volcano_hazard_classes = {
 
 flood_hazard_classes = {
     'key': 'flood_hazard_classes',
-    'name': tr('Flood classes'),
+    'name': tr('Flood wet/dry classes'),
     'description': tr(
         'This is a binary classification for an area. The area is either '
         '<b>wet</b> (affected by flood water) or <b>dry</b> (not affected '
@@ -353,6 +353,105 @@ flood_hazard_classes = {
         exposure_population,
         exposure_road,
         exposure_structure
+    ]
+}
+
+flood_petabencana_hazard_classes = {
+    'key': 'flood_petabencana_hazard_classes',
+    'name': tr('Flood classes'),
+    'type': hazard_classification_type,
+    'description': tr(
+        'This is a flood classification for an area. The area is broken '
+        'down into a number of flood classes of increasing severity based '
+        'on the water depth.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    'classes': [
+        {
+            'key': 'high',
+            'value': 3,
+            'color': red,
+            'name': tr('High'),
+            'affected': True,
+            'description': tr('Water is above waist height.'),
+            'displacement_rate': 0.01,
+            'fatality_rate': 0.0,
+            'numeric_default_min': 1.5,
+            'numeric_default_max': 9999999999,
+            'string_defaults': ['high'],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
+            'key': 'medium',
+            'value': 2,
+            'color': orange,
+            'name': tr('Medium'),
+            'affected': True,
+            'description': tr(
+                'Water is above knee height, below waist height.'),
+            'displacement_rate': 0.0,
+            'fatality_rate': 0.0,
+            'numeric_default_min': 0.7,
+            'numeric_default_max': 1.5 - small_number,
+            'string_defaults': ['medium'],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
+            'key': 'low',
+            'value': 1,
+            'color': yellow,
+            'name': tr('Low'),
+            'affected': True,
+            'description': tr(
+                'Water encountered up to knee deep.'),
+            'displacement_rate': 0.0,
+            'fatality_rate': 0.0,
+            'numeric_default_min': 0.1,
+            'numeric_default_max': 0.7 - small_number,
+            'string_defaults': ['low'],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
+            'key': 'use_caution',
+            'value': 0,
+            'color': light_green,
+            'name': tr('Use caution'),
+            'affected': False,
+            'description': tr(
+                'No water encountered above ground height but there are may '
+                'be floods in surrounding areas and you should use caution '
+                'when moving around in this area.'),
+            'displacement_rate': 0.0,
+            'fatality_rate': 0.0,
+            'numeric_default_min': 0,
+            'numeric_default_max': 0.1,
+            'string_defaults': ['caution'],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        }
     ]
 }
 
@@ -1485,6 +1584,7 @@ hazard_classification = {
     'types': [
         generic_hazard_classes,
         flood_hazard_classes,
+        flood_petabencana_hazard_classes,
         earthquake_mmi_hazard_classes,
         tsunami_hazard_classes,
         tsunami_hazard_population_classes,
