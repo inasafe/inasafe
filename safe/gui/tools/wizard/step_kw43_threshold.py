@@ -1,12 +1,12 @@
 # coding=utf-8
+
 """Keyword Wizard Step for Threshold."""
+
 from collections import OrderedDict
 from functools import partial
 import logging
-import numpy
-from osgeo import gdal
-from osgeo.gdalconst import GA_ReadOnly
 from PyQt4.QtGui import QDoubleSpinBox, QHBoxLayout, QLabel
+from qgis.core import QgsRasterBandStats
 
 from safe.utilities.i18n import tr
 from safe.definitions.layer_purposes import layer_purpose_aggregation
@@ -30,7 +30,9 @@ FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
 class StepKwThreshold(WizardStep, FORM_CLASS):
-    """Keyword Wizard Step: Threshold"""
+
+    """Keyword Wizard Step: Threshold."""
+
     def __init__(self, parent=None):
         """Constructor for the tab.
 
@@ -42,8 +44,9 @@ class StepKwThreshold(WizardStep, FORM_CLASS):
         self.classes = OrderedDict()
 
     def is_ready_to_next_step(self):
-        """Check if the step is complete. If so, there is
-            no reason to block the Next button.
+        """Check if the step is complete.
+
+        If so, there is no reason to block the Next button.
 
         :returns: True if new step may be enabled.
         :rtype: bool
@@ -53,7 +56,7 @@ class StepKwThreshold(WizardStep, FORM_CLASS):
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.
 
-        :returns: The step to be switched to
+        :returns: The step to be switched to.
         :rtype: WizardStep instance or None
         """
         if self.parent.get_layer_geometry_key() == \
@@ -94,14 +97,14 @@ class StepKwThreshold(WizardStep, FORM_CLASS):
             selected_classification()
 
         if is_raster_layer(self.parent.layer):
-            dataset = gdal.Open(self.parent.layer.source(), GA_ReadOnly)
-            statistic = dataset.GetRasterBand(1).GetStatistics(True, True)
-            min_value_layer = statistic[0]
-            max_value_layer = statistic[1]
+            statistics = self.parent.layer.dataProvider().bandStatistics(
+                1, QgsRasterBandStats.All, self.parent.layer.extent(), 0)
             text = continuous_raster_question % (
                 layer_purpose['name'],
                 layer_subcategory['name'],
-                classification['name'], min_value_layer, max_value_layer)
+                classification['name'],
+                statistics.minimumValue,
+                statistics.maximumValue)
         else:
             field_name = self.parent.step_kw_field.selected_field()
             field_index = self.parent.layer.fieldNameIndex(field_name)
