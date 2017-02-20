@@ -68,7 +68,8 @@ exposure_population = {
         tr('Fatality model is from Institut Teknologi Bandung 2012.'),
 
     ],
-    'earthquake_fatality_model_limitations': [# notes provided by Hadi Ghasemi
+    'earthquake_fatality_model_limitations': [
+        # notes provided by Hadi Ghasemi
         tr('Earthquake fatalities are due to a number of factors, such as '
            'destructive level of ground shaking, tsunami, landsliding and '
            'fire. The implemented fatality models only consider the number of '
