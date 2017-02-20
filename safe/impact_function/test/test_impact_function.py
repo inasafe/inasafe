@@ -681,10 +681,13 @@ class TestImpactFunction(unittest.TestCase):
             'inasafe_version': get_version(),
             'aggregation_keywords': deepcopy(aggregation_layer.keywords),
             'aggregation_layer': aggregation_layer.source(),
+            'aggregation_layer_id': aggregation_layer.id(),
             'exposure_keywords': deepcopy(exposure_layer.keywords),
             'exposure_layer': exposure_layer.source(),
+            'exposure_layer_id': exposure_layer.id(),
             'hazard_keywords': deepcopy(hazard_layer.keywords),
             'hazard_layer': hazard_layer.source(),
+            'hazard_layer_id': hazard_layer.id(),
             'analysis_question': get_analysis_question(hazard, exposure),
             'report_question': get_report_question(exposure)
         }
@@ -740,10 +743,13 @@ class TestImpactFunction(unittest.TestCase):
             'os': platform.version(),
             'aggregation_keywords': None,
             'aggregation_layer': None,
+            'aggregation_layer_id': None,
             'exposure_keywords': deepcopy(exposure_layer.keywords),
             'exposure_layer': exposure_layer.source(),
+            'exposure_layer_id': exposure_layer.id(),
             'hazard_keywords': deepcopy(hazard_layer.keywords),
             'hazard_layer': hazard_layer.source(),
+            'hazard_layer_id': hazard_layer.id(),
             'analysis_question': get_analysis_question(hazard, exposure),
             'report_question': get_report_question(exposure)
         }

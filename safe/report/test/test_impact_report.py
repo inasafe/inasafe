@@ -1280,10 +1280,10 @@ class TestImpactReport(unittest.TestCase):
 
         # insert layer to registry
         layer_registry = QgsMapLayerRegistry.instance()
-        layer_registry.removeAllMapLayers()
+        layer_registry.addMapLayers(
+            [hazard_layer, exposure_layer, aggregation_layer])
         rendered_layer = impact_function.impact
-        for layer in impact_function.outputs:
-            layer_registry.addMapLayer(layer)
+        layer_registry.addMapLayers(impact_function.outputs)
 
         # Create impact report
         report_metadata = ReportMetadata(

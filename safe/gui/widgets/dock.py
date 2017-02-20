@@ -1156,6 +1156,15 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # Add result layer to QGIS
         add_impact_layers_to_canvas(self.impact_function, self.iface)
 
+        # execute this before generating report
+        if self.zoom_to_impact_flag:
+            self.iface.zoomToActiveLayer()
+
+        if self.hide_exposure_flag:
+            legend = self.iface.legendInterface()
+            qgis_exposure = self.get_exposure_layer()
+            legend.setLayerVisible(qgis_exposure, False)
+
         if setting('generate_report', True, bool):
             # Generate impact report
             error_code, message = generate_impact_report(
@@ -1182,16 +1191,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 self.validate_impact_function()
                 return ANALYSIS_FAILED_BAD_CODE, message
 
-        if self.zoom_to_impact_flag:
-            self.iface.zoomToActiveLayer()
-
         if self.impact_function.debug_mode:
             add_debug_layers_to_canvas(self.impact_function)
-
-        if self.hide_exposure_flag:
-            legend = self.iface.legendInterface()
-            qgis_exposure = self.get_exposure_layer()
-            legend.setLayerVisible(qgis_exposure, False)
 
         self.extent.set_last_analysis_extent(
             self.impact_function.analysis_extent,

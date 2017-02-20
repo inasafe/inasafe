@@ -29,8 +29,8 @@
         <number>0</number>
        </property>
        <item row="0" column="0">
-        <widget class="QWebView" name="help_web_view">
-         <property name="url">
+        <widget class="QWebView" name="help_web_view" native="true">
+         <property name="url" stdset="0">
           <url>
            <string>about:blank</string>
           </url>
@@ -47,7 +47,7 @@
        <item row="0" column="0">
         <widget class="QTabWidget" name="tabWidget">
          <property name="currentIndex">
-          <number>4</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="tab_basic">
           <attribute name="title">
@@ -119,6 +119,13 @@
                  </property>
                  <property name="text">
                   <string>Hide exposure layer on scenario estimate completion</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="cbx_show_only_impact">
+                 <property name="text">
+                  <string>Show only impact layer on report map</string>
                  </property>
                 </widget>
                </item>

@@ -21,6 +21,7 @@ from PyQt4.QtSvg import QSvgRenderer
 from jinja2.environment import Environment
 from jinja2.loaders import FileSystemLoader
 from qgis.core import (
+    QgsMapLayer,
     QgsComposerFrame,
     QgsComposition,
     QgsComposerHtml,
@@ -274,8 +275,8 @@ def qgis_composer_renderer(impact_report, component):
         """:type: qgis.core.QgsComposerMap"""
         if composer_map:
             composer_map.setKeepLayerSet(True)
-            composer_map.setLayerSet(
-                [l.id() for l in layers])
+            layer_set = [l.id() for l in layers if isinstance(l, QgsMapLayer)]
+            composer_map.setLayerSet(layer_set)
             if map_extent_option and isinstance(
                     map_extent_option, QgsRectangle):
                 # use provided map extent
