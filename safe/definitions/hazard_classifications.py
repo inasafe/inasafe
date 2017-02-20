@@ -3,6 +3,11 @@
 
 See https://github.com/inasafe/inasafe/issues/2920#issuecomment-229874044
 to have a table showing you classes of each kind of hazard.
+
+Rule of using the thresholds:
+Minimum value IS NOT included, but maximum value IS included to the range.
+Mathematical expression:
+minimum_value < x <= maximum_value
 """
 from safe.definitions import concepts
 from safe.utilities.i18n import tr
