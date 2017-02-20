@@ -228,9 +228,10 @@ earthquake_mmi_hazard_scale = {
     'name': tr('Earthquake MMI scale'),
     'description': tr(
         'This scale, composed of increasing levels of intensity that range '
-        'from imperceptible shaking to catastrophic destruction, is designated '
-        'by Roman numerals. It does not have a mathematical basis; instead it '
-        'is an arbitrary ranking based on observed effects.'),
+        'from imperceptible shaking to catastrophic destruction, is '
+        'designated by Roman numerals. It does not have a mathematical '
+        'basis; instead it is an arbitrary ranking based on observed '
+        'effects.'),
     'type': hazard_classification_type,
     'citations': [
         {
@@ -394,9 +395,10 @@ earthquake_mmi_hazard_scale = {
             'affected': True,
             'description':
                 tr('Felt indoors by many, outdoors by few during the day. '
-                   'At night, some awakened. Dishes, windows, doors disturbed; '
-                   'walls make cracking sound. Sensation like heavy truck '
-                   'striking building. Standing motor cars rocked noticeably.'),
+                   'At night, some awakened. Dishes, windows, doors '
+                   'disturbed; walls make cracking sound. Sensation like '
+                   'heavy truck striking building. Standing motor cars rocked '
+                   'noticeably.'),
             'string_defaults': ['Light'],
             'displacement_rate': 0.0,
             # Not used because EQ algs take care of this
