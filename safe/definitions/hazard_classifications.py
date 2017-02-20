@@ -135,7 +135,6 @@ generic_hazard_classes = {
         exposure_structure
     ]
 }
-# do not use these old classes until we can trace the origin
 earthquake_mmi_hazard_classes = {
     'key': 'earthquake_mmi_hazard_classes',
     'name': tr('Earthquake MMI classes'),
