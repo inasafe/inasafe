@@ -258,7 +258,8 @@ earthquake_mmi_hazard_scale = {
             'citations': [
                 {
                     'text': None,
-                    'link': u'https://earthquake.usgs.gov/learn/topics/mercalli.php'
+                    'link': u'https://earthquake.usgs.gov/learn/topics/'
+                            u'mercalli.php'
                 }
             ]
         },
@@ -282,7 +283,8 @@ earthquake_mmi_hazard_scale = {
             'citations': [
                 {
                     'text': None,
-                    'link': u'https://earthquake.usgs.gov/learn/topics/mercalli.php'
+                    'link': u'https://earthquake.usgs.gov/learn/topics/'
+                            u'mercalli.php'
                 }
             ]
         },
@@ -307,7 +309,8 @@ earthquake_mmi_hazard_scale = {
             'citations': [
                 {
                     'text': None,
-                    'link': u'https://earthquake.usgs.gov/learn/topics/mercalli.php'
+                    'link': u'https://earthquake.usgs.gov/learn/topics/'
+                            u'mercalli.php'
                 }
             ]
         },
@@ -331,7 +334,8 @@ earthquake_mmi_hazard_scale = {
             'citations': [
                 {
                     'text': None,
-                    'link': u'https://earthquake.usgs.gov/learn/topics/mercalli.php'
+                    'link': u'https://earthquake.usgs.gov/learn/topics/'
+                            u'mercalli.php'
                 }
             ]
         },
@@ -353,7 +357,8 @@ earthquake_mmi_hazard_scale = {
             'citations': [
                 {
                     'text': None,
-                    'link': u'https://earthquake.usgs.gov/learn/topics/mercalli.php'
+                    'link': u'https://earthquake.usgs.gov/learn/topics/'
+                            u'mercalli.php'
                 }
             ]
         },
@@ -376,7 +381,8 @@ earthquake_mmi_hazard_scale = {
             'citations': [
                 {
                     'text': None,
-                    'link': u'https://earthquake.usgs.gov/learn/topics/mercalli.php'
+                    'link': u'https://earthquake.usgs.gov/learn/topics/'
+                            u'mercalli.php'
                 }
             ]
         },
@@ -400,7 +406,8 @@ earthquake_mmi_hazard_scale = {
             'citations': [
                 {
                     'text': None,
-                    'link': u'https://earthquake.usgs.gov/learn/topics/mercalli.php'
+                    'link': u'https://earthquake.usgs.gov/learn/topics/'
+                            u'mercalli.php'
                 }
             ]
         },
@@ -412,9 +419,9 @@ earthquake_mmi_hazard_scale = {
             'affected': True,
             'description':
                 tr('Felt quite noticeably by persons indoors, especially on '
-                   'upper floors of buildings. Many people do not recognize it '
-                   'as an earthquake. Standing motor cars may rock slightly. '
-                   'Vibrations similar to the passing of a truck. '
+                   'upper floors of buildings. Many people do not recognize  '
+                   'it as an earthquake. Standing motor cars may rock '
+                   'slightly. Vibrations similar to the passing of a truck. '
                    'Duration estimated.'),
             'string_defaults': ['Weak'],
             'displacement_rate': 0.0,
@@ -425,7 +432,8 @@ earthquake_mmi_hazard_scale = {
             'citations': [
                 {
                     'text': None,
-                    'link': u'https://earthquake.usgs.gov/learn/topics/mercalli.php'
+                    'link': u'https://earthquake.usgs.gov/learn/topics/'
+                            u'mercalli.php'
                 }
             ]
         },
@@ -447,7 +455,8 @@ earthquake_mmi_hazard_scale = {
             'citations': [
                 {
                     'text': None,
-                    'link': u'https://earthquake.usgs.gov/learn/topics/mercalli.php'
+                    'link': u'https://earthquake.usgs.gov/learn/topics/'
+                            u'mercalli.php'
                 }
             ]
         },
@@ -469,7 +478,8 @@ earthquake_mmi_hazard_scale = {
             'citations': [
                 {
                     'text': None,
-                    'link': u'https://earthquake.usgs.gov/learn/topics/mercalli.php'
+                    'link': u'https://earthquake.usgs.gov/learn/topics/'
+                            u'mercalli.php'
                 }
             ]
         }
