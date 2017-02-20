@@ -232,8 +232,9 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             # Iterate through all available hazard classifications
             for hazard_classification in hazard_classifications:
                 # Skip if the classification is not for the exposure
-                if exposure not in hazard_classification['exposures']:
-                    continue
+                if 'exposures' in hazard_classification:
+                    if exposure not in hazard_classification['exposures']:
+                        continue
                 exposure_combo_box.addItem(hazard_classification['name'])
                 exposure_combo_box.setItemData(
                     i + 1, hazard_classification, Qt.UserRole)
