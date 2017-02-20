@@ -55,9 +55,6 @@ DATADIR = os.path.join(pardir, DATANAME)
 
 # Bundled test data
 TESTDATA = os.path.join(DATADIR, 'test')  # Artificial datasets
-HAZDATA = os.path.join(DATADIR, 'hazard')  # Real hazard layers
-EXPDATA = os.path.join(DATADIR, 'exposure')  # Real exposure layers
-BOUNDDATA = os.path.join(DATADIR, 'boundaries')  # Real exposure layers
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

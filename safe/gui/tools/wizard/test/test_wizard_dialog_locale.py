@@ -31,7 +31,7 @@ skipped_reason = (
     'run it separately.')
 
 
-@unittest.skip(skipped_reason)
+# @unittest.skip(skipped_reason)
 class TestWizardDialogLocale(unittest.TestCase):
     """Test for Wizard Dialog in Locale mode."""
     def setUp(self):
@@ -112,8 +112,7 @@ class TestWizardDialogLocale(unittest.TestCase):
     def test_translation(self):
         """Test for metadata translation."""
         from safe.test.utilities import (
-            clone_shp_layer, remove_vector_temp_file)
-        from safe.test.utilities import BOUNDDATA
+            remove_vector_temp_file, load_test_vector_layer)
 
         from safe.test.utilities import get_qgis_app
         # Get QGis app handle
@@ -122,10 +121,9 @@ class TestWizardDialogLocale(unittest.TestCase):
 
         from safe.gui.tools.wizard.wizard_dialog import WizardDialog
 
-        layer = clone_shp_layer(
-            name='kabupaten_jakarta',
-            include_keywords=True,
-            source_directory=BOUNDDATA)
+        layer = load_test_vector_layer(
+            'gisv4', 'aggregation', 'small_grid.geojson', clone_to_memory=True)
+        layer.keywords = {}
         # noinspection PyTypeChecker
         dialog = WizardDialog(PARENT, IFACE)
         dialog.set_keywords_creation_mode(layer)
