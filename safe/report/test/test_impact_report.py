@@ -313,27 +313,116 @@ class TestImpactReport(unittest.TestCase):
         """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
 
         expected_context = {
-            'header': u'Estimated number of Structures by type',
+            'header': u'Estimated Number of buildings by Building type',
             'notes': u'Columns and rows containing only 0 or "No data" '
                      u'values are excluded from the tables.',
+            'group_border_color': u'#36454f',
+            'detail_header': {
+                'total_header_index': 3,
+                'breakdown_header_index': 0,
+                'header_hazard_group': {
+                    'not_affected': {
+                        'header': u'Not affected',
+                        'hazards': []
+                    },
+                    'affected': {
+                        'header': u'Affected',
+                        'hazards': [
+                            u'High hazard zone',
+                            u'Medium hazard zone',
+                            u'Low hazard zone'],
+                        'start_index': 1
+                    }
+                }
+            },
             'detail_table': {
                 'headers': [
-                    u'Structures type',
-                    u'High hazard zone',
-                    u'Medium hazard zone',
+                    u'Building type',
+                    {
+                        'start': True, 'colspan': 2,
+                        'name': u'High hazard zone',
+                        'header_group': 'affected'
+                    },
+                    {
+                        'start': False,
+                        'name': u'Medium hazard zone',
+                        'header_group': 'affected'
+                    },
                     u'Total Affected',
                     u'Total Not Affected',
-                    u'Total Not Exposed',
-                    u'Total'
+                    u'Total Not Exposed', u'Total'
                 ],
                 'details': [
-                    [u'government', '0', '10', '10', '0', '0', '10'],
-                    [u'education', '10', '0', '10', '0', '10', '10'],
-                    [u'other', '0', '10', '10', '0', '0', '10'],
-                    [u'commercial', '10', '0', '10', '0', '0', '10'],
-                    [u'health', '10', '0', '10', '0', '0', '10']
+                    [
+                        u'government',
+                        {
+                            'value': '0',
+                            'header_group': 'affected'
+                        },
+                        {
+                            'value': '10',
+                            'header_group': 'affected'
+                        }, '10', '0', '0', '10'
+                    ],
+                    [
+                        u'education',
+                        {
+                            'value': '10',
+                            'header_group': 'affected'
+                        },
+                        {
+                            'value': '0',
+                            'header_group': 'affected'
+                        },
+                        '10', '0', '10', '10'
+                    ],
+                    [
+                        u'other',
+                        {
+                            'value': '0',
+                            'header_group': 'affected'
+                        },
+                        {
+                            'value': '10',
+                            'header_group': 'affected'
+                        },
+                        '10', '0', '0', '10'
+                    ],
+                    [
+                        u'commercial',
+                        {
+                            'value': '10',
+                            'header_group': 'affected'
+                        },
+                        {
+                            'value': '0',
+                            'header_group': 'affected'
+                        },
+                        '10', '0', '0', '10'
+                    ],
+                    [
+                        u'health',
+                        {
+                            'value': '10',
+                            'header_group': 'affected'
+                        },
+                        {
+                            'value': '0',
+                            'header_group': 'affected'
+                        },
+                        '10', '0', '0', '10'
+                    ]
                 ],
-                'footers': [u'Total', '10', '10', '10', '0', '10', '10']
+                'footers': [
+                    u'Total', {
+                        'value': '10',
+                        'header_group': 'affected'
+                    },
+                    {
+                        'value': '10',
+                        'header_group': 'affected'
+                    }, '10', '0', '10', '10'
+                ]
             }
         }
         actual_context = analysis_breakdown.context

@@ -4,6 +4,7 @@
 """
 from __future__ import absolute_import
 
+from safe.definitions.exposure import exposure_structure
 from safe.definitions.reports import (
     jinja2_component_type,
     qgis_composer_component_type,
@@ -26,6 +27,7 @@ from safe.definitions.fields import (
     total_not_affected_field,
     total_not_exposed_field,
     total_field)
+from safe.definitions.styles import charcoal_black
 from safe.report.extractors.action_notes import (
     action_checklist_extractor,
     notes_assumptions_extractor)
@@ -114,9 +116,26 @@ analysis_breakdown_component = {
                 'jinja2/'
                 'analysis-detail.html',
     'extra_args': {
+        'exposure_type_header_mapping': {
+            # In the report, structure is usually called building.
+            exposure_structure['key']: tr('Building')
+        },
+        'hazard_class_header_mapping': {
+            'affected': {
+                'header': tr('Affected'),
+                # this is color for background in affected column in
+                # hex #rgb format. Don't declare this for default bootstrap
+                # background
+                # 'color': affected_column_background.name()
+            },
+            'not_affected': {
+                'header': tr('Not affected')
+            }
+        },
+        'group_border_color': charcoal_black.name(),
         'breakdown_header_type_format': tr('{exposure} type'),
         'breakdown_header_class_format': tr('{exposure} class'),
-        'header': tr('Estimated number of {exposure} by type'),
+        'header': tr('Estimated {title} by {exposure} type'),
         'notes': tr(
             'Columns and rows containing only 0 or "No data" values are '
             'excluded from the tables.')

@@ -47,6 +47,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
     if exposure_breakdown:
         exposure_breakdown_fields = exposure_breakdown.keywords[
             'inasafe_fields']
+    provenance = impact_report.impact_function.provenance
     debug_mode = impact_report.impact_function.debug_mode
 
     """Initializations"""
@@ -100,14 +101,52 @@ def analysis_detail_extractor(impact_report, component_metadata):
         breakdown_header_template = resolve_from_dictionary(
             extra_args, 'breakdown_header_class_format')
 
+    # check if there is header type associations
+    type_header_mapping = resolve_from_dictionary(
+        extra_args, 'exposure_type_header_mapping')
+
+    if exposure_type['key'] in type_header_mapping:
+        exposure_header = type_header_mapping[exposure_type['key']]
+    else:
+        exposure_header = exposure_type['name']
+
     headers.append(
-        breakdown_header_template.format(exposure=exposure_type['name']))
+        breakdown_header_template.format(exposure=exposure_header))
 
+    # this is mapping for customizing double header for
+    # affected/not affected hazard classes
+    hazard_class_header_mapping = resolve_from_dictionary(
+        extra_args,
+        'hazard_class_header_mapping')
     # hazard header
-    for hazard_class in hazard_classification['classes']:
-        headers.append(hazard_class['name'])
+    # TODO: we need to get affected and not_affected key from
+    # definitions concept
+    header_hazard_group = {
+        'affected': {
+            'hazards': []
+        },
+        'not_affected': {
+            'hazards': []
+        }
+    }
+    for key, group in header_hazard_group.iteritems():
+        if key in hazard_class_header_mapping:
+            header_hazard_group[key].update(hazard_class_header_mapping[key])
 
-    # affected, not exposed, not affected, total header
+    for hazard_class in hazard_classification['classes']:
+        # the tuple format would be:
+        # (class name, is it affected, header background color
+        hazard_class_name = hazard_class['name']
+        if hazard_class.get('affected'):
+            affected_status = 'affected'
+        else:
+            affected_status = 'not_affected'
+
+        header_hazard_group[affected_status]['hazards'].append(
+            hazard_class_name)
+        headers.append(hazard_class_name)
+
+    # affected, not affected, not exposed, total header
     report_fields = [
         total_affected_field,
         total_not_affected_field,
@@ -135,6 +174,12 @@ def analysis_detail_extractor(impact_report, component_metadata):
             field_key_name = hazard_count_field['key'] % (
                 hazard_class['key'], )
 
+            group_key = None
+            for key, group in header_hazard_group.iteritems():
+                if hazard_class['name'] in group['hazards']:
+                    group_key = key
+                    break
+
             try:
                 # retrieve dynamic field name from analysis_fields keywords
                 # will cause key error if no hazard count for that particular
@@ -147,11 +192,17 @@ def analysis_detail_extractor(impact_report, component_metadata):
                 count_value = format_number(
                     count_value,
                     enable_rounding=is_rounding)
-                row.append(count_value)
+                row.append({
+                    'value': count_value,
+                    'header_group': group_key
+                })
             except KeyError:
                 # in case the field was not found
                 # assume value 0
-                row.append(0)
+                row.append({
+                    'value': 0,
+                    'header_group': group_key
+                })
 
         skip_row = False
 
@@ -162,7 +213,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
             total_count = format_number(
                 total_count,
                 enable_rounding=is_rounding)
-            if total_count == 0 and field == total_affected_field:
+            if total_count == '0' and field == total_affected_field:
                 skip_row = True
                 break
 
@@ -183,6 +234,12 @@ def analysis_detail_extractor(impact_report, component_metadata):
         field_key_name = hazard_count_field['key'] % (
             hazard_class['key'],)
 
+        group_key = None
+        for key, group in header_hazard_group.iteritems():
+            if hazard_class['name'] in group['hazards']:
+                group_key = key
+                break
+
         try:
             # retrieve dynamic field name from analysis_fields keywords
             # will cause key error if no hazard count for that particular
@@ -195,9 +252,9 @@ def analysis_detail_extractor(impact_report, component_metadata):
         except KeyError:
             # in case the field was not found
             # assume value 0
-            count_value = 0
+            count_value = '0'
 
-        if count_value == 0:
+        if count_value == '0':
             # if total affected for hazard class is zero, delete entire
             # column
             column_index = len(footers)
@@ -208,7 +265,10 @@ def analysis_detail_extractor(impact_report, component_metadata):
                 row = row[:column_index] + row[column_index + 1:]
                 details[row_idx] = row
             continue
-        footers.append(count_value)
+        footers.append({
+            'value': count_value,
+            'header_group': group_key
+        })
 
     # for footers
     for field in report_fields:
@@ -224,8 +284,51 @@ def analysis_detail_extractor(impact_report, component_metadata):
     notes = resolve_from_dictionary(
         extra_args, 'notes')
 
-    context['header'] = header.format(exposure=exposure_type['name'])
+    context['header'] = header.format(
+        title=provenance['map_legend_title'],
+        exposure=exposure_header)
+    context['group_border_color'] = resolve_from_dictionary(
+        extra_args, 'group_border_color')
     context['notes'] = notes
+
+    breakdown_header_index = 0
+    total_header_index = len(headers) - len(report_fields)
+    context['detail_header'] = {
+        'header_hazard_group': header_hazard_group,
+        'breakdown_header_index': breakdown_header_index,
+        'total_header_index': total_header_index
+    }
+
+    # modify headers to include double header
+    affected_headers = []
+    last_group = 0
+    for i in range(breakdown_header_index, total_header_index):
+        hazard_class_name = headers[i]
+        group_key = None
+        for key, group in header_hazard_group.iteritems():
+            if hazard_class_name in group['hazards']:
+                group_key = key
+                break
+
+        if group_key and group_key not in affected_headers:
+            affected_headers.append(group_key)
+            headers[i] = {
+                'name': hazard_class_name,
+                'start': True,
+                'header_group': group_key,
+                'colspan': 1
+            }
+            last_group = i
+            header_hazard_group[group_key]['start_index'] = i
+        elif group_key:
+            colspan = headers[last_group]['colspan']
+            headers[last_group]['colspan'] = colspan + 1
+            headers[i] = {
+                'name': hazard_class_name,
+                'start': False,
+                'header_group': group_key
+            }
+
     context['detail_table'] = {
         'headers': headers,
         'details': details,
