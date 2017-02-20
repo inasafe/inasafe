@@ -14,6 +14,7 @@ from PyQt4.QtWebKit import QWebView
 
 from osgeo import gdal
 from osgeo.gdalconst import GA_ReadOnly
+from qgis.core import QgsRasterBandStats
 
 import safe.messaging as m
 from safe.messaging import styles
@@ -74,7 +75,6 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
 
         :param parent: widget to use as parent (Wizard Dialog).
         :type parent: QWidget
-
         """
         WizardStep.__init__(self, parent)
         self.exposures = []
@@ -525,14 +525,14 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             selected_subcategory()
 
         if is_raster_layer(self.parent.layer):
-            dataset = gdal.Open(self.parent.layer.source(), GA_ReadOnly)
-            statistic = dataset.GetRasterBand(1).GetStatistics(True, True)
-            min_value_layer = statistic[0]
-            max_value_layer = statistic[1]
+            statistics = self.parent.layer.dataProvider().bandStatistics(
+                1, QgsRasterBandStats.All, self.parent.layer.extent(), 0)
             description_text = continuous_raster_question % (
                 layer_purpose['name'],
                 layer_subcategory['name'],
-                classification['name'], min_value_layer, max_value_layer)
+                classification['name'],
+                statistics.minimumValue,
+                statistics.maximumValue)
         else:
             field_name = self.parent.step_kw_field.selected_field()
             field_index = self.parent.layer.fieldNameIndex(field_name)
