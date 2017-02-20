@@ -149,7 +149,12 @@ notes_assumptions_component = {
                 'jinja2/'
                 'bullet-list-section.html',
     'extra_args': {
-        'header': tr('Notes and assumptions')
+        'header': tr('Notes and assumptions'),
+        'displacement_rates_note_format': tr(
+            'For this analysis, the following displacement rates were used: '
+            '{rate_description}'),
+        'hazard_displacement_rates_note_format': tr(
+            '{name} - {displacement_rate:.2%}')
     }
 }
 
