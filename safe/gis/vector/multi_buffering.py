@@ -18,6 +18,7 @@ from safe.gis.vector.tools import (
     create_field_from_definition)
 from safe.gis.sanity_check import check_layer
 from safe.definitions.fields import hazard_class_field, buffer_distance_field
+from safe.definitions.layer_purposes import layer_purpose_hazard
 from safe.definitions.processing_steps import buffer_steps
 from safe.utilities.profiling import profile
 
@@ -124,6 +125,7 @@ def multi_buffering(layer, radii, callback=None):
     # We transfer keywords to the output.
     buffered.keywords = layer.keywords
     buffered.keywords['layer_geometry'] = 'polygon'
+    buffered.keywords['layer_purpose'] = layer_purpose_hazard['key']
     buffered.keywords['inasafe_fields'][hazard_class_field['key']] = (
         hazard_class_field['field_name'])
 
