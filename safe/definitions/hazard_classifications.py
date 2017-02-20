@@ -21,7 +21,19 @@ from safe.definitions.styles import (
     orange,
     red,
     dark_red,
-    very_dark_red)
+    very_dark_red,
+    MMI_dark_brown,
+    MMI_brown,
+    MMI_dark_red,
+    MMI_red,
+    MMI_orange,
+    MMI_light_orange,
+    MMI_yellow,
+    MMI_light_cyan,
+    MMI_cyan,
+    MMI_light_blue,
+    MMI_blue,
+    MMI_white)
 from safe.definitions.exposure import (
     exposure_land_cover,
     exposure_place,
@@ -230,7 +242,7 @@ earthquake_mmi_hazard_scale = {
         {
             'key': 'X',
             'value': 10,
-            'color': red,
+            'color': MMI_dark_red,
             'name': tr('X'),
             'affected': True,
             'description':
@@ -254,7 +266,7 @@ earthquake_mmi_hazard_scale = {
         {
             'key': 'IX',
             'value': 9,
-            'color': orange,
+            'color': MMI_red,
             'name': tr('IX'),
             'affected': True,
             'description':
@@ -279,7 +291,7 @@ earthquake_mmi_hazard_scale = {
         {
             'key': 'VIII',
             'value': 8,
-            'color': yellow,
+            'color': MMI_orange,
             'name': tr('VIII'),
             'affected': True,
             'description':
@@ -305,7 +317,7 @@ earthquake_mmi_hazard_scale = {
         {
             'key': 'VII',
             'value': 7,
-            'color': yellow,
+            'color': MMI_light_orange,
             'name': tr('VII'),
             'affected': True,
             'description':
@@ -330,7 +342,7 @@ earthquake_mmi_hazard_scale = {
         {
             'key': 'VI',
             'value': 6,
-            'color': yellow,
+            'color': MMI_yellow,
             'name': tr('VI'),
             'affected': True,
             'description':
@@ -353,7 +365,7 @@ earthquake_mmi_hazard_scale = {
         {
             'key': 'V',
             'value': 5,
-            'color': yellow,
+            'color': MMI_light_cyan,
             'name': tr('V'),
             'affected': True,
             'description':
@@ -377,7 +389,7 @@ earthquake_mmi_hazard_scale = {
         {
             'key': 'IV',
             'value': 4,
-            'color': yellow,
+            'color': MMI_cyan,
             'name': tr('IV'),
             'affected': True,
             'description':
@@ -402,7 +414,7 @@ earthquake_mmi_hazard_scale = {
         {
             'key': 'III',
             'value': 3,
-            'color': yellow,
+            'color': MMI_light_blue,
             'name': tr('III'),
             'affected': True,
             'description':
@@ -428,7 +440,7 @@ earthquake_mmi_hazard_scale = {
         {
             'key': 'II',
             'value': 2,
-            'color': yellow,
+            'color': MMI_blue,
             'name': tr('II'),
             'affected': True,
             'description':
@@ -451,7 +463,7 @@ earthquake_mmi_hazard_scale = {
         {
             'key': 'I',
             'value': 1,
-            'color': yellow,
+            'color': MMI_white,
             'name': tr('I'),
             'affected': True,
             'description':
