@@ -18,6 +18,18 @@ orange = QColor('#FEB24C')
 red = QColor('#F03B20')
 dark_red = QColor('#BD0026')
 very_dark_red = QColor('#710017')
+MMI_white = QColor ('#ffffff')
+MMI_blue = QColor ('#209fff')
+MMI_light_blue = QColor ('#00cfff')
+MMI_cyan = QColor ('#55ffff')
+MMI_light_cyan = QColor ('#aaffff')
+MMI_yellow = QColor ('#fff000')
+MMI_light_orange = QColor ('#ffa800')
+MMI_orange = QColor('#ff7000')
+MMI_red = QColor ('#ff0000')
+MMI_dark_red = QColor ('#dd0000')
+MMI_brown = QColor('#880000')
+MMI_dark_brown = QColor('#440000')
 
 # Map legend templates according to standards :
 # https://github.com/inasafe/inasafe/issues/3653#issuecomment-275011957
