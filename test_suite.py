@@ -53,6 +53,14 @@ def test_package(package='safe'):
     _run_tests(test_suite, package)
 
 
+def test_environment():
+    """Test package with an environment variable."""
+    package = os.environ.get('TESTING_PACKAGE', 'safe')
+    test_loader = unittest.defaultTestLoader
+    test_suite = test_loader.discover(package)
+    _run_tests(test_suite, package)
+
+
 def test_manually():
     """Test manually a test class.
 
