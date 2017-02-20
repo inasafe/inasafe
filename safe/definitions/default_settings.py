@@ -7,6 +7,7 @@ inasafe_default_settings = {
     'visibleLayersOnlyFlag': True,
     'set_layer_from_title_flag': True,
     'setZoomToImpactFlag': True,
+    'set_show_only_impact_on_report': False,
     'setHideExposureFlag': False,
     'useSelectedFeaturesOnly': False,
     'useSentry': False,

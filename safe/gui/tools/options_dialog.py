@@ -87,6 +87,7 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             'visibleLayersOnlyFlag': self.cbxVisibleLayersOnly,
             'set_layer_from_title_flag': self.cbxSetLayerNameFromTitle,
             'setZoomToImpactFlag': self.cbxZoomToImpact,
+            'set_show_only_impact_on_report': self.cbx_show_only_impact,
             'setHideExposureFlag': self.cbxHideExposure,
             'useSelectedFeaturesOnly': self.cbxUseSelectedFeaturesOnly,
             'useSentry': self.cbxUseSentry,

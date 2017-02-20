@@ -756,6 +756,11 @@ class ImpactFunction(object):
         :rtype: (int, m.Message)
         """
         self._provenance_ready = False
+        # save layer reference before preparing.
+        # used to display it in maps
+        original_exposure = self.exposure
+        original_hazard = self.hazard
+        original_aggregation = self.aggregation
         try:
             if not self.exposure:
                 message = generate_input_error_message(
@@ -879,11 +884,21 @@ class ImpactFunction(object):
             # Everything was fine.
             self._is_ready = True
             self._provenance['exposure_layer'] = self.exposure.source()
+            # reference to original layer being used
+            self._provenance['exposure_layer_id'] = original_exposure.id()
             self._provenance['exposure_keywords'] = deepcopy(
                 self.exposure.keywords)
             self._provenance['hazard_layer'] = self.hazard.source()
+            # reference to original layer being used
+            self._provenance['hazard_layer_id'] = original_hazard.id()
             self._provenance['hazard_keywords'] = deepcopy(
                 self.hazard.keywords)
+            # reference to original layer being used
+            if original_aggregation:
+                self._provenance['aggregation_layer_id'] = (
+                    original_aggregation.id())
+            else:
+                self._provenance['aggregation_layer_id'] = None
             self._provenance['aggregation_layer'] = aggregation_source
             self._provenance['aggregation_keywords'] = aggregation_keywords
 
