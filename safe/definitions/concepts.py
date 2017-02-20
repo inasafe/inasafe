@@ -469,6 +469,33 @@ concepts = {
             }
         ],
     },
+    'thresholds': {
+        'key': 'thresholds',
+        'description': tr(
+            'A range that defined with minimum and maximum value. In InaSAFE '
+            'we exclude the minimum value but include the maximum value. In '
+            'mathematical expression: minimum value < x <= maximum value. It '
+            'is used for doing classification for continuous data.'),
+        'citations': [
+            {
+                'text': '',
+                'link': u''
+            }
+        ],
+    },
+    'value_maps': {
+        'key': 'value_maps',
+        'description': tr(
+            'A mapping of a set of values to another set of unique values. '
+            'Each unique value represents a particular class. It is used for '
+            'doing classification for classified (non-continuous) data'),
+        'citations': [
+            {
+                'text': '',
+                'link': u''
+            }
+        ],
+    },
     # Boilerplate for adding a new concept...
     #  '': {
     #    'description': tr(
