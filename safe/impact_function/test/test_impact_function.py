@@ -778,22 +778,18 @@ class TestImpactFunction(unittest.TestCase):
 
         self.assertDictEqual(expected_provenance, impact_function.provenance)
 
-    @unittest.expectedFailure
     def test_vector_post_minimum_needs_value_generation(self):
         """Test minimum needs postprocessors on vector exposure.
+
+        Test with vector exposure data with population_count_field exists.
 
         Minimum needs postprocessors is defined to only generate values when
         exposure contains population data.
         """
-
-        # # #
-        # Test with vector exposure data with population_count_field exists.
-        # # #
-
         hazard_layer = load_test_vector_layer(
-            'gisv4', 'hazard', 'classified_vector.geojson')
+            'gisv4', 'hazard', 'tsunami_vector.geojson')
         exposure_layer = load_test_vector_layer(
-            'gisv4', 'exposure', 'buildings.geojson')
+            'gisv4', 'exposure', 'population.geojson')
         aggregation_layer = load_test_vector_layer(
             'gisv4', 'aggregation', 'small_grid.geojson')
 
@@ -801,7 +797,8 @@ class TestImpactFunction(unittest.TestCase):
         impact_function.aggregation = aggregation_layer
         impact_function.exposure = exposure_layer
         impact_function.hazard = hazard_layer
-        impact_function.prepare()
+        status, message = impact_function.prepare()
+        self.assertEqual(PREPARE_SUCCESS, status, message)
         return_code, message = impact_function.run()
 
         self.assertEqual(return_code, ANALYSIS_SUCCESS, message)
@@ -809,15 +806,14 @@ class TestImpactFunction(unittest.TestCase):
         # minimum needs fields should exists in the results
         self._check_minimum_fields_exists(impact_function)
 
-        # TODO: should include demographic postprocessor value too
         expected_value = {
             u'population': 69,
             u'total': 9.0,
-            u'minimum_needs__rice': 193,
-            u'minimum_needs__clean_water': 4623,
-            u'minimum_needs__toilets': 3,
-            u'minimum_needs__drinking_water': 1207,
-            u'minimum_needs__family_kits': 13,
+            u'minimum_needs__rice': 239,
+            u'minimum_needs__clean_water': 5733,
+            u'minimum_needs__toilets': 4,
+            u'minimum_needs__drinking_water': 1497,
+            u'minimum_needs__family_kits': 17,
             u'male': 34,
             u'female': 34,
             u'youth': 17,
