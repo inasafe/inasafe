@@ -114,6 +114,9 @@ def run_scenario(scenario, use_debug=False):
         exposure_path = scenario['exposure']
     elif os.path.exists(standard_data_path('exposure', scenario['exposure'])):
         exposure_path = standard_data_path('exposure', scenario['exposure'])
+    elif os.path.exists(
+            standard_data_path(*(scenario['exposure'].split('/')))):
+        exposure_path = standard_data_path(*(scenario['exposure'].split('/')))
     else:
         raise IOError('No exposure file')
 
@@ -121,6 +124,8 @@ def run_scenario(scenario, use_debug=False):
         hazard_path = scenario['hazard']
     elif os.path.exists(standard_data_path('hazard', scenario['hazard'])):
         hazard_path = standard_data_path('hazard', scenario['hazard'])
+    elif os.path.exists(standard_data_path(*(scenario['hazard'].split('/')))):
+        hazard_path = standard_data_path(*(scenario['hazard'].split('/')))
     else:
         raise IOError('No hazard file')
 
@@ -133,6 +138,10 @@ def run_scenario(scenario, use_debug=False):
                 'aggregation', scenario['aggregation'])):
             aggregation_path = standard_data_path(
                 'aggregation', scenario['aggregation'])
+        elif os.path.exists(
+                standard_data_path(*(scenario['aggregation'].split('/')))):
+            aggregation_path = standard_data_path(
+                *(scenario['aggregation'].split('/')))
         else:
             raise IOError('No aggregation file')
 
