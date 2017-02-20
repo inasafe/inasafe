@@ -1,15 +1,16 @@
 # coding=utf-8
-"""Help text for Peta Jakarta Downloader."""
+"""Help text for PetaBencana Downloader."""
 
 from safe.utilities.i18n import tr
 from safe import messaging as m
 from safe.messaging import styles
+from safe.definitions.peta_bencana import production_api
 
 SUBSECTION_STYLE = styles.SUBSECTION_LEVEL_3_STYLE
 
 
-def peta_jakarta_help():
-    """Help message for OSM Downloader dialog.
+def peta_bencana_help():
+    """Help message for PetaBencana dialog.
 
     .. versionadded:: 3.2.1
 
@@ -35,7 +36,7 @@ def heading():
     :returns: A heading object.
     :rtype: safe.messaging.heading.Heading
     """
-    message = m.Heading(tr('Peta Jakarta downloader help'), **SUBSECTION_STYLE)
+    message = m.Heading(tr('PetaBencana downloader help'), **SUBSECTION_STYLE)
     return message
 
 
@@ -51,7 +52,7 @@ def content():
     :rtype: safe.messaging.message.Message
     """
     message = m.Message()
-    link = m.Link('https://petajakarta.org', 'PetaJakarta.org')
+    link = m.Link('https://petabencana.id', 'PetaBencana.id')
     body = m.Paragraph(tr(
         'This tool will fetch current flood data for Jakarta from '), link)
     tips = m.BulletedList()
@@ -81,9 +82,9 @@ def content():
         'This tool requires a working internet connection and fetching '
         'data will consume your bandwidth.'))
     tips.add(m.Link(
-        'https://petajakarta.org/banjir/en/data/',
+        production_api['help_url'],
         text=tr(
-            'Downloaded data is copyright the PetaJakarta contributors'
+            'Downloaded data is copyright the PetaBencana contributors'
             ' (click for more info).')
     ))
     message.add(body)

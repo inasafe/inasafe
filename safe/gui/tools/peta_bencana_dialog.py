@@ -17,8 +17,9 @@ import time
 
 from shutil import copy
 from PyQt4 import QtCore
-from PyQt4.QtCore import QVariant
+from PyQt4.QtCore import QVariant, Qt
 from PyQt4.QtNetwork import QNetworkReply
+
 # noinspection PyUnresolvedReferences
 # pylint: disable=unused-import
 from qgis.core import (
@@ -30,7 +31,8 @@ from qgis.core import (
     QgsVectorFileWriter,
     QgsField,
     QgsExpression,
-    QgsFeature)
+    QgsFeature,
+    QgsNetworkAccessManager)
 # pylint: enable=unused-import
 
 # noinspection PyPackageRequirements
@@ -39,24 +41,30 @@ from PyQt4 import QtGui
 from PyQt4.QtCore import QSettings, pyqtSignature, QRegExp, pyqtSlot
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import (
-    QDialog, QProgressDialog, QMessageBox, QFileDialog, QRegExpValidator)
+    QDialog,
+    QProgressDialog,
+    QMessageBox,
+    QFileDialog,
+    QRegExpValidator,
+    QButtonGroup)
 
 from safe.common.exceptions import (
     CanceledImportDialogError,
-    DownloadError,
     FileMissingError)
+from safe.definitions.peta_bencana import development_api, production_api
+from safe.gui.tools.help.peta_bencana_help import peta_bencana_help
 from safe.utilities.file_downloader import FileDownloader
 from safe.utilities.resources import (
     html_footer, html_header, get_ui_class, resources_path)
 from safe.utilities.qgis_utilities import (
     display_warning_message_box,
     display_warning_message_bar)
-from safe.gui.tools.help.peta_jakarta_help import peta_jakarta_help
+from safe.utilities.settings import setting
 
 
 LOGGER = logging.getLogger('InaSAFE')
 
-FORM_CLASS = get_ui_class('peta_jakarta_dialog_base.ui')
+FORM_CLASS = get_ui_class('peta_bencana_dialog_base.ui')
 
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
@@ -65,8 +73,8 @@ __copyright__ = ('Copyright 2015, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 
-class PetaJakartaDialog(QDialog, FORM_CLASS):
-    """Downloader for petajakarta data.
+class PetaBencanaDialog(QDialog, FORM_CLASS):
+    """Downloader for PetaBencana data.
 
     .. versionadded: 3.3
     """
@@ -86,14 +94,34 @@ class PetaJakartaDialog(QDialog, FORM_CLASS):
         self.parent = parent
         self.setupUi(self)
 
-        self.setWindowTitle(self.tr('PetaJakarta Downloader'))
+        title = self.tr('PetaBencana Downloader')
+        self.setWindowTitle(title)
 
         self.iface = iface
+
+        self.source = None
+
+        self.radio_button_group = QButtonGroup()
+        self.radio_button_group.addButton(self.radio_button_production)
+        self.radio_button_group.addButton(self.radio_button_development)
+
+        self.radio_button_group.setExclusive(True)
+        self.radio_button_production.setChecked(True)
+        self.populate_combo_box()
+
+        developer_mode = setting('developer_mode', False, bool)
+        if not developer_mode:
+            self.radio_button_widget.hide()
+            self.source_label.hide()
+            self.output_group.adjustSize()
+
+        # signals
+        self.radio_button_production.clicked.connect(self.populate_combo_box)
+        self.radio_button_development.clicked.connect(self.populate_combo_box)
 
         # creating progress dialog for download
         self.progress_dialog = QProgressDialog(self)
         self.progress_dialog.setAutoClose(False)
-        title = self.tr('PetaJakarta Downloader')
         self.progress_dialog.setWindowTitle(title)
 
         # Set up things for context help
@@ -146,7 +174,7 @@ class PetaJakartaDialog(QDialog, FORM_CLASS):
 
         string = header
 
-        message = peta_jakarta_help()
+        message = peta_bencana_help()
         string += message.to_html()
         string += footer
 
@@ -183,7 +211,7 @@ class PetaJakartaDialog(QDialog, FORM_CLASS):
             self, self.tr('Select download directory')))
 
     def accept(self):
-        """Do PetaJakarta download and display it in QGIS.
+        """Do PetaBencana download and display it in QGIS.
 
         .. versionadded: 3.3
         """
@@ -196,9 +224,7 @@ class PetaJakartaDialog(QDialog, FORM_CLASS):
 
         QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
 
-        source = (
-            'https://data.petabencana.id/floods'
-            '?city=jbd&geoformat=geojson&format=json&minimum_state=1')
+        source = self.define_url()
         # save the file as json first
         name = 'jakarta_flood.json'
         output_directory = self.output_directory.text()
@@ -243,11 +269,24 @@ class PetaJakartaDialog(QDialog, FORM_CLASS):
 
         self.copy_keywords(output_base_file_path)
         layer = self.add_flooded_field(output_base_file_path)
-        # add the layer to the map
-        registry = QgsMapLayerRegistry.instance()
-        registry.addMapLayer(layer)
-        self.disable_busy_cursor()
-        self.done(QDialog.Accepted)
+
+        # check if the layer has feature or not
+        if layer.featureCount() <= 0:
+            city = self.city_combo_box.currentText()
+            message = self.tr(
+                'There are no floods data available on {city} '
+                'at this time.'.format(city=city))
+            display_warning_message_box(
+                self,
+                self.tr('No data'),
+                message)
+            self.disable_busy_cursor()
+        else:
+            # add the layer to the map
+            registry = QgsMapLayerRegistry.instance()
+            registry.addMapLayer(layer)
+            self.disable_busy_cursor()
+            self.done(QDialog.Accepted)
 
     def add_flooded_field(self, shapefile_path):
         """Create the layer from the local shp adding the flooded field.
@@ -311,7 +350,7 @@ class PetaJakartaDialog(QDialog, FORM_CLASS):
             field added.
         :type shapefile_path: basestring
         """
-        source_xml_path = resources_path('petajakarta', 'flood-keywords.xml')
+        source_xml_path = resources_path('petabencana', 'flood-keywords.xml')
         output_xml_path = shapefile_path.replace('shp', 'xml')
         LOGGER.info('Copying xml to: %s' % output_xml_path)
 
@@ -337,7 +376,7 @@ class PetaJakartaDialog(QDialog, FORM_CLASS):
             added.
         :type shapefile_path: basestring
         """
-        source_qml_path = resources_path('petajakarta', 'flood-style.qml')
+        source_qml_path = resources_path('petabencana', 'flood-style.qml')
         output_qml_path = shapefile_path.replace('shp', 'qml')
         LOGGER.info('Copying qml to: %s' % output_qml_path)
         copy(source_qml_path, output_qml_path)
@@ -439,7 +478,7 @@ class PetaJakartaDialog(QDialog, FORM_CLASS):
             file_path_test = file_path
 
         if os.path.isfile(file_path_test):
-            return PetaJakartaDialog.get_unique_file_path_suffix(
+            return PetaBencanaDialog.get_unique_file_path_suffix(
                 file_path, separator, i + 1)
         else:
             return i
@@ -527,7 +566,7 @@ class PetaJakartaDialog(QDialog, FORM_CLASS):
         """
         # add our own logic here...
 
-        super(PetaJakartaDialog, self).reject()
+        super(PetaBencanaDialog, self).reject()
 
     def download(self, url, output_path):
         """Download file from API url and write to output path.
@@ -554,3 +593,52 @@ class PetaJakartaDialog(QDialog, FORM_CLASS):
                 self,
                 self.tr('Download error'),
                 self.tr(message))
+
+    # The function below might be usefull for future usage.
+
+    # def get_available_area(self):
+    #     """Function to automatically get the available area on API.
+    #        *still cannot get string data from QByteArray*
+    #     """
+    #     available_area = []
+    #     network_manager = QgsNetworkAccessManager.instance()
+    #     api_url = QUrl('https://data.petabencana.id/cities')
+    #     api_request = QNetworkRequest(api_url)
+    #     api_response = network_manager.get(api_request)
+    #     data = api_response.readAll()
+    #     json_response = QScriptEngine().evaluate(data)
+    #     geometries = json_response.property('output').property('geometries')
+    #     iterator = QScriptValueIterator(geometries)
+    #     while iterator.hasNext():
+    #         iterator.next()
+    #         geometry = iterator.value()
+    #         geometry_code = (
+    #             geometry.property('properties').property('code').toString())
+    #         available_area.append(geometry_code)
+
+    def populate_combo_box(self):
+        """Populate combobox for selecting city."""
+        if self.radio_button_production.isChecked():
+            self.source = production_api['url']
+            available_data = production_api['available_data']
+
+        else:
+            self.source = development_api['url']
+            available_data = development_api['available_data']
+
+        self.city_combo_box.clear()
+        for index, data in enumerate(available_data):
+            self.city_combo_box.addItem(data['name'])
+            self.city_combo_box.setItemData(
+                index, data['code'], Qt.UserRole)
+
+    def define_url(self):
+        """Define API url based on which source is selected.
+
+        :return: Valid url of selected source.
+        :rtype: str
+        """
+        current_index = self.city_combo_box.currentIndex()
+        city_code = self.city_combo_box.itemData(current_index, Qt.UserRole)
+        source = (self.source).format(city_code=city_code)
+        return source

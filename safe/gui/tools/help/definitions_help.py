@@ -17,7 +17,7 @@ from safe.gui.tools.help.needs_manager_help import content as \
     needs_manager_help
 from safe.gui.tools.help.options_help import content as options_help
 from safe.gui.tools.help.osm_downloader_help import content as osm_help
-from safe.gui.tools.help.peta_jakarta_help import content as petajakarta_help
+from safe.gui.tools.help.peta_bencana_help import content as petabencana_help
 from safe.gui.tools.help.shakemap_converter_help \
     import content as shakemap_help
 from safe.gui.tools.help.multi_buffer_help import content as multi_buffer_help
@@ -143,9 +143,9 @@ def content():
     message.add(header)
     message.add(osm_help())
 
-    header = m.Heading(tr('The PetaJakarta Downloader'), **SUBSECTION_STYLE)
+    header = m.Heading(tr('The PetaBencana Downloader'), **SUBSECTION_STYLE)
     message.add(header)
-    message.add(petajakarta_help())
+    message.add(petabencana_help())
 
     header = m.Heading(tr('The Shakemap Converter'), **SUBSECTION_STYLE)
     message.add(header)
