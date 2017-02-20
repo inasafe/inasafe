@@ -22,18 +22,18 @@ from safe.definitions.styles import (
     red,
     dark_red,
     very_dark_red,
-    MMI_dark_brown,
-    MMI_brown,
-    MMI_dark_red,
-    MMI_red,
-    MMI_orange,
-    MMI_light_orange,
-    MMI_yellow,
-    MMI_light_cyan,
-    MMI_cyan,
-    MMI_light_blue,
-    MMI_blue,
-    MMI_white)
+    MMI_12,
+    MMI_11,
+    MMI_10,
+    MMI_9,
+    MMI_8,
+    MMI_7,
+    MMI_6,
+    MMI_5,
+    MMI_4,
+    MMI_3,
+    MMI_2,
+    MMI_1)
 from safe.definitions.exposure import (
     exposure_land_cover,
     exposure_place,
@@ -136,8 +136,8 @@ generic_hazard_classes = {
     ]
 }
 # do not use these old classes until we can trace the origin
-earthquake_mmi_old_hazard_classes = {
-    'key': 'earthquake_mmi_old_hazard_classes',
+earthquake_mmi_hazard_classes = {
+    'key': 'earthquake_mmi_hazard_classes',
     'name': tr('Earthquake MMI classes'),
     'description': tr(
         'Three classes are supported for earthquake vector hazard data: '
@@ -162,8 +162,8 @@ earthquake_mmi_old_hazard_classes = {
             # 'displacement_rate': 0.0,
             # Not used because EQ algs take care of this
             # 'fatality_rate': 0.0,
-            'numeric_default_min': 8,
-            'numeric_default_max': 9999999999,
+            'numeric_default_min': 9,
+            'numeric_default_max': 10,
             'citations': [
                 {
                     'text': None,
@@ -184,7 +184,7 @@ earthquake_mmi_old_hazard_classes = {
             # Not used because EQ algs take care of this
             # 'fatality_rate': 0.0,
             'numeric_default_min': 7,
-            'numeric_default_max': (8 - small_number),
+            'numeric_default_max': 8,
             'citations': [
                 {
                     'text': None,
@@ -204,8 +204,8 @@ earthquake_mmi_old_hazard_classes = {
             # 'displacement_rate': 0.0,
             # Not used because EQ algs take care of this
             # 'fatality_rate': 0.0,
-            'numeric_default_min': 6,
-            'numeric_default_max': (7 - small_number),
+            'numeric_default_min': 5,
+            'numeric_default_max': 6,
             'citations': [
                 {
                     'text': None,
@@ -215,16 +215,14 @@ earthquake_mmi_old_hazard_classes = {
         }
     ],
     'exposures': [
-        exposure_land_cover,
-        exposure_place,
         exposure_population,
         exposure_road,
         exposure_structure
     ]
 }
 
-earthquake_mmi_hazard_scale = {
-    'key': 'earthquake_mmi_hazard_scale',
+earthquake_mmi_scale = {
+    'key': 'earthquake_mmi_scale',
     'name': tr('Earthquake MMI scale'),
     'description': tr(
         'This scale, composed of increasing levels of intensity that range '
@@ -243,7 +241,7 @@ earthquake_mmi_hazard_scale = {
         {
             'key': 'X',
             'value': 10,
-            'color': MMI_dark_red,
+            'color': MMI_10,
             'name': tr('X'),
             'affected': True,
             'description':
@@ -267,7 +265,7 @@ earthquake_mmi_hazard_scale = {
         {
             'key': 'IX',
             'value': 9,
-            'color': MMI_red,
+            'color': MMI_9,
             'name': tr('IX'),
             'affected': True,
             'description':
@@ -292,7 +290,7 @@ earthquake_mmi_hazard_scale = {
         {
             'key': 'VIII',
             'value': 8,
-            'color': MMI_orange,
+            'color': MMI_8,
             'name': tr('VIII'),
             'affected': True,
             'description':
@@ -318,7 +316,7 @@ earthquake_mmi_hazard_scale = {
         {
             'key': 'VII',
             'value': 7,
-            'color': MMI_light_orange,
+            'color': MMI_7,
             'name': tr('VII'),
             'affected': True,
             'description':
@@ -343,7 +341,7 @@ earthquake_mmi_hazard_scale = {
         {
             'key': 'VI',
             'value': 6,
-            'color': MMI_yellow,
+            'color': MMI_6,
             'name': tr('VI'),
             'affected': True,
             'description':
@@ -366,7 +364,7 @@ earthquake_mmi_hazard_scale = {
         {
             'key': 'V',
             'value': 5,
-            'color': MMI_light_cyan,
+            'color': MMI_5,
             'name': tr('V'),
             'affected': True,
             'description':
@@ -390,7 +388,7 @@ earthquake_mmi_hazard_scale = {
         {
             'key': 'IV',
             'value': 4,
-            'color': MMI_cyan,
+            'color': MMI_4,
             'name': tr('IV'),
             'affected': True,
             'description':
@@ -416,7 +414,7 @@ earthquake_mmi_hazard_scale = {
         {
             'key': 'III',
             'value': 3,
-            'color': MMI_light_blue,
+            'color': MMI_3,
             'name': tr('III'),
             'affected': True,
             'description':
@@ -442,7 +440,7 @@ earthquake_mmi_hazard_scale = {
         {
             'key': 'II',
             'value': 2,
-            'color': MMI_blue,
+            'color': MMI_2,
             'name': tr('II'),
             'affected': True,
             'description':
@@ -465,7 +463,7 @@ earthquake_mmi_hazard_scale = {
         {
             'key': 'I',
             'value': 1,
-            'color': MMI_white,
+            'color': MMI_1,
             'name': tr('I'),
             'affected': True,
             'description':
@@ -487,8 +485,6 @@ earthquake_mmi_hazard_scale = {
         }
     ],
     'exposures': [
-        exposure_land_cover,
-        exposure_place,
         exposure_population,
         exposure_road,
         exposure_structure
@@ -1870,6 +1866,7 @@ hazard_classification = {
         flood_hazard_classes,
         flood_petabencana_hazard_classes,
         earthquake_mmi_hazard_classes,
+        earthquake_mmi_scale,
         tsunami_hazard_classes,
         tsunami_hazard_population_classes,
         tsunami_hazard_classes_ITB,
