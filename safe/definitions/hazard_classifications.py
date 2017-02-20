@@ -250,8 +250,7 @@ earthquake_mmi_hazard_scale = {
                    'and frame structures destroyed with foundations. '
                    'Rails bent.'),
             'string_defaults': ['Extreme'],
-            # Not used because EQ algs take care of this
-            # 'displacement_rate': 0.0,
+            'displacement_rate': 1.0,
             # Not used because EQ algs take care of this
             # 'fatality_rate': 0.0,
             'numeric_default_min': 9.5,
@@ -275,8 +274,7 @@ earthquake_mmi_hazard_scale = {
                    'Damage great in substantial buildings, with partial '
                    'collapse. Buildings shifted off foundations.'),
             'string_defaults': ['Violent'],
-            # Not used because EQ algs take care of this
-            # 'displacement_rate': 0.0,
+            'displacement_rate': 1.0,
             # Not used because EQ algs take care of this
             # 'fatality_rate': 0.0,
             'numeric_default_min': 8.5,
@@ -301,8 +299,7 @@ earthquake_mmi_hazard_scale = {
                    'structures. Fall of chimneys, factory stacks, columns, '
                    'monuments, walls. Heavy furniture overturned.'),
             'string_defaults': ['Severe'],
-            # Not used because EQ algs take care of this
-            # 'displacement_rate': 0.0,
+            'displacement_rate': 1.0,
             # Not used because EQ algs take care of this
             # 'fatality_rate': 0.0,
             'numeric_default_min': 7.5,
@@ -326,8 +323,7 @@ earthquake_mmi_hazard_scale = {
                    'structures; considerable damage in poorly built or badly '
                    'designed structures; some chimneys broken.'),
             'string_defaults': ['Very strong'],
-            # Not used because EQ algs take care of this
-            # 'displacement_rate': 0.0,
+            'displacement_rate': 1.0,
             # Not used because EQ algs take care of this
             # 'fatality_rate': 0.0,
             'numeric_default_min': 6.5,
@@ -349,8 +345,7 @@ earthquake_mmi_hazard_scale = {
                 tr('Felt by all, many frightened. Some heavy furniture moved; '
                    'a few instances of fallen plaster. Damage slight.'),
             'string_defaults': ['Strong'],
-            # Not used because EQ algs take care of this
-            # 'displacement_rate': 0.0,
+            'displacement_rate': 1.0,
             # Not used because EQ algs take care of this
             # 'fatality_rate': 0.0,
             'numeric_default_min': 5.5,
@@ -373,8 +368,7 @@ earthquake_mmi_hazard_scale = {
                    'windows broken. Unstable objects overturned. Pendulum '
                    'clocks may stop.'),
             'string_defaults': ['Moderate'],
-            # Not used because EQ algs take care of this
-            # 'displacement_rate': 0.0,
+            'displacement_rate': 0.0,
             # Not used because EQ algs take care of this
             # 'fatality_rate': 0.0,
             'numeric_default_min': 4.5,
@@ -398,8 +392,7 @@ earthquake_mmi_hazard_scale = {
                    'walls make cracking sound. Sensation like heavy truck '
                    'striking building. Standing motor cars rocked noticeably.'),
             'string_defaults': ['Light'],
-            # Not used because EQ algs take care of this
-            # 'displacement_rate': 0.0,
+            'displacement_rate': 0.0,
             # Not used because EQ algs take care of this
             # 'fatality_rate': 0.0,
             'numeric_default_min': 3.5,
@@ -424,8 +417,7 @@ earthquake_mmi_hazard_scale = {
                    'Vibrations similar to the passing of a truck. '
                    'Duration estimated.'),
             'string_defaults': ['Weak'],
-            # Not used because EQ algs take care of this
-            # 'displacement_rate': 0.0,
+            'displacement_rate': 0.0,
             # Not used because EQ algs take care of this
             # 'fatality_rate': 0.0,
             'numeric_default_min': 2.5,
@@ -447,8 +439,7 @@ earthquake_mmi_hazard_scale = {
                 tr('Felt only by a few persons at rest,especially on upper '
                    'floors of buildings.'),
             'string_defaults': ['Weak'],
-            # Not used because EQ algs take care of this
-            # 'displacement_rate': 0.0,
+            'displacement_rate': 0.0,
             # Not used because EQ algs take care of this
             # 'fatality_rate': 0.0,
             'numeric_default_min': 1.5,
@@ -470,8 +461,7 @@ earthquake_mmi_hazard_scale = {
                 tr('Not felt except by a very few under especially favorable '
                    'conditions.'),
             'string_defaults': ['Not felt'],
-            # Not used because EQ algs take care of this
-            # 'displacement_rate': 0.0,
+            'displacement_rate': 0.0,
             # Not used because EQ algs take care of this
             # 'fatality_rate': 0.0,
             'numeric_default_min': 0.5,
