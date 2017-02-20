@@ -4,6 +4,7 @@ from safe.definitions.hazard_classifications import (
     generic_hazard_classes,
     volcano_hazard_classes,
     earthquake_mmi_hazard_classes,
+    earthquake_mmi_scale,
     flood_hazard_classes,
     flood_petabencana_hazard_classes,
     tsunami_hazard_classes,
@@ -152,7 +153,8 @@ hazard_earthquake = {
         'polygon',
         'raster'
     ],
-    'classifications': [generic_hazard_classes, earthquake_mmi_hazard_classes],
+    'classifications': [generic_hazard_classes, earthquake_mmi_hazard_classes,
+                        earthquake_mmi_scale],
     'compulsory_fields': [hazard_value_field],
     'fields': hazard_fields,
     'extra_fields': [],

@@ -21,7 +21,19 @@ from safe.definitions.styles import (
     orange,
     red,
     dark_red,
-    very_dark_red)
+    very_dark_red,
+    MMI_12,
+    MMI_11,
+    MMI_10,
+    MMI_9,
+    MMI_8,
+    MMI_7,
+    MMI_6,
+    MMI_5,
+    MMI_4,
+    MMI_3,
+    MMI_2,
+    MMI_1)
 from safe.definitions.exposure import (
     exposure_land_cover,
     exposure_place,
@@ -123,7 +135,6 @@ generic_hazard_classes = {
         exposure_structure
     ]
 }
-
 earthquake_mmi_hazard_classes = {
     'key': 'earthquake_mmi_hazard_classes',
     'name': tr('Earthquake MMI classes'),
@@ -150,8 +161,8 @@ earthquake_mmi_hazard_classes = {
             # 'displacement_rate': 0.0,
             # Not used because EQ algs take care of this
             # 'fatality_rate': 0.0,
-            'numeric_default_min': 8,
-            'numeric_default_max': 9999999999,
+            'numeric_default_min': 9,
+            'numeric_default_max': 10,
             'citations': [
                 {
                     'text': None,
@@ -172,7 +183,7 @@ earthquake_mmi_hazard_classes = {
             # Not used because EQ algs take care of this
             # 'fatality_rate': 0.0,
             'numeric_default_min': 7,
-            'numeric_default_max': (8 - small_number),
+            'numeric_default_max': 8,
             'citations': [
                 {
                     'text': None,
@@ -192,8 +203,8 @@ earthquake_mmi_hazard_classes = {
             # 'displacement_rate': 0.0,
             # Not used because EQ algs take care of this
             # 'fatality_rate': 0.0,
-            'numeric_default_min': 6,
-            'numeric_default_max': (7 - small_number),
+            'numeric_default_min': 5,
+            'numeric_default_max': 6,
             'citations': [
                 {
                     'text': None,
@@ -203,8 +214,276 @@ earthquake_mmi_hazard_classes = {
         }
     ],
     'exposures': [
-        exposure_land_cover,
-        exposure_place,
+        exposure_population,
+        exposure_road,
+        exposure_structure
+    ]
+}
+
+earthquake_mmi_scale = {
+    'key': 'earthquake_mmi_scale',
+    'name': tr('Earthquake MMI scale'),
+    'description': tr(
+        'This scale, composed of increasing levels of intensity that range '
+        'from imperceptible shaking to catastrophic destruction, is '
+        'designated by Roman numerals. It does not have a mathematical '
+        'basis; instead it is an arbitrary ranking based on observed '
+        'effects.'),
+    'type': hazard_classification_type,
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    'classes': [
+        {
+            'key': 'X',
+            'value': 10,
+            'color': MMI_10,
+            'name': tr('X'),
+            'affected': True,
+            'description':
+                tr('Some well-built wooden structures destroyed; most masonry '
+                   'and frame structures destroyed with foundations. '
+                   'Rails bent.'),
+            'string_defaults': ['Extreme'],
+            'displacement_rate': 1.0,
+            # Not used because EQ algs take care of this
+            # 'fatality_rate': 0.0,
+            'numeric_default_min': 9.5,
+            'numeric_default_max': 10.5,
+            'citations': [
+                {
+                    'text': None,
+                    'link': u'https://earthquake.usgs.gov/learn/topics/'
+                            u'mercalli.php'
+                }
+            ]
+        },
+        {
+            'key': 'IX',
+            'value': 9,
+            'color': MMI_9,
+            'name': tr('IX'),
+            'affected': True,
+            'description':
+                tr('Damage considerable in specially designed structures; '
+                   'well-designed frame structures thrown out of plumb. '
+                   'Damage great in substantial buildings, with partial '
+                   'collapse. Buildings shifted off foundations.'),
+            'string_defaults': ['Violent'],
+            'displacement_rate': 1.0,
+            # Not used because EQ algs take care of this
+            # 'fatality_rate': 0.0,
+            'numeric_default_min': 8.5,
+            'numeric_default_max': 9.5,
+            'citations': [
+                {
+                    'text': None,
+                    'link': u'https://earthquake.usgs.gov/learn/topics/'
+                            u'mercalli.php'
+                }
+            ]
+        },
+        {
+            'key': 'VIII',
+            'value': 8,
+            'color': MMI_8,
+            'name': tr('VIII'),
+            'affected': True,
+            'description':
+                tr('Damage slight in specially designed structures; '
+                   'considerable damage in ordinary substantial buildings '
+                   'with partial collapse. Damage great in poorly built '
+                   'structures. Fall of chimneys, factory stacks, columns, '
+                   'monuments, walls. Heavy furniture overturned.'),
+            'string_defaults': ['Severe'],
+            'displacement_rate': 1.0,
+            # Not used because EQ algs take care of this
+            # 'fatality_rate': 0.0,
+            'numeric_default_min': 7.5,
+            'numeric_default_max': 8.5,
+            'citations': [
+                {
+                    'text': None,
+                    'link': u'https://earthquake.usgs.gov/learn/topics/'
+                            u'mercalli.php'
+                }
+            ]
+        },
+        {
+            'key': 'VII',
+            'value': 7,
+            'color': MMI_7,
+            'name': tr('VII'),
+            'affected': True,
+            'description':
+                tr('Damage negligible in buildings of good design and '
+                   'construction; slight to moderate in well-built ordinary '
+                   'structures; considerable damage in poorly built or badly '
+                   'designed structures; some chimneys broken.'),
+            'string_defaults': ['Very strong'],
+            'displacement_rate': 1.0,
+            # Not used because EQ algs take care of this
+            # 'fatality_rate': 0.0,
+            'numeric_default_min': 6.5,
+            'numeric_default_max': 7.5,
+            'citations': [
+                {
+                    'text': None,
+                    'link': u'https://earthquake.usgs.gov/learn/topics/'
+                            u'mercalli.php'
+                }
+            ]
+        },
+        {
+            'key': 'VI',
+            'value': 6,
+            'color': MMI_6,
+            'name': tr('VI'),
+            'affected': True,
+            'description':
+                tr('Felt by all, many frightened. Some heavy furniture moved; '
+                   'a few instances of fallen plaster. Damage slight.'),
+            'string_defaults': ['Strong'],
+            'displacement_rate': 1.0,
+            # Not used because EQ algs take care of this
+            # 'fatality_rate': 0.0,
+            'numeric_default_min': 5.5,
+            'numeric_default_max': 6.5,
+            'citations': [
+                {
+                    'text': None,
+                    'link': u'https://earthquake.usgs.gov/learn/topics/'
+                            u'mercalli.php'
+                }
+            ]
+        },
+        {
+            'key': 'V',
+            'value': 5,
+            'color': MMI_5,
+            'name': tr('V'),
+            'affected': True,
+            'description':
+                tr('Felt by nearly everyone; many awakened. Some dishes, '
+                   'windows broken. Unstable objects overturned. Pendulum '
+                   'clocks may stop.'),
+            'string_defaults': ['Moderate'],
+            'displacement_rate': 0.0,
+            # Not used because EQ algs take care of this
+            # 'fatality_rate': 0.0,
+            'numeric_default_min': 4.5,
+            'numeric_default_max': 5.5,
+            'citations': [
+                {
+                    'text': None,
+                    'link': u'https://earthquake.usgs.gov/learn/topics/'
+                            u'mercalli.php'
+                }
+            ]
+        },
+        {
+            'key': 'IV',
+            'value': 4,
+            'color': MMI_4,
+            'name': tr('IV'),
+            'affected': True,
+            'description':
+                tr('Felt indoors by many, outdoors by few during the day. '
+                   'At night, some awakened. Dishes, windows, doors '
+                   'disturbed; walls make cracking sound. Sensation like '
+                   'heavy truck striking building. Standing motor cars rocked '
+                   'noticeably.'),
+            'string_defaults': ['Light'],
+            'displacement_rate': 0.0,
+            # Not used because EQ algs take care of this
+            # 'fatality_rate': 0.0,
+            'numeric_default_min': 3.5,
+            'numeric_default_max': 4.5,
+            'citations': [
+                {
+                    'text': None,
+                    'link': u'https://earthquake.usgs.gov/learn/topics/'
+                            u'mercalli.php'
+                }
+            ]
+        },
+        {
+            'key': 'III',
+            'value': 3,
+            'color': MMI_3,
+            'name': tr('III'),
+            'affected': True,
+            'description':
+                tr('Felt quite noticeably by persons indoors, especially on '
+                   'upper floors of buildings. Many people do not recognize  '
+                   'it as an earthquake. Standing motor cars may rock '
+                   'slightly. Vibrations similar to the passing of a truck. '
+                   'Duration estimated.'),
+            'string_defaults': ['Weak'],
+            'displacement_rate': 0.0,
+            # Not used because EQ algs take care of this
+            # 'fatality_rate': 0.0,
+            'numeric_default_min': 2.5,
+            'numeric_default_max': 3.5,
+            'citations': [
+                {
+                    'text': None,
+                    'link': u'https://earthquake.usgs.gov/learn/topics/'
+                            u'mercalli.php'
+                }
+            ]
+        },
+        {
+            'key': 'II',
+            'value': 2,
+            'color': MMI_2,
+            'name': tr('II'),
+            'affected': True,
+            'description':
+                tr('Felt only by a few persons at rest,especially on upper '
+                   'floors of buildings.'),
+            'string_defaults': ['Weak'],
+            'displacement_rate': 0.0,
+            # Not used because EQ algs take care of this
+            # 'fatality_rate': 0.0,
+            'numeric_default_min': 1.5,
+            'numeric_default_max': 2.5,
+            'citations': [
+                {
+                    'text': None,
+                    'link': u'https://earthquake.usgs.gov/learn/topics/'
+                            u'mercalli.php'
+                }
+            ]
+        },
+        {
+            'key': 'I',
+            'value': 1,
+            'color': MMI_1,
+            'name': tr('I'),
+            'affected': True,
+            'description':
+                tr('Not felt except by a very few under especially favorable '
+                   'conditions.'),
+            'string_defaults': ['Not felt'],
+            'displacement_rate': 0.0,
+            # Not used because EQ algs take care of this
+            # 'fatality_rate': 0.0,
+            'numeric_default_min': 0.5,
+            'numeric_default_max': 1.5,
+            'citations': [
+                {
+                    'text': None,
+                    'link': u'https://earthquake.usgs.gov/learn/topics/'
+                            u'mercalli.php'
+                }
+            ]
+        }
+    ],
+    'exposures': [
         exposure_population,
         exposure_road,
         exposure_structure
@@ -1586,6 +1865,7 @@ hazard_classification = {
         flood_hazard_classes,
         flood_petabencana_hazard_classes,
         earthquake_mmi_hazard_classes,
+        earthquake_mmi_scale,
         tsunami_hazard_classes,
         tsunami_hazard_population_classes,
         tsunami_hazard_classes_ITB,
