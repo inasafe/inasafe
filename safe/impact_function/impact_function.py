@@ -121,12 +121,14 @@ from safe.impact_function.style import (
     generate_classified_legend,
     hazard_class_style,
     simple_polygon_without_brush,
+    displaced_people_style,
 )
 from safe.utilities.gis import is_vector_layer, is_raster_layer
 from safe.utilities.i18n import tr
 from safe.utilities.unicode import get_unicode
 from safe.utilities.keyword_io import KeywordIO
-from safe.utilities.metadata import active_thresholds_value_maps
+from safe.utilities.metadata import (
+    active_thresholds_value_maps, active_classification)
 from safe.utilities.utilities import (
     replace_accentuated_characters, get_error_message)
 from safe.utilities.profiling import (
@@ -1331,6 +1333,13 @@ class ImpactFunction(object):
         """Perform a damage curve analysis with EQ raster on population raster.
         """
 
+        classification_key = active_classification(
+            self.hazard.keywords, 'population')
+        thresholds = active_thresholds_value_maps(
+            self.hazard.keywords, 'population')
+        self.hazard.keywords['classification'] = classification_key
+        self.hazard.keywords['thresholds'] = thresholds
+
         fatality_rates = {}
         for model in EARTHQUAKE_FUNCTIONS:
             fatality_rates[model['key']] = model['fatality_rates']
@@ -1826,6 +1835,9 @@ class ImpactFunction(object):
 
                     if layer.keywords['inasafe_fields'].get(hazard_class):
                         hazard_class_style(layer, classes, display_not_exposed)
+
+            else:
+                displaced_people_style(layer)
 
         # Let's style the aggregation and analysis layer.
         simple_polygon_without_brush(self.aggregation_impacted)
