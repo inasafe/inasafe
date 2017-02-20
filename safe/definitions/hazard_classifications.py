@@ -657,7 +657,7 @@ flood_petabencana_hazard_classes = {
             'name': tr('High'),
             'affected': True,
             'description': tr('Water is above waist height.'),
-            'displacement_rate': 0.01,
+            'displacement_rate': 1.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 1.5,
             'numeric_default_max': 9999999999,
@@ -677,7 +677,7 @@ flood_petabencana_hazard_classes = {
             'affected': True,
             'description': tr(
                 'Water is above knee height, below waist height.'),
-            'displacement_rate': 0.0,
+            'displacement_rate': 0.03,
             'fatality_rate': 0.0,
             'numeric_default_min': 0.7,
             'numeric_default_max': 1.5 - small_number,
