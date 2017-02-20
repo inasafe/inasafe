@@ -103,6 +103,11 @@ union_steps = {
 Raster package
 """
 
+earthquake_displaced = {
+    'step_name': tr('People Displaced'),
+    'output_layer_name': 'people_displaced'
+}
+
 align_steps = {
     'step_name': tr('Align'),
     'output_layer_name': '%s_aligned',

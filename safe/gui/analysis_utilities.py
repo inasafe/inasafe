@@ -1,5 +1,7 @@
 # coding=utf-8
-"""Analysis Utilities"""
+
+"""Analysis Utilities."""
+
 import os
 from collections import OrderedDict
 from PyQt4.QtCore import QDir, Qt
@@ -13,6 +15,7 @@ from safe.definitions.reports.components import (
 from safe.impact_function.style import hazard_class_style
 from safe.report.report_metadata import ReportMetadata
 from safe.report.impact_report import ImpactReport
+from safe.utilities.gis import is_raster_layer
 from safe.utilities.settings import setting
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -127,6 +130,8 @@ def add_impact_layers_to_canvas(impact_function, iface):
         if layer.id() == impact_function.impact.id():
             layer_node.setVisible(Qt.Checked)
             iface.setActiveLayer(layer)
+        elif is_raster_layer(layer):
+            layer_node.setVisible(Qt.Checked)
         else:
             layer_node.setVisible(Qt.Unchecked)
 
