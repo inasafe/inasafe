@@ -142,6 +142,14 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         self.restore_defaults.clicked.connect(
             self.restore_defaults_ratio)
 
+        # TODO: Hide this until behaviour is defined
+        # hide template warning toggle
+        self.template_warning_checkbox.hide()
+
+        # hide custom template dir toggle
+        self.custom_templates_dir_checkbox.hide()
+        self.splitter_custom_report.hide()
+
     def save_boolean_setting(self, key, check_box):
         """Save boolean setting according to check_box state.
 
