@@ -619,6 +619,15 @@ class WizardDialog(QDialog, FORM_CLASS):
            executed when the Next button is released.
         """
         current_step = self.get_current_step()
+        # For checking age sum == 1
+        if current_step == self.step_kw_default_inasafe_fields:
+            good_ratios = self.step_kw_default_inasafe_fields.\
+                is_good_age_ratios()
+            self.step_kw_default_inasafe_fields.toggle_age_ratio_sum_message(
+                    good_ratios)
+            if not good_ratios:
+                return
+
         if current_step.step_type == 'step_fc':
             self.impact_function_steps.append(current_step)
         elif current_step.step_type == 'step_kw':
