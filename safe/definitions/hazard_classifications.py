@@ -166,7 +166,7 @@ earthquake_mmi_hazard_classes = {
             # 'displacement_rate': 0.0,
             # Not used because EQ algs take care of this
             # 'fatality_rate': 0.0,
-            'numeric_default_min': 9,
+            'numeric_default_min': 8,
             'numeric_default_max': 10,
             'citations': [
                 {
@@ -187,7 +187,7 @@ earthquake_mmi_hazard_classes = {
             # 'displacement_rate': 0.0,
             # Not used because EQ algs take care of this
             # 'fatality_rate': 0.0,
-            'numeric_default_min': 7,
+            'numeric_default_min': 6,
             'numeric_default_max': 8,
             'citations': [
                 {
@@ -208,7 +208,7 @@ earthquake_mmi_hazard_classes = {
             # 'displacement_rate': 0.0,
             # Not used because EQ algs take care of this
             # 'fatality_rate': 0.0,
-            'numeric_default_min': 5,
+            'numeric_default_min': 4,
             'numeric_default_max': 6,
             'citations': [
                 {

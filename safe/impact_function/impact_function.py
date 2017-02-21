@@ -1810,7 +1810,7 @@ class ImpactFunction(object):
             # We are running EQ raster on population raster.
             self.set_state_process(
                 'impact function',
-                'Aggregate the analysis summary')
+                'Aggregate the earthquake analysis summary')
             self._analysis_impacted = analysis_eartquake_summary(
                 self.aggregation_impacted, self.analysis_impacted)
             self.debug_layer(self._analysis_impacted, add_to_datastore=False)
