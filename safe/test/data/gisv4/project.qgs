@@ -3,6 +3,12 @@
   <title></title>
   <layer-tree-group expanded="1" checked="Qt::PartiallyChecked" name="">
     <customproperties/>
+    <layer-tree-group expanded="1" checked="Qt::Checked" name="Aggregation">
+      <customproperties/>
+      <layer-tree-layer expanded="1" checked="Qt::Checked" id="small_grid20161006210131545" name="small grid">
+        <customproperties/>
+      </layer-tree-layer>
+    </layer-tree-group>
     <layer-tree-group expanded="1" checked="Qt::PartiallyChecked" name="Exposure">
       <customproperties/>
       <layer-tree-layer expanded="0" checked="Qt::Unchecked" id="population20170217161101848" name="population raster">
@@ -33,12 +39,6 @@
         <customproperties/>
       </layer-tree-layer>
     </layer-tree-group>
-    <layer-tree-group expanded="1" checked="Qt::Checked" name="Aggregation">
-      <customproperties/>
-      <layer-tree-layer expanded="1" checked="Qt::Checked" id="small_grid20161006210131545" name="small grid">
-        <customproperties/>
-      </layer-tree-layer>
-    </layer-tree-group>
     <layer-tree-group expanded="1" checked="Qt::Unchecked" name="Intermediate">
       <customproperties/>
       <layer-tree-layer expanded="1" checked="Qt::Unchecked" id="aggregate_classified_hazard20161010113051631" name="aggregate_classified_hazard">
@@ -56,10 +56,10 @@
   <mapcanvas>
     <units>degrees</units>
     <extent>
-      <xmin>106.61814374184510257</xmin>
-      <ymin>-6.3156594169932152</ymin>
-      <xmax>107.02384364204786493</xmax>
-      <ymax>-6.10216016527359351</ymax>
+      <xmin>106.60351829036673621</xmin>
+      <ymin>-6.29831710442374693</ymin>
+      <xmax>107.00921819056949857</xmax>
+      <ymax>-6.08481785270412523</ymax>
     </extent>
     <rotation>0</rotation>
     <projections>0</projections>
@@ -94,6 +94,13 @@
     </custom-order>
   </layer-tree-canvas>
   <legend updateDrawingOrder="true">
+    <legendgroup open="true" checked="Qt::Checked" name="Aggregation">
+      <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="small grid" showFeatureCount="0">
+        <filegroup open="true" hidden="false">
+          <legendlayerfile isInOverview="0" layerid="small_grid20161006210131545" visible="1"/>
+        </filegroup>
+      </legendlayer>
+    </legendgroup>
     <legendgroup open="true" checked="Qt::PartiallyChecked" name="Exposure">
       <legendlayer drawingOrder="-1" open="false" checked="Qt::Unchecked" name="population raster" showFeatureCount="0">
         <filegroup open="false" hidden="false">
@@ -135,13 +142,6 @@
       <legendlayer drawingOrder="-1" open="true" checked="Qt::Unchecked" name="earthquake" showFeatureCount="0">
         <filegroup open="true" hidden="false">
           <legendlayerfile isInOverview="0" layerid="earthquake20170217201457644" visible="0"/>
-        </filegroup>
-      </legendlayer>
-    </legendgroup>
-    <legendgroup open="true" checked="Qt::Checked" name="Aggregation">
-      <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="small grid" showFeatureCount="0">
-        <filegroup open="true" hidden="false">
-          <legendlayerfile isInOverview="0" layerid="small_grid20161006210131545" visible="1"/>
         </filegroup>
       </legendlayer>
     </legendgroup>
@@ -973,7 +973,7 @@ def my_form_open(dialog, layer, feature):
         <fieldstyles/>
       </conditionalstyles>
     </maplayer>
-    <maplayer minimumScale="0" maximumScale="1e+08" type="raster" hasScaleBasedVisibilityFlag="0">
+    <maplayer minimumScale="-4.65661e-10" maximumScale="1e+08" type="raster" hasScaleBasedVisibilityFlag="0">
       <extent>
         <xmin>106.7155000000000058</xmin>
         <ymin>-6.2784999999999993</ymin>
@@ -1013,11 +1013,18 @@ def my_form_open(dialog, layer, feature):
           <rasterTransparency/>
           <rastershader>
             <colorrampshader colorRampType="INTERPOLATED" clip="0">
-              <item alpha="255" value="1" label="1.000000" color="#ffffb2"/>
-              <item alpha="255" value="3" label="3.000000" color="#fecc5c"/>
-              <item alpha="255" value="5" label="5.000000" color="#fd8d3c"/>
-              <item alpha="255" value="7" label="7.000000" color="#f03b20"/>
-              <item alpha="255" value="9" label="9.000000" color="#bd0026"/>
+              <item alpha="255" value="1" label="1" color="#ffffff"/>
+              <item alpha="255" value="2" label="2" color="#209fff"/>
+              <item alpha="255" value="3" label="3" color="#00cfff"/>
+              <item alpha="255" value="4" label="4" color="#55ffff"/>
+              <item alpha="255" value="5" label="5" color="#aaffff"/>
+              <item alpha="255" value="6" label="6" color="#fff000"/>
+              <item alpha="255" value="7" label="7" color="#ffa800"/>
+              <item alpha="255" value="8" label="8" color="#ff7000"/>
+              <item alpha="255" value="9" label="9" color="#ff0000"/>
+              <item alpha="255" value="10" label="10" color="#dd0000"/>
+              <item alpha="255" value="11" label="11" color="#880000"/>
+              <item alpha="255" value="12" label="12" color="#440000"/>
             </colorrampshader>
           </rastershader>
         </rasterrenderer>
@@ -1391,7 +1398,7 @@ def my_form_open(dialog, layer, feature):
         <fieldstyles/>
       </conditionalstyles>
     </maplayer>
-    <maplayer minimumScale="0" maximumScale="1e+08" type="raster" hasScaleBasedVisibilityFlag="0">
+    <maplayer minimumScale="-4.65661e-10" maximumScale="1e+08" type="raster" hasScaleBasedVisibilityFlag="0">
       <extent>
         <xmin>106.71850000000000591</xmin>
         <ymin>-6.27780000000000005</ymin>
@@ -1427,7 +1434,7 @@ def my_form_open(dialog, layer, feature):
         <map-layer-style name=""/>
       </map-layer-style-manager>
       <pipe>
-        <rasterrenderer opacity="1" alphaBand="0" classificationMax="90" classificationMinMaxOrigin="MinMaxFullExtentEstimated" band="1" classificationMin="0" type="singlebandpseudocolor">
+        <rasterrenderer opacity="1" alphaBand="-1" classificationMax="90" classificationMinMaxOrigin="MinMaxFullExtentEstimated" band="1" classificationMin="0" type="singlebandpseudocolor">
           <rasterTransparency/>
           <rastershader>
             <colorrampshader colorRampType="INTERPOLATED" clip="0">
@@ -1442,7 +1449,7 @@ def my_form_open(dialog, layer, feature):
         <huesaturation colorizeGreen="128" colorizeOn="0" colorizeRed="255" colorizeBlue="128" grayscaleMode="0" saturation="0" colorizeStrength="100"/>
         <rasterresampler maxOversampling="2"/>
       </pipe>
-      <blendMode>0</blendMode>
+      <blendMode>6</blendMode>
     </maplayer>
     <maplayer minimumScale="-4.65661e-10" maximumScale="1e+08" simplifyDrawingHints="1" minLabelScale="0" maxLabelScale="1e+08" simplifyDrawingTol="1" geometry="Line" simplifyMaxScale="1" type="vector" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
       <extent>
