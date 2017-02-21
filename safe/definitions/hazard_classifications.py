@@ -448,7 +448,7 @@ earthquake_mmi_scale = {
             'name': tr('II'),
             'affected': True,
             'description':
-                tr('Felt only by a few persons at rest,especially on upper '
+                tr('Felt only by a few persons at rest, especially on upper '
                    'floors of buildings.'),
             'string_defaults': ['Weak'],
             'displacement_rate': 0.0,
@@ -881,7 +881,7 @@ tsunami_hazard_classes = {
     'name': tr('Tsunami classes'),
     # note: these are default tsunami classes for everything except population
     'description': tr(
-        'Tsunami hazards can be classified into one of three classes for an '
+        'Tsunami hazards can be classified into one of four classes for an '
         'area. The area is either <b>dry</b>, <b>low</b>, <b>medium</b>, or '
         '<b>high</b>, for tsunami hazard classification. '
         'The following description for these classes is provided by Badan '
