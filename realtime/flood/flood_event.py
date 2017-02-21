@@ -68,6 +68,8 @@ class FloodImpactData(object):
 
 class FloodEvent(QObject):
 
+    IDP_RATE = 0.01
+
     def __init__(
             self,
             working_dir,
@@ -203,7 +205,7 @@ class FloodEvent(QObject):
         }
         """
         if os.path.exists(self.metadata_path):
-            with open(self.metadata_path, 'w') as f:
+            with open(self.metadata_path) as f:
                 metadata_dict = json.loads(f.read())
                 self.flood_data_source = metadata_dict.get(
                     'flood_data_source')
@@ -414,7 +416,7 @@ class FloodEvent(QObject):
             impact_function.total_affected_population
         # Fixme for now, it was estimated that 1% of impacted is IDP
         self.impact_data.estimates_idp = \
-            impact_function.total_affected_population * 0.01
+            impact_function.total_affected_population * FloodEvent.IDP_RATE
         self.impact_data.minimum_needs = impact_function.total_needs
 
     def generate_population_aggregation(self):
@@ -476,11 +478,13 @@ class FloodEvent(QObject):
         for k, v in district_dict.iteritems():
             total_affected += v
 
+        total_idp = total_affected * FloodEvent.IDP_RATE
+
         # calculate new minimum needs
         min_needs = self.impact_data.minimum_needs
         for k, v in min_needs.iteritems():
             for need in v:
-                need['amount'] = need['value'] * total_affected
+                need['amount'] = need['value'] * total_idp
 
         # self.impact_data.total_affected_population = total_affected
         # self.impact_data.estimates_idp = 0.01 * total_affected
