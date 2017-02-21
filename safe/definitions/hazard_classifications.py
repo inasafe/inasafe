@@ -1119,7 +1119,7 @@ tsunami_hazard_classes_ITB = {
     'type': hazard_classification_type,
     'citations': [
         {
-            'text': None,
+            'text': 'Papadopoulos and Imamura, 2001',
             'link': u'http://geology.about.com/od/tsunamis/a/'
                     u'Tsunami-Intensity-Scale-2001.htm'
         }
@@ -1269,7 +1269,7 @@ tsunami_hazard_population_classes_ITB = {
     'type': hazard_classification_type,
     'citations': [
         {
-            'text': None,
+            'text': 'Papadopoulos and Imamura, 2001',
             'link': u'http://geology.about.com/od/tsunamis/a/'
                     u'Tsunami-Intensity-Scale-2001.htm'
         }
