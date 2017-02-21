@@ -14,7 +14,7 @@
       "info": {},
       "process":[
         "Set summaries",
-        "Aggregate the analysis summary"
+        "Aggregate the earthquake analysis summary"
       ]
     },
     "post_processor":{

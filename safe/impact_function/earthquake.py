@@ -17,6 +17,7 @@ from qgis.core import (
     QgsVectorFileWriter,
 )
 
+from safe.definitions.utilities import definition
 from safe.definitions.fields import (
     aggregation_id_field,
     population_count_field,
@@ -41,6 +42,27 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 LOGGER = logging.getLogger('InaSAFE')
+
+
+def from_mmi_to_hazard_class(mmi_level, classification_key):
+    """From a MMI level, it returns the hazard class given a classification.
+
+    :param mmi_level: The MMI level.
+    :type mmi_level: int
+
+    :param classification_key: The earthquake classification.
+    :type classification_key: safe.definitions.hazard_classifications
+
+    :return: The hazard class key
+    :rtype: basestring
+    """
+    classes = definition(classification_key)['classes']
+    for hazard_class in classes:
+        minimum = hazard_class['numeric_default_min']
+        maximum = hazard_class['numeric_default_max']
+        if minimum < mmi_level <= maximum:
+            return hazard_class['key']
+    return None
 
 
 @profile
