@@ -523,9 +523,9 @@ post_processor_size = {
     'key': 'post_processor_size',
     'name': tr('Size Value Post Processor'),
     'description': tr(
-        'A post processor to calculate the size of the feature. If the '
-        'feature is a polygon, the result will be area in m². If the feature '
-        'is a line we use length in metres.'),
+        u'A post processor to calculate the size of the feature. If the '
+        u'feature is a polygon, the result will be area in m². If the feature '
+        u'is a line we use length in metres.'),
     'input': {
         'size_calculator': {
             'type': layer_property_input_type,
@@ -548,9 +548,9 @@ post_processor_size_rate = {
     'key': 'post_processor_size_rate',
     'name': tr('Size Rate Post Processor'),
     'description': tr(
-        'A post processor to calculate the value of a feature based on its'
-        'size. If feature is a polygon the size is calculated as '
-        'the area in m². If the feature is a line we use length in metres.'),
+        u'A post processor to calculate the value of a feature based on its'
+        u'size. If feature is a polygon the size is calculated as '
+        u'the area in m². If the feature is a line we use length in metres.'),
     'input': {
         'size': {
             'type': field_input_type,

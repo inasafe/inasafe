@@ -267,11 +267,8 @@ def content():
         'Remote datasets will be copied locally before processing.'))
     bullets.add(m.Text(
         tr(
-            'All datasets will be clipped to according to the behaviours '
-            'defined in the analysis extents dialog.'
-            'layer, exposure layer and the current view extents unless '
-            'you have specified a different clipping behaviour in the '
-            'extents selector dialog.'),
+            'All datasets will be clipped to the behaviours defined in the '
+            'analysis extents dialog if you do not use an aggregation layer.'),
         m.Image(
             'file:///%s/img/icons/'
             'set-extents-tool.svg' % resources_path(),

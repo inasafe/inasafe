@@ -39,7 +39,8 @@ exposure_population = {
     'notes': [  # these are additional generic notes for people - IF has more
         caveat_incomplete_data,
         tr('Exposed population varies by the time (day or night, weekends, '
-           'holidays etc.) Such variations are not included in the analysis.'),
+           'holidays etc.). Such variations are not included in the analysis.'
+        ),
         tr('Numbers reported for population counts have been rounded to the '
            'nearest 10 people if the total is less than 1,000; nearest 100 '
            'people if more than 1,000 and less than 100,000; and nearest '
@@ -49,9 +50,9 @@ exposure_population = {
     ],
     'earthquake_notes': [
         # these are earthquake specific notes for population
-        tr('Map shows the estimated displaced population.People are displaced '
-           'if they experience and survive a shake level of more than 5 on '
-           'the MMI scale.'),
+        tr('Map shows the estimated displaced population. People are '
+           'displaced if they experience and survive a shake level of more '
+           'than 5 on the MMI scale.'),
         tr('Exposed population varies by the time (day or night, weekends, '
            'holidays etc.). Such variations are not considered in the '
            'estimates in the InaSAFE.'),
