@@ -662,8 +662,8 @@ flood_petabencana_hazard_classes = {
             'name': tr('High'),
             'affected': True,
             'description': tr('Water is above waist height.'),
-            # displacement rate estimated from DMI analysis of historical flood
-            # data and IDP numbers
+            # displacement rate estimated from DMI analysis of historical
+            # flood data and IDP numbers
             'displacement_rate': 0.05,
             'fatality_rate': 0.0,
             'numeric_default_min': 1.5,
@@ -684,8 +684,8 @@ flood_petabencana_hazard_classes = {
             'affected': True,
             'description': tr(
                 'Water is above knee height, below waist height.'),
-            # displacement rate estimated from DMI analysis of historical flood
-            # data and IDP numbers
+            # displacement rate estimated from DMI analysis of historical
+            # flood data and IDP numbers
             'displacement_rate': 0.03,
             'fatality_rate': 0.0,
             'numeric_default_min': 0.7,
@@ -706,8 +706,8 @@ flood_petabencana_hazard_classes = {
             'affected': True,
             'description': tr(
                 'Water encountered up to knee deep.'),
-            # displacement rate estimated from DMI analysis of historical flood
-            # data and IDP numbers
+            # displacement rate estimated from DMI analysis of historical
+            # flood data and IDP numbers
             'displacement_rate': 0.01,
             'fatality_rate': 0.0,
             'numeric_default_min': 0.1,
@@ -731,8 +731,8 @@ flood_petabencana_hazard_classes = {
                 'be floods in surrounding areas and you should use caution '
                 'when moving around in this area.'),
 
-            # displacement rate estimated from DMI analysis of historical flood
-            # data and IDP numbers
+            # displacement rate estimated from DMI analysis of historical
+            # flood data and IDP numbers
             'displacement_rate': 0.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 0,
