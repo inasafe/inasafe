@@ -13,9 +13,7 @@ from safe.definitions.fields import (
     female_count_field,
     youth_count_field,
     population_count_field,
-    exposure_type_field,
-    feature_value_field,
-    feature_rate_field)
+    exposure_type_field)
 from safe.definitions.layer_modes import (
     layer_mode_continuous, layer_mode_classified)
 from safe.definitions.exposure_classifications import (
@@ -45,7 +43,8 @@ exposure_population = {
            'people if more than 1,000 and less than 100,000; and nearest '
            '1000 if more than 100,000.'),
         tr('Rounding is applied to all population values, which may cause '
-           'discrepancies between subtotals and totals.'),
+           'discrepancies between subtotals and totals. '),
+        concepts['rounding_methodology']['description'],
     ],
     'earthquake_notes': [
         # these are earthquake specific notes for population
@@ -189,6 +188,7 @@ exposure_road = {
            'more than 100,000.'),
         tr('Rounding is applied to all road lengths, which may cause '
            'discrepancies between subtotals and totals.'),
+        concepts['rounding_methodology']['description'],
         tr('Roads marked as not affected may still be unusable due to network '
            'isolation. Roads marked as affected may still be usable if they '
            'are elevated above the local landscape.'),
@@ -247,10 +247,12 @@ exposure_structure = {
            'hazard status lower than that to which they are exposed outside '
            'the analysis area.'),
         tr('Numbers reported for structures have been rounded to the nearest '
-           '10 if the total is less than 1,000; nearest 100 if more than 1,000'
-           'and less than 100,000; and nearest 1000 if more than 100,000.'),
+           '10 if the total is less than 1,000; nearest 100 if more than '
+           '1,000 and less than 100,000; and nearest 1000 if more than '
+           '100,000.'),
         tr('Rounding is applied to all structure counts, which may cause '
            'discrepancies between subtotals and totals.'),
+        concepts['rounding_methodology']['description'],
     ],
     'continuous_notes': [  # notes specific to continuous data
     ],
@@ -347,6 +349,7 @@ exposure_land_cover = {
            'hectares if more than 100,000.'),
         tr('Rounding is applied to all land cover areas, which may cause '
            'discrepancies between subtotals and totals.'),
+        concepts['rounding_methodology']['description']
     ],
     'continuous_notes': [  # notes specific to continuous data
     ],

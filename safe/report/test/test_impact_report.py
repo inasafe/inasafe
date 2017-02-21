@@ -218,43 +218,33 @@ class TestImpactReport(unittest.TestCase):
             notes_assumptions_component['key'])
         """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
 
+        # TODO: this test is fragile and will break whenever we change
+        # definitions. TS. I reduced the test fragments to snippets which
+        # will hopefully make things a little less fragile.
         expected_context = {
-            'header': u'Notes and assumptions',
-            'items': [
-                u'The impacts on roads, people, buildings and other exposure '
-                u'elements may be underestimated if the exposure data are '
-                u'incomplete.',
-
-                u'Structures overlapping the analysis extent may be assigned '
-                u'a hazard status lower than that to which they are exposed '
-                u'outside the analysis area.',
-
-                u'Numbers reported for structures have been rounded to the '
-                u'nearest 10 if the total is less than 1,000; nearest 100 if '
-                u'more than 1,000and less than 100,000; and nearest 1000 if '
-                u'more than 100,000.',
-
-                u'Rounding is applied to all structure counts, which may '
-                u'cause discrepancies between subtotals and totals.',
-
-                u'The extent and severity of the mapped scenario or hazard '
-                u'zones may not be consistent with future events.',
-
-                u'The impacts on roads, people, buildings and '
-                u'other exposure elements may differ from the '
-                u'analysis results due to local conditions '
-                u'such as terrain and infrastructure type.',
-
-                u'The analysis extent is limited to the extent '
-                u'of the aggregation layer or analysis extent. '
-                u'Hazard and exposure data outside the '
-                u'analysis extent are not included in the '
-                u'impact layer, impact map or impact reports.'
-            ]
+            u'impacts on roads, people, buildings',
+            u'overlapping the analysis extent',
+            u'more than 1,000 and less than 100,000',
+            u'cause discrepancies',
+            u'zones may not be consistent with future events',
+            u'terrain and infrastructure type',
+            u'analysis extent is limited',
+            u'Hazard and exposure data outside'
         }
         actual_context = notes_assumptions.context
+        for expected_item in expected_context:
+            current_flag = False
+            # Iterate to see if expected_item is in at least one of the
+            # actual content items ...
+            for actual_item in actual_context['items']:
+                if expected_item in actual_item:
+                    current_flag = True
+            # It was not found in any item :-(
+            self.assertTrue(
+                current_flag,
+                '"%s" not found in %s' % (
+                    expected_item, actual_context['items']))
 
-        self.assertDictEqual(expected_context, actual_context)
         self.assertTrue(
             notes_assumptions.output, empty_component_output_message)
 
