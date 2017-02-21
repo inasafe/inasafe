@@ -2,11 +2,15 @@
 """Styles and colors which are used in InaSAFE."""
 
 from PyQt4.QtGui import QColor
+from qgis.core import QgsColorRampShader
+from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
+
+transparent = QColor(0, 0, 0, 0)
 
 # Hazard classes as specified in reporting standards :
 # https://github.com/inasafe/inasafe/issues/2920#issuecomment-229874044
@@ -18,7 +22,8 @@ orange = QColor('#FEB24C')
 red = QColor('#F03B20')
 dark_red = QColor('#BD0026')
 very_dark_red = QColor('#710017')
-charcoal_black = QColor('#36454F')
+
+# Colors for each MMI levels.
 MMI_1 = QColor('#ffffff')
 MMI_2 = QColor('#209fff')
 MMI_3 = QColor('#00cfff')
@@ -32,7 +37,16 @@ MMI_10 = QColor('#dd0000')
 MMI_11 = QColor('#880000')
 MMI_12 = QColor('#440000')
 
+# Displaced people raster after an EQ raster. The first item is the value in
+# the raster.
+legend_raster_displaced = [
+    QgsColorRampShader.ColorRampItem(0, transparent, tr('Not Displaced')),
+    QgsColorRampShader.ColorRampItem(1, QColor('#a53c12'), tr('Displaced')),
+]
+
+# Colors used in reporting.
 affected_column_background = QColor('#fff8e9')
+charcoal_black = QColor('#36454F')
 
 # Map legend templates according to standards :
 # https://github.com/inasafe/inasafe/issues/3653#issuecomment-275011957
@@ -50,13 +64,13 @@ template_with_range_thresholds = (
 line_width_exposure = 0.66
 
 # Rubber bands
-user_analysis_color = QColor(0, 0, 255, 100)
+user_analysis_color = QColor(0, 0, 255, 100)  # Blue
 user_analysis_width = 2
 
-next_analysis_color = QColor(0, 255, 0, 100)
+next_analysis_color = QColor(0, 255, 0, 100)  # Green
 next_analysis_width = 10
 
-last_analysis_color = QColor(255, 0, 0, 100)
+last_analysis_color = QColor(255, 0, 0, 100)  # Red
 last_analysis_width = 5
 
 # Availability options color in wizard
