@@ -145,6 +145,8 @@ def content():
         row.add(m.Cell(term))
         row.add(m.Cell(description))
         table.add(row)
+    # ensure the last group's table is added
+    message.add(table)
 
     ##
     # Help dialog contents ...
