@@ -200,7 +200,7 @@
             <gco:Dictionary>{&quot;aggregation_name_field&quot;: &quot;KAB_NAME&quot;}</gco:Dictionary>
           </inasafe_fields>
           <inasafe_default_values>
-            <gco:Dictionary>{&quot;adult_ratio_field&quot;: 0.659, &quot;youth_ratio_field&quot;: 0.254, &quot;female_ratio_field&quot;: 0.5, &quot;elderly_ratio_field&quot;: 0.087}</gco:Dictionary>
+            <gco:Dictionary>{&quot;adult_ratio_field&quot;: 0.659, &quot;youth_ratio_field&quot;: 0.254, &quot;elderly_ratio_field&quot;: 0.087}</gco:Dictionary>
           </inasafe_default_values>
           <resolution>
             <gco:FloatTuple/>
