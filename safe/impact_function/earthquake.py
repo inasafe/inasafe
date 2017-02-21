@@ -29,7 +29,6 @@ from safe.definitions.fields import (
 )
 from safe.definitions.layer_purposes import (
     layer_purpose_aggregation_impacted, layer_purpose_exposure_impacted)
-from safe.definitions.earthquake import displacement_rate
 from safe.definitions.processing_steps import earthquake_displaced
 from safe.gis.vector.tools import create_field_from_definition
 from safe.gis.raster.write_raster import array_to_raster, make_array
@@ -50,7 +49,7 @@ def from_mmi_to_hazard_class(mmi_level, classification_key):
     :param mmi_level: The MMI level.
     :type mmi_level: int
 
-    :param classification_key: The earthquake classification.
+    :param classification_key: The earthquake classification key.
     :type classification_key: safe.definitions.hazard_classifications
 
     :return: The hazard class key
@@ -63,6 +62,27 @@ def from_mmi_to_hazard_class(mmi_level, classification_key):
         if minimum < mmi_level <= maximum:
             return hazard_class['key']
     return None
+
+
+def displacement_rate(mmi_level, classification_key):
+    """From a MMI level, it gives the displacement rate given a classification.
+
+    :param mmi_level: The MMI level.
+    :type mmi_level: int
+
+    :param classification_key: The earthquake classification key.
+    :type classification_key: safe.definitions.hazard_classifications
+
+    :return: The displacement rate.
+    :rtype: float
+    """
+    classes = definition(classification_key)['classes']
+    for hazard_class in classes:
+        minimum = hazard_class['numeric_default_min']
+        maximum = hazard_class['numeric_default_max']
+        if minimum < mmi_level <= maximum:
+            return hazard_class['displacement_rate']
+    return 0.0
 
 
 @profile
@@ -109,6 +129,8 @@ def exposed_people_stats(hazard, exposure, aggregation, fatality_rate):
 
     exposed_array = make_array(width, height)
 
+    classification_key = hazard.keywords['classification']
+
     # walk through the rasters pixel by pixel and aggregate numbers
     # of people in the combination of hazard zones and aggregation zones
     for i in xrange(width * height):
@@ -121,7 +143,7 @@ def exposed_people_stats(hazard, exposure, aggregation, fatality_rate):
                 int(hazard_mmi * fatality_rate[hazard_mmi]))  # rounding down
             mmi_displaced = (
                 (people_count - mmi_fatalities) *
-                displacement_rate()[hazard_mmi])
+                displacement_rate(hazard_mmi, classification_key))
 
             agg_zone_index = int(agg_block.value(long(i)))
 
@@ -175,6 +197,9 @@ def make_summary_layer(exposed, aggregation, fatality_rate):
     :rtype: tuple(QgsVectorLayer, dict)
     """
     field_mapping = {}
+
+    classification_key = (
+        aggregation.keywords['hazard_keywords']['classification'])
 
     aggregation.startEditing()
     inasafe_fields = aggregation.keywords['inasafe_fields']
@@ -235,7 +260,8 @@ def make_summary_layer(exposed, aggregation, fatality_rate):
             mmi_fatalities = (
                 int(mmi_exposed * fatality_rate[mmi]))  # rounding down
             mmi_displaced = (
-                (mmi_exposed - mmi_fatalities) * displacement_rate()[mmi])
+                (mmi_exposed - mmi_fatalities) *
+                displacement_rate(mmi, classification_key))
 
             aggregation.changeAttributeValue(
                 agg_feature.id(),

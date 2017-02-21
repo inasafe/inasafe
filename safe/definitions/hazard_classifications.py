@@ -162,8 +162,7 @@ earthquake_mmi_hazard_classes = {
             'affected': True,
             'description': tr('The highest hazard class.'),
             'string_defaults': ['high'],
-            # Not used because EQ algs take care of this
-            # 'displacement_rate': 0.0,
+            'displacement_rate': 1.0,
             # Not used because EQ algs take care of this
             # 'fatality_rate': 0.0,
             'numeric_default_min': 8,
@@ -183,8 +182,7 @@ earthquake_mmi_hazard_classes = {
             'affected': True,
             'description': tr('The medium hazard class.'),
             'string_defaults': ['medium'],
-            # Not used because EQ algs take care of this
-            # 'displacement_rate': 0.0,
+            'displacement_rate': 1.0,
             # Not used because EQ algs take care of this
             # 'fatality_rate': 0.0,
             'numeric_default_min': 6,
@@ -204,11 +202,10 @@ earthquake_mmi_hazard_classes = {
             'affected': True,
             'description': tr('The lowest hazard class.'),
             'string_defaults': ['low'],
-            # Not used because EQ algs take care of this
-            # 'displacement_rate': 0.0,
+            'displacement_rate': 1.0,
             # Not used because EQ algs take care of this
             # 'fatality_rate': 0.0,
-            'numeric_default_min': 4,
+            'numeric_default_min': 5,
             'numeric_default_max': 6,
             'citations': [
                 {

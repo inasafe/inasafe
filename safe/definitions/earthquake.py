@@ -213,19 +213,3 @@ EARTHQUAKE_FUNCTIONS = (
         'fatality_rates': pager_fatality_rates
     }
 )
-
-
-def displacement_rate():
-    """Return the displacement rate.
-
-    Note: displacement rates are specified here but are not a function of the
-    fatality models.
-
-    :returns: The displacement rate.
-    :rtype: dict
-    """
-    rate = {
-        2: 0.0, 3: 0.0, 4: 0.0, 5: 0.0,
-        6: 1.0, 7: 1.0, 8: 1.0, 9: 1.0, 10: 1.0
-    }
-    return rate
