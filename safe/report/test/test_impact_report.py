@@ -479,6 +479,18 @@ class TestImpactReport(unittest.TestCase):
         self.assertTrue(
             minimum_needs.output, empty_component_output_message)
 
+        # test displacement rates notes, since it is only showed up when
+        # the rates is used, such as in this minimum needs report
+        notes_assumptions = impact_report.metadata.component_by_key(
+            notes_assumptions_component['key'])
+        """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
+
+        expected_context = (
+            'For this analysis, the following displacement rates were used: '
+            'Wet - 90.00%, Dry - 0.00%')
+        actual_context = notes_assumptions.context['items'][-1]
+        self.assertEqual(expected_context.strip(), actual_context.strip())
+
         """Check generated report"""
 
         output_path = impact_report.component_absolute_output_path(
