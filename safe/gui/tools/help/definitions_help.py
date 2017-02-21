@@ -503,7 +503,10 @@ def content():
 
     # Finally we add the table of contents at the top
     full_message = m.Message()
-    header = m.Heading(tr('Contents'), **SECTION_STYLE)
+    # Contents is not a link so reset style
+    style = SECTION_STYLE
+    style['element_id'] = ''
+    header = m.Heading(tr('Contents'), **style)
     full_message.add(header)
     full_message.add(table_of_contents)
     full_message.add(message)
@@ -520,6 +523,8 @@ def _start_glossary_table(group):
 
 
 def _create_section_header(message, table_of_contents, id, text):
+    # Warning a side effect here is that the SECTION_STYLE is updated
+    # when setting style as we don't have a deep copy
     style = SECTION_STYLE
     style['element_id'] = id
     header = m.Heading(text, **style)
