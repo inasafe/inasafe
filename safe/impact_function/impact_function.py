@@ -1332,13 +1332,14 @@ class ImpactFunction(object):
     def earthquake_raster_population_raster(self):
         """Perform a damage curve analysis with EQ raster on population raster.
         """
-
         classification_key = active_classification(
             self.hazard.keywords, 'population')
         thresholds = active_thresholds_value_maps(
             self.hazard.keywords, 'population')
         self.hazard.keywords['classification'] = classification_key
         self.hazard.keywords['thresholds'] = thresholds
+        self.aggregation.keywords['hazard_keywords'] = dict(
+            self.hazard.keywords)
 
         fatality_rates = {}
         for model in EARTHQUAKE_FUNCTIONS:
