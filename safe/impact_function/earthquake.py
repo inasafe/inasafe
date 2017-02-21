@@ -1,5 +1,9 @@
 # coding=utf-8
 
+"""Earthquake functions."""
+
+import logging
+
 from qgis.core import (
     QGis,
     QgsCoordinateReferenceSystem,
@@ -35,6 +39,8 @@ __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
+
+LOGGER = logging.getLogger('InaSAFE')
 
 
 @profile
@@ -201,7 +207,9 @@ def make_summary_layer(exposed, aggregation, fatality_rate):
         total_fatalities = 0
         total_displaced = 0
 
-        for mmi, mmi_exposed in exposed_per_agg_zone[agg_zone].iteritems():
+        LOGGER.debug('Aggregation %s is being processed by EQ IF' % agg_zone)
+        stats_aggregation = exposed_per_agg_zone[agg_zone]
+        for mmi, mmi_exposed in stats_aggregation.iteritems():
             mmi_fatalities = (
                 int(mmi_exposed * fatality_rate[mmi]))  # rounding down
             mmi_displaced = (

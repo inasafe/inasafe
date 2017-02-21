@@ -2,25 +2,29 @@
 
 """Rasterize a vector layer."""
 
+import logging
+import numpy
+from osgeo.gdalconst import GA_ReadOnly
 from tempfile import mkdtemp
-from collections import OrderedDict
-from qgis.core import QgsRasterLayer
-
+from subprocess import check_call
+from qgis.core import QgsRasterLayer, QgsRasterBandStats
+from osgeo import gdal
 from processing import runalg
 
-from safe.common.utilities import unique_filename
+from safe.common.utilities import unique_filename, which
 from safe.datastore.folder import Folder
 from safe.definitions.fields import aggregation_id_field
 from safe.definitions.processing_steps import rasterize_steps
 from safe.definitions.layer_purposes import layer_purpose_aggregation_impacted
 from safe.gis.sanity_check import check_layer
-from safe.utilities.gis import qgis_version
 from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
+
+LOGGER = logging.getLogger('InaSAFE')
 
 
 @profile
@@ -60,35 +64,61 @@ def rasterize_vector_layer(layer, width, height, extent):
     layer = data_store.layer(result[1])
     assert layer.isValid()
 
-    parameters = OrderedDict()
-    parameters['INPUT'] = layer
-    parameters['FIELD'] = (
-        layer.keywords['inasafe_fields'][aggregation_id_field['key']])
-    parameters['DIMENSIONS'] = 0  # output size is given in pixels
-    parameters['WIDTH'] = width
-    parameters['HEGHT'] = height
-    parameters['RASTER_EXT'] = extent_str
-    parameters['TFW'] = False  # force generation of ESRI TFW
-    parameters['RTYPE'] = 1  # raster type: Int16
-    parameters['NO_DATA'] = '-1'   # nodata value
-    parameters['COMPRESS'] = 4  # GeoTIFF compression: DEFLATE
-    parameters['JPEGCOMPRESSION'] = 75  # JPEG compression level: 75
-    parameters['ZLEVEL'] = 6  # DEFLATE compression level
-    parameters['PREDICTOR'] = 1  # predictor for JPEG/DEFLATE
-    parameters['TILED'] = False  # Tiled GeoTIFF?
-    parameters['BIGTIFF'] = 0  # whether to make big TIFF
-    parameters['EXTRA'] = ''  # additional creation parameters
-    parameters['OUTPUT'] = output_filename
+    field = layer.keywords['inasafe_fields'][aggregation_id_field['key']]
 
-    if qgis_version() < 21600:
-        # New parameter in QGIS 2.16. We need to remove it if QGIS < 2.16.
-        del parameters['RASTER_EXT']
+    # ET 21/02/17. I got some issues using rasterize algorithm from Processing.
+    # I keep it in case of we need it later. Let's use gdal command line.
+    use_gdal_command_line = True
 
-    result = runalg('gdalogr:rasterize', *parameters.values())
+    if use_gdal_command_line:
+        commands = [which('gdal_rasterize')[0]]
+        commands += ['-a', field]
+        commands += ['-ts', str(width), str(height)]
+        commands += ['-ot', 'Int16']
+        commands += ['-a_nodata', "'-1'"]
+        commands += [layer.source(), output_filename]
 
-    assert result is not None
+        LOGGER.info(' '.join(commands))
+        result = check_call(commands)
+        LOGGER.info('Result : %s' % result)
+    else:
+        parameters = dict()
+        parameters['INPUT'] = layer
+        parameters['FIELD'] = field
+        parameters['DIMENSIONS'] = 0  # output size is given in pixels
+        parameters['WIDTH'] = width
+        parameters['HEIGHT'] = height
+        parameters['RASTER_EXT'] = extent_str
+        parameters['TFW'] = False  # force generation of ESRI TFW
+        parameters['RTYPE'] = 1  # raster type: Int16
+        parameters['NO_DATA'] = '-1'   # nodata value
+        parameters['COMPRESS'] = 4  # GeoTIFF compression: DEFLATE
+        parameters['JPEGCOMPRESSION'] = 75  # JPEG compression level: 75
+        parameters['ZLEVEL'] = 6  # DEFLATE compression level
+        parameters['PREDICTOR'] = 1  # predictor for JPEG/DEFLATE
+        parameters['TILED'] = False  # Tiled GeoTIFF?
+        parameters['BIGTIFF'] = 0  # whether to make big TIFF
+        parameters['EXTRA'] = ''  # additional creation parameters
+        parameters['OUTPUT'] = output_filename
+
+        result = runalg('gdalogr:rasterize', parameters)
+        if result is None:
+            # Let's try be removing a new parameter added between 2.14 and 2.16
+            del parameters['RASTER_EXT']
+
+        result = runalg('gdalogr:rasterize', parameters)
+        assert result is not None
 
     layer_aligned = QgsRasterLayer(output_filename, name, 'gdal')
+    assert layer_aligned.isValid()
+
+    index = layer.fieldNameIndex(field)
+    unique_ratio = layer.uniqueValues(index)
+
+    dataset = gdal.Open(layer_aligned.source(), GA_ReadOnly)
+    unique_values = numpy.unique(numpy.array(
+        dataset.GetRasterBand(1).ReadAsArray()))
+    assert len(unique_values) == len(unique_ratio)
 
     layer_aligned.keywords = keywords
     layer_aligned.keywords['title'] = (
