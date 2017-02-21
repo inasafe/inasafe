@@ -650,8 +650,8 @@ flood_petabencana_hazard_classes = {
         'on the water depth.'),
     'citations': [
         {
-            'text': None,
-            'link': None
+            'text': tr('PetaBencana.id'),
+            'link': u'https://petabencana.id'
         }
     ],
     'classes': [
@@ -662,7 +662,9 @@ flood_petabencana_hazard_classes = {
             'name': tr('High'),
             'affected': True,
             'description': tr('Water is above waist height.'),
-            'displacement_rate': 1.0,
+            # displacement rate estimated from DMI analysis of historical
+            # flood data and IDP numbers
+            'displacement_rate': 0.05,
             'fatality_rate': 0.0,
             'numeric_default_min': 1.5,
             'numeric_default_max': 9999999999,
@@ -682,6 +684,8 @@ flood_petabencana_hazard_classes = {
             'affected': True,
             'description': tr(
                 'Water is above knee height, below waist height.'),
+            # displacement rate estimated from DMI analysis of historical
+            # flood data and IDP numbers
             'displacement_rate': 0.03,
             'fatality_rate': 0.0,
             'numeric_default_min': 0.7,
@@ -702,7 +706,9 @@ flood_petabencana_hazard_classes = {
             'affected': True,
             'description': tr(
                 'Water encountered up to knee deep.'),
-            'displacement_rate': 0.0,
+            # displacement rate estimated from DMI analysis of historical
+            # flood data and IDP numbers
+            'displacement_rate': 0.01,
             'fatality_rate': 0.0,
             'numeric_default_min': 0.1,
             'numeric_default_max': 0.7,
@@ -724,6 +730,9 @@ flood_petabencana_hazard_classes = {
                 'No water encountered above ground height but there are may '
                 'be floods in surrounding areas and you should use caution '
                 'when moving around in this area.'),
+
+            # displacement rate estimated from DMI analysis of historical
+            # flood data and IDP numbers
             'displacement_rate': 0.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 0,
@@ -1119,7 +1128,7 @@ tsunami_hazard_classes_ITB = {
     'type': hazard_classification_type,
     'citations': [
         {
-            'text': None,
+            'text': 'Papadopoulos and Imamura, 2001',
             'link': u'http://geology.about.com/od/tsunamis/a/'
                     u'Tsunami-Intensity-Scale-2001.htm'
         }
@@ -1269,7 +1278,7 @@ tsunami_hazard_population_classes_ITB = {
     'type': hazard_classification_type,
     'citations': [
         {
-            'text': None,
+            'text': 'Papadopoulos and Imamura, 2001',
             'link': u'http://geology.about.com/od/tsunamis/a/'
                     u'Tsunami-Intensity-Scale-2001.htm'
         }
