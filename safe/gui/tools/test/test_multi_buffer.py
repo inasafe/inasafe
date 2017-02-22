@@ -58,6 +58,9 @@ class MultiBufferTest(unittest.TestCase):
         self.assertEqual(
             len(classification), dialog.hazard_class_form.count())
 
+        # don't launch keyword wizard. otherwise, the test will hang
+        dialog.keyword_wizard_checkbox.setChecked(False)
+
         dialog.accept()
 
         layer = dialog.data_store.layer(dialog.output_filename)

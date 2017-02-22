@@ -16,7 +16,7 @@ from safe.gis.vector.tools import (
     create_memory_layer,
     create_field_from_definition)
 from safe.gis.sanity_check import check_layer
-from safe.definitions.fields import hazard_class_field, buffer_distance_field
+from safe.definitions.fields import (hazard_class_field, buffer_distance_field)
 from safe.definitions.layer_purposes import layer_purpose_hazard
 from safe.definitions.processing_steps import buffer_steps
 from safe.utilities.profiling import profile

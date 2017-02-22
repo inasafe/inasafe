@@ -43,6 +43,7 @@ class MultiBufferDialog(QtGui.QDialog, FORM_CLASS):
         self.parent = parent
         self.iface = iface
         self.dock_widget = dock_widget
+        self.keyword_wizard = None
 
         # output file properties initialisation
         self.data_store = None
@@ -143,6 +144,7 @@ class MultiBufferDialog(QtGui.QDialog, FORM_CLASS):
 
         QgsMapLayerRegistry.instance().addMapLayers(
             [self.output_layer])
+        self.iface.setActiveLayer(self.output_layer)
         self.iface.zoomToActiveLayer()
         self.done(QtGui.QDialog.Accepted)
 
@@ -289,9 +291,9 @@ class MultiBufferDialog(QtGui.QDialog, FORM_CLASS):
             return
 
         # launch wizard dialog
-        self.wizard = WizardDialog(
+        self.keyword_wizard = WizardDialog(
             self.iface.mainWindow(),
             self.iface,
             self.dock_widget)
-        self.wizard.set_keywords_creation_mode()
-        self.wizard.exec_()  # modal
+        self.keyword_wizard.set_keywords_creation_mode(self.output_layer)
+        self.keyword_wizard.exec_()  # modal
