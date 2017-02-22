@@ -6641,6 +6641,21 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
         <translation>La couche %s n&apos;a pas de mot-clés. Utilisez l&apos;assistant pour assigner des mots-clés à la couche.</translation>
     </message>
     <message>
+        <location filename="analysis_steps.py" line="66"/>
+        <source>During the exposure preparation phase of the analysis, we convert the exposure data to a usable format for the analysis.</source>
+        <translation>Durant la préparation de l&apos;enjeu, nous convertissons la donnée dans un format utilisable pour l&apos;analyse.</translation>
+    </message>
+    <message>
+        <location filename="concepts.py" line="477"/>
+        <source>A range that defined with minimum and maximum value. In InaSAFE we exclude the minimum value but include the maximum value. In mathematical expression: minimum value &lt; x &lt;= maximum value. It is used for doing classification for continuous data.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="concepts.py" line="492"/>
+        <source>A conceptual mapping between one set of unique values and another set of unique values. Each unique value represents a particular class. It is used to express terms or concepts from one classification system in another classification system and only applies to non-continuous data. For example a value map can be used to express local names for entities (e.g.street type: &quot;jalan&quot;) into generic concepts (e.g.street type: &quot;residential&quot;).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="earthquake.py" line="148"/>
         <source>ITB fatality model based on a Bayesian approach. This model was developed by Institut Teknologi Bandung (ITB) and implemented by Dr. Hyeuk Ryu, Geoscience Australia.</source>
         <translation>Modèle de mortalité ITB basé sur une approche Bayésienne. Ce modèle a été développé par l&apos;Institut de Technologie de Bandung (ITB) et implémenté par Dr. Heuk Ryu, Geoscience Australie.</translation>
@@ -6686,278 +6701,13 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
         <translation>Jaiswal, K. S., Wald, D. J., et Hearne, M. (2009a). Estimating casualties for large worldwide earthquakes using an empirical approach. U.S. Geological Survey Open-File Report 2009-1136.</translation>
     </message>
     <message>
-        <location filename="hazard.py" line="289"/>
-        <source>Volcanic ash is modelled hazard data estimating the thickness of ash on the ground following a volcanic eruption.</source>
-        <translation>Les nuées ardentes volcaniques concernent des données sur l&apos;épaisseur des cendres au sol précédent une éruption volcanique.</translation>
-    </message>
-    <message>
-        <location filename="hazard.py" line="295"/>
-        <source>What action can be taken to secure water supplies and protect crops?</source>
-        <translation>Quelles mesures peuvent être prises pour sécuriser l&apos;eau et protéger les champs ?</translation>
-    </message>
-    <message>
-        <location filename="hazard.py" line="340"/>
-        <source>Tsunami hazard scenarios estimate the inundation of a tsunami wave on land.</source>
-        <translation>Les scénarios d&apos;un aléa tsunami estiment l&apos;inondation d&apos;une vague sur les terres.</translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="82"/>
-        <source>The area with the highest hazard.</source>
-        <translation>La zone avec l&apos;aléa le plus élevée.</translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="101"/>
-        <source>The area with the medium hazard.</source>
-        <translation>La zone avec un aléa modéré.</translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="120"/>
-        <source>The area with the lowest hazard.</source>
-        <translation>La zone avec un aléa faible.</translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="754"/>
-        <source>Five classes are supported for volcanic ash hazard data: &lt;b&gt;very low&lt;/b&gt;, &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, &lt;b&gt;high&lt;/b&gt; or &lt;b&gt;very high&lt;/b&gt;.</source>
-        <translation>Cinq classes sont supportées pour les nuées ardentes: &lt;b&gt;très faible&lt;/b&gt;, &lt;b&gt;faible&lt;/b&gt;, &lt;b&gt;modéré&lt;/b&gt;, &lt;b&gt;élevé&lt;/b&gt; ou &lt;b&gt;très élevé&lt;/b&gt;.</translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="773"/>
-        <source>Dry loading on buildings causing structural collapse.</source>
-        <translation>Un dépôt solide sur les structures provoquant l&apos;effondrement.</translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="792"/>
-        <source>Dry loading on buildings causing structural damage but not collapse; wet loading on buildings (i.e. ash loading + heavy rainfall) causing structural collapse.</source>
+        <location filename="exposure.py" line="41"/>
+        <source>Exposed population varies by the time (day or night, weekends, holidays etc.). Such variations are not included in the analysis.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="813"/>
-        <source>Damage to less vulnerable agricultural crops (e.g. tea plantations) and destruction of more vulnerable crops; destruction of critical infrastructure; cosmetic (non-structural) damage to buildings</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="835"/>
-        <source>Damage to transportation routes (e.g. airports, roads, railways); damage to critical infrastructure (e.g. electricity supply); damage to more vulnerable agricultural crops (e.g. rice fields)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="857"/>
-        <source>Impact on health (respiration), livestock, and contamination of water supply.</source>
-        <translation>Impact sur la santé (respiration), bétail, et la contamination de l&apos;approvisionnement en eau.</translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="1024"/>
-        <source>BNPB Perka 2/2012</source>
-        <translation>BNPB Perka 2/2012</translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="1036"/>
-        <source>The area is potentially hit by a tsunami wave with an inundation depth &gt; 3 m or reach a tsunami intensity scale of VII or more (Papadopoulos and Imamura, 2001). Tsunami wave with 4 m inundation depth cause damage to small vessel, a few ships are drifted inland, severe damage on most wooden houses. Boulders are deposited on shore. If tsunami height reaches 8 m, it will cause severe damage. Dykes, wave breaker, tsunami protection walls and green belts will be washed away.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="1341"/>
-        <source>Water above 1.1m and less than 3.0m. The area is potentially hit by a tsunami wave with an inundation depth of 1 - 3 m or equal to V-VI tsunami intensity scale (Papadopoulos and Imamura, 2001). Tsunami wave with a 3m inundation depth causes most people frightened and to flee to higher ground. Small vessels drift and collide. Damage occurs to some wooden houses, while most of them are safe.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="1367"/>
-        <source>Water above ground height and less than 1.0m. The area is potentially hit by a tsunami wave with an inundation depth less than 1 m or similar to tsunami intensity scale of V or less in (Papadopoulos and Imamura, 2001). Tsunami wave of 1m height causes few people to be frightened and flee to higher elevation. Felt by most people on large ship, observed from shore. Small vessels drift and collide and some turn over. Sand is deposited and there is flooding of areas close to the shore.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="1014"/>
-        <source>Tsunami hazards can be classified into one of three classes for an area. The area is either &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, or &lt;b&gt;high&lt;/b&gt;, for tsunami hazard classification. The following description for these classes is provided by Badan Geologi based on BNPB Perka 2/2012, and modified for population by Pak Hamza</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="1064"/>
-        <source>Water above 0.7m and less than 3.0m. The area is potentially hit by a tsunami wave with an inundation depth of 1 - 3 m or equal to V-VI tsunami intensity scale (Papadopoulos and Imamura, 2001). Tsunami wave with a 3m inundation depth causes most people frightened and to flee to higher ground. Small vessels drift and collide. Damage occurs to some wooden houses, while most of them are safe.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="1121"/>
-        <source>Tsunami classes ITB</source>
-        <translation>Classes tsunami ITB</translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="1272"/>
-        <source>Tsunami hazards can be classified into one of five classes for an area. The area is either &lt;b&gt;dry&lt;/b&gt;, &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, &lt;b&gt;high&lt;/b&gt;, or &lt;b&gt;very high&lt;/b&gt; for tsunami hazard classification. The following description for these classes is provided by Pak Hamza ITB based on Papadopoulos and Imamura, 2001.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="1312"/>
-        <source>Water above 3.1m and less than 8.0m. The area is potentially hit by a tsunami wave with an inundation depth &gt; 3 m or reach a tsunami intensity scale of VII or even more (Papadopoulos and Imamura, 2001). Tsunami wave with 4 m inundation depth cause damage to small vessel, a few ships are drifted inland, severe damage on most wooden houses. Boulders are deposited on shore. If tsunami height reaches 8 m, it will cause severe damage. Dykes, wave breaker, tsunami protection walls and green belts will be washed away.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="1271"/>
-        <source>Tsunami population classes ITB</source>
-        <translation>Classes tsunami population ITB</translation>
-    </message>
-    <message>
-        <location filename="post_processors.py" line="211"/>
-        <source>This is a value for the layer_property input type. It retrieves Size Calculator of the layer CRS</source>
-        <translation>C&apos;est une valeur pour l&apos;entrée de type layer_property. Récupération du calculateur de taille selon le CRS de la couche.</translation>
-    </message>
-    <message>
-        <location filename="post_processors.py" line="218"/>
-        <source>This is a value for layer_property input type. It retrieves the layer Coordinate Reference System (CRS).</source>
-        <translation>C&apos;est une valeur pour l&apos;entrée de type layer_property. Récupération du Système de Coordonnées de Référence (CRS) de la couche.</translation>
-    </message>
-    <message>
-        <location filename="post_processors.py" line="236"/>
-        <source>This type of process is a formula which is interpreted and executed by the post processor.</source>
-        <translation>Ce type de traitement est une formule qui est interprété et exécuté par le post processeur.</translation>
-    </message>
-    <message>
-        <location filename="post_processors.py" line="243"/>
-        <source>This type of process takes inputs as arguments and processes them by passing them to a Python function.</source>
-        <translation>Ce type de traitement nécessite des arguments comme entrées et les traite selon une fonction Python.</translation>
-    </message>
-    <message>
-        <location filename="post_processors.py" line="349"/>
-        <source>A post processor to calculate needed hygiene packs weekly for women who are displaced. &quot;Displaced&quot; is defined as: {displaced_concept}</source>
-        <translation>Un post processeur pour calculer le nombre de packs hygiénique hebdomadaire pour les femmes déplacées. &quot;Déplacé&quot; est défini comme: {displaced_concept}</translation>
-    </message>
-    <message>
-        <location filename="components.py" line="81"/>
-        <source>Estimated {title}</source>
-        <translation>Estimation {title}</translation>
-    </message>
-    <message>
-        <location filename="components.py" line="93"/>
-        <source>Not Affected</source>
-        <translation>Non affecté(s)</translation>
-    </message>
-    <message>
-        <location filename="components.py" line="97"/>
-        <source>Not Exposed</source>
-        <translation>Non Exposé</translation>
-    </message>
-    <message>
-        <location filename="components.py" line="408"/>
-        <source>source not available</source>
-        <translation>source non disponible</translation>
-    </message>
-    <message>
-        <location filename="components.py" line="409"/>
-        <source>reference unspecified</source>
-        <translation>référence non spécifiée</translation>
-    </message>
-    <message>
-        <location filename="components.py" line="410"/>
-        <source>not used</source>
-        <translation>non utilisé</translation>
-    </message>
-    <message>
-        <location filename="components.py" line="423"/>
-        <source>Hazard source</source>
-        <translation>Source aléa</translation>
-    </message>
-    <message>
-        <location filename="components.py" line="435"/>
-        <source>{layer_name} - {source} - </source>
-        <translation>{layer_name} - {source} - </translation>
-    </message>
-    <message>
-        <location filename="components.py" line="428"/>
-        <source>Exposure source</source>
-        <translation>Source enjeu</translation>
-    </message>
-    <message>
-        <location filename="components.py" line="433"/>
-        <source>Aggregation source</source>
-        <translation>Source agrégation</translation>
-    </message>
-    <message>
-        <location filename="components.py" line="438"/>
-        <source>Impact Function</source>
-        <translation>Fonction d&apos;Impact</translation>
-    </message>
-    <message>
-        <location filename="components.py" line="440"/>
-        <source>{impact_function_name}</source>
-        <translation>{impact_function_name}</translation>
-    </message>
-    <message>
-        <location filename="sanity_check.py" line="70"/>
-        <source>The layer is invalid.</source>
-        <translation>La couche est invalide.</translation>
-    </message>
-    <message>
-        <location filename="sanity_check.py" line="78"/>
-        <source>The layer should not have many sublayers : {source} : {names}</source>
-        <translation>La couche ne doit pas avoir plusieurs sous-couches : {source} : {names}</translation>
-    </message>
-    <message>
-        <location filename="sanity_check.py" line="87"/>
-        <source>The layer has not a valid geometry type.</source>
-        <translation>La couche n&apos;a pas un type de géométrie valide.</translation>
-    </message>
-    <message>
-        <location filename="sanity_check.py" line="92"/>
-        <source>The layer has not a correct geometry type.</source>
-        <translation>La couche n&apos;a pas un type de géométrie correct.</translation>
-    </message>
-    <message>
-        <location filename="sanity_check.py" line="96"/>
-        <source>The layer is neither a raster nor a vector : {type}</source>
-        <translation>La couche n&apos;est ni un raster ni un vecteur : {type}</translation>
-    </message>
-    <message>
-        <location filename="prepare_vector_layer.py" line="157"/>
-        <source>Hazard classification is missing exposure key.</source>
-        <translation>La clé exposure est manquante dans la classification de l&apos;aléa.</translation>
-    </message>
-    <message>
-        <location filename="step_kw33_multi_classifications.py" line="269"/>
-        <source>InaSAFE use default classification for Raster Earthquake hazard on population.</source>
-        <translation>InaSAFE utilise une classification par défaut pour Séisme Raster sur la Population Raster.</translation>
-    </message>
-    <message>
-        <location filename="step_kw43_threshold.py" line="137"/>
-        <source>Min &gt;</source>
-        <translation>Min &gt;</translation>
-    </message>
-    <message>
-        <location filename="wizard_strings.py" line="144"/>
-        <source>You have selected &lt;b&gt;%s %s&lt;/b&gt; as a &lt;b&gt;continuous&lt;/b&gt; layer and the attribute is &lt;b&gt;%s&lt;/b&gt; with &lt;b&gt;%s&lt;/b&gt;. Please input the minimum and maximum value for each class below. Minimum value will be excluded in the range, while maximum value will be included. The minimum value from the layer is &lt;b&gt;%s&lt;/b&gt; and the maximum value is &lt;b&gt;%s&lt;/b&gt;.</source>
-        <translation>Vous avez sélectionné &lt;b&gt;%s %s&lt;/b&gt; comme une couche &lt;b&gt;continue&lt;/b&gt; et l&apos;attribut est &lt;b&gt;%s&lt;/b&gt; avec &lt;b&gt;%s&lt;/b&gt;. Veuillez indiquer les valeurs minimale et maximale pour chaque classe ci-dessous. La valeur minimale sera exclue de l&apos;intervalle, alors que la valeur maximale sera inclue. La valeur minimale de la couche est &lt;b&gt;%s&lt;/b&gt; et la valeur maximale est &lt;b&gt;%s&lt;/b&gt;.</translation>
-    </message>
-    <message>
-        <location filename="wizard_strings.py" line="152"/>
-        <source>You have selected &lt;b&gt;%s %s&lt;/b&gt; as a &lt;b&gt;continuous&lt;/b&gt; layer with &lt;b&gt;%s&lt;/b&gt;. Minimum value will be excluded in the range, while maximum value will be included. Please input the minimum and maximum value for each class below. The minimum value from the layer is &lt;b&gt;%s&lt;/b&gt; and the maximum value is &lt;b&gt;%s&lt;/b&gt;.</source>
-        <translation>Vous avez sélectionné &lt;b&gt;%s %s&lt;/b&gt; comme une couche &lt;b&gt;continue&lt;/b&gt; avec &lt;b&gt;%s&lt;/b&gt;. La valeur minimale sera exclue de l&apos;intervalle, alors que la valeur maximale sera inclue. Veuillez indiquer les valeurs minimale et maximale pour chaque classe ci-dessous. La valeur minimale de la couche est &lt;b&gt;%s&lt;/b&gt; et la valeur maximale est &lt;b&gt;%s&lt;/b&gt;.</translation>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="960"/>
-        <source>The aggregation layer seems to have a problem. Some features might be invalid. You should check the validity of this layer or use a selection within this layer.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="1293"/>
-        <source>Something went wrong with the datastore : {error_message}</source>
-        <translation>Une erreur est survenu avec le entrepôt : {error_message}</translation>
-    </message>
-    <message>
-        <location filename="keyword_io.py" line="165"/>
-        <source>The layer is not a QgsMapLayer : {type}</source>
-        <translation>La couche n&apos;est pas un QgsMapLayer : {type}</translation>
-    </message>
-    <message>
-        <location filename="analysis_steps.py" line="66"/>
-        <source>During the exposure preparation phase of the analysis, we convert the exposure data to a usable format for the analysis.</source>
-        <translation>Durant la préparation de l&apos;enjeu, nous convertissons la donnée dans un format utilisable pour l&apos;analyse.</translation>
-    </message>
-    <message>
-        <location filename="concepts.py" line="477"/>
-        <source>A range that defined with minimum and maximum value. In InaSAFE we exclude the minimum value but include the maximum value. In mathematical expression: minimum value &lt; x &lt;= maximum value. It is used for doing classification for continuous data.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="concepts.py" line="492"/>
-        <source>A conceptual mapping between one set of unique values and another set of unique values. Each unique value represents a particular class. It is used to express terms or concepts from one classification system in another classification system and only applies to non-continuous data. For example a value map can be used to express local names for entities (e.g.street type: &quot;jalan&quot;) into generic concepts (e.g.street type: &quot;residential&quot;).</source>
+        <location filename="exposure.py" line="53"/>
+        <source>Map shows the estimated displaced population. People are displaced if they experience and survive a shake level of more than 5 on the MMI scale.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -6989,6 +6739,36 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
         <location filename="exposure.py" line="85"/>
         <source>Care should be taken when applying empirical earthquake fatality models for ground-motion estimation methods that are inconsistent with the methods used to calibrate the model.</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="hazard.py" line="289"/>
+        <source>Volcanic ash is modelled hazard data estimating the thickness of ash on the ground following a volcanic eruption.</source>
+        <translation>Les nuées ardentes volcaniques concernent des données sur l&apos;épaisseur des cendres au sol précédent une éruption volcanique.</translation>
+    </message>
+    <message>
+        <location filename="hazard.py" line="295"/>
+        <source>What action can be taken to secure water supplies and protect crops?</source>
+        <translation>Quelles mesures peuvent être prises pour sécuriser l&apos;eau et protéger les champs ?</translation>
+    </message>
+    <message>
+        <location filename="hazard.py" line="340"/>
+        <source>Tsunami hazard scenarios estimate the inundation of a tsunami wave on land.</source>
+        <translation>Les scénarios d&apos;un aléa tsunami estiment l&apos;inondation d&apos;une vague sur les terres.</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="82"/>
+        <source>The area with the highest hazard.</source>
+        <translation>La zone avec l&apos;aléa le plus élevée.</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="101"/>
+        <source>The area with the medium hazard.</source>
+        <translation>La zone avec un aléa modéré.</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="120"/>
+        <source>The area with the lowest hazard.</source>
+        <translation>La zone avec un aléa faible.</translation>
     </message>
     <message>
         <location filename="hazard_classifications.py" line="230"/>
@@ -7086,6 +6866,11 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
         <translation>II</translation>
     </message>
     <message>
+        <location filename="hazard_classifications.py" line="451"/>
+        <source>Felt only by a few persons at rest, especially on upper floors of buildings.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="hazard_classifications.py" line="471"/>
         <source>I</source>
         <translation>I</translation>
@@ -7104,6 +6889,11 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
         <location filename="hazard_classifications.py" line="647"/>
         <source>This is a flood classification for an area. The area is broken down into a number of flood classes of increasing severity based on the water depth.</source>
         <translation>Ceci est une classification d&apos;inondation pour une zone. La zone est décomposée en plusieurs classes avec une sévérité croissante basée sur la profondeur d&apos;eau.</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="653"/>
+        <source>PetaBencana.id</source>
+        <translation>PetaBencana.id</translation>
     </message>
     <message>
         <location filename="hazard_classifications.py" line="664"/>
@@ -7131,9 +6921,94 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
         <translation>Il n&apos;y a pas d&apos;eau au niveau du sol mais il peut y avoir des inondations dans les environs et vous devez vous déplacer avec prudence dans la zone.</translation>
     </message>
     <message>
+        <location filename="hazard_classifications.py" line="754"/>
+        <source>Five classes are supported for volcanic ash hazard data: &lt;b&gt;very low&lt;/b&gt;, &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, &lt;b&gt;high&lt;/b&gt; or &lt;b&gt;very high&lt;/b&gt;.</source>
+        <translation>Cinq classes sont supportées pour les nuées ardentes: &lt;b&gt;très faible&lt;/b&gt;, &lt;b&gt;faible&lt;/b&gt;, &lt;b&gt;modéré&lt;/b&gt;, &lt;b&gt;élevé&lt;/b&gt; ou &lt;b&gt;très élevé&lt;/b&gt;.</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="773"/>
+        <source>Dry loading on buildings causing structural collapse.</source>
+        <translation>Un dépôt solide sur les structures provoquant l&apos;effondrement.</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="792"/>
+        <source>Dry loading on buildings causing structural damage but not collapse; wet loading on buildings (i.e. ash loading + heavy rainfall) causing structural collapse.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="813"/>
+        <source>Damage to less vulnerable agricultural crops (e.g. tea plantations) and destruction of more vulnerable crops; destruction of critical infrastructure; cosmetic (non-structural) damage to buildings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="835"/>
+        <source>Damage to transportation routes (e.g. airports, roads, railways); damage to critical infrastructure (e.g. electricity supply); damage to more vulnerable agricultural crops (e.g. rice fields)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="857"/>
+        <source>Impact on health (respiration), livestock, and contamination of water supply.</source>
+        <translation>Impact sur la santé (respiration), bétail, et la contamination de l&apos;approvisionnement en eau.</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="883"/>
+        <source>Tsunami hazards can be classified into one of four classes for an area. The area is either &lt;b&gt;dry&lt;/b&gt;, &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, or &lt;b&gt;high&lt;/b&gt;, for tsunami hazard classification. The following description for these classes is provided by Badan Geologi based on BNPB Perka 2/2012</source>
+        <translation>L&apos;aléa tsunami peut être classifié dans une de ces quatre classes pour une zone donnée. La zone est soit &lt;b&gt;sèche&lt;/b&gt;, &lt;b&gt;faible&lt;/&gt;, &lt;b&gt;modérée&lt;/b&gt; ou &lt;b&gt;haute&lt;/b&gt; pour la classification d&apos;un tsunami. La description précédente pour ces classes est décrite par Badan Geologi dans BNPB Perka 2/2012</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="1024"/>
+        <source>BNPB Perka 2/2012</source>
+        <translation>BNPB Perka 2/2012</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="1036"/>
+        <source>The area is potentially hit by a tsunami wave with an inundation depth &gt; 3 m or reach a tsunami intensity scale of VII or more (Papadopoulos and Imamura, 2001). Tsunami wave with 4 m inundation depth cause damage to small vessel, a few ships are drifted inland, severe damage on most wooden houses. Boulders are deposited on shore. If tsunami height reaches 8 m, it will cause severe damage. Dykes, wave breaker, tsunami protection walls and green belts will be washed away.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="1341"/>
+        <source>Water above 1.1m and less than 3.0m. The area is potentially hit by a tsunami wave with an inundation depth of 1 - 3 m or equal to V-VI tsunami intensity scale (Papadopoulos and Imamura, 2001). Tsunami wave with a 3m inundation depth causes most people frightened and to flee to higher ground. Small vessels drift and collide. Damage occurs to some wooden houses, while most of them are safe.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="1367"/>
+        <source>Water above ground height and less than 1.0m. The area is potentially hit by a tsunami wave with an inundation depth less than 1 m or similar to tsunami intensity scale of V or less in (Papadopoulos and Imamura, 2001). Tsunami wave of 1m height causes few people to be frightened and flee to higher elevation. Felt by most people on large ship, observed from shore. Small vessels drift and collide and some turn over. Sand is deposited and there is flooding of areas close to the shore.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="hazard_classifications.py" line="1012"/>
         <source>Tsunami population classes</source>
         <translation>Classes tsunami population</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="1014"/>
+        <source>Tsunami hazards can be classified into one of three classes for an area. The area is either &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, or &lt;b&gt;high&lt;/b&gt;, for tsunami hazard classification. The following description for these classes is provided by Badan Geologi based on BNPB Perka 2/2012, and modified for population by Pak Hamza</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="1064"/>
+        <source>Water above 0.7m and less than 3.0m. The area is potentially hit by a tsunami wave with an inundation depth of 1 - 3 m or equal to V-VI tsunami intensity scale (Papadopoulos and Imamura, 2001). Tsunami wave with a 3m inundation depth causes most people frightened and to flee to higher ground. Small vessels drift and collide. Damage occurs to some wooden houses, while most of them are safe.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="1121"/>
+        <source>Tsunami classes ITB</source>
+        <translation>Classes tsunami ITB</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="1272"/>
+        <source>Tsunami hazards can be classified into one of five classes for an area. The area is either &lt;b&gt;dry&lt;/b&gt;, &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, &lt;b&gt;high&lt;/b&gt;, or &lt;b&gt;very high&lt;/b&gt; for tsunami hazard classification. The following description for these classes is provided by Pak Hamza ITB based on Papadopoulos and Imamura, 2001.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="1312"/>
+        <source>Water above 3.1m and less than 8.0m. The area is potentially hit by a tsunami wave with an inundation depth &gt; 3 m or reach a tsunami intensity scale of VII or even more (Papadopoulos and Imamura, 2001). Tsunami wave with 4 m inundation depth cause damage to small vessel, a few ships are drifted inland, severe damage on most wooden houses. Boulders are deposited on shore. If tsunami height reaches 8 m, it will cause severe damage. Dykes, wave breaker, tsunami protection walls and green belts will be washed away.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="1271"/>
+        <source>Tsunami population classes ITB</source>
+        <translation>Classes tsunami population ITB</translation>
     </message>
     <message>
         <location filename="peta_bencana.py" line="12"/>
@@ -7144,6 +7019,31 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
         <location filename="peta_bencana.py" line="34"/>
         <source>Production API</source>
         <translation>API de Production</translation>
+    </message>
+    <message>
+        <location filename="post_processors.py" line="211"/>
+        <source>This is a value for the layer_property input type. It retrieves Size Calculator of the layer CRS</source>
+        <translation>C&apos;est une valeur pour l&apos;entrée de type layer_property. Récupération du calculateur de taille selon le CRS de la couche.</translation>
+    </message>
+    <message>
+        <location filename="post_processors.py" line="218"/>
+        <source>This is a value for layer_property input type. It retrieves the layer Coordinate Reference System (CRS).</source>
+        <translation>C&apos;est une valeur pour l&apos;entrée de type layer_property. Récupération du Système de Coordonnées de Référence (CRS) de la couche.</translation>
+    </message>
+    <message>
+        <location filename="post_processors.py" line="236"/>
+        <source>This type of process is a formula which is interpreted and executed by the post processor.</source>
+        <translation>Ce type de traitement est une formule qui est interprété et exécuté par le post processeur.</translation>
+    </message>
+    <message>
+        <location filename="post_processors.py" line="243"/>
+        <source>This type of process takes inputs as arguments and processes them by passing them to a Python function.</source>
+        <translation>Ce type de traitement nécessite des arguments comme entrées et les traite selon une fonction Python.</translation>
+    </message>
+    <message>
+        <location filename="post_processors.py" line="349"/>
+        <source>A post processor to calculate needed hygiene packs weekly for women who are displaced. &quot;Displaced&quot; is defined as: {displaced_concept}</source>
+        <translation>Un post processeur pour calculer le nombre de packs hygiénique hebdomadaire pour les femmes déplacées. &quot;Déplacé&quot; est défini comme: {displaced_concept}</translation>
     </message>
     <message>
         <location filename="__init__.py" line="20"/>
@@ -7256,6 +7156,126 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
         <translation>Marque ce composant comme étant une sortie SVG.</translation>
     </message>
     <message>
+        <location filename="components.py" line="81"/>
+        <source>Estimated {title}</source>
+        <translation>Estimation {title}</translation>
+    </message>
+    <message>
+        <location filename="components.py" line="93"/>
+        <source>Not Affected</source>
+        <translation>Non affecté(s)</translation>
+    </message>
+    <message>
+        <location filename="components.py" line="97"/>
+        <source>Not Exposed</source>
+        <translation>Non Exposé</translation>
+    </message>
+    <message>
+        <location filename="components.py" line="132"/>
+        <source>Not affected</source>
+        <translation>Non affectés</translation>
+    </message>
+    <message>
+        <location filename="components.py" line="138"/>
+        <source>Estimated {title} by {exposure} type</source>
+        <translation>Estimation du {title} de {exposure} par type</translation>
+    </message>
+    <message>
+        <location filename="components.py" line="172"/>
+        <source>For this analysis, the following displacement rates were used: {rate_description}</source>
+        <translation>Pour cette analyse, les ratios de déplacement suivants ont été utilisés: {rate_description}</translation>
+    </message>
+    <message>
+        <location filename="components.py" line="175"/>
+        <source>{name} - {displacement_rate:.2%}</source>
+        <translation>{name} - {displacement_rate:.2%}</translation>
+    </message>
+    <message>
+        <location filename="components.py" line="408"/>
+        <source>source not available</source>
+        <translation>source non disponible</translation>
+    </message>
+    <message>
+        <location filename="components.py" line="409"/>
+        <source>reference unspecified</source>
+        <translation>référence non spécifiée</translation>
+    </message>
+    <message>
+        <location filename="components.py" line="410"/>
+        <source>not used</source>
+        <translation>non utilisé</translation>
+    </message>
+    <message>
+        <location filename="components.py" line="423"/>
+        <source>Hazard source</source>
+        <translation>Source aléa</translation>
+    </message>
+    <message>
+        <location filename="components.py" line="435"/>
+        <source>{layer_name} - {source} - </source>
+        <translation>{layer_name} - {source} - </translation>
+    </message>
+    <message>
+        <location filename="components.py" line="428"/>
+        <source>Exposure source</source>
+        <translation>Source enjeu</translation>
+    </message>
+    <message>
+        <location filename="components.py" line="433"/>
+        <source>Aggregation source</source>
+        <translation>Source agrégation</translation>
+    </message>
+    <message>
+        <location filename="components.py" line="438"/>
+        <source>Impact Function</source>
+        <translation>Fonction d&apos;Impact</translation>
+    </message>
+    <message>
+        <location filename="components.py" line="440"/>
+        <source>{impact_function_name}</source>
+        <translation>{impact_function_name}</translation>
+    </message>
+    <message>
+        <location filename="units.py" line="48"/>
+        <source>Weight/area</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="units.py" line="113"/>
+        <source>Speed</source>
+        <translation>Vitesse</translation>
+    </message>
+    <message>
+        <location filename="sanity_check.py" line="70"/>
+        <source>The layer is invalid.</source>
+        <translation>La couche est invalide.</translation>
+    </message>
+    <message>
+        <location filename="sanity_check.py" line="78"/>
+        <source>The layer should not have many sublayers : {source} : {names}</source>
+        <translation>La couche ne doit pas avoir plusieurs sous-couches : {source} : {names}</translation>
+    </message>
+    <message>
+        <location filename="sanity_check.py" line="87"/>
+        <source>The layer has not a valid geometry type.</source>
+        <translation>La couche n&apos;a pas un type de géométrie valide.</translation>
+    </message>
+    <message>
+        <location filename="sanity_check.py" line="92"/>
+        <source>The layer has not a correct geometry type.</source>
+        <translation>La couche n&apos;a pas un type de géométrie correct.</translation>
+    </message>
+    <message>
+        <location filename="sanity_check.py" line="96"/>
+        <source>The layer is neither a raster nor a vector : {type}</source>
+        <translation>La couche n&apos;est ni un raster ni un vecteur : {type}</translation>
+    </message>
+    <message>
+        <location filename="prepare_vector_layer.py" line="157"/>
+        <source>Hazard classification is missing exposure key.</source>
+        <translation>La clé exposure est manquante dans la classification de l&apos;aléa.</translation>
+    </message>
+    <message>
         <location filename="union.py" line="248"/>
         <source>GEOS geoprocessing error: One or more input features have null geometry.</source>
         <translation>Erreur de traitement GEOS: Une ou plusieurs entités en entrée ont une géométrie nulle.</translation>
@@ -7264,6 +7284,36 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
         <location filename="definitions_help.py" line="146"/>
         <source>The PetaBencana Downloader</source>
         <translation>Le Téléchargeur PetaBencana</translation>
+    </message>
+    <message>
+        <location filename="definitions_help.py" line="589"/>
+        <source>Earthquake notes:</source>
+        <translation>Notes séismes:</translation>
+    </message>
+    <message>
+        <location filename="definitions_help.py" line="590"/>
+        <source>Earthquake Pager notes:</source>
+        <translation>Notes séismes Pager:</translation>
+    </message>
+    <message>
+        <location filename="definitions_help.py" line="591"/>
+        <source>Earthquake ITB notes:</source>
+        <translation>Notes séismes ITB:</translation>
+    </message>
+    <message>
+        <location filename="definitions_help.py" line="593"/>
+        <source>Earthquake fatality model limitations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="dock_help.py" line="268"/>
+        <source>All datasets will be clipped to the behaviours defined in the analysis extents dialog if you do not use an aggregation layer.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="needs_calculator_help.py" line="69"/>
+        <source>Use the pick lists to select the layer and the population field and then press &apos;OK&apos;.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="peta_bencana_help.py" line="39"/>
@@ -7276,94 +7326,54 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
         <translation>Les données sont la propriété de contributeurs PetaBencana (cliquez pour plus d&apos;informations).</translation>
     </message>
     <message>
+        <location filename="step_kw33_multi_classifications.py" line="269"/>
+        <source>InaSAFE use default classification for Raster Earthquake hazard on population.</source>
+        <translation>InaSAFE utilise une classification par défaut pour Séisme Raster sur la Population Raster.</translation>
+    </message>
+    <message>
+        <location filename="step_kw43_threshold.py" line="137"/>
+        <source>Min &gt;</source>
+        <translation>Min &gt;</translation>
+    </message>
+    <message>
+        <location filename="step_kw47_default_inasafe_fields.py" line="265"/>
+        <source>The sum of your age ratios is not 1. Please fix it first before you can continue to the next step.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="step_kw47_default_inasafe_fields.py" line="270"/>
+        <source>You are good to go.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="wizard_strings.py" line="144"/>
+        <source>You have selected &lt;b&gt;%s %s&lt;/b&gt; as a &lt;b&gt;continuous&lt;/b&gt; layer and the attribute is &lt;b&gt;%s&lt;/b&gt; with &lt;b&gt;%s&lt;/b&gt;. Please input the minimum and maximum value for each class below. Minimum value will be excluded in the range, while maximum value will be included. The minimum value from the layer is &lt;b&gt;%s&lt;/b&gt; and the maximum value is &lt;b&gt;%s&lt;/b&gt;.</source>
+        <translation>Vous avez sélectionné &lt;b&gt;%s %s&lt;/b&gt; comme une couche &lt;b&gt;continue&lt;/b&gt; et l&apos;attribut est &lt;b&gt;%s&lt;/b&gt; avec &lt;b&gt;%s&lt;/b&gt;. Veuillez indiquer les valeurs minimale et maximale pour chaque classe ci-dessous. La valeur minimale sera exclue de l&apos;intervalle, alors que la valeur maximale sera inclue. La valeur minimale de la couche est &lt;b&gt;%s&lt;/b&gt; et la valeur maximale est &lt;b&gt;%s&lt;/b&gt;.</translation>
+    </message>
+    <message>
+        <location filename="wizard_strings.py" line="152"/>
+        <source>You have selected &lt;b&gt;%s %s&lt;/b&gt; as a &lt;b&gt;continuous&lt;/b&gt; layer with &lt;b&gt;%s&lt;/b&gt;. Minimum value will be excluded in the range, while maximum value will be included. Please input the minimum and maximum value for each class below. The minimum value from the layer is &lt;b&gt;%s&lt;/b&gt; and the maximum value is &lt;b&gt;%s&lt;/b&gt;.</source>
+        <translation>Vous avez sélectionné &lt;b&gt;%s %s&lt;/b&gt; comme une couche &lt;b&gt;continue&lt;/b&gt; avec &lt;b&gt;%s&lt;/b&gt;. La valeur minimale sera exclue de l&apos;intervalle, alors que la valeur maximale sera inclue. Veuillez indiquer les valeurs minimale et maximale pour chaque classe ci-dessous. La valeur minimale de la couche est &lt;b&gt;%s&lt;/b&gt; et la valeur maximale est &lt;b&gt;%s&lt;/b&gt;.</translation>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="960"/>
+        <source>The aggregation layer seems to have a problem. Some features might be invalid. You should check the validity of this layer or use a selection within this layer.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="1293"/>
+        <source>Something went wrong with the datastore : {error_message}</source>
+        <translation>Une erreur est survenu avec le entrepôt : {error_message}</translation>
+    </message>
+    <message>
         <location filename="impact_function.py" line="1472"/>
         <source>{ratio} constant detected, we will add it to the exposure layer.</source>
         <translation>Constante {ratio} détecté, nous allons l&apos;ajouter à la couche d&apos;enjeu.</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="41"/>
-        <source>Exposed population varies by the time (day or night, weekends, holidays etc.). Such variations are not included in the analysis.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="exposure.py" line="53"/>
-        <source>Map shows the estimated displaced population. People are displaced if they experience and survive a shake level of more than 5 on the MMI scale.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="451"/>
-        <source>Felt only by a few persons at rest, especially on upper floors of buildings.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="653"/>
-        <source>PetaBencana.id</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="883"/>
-        <source>Tsunami hazards can be classified into one of four classes for an area. The area is either &lt;b&gt;dry&lt;/b&gt;, &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, or &lt;b&gt;high&lt;/b&gt;, for tsunami hazard classification. The following description for these classes is provided by Badan Geologi based on BNPB Perka 2/2012</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="components.py" line="132"/>
-        <source>Not affected</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="components.py" line="138"/>
-        <source>Estimated {title} by {exposure} type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="components.py" line="172"/>
-        <source>For this analysis, the following displacement rates were used: {rate_description}</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="components.py" line="175"/>
-        <source>{name} - {displacement_rate:.2%}</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="units.py" line="48"/>
-        <source>Weight/area</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="units.py" line="113"/>
-        <source>Speed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions_help.py" line="589"/>
-        <source>Earthquake notes:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions_help.py" line="590"/>
-        <source>Earthquake Pager notes:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions_help.py" line="591"/>
-        <source>Earthquake ITB notes:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions_help.py" line="593"/>
-        <source>Earthquake fataility model limitations</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock_help.py" line="268"/>
-        <source>All datasets will be clipped to the behaviours defined in the analysis extents dialog if you do not use an aggregation layer.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="needs_calculator_help.py" line="69"/>
-        <source>Use the pick lists to select the layer and the population field and then press &apos;OK&apos;.</source>
-        <translation type="unfinished"></translation>
+        <location filename="keyword_io.py" line="165"/>
+        <source>The layer is not a QgsMapLayer : {type}</source>
+        <translation>La couche n&apos;est pas un QgsMapLayer : {type}</translation>
     </message>
 </context>
 <context>
@@ -8341,11 +8351,6 @@ to
         <translation>Champ nom agrégation</translation>
     </message>
     <message>
-        <location filename="needs_calculator_dialog_base.ui" line="148"/>
-        <source>Aggregation field ID</source>
-        <translation>Champ identifiant agrégation</translation>
-    </message>
-    <message>
         <location filename="needs_calculator_dialog_base.ui" line="56"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This tool will calculate minimum needs for displaced people in the specified aggregation areas. Press the help button for more detailed instruction about this tool.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
@@ -8353,12 +8358,17 @@ to
     <message>
         <location filename="needs_calculator_dialog_base.ui" line="79"/>
         <source>Displaced people layer*</source>
-        <translation type="unfinished"></translation>
+        <translation>Couche personnes déplacées*</translation>
     </message>
     <message>
         <location filename="needs_calculator_dialog_base.ui" line="102"/>
         <source>Displaced people field*</source>
-        <translation type="unfinished"></translation>
+        <translation>Champ personnes déplacées*</translation>
+    </message>
+    <message>
+        <location filename="needs_calculator_dialog_base.ui" line="148"/>
+        <source>Aggregation field ID</source>
+        <translation>Champ identifiant agrégation</translation>
     </message>
     <message>
         <location filename="needs_calculator_dialog_base.ui" line="158"/>
@@ -9653,12 +9663,12 @@ p, li { white-space: pre-wrap; }
         <translation>Terminer</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="693"/>
+        <location filename="wizard_dialog.py" line="702"/>
         <source>Next</source>
         <translation>Suivant</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="822"/>
+        <location filename="wizard_dialog.py" line="831"/>
         <source>InaSAFE</source>
         <translation>InaSAFE</translation>
     </message>
@@ -9683,7 +9693,7 @@ p, li { white-space: pre-wrap; }
         <translation>Utilisez cet assistant pour établir une évaluation d&apos;impact</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="822"/>
+        <location filename="wizard_dialog.py" line="831"/>
         <source>An error was encountered when saving the following keywords:
  %s</source>
         <translation>Une erreur est survenue lors de l&apos;enregistrement des mots-clés:
