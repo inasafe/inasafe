@@ -524,7 +524,7 @@ concepts['value_maps'] = {
         'one classification system in another classification system and '
         'only applies to non-continuous data. For example a value map can '
         'be used to express local names for entities (e.g.street type: '
-        '"jalan") into generic concepts (e.g.street type: "residential").'
+        '"alley") into generic concepts (e.g.street type: "residential").'
     ),
     'citations': [
         {
