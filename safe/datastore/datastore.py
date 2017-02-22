@@ -126,8 +126,13 @@ class DataStore(object):
 
         try:
             layer.keywords
-            KeywordIO().write_keywords(
-                self.layer(result[1]), layer.keywords)
+            real_layer = self.layer(result[1])
+            if isinstance(real_layer, bool):
+                message = ('{name} was not found in the datastore or the '
+                           'layer was not valid.'.format(name=result[1]))
+                LOGGER.debug(message)
+                return False, message
+            KeywordIO().write_keywords(real_layer, layer.keywords)
         except AttributeError:
             pass
 

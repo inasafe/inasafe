@@ -5,6 +5,8 @@
 
 """Definitions relating to post-processing."""
 
+import logging
+from math import isnan
 from collections import OrderedDict
 
 from PyQt4.QtCore import QPyNullVariant
@@ -41,6 +43,8 @@ __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
+
+LOGGER = logging.getLogger('InaSAFE')
 
 # # #
 # Functions
@@ -79,7 +83,28 @@ def size(**kwargs):
 
     :return: The size.
     """
-    feature_size = kwargs['size_calculator'].measure(kwargs['geometry'])
+    geometry = kwargs['geometry']
+    size_calculator = kwargs['size_calculator']
+    message = 'Size with NaN value : geometry valid={valid}, WKT={wkt}'
+    feature_size = 0
+    if geometry.isMultipart():
+        # Be careful, the size calculator is not working well on a multipart.
+        # So we compute the size part per part. See ticket #3812
+        for single in geometry.asGeometryCollection():
+            geometry_size = size_calculator.measure(single)
+            if not isnan(geometry_size):
+                feature_size += geometry_size
+            else:
+                LOGGER.debug(message.format(
+                    valid=single.isGeosValid(), wkt=single.exportToWkt()))
+    else:
+        geometry_size = size_calculator.measure(geometry)
+        if not isnan(geometry_size):
+            feature_size = geometry_size
+        else:
+            LOGGER.debug(message.format(
+                valid=geometry.isGeosValid(), wkt=geometry.exportToWkt()))
+
     return feature_size
 
 

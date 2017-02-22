@@ -2,6 +2,7 @@
 
 """Aggregate the aggregate hazard to the analysis layer."""
 
+from math import isnan
 from PyQt4.QtCore import QPyNullVariant
 from qgis.core import QGis, QgsFeatureRequest
 
@@ -107,7 +108,8 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
     for area in aggregate_hazard.getFeatures():
         hazard_value = area[hazard_class_index]
         value = area[total]
-        if not value or isinstance(value, QPyNullVariant):
+        if not value or isinstance(value, QPyNullVariant) or isnan(value):
+            # For isnan, see ticket #3812
             value = 0
         if not hazard_value or isinstance(hazard_value, QPyNullVariant):
             hazard_value = 'NULL'
