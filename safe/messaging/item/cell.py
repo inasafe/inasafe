@@ -95,7 +95,7 @@ class Cell(MessageElement):
         # Special case for when we want to put a nested table in a cell
         # We don't use isinstance because of recursive imports with table
         class_name = args[0].__class__.__name__
-        if class_name in ['BulletedList', 'Table']:
+        if class_name in ['BulletedList', 'Table', 'Message']:
             self.content = args[0]
         else:
             self.content = Text(*args)
@@ -126,7 +126,7 @@ class Cell(MessageElement):
         # Special case for when we want to put a nested table in a cell
         # We don't use isinstance because of recursive imports with table
         class_name = self.content.__class__.__name__
-        if class_name in ['BulletedList', 'Table']:
+        if class_name in ['BulletedList', 'Table', 'Message']:
             html = self.content.to_html()
         else:
             html = self.content.to_html(wrap_slash=self.wrap_slash)

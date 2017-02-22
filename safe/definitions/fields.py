@@ -36,10 +36,10 @@ exposure_id_field = {
     'type': qvariant_whole_numbers,
     'length': default_field_length,
     'precision': 0,
-    'help_text': tr(  # this is the short description
+    'description': tr(  # this is the short description
         'An ID attribute in the exposure layer'
     ),
-    'description': tr(
+    'help_text': tr(
         'A unique identifier for each exposure feature. If you provide this '
         'we will persist these identifiers in the output datasets so that '
         'you can do a table join back to the original exposure layer if '
@@ -142,9 +142,9 @@ hazard_id_field = {
     'type': qvariant_whole_numbers,
     'length': default_field_length,
     'precision': 0,
-    'description': tr(  # short description
+    'help_text': tr(  # short description
         'An ID attribute in the hazard layer.'),
-    'help_text': tr(
+    'description': tr(
         'A unique identifier for each hazard feature. If you provide this '
         'we will persist these identifiers in the output datasets so that '
         'you can do a table join back to the original hazard layer if '
@@ -248,9 +248,9 @@ aggregation_id_field = {
     'type': qvariant_whole_numbers,
     'length': default_field_length,
     'precision': 0,
-    'help_text': tr(  # short description
+    'description': tr(  # short description
         'An ID attribute in the aggregation layer.'),
-    'description': tr(
+    'help_text': tr(
         'A unique identifier for each aggregation feature. If you provide '
         'this we will persist these identifiers in the output datasets so '
         'that you can do a table join back to the original aggregation layer '
@@ -301,9 +301,9 @@ analysis_id_field = {
     'length': default_field_length,
     'precision': 0,
     'absolute': False,
-    'help_text': tr(  # short description
+    'description': tr(  # short description
         'An ID attribute in the analysis layer.'),
-    'description': tr(
+    'help_text': tr(
         'A unique identifier for each analysis feature.'),
     'citations': [
         {
