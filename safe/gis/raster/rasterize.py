@@ -3,12 +3,9 @@
 """Rasterize a vector layer."""
 
 import logging
-import numpy
-from osgeo.gdalconst import GA_ReadOnly
 from tempfile import mkdtemp
 from subprocess import check_call
 from qgis.core import QgsRasterLayer, QgsRasterBandStats
-from osgeo import gdal
 from processing import runalg
 
 from safe.common.utilities import unique_filename, which
@@ -111,14 +108,6 @@ def rasterize_vector_layer(layer, width, height, extent):
 
     layer_aligned = QgsRasterLayer(output_filename, name, 'gdal')
     assert layer_aligned.isValid()
-
-    index = layer.fieldNameIndex(field)
-    unique_ratio = layer.uniqueValues(index)
-
-    dataset = gdal.Open(layer_aligned.source(), GA_ReadOnly)
-    unique_values = numpy.unique(numpy.array(
-        dataset.GetRasterBand(1).ReadAsArray()))
-    assert len(unique_values) == len(unique_ratio)
 
     layer_aligned.keywords = keywords
     layer_aligned.keywords['title'] = (
