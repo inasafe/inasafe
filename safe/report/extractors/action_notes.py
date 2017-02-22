@@ -67,7 +67,7 @@ def notes_assumptions_extractor(impact_report, component_metadata):
             break
 
     for hazard_class in hazard_classification['classes']:
-        if hazard_class['displacement_rate'] > 0:
+        if hazard_class.get('displacement_rate', 0) > 0:
             show_displacement_note = True
             break
     else:
