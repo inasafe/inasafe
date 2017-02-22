@@ -14,8 +14,8 @@ from PyQt4.QtGui import QFileDialog, QIcon
 from safe.common.utilities import unique_filename, temp_dir
 from safe.datastore.folder import Folder
 from safe.gis.vector.multi_buffering import multi_buffering
-from safe.gui.tools.help.multi_buffer_help import (
-    multi_buffer_help)
+from safe.gui.tools.wizard.wizard_dialog import WizardDialog
+from safe.gui.tools.help.multi_buffer_help import multi_buffer_help
 from safe.messaging import styles
 from safe.utilities.resources import (
     get_ui_class,
@@ -31,7 +31,7 @@ FORM_CLASS = get_ui_class('multi_buffer_dialog_base.ui')
 class MultiBufferDialog(QtGui.QDialog, FORM_CLASS):
     """Dialog implementation class for the InaSAFE multi buffer tool."""
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, iface=None, dock_widget=None):
         """Constructor for the multi buffer dialog.
 
         :param parent: Parent widget of this dialog.
@@ -40,6 +40,9 @@ class MultiBufferDialog(QtGui.QDialog, FORM_CLASS):
         QtGui.QDialog.__init__(self, parent)
         self.setupUi(self)
         self.setWindowTitle(self.tr('InaSAFE Multi Buffer Tool'))
+        self.parent = parent
+        self.iface = iface
+        self.dock_widget = dock_widget
 
         # output file properties initialisation
         self.data_store = None
@@ -62,6 +65,7 @@ class MultiBufferDialog(QtGui.QDialog, FORM_CLASS):
         self.ok_button_status()
         self.output_form.setPlaceholderText(
             self.tr('[Create a temporary layer]'))
+        self.keyword_wizard_checkbox.setChecked(True)
 
         # set signal
         self.layer.layerChanged.connect(self.directory_button_status)
@@ -139,7 +143,11 @@ class MultiBufferDialog(QtGui.QDialog, FORM_CLASS):
 
         QgsMapLayerRegistry.instance().addMapLayers(
             [self.output_layer])
+        self.iface.zoomToActiveLayer()
         self.done(QtGui.QDialog.Accepted)
+
+        if self.keyword_wizard_checkbox.isChecked():
+            self.launch_keyword_wizard()
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_directory_button_tool_clicked(self):
@@ -273,3 +281,17 @@ class MultiBufferDialog(QtGui.QDialog, FORM_CLASS):
         string += footer
 
         self.help_web_view.setHtml(string)
+
+    def launch_keyword_wizard(self):
+        """Launch keyword creation wizard."""
+        # make sure selected layer is the output layer
+        if self.iface.activeLayer() != self.output_layer:
+            return
+
+        # launch wizard dialog
+        self.wizard = WizardDialog(
+            self.iface.mainWindow(),
+            self.iface,
+            self.dock_widget)
+        self.wizard.set_keywords_creation_mode()
+        self.wizard.exec_()  # modal

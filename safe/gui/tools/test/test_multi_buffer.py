@@ -12,7 +12,6 @@ from PyQt4 import QtGui
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe.common.utilities import temp_dir
 from safe.gui.tools.multi_buffer_dialog import (
     MultiBufferDialog)
 
@@ -36,7 +35,7 @@ class MultiBufferTest(unittest.TestCase):
                             dialog.
         :type output_path: str
         """
-        dialog = MultiBufferDialog(PARENT)
+        dialog = MultiBufferDialog(PARENT, IFACE)
         layer = load_test_vector_layer('hazard', 'volcano_point.geojson')
         QgsMapLayerRegistry.instance().addMapLayers([layer])
 

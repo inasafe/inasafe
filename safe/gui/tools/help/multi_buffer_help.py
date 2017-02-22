@@ -75,9 +75,17 @@ def content():
         'remove, then click the remove (-) button.'
     ))
     tips.add(tr(
+        'To launch keywords creation wizard right after the buffering is '
+        'complete, check the launch keywords wizard check box. If you want '
+        'to do it later, uncheck the launch keywords wizard check box.'
+    ))
+    tips.add(tr(
         'A new layer will be added to QGIS after the buffering is complete. '
         'The layer will contain new buffer polygon(s) and the class name will '
-        'be stored as an attribute of each polygon.'
+        'be stored as an attribute of each polygon. And if you check the '
+        'launch keywords wizard check box, the keywords creation wizard will '
+        'launch right after the buffering is complete. You can assign the '
+        'keywords to the output layer.'
     ))
     message.add(tips)
     return message
