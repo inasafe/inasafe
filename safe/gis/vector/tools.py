@@ -2,6 +2,7 @@
 
 """Tools for vector layers."""
 
+import logging
 from uuid import uuid4
 from PyQt4.QtCore import QPyNullVariant
 from qgis.core import (
@@ -18,6 +19,7 @@ from qgis.core import (
 )
 
 from safe.common.exceptions import MemoryLayerCreationError
+from safe.gis.vector.clean_geometry import geometry_checker
 from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -25,6 +27,7 @@ __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
+LOGGER = logging.getLogger('InaSAFE')
 
 wkb_type_groups = {
     'Point': (
@@ -113,6 +116,7 @@ def copy_layer(source, target):
 
     request = QgsFeatureRequest()
 
+    aggregation_layer = False
     if source.keywords.get('layer_purpose') == 'aggregation':
         try:
             use_selected_only = source.use_selected_features_only
@@ -124,8 +128,17 @@ def copy_layer(source, target):
         if use_selected_only and source.selectedFeatureCount() > 0:
             request.setFilterFids(source.selectedFeaturesIds())
 
+        aggregation_layer = True
+
     for i, feature in enumerate(source.getFeatures(request)):
         geom = feature.geometry()
+        if aggregation_layer:
+            # See issue https://github.com/inasafe/inasafe/issues/3713
+            geom = geometry_checker(geom)
+            if not geom.isGeosValid():
+                LOGGER.info(
+                    'One geometry in the aggregation layer is still invalid '
+                    'after cleaning.')
         out_feature.setGeometry(QgsGeometry(geom))
         out_feature.setAttributes(feature.attributes())
         target.addFeature(out_feature)
