@@ -132,7 +132,7 @@ def content():
             table = _start_glossary_table(current_group)
             last_group = current_group
         row = m.Row()
-        term = value['key'].replace('_', ' ')
+        term = value['key'].replace('_', ' ').title()
         description = m.Message(value['description'])
         for citation in value['citations']:
             if citation['text'] in [None, '']:

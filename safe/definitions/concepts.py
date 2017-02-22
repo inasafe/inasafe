@@ -503,10 +503,10 @@ concepts['thresholds'] = {
     'group': tr('Data representation'),
     'key': 'thresholds',
     'description': tr(
-        'A range that defined with minimum and maximum value. In InaSAFE '
+        'A range defined with a minimum and maximum value. In InaSAFE '
         'we exclude the minimum value but include the maximum value. In '
         'mathematical expression: minimum value < x <= maximum value. It '
-        'is used for doing classification for continuous data.'),
+        'is used for doing classification of continuous data.'),
     'citations': [
         {
             'text': '',
@@ -561,4 +561,3 @@ concepts['rounding_methodology'] = {
 #        }
 #    ],
 #  },
-
