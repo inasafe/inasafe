@@ -256,10 +256,16 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
         return True
 
     def toggle_age_ratio_sum_message(self, flag):
-        """Method to show error message about sum of age ratio."""
+        """Method to show error message about sum of age ratio.
+
+        :param flag: Flag if the ratio is valid or not.
+        :type flag: bool
+        """
         if not flag:
             self.message_label.setText(
-                tr('Fix your age ratio. Make sure the sum is 1.'))
+                tr('The sum of your age ratios is not 1. Please fix it '
+                   'first before you can continue to the next step.'))
+            self.message_label.setStyleSheet('color: red')
         else:
-            self.message_label.setText(
-                tr('You are good to go.'))
+            self.message_label.setText(tr('You are good to go.'))
+            self.message_label.setStyleSheet('color: green')
