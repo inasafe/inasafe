@@ -111,7 +111,11 @@ from safe.impact_function.earthquake import (
 from safe.impact_function.postprocessors import (
     run_single_post_processor, enough_input)
 from safe.impact_function.create_extra_layers import (
-    create_analysis_layer, create_virtual_aggregation, create_profile_layer)
+    create_analysis_layer,
+    create_virtual_aggregation,
+    create_profile_layer,
+    create_valid_aggregation,
+)
 from safe.impact_function.style import (
     layer_title,
     generate_classified_legend,
@@ -800,10 +804,14 @@ class ImpactFunction(object):
 
                 status, message = self._check_layer(
                     self.aggregation, 'aggregation')
+                aggregation_source = self.aggregation.source()
+                aggregation_keywords = deepcopy(self.aggregation.keywords)
 
                 if status != PREPARE_SUCCESS:
                     return status, message
             else:
+                aggregation_source = None
+                aggregation_keywords = None
                 if self.requested_extent and not self.requested_extent_crs:
                     message = generate_input_error_message(
                         tr('Error with the requested extent'),
@@ -874,12 +882,6 @@ class ImpactFunction(object):
             self._provenance['hazard_layer'] = self.hazard.source()
             self._provenance['hazard_keywords'] = deepcopy(
                 self.hazard.keywords)
-            if self.aggregation:
-                aggregation_source = self.aggregation.source()
-                aggregation_keywords = deepcopy(self.aggregation.keywords)
-            else:
-                aggregation_source = None
-                aggregation_keywords = None
             self._provenance['aggregation_layer'] = aggregation_source
             self._provenance['aggregation_keywords'] = aggregation_keywords
 
@@ -945,12 +947,12 @@ class ImpactFunction(object):
                 self._analysis_extent = hazard_exposure
 
         else:
+            # We monkey patch if we use selected features only.
+            self.aggregation.use_selected_features_only = (
+                self.use_selected_features_only)
+            self.aggregation = create_valid_aggregation(self.aggregation)
             list_geometry = []
-            request = QgsFeatureRequest().setSubsetOfAttributes([])
-            if self.use_selected_features_only \
-                    and self.aggregation.selectedFeatureCount() > 0:
-                request.setFilterFids(self.aggregation.selectedFeaturesIds())
-            for area in self.aggregation.getFeatures(request):
+            for area in self.aggregation.getFeatures():
                 list_geometry.append(QgsGeometry(area.geometry()))
 
             self._analysis_extent = QgsGeometry.unaryUnion(list_geometry)
@@ -1406,10 +1408,6 @@ class ImpactFunction(object):
 
             self.set_state_process(
                 'aggregation', 'Cleaning the aggregation layer')
-            # We monkey patch if we use selected features only.
-            self.aggregation.use_selected_features_only = (
-                self.use_selected_features_only)
-            # noinspection PyTypeChecker
             self.aggregation = prepare_vector_layer(self.aggregation)
             self.debug_layer(self.aggregation)
 

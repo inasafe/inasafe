@@ -303,6 +303,7 @@ class TestImpactFunction(unittest.TestCase):
 
         # With an aggregation layer, with selection
         impact_function.use_selected_features_only = True
+        impact_function.aggregation = aggregation_layer
         status, message = impact_function.prepare()
         self.assertEqual(PREPARE_SUCCESS, status, message)
         message = (

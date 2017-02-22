@@ -1,4 +1,5 @@
 # coding=utf-8
+
 """Create extra layers in the impact function."""
 
 from qgis.core import (
@@ -25,7 +26,7 @@ from safe.definitions.layer_purposes import (
     layer_purpose_analysis_impacted,
 )
 from safe.gis.vector.tools import (
-    create_memory_layer, create_field_from_definition)
+    create_memory_layer, create_field_from_definition, copy_layer)
 from safe.utilities.profiling import profile
 from safe.utilities.i18n import tr
 
@@ -161,3 +162,33 @@ def create_profile_layer(profiling):
 
     tabular.commitChanges()
     return tabular
+
+
+def create_valid_aggregation(layer):
+    """Create a local copy of the aggregation layer and try to make it valid.
+
+    We need to make the layer valid if we can. We got some issues with
+    DKI Jakarta dataset : Districts and Subdistricts layers.
+    See issue : https://github.com/inasafe/inasafe/issues/3713
+
+    :param layer: The aggregation layer.
+    :type layer: QgsVectorLayer
+
+    :return: The new aggregation layer in memory.
+    :rtype: QgsVectorLayer
+    """
+    cleaned = create_memory_layer(
+        'aggregation', layer.geometryType(), layer.crs(), layer.fields())
+
+    # We transfer keywords to the output.
+    cleaned.keywords = layer.keywords
+
+    try:
+        use_selected_only = layer.use_selected_features_only
+    except AttributeError:
+        use_selected_only = False
+
+    cleaned.use_selected_features_only = use_selected_only
+
+    copy_layer(layer, cleaned)
+    return cleaned
