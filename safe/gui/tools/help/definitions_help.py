@@ -590,7 +590,7 @@ def definition_to_message(definition, heading_style=None):
         'earthquake_pager_notes': tr('Earthquake Pager notes:'),
         'earthquake_itb_notes': tr('Earthquake ITB notes:'),
         'earthquake_fatality_model_limitations':
-            tr('Earthquake fataility model limitations')}
+            tr('Earthquake fatality model limitations')}
     for extra_note, title in extra_notes.iteritems():
         if extra_note in definition:
             message.add(m.Heading(
