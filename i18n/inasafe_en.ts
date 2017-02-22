@@ -6633,6 +6633,21 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="analysis_steps.py" line="66"/>
+        <source>During the exposure preparation phase of the analysis, we convert the exposure data to a usable format for the analysis.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="concepts.py" line="477"/>
+        <source>A range that defined with minimum and maximum value. In InaSAFE we exclude the minimum value but include the maximum value. In mathematical expression: minimum value &lt; x &lt;= maximum value. It is used for doing classification for continuous data.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="concepts.py" line="492"/>
+        <source>A conceptual mapping between one set of unique values and another set of unique values. Each unique value represents a particular class. It is used to express terms or concepts from one classification system in another classification system and only applies to non-continuous data. For example a value map can be used to express local names for entities (e.g.street type: &quot;jalan&quot;) into generic concepts (e.g.street type: &quot;residential&quot;).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="earthquake.py" line="148"/>
         <source>ITB fatality model based on a Bayesian approach. This model was developed by Institut Teknologi Bandung (ITB) and implemented by Dr. Hyeuk Ryu, Geoscience Australia.</source>
         <translation type="unfinished"></translation>
@@ -6678,278 +6693,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard.py" line="289"/>
-        <source>Volcanic ash is modelled hazard data estimating the thickness of ash on the ground following a volcanic eruption.</source>
+        <location filename="exposure.py" line="41"/>
+        <source>Exposed population varies by the time (day or night, weekends, holidays etc.). Such variations are not included in the analysis.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard.py" line="295"/>
-        <source>What action can be taken to secure water supplies and protect crops?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard.py" line="340"/>
-        <source>Tsunami hazard scenarios estimate the inundation of a tsunami wave on land.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="82"/>
-        <source>The area with the highest hazard.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="101"/>
-        <source>The area with the medium hazard.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="120"/>
-        <source>The area with the lowest hazard.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="754"/>
-        <source>Five classes are supported for volcanic ash hazard data: &lt;b&gt;very low&lt;/b&gt;, &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, &lt;b&gt;high&lt;/b&gt; or &lt;b&gt;very high&lt;/b&gt;.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="773"/>
-        <source>Dry loading on buildings causing structural collapse.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="792"/>
-        <source>Dry loading on buildings causing structural damage but not collapse; wet loading on buildings (i.e. ash loading + heavy rainfall) causing structural collapse.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="813"/>
-        <source>Damage to less vulnerable agricultural crops (e.g. tea plantations) and destruction of more vulnerable crops; destruction of critical infrastructure; cosmetic (non-structural) damage to buildings</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="835"/>
-        <source>Damage to transportation routes (e.g. airports, roads, railways); damage to critical infrastructure (e.g. electricity supply); damage to more vulnerable agricultural crops (e.g. rice fields)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="857"/>
-        <source>Impact on health (respiration), livestock, and contamination of water supply.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="1024"/>
-        <source>BNPB Perka 2/2012</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="1036"/>
-        <source>The area is potentially hit by a tsunami wave with an inundation depth &gt; 3 m or reach a tsunami intensity scale of VII or more (Papadopoulos and Imamura, 2001). Tsunami wave with 4 m inundation depth cause damage to small vessel, a few ships are drifted inland, severe damage on most wooden houses. Boulders are deposited on shore. If tsunami height reaches 8 m, it will cause severe damage. Dykes, wave breaker, tsunami protection walls and green belts will be washed away.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="1341"/>
-        <source>Water above 1.1m and less than 3.0m. The area is potentially hit by a tsunami wave with an inundation depth of 1 - 3 m or equal to V-VI tsunami intensity scale (Papadopoulos and Imamura, 2001). Tsunami wave with a 3m inundation depth causes most people frightened and to flee to higher ground. Small vessels drift and collide. Damage occurs to some wooden houses, while most of them are safe.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="1367"/>
-        <source>Water above ground height and less than 1.0m. The area is potentially hit by a tsunami wave with an inundation depth less than 1 m or similar to tsunami intensity scale of V or less in (Papadopoulos and Imamura, 2001). Tsunami wave of 1m height causes few people to be frightened and flee to higher elevation. Felt by most people on large ship, observed from shore. Small vessels drift and collide and some turn over. Sand is deposited and there is flooding of areas close to the shore.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="1014"/>
-        <source>Tsunami hazards can be classified into one of three classes for an area. The area is either &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, or &lt;b&gt;high&lt;/b&gt;, for tsunami hazard classification. The following description for these classes is provided by Badan Geologi based on BNPB Perka 2/2012, and modified for population by Pak Hamza</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="1064"/>
-        <source>Water above 0.7m and less than 3.0m. The area is potentially hit by a tsunami wave with an inundation depth of 1 - 3 m or equal to V-VI tsunami intensity scale (Papadopoulos and Imamura, 2001). Tsunami wave with a 3m inundation depth causes most people frightened and to flee to higher ground. Small vessels drift and collide. Damage occurs to some wooden houses, while most of them are safe.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="1121"/>
-        <source>Tsunami classes ITB</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="1272"/>
-        <source>Tsunami hazards can be classified into one of five classes for an area. The area is either &lt;b&gt;dry&lt;/b&gt;, &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, &lt;b&gt;high&lt;/b&gt;, or &lt;b&gt;very high&lt;/b&gt; for tsunami hazard classification. The following description for these classes is provided by Pak Hamza ITB based on Papadopoulos and Imamura, 2001.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="1312"/>
-        <source>Water above 3.1m and less than 8.0m. The area is potentially hit by a tsunami wave with an inundation depth &gt; 3 m or reach a tsunami intensity scale of VII or even more (Papadopoulos and Imamura, 2001). Tsunami wave with 4 m inundation depth cause damage to small vessel, a few ships are drifted inland, severe damage on most wooden houses. Boulders are deposited on shore. If tsunami height reaches 8 m, it will cause severe damage. Dykes, wave breaker, tsunami protection walls and green belts will be washed away.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="1271"/>
-        <source>Tsunami population classes ITB</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="post_processors.py" line="211"/>
-        <source>This is a value for the layer_property input type. It retrieves Size Calculator of the layer CRS</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="post_processors.py" line="218"/>
-        <source>This is a value for layer_property input type. It retrieves the layer Coordinate Reference System (CRS).</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="post_processors.py" line="236"/>
-        <source>This type of process is a formula which is interpreted and executed by the post processor.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="post_processors.py" line="243"/>
-        <source>This type of process takes inputs as arguments and processes them by passing them to a Python function.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="post_processors.py" line="349"/>
-        <source>A post processor to calculate needed hygiene packs weekly for women who are displaced. &quot;Displaced&quot; is defined as: {displaced_concept}</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="components.py" line="81"/>
-        <source>Estimated {title}</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="components.py" line="93"/>
-        <source>Not Affected</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="components.py" line="97"/>
-        <source>Not Exposed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="components.py" line="408"/>
-        <source>source not available</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="components.py" line="409"/>
-        <source>reference unspecified</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="components.py" line="410"/>
-        <source>not used</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="components.py" line="423"/>
-        <source>Hazard source</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="components.py" line="435"/>
-        <source>{layer_name} - {source} - </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="components.py" line="428"/>
-        <source>Exposure source</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="components.py" line="433"/>
-        <source>Aggregation source</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="components.py" line="438"/>
-        <source>Impact Function</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="components.py" line="440"/>
-        <source>{impact_function_name}</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="sanity_check.py" line="70"/>
-        <source>The layer is invalid.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="sanity_check.py" line="78"/>
-        <source>The layer should not have many sublayers : {source} : {names}</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="sanity_check.py" line="87"/>
-        <source>The layer has not a valid geometry type.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="sanity_check.py" line="92"/>
-        <source>The layer has not a correct geometry type.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="sanity_check.py" line="96"/>
-        <source>The layer is neither a raster nor a vector : {type}</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="prepare_vector_layer.py" line="157"/>
-        <source>Hazard classification is missing exposure key.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="step_kw33_multi_classifications.py" line="269"/>
-        <source>InaSAFE use default classification for Raster Earthquake hazard on population.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="step_kw43_threshold.py" line="137"/>
-        <source>Min &gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="wizard_strings.py" line="144"/>
-        <source>You have selected &lt;b&gt;%s %s&lt;/b&gt; as a &lt;b&gt;continuous&lt;/b&gt; layer and the attribute is &lt;b&gt;%s&lt;/b&gt; with &lt;b&gt;%s&lt;/b&gt;. Please input the minimum and maximum value for each class below. Minimum value will be excluded in the range, while maximum value will be included. The minimum value from the layer is &lt;b&gt;%s&lt;/b&gt; and the maximum value is &lt;b&gt;%s&lt;/b&gt;.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="wizard_strings.py" line="152"/>
-        <source>You have selected &lt;b&gt;%s %s&lt;/b&gt; as a &lt;b&gt;continuous&lt;/b&gt; layer with &lt;b&gt;%s&lt;/b&gt;. Minimum value will be excluded in the range, while maximum value will be included. Please input the minimum and maximum value for each class below. The minimum value from the layer is &lt;b&gt;%s&lt;/b&gt; and the maximum value is &lt;b&gt;%s&lt;/b&gt;.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="960"/>
-        <source>The aggregation layer seems to have a problem. Some features might be invalid. You should check the validity of this layer or use a selection within this layer.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="1293"/>
-        <source>Something went wrong with the datastore : {error_message}</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="keyword_io.py" line="165"/>
-        <source>The layer is not a QgsMapLayer : {type}</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="analysis_steps.py" line="66"/>
-        <source>During the exposure preparation phase of the analysis, we convert the exposure data to a usable format for the analysis.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="concepts.py" line="477"/>
-        <source>A range that defined with minimum and maximum value. In InaSAFE we exclude the minimum value but include the maximum value. In mathematical expression: minimum value &lt; x &lt;= maximum value. It is used for doing classification for continuous data.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="concepts.py" line="492"/>
-        <source>A conceptual mapping between one set of unique values and another set of unique values. Each unique value represents a particular class. It is used to express terms or concepts from one classification system in another classification system and only applies to non-continuous data. For example a value map can be used to express local names for entities (e.g.street type: &quot;jalan&quot;) into generic concepts (e.g.street type: &quot;residential&quot;).</source>
+        <location filename="exposure.py" line="53"/>
+        <source>Map shows the estimated displaced population. People are displaced if they experience and survive a shake level of more than 5 on the MMI scale.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -6980,6 +6730,36 @@
     <message>
         <location filename="exposure.py" line="85"/>
         <source>Care should be taken when applying empirical earthquake fatality models for ground-motion estimation methods that are inconsistent with the methods used to calibrate the model.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="hazard.py" line="289"/>
+        <source>Volcanic ash is modelled hazard data estimating the thickness of ash on the ground following a volcanic eruption.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="hazard.py" line="295"/>
+        <source>What action can be taken to secure water supplies and protect crops?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="hazard.py" line="340"/>
+        <source>Tsunami hazard scenarios estimate the inundation of a tsunami wave on land.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="82"/>
+        <source>The area with the highest hazard.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="101"/>
+        <source>The area with the medium hazard.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="120"/>
+        <source>The area with the lowest hazard.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7078,6 +6858,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="hazard_classifications.py" line="451"/>
+        <source>Felt only by a few persons at rest, especially on upper floors of buildings.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="hazard_classifications.py" line="471"/>
         <source>I</source>
         <translation type="unfinished"></translation>
@@ -7095,6 +6880,11 @@
     <message>
         <location filename="hazard_classifications.py" line="647"/>
         <source>This is a flood classification for an area. The area is broken down into a number of flood classes of increasing severity based on the water depth.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="653"/>
+        <source>PetaBencana.id</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7123,8 +6913,93 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="hazard_classifications.py" line="754"/>
+        <source>Five classes are supported for volcanic ash hazard data: &lt;b&gt;very low&lt;/b&gt;, &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, &lt;b&gt;high&lt;/b&gt; or &lt;b&gt;very high&lt;/b&gt;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="773"/>
+        <source>Dry loading on buildings causing structural collapse.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="792"/>
+        <source>Dry loading on buildings causing structural damage but not collapse; wet loading on buildings (i.e. ash loading + heavy rainfall) causing structural collapse.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="813"/>
+        <source>Damage to less vulnerable agricultural crops (e.g. tea plantations) and destruction of more vulnerable crops; destruction of critical infrastructure; cosmetic (non-structural) damage to buildings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="835"/>
+        <source>Damage to transportation routes (e.g. airports, roads, railways); damage to critical infrastructure (e.g. electricity supply); damage to more vulnerable agricultural crops (e.g. rice fields)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="857"/>
+        <source>Impact on health (respiration), livestock, and contamination of water supply.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="883"/>
+        <source>Tsunami hazards can be classified into one of four classes for an area. The area is either &lt;b&gt;dry&lt;/b&gt;, &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, or &lt;b&gt;high&lt;/b&gt;, for tsunami hazard classification. The following description for these classes is provided by Badan Geologi based on BNPB Perka 2/2012</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="1024"/>
+        <source>BNPB Perka 2/2012</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="1036"/>
+        <source>The area is potentially hit by a tsunami wave with an inundation depth &gt; 3 m or reach a tsunami intensity scale of VII or more (Papadopoulos and Imamura, 2001). Tsunami wave with 4 m inundation depth cause damage to small vessel, a few ships are drifted inland, severe damage on most wooden houses. Boulders are deposited on shore. If tsunami height reaches 8 m, it will cause severe damage. Dykes, wave breaker, tsunami protection walls and green belts will be washed away.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="1341"/>
+        <source>Water above 1.1m and less than 3.0m. The area is potentially hit by a tsunami wave with an inundation depth of 1 - 3 m or equal to V-VI tsunami intensity scale (Papadopoulos and Imamura, 2001). Tsunami wave with a 3m inundation depth causes most people frightened and to flee to higher ground. Small vessels drift and collide. Damage occurs to some wooden houses, while most of them are safe.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="1367"/>
+        <source>Water above ground height and less than 1.0m. The area is potentially hit by a tsunami wave with an inundation depth less than 1 m or similar to tsunami intensity scale of V or less in (Papadopoulos and Imamura, 2001). Tsunami wave of 1m height causes few people to be frightened and flee to higher elevation. Felt by most people on large ship, observed from shore. Small vessels drift and collide and some turn over. Sand is deposited and there is flooding of areas close to the shore.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="hazard_classifications.py" line="1012"/>
         <source>Tsunami population classes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="1014"/>
+        <source>Tsunami hazards can be classified into one of three classes for an area. The area is either &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, or &lt;b&gt;high&lt;/b&gt;, for tsunami hazard classification. The following description for these classes is provided by Badan Geologi based on BNPB Perka 2/2012, and modified for population by Pak Hamza</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="1064"/>
+        <source>Water above 0.7m and less than 3.0m. The area is potentially hit by a tsunami wave with an inundation depth of 1 - 3 m or equal to V-VI tsunami intensity scale (Papadopoulos and Imamura, 2001). Tsunami wave with a 3m inundation depth causes most people frightened and to flee to higher ground. Small vessels drift and collide. Damage occurs to some wooden houses, while most of them are safe.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="1121"/>
+        <source>Tsunami classes ITB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="1272"/>
+        <source>Tsunami hazards can be classified into one of five classes for an area. The area is either &lt;b&gt;dry&lt;/b&gt;, &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, &lt;b&gt;high&lt;/b&gt;, or &lt;b&gt;very high&lt;/b&gt; for tsunami hazard classification. The following description for these classes is provided by Pak Hamza ITB based on Papadopoulos and Imamura, 2001.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="1312"/>
+        <source>Water above 3.1m and less than 8.0m. The area is potentially hit by a tsunami wave with an inundation depth &gt; 3 m or reach a tsunami intensity scale of VII or even more (Papadopoulos and Imamura, 2001). Tsunami wave with 4 m inundation depth cause damage to small vessel, a few ships are drifted inland, severe damage on most wooden houses. Boulders are deposited on shore. If tsunami height reaches 8 m, it will cause severe damage. Dykes, wave breaker, tsunami protection walls and green belts will be washed away.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="1271"/>
+        <source>Tsunami population classes ITB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7135,6 +7010,31 @@
     <message>
         <location filename="peta_bencana.py" line="34"/>
         <source>Production API</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="post_processors.py" line="211"/>
+        <source>This is a value for the layer_property input type. It retrieves Size Calculator of the layer CRS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="post_processors.py" line="218"/>
+        <source>This is a value for layer_property input type. It retrieves the layer Coordinate Reference System (CRS).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="post_processors.py" line="236"/>
+        <source>This type of process is a formula which is interpreted and executed by the post processor.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="post_processors.py" line="243"/>
+        <source>This type of process takes inputs as arguments and processes them by passing them to a Python function.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="post_processors.py" line="349"/>
+        <source>A post processor to calculate needed hygiene packs weekly for women who are displaced. &quot;Displaced&quot; is defined as: {displaced_concept}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7248,53 +7148,18 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="union.py" line="248"/>
-        <source>GEOS geoprocessing error: One or more input features have null geometry.</source>
+        <location filename="components.py" line="81"/>
+        <source>Estimated {title}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="146"/>
-        <source>The PetaBencana Downloader</source>
+        <location filename="components.py" line="93"/>
+        <source>Not Affected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="peta_bencana_help.py" line="39"/>
-        <source>PetaBencana downloader help</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="peta_bencana_help.py" line="84"/>
-        <source>Downloaded data is copyright the PetaBencana contributors (click for more info).</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="1472"/>
-        <source>{ratio} constant detected, we will add it to the exposure layer.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="exposure.py" line="41"/>
-        <source>Exposed population varies by the time (day or night, weekends, holidays etc.). Such variations are not included in the analysis.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="exposure.py" line="53"/>
-        <source>Map shows the estimated displaced population. People are displaced if they experience and survive a shake level of more than 5 on the MMI scale.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="451"/>
-        <source>Felt only by a few persons at rest, especially on upper floors of buildings.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="653"/>
-        <source>PetaBencana.id</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="883"/>
-        <source>Tsunami hazards can be classified into one of four classes for an area. The area is either &lt;b&gt;dry&lt;/b&gt;, &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, or &lt;b&gt;high&lt;/b&gt;, for tsunami hazard classification. The following description for these classes is provided by Badan Geologi based on BNPB Perka 2/2012</source>
+        <location filename="components.py" line="97"/>
+        <source>Not Exposed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7318,6 +7183,51 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="components.py" line="408"/>
+        <source>source not available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="components.py" line="409"/>
+        <source>reference unspecified</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="components.py" line="410"/>
+        <source>not used</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="components.py" line="423"/>
+        <source>Hazard source</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="components.py" line="435"/>
+        <source>{layer_name} - {source} - </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="components.py" line="428"/>
+        <source>Exposure source</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="components.py" line="433"/>
+        <source>Aggregation source</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="components.py" line="438"/>
+        <source>Impact Function</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="components.py" line="440"/>
+        <source>{impact_function_name}</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="units.py" line="48"/>
         <source>Weight/area</source>
         <translation type="unfinished"></translation>
@@ -7325,6 +7235,46 @@
     <message>
         <location filename="units.py" line="113"/>
         <source>Speed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="sanity_check.py" line="70"/>
+        <source>The layer is invalid.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="sanity_check.py" line="78"/>
+        <source>The layer should not have many sublayers : {source} : {names}</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="sanity_check.py" line="87"/>
+        <source>The layer has not a valid geometry type.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="sanity_check.py" line="92"/>
+        <source>The layer has not a correct geometry type.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="sanity_check.py" line="96"/>
+        <source>The layer is neither a raster nor a vector : {type}</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="prepare_vector_layer.py" line="157"/>
+        <source>Hazard classification is missing exposure key.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="union.py" line="248"/>
+        <source>GEOS geoprocessing error: One or more input features have null geometry.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="definitions_help.py" line="146"/>
+        <source>The PetaBencana Downloader</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7344,7 +7294,7 @@
     </message>
     <message>
         <location filename="definitions_help.py" line="593"/>
-        <source>Earthquake fataility model limitations</source>
+        <source>Earthquake fatality model limitations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7355,6 +7305,66 @@
     <message>
         <location filename="needs_calculator_help.py" line="69"/>
         <source>Use the pick lists to select the layer and the population field and then press &apos;OK&apos;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="peta_bencana_help.py" line="39"/>
+        <source>PetaBencana downloader help</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="peta_bencana_help.py" line="84"/>
+        <source>Downloaded data is copyright the PetaBencana contributors (click for more info).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="step_kw33_multi_classifications.py" line="269"/>
+        <source>InaSAFE use default classification for Raster Earthquake hazard on population.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="step_kw43_threshold.py" line="137"/>
+        <source>Min &gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="step_kw47_default_inasafe_fields.py" line="265"/>
+        <source>The sum of your age ratios is not 1. Please fix it first before you can continue to the next step.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="step_kw47_default_inasafe_fields.py" line="270"/>
+        <source>You are good to go.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="wizard_strings.py" line="144"/>
+        <source>You have selected &lt;b&gt;%s %s&lt;/b&gt; as a &lt;b&gt;continuous&lt;/b&gt; layer and the attribute is &lt;b&gt;%s&lt;/b&gt; with &lt;b&gt;%s&lt;/b&gt;. Please input the minimum and maximum value for each class below. Minimum value will be excluded in the range, while maximum value will be included. The minimum value from the layer is &lt;b&gt;%s&lt;/b&gt; and the maximum value is &lt;b&gt;%s&lt;/b&gt;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="wizard_strings.py" line="152"/>
+        <source>You have selected &lt;b&gt;%s %s&lt;/b&gt; as a &lt;b&gt;continuous&lt;/b&gt; layer with &lt;b&gt;%s&lt;/b&gt;. Minimum value will be excluded in the range, while maximum value will be included. Please input the minimum and maximum value for each class below. The minimum value from the layer is &lt;b&gt;%s&lt;/b&gt; and the maximum value is &lt;b&gt;%s&lt;/b&gt;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="960"/>
+        <source>The aggregation layer seems to have a problem. Some features might be invalid. You should check the validity of this layer or use a selection within this layer.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="1293"/>
+        <source>Something went wrong with the datastore : {error_message}</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="1472"/>
+        <source>{ratio} constant detected, we will add it to the exposure layer.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="keyword_io.py" line="165"/>
+        <source>The layer is not a QgsMapLayer : {type}</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7396,36 +7406,11 @@
     <message>
         <location filename="about_dialog_base.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished">Dialog</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="about_dialog_base.ui" line="24"/>
         <source>About</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="about_dialog_base.ui" line="46"/>
-        <source>Getting Started</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="about_dialog_base.ui" line="72"/>
-        <source>Limitations</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="about_dialog_base.ui" line="98"/>
-        <source>Disclaimer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="about_dialog_base.ui" line="119"/>
-        <source>Supporters</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="about_dialog_base.ui" line="145"/>
-        <source>Image Credits</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7436,6 +7421,11 @@ p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Helvetica Neue,Helvetica,Segoe UI,Arial,freesans,sans-serif&apos;; font-size:14px; color:#333333; background-color:#ffffff;&quot;&gt;InaSAFE is free software that provides a simple but rigorous way to combine data from communities, local governments and scientists to help assess the possible impact of future disaster events on communities, assets and infrastructure. It uses innovative science and crowd sourcing techniques (OpenStreetMap, OSM) to create realistic disaster scenarios for better planning, preparedness and response activities. It is in demand by disaster managers across Indonesia and around the world. &lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Helvetica Neue,Helvetica,Segoe UI,Arial,freesans,sans-serif&apos;; font-size:14px; color:#333333; background-color:#ffffff;&quot;&gt;InaSAFE was developed jointly by the Indonesia&apos;s National Disaster Management Agency (BNPB), the Australian Government and the World Bank - Global Facility for Disaster Reduction and Recovery (World Bank-GFDRR).&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="about_dialog_base.ui" line="46"/>
+        <source>Getting Started</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7453,6 +7443,11 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="about_dialog_base.ui" line="72"/>
+        <source>Limitations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="about_dialog_base.ui" line="159"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -7462,12 +7457,22 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="about_dialog_base.ui" line="98"/>
+        <source>Disclaimer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="about_dialog_base.ui" line="107"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Sans&apos;; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="about_dialog_base.ui" line="119"/>
+        <source>Supporters</source>
         <translation type="unfinished"></translation>
     </message>
     <message encoding="UTF-8">
@@ -7484,73 +7489,14 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://essc.org.ph/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Environmental Science for Social Change (Philippines)&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="about_dialog_base.ui" line="145"/>
+        <source>Image Credits</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BatchDialog</name>
-    <message>
-        <location filename="batch_dialog.py" line="440"/>
-        <source>Running</source>
-        <translation>Running</translation>
-    </message>
-    <message>
-        <location filename="batch_dialog.py" line="453"/>
-        <source>Script OK</source>
-        <translation>Script OK</translation>
-    </message>
-    <message>
-        <location filename="batch_dialog.py" line="456"/>
-        <source>Script Fail</source>
-        <translation>Script Fail</translation>
-    </message>
-    <message>
-        <location filename="batch_dialog.py" line="564"/>
-        <source>The file(s) below were parsed successfully:
-</source>
-        <translation>The file(s) below were parsed successfully:
-</translation>
-    </message>
-    <message>
-        <location filename="batch_dialog.py" line="566"/>
-        <source>The file(s) below were not parsed successfully:
-</source>
-        <translation>The file(s) below were not parsed successfully:
-</translation>
-    </message>
-    <message>
-        <location filename="batch_dialog.py" line="773"/>
-        <source>Set the source directory for script and scenario</source>
-        <translation>Set the source directory for script and scenario</translation>
-    </message>
-    <message>
-        <location filename="batch_dialog.py" line="780"/>
-        <source>Set the output directory for pdf report files</source>
-        <translation>Set the output directory for pdf report files</translation>
-    </message>
-    <message>
-        <location filename="batch_dialog.py" line="800"/>
-        <source>Hide Help</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="batch_dialog.py" line="803"/>
-        <source>Show Help</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="batch_dialog.py" line="493"/>
-        <source>Analysis Success</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="batch_dialog.py" line="376"/>
-        <source>Error while preparing scenario</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="batch_dialog.py" line="474"/>
-        <source>Please update scenario</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <location filename="batch_dialog.py" line="313"/>
         <source>Unable to find {hazard_path}</source>
@@ -7562,8 +7508,70 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="batch_dialog.py" line="376"/>
+        <source>Error while preparing scenario</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="batch_dialog.py" line="440"/>
+        <source>Running</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="batch_dialog.py" line="453"/>
+        <source>Script OK</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="batch_dialog.py" line="456"/>
+        <source>Script Fail</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="batch_dialog.py" line="474"/>
+        <source>Please update scenario</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="batch_dialog.py" line="493"/>
+        <source>Analysis Success</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="batch_dialog.py" line="530"/>
         <source>Report failed to generate.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="batch_dialog.py" line="564"/>
+        <source>The file(s) below were parsed successfully:
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="batch_dialog.py" line="566"/>
+        <source>The file(s) below were not parsed successfully:
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="batch_dialog.py" line="773"/>
+        <source>Set the source directory for script and scenario</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="batch_dialog.py" line="780"/>
+        <source>Set the output directory for pdf report files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="batch_dialog.py" line="800"/>
+        <source>Hide Help</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="batch_dialog.py" line="803"/>
+        <source>Show Help</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7572,65 +7580,70 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="batch_dialog_base.ui" line="14"/>
         <source>Batch Runner</source>
-        <translation>Batch Runner</translation>
-    </message>
-    <message>
-        <location filename="batch_dialog_base.ui" line="46"/>
-        <source>Scenario directory</source>
-        <translation>Scenario directory</translation>
-    </message>
-    <message>
-        <location filename="batch_dialog_base.ui" line="136"/>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
-        <location filename="batch_dialog_base.ui" line="65"/>
-        <source>Result table</source>
-        <translation>Result table</translation>
-    </message>
-    <message>
-        <location filename="batch_dialog_base.ui" line="72"/>
-        <source>Task</source>
-        <translation>Task</translation>
-    </message>
-    <message>
-        <location filename="batch_dialog_base.ui" line="77"/>
-        <source>Status</source>
-        <translation>Status</translation>
-    </message>
-    <message>
-        <location filename="batch_dialog_base.ui" line="98"/>
-        <source>Output destination</source>
-        <translation>Output destination</translation>
-    </message>
-    <message>
-        <location filename="batch_dialog_base.ui" line="104"/>
-        <source>Use scenario directory</source>
-        <translation>Use scenario directory</translation>
-    </message>
-    <message>
-        <location filename="batch_dialog_base.ui" line="117"/>
-        <source>Choose custom output directory</source>
-        <translation>Choose custom output directory</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="batch_dialog_base.ui" line="31"/>
         <source>about:blank</source>
-        <translation type="unfinished">about:blank</translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="batch_dialog_base.ui" line="46"/>
+        <source>Scenario directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="batch_dialog_base.ui" line="136"/>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="batch_dialog_base.ui" line="65"/>
+        <source>Result table</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="batch_dialog_base.ui" line="72"/>
+        <source>Task</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="batch_dialog_base.ui" line="77"/>
+        <source>Status</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="batch_dialog_base.ui" line="85"/>
         <source>Run each scenario in new project</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="batch_dialog_base.ui" line="98"/>
+        <source>Output destination</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="batch_dialog_base.ui" line="104"/>
+        <source>Use scenario directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="batch_dialog_base.ui" line="117"/>
+        <source>Choose custom output directory</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Dialog</name>
     <message>
+        <location filename="help_dialog_base.ui" line="14"/>
+        <source>InaSAFE Help</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="raster_reclassify_dialog_base.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished">Dialog</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="raster_reclassify_dialog_base.ui" line="41"/>
@@ -7647,37 +7660,22 @@ p, li { white-space: pre-wrap; }
         <source>Threshold</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="help_dialog_base.ui" line="14"/>
-        <source>InaSAFE Help</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>Dock</name>
     <message>
-        <location filename="dock.py" line="654"/>
-        <source>Entire area</source>
-        <translation>Entire area</translation>
+        <location filename="dock.py" line="371"/>
+        <source>InaSAFE %s</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="956"/>
-        <source>InaSAFE</source>
-        <translation>InaSAFE</translation>
-    </message>
-    <message>
-        <location filename="dock.py" line="956"/>
-        <source>Please select a valid impact layer before trying to print.</source>
-        <translation>Please select a valid impact layer before trying to print.</translation>
-    </message>
-    <message>
-        <location filename="dock.py" line="1023"/>
-        <source>Map Creator</source>
-        <translation>Map Creator</translation>
+        <location filename="dock.py" line="361"/>
+        <source>The file for organization logo in %s doesn&apos;t exists. Please check in Plugins -&gt; InaSAFE -&gt; Options that your paths are still correct and update them if needed.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="dock.py" line="371"/>
-        <source>InaSAFE %s</source>
+        <source>The file for organization logo has zero height. Please provide valid file for organization logo.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7696,38 +7694,28 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="361"/>
-        <source>The file for organization logo in %s doesn&apos;t exists. Please check in Plugins -&gt; InaSAFE -&gt; Options that your paths are still correct and update them if needed.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock.py" line="371"/>
-        <source>The file for organization logo has zero height. Please provide valid file for organization logo.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock.py" line="1263"/>
-        <source>The hazard layer, exposure layer and your defined analysis area extents all overlap. Press the run button below to continue with the analysis.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock.py" line="1268"/>
-        <source>Analysis environment ready</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock.py" line="1268"/>
-        <source>More info ...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock.py" line="1306"/>
-        <source>No overlapping extents</source>
+        <location filename="dock.py" line="654"/>
+        <source>Entire area</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="dock.py" line="754"/>
         <source>Analysis status</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="dock.py" line="956"/>
+        <source>InaSAFE</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="dock.py" line="956"/>
+        <source>Please select a valid impact layer before trying to print.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="dock.py" line="1023"/>
+        <source>Map Creator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7750,42 +7738,37 @@ p, li { white-space: pre-wrap; }
         <source>The generated qpts were saved as:</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="dock.py" line="1263"/>
+        <source>The hazard layer, exposure layer and your defined analysis area extents all overlap. Press the run button below to continue with the analysis.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="dock.py" line="1268"/>
+        <source>Analysis environment ready</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="dock.py" line="1268"/>
+        <source>More info ...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="dock.py" line="1306"/>
+        <source>No overlapping extents</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DockBase</name>
     <message>
         <location filename="dock_base.ui" line="18"/>
         <source>InaSAFE</source>
-        <translation>InaSAFE</translation>
-    </message>
-    <message>
-        <location filename="dock_base.ui" line="122"/>
-        <source>about:blank</source>
-        <translation>about:blank</translation>
-    </message>
-    <message>
-        <location filename="dock_base.ui" line="173"/>
-        <source>Help</source>
-        <translation>Help</translation>
-    </message>
-    <message>
-        <location filename="dock_base.ui" line="240"/>
-        <source>Run</source>
-        <translation>Run</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="dock_base.ui" line="28"/>
         <source>Show question form</source>
-        <translation>Show question form</translation>
-    </message>
-    <message>
-        <location filename="dock_base.ui" line="213"/>
-        <source>Print ...</source>
-        <translation>Print ...</translation>
-    </message>
-    <message>
-        <location filename="dock_base.ui" line="193"/>
-        <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7804,8 +7787,33 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="dock_base.ui" line="122"/>
+        <source>about:blank</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="dock_base.ui" line="173"/>
+        <source>Help</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="dock_base.ui" line="193"/>
+        <source>About</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="dock_base.ui" line="213"/>
+        <source>Print ...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="dock_base.ui" line="233"/>
         <source>Debug</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="dock_base.ui" line="240"/>
+        <source>Run</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7837,31 +7845,11 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="extent_selector_dialog_base.ui" line="49"/>
         <source>about:blank</source>
-        <translation type="unfinished">about:blank</translation>
-    </message>
-    <message>
-        <location filename="extent_selector_dialog_base.ui" line="151"/>
-        <source>North: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="extent_selector_dialog_base.ui" line="212"/>
-        <source>East: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="extent_selector_dialog_base.ui" line="124"/>
-        <source>West: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="extent_selector_dialog_base.ui" line="185"/>
-        <source>South: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="extent_selector_dialog_base.ui" line="254"/>
-        <source>Use intersection of hazard, exposure and current view extent</source>
+        <location filename="extent_selector_dialog_base.ui" line="64"/>
+        <source>When carrying out an analysis without an aggregation layer, which clipping behaviour should be used?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7880,8 +7868,28 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="extent_selector_dialog_base.ui" line="124"/>
+        <source>West: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="extent_selector_dialog_base.ui" line="151"/>
+        <source>North: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="extent_selector_dialog_base.ui" line="167"/>
         <source>Drag on map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="extent_selector_dialog_base.ui" line="185"/>
+        <source>South: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="extent_selector_dialog_base.ui" line="212"/>
+        <source>East: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7900,8 +7908,8 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="extent_selector_dialog_base.ui" line="64"/>
-        <source>When carrying out an analysis without an aggregation layer, which clipping behaviour should be used?</source>
+        <location filename="extent_selector_dialog_base.ui" line="254"/>
+        <source>Use intersection of hazard, exposure and current view extent</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7915,7 +7923,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="multi_buffer_dialog_base.ui" line="28"/>
         <source>about:blank</source>
-        <translation type="unfinished">about:blank</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="multi_buffer_dialog_base.ui" line="45"/>
@@ -7935,7 +7943,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="multi_buffer_dialog_base.ui" line="99"/>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="multi_buffer_dialog_base.ui" line="137"/>
@@ -7973,27 +7981,27 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="function_options_dialog.py" line="73"/>
         <source>InaSAFE impact function configuration</source>
-        <translation>InaSAFE impact function configuration</translation>
-    </message>
-    <message>
-        <location filename="function_options_dialog.py" line="191"/>
-        <source>Postprocessors</source>
-        <translation>Postprocessors</translation>
-    </message>
-    <message>
-        <location filename="function_options_dialog.py" line="296"/>
-        <source>Unexpected error: %s </source>
-        <translation>Unexpected error: %s </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="function_options_dialog.py" line="170"/>
         <source>Minimum Needs</source>
-        <translation>Minimum Needs</translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="function_options_dialog.py" line="191"/>
+        <source>Postprocessors</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="function_options_dialog.py" line="251"/>
         <source>Parameters for impact function &quot;%s&quot; that can be modified are:</source>
-        <translation>Parameters for impact function &quot;%s&quot; that can be modified are:</translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="function_options_dialog.py" line="296"/>
+        <source>Unexpected error: %s </source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="function_options_dialog.py" line="314"/>
@@ -8011,17 +8019,17 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="function_options_dialog_base.ui" line="14"/>
         <source>Dialog</source>
-        <translation>Dialog</translation>
-    </message>
-    <message>
-        <location filename="function_options_dialog_base.ui" line="93"/>
-        <source>Options</source>
-        <translation>Options</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="function_options_dialog_base.ui" line="40"/>
         <source>about:blank</source>
-        <translation type="unfinished">about:blank</translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="function_options_dialog_base.ui" line="93"/>
+        <source>Options</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -8029,42 +8037,42 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="impact_merge_dialog_base.ui" line="14"/>
         <source>Dialog</source>
-        <translation>Dialog</translation>
-    </message>
-    <message>
-        <location filename="impact_merge_dialog_base.ui" line="105"/>
-        <source>&amp;Second impact layer</source>
-        <translation>&amp;Second impact layer</translation>
-    </message>
-    <message>
-        <location filename="impact_merge_dialog_base.ui" line="121"/>
-        <source>&amp;Aggregation Layer</source>
-        <translation>&amp;Aggregation Layer</translation>
-    </message>
-    <message>
-        <location filename="impact_merge_dialog_base.ui" line="131"/>
-        <source>&amp;Output directory</source>
-        <translation>&amp;Output directory</translation>
-    </message>
-    <message>
-        <location filename="impact_merge_dialog_base.ui" line="172"/>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
-        <location filename="impact_merge_dialog_base.ui" line="74"/>
-        <source>&amp;First impact layer</source>
-        <translation>&amp;First impact layer</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="impact_merge_dialog_base.ui" line="50"/>
         <source>about:blank</source>
-        <translation>about:blank</translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="impact_merge_dialog_base.ui" line="74"/>
+        <source>&amp;First impact layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="impact_merge_dialog_base.ui" line="172"/>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="impact_merge_dialog_base.ui" line="105"/>
+        <source>&amp;Second impact layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="impact_merge_dialog_base.ui" line="121"/>
+        <source>&amp;Aggregation Layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="impact_merge_dialog_base.ui" line="131"/>
+        <source>&amp;Output directory</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="impact_merge_dialog_base.ui" line="141"/>
         <source>&amp;Use customized report template</source>
-        <translation>&amp;Use customized report template</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -8072,32 +8080,32 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="impact_report_dialog.py" line="53"/>
         <source>Open PDF</source>
-        <translation>Open PDF</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="impact_report_dialog.py" line="55"/>
         <source>Write report to PDF and open it in default viewer</source>
-        <translation>Write report to PDF and open it in default viewer</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="impact_report_dialog.py" line="60"/>
         <source>Open composer</source>
-        <translation>Open composer</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="impact_report_dialog.py" line="62"/>
         <source>Prepare report and open it in QGIS composer</source>
-        <translation>Prepare report and open it in QGIS composer</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="impact_report_dialog.py" line="187"/>
         <source>Select report</source>
-        <translation>Select report</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="impact_report_dialog.py" line="187"/>
         <source>QGIS composer templates (*.qpt *.QPT)</source>
-        <translation>QGIS composer templates (*.qpt *.QPT)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="impact_report_dialog.py" line="215"/>
@@ -8115,65 +8123,62 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="impact_report_dialog_base.ui" line="14"/>
         <source>Impact report</source>
-        <translation>Impact report</translation>
-    </message>
-    <message>
-        <location filename="impact_report_dialog_base.ui" line="64"/>
-        <source>Area to print</source>
-        <translation>Area to print</translation>
-    </message>
-    <message>
-        <location filename="impact_report_dialog_base.ui" line="70"/>
-        <source>Analysis extent</source>
-        <translation>Analysis extent</translation>
-    </message>
-    <message>
-        <location filename="impact_report_dialog_base.ui" line="80"/>
-        <source>Current extent</source>
-        <translation>Current extent</translation>
-    </message>
-    <message>
-        <location filename="impact_report_dialog_base.ui" line="90"/>
-        <source>Template to use</source>
-        <translation>Template to use</translation>
-    </message>
-    <message>
-        <location filename="impact_report_dialog_base.ui" line="116"/>
-        <source>...</source>
-        <translation>...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="impact_report_dialog_base.ui" line="40"/>
         <source>about:blank</source>
-        <translation type="unfinished">about:blank</translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="impact_report_dialog_base.ui" line="64"/>
+        <source>Area to print</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="impact_report_dialog_base.ui" line="70"/>
+        <source>Analysis extent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="impact_report_dialog_base.ui" line="80"/>
+        <source>Current extent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="impact_report_dialog_base.ui" line="90"/>
+        <source>Template to use</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="impact_report_dialog_base.ui" line="116"/>
+        <source>...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>KeywordIO</name>
+    <message>
+        <location filename="keyword_io.py" line="231"/>
+        <source>Expected extra keywords to be a dictionary. Got %s</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <location filename="keyword_io.py" line="245"/>
         <source>Failed to copy keywords file from : 
 %s
 to
 %s: %s</source>
-        <translation>Failed to copy keywords file from : 
-%s
-to
-%s: %s</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="keyword_io.py" line="336"/>
         <source>Layer keywords:</source>
-        <translation type="unfinished">Layer keywords:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="keyword_io.py" line="338"/>
         <source>The following keywords are defined for the active layer:</source>
-        <translation type="unfinished">The following keywords are defined for the active layer:</translation>
-    </message>
-    <message>
-        <location filename="keyword_io.py" line="231"/>
-        <source>Expected extra keywords to be a dictionary. Got %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8190,43 +8195,43 @@ to
 <context>
     <name>MessageViewer</name>
     <message>
-        <location filename="message_viewer.py" line="166"/>
-        <source>log pageToText</source>
-        <translation>log pageToText</translation>
-    </message>
-    <message>
         <location filename="message_viewer.py" line="71"/>
         <source>Show log</source>
-        <translation>Show log</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="message_viewer.py" line="76"/>
         <source>Show report</source>
-        <translation>Show report</translation>
-    </message>
-    <message>
-        <location filename="message_viewer.py" line="143"/>
-        <source>Open in web browser</source>
-        <translation>Open in web browser</translation>
-    </message>
-    <message>
-        <location filename="message_viewer.py" line="325"/>
-        <source>report_path is not set</source>
-        <translation>report_path is not set</translation>
-    </message>
-    <message>
-        <location filename="message_viewer.py" line="334"/>
-        <source>Analysis log</source>
-        <translation>Analysis log</translation>
-    </message>
-    <message>
-        <location filename="message_viewer.py" line="342"/>
-        <source>log_path is not set</source>
-        <translation>log_path is not set</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="message_viewer.py" line="81"/>
         <source>Save as PDF</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="message_viewer.py" line="143"/>
+        <source>Open in web browser</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="message_viewer.py" line="166"/>
+        <source>log pageToText</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="message_viewer.py" line="325"/>
+        <source>report_path is not set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="message_viewer.py" line="334"/>
+        <source>Analysis log</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="message_viewer.py" line="342"/>
+        <source>log_path is not set</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -8266,16 +8271,6 @@ to
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="needs_calculator_dialog.py" line="242"/>
-        <source>Hide Help</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="needs_calculator_dialog.py" line="245"/>
-        <source>Show Help</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="needs_calculator_dialog.py" line="133"/>
         <source>Error while running post processor</source>
         <translation type="unfinished"></translation>
@@ -8285,27 +8280,27 @@ to
         <source>Error while calculating minimum needs</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="needs_calculator_dialog.py" line="242"/>
+        <source>Hide Help</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="needs_calculator_dialog.py" line="245"/>
+        <source>Show Help</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>NeedsCalculatorDialogBase</name>
     <message>
-        <location filename="needs_calculator_dialog_base.ui" line="41"/>
-        <source>about:blank</source>
-        <translation type="unfinished">about:blank</translation>
-    </message>
-    <message>
         <location filename="needs_calculator_dialog_base.ui" line="14"/>
         <source>Minimum Needs Calculator</source>
-        <translation type="unfinished">Minimum Needs Calculator</translation>
-    </message>
-    <message>
-        <location filename="needs_calculator_dialog_base.ui" line="125"/>
-        <source>Aggregation field name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="needs_calculator_dialog_base.ui" line="148"/>
-        <source>Aggregation field ID</source>
+        <location filename="needs_calculator_dialog_base.ui" line="41"/>
+        <source>about:blank</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8324,6 +8319,16 @@ to
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="needs_calculator_dialog_base.ui" line="125"/>
+        <source>Aggregation field name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="needs_calculator_dialog_base.ui" line="148"/>
+        <source>Aggregation field ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="needs_calculator_dialog_base.ui" line="158"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;*required&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
@@ -8334,6 +8339,11 @@ to
     <message>
         <location filename="needs_manager_dialog.py" line="112"/>
         <source>Discard changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="needs_manager_dialog.py" line="119"/>
+        <source>Restore defaults</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8367,21 +8377,6 @@ to
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="744"/>
-        <source>JSON files (*.json *.JSON)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="needs_manager_dialog.py" line="744"/>
-        <source>Create a minimum needs profile</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="needs_manager_dialog.py" line="810"/>
-        <source>Remove %s.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="needs_manager_dialog.py" line="624"/>
         <source>Problem - default value is invalid</source>
         <translation type="unfinished"></translation>
@@ -8397,6 +8392,21 @@ to
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="needs_manager_dialog.py" line="744"/>
+        <source>JSON files (*.json *.JSON)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="needs_manager_dialog.py" line="744"/>
+        <source>Create a minimum needs profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="needs_manager_dialog.py" line="810"/>
+        <source>Remove %s.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="needs_manager_dialog.py" line="835"/>
         <source>Hide Help</source>
         <translation type="unfinished"></translation>
@@ -8406,17 +8416,17 @@ to
         <source>Show Help</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="needs_manager_dialog.py" line="119"/>
-        <source>Restore defaults</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>NeedsManagerDialogBase</name>
     <message>
         <location filename="needs_manager_dialog_base.ui" line="17"/>
         <source>Minimum Needs Manager</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="needs_manager_dialog_base.ui" line="43"/>
+        <source>about:blank</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8464,11 +8474,6 @@ to
         <source>Resource editor</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="needs_manager_dialog_base.ui" line="43"/>
-        <source>about:blank</source>
-        <translation type="unfinished">about:blank</translation>
-    </message>
 </context>
 <context>
     <name>OptionsDialog</name>
@@ -8488,8 +8493,18 @@ to
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="options_dialog.py" line="331"/>
+        <source>Results directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="options_dialog.py" line="344"/>
         <source>Set north arrow image file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="options_dialog.py" line="362"/>
+        <source>Portable Network Graphics files (*.png *.PNG);;JPEG Images (*.jpg *.jpeg);;GIF Images (*.gif *.GIF);;SVG Images (*.svg *.SVG);;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8503,11 +8518,6 @@ to
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="options_dialog.py" line="331"/>
-        <source>Results directory</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="options_dialog.py" line="476"/>
         <source>Hide Help</source>
         <translation type="unfinished"></translation>
@@ -8517,83 +8527,93 @@ to
         <source>Show Help</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="options_dialog.py" line="362"/>
-        <source>Portable Network Graphics files (*.png *.PNG);;JPEG Images (*.jpg *.jpeg);;GIF Images (*.gif *.GIF);;SVG Images (*.svg *.SVG);;</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>OptionsDialogBase</name>
     <message>
         <location filename="options_dialog_base.ui" line="14"/>
         <source>InaSAFE - Options</source>
-        <translation>InaSAFE - Options</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="200"/>
-        <source>Not yet implemented</source>
-        <translation>Not yet implemented</translation>
-    </message>
-    <message>
-        <location filename="options_dialog_base.ui" line="209"/>
-        <source>Bubble exposure and hazard layers to top when selected</source>
-        <translation>Bubble exposure and hazard layers to top when selected</translation>
-    </message>
-    <message>
-        <location filename="options_dialog_base.ui" line="135"/>
-        <source>Location for results</source>
-        <translation>Location for results</translation>
-    </message>
-    <message>
-        <location filename="options_dialog_base.ui" line="614"/>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
-        <location filename="options_dialog_base.ui" line="261"/>
-        <source>Organisation name (for maps, reports etc.)</source>
-        <translation>Organisation name (for maps, reports etc.)</translation>
-    </message>
-    <message>
-        <location filename="options_dialog_base.ui" line="242"/>
-        <source>DPI (Maps and reports)</source>
-        <translation>DPI (Maps and reports)</translation>
-    </message>
-    <message>
-        <location filename="options_dialog_base.ui" line="101"/>
-        <source>Set QGIS layer name from &apos;title&apos; in keywords</source>
-        <translation>Set QGIS layer name from &apos;title&apos; in keywords</translation>
-    </message>
-    <message>
-        <location filename="options_dialog_base.ui" line="111"/>
-        <source>Zoom to impact layer on scenario estimate completion</source>
-        <translation>Zoom to impact layer on scenario estimate completion</translation>
-    </message>
-    <message>
-        <location filename="options_dialog_base.ui" line="595"/>
-        <source>Keyword cache for remote datasources</source>
-        <translation>Keyword cache for remote datasources</translation>
-    </message>
-    <message>
-        <location filename="options_dialog_base.ui" line="121"/>
-        <source>Hide exposure layer on scenario estimate completion</source>
-        <translation>Hide exposure layer on scenario estimate completion</translation>
+        <location filename="options_dialog_base.ui" line="35"/>
+        <source>about:blank</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="options_dialog_base.ui" line="54"/>
         <source>Basic Options</source>
-        <translation>Basic Options</translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="options_dialog_base.ui" line="84"/>
+        <source>Show organisation logo in the InaSAFE dock</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="options_dialog_base.ui" line="91"/>
+        <source>Only show visible layers in the InaSAFE dock and in the wizard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="options_dialog_base.ui" line="101"/>
+        <source>Set QGIS layer name from &apos;title&apos; in keywords</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="options_dialog_base.ui" line="111"/>
+        <source>Zoom to impact layer on scenario estimate completion</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="options_dialog_base.ui" line="121"/>
+        <source>Hide exposure layer on scenario estimate completion</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="options_dialog_base.ui" line="128"/>
+        <source>Use selected features only with the aggregation layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="options_dialog_base.ui" line="135"/>
+        <source>Location for results</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="options_dialog_base.ui" line="614"/>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="options_dialog_base.ui" line="166"/>
+        <source>Default Earthquake function</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="options_dialog_base.ui" line="200"/>
+        <source>Not yet implemented</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="options_dialog_base.ui" line="209"/>
+        <source>Bubble exposure and hazard layers to top when selected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="options_dialog_base.ui" line="242"/>
+        <source>DPI (Maps and reports)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="options_dialog_base.ui" line="261"/>
+        <source>Organisation name (for maps, reports etc.)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="options_dialog_base.ui" line="289"/>
         <source>Template Options</source>
-        <translation>Template Options</translation>
-    </message>
-    <message>
-        <location filename="options_dialog_base.ui" line="542"/>
-        <source>Advanced</source>
-        <translation>Advanced</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="options_dialog_base.ui" line="295"/>
@@ -8618,6 +8638,11 @@ to
     <message>
         <location filename="options_dialog_base.ui" line="401"/>
         <source>Use custom organisation disclaimer text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="options_dialog_base.ui" line="419"/>
+        <source>ISO 19155 Metadata</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8646,8 +8671,13 @@ to
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="568"/>
-        <source>Help to improve InaSAFE by submitting errors to a remote server (needs restart)</source>
+        <location filename="options_dialog_base.ui" line="509"/>
+        <source>Global Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="options_dialog_base.ui" line="542"/>
+        <source>Advanced</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8656,38 +8686,8 @@ to
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="35"/>
-        <source>about:blank</source>
-        <translation type="unfinished">about:blank</translation>
-    </message>
-    <message>
-        <location filename="options_dialog_base.ui" line="419"/>
-        <source>ISO 19155 Metadata</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="options_dialog_base.ui" line="84"/>
-        <source>Show organisation logo in the InaSAFE dock</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="options_dialog_base.ui" line="91"/>
-        <source>Only show visible layers in the InaSAFE dock and in the wizard</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="options_dialog_base.ui" line="128"/>
-        <source>Use selected features only with the aggregation layer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="options_dialog_base.ui" line="509"/>
-        <source>Global Default</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="options_dialog_base.ui" line="166"/>
-        <source>Default Earthquake function</source>
+        <location filename="options_dialog_base.ui" line="568"/>
+        <source>Help to improve InaSAFE by submitting errors to a remote server (needs restart)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8697,6 +8697,11 @@ to
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;.SF NS Text&apos;; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:12pt; font-weight:600; color:#f50000;&quot;&gt;Note:&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:12pt;&quot;&gt; The above setting requires a QGIS restart to disable / enable. Error messages and diagnostic information will be posted to http://sentry.linfiniti.com/inasafe-desktop/. Some institutions may not allow you to enable this feature - check with your network administrator if unsure. Although the data is submitted anonymously, the information contained in tracebacks may contain file system paths which reveal your identity or other information from your system.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="options_dialog_base.ui" line="595"/>
+        <source>Keyword cache for remote datasources</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8710,66 +8715,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="osm_downloader_dialog.py" line="92"/>
         <source>InaSAFE OpenStreetMap Downloader</source>
-        <translation type="unfinished">InaSAFE OpenStreetMap Downloader</translation>
-    </message>
-    <message>
-        <location filename="osm_downloader_dialog.py" line="297"/>
-        <source>Select download directory</source>
-        <translation type="unfinished">Select download directory</translation>
-    </message>
-    <message>
-        <location filename="osm_downloader_dialog.py" line="332"/>
-        <source>InaSAFE OpenStreetMap Downloader Error</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="osm_downloader_dialog.py" line="347"/>
-        <source>The bounding box is not valid. Please make sure it is valid or check your projection!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="osm_downloader_dialog.py" line="503"/>
-        <source>Directory %s not exist</source>
-        <translation type="unfinished">Directory %s not exist</translation>
-    </message>
-    <message>
-        <location filename="osm_downloader_dialog.py" line="504"/>
-        <source>Directory %s not exist. Do you want to create it?</source>
-        <translation type="unfinished">Directory %s not exist. Do you want to create it?</translation>
-    </message>
-    <message>
-        <location filename="osm_downloader_dialog.py" line="515"/>
-        <source>InaSAFE error</source>
-        <translation type="unfinished">InaSAFE error</translation>
-    </message>
-    <message>
-        <location filename="osm_downloader_dialog.py" line="515"/>
-        <source>Output directory can not be empty.</source>
-        <translation type="unfinished">Output directory can not be empty.</translation>
-    </message>
-    <message>
-        <location filename="osm_downloader_dialog.py" line="270"/>
-        <source>Bounding box from the map canvas</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="osm_downloader_dialog.py" line="539"/>
-        <source>%s does not exist. The server does not have any data for this extent.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="osm_downloader_dialog.py" line="562"/>
-        <source>Enable &apos;on the fly&apos;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="osm_downloader_dialog.py" line="562"/>
-        <source>Your current projection is different than EPSG:4326. You should enable &apos;on the fly&apos; to display correctly your layers</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="osm_downloader_dialog.py" line="288"/>
-        <source>Bounding box from rectangle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8798,8 +8743,68 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="osm_downloader_dialog.py" line="270"/>
+        <source>Bounding box from the map canvas</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="osm_downloader_dialog.py" line="288"/>
+        <source>Bounding box from rectangle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="osm_downloader_dialog.py" line="297"/>
+        <source>Select download directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="osm_downloader_dialog.py" line="332"/>
+        <source>InaSAFE OpenStreetMap Downloader Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="osm_downloader_dialog.py" line="347"/>
+        <source>The bounding box is not valid. Please make sure it is valid or check your projection!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="osm_downloader_dialog.py" line="359"/>
         <source>No feature selected. Please make sure you have checked one feature.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="osm_downloader_dialog.py" line="503"/>
+        <source>Directory %s not exist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="osm_downloader_dialog.py" line="504"/>
+        <source>Directory %s not exist. Do you want to create it?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="osm_downloader_dialog.py" line="515"/>
+        <source>InaSAFE error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="osm_downloader_dialog.py" line="515"/>
+        <source>Output directory can not be empty.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="osm_downloader_dialog.py" line="539"/>
+        <source>%s does not exist. The server does not have any data for this extent.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="osm_downloader_dialog.py" line="562"/>
+        <source>Enable &apos;on the fly&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="osm_downloader_dialog.py" line="562"/>
+        <source>Your current projection is different than EPSG:4326. You should enable &apos;on the fly&apos; to display correctly your layers</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -8808,46 +8813,11 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="osm_downloader_dialog_base.ui" line="14"/>
         <source>OSM Downloader</source>
-        <translation type="unfinished">OSM Downloader</translation>
-    </message>
-    <message>
-        <location filename="osm_downloader_dialog_base.ui" line="106"/>
-        <source>Roads</source>
-        <translation type="unfinished">Roads</translation>
-    </message>
-    <message>
-        <location filename="osm_downloader_dialog_base.ui" line="433"/>
-        <source>Output directory</source>
-        <translation type="unfinished">Output directory</translation>
-    </message>
-    <message>
-        <location filename="osm_downloader_dialog_base.ui" line="456"/>
-        <source>...</source>
-        <translation type="unfinished">...</translation>
-    </message>
-    <message>
-        <location filename="osm_downloader_dialog_base.ui" line="463"/>
-        <source>File name prefix</source>
-        <translation type="unfinished">File name prefix</translation>
-    </message>
-    <message>
-        <location filename="osm_downloader_dialog_base.ui" line="263"/>
-        <source>Bounding box</source>
-        <translation type="unfinished">Bounding box</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="osm_downloader_dialog_base.ui" line="64"/>
         <source>about:blank</source>
-        <translation type="unfinished">about:blank</translation>
-    </message>
-    <message>
-        <location filename="osm_downloader_dialog_base.ui" line="126"/>
-        <source>Building points</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="osm_downloader_dialog_base.ui" line="486"/>
-        <source>Overwrite existing files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8856,13 +8826,33 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="osm_downloader_dialog_base.ui" line="106"/>
+        <source>Roads</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="osm_downloader_dialog_base.ui" line="116"/>
         <source>Building polygons</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="osm_downloader_dialog_base.ui" line="126"/>
+        <source>Building points</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="osm_downloader_dialog_base.ui" line="136"/>
+        <source>Evacuation centers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="osm_downloader_dialog_base.ui" line="146"/>
         <source>Political boundaries</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="osm_downloader_dialog_base.ui" line="153"/>
+        <source>Flood prone areas</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8878,6 +8868,11 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="osm_downloader_dialog_base.ui" line="238"/>
         <source>Extract boundaries as OSM</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="osm_downloader_dialog_base.ui" line="263"/>
+        <source>Bounding box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8911,13 +8906,23 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="osm_downloader_dialog_base.ui" line="136"/>
-        <source>Evacuation centers</source>
+        <location filename="osm_downloader_dialog_base.ui" line="433"/>
+        <source>Output directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="osm_downloader_dialog_base.ui" line="153"/>
-        <source>Flood prone areas</source>
+        <location filename="osm_downloader_dialog_base.ui" line="456"/>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="osm_downloader_dialog_base.ui" line="463"/>
+        <source>File name prefix</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="osm_downloader_dialog_base.ui" line="486"/>
+        <source>Overwrite existing files</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -9024,7 +9029,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="peta_bencana_dialog_base.ui" line="46"/>
         <source>about:blank</source>
-        <translation type="unfinished">about:blank</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="peta_bencana_dialog_base.ui" line="67"/>
@@ -9044,7 +9049,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="peta_bencana_dialog_base.ui" line="125"/>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="peta_bencana_dialog_base.ui" line="132"/>
@@ -9082,7 +9087,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="plugin.py" line="614"/>
         <source>InaSAFE</source>
-        <translation type="unfinished">InaSAFE</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="plugin.py" line="180"/>
@@ -9095,48 +9100,13 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="206"/>
-        <source>Open InaSAFE keywords creation wizard</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="plugin.py" line="222"/>
-        <source>Open InaSAFE impact function centric wizard</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="plugin.py" line="237"/>
-        <source>Open InaSAFE options dialog</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="plugin.py" line="295"/>
-        <source>Open InaSAFE Converter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="plugin.py" line="322"/>
-        <source>Save current scenario to text file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="plugin.py" line="423"/>
-        <source>Set the analysis area for InaSAFE</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="plugin.py" line="319"/>
-        <source>Save Current Scenario</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="plugin.py" line="397"/>
-        <source>Toggle Scenario Outlines</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="plugin.py" line="200"/>
         <source>Keywords Creation Wizard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="206"/>
+        <source>Open InaSAFE keywords creation wizard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -9145,18 +9115,38 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="plugin.py" line="222"/>
+        <source>Open InaSAFE impact function centric wizard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="plugin.py" line="232"/>
         <source>Options</source>
-        <translation type="unfinished">Options</translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="237"/>
+        <source>Open InaSAFE options dialog</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="plugin.py" line="245"/>
         <source>Minimum Needs Calculator</source>
-        <translation type="unfinished">Minimum Needs Calculator</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="plugin.py" line="250"/>
         <source>Open InaSAFE minimum needs calculator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="259"/>
+        <source>Multi Buffer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="264"/>
+        <source>Open InaSAFE multi buffer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -9175,9 +9165,14 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="plugin.py" line="295"/>
+        <source>Open InaSAFE Converter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="plugin.py" line="305"/>
         <source>Batch Runner</source>
-        <translation type="unfinished">Batch Runner</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="plugin.py" line="310"/>
@@ -9185,28 +9180,18 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="plugin.py" line="319"/>
+        <source>Save Current Scenario</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="322"/>
+        <source>Save current scenario to text file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="plugin.py" line="339"/>
         <source>OpenStreetMap Downloader</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="plugin.py" line="417"/>
-        <source>Set Analysis Area</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="plugin.py" line="437"/>
-        <source>Add Test Layers</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="plugin.py" line="443"/>
-        <source>Add test layers</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="plugin.py" line="400"/>
-        <source>Toggle rubber bands showing scenario extents.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -9220,8 +9205,58 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="815"/>
-        <source>OpenStreetMap</source>
+        <location filename="plugin.py" line="362"/>
+        <source>InaSAFE Help</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="366"/>
+        <source>Show InaSAFE Help</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="368"/>
+        <source>Use this to show a document describing all InaSAFE concepts.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="383"/>
+        <source>Add PetaBencana Flood Layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="385"/>
+        <source>Use this to add a PetaBencana layer to your map. It needs internet access to function.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="397"/>
+        <source>Toggle Scenario Outlines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="400"/>
+        <source>Toggle rubber bands showing scenario extents.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="417"/>
+        <source>Set Analysis Area</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="423"/>
+        <source>Set the analysis area for InaSAFE</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="437"/>
+        <source>Add Test Layers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="443"/>
+        <source>Add test layers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -9245,38 +9280,8 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="362"/>
-        <source>InaSAFE Help</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="plugin.py" line="366"/>
-        <source>Show InaSAFE Help</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="plugin.py" line="368"/>
-        <source>Use this to show a document describing all InaSAFE concepts.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="plugin.py" line="259"/>
-        <source>Multi Buffer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="plugin.py" line="264"/>
-        <source>Open InaSAFE multi buffer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="plugin.py" line="383"/>
-        <source>Add PetaBencana Flood Layer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="plugin.py" line="385"/>
-        <source>Use this to add a PetaBencana layer to your map. It needs internet access to function.</source>
+        <location filename="plugin.py" line="815"/>
+        <source>OpenStreetMap</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -9285,32 +9290,32 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="save_scenario.py" line="88"/>
         <source>Exposure layer is not found, can not save scenario. Please add exposure layer to do so.</source>
-        <translation type="unfinished">Exposure layer is not found, can not save scenario. Please add exposure layer to do so.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="save_scenario.py" line="94"/>
         <source>Hazard layer is not found, can not save scenario. Please add hazard layer to do so.</source>
-        <translation type="unfinished">Hazard layer is not found, can not save scenario. Please add hazard layer to do so.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="save_scenario.py" line="110"/>
         <source>InaSAFE Save Scenario Warning</source>
-        <translation type="unfinished">InaSAFE Save Scenario Warning</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="save_scenario.py" line="138"/>
         <source>Save Scenario</source>
-        <translation type="unfinished">Save Scenario</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="save_scenario.py" line="183"/>
         <source>InaSAFE</source>
-        <translation type="unfinished">InaSAFE</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="save_scenario.py" line="183"/>
         <source>Failed to save scenario to </source>
-        <translation type="unfinished">Failed to save scenario to </translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -9321,29 +9326,29 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="shakemap_converter_dialog.py" line="121"/>
-        <source>Shakemap Grid Importer</source>
-        <translation type="unfinished">Shakemap Grid Importer</translation>
-    </message>
-    <message>
         <location filename="shakemap_converter_dialog.py" line="89"/>
         <source>output file is not .tif</source>
-        <translation type="unfinished">output file is not .tif</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="shakemap_converter_dialog.py" line="101"/>
         <source>input file is not .xml</source>
-        <translation type="unfinished">input file is not .xml</translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="shakemap_converter_dialog.py" line="121"/>
+        <source>Shakemap Grid Importer</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="shakemap_converter_dialog.py" line="167"/>
         <source>InaSAFE</source>
-        <translation type="unfinished">InaSAFE</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="shakemap_converter_dialog.py" line="161"/>
         <source>Output file name must be tif file</source>
-        <translation type="unfinished">Output file name must be tif file</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="shakemap_converter_dialog.py" line="167"/>
@@ -9353,16 +9358,16 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="shakemap_converter_dialog.py" line="210"/>
         <source>Input file</source>
-        <translation type="unfinished">Input file</translation>
-    </message>
-    <message>
-        <location filename="shakemap_converter_dialog.py" line="220"/>
-        <source>Output file</source>
-        <translation type="unfinished">Output file</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="shakemap_converter_dialog.py" line="210"/>
         <source>Raw grid file (*.xml)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="shakemap_converter_dialog.py" line="220"/>
+        <source>Output file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -9386,27 +9391,27 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="shakemap_importer_dialog_base.ui" line="14"/>
         <source>InaSAFE - Shakemap Importer</source>
-        <translation type="unfinished">InaSAFE - Shakemap Importer</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="shakemap_importer_dialog_base.ui" line="75"/>
         <source>about:blank</source>
-        <translation type="unfinished">about:blank</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="shakemap_importer_dialog_base.ui" line="83"/>
         <source>Input</source>
-        <translation type="unfinished">Input</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="shakemap_importer_dialog_base.ui" line="163"/>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="shakemap_importer_dialog_base.ui" line="110"/>
         <source>Title</source>
-        <translation type="unfinished">Title</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="shakemap_importer_dialog_base.ui" line="117"/>
@@ -9416,42 +9421,42 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="shakemap_importer_dialog_base.ui" line="124"/>
         <source>Source</source>
-        <translation type="unfinished">Source</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="shakemap_importer_dialog_base.ui" line="145"/>
         <source>Output</source>
-        <translation type="unfinished">Output</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="shakemap_importer_dialog_base.ui" line="172"/>
         <source>The output will be a .tif raster file</source>
-        <translation type="unfinished">The output will be a .tif raster file</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="shakemap_importer_dialog_base.ui" line="179"/>
         <source>Same directory as input file</source>
-        <translation type="unfinished">Same directory as input file</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="shakemap_importer_dialog_base.ui" line="192"/>
         <source>Add output layer to QGIS project</source>
-        <translation type="unfinished">Add output layer to QGIS project</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="shakemap_importer_dialog_base.ui" line="205"/>
         <source>Algorithm</source>
-        <translation type="unfinished">Algorithm</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="shakemap_importer_dialog_base.ui" line="211"/>
         <source>Nearest neighbour</source>
-        <translation type="unfinished">Nearest neighbour</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="shakemap_importer_dialog_base.ui" line="221"/>
         <source>Inverse Distance</source>
-        <translation type="unfinished">Inverse Distance</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -9469,17 +9474,17 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="step_fc90_analysis.py" line="327"/>
         <source>Please select a valid impact layer before trying to print.</source>
-        <translation type="unfinished">Please select a valid impact layer before trying to print.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="step_fc90_analysis.py" line="355"/>
         <source>Map Creator</source>
-        <translation type="unfinished">Map Creator</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="step_fc90_analysis.py" line="355"/>
         <source>Your PDF was created....opening using the default PDF viewer on your system. The generated pdfs were saved as:</source>
-        <translation type="unfinished">Your PDF was created....opening using the default PDF viewer on your system. The generated pdfs were saved as:</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -9607,26 +9612,6 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>WizardDialog</name>
     <message>
-        <location filename="wizard_dialog.py" line="590"/>
-        <source>Finish</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="wizard_dialog.py" line="693"/>
-        <source>Next</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="wizard_dialog.py" line="822"/>
-        <source>InaSAFE</source>
-        <translation type="unfinished">InaSAFE</translation>
-    </message>
-    <message>
-        <location filename="wizard_dialog.py" line="592"/>
-        <source>Run</source>
-        <translation type="unfinished">Run</translation>
-    </message>
-    <message>
         <location filename="wizard_dialog.py" line="242"/>
         <source>Keywords update wizard for layer &lt;b&gt;%s&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
@@ -9642,7 +9627,27 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="822"/>
+        <location filename="wizard_dialog.py" line="590"/>
+        <source>Finish</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="wizard_dialog.py" line="592"/>
+        <source>Run</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="wizard_dialog.py" line="702"/>
+        <source>Next</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="wizard_dialog.py" line="831"/>
+        <source>InaSAFE</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="wizard_dialog.py" line="831"/>
         <source>An error was encountered when saving the following keywords:
  %s</source>
         <translation type="unfinished"></translation>
@@ -9661,6 +9666,16 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="wizard_dialog_base.ui" line="98"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:22pt;&quot;&gt;Ina&lt;/span&gt;&lt;span style=&quot; font-size:22pt; font-weight:600;&quot;&gt;SAFE&lt;/span&gt;&lt;span style=&quot; font-size:22pt;&quot;&gt; step by step&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="wizard_dialog_base.ui" line="111"/>
+        <source> Data-centric assessment...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="wizard_dialog_base.ui" line="244"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
@@ -9673,16 +9688,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="wizard_dialog_base.ui" line="277"/>
         <source>Next</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="wizard_dialog_base.ui" line="111"/>
-        <source> Data-centric assessment...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="wizard_dialog_base.ui" line="98"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:22pt;&quot;&gt;Ina&lt;/span&gt;&lt;span style=&quot; font-size:22pt; font-weight:600;&quot;&gt;SAFE&lt;/span&gt;&lt;span style=&quot; font-size:22pt;&quot;&gt; step by step&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -10016,12 +10021,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="step_fc90_analysis.ui" line="66"/>
         <source>about:blank</source>
-        <translation type="unfinished">about:blank</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="step_fc90_analysis.ui" line="76"/>
         <source>Open in web browser</source>
-        <translation type="unfinished">Open in web browser</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="step_fc90_analysis.ui" line="83"/>
@@ -10176,7 +10181,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="step_kw55_source.ui" line="131"/>
         <source>Source</source>
-        <translation type="unfinished">Source</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="step_kw55_source.ui" line="148"/>
@@ -10202,7 +10207,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="step_kw60_title.ui" line="44"/>
         <source>Title</source>
-        <translation type="unfinished">Title</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -10218,7 +10223,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="test_dock.py" line="705"/>
         <source>Entire area</source>
-        <translation type="unfinished">Entire area</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

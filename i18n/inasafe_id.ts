@@ -6639,6 +6639,21 @@
         <translation>Lapisan %s tidak memiliki kata kunci. Gunakan wizard untuk menetapkan kata kunci pada lapisan.</translation>
     </message>
     <message>
+        <location filename="analysis_steps.py" line="66"/>
+        <source>During the exposure preparation phase of the analysis, we convert the exposure data to a usable format for the analysis.</source>
+        <translation>Pada tahap persiapan keterpaparan dalam analisis, kita akan mengkonversi data keterpaparan ke dalam format yang dapat digunakan untuk analisis.</translation>
+    </message>
+    <message>
+        <location filename="concepts.py" line="477"/>
+        <source>A range that defined with minimum and maximum value. In InaSAFE we exclude the minimum value but include the maximum value. In mathematical expression: minimum value &lt; x &lt;= maximum value. It is used for doing classification for continuous data.</source>
+        <translation>Rentang yang didefinisikan dengan nilai minimum dan maksimum. Di InaSAFE kita mengecualikan nilai minimum tetapi memasukkan nilai maksimum. Pada ekspresi matematis: nilai minimum &lt; x &lt;= nilai maksimum. Ini digunakan untuk melakukan klasifikasi untuk data kontinu.</translation>
+    </message>
+    <message>
+        <location filename="concepts.py" line="492"/>
+        <source>A conceptual mapping between one set of unique values and another set of unique values. Each unique value represents a particular class. It is used to express terms or concepts from one classification system in another classification system and only applies to non-continuous data. For example a value map can be used to express local names for entities (e.g.street type: &quot;jalan&quot;) into generic concepts (e.g.street type: &quot;residential&quot;).</source>
+        <translation>Pemetaan konseptual antara satu set nilai unik dan nilai unik lainnya. Beberapa nilai unik mewakili klas tertentu. Ini digunakan untuk mengungkapkan istilah atau konsep dari satu sistem klasifikasi dalam sistem klasifikasi lain dan hanya berlaku untuk data non-kontinu. Sebagai contoh nilai peta dapat digunakan untuk mengungkapkan nama lokal untuk entitas (contoh: tipe jalan: &quot;jalan&quot;) ke dalam konsep generik (contoh: tipe jalanan: &quot;residensial&quot;).</translation>
+    </message>
+    <message>
         <location filename="earthquake.py" line="148"/>
         <source>ITB fatality model based on a Bayesian approach. This model was developed by Institut Teknologi Bandung (ITB) and implemented by Dr. Hyeuk Ryu, Geoscience Australia.</source>
         <translation>Model fatalitas ITB berdasarkan pendekatan Bayesian. Model ini dikembangkan oleh Institut Teknologi Bandung (ITB) dan diimplementasikan oleh Dr. Hyeuk Ryu, Geoscience Australia.</translation>
@@ -6651,7 +6666,7 @@
     <message>
         <location filename="earthquake.py" line="148"/>
         <source>An Empirical Fatality Model for Indonesia Based on a Bayesian Approach by W. Sengara, M. Suarjana, M.A. Yulman, H. Ghasemi, and H. Ryu. submitted for Journal of the Geological Society.</source>
-        <translation type="unfinished"></translation>
+        <translation>Model Fatalitas Empiris untuk Basis Indonesia pada Pendekatan Bayesian oleh W. Sengara, M. Suarjana, M.A. Yulman, H. Ghasemi, dan H. Ryu. diserahkan untuk Jurnal Komunitas Geologis.</translation>
     </message>
     <message>
         <location filename="earthquake.py" line="148"/>
@@ -6676,12 +6691,52 @@
     <message>
         <location filename="earthquake.py" line="148"/>
         <source>The USGS Pager fatality model using Indonesian country coefficients.</source>
-        <translation type="unfinished"></translation>
+        <translation>Model fatalitas Pager USGS menggunakan koefisien negara Indonesia.</translation>
     </message>
     <message>
         <location filename="earthquake.py" line="148"/>
         <source>Jaiswal, K. S., Wald, D. J., and Hearne, M. (2009a). Estimating casualties for large worldwide earthquakes using an empirical approach. U.S. Geological Survey Open-File Report 2009-1136.</source>
         <translation>Jaiswal, K. S., Wald, D. J., and Hearne, M. (2009a). Estimating casualties for large worldwide earthquakes using an empirical approach. U.S. Geological Survey Open-File Report 2009-1136.</translation>
+    </message>
+    <message>
+        <location filename="exposure.py" line="41"/>
+        <source>Exposed population varies by the time (day or night, weekends, holidays etc.). Such variations are not included in the analysis.</source>
+        <translation>Populasi terpapar bervariasi berdasar waktu (siang atau malam, akhir pekan, liburan, dll.). Variasi tersebut tidak termasuk di dalam analisis.</translation>
+    </message>
+    <message>
+        <location filename="exposure.py" line="53"/>
+        <source>Map shows the estimated displaced population. People are displaced if they experience and survive a shake level of more than 5 on the MMI scale.</source>
+        <translation>Peta menunjukkan perkiraan penduduk yang mengungsi. Penduduk yang mengungsi jika mereka mengalami dan selamat dari guncangan melebihi level 5 skala MMI.</translation>
+    </message>
+    <message>
+        <location filename="exposure.py" line="56"/>
+        <source>Exposed population varies by the time (day or night, weekends, holidays etc.). Such variations are not considered in the estimates in the InaSAFE.</source>
+        <translation>Populasi terpapar bervariasi berdasar waktu (siang atau malam, akhir pekan, liburan, dll.). Variasi tersebut tidak dipertimbangkan dalam perkiraan di InaSAFE.</translation>
+    </message>
+    <message>
+        <location filename="exposure.py" line="59"/>
+        <source>The fatality calculation assumes that no fatalities occur for shake levels below 4 and fatality counts of less than 50 are rounded down.</source>
+        <translation>Perhitungan fatalitas menggunakan asumsi bahwa tidak ada kematian yang terjadi untuk getaran di bawah 4 dan jumlah fatalitas yang kurang dari 50 diabaikan.</translation>
+    </message>
+    <message>
+        <location filename="exposure.py" line="74"/>
+        <source>Earthquake fatalities are due to a number of factors, such as destructive level of ground shaking, tsunami, landsliding and fire. The implemented fatality models only consider the number of fatalities due to the earthquake ground shaking and do not include losses due to the other secondary hazards.</source>
+        <translation>Fatalitas gempabumi disebabkan oleh sejumlah faktor, seperti tingkat destruktif dari getaran tanah, tsunami, tanah longsor dan kebakaran. Model fatalitas diimplementasikan hanya mempertimbangkan jumlah fatalitas yang disebabkan getaran tanah gempabumi dan tidak termasuk kerugian yang disebabkan oleh ancaman sekunder lainnya.</translation>
+    </message>
+    <message>
+        <location filename="exposure.py" line="79"/>
+        <source>The fatality models do not estimate number of injuries or displaced people. </source>
+        <translation>Model fatalitas tidak memperkirakan jumlah yang terluka atau orang yang mengungsi.</translation>
+    </message>
+    <message>
+        <location filename="exposure.py" line="81"/>
+        <source>Empirical fatality models provide an estimate of the number of fatalities. There are several sources of uncertainty contributing to the overall uncertainty of any estimate, such as uncertainties in shaking intensity, and population estimates. </source>
+        <translation>Model fatalitas empiris menyediakan perkiraan jumlah kematian. Ada beberapa sumber kontribusi ketidakpastian terhadap keseluruhan ketidakpastian dari setiap perkiraan, seperti ketidakpastian intensitas getaran, dan perkiraan populasi.</translation>
+    </message>
+    <message>
+        <location filename="exposure.py" line="85"/>
+        <source>Care should be taken when applying empirical earthquake fatality models for ground-motion estimation methods that are inconsistent with the methods used to calibrate the model.</source>
+        <translation>Kehati-hatian harus diambil ketika menggunakan model fatalitas gempa bumi empiris untuk metode perkiraan gerakan tanah yang tidak konsisten dengan metode yang digunakan untuk mengkalibrasi modelnya.</translation>
     </message>
     <message>
         <location filename="hazard.py" line="289"/>
@@ -6714,6 +6769,156 @@
         <translation>Area dengan ancaman terendah.</translation>
     </message>
     <message>
+        <location filename="hazard_classifications.py" line="230"/>
+        <source>Earthquake MMI scale</source>
+        <translation>Skala MMI gempabumi</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="231"/>
+        <source>This scale, composed of increasing levels of intensity that range from imperceptible shaking to catastrophic destruction, is designated by Roman numerals. It does not have a mathematical basis; instead it is an arbitrary ranking based on observed effects.</source>
+        <translation>Skala ini, terdiri dari peningkatan level intensitas yang kisaran dari getaran yang tidak terlihat sampai kerusakan bencana, ditunjukkan oleh angka Romawi. Ini tidak memiliki basis matematis; melainkan merupakan peringkat yang berubah berdasarkan pada efek yang diamati.</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="249"/>
+        <source>X</source>
+        <translation>X</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="252"/>
+        <source>Some well-built wooden structures destroyed; most masonry and frame structures destroyed with foundations. Rails bent.</source>
+        <translation>Beberapa struktur bangunan kayu yang kokoh menjadi hancur; kebanyakan batu dan kerangka struktur hancur dengan fondasi. Rel bengkok.</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="273"/>
+        <source>IX</source>
+        <translation>IX</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="276"/>
+        <source>Damage considerable in specially designed structures; well-designed frame structures thrown out of plumb. Damage great in substantial buildings, with partial collapse. Buildings shifted off foundations.</source>
+        <translation>Kerusakan cukup besar dalam struktur yang dirancang khusus; struktur kerangka yang dirancang dengan baik terlempar keluar dari kedalaman. Kerusakan besar pada bangunan substansial, dengan runtuhnya sebagian. Bangunan bergeser dari fondasinya.</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="298"/>
+        <source>VIII</source>
+        <translation>VIII</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="301"/>
+        <source>Damage slight in specially designed structures; considerable damage in ordinary substantial buildings with partial collapse. Damage great in poorly built structures. Fall of chimneys, factory stacks, columns, monuments, walls. Heavy furniture overturned.</source>
+        <translation>Kerusakan kecil dalam struktur yang dirancang khusus; kerusakan yang cukup besar dalam bangunan besar substansial dengan runtuhnya sebagian. Kerusakan besar dalam struktur bangunan yang buruk. Cerobong asap, pabrik bertumpukan, kolom, monumen, dinding yang berjatuhan. Furnitur berat terbalik.</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="324"/>
+        <source>VII</source>
+        <translation>VII</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="327"/>
+        <source>Damage negligible in buildings of good design and construction; slight to moderate in well-built ordinary structures; considerable damage in poorly built or badly designed structures; some chimneys broken.</source>
+        <translation>Kerusakan ringan di bangunan yang disain dan konstruksinya bagus; ringan hingga sedang di struktur bangunan yang bagus; kerusakan cukup besar di bangunan yang kurang baik atau disain struktur yang buruk; beberapa cerobong asap rusak.</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="349"/>
+        <source>VI</source>
+        <translation>VI</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="352"/>
+        <source>Felt by all, many frightened. Some heavy furniture moved; a few instances of fallen plaster. Damage slight.</source>
+        <translation>Dirasakan oleh semua, banyak ketakutan. Beberapa furnitur berat berpindah; beberapa contoh plesteran jatuh. Sedikit kerusakan.</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="372"/>
+        <source>V</source>
+        <translation>V</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="375"/>
+        <source>Felt by nearly everyone; many awakened. Some dishes, windows broken. Unstable objects overturned. Pendulum clocks may stop.</source>
+        <translation>Dirasakan oleh hampir semua orang; banyak yang terbangun. Beberapa piring, jendela rusak. Obyek tidak berhenti terbalik. Jam pendulum mungkin berhenti.</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="396"/>
+        <source>IV</source>
+        <translation>IV</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="399"/>
+        <source>Felt indoors by many, outdoors by few during the day. At night, some awakened. Dishes, windows, doors disturbed; walls make cracking sound. Sensation like heavy truck striking building. Standing motor cars rocked noticeably.</source>
+        <translation>Dirasakan beberapa orang di dalam ruangan, di luar ruangan beberapa pada siang hari. Pada malam hari, beberapa terbangun. Piring, jendela, pintu terganggu; dinding mungkin berbunyi gemeretak. Terasa seperti truk berat mendekati bangunan. Kendaraan bermotor yang berdiri terasa terguncang.</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="422"/>
+        <source>III</source>
+        <translation>III</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="425"/>
+        <source>Felt quite noticeably by persons indoors, especially on upper floors of buildings. Many people do not recognize  it as an earthquake. Standing motor cars may rock slightly. Vibrations similar to the passing of a truck. Duration estimated.</source>
+        <translation>Sedikit dirasakan oleh orang di dalam ruangan, khususnya di lantai teratas pada bangunan. Banyak orang tidak mengenali itu sebagai gempabumi. Kendaraan bermotor yang berdiri mungkin sedikit terguncang. Getaran seperti truk yang melintas. Durasi diperkirakan.</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="448"/>
+        <source>II</source>
+        <translation>II</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="451"/>
+        <source>Felt only by a few persons at rest, especially on upper floors of buildings.</source>
+        <translation>Dirasakan hanya beberapa orang yang beristirahat, terutama di lantai paling atas di bangunan.</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="471"/>
+        <source>I</source>
+        <translation>I</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="474"/>
+        <source>Not felt except by a very few under especially favorable conditions.</source>
+        <translation>Tidak terasakan kecuali oleh beberapa di bawah kondisi yang memungkinkan.</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="581"/>
+        <source>Flood wet/dry classes</source>
+        <translation>Klas banjir basah/kering</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="647"/>
+        <source>This is a flood classification for an area. The area is broken down into a number of flood classes of increasing severity based on the water depth.</source>
+        <translation>Ini adalah klasifikasi banjir untuk suatu area. Area dibagi menjadi jumlah klas banjir dengan tingkat keparahan berdasarkan kedalaman air.</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="653"/>
+        <source>PetaBencana.id</source>
+        <translation>PetaBencana.id</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="664"/>
+        <source>Water is above waist height.</source>
+        <translation>Air di atas tinggi pinggang.</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="685"/>
+        <source>Water is above knee height, below waist height.</source>
+        <translation>Air di atas tinggi lutut, di bawah tinggi pinggang.</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="707"/>
+        <source>Water encountered up to knee deep.</source>
+        <translation>Air yang ditemui hingga sedalam lutut.</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="727"/>
+        <source>Use caution</source>
+        <translation>Hati-hati</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="729"/>
+        <source>No water encountered above ground height but there are may be floods in surrounding areas and you should use caution when moving around in this area.</source>
+        <translation>Tidak ada air yang dijumpai di atas tanah tetapi ada kemungkinan banjir di area sekitarnya dan Anda harus berhati-hati ketika berjalan di sekitar area ini.</translation>
+    </message>
+    <message>
         <location filename="hazard_classifications.py" line="754"/>
         <source>Five classes are supported for volcanic ash hazard data: &lt;b&gt;very low&lt;/b&gt;, &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, &lt;b&gt;high&lt;/b&gt; or &lt;b&gt;very high&lt;/b&gt;.</source>
         <translation>Lima klas yang didukung untuk data ancaman vektor abu vulkan: &lt;b&gt;sangat rendah&lt;/b&gt;, &lt;b&gt;rendah&lt;/b&gt;, &lt;b&gt;sedang&lt;/b&gt;, &lt;b&gt;tinggi&lt;/b&gt; atau &lt;b&gt;sangat tinggi&lt;/b&gt;.</translation>
@@ -6721,27 +6926,32 @@
     <message>
         <location filename="hazard_classifications.py" line="773"/>
         <source>Dry loading on buildings causing structural collapse.</source>
-        <translation type="unfinished"></translation>
+        <translation>Muatan kering pada bangunan mengakibatkan keruntuhan struktur.</translation>
     </message>
     <message>
         <location filename="hazard_classifications.py" line="792"/>
         <source>Dry loading on buildings causing structural damage but not collapse; wet loading on buildings (i.e. ash loading + heavy rainfall) causing structural collapse.</source>
-        <translation type="unfinished"></translation>
+        <translation>Muatan kering pada bangunan menyebabkan kerusakan struktural tetapi tidak runtuh; beban kering pada bangunan (misalnya muatan debu + hujan deras) mengakibatkan keruntuhan struktural.</translation>
     </message>
     <message>
         <location filename="hazard_classifications.py" line="813"/>
         <source>Damage to less vulnerable agricultural crops (e.g. tea plantations) and destruction of more vulnerable crops; destruction of critical infrastructure; cosmetic (non-structural) damage to buildings</source>
-        <translation type="unfinished"></translation>
+        <translation>Kerusakan pada tanaman pertanian yang kerentanan lebih sedikit (contoh: perkebunan teh) dan kerusakan tanaman yang lebih rentan; kerusakan pada infrastruktur kritis; kerusakan kosmetik (non-struktural) pada bangunan</translation>
     </message>
     <message>
         <location filename="hazard_classifications.py" line="835"/>
         <source>Damage to transportation routes (e.g. airports, roads, railways); damage to critical infrastructure (e.g. electricity supply); damage to more vulnerable agricultural crops (e.g. rice fields)</source>
-        <translation type="unfinished"></translation>
+        <translation>Kerusakan pada rute transportasi (contoh: bandara, jalan, rel kereta api); kerusakan pada infrastruktur kritis (contoh: persediaan kelistrikan); kerusakan pada tanaman pertanian yang lebih rentan (contoh: sawah)</translation>
     </message>
     <message>
         <location filename="hazard_classifications.py" line="857"/>
         <source>Impact on health (respiration), livestock, and contamination of water supply.</source>
         <translation>Dampak pada kesehatan (respirasi), ternak, dan kontaminasi persediaan air.</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="883"/>
+        <source>Tsunami hazards can be classified into one of four classes for an area. The area is either &lt;b&gt;dry&lt;/b&gt;, &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, or &lt;b&gt;high&lt;/b&gt;, for tsunami hazard classification. The following description for these classes is provided by Badan Geologi based on BNPB Perka 2/2012</source>
+        <translation>Ancaman tsunami dapat diklasifikasikan ke dalam satu dari empat klas untuk suatu area. Area ini baik &lt;b&gt;kering&lt;/b&gt;, &lt;b&gt;rendah&lt;/b&gt;, &lt;b&gt;sedang&lt;/b&gt;, atau &lt;b&gt;tinggi&lt;/b&gt;, untuk klasifikasi ancaman tsunami. Deskripsi mengenai kelas-kelas tersebut disediakan oleh Badan Geologi berdasarkan Perka. BNPB No.2/2012</translation>
     </message>
     <message>
         <location filename="hazard_classifications.py" line="1024"/>
@@ -6762,6 +6972,11 @@
         <location filename="hazard_classifications.py" line="1367"/>
         <source>Water above ground height and less than 1.0m. The area is potentially hit by a tsunami wave with an inundation depth less than 1 m or similar to tsunami intensity scale of V or less in (Papadopoulos and Imamura, 2001). Tsunami wave of 1m height causes few people to be frightened and flee to higher elevation. Felt by most people on large ship, observed from shore. Small vessels drift and collide and some turn over. Sand is deposited and there is flooding of areas close to the shore.</source>
         <translation>Air di atas permukaan tanah dan ketinggian kurang dari 1,0 m. Area berpotensi diterjang gelombang tsunami dengan kedalaman kurang dari 1 m atau setara dengan V atau kurang skala intensitas tsunami (Papadoupulos dan Imamura, 2001). Gelombang tsunami dengan ketinggian 1 m menyebabkan orang-orang ketakutan dan mengungsi ke tempat yang lebih tinggi. Dirasakan oleh sebagian besar orang pada kapal besar, terlihat dari pantai. Kapal kecil akan hanyut dan bertabrakan dan beberapa akan terbalik. Pasir mengendap dan akan ada banjir di wilayah dekat dengan pantai.</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="1012"/>
+        <source>Tsunami population classes</source>
+        <translation>Klasifikasi penduduk tsunami</translation>
     </message>
     <message>
         <location filename="hazard_classifications.py" line="1014"/>
@@ -6786,352 +7001,12 @@
     <message>
         <location filename="hazard_classifications.py" line="1312"/>
         <source>Water above 3.1m and less than 8.0m. The area is potentially hit by a tsunami wave with an inundation depth &gt; 3 m or reach a tsunami intensity scale of VII or even more (Papadopoulos and Imamura, 2001). Tsunami wave with 4 m inundation depth cause damage to small vessel, a few ships are drifted inland, severe damage on most wooden houses. Boulders are deposited on shore. If tsunami height reaches 8 m, it will cause severe damage. Dykes, wave breaker, tsunami protection walls and green belts will be washed away.</source>
-        <translation type="unfinished"></translation>
+        <translation>Air di atas 3,1 m dan kurang dari 8,0 m. Area berpotensi diterjang gelombang tsunami dengan kedalaman rendaman &gt; 3 m atau mencapai VII atau bahkan lebih skala intensitas tsunami (Papadopoulos dan Imamura, 2001). Gelombang tsunami dengan kedalaman rendaman 4 m menyebabkan kerusakan pada kapal kecil, dan beberapa kapal besar hanyut ke daratan, kerusakan parah pada rumah kayu. Batu besar mengendap di pantai. Jika ketinggian tsunami mencapai 8  akan menyebabkan kerusakan parah. Tanggul, pemecah gelombang, dinding pelindung tsunami dan sabuk hijau akan hanyut.</translation>
     </message>
     <message>
         <location filename="hazard_classifications.py" line="1271"/>
         <source>Tsunami population classes ITB</source>
         <translation>Klasifikasi penduduk tsunami menurut ITB</translation>
-    </message>
-    <message>
-        <location filename="post_processors.py" line="211"/>
-        <source>This is a value for the layer_property input type. It retrieves Size Calculator of the layer CRS</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="post_processors.py" line="218"/>
-        <source>This is a value for layer_property input type. It retrieves the layer Coordinate Reference System (CRS).</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="post_processors.py" line="236"/>
-        <source>This type of process is a formula which is interpreted and executed by the post processor.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="post_processors.py" line="243"/>
-        <source>This type of process takes inputs as arguments and processes them by passing them to a Python function.</source>
-        <translation>Tipe proses ini mengambil masukan sebagai argumen dan memprosesnya dengan melewatinya sebagai argumen untuk fungsi Python.</translation>
-    </message>
-    <message>
-        <location filename="post_processors.py" line="349"/>
-        <source>A post processor to calculate needed hygiene packs weekly for women who are displaced. &quot;Displaced&quot; is defined as: {displaced_concept}</source>
-        <translation>Postprosesor untuk menghitung berapa banyak paket kebersihan yang diperlukan oleh wanita yang mengungsi setiap pekan. &quot;Mengungsi&quot; didefinisikan sebagai: {displaced_concept}</translation>
-    </message>
-    <message>
-        <location filename="components.py" line="81"/>
-        <source>Estimated {title}</source>
-        <translation>Perkiraan {title}</translation>
-    </message>
-    <message>
-        <location filename="components.py" line="93"/>
-        <source>Not Affected</source>
-        <translation>Tidak terdampak</translation>
-    </message>
-    <message>
-        <location filename="components.py" line="97"/>
-        <source>Not Exposed</source>
-        <translation>Tidak Terdampak</translation>
-    </message>
-    <message>
-        <location filename="components.py" line="408"/>
-        <source>source not available</source>
-        <translation>sumber tidak tersedia</translation>
-    </message>
-    <message>
-        <location filename="components.py" line="409"/>
-        <source>reference unspecified</source>
-        <translation>referensi tidak terspesifikasi</translation>
-    </message>
-    <message>
-        <location filename="components.py" line="410"/>
-        <source>not used</source>
-        <translation>tidak digunakan</translation>
-    </message>
-    <message>
-        <location filename="components.py" line="423"/>
-        <source>Hazard source</source>
-        <translation>Sumber ancaman</translation>
-    </message>
-    <message>
-        <location filename="components.py" line="435"/>
-        <source>{layer_name} - {source} - </source>
-        <translation>{layer_name} - {source} - </translation>
-    </message>
-    <message>
-        <location filename="components.py" line="428"/>
-        <source>Exposure source</source>
-        <translation>Sumber keterpaparan</translation>
-    </message>
-    <message>
-        <location filename="components.py" line="433"/>
-        <source>Aggregation source</source>
-        <translation>Sumber agregasi</translation>
-    </message>
-    <message>
-        <location filename="components.py" line="438"/>
-        <source>Impact Function</source>
-        <translation>Fungsi Dampak</translation>
-    </message>
-    <message>
-        <location filename="components.py" line="440"/>
-        <source>{impact_function_name}</source>
-        <translation>{impact_function_name}</translation>
-    </message>
-    <message>
-        <location filename="sanity_check.py" line="70"/>
-        <source>The layer is invalid.</source>
-        <translation>Lapisan tidak valid.</translation>
-    </message>
-    <message>
-        <location filename="sanity_check.py" line="78"/>
-        <source>The layer should not have many sublayers : {source} : {names}</source>
-        <translation>Lapisan tidak harus memiliki banyak sublapisan : {source} : {names}</translation>
-    </message>
-    <message>
-        <location filename="sanity_check.py" line="87"/>
-        <source>The layer has not a valid geometry type.</source>
-        <translation>Lapisan tidak memiliki tipe geometri yang valid.</translation>
-    </message>
-    <message>
-        <location filename="sanity_check.py" line="92"/>
-        <source>The layer has not a correct geometry type.</source>
-        <translation>Lapisan tidak memiliki tipe geometri yang benar.</translation>
-    </message>
-    <message>
-        <location filename="sanity_check.py" line="96"/>
-        <source>The layer is neither a raster nor a vector : {type}</source>
-        <translation>Lapisan bukan berupa raster ataupun vector : {type}</translation>
-    </message>
-    <message>
-        <location filename="prepare_vector_layer.py" line="157"/>
-        <source>Hazard classification is missing exposure key.</source>
-        <translation>Klasifikasi ancaman tidak memuat kata kunci keterpaparan.</translation>
-    </message>
-    <message>
-        <location filename="step_kw33_multi_classifications.py" line="269"/>
-        <source>InaSAFE use default classification for Raster Earthquake hazard on population.</source>
-        <translation>InaSAFE menggunakan klasifikasi default untuk ancaman Gempa Bumi Raster pada populasi.</translation>
-    </message>
-    <message>
-        <location filename="step_kw43_threshold.py" line="137"/>
-        <source>Min &gt;</source>
-        <translation>Min &gt;</translation>
-    </message>
-    <message>
-        <location filename="wizard_strings.py" line="144"/>
-        <source>You have selected &lt;b&gt;%s %s&lt;/b&gt; as a &lt;b&gt;continuous&lt;/b&gt; layer and the attribute is &lt;b&gt;%s&lt;/b&gt; with &lt;b&gt;%s&lt;/b&gt;. Please input the minimum and maximum value for each class below. Minimum value will be excluded in the range, while maximum value will be included. The minimum value from the layer is &lt;b&gt;%s&lt;/b&gt; and the maximum value is &lt;b&gt;%s&lt;/b&gt;.</source>
-        <translation>Anda telah memilih &lt;b&gt;%s %s&lt;/b&gt; sebagai lapisan &lt;b&gt;kontinyu&lt;/b&gt; dan atribut &lt;b&gt;%s&lt;/b&gt; dengan &lt;b&gt;%s&lt;/b&gt;. Mohon masukkan nilai minimum dan maksimum di bawah setiap klas. Nilai minimum tidak dimasukan ke dalam rentang, sementara nilai maksimum akan dimasukan. Nilai minimum untuk lapisan adalah &lt;b&gt;%s&lt;/b&gt; dan nilai maksimum adalah &lt;b&gt;%s&lt;/b&gt;.</translation>
-    </message>
-    <message>
-        <location filename="wizard_strings.py" line="152"/>
-        <source>You have selected &lt;b&gt;%s %s&lt;/b&gt; as a &lt;b&gt;continuous&lt;/b&gt; layer with &lt;b&gt;%s&lt;/b&gt;. Minimum value will be excluded in the range, while maximum value will be included. Please input the minimum and maximum value for each class below. The minimum value from the layer is &lt;b&gt;%s&lt;/b&gt; and the maximum value is &lt;b&gt;%s&lt;/b&gt;.</source>
-        <translation>Anda telah memilih &lt;b&gt;%s %s&lt;/b&gt; sebagai lapisan &lt;b&gt;kontinyu&lt;/b&gt; dengan &lt;b&gt;%s&lt;/b&gt;. Nilai minimum tidak dimasukan ke dalam rentang, sementara nilai maksimum akan dimasukan. Mohon masukkan nilai minimum dan maksimum di bawah setiap klas. Nilai minimum untuk lapisan adalah &lt;b&gt;%s&lt;/b&gt; dan nilai maksimum adalah &lt;b&gt;%s&lt;/b&gt;.</translation>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="960"/>
-        <source>The aggregation layer seems to have a problem. Some features might be invalid. You should check the validity of this layer or use a selection within this layer.</source>
-        <translation>Tampaknya ada masalah pada lapisan agregasi. Beberapa fitur kemungkinan tidak valid. Cobalah untuk melakukan pengecekan validitas atau lakukan pemilihan fitur tertentu pada lapisan ini.</translation>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="1293"/>
-        <source>Something went wrong with the datastore : {error_message}</source>
-        <translation>Terjadi sebuah kesalahan dengan datastore : {error_message}</translation>
-    </message>
-    <message>
-        <location filename="keyword_io.py" line="165"/>
-        <source>The layer is not a QgsMapLayer : {type}</source>
-        <translation>Bukan lapisan QgsMapLayer : {type}</translation>
-    </message>
-    <message>
-        <location filename="analysis_steps.py" line="66"/>
-        <source>During the exposure preparation phase of the analysis, we convert the exposure data to a usable format for the analysis.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="concepts.py" line="477"/>
-        <source>A range that defined with minimum and maximum value. In InaSAFE we exclude the minimum value but include the maximum value. In mathematical expression: minimum value &lt; x &lt;= maximum value. It is used for doing classification for continuous data.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="concepts.py" line="492"/>
-        <source>A conceptual mapping between one set of unique values and another set of unique values. Each unique value represents a particular class. It is used to express terms or concepts from one classification system in another classification system and only applies to non-continuous data. For example a value map can be used to express local names for entities (e.g.street type: &quot;jalan&quot;) into generic concepts (e.g.street type: &quot;residential&quot;).</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="exposure.py" line="56"/>
-        <source>Exposed population varies by the time (day or night, weekends, holidays etc.). Such variations are not considered in the estimates in the InaSAFE.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="exposure.py" line="59"/>
-        <source>The fatality calculation assumes that no fatalities occur for shake levels below 4 and fatality counts of less than 50 are rounded down.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="exposure.py" line="74"/>
-        <source>Earthquake fatalities are due to a number of factors, such as destructive level of ground shaking, tsunami, landsliding and fire. The implemented fatality models only consider the number of fatalities due to the earthquake ground shaking and do not include losses due to the other secondary hazards.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="exposure.py" line="79"/>
-        <source>The fatality models do not estimate number of injuries or displaced people. </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="exposure.py" line="81"/>
-        <source>Empirical fatality models provide an estimate of the number of fatalities. There are several sources of uncertainty contributing to the overall uncertainty of any estimate, such as uncertainties in shaking intensity, and population estimates. </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="exposure.py" line="85"/>
-        <source>Care should be taken when applying empirical earthquake fatality models for ground-motion estimation methods that are inconsistent with the methods used to calibrate the model.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="230"/>
-        <source>Earthquake MMI scale</source>
-        <translation>Skala MMI gempabumi</translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="231"/>
-        <source>This scale, composed of increasing levels of intensity that range from imperceptible shaking to catastrophic destruction, is designated by Roman numerals. It does not have a mathematical basis; instead it is an arbitrary ranking based on observed effects.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="249"/>
-        <source>X</source>
-        <translation>X</translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="252"/>
-        <source>Some well-built wooden structures destroyed; most masonry and frame structures destroyed with foundations. Rails bent.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="273"/>
-        <source>IX</source>
-        <translation>IX</translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="276"/>
-        <source>Damage considerable in specially designed structures; well-designed frame structures thrown out of plumb. Damage great in substantial buildings, with partial collapse. Buildings shifted off foundations.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="298"/>
-        <source>VIII</source>
-        <translation>VIII</translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="301"/>
-        <source>Damage slight in specially designed structures; considerable damage in ordinary substantial buildings with partial collapse. Damage great in poorly built structures. Fall of chimneys, factory stacks, columns, monuments, walls. Heavy furniture overturned.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="324"/>
-        <source>VII</source>
-        <translation>VII</translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="327"/>
-        <source>Damage negligible in buildings of good design and construction; slight to moderate in well-built ordinary structures; considerable damage in poorly built or badly designed structures; some chimneys broken.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="349"/>
-        <source>VI</source>
-        <translation>VI</translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="352"/>
-        <source>Felt by all, many frightened. Some heavy furniture moved; a few instances of fallen plaster. Damage slight.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="372"/>
-        <source>V</source>
-        <translation>V</translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="375"/>
-        <source>Felt by nearly everyone; many awakened. Some dishes, windows broken. Unstable objects overturned. Pendulum clocks may stop.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="396"/>
-        <source>IV</source>
-        <translation>IV</translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="399"/>
-        <source>Felt indoors by many, outdoors by few during the day. At night, some awakened. Dishes, windows, doors disturbed; walls make cracking sound. Sensation like heavy truck striking building. Standing motor cars rocked noticeably.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="422"/>
-        <source>III</source>
-        <translation>III</translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="425"/>
-        <source>Felt quite noticeably by persons indoors, especially on upper floors of buildings. Many people do not recognize  it as an earthquake. Standing motor cars may rock slightly. Vibrations similar to the passing of a truck. Duration estimated.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="448"/>
-        <source>II</source>
-        <translation>II</translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="471"/>
-        <source>I</source>
-        <translation>I</translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="474"/>
-        <source>Not felt except by a very few under especially favorable conditions.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="581"/>
-        <source>Flood wet/dry classes</source>
-        <translation>Klas banjir basah/kering</translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="647"/>
-        <source>This is a flood classification for an area. The area is broken down into a number of flood classes of increasing severity based on the water depth.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="664"/>
-        <source>Water is above waist height.</source>
-        <translation>Air di atas tinggi pinggang.</translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="685"/>
-        <source>Water is above knee height, below waist height.</source>
-        <translation>Air di atas tinggi lutut, di bawah tinggi pinggang.</translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="707"/>
-        <source>Water encountered up to knee deep.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="727"/>
-        <source>Use caution</source>
-        <translation>Hati-hati</translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="729"/>
-        <source>No water encountered above ground height but there are may be floods in surrounding areas and you should use caution when moving around in this area.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="1012"/>
-        <source>Tsunami population classes</source>
-        <translation>Klasifikasi penduduk tsunami</translation>
     </message>
     <message>
         <location filename="peta_bencana.py" line="12"/>
@@ -7142,6 +7017,31 @@
         <location filename="peta_bencana.py" line="34"/>
         <source>Production API</source>
         <translation>API Produksi</translation>
+    </message>
+    <message>
+        <location filename="post_processors.py" line="211"/>
+        <source>This is a value for the layer_property input type. It retrieves Size Calculator of the layer CRS</source>
+        <translation>Nilai ini untuk tipe masukan properti_lapisan. Ini mendapatkan kembali Kalkulator Ukuran dari lapisan CRS</translation>
+    </message>
+    <message>
+        <location filename="post_processors.py" line="218"/>
+        <source>This is a value for layer_property input type. It retrieves the layer Coordinate Reference System (CRS).</source>
+        <translation>Nilai ini untuk tipe masukan properti_lapisan. Ini mendapatkan kembali lapisan Sistem Referensi Koordiat (CRS).</translation>
+    </message>
+    <message>
+        <location filename="post_processors.py" line="236"/>
+        <source>This type of process is a formula which is interpreted and executed by the post processor.</source>
+        <translation>Tipe proses ini adalah formula yang diinterpretasi dan dieksekusi oleh postprosesor.</translation>
+    </message>
+    <message>
+        <location filename="post_processors.py" line="243"/>
+        <source>This type of process takes inputs as arguments and processes them by passing them to a Python function.</source>
+        <translation>Tipe proses ini mengambil masukan sebagai argumen dan memprosesnya dengan melewatinya sebagai argumen untuk fungsi Python.</translation>
+    </message>
+    <message>
+        <location filename="post_processors.py" line="349"/>
+        <source>A post processor to calculate needed hygiene packs weekly for women who are displaced. &quot;Displaced&quot; is defined as: {displaced_concept}</source>
+        <translation>Postprosesor untuk menghitung berapa banyak paket kebersihan yang diperlukan oleh wanita yang mengungsi setiap pekan. &quot;Mengungsi&quot; didefinisikan sebagai: {displaced_concept}</translation>
     </message>
     <message>
         <location filename="__init__.py" line="20"/>
@@ -7254,6 +7154,126 @@
         <translation>Tandai produk ini sebagai keluaran SVG.</translation>
     </message>
     <message>
+        <location filename="components.py" line="81"/>
+        <source>Estimated {title}</source>
+        <translation>Perkiraan {title}</translation>
+    </message>
+    <message>
+        <location filename="components.py" line="93"/>
+        <source>Not Affected</source>
+        <translation>Tidak terdampak</translation>
+    </message>
+    <message>
+        <location filename="components.py" line="97"/>
+        <source>Not Exposed</source>
+        <translation>Tidak Terdampak</translation>
+    </message>
+    <message>
+        <location filename="components.py" line="132"/>
+        <source>Not affected</source>
+        <translation>Tidak terdampak</translation>
+    </message>
+    <message>
+        <location filename="components.py" line="138"/>
+        <source>Estimated {title} by {exposure} type</source>
+        <translation>Perkiraan {title} menurut tipe {exposure}</translation>
+    </message>
+    <message>
+        <location filename="components.py" line="172"/>
+        <source>For this analysis, the following displacement rates were used: {rate_description}</source>
+        <translation>Untuk analisis ini, tingkat perpindahan berikut digunakan: {rate_description}</translation>
+    </message>
+    <message>
+        <location filename="components.py" line="175"/>
+        <source>{name} - {displacement_rate:.2%}</source>
+        <translation>{name} - {displacement_rate:.2%}</translation>
+    </message>
+    <message>
+        <location filename="components.py" line="408"/>
+        <source>source not available</source>
+        <translation>sumber tidak tersedia</translation>
+    </message>
+    <message>
+        <location filename="components.py" line="409"/>
+        <source>reference unspecified</source>
+        <translation>referensi tidak terspesifikasi</translation>
+    </message>
+    <message>
+        <location filename="components.py" line="410"/>
+        <source>not used</source>
+        <translation>tidak digunakan</translation>
+    </message>
+    <message>
+        <location filename="components.py" line="423"/>
+        <source>Hazard source</source>
+        <translation>Sumber ancaman</translation>
+    </message>
+    <message>
+        <location filename="components.py" line="435"/>
+        <source>{layer_name} - {source} - </source>
+        <translation>{layer_name} - {source} - </translation>
+    </message>
+    <message>
+        <location filename="components.py" line="428"/>
+        <source>Exposure source</source>
+        <translation>Sumber keterpaparan</translation>
+    </message>
+    <message>
+        <location filename="components.py" line="433"/>
+        <source>Aggregation source</source>
+        <translation>Sumber agregasi</translation>
+    </message>
+    <message>
+        <location filename="components.py" line="438"/>
+        <source>Impact Function</source>
+        <translation>Fungsi Dampak</translation>
+    </message>
+    <message>
+        <location filename="components.py" line="440"/>
+        <source>{impact_function_name}</source>
+        <translation>{impact_function_name}</translation>
+    </message>
+    <message>
+        <location filename="units.py" line="48"/>
+        <source>Weight/area</source>
+        <translation>Berat/area</translation>
+    </message>
+    <message>
+        <location filename="units.py" line="113"/>
+        <source>Speed</source>
+        <translation>Kecepatan</translation>
+    </message>
+    <message>
+        <location filename="sanity_check.py" line="70"/>
+        <source>The layer is invalid.</source>
+        <translation>Lapisan tidak valid.</translation>
+    </message>
+    <message>
+        <location filename="sanity_check.py" line="78"/>
+        <source>The layer should not have many sublayers : {source} : {names}</source>
+        <translation>Lapisan tidak harus memiliki banyak sublapisan : {source} : {names}</translation>
+    </message>
+    <message>
+        <location filename="sanity_check.py" line="87"/>
+        <source>The layer has not a valid geometry type.</source>
+        <translation>Lapisan tidak memiliki tipe geometri yang valid.</translation>
+    </message>
+    <message>
+        <location filename="sanity_check.py" line="92"/>
+        <source>The layer has not a correct geometry type.</source>
+        <translation>Lapisan tidak memiliki tipe geometri yang benar.</translation>
+    </message>
+    <message>
+        <location filename="sanity_check.py" line="96"/>
+        <source>The layer is neither a raster nor a vector : {type}</source>
+        <translation>Lapisan bukan berupa raster ataupun vector : {type}</translation>
+    </message>
+    <message>
+        <location filename="prepare_vector_layer.py" line="157"/>
+        <source>Hazard classification is missing exposure key.</source>
+        <translation>Klasifikasi ancaman tidak memuat kata kunci keterpaparan.</translation>
+    </message>
+    <message>
         <location filename="union.py" line="248"/>
         <source>GEOS geoprocessing error: One or more input features have null geometry.</source>
         <translation>Kesalahan GEOS geoprosesing: Salah satu masukan fitur atau lebih memiliki geometri null.</translation>
@@ -7262,6 +7282,36 @@
         <location filename="definitions_help.py" line="146"/>
         <source>The PetaBencana Downloader</source>
         <translation>Pengunduh PetaBencana</translation>
+    </message>
+    <message>
+        <location filename="definitions_help.py" line="589"/>
+        <source>Earthquake notes:</source>
+        <translation>Catatan gempa bumi:</translation>
+    </message>
+    <message>
+        <location filename="definitions_help.py" line="590"/>
+        <source>Earthquake Pager notes:</source>
+        <translation>Catatan gempa bumi Pager:</translation>
+    </message>
+    <message>
+        <location filename="definitions_help.py" line="591"/>
+        <source>Earthquake ITB notes:</source>
+        <translation>Catatan gempa bumi ITB:</translation>
+    </message>
+    <message>
+        <location filename="definitions_help.py" line="593"/>
+        <source>Earthquake fatality model limitations</source>
+        <translation>Keterbatasan model fatalitas gempabumi</translation>
+    </message>
+    <message>
+        <location filename="dock_help.py" line="268"/>
+        <source>All datasets will be clipped to the behaviours defined in the analysis extents dialog if you do not use an aggregation layer.</source>
+        <translation>Semua dataset akan dipotong untuk perilaku yang didefinisikan dalam dialog luasan analisis jika Anda tidak menggunakan lapisan agregasi.</translation>
+    </message>
+    <message>
+        <location filename="needs_calculator_help.py" line="69"/>
+        <source>Use the pick lists to select the layer and the population field and then press &apos;OK&apos;.</source>
+        <translation>Gunakan daftar pilihan di bawah ini untuk memilih layer dan bidang populasi lalu tekan &apos;OK&apos;.</translation>
     </message>
     <message>
         <location filename="peta_bencana_help.py" line="39"/>
@@ -7274,94 +7324,54 @@
         <translation>Data yang diunduh adalah hak cipta kontributor PetaBencana  (klik untuk info lebih lanjut).</translation>
     </message>
     <message>
+        <location filename="step_kw33_multi_classifications.py" line="269"/>
+        <source>InaSAFE use default classification for Raster Earthquake hazard on population.</source>
+        <translation>InaSAFE menggunakan klasifikasi default untuk ancaman Gempa Bumi Raster pada populasi.</translation>
+    </message>
+    <message>
+        <location filename="step_kw43_threshold.py" line="137"/>
+        <source>Min &gt;</source>
+        <translation>Min &gt;</translation>
+    </message>
+    <message>
+        <location filename="step_kw47_default_inasafe_fields.py" line="265"/>
+        <source>The sum of your age ratios is not 1. Please fix it first before you can continue to the next step.</source>
+        <translation>Jumlah rasio umur Anda bukan 1. Silahkan perbaiki dahulu sebelum Anda dapat melanjutkan ke langkah selanjutnya.</translation>
+    </message>
+    <message>
+        <location filename="step_kw47_default_inasafe_fields.py" line="270"/>
+        <source>You are good to go.</source>
+        <translation>Anda bisa melanjutkan proses dengan aman.</translation>
+    </message>
+    <message>
+        <location filename="wizard_strings.py" line="144"/>
+        <source>You have selected &lt;b&gt;%s %s&lt;/b&gt; as a &lt;b&gt;continuous&lt;/b&gt; layer and the attribute is &lt;b&gt;%s&lt;/b&gt; with &lt;b&gt;%s&lt;/b&gt;. Please input the minimum and maximum value for each class below. Minimum value will be excluded in the range, while maximum value will be included. The minimum value from the layer is &lt;b&gt;%s&lt;/b&gt; and the maximum value is &lt;b&gt;%s&lt;/b&gt;.</source>
+        <translation>Anda telah memilih &lt;b&gt;%s %s&lt;/b&gt; sebagai lapisan &lt;b&gt;kontinyu&lt;/b&gt; dan atribut &lt;b&gt;%s&lt;/b&gt; dengan &lt;b&gt;%s&lt;/b&gt;. Mohon masukkan nilai minimum dan maksimum di bawah setiap klas. Nilai minimum tidak dimasukan ke dalam rentang, sementara nilai maksimum akan dimasukan. Nilai minimum untuk lapisan adalah &lt;b&gt;%s&lt;/b&gt; dan nilai maksimum adalah &lt;b&gt;%s&lt;/b&gt;.</translation>
+    </message>
+    <message>
+        <location filename="wizard_strings.py" line="152"/>
+        <source>You have selected &lt;b&gt;%s %s&lt;/b&gt; as a &lt;b&gt;continuous&lt;/b&gt; layer with &lt;b&gt;%s&lt;/b&gt;. Minimum value will be excluded in the range, while maximum value will be included. Please input the minimum and maximum value for each class below. The minimum value from the layer is &lt;b&gt;%s&lt;/b&gt; and the maximum value is &lt;b&gt;%s&lt;/b&gt;.</source>
+        <translation>Anda telah memilih &lt;b&gt;%s %s&lt;/b&gt; sebagai lapisan &lt;b&gt;kontinyu&lt;/b&gt; dengan &lt;b&gt;%s&lt;/b&gt;. Nilai minimum tidak dimasukan ke dalam rentang, sementara nilai maksimum akan dimasukan. Mohon masukkan nilai minimum dan maksimum di bawah setiap klas. Nilai minimum untuk lapisan adalah &lt;b&gt;%s&lt;/b&gt; dan nilai maksimum adalah &lt;b&gt;%s&lt;/b&gt;.</translation>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="960"/>
+        <source>The aggregation layer seems to have a problem. Some features might be invalid. You should check the validity of this layer or use a selection within this layer.</source>
+        <translation>Tampaknya ada masalah pada lapisan agregasi. Beberapa fitur kemungkinan tidak valid. Cobalah untuk melakukan pengecekan validitas atau lakukan pemilihan fitur tertentu pada lapisan ini.</translation>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="1293"/>
+        <source>Something went wrong with the datastore : {error_message}</source>
+        <translation>Terjadi sebuah kesalahan dengan datastore : {error_message}</translation>
+    </message>
+    <message>
         <location filename="impact_function.py" line="1472"/>
         <source>{ratio} constant detected, we will add it to the exposure layer.</source>
         <translation>konstan {ratio} terdeteksi, kita akan menambahkannya ke lapisan keterpaparan.</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="41"/>
-        <source>Exposed population varies by the time (day or night, weekends, holidays etc.). Such variations are not included in the analysis.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="exposure.py" line="53"/>
-        <source>Map shows the estimated displaced population. People are displaced if they experience and survive a shake level of more than 5 on the MMI scale.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="451"/>
-        <source>Felt only by a few persons at rest, especially on upper floors of buildings.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="653"/>
-        <source>PetaBencana.id</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="883"/>
-        <source>Tsunami hazards can be classified into one of four classes for an area. The area is either &lt;b&gt;dry&lt;/b&gt;, &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, or &lt;b&gt;high&lt;/b&gt;, for tsunami hazard classification. The following description for these classes is provided by Badan Geologi based on BNPB Perka 2/2012</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="components.py" line="132"/>
-        <source>Not affected</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="components.py" line="138"/>
-        <source>Estimated {title} by {exposure} type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="components.py" line="172"/>
-        <source>For this analysis, the following displacement rates were used: {rate_description}</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="components.py" line="175"/>
-        <source>{name} - {displacement_rate:.2%}</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="units.py" line="48"/>
-        <source>Weight/area</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="units.py" line="113"/>
-        <source>Speed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions_help.py" line="589"/>
-        <source>Earthquake notes:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions_help.py" line="590"/>
-        <source>Earthquake Pager notes:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions_help.py" line="591"/>
-        <source>Earthquake ITB notes:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions_help.py" line="593"/>
-        <source>Earthquake fataility model limitations</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock_help.py" line="268"/>
-        <source>All datasets will be clipped to the behaviours defined in the analysis extents dialog if you do not use an aggregation layer.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="needs_calculator_help.py" line="69"/>
-        <source>Use the pick lists to select the layer and the population field and then press &apos;OK&apos;.</source>
-        <translation type="unfinished"></translation>
+        <location filename="keyword_io.py" line="165"/>
+        <source>The layer is not a QgsMapLayer : {type}</source>
+        <translation>Bukan lapisan QgsMapLayer : {type}</translation>
     </message>
 </context>
 <context>
@@ -8341,29 +8351,29 @@ ke
         <translation>Nama field agregasi</translation>
     </message>
     <message>
+        <location filename="needs_calculator_dialog_base.ui" line="56"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This tool will calculate minimum needs for displaced people in the specified aggregation areas. Press the help button for more detailed instruction about this tool.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Perangkat ini akan menghitung kebutuhan minimum bagi orang yang mengungsi pada area agregasi yang ditentukan. Tekan tombol bantuan untuk detail instruksi lebih lanjut tentang perangkat ini.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location filename="needs_calculator_dialog_base.ui" line="79"/>
+        <source>Displaced people layer*</source>
+        <translation>Lapisan penduduk mengungsi*</translation>
+    </message>
+    <message>
+        <location filename="needs_calculator_dialog_base.ui" line="102"/>
+        <source>Displaced people field*</source>
+        <translation>Field penduduk mengungsi*</translation>
+    </message>
+    <message>
         <location filename="needs_calculator_dialog_base.ui" line="148"/>
         <source>Aggregation field ID</source>
         <translation>Field ID agregasi</translation>
     </message>
     <message>
-        <location filename="needs_calculator_dialog_base.ui" line="56"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This tool will calculate minimum needs for displaced people in the specified aggregation areas. Press the help button for more detailed instruction about this tool.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="needs_calculator_dialog_base.ui" line="79"/>
-        <source>Displaced people layer*</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="needs_calculator_dialog_base.ui" line="102"/>
-        <source>Displaced people field*</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="needs_calculator_dialog_base.ui" line="158"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;*required&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;*dibutuhkan&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
@@ -9653,12 +9663,12 @@ p, li { white-space: pre-wrap; }
         <translation>Selesai</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="693"/>
+        <location filename="wizard_dialog.py" line="702"/>
         <source>Next</source>
         <translation>Lanjut</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="822"/>
+        <location filename="wizard_dialog.py" line="831"/>
         <source>InaSAFE</source>
         <translation>InaSAFE</translation>
     </message>
@@ -9683,7 +9693,7 @@ p, li { white-space: pre-wrap; }
         <translation>Pergunakan wizard ini untuk menjalankan perhitungan dampak terpandu</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="822"/>
+        <location filename="wizard_dialog.py" line="831"/>
         <source>An error was encountered when saving the following keywords:
  %s</source>
         <translation>Terjadi kesalahan saat penyimpanan kata kunci berikut: 
