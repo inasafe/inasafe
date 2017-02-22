@@ -548,8 +548,8 @@ post_processor_size_rate = {
     'key': 'post_processor_size_rate',
     'name': tr('Size Rate Post Processor'),
     'description': tr(
-        u'A post processor to calculate the value of a feature based on its'
-        u'size. If feature is a polygon the size is calculated as '
+        u'A post processor to calculate the value of a feature based on its '
+        u'size. If a feature is a polygon the size is calculated as '
         u'the area in m². If the feature is a line we use length in metres.'),
     'input': {
         'size': {

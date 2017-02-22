@@ -278,9 +278,8 @@ def content():
         tr(
             'You can visualise the area that will be used for the analysis '
             'by enabling the "Toggle Scenario Outlines" tool. When this tool '
-            'is enabled, a line (green by defaul) will be drawn around the '
-            'outermost boundary of the analysis area.'
-            '.'),
+            'is enabled, a line (green by default) will be drawn around the '
+            'outermost boundary of the analysis area.'),
         m.Image(
             'file:///%s/img/icons/'
             'toggle-rubber-bands.svg' % resources_path(),

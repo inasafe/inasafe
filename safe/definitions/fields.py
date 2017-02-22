@@ -277,7 +277,7 @@ aggregation_name_field = {
         'A NAME attribute in the aggregation layer.'),
     'description': tr(
         'This will be carried over to the impact layer if provided. The name '
-        'can be useful labelling label the area names that are used in '
+        'can be useful to label the area names that are used in '
         'the report generation process.'),
     'citations': [
         {
