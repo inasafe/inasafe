@@ -778,15 +778,20 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         QtGui.qApp.processEvents()
         self.busy = True
 
-    def hide_busy(self):
-        """A helper function to indicate processing is done."""
+    def hide_busy(self, check_next_impact=True):
+        """A helper function to indicate processing is done.
+
+        :param check_next_impact: Flag to check if we can validate the next IF.
+        :type check_next_impact: bool
+        """
         self.progress_bar.hide()
         self.show_question_button.setVisible(True)
         self.question_group.setEnabled(True)
         self.question_group.setVisible(False)
 
-        # We check if we can run an IF
-        self.validate_impact_function()
+        if check_next_impact:
+            # We check if we can run an IF
+            self.validate_impact_function()
 
         self.repaint()
         disable_busy_cursor()
@@ -1133,7 +1138,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             # we want to re-raise it to get the first aid plugin popup.
             add_debug_layers_to_canvas(self.impact_function)
             disable_busy_cursor()
-            self.validate_impact_function()
             raise
         if status == ANALYSIS_FAILED_BAD_INPUT:
             self.hide_busy()
@@ -1176,7 +1180,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     'The impact report could not be generated.'))
                 send_error_message(self, message)
                 LOGGER.info(message.to_text())
-                self.validate_impact_function()
                 return ANALYSIS_FAILED_BAD_CODE, message
 
             error_code, message = generate_impact_map_report(
@@ -1188,7 +1191,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     'The impact report could not be generated.'))
                 send_error_message(self, message)
                 LOGGER.info(message.to_text())
-                self.validate_impact_function()
                 return ANALYSIS_FAILED_BAD_CODE, message
 
         if self.impact_function.debug_mode:
@@ -1198,8 +1200,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.impact_function.analysis_extent,
             self.get_exposure_layer().crs())
 
-        self.hide_busy()
-        self.validate_impact_function()
+        # We do not want to check the state of the next IF
+        self.hide_busy(check_next_impact=False)
         return ANALYSIS_SUCCESS, None
 
     def validate_impact_function(self):
