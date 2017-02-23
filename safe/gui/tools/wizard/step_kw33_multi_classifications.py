@@ -34,7 +34,7 @@ from safe.definitions.utilities import (
     default_classification_value_maps
 )
 from safe.definitions.hazard_classifications import (
-    earthquake_mmi_hazard_classes)
+    earthquake_mmi_scale)
 from safe.definitions.layer_modes import layer_mode_continuous
 from safe.gui.tools.wizard.wizard_strings import (
     multiple_classified_hazard_classifications_vector,
@@ -207,17 +207,21 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
                         special_case = True
                         # Set classification for EQ Raster for Population
                         self.thresholds[exposure_population['key']] = {
-                            earthquake_mmi_hazard_classes['key']: {
+                            earthquake_mmi_scale['key']: {
                                 'classes': default_classification_thresholds(
-                                    earthquake_mmi_hazard_classes),
+                                    earthquake_mmi_scale),
                                 'active': True
                             }
                         }
 
             # Add label
             # Hazard on Exposure Classifications
-            label = tr('%s on %s Classifications' % (
-                hazard['name'], exposure['name']))
+            label = tr(
+                '{hazard_name} on {exposure_name} Classifications'
+            ).format(
+                hazard_name=hazard['name'],
+                exposure_name=exposure['name']
+            )
             exposure_label = QLabel(label)
 
             # Add combo box
@@ -262,7 +266,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             # For special case. Raster EQ on Population.
             if special_case:
                 mmi_index = exposure_combo_box.findText(
-                    earthquake_mmi_hazard_classes['name'])
+                    earthquake_mmi_scale['name'])
                 exposure_combo_box.setCurrentIndex(mmi_index)
                 exposure_combo_box.setEnabled(False)
                 exposure_edit_button.setEnabled(False)
