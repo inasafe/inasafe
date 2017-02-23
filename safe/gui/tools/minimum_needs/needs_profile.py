@@ -298,6 +298,14 @@ class NeedsProfile(MinimumNeeds):
         :returns: root directory
         :rtype: QString
         """
+        if not QgsApplication.qgisSettingsDirPath() or (
+                    QgsApplication.qgisSettingsDirPath() == ''):
+            self._root_directory = None
+        else:
+            # noinspection PyArgumentList
+            self._root_directory = os.path.join(
+                QgsApplication.qgisSettingsDirPath(),
+                'inasafe')
 
         return self._root_directory
 
