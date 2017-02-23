@@ -192,26 +192,19 @@ def get_inasafe_default_value_fields(qsetting, field_key):
 def clear_layout(layout):
     """Clear layout content.
 
-    # Adapted from http://stackoverflow.com/a/9375273/1198772
+    # Adapted from http://stackoverflow.com/a/9383780
 
     :param layout: A layout.
     :type layout: QLayout
     """
-    for i in reversed(range(layout.count())):
-        item = layout.itemAt(i)
-
-        if isinstance(item, QWidgetItem):
-            item.widget().close()
-        elif isinstance(item, QLayout):
-            clear_layout(item.layout())
-        elif isinstance(item, QSpacerItem):
-            # No need to do anything
-            pass
-        else:
-            pass
-
-        # Remove the item from layout
-        layout.removeItem(item)
+    if layout is not None:
+        while layout.count():
+            item = layout.takeAt(0)
+            widget = item.widget()
+            if widget is not None:
+                widget.deleteLater()
+            else:
+                clear_layout(item.layout())
 
 
 def skip_inasafe_field(layer, inasafe_fields):
