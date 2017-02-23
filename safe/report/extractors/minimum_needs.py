@@ -1,9 +1,12 @@
 # coding=utf-8
 from safe.common.parameters.resource_parameter import ResourceParameter
+from safe.definitions.fields import displaced_field
 from safe.definitions.minimum_needs import (
     minimum_needs_fields,
     minimum_needs_namespace)
-from safe.report.extractors.util import resolve_from_dictionary
+from safe.report.extractors.util import (
+    resolve_from_dictionary,
+    value_from_field_name)
 from safe.utilities.i18n import tr
 from safe.utilities.rounding import format_number
 
@@ -34,6 +37,26 @@ def minimum_needs_extractor(impact_report, component_metadata):
     analysis_keywords = analysis_layer.keywords['inasafe_fields']
     debug_mode = impact_report.impact_function.debug_mode
     is_rounding = not debug_mode
+
+    header = resolve_from_dictionary(extra_args, 'header')
+    context['header'] = header
+
+    # check if displaced is not zero
+    try:
+        displaced_field_name = analysis_keywords[displaced_field['key']]
+        total_displaced = value_from_field_name(
+            displaced_field_name, analysis_layer)
+        if total_displaced == 0:
+            zero_displaced_message = resolve_from_dictionary(
+                extra_args, 'zero_displaced_message')
+            context['zero_displaced'] = {
+                'status': True,
+                'message': zero_displaced_message
+            }
+            return context
+    except KeyError:
+        # in case no displaced field
+        pass
 
     # minimum needs calculation only affect population type exposure
     # check if analysis keyword have minimum_needs keywords
@@ -94,8 +117,6 @@ def minimum_needs_extractor(impact_report, component_metadata):
             group['needs'].append(item)
         needs.append(group)
 
-    header = resolve_from_dictionary(extra_args, 'header')
-    context['header'] = header
     context['needs'] = needs
 
     return context

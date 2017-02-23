@@ -46,6 +46,8 @@ exposure_population = {
         tr('Rounding is applied to all population values, which may cause '
            'discrepancies between subtotals and totals. '),
         concepts['rounding_methodology']['description'],
+        tr('If displacement counts are 0, no minimum needs and displaced '
+           'related postprocessors will be shown.')
     ],
     'earthquake_notes': [
         # these are earthquake specific notes for population

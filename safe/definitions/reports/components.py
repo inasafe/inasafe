@@ -192,7 +192,9 @@ minimum_needs_component = {
         'header_frequency_format': tr(
             'Relief items to be provided {frequency}'),
         'total_header': tr('Total'),
-        'need_header_format': tr('{name} [{unit_abbreviation}]')
+        'need_header_format': tr('{name} [{unit_abbreviation}]'),
+        'zero_displaced_message': tr(
+            'Analysis produced 0 displaced count. No calculations produced.')
     }
 }
 
@@ -242,11 +244,20 @@ aggregation_postprocessors_component = {
         },
         'defaults': {
             'aggregation_header': tr('Aggregation area'),
-            'total_population_header': tr('Total Population'),
+            'total_population_header': tr('Total Displaced Population'),
             'total_header': tr('Total'),
             'notes': tr(
                 'Columns and rows containing only 0 or "No data" values are '
                 'excluded from the tables.'),
+            'zero_displaced_message': tr(
+                'Analysis produced 0 displaced count. '
+                'No calculations produced.'),
+            'no_gender_rate_message': tr(
+                'Gender ratio not exists. '
+                'No calculations produced.'),
+            'no_age_rate_message': tr(
+                'Age ratio not exists. '
+                'No calculations produced.'),
         }
     }
 }
