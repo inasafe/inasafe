@@ -16,11 +16,10 @@ from safe.gis.vector.tools import (
     create_memory_layer,
     create_field_from_definition)
 from safe.gis.sanity_check import check_layer
-from safe.definitions.fields import (hazard_class_field, buffer_distance_field)
+from safe.definitions.fields import hazard_class_field, buffer_distance_field
 from safe.definitions.layer_purposes import layer_purpose_hazard
 from safe.definitions.processing_steps import buffer_steps
 from safe.utilities.profiling import profile
-from safe.utilities.keyword_io import KeywordIO
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -123,7 +122,7 @@ def multi_buffering(layer, radii, callback=None):
             callback(current=i, maximum=feature_count, step=processing_step)
 
     # We transfer keywords to the output.
-    buffered.keywords = KeywordIO().read_keywords(layer)
+    buffered.keywords = layer.keywords
     buffered.keywords['layer_geometry'] = 'polygon'
     buffered.keywords['layer_purpose'] = layer_purpose_hazard['key']
     buffered.keywords['inasafe_fields'][hazard_class_field['key']] = (
