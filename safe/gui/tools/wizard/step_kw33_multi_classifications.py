@@ -1,6 +1,7 @@
 # coding=utf-8
 """InaSAFE Keyword Wizard Step for Multi Classifications."""
 
+import logging
 from functools import partial
 from collections import OrderedDict
 import numpy
@@ -53,6 +54,8 @@ __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
+
+LOGGER = logging.getLogger('InaSAFE')
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
@@ -217,8 +220,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             # Add label
             # Hazard on Exposure Classifications
             label = tr(
-                '{hazard_name} on {exposure_name} Classifications'
-            ).format(
+                '{hazard_name} on {exposure_name} Classifications').format(
                 hazard_name=hazard['name'],
                 exposure_name=exposure['name']
             )
