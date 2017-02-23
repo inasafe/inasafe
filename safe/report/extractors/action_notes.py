@@ -1,6 +1,8 @@
 # coding=utf-8
+from safe.definitions.exposure import exposure_population
 from safe.definitions.hazard_classifications import hazard_classes_all
-from safe.report.extractors.util import resolve_from_dictionary
+from safe.report.extractors.util import resolve_from_dictionary, \
+    layer_definition_type
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -51,8 +53,10 @@ def notes_assumptions_extractor(impact_report, component_metadata):
     """
     context = {}
     hazard_layer = impact_report.hazard
+    exposure_layer = impact_report.exposure
     provenance = impact_report.impact_function.provenance
     extra_args = component_metadata.extra_args
+    exposure_type = layer_definition_type(exposure_layer)
 
     context['header'] = resolve_from_dictionary(extra_args, 'header')
     context['items'] = provenance['notes']
@@ -66,14 +70,16 @@ def notes_assumptions_extractor(impact_report, component_metadata):
             hazard_classification = classification
             break
 
+    # Check hazard have displacement rate
     for hazard_class in hazard_classification['classes']:
         if hazard_class.get('displacement_rate', 0) > 0:
-            show_displacement_note = True
+            have_displacement_rate = True
             break
     else:
-        show_displacement_note = False
+        have_displacement_rate = False
 
-    if show_displacement_note:
+    # Only show displacement note if analysis about population exposure
+    if have_displacement_rate and exposure_type == exposure_population:
         # add notes for displacement rate used
         displacement_note_format = resolve_from_dictionary(
             extra_args, 'displacement_rates_note_format')
