@@ -4,7 +4,8 @@
 """
 from __future__ import absolute_import
 
-from safe.definitions.exposure import exposure_structure
+from safe.definitions.exposure import exposure_structure, exposure_road, \
+    exposure_land_cover
 from safe.definitions.reports import (
     jinja2_component_type,
     qgis_composer_component_type,
@@ -36,7 +37,9 @@ from safe.report.extractors.aggregate_postprocessors import \
 from safe.report.extractors.aggregate_result import \
     aggregation_result_extractor
 from safe.report.extractors.analysis_detail import analysis_detail_extractor
-from safe.report.extractors.analysis_result import analysis_result_extractor
+from safe.report.extractors.analysis_question import \
+    analysis_question_extractor
+from safe.report.extractors.general_report import general_report_extractor
 from safe.report.extractors.composer import qgis_composer_extractor
 from safe.report.extractors.impact_table import (
     impact_table_extractor,
@@ -67,18 +70,34 @@ __revision__ = '$Format:%H$'
 
 
 # Individual report component
-analysis_result_component = {
-    'key': 'analysis-result',
+analysis_question_component = {
+    'key': 'analysis-question',
     'type': jinja2_component_type,
     'processor': jinja2_renderer,
-    'extractor': analysis_result_extractor,
+    'extractor': analysis_question_extractor,
     'output_format': Jinja2ComponentsMetadata.OutputFormat.String,
     'output_path': 'analysis-result-output.html',
     'template': 'standard-template/'
                 'jinja2/'
-                'analysis-result.html',
+                'analysis-question.html',
     'extra_args': {
-        'header_format': tr('Estimated {title}'),
+        'header': tr('Analysis question')
+    }
+}
+
+general_report_component = {
+    'key': 'general-report',
+    'type': jinja2_component_type,
+    'processor': jinja2_renderer,
+    'extractor': general_report_extractor,
+    'output_format': Jinja2ComponentsMetadata.OutputFormat.String,
+    'output_path': 'general-report-output.html',
+    'template': 'standard-template/'
+                'jinja2/'
+                'general-report.html',
+    'extra_args': {
+        'header': tr('General Report'),
+        'table_header_format': tr('Estimated {title}'),
         'hazard_header': tr('Hazard Zone'),
         # Used to customize header.
         # See issue inasafe#3688: remove all 'total' words
@@ -96,17 +115,13 @@ analysis_result_component = {
             {
                 'header': tr('Not Exposed'),
                 'field': total_not_exposed_field
-            },
-            {
-                'header': total_field['name'],
-                'field': total_field
             }
         ]
     }
 }
 
-analysis_breakdown_component = {
-    'key': 'analysis-breakdown',
+analysis_detail_component = {
+    'key': 'analysis-detail',
     'type': jinja2_component_type,
     'processor': jinja2_renderer,
     'extractor': analysis_detail_extractor,
@@ -117,8 +132,11 @@ analysis_breakdown_component = {
                 'analysis-detail.html',
     'extra_args': {
         'exposure_type_header_mapping': {
-            # In the report, structure is usually called building.
-            exposure_structure['key']: tr('Building')
+            # In the report, exposure type is usually singular
+            # We can also use this to rename exposure name
+            exposure_structure['key']: tr('Structure'),
+            exposure_road['key']: tr('Road'),
+            exposure_land_cover['key']: tr('Land cover')
         },
         'hazard_class_header_mapping': {
             'affected': {
@@ -135,7 +153,8 @@ analysis_breakdown_component = {
         'group_border_color': charcoal_black.name(),
         'breakdown_header_type_format': tr('{exposure} type'),
         'breakdown_header_class_format': tr('{exposure} class'),
-        'header': tr('Estimated {title} by {exposure} type'),
+        'header': tr('Analysis Detail'),
+        'table_header_format': tr('Estimated {title} by {exposure} type'),
         'notes': tr(
             'Columns and rows containing only 0 or "No data" values are '
             'excluded from the tables.')
@@ -357,8 +376,9 @@ population_infographic_component = {
 
 # Default impact report component for reusability
 impact_report_component_metadata = [
-    analysis_result_component,
-    analysis_breakdown_component,
+    analysis_question_component,
+    general_report_component,
+    analysis_detail_component,
     action_checklist_component,
     notes_assumptions_component,
     minimum_needs_component,
@@ -421,8 +441,9 @@ standard_impact_report_metadata_html = {
                     'aggregation_not_used': tr('not used')
                 },
                 'components_list': {
-                    'analysis_result': analysis_result_component,
-                    'analysis_breakdown': analysis_breakdown_component,
+                    'analysis_question': analysis_question_component,
+                    'general_report': general_report_component,
+                    'analysis_detail': analysis_detail_component,
                     'action_checklist': action_checklist_component,
                     'notes_assumptions': notes_assumptions_component,
                     'minimum_needs': minimum_needs_component,

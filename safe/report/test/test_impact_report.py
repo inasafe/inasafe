@@ -31,10 +31,10 @@ from safe.definitions.reports.components import (
     report_a4_blue,
     standard_impact_report_metadata_html,
     standard_impact_report_metadata_pdf,
-    analysis_result_component,
+    general_report_component,
     action_checklist_component,
     notes_assumptions_component,
-    analysis_breakdown_component,
+    analysis_detail_component,
     aggregation_result_component,
     minimum_needs_component,
     aggregation_postprocessors_component,
@@ -84,10 +84,10 @@ class TestImpactReport(unittest.TestCase):
         flood_hazard_classes['classes'][0][
             'displacement_rate'] = self.default_displacement_rate
 
-    def test_analysis_result_from_impact_function(self):
+    def test_general_report_from_impact_function(self):
         """Test generate analysis result from impact function."""
 
-        output_folder = self.fixtures_dir('../output/analysis_result')
+        output_folder = self.fixtures_dir('../output/general_report')
 
         # Classified vector with building-points
         shutil.rmtree(output_folder, ignore_errors=True)
@@ -126,13 +126,12 @@ class TestImpactReport(unittest.TestCase):
 
         # Check Analysis Summary
         analysis_summary = impact_report.metadata.component_by_key(
-            analysis_result_component['key'])
+            general_report_component['key'])
         """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
 
         expected_context = {
-            'header': u'Estimated number of buildings',
-            'title': u'In the event of a Generic, how many Structures might '
-                     u'be affected?',
+            'header': u'General Report',
+            'table_header': u'Estimated Number of buildings',
             'summary': [
                 {
                     'header_label': u'Hazard Zone',
@@ -151,9 +150,15 @@ class TestImpactReport(unittest.TestCase):
                             'value': 0,
                             'name': u'Low hazard zone',
                             'key': 'low'
+                        },
+                        {
+                            'value': '10',
+                            'name': u'Total',
+                            'as_header': True,
+                            'key': total_field['key']
                         }
                     ],
-                    'value_label': 'Count'
+                    'value_label': u'Count'
                 },
                 {
                     'header_label': u'Structures',
@@ -172,14 +177,9 @@ class TestImpactReport(unittest.TestCase):
                             'value': '10',
                             'name': u'Not Exposed',
                             'key': total_not_exposed_field['key']
-                        },
-                        {
-                            'value': '10',
-                            'name': u'Total',
-                            'key': total_field['key']
                         }
                     ],
-                    'value_label': 'Count'
+                    'value_label': u'Count'
                 }
             ]
         }
@@ -258,9 +258,9 @@ class TestImpactReport(unittest.TestCase):
 
         shutil.rmtree(output_folder, ignore_errors=True)
 
-    def test_analysis_breakdown_detail(self):
+    def test_analysis_detail(self):
         """Test generate analysis breakdown and aggregation report."""
-        output_folder = self.fixtures_dir('../output/analysis_breakdown')
+        output_folder = self.fixtures_dir('../output/analysis_detail')
 
         # Classified vector with buildings
         shutil.rmtree(output_folder, ignore_errors=True)
@@ -298,12 +298,12 @@ class TestImpactReport(unittest.TestCase):
         empty_component_output_message = 'Empty component output'
 
         # Check Analysis Breakdown
-        analysis_breakdown = impact_report.metadata.component_by_key(
-            analysis_breakdown_component['key'])
+        analysis_detail = impact_report.metadata.component_by_key(
+            analysis_detail_component['key'])
         """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
 
         expected_context = {
-            'header': u'Estimated Number of buildings by Building type',
+            'header': u'Analysis Detail',
             'notes': u'Columns and rows containing only 0 or "No data" '
                      u'values are excluded from the tables.',
             'group_border_color': u'#36454f',
@@ -326,8 +326,10 @@ class TestImpactReport(unittest.TestCase):
                 }
             },
             'detail_table': {
+                'table_header': u'Estimated Number of buildings by '
+                                u'Structure type',
                 'headers': [
-                    u'Building type',
+                    u'Structure type',
                     {
                         'start': True, 'colspan': 2,
                         'name': u'High hazard zone',
@@ -344,18 +346,7 @@ class TestImpactReport(unittest.TestCase):
                 ],
                 'details': [
                     [
-                        u'government',
-                        {
-                            'value': '0',
-                            'header_group': 'affected'
-                        },
-                        {
-                            'value': '10',
-                            'header_group': 'affected'
-                        }, '10', '0', '0', '10'
-                    ],
-                    [
-                        u'education',
+                        u'Education',
                         {
                             'value': '10',
                             'header_group': 'affected'
@@ -367,19 +358,7 @@ class TestImpactReport(unittest.TestCase):
                         '10', '0', '10', '10'
                     ],
                     [
-                        u'other',
-                        {
-                            'value': '0',
-                            'header_group': 'affected'
-                        },
-                        {
-                            'value': '10',
-                            'header_group': 'affected'
-                        },
-                        '10', '0', '0', '10'
-                    ],
-                    [
-                        u'commercial',
+                        u'Health',
                         {
                             'value': '10',
                             'header_group': 'affected'
@@ -391,7 +370,18 @@ class TestImpactReport(unittest.TestCase):
                         '10', '0', '0', '10'
                     ],
                     [
-                        u'health',
+                        u'Government',
+                        {
+                            'value': '0',
+                            'header_group': 'affected'
+                        },
+                        {
+                            'value': '10',
+                            'header_group': 'affected'
+                        }, '10', '0', '0', '10'
+                    ],
+                    [
+                        u'Commercial',
                         {
                             'value': '10',
                             'header_group': 'affected'
@@ -401,7 +391,19 @@ class TestImpactReport(unittest.TestCase):
                             'header_group': 'affected'
                         },
                         '10', '0', '0', '10'
-                    ]
+                    ],
+                    [
+                        u'Other',
+                        {
+                            'value': '0',
+                            'header_group': 'affected'
+                        },
+                        {
+                            'value': '10',
+                            'header_group': 'affected'
+                        },
+                        '10', '0', '0', '10'
+                    ],
                 ],
                 'footers': [
                     u'Total', {
@@ -415,11 +417,11 @@ class TestImpactReport(unittest.TestCase):
                 ]
             }
         }
-        actual_context = analysis_breakdown.context
+        actual_context = analysis_detail.context
         self.assertDictEqual(
             expected_context, actual_context)
         self.assertTrue(
-            analysis_breakdown.output, empty_component_output_message)
+            analysis_detail.output, empty_component_output_message)
 
         # Check Aggregate Report
         aggregate_result = impact_report.metadata.component_by_key(

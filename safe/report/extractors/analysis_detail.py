@@ -12,6 +12,7 @@ from safe.report.extractors.util import (
     layer_definition_type,
     resolve_from_dictionary,
     value_from_field_name)
+from safe.utilities.i18n import tr
 from safe.utilities.rounding import format_number
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -164,8 +165,9 @@ def analysis_detail_extractor(impact_report, component_metadata):
         # Get breakdown name
         breakdown_field_name = breakdown_field['field_name']
         field_index = exposure_breakdown.fieldNameIndex(breakdown_field_name)
-        breakdown_name = feat[field_index]
-        row.append(breakdown_name)
+        class_key = feat[field_index]
+
+        row.append(class_key)
 
         # Get hazard count
         for hazard_class in hazard_classification['classes']:
@@ -223,6 +225,44 @@ def analysis_detail_extractor(impact_report, component_metadata):
             continue
 
         details.append(row)
+
+    # retrieve classes definitions
+    exposure_classifications = exposure_type['classifications']
+    exposure_class_lists = []
+    for classes_definition in exposure_classifications:
+        classes = classes_definition.get('classes')
+        if classes:
+            exposure_class_lists += classes
+
+    # sort detail rows based on class order
+    # create lambda function to sort
+    def sort_classes(row):
+        """Sort method to retrieve exposure class key index"""
+        # class key is first column
+        class_key = row[0]
+        # find index in class list
+        for i, exposure_class in enumerate(exposure_class_lists):
+            if class_key == exposure_class['key']:
+                return i
+        else:
+            return -1
+
+    # sort
+    details = sorted(details, key=sort_classes)
+
+    # retrieve breakdown name from classes list
+    for row in details:
+        class_key = row[0]
+        for exposure_class in exposure_class_lists:
+            if class_key == exposure_class['key']:
+                breakdown_name = exposure_class['name']
+                break
+        else:
+            # attempt for dynamic translations
+            breakdown_name = tr(class_key.capitalize())
+
+        # replace class_key with the class name
+        row[0] = breakdown_name
 
     """create total footers"""
     # create total header
@@ -284,9 +324,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
     notes = resolve_from_dictionary(
         extra_args, 'notes')
 
-    context['header'] = header.format(
-        title=provenance['map_legend_title'],
-        exposure=exposure_header)
+    context['header'] = header
     context['group_border_color'] = resolve_from_dictionary(
         extra_args, 'group_border_color')
     context['notes'] = notes
@@ -329,7 +367,14 @@ def analysis_detail_extractor(impact_report, component_metadata):
                 'header_group': group_key
             }
 
+    table_header_format = resolve_from_dictionary(
+        extra_args, 'table_header_format')
+    table_header = table_header_format.format(
+        title=provenance['map_legend_title'],
+        exposure=exposure_header)
+
     context['detail_table'] = {
+        'table_header': table_header,
         'headers': headers,
         'details': details,
         'footers': footers,
