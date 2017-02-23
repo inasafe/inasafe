@@ -36,9 +36,15 @@ def impact_table_extractor(impact_report, component_metadata):
     """
     context = {}
     extra_args = component_metadata.extra_args
+    debug_mode = impact_report.impact_function.debug_mode
 
     components_list = resolve_from_dictionary(
         extra_args, 'components_list')
+
+    # TODO: Decide either to use it or not
+    if not debug_mode:
+        # only show experimental MMI Detail when in debug mode
+        components_list.pop('mmi_detail', None)
 
     context['brand_logo'] = resource_url(
             resources_path('img', 'logos', 'inasafe-logo-white.png'))

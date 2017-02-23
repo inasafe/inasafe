@@ -90,16 +90,20 @@ def population_chart_extractor(impact_report, component_metadata):
         colors.append(hazard_class['color'].name())
 
     # add total not affected
-    field_name = analysis_layer_fields[total_not_affected_field['key']]
-    hazard_value = value_from_field_name(field_name, analysis_layer)
-    hazard_value = round_affected_number(
-        hazard_value,
-        enable_rounding=True,
-        use_population_rounding=True)
+    try:
+        field_name = analysis_layer_fields[total_not_affected_field['key']]
+        hazard_value = value_from_field_name(field_name, analysis_layer)
+        hazard_value = round_affected_number(
+            hazard_value,
+            enable_rounding=True,
+            use_population_rounding=True)
 
-    data.append(hazard_value)
-    labels.append(total_not_affected_field['name'])
-    colors.append(green.name())
+        data.append(hazard_value)
+        labels.append(total_not_affected_field['name'])
+        colors.append(green.name())
+    except KeyError:
+        # in case the field is not there
+        pass
 
     # add number for total not affected
     chart_title = resolve_from_dictionary(extra_args, 'chart_title')

@@ -4,8 +4,10 @@
 """
 from __future__ import absolute_import
 
-from safe.definitions.exposure import exposure_structure, exposure_road, \
-    exposure_land_cover
+from safe.definitions.exposure import (
+    exposure_structure,
+    exposure_road,
+    exposure_land_cover)
 from safe.definitions.reports import (
     jinja2_component_type,
     qgis_composer_component_type,
@@ -27,7 +29,13 @@ from safe.definitions.fields import (
     total_affected_field,
     total_not_affected_field,
     total_not_exposed_field,
-    total_field)
+    total_field,
+    population_exposed_per_mmi_field,
+    population_displaced_per_mmi,
+    fatalities_per_mmi_field,
+    population_count_field,
+    displaced_field,
+    fatalities_field)
 from safe.definitions.styles import charcoal_black
 from safe.report.extractors.action_notes import (
     action_checklist_extractor,
@@ -49,6 +57,7 @@ from safe.report.extractors.infographics import (
     infographic_layout_extractor,
     infographic_pdf_extractor)
 from safe.report.extractors.minimum_needs import minimum_needs_extractor
+from safe.report.extractors.mmi_detail import mmi_detail_extractor
 from safe.report.extractors.population_chart import (
     population_chart_extractor,
     population_chart_to_png_extractor)
@@ -115,8 +124,55 @@ general_report_component = {
             {
                 'header': tr('Not Exposed'),
                 'field': total_not_exposed_field
+            },
+            {
+                'header': displaced_field['name'],
+                'field': displaced_field
+            },
+            {
+                'header': fatalities_field['name'],
+                'field': fatalities_field
             }
         ]
+    }
+}
+
+mmi_detail_component = {
+    'key': 'mmi-detail',
+    'type': jinja2_component_type,
+    'processor': jinja2_renderer,
+    'extractor': mmi_detail_extractor,
+    'output_format': Jinja2ComponentsMetadata.OutputFormat.String,
+    'output_path': 'mmi-detail-output.html',
+    'template': 'standard-template/'
+                'jinja2/'
+                'mmi-detail.html',
+    'extra_args': {
+        'header': tr('MMI Detail'),
+        'mmi_header': tr('MMI'),
+        # used to customize header
+        'reported_fields': [
+            {
+                'header': tr('Exposed'),
+                'field': population_exposed_per_mmi_field
+            },
+            {
+                'header': tr('Displaced'),
+                'field': population_displaced_per_mmi
+            },
+            {
+                'header': tr('Fatalities'),
+                'field': fatalities_per_mmi_field
+            }
+        ],
+        'total_fields': [
+            # TODO: change to total exposed population field once it is
+            # available
+            population_count_field,
+            displaced_field,
+            fatalities_field
+        ],
+        'total_header': tr('Total'),
     }
 }
 
@@ -378,6 +434,7 @@ population_infographic_component = {
 impact_report_component_metadata = [
     analysis_question_component,
     general_report_component,
+    mmi_detail_component,
     analysis_detail_component,
     action_checklist_component,
     notes_assumptions_component,
@@ -443,6 +500,7 @@ standard_impact_report_metadata_html = {
                 'components_list': {
                     'analysis_question': analysis_question_component,
                     'general_report': general_report_component,
+                    'mmi_detail': mmi_detail_component,
                     'analysis_detail': analysis_detail_component,
                     'action_checklist': action_checklist_component,
                     'notes_assumptions': notes_assumptions_component,
