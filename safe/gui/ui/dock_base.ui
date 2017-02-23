@@ -93,7 +93,7 @@
        <item row="6" column="0">
         <widget class="QLabel" name="aggregation_question_label">
          <property name="text">
-          <string>will be affected? Summarise the results by</string>
+          <string notr="true">SET IN PYTHON CODE dock.py</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>

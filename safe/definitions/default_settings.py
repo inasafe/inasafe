@@ -8,7 +8,7 @@ inasafe_default_settings = {
     'set_layer_from_title_flag': True,
     'setZoomToImpactFlag': True,
     'setHideExposureFlag': False,
-    'useSelectedFeaturesOnly': False,
+    'useSelectedFeaturesOnly': True,
     'useSentry': False,
     'template_warning_verbose': True,
     'showOrganisationLogoInDockFlag': False,

@@ -157,6 +157,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.show_only_visible_layers_flag = None
         self.set_layer_from_title_flag = None
         self.zoom_to_impact_flag = None
+        self.use_selected_features_only = None
         self.hide_exposure_flag = None
         self.map_canvas = None
         self.developer_mode = None
@@ -204,16 +205,14 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         :param layer: The current aggregation layer.
         :type layer: QgsVectorLayer
         """
-        use_selected_only = setting('useSelectedFeaturesOnly', False, bool)
-
         # We need to disconnect first.
-        if self._aggregation and use_selected_only:
+        if self._aggregation and self.use_selected_features_only:
             self._aggregation.selectionChanged.disconnect(
                 self.validate_impact_function)
 
         self._aggregation = layer
 
-        if use_selected_only and layer:
+        if self.use_selected_features_only and layer:
             self._aggregation.selectionChanged.connect(
                 self.validate_impact_function)
 
@@ -300,6 +299,13 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         # whether to show or not dev only options
         self.developer_mode = setting('developer_mode', False, bool)
+
+        # If we use selected features only
+        flag = setting('useSelectedFeaturesOnly', True, bool)
+        self.use_selected_features_only = flag
+        # We need to re-trigger the aggregation combobox with the new flag.
+        index = self.aggregation_layer_combo.currentIndex()
+        self.aggregation_layer_combo.setCurrentIndex(index)
 
         # whether to show or not a custom Logo
         flag = setting('organisation_logo_path', supporters_logo_path(), str)
@@ -1236,11 +1242,24 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         impact_function.exposure = self.get_exposure_layer()
         aggregation = self.get_aggregation_layer()
 
+        label_without_selection = tr(
+            'will be affected? Summarise the results by')
+        label_with_selection = tr(
+            'will be affected? Summarise the results by selected '
+            'features in')
         if aggregation:
             impact_function.aggregation = aggregation
             impact_function.use_selected_features_only = (
-                setting('useSelectedFeaturesOnly', False, bool))
+                self.use_selected_features_only)
+
+            if self.use_selected_features_only and (
+                        aggregation.selectedFeatureCount() > 0):
+                self.aggregation_question_label.setText(label_with_selection)
+            else:
+                self.aggregation_question_label.setText(
+                    label_without_selection)
         else:
+            self.aggregation_question_label.setText(label_without_selection)
             mode = setting('analysis_extents_mode')
             if self.extent.user_extent:
                 # This like a hack to transform a geometry to a rectangle.
