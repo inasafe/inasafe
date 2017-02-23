@@ -35,7 +35,7 @@ __revision__ = '$Format:%H$'
 
 @profile
 def aggregation_summary(aggregate_hazard, aggregation, callback=None):
-    """Compute the summary from the aggregate hazard to the analysos layer.
+    """Compute the summary from the aggregate hazard to the analysis layer.
 
     Source layer :
     | haz_id | haz_class | aggr_id | aggr_name | total_feature |
@@ -106,11 +106,13 @@ def aggregation_summary(aggregate_hazard, aggregation, callback=None):
 
         for key, name_field in source_fields.iteritems():
             if key.endswith(pattern):
-                key.replace(pattern, '')
+                aggregation_id = area[aggregation_index]
+                exposure_class = key.replace(pattern, '')
+                value = area[name_field]
                 flat_table.add_value(
-                    area[name_field],
-                    aggregation_id=area[aggregation_index],
-                    exposure_class=key.replace(pattern, '')
+                    value,
+                    aggregation_id=aggregation_id,
+                    exposure_class=exposure_class
                 )
 
         # We summarize every absolute values.
