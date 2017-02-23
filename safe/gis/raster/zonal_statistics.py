@@ -4,6 +4,7 @@
 
 import logging
 from qgis.analysis import QgsZonalStatistics
+from qgis.core import QgsFeatureRequest
 
 from safe.gis.sanity_check import check_layer
 from safe.gis.vector.tools import copy_layer, create_memory_layer
@@ -71,6 +72,22 @@ def zonal_stats(raster, vector, callback=None):
     }
     copy_fields(layer, fields_to_rename)
     remove_fields(layer, fields_to_rename.keys())
+
+    layer.commitChanges()
+
+    # The zonal stats is producing some None values. We need to fill these
+    # with 0. See issue : #3778
+    # We should start a new editing session as previous fields need to be
+    # commited first.
+    layer.startEditing()
+    request = QgsFeatureRequest()
+    expression = '\"%s\" is None' % output_field
+    request.setFilterExpression(expression)
+    request.setFlags(QgsFeatureRequest.NoGeometry)
+    index = layer.fieldNameIndex(output_field)
+    for feature in layer.getFeatures():
+        if feature[output_field] is None:
+            layer.changeAttributeValue(feature.id(), index, 0)
     layer.commitChanges()
 
     layer.keywords = raster.keywords.copy()
