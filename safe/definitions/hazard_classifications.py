@@ -769,7 +769,8 @@ ash_hazard_classes = {
             'affected': True,
             'description': tr(
                 'Dry loading on buildings causing structural collapse.'),
-            'displacement_rate': 0.0,
+            # Displacement rate of 100% advised by Ibu Estu - BG Feb 2017
+            'displacement_rate': 1.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 10,
             'numeric_default_max': 9999999999,
@@ -790,7 +791,8 @@ ash_hazard_classes = {
                 'Dry loading on buildings causing structural damage but not '
                 'collapse; wet loading on buildings (i.e. ash loading + heavy '
                 'rainfall) causing structural collapse.'),
-            'displacement_rate': 0.0,
+            # Displacement rate of 100% advised by Ibu Estu - PVMBG Feb 2017
+            'displacement_rate': 1.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 5,
             'numeric_default_max': 10,
@@ -828,7 +830,9 @@ ash_hazard_classes = {
             'value': 2,
             'color': yellow,
             'name': tr('Low'),
-            'affected': False,
+            # affected is true for roads; driving becomes dangerous
+            # Advice from Pak Nugi - PVMBG - Feb 2017
+            'affected': True,
             'description': tr(
                 'Damage to transportation routes (e.g. airports, roads, '
                 'railways); damage to critical infrastructure '
@@ -868,7 +872,10 @@ ash_hazard_classes = {
     ],
     'exposures': [
         exposure_land_cover,
-        exposure_place
+        exposure_place,
+        exposure_population,
+        exposure_road,
+        exposure_structure
     ]
 }
 
