@@ -208,7 +208,7 @@ concepts['displaced_people'] = {
     'description': tr(
         'Displaced people are people who, for different reasons and '
         'circumstances because of risk or disaster, have to leave their '
-        'place of residence. In InaSAFE, demographic and minimum'
+        'place of residence. In InaSAFE, demographic and minimum '
         'needs reports are based on displaced / evacuated people.'),
     'citations': [
         {
