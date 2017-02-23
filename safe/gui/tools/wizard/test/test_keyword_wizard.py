@@ -28,7 +28,7 @@ from safe.definitions.hazard_category import hazard_category_multiple_event
 from safe.definitions.hazard_classifications import (
     flood_hazard_classes,
     volcano_hazard_classes,
-    earthquake_mmi_hazard_classes,)
+    earthquake_mmi_scale)
 from safe.definitions.constants import no_field
 from safe.definitions.fields import (
     aggregation_name_field,
@@ -2266,10 +2266,10 @@ class TestKeywordWizard(unittest.TestCase):
             'layer_mode': layer_mode_continuous['key'],
             'thresholds': {
                 exposure_population['key']: {
-                    earthquake_mmi_hazard_classes['key']: {
+                    earthquake_mmi_scale['key']: {
                         'active': True,
                         'classes': default_classification_thresholds(
-                            earthquake_mmi_hazard_classes)
+                            earthquake_mmi_scale)
                     }
                 }
             }
