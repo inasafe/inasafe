@@ -9,7 +9,7 @@ inasafe_default_settings = {
     'setZoomToImpactFlag': True,
     'set_show_only_impact_on_report': False,
     'setHideExposureFlag': False,
-    'useSelectedFeaturesOnly': False,
+    'useSelectedFeaturesOnly': True,
     'useSentry': False,
     'template_warning_verbose': True,
     'showOrganisationLogoInDockFlag': False,
