@@ -3,6 +3,7 @@
 
 import logging
 import re
+import sys
 from PyQt4 import QtCore
 from PyQt4.QtGui import QWidgetItem, QSpacerItem, QLayout
 
@@ -192,26 +193,41 @@ def get_inasafe_default_value_fields(qsetting, field_key):
 def clear_layout(layout):
     """Clear layout content.
 
-    # Adapted from http://stackoverflow.com/a/9375273/1198772
-
     :param layout: A layout.
     :type layout: QLayout
     """
-    for i in reversed(range(layout.count())):
-        item = layout.itemAt(i)
+    # Different platform has different treatment
+    # If InaSAFE running on Windows or Linux
+    if sys.platform in ['linux2', 'win32']:
+        # Adapted from http://stackoverflow.com/a/9383780
+        if layout is not None:
+            while layout.count():
+                item = layout.takeAt(0)
+                widget = item.widget()
+                if widget is not None:
+                    # Remove the item from layout
+                    widget.deleteLater()
+                else:
+                    clear_layout(item.layout())
 
-        if isinstance(item, QWidgetItem):
-            item.widget().close()
-        elif isinstance(item, QLayout):
-            clear_layout(item.layout())
-        elif isinstance(item, QSpacerItem):
-            # No need to do anything
-            pass
-        else:
-            pass
+    # If InaSAFE running on anything else than Windows or Linux
+    else:
+        # Adapted from http://stackoverflow.com/a/9375273/1198772
+        for i in reversed(range(layout.count())):
+            item = layout.itemAt(i)
 
-        # Remove the item from layout
-        layout.removeItem(item)
+            if isinstance(item, QWidgetItem):
+                item.widget().close()
+            elif isinstance(item, QLayout):
+                clear_layout(item.layout())
+            elif isinstance(item, QSpacerItem):
+                # No need to do anything
+                pass
+            else:
+                pass
+
+            # Remove the item from layout
+            layout.removeItem(item)
 
 
 def skip_inasafe_field(layer, inasafe_fields):
