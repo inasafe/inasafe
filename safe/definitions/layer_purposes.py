@@ -60,7 +60,7 @@ layer_purpose_exposure_impacted = {
     'key': 'exposure_impacted',
     'name': tr('Exposure Impacted'),
     'description': tr(
-        'An <b>exposure impact</b> layer is one of the possible results of '
+        'An <b>exposure impacted</b> layer is one of the possible results of '
         'an InaSAFE analysis. It has fields that represent the impact on each '
         'exposure feature by the hazard in each aggregation area. This type '
         'of impact layer will not be created if the exposure layer is a '

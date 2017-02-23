@@ -147,7 +147,7 @@ def content():
         'mathematical model. The results of this model will show what the '
         'effect of the hazard will be on the exposed infrastructure or '
         'people. The plugin relies on simple keyword metadata '
-        'associated with each layer to determine what kind of information the'
+        'associated with each layer to determine what kind of information the '
         'layer represents. You can define these keywords by '
         'selecting a layer and then clicking the InaSAFE Keywords Wizard icon '
         'on the toolbar: '),
