@@ -794,7 +794,8 @@ class Plugin(object):
         from safe.gui.tools.multi_buffer_dialog import (
             MultiBufferDialog)
 
-        dialog = MultiBufferDialog(self.iface.mainWindow())
+        dialog = MultiBufferDialog(
+            self.iface.mainWindow(), self.iface, self.dock_widget)
         dialog.exec_()  # modal
 
     def show_osm_downloader(self):
