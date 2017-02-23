@@ -200,6 +200,7 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
             display_critical_message_box(
                 title=self.tr('Error while calculating minimum needs'),
                 message=message)
+            return
 
         # remove monkey patching keywords
         del self.result_layer.keywords

@@ -134,8 +134,10 @@ def copy_layer(source, target):
         geom = feature.geometry()
         if aggregation_layer:
             # See issue https://github.com/inasafe/inasafe/issues/3713
+            # and issue https://github.com/inasafe/inasafe/issues/3927
+            # Also handle if feature has no geometry.
             geom = geometry_checker(geom)
-            if not geom.isGeosValid():
+            if not geom or not geom.isGeosValid():
                 LOGGER.info(
                     'One geometry in the aggregation layer is still invalid '
                     'after cleaning.')
