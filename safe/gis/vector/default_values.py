@@ -75,10 +75,10 @@ def add_default_values(layer, callback=None):
         if not field:
             # Case 3
             LOGGER.debug(
-                tr('{field} key is not present but the layer has {value} as a '
-                   'default for {field}. We create the new field.'.format(
+                '{field} key is not present but the layer has {value} as a '
+                'default for {field}. We create the new field.'.format(
                     **{'field': target_field['key'],
-                       'value': defaults[default]})))
+                       'value': defaults[default]}))
 
             new_field = create_field_from_definition(target_field)
 
@@ -96,11 +96,10 @@ def add_default_values(layer, callback=None):
         else:
             # Case 4
             LOGGER.debug(
-                tr(
-                    '{field} key is present and the layer has {value} as a '
-                    'default for {field}, we should fill null values.'.format(
-                        **{'field': target_field['key'],
-                           'value': defaults[default]})))
+                '{field} key is present and the layer has {value} as a '
+                'default for {field}, we should fill null values.'.format(
+                    **{'field': target_field['key'],
+                       'value': defaults[default]}))
 
             index = layer.fieldNameIndex(field)
 

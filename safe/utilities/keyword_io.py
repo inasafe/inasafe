@@ -188,8 +188,8 @@ class KeywordIO(QObject):
             self.write_keywords(layer, existing_keywords)
         except OperationalError as e:
             message = tr(
-                'Keyword database path: {keyword_db_path}'.format(
-                    keyword_db_path=self.keyword_db_path))
+                'Keyword database path: {keyword_db_path}').format(
+                    keyword_db_path=self.keyword_db_path)
             raise KeywordDbError(str(e) + '\n' + message)
 
     def copy_keywords(

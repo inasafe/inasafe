@@ -275,7 +275,7 @@ class PetaBencanaDialog(QDialog, FORM_CLASS):
             city = self.city_combo_box.currentText()
             message = self.tr(
                 'There are no floods data available on {city} '
-                'at this time.'.format(city=city))
+                'at this time.').format(city=city)
             display_warning_message_box(
                 self,
                 self.tr('No data'),

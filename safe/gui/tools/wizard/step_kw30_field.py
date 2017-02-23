@@ -143,9 +143,9 @@ class StepKwField(WizardStep, FORM_CLASS):
                 '%s_%s_question' % (subcategory['key'], unit['key']))
             if 'MISSING' in subcategory_unit_relation:
                 subcategory_unit_relation = self.tr(
-                    '{subcategory} in {unit} unit'.format(
-                        subcategory=subcategory['name'].lower(),
-                        unit=unit['plural_name']))
+                    '{subcategory} in {unit} unit').format(
+                    subcategory=subcategory['name'].lower(),
+                    unit=unit['plural_name'])
             question_text = field_question_subcategory_unit % (
                 purpose['name'],
                 subcategory['name'],
