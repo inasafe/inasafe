@@ -15,12 +15,13 @@ from PyQt4.QtCore import QVariant
 from qgis.core import (
     QgsMapLayerRegistry,
     QGis,
-    QgsVectorLayer,
     QgsFeature,
     QgsField,
     QgsFeatureRequest,
+    QgsCoordinateReferenceSystem,
 )
 
+from safe.gis.vector.tools import create_memory_layer
 from safe.datastore.folder import Folder
 
 __author__ = 'etienne@kartoza.com'
@@ -35,28 +36,34 @@ You can call them only to debug your code.
 """
 
 
-def show_qgis_geometry(geometry):
+def show_qgis_geometry(geometry, crs=None):
     """Show a QGIS geometry.
 
     :param geometry: The geometry to display.
     :type geometry: QgsGeometry
+
+    :param crs: The CRS of the geometry. 4326 by default.
+    :type crs: QgsCoordinateReferenceSystem
     """
     feature = QgsFeature()
     feature.setGeometry(geometry)
-    show_qgis_feature(feature)
+    if crs is None:
+        crs = QgsCoordinateReferenceSystem(4326)
+    show_qgis_feature(feature, crs)
 
 
-def show_qgis_feature(feature):
+def show_qgis_feature(feature, crs=None):
     """Show a QGIS feature.
 
     :param feature: The feature to display.
     :type feature: QgsFeature
+
+    :param crs: The CRS of the geometry. 4326 by default.
+    :type crs: QgsCoordinateReferenceSystem
     """
-
-    geometries = ['Point', 'Line', 'Polygon']
-    geometry = geometries[feature.geometry().type()]
-
-    layer = QgsVectorLayer(geometry, 'Debug', 'memory')
+    if crs is None:
+        crs = QgsCoordinateReferenceSystem(4326)
+    layer = create_memory_layer('Debug', feature.geometry().type(), crs)
     data_provider = layer.dataProvider()
 
     for i, attr in enumerate(feature.attributes()):
