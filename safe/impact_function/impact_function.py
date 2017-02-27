@@ -1833,24 +1833,30 @@ class ImpactFunction(object):
 
     def style(self):
         """Function to apply some styles to the layers."""
-        classes = generate_classified_legend(
-            self.analysis_impacted,
-            self.exposure,
-            self.hazard,
-            self.debug_mode)
+        if self.hazard.keywords.get('classification'):
+            classes = generate_classified_legend(
+                self.analysis_impacted,
+                self.exposure,
+                self.hazard,
+                self.debug_mode)
 
-        # Let's style layers which have a geometry and have hazard_class
-        hazard_class = hazard_class_field['key']
-        for layer in self.outputs:
-            if is_vector_layer(layer):
-                without_geometries = [QGis.NoGeometry, QGis.UnknownGeometry]
-                if layer.geometryType() not in without_geometries:
-                    display_not_exposed = False
-                    if layer == self.impact or self.debug_mode:
-                        display_not_exposed = True
+            # Let's style layers which have a geometry and have hazard_class
+            hazard_class = hazard_class_field['key']
+            for layer in self.outputs:
+                if is_vector_layer(layer):
+                    without_geometries = [
+                        QGis.NoGeometry, QGis.UnknownGeometry]
+                    if layer.geometryType() not in without_geometries:
+                        display_not_exposed = False
+                        if layer == self.impact or self.debug_mode:
+                            display_not_exposed = True
 
-                    if layer.keywords['inasafe_fields'].get(hazard_class):
-                        hazard_class_style(layer, classes, display_not_exposed)
+                        if layer.keywords['inasafe_fields'].get(hazard_class):
+                            hazard_class_style(
+                                layer, classes, display_not_exposed)
+        else:
+            # The IF might be EQ on population. There is not a classification.
+            pass
 
             else:
                 displaced_people_style(layer)
