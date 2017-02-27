@@ -35,7 +35,6 @@ from safe.definitions.post_processors import (
     field_input_type,
     dynamic_field_input_type,
     needs_profile_input_type,
-    post_processor_displaced,
     post_processor_hygiene_packs,
     post_processor_additional_rice)
 from safe.test.utilities import load_test_vector_layer
@@ -60,36 +59,6 @@ class TestPostProcessors(unittest.TestCase):
         """Patch class for testings."""
 
         pass
-
-    def test_displaced_post_processor(self):
-        """Test displaced post processor."""
-        impact_layer = load_test_vector_layer(
-            'impact',
-            'indivisible_polygon_impact.geojson',
-            clone_to_memory=True)
-        self.assertIsNotNone(impact_layer)
-
-        # delete already existing displaced field
-        field_name = impact_layer.keywords['inasafe_fields'][
-            displaced_field['key']]
-        field_index = impact_layer.fieldNameIndex(field_name)
-        impact_layer.startEditing()
-        impact_layer.deleteAttribute(field_index)
-        impact_layer.commitChanges()
-
-        # patch necessary keywords
-        impact_layer.keywords['hazard_keywords'] = {
-            'classification': flood_hazard_classes['key']
-        }
-
-        result, message = run_single_post_processor(
-            impact_layer,
-            post_processor_displaced)
-        self.assertTrue(result, message)
-
-        # Check if new field is added
-        impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
-        self.assertIn(displaced_field['field_name'], impact_fields)
 
     def test_gender_post_processor(self):
         """Test gender post processor."""

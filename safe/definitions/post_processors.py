@@ -16,6 +16,7 @@ from safe.definitions.exposure import exposure_population
 from safe.definitions.minimum_needs import minimum_needs_fields
 from safe.utilities.i18n import tr
 from safe.definitions.fields import (
+    population_displacement_ratio_field,
     displaced_field,
     female_ratio_field,
     population_count_field,
@@ -134,7 +135,7 @@ def post_processor_affected_function(**kwargs):
     return affected
 
 
-def post_processor_displacement_function(
+def post_processor_population_displacement_function(
         classification=None, hazard_class=None, population=None):
     """Private function used in the displacement postprocessor.
 
@@ -144,11 +145,14 @@ def post_processor_displacement_function(
     :param hazard_class: The hazard class of the feature.
     :type hazard_class: str
 
-    :param population: Number of affected population
+    :param population: We don't use this value here. It's only used for
+        condition for the postprocessor to run.
     :type population: float, int
 
-    :return:
+    :return: The displacement ratio for a given hazard class.
+    :rtype: float
     """
+    _ = population
     for hazard in hazard_classes_all:
         if hazard['key'] == classification:
             classification = hazard['classes']
@@ -156,16 +160,10 @@ def post_processor_displacement_function(
 
     for hazard_class_def in classification:
         if hazard_class_def['key'] == hazard_class:
-            displaced_rate = hazard_class_def.get('displacement_rate', 0)
-            break
-    else:
-        displaced_rate = 0
+            displaced_ratio = hazard_class_def.get('displacement_rate', 0)
+            return displaced_ratio
 
-    try:
-        return population * displaced_rate
-    except:  # pylint: disable=broad-except
-        # intended, return 0 if calculation fails
-        return 0
+    return 0
 
 # # #
 # Post processors related definitions
@@ -282,6 +280,44 @@ post_processor_process_types = [
 
 # A postprocessor can be defined with a formula or with a python function.
 
+post_processor_displaced_ratio = {
+    'key': 'post_processor_displacement_ratio',
+    'name': tr('Population Displacement Ratio Post Processor'),
+    'description': tr(
+        'A post processor to add the population displacement ratio according '
+        'to the hazard class'),
+    'input': {
+        # Taking hazard classification
+        'classification': {
+            'type': keyword_input_type,
+            'value': ['hazard_keywords', 'classification']
+        },
+        'hazard_class': {
+            'type': field_input_type,
+            'value': hazard_class_field,
+        },
+        'population': [
+            # No one of these fields are used in this postprocessor.
+            # But we put them as a condition for the postprocessor to run.
+            {
+                'value': population_count_field,
+                'type': field_input_type,
+            },
+            {
+                'value': exposure_count_field,
+                'field_param': exposure_population['key'],
+                'type': dynamic_field_input_type,
+            }],
+    },
+    'output': {
+        'population_displacement_ratio': {
+            'value': population_displacement_ratio_field,
+            'type': function_process,
+            'function': post_processor_population_displacement_function
+        }
+    }
+}
+
 post_processor_displaced = {
     'key': 'post_processor_displacement',
     'name': tr('Displaced Post Processor'),
@@ -302,21 +338,16 @@ post_processor_displaced = {
                 'field_param': exposure_population['key'],
                 'type': dynamic_field_input_type,
             }],
-        # Taking hazard classification
-        'classification': {
-            'type': keyword_input_type,
-            'value': ['hazard_keywords', 'classification']
-        },
-        'hazard_class': {
+        'displacement_ratio': {
             'type': field_input_type,
-            'value': hazard_class_field,
+            'value': population_displacement_ratio_field
         }
     },
     'output': {
         'displaced': {
             'value': displaced_field,
-            'type': function_process,
-            'function': post_processor_displacement_function
+            'type': formula_process,
+            'formula': 'population * displacement_ratio'
         }
     }
 }
@@ -680,17 +711,19 @@ minimum_needs_post_processors = initialize_minimum_needs_post_processors()
 # and hygiene packs post processor must run after gender post processor
 
 # Postprocessor tree
+# # Root : impact layer
 # |--- size
 # |   `--- size rate  disabled in V4.0, ET 13/02/17
 # |--- affected
-# |--- displaced
-# |   |--- gender
-# |   |   |--- hygiene packs
-# |   |   `--- additional rice
-# |   |--- youth
-# |   |--- adult
-# |   |--- elderly
-# |   `--- minimum needs
+# |--- displaced ratio
+# |   |--- displaced count
+# |      |--- gender
+# |      |   |--- hygiene packs
+# |      |   `--- additional rice
+# |      |--- youth
+# |      |--- adult
+# |      |--- elderly
+# |      `--- minimum needs
 
 female_postprocessors = [
     post_processor_gender,
@@ -710,5 +743,6 @@ post_processors = [
     post_processor_size,
     # post_processor_size_rate, disabled in V4.0, ET 13/02/17
     post_processor_affected,
+    post_processor_displaced_ratio,
     post_processor_displaced,
 ] + female_postprocessors + age_postprocessors + minimum_needs_post_processors
