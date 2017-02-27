@@ -4,8 +4,14 @@ import logging
 import random
 import unittest
 
+from safe.definitions.units import (
+    unit_millimetres, unit_metres, unit_kilometres, unit_knots)
 from safe.utilities.rounding import (
-    population_rounding_full, population_rounding, add_separators)
+    population_rounding_full,
+    population_rounding,
+    add_separators,
+    convert_unit,
+)
 from safe.utilities.i18n import locale
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -61,6 +67,14 @@ class TestCore(unittest.TestCase):
         else:
             expected_str = '1,234'
         self.assertEqual(expected_str, formatted_int)
+
+    def test_convert_unit(self):
+        """Test we can convert a unit."""
+        self.assertEqual(1000, convert_unit(1, unit_kilometres, unit_metres))
+        self.assertEqual(0.001, convert_unit(1, unit_metres, unit_kilometres))
+        self.assertEqual(
+            1000000, convert_unit(1, unit_kilometres, unit_millimetres))
+        self.assertIsNone(convert_unit(1, unit_kilometres, unit_knots))
 
 if __name__ == '__main__':
     unittest.main()

@@ -187,6 +187,9 @@ class TestPostProcessors(unittest.TestCase):
             'impact',
             'indivisible_polygon_impact.geojson',
             clone_to_memory=True)
+        impact_layer.keywords['exposure_keywords'] = {
+            'exposure': 'population'
+        }
         self.assertIsNotNone(impact_layer)
 
         # Test the size post processor.
