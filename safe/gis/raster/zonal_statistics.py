@@ -1,13 +1,12 @@
 # coding=utf-8
-"""
-Zonal statistics on a raster layer.
 
-Issue https://github.com/inasafe/inasafe/issues/3190
-"""
+"""Zonal statistics on a raster layer."""
 
 import logging
 from qgis.analysis import QgsZonalStatistics
+from qgis.core import QgsFeatureRequest
 
+from safe.gis.sanity_check import check_layer
 from safe.gis.vector.tools import copy_layer, create_memory_layer
 from safe.gis.vector.prepare_vector_layer import copy_fields, remove_fields
 from safe.definitions.fields import exposure_count_field, total_field
@@ -28,6 +27,9 @@ LOGGER = logging.getLogger('InaSAFE')
 @profile
 def zonal_stats(raster, vector, callback=None):
     """Reclassify a continuous raster layer.
+
+    Issue https://github.com/inasafe/inasafe/issues/3190
+
 
     :param raster: The raster layer.
     :type raster: QgsRasterLayer
@@ -70,6 +72,22 @@ def zonal_stats(raster, vector, callback=None):
     }
     copy_fields(layer, fields_to_rename)
     remove_fields(layer, fields_to_rename.keys())
+
+    layer.commitChanges()
+
+    # The zonal stats is producing some None values. We need to fill these
+    # with 0. See issue : #3778
+    # We should start a new editing session as previous fields need to be
+    # commited first.
+    layer.startEditing()
+    request = QgsFeatureRequest()
+    expression = '\"%s\" is None' % output_field
+    request.setFilterExpression(expression)
+    request.setFlags(QgsFeatureRequest.NoGeometry)
+    index = layer.fieldNameIndex(output_field)
+    for feature in layer.getFeatures():
+        if feature[output_field] is None:
+            layer.changeAttributeValue(feature.id(), index, 0)
     layer.commitChanges()
 
     layer.keywords = raster.keywords.copy()
@@ -90,4 +108,5 @@ def zonal_stats(raster, vector, callback=None):
 
     layer.keywords['title'] = output_layer_name
 
+    check_layer(layer)
     return layer

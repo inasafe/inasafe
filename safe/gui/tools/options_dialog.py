@@ -21,7 +21,7 @@ from safe.definitions.default_settings import inasafe_default_settings
 from safe.definitions.messages import disclaimer
 from safe.common.utilities import temp_dir
 from safe.defaults import supporters_logo_path, default_north_arrow_path
-from safe.impact_function.earthquake import EARTHQUAKE_FUNCTIONS
+from safe.definitions.earthquake import EARTHQUAKE_FUNCTIONS
 from safe.utilities.i18n import tr
 from safe.utilities.resources import get_ui_class, html_header, html_footer
 from safe.utilities.settings import setting, set_setting
@@ -84,17 +84,18 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
 
         # List of setting key and control
         self.boolean_settings = {
-            # 'useThreadingFlag': self.
             'visibleLayersOnlyFlag': self.cbxVisibleLayersOnly,
             'set_layer_from_title_flag': self.cbxSetLayerNameFromTitle,
             'setZoomToImpactFlag': self.cbxZoomToImpact,
+            'set_show_only_impact_on_report': self.cbx_show_only_impact,
             'setHideExposureFlag': self.cbxHideExposure,
             'useSelectedFeaturesOnly': self.cbxUseSelectedFeaturesOnly,
             'useSentry': self.cbxUseSentry,
             'template_warning_verbose': self.template_warning_checkbox,
             'showOrganisationLogoInDockFlag':
                 self.organisation_on_dock_checkbox,
-            'developer_mode': self.cbxDevMode
+            'developer_mode': self.cbxDevMode,
+            'generate_report': self.checkbox_generate_reports,
         }
         self.text_settings = {
             'keywordCachePath': self.leKeywordCachePath,
@@ -112,13 +113,17 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         self.help_button.toggled.connect(self.help_toggled)
         self.main_stacked_widget.setCurrentIndex(1)
 
+        # Always set first tab to be open, 0-th index
+        self.tabWidget.setCurrentIndex(0)
+
         # Hide not implemented group
         self.grpNotImplemented.hide()
         self.adjustSize()
         self.restore_state()
-        # hack prevent showing use thread visible and set it false see #557
-        self.cbxUseThread.setChecked(True)
-        self.cbxUseThread.setVisible(False)
+
+        # Hide checkbox if not developers
+        if not self.cbxDevMode.isChecked():
+            self.checkbox_generate_reports.hide()
 
         # Set up listener for various UI
         self.custom_org_logo_checkbox.toggled.connect(
@@ -137,6 +142,14 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         self.restore_defaults.setCheckable(True)
         self.restore_defaults.clicked.connect(
             self.restore_defaults_ratio)
+
+        # TODO: Hide this until behaviour is defined
+        # hide template warning toggle
+        self.template_warning_checkbox.hide()
+
+        # hide custom template dir toggle
+        self.custom_templates_dir_checkbox.hide()
+        self.splitter_custom_report.hide()
 
     def save_boolean_setting(self, key, check_box):
         """Save boolean setting according to check_box state.
@@ -188,9 +201,6 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
 
     def restore_state(self):
         """Reinstate the options based on the user's stored session info."""
-        flag = False
-        self.cbxUseThread.setChecked(flag)
-
         # Restore boolean setting as check box.
         for key, check_box in self.boolean_settings.items():
             self.restore_boolean_setting(key, check_box)
@@ -268,9 +278,6 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         # Save text settings
         for key, line_edit in self.text_settings.items():
             self.save_text_setting(key, line_edit)
-
-        self.settings.setValue(
-            'inasafe/useThreadingFlag', False)
 
         self.settings.setValue(
             'inasafe/north_arrow_path',

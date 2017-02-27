@@ -32,6 +32,9 @@ class DefaultSelectParameter(SelectParameter):
         self._default_values = None
         # Store selected default value
         self._default_value = None
+        # Minimum and maximum for custom value
+        self._min_value = None
+        self._max_value = None
 
     @property
     def default_labels(self):
@@ -60,6 +63,34 @@ class DefaultSelectParameter(SelectParameter):
         :type default_values: list
         """
         self._default_values = default_values
+
+    @property
+    def minimum(self):
+        """Property for minimum value"""
+        return self._min_value
+
+    @minimum.setter
+    def minimum(self, minimum):
+        """Setter for minimum value.
+
+        :param minimum: The minimum value.
+        :type minimum: int or float
+        """
+        self._min_value = minimum
+
+    @property
+    def maximum(self):
+        """Property for maximum value"""
+        return self._max_value
+
+    @maximum.setter
+    def maximum(self, maximum):
+        """Setter for maximum value.
+
+        :param maximum: The maximum value.
+        :type maximum: int or float
+        """
+        self._max_value = maximum
 
     @property
     def default_value(self):

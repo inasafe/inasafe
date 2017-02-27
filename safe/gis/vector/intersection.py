@@ -1,10 +1,6 @@
 # coding=utf-8
 
-"""
-Intersect two layers.
-
-Issue https://github.com/inasafe/inasafe/issues/3186
-"""
+"""Intersect two layers."""
 
 import logging
 from qgis.core import (
@@ -16,11 +12,11 @@ from qgis.core import (
 )
 
 from safe.utilities.i18n import tr
-from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
 from safe.definitions.layer_purposes import layer_purpose_exposure_impacted
 from safe.definitions.processing_steps import intersection_steps
 from safe.gis.vector.tools import (
     create_memory_layer, wkb_type_groups, create_spatial_index)
+from safe.gis.sanity_check import check_layer
 from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -35,6 +31,8 @@ LOGGER = logging.getLogger('InaSAFE')
 @profile
 def intersection(source, mask, callback=None):
     """Intersect two layers.
+
+    Issue https://github.com/inasafe/inasafe/issues/3186
 
     Note : This algorithm is copied from :
     https://github.com/qgis/QGIS/blob/master/python/plugins/processing/algs/
@@ -57,6 +55,8 @@ def intersection(source, mask, callback=None):
     .. versionadded:: 4.0
     """
     output_layer_name = intersection_steps['output_layer_name']
+    output_layer_name = output_layer_name % (
+        source.keywords['layer_purpose'])
     processing_step = intersection_steps['step_name']
 
     fields = source.fields()
@@ -111,12 +111,15 @@ def intersection(source, mask, callback=None):
                     geom_types = wkb_type_groups[
                         wkb_type_groups[int_geom.wkbType()]]
                     if int_geom.wkbType() in geom_types:
-                        out_feature.setGeometry(int_geom)
-                        attrs = []
-                        attrs.extend(attributes)
-                        attrs.extend(mask_attributes)
-                        out_feature.setAttributes(attrs)
-                        writer.addFeature(out_feature)
+                        if int_geom.type() == source.geometryType():
+                            # We got some features which have not the same
+                            # kind of geometry. We want to skip them.
+                            out_feature.setGeometry(int_geom)
+                            attrs = []
+                            attrs.extend(attributes)
+                            attrs.extend(mask_attributes)
+                            out_feature.setAttributes(attrs)
+                            writer.addFeature(out_feature)
                 except:
                     LOGGER.debug(
                         tr('Feature geometry error: One or more output '
@@ -136,4 +139,5 @@ def intersection(source, mask, callback=None):
     writer.keywords['aggregation_keywords'] = dict(
         mask.keywords['aggregation_keywords'])
 
+    check_layer(writer)
     return writer

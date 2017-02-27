@@ -1,10 +1,6 @@
 # coding=utf-8
 
-"""
-Assign the highest value to an exposure according to a hazard layer.
-
-Issue https://github.com/inasafe/inasafe/issues/3192
-"""
+"""Assign the highest value to an exposure according to a hazard layer."""
 
 import logging
 from qgis.core import (
@@ -21,6 +17,7 @@ from safe.definitions.hazard_classifications import (
     hazard_classification, not_exposed_class)
 from safe.definitions.processing_steps import assign_highest_value_steps
 from safe.gis.vector.tools import create_spatial_index
+from safe.gis.sanity_check import check_layer
 from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -34,9 +31,13 @@ LOGGER = logging.getLogger('InaSAFE')
 
 @profile
 def assign_highest_value(exposure, hazard, callback=None):
-    """For indivisible polygon exposure layers such as buildings, we need to
+    """Assign the highest hazard value to an indivisible feature.
+
+    For indivisible polygon exposure layers such as buildings, we need to
     assigned the greatest hazard that each polygon touches and use that as the
-     effective hazard class.
+    effective hazard class.
+
+    Issue https://github.com/inasafe/inasafe/issues/3192
 
     We follow the concept here that any part of the exposure dataset that
     touches the hazard is affected, and the greatest hazard is the effective
@@ -143,4 +144,5 @@ def assign_highest_value(exposure, hazard, callback=None):
 
     exposure.keywords['title'] = output_layer_name
 
+    check_layer(exposure)
     return exposure

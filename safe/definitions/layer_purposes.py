@@ -60,7 +60,7 @@ layer_purpose_exposure_impacted = {
     'key': 'exposure_impacted',
     'name': tr('Exposure Impacted'),
     'description': tr(
-        'An <b>exposure impact</b> layer is one of the possible results of '
+        'An <b>exposure impacted</b> layer is one of the possible results of '
         'an InaSAFE analysis. It has fields that represent the impact on each '
         'exposure feature by the hazard in each aggregation area. This type '
         'of impact layer will not be created if the exposure layer is a '
@@ -165,8 +165,8 @@ layer_purpose_exposure_breakdown = {
         'created for each hazard class encountered in the analysis and for '
         'analysis totals. For example there will be a column for the total '
         'number of buildings considered affected in the entire analysis area,'
-        'and further columns for unaffected total and the combined total of '
-        'unaffected + affected. This layer is used for generating reports '
+        'and further columns for not affected total and the combined total of '
+        'not affected + affected. This layer is used for generating reports '
         'and can also be easily exported to a spreadsheet for further '
         'analysis.'),
     'allowed_geometries': [],

@@ -1,9 +1,6 @@
 # coding=utf-8
-"""
-Polygonize a raster layer into a vector layer.
 
-Issue https://github.com/inasafe/inasafe/issues/3183
-"""
+"""Polygonize a raster layer into a vector layer."""
 
 
 from osgeo import gdal, osr, ogr
@@ -20,6 +17,7 @@ from safe.definitions.fields import hazard_value_field, exposure_type_field
 from safe.definitions.layer_geometry import (
     layer_geometry, layer_geometry_polygon)
 from safe.definitions.processing_steps import polygonize_steps
+from safe.gis.sanity_check import check_layer
 from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -30,8 +28,7 @@ __revision__ = '$Format:%H$'
 
 @profile
 def polygonize(layer, callback=None):
-    """
-    Polygonize a raster layer into a vector layer using GDAL.
+    """Polygonize a raster layer into a vector layer using GDAL.
 
     Issue https://github.com/inasafe/inasafe/issues/3183
 
@@ -104,4 +101,5 @@ def polygonize(layer, callback=None):
         output_field['key']: field_name
     }
 
+    check_layer(vector_layer)
     return vector_layer

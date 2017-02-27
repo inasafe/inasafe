@@ -24,6 +24,7 @@ from safe.definitions import (
     exposure_fields,
     hazard_fields,
     flood_hazard_classes,
+    flood_petabencana_hazard_classes,
     generic_hazard_classes,
     aggregation_fields,
     layer_purpose_hazard,
@@ -164,7 +165,10 @@ class TestDefinitionsUtilities(unittest.TestCase):
     def test_hazards_classifications(self):
         """Test for get_hazards_classifications."""
         self.maxDiff = None
-        expected = [flood_hazard_classes, generic_hazard_classes]
+        expected = [
+            flood_hazard_classes,
+            flood_petabencana_hazard_classes,
+            generic_hazard_classes]
         self.assertItemsEqual(
             get_classifications('flood'), expected)
 

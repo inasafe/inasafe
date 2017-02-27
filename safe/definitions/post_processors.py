@@ -5,6 +5,8 @@
 
 """Definitions relating to post-processing."""
 
+import logging
+from math import isnan
 from collections import OrderedDict
 
 from PyQt4.QtCore import QPyNullVariant
@@ -41,6 +43,8 @@ __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
+
+LOGGER = logging.getLogger('InaSAFE')
 
 # # #
 # Functions
@@ -79,7 +83,28 @@ def size(**kwargs):
 
     :return: The size.
     """
-    feature_size = kwargs['size_calculator'].measure(kwargs['geometry'])
+    geometry = kwargs['geometry']
+    size_calculator = kwargs['size_calculator']
+    message = 'Size with NaN value : geometry valid={valid}, WKT={wkt}'
+    feature_size = 0
+    if geometry.isMultipart():
+        # Be careful, the size calculator is not working well on a multipart.
+        # So we compute the size part per part. See ticket #3812
+        for single in geometry.asGeometryCollection():
+            geometry_size = size_calculator.measure(single)
+            if not isnan(geometry_size):
+                feature_size += geometry_size
+            else:
+                LOGGER.debug(message.format(
+                    valid=single.isGeosValid(), wkt=single.exportToWkt()))
+    else:
+        geometry_size = size_calculator.measure(geometry)
+        if not isnan(geometry_size):
+            feature_size = geometry_size
+        else:
+            LOGGER.debug(message.format(
+                valid=geometry.isGeosValid(), wkt=geometry.exportToWkt()))
+
     return feature_size
 
 
@@ -97,6 +122,7 @@ def post_processor_affected_function(**kwargs):
     for hazard in hazard_classes_all:
         if hazard['key'] == kwargs['classification']:
             classification = hazard['classes']
+            break
 
     for level in classification:
         if level['key'] == kwargs['hazard_class']:
@@ -126,6 +152,7 @@ def post_processor_displacement_function(
     for hazard in hazard_classes_all:
         if hazard['key'] == classification:
             classification = hazard['classes']
+            break
 
     for hazard_class_def in classification:
         if hazard_class_def['key'] == hazard_class:
@@ -207,15 +234,15 @@ post_processor_input_types = [
 size_calculator_input_value = {
     'key': 'size_calculator',
     'description': tr(
-        'This is a value for the layer_property input type. Retrieve Size '
+        'This is a value for the layer_property input type. It retrieves Size '
         'Calculator of the layer CRS')
 }
 
 layer_crs_input_value = {
     'key': 'layer_crs',
     'description': tr(
-        'This is a value for layer_crs input type. It retrieves the layer '
-        'Coordinate Reference System (CRS).')
+        'This is a value for layer_property input type. It retrieves the '
+        'layer Coordinate Reference System (CRS).')
 }
 
 layer_property_input_values = [
@@ -232,15 +259,15 @@ post_processor_input_values = [
 formula_process = {
     'key': 'formula',
     'description': tr(
-        'This type of process takes inputs as arguments and processes them '
-        'according to a python expression provided by the processor.')
+        'This type of process is a formula which is interpreted and executed '
+        'by the post processor.')
 }
 
 function_process = {
     'key': 'function',
     'description': tr(
         'This type of process takes inputs as arguments and processes them '
-        'by passing them as arguments to a python function.')
+        'by passing them to a Python function.')
 }
 
 
@@ -345,7 +372,7 @@ post_processor_hygiene_packs = {
     'key': 'post_processor_hygiene_packs',
     'name': tr('Weekly Hygiene Packs Post Processor'),
     'description': tr(
-        'A post processor to calculate needed hygiene packs weekly for women'
+        'A post processor to calculate needed hygiene packs weekly for women '
         'who are displaced. "Displaced" is defined as: '
         '{displaced_concept}').format(
             displaced_concept=concepts['displaced_people']['description']),
@@ -521,9 +548,9 @@ post_processor_size = {
     'key': 'post_processor_size',
     'name': tr('Size Value Post Processor'),
     'description': tr(
-        'A post processor to calculate the size of the feature. If the '
-        'feature is a polygon, the result will be area in m². If the feature '
-        'is a line we use length in metres.'),
+        u'A post processor to calculate the size of the feature. If the '
+        u'feature is a polygon, the result will be area in m². If the feature '
+        u'is a line we use length in metres.'),
     'input': {
         'size_calculator': {
             'type': layer_property_input_type,
@@ -546,9 +573,9 @@ post_processor_size_rate = {
     'key': 'post_processor_size_rate',
     'name': tr('Size Rate Post Processor'),
     'description': tr(
-        'A post processor to calculate the value of a feature based on its'
-        'size. If feature is a polygon the size is calculated as '
-        'the area in m². If the feature is a line we use length in metres.'),
+        u'A post processor to calculate the value of a feature based on its '
+        u'size. If a feature is a polygon the size is calculated as '
+        u'the area in m². If the feature is a line we use length in metres.'),
     'input': {
         'size': {
             'type': field_input_type,
@@ -654,7 +681,7 @@ minimum_needs_post_processors = initialize_minimum_needs_post_processors()
 
 # Postprocessor tree
 # |--- size
-# |   `--- size rate
+# |   `--- size rate  disabled in V4.0, ET 13/02/17
 # |--- affected
 # |--- displaced
 # |   |--- gender
@@ -677,9 +704,11 @@ age_postprocessors = [
     post_processor_elderly,
 ]
 
+vulnerability_postprocessors = [post_processor_gender] + age_postprocessors
+
 post_processors = [
     post_processor_size,
-    post_processor_size_rate,
+    # post_processor_size_rate, disabled in V4.0, ET 13/02/17
     post_processor_affected,
     post_processor_displaced,
 ] + female_postprocessors + age_postprocessors + minimum_needs_post_processors

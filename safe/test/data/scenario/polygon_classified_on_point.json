@@ -53,6 +53,7 @@
       "process":[
         "Smart clip",
         "Cleaning the vector exposure attribute table",
+        "Compute ratios from counts",
         "Add default values",
         "Assign classes based on value map"
       ]

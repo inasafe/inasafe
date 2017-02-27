@@ -1,9 +1,6 @@
 # coding=utf-8
-"""
-Reclassify a raster layer.
 
-Issue https://github.com/inasafe/inasafe/issues/3182
-"""
+"""Reclassify a raster layer."""
 
 import numpy as np
 from osgeo import gdal
@@ -16,6 +13,7 @@ from safe.common.utilities import unique_filename, temp_dir
 from safe.definitions.constants import no_data_value
 from safe.definitions.utilities import definition
 from safe.definitions.processing_steps import reclassify_raster_steps
+from safe.gis.sanity_check import check_layer
 from safe.utilities.profiling import profile
 from safe.utilities.metadata import (
     active_thresholds_value_maps, active_classification)
@@ -30,15 +28,18 @@ __revision__ = '$Format:%H$'
 def reclassify(layer, exposure_key=None, callback=None):
     """Reclassify a continuous raster layer.
 
+    Issue https://github.com/inasafe/inasafe/issues/3182
+
+
     This function is a wrapper for the code from
     https://github.com/chiatt/gdal_reclassify
 
     For instance if you want to reclassify like this table :
             Original Value     |   Class
-            - ∞ <= val < 0     |     1
-            0   <= val < 0.5   |     2
-            0.5 <= val < 5     |     3
-            5   <= val < + ∞   |     6
+            - ∞ < val <= 0     |     1
+            0   < val <= 0.5   |     2
+            0.5 < val <= 5     |     3
+            5   < val <  + ∞   |     6
 
     You need a dictionary :
         ranges = OrderedDict()
@@ -108,13 +109,13 @@ def reclassify(layer, exposure_key=None, callback=None):
         v_max = interval[1]
 
         if v_min is None:
-            destination[np.where(source < v_max)] = value
+            destination[np.where(source <= v_max)] = value
 
         if v_max is None:
-            destination[np.where(source >= v_min)] = value
+            destination[np.where(source > v_min)] = value
 
         if v_min < v_max:
-            destination[np.where((v_min <= source) & (source < v_max))] = value
+            destination[np.where((v_min < source) & (source <= v_max))] = value
 
     # Tag no data cells
     destination[np.where(source == no_data)] = no_data_value
@@ -150,4 +151,5 @@ def reclassify(layer, exposure_key=None, callback=None):
     reclassified.keywords['value_map'] = value_map
     reclassified.keywords['title'] = output_layer_name
 
+    check_layer(reclassified)
     return reclassified

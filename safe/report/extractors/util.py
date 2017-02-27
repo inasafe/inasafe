@@ -1,5 +1,6 @@
 # coding=utf-8
 import os
+import codecs
 
 from PyQt4 import QtCore
 from jinja2.exceptions import TemplateError
@@ -20,7 +21,7 @@ def layer_definition_type(layer):
     For example, if a layer have layer_purpose: exposure, and exposure: roads
     then it will return definition for exposure_roads.
 
-    That's why it only supports hazard layer or exposure layer
+    That's why it only supports hazard layer or exposure layer.
 
     :param layer: hazard layer or exposure layer
     :type layer: qgis.core.QgsVectorLayer
@@ -41,18 +42,17 @@ def layer_definition_type(layer):
 
 
 def jinja2_output_as_string(impact_report, component_key):
-    """
-    Get a given jinja2 component output as string
+    """Get a given jinja2 component output as string.
 
-    Useful for composing complex document
+    Useful for composing complex document.
 
-    :param impact_report: Impact Report that contains the component key
+    :param impact_report: Impact Report that contains the component key.
     :type impact_report: safe.report.impact_report.ImpactReport
 
-    :param component_key: The key of the component to get the output from
+    :param component_key: The key of the component to get the output from.
     :type component_key: str
 
-    :return: output as string
+    :return: output as string.
     :rtype: str
     """
     metadata = impact_report.metadata
@@ -65,7 +65,9 @@ def jinja2_output_as_string(impact_report, component_key):
                     filename = os.path.join(
                         impact_report.output_folder, c.output_path)
                     filename = os.path.abspath(filename)
-                    with open(filename) as f:
+                    # We need to open the file in UTF-8, the HTML may have
+                    # some accents for instance.
+                    with codecs.open(filename, 'r', 'utf-8') as f:
                         return f.read()
                 except IOError:
                     pass
@@ -77,12 +79,13 @@ def jinja2_output_as_string(impact_report, component_key):
 
 def value_from_field_name(field_name, analysis_layer):
     """Get the value of analysis layer based on field name.
+
     Can also be used for any layer with one feature.
 
-    :param field_name: Field name of analysis layer that we want to get
+    :param field_name: Field name of analysis layer that we want to get.
     :type field_name: str
 
-    :param analysis_layer: Analysis layer
+    :param analysis_layer: Analysis layer.
     :type analysis_layer: qgis.core.QgsVectorLayer
 
     :return: return the valeu of a given field name of the analysis.
@@ -98,15 +101,15 @@ def resolve_from_dictionary(dictionary, key_list, default_value=None):
     it will try to resolve d['foo']['bar']. If not possible,
     return default_value.
 
-    :param dictionary: A dictionary to resolve
+    :param dictionary: A dictionary to resolve.
     :type dictionary: dict
 
-    :param key_list: A list of key to resolve
+    :param key_list: A list of key to resolve.
     :type key_list: list[str], str
 
-    :param default_value: Any arbitrary default value to return
+    :param default_value: Any arbitrary default value to return.
 
-    :return: intended value, if fails, return default_value
+    :return: intended value, if fails, return default_value.
     """
     try:
         current_value = dictionary
@@ -117,17 +120,3 @@ def resolve_from_dictionary(dictionary, key_list, default_value=None):
         return current_value
     except KeyError:
         return default_value
-
-
-def value_from_inasafe_settings(key):
-    """Take value from InaSAFE settings.
-
-    :param key: settings key
-    :type key: str
-
-    :return: intended value
-    """
-    qsettings = QtCore.QSettings()
-    namespace = 'inasafe/{key}'
-    return qsettings.value(
-        namespace.format(key=key), inasafe_default_settings[key])

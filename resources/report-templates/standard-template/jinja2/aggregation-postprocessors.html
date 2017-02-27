@@ -1,56 +1,62 @@
 {% if use_aggregation %}
     {% for _, value in sections.iteritems() %}
-        {% if value and value.rows %}
-        <div>
-            {{ value.notes }}
-        </div>
+        {% if value %}
         <h5 class="info">
-            <i class="icon-info-sign icon-white"></i> {{ value.header }}
+            <i class="icon-info-sign icon-white"></i> {{ value.header|capitalize }}
         </h5>
-        <table class="table table-striped condensed">
-            <thead>
-                <tr>
-                    {% for column in value.columns %}
-                        {% if loop.first %}
-                        <th class="text-left">
-                        {% else %}
-                        <th class="text-right">
-                        {% endif %}
-                            {{ column|capitalize }}
-                        </th>
-                    {% endfor %}
-                </tr>
-            </thead>
-            <tbody>
-                {% for row in value.rows %}
-                <tr>
-                    {% for column in row %}
-                        {% if loop.first %}
-                        <th class="text-left">{{ column }}</th>
-                        {% else %}
-                        <td class="text-right">{{ column }}</td>
-                        {% endif %}
-                    {% endfor %}
-                </tr>
-                {% endfor %}
-            </tbody>
-            <tfoot>
-                <tr>
-                {% for column in value.totals %}
-                    {% if loop.first %}
-                    <th class="text-left">{{ column }}</th>
-                    {% else %}
-                    <td class="text-right">{{ column }}</td>
-                     {% endif %}
-            {% endfor %}
-                </tr>
-            </tfoot>
-        </table>
+            {% if value.empty %}
+                <p>
+                    {{ value.message }}
+                </p>
+            {% elif value.rows %}
+                <table class="table table-striped condensed">
+                    <thead>
+                        <tr>
+                            {% for column in value.columns %}
+                                {% if loop.first %}
+                                <th class="text-left">
+                                {% else %}
+                                <th class="text-right">
+                                {% endif %}
+                                    {{ column|capitalize }}
+                                </th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in value.rows %}
+                        <tr>
+                            {% for column in row %}
+                                {% if loop.first %}
+                                <th class="text-left">{{ column|capitalize }}</th>
+                                {% else %}
+                                <td class="text-right">{{ column }}</td>
+                                {% endif %}
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                        {% for column in value.totals %}
+                            {% if loop.first %}
+                            <th class="text-left">{{ column|capitalize }}</th>
+                            {% else %}
+                            <td class="text-right">{{ column }}</td>
+                             {% endif %}
+                        {% endfor %}
+                        </tr>
+                    </tfoot>
+                </table>
+                <div>
+                    {{ value.notes }}
+                </div>
+            {% endif %}
         {% endif %}
     {% endfor %}
 {% elif sections_not_empty %}
 <h5 class="info">
-    <i class="icon-info-sign icon-white"></i> {{ header }}
+    <i class="icon-info-sign icon-white"></i> {{ header|capitalize }}
 </h5>
 <table class="table table-striped condensed">
     <tbody>
@@ -70,7 +76,7 @@
             <tr>
                 {% for column in row %}
                     {% if loop.first %}
-                    <td class="text-left">{{ column }}</td>
+                    <td class="text-left">{{ column|capitalize }}</td>
                     {% else %}
                     <td class="text-right">{{ column }}</td>
                     {% endif %}

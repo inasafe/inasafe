@@ -1,21 +1,9 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
-
-This module provides: Keyword Wizard Step: Default InaSAFE Fields
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
+"""Default InaSAFE Fields Step."""
 
 # noinspection PyPackageRequirements
 import logging
-from PyQt4.QtGui import QWidget
+from PyQt4.QtGui import QWidget, QLabel
 
 from safe.common.parameters.default_select_parameter import (
     DefaultSelectParameter)
@@ -30,8 +18,12 @@ from safe.definitions.layer_geometry import layer_geometry_raster
 from safe.definitions.constants import no_field
 from safe.gui.tools.wizard.wizard_utils import get_inasafe_default_value_fields
 
+from safe.definitions.fields import (
+    youth_ratio_field, adult_ratio_field, elderly_ratio_field)
+
 from safe.gui.tools.wizard.wizard_step import (
     WizardStep, get_wizard_step_ui_class)
+from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -61,6 +53,7 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
         self.parameter_container = ParameterContainer(
             extra_parameters=self.extra_parameters)
         self.kwExtraKeywordsGridLayout.addWidget(self.parameter_container)
+        self.message_label = QLabel()
 
     def is_ready_to_next_step(self):
         """Check if the step is complete. If so, there is
@@ -111,6 +104,7 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
     # noinspection PyTypeChecker
     def set_widgets(self):
         """Set widgets on the Extra Keywords tab."""
+        self.clear()
         existing_inasafe_field = self.parent.get_existing_keyword(
             'inasafe_fields')
         existing_inasafe_default_values = self.parent.get_existing_keyword(
@@ -146,8 +140,8 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
             parameter.guid = inasafe_field['key']
             parameter.name = inasafe_field['name']
             parameter.is_required = False
-            parameter.description = inasafe_field['help_text']
-            parameter.help_text = inasafe_field['description']
+            parameter.description = inasafe_field['description']
+            parameter.help_text = inasafe_field['help_text']
             parameter.element_type = unicode
             parameter.options_list = option_list
             parameter.value = no_field
@@ -155,6 +149,10 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
                 self.parent.setting, inasafe_field['key'])[0]
             parameter.default_values = get_inasafe_default_value_fields(
                 self.parent.setting, inasafe_field['key'])[1]
+            parameter.minimum = inasafe_field['default_value'].get(
+                'min_value')
+            parameter.maximum = inasafe_field['default_value'].get(
+                'max_value')
             # Check if there is already value in the metadata.
             if existing_inasafe_field:
                 existing_value = existing_inasafe_field.get(
@@ -176,11 +174,15 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
             self.parameters, extra_parameters=self.extra_parameters)
         self.parameter_container.setup_ui()
         self.kwExtraKeywordsGridLayout.addWidget(self.parameter_container)
+        # Add Message label
+        self.kwExtraKeywordsGridLayout.addWidget(self.message_label)
 
         # Set default value to None
         for parameter_widget in self.parameter_container.\
                 get_parameter_widgets():
             parameter_widget.widget().set_default(None)
+            # Set selected radio button to 'Do not use'
+            parameter_widget.widget().set_selected_radio_button()
         # Set default value from existing keywords
         if existing_inasafe_default_values:
             for guid, default in existing_inasafe_default_values.items():
@@ -188,6 +190,8 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
                     get_parameter_widget_by_guid(guid)
                 if isinstance(parameter_widget, DefaultSelectParameterWidget):
                     parameter_widget.set_default(default)
+                    # Set selected radio button to 'Do not use'
+                    parameter_widget.set_selected_radio_button()
 
     def get_inasafe_fields(self):
         """Return inasafe fields from the current wizard state.
@@ -224,3 +228,44 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
             self.kwExtraKeywordsGridLayout.itemAt(i).widget().setParent(None)
         self.parameters = []
         self.parameter_container = ParameterContainer()
+
+    def is_good_age_ratios(self):
+        """Method to check the sum of age ratio is 1.
+
+        :returns: True if the sum is 1 or the sum less than 1 but there is
+            None.
+        :rtype: bool
+        """
+        default_values = self.get_inasafe_default_values()
+
+        youth_ratio = default_values.get(youth_ratio_field['key'])
+        adult_ratio = default_values.get(adult_ratio_field['key'])
+        elderly_ratio = default_values.get(elderly_ratio_field['key'])
+        ratios = [youth_ratio, adult_ratio, elderly_ratio]
+
+        if None in ratios:
+            # If there is None, just check to not exceeding 1
+            clean_ratios = [x for x in ratios if x is not None]
+            ratios.remove(None)
+            if sum(clean_ratios) > 1:
+                return False
+        else:
+            if sum(ratios) != 1:
+                return False
+
+        return True
+
+    def toggle_age_ratio_sum_message(self, flag):
+        """Method to show error message about sum of age ratio.
+
+        :param flag: Flag if the ratio is valid or not.
+        :type flag: bool
+        """
+        if not flag:
+            self.message_label.setText(
+                tr('The sum of your age ratios is not 1. Please fix it '
+                   'first before you can continue to the next step.'))
+            self.message_label.setStyleSheet('color: red')
+        else:
+            self.message_label.setText(tr('You are good to go.'))
+            self.message_label.setStyleSheet('color: green')

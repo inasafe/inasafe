@@ -1,8 +1,6 @@
 # coding=utf-8
 
-"""
-Recompute counts.
-"""
+"""Recompute counts."""
 
 from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
 from safe.definitions.fields import (
@@ -14,6 +12,7 @@ from safe.definitions.processing_steps import (
     recompute_counts_steps)
 from safe.utilities.profiling import profile
 from safe.gis.vector.tools import size_calculator
+from safe.gis.sanity_check import check_layer
 
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -90,4 +89,5 @@ def recompute_counts(layer, callback=None):
 
     layer.keywords['title'] = output_layer_name
 
+    check_layer(layer)
     return layer

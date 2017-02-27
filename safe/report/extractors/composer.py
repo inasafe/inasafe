@@ -1,11 +1,13 @@
 # coding=utf-8
 import datetime
 
+from qgis.core import QgsMapLayerRegistry
 from safe.common.version import get_version
 from safe.definitions.fields import analysis_name_field
 from safe.report.extractors.util import (
     value_from_field_name,
-    resolve_from_dictionary, value_from_inasafe_settings)
+    resolve_from_dictionary)
+from safe.utilities.settings import setting
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -214,20 +216,41 @@ def qgis_composer_extractor(impact_report, component_metadata):
     context.html_frame_elements = html_frame_elements
 
     # Set default map to resize
+
+    # check show only impact
+    show_only_impact = setting('set_show_only_impact_on_report', False, bool)
     layers = [impact_report.impact_function.impact]
+    layer_registry = QgsMapLayerRegistry.instance()
+    if not show_only_impact:
+        hazard_layer = layer_registry.mapLayers().get(
+            provenance['hazard_layer_id'], None)
+
+        aggregation_layer_id = provenance['aggregation_layer_id']
+        if aggregation_layer_id:
+            aggregation_layer = layer_registry.mapLayers().get(
+                aggregation_layer_id, None)
+            layers.insert(0, aggregation_layer)
+
+        layers.append(hazard_layer)
+
     # check hide exposure settings
-    hide_exposure_flag = value_from_inasafe_settings(
-        'setHideExposureFlag')
+    hide_exposure_flag = setting('setHideExposureFlag', False, bool)
     if not hide_exposure_flag:
         # place exposure at the bottom
-        layers.append(impact_report.impact_function.exposure)
+        exposure_layer = layer_registry.mapLayers().get(
+            provenance['exposure_layer_id'])
+        layers.append(exposure_layer)
+
+    # default extent is analysis extent
+    if not qgis_context.extent:
+        qgis_context.extent = impact_report.impact_function.analysis_extent
 
     map_elements = [
         {
             'id': 'impact-map',
             'extent': qgis_context.extent,
             'grid_split_count': 5,
-            'layers': layers
+            'layers': layers,
         }
     ]
     context.map_elements = map_elements

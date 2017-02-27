@@ -155,8 +155,11 @@ class SaveScenarioDialog(QDialog):
         #  Write to file
         parser = ConfigParser()
         parser.add_section(title)
-        parser.set(title, 'exposure', relative_exposure_path)
-        parser.set(title, 'hazard', relative_hazard_path)
+        # Relative path is not recognized by the batch runner, so we use
+        # absolute path.
+        parser.set(title, 'exposure', exposure_path)
+        parser.set(title, 'hazard', hazard_path)
+
         parser.set(title, 'extent', extent_string)
         if self.dock.extent.crs is None:
             parser.set(title, 'extent_crs',

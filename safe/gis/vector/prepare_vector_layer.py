@@ -1,4 +1,5 @@
 # coding=utf-8
+
 """Prepare layers for InaSAFE."""
 
 import logging
@@ -19,6 +20,7 @@ from safe.gis.vector.tools import (
     copy_layer,
     create_field_from_definition
 )
+from safe.gis.sanity_check import check_layer
 from safe.definitions.processing_steps import prepare_vector_steps
 from safe.definitions.fields import (
     exposure_id_field,
@@ -57,8 +59,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 @profile
 def prepare_vector_layer(layer, callback=None):
-    """
-    This function will prepare the layer to be used in InaSAFE :
+    """This function will prepare the layer to be used in InaSAFE :
      * Make a local copy of the layer.
      * Make sure that we have an InaSAFE ID column.
      * Rename fields according to our definitions.
@@ -123,6 +124,7 @@ def prepare_vector_layer(layer, callback=None):
 
     cleaned.keywords['title'] = output_layer_name
 
+    check_layer(cleaned)
     return cleaned
 
 
@@ -152,7 +154,7 @@ def _check_value_mapping(layer, exposure_key=None):
 
     if layer.keywords['layer_purpose'] == layer_purpose_hazard['key']:
         if not exposure_key:
-            message = tr('Hazard classification missing exposure key.')
+            message = tr('Hazard classification is missing exposure key.')
             raise InvalidKeywordsForProcessingAlgorithm(message)
         classification = active_classification(layer.keywords, exposure_key)
     else:

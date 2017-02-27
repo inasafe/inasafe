@@ -1,4 +1,5 @@
 # coding=utf-8
+
 """InaSAFE Function Centric Wizard Analysis Step."""
 
 import logging
@@ -6,13 +7,20 @@ import os
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature, QSettings
 
+from qgis.core import (
+    QgsGeometry,
+    QgsCoordinateReferenceSystem,
+    QgsMapLayerRegistry)
+
 from safe.utilities.i18n import tr
+from safe.utilities.extent import Extent
 from safe.definitions.constants import (
     ANALYSIS_FAILED_BAD_INPUT,
     ANALYSIS_FAILED_BAD_CODE,
     PREPARE_FAILED_BAD_INPUT,
     PREPARE_FAILED_BAD_CODE,
-    HAZARD_EXPOSURE_VIEW
+    HAZARD_EXPOSURE_VIEW,
+    HAZARD_EXPOSURE_BOUNDINGBOX
 )
 from safe.common.signals import send_static_message, send_error_message
 from safe.gui.widgets.message import enable_messaging
@@ -44,14 +52,19 @@ FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
 class StepFcAnalysis(WizardStep, FORM_CLASS):
+
     """Function Centric Wizard Step: Analysis."""
 
     def __init__(self, parent):
-        """Init method"""
+        """Init method."""
         WizardStep.__init__(self, parent)
 
         enable_messaging(self.results_webview)
+        self.iface = parent.iface
         self.impact_function = None
+        self.extent = Extent(self.iface)
+        self.zoom_to_impact_flag = None
+        self.hide_exposure_flag = None
 
     def is_ready_to_next_step(self):
         """Check if the step is complete. If so, there is
@@ -104,7 +117,7 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         LOGGER.debug('Open in composer Button is not implemented')
 
     def setup_and_run_analysis(self):
-        """Execute analysis after the tab is displayed"""
+        """Execute analysis after the tab is displayed."""
         # IFCW 4.0:
 
         # Show busy
@@ -112,6 +125,8 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         # show next analysis extent
         # Prepare impact function from wizard dialog user input
         self.impact_function = self.prepare_impact_function()
+        # Read user's settings
+        self.read_settings()
         # Prepare impact function
         status, message = self.impact_function.prepare()
         # Check status
@@ -120,13 +135,15 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
             LOGGER.info(tr(
                 'The impact function will not be able to run because of the '
                 'inputs.'))
+            LOGGER.info(message.to_text())
             send_error_message(self, message)
             return
         if status == PREPARE_FAILED_BAD_CODE:
             self.hide_busy()
             LOGGER.exception(tr(
-                'The impact function will not be able to run because of a '
+                'The impact function was not able to be prepared because of a '
                 'bug.'))
+            LOGGER.info(message.to_text())
             send_error_message(self, message)
             return
         # Start the analysis
@@ -136,12 +153,14 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
             self.hide_busy()
             LOGGER.info(tr(
                 'The impact function could not run because of the inputs.'))
+            LOGGER.info(message.to_text())
             send_error_message(self, message)
             return
         elif status == ANALYSIS_FAILED_BAD_CODE:
             self.hide_busy()
             LOGGER.exception(tr(
                 'The impact function could not run because of a bug.'))
+            LOGGER.exception(message.to_text())
             send_error_message(self, message)
             return
 
@@ -153,19 +172,60 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         add_impact_layers_to_canvas(self.impact_function, self.parent.iface)
 
         # Some if-s i.e. zoom, debug, hide exposure
+        if self.zoom_to_impact_flag:
+            self.iface.zoomToActiveLayer()
+
+        qgis_exposure = (
+            QgsMapLayerRegistry.instance().mapLayer(
+                self.parent.exposure_layer.id()))
+
+        if self.hide_exposure_flag:
+            legend = self.iface.legendInterface()
+            legend.setLayerVisible(qgis_exposure, False)
+
+        self.extent.set_last_analysis_extent(
+            self.impact_function.analysis_extent,
+            qgis_exposure.crs())
+
         # Hide busy
         self.hide_busy()
         # Setup gui if analysis is done
         self.setup_gui_analysis_done()
 
     def set_widgets(self):
-        """Set widgets on the Progress tab"""
+        """Set widgets on the Progress tab."""
         self.progress_bar.setValue(0)
         self.results_webview.setHtml('')
         self.pbnReportWeb.hide()
         self.pbnReportPDF.hide()
         self.pbnReportComposer.hide()
         self.lblAnalysisStatus.setText(self.tr('Running analysis...'))
+
+    def read_settings(self):
+        """Set the IF state from QSettings."""
+        extent = setting('user_extent', None, str)
+        if extent:
+            extent = QgsGeometry.fromWkt(extent)
+            if not extent.isGeosValid():
+                extent = None
+
+        crs = setting('user_extent_crs', None, str)
+        if crs:
+            crs = QgsCoordinateReferenceSystem(crs)
+            if not crs.isValid():
+                crs = None
+
+        mode = setting('analysis_extents_mode', HAZARD_EXPOSURE_VIEW)
+        if crs and extent and mode == HAZARD_EXPOSURE_BOUNDINGBOX:
+            self.extent.set_user_extent(extent, crs)
+
+        self.extent.show_rubber_bands = setting(
+            'showRubberBands', False, bool)
+
+        self.zoom_to_impact_flag = setting('setZoomToImpactFlag', True, bool)
+
+        # whether exposure layer should be hidden after model completes
+        self.hide_exposure_flag = setting('setHideExposureFlag', False, bool)
 
     def prepare_impact_function(self):
         """Create analysis as a representation of current situation of IFCW."""

@@ -36,10 +36,10 @@ exposure_id_field = {
     'type': qvariant_whole_numbers,
     'length': default_field_length,
     'precision': 0,
-    'help_text': tr(  # this is the short description
+    'description': tr(  # this is the short description
         'An ID attribute in the exposure layer'
     ),
-    'description': tr(
+    'help_text': tr(
         'A unique identifier for each exposure feature. If you provide this '
         'we will persist these identifiers in the output datasets so that '
         'you can do a table join back to the original exposure layer if '
@@ -248,9 +248,9 @@ aggregation_id_field = {
     'type': qvariant_whole_numbers,
     'length': default_field_length,
     'precision': 0,
-    'help_text': tr(  # short description
+    'description': tr(  # short description
         'An ID attribute in the aggregation layer.'),
-    'description': tr(
+    'help_text': tr(
         'A unique identifier for each aggregation feature. If you provide '
         'this we will persist these identifiers in the output datasets so '
         'that you can do a table join back to the original aggregation layer '
@@ -277,7 +277,7 @@ aggregation_name_field = {
         'A NAME attribute in the aggregation layer.'),
     'description': tr(
         'This will be carried over to the impact layer if provided. The name '
-        'can be useful labelling label the area names that are used in '
+        'can be useful to label the area names that are used in '
         'the report generation process.'),
     'citations': [
         {
@@ -301,9 +301,9 @@ analysis_id_field = {
     'length': default_field_length,
     'precision': 0,
     'absolute': False,
-    'help_text': tr(  # short description
+    'description': tr(  # short description
         'An ID attribute in the analysis layer.'),
-    'description': tr(
+    'help_text': tr(
         'A unique identifier for each analysis feature.'),
     'citations': [
         {
@@ -625,9 +625,8 @@ buffer_distance_field = {
     'type': QVariant.Int,
     'length': default_field_length,
     'precision': 0,
-    'absolute': False,
-    'description': tr(
-        'The distance of the buffer for each feature.'),
+    'absolute': True,
+    'description': tr('The distance of the buffer for each feature.'),
     'help_text': tr(''),
     'citations': [
         {
@@ -1072,23 +1071,24 @@ total_affected_field = {
     'replace_null': False
 }
 
-# Total unaffected field to store the number of unaffected by the hazard
-total_unaffected_field = {
-    'key': 'total_unaffected_field',
-    'name': tr('Total Unaffected'),
-    'field_name': 'total_unaffected',
+# Total not affected field to store the number of not affected by the hazard
+total_not_affected_field = {
+    'key': 'total_not_affected_field',
+    'name': tr('Total Not Affected'),
+    'field_name': 'total_not_affected',
     'type': QVariant.Double,
     'length': default_field_length,
     'precision': 2,
-    'absolute': False,
+    'absolute': True,
     'help_text': tr(
-        'The total unaffected field stores the cumulative total number of '
-        'unaffected features or entities.'),
+        'The total not affected field stores the cumulative total number of '
+        'not affected features or entities.'),
     'description': tr(
-        'The total unaffected field is added to the analysis layer, aggregate '
-        'impact layer and aggregate hazard impact layer during the impact '
-        'analysis. It represents the cumulative count of unaffected exposure '
-        'features (e.g. buildings) or entities (e.g. people) for each area.'),
+        'The total not affected field is added to the analysis layer, '
+        'aggregate impact layer and aggregate hazard impact layer during the '
+        'impact analysis. It represents the cumulative count of not affected '
+        'exposure features (e.g. buildings) or entities (e.g. people) for '
+        'each area.'),
     'citations': [
         {
             'text': None,
@@ -1348,7 +1348,7 @@ exposure_breakdown_fields = [
     exposure_class_field,
     hazard_count_field,
     total_affected_field,
-    total_unaffected_field,
+    total_not_affected_field,
     total_not_exposed_field,
     total_field,
 ]
@@ -1358,7 +1358,7 @@ analysis_fields = [
     analysis_name_field,
     hazard_count_field,
     total_affected_field,
-    total_unaffected_field,
+    total_not_affected_field,
     total_not_exposed_field,
     total_field
 ]
@@ -1391,3 +1391,12 @@ ratio_fields = [
     adult_ratio_field,
     elderly_ratio_field,
 ]
+
+# This table is useful when we need to match between counts and ratios.
+count_ratio_mapping = {
+    female_count_field['key']: female_ratio_field['key'],
+    youth_count_field['key']: youth_ratio_field['key'],
+    adult_count_field['key']: adult_ratio_field['key'],
+    elderly_count_field['key']: elderly_ratio_field['key'],
+    # feature_value_field['key']: feature_rate_field['key'], disabled V4.0 ET
+}

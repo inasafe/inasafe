@@ -1,5 +1,5 @@
 # coding=utf-8
-"""InaSAFE Dock"""
+"""InaSAFE Dock."""
 
 import os
 import shutil
@@ -38,13 +38,21 @@ from safe.definitions.constants import (
     PREPARE_SUCCESS,
 )
 from safe.defaults import supporters_logo_path
+from safe.definitions.reports import (
+    final_product_tag,
+    pdf_product_tag,
+    html_product_tag,
+    qpt_product_tag)
+from safe.definitions.reports.components import (
+    standard_impact_report_metadata_pdf,
+    report_a4_blue)
 from safe.report.impact_report import ImpactReport
+from safe.report.report_metadata import ReportMetadata
 from safe.utilities.gis import wkt_to_rectangle
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.utilities import (
     get_error_message,
-    impact_attribution,
     add_ordered_combo_item,
     is_keyword_version_supported,
 )
@@ -149,6 +157,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.show_only_visible_layers_flag = None
         self.set_layer_from_title_flag = None
         self.zoom_to_impact_flag = None
+        self.use_selected_features_only = None
         self.hide_exposure_flag = None
         self.map_canvas = None
         self.developer_mode = None
@@ -196,16 +205,14 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         :param layer: The current aggregation layer.
         :type layer: QgsVectorLayer
         """
-        use_selected_only = setting('useSelectedFeaturesOnly', False, bool)
-
         # We need to disconnect first.
-        if self._aggregation and use_selected_only:
+        if self._aggregation and self.use_selected_features_only:
             self._aggregation.selectionChanged.disconnect(
                 self.validate_impact_function)
 
         self._aggregation = layer
 
-        if use_selected_only and layer:
+        if self.use_selected_features_only and layer:
             self._aggregation.selectionChanged.connect(
                 self.validate_impact_function)
 
@@ -292,6 +299,13 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         # whether to show or not dev only options
         self.developer_mode = setting('developer_mode', False, bool)
+
+        # If we use selected features only
+        flag = setting('useSelectedFeaturesOnly', True, bool)
+        self.use_selected_features_only = flag
+        # We need to re-trigger the aggregation combobox with the new flag.
+        index = self.aggregation_layer_combo.currentIndex()
+        self.aggregation_layer_combo.setCurrentIndex(index)
 
         # whether to show or not a custom Logo
         flag = setting('organisation_logo_path', supporters_logo_path(), str)
@@ -754,86 +768,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.progress_bar.setValue(current_value)
         QtGui.QApplication.processEvents()
 
-    def accept(self):
-        """Execute analysis when run button is clicked."""
-        # Start the analysis
-        self.impact_function = self.validate_impact_function()
-        if not self.impact_function:
-            # This should not happen as the "accept" button should disabled if
-            # the impact function is not ready.
-            LOGGER.info(tr('The impact function should not have been ready.'))
-            return
-
-        self.show_busy()
-        self.impact_function.callback = self.progress_callback
-        self.impact_function.debug_mode = self.debug_mode.isChecked()
-        try:
-            status, message = self.impact_function.run()
-        except:
-            # We have an exception only if we are in debug mode.
-            # We want to display the datastore and then
-            # we want to re-raise it to get the first aid plugin popup.
-            add_debug_layers_to_canvas(self.impact_function)
-            disable_busy_cursor()
-            raise
-        if status == ANALYSIS_FAILED_BAD_INPUT:
-            self.hide_busy()
-            LOGGER.info(tr(
-                'The impact function could not run because of the inputs.'))
-            send_error_message(self, message)
-            return status, message
-        elif status == ANALYSIS_FAILED_BAD_CODE:
-            self.hide_busy()
-            LOGGER.exception(tr(
-                'The impact function could not run because of a bug.'))
-            send_error_message(self, message)
-
-            # Even if we are not in debug mode, as we got an exception, we
-            # display the debug group.
-            add_debug_layers_to_canvas(self.impact_function)
-            return status, message
-
-        LOGGER.info(tr('The impact function could run without errors.'))
-
-        # Add result layer to QGIS
-        add_impact_layers_to_canvas(self.impact_function, self.iface)
-
-        # Generate impact report
-        error_code, message = generate_impact_report(
-            self.impact_function, self.iface)
-
-        if error_code == ImpactReport.REPORT_GENERATION_FAILED:
-            LOGGER.info(tr(
-                'The impact report could not be generated.'))
-            send_error_message(self, message)
-
-        error_code, message = generate_impact_map_report(
-            self.impact_function, self.iface)
-
-        if error_code == ImpactReport.REPORT_GENERATION_FAILED:
-            LOGGER.info(tr(
-                'The impact report could not be generated.'))
-            send_error_message(self, message)
-
-        if self.zoom_to_impact_flag:
-            self.iface.zoomToActiveLayer()
-
-        if self.impact_function.debug_mode:
-            add_debug_layers_to_canvas(self.impact_function)
-
-        if self.hide_exposure_flag:
-            legend = self.iface.legendInterface()
-            qgis_exposure = self.get_exposure_layer()
-            legend.setLayerVisible(qgis_exposure, False)
-
-        self.extent.set_last_analysis_extent(
-            self.impact_function.analysis_extent,
-            self.get_exposure_layer().crs())
-
-        self.hide_busy()
-        self.impact_function = None
-        return ANALYSIS_SUCCESS, None
-
     def show_help(self):
         """Open the help dialog."""
         # noinspection PyTypeChecker
@@ -850,68 +784,45 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         QtGui.qApp.processEvents()
         self.busy = True
 
-    def hide_busy(self):
-        """A helper function to indicate processing is done."""
+    def hide_busy(self, check_next_impact=True):
+        """A helper function to indicate processing is done.
+
+        :param check_next_impact: Flag to check if we can validate the next IF.
+        :type check_next_impact: bool
+        """
         self.progress_bar.hide()
         self.show_question_button.setVisible(True)
         self.question_group.setEnabled(True)
         self.question_group.setVisible(False)
 
-        # We check if we can run an IF
-        self.validate_impact_function()
+        if check_next_impact:
+            # We check if we can run an IF
+            self.validate_impact_function()
 
         self.repaint()
         disable_busy_cursor()
         self.busy = False
 
-    def show_impact(self, layer):
-        """Show the report or keywords from an impact layer.
+    def show_impact(self, report_path):
+        """Show the report.
 
         .. versionadded: 4.0
 
-        :param layer: QgsMapLayer instance that is now active
-        :type layer: QgsMapLayer, QgsRasterLayer, QgsVectorLayer
+        :param report_path: The path to the report.
+        :type report_path: basestring
         """
-        report_path = os.path.dirname(layer.source())
-        report_path = os.path.join(
-            report_path, 'output/impact-report-output.html')
+        # We can display an impact report.
+        # We need to open the file in UTF-8, the HTML may have some accents
+        with codecs.open(report_path, 'r', 'utf-8') as report_file:
+            report = report_file.read()
 
-        if os.path.exists(report_path):
-            # We can display an impact report.
-            LOGGER.debug('Showing Impact Report')
-
-            # We need to open the file in UTF-8, the HTML may have some accents
-            with codecs.open(report_path, 'r', 'utf-8') as report_file:
-                report = report_file.read()
-
-            self.print_button.setEnabled(True)
-            # right now send the report as html texts, not message
-            send_static_message(self, report)
-            # also hide the question and show the show question button
-            self.show_question_button.setVisible(True)
-            self.question_group.setEnabled(True)
-            self.question_group.setVisible(False)
-
-        else:
-            # TODO : ET 9/12/16, need to check this with V4.
-            # There isn't report, we can display only keywords.
-            LOGGER.debug('Showing Impact Keywords')
-            keywords = self.keyword_io.read_keywords(layer)
-            if 'impact_summary' not in keywords:
-                return
-
-            report = m.Message()
-            report.add(LOGO_ELEMENT)
-            report.add(m.Heading(self.tr(
-                'Analysis Results'), **INFO_STYLE))
-            report.add(m.Text(keywords['impact_summary']))
-            report.add(impact_attribution(keywords))
-            self.print_button.setEnabled(True)
-            send_static_message(self, report)
-            # also hide the question and show the show question button
-            self.show_question_button.setVisible(True)
-            self.question_group.setEnabled(True)
-            self.question_group.setVisible(False)
+        self.print_button.setEnabled(True)
+        # right now send the report as html texts, not message
+        send_static_message(self, report)
+        # also hide the question and show the show question button
+        self.show_question_button.setVisible(True)
+        self.question_group.setEnabled(True)
+        self.question_group.setVisible(False)
 
     def show_generic_keywords(self, layer):
         """Show the keywords defined for the active layer.
@@ -966,9 +877,17 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 layer_purpose_exposure_breakdown['key'],
             ]
 
+            show_keywords = True
             if keywords.get('layer_purpose') in impacted_layer:
-                self.show_impact(layer)
-            else:
+                report_path = os.path.dirname(layer.source())
+                report_path = os.path.join(
+                    report_path, 'output/impact-report-output.html')
+
+                if os.path.exists(report_path):
+                    show_keywords = False
+                    self.show_impact(report_path)
+
+            if show_keywords:
                 if inasafe_keyword_version_key not in keywords.keys():
                     show_keyword_version_message(
                         self, 'No Version', self.inasafe_version)
@@ -1055,37 +974,90 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # Get output path from datastore
         # Fetch report for pdfs report
         report_path = os.path.dirname(impact_layer.source())
-        output_paths = [
-            os.path.join(
-                report_path,
-                'output/impact-report-output.pdf'),
-            os.path.join(
-                report_path,
-                'output/a4-portrait-blue.pdf'),
-            os.path.join(
-                report_path,
-                'output/a4-landscape-blue.pdf'),
+
+        # TODO: temporary hack until Impact Function becomes serializable
+        # need to have impact report
+        standard_impact_report_metadata = ReportMetadata(
+            metadata_dict=standard_impact_report_metadata_pdf)
+        standard_map_report_metadata = ReportMetadata(
+            metadata_dict=report_a4_blue)
+
+        standard_report_metadata = [
+            standard_impact_report_metadata,
+            standard_map_report_metadata
         ]
 
-        # Make sure the file paths can wrap nicely:
-        wrapped_output_paths = [
-            path.replace(os.sep, '<wbr>' + os.sep) for path in
-            output_paths]
+        def retrieve_components(tags):
+            products = []
+            for report_metadata in standard_report_metadata:
+                products += (report_metadata.component_by_tags(tags))
+            return products
+
+        def retrieve_paths(products, suffix=None):
+            paths = []
+            for c in products:
+                path = ImpactReport.absolute_output_path(
+                    os.path.join(report_path, 'output'),
+                    products,
+                    c.key)
+                if isinstance(path, list):
+                    for p in path:
+                        paths.append(p)
+                elif isinstance(path, dict):
+                    for p in path.itervalues():
+                        paths.append(p)
+                else:
+                    paths.append(path)
+            if suffix:
+                paths = [p for p in paths if p.endswith(suffix)]
+
+            paths = [p for p in paths if os.path.exists(p)]
+            return paths
+
+        def wrap_output_paths(paths):
+            """Make sure the file paths can wrap nicely."""
+            return [p.replace(os.sep, '<wbr>' + os.sep) for p in paths]
+
+        pdf_products = retrieve_components(
+            [final_product_tag, pdf_product_tag])
+        pdf_output_paths = retrieve_paths(pdf_products, '.pdf')
+
+        html_products = retrieve_components(
+                [final_product_tag, html_product_tag])
+        html_output_paths = retrieve_paths(html_products, '.html')
+
+        qpt_products = retrieve_components(
+            [final_product_tag, qpt_product_tag])
+        qpt_output_paths = retrieve_paths(qpt_products, '.qpt')
 
         # create message to user
         status = m.Message(
             m.Heading(self.tr('Map Creator'), **INFO_STYLE),
             m.Paragraph(self.tr(
                 'Your PDF was created....opening using the default PDF '
-                'viewer on your system. The generated pdfs were saved '
+                'viewer on your system.')),
+            m.ImportantText(self.tr(
+                'The generated pdfs were saved '
                 'as:')))
 
-        for path in wrapped_output_paths:
+        for path in wrap_output_paths(pdf_output_paths):
+            status.add(m.Paragraph(path))
+
+        status.add(m.Paragraph(
+            m.ImportantText(self.tr('The generated htmls were saved as:'))))
+
+        for path in wrap_output_paths(html_output_paths):
+            status.add(m.Paragraph(path))
+
+        status.add(m.Paragraph(
+            m.ImportantText(self.tr('The generated qpts were saved as:'))))
+
+        for path in wrap_output_paths(qpt_output_paths):
             status.add(m.Paragraph(path))
 
         send_static_message(self, status)
 
-        for path in output_paths:
+        for path in pdf_output_paths:
             # noinspection PyCallByClass,PyTypeChecker,PyTypeChecker
             QtGui.QDesktopServices.openUrl(
                 QtCore.QUrl.fromLocalFile(path))
@@ -1149,6 +1121,95 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 visible_count += 1
         return visible_count
 
+    def accept(self):
+        """Execute analysis when run button is clicked."""
+        # Start the analysis
+        self.impact_function = self.validate_impact_function()
+        if not isinstance(self.impact_function, ImpactFunction):
+            # This should not happen as the "accept" button should disabled if
+            # the impact function is not ready.
+            return ANALYSIS_FAILED_BAD_CODE, None
+        if not self.impact_function.is_ready:
+            LOGGER.info(tr('The impact function should not have been ready.'))
+            return ANALYSIS_FAILED_BAD_CODE, None
+
+        self.show_busy()
+        self.impact_function.callback = self.progress_callback
+        self.impact_function.debug_mode = self.debug_mode.isChecked()
+        try:
+            status, message = self.impact_function.run()
+        except:
+            # We have an exception only if we are in debug mode.
+            # We want to display the datastore and then
+            # we want to re-raise it to get the first aid plugin popup.
+            add_debug_layers_to_canvas(self.impact_function)
+            disable_busy_cursor()
+            raise
+        if status == ANALYSIS_FAILED_BAD_INPUT:
+            self.hide_busy()
+            LOGGER.info(tr(
+                'The impact function could not run because of the inputs.'))
+            send_error_message(self, message)
+            LOGGER.info(message.to_text())
+            return status, message
+        elif status == ANALYSIS_FAILED_BAD_CODE:
+            self.hide_busy()
+            LOGGER.exception(tr(
+                'The impact function could not run because of a bug.'))
+            LOGGER.exception(message.to_text())
+            send_error_message(self, message)
+            self.validate_impact_function()
+            return status, message
+
+        LOGGER.info(tr('The impact function could run without errors.'))
+
+        # Add result layer to QGIS
+        add_impact_layers_to_canvas(self.impact_function, self.iface)
+
+        # execute this before generating report
+        if self.zoom_to_impact_flag:
+            self.iface.zoomToActiveLayer()
+
+        if self.hide_exposure_flag:
+            legend = self.iface.legendInterface()
+            qgis_exposure = self.get_exposure_layer()
+            legend.setLayerVisible(qgis_exposure, False)
+
+        if setting('generate_report', True, bool):
+            # Generate impact report
+            error_code, message = generate_impact_report(
+                self.impact_function, self.iface)
+
+            if error_code == ImpactReport.REPORT_GENERATION_FAILED:
+                self.hide_busy()
+                LOGGER.info(tr(
+                    'The impact report could not be generated.'))
+                send_error_message(self, message)
+                LOGGER.info(message.to_text())
+                return ANALYSIS_FAILED_BAD_CODE, message
+
+            error_code, message = generate_impact_map_report(
+                self.impact_function, self.iface)
+
+            if error_code == ImpactReport.REPORT_GENERATION_FAILED:
+                self.hide_busy()
+                LOGGER.info(tr(
+                    'The impact report could not be generated.'))
+                send_error_message(self, message)
+                LOGGER.info(message.to_text())
+                return ANALYSIS_FAILED_BAD_CODE, message
+
+        if self.impact_function.debug_mode:
+            add_debug_layers_to_canvas(self.impact_function)
+
+        self.extent.set_last_analysis_extent(
+            self.impact_function.analysis_extent,
+            self.get_exposure_layer().crs())
+
+        # We do not want to check the state of the next IF
+        self.hide_busy(check_next_impact=False)
+        return ANALYSIS_SUCCESS, None
+
     def validate_impact_function(self):
         """Helper method to evaluate the current state of the impact function.
 
@@ -1163,8 +1224,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         .. versionadded:: 4.0
         """
-        LOGGER.info(tr('Checking the state of the impact function.'))
-
         # First, we check if the dock is not busy.
         if self.busy:
             return False, None
@@ -1175,6 +1234,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             send_static_message(self, message)
             self.run_button.setEnabled(False)
             self.extent.clear_next_analysis_extent()
+            self.impact_function = None
             return False, None
 
         # Finally, we need to check if an IF can run.
@@ -1183,11 +1243,24 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         impact_function.exposure = self.get_exposure_layer()
         aggregation = self.get_aggregation_layer()
 
+        label_without_selection = tr(
+            'will be affected? Summarise the results by')
+        label_with_selection = tr(
+            'will be affected? Summarise the results by selected '
+            'features in')
         if aggregation:
             impact_function.aggregation = aggregation
             impact_function.use_selected_features_only = (
-                setting('useSelectedFeaturesOnly', False, bool))
+                self.use_selected_features_only)
+
+            if self.use_selected_features_only and (
+                        aggregation.selectedFeatureCount() > 0):
+                self.aggregation_question_label.setText(label_with_selection)
+            else:
+                self.aggregation_question_label.setText(
+                    label_without_selection)
         else:
+            self.aggregation_question_label.setText(label_without_selection)
             mode = setting('analysis_extents_mode')
             if self.extent.user_extent:
                 # This like a hack to transform a geometry to a rectangle.
@@ -1226,14 +1299,15 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 self.get_exposure_layer().crs())
 
             self.run_button.setEnabled(True)
-            LOGGER.info('The impact function is ready.')
             send_static_message(self, ready_message())
+            self.impact_function = None
             return impact_function
 
         elif status == PREPARE_FAILED_BAD_LAYER:
             self.extent.clear_next_analysis_extent()
             send_error_message(self, message)
             self.run_button.setEnabled(False)
+            self.impact_function = None
             return None
 
         elif status == PREPARE_FAILED_INSUFFICIENT_OVERLAP_REQUESTED_EXTENT:
@@ -1244,6 +1318,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     'InaSAFE',
                     tr('The requested extent is not overlapping your layers.'))
             self.run_button.setEnabled(False)
+            self.impact_function = None
             return None
 
         elif status == PREPARE_FAILED_INSUFFICIENT_OVERLAP:
@@ -1255,6 +1330,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     self.tr('No overlapping extents'),
                     no_overlap_message())
             self.run_button.setEnabled(False)
+            self.impact_function = None
             return None
 
         elif status == PREPARE_FAILED_BAD_INPUT:
@@ -1262,6 +1338,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.extent.clear_next_analysis_extent()
             send_error_message(self, message)
             self.run_button.setEnabled(False)
+            self.impact_function = None
             return None
 
         else:
@@ -1269,6 +1346,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.extent.clear_next_analysis_extent()
             send_error_message(self, message)
             self.run_button.setEnabled(False)
+            self.impact_function = None
             return None
 
     def _validate_question_area(self):

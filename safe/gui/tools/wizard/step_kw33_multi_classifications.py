@@ -1,6 +1,7 @@
 # coding=utf-8
 """InaSAFE Keyword Wizard Step for Multi Classifications."""
 
+import logging
 from functools import partial
 from collections import OrderedDict
 import numpy
@@ -14,12 +15,14 @@ from PyQt4.QtWebKit import QWebView
 
 from osgeo import gdal
 from osgeo.gdalconst import GA_ReadOnly
+from qgis.core import QgsRasterBandStats
 
 import safe.messaging as m
 from safe.messaging import styles
 
 from safe.utilities.i18n import tr
-from safe.definitions.exposure import exposure_all
+from safe.definitions.exposure import exposure_all, exposure_population
+from safe.definitions.hazard import hazard_earthquake
 from safe.definitions.font import big_font
 from safe.definitions.layer_purposes import layer_purpose_aggregation
 from safe.gui.tools.wizard.wizard_step import (
@@ -31,6 +34,8 @@ from safe.definitions.utilities import (
     default_classification_thresholds,
     default_classification_value_maps
 )
+from safe.definitions.hazard_classifications import (
+    earthquake_mmi_scale)
 from safe.definitions.layer_modes import layer_mode_continuous
 from safe.gui.tools.wizard.wizard_strings import (
     multiple_classified_hazard_classifications_vector,
@@ -49,6 +54,8 @@ __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
+
+LOGGER = logging.getLogger('InaSAFE')
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
@@ -71,7 +78,6 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
 
         :param parent: widget to use as parent (Wizard Dialog).
         :type parent: QWidget
-
         """
         WizardStep.__init__(self, parent)
         self.exposures = []
@@ -95,13 +101,32 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         self.list_unique_values = None
         self.tree_mapping_widget = None
 
+        # GUI, good for testing
+        self.save_button = None
+
+        # Has default threshold
+        # Trick for EQ raster for population #3853
+        self.use_default_thresholds = False
+        # Index of the special case exposure classification
+        self.special_case_index = None
+
     def is_ready_to_next_step(self):
         """Check if the step is complete.
 
         :returns: True if new step may be enabled.
         :rtype: bool
         """
-        return True
+        # Still editing
+        if self.mode == EDIT_MODE:
+            return False
+        for combo_box in self.exposure_combo_boxes:
+            # Enable if there is one that has classification
+            if combo_box.currentIndex() > 0:
+                return True
+        # Trick for EQ raster for population #3853
+        if self.use_default_thresholds:
+            return True
+        return False
 
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.
@@ -164,30 +189,58 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
 
         Generate all exposure, combobox, and edit button.
         """
-        subcategory = self.parent.step_kw_subcategory.selected_subcategory()
+        hazard = self.parent.step_kw_subcategory.selected_subcategory()
         left_panel_heading = QLabel(tr('Classifications'))
         left_panel_heading.setFont(big_font)
         self.left_layout.addWidget(left_panel_heading)
 
+        inner_left_layout = QGridLayout()
+
+        row = 0
         for exposure in exposure_all:
-            exposure_layout = QHBoxLayout()
+            special_case = False
+            # Filter out unsupported exposure for the hazard
+            if exposure in hazard['disabled_exposures']:
+                continue
+            # Trick for EQ raster for population #3853
+            if exposure == exposure_population and hazard == hazard_earthquake:
+                if is_raster_layer(self.parent.layer):
+                    if self.layer_mode == layer_mode_continuous:
+                        self.use_default_thresholds = True
+                        special_case = True
+                        # Set classification for EQ Raster for Population
+                        self.thresholds[exposure_population['key']] = {
+                            earthquake_mmi_scale['key']: {
+                                'classes': default_classification_thresholds(
+                                    earthquake_mmi_scale),
+                                'active': True
+                            }
+                        }
 
             # Add label
             # Hazard on Exposure Classifications
-            label = tr('%s on %s Classifications' % (
-                subcategory['name'], exposure['name']))
+            label = tr(
+                '{hazard_name} on {exposure_name} Classifications').format(
+                hazard_name=hazard['name'],
+                exposure_name=exposure['name']
+            )
             exposure_label = QLabel(label)
 
             # Add combo box
             exposure_combo_box = QComboBox()
-            hazard_classifications = subcategory.get('classifications')
+            hazard_classifications = hazard.get('classifications')
             exposure_combo_box.addItem(tr('No classifications'))
             exposure_combo_box.setItemData(
                 0, None, Qt.UserRole)
 
             current_index = 0
+            i = 0
             # Iterate through all available hazard classifications
-            for i, hazard_classification in enumerate(hazard_classifications):
+            for hazard_classification in hazard_classifications:
+                # Skip if the classification is not for the exposure
+                if 'exposures' in hazard_classification:
+                    if exposure not in hazard_classification['exposures']:
+                        continue
                 exposure_combo_box.addItem(hazard_classification['name'])
                 exposure_combo_box.setItemData(
                     i + 1, hazard_classification, Qt.UserRole)
@@ -205,50 +258,78 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
                         is_active = current_hazard_classification.get('active')
                         if is_active:
                             current_index = i + 1
+                i += 1
             # Set current classification
             exposure_combo_box.setCurrentIndex(current_index)
 
             # Add edit button
             exposure_edit_button = QPushButton(tr('Edit'))
-            exposure_edit_button.clicked.connect(
-                partial(self.edit_button_clicked,
+
+            # For special case. Raster EQ on Population.
+            if special_case:
+                mmi_index = exposure_combo_box.findText(
+                    earthquake_mmi_scale['name'])
+                exposure_combo_box.setCurrentIndex(mmi_index)
+                exposure_combo_box.setEnabled(False)
+                exposure_edit_button.setEnabled(False)
+                tool_tip_message = tr(
+                    'InaSAFE use default classification for Raster Earthquake '
+                    'hazard on population.')
+                exposure_label.setToolTip(tool_tip_message)
+                exposure_combo_box.setToolTip(tool_tip_message)
+                exposure_edit_button.setToolTip(tool_tip_message)
+
+            else:
+                if current_index == 0:
+                    # Disable if there is no classification chosen.
+                    exposure_edit_button.setEnabled(False)
+                exposure_edit_button.clicked.connect(
+                    partial(self.edit_button_clicked,
                         edit_button=exposure_edit_button,
                         exposure_combo_box=exposure_combo_box,
                         exposure=exposure))
-            if current_index == 0:
-                # Disable if there is no classification chosen.
-                exposure_edit_button.setEnabled(False)
-
-            exposure_combo_box.currentIndexChanged.connect(
-                partial(
-                    self.classifications_combo_box_changed,
-                    exposure=exposure,
-                    exposure_combo_box=exposure_combo_box,
-                    edit_button=exposure_edit_button
-                    )
-            )
+                exposure_combo_box.currentIndexChanged.connect(
+                    partial(
+                        self.classifications_combo_box_changed,
+                        exposure=exposure,
+                        exposure_combo_box=exposure_combo_box,
+                        edit_button=exposure_edit_button))
 
             # Arrange in layout
-            exposure_layout.addWidget(exposure_label)
-            exposure_layout.addWidget(exposure_combo_box)
-            exposure_layout.addWidget(exposure_edit_button)
-
-            # Stretch
-            exposure_layout.setStretch(0, 0)
-            exposure_layout.setStretch(0, 0)
-            exposure_layout.setStretch(0, 1)
-            self.left_layout.addLayout(exposure_layout)
-
-            self.left_layout.addStretch(1)
+            inner_left_layout.addWidget(exposure_label, row, 0)
+            inner_left_layout.addWidget(exposure_combo_box, row, 1)
+            inner_left_layout.addWidget(exposure_edit_button, row, 2)
 
             # Adding to step's attribute
             self.exposures.append(exposure)
             self.exposure_combo_boxes.append(exposure_combo_box)
             self.exposure_edit_buttons.append(exposure_edit_button)
             self.exposure_labels.append(label)
+            if special_case:
+                self.special_case_index = len(self.exposures) - 1
 
+            row += 1
+
+        self.left_layout.addLayout(inner_left_layout)
+        # To push the inner_left_layout up
+        self.left_layout.addStretch(1)
+
+    # noinspection PyUnusedLocal
     def edit_button_clicked(self, edit_button, exposure_combo_box, exposure):
-        """Method to handle edit button."""
+        """Method to handle when an edit button is clicked.
+
+        :param edit_button: The edit button.
+        :type edit_button: QPushButton
+
+        :param exposure_combo_box: The combo box of the exposure, contains
+            list of classifications.
+        :type exposure_combo_box: QComboBox
+
+        :param exposure: Exposure definition.
+        :type exposure: dict
+        """
+        # Note(IS): Do not change the text of edit button for now until we
+        # have better behaviour.
         classification = self.get_classification(exposure_combo_box)
 
         if self.mode == CHOOSE_MODE:
@@ -260,12 +341,12 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             for exposure_edit_button in self.exposure_edit_buttons:
                 exposure_edit_button.setEnabled(False)
             # Except one that was clicked
-            edit_button.setEnabled(True)
+            # edit_button.setEnabled(True)
             # Disable all combo box
             for exposure_combo_box in self.exposure_combo_boxes:
                 exposure_combo_box.setEnabled(False)
             # Change the edit button to cancel
-            edit_button.setText(tr('Cancel'))
+            # edit_button.setText(tr('Cancel'))
 
             # Clear right panel
             clear_layout(self.right_layout)
@@ -279,6 +360,8 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         elif self.mode == EDIT_MODE:
             # Behave the same as cancel button clicked.
             self.cancel_button_clicked()
+
+        self.parent.pbnNext.setEnabled(self.is_ready_to_next_step())
 
     def show_current_state(self):
         """Setup the UI for QTextEdit to show the current state."""
@@ -424,7 +507,8 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
 
         return output
 
-    def get_classification(self, combo_box):
+    @staticmethod
+    def get_classification(combo_box):
         """Helper to obtain the classification from a combo box.
 
         :param combo_box: A classification combo box.
@@ -447,15 +531,14 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             selected_subcategory()
 
         if is_raster_layer(self.parent.layer):
-            dataset = gdal.Open(self.parent.layer.source(), GA_ReadOnly)
-            min_value_layer = numpy.amin(numpy.array(
-                dataset.GetRasterBand(1).ReadAsArray()))
-            max_value_layer = numpy.amax(numpy.array(
-                dataset.GetRasterBand(1).ReadAsArray()))
+            statistics = self.parent.layer.dataProvider().bandStatistics(
+                1, QgsRasterBandStats.All, self.parent.layer.extent(), 0)
             description_text = continuous_raster_question % (
                 layer_purpose['name'],
                 layer_subcategory['name'],
-                classification['name'], min_value_layer, max_value_layer)
+                classification['name'],
+                statistics.minimumValue,
+                statistics.maximumValue)
         else:
             field_name = self.parent.step_kw_field.selected_field()
             field_index = self.parent.layer.fieldNameIndex(field_name)
@@ -483,7 +566,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         self.threshold_classes = OrderedDict()
         classes = classification.get('classes')
         # Sort by value, put the lowest first
-        classes = sorted(classes, key=lambda k: k['value'])
+        classes = sorted(classes, key=lambda the_key: the_key['value'])
 
         grid_layout_thresholds = QGridLayout()
 
@@ -494,7 +577,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             class_label = QLabel(the_class['name'])
 
             # Min label
-            min_label = QLabel(tr('Min'))
+            min_label = QLabel(tr('Min >'))
 
             # Min value as double spin
             min_value_input = QDoubleSpinBox()
@@ -577,25 +660,27 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         grid_layout_thresholds.setColumnStretch(0, 1)
         grid_layout_thresholds.setColumnStretch(0, 2)
 
-        def min_max_changed(index, mode):
+        def min_max_changed(double_spin_index, mode):
             """Slot when min or max value change.
 
-            :param index: The index of the double spin.
-            :type index: int
+            :param double_spin_index: The index of the double spin.
+            :type double_spin_index: int
 
             :param mode: The flag to indicate the min or max value.
             :type mode: int
             """
             if mode == MAX_VALUE_MODE:
-                current_max_value = self.threshold_classes.values()[index][1]
+                current_max_value = self.threshold_classes.values()[
+                    double_spin_index][1]
                 target_min_value = self.threshold_classes.values()[
-                    index + 1][0]
+                    double_spin_index + 1][0]
                 if current_max_value.value() != target_min_value.value():
                     target_min_value.setValue(current_max_value.value())
             elif mode == MIN_VALUE_MODE:
-                current_min_value = self.threshold_classes.values()[index][0]
+                current_min_value = self.threshold_classes.values()[
+                    double_spin_index][0]
                 target_max_value = self.threshold_classes.values()[
-                    index - 1][1]
+                    double_spin_index - 1][1]
                 if current_min_value.value() != target_max_value.value():
                     target_max_value.setValue(current_min_value.value())
 
@@ -605,11 +690,15 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             if index < len(self.threshold_classes) - 1:
                 # Max value changed
                 v[1].valueChanged.connect(partial(
-                    min_max_changed, index=index, mode=MAX_VALUE_MODE))
+                    min_max_changed,
+                    double_spin_index=index,
+                    mode=MAX_VALUE_MODE))
             if index > 0:
                 # Min value
                 v[0].valueChanged.connect(partial(
-                    min_max_changed, index=index, mode=MIN_VALUE_MODE))
+                    min_max_changed,
+                    double_spin_index=index,
+                    mode=MIN_VALUE_MODE))
 
         grid_layout_thresholds.setSpacing(0)
 
@@ -621,26 +710,28 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         :param classification: The current classification.
         :type classification: dict
         """
+        # Note(IS): Until we have good behaviour, we will disable load
+        # default and cancel button.
         # Add 3 buttons: Load default, Cancel, Save
-        load_default_button = QPushButton(tr('Load Default'))
-        cancel_button = QPushButton(tr('Cancel'))
-        save_button = QPushButton(tr('Save'))
+        # load_default_button = QPushButton(tr('Load Default'))
+        # cancel_button = QPushButton(tr('Cancel'))
+        self.save_button = QPushButton(tr('Save'))
 
         # Action for buttons
-        cancel_button.clicked.connect(self.cancel_button_clicked)
-        save_button.clicked.connect(
+        # cancel_button.clicked.connect(self.cancel_button_clicked)
+        self.save_button.clicked.connect(
             partial(self.save_button_clicked, classification=classification))
 
         button_layout = QHBoxLayout()
-        button_layout.addWidget(load_default_button)
+        # button_layout.addWidget(load_default_button)
         button_layout.addStretch(1)
-        button_layout.addWidget(cancel_button)
-        button_layout.addWidget(save_button)
+        # button_layout.addWidget(cancel_button)
+        button_layout.addWidget(self.save_button)
 
-        button_layout.setStretch(0, 1)
+        button_layout.setStretch(0, 3)
         button_layout.setStretch(1, 1)
-        button_layout.setStretch(2, 1)
-        button_layout.setStretch(3, 1)
+        # button_layout.setStretch(2, 1)
+        # button_layout.setStretch(3, 1)
 
         self.right_layout.addLayout(button_layout)
 
@@ -695,6 +786,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         self.tree_mapping_widget = QTreeWidget()
         self.tree_mapping_widget.setDragDropMode(QAbstractItemView.DragDrop)
         self.tree_mapping_widget.setDefaultDropAction(Qt.MoveAction)
+        self.tree_mapping_widget.header().hide()
 
         self.tree_mapping_widget.itemChanged.connect(
             self.update_dragged_item_flags)
@@ -749,6 +841,45 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             self.tree_mapping_widget
         )
 
+        # Current value map for exposure and classification
+        available_classifications = self.value_maps.get(
+            self.active_exposure['key'])
+        if not available_classifications:
+            return
+        # Get active one
+        current_classification = available_classifications.get(
+            classification['key'])
+        if not current_classification:
+            return
+        current_value_map = current_classification.get('classes')
+        if not current_value_map:
+            return
+
+        unassigned_values = list()
+        assigned_values = dict()
+        for default_class in default_classes:
+            assigned_values[default_class['key']] = list()
+        for unique_value in unique_values:
+            if unique_value is None or isinstance(
+                    unique_value, QPyNullVariant):
+                # Don't classify features with NULL value
+                continue
+            # check in value map
+            assigned = False
+            for key, value_list in current_value_map.items():
+                if unique_value in value_list and key in assigned_values:
+                    assigned_values[key] += [unique_value]
+                    assigned = True
+            if not assigned:
+                unassigned_values += [unique_value]
+        self.populate_classified_values(
+            unassigned_values,
+            assigned_values,
+            default_classes,
+            self.list_unique_values,
+            self.tree_mapping_widget
+        )
+
     # noinspection PyMethodMayBeStatic
     def update_dragged_item_flags(self, item):
         """Fix the drop flag after the item is dropped.
@@ -766,8 +897,9 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
                 and int(item.flags() & Qt.ItemIsDragEnabled):
             item.setFlags(item.flags() & ~Qt.ItemIsDropEnabled)
 
+    @staticmethod
     def populate_classified_values(
-            self, unassigned_values, assigned_values, default_classes,
+            unassigned_values, assigned_values, default_classes,
             list_unique_values, tree_mapping_widget):
         """Populate lstUniqueValues and treeClasses.from the parameters.
 
@@ -843,11 +975,15 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         self.mode = CHOOSE_MODE
         # Enable all edit buttons and combo boxes
         for i in range(len(self.exposures)):
+            if i == self.special_case_index:
+                self.exposure_edit_buttons[i].setEnabled(False)
+                self.exposure_combo_boxes[i].setEnabled(False)
+                continue
             if self.get_classification(self.exposure_combo_boxes[i]):
                 self.exposure_edit_buttons[i].setEnabled(True)
             else:
                 self.exposure_edit_buttons[i].setEnabled(False)
-            self.exposure_edit_buttons[i].setText(tr('Edit'))
+            # self.exposure_edit_buttons[i].setText(tr('Edit'))
             self.exposure_combo_boxes[i].setEnabled(True)
 
         # Clear right panel
@@ -856,6 +992,8 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         self.show_current_state()
         # Unset active exposure
         self.active_exposure = None
+
+        self.parent.pbnNext.setEnabled(self.is_ready_to_next_step())
 
     def save_button_clicked(self, classification):
         """Action for save button clicked.
@@ -955,6 +1093,11 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         self.activate_classification(exposure, classification)
         clear_layout(self.right_layout)
         self.show_current_state()
+
+        self.parent.pbnNext.setEnabled(self.is_ready_to_next_step())
+
+        # Open edit panel directly
+        edit_button.click()
 
     def activate_classification(self, exposure, classification=None):
         """Set active to True for classification for the exposure.

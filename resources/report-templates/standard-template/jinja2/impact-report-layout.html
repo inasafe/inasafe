@@ -3,8 +3,9 @@
     <img src="{{ brand_logo }}" title="InaSAFE" alt="InaSAFE" />
 </div>
 
-{{ analysis_result }}
-{{ analysis_breakdown }}
+{{ analysis_question }}
+{{ general_report }}
+{{ analysis_detail }}
 {{ minimum_needs }}
 {{ action_checklist }}
 {{ notes_assumptions }}
@@ -14,6 +15,12 @@
 <h5 class="info">
     <i class="icon-info-sign icon-white"></i> Analysis details
 </h5>
-{{ analysis_details }}
+{% for key, item in analysis_details.iteritems() %}
+{% if item %}
+<p>
+    <b>{{ item.header }}</b> {{ item.provenance }}
+</p>
+{% endif %}
+{% endfor %}
 
 {% include 'standard-template/jinja2/footer.html' %}

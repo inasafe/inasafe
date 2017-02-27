@@ -1,15 +1,15 @@
 # coding=utf-8
+
 """Reclassify a continuous vector layer."""
 
 from PyQt4.QtCore import QPyNullVariant
 from qgis.core import QgsField
 
 from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
-from safe.definitions.layer_purposes import (
-    layer_purpose_hazard, layer_purpose_exposure)
 from safe.definitions.utilities import definition
 from safe.definitions.fields import hazard_class_field, hazard_value_field
 from safe.definitions.processing_steps import reclassify_vector_steps
+from safe.gis.sanity_check import check_layer
 from safe.utilities.metadata import (
     active_thresholds_value_maps, active_classification)
 from safe.utilities.profiling import profile
@@ -31,7 +31,7 @@ def reclassify(layer, exposure_key=None, callback=None):
             - ∞ < val <= 0     |     1
             0   < val <= 0.5   |     2
             0.5 < val <= 5     |     3
-            5   < val <= + ∞   |     6
+            5   < val <  + ∞   |     6
 
     You need a dictionary :
         ranges = OrderedDict()
@@ -106,7 +106,6 @@ def reclassify(layer, exposure_key=None, callback=None):
     layer.updateFields()
 
     # We transfer keywords to the output.
-    layer.keywords = layer.keywords
     inasafe_fields[hazard_class_field['key']] = (
         hazard_class_field['field_name'])
 
@@ -119,6 +118,7 @@ def reclassify(layer, exposure_key=None, callback=None):
     layer.keywords['value_map'] = value_map
     layer.keywords['title'] = output_layer_name
 
+    check_layer(layer)
     return layer
 
 
@@ -137,7 +137,6 @@ def _classified_value(value, ranges):
     :return: The classified value or None.
     :rtype: float or None
     """
-
     if value is None or value == '' or isinstance(value, QPyNullVariant):
         return None
 

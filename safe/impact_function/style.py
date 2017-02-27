@@ -10,6 +10,10 @@ from qgis.core import (
     QgsCategorizedSymbolRendererV2,
     QgsSymbolLayerV2Registry,
     QgsConditionalStyle,
+    QGis,
+    QgsRasterShader,
+    QgsColorRampShader,
+    QgsSingleBandPseudoColorRenderer,
 )
 
 from safe.definitions.styles import (
@@ -18,6 +22,7 @@ from safe.definitions.styles import (
     template_with_minimum_thresholds,
     template_with_maximum_thresholds,
     template_with_range_thresholds,
+    legend_raster_displaced,
 )
 from safe.definitions.fields import hazard_class_field, hazard_count_field
 from safe.definitions.hazard_classifications import not_exposed_class
@@ -47,6 +52,7 @@ def hazard_class_style(layer, classification, display_null=False):
     """
     categories = []
 
+    # Conditional styling
     attribute_table_styles = []
 
     for hazard_class, (color, label) in classification.iteritems():
@@ -64,12 +70,15 @@ def hazard_class_style(layer, classification, display_null=False):
 
         style = QgsConditionalStyle()
         style.setName(hazard_class)
-        style.setBackgroundColor(color.lighter())
         style.setRule("hazard_class='%s'" % hazard_class)
+        symbol = QgsSymbolV2.defaultSymbol(QGis.Point)
+        symbol.setColor(color)
+        symbol.setSize(3)
+        style.setSymbol(symbol)
         attribute_table_styles.append(style)
 
-    # Disabled until we improve it a little bit. ET 20/01/17.
-    # layer.conditionalStyles().setRowStyles(attribute_table_styles)
+    layer.conditionalStyles().setFieldStyles(
+        'hazard_class', attribute_table_styles)
     renderer = QgsCategorizedSymbolRendererV2(
         hazard_class_field['field_name'], categories)
     layer.setRendererV2(renderer)
@@ -305,3 +314,22 @@ def simple_polygon_without_brush(layer):
 
     renderer = QgsSingleSymbolRendererV2(symbol)
     layer.setRendererV2(renderer)
+
+
+def displaced_people_style(layer):
+    """Simple style to display a displaced count with a binary style.
+
+    :param layer: The layer to style.
+    :type layer: QgsRasterLayer
+    """
+    color_ramp = QgsColorRampShader()
+    color_ramp.setColorRampType(QgsColorRampShader.INTERPOLATED)
+    color_ramp.setColorRampItemList(legend_raster_displaced)
+
+    shader = QgsRasterShader()
+    shader.setRasterShaderFunction(color_ramp)
+
+    renderer = QgsSingleBandPseudoColorRenderer(
+        layer.dataProvider(), 1, shader)
+
+    layer.setRenderer(renderer)

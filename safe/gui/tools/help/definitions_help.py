@@ -17,7 +17,7 @@ from safe.gui.tools.help.needs_manager_help import content as \
     needs_manager_help
 from safe.gui.tools.help.options_help import content as options_help
 from safe.gui.tools.help.osm_downloader_help import content as osm_help
-from safe.gui.tools.help.peta_jakarta_help import content as petajakarta_help
+from safe.gui.tools.help.peta_bencana_help import content as petabencana_help
 from safe.gui.tools.help.shakemap_converter_help \
     import content as shakemap_help
 from safe.gui.tools.help.multi_buffer_help import content as multi_buffer_help
@@ -109,6 +109,46 @@ def content():
     message.add(bullets)
 
     ##
+    # Basic concepts ...
+    ##
+    ##
+    # Help dialog contents ...
+    ##
+    _create_section_header(
+        message,
+        table_of_contents,
+        'glossary',
+        tr('Glossary of terms'))
+
+    last_group = None
+    table = None
+    for key, value in definitions.concepts.iteritems():
+        current_group = value['group']
+        if current_group != last_group:
+            if last_group is not None:
+                message.add(table)
+            header = m.Heading(current_group, **SUBSECTION_STYLE)
+            message.add(header)
+            table = _start_glossary_table(current_group)
+            last_group = current_group
+        row = m.Row()
+        term = value['key'].replace('_', ' ').title()
+        description = m.Message(value['description'])
+        for citation in value['citations']:
+            if citation['text'] in [None, '']:
+                continue
+            if citation['link'] in [None, '']:
+                description.add(m.Paragraph(citation['text']))
+            else:
+                description.add(m.Paragraph(
+                    m.Link(citation['link'], citation['text'])))
+        row.add(m.Cell(term))
+        row.add(m.Cell(description))
+        table.add(row)
+    # ensure the last group's table is added
+    message.add(table)
+
+    ##
     # Help dialog contents ...
     ##
     _create_section_header(
@@ -143,9 +183,9 @@ def content():
     message.add(header)
     message.add(osm_help())
 
-    header = m.Heading(tr('The PetaJakarta Downloader'), **SUBSECTION_STYLE)
+    header = m.Heading(tr('The PetaBencana Downloader'), **SUBSECTION_STYLE)
     message.add(header)
-    message.add(petajakarta_help())
+    message.add(petabencana_help())
 
     header = m.Heading(tr('The Shakemap Converter'), **SUBSECTION_STYLE)
     message.add(header)
@@ -463,14 +503,28 @@ def content():
 
     # Finally we add the table of contents at the top
     full_message = m.Message()
-    header = m.Heading(tr('Contents'), **SECTION_STYLE)
+    # Contents is not a link so reset style
+    style = SECTION_STYLE
+    style['element_id'] = ''
+    header = m.Heading(tr('Contents'), **style)
     full_message.add(header)
     full_message.add(table_of_contents)
     full_message.add(message)
     return full_message
 
 
+def _start_glossary_table(group):
+    table = m.Table(style_class='table table-condensed table-striped')
+    row = m.Row()
+    row.add(m.Cell(tr('Term')), header_flag=True)
+    row.add(m.Cell(tr('Description')), header_flag=True)
+    table.add(row)
+    return table
+
+
 def _create_section_header(message, table_of_contents, id, text):
+    # Warning a side effect here is that the SECTION_STYLE is updated
+    # when setting style as we don't have a deep copy
     style = SECTION_STYLE
     style['element_id'] = id
     header = m.Heading(text, **style)
@@ -582,6 +636,25 @@ def definition_to_message(definition, heading_style=None):
             bullets.add(m.Text(note))
         message.add(bullets)
 
+    # This is a bit hacky but we want to be sure that extra notes
+    # also show up in the help. See issue #3906 and
+    # https://github.com/inasafe/inasafe/pull/3891#issuecomment-281034766
+    extra_notes = {
+        'earthquake_notes': tr('Earthquake notes:'),
+        'earthquake_pager_notes': tr('Earthquake Pager notes:'),
+        'earthquake_itb_notes': tr('Earthquake ITB notes:'),
+        'earthquake_fatality_model_limitations':
+            tr('Earthquake fatality model limitations')}
+    for extra_note, title in extra_notes.iteritems():
+        if extra_note in definition:
+            message.add(m.Heading(
+                title, **DETAILS_SUBGROUP_STYLE))
+            bullets = m.BulletedList()
+            for note in definition[extra_note]:
+                bullets.add(m.Text(note))
+            message.add(bullets)
+    # end of
+
     if 'continuous_notes' in definition:
         message.add(m.Heading(
             tr('Notes for continuous datasets:'),
@@ -686,6 +759,14 @@ def definition_to_message(definition, heading_style=None):
                 row.add(m.Cell(inasafe_class['affected']))
             else:
                 row.add(m.Cell(tr('unspecified')))
+
+            if 'displacement_rate' in inasafe_class:
+                rate = inasafe_class['displacement_rate'] * 100
+                rate = u'%s%%' % rate
+                row.add(m.Cell(rate))
+            else:
+                row.add(m.Cell(tr('unspecified')))
+
             if 'string_defaults' in inasafe_class:
                 defaults = None
                 for default in inasafe_class['string_defaults']:
@@ -728,7 +809,7 @@ def definition_to_message(definition, heading_style=None):
             # Description goes in its own row with spanning
             row = m.Row()
             row.add(m.Cell(''))
-            row.add(m.Cell(inasafe_class['description'], span=5))
+            row.add(m.Cell(inasafe_class['description'], span=6))
             table.add(row)
         # For hazard classes we also add the 'not affected' class manually:
         if definition['type'] == definitions.hazard_classification_type:
@@ -857,6 +938,7 @@ def _make_defaults_table():
     row.add(m.Cell(tr('')), header_flag=True)
     row.add(m.Cell(tr('Name')), header_flag=True)
     row.add(m.Cell(tr('Affected')), header_flag=True)
+    row.add(m.Cell(tr('Displacement rate')), header_flag=True)
     row.add(m.Cell(tr('Default values')), header_flag=True)
     row.add(m.Cell(tr('Default min')), header_flag=True)
     row.add(m.Cell(tr('Default max')), header_flag=True)

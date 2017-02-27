@@ -1,13 +1,34 @@
 # coding=utf-8
+"""Contains definitions about Report components.
 
-"""
-Definitions for basic report
 """
 from __future__ import absolute_import
 
-from qgis.core import QgsComposition
+from safe.definitions.exposure import exposure_structure, exposure_road, \
+    exposure_land_cover
+from safe.definitions.reports import (
+    jinja2_component_type,
+    qgis_composer_component_type,
+    qt_renderer_component_type,
+    svg_product_tag,
+    png_product_tag,
+    infographic_product_tag,
+    final_product_tag,
+    html_product_tag,
+    table_product_tag,
+    map_product_tag,
+    pdf_product_tag,
+    template_product_tag,
+    qpt_product_tag)
 
 from safe.common.utilities import safe_dir
+from safe.definitions.fields import (
+    affected_field,
+    total_affected_field,
+    total_not_affected_field,
+    total_not_exposed_field,
+    total_field)
+from safe.definitions.styles import charcoal_black
 from safe.report.extractors.action_notes import (
     action_checklist_extractor,
     notes_assumptions_extractor)
@@ -16,7 +37,9 @@ from safe.report.extractors.aggregate_postprocessors import \
 from safe.report.extractors.aggregate_result import \
     aggregation_result_extractor
 from safe.report.extractors.analysis_detail import analysis_detail_extractor
-from safe.report.extractors.analysis_result import analysis_result_extractor
+from safe.report.extractors.analysis_question import \
+    analysis_question_extractor
+from safe.report.extractors.general_report import general_report_extractor
 from safe.report.extractors.composer import qgis_composer_extractor
 from safe.report.extractors.impact_table import (
     impact_table_extractor,
@@ -35,7 +58,6 @@ from safe.report.processors.default import (
     qgis_composer_html_renderer,
     qt_svg_to_png_renderer)
 from safe.report.report_metadata import (
-    ReportComponentsMetadata,
     Jinja2ComponentsMetadata,
     QgisComposerComponentsMetadata)
 from safe.utilities.i18n import tr
@@ -46,26 +68,61 @@ __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
+
 # Individual report component
-analysis_result_component = {
-    'key': 'analysis-result',
-    'type': ReportComponentsMetadata.AvailableComponent.Jinja2,
+analysis_question_component = {
+    'key': 'analysis-question',
+    'type': jinja2_component_type,
     'processor': jinja2_renderer,
-    'extractor': analysis_result_extractor,
+    'extractor': analysis_question_extractor,
     'output_format': Jinja2ComponentsMetadata.OutputFormat.String,
     'output_path': 'analysis-result-output.html',
     'template': 'standard-template/'
                 'jinja2/'
-                'analysis-result.html',
+                'analysis-question.html',
     'extra_args': {
-        'header': tr('Analysis Results'),
-        'hazard_header': tr('Hazard Zone'),
+        'header': tr('Analysis question')
     }
 }
 
-analysis_breakdown_component = {
-    'key': 'analysis-breakdown',
-    'type': ReportComponentsMetadata.AvailableComponent.Jinja2,
+general_report_component = {
+    'key': 'general-report',
+    'type': jinja2_component_type,
+    'processor': jinja2_renderer,
+    'extractor': general_report_extractor,
+    'output_format': Jinja2ComponentsMetadata.OutputFormat.String,
+    'output_path': 'general-report-output.html',
+    'template': 'standard-template/'
+                'jinja2/'
+                'general-report.html',
+    'extra_args': {
+        'header': tr('General Report'),
+        'table_header_format': tr('Estimated {title}'),
+        'hazard_header': tr('Hazard Zone'),
+        # Used to customize header.
+        # See issue inasafe#3688: remove all 'total' words
+        'reported_fields': [
+            {
+                'header': affected_field['name'],
+                'field': total_affected_field
+            },
+            {
+                # specify it directly since there is no field for
+                # unaffected only.
+                'header': tr('Not Affected'),
+                'field': total_not_affected_field
+            },
+            {
+                'header': tr('Not Exposed'),
+                'field': total_not_exposed_field
+            }
+        ]
+    }
+}
+
+analysis_detail_component = {
+    'key': 'analysis-detail',
+    'type': jinja2_component_type,
     'processor': jinja2_renderer,
     'extractor': analysis_detail_extractor,
     'output_format': Jinja2ComponentsMetadata.OutputFormat.String,
@@ -74,9 +131,30 @@ analysis_breakdown_component = {
                 'jinja2/'
                 'analysis-detail.html',
     'extra_args': {
+        'exposure_type_header_mapping': {
+            # In the report, exposure type is usually singular
+            # We can also use this to rename exposure name
+            exposure_structure['key']: tr('Structure'),
+            exposure_road['key']: tr('Road'),
+            exposure_land_cover['key']: tr('Land cover')
+        },
+        'hazard_class_header_mapping': {
+            'affected': {
+                'header': tr('Affected'),
+                # this is color for background in affected column in
+                # hex #rgb format. Don't declare this for default bootstrap
+                # background
+                # 'color': affected_column_background.name()
+            },
+            'not_affected': {
+                'header': tr('Not affected')
+            }
+        },
+        'group_border_color': charcoal_black.name(),
         'breakdown_header_type_format': tr('{exposure} type'),
         'breakdown_header_class_format': tr('{exposure} class'),
-        'header': tr('Estimated number of {exposure} by type'),
+        'header': tr('Analysis Detail'),
+        'table_header_format': tr('Estimated {title} by {exposure} type'),
         'notes': tr(
             'Columns and rows containing only 0 or "No data" values are '
             'excluded from the tables.')
@@ -85,7 +163,7 @@ analysis_breakdown_component = {
 
 action_checklist_component = {
     'key': 'action-checklist',
-    'type': ReportComponentsMetadata.AvailableComponent.Jinja2,
+    'type': jinja2_component_type,
     'processor': jinja2_renderer,
     'extractor': action_checklist_extractor,
     'output_format': Jinja2ComponentsMetadata.OutputFormat.String,
@@ -100,7 +178,7 @@ action_checklist_component = {
 
 notes_assumptions_component = {
     'key': 'notes-assumptions',
-    'type': ReportComponentsMetadata.AvailableComponent.Jinja2,
+    'type': jinja2_component_type,
     'processor': jinja2_renderer,
     'extractor': notes_assumptions_extractor,
     'output_format': Jinja2ComponentsMetadata.OutputFormat.String,
@@ -109,13 +187,18 @@ notes_assumptions_component = {
                 'jinja2/'
                 'bullet-list-section.html',
     'extra_args': {
-        'header': tr('Notes and assumptions')
+        'header': tr('Notes and assumptions'),
+        'displacement_rates_note_format': tr(
+            'For this analysis, the following displacement rates were used: '
+            '{rate_description}'),
+        'hazard_displacement_rates_note_format': tr(
+            '{name} - {displacement_rate:.2%}')
     }
 }
 
 minimum_needs_component = {
     'key': 'minimum-needs',
-    'type': ReportComponentsMetadata.AvailableComponent.Jinja2,
+    'type': jinja2_component_type,
     'processor': jinja2_renderer,
     'extractor': minimum_needs_extractor,
     'output_format': Jinja2ComponentsMetadata.OutputFormat.String,
@@ -128,13 +211,15 @@ minimum_needs_component = {
         'header_frequency_format': tr(
             'Relief items to be provided {frequency}'),
         'total_header': tr('Total'),
-        'need_header_format': tr('{name} [{unit_abbreviation}]')
+        'need_header_format': tr('{name} [{unit_abbreviation}]'),
+        'zero_displaced_message': tr(
+            'Analysis produced 0 displaced count. No calculations produced.')
     }
 }
 
 aggregation_result_component = {
     'key': 'aggregation-result',
-    'type': ReportComponentsMetadata.AvailableComponent.Jinja2,
+    'type': jinja2_component_type,
     'processor': jinja2_renderer,
     'extractor': aggregation_result_extractor,
     'output_format': Jinja2ComponentsMetadata.OutputFormat.String,
@@ -155,7 +240,7 @@ aggregation_result_component = {
 
 aggregation_postprocessors_component = {
     'key': 'aggregation-postprocessors',
-    'type': ReportComponentsMetadata.AvailableComponent.Jinja2,
+    'type': jinja2_component_type,
     'processor': jinja2_renderer,
     'extractor': aggregation_postprocessors_extractor,
     'output_format': Jinja2ComponentsMetadata.OutputFormat.String,
@@ -178,18 +263,27 @@ aggregation_postprocessors_component = {
         },
         'defaults': {
             'aggregation_header': tr('Aggregation area'),
-            'total_population_header': tr('Total Population'),
+            'total_population_header': tr('Total Displaced Population'),
             'total_header': tr('Total'),
             'notes': tr(
                 'Columns and rows containing only 0 or "No data" values are '
                 'excluded from the tables.'),
+            'zero_displaced_message': tr(
+                'Analysis produced 0 displaced count. '
+                'No calculations produced.'),
+            'no_gender_rate_message': tr(
+                'Gender ratio not exists. '
+                'No calculations produced.'),
+            'no_age_rate_message': tr(
+                'Age ratio not exists. '
+                'No calculations produced.'),
         }
     }
 }
 
 population_chart_svg_component = {
     'key': 'population-chart',
-    'type': ReportComponentsMetadata.AvailableComponent.Jinja2,
+    'type': jinja2_component_type,
     'processor': jinja2_renderer,
     'extractor': population_chart_extractor,
     'output_format': Jinja2ComponentsMetadata.OutputFormat.File,
@@ -197,6 +291,7 @@ population_chart_svg_component = {
     'template': 'standard-template'
                 '/jinja2/svg'
                 '/donut-chart.svg',
+    'tags': [svg_product_tag],
     'extra_args': {
         'chart_title': tr('Estimated total population'),
         'total_header': tr('Population')
@@ -206,11 +301,12 @@ population_chart_svg_component = {
 population_chart_png_component = {
     # This component depends on population_chart_svg_component
     'key': 'population-chart-png',
-    'type': ReportComponentsMetadata.AvailableComponent.QtRenderer,
+    'type': qt_renderer_component_type,
     'processor': qt_svg_to_png_renderer,
     'extractor': population_chart_to_png_extractor,
     'output_format': Jinja2ComponentsMetadata.OutputFormat.File,
     'output_path': 'population-chart.png',
+    'tags': [png_product_tag],
     'extra_args': {
         'width': 256,
         'height': 256
@@ -220,7 +316,7 @@ population_chart_png_component = {
 population_infographic_component = {
     # This component depends on population_chart_png_component
     'key': 'population-infographic',
-    'type': ReportComponentsMetadata.AvailableComponent.Jinja2,
+    'type': jinja2_component_type,
     'processor': jinja2_renderer,
     'extractor': population_infographic_extractor,
     'output_format': Jinja2ComponentsMetadata.OutputFormat.String,
@@ -237,7 +333,7 @@ population_infographic_component = {
             },
             'vulnerability': {
                 'header': tr('Vulnerability'),
-                'sub_header_format': tr('from {number_affected:,d} affected'),
+                'sub_header_format': tr('from {number_affected} affected'),
                 'items': {
                     'headers': [
                         tr('Female'),
@@ -256,13 +352,13 @@ population_infographic_component = {
         'icons': {
             'total_affected_field': resource_url(resources_path(
                 'img/definitions/people.png')),
-            'female_count_field': resource_url(resources_path(
+            'female_displaced_count_field': resource_url(resources_path(
                 'img/definitions/female.png')),
-            'youth_count_field': resource_url(resources_path(
+            'youth_displaced_count_field': resource_url(resources_path(
                 'img/definitions/youth.png')),
-            'adult_count_field': resource_url(resources_path(
+            'adult_displaced_count_field': resource_url(resources_path(
                 'img/definitions/adult.png')),
-            'elderly_count_field': resource_url(resources_path(
+            'elderly_displaced_count_field': resource_url(resources_path(
                 'img/definitions/elderly.png')),
             'minimum_needs__rice_count_field': resource_url(resources_path(
                 'img/definitions/rice.png')),
@@ -280,8 +376,9 @@ population_infographic_component = {
 
 # Default impact report component for reusability
 impact_report_component_metadata = [
-    analysis_result_component,
-    analysis_breakdown_component,
+    analysis_question_component,
+    general_report_component,
+    analysis_detail_component,
     action_checklist_component,
     notes_assumptions_component,
     minimum_needs_component,
@@ -301,7 +398,7 @@ standard_impact_report_metadata_html = {
         # Infographic Layout HTML
         {
             'key': 'infographic-layout',
-            'type': ReportComponentsMetadata.AvailableComponent.Jinja2,
+            'type': jinja2_component_type,
             'processor': jinja2_renderer,
             'extractor': infographic_layout_extractor,
             'output_format': Jinja2ComponentsMetadata.OutputFormat.File,
@@ -316,10 +413,15 @@ standard_impact_report_metadata_html = {
             'template': 'standard-template/'
                         'jinja2/'
                         'infographic-layout.html',
+            'tags': [
+                final_product_tag,
+                infographic_product_tag,
+                html_product_tag
+            ]
         },
         {
             'key': 'impact-report',
-            'type': ReportComponentsMetadata.AvailableComponent.Jinja2,
+            'type': jinja2_component_type,
             'processor': jinja2_renderer,
             'extractor': impact_table_extractor,
             'output_format': Jinja2ComponentsMetadata.OutputFormat.File,
@@ -327,15 +429,49 @@ standard_impact_report_metadata_html = {
             'template': 'standard-template/'
                         'jinja2/'
                         'impact-report-layout.html',
+            'tags': [
+                final_product_tag,
+                table_product_tag,
+                html_product_tag
+            ],
             'extra_args': {
                 'defaults': {
-                    'provenance_source': tr('an unknown source')
+                    'source': tr('source not available'),
+                    'reference': tr('reference unspecified'),
+                    'aggregation_not_used': tr('not used')
                 },
-                'provenance_format': tr(
-                    'Hazard details'
-                    '<p>{hazard_provenance}</p>'
-                    'Exposure details'
-                    '<p>{exposure_provenance}</p>')
+                'components_list': {
+                    'analysis_question': analysis_question_component,
+                    'general_report': general_report_component,
+                    'analysis_detail': analysis_detail_component,
+                    'action_checklist': action_checklist_component,
+                    'notes_assumptions': notes_assumptions_component,
+                    'minimum_needs': minimum_needs_component,
+                    'aggregation_result': aggregation_result_component,
+                    'aggregation_postprocessors': (
+                        aggregation_postprocessors_component)
+                },
+                'provenance_format': {
+                    'hazard_header': tr(
+                        'Hazard source'),
+                    'hazard_format': tr(
+                        '{layer_name} - {source} - '),
+
+                    'exposure_header': tr(
+                        'Exposure source'),
+                    'exposure_format': tr(
+                        '{layer_name} - {source} - '),
+
+                    'aggregation_header': tr(
+                        'Aggregation source'),
+                    'aggregation_format': tr(
+                        '{layer_name} - {source} - '),
+
+                    'impact_function_header': tr(
+                        'Impact Function'),
+                    'impact_function_format': tr(
+                        '{impact_function_name}'),
+                }
             }
         }
     ]
@@ -350,16 +486,21 @@ standard_impact_report_metadata_pdf = {
         # Impact Report PDF
         {
             'key': 'impact-report-pdf',
-            'type': ReportComponentsMetadata.AvailableComponent.QGISComposer,
+            'type': qgis_composer_component_type,
             'processor': qgis_composer_html_renderer,
             'extractor': impact_table_pdf_extractor,
             'output_format': QgisComposerComponentsMetadata.OutputFormat.PDF,
             'output_path': 'impact-report-output.pdf',
+            'tags': [
+                final_product_tag,
+                table_product_tag,
+                pdf_product_tag
+            ]
         },
         # Infographic Layout PDF
         {
             'key': 'infographic-pdf',
-            'type': ReportComponentsMetadata.AvailableComponent.QGISComposer,
+            'type': qgis_composer_component_type,
             'processor': qgis_composer_html_renderer,
             'extractor': infographic_pdf_extractor,
             'output_format': QgisComposerComponentsMetadata.OutputFormat.PDF,
@@ -367,40 +508,11 @@ standard_impact_report_metadata_pdf = {
             'page_dpi': 300,
             'page_width': 297,
             'page_height': 210,
-        }
-    ]
-}
-
-# Standard PDF Output for infographic report
-standard_infographic_report_metadata_pdf = {
-    'key': 'infographic-result-pdf',
-    'name': 'infographic-result-pdf',
-    'template_folder': safe_dir(sub_dir='../resources/report-templates/'),
-    'components': [
-        population_chart_svg_component,
-        population_chart_png_component,
-        population_infographic_component,
-        {
-            'key': 'infographic-layout',
-            'type': ReportComponentsMetadata.AvailableComponent.Jinja2,
-            'processor': jinja2_renderer,
-            'extractor': infographic_layout_extractor,
-            'output_format': Jinja2ComponentsMetadata.OutputFormat.File,
-            'output_path': 'infographic.html',
-            'extra_args': {
-                'infographics': [population_infographic_component['key']]
-            },
-        },
-        {
-            'key': 'infographic-pdf',
-            'type': ReportComponentsMetadata.AvailableComponent.QGISComposer,
-            'processor': qgis_composer_html_renderer,
-            'extractor': infographic_pdf_extractor,
-            'output_format': QgisComposerComponentsMetadata.OutputFormat.PDF,
-            'output_path': 'infographic.pdf',
-            'page_dpi': 300,
-            'page_width': 297,
-            'page_height': 210,
+            'tags': [
+                final_product_tag,
+                infographic_product_tag,
+                pdf_product_tag
+            ]
         }
     ]
 }
@@ -439,24 +551,50 @@ report_a4_blue = {
     'components': [
         {
             'key': 'a4-portrait-blue',
-            'type': ReportComponentsMetadata.AvailableComponent.QGISComposer,
+            'type': qgis_composer_component_type,
             'processor': qgis_composer_renderer,
             'extractor': qgis_composer_extractor,
-            'output_format': QgisComposerComponentsMetadata.OutputFormat.PDF,
+            'output_format': {
+                'map': QgisComposerComponentsMetadata.OutputFormat.PDF,
+                'template': QgisComposerComponentsMetadata.OutputFormat.QPT
+            },
             'template': '../qgis-composer-templates/'
                         'a4-portrait-blue.qpt',
-            'output_path': 'a4-portrait-blue.pdf',
+            'tags': [
+                final_product_tag,
+                map_product_tag,
+                template_product_tag,
+                pdf_product_tag,
+                qpt_product_tag
+            ],
+            'output_path': {
+                'map': 'a4-portrait-blue.pdf',
+                'template': 'a4-portrait-blue.qpt'
+            },
             'extra_args': map_report_extra_args
         },
         {
             'key': 'a4-landscape-blue',
-            'type': ReportComponentsMetadata.AvailableComponent.QGISComposer,
+            'type': qgis_composer_component_type,
             'processor': qgis_composer_renderer,
             'extractor': qgis_composer_extractor,
-            'output_format': QgisComposerComponentsMetadata.OutputFormat.PDF,
+            'output_format': {
+                'map': QgisComposerComponentsMetadata.OutputFormat.PDF,
+                'template': QgisComposerComponentsMetadata.OutputFormat.QPT
+            },
             'template': '../qgis-composer-templates/'
                         'a4-landscape-blue.qpt',
-            'output_path': 'a4-landscape-blue.pdf',
+            'tags': [
+                final_product_tag,
+                map_product_tag,
+                template_product_tag,
+                pdf_product_tag,
+                qpt_product_tag
+            ],
+            'output_path': {
+                'map': 'a4-landscape-blue.pdf',
+                'template': 'a4-landscape-blue.qpt'
+            },
             'orientation': 'landscape',
             'page_dpi': 300,
             'page_width': 297,

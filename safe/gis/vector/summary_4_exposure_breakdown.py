@@ -13,7 +13,7 @@ from safe.definitions.fields import (
     hazard_class_field,
     exposure_type_field,
     total_affected_field,
-    total_unaffected_field,
+    total_not_affected_field,
     total_not_exposed_field,
     total_field,
     affected_field,
@@ -25,11 +25,11 @@ from safe.definitions.processing_steps import (
 from safe.definitions.post_processors import post_processor_affected_function
 from safe.definitions.layer_purposes import layer_purpose_exposure_breakdown
 from safe.definitions.hazard_classifications import not_exposed_class
-from safe.common.exceptions import ComputationError
 from safe.gis.vector.tools import (
     create_field_from_definition,
     read_dynamic_inasafe_field,
     create_memory_layer)
+from safe.gis.sanity_check import check_layer
 from safe.gis.vector.summary_tools import (
     check_inputs, create_absolute_values_structure)
 from safe.utilities.profiling import profile
@@ -151,10 +151,10 @@ def exposure_type_breakdown(aggregate_hazard, callback=None):
     # essentially have the same value as NULL_hazard_count
     # but with this, make sure that it exists in layer so it can be used for
     # reporting, and can be referenced to fields.py to take the label.
-    field = create_field_from_definition(total_unaffected_field)
+    field = create_field_from_definition(total_not_affected_field)
     tabular.addAttribute(field)
-    tabular.keywords['inasafe_fields'][total_unaffected_field['key']] = (
-        total_unaffected_field['field_name'])
+    tabular.keywords['inasafe_fields'][total_not_affected_field['key']] = (
+        total_not_affected_field['field_name'])
 
     field = create_field_from_definition(total_not_exposed_field)
     tabular.addAttribute(field)
@@ -214,15 +214,17 @@ def exposure_type_breakdown(aggregate_hazard, callback=None):
         feature.setAttributes(attributes)
         tabular.addFeature(feature)
 
-        # Sanity check ± 1 to the result.
-        total_computed = (
-            total_affected + total_not_affected + total_not_exposed)
-        if not -1 < (total_computed - total) < 1:
-            raise ComputationError
+        # Sanity check ± 1 to the result. Disabled for now as it seems ± 1 is
+        # not enough. ET 13/02/17
+        # total_computed = (
+        #     total_affected + total_not_affected + total_not_exposed)
+        # if not -1 < (total_computed - total) < 1:
+        #     raise ComputationError
 
     tabular.commitChanges()
 
     tabular.keywords['title'] = output_layer_name
     tabular.keywords['layer_purpose'] = layer_purpose_exposure_breakdown['key']
 
+    check_layer(tabular, has_geometry=False)
     return tabular

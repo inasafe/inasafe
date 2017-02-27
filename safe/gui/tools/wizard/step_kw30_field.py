@@ -16,9 +16,10 @@ from safe.gui.tools.wizard.wizard_strings import (
     field_question_subcategory_unit,
     field_question_subcategory_classified,
     field_question_aggregation)
-from safe.gui.tools.wizard.wizard_utils import get_question_text
+from safe.gui.tools.wizard.wizard_utils import (
+    get_question_text, skip_inasafe_field)
 from safe.utilities.gis import is_raster_layer
-from safe.definitions.utilities import get_fields
+from safe.definitions.utilities import get_fields, get_non_compulsory_fields
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -64,9 +65,9 @@ class StepKwField(WizardStep, FORM_CLASS):
                 return self.parent.step_kw_classification
 
         # Check if it can go to inasafe field step
-        inasafe_fields = get_fields(
-            layer_purpose['key'], subcategory['key'], replace_null=False)
-        if inasafe_fields:
+        non_compulsory_fields = get_non_compulsory_fields(
+            layer_purpose['key'], subcategory['key'])
+        if not skip_inasafe_field(self.parent.layer, non_compulsory_fields):
             return self.parent.step_kw_inasafe_fields
 
         # Check if it can go to inasafe default field step
@@ -142,9 +143,9 @@ class StepKwField(WizardStep, FORM_CLASS):
                 '%s_%s_question' % (subcategory['key'], unit['key']))
             if 'MISSING' in subcategory_unit_relation:
                 subcategory_unit_relation = self.tr(
-                    '{subcategory} in {unit} unit'.format(
-                        subcategory=subcategory['name'].lower(),
-                        unit=unit['plural_name']))
+                    '{subcategory} in {unit} unit').format(
+                    subcategory=subcategory['name'].lower(),
+                    unit=unit['plural_name'])
             question_text = field_question_subcategory_unit % (
                 purpose['name'],
                 subcategory['name'],

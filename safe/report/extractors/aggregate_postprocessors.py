@@ -2,12 +2,9 @@
 from collections import OrderedDict
 
 from safe.common.parameters.resource_parameter import ResourceParameter
-from safe.definitions.exposure import exposure_population
 from safe.definitions.fields import (
     aggregation_name_field,
-    population_count_field,
-    affected_exposure_count_field,
-    total_affected_field)
+    displaced_field, male_displaced_count_field)
 from safe.definitions.minimum_needs import minimum_needs_fields
 from safe.definitions.post_processors import (
     age_postprocessors,
@@ -49,9 +46,24 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
     # Find out aggregation report type
     aggregation_impacted = impact_report.aggregation_impacted
     analysis_layer = impact_report.analysis
+    analysis_keywords = impact_report.analysis.keywords['inasafe_fields']
     debug_mode = impact_report.impact_function.debug_mode
     use_aggregation = bool(impact_report.impact_function.provenance[
         'aggregation_layer'])
+
+    # check zero displaced (there will be no output to display)
+    try:
+        displaced_field_name = analysis_keywords[displaced_field['key']]
+        total_displaced = value_from_field_name(
+            displaced_field_name, analysis_layer)
+
+        zero_displaced = False
+        if total_displaced == 0:
+            zero_displaced = True
+    except KeyError:
+        # in case no displaced field
+        # let each section handled itself
+        zero_displaced = False
 
     context['use_aggregation'] = use_aggregation
     if not use_aggregation:
@@ -59,35 +71,89 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
             extra_args, 'header')
 
     age_fields = [postprocessor_output_field(p) for p in age_postprocessors]
-    gender_fields = [
+    gender_fields = [male_displaced_count_field] + [
         postprocessor_output_field(p) for p in female_postprocessors]
+
+    # check age_fields exists
+    for field in age_fields:
+        if field['key'] not in analysis_keywords:
+            no_age_field = True
+    else:
+        no_age_field = False
+
+    # check gender_fields exists
+    for field in gender_fields:
+        if field['key'] not in analysis_keywords:
+            no_gender_field = True
+    else:
+        no_gender_field = False
 
     age_section_header = resolve_from_dictionary(
         extra_args, ['sections', 'age', 'header'])
-    context['sections']['age'] = create_section(
-        aggregation_impacted,
-        analysis_layer,
-        age_fields,
-        age_section_header,
-        use_aggregation=use_aggregation,
-        debug_mode=debug_mode,
-        population_rounding=True,
-        extra_component_args=extra_args)
+    if zero_displaced:
+        context['sections']['age'] = {
+            'header': age_section_header,
+            'empty': True,
+            'message': resolve_from_dictionary(
+                extra_args, ['defaults', 'zero_displaced_message'])
+        }
+    elif no_age_field:
+        context['sections']['age'] = {
+            'header': age_section_header,
+            'empty': True,
+            'message': resolve_from_dictionary(
+                extra_args, ['defaults', 'no_age_rate_message'])
+        }
+    else:
+        context['sections']['age'] = create_section(
+            aggregation_impacted,
+            analysis_layer,
+            age_fields,
+            age_section_header,
+            use_aggregation=use_aggregation,
+            debug_mode=debug_mode,
+            population_rounding=True,
+            extra_component_args=extra_args)
 
     gender_section_header = resolve_from_dictionary(
         extra_args, ['sections', 'gender', 'header'])
-    context['sections']['gender'] = create_section(
-        aggregation_impacted,
-        analysis_layer,
-        gender_fields,
-        gender_section_header,
-        use_aggregation=use_aggregation,
-        debug_mode=debug_mode,
-        population_rounding=True,
-        extra_component_args=extra_args)
+    if zero_displaced:
+        context['sections']['gender'] = {
+            'header': gender_section_header,
+            'empty': True,
+            'message': resolve_from_dictionary(
+                extra_args, ['defaults', 'zero_displaced_message'])
+        }
+    elif no_gender_field:
+        context['sections']['gender'] = {
+            'header': gender_section_header,
+            'empty': True,
+            'message': resolve_from_dictionary(
+                extra_args, ['defaults', 'no_gender_rate_message'])
+        }
+    else:
+        context['sections']['gender'] = create_section(
+            aggregation_impacted,
+            analysis_layer,
+            gender_fields,
+            gender_section_header,
+            use_aggregation=use_aggregation,
+            debug_mode=debug_mode,
+            population_rounding=True,
+            extra_component_args=extra_args)
 
+    minimum_needs_section_header = resolve_from_dictionary(
+        extra_args, ['sections', 'minimum_needs', 'header'])
+    # Don't show minimum needs if there is no displaced
+    if zero_displaced:
+        context['sections']['minimum_needs'] = {
+            'header': minimum_needs_section_header,
+            'empty': True,
+            'message': resolve_from_dictionary(
+                extra_args, ['defaults', 'zero_displaced_message'])
+        }
     # Only provides minimum needs breakdown if there is aggregation layer
-    if use_aggregation:
+    elif use_aggregation:
         # minimum needs should provide unit for column headers
         units_label = []
 
@@ -102,8 +168,6 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
                         unit=unit_abbreviation)
                 units_label.append(unit)
 
-        minimum_needs_section_header = resolve_from_dictionary(
-            extra_args, ['sections', 'minimum_needs', 'header'])
         context['sections']['minimum_needs'] = create_section(
             aggregation_impacted,
             analysis_layer,
@@ -239,28 +303,13 @@ def create_section_with_aggregation(
     if not postprocessors_fields_found:
         return {}
 
-    # figuring out affected population field
-    # for vector exposure dataset
-    is_population_count_exist = (
-        population_count_field['key'] in aggregation_impacted_fields and
-        population_count_field['key'] in analysis_layer_fields)
-    # for raster exposure dataset
-    is_population_affected_count_exist = (
-        affected_exposure_count_field['key'] % exposure_population['key']
-        in aggregation_impacted_fields and
-        total_affected_field['key'] in analysis_layer_fields)
-
-    affected_population_field = None
-    total_affected_population_field = None
-    if is_population_count_exist:
-        affected_population_field = population_count_field['key']
-        total_affected_population_field = population_count_field['key']
-    elif is_population_affected_count_exist:
-        affected_population_field = affected_exposure_count_field['key'] % (
-            exposure_population['key'], )
-        total_affected_population_field = total_affected_field['key']
-
-    if not affected_population_field or not total_affected_population_field:
+    # figuring out displaced field
+    try:
+        displaced_field_name = analysis_layer_fields[displaced_field['key']]
+        displaced_field_name = aggregation_impacted_fields[
+            displaced_field['key']]
+    except KeyError:
+        # no displaced field, can't show result
         return {}
 
     """Generating header name for columns"""
@@ -286,15 +335,15 @@ def create_section_with_aggregation(
                 unit = output_field.get('unit').get('abbreviation')
 
             if unit:
-                header_format = '{name} [{unit}]'
+                header_format = u'{name} [{unit}]'
             else:
-                header_format = '{name}'
+                header_format = u'{name}'
 
             header = header_format.format(
                 name=name,
                 unit=unit)
         else:
-            header_format = '{name}'
+            header_format = u'{name}'
             header = header_format.format(name=name)
 
         columns.append(header)
@@ -305,46 +354,44 @@ def create_section_with_aggregation(
 
         aggregation_name_index = aggregation_impacted.fieldNameIndex(
             aggregation_name_field['field_name'])
-        affected_population_name = aggregation_impacted_fields[
-            affected_population_field]
-        affected_population_index = aggregation_impacted.fieldNameIndex(
-            affected_population_name)
+        displaced_field_name = aggregation_impacted_fields[
+            displaced_field['key']]
+        displaced_field_index = aggregation_impacted.fieldNameIndex(
+            displaced_field_name)
 
         aggregation_name = feature[aggregation_name_index]
-        total_affected = format_number(
-            feature[affected_population_index],
+        total_displaced = format_number(
+            feature[displaced_field_index],
             enable_rounding=enable_rounding)
 
         row = [
             aggregation_name,
-            total_affected,
+            total_displaced,
         ]
 
-        all_zeros = True
+        if total_displaced == '0' and not debug_mode:
+            continue
 
         for output_field in postprocessors_fields_found:
             field_name = aggregation_impacted_fields[output_field['key']]
             field_index = aggregation_impacted.fieldNameIndex(field_name)
+            value = feature[field_index]
+
             value = format_number(
-                feature[field_index],
+                value,
                 enable_rounding=enable_rounding)
             row.append(value)
 
-            if not value == 0:
-                all_zeros = False
-
-        if not all_zeros:
-            row_values.append(row)
+        row_values.append(row)
 
     """Generating total rows """
 
-    feature = analysis_layer.getFeatures().next()
-    total_affected_population_name = analysis_layer_fields[
-        total_affected_population_field]
-    total_affected_population_index = analysis_layer.fieldNameIndex(
-        total_affected_population_name)
+    total_displaced_field_name = analysis_layer_fields[
+        displaced_field['key']]
+    value = value_from_field_name(
+        total_displaced_field_name, analysis_layer)
     value = format_number(
-        feature[total_affected_population_index],
+        value,
         enable_rounding=enable_rounding)
     total_header = resolve_from_dictionary(
         extra_component_args, ['defaults', 'total_header'])
@@ -354,9 +401,9 @@ def create_section_with_aggregation(
     ]
     for output_field in postprocessors_fields_found:
         field_name = analysis_layer_fields[output_field['key']]
-        field_index = analysis_layer.fieldNameIndex(field_name)
+        value = value_from_field_name(field_name, analysis_layer)
         value = format_number(
-            feature[field_index],
+            value,
             enable_rounding=enable_rounding)
         totals.append(value)
 
@@ -424,28 +471,14 @@ def create_section_without_aggregation(
     if not postprocessors_fields_found:
         return {}
 
-    # figuring out affected population field
-    # for vector exposure dataset
-    is_population_count_exist = (
-        population_count_field['key'] in aggregation_impacted_fields and
-        population_count_field['key'] in analysis_layer_fields)
-    # for raster exposure dataset
-    is_population_affected_count_exist = (
-        affected_exposure_count_field['key'] % exposure_population['key']
-        in aggregation_impacted_fields and
-        total_affected_field['key'] in analysis_layer_fields)
-
-    affected_population_field = None
-    total_affected_population_field = None
-    if is_population_count_exist:
-        affected_population_field = population_count_field['key']
-        total_affected_population_field = population_count_field['key']
-    elif is_population_affected_count_exist:
-        affected_population_field = affected_exposure_count_field['key'] % (
-            exposure_population['key'], )
-        total_affected_population_field = total_affected_field['key']
-
-    if not affected_population_field or not total_affected_population_field:
+    # figuring out displaced field
+    try:
+        displaced_field_name = analysis_layer_fields[
+            displaced_field['key']]
+        displaced_field_name = aggregation_impacted_fields[
+            displaced_field['key']]
+    except KeyError:
+        # no displaced field, can't show result
         return {}
 
     """Generating header name for columns"""
@@ -472,15 +505,15 @@ def create_section_without_aggregation(
                 unit = output_field.get('unit').get('abbreviation')
 
             if unit:
-                header_format = '{name} [{unit}]'
+                header_format = u'{name} [{unit}]'
             else:
-                header_format = '{name}'
+                header_format = u'{name}'
 
             header = header_format.format(
                 name=name,
                 unit=unit)
         else:
-            header_format = '{name}'
+            header_format = u'{name}'
             header = header_format.format(name=name)
 
         row.append(header)

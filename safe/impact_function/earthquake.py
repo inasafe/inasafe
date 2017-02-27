@@ -1,5 +1,9 @@
 # coding=utf-8
 
+"""Earthquake functions."""
+
+import logging
+
 from qgis.core import (
     QGis,
     QgsCoordinateReferenceSystem,
@@ -13,6 +17,7 @@ from qgis.core import (
     QgsVectorFileWriter,
 )
 
+from safe.definitions.utilities import definition
 from safe.definitions.fields import (
     aggregation_id_field,
     population_count_field,
@@ -24,181 +29,60 @@ from safe.definitions.fields import (
 )
 from safe.definitions.layer_purposes import (
     layer_purpose_aggregation_impacted, layer_purpose_exposure_impacted)
+from safe.definitions.processing_steps import earthquake_displaced
 from safe.gis.vector.tools import create_field_from_definition
-from safe.utilities.numerics import log_normal_cdf
 from safe.gis.raster.write_raster import array_to_raster, make_array
 from safe.common.utilities import unique_filename
 from safe.utilities.profiling import profile
-from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
+LOGGER = logging.getLogger('InaSAFE')
 
-def itb_fatality_rates():
-    """Indonesian Earthquake Fatality Model.
 
-    This model was developed by Institut Teknologi Bandung (ITB) and
-    implemented by Dr. Hadi Ghasemi, Geoscience Australia.
+def from_mmi_to_hazard_class(mmi_level, classification_key):
+    """From a MMI level, it returns the hazard class given a classification.
 
-    Reference:
+    :param mmi_level: The MMI level.
+    :type mmi_level: int
 
-    Indonesian Earthquake Building-Damage and Fatality Models and
-    Post Disaster Survey Guidelines Development,
-    Bali, 27-28 February 2012, 54pp.
+    :param classification_key: The earthquake classification key.
+    :type classification_key: safe.definitions.hazard_classifications
 
-    Algorithm:
-
-    In this study, the same functional form as Allen (2009) is adopted
-    to express fatality rate as a function of intensity (see Eq. 10 in the
-    report). The Matlab built-in function (fminsearch) for  Nelder-Mead
-    algorithm was used to estimate the model parameters. The objective
-    function (L2G norm) that is minimised during the optimisation is the
-    same as the one used by Jaiswal et al. (2010).
-
-    The coefficients used in the indonesian model are
-    x=0.62275231, y=8.03314466, zeta=2.15
-
-    Allen, T. I., Wald, D. J., Earle, P. S., Marano, K. D., Hotovec, A. J.,
-    Lin, K., and Hearne, M., 2009. An Atlas of ShakeMaps and population
-    exposure catalog for earthquake loss modeling, Bull. Earthq. Eng. 7,
-    701-718.
-
-    Jaiswal, K., and Wald, D., 2010. An empirical model for global earthquake
-    fatality estimation, Earthq. Spectra 26, 1017-1037.
-
-    Caveats and limitations:
-
-    The current model is the result of the above mentioned workshop and
-    reflects the best available information. However, the current model
-    has a number of issues listed below and is expected to evolve further
-    over time.
-
-    1 - The model is based on limited number of observed fatality
-        rates during 4 past fatal events.
-
-    2 - The model clearly over-predicts the fatality rates at
-        intensities higher than VIII.
-
-    3 - The model only estimates the expected fatality rate for a given
-        intensity level; however the associated uncertainty for the proposed
-        model is not addressed.
-
-    4 - There are few known mistakes in developing the current model:
-        - rounding MMI values to the nearest 0.5,
-        - Implementing Finite-Fault models of candidate events, and
-        - consistency between selected GMPEs with those in use by BMKG.
-          These issues will be addressed by ITB team in the final report.
-
-    Note: Because of these caveats, decisions should not be made solely on
-    the information presented here and should always be verified by ground
-    truthing and other reliable information sources.
-
-    :returns: Fatality rate.
-    :rtype: dic
+    :return: The hazard class key
+    :rtype: basestring
     """
-    # As per email discussion with Ole, Trevor, Hadi, mmi < 4 will have
-    # a fatality rate of 0 - Tim
-    mmi_range = range(2, 11)
-    # Model coefficients
-    x = 0.62275231
-    y = 8.03314466
-    fatality_rate = {
-        mmi: 0 if mmi < 4 else 10 ** (x * mmi - y) for mmi in mmi_range}
-    return fatality_rate
+    classes = definition(classification_key)['classes']
+    for hazard_class in classes:
+        minimum = hazard_class['numeric_default_min']
+        maximum = hazard_class['numeric_default_max']
+        if minimum < mmi_level <= maximum:
+            return hazard_class['key']
+    return None
 
 
-def pager_fatality_rates():
-    """USGS Pager fatality estimation model.
+def displacement_rate(mmi_level, classification_key):
+    """From a MMI level, it gives the displacement rate given a classification.
 
-    Fatality rate(MMI) = cum. standard normal dist(1/BETA * ln(MMI/THETA)).
+    :param mmi_level: The MMI level.
+    :type mmi_level: int
 
-    Reference:
+    :param classification_key: The earthquake classification key.
+    :type classification_key: safe.definitions.hazard_classifications
 
-    Jaiswal, K. S., Wald, D. J., and Hearne, M. (2009a).
-    Estimating casualties for large worldwide earthquakes using an empirical
-    approach. U.S. Geological Survey Open-File Report 2009-1136.
-
-    v1.0:
-        Theta: 14.05, Beta: 0.17, Zeta 2.15
-        Jaiswal, K, and Wald, D (2010)
-        An Empirical Model for Global Earthquake Fatality Estimation
-        Earthquake Spectra, Volume 26, No. 4, pages 1017–1037
-
-    v2.0:
-        Theta: 13.249, Beta: 0.151, Zeta: 1.641)
-        (http://pubs.usgs.gov/of/2009/1136/pdf/
-        PAGER%20Implementation%20of%20Empirical%20model.xls)
-
-    :returns: Fatality rate calculated as:
-        lognorm.cdf(mmi, shape=Beta, scale=Theta)
-    :rtype: dic
+    :return: The displacement rate.
+    :rtype: float
     """
-    # Model coefficients
-    theta = 13.249
-    beta = 0.151
-    mmi_range = range(2, 11)
-    fatality_rate = {mmi: 0 if mmi < 4 else log_normal_cdf(
-        mmi, median=theta, sigma=beta) for mmi in mmi_range}
-    return fatality_rate
-
-
-def itb_bayesian_fatality_rates():
-    """ITB fatality model based on a Bayesian approach.
-
-    This model was developed by Institut Teknologi Bandung (ITB) and
-    implemented by Dr. Hyeuk Ryu, Geoscience Australia.
-
-    Reference:
-
-    An Empirical Fatality Model for Indonesia Based on a Bayesian Approach
-    by W. Sengara, M. Suarjana, M.A. Yulman, H. Ghasemi, and H. Ryu
-    submitted for Journal of the Geological Society
-
-    :returns: Fatality rates as medians
-        It comes worden_berngamma_log_fat_rate_inasafe_10.csv in InaSAFE 3.
-    :rtype: dict
-    """
-    fatality_rate = {
-        2: 0.0, 3: 0.0, 4: 0.0, 5: 0.0,
-        6: 3.41733122522e-05,
-        7: 0.000387804494226,
-        8: 0.001851451786,
-        9: 0.00787294191661,
-        10: 0.0314512157378,
-    }
-    return fatality_rate
-
-EARTHQUAKE_FUNCTIONS = (
-    {
-        'key': 'itb_bayesian_fatality_rates',
-        'name': tr('ITB bayesian fatality rates'),
-        'fatality_rates': itb_bayesian_fatality_rates
-    }, {
-        'key': 'itb_fatality_rates',
-        'name': tr('ITB fatality rates'),
-        'fatality_rates': itb_fatality_rates
-    }, {
-        'key': 'pager_fatality_rates',
-        'name': tr('Pager fatality rates'),
-        'fatality_rates': pager_fatality_rates
-    }
-)
-
-
-def displacement_rate():
-    """Return the displacement rate.
-
-    :returns: The displacement rate.
-    :rtype: dict
-    """
-    rate = {
-        2: 0.0, 3: 0.0, 4: 0.0, 5: 0.0,
-        6: 1.0, 7: 1.0, 8: 1.0, 9: 1.0, 10: 1.0
-    }
-    return rate
+    classes = definition(classification_key)['classes']
+    for hazard_class in classes:
+        minimum = hazard_class['numeric_default_min']
+        maximum = hazard_class['numeric_default_max']
+        if minimum < mmi_level <= maximum:
+            return hazard_class['displacement_rate']
+    return 0.0
 
 
 @profile
@@ -225,7 +109,10 @@ def exposed_people_stats(hazard, exposure, aggregation, fatality_rate):
         Tuple (mmi, agg_zone), value: number of exposed people
     :rtype: (dict, QgsRasterLayer)
     """
-    exposed_raster_filename = unique_filename(prefix='exposed', suffix='.tif')
+    output_layer_name = earthquake_displaced['output_layer_name']
+    processing_step = earthquake_displaced['step_name']
+    exposed_raster_filename = unique_filename(
+        prefix=output_layer_name, suffix='.tif')
 
     hazard_provider = hazard.dataProvider()
     extent = hazard.extent()
@@ -242,26 +129,32 @@ def exposed_people_stats(hazard, exposure, aggregation, fatality_rate):
 
     exposed_array = make_array(width, height)
 
+    classification_key = hazard.keywords['classification']
+
     # walk through the rasters pixel by pixel and aggregate numbers
     # of people in the combination of hazard zones and aggregation zones
     for i in xrange(width * height):
         hazard_mmi = hazard_block.value(long(i))
-        hazard_mmi = int(round(hazard_mmi))
-
         people_count = exposure_block.value(long(i))
 
-        mmi_fatalities = (
-            int(hazard_mmi * fatality_rate[hazard_mmi]))  # rounding down
-        mmi_displaced = (
-            (people_count - mmi_fatalities) * displacement_rate()[hazard_mmi])
+        if hazard_mmi >= 2.0 and people_count >= 0.0:
+            hazard_mmi = int(round(hazard_mmi))
+            mmi_fatalities = (
+                int(hazard_mmi * fatality_rate[hazard_mmi]))  # rounding down
+            mmi_displaced = (
+                (people_count - mmi_fatalities) *
+                displacement_rate(hazard_mmi, classification_key))
 
-        agg_zone_index = int(agg_block.value(long(i)))
+            agg_zone_index = int(agg_block.value(long(i)))
 
-        key = (hazard_mmi, agg_zone_index)
-        if key not in exposed:
-            exposed[key] = 0
+            key = (hazard_mmi, agg_zone_index)
+            if key not in exposed:
+                exposed[key] = 0
 
-        exposed[key] += people_count
+            exposed[key] += people_count
+        else:
+            # If hazard is less than 2 or population is less than 0
+            mmi_displaced = -1
 
         exposed_array[i / width, i % width] = mmi_displaced
 
@@ -274,7 +167,7 @@ def exposed_people_stats(hazard, exposure, aggregation, fatality_rate):
     exposed_raster.keywords = dict(exposure.keywords)
     exposed_raster.keywords['layer_purpose'] = (
         layer_purpose_exposure_impacted['key'])
-    exposed_raster.keywords['title'] = layer_purpose_exposure_impacted['key']
+    exposed_raster.keywords['title'] = processing_step
     exposed_raster.keywords['exposure_keywords'] = dict(exposure.keywords)
     exposed_raster.keywords['hazard_keywords'] = dict(hazard.keywords)
     exposed_raster.keywords['aggregation_keywords'] = dict(
@@ -304,6 +197,9 @@ def make_summary_layer(exposed, aggregation, fatality_rate):
     :rtype: tuple(QgsVectorLayer, dict)
     """
     field_mapping = {}
+
+    classification_key = (
+        aggregation.keywords['hazard_keywords']['classification'])
 
     aggregation.startEditing()
     inasafe_fields = aggregation.keywords['inasafe_fields']
@@ -358,11 +254,14 @@ def make_summary_layer(exposed, aggregation, fatality_rate):
         total_fatalities = 0
         total_displaced = 0
 
-        for mmi, mmi_exposed in exposed_per_agg_zone[agg_zone].iteritems():
+        LOGGER.debug('Aggregation %s is being processed by EQ IF' % agg_zone)
+        stats_aggregation = exposed_per_agg_zone[agg_zone]
+        for mmi, mmi_exposed in stats_aggregation.iteritems():
             mmi_fatalities = (
                 int(mmi_exposed * fatality_rate[mmi]))  # rounding down
             mmi_displaced = (
-                (mmi_exposed - mmi_fatalities) * displacement_rate()[mmi])
+                (mmi_exposed - mmi_fatalities) *
+                displacement_rate(mmi, classification_key))
 
             aggregation.changeAttributeValue(
                 agg_feature.id(),

@@ -1,15 +1,9 @@
 # coding=utf-8
-from safe.definitions.exposure import exposure_population
-from safe.definitions.fields import (
-    hazard_count_field,
-    total_affected_field,
-    total_field,
-    total_unaffected_field,
-    total_not_exposed_field)
+from safe.definitions.fields import hazard_count_field, total_field
 from safe.definitions.hazard_classifications import hazard_classes_all
 from safe.report.extractors.util import (
     layer_definition_type,
-    resolve_from_dictionary)
+    resolve_from_dictionary, value_from_field_name)
 from safe.utilities.rounding import format_number
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -18,8 +12,8 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
-def analysis_result_extractor(impact_report, component_metadata):
-    """Extracting analysis result from the impact layer.
+def general_report_extractor(impact_report, component_metadata):
+    """Extracting general analysis result from the impact layer.
 
     :param impact_report: the impact report that acts as a proxy to fetch
         all the data that extractor needed
@@ -56,9 +50,9 @@ def analysis_result_extractor(impact_report, component_metadata):
     exposure_unit = exposure_type['units'][0]
     hazard_header = resolve_from_dictionary(extra_args, 'hazard_header')
     if exposure_unit['abbreviation']:
-        value_header = '{name} ({abbreviation})'.format(**exposure_unit)
+        value_header = u'{measure} ({abbreviation})'.format(**exposure_unit)
     else:
-        value_header = '{name}'.format(**exposure_unit)
+        value_header = u'{name}'.format(**exposure_unit)
 
     # in case there is a classification
     if 'classification' in hazard_layer.keywords:
@@ -106,6 +100,21 @@ def analysis_result_extractor(impact_report, component_metadata):
 
             hazard_stats.append(stats)
 
+        # find total field
+        try:
+            field_name = analysis_inasafe_fields[total_field['key']]
+            total = value_from_field_name(field_name, analysis_layer)
+            total = format_number(total, enable_rounding=is_rounded)
+            stats = {
+                'key': total_field['key'],
+                'name': total_field['name'],
+                'as_header': True,
+                'value': total
+            }
+            hazard_stats.append(stats)
+        except KeyError:
+            pass
+
         summary.append({
             'header_label': hazard_header,
             'value_label': value_header,
@@ -115,23 +124,20 @@ def analysis_result_extractor(impact_report, component_metadata):
     # retrieve affected column
     report_stats = []
 
-    report_fields = [
-        total_affected_field,
-        total_unaffected_field,
-        total_not_exposed_field,
-        total_field
-    ]
-    for report_field in report_fields:
-        if report_field['key'] in analysis_inasafe_fields:
+    reported_fields = resolve_from_dictionary(
+        extra_args, 'reported_fields')
+    for item in reported_fields:
+        header = item['header']
+        field = item['field']
+        if field['key'] in analysis_inasafe_fields:
             field_index = analysis_layer.fieldNameIndex(
-                report_field['field_name'])
-            row_label = report_field['name']
+                field['field_name'])
             row_value = format_number(
                 analysis_feature[field_index],
                 enable_rounding=is_rounded)
             row_stats = {
-                'key': report_field['key'],
-                'name': row_label,
+                'key': field['key'],
+                'name': header,
                 'value': row_value
             }
             report_stats.append(row_stats)
@@ -147,13 +153,14 @@ def analysis_result_extractor(impact_report, component_metadata):
         'rows': report_stats
     })
 
-    # Proper title from reporting standard
-    analysis_title = provenance['analysis_question']
-
     header = resolve_from_dictionary(extra_args, ['header'])
+    table_header_format = resolve_from_dictionary(
+        extra_args, 'table_header_format')
+    table_header = table_header_format.format(
+        title=provenance['map_legend_title'])
 
     context['header'] = header
     context['summary'] = summary
-    context['title'] = analysis_title
+    context['table_header'] = table_header
 
     return context

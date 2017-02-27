@@ -2,15 +2,18 @@
 
 import unittest
 
-from safe.test.utilities import get_qgis_app, load_test_vector_layer
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+from safe.test.utilities import (
+    load_test_vector_layer, load_test_raster_layer, qgis_iface)
 
+from safe.definitions.utilities import definition
 from safe.definitions.fields import (
     total_field,
     exposure_class_field,
     hazard_class_field,
+    hazard_count_field,
     exposure_count_field
 )
+from safe.definitions.constants import PREPARE_SUCCESS, ANALYSIS_SUCCESS
 from safe.gis.vector.tools import read_dynamic_inasafe_field
 from safe.gis.vector.summary_1_aggregate_hazard import (
     aggregate_hazard_summary)
@@ -18,7 +21,10 @@ from safe.gis.vector.summary_2_aggregation import aggregation_summary
 from safe.gis.vector.summary_3_analysis import analysis_summary
 from safe.gis.vector.summary_4_exposure_breakdown import (
     exposure_type_breakdown)
-from safe.utilities.utilities import check_inasafe_fields
+from safe.impact_function.impact_function import ImpactFunction
+from safe.gis.sanity_check import check_inasafe_fields
+
+qgis_iface()
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -28,15 +34,10 @@ __revision__ = '$Format:%H$'
 
 class TestAggregateSummary(unittest.TestCase):
 
-    def setUp(self):
-        pass
-
-    def tearDown(self):
-        pass
+    """Summary calculation tests."""
 
     def test_impact_summary(self):
         """Test we can aggregate the impact to the aggregate hazard."""
-
         impact = load_test_vector_layer(
             'gisv4',
             'impacts',
@@ -78,7 +79,6 @@ class TestAggregateSummary(unittest.TestCase):
 
     def test_aggregation_summary(self):
         """Test we can aggregate the aggregate hazard to the aggregation."""
-
         aggregate_hazard = load_test_vector_layer(
             'gisv4',
             'intermediate',
@@ -112,7 +112,6 @@ class TestAggregateSummary(unittest.TestCase):
 
     def test_analysis_summary(self):
         """Test we can aggregate the aggregate hazard to the analysis."""
-
         aggregate_hazard = load_test_vector_layer(
             'gisv4',
             'intermediate',
@@ -142,7 +141,7 @@ class TestAggregateSummary(unittest.TestCase):
         # expected number of fields:
         # - one field for each hazard class
         # - 2 fields for analysis id and analysis name
-        # - 4 fields for total affected, unaffected, not exposed and total
+        # - 4 fields for total affected, not_affected, not exposed and total
         self.assertEqual(
             layer.fields().count(),
             len(unique_hazard) + number_of_fields + 4
@@ -150,7 +149,6 @@ class TestAggregateSummary(unittest.TestCase):
 
     def test_exposure_breakdown_summary(self):
         """Test we can produce the breakdown for the exposure type."""
-
         aggregate_hazard = load_test_vector_layer(
             'gisv4',
             'intermediate',
@@ -181,7 +179,35 @@ class TestAggregateSummary(unittest.TestCase):
         # one column per hazard
         # one for the exposure
         # one for total affected
-        # one for total unaffected
+        # one for total not affected
         # one for total not exposed
         # one for total
         self.assertEqual(layer.fields().count(), len(unique_hazard) + 5)
+
+    def test_analysis_earthquake_summary(self):
+        """Test we can compute summary after an EQ on population."""
+        hazard = load_test_raster_layer('gisv4', 'hazard', 'earthquake.asc')
+        exposure = load_test_raster_layer(
+            'gisv4', 'exposure', 'raster', 'population.asc')
+        aggregation = load_test_vector_layer(
+            'gisv4', 'aggregation', 'small_grid.geojson')
+
+        impact_function = ImpactFunction()
+        impact_function.hazard = hazard
+        impact_function.exposure = exposure
+        impact_function.aggregation = aggregation
+        status, message = impact_function.prepare()
+        self.assertEqual(PREPARE_SUCCESS, status, message)
+        status, message = impact_function.run()
+        self.assertEqual(ANALYSIS_SUCCESS, status, message)
+
+        layer = impact_function.analysis_impacted
+        classification = hazard.keywords['classification']
+        classes = definition(classification)['classes']
+        for hazard_class in classes:
+            field_name = hazard_count_field['field_name'] % hazard_class['key']
+            message = '%s is not found in the EQ summary layer.' % field_name
+            self.assertNotEqual(-1, layer.fieldNameIndex(field_name), message)
+
+        check_inasafe_fields(impact_function.analysis_impacted)
+        check_inasafe_fields(impact_function.aggregation_impacted)

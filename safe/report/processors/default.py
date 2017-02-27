@@ -21,6 +21,7 @@ from PyQt4.QtSvg import QSvgRenderer
 from jinja2.environment import Environment
 from jinja2.loaders import FileSystemLoader
 from qgis.core import (
+    QgsMapLayer,
     QgsComposerFrame,
     QgsComposition,
     QgsComposerHtml,
@@ -30,6 +31,7 @@ from qgis.core import (
 
 from safe.common.exceptions import TemplateLoadingError
 from safe.common.utilities import temp_dir
+from safe.report.report_metadata import QgisComposerComponentsMetadata
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -79,8 +81,8 @@ def jinja2_renderer(impact_report, component):
     elif component.output_format == 'file':
         if impact_report.output_folder is None:
             impact_report.output_folder = mkdtemp(dir=temp_dir())
-        output_path = os.path.join(
-            impact_report.output_folder, component.output_path)
+        output_path = impact_report.component_absolute_output_path(
+            component.key)
 
         # make sure directory is created
         dirname = os.path.dirname(output_path)
@@ -163,8 +165,8 @@ def qgis_composer_html_renderer(impact_report, component):
     # in case output folder not specified
     if impact_report.output_folder is None:
         impact_report.output_folder = mkdtemp(dir=temp_dir())
-    output_path = os.path.join(
-        impact_report.output_folder, component.output_path)
+    output_path = impact_report.component_absolute_output_path(
+        component.key)
 
     # make sure directory is created
     dirname = os.path.dirname(output_path)
@@ -268,25 +270,33 @@ def qgis_composer_renderer(impact_report, component):
         item_id = map_el.get('id')
         split_count = map_el.get('grid_split_count')
         layers = map_el.get('layers')
+        map_extent_option = map_el.get('extent')
         composer_map = composition.getComposerItemById(item_id)
         """:type: qgis.core.QgsComposerMap"""
         if composer_map:
             composer_map.setKeepLayerSet(True)
-            composer_map.setLayerSet(
-                [l.id() for l in layers])
-            # composer_map.zoomToExtent(square_extent)
-            extent = QgsRectangle()
-            extent.setMinimal()
-            for l in layers:
-                extent.combineExtentWith(l.extent())
+            layer_set = [l.id() for l in layers if isinstance(l, QgsMapLayer)]
+            composer_map.setLayerSet(layer_set)
+            if map_extent_option and isinstance(
+                    map_extent_option, QgsRectangle):
+                # use provided map extent
+                extent = map_extent_option
+            else:
+                # if map extent not provided, try to calculate extent
+                # from list of given layers. Combine it so all layers were
+                # shown properly
+                extent = QgsRectangle()
+                extent.setMinimal()
+                for l in layers:
+                    # combine extent if different layer is provided.
+                    extent.combineExtentWith(l.extent())
 
-            canvas_extent = extent
-            width = canvas_extent.width()
-            height = canvas_extent.height()
+            width = extent.width()
+            height = extent.height()
             longest_width = width if width > height else height
             half_length = longest_width / 2
             margin = half_length / 5
-            center = canvas_extent.center()
+            center = extent.center()
             min_x = center.x() - half_length - margin
             max_x = center.x() + half_length + margin
             min_y = center.y() - half_length - margin
@@ -343,30 +353,126 @@ def qgis_composer_renderer(impact_report, component):
     # in case output folder not specified
     if impact_report.output_folder is None:
         impact_report.output_folder = mkdtemp(dir=temp_dir())
-    output_path = os.path.join(
-        impact_report.output_folder, component.output_path)
 
-    # make sure directory is created
-    dirname = os.path.dirname(output_path)
-    if not os.path.exists(dirname):
-        os.makedirs(dirname, exist_ok=True)
+    def create_map_output(output_path, file_format, metadata):
+        """Produce PDF Map output.
+
+        :param output_path: the output path
+        :type output_path: str
+
+        :param file_format: file format of map output, PDF or PNG
+        :type file_format: 'pdf', 'png'
+
+        :param metadata: the component metadata
+        :type metadata: QgisComposerComponentsMetadata
+
+        :return: generated output path
+        :rtype: str
+        """
+
+        # make sure directory is created
+        dirname = os.path.dirname(output_path)
+        if not os.path.exists(dirname):
+            os.makedirs(dirname, exist_ok=True)
+
+        # for QGIS composer only pdf and png output are available
+        if file_format == QgisComposerComponentsMetadata.OutputFormat.PDF:
+            try:
+                composition.setPlotStyle(
+                    impact_report.qgis_composition_context.plot_style)
+                composition.setPrintResolution(metadata.page_dpi)
+                composition.setPaperSize(
+                    metadata.page_width, metadata.page_height)
+                composition.setPrintAsRaster(
+                    impact_report.qgis_composition_context.save_as_raster)
+
+                composition.exportAsPDF(output_path)
+            except Exception as exc:
+                LOGGER.error(exc)
+                return None
+        elif file_format == QgisComposerComponentsMetadata.OutputFormat.PNG:
+            # TODO: implement PNG generations
+            raise Exception('Not yet supported')
+        return output_path
+
+    def create_qgis_template_output(output_path, qgis_composition):
+        """Produce QGIS Template output.
+
+        :param output_path: the output path
+        :type output_path: str
+
+        :param qgis_composition: QGIS Composition object to get template
+            values
+        :type qgis_composition: QgsComposition
+
+        :return: generated output path
+        :rtype: str
+        """
+
+        # make sure directory is created
+        dirname = os.path.dirname(output_path)
+        if not os.path.exists(dirname):
+            os.makedirs(dirname, exist_ok=True)
+
+        template_document = QtXml.QDomDocument()
+        element = template_document.createElement('Composer')
+        qgis_composition.writeXML(element, template_document)
+        template_document.appendChild(element)
+
+        with open(output_path, 'w') as f:
+            f.write(template_document.toByteArray())
+
+        return output_path
 
     output_format = component.output_format
-    # for QGIS composer only pdf and png output are available
-    if output_format == 'pdf':
-        try:
-            composition.setPlotStyle(
-                impact_report.qgis_composition_context.plot_style)
-            composition.setPrintResolution(component.page_dpi)
-            composition.setPaperSize(
-                component.page_width, component.page_height)
-            composition.setPrintAsRaster(
-                impact_report.qgis_composition_context.save_as_raster)
+    component_output_path = impact_report.component_absolute_output_path(
+        component.key)
+    component_output = None
 
-            composition.exportAsPDF(output_path)
-            component.output = output_path
-        except Exception as exc:
-            LOGGER.error(exc)
+    map_format = QgisComposerComponentsMetadata.OutputFormat.MAP_OUTPUT
+    template_format = QgisComposerComponentsMetadata.OutputFormat.QPT
+    if isinstance(output_format, list):
+        component_output = []
+        for i in range(len(output_format)):
+            each_format = output_format[i]
+            each_path = component_output_path[i]
+
+            if each_format in map_format:
+                result_path = create_map_output(
+                    each_path, each_format, component)
+                component_output.append(result_path)
+            elif each_format == template_format:
+                result_path = create_qgis_template_output(
+                    each_path, composition)
+                component_output.append(result_path)
+    elif isinstance(output_format, dict):
+        component_output = {}
+        for key, each_format in output_format.iteritems():
+            each_path = component_output_path[key]
+
+            if each_format in map_format:
+                result_path = create_map_output(
+                    each_path, each_format, component)
+                component_output[key] = result_path
+            elif each_format == template_format:
+                result_path = create_qgis_template_output(
+                    each_path, composition)
+                component_output[key] = result_path
+    elif (output_format in
+            QgisComposerComponentsMetadata.OutputFormat.SUPPORTED_OUTPUT):
+        component_output = None
+
+        if output_format in map_format:
+            result_path = create_map_output(
+                component_output_path, output_format, component)
+            component_output = result_path
+        elif output_format == template_format:
+            result_path = create_qgis_template_output(
+                component_output_path, composition)
+            component_output = result_path
+
+    component.output = component_output
+
     return component.output
 
 
@@ -400,10 +506,10 @@ def qt_svg_to_png_renderer(impact_report, component):
     # in case output folder not specified
     if impact_report.output_folder is None:
         impact_report.output_folder = mkdtemp(dir=temp_dir())
-    output_path = os.path.join(
-        impact_report.output_folder, component.output_path)
+    output_path = impact_report.component_absolute_output_path(
+        component.key)
 
     qimage.save(output_path)
 
     component.output = output_path
-    return component.output_path
+    return component.output

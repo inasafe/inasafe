@@ -373,22 +373,22 @@ class Plugin(object):
             self.action_show_definitions,
             add_to_toolbar=True)
 
-    def _create_add_petajakarta_layer_action(self):
+    def _create_add_petabencana_layer_action(self):
         """Create action for import OSM Dialog."""
-        icon = resources_path('img', 'icons', 'add-petajakarta-layer.svg')
-        self.action_add_petajakarta_layer = QAction(
+        icon = resources_path('img', 'icons', 'add-petabencana-layer.svg')
+        self.action_add_petabencana_layer = QAction(
             QIcon(icon),
-            self.tr('Add PetaJakarta Flood Layer'),
+            self.tr('Add PetaBencana Flood Layer'),
             self.iface.mainWindow())
-        self.action_add_petajakarta_layer.setStatusTip(self.tr(
-            'Add PetaJakarta Flood Layer'))
-        self.action_add_petajakarta_layer.setWhatsThis(self.tr(
-            'Use this to add a PetaJakarta layer to your map. '
+        self.action_add_petabencana_layer.setStatusTip(self.tr(
+            'Add PetaBencana Flood Layer'))
+        self.action_add_petabencana_layer.setWhatsThis(self.tr(
+            'Use this to add a PetaBencana layer to your map. '
             'It needs internet access to function.'))
-        self.action_add_petajakarta_layer.triggered.connect(
-            self.add_petajakarta_layer)
+        self.action_add_petabencana_layer.triggered.connect(
+            self.add_petabencana_layer)
         self.add_action(
-            self.action_add_petajakarta_layer,
+            self.action_add_petabencana_layer,
             add_to_toolbar=False)
 
     def _create_rubber_bands_action(self):
@@ -535,7 +535,7 @@ class Plugin(object):
         self._add_spacer_to_menu()
         self._create_osm_downloader_action()
         self._create_add_osm_layer_action()
-        self._create_add_petajakarta_layer_action()
+        self._create_add_petabencana_layer_action()
         self._create_shakemap_converter_action()
         self._create_minimum_needs_action()
         self._create_multi_buffer_action()
@@ -794,7 +794,8 @@ class Plugin(object):
         from safe.gui.tools.multi_buffer_dialog import (
             MultiBufferDialog)
 
-        dialog = MultiBufferDialog(self.iface.mainWindow())
+        dialog = MultiBufferDialog(
+            self.iface.mainWindow(), self.iface, self.dock_widget)
         dialog.exec_()  # modal
 
     def show_osm_downloader(self):
@@ -839,14 +840,14 @@ class Plugin(object):
             definitions_help.definitions_help())
         dialog.show()  # non modal
 
-    def add_petajakarta_layer(self):
-        """Add petajakarta layer to the map.
+    def add_petabencana_layer(self):
+        """Add petabencana layer to the map.
 
-        This uses the PetaJakarta API to fetch the latest floods in JK. See
-        https://petajakarta.org/banjir/en/data/api/#aggregates
+        This uses the PetaBencana API to fetch the latest floods in JK. See
+        https://data.petabencana.id/floods
         """
-        from safe.gui.tools.peta_jakarta_dialog import PetaJakartaDialog
-        dialog = PetaJakartaDialog(self.iface.mainWindow(), self.iface)
+        from safe.gui.tools.peta_bencana_dialog import PetaBencanaDialog
+        dialog = PetaBencanaDialog(self.iface.mainWindow(), self.iface)
         dialog.show()  # non modal
 
     def show_batch_runner(self):

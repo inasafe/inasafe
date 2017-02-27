@@ -1,4 +1,5 @@
 # coding=utf-8
+
 """Test for Impact Function."""
 
 from copy import deepcopy
@@ -13,7 +14,20 @@ import logging
 from os.path import join, isfile
 from os import listdir
 
-from safe.definitions.layer_purposes import layer_purpose_profiling
+from safe.definitions.fields import (
+    female_ratio_field,
+    female_count_field,
+    elderly_ratio_field,
+    female_displaced_count_field,
+    youth_displaced_count_field,
+    displaced_field,
+)
+from safe.definitions.default_values import female_ratio_default_value
+from safe.definitions.layer_purposes import (
+    layer_purpose_profiling,
+    layer_purpose_analysis_impacted,
+    layer_purpose_aggregate_hazard_impacted,
+)
 from safe.definitions.minimum_needs import minimum_needs_fields
 from safe.definitions.utilities import definition
 from safe.test.utilities import (
@@ -57,9 +71,9 @@ from safe.definitions.constants import (
     ANALYSIS_SUCCESS,
     ANALYSIS_FAILED_BAD_INPUT,
 )
+from safe.gis.sanity_check import check_inasafe_fields
 from safe.utilities.unicode import byteify
 from safe.utilities.gis import wkt_to_rectangle
-from safe.utilities.utilities import check_inasafe_fields
 from safe.impact_function.impact_function import ImpactFunction
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -100,6 +114,9 @@ def run_scenario(scenario, use_debug=False):
         exposure_path = scenario['exposure']
     elif os.path.exists(standard_data_path('exposure', scenario['exposure'])):
         exposure_path = standard_data_path('exposure', scenario['exposure'])
+    elif os.path.exists(
+            standard_data_path(*(scenario['exposure'].split('/')))):
+        exposure_path = standard_data_path(*(scenario['exposure'].split('/')))
     else:
         raise IOError('No exposure file')
 
@@ -107,6 +124,8 @@ def run_scenario(scenario, use_debug=False):
         hazard_path = scenario['hazard']
     elif os.path.exists(standard_data_path('hazard', scenario['hazard'])):
         hazard_path = standard_data_path('hazard', scenario['hazard'])
+    elif os.path.exists(standard_data_path(*(scenario['hazard'].split('/')))):
+        hazard_path = standard_data_path(*(scenario['hazard'].split('/')))
     else:
         raise IOError('No hazard file')
 
@@ -119,6 +138,10 @@ def run_scenario(scenario, use_debug=False):
                 'aggregation', scenario['aggregation'])):
             aggregation_path = standard_data_path(
                 'aggregation', scenario['aggregation'])
+        elif os.path.exists(
+                standard_data_path(*(scenario['aggregation'].split('/')))):
+            aggregation_path = standard_data_path(
+                *(scenario['aggregation'].split('/')))
         else:
             raise IOError('No aggregation file')
 
@@ -289,6 +312,7 @@ class TestImpactFunction(unittest.TestCase):
 
         # With an aggregation layer, with selection
         impact_function.use_selected_features_only = True
+        impact_function.aggregation = aggregation_layer
         status, message = impact_function.prepare()
         self.assertEqual(PREPARE_SUCCESS, status, message)
         message = (
@@ -304,6 +328,168 @@ class TestImpactFunction(unittest.TestCase):
                 impact_function.analysis_extent.exportToWkt()),
             message
         )
+
+    def test_ratios_with_vector_exposure(self):
+        """Test if we can add defaults to a vector exposure."""
+        # First test, if we do not provide an aggregation,
+        hazard_layer = load_test_vector_layer(
+            'gisv4', 'hazard', 'classified_vector.geojson')
+        exposure_layer = load_test_vector_layer(
+            'gisv4', 'exposure', 'population.geojson')
+
+        # Set up impact function
+        impact_function = ImpactFunction()
+        impact_function.exposure = exposure_layer
+        impact_function.hazard = hazard_layer
+        impact_function.prepare()
+        # Let's remove one field from keywords.
+        # We monkey patch keywords for testing after `prepare` & before `run`.
+        fields = impact_function.exposure.keywords['inasafe_fields']
+        del fields[female_count_field['key']]
+        status, message = impact_function.run()
+        self.assertEqual(ANALYSIS_SUCCESS, status, message)
+
+        impact = impact_function.impact
+
+        # We check the field exist after the IF with only one value.
+        field = impact.fieldNameIndex(
+            female_ratio_field['field_name'])
+        self.assertNotEqual(-1, field)
+        unique_ratio = impact.uniqueValues(field)
+        self.assertEqual(1, len(unique_ratio))
+        self.assertEqual(
+            unique_ratio[0], female_ratio_default_value['default_value'])
+
+        # Second test, if we provide an aggregation without a default ratio 0.2
+        expected_ratio = 1.0
+        hazard_layer = load_test_vector_layer(
+            'gisv4', 'hazard', 'classified_vector.geojson')
+        exposure_layer = load_test_vector_layer(
+            'gisv4', 'exposure', 'population.geojson')
+        aggregation_layer = load_test_vector_layer(
+            'gisv4', 'aggregation', 'small_grid.geojson')
+
+        # Set up impact function
+        impact_function = ImpactFunction()
+        impact_function.aggregation = aggregation_layer
+        impact_function.exposure = exposure_layer
+        impact_function.hazard = hazard_layer
+        impact_function.debug_mode = True
+        impact_function.prepare()
+        # The `prepare` reads keywords from the file.
+        impact_function.aggregation.keywords['inasafe_default_values'] = {
+            elderly_ratio_field['key']: expected_ratio
+        }
+        fields = impact_function.exposure.keywords['inasafe_fields']
+        del fields[female_count_field['key']]
+        status, message = impact_function.run()
+        self.assertEqual(ANALYSIS_SUCCESS, status, message)
+        impact = impact_function.impact
+
+        # We check the field exist after the IF with only original values.
+        field = impact.fieldNameIndex(
+            female_ratio_field['field_name'])
+        self.assertNotEqual(-1, field)
+        unique_ratio = impact.uniqueValues(field)
+        self.assertEqual(3, len(unique_ratio))
+
+        # We check the field exist after the IF with only one value.
+        field = impact.fieldNameIndex(
+            elderly_ratio_field['field_name'])
+        self.assertNotEqual(-1, field)
+        unique_ratio = impact.uniqueValues(field)
+        self.assertEqual(1, len(unique_ratio))
+        self.assertEqual(expected_ratio, unique_ratio[0])
+
+        # Third test, if we provide an aggregation with a ratio and the
+        # exposure has a count.
+        hazard_layer = load_test_vector_layer(
+            'gisv4', 'hazard', 'classified_vector.geojson')
+        exposure_layer = load_test_vector_layer(
+            'gisv4', 'exposure', 'population.geojson')
+        aggregation_layer = load_test_vector_layer(
+            'gisv4', 'aggregation', 'small_grid.geojson')
+
+        # Set up impact function
+        impact_function = ImpactFunction()
+        impact_function.debug_mode = True
+        impact_function.exposure = exposure_layer
+        impact_function.hazard = hazard_layer
+        impact_function.aggregation = aggregation_layer
+        impact_function.prepare()
+        status, message = impact_function.run()
+        self.assertEqual(ANALYSIS_SUCCESS, status, message)
+
+        impact = impact_function.impact
+
+        # Check that we don't have only one unique value.
+        field = impact.fieldNameIndex(
+            female_ratio_field['field_name'])
+        self.assertNotEqual(-1, field)
+        unique_ratio = impact.uniqueValues(field)
+        self.assertNotEqual(1, len(unique_ratio))
+
+    def test_ratios_with_raster_exposure(self):
+        """Test if we can add defaults to a raster exposure.
+
+        See ticket #3851 how to manage ratios with a raster exposure.
+        """
+        hazard_layer = load_test_vector_layer(
+            'gisv4', 'hazard', 'tsunami_vector.geojson')
+        exposure_layer = load_test_raster_layer(
+            'gisv4', 'exposure', 'raster', 'population.asc')
+
+        # Set up impact function
+        impact_function = ImpactFunction()
+        impact_function.debug_mode = True
+        impact_function.exposure = exposure_layer
+        impact_function.hazard = hazard_layer
+        impact_function.prepare()
+        status, message = impact_function.run()
+        self.assertEqual(ANALYSIS_SUCCESS, status, message)
+
+        for layer in impact_function.outputs:
+            if layer.keywords['layer_purpose'] == (
+                    layer_purpose_analysis_impacted['key']):
+                analysis = layer
+            if layer.keywords['layer_purpose'] == (
+                    layer_purpose_aggregate_hazard_impacted['key']):
+                impact = layer
+
+        # We check in the impact layer if we have :
+        # female default ratio with the default value
+        index = impact.fieldNameIndex(female_ratio_field['field_name'])
+        self.assertNotEqual(-1, index)
+        unique_values = impact.uniqueValues(index)
+        self.assertEqual(1, len(unique_values))
+        female_ratio = unique_values[0]
+
+        # female displaced count and youth displaced count
+        self.assertNotEqual(
+            -1, impact.fieldNameIndex(
+                female_displaced_count_field['field_name']))
+        self.assertNotEqual(
+            -1, impact.fieldNameIndex(
+                youth_displaced_count_field['field_name']))
+
+        # Check that we have more than 0 female displaced in the analysis layer
+        index = analysis.fieldNameIndex(
+            female_displaced_count_field['field_name'])
+        female_displaced = analysis.uniqueValues(index)[0]
+        self.assertGreater(female_displaced, 0)
+
+        # Let's check computation
+        index = analysis.fieldNameIndex(
+            displaced_field['field_name'])
+        displaced_population = analysis.uniqueValues(index)[0]
+        self.assertEqual(
+            displaced_population * female_ratio, female_displaced)
+
+        # Check that we have more than 0 youth displaced in the analysis layer
+        index = analysis.fieldNameIndex(
+            female_displaced_count_field['field_name'])
+        value = analysis.uniqueValues(index)[0]
+        self.assertGreater(value, 0)
 
     def test_profiling(self):
         """Test running impact function on test data."""
@@ -374,6 +560,7 @@ class TestImpactFunction(unittest.TestCase):
         Let's keep booleans to False by default.
         """
         scenarios = {
+            'earthquake_raster_on_raster_population': False,
             'polygon_classified_on_line': False,
             'polygon_classified_on_point': False,
             'polygon_classified_on_vector_population': False,
@@ -434,7 +621,20 @@ class TestImpactFunction(unittest.TestCase):
             'exposure': 'structure',
         }
 
+        def debug_layer(layer, add_to_datastore):
+            """Monkey patching because we can't check inasafe_fields.
+
+            :param layer: The layer.
+            :type layer: QgsVectorLayer
+
+            :param add_to_datastore: Flag
+            :type add_to_datastore: bool
+            """
+            # We do nothing here.
+            return layer, add_to_datastore
+
         impact_function = ImpactFunction()
+        impact_function.debug_layer = debug_layer
 
         impact_function.post_process(impact_layer)
 
@@ -481,10 +681,13 @@ class TestImpactFunction(unittest.TestCase):
             'inasafe_version': get_version(),
             'aggregation_keywords': deepcopy(aggregation_layer.keywords),
             'aggregation_layer': aggregation_layer.source(),
+            'aggregation_layer_id': aggregation_layer.id(),
             'exposure_keywords': deepcopy(exposure_layer.keywords),
             'exposure_layer': exposure_layer.source(),
+            'exposure_layer_id': exposure_layer.id(),
             'hazard_keywords': deepcopy(hazard_layer.keywords),
             'hazard_layer': hazard_layer.source(),
+            'hazard_layer_id': hazard_layer.id(),
             'analysis_question': get_analysis_question(hazard, exposure),
             'report_question': get_report_question(exposure)
         }
@@ -540,10 +743,13 @@ class TestImpactFunction(unittest.TestCase):
             'os': platform.version(),
             'aggregation_keywords': None,
             'aggregation_layer': None,
+            'aggregation_layer_id': None,
             'exposure_keywords': deepcopy(exposure_layer.keywords),
             'exposure_layer': exposure_layer.source(),
+            'exposure_layer_id': exposure_layer.id(),
             'hazard_keywords': deepcopy(hazard_layer.keywords),
             'hazard_layer': hazard_layer.source(),
+            'hazard_layer_id': hazard_layer.id(),
             'analysis_question': get_analysis_question(hazard, exposure),
             'report_question': get_report_question(exposure)
         }
@@ -669,7 +875,7 @@ class TestImpactFunction(unittest.TestCase):
             u'elderly': 0,
             u'total': 162.7667000000474,
             u'minimum_needs__family_kits': 1,
-            u'total_unaffected': 153.55850000000828,
+            u'total_not_affected': 153.55850000000828,
         }
 
         self._check_minimum_fields_value(expected_value, impact_function)

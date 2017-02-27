@@ -2,7 +2,7 @@
 import unittest
 
 from safe.report.extractors.action_notes import action_checklist_extractor
-from safe.report.extractors.analysis_result import analysis_result_extractor
+from safe.report.extractors.general_report import general_report_extractor
 from safe.report.processors.default import jinja2_renderer
 from safe.report.report_metadata import ReportMetadata
 
@@ -21,15 +21,15 @@ class TestReportMetadata(unittest.TestCase):
             'template_folder': '../resources/report-templates/',
             'components': [
                 {
-                    'key': 'analysis-result',
+                    'key': 'general-report',
                     'type': 'Jinja2',
                     'processor': jinja2_renderer,
-                    'extractor': analysis_result_extractor,
+                    'extractor': general_report_extractor,
                     'output_format': 'file',
-                    'output_path': 'analysis-result-output.html',
+                    'output_path': 'general-report-output.html',
                     'template': 'standard-template/'
                                 'jinja2/'
-                                'analysis-result.html',
+                                'general-report.html',
                 },
                 {
                     'key': 'action-checklist',

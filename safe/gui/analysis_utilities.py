@@ -1,19 +1,22 @@
 # coding=utf-8
-"""Analysis Utilities"""
+
+"""Analysis Utilities."""
+
 import os
 from collections import OrderedDict
 from PyQt4.QtCore import QDir, Qt
-from PyQt4.QtCore import QSettings
 from qgis.core import QgsMapLayerRegistry, QgsProject, QgsMapLayer, QGis
 
 from safe.definitions.utilities import definition
 from safe.definitions.fields import hazard_class_field
-from safe.definitions.report import (
+from safe.definitions.reports.components import (
     standard_impact_report_metadata_pdf,
     report_a4_blue)
 from safe.impact_function.style import hazard_class_style
 from safe.report.report_metadata import ReportMetadata
 from safe.report.impact_report import ImpactReport
+from safe.utilities.gis import is_raster_layer
+from safe.utilities.settings import setting
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -73,18 +76,14 @@ def generate_impact_map_report(impact_function, iface):
         impact_function=impact_function)
 
     # Get other setting
-    # settings = QSettings()
-    # logo_path = settings.value(
-    #     'inasafe/organisation_logo_path', '', type=str)
-    # impact_report.inasafe_context.organisation_logo = logo_path
-    #
-    # disclaimer_text = settings.value(
-    #     'inasafe/reportDisclaimer', '', type=str)
-    # impact_report.inasafe_context.disclaimer = disclaimer_text
-    #
-    # north_arrow_path = settings.value(
-    #     'inasafe/north_arrow_path', '', type=str)
-    # impact_report.inasafe_context.north_arrow = north_arrow_path
+    logo_path = setting('organisation_logo_path', None, str)
+    impact_report.inasafe_context.organisation_logo = logo_path
+
+    disclaimer_text = setting('reportDisclaimer', None, str)
+    impact_report.inasafe_context.disclaimer = disclaimer_text
+
+    north_arrow_path = setting('north_arrow_path', None, str)
+    impact_report.inasafe_context.north_arrow = north_arrow_path
 
     # get the extent of impact layer
     impact_report.qgis_composition_context.extent = \
@@ -131,6 +130,8 @@ def add_impact_layers_to_canvas(impact_function, iface):
         if layer.id() == impact_function.impact.id():
             layer_node.setVisible(Qt.Checked)
             iface.setActiveLayer(layer)
+        elif is_raster_layer(layer):
+            layer_node.setVisible(Qt.Checked)
         else:
             layer_node.setVisible(Qt.Unchecked)
 
@@ -148,18 +149,26 @@ def add_debug_layers_to_canvas(impact_function):
     group_debug.setExpanded(False)
 
     # Let's style the hazard class in each layers.
-    classification = (
-        impact_function.hazard.keywords['classification'])
-    classification = definition(classification)
+    # noinspection PyBroadException
+    try:
+        classification = (
+            impact_function.hazard.keywords['classification'])
+        classification = definition(classification)
 
-    classes = OrderedDict()
-    for f in reversed(classification['classes']):
-        classes[f['key']] = (f['color'], f['name'])
-    hazard_class = hazard_class_field['key']
+        classes = OrderedDict()
+        for f in reversed(classification['classes']):
+            classes[f['key']] = (f['color'], f['name'])
+        hazard_class = hazard_class_field['key']
+    except:
+        # We might not have a classification. But this is the debug group so
+        # let's not raise a new exception.
+        classification = None
 
     datastore = impact_function.datastore
     for layer in datastore.layers():
         qgis_layer = datastore.layer(layer)
+        if not isinstance(qgis_layer, QgsMapLayer):
+            continue
         QgsMapLayerRegistry.instance().addMapLayer(
             qgis_layer, False)
         layer_node = group_debug.insertLayer(0, qgis_layer)
@@ -169,6 +178,6 @@ def add_debug_layers_to_canvas(impact_function):
         # Let's style layers which have a geometry and have
         # hazard_class
         if qgis_layer.type() == QgsMapLayer.VectorLayer:
-            if qgis_layer.geometryType() != QGis.NoGeometry:
+            if qgis_layer.geometryType() != QGis.NoGeometry and classification:
                 if qgis_layer.keywords['inasafe_fields'].get(hazard_class):
                     hazard_class_style(qgis_layer, classes, True)

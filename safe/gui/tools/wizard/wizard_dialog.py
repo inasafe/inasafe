@@ -6,9 +6,7 @@ from sqlite3 import OperationalError
 
 from PyQt4 import QtGui
 from PyQt4.QtCore import pyqtSignature, QSettings
-from PyQt4.QtGui import (
-    QDialog,
-    QPixmap)
+from PyQt4.QtGui import QDialog, QPixmap
 from qgis.core import QgsMapLayerRegistry
 
 from safe.definitions.layer_purposes import (
@@ -34,12 +32,13 @@ from safe.common.exceptions import (
     InaSAFEError,
     MetadataReadError,
     InvalidWizardStep)
+
 from safe.gui.tools.wizard.wizard_strings import (
     category_question_hazard,
     category_question_exposure,
     category_question_aggregation)
-from safe.gui.tools.wizard.wizard_utils import (
-    layer_description_html)
+from safe.gui.tools.wizard.wizard_utils import layer_description_html
+
 from safe.utilities.settings import set_inasafe_default_value_qsetting
 from safe.utilities.gis import (
     is_raster_layer,
@@ -83,8 +82,7 @@ from step_kw43_threshold import StepKwThreshold
 from step_kw45_inasafe_fields import StepKwInaSAFEFields
 from step_kw47_default_inasafe_fields import StepKwDefaultInaSAFEFields
 from step_kw49_inasafe_raster_default_values import (
-    StepKwInaSAFERasterDefaultValues
-)
+    StepKwInaSAFERasterDefaultValues)
 from step_kw55_source import StepKwSource
 from step_kw60_title import StepKwTitle
 from step_kw65_summary import StepKwSummary
@@ -621,6 +619,15 @@ class WizardDialog(QDialog, FORM_CLASS):
            executed when the Next button is released.
         """
         current_step = self.get_current_step()
+        # For checking age sum == 1
+        if current_step == self.step_kw_default_inasafe_fields:
+            good_ratios = self.step_kw_default_inasafe_fields.\
+                is_good_age_ratios()
+            self.step_kw_default_inasafe_fields.toggle_age_ratio_sum_message(
+                    good_ratios)
+            if not good_ratios:
+                return
+
         if current_step.step_type == 'step_fc':
             self.impact_function_steps.append(current_step)
         elif current_step.step_type == 'step_kw':

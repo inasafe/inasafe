@@ -67,7 +67,7 @@ def content():
         'displaced people associated with each feature.'
     ))
     tips.add(tr(
-        'Use the pick lists below to select the layer and the population '
+        'Use the pick lists to select the layer and the population '
         'field and then press \'OK\'.'
     ))
     tips.add(tr(

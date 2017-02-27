@@ -14,6 +14,7 @@
       "info": {},
       "process":[
         "Zonal stats between exposure and aggregate hazard",
+        "Add default values",
         "Aggregate the aggregation summary",
         "Aggregate the analysis summary"
       ]
@@ -43,7 +44,6 @@
       },
       "process":[
         "Cleaning the aggregation layer",
-        "Add default values",
         "Reproject aggregation layer to exposure CRS",
         "Convert the aggregation layer to the analysis layer",
         "Union hazard polygons with aggregation areas and assign hazard class"

@@ -1,15 +1,6 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool by AusAid
 
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
+"""Folder datastore implementation."""
 
 from itertools import product
 from PyQt4.QtCore import QFileInfo, QDir, QFile
@@ -23,6 +14,11 @@ from qgis.core import (
 from safe.datastore.datastore import DataStore
 from safe.common.exceptions import ErrorDataStore
 from safe.utilities.utilities import human_sorting
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 VECTOR_EXTENSIONS = ('shp', 'kml', 'geojson')
 RASTER_EXTENSIONS = ('asc', 'tiff', 'tif')
@@ -172,6 +168,7 @@ class Folder(DataStore):
             None,
             'CSV')
 
+        assert output.exists()
         return True, output.baseName()
 
     def _add_vector_layer(self, vector_layer, layer_name):
@@ -210,6 +207,7 @@ class Folder(DataStore):
             vector_layer.crs(),
             driver_mapping[self._default_vector_format])
 
+        assert output.exists()
         return True, output.baseName()
 
     def _add_raster_layer(self, raster_layer, layer_name):
@@ -259,4 +257,6 @@ class Folder(DataStore):
                 crs)
 
             del file_writer
+
+        assert output.exists()
         return True, output.baseName()

@@ -302,7 +302,7 @@ class ImpactReport(object):
         map_settings = self._iface.mapCanvas().mapSettings()
 
         self._qgis_composition_context = QGISCompositionContext(
-            self._iface.mapCanvas().extent(),
+            None,
             map_settings,
             ImpactReport.DEFAULT_PAGE_DPI)
         self._keyword_io = KeywordIO()
@@ -351,20 +351,56 @@ class ImpactReport(object):
         if not os.path.exists(self._output_folder):
             os.makedirs(self._output_folder)
 
+    @staticmethod
+    def absolute_output_path(
+            output_folder, components, component_key):
+        """Return absolute output path of component.
+
+        :param output_folder: The base output folder
+        :type output_folder: str
+
+        :param components: The list of components to look up
+        :type components: list[ReportMetadata]
+
+        :param component_key: The component key
+        :type component_key: str
+
+        :return:
+        """
+        comp_keys = [c.key for c in components]
+
+        if component_key in comp_keys:
+            idx = comp_keys.index(component_key)
+            output_path = components[idx].output_path
+            if isinstance(output_path, str):
+                return os.path.abspath(
+                    os.path.join(output_folder, output_path))
+            elif isinstance(output_path, list):
+                output_list = []
+                for path in output_path:
+                    output_list.append(os.path.abspath(
+                        os.path.join(output_folder, path)))
+                return output_list
+            elif isinstance(output_path, dict):
+                output_dict = {}
+                for key, path in output_path.iteritems():
+                    output_dict[key] = os.path.abspath(
+                        os.path.join(output_folder, path))
+                return output_dict
+        return None
+
     def component_absolute_output_path(self, component_key):
         """Return absolute output path of component.
 
-        :param component_key:
+        :param component_key: The component key
+        :type component_key: str
+
         :return:
         """
-        comp_keys = [c.key for c in self.metadata.components]
-        if component_key in comp_keys:
-            idx = comp_keys.index(component_key)
-            return os.path.abspath(
-                os.path.join(
-                    self.output_folder,
-                    self.metadata.components[idx].output_path))
-        return None
+        return ImpactReport.absolute_output_path(
+            self.output_folder,
+            self.metadata.components,
+            component_key)
 
     @property
     def impact_function(self):

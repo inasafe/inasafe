@@ -99,7 +99,7 @@ def aggregation_result_extractor(impact_report, component_metadata):
         total_affected_value = format_number(
             feat[total_field_index],
             enable_rounding=is_rounded)
-        if total_affected_value == 0:
+        if total_affected_value == '0':
             # skip aggregation type if the total affected is zero
             continue
         item = {
@@ -156,7 +156,8 @@ def aggregation_result_extractor(impact_report, component_metadata):
 
     if value_dict:
         for type_name in type_fields:
-            if int(value_dict[type_name]) == 0:
+            affected_value_string_formatted = value_dict[type_name]
+            if affected_value_string_formatted == '0':
                 # if total affected for breakdown type is zero
                 # current column index
                 column_index = len(type_total_values)
@@ -171,7 +172,7 @@ def aggregation_result_extractor(impact_report, component_metadata):
                         type_values[:column_index] +
                         type_values[column_index + 1:])
                 continue
-            type_total_values.append(value_dict[type_name])
+            type_total_values.append(affected_value_string_formatted)
 
     """Get the super total affected"""
 

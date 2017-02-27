@@ -11,6 +11,12 @@ from jinja2.environment import Template
 
 from safe.common.utilities import safe_dir
 from safe.definitions.constants import ANALYSIS_SUCCESS
+from safe.definitions.fields import (
+    total_not_affected_field,
+    total_affected_field,
+    total_not_exposed_field,
+    total_field)
+from safe.definitions.hazard_classifications import flood_hazard_classes
 from safe.impact_function.impact_function import ImpactFunction
 from safe.report.report_metadata import ReportMetadata
 from safe.test.utilities import (
@@ -21,14 +27,14 @@ from safe.test.utilities import (
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from qgis.core import QgsMapLayerRegistry
-from safe.definitions.report import (
+from safe.definitions.reports.components import (
     report_a4_blue,
     standard_impact_report_metadata_html,
     standard_impact_report_metadata_pdf,
-    analysis_result_component,
+    general_report_component,
     action_checklist_component,
     notes_assumptions_component,
-    analysis_breakdown_component,
+    analysis_detail_component,
     aggregation_result_component,
     minimum_needs_component,
     aggregation_postprocessors_component,
@@ -67,11 +73,21 @@ class TestImpactReport(unittest.TestCase):
 
     def setUp(self):
         self.maxDiff = None
+        # change displacement rate so the result is easily distinguished
+        self.default_displacement_rate = flood_hazard_classes['classes'][0][
+            'displacement_rate']
+        flood_hazard_classes['classes'][0][
+            'displacement_rate'] = 0.90
 
-    def test_analysis_result_from_impact_function(self):
+    def tearDown(self):
+        # restore displacement rate
+        flood_hazard_classes['classes'][0][
+            'displacement_rate'] = self.default_displacement_rate
+
+    def test_general_report_from_impact_function(self):
         """Test generate analysis result from impact function."""
 
-        output_folder = self.fixtures_dir('../output/analysis_result')
+        output_folder = self.fixtures_dir('../output/general_report')
 
         # Classified vector with building-points
         shutil.rmtree(output_folder, ignore_errors=True)
@@ -110,13 +126,12 @@ class TestImpactReport(unittest.TestCase):
 
         # Check Analysis Summary
         analysis_summary = impact_report.metadata.component_by_key(
-            analysis_result_component['key'])
+            general_report_component['key'])
         """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
 
         expected_context = {
-            'header': u'Analysis Results',
-            'title': u'In the event of a Generic, how many Structures might '
-                     u'be affected?',
+            'header': u'General Report',
+            'table_header': u'Estimated Number of buildings',
             'summary': [
                 {
                     'header_label': u'Hazard Zone',
@@ -135,35 +150,36 @@ class TestImpactReport(unittest.TestCase):
                             'value': 0,
                             'name': u'Low hazard zone',
                             'key': 'low'
+                        },
+                        {
+                            'value': '10',
+                            'name': u'Total',
+                            'as_header': True,
+                            'key': total_field['key']
                         }
                     ],
-                    'value_label': 'Count'
+                    'value_label': u'Count'
                 },
                 {
                     'header_label': u'Structures',
                     'rows': [
                         {
                             'value': '10',
-                            'name': u'Total Affected',
-                            'key': 'total_affected_field'
+                            'name': u'Affected',
+                            'key': total_affected_field['key']
                         },
                         {
                             'value': '0',
-                            'name': u'Total Unaffected',
-                            'key': 'total_unaffected_field'
+                            'name': u'Not Affected',
+                            'key': total_not_affected_field['key']
                         },
                         {
                             'value': '10',
-                            'name': u'Total Not Exposed',
-                            'key': 'total_not_exposed_field',
-                        },
-                        {
-                            'value': '10',
-                            'name': u'Total',
-                            'key': 'total_field'
+                            'name': u'Not Exposed',
+                            'key': total_not_exposed_field['key']
                         }
                     ],
-                    'value_label': 'Count'
+                    'value_label': u'Count'
                 }
             ]
         }
@@ -202,26 +218,33 @@ class TestImpactReport(unittest.TestCase):
             notes_assumptions_component['key'])
         """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
 
+        # TODO: this test is fragile and will break whenever we change
+        # definitions. TS. I reduced the test fragments to snippets which
+        # will hopefully make things a little less fragile.
         expected_context = {
-            'header': u'Notes and assumptions',
-            'items': [
-                u'The impacts on roads, people, buildings and other exposure '
-                u'elements may be underestimated if the exposure data are '
-                u'incomplete.',
-                u'Structures overlapping the analysis extent may be assigned '
-                u'a hazard status lower than that to which they are exposed '
-                u'outside the analysis area.',
-                u'Numbers reported for structures have been rounded to the '
-                u'nearest 10 if the total is less than 1,000; nearest 100 if '
-                u'more than 1,000and less than 100,000; and nearest 1000 if '
-                u'more than 100,000.',
-                u'Rounding is applied to all structure counts, which may '
-                u'cause discrepancies between subtotals and totals.'
-            ]
+            u'impacts on roads, people, buildings',
+            u'overlapping the analysis extent',
+            u'more than 1,000 and less than 100,000',
+            u'cause discrepancies',
+            u'zones may not be consistent with future events',
+            u'terrain and infrastructure type',
+            u'analysis extent is limited',
+            u'Hazard and exposure data outside'
         }
         actual_context = notes_assumptions.context
+        for expected_item in expected_context:
+            current_flag = False
+            # Iterate to see if expected_item is in at least one of the
+            # actual content items ...
+            for actual_item in actual_context['items']:
+                if expected_item in actual_item:
+                    current_flag = True
+            # It was not found in any item :-(
+            self.assertTrue(
+                current_flag,
+                '"%s" not found in %s' % (
+                    expected_item, actual_context['items']))
 
-        self.assertDictEqual(expected_context, actual_context)
         self.assertTrue(
             notes_assumptions.output, empty_component_output_message)
 
@@ -235,9 +258,9 @@ class TestImpactReport(unittest.TestCase):
 
         shutil.rmtree(output_folder, ignore_errors=True)
 
-    def test_analysis_breakdown_detail(self):
+    def test_analysis_detail(self):
         """Test generate analysis breakdown and aggregation report."""
-        output_folder = self.fixtures_dir('../output/analysis_breakdown')
+        output_folder = self.fixtures_dir('../output/analysis_detail')
 
         # Classified vector with buildings
         shutil.rmtree(output_folder, ignore_errors=True)
@@ -275,39 +298,130 @@ class TestImpactReport(unittest.TestCase):
         empty_component_output_message = 'Empty component output'
 
         # Check Analysis Breakdown
-        analysis_breakdown = impact_report.metadata.component_by_key(
-            analysis_breakdown_component['key'])
+        analysis_detail = impact_report.metadata.component_by_key(
+            analysis_detail_component['key'])
         """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
 
         expected_context = {
-            'header': u'Estimated number of Structures by type',
+            'header': u'Analysis Detail',
             'notes': u'Columns and rows containing only 0 or "No data" '
                      u'values are excluded from the tables.',
+            'group_border_color': u'#36454f',
+            'detail_header': {
+                'total_header_index': 3,
+                'breakdown_header_index': 0,
+                'header_hazard_group': {
+                    'not_affected': {
+                        'header': u'Not affected',
+                        'hazards': []
+                    },
+                    'affected': {
+                        'header': u'Affected',
+                        'hazards': [
+                            u'High hazard zone',
+                            u'Medium hazard zone',
+                            u'Low hazard zone'],
+                        'start_index': 1
+                    }
+                }
+            },
             'detail_table': {
+                'table_header': u'Estimated Number of buildings by '
+                                u'Structure type',
                 'headers': [
-                    u'Structures type',
-                    u'High hazard zone',
-                    u'Medium hazard zone',
+                    u'Structure type',
+                    {
+                        'start': True, 'colspan': 2,
+                        'name': u'High hazard zone',
+                        'header_group': 'affected'
+                    },
+                    {
+                        'start': False,
+                        'name': u'Medium hazard zone',
+                        'header_group': 'affected'
+                    },
                     u'Total Affected',
-                    u'Total Unaffected',
-                    u'Total Not Exposed',
-                    u'Total'
+                    u'Total Not Affected',
+                    u'Total Not Exposed', u'Total'
                 ],
                 'details': [
-                    [u'other', '0', '10', '10', '0', '0', '10'],
-                    [u'government', '0', '10', '10', '0', '0', '10'],
-                    [u'commercial', '10', '0', '10', '0', '0', '10'],
-                    [u'education', '10', '0', '10', '0', '10', '10'],
-                    [u'health', '10', '0', '10', '0', '0', '10']
+                    [
+                        u'Education',
+                        {
+                            'value': '10',
+                            'header_group': 'affected'
+                        },
+                        {
+                            'value': '0',
+                            'header_group': 'affected'
+                        },
+                        '10', '0', '10', '10'
+                    ],
+                    [
+                        u'Health',
+                        {
+                            'value': '10',
+                            'header_group': 'affected'
+                        },
+                        {
+                            'value': '0',
+                            'header_group': 'affected'
+                        },
+                        '10', '0', '0', '10'
+                    ],
+                    [
+                        u'Government',
+                        {
+                            'value': '0',
+                            'header_group': 'affected'
+                        },
+                        {
+                            'value': '10',
+                            'header_group': 'affected'
+                        }, '10', '0', '0', '10'
+                    ],
+                    [
+                        u'Commercial',
+                        {
+                            'value': '10',
+                            'header_group': 'affected'
+                        },
+                        {
+                            'value': '0',
+                            'header_group': 'affected'
+                        },
+                        '10', '0', '0', '10'
+                    ],
+                    [
+                        u'Other',
+                        {
+                            'value': '0',
+                            'header_group': 'affected'
+                        },
+                        {
+                            'value': '10',
+                            'header_group': 'affected'
+                        },
+                        '10', '0', '0', '10'
+                    ],
                 ],
-                'footers': [u'Total', '10', '10', '10', '0', '10', '10']
+                'footers': [
+                    u'Total', {
+                        'value': '10',
+                        'header_group': 'affected'
+                    },
+                    {
+                        'value': '10',
+                        'header_group': 'affected'
+                    }, '10', '0', '10', '10'
+                ]
             }
         }
-        actual_context = analysis_breakdown.context
+        actual_context = analysis_detail.context
         self.assertDictEqual(
             expected_context, actual_context)
         self.assertTrue(
-            analysis_breakdown.output, empty_component_output_message)
+            analysis_detail.output, empty_component_output_message)
 
         # Check Aggregate Report
         aggregate_result = impact_report.metadata.component_by_key(
@@ -321,12 +435,12 @@ class TestImpactReport(unittest.TestCase):
                 'header_label': u'Aggregation area',
                 'rows': [
                     {
-                        'type_values': ['10', '0', '10', '10', '0'],
+                        'type_values': ['0', '10', '10', '10', '0'],
                         'total': '10',
                         'name': u'area 1'
                     },
                     {
-                        'type_values': ['0', '10', '0', '0', '0'],
+                        'type_values': ['10', '0', '0', '0', '0'],
                         'total': '10',
                         'name': u'area 2'
                     },
@@ -337,8 +451,8 @@ class TestImpactReport(unittest.TestCase):
                     }
                 ],
                 'type_header_labels': [
-                    u'Other',
                     u'Government',
+                    u'Other',
                     u'Commercial',
                     u'Education',
                     u'Health'
@@ -365,12 +479,8 @@ class TestImpactReport(unittest.TestCase):
 
         shutil.rmtree(output_folder, ignore_errors=True)
 
-    # expected to fail until postprocessor calculation in analysis
-    # impacted is fixed
-    @unittest.expectedFailure
-    def test_minimum_needs(self):
+    def test_minimum_needs_outputs(self):
         """Test generate minimum needs section."""
-
         output_folder = self.fixtures_dir('../output/minimum_needs')
         shutil.rmtree(output_folder, ignore_errors=True)
 
@@ -450,6 +560,18 @@ class TestImpactReport(unittest.TestCase):
         self.assertTrue(
             minimum_needs.output, empty_component_output_message)
 
+        # test displacement rates notes, since it is only showed up when
+        # the rates is used, such as in this minimum needs report
+        notes_assumptions = impact_report.metadata.component_by_key(
+            notes_assumptions_component['key'])
+        """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
+
+        expected_context = (
+            'For this analysis, the following displacement rates were used: '
+            'Wet - 90.00%, Dry - 0.00%')
+        actual_context = notes_assumptions.context['items'][-1]
+        self.assertEqual(expected_context.strip(), actual_context.strip())
+
         """Check generated report"""
 
         output_path = impact_report.component_absolute_output_path(
@@ -460,9 +582,201 @@ class TestImpactReport(unittest.TestCase):
 
         shutil.rmtree(output_folder, ignore_errors=True)
 
-    # expected to fail until postprocessor calculation in analysis
-    # impacted is fixed
-    @unittest.expectedFailure
+    def test_aggregation_area_result_using_entire_area(self):
+        """Test generate aggregation area results.
+
+        This test should not handle postprocessors (covered in other tests).
+        """
+        output_folder = self.fixtures_dir(
+            '../output/aggregation_entire_area_result')
+        shutil.rmtree(output_folder, ignore_errors=True)
+
+        # Only flood and earthquake who deals with evacuated population report
+        hazard_layer = load_test_vector_layer(
+            'hazard', 'flood_multipart_polygons.shp')
+        exposure_layer = load_test_vector_layer(
+            'exposure', 'buildings.shp')
+        # Check when we doesn't use aggregation area.
+        # In other words, Entire Area aggregations.
+
+        impact_function = ImpactFunction()
+        impact_function.exposure = exposure_layer
+        impact_function.hazard = hazard_layer
+        impact_function.prepare()
+        return_code, message = impact_function.run()
+
+        self.assertEqual(return_code, ANALYSIS_SUCCESS, message)
+
+        report_metadata = ReportMetadata(
+            metadata_dict=standard_impact_report_metadata_html)
+
+        impact_report = ImpactReport(
+            IFACE,
+            report_metadata,
+            impact_function=impact_function)
+        impact_report.output_folder = output_folder
+        return_code, message = impact_report.process_component()
+
+        self.assertEqual(
+            return_code, ImpactReport.REPORT_GENERATION_SUCCESS, message)
+
+        """Check generated context"""
+        empty_component_output_message = 'Empty component output'
+
+        aggregation_result = impact_report.metadata.component_by_key(
+            aggregation_result_component['key'])
+        """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
+
+        expected_context = {
+            'aggregation_result': {
+                'header_label': u'Aggregation area',
+                'rows': [
+                    {
+                        'type_values': ['10', '30', '10', '10', '10', '10'],
+                        'total': '40',
+                        'name': u'Entire Area'
+                    }
+                ],
+                'type_header_labels': [
+                    u'Government',
+                    u'Residential',
+                    u'Commercial',
+                    u'Education',
+                    u'Place of worship',
+                    u'Health'
+                ],
+                'total_in_aggregation_area_label': u'Total',
+                'total_label': u'Total',
+                'total_all': '40',
+                'type_total_values': ['10', '30', '10', '10', '10', '10']
+            },
+            'header': u'Aggregation Result',
+            'notes': u'Columns and rows containing only 0 or "No data" '
+                     u'values are excluded from the tables.'
+        }
+
+        actual_context = aggregation_result.context
+
+        self.assertDictEqual(expected_context, actual_context)
+        self.assertTrue(
+            aggregation_result.output, empty_component_output_message)
+
+        """Check generated report"""
+
+        output_path = impact_report.component_absolute_output_path(
+            'impact-report')
+
+        # for now, test that output exists
+        self.assertTrue(os.path.exists(output_path))
+
+        shutil.rmtree(output_folder, ignore_errors=True)
+
+    def test_aggregation_area_result(self):
+        """Test generate aggregation area results.
+
+        This test should not handle postprocessors (covered in other tests).
+        """
+        output_folder = self.fixtures_dir(
+            '../output/aggregation_area_result')
+        shutil.rmtree(output_folder, ignore_errors=True)
+
+        # Only flood and earthquake who deals with evacuated population report
+        hazard_layer = load_test_vector_layer(
+            'hazard', 'flood_multipart_polygons.shp')
+        exposure_layer = load_test_vector_layer(
+            'exposure', 'buildings.shp')
+        # Check when we use aggregation area
+        aggregation_layer = load_test_vector_layer(
+            'aggregation', 'grid_jakarta.geojson')
+
+        impact_function = ImpactFunction()
+        impact_function.exposure = exposure_layer
+        impact_function.hazard = hazard_layer
+        impact_function.aggregation = aggregation_layer
+        impact_function.prepare()
+        return_code, message = impact_function.run()
+
+        self.assertEqual(return_code, ANALYSIS_SUCCESS, message)
+
+        report_metadata = ReportMetadata(
+            metadata_dict=standard_impact_report_metadata_html)
+
+        impact_report = ImpactReport(
+            IFACE,
+            report_metadata,
+            impact_function=impact_function)
+        impact_report.output_folder = output_folder
+        return_code, message = impact_report.process_component()
+
+        self.assertEqual(
+            return_code, ImpactReport.REPORT_GENERATION_SUCCESS, message)
+
+        """Check generated context"""
+        empty_component_output_message = 'Empty component output'
+
+        aggregation_result = impact_report.metadata.component_by_key(
+            aggregation_result_component['key'])
+        """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
+
+        expected_context = {
+            'aggregation_result': {
+                'header_label': u'Aggregation area',
+                'rows': [
+                    {
+                        'type_values': ['10', '0', '0', '10', '10', '0'],
+                        'total': '10',
+                        'name': u'B'
+                    },
+                    {
+                        'type_values': ['0', '10', '0', '0', '0', '0'],
+                        'total': '10',
+                        'name': u'C'
+                    },
+                    {
+                        'type_values': ['10', '10', '0', '10', '10', '0'],
+                        'total': '20',
+                        'name': u'F'
+                    },
+                    {
+                        'type_values': ['0', '20', '10', '0', '0', '10'],
+                        'total': '20',
+                        'name': u'G'
+                    }
+                ],
+                'type_header_labels': [
+                    u'Government',
+                    u'Residential',
+                    u'Commercial',
+                    u'Education',
+                    u'Place of worship',
+                    u'Health'
+                ],
+                'total_in_aggregation_area_label': u'Total',
+                'total_label': u'Total',
+                'total_all': '40',
+                'type_total_values': ['10', '30', '10', '10', '10', '10']
+            },
+            'header': u'Aggregation Result',
+            'notes': u'Columns and rows containing only 0 or "No data" '
+                     u'values are excluded from the tables.'
+        }
+
+        actual_context = aggregation_result.context
+
+        self.assertDictEqual(expected_context, actual_context)
+        self.assertTrue(
+            aggregation_result.output, empty_component_output_message)
+
+        """Check generated report"""
+
+        output_path = impact_report.component_absolute_output_path(
+            'impact-report')
+
+        # for now, test that output exists
+        self.assertTrue(os.path.exists(output_path))
+
+        shutil.rmtree(output_folder, ignore_errors=True)
+
     def test_aggregate_post_processors_vector(self):
         """Test generate aggregate postprocessors sections."""
 
@@ -510,68 +824,73 @@ class TestImpactReport(unittest.TestCase):
             aggregation_postprocessors_component['key'])
         """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
 
-        # TODO: This has possible wrong number, expect to be fixed soon.
         expected_context = {
-            'sections': OrderedDict(
-                [
-                    ('age', {
-                        'header': u'Detailed Age Report',
-                        'rows': [[u'area 1', 20, 3, 9, 1],
-                                 [u'area 2', 20, 3, 9, 1],
-                                 [u'area 3', 20, 3, 7, 1]],
-                        'columns': [
-                            u'Aggregation area',
-                            u'Total Population',
-                            u'Youth Count',
-                            u'Adult Count',
-                            u'Elderly Count'],
-                        'totals': [
-                            u'Total',
-                            50,
-                            9,
-                            30,
-                            3]
-                    }),
-                    ('gender', {
-                         'header': u'Detailed Gender '
-                                   u'Report',
-                         'rows': [[u'area 1', 20, 7, 7],
-                                  [u'area 2', 20, 7, 7],
-                                  [u'area 3', 20, 6, 6]],
-                         'columns': [
-                             u'Aggregation area',
-                             u'Total Population',
-                             u'Female Count',
-                             u'Male Count'],
-                         'totals': [
-                             u'Total',
-                             50,
-                             20,
-                             20]
-                    }),
-                    ('minimum_needs', {
-                        'header': u'Detailed Minimum Needs Report',
-                        'rows': [[u'area 1', 15, 42, 262, 1005, 3, 0],
-                                 [u'area 2', 15, 42, 262, 1005, 3, 0],
-                                 [u'area 3', 12, 33, 210, 804, 2, 0]],
-                        'columns': [
-                            u'Aggregation area',
-                            u'Total Population',
-                            'Rice',
-                            'Drinking Water',
-                            'Clean Water',
-                            'Family Kits',
-                            'Toilets'],
-                        'totals': [
-                            u'Total',
-                            50,
-                            117,
-                            734,
-                            2814,
-                            7,
-                            1]
-                    })
-                ])
+            'sections': OrderedDict([
+                ('age', {
+                    'header': u'Detailed Age Report',
+                    'notes': u'Columns and rows containing only 0 or "No '
+                             u'data" values are excluded from the tables.',
+                    'rows': [[u'B', '2,700', '660', '1,800', '240'],
+                             [u'C', '6,500', '1,700', '4,300', '590'],
+                             [u'F', '7,100', '1,800', '4,700', '640'],
+                             [u'G', '9,500', '2,400', '6,300', '860']],
+                    'columns': [u'Aggregation area',
+                                u'Total Displaced Population',
+                                u'Youth Displaced Count',
+                                u'Adult Displaced Count',
+                                u'Elderly Displaced Count'],
+                    'totals': [
+                        u'Total', '25,700', '6,400', '16,900', '2,400']}),
+                ('gender', {
+                    'header': u'Detailed Gender Report',
+                    'notes': u'Columns and rows containing only 0 or "No '
+                             u'data" values are excluded from the tables.',
+                    'rows': [
+                        [u'B', '2,700', '1,400', '1,400', '1,100', '130'],
+                        [u'C', '6,500', '3,300', '3,300', '2,600', '310'],
+                        [u'F', '7,100', '3,600', '3,600', '2,800', '330'],
+                        [u'G', '9,500', '4,800', '4,800', '3,800', '440']],
+                    'columns': [
+                        u'Aggregation area',
+                        u'Total Displaced Population',
+                        u'Male Displaced Count',
+                        u'Female Displaced Count',
+                        u'Weekly Hygiene Packs',
+                        u'Additional Weekly Rice kg for Pregnant and '
+                        u'Lactating Women [kg]'],
+                    'totals': [
+                        u'Total', '25,700', '12,900', '12,900', '10,200',
+                        '1,200']}),
+                ('minimum_needs', {
+                    'header': u'Detailed Minimum Needs Report',
+                    'notes': u'Columns and rows containing only 0 or "No '
+                             u'data" values are excluded from the tables.',
+                    'rows': [
+                        [u'B', '2,700', '7,400', '45,800', '176,000',
+                         '530', '130'],
+                        [u'C', '6,500', '18,200', '114,000', '434,000',
+                         '1,300', '330'],
+                        [u'F', '7,100', '19,800', '124,000', '473,000',
+                         '1,500', '360'],
+                        [u'G', '9,500', '26,500', '166,000', '634,000',
+                         '1,900', '480']],
+                    'columns': [
+                        u'Aggregation area',
+                        u'Total Displaced Population',
+                        u'Rice [kg]',
+                        u'Drinking Water [l]',
+                        u'Clean Water [l]',
+                        u'Family Kits',
+                        u'Toilets'],
+                    'totals': [
+                        u'Total',
+                        '25,700',
+                        '71,700',
+                        '449,000',
+                        '1,716,000',
+                        '5,200',
+                        '1,300']})]),
+            'use_aggregation': True
         }
         actual_context = aggregation_postprocessors.context
 
@@ -589,11 +908,12 @@ class TestImpactReport(unittest.TestCase):
 
         shutil.rmtree(output_folder, ignore_errors=True)
 
-    # expected to fail until postprocessor calculation in analysis
-    # impacted is fixed
-    @unittest.expectedFailure
     def test_aggregate_post_processors_raster(self):
-        """Test generate aggregate postprocessors sections."""
+        """Test generate aggregate postprocessors sections.
+
+        This test is not using actual displacement rate in order to
+        distinguish the result more clearly.
+        """
 
         output_folder = self.fixtures_dir(
             '../output/aggregate_post_processors')
@@ -639,65 +959,61 @@ class TestImpactReport(unittest.TestCase):
             aggregation_postprocessors_component['key'])
         """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
 
-        # TODO: This has possible wrong number, expect to be fixed soon.
         expected_context = {
-            'sections': OrderedDict(
-                [
-                    ('age', {
-                        'header': u'Detailed Age Report',
-                        'rows': [
-                            [u'Entire Area', 10, 2, 6, 0]],
-                        'columns': [
-                            u'Aggregation area',
-                            u'Total Population',
-                            u'Youth Count',
-                            u'Adult Count',
-                            u'Elderly Count'],
-                        'totals': [
-                            u'Total',
-                            10,
-                            2,
-                            6,
-                            0]
-                    }),
-                    ('gender', {
-                         'header': u'Detailed Gender '
-                                   u'Report',
-                         'rows': [
-                             [u'Entire Area', 10, 4, 4]],
-                         'columns': [
-                             u'Aggregation area',
-                             u'Total Population',
-                             u'Female Count',
-                             u'Male Count'],
-                         'totals': [
-                             u'Total',
-                             10,
-                             4,
-                             4]
-                    }),
-                    ('minimum_needs', {
-                        'header': u'Detailed Minimum Needs Report',
-                        'rows': [
-                            [u'Entire Area', 10, 25, 161, 616, 1, 0]],
-                        'columns': [
-                            u'Aggregation area',
-                            u'Total Population',
-                            'Rice',
-                            'Drinking Water',
-                            'Clean Water',
-                            'Family Kits',
-                            'Toilets'],
-                        'totals': [
-                            u'Total',
-                            10,
-                            25,
-                            161,
-                            616,
-                            1,
-                            0]
-                    })
-                ])
+            'sections': OrderedDict([
+                ('age', {
+                    'header': u'Detailed Age Report',
+                    'notes': u'Columns and rows containing only 0 or "No '
+                             u'data" values are excluded from the tables.',
+                    'rows': [[u'B', '10', '0', '0', '0'],
+                             [u'C', '10', '10', '10', '0'],
+                             [u'F', '10', '0', '10', '0'],
+                             [u'G', '10', '10', '10', '0'],
+                             [u'K', '10', '0', '10', '0']],
+                    'columns': [u'Aggregation area',
+                                u'Total Displaced Population',
+                                u'Youth Displaced Count',
+                                u'Adult Displaced Count',
+                                u'Elderly Displaced Count'],
+                    'totals': [u'Total', '20', '10', '20', '10']}),
+                ('gender', {
+                    'header': u'Detailed Gender Report',
+                    'notes': u'Columns and rows containing only 0 or "No '
+                             u'data" values are excluded from the tables.',
+                    'rows': [[u'B', '10', '0', '0', '0', '0'],
+                             [u'C', '10', '10', '10', '10', '0'],
+                             [u'F', '10', '10', '10', '10', '0'],
+                             [u'G', '10', '10', '10', '10', '0'],
+                             [u'K', '10', '0', '0', '0', '0']],
+                    'columns': [u'Aggregation area',
+                                u'Total Displaced Population',
+                                u'Male Displaced Count',
+                                u'Female Displaced Count',
+                                u'Weekly Hygiene Packs',
+                                u'Additional Weekly Rice kg for Pregnant and '
+                                u'Lactating Women [kg]'],
+                    'totals': [u'Total', '20', '10', '10', '10', '0']}),
+                ('minimum_needs', {
+                    'header': u'Detailed Minimum Needs Report',
+                    'notes': u'Columns and rows containing only 0 or "No '
+                             u'data" values are excluded from the tables.',
+                    'rows': [
+                        [u'B', '10', '10', '20', '80', '0', '0'],
+                        [u'C', '10', '20', '90', '340', '0', '0'],
+                        [u'F', '10', '10', '70', '260', '0', '0'],
+                        [u'G', '10', '20', '110', '410', '10', '0'],
+                        [u'K', '10', '10', '40', '130', '0', '0']],
+                    'columns': [u'Aggregation area',
+                                u'Total Displaced Population',
+                                u'Rice [kg]',
+                                u'Drinking Water [l]',
+                                u'Clean Water [l]',
+                                u'Family Kits',
+                                u'Toilets'],
+                    'totals': [u'Total', '20', '60', '350', '1,400', '10',
+                               '0']
+                })]),
+            'use_aggregation': True
         }
         actual_context = aggregation_postprocessors.context
 
@@ -716,11 +1032,12 @@ class TestImpactReport(unittest.TestCase):
 
         shutil.rmtree(output_folder, ignore_errors=True)
 
-    # expected to fail until postprocessor calculation in analysis
-    # impacted is fixed
-    @unittest.expectedFailure
     def test_population_infographic(self):
-        """Test population infographic generation."""
+        """Test population infographic generation.
+
+        This test is not using actual displacement rate in order to
+        distinguish the result more clearly.
+        """
         output_folder = self.fixtures_dir(
             '../output/population_infographic')
         shutil.rmtree(output_folder, ignore_errors=True)
@@ -758,20 +1075,16 @@ class TestImpactReport(unittest.TestCase):
             return_code, ImpactReport.REPORT_GENERATION_SUCCESS, message)
 
         """Checking generated context"""
-        empty_component_output_message = 'Empty component output'
-
         # Check population infographic
         population_infographic = impact_report.metadata.component_by_key(
             population_infographic_component['key']).context
         """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
 
-        # TODO: This has possible wrong number, expect to be fixed soon.
-
         # Check population chart
         expected_context = {
-            'data': [30, 125.88367290531815],
-            'total_value': 155.883672905,
-            'labels': [u'Wet', u'Total Unaffected'],
+            'data': [30, 40],
+            'total_value': 70,
+            'labels': [u'Wet', u'Total Not Affected'],
             'colors': [u'#f03b20', u'#1a9641'],
         }
 
@@ -792,7 +1105,7 @@ class TestImpactReport(unittest.TestCase):
 
         # Check people section
         expected_context = {
-            'number': 30
+            'number': '30'
         }
 
         people_context = population_infographic['sections']['people'][
@@ -811,24 +1124,24 @@ class TestImpactReport(unittest.TestCase):
         expected_context = {
             'items': [
                 {
-                    'header': 'Female',
-                    'number': 80,
-                    'percentage': 50.0,
+                    'header': u'Female',
+                    'number': '10',
+                    'percentage': '47.4',
                 },
                 {
-                    'header': 'Youth',
-                    'number': 40,
-                    'percentage': 25.0,
+                    'header': u'Youth',
+                    'number': '10',
+                    'percentage': '26.3',
                 },
                 {
-                    'header': 'Adult',
-                    'number': 100,
-                    'percentage': 62.5,
+                    'header': u'Adult',
+                    'number': '20',
+                    'percentage': '68.4',
                 },
                 {
-                    'header': 'Elderly',
-                    'number': 20,
-                    'percentage': 12.5,
+                    'header': u'Elderly',
+                    'number': '10',
+                    'percentage': '5.3',
                 }
             ]
         }
@@ -837,11 +1150,12 @@ class TestImpactReport(unittest.TestCase):
             'vulnerability']
 
         actual_context = {
-            'items': [{
-                'header': item.header,
-                'number': item.number,
-                'percentage': item.percentage
-            } for item in vulnerabilities_context['items']]
+            'items': [
+                {
+                    'header': item.header,
+                    'number': item.number,
+                    'percentage': item.percentage
+                } for item in vulnerabilities_context['items']]
         }
 
         self.assertDictEqual(
@@ -851,29 +1165,29 @@ class TestImpactReport(unittest.TestCase):
         expected_context = {
             'items': [
                 {
-                    'header': 'Rice',
-                    'number': 420,
-                    'unit': 'kg/weekly',
+                    'header': u'Rice',
+                    'number': '60',
+                    'unit': u'kg/weekly',
                 },
                 {
-                    'header': 'Drinking Water',
-                    'number': 2600,
-                    'unit': 'l/weekly',
+                    'header': u'Drinking Water',
+                    'number': '350',
+                    'unit': u'l/weekly',
                 },
                 {
-                    'header': 'Clean Water',
-                    'number': 10000,
-                    'unit': 'l/weekly',
+                    'header': u'Clean Water',
+                    'number': '1,400',
+                    'unit': u'l/weekly',
                 },
                 {
-                    'header': 'Family Kits',
-                    'number': 30,
-                    'unit': 'units',
+                    'header': u'Family Kits',
+                    'number': '10',
+                    'unit': u'units',
                 },
                 {
                     'header': 'Toilets',
-                    'number': 10,
-                    'unit': 'units',
+                    'number': '0',
+                    'unit': u'units',
                 },
             ]
         }
@@ -882,20 +1196,16 @@ class TestImpactReport(unittest.TestCase):
             'minimum_needs']
 
         actual_context = {
-            'items': [{
-                'header': item.header,
-                'number': item.number,
-                'percentage': item.percentage,
-            } for item in needs_context['items']]
+            'items': [
+                {
+                    'header': item.header,
+                    'number': item.number,
+                    'unit': item.unit,
+                } for item in needs_context['items']]
         }
 
         self.assertDictEqual(
             expected_context, actual_context)
-
-        # Check output
-
-        self.assertTrue(
-            population_infographic.output, empty_component_output_message)
 
         """Check generated report"""
 
@@ -978,9 +1288,10 @@ class TestImpactReport(unittest.TestCase):
 
         # insert layer to registry
         layer_registry = QgsMapLayerRegistry.instance()
-        layer_registry.removeAllMapLayers()
-        rendered_layer = impact_function.exposure_impacted
-        layer_registry.addMapLayer(rendered_layer)
+        layer_registry.addMapLayers(
+            [hazard_layer, exposure_layer, aggregation_layer])
+        rendered_layer = impact_function.impact
+        layer_registry.addMapLayers(impact_function.outputs)
 
         # Create impact report
         report_metadata = ReportMetadata(
@@ -1004,11 +1315,13 @@ class TestImpactReport(unittest.TestCase):
             'a4-portrait-blue')
 
         # for now, test that output exists
-        self.assertTrue(os.path.exists(output_path))
+        for path in output_path.itervalues():
+            self.assertTrue(os.path.exists(path), msg=path)
 
         output_path = impact_report.component_absolute_output_path(
             'a4-landscape-blue')
 
-        self.assertTrue(os.path.exists(output_path))
+        for path in output_path.itervalues():
+            self.assertTrue(os.path.exists(path), msg=path)
 
         shutil.rmtree(output_folder, ignore_errors=True)

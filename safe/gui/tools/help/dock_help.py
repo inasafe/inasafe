@@ -147,7 +147,7 @@ def content():
         'mathematical model. The results of this model will show what the '
         'effect of the hazard will be on the exposed infrastructure or '
         'people. The plugin relies on simple keyword metadata '
-        'associated with each layer to determine what kind of information the'
+        'associated with each layer to determine what kind of information the '
         'layer represents. You can define these keywords by '
         'selecting a layer and then clicking the InaSAFE Keywords Wizard icon '
         'on the toolbar: '),
@@ -267,11 +267,8 @@ def content():
         'Remote datasets will be copied locally before processing.'))
     bullets.add(m.Text(
         tr(
-            'All datasets will be clipped to according to the behaviours '
-            'defined in the analysis extents dialog.'
-            'layer, exposure layer and the current view extents unless '
-            'you have specified a different clipping behaviour in the '
-            'extents selector dialog.'),
+            'All datasets will be clipped to the behaviours defined in the '
+            'analysis extents dialog if you do not use an aggregation layer.'),
         m.Image(
             'file:///%s/img/icons/'
             'set-extents-tool.svg' % resources_path(),
@@ -281,9 +278,8 @@ def content():
         tr(
             'You can visualise the area that will be used for the analysis '
             'by enabling the "Toggle Scenario Outlines" tool. When this tool '
-            'is enabled, a line (green by defaul) will be drawn around the '
-            'outermost boundary of the analysis area.'
-            '.'),
+            'is enabled, a line (green by default) will be drawn around the '
+            'outermost boundary of the analysis area.'),
         m.Image(
             'file:///%s/img/icons/'
             'toggle-rubber-bands.svg' % resources_path(),

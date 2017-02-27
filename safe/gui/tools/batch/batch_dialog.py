@@ -37,6 +37,7 @@ from qgis.core import (
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature, pyqtSlot, QSettings, Qt
 from PyQt4.QtGui import (
+    QAbstractItemView,
     QDialog,
     QFileDialog,
     QTableWidgetItem,
@@ -52,11 +53,12 @@ from safe.definitions.layer_purposes import (
     layer_purpose_hazard,
     layer_purpose_exposure,
     layer_purpose_aggregation)
-from safe.definitions.report import (
+from safe.definitions.reports.components import (
     standard_impact_report_metadata_pdf,
     report_a4_blue)
 from safe.utilities.gis import extent_string_to_array
 from safe.common.utilities import temp_dir
+from safe.common.signals import send_error_message
 from safe.utilities.resources import (
     html_footer, html_header, get_ui_class)
 from safe.messaging import styles
@@ -106,6 +108,9 @@ class BatchDialog(QDialog, FORM_CLASS):
         self.table.setColumnWidth(0, 200)
         self.table.setColumnWidth(1, 125)
 
+        # select the whole row instead of one cell
+        self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
+
         # initiate layer group creation
         self.root = QgsProject.instance().layerTreeRoot()
         # container for all layer group
@@ -146,7 +151,7 @@ class BatchDialog(QDialog, FORM_CLASS):
             self.run_selected_button, QDialogButtonBox.ActionRole)
 
         # Set up new project settings
-        self.start_in_new_project = True
+        self.start_in_new_project = False
 
         # Set up context help
         self.help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
@@ -216,8 +221,6 @@ class BatchDialog(QDialog, FORM_CLASS):
         :param scenario_directory: Path where .txt & .py reside.
         :type scenario_directory: QString
         """
-
-        # LOGGER.info("populate_table from %s" % scenario_directory)
         parsed_files = []
         unparsed_files = []
         self.table.clearContents()
@@ -268,17 +271,11 @@ class BatchDialog(QDialog, FORM_CLASS):
         :param filename: the script filename.
         :type filename: str
         """
-
-        # import script module
-        # LOGGER.info('Run script task' + filename)
         module, _ = os.path.splitext(filename)
         if module in sys.modules:
             script = reload(sys.modules[module])
         else:
             script = __import__(module)
-
-        # run as a new project
-        # self.iface.newProject()
 
         # run entry function
         function = script.runScript
@@ -288,8 +285,7 @@ class BatchDialog(QDialog, FORM_CLASS):
             function()
 
     def reset_status(self):
-        """Set all scenarios' status to empty in the table
-        """
+        """Set all scenarios' status to empty in the table."""
         for row in range(self.table.rowCount()):
             status_item = self.table.item(row, 1)
             status_item.setText(self.tr(''))
@@ -306,15 +302,15 @@ class BatchDialog(QDialog, FORM_CLASS):
         """
 
         status = True
+        message = ''
         # get hazard
         if 'hazard' in items:
-            LOGGER.info('Hazard path is found')
             hazard_path = items['hazard']
             hazard = self.define_layer(hazard_path)
             if not hazard:
                 status = False
                 message = self.tr(
-                    'Unable to find {hazard_path} ').format(
+                    'Unable to find {hazard_path}').format(
                     hazard_path=hazard_path)
         else:
             hazard = None
@@ -322,13 +318,14 @@ class BatchDialog(QDialog, FORM_CLASS):
 
         # get exposure
         if 'exposure' in items:
-            LOGGER.info('Exposure path is found')
             exposure_path = items['exposure']
             exposure = self.define_layer(exposure_path)
             if not exposure:
                 status = False
+                if message:
+                    message += '\n'
                 message += self.tr(
-                    '\nUnable to find {exposure_path} ').format(
+                    'Unable to find {exposure_path}').format(
                     exposure_path=exposure_path)
         else:
             exposure = None
@@ -336,7 +333,6 @@ class BatchDialog(QDialog, FORM_CLASS):
 
         # get aggregation
         if 'aggregation' in items:
-            LOGGER.info('Aggregation path is found')
             aggregation_path = items['aggregation']
             aggregation = self.define_layer(aggregation_path)
         else:
@@ -385,11 +381,11 @@ class BatchDialog(QDialog, FORM_CLASS):
         """Create QGIS layer (either vector or raster) from file path input.
 
         :param layer_path: Full path to layer file.
-        :type layer_path: path
+        :type layer_path: str
 
-        :return: QgsMapLayer
+        :return: QGIS layer.
+        :rtype: QgsMapLayer
         """
-
         scenario_dir = str(self.source_directory.text())
         joined_path = os.path.join(scenario_dir, layer_path)
         full_path = os.path.normpath(joined_path)
@@ -435,7 +431,6 @@ class BatchDialog(QDialog, FORM_CLASS):
         :returns: Flag indicating if the task succeeded or not.
         :rtype: bool
         """
-
         self.enable_busy_cursor()
         for layer_group in self.layer_group_container:
             layer_group.setVisible(False)
@@ -463,7 +458,9 @@ class BatchDialog(QDialog, FORM_CLASS):
                     str(e))
                 result = False
         elif isinstance(value, dict):
-
+            # start in new project if toggle is active
+            if self.start_in_new_project:
+                self.iface.newProject()
             # create layer group
             group_name = value['scenario_name']
             self.layer_group = self.root.addGroup(group_name)
@@ -529,18 +526,20 @@ class BatchDialog(QDialog, FORM_CLASS):
                                 self.iface,
                                 group_name)
                         except:
-                            status_item.setText('Report failed to generate')
+                            status_item.setText(
+                                self.tr('Report failed to generate.'))
                     else:
                         LOGGER.info('Impact layer is invalid')
+
                 elif status == ANALYSIS_FAILED_BAD_INPUT:
                     LOGGER.info('Bad input detected')
-                    LOGGER.info(message)
+
                 elif status == ANALYSIS_FAILED_BAD_CODE:
                     LOGGER.info('Impact function encountered a bug')
-                    LOGGER.info(message)
+
             else:
-                LOGGER.warning('Impact function not ready with message:')
-                LOGGER.info(prepare_message)
+                LOGGER.warning('Impact function not ready')
+                send_error_message(self, prepare_message)
 
         else:
             LOGGER.exception('Data type not supported: "%s"' % value)
@@ -579,17 +578,21 @@ class BatchDialog(QDialog, FORM_CLASS):
     @pyqtSignature('')
     def run_selected_clicked(self):
         """Run the selected scenario."""
+        # get all selected rows
+        rows = sorted(set(index.row() for index in
+                          self.table.selectedIndexes()))
         self.enable_busy_cursor()
-        current_row = self.table.currentRow()
-        item = self.table.item(current_row, 0)
-        status_item = self.table.item(current_row, 1)
-        self.run_task(item, status_item)
+        # iterate over selected rows
+        for row in rows:
+            current_row = row
+            item = self.table.item(current_row, 0)
+            status_item = self.table.item(current_row, 1)
+            self.run_task(item, status_item)
         self.disable_busy_cursor()
 
     @pyqtSignature('')
     def run_all_clicked(self):
-        """Run all scenario when pbRunAll is clicked.
-        """
+        """Run all scenario when pbRunAll is clicked."""
         self.reset_status()
 
         self.enable_busy_cursor()
@@ -679,8 +682,15 @@ class BatchDialog(QDialog, FORM_CLASS):
 
         Directory where the report stored is specified by user input from the
         dialog. This function is adapted from analysis_utilities.py
-        :param impact_function: Impact Function
-        :param iface: iface
+
+        :param impact_function: Impact Function.
+        :type impact_function: ImpactFunction()
+
+        :param iface: iface.
+        :type iface: iface
+
+        :param scenario_name: name of the scenario
+        :type scenario_name: str
         """
         # output folder
         output_dir = self.output_directory.text()
@@ -729,8 +739,7 @@ class BatchDialog(QDialog, FORM_CLASS):
             # LOGGER.info(report)
 
     def update_default_output_dir(self):
-        """Update output dir if set to default
-        """
+        """Update output dir if set to default."""
         if self.scenario_directory_radio.isChecked():
             self.output_directory.setText(self.source_directory.text())
 
@@ -839,7 +848,6 @@ def read_scenarios(filename):
         path for hazard, exposure, and aggregation are relative to scenario
         file path
     """
-
     # Input checks
     filename = os.path.abspath(filename)
 

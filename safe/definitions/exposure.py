@@ -13,9 +13,7 @@ from safe.definitions.fields import (
     female_count_field,
     youth_count_field,
     population_count_field,
-    exposure_type_field,
-    feature_value_field,
-    feature_rate_field)
+    exposure_type_field)
 from safe.definitions.layer_modes import (
     layer_mode_continuous, layer_mode_classified)
 from safe.definitions.exposure_classifications import (
@@ -38,21 +36,30 @@ exposure_population = {
         'exposed to a particular hazard.'),
     'notes': [  # these are additional generic notes for people - IF has more
         caveat_incomplete_data,
+        tr('Exposed population varies by the time (day or night, weekends, '
+           'holidays etc.). Such variations are not included in the analysis.'
+        ),
         tr('Numbers reported for population counts have been rounded to the '
            'nearest 10 people if the total is less than 1,000; nearest 100 '
            'people if more than 1,000 and less than 100,000; and nearest '
            '1000 if more than 100,000.'),
         tr('Rounding is applied to all population values, which may cause '
-           'discrepancies between subtotals and totals.'),
+           'discrepancies between subtotals and totals. '),
+        concepts['rounding_methodology']['description'],
+        tr('If displacement counts are 0, no minimum needs and displaced '
+           'related postprocessors will be shown.')
     ],
     'earthquake_notes': [
         # these are earthquake specific notes for population
-        tr('Map shows the estimation of displaced population.'),
-        tr('People are displaced if they experience and survive a shake level '
-           'of more than 5 on the MMI scale.'),
+        tr('Map shows the estimated displaced population. People are '
+           'displaced if they experience and survive a shake level of more '
+           'than 5 on the MMI scale.'),
+        tr('Exposed population varies by the time (day or night, weekends, '
+           'holidays etc.). Such variations are not considered in the '
+           'estimates in the InaSAFE.'),
         tr('The fatality calculation assumes that no fatalities occur for '
            'shake levels below 4 and fatality counts of less than 50 are '
-           'disregarded.'),
+           'rounded down.'),
 
     ],
     'earthquake_pager_notes': [   # these are earthquake Pager specific notes
@@ -60,9 +67,28 @@ exposure_population = {
             'Pager Model.'),
     ],
     'earthquake_itb_notes': [   # these are earthquake ITB specific notes
-         tr('Fatality model is from Institut Teknologi Bandung 2012.'),
+        tr('Fatality model is from Institut Teknologi Bandung 2012.'),
 
     ],
+    'earthquake_fatality_model_limitations': [
+        # notes provided by Hadi Ghasemi
+        tr('Earthquake fatalities are due to a number of factors, such as '
+           'destructive level of ground shaking, tsunami, landsliding and '
+           'fire. The implemented fatality models only consider the number of '
+           'fatalities due to the earthquake ground shaking and do not '
+           'include losses due to the other secondary hazards.'),
+        tr('The fatality models do not estimate number of injuries or '
+           'displaced people. '),
+        tr('Empirical fatality models provide an estimate of the number of '
+           'fatalities. There are several sources of uncertainty contributing '
+           'to the overall uncertainty of any estimate, such as uncertainties '
+           'in shaking intensity, and population estimates. '),
+        tr('Care should be taken when applying empirical earthquake fatality '
+           'models for ground-motion estimation methods that are inconsistent '
+           'with the methods used to calibrate the model.'),
+
+    ],
+
     'continuous_notes': [  # notes specific to continuous data
     ],
     'classified_notes': [  # notes specific to classified data
@@ -84,7 +110,7 @@ exposure_population = {
         tr('Are there enough covered floor areas available for the displaced '
            'people?'),
         tr('What are the land-use rights for the settlement location?'),
-        tr('What is the ownership of the shelter or settlement location'),
+        tr('What is the ownership of the shelter or settlement location?'),
         tr('What is the appropriate construction for temporary or '
            'transitional household shelter?'),
         tr('What are the existing environmental risks or vulnerabilities at '
@@ -165,6 +191,7 @@ exposure_road = {
            'more than 100,000.'),
         tr('Rounding is applied to all road lengths, which may cause '
            'discrepancies between subtotals and totals.'),
+        concepts['rounding_methodology']['description'],
         tr('Roads marked as not affected may still be unusable due to network '
            'isolation. Roads marked as affected may still be usable if they '
            'are elevated above the local landscape.'),
@@ -180,7 +207,7 @@ exposure_road = {
     'actions': [  # these are additional generic actions - IF has more
         tr('Which roads can be used to evacuate people or to distribute '
            'logistics?'),
-        tr('What type of vehicles can use the unaffected roads?'),
+        tr('What type of vehicles can use the not affected roads?'),
         tr('What sort of equipment will be needed to reopen roads?'),
         tr('Where will we get the equipment needed to open roads?'),
         tr('Which government department is responsible for supplying '
@@ -201,8 +228,8 @@ exposure_road = {
     'compulsory_fields': [exposure_type_field],
     'fields': exposure_fields,
     'extra_fields': [
-        feature_value_field,
-        feature_rate_field
+        # feature_value_field, disabled in V4.0, ET 13/02/17
+        # feature_rate_field disabled in V4.0, ET 13/02/17
     ],
     'layer_modes': [layer_mode_classified],
     'display_not_exposed': True,
@@ -223,10 +250,12 @@ exposure_structure = {
            'hazard status lower than that to which they are exposed outside '
            'the analysis area.'),
         tr('Numbers reported for structures have been rounded to the nearest '
-           '10 if the total is less than 1,000; nearest 100 if more than 1,000'
-           'and less than 100,000; and nearest 1000 if more than 100,000.'),
+           '10 if the total is less than 1,000; nearest 100 if more than '
+           '1,000 and less than 100,000; and nearest 1000 if more than '
+           '100,000.'),
         tr('Rounding is applied to all structure counts, which may cause '
            'discrepancies between subtotals and totals.'),
+        concepts['rounding_methodology']['description'],
     ],
     'continuous_notes': [  # notes specific to continuous data
     ],
@@ -260,8 +289,8 @@ exposure_structure = {
     'compulsory_fields': [exposure_type_field],
     'fields': exposure_fields,
     'extra_fields': [
-        feature_value_field,
-        feature_rate_field
+        # feature_value_field, disabled in V4.0, ET 13/02/17
+        # feature_rate_field disabled in V4.0, ET 13/02/17
     ],
     'layer_modes': [layer_mode_classified],
     'display_not_exposed': True,
@@ -323,6 +352,7 @@ exposure_land_cover = {
            'hectares if more than 100,000.'),
         tr('Rounding is applied to all land cover areas, which may cause '
            'discrepancies between subtotals and totals.'),
+        concepts['rounding_methodology']['description']
     ],
     'continuous_notes': [  # notes specific to continuous data
     ],
@@ -359,8 +389,8 @@ exposure_land_cover = {
     'compulsory_fields': [exposure_type_field],
     'fields': exposure_fields,
     'extra_fields': [
-        feature_value_field,
-        feature_rate_field
+        # feature_value_field, disabled in V4.0, ET 13/02/17
+        # feature_rate_field disabled in V4.0, ET 13/02/17
     ],
     'layer_modes': [layer_mode_classified],
     'display_not_exposed': False,

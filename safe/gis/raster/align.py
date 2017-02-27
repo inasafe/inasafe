@@ -1,10 +1,6 @@
 # coding=utf-8
-"""
-Align rasters :
-- reproject to the same CRS
-- resample to the same cell size and offset in the grid
-- clip to a region of interest
-"""
+
+"""Align rasters."""
 
 from qgis.core import (
     QgsRasterLayer,
@@ -16,6 +12,7 @@ from qgis.analysis import QgsAlignRaster
 from safe.common.utilities import unique_filename
 from safe.common.exceptions import AlignRastersError
 from safe.definitions.processing_steps import align_steps
+from safe.gis.sanity_check import check_layer
 from safe.utilities.profiling import profile
 from safe.utilities.i18n import tr
 
@@ -38,6 +35,10 @@ def align_rasters(hazard_layer, exposure_layer, extent):
     From the two layers, the layer with finer resolution (smaller cell size)
     will be used as the reference for the alignment (i.e. parameters will
     be set to its CRS, cell size and grid offset).
+
+    - Reproject to the same CRS.
+    - Resample to the same cell size and offset in the grid.
+    - Clip to a region of interest.
 
     :param hazard_layer: Hazard layer to be aligned.
     :type hazard_layer: QgsRasterLayer
@@ -108,4 +109,6 @@ def align_rasters(hazard_layer, exposure_layer, extent):
     aligned_exposure_layer.keywords['resolution'] = (
         align.cellSize().width(), align.cellSize().height())
 
+    check_layer(exposure_layer)
+    check_layer(hazard_layer)
     return aligned_hazard_layer, aligned_exposure_layer

@@ -4,8 +4,13 @@ from safe.definitions.hazard_classifications import (
     generic_hazard_classes,
     volcano_hazard_classes,
     earthquake_mmi_hazard_classes,
+    earthquake_mmi_scale,
     flood_hazard_classes,
+    flood_petabencana_hazard_classes,
     tsunami_hazard_classes,
+    tsunami_hazard_population_classes,
+    tsunami_hazard_classes_ITB,
+    tsunami_hazard_population_classes_ITB,
     ash_hazard_classes,
     cyclone_au_bom_hazard_classes,
     cyclone_sshws_hazard_classes)
@@ -23,12 +28,18 @@ from safe.definitions.units import (
     unit_mmi,
     unit_miles_per_hour,
     unit_kilometres_per_hour,
-    unit_knots)
+    unit_knots,
+    unit_metres_per_second)
 from safe.definitions.layer_modes import (
     layer_mode_classified, layer_mode_continuous)
 from safe.definitions.fields import (
     hazard_name_field, hazard_fields, hazard_value_field)
-from safe.definitions.exposure import exposure_place
+from safe.definitions.exposure import (
+    exposure_place,
+    exposure_land_cover,
+    exposure_road,
+    exposure_population,
+    exposure_structure)
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -59,7 +70,8 @@ continuous_hazard_unit = {
         unit_mmi,
         unit_kilometres_per_hour,
         unit_miles_per_hour,
-        unit_knots
+        unit_knots,
+        unit_metres_per_second
     ]
 }
 continuous_hazard_unit_all = continuous_hazard_unit['types']
@@ -141,12 +153,16 @@ hazard_earthquake = {
         'polygon',
         'raster'
     ],
-    'classifications': [generic_hazard_classes, earthquake_mmi_hazard_classes],
+    'classifications': [generic_hazard_classes, earthquake_mmi_hazard_classes,
+                        earthquake_mmi_scale],
     'compulsory_fields': [hazard_value_field],
     'fields': hazard_fields,
     'extra_fields': [],
     'layer_modes': [layer_mode_classified, layer_mode_continuous],
-    'disabled_exposures': [exposure_place]
+    'disabled_exposures': [
+        exposure_place,
+        exposure_land_cover,
+    ]
 }
 hazard_flood = {
     'key': 'flood',
@@ -184,7 +200,10 @@ hazard_flood = {
         'polygon',
         'raster'
     ],
-    'classifications': [flood_hazard_classes, generic_hazard_classes],
+    'classifications': [
+        flood_hazard_classes,
+        flood_petabencana_hazard_classes,
+        generic_hazard_classes],
     'compulsory_fields': [hazard_value_field],
     'fields': hazard_fields,
     'extra_fields': [],
@@ -226,7 +245,8 @@ hazard_cyclone = {
     'continuous_hazard_units': [
         unit_miles_per_hour,
         unit_kilometres_per_hour,
-        unit_knots
+        unit_knots,
+        unit_metres_per_second
     ],
     'allowed_geometries': [
         'polygon',
@@ -241,7 +261,12 @@ hazard_cyclone = {
     'fields': hazard_fields,
     'extra_fields': [],
     'layer_modes': [layer_mode_classified, layer_mode_continuous],
-    'disabled_exposures': [exposure_place]
+    'disabled_exposures': [
+        exposure_place,
+        exposure_land_cover,
+        exposure_road,
+        exposure_population
+    ]
 }
 
 hazard_volcanic_ash = {
@@ -261,10 +286,15 @@ hazard_volcanic_ash = {
     'classified_notes': [  # notes specific to classified data
     ],
     'single_event_notes': [  # notes specific to single event data
+        tr('Volcanic ash is modelled hazard data estimating the thickness of '
+           'ash on the ground following a volcanic eruption.')
     ],
     'multi_event_notes': [  # notes specific to multi event data
     ],
     'actions': [  # these are additional generic actions - IF has more
+        tr('What action can be taken to secure water supplies and protect '
+           'crops?'),
+        tr('Do you have enough masks for people in the affected area?')
 
     ],
     'citations': [
@@ -283,7 +313,11 @@ hazard_volcanic_ash = {
     'fields': hazard_fields,
     'extra_fields': [],
     'layer_modes': [layer_mode_classified, layer_mode_continuous],
-    'disabled_exposures': []
+    'disabled_exposures': [
+        exposure_population,
+        exposure_structure,
+        exposure_road
+    ]
 }
 hazard_tsunami = {
     'key': 'tsunami',
@@ -304,6 +338,8 @@ hazard_tsunami = {
     'classified_notes': [  # notes specific to classified data
     ],
     'single_event_notes': [  # notes specific to single event data
+        tr('Tsunami hazard scenarios estimate the inundation of a tsunami '
+           'wave on land.')
     ],
     'multi_event_notes': [  # notes specific to multi event data
     ],
@@ -321,7 +357,12 @@ hazard_tsunami = {
         'polygon',
         'raster'
     ],
-    'classifications': [tsunami_hazard_classes, generic_hazard_classes],
+    'classifications': [
+        tsunami_hazard_classes,
+        tsunami_hazard_population_classes,
+        tsunami_hazard_classes_ITB,
+        tsunami_hazard_population_classes_ITB,
+    ],
     'compulsory_fields': [hazard_value_field],
     'fields': hazard_fields,
     'extra_fields': [],
