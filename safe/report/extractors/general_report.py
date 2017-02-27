@@ -1,9 +1,9 @@
 # coding=utf-8
-from safe.definitions.fields import hazard_count_field
+from safe.definitions.fields import hazard_count_field, total_field
 from safe.definitions.hazard_classifications import hazard_classes_all
 from safe.report.extractors.util import (
     layer_definition_type,
-    resolve_from_dictionary)
+    resolve_from_dictionary, value_from_field_name)
 from safe.utilities.rounding import format_number
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -12,8 +12,8 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
-def analysis_result_extractor(impact_report, component_metadata):
-    """Extracting analysis result from the impact layer.
+def general_report_extractor(impact_report, component_metadata):
+    """Extracting general analysis result from the impact layer.
 
     :param impact_report: the impact report that acts as a proxy to fetch
         all the data that extractor needed
@@ -100,6 +100,21 @@ def analysis_result_extractor(impact_report, component_metadata):
 
             hazard_stats.append(stats)
 
+        # find total field
+        try:
+            field_name = analysis_inasafe_fields[total_field['key']]
+            total = value_from_field_name(field_name, analysis_layer)
+            total = format_number(total, enable_rounding=is_rounded)
+            stats = {
+                'key': total_field['key'],
+                'name': total_field['name'],
+                'as_header': True,
+                'value': total
+            }
+            hazard_stats.append(stats)
+        except KeyError:
+            pass
+
         summary.append({
             'header_label': hazard_header,
             'value_label': value_header,
@@ -138,15 +153,14 @@ def analysis_result_extractor(impact_report, component_metadata):
         'rows': report_stats
     })
 
-    # Proper title from reporting standard
-    analysis_title = provenance['analysis_question']
-
-    header_format = resolve_from_dictionary(extra_args, ['header_format'])
-    header = header_format.format(title=provenance['map_legend_title'])
-    header = header.capitalize()
+    header = resolve_from_dictionary(extra_args, ['header'])
+    table_header_format = resolve_from_dictionary(
+        extra_args, 'table_header_format')
+    table_header = table_header_format.format(
+        title=provenance['map_legend_title'])
 
     context['header'] = header
     context['summary'] = summary
-    context['title'] = analysis_title
+    context['table_header'] = table_header
 
     return context

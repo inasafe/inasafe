@@ -31,10 +31,10 @@ from safe.definitions.reports.components import (
     report_a4_blue,
     standard_impact_report_metadata_html,
     standard_impact_report_metadata_pdf,
-    analysis_result_component,
+    general_report_component,
     action_checklist_component,
     notes_assumptions_component,
-    analysis_breakdown_component,
+    analysis_detail_component,
     aggregation_result_component,
     minimum_needs_component,
     aggregation_postprocessors_component,
@@ -84,10 +84,10 @@ class TestImpactReport(unittest.TestCase):
         flood_hazard_classes['classes'][0][
             'displacement_rate'] = self.default_displacement_rate
 
-    def test_analysis_result_from_impact_function(self):
+    def test_general_report_from_impact_function(self):
         """Test generate analysis result from impact function."""
 
-        output_folder = self.fixtures_dir('../output/analysis_result')
+        output_folder = self.fixtures_dir('../output/general_report')
 
         # Classified vector with building-points
         shutil.rmtree(output_folder, ignore_errors=True)
@@ -126,13 +126,12 @@ class TestImpactReport(unittest.TestCase):
 
         # Check Analysis Summary
         analysis_summary = impact_report.metadata.component_by_key(
-            analysis_result_component['key'])
+            general_report_component['key'])
         """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
 
         expected_context = {
-            'header': u'Estimated number of buildings',
-            'title': u'In the event of a Generic, how many Structures might '
-                     u'be affected?',
+            'header': u'General Report',
+            'table_header': u'Estimated Number of buildings',
             'summary': [
                 {
                     'header_label': u'Hazard Zone',
@@ -151,9 +150,15 @@ class TestImpactReport(unittest.TestCase):
                             'value': 0,
                             'name': u'Low hazard zone',
                             'key': 'low'
+                        },
+                        {
+                            'value': '10',
+                            'name': u'Total',
+                            'as_header': True,
+                            'key': total_field['key']
                         }
                     ],
-                    'value_label': 'Count'
+                    'value_label': u'Count'
                 },
                 {
                     'header_label': u'Structures',
@@ -172,14 +177,9 @@ class TestImpactReport(unittest.TestCase):
                             'value': '10',
                             'name': u'Not Exposed',
                             'key': total_not_exposed_field['key']
-                        },
-                        {
-                            'value': '10',
-                            'name': u'Total',
-                            'key': total_field['key']
                         }
                     ],
-                    'value_label': 'Count'
+                    'value_label': u'Count'
                 }
             ]
         }
@@ -258,9 +258,9 @@ class TestImpactReport(unittest.TestCase):
 
         shutil.rmtree(output_folder, ignore_errors=True)
 
-    def test_analysis_breakdown_detail(self):
+    def test_analysis_detail(self):
         """Test generate analysis breakdown and aggregation report."""
-        output_folder = self.fixtures_dir('../output/analysis_breakdown')
+        output_folder = self.fixtures_dir('../output/analysis_detail')
 
         # Classified vector with buildings
         shutil.rmtree(output_folder, ignore_errors=True)
@@ -298,12 +298,12 @@ class TestImpactReport(unittest.TestCase):
         empty_component_output_message = 'Empty component output'
 
         # Check Analysis Breakdown
-        analysis_breakdown = impact_report.metadata.component_by_key(
-            analysis_breakdown_component['key'])
+        analysis_detail = impact_report.metadata.component_by_key(
+            analysis_detail_component['key'])
         """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
 
         expected_context = {
-            'header': u'Estimated Number of buildings by Building type',
+            'header': u'Analysis Detail',
             'notes': u'Columns and rows containing only 0 or "No data" '
                      u'values are excluded from the tables.',
             'group_border_color': u'#36454f',
@@ -326,8 +326,10 @@ class TestImpactReport(unittest.TestCase):
                 }
             },
             'detail_table': {
+                'table_header': u'Estimated Number of buildings by '
+                                u'Structure type',
                 'headers': [
-                    u'Building type',
+                    u'Structure type',
                     {
                         'start': True, 'colspan': 2,
                         'name': u'High hazard zone',
@@ -344,18 +346,7 @@ class TestImpactReport(unittest.TestCase):
                 ],
                 'details': [
                     [
-                        u'government',
-                        {
-                            'value': '0',
-                            'header_group': 'affected'
-                        },
-                        {
-                            'value': '10',
-                            'header_group': 'affected'
-                        }, '10', '0', '0', '10'
-                    ],
-                    [
-                        u'education',
+                        u'Education',
                         {
                             'value': '10',
                             'header_group': 'affected'
@@ -367,19 +358,7 @@ class TestImpactReport(unittest.TestCase):
                         '10', '0', '10', '10'
                     ],
                     [
-                        u'other',
-                        {
-                            'value': '0',
-                            'header_group': 'affected'
-                        },
-                        {
-                            'value': '10',
-                            'header_group': 'affected'
-                        },
-                        '10', '0', '0', '10'
-                    ],
-                    [
-                        u'commercial',
+                        u'Health',
                         {
                             'value': '10',
                             'header_group': 'affected'
@@ -391,7 +370,18 @@ class TestImpactReport(unittest.TestCase):
                         '10', '0', '0', '10'
                     ],
                     [
-                        u'health',
+                        u'Government',
+                        {
+                            'value': '0',
+                            'header_group': 'affected'
+                        },
+                        {
+                            'value': '10',
+                            'header_group': 'affected'
+                        }, '10', '0', '0', '10'
+                    ],
+                    [
+                        u'Commercial',
                         {
                             'value': '10',
                             'header_group': 'affected'
@@ -401,7 +391,19 @@ class TestImpactReport(unittest.TestCase):
                             'header_group': 'affected'
                         },
                         '10', '0', '0', '10'
-                    ]
+                    ],
+                    [
+                        u'Other',
+                        {
+                            'value': '0',
+                            'header_group': 'affected'
+                        },
+                        {
+                            'value': '10',
+                            'header_group': 'affected'
+                        },
+                        '10', '0', '0', '10'
+                    ],
                 ],
                 'footers': [
                     u'Total', {
@@ -415,11 +417,11 @@ class TestImpactReport(unittest.TestCase):
                 ]
             }
         }
-        actual_context = analysis_breakdown.context
+        actual_context = analysis_detail.context
         self.assertDictEqual(
             expected_context, actual_context)
         self.assertTrue(
-            analysis_breakdown.output, empty_component_output_message)
+            analysis_detail.output, empty_component_output_message)
 
         # Check Aggregate Report
         aggregate_result = impact_report.metadata.component_by_key(
@@ -525,7 +527,7 @@ class TestImpactReport(unittest.TestCase):
                     'needs': [
                         {
                             'header': u'Toilets',
-                            'value': '10'
+                            'value': '0'
                         }],
                     'total_header': u'Total'
                 },
@@ -828,58 +830,61 @@ class TestImpactReport(unittest.TestCase):
                     'header': u'Detailed Age Report',
                     'notes': u'Columns and rows containing only 0 or "No '
                              u'data" values are excluded from the tables.',
-                    'rows': [[u'B', '3,000', '670', '1,800', '230'],
-                             [u'C', '7,200', '1,700', '4,300', '570'],
-                             [u'F', '7,900', '1,800', '4,700', '620'],
-                             [u'G', '10,600', '2,500', '6,300', '830']],
-                    'columns': [u'Aggregation area', u'Total Population',
-                                'Youth Displaced Count',
-                                'Adult Displaced Count',
-                                'Elderly Displaced Count'],
+                    'rows': [[u'B', '2,700', '660', '1,800', '240'],
+                             [u'C', '6,500', '1,700', '4,300', '590'],
+                             [u'F', '7,100', '1,800', '4,700', '640'],
+                             [u'G', '9,500', '2,400', '6,300', '860']],
+                    'columns': [u'Aggregation area',
+                                u'Total Displaced Population',
+                                u'Youth Displaced Count',
+                                u'Adult Displaced Count',
+                                u'Elderly Displaced Count'],
                     'totals': [
-                        u'Total', '103,000', '6,600', '16,900', '2,300']}),
+                        u'Total', '25,700', '6,400', '16,900', '2,400']}),
                 ('gender', {
                     'header': u'Detailed Gender Report',
                     'notes': u'Columns and rows containing only 0 or "No '
                              u'data" values are excluded from the tables.',
                     'rows': [
-                        [u'B', '3,000', '1,400', '1,100', '130'],
-                        [u'C', '7,200', '3,300', '2,600', '310'],
-                        [u'F', '7,900', '3,600', '2,800', '330'],
-                        [u'G', '10,600', '4,800', '3,800', '440']],
+                        [u'B', '2,700', '1,400', '1,400', '1,100', '130'],
+                        [u'C', '6,500', '3,300', '3,300', '2,600', '310'],
+                        [u'F', '7,100', '3,600', '3,600', '2,800', '330'],
+                        [u'G', '9,500', '4,800', '4,800', '3,800', '440']],
                     'columns': [
                         u'Aggregation area',
-                        u'Total Population',
-                        'Female Displaced Count',
-                        'Weekly Hygiene Packs',
-                        'Additional Weekly Rice kg for Pregnant and '
-                        'Lactating Women [kg]'],
+                        u'Total Displaced Population',
+                        u'Male Displaced Count',
+                        u'Female Displaced Count',
+                        u'Weekly Hygiene Packs',
+                        u'Additional Weekly Rice kg for Pregnant and '
+                        u'Lactating Women [kg]'],
                     'totals': [
-                        u'Total', '103,000', '12,900', '10,200', '1,200']}),
+                        u'Total', '25,700', '12,900', '12,900', '10,200',
+                        '1,200']}),
                 ('minimum_needs', {
                     'header': u'Detailed Minimum Needs Report',
                     'notes': u'Columns and rows containing only 0 or "No '
                              u'data" values are excluded from the tables.',
                     'rows': [
-                        [u'B', '3,000', '7,400', '45,800', '176,000',
-                         '530', '140'],
-                        [u'C', '7,200', '18,200', '114,000', '434,000',
+                        [u'B', '2,700', '7,400', '45,800', '176,000',
+                         '530', '130'],
+                        [u'C', '6,500', '18,200', '114,000', '434,000',
                          '1,300', '330'],
-                        [u'F', '7,900', '19,800', '124,000', '473,000',
+                        [u'F', '7,100', '19,800', '124,000', '473,000',
                          '1,500', '360'],
-                        [u'G', '10,600', '26,500', '166,000', '634,000',
+                        [u'G', '9,500', '26,500', '166,000', '634,000',
                          '1,900', '480']],
                     'columns': [
                         u'Aggregation area',
-                        u'Total Population',
-                        'Rice [kg]',
-                        'Drinking Water [l]',
-                        'Clean Water [l]',
-                        'Family Kits',
-                        'Toilets'],
+                        u'Total Displaced Population',
+                        u'Rice [kg]',
+                        u'Drinking Water [l]',
+                        u'Clean Water [l]',
+                        u'Family Kits',
+                        u'Toilets'],
                     'totals': [
                         u'Total',
-                        '103,000',
+                        '25,700',
                         '71,700',
                         '449,000',
                         '1,716,000',
@@ -960,50 +965,53 @@ class TestImpactReport(unittest.TestCase):
                     'header': u'Detailed Age Report',
                     'notes': u'Columns and rows containing only 0 or "No '
                              u'data" values are excluded from the tables.',
-                    'rows': [[u'C', '10', '10', '10', '0'],
+                    'rows': [[u'B', '10', '0', '0', '0'],
+                             [u'C', '10', '10', '10', '0'],
                              [u'F', '10', '0', '10', '0'],
                              [u'G', '10', '10', '10', '0'],
                              [u'K', '10', '0', '10', '0']],
-                    'columns': [u'Aggregation area', u'Total Population',
-                                'Youth Displaced Count',
-                                'Adult Displaced Count',
-                                'Elderly Displaced Count'],
-                    'totals': [u'Total', '30', '10', '20', '10']}),
+                    'columns': [u'Aggregation area',
+                                u'Total Displaced Population',
+                                u'Youth Displaced Count',
+                                u'Adult Displaced Count',
+                                u'Elderly Displaced Count'],
+                    'totals': [u'Total', '20', '10', '20', '10']}),
                 ('gender', {
                     'header': u'Detailed Gender Report',
                     'notes': u'Columns and rows containing only 0 or "No '
                              u'data" values are excluded from the tables.',
-                    'rows': [[u'C', '10', '10', '10', '0'],
-                             [u'F', '10', '10', '10', '0'],
-                             [u'G', '10', '10', '10', '0']],
-                    'columns': [u'Aggregation area', u'Total Population',
-                                'Female Displaced Count',
-                                'Weekly Hygiene Packs',
-                                'Additional Weekly Rice kg for Pregnant and '
-                                'Lactating Women [kg]'],
-                    'totals': [u'Total', '30', '10', '10', '0']}),
+                    'rows': [[u'B', '10', '0', '0', '0', '0'],
+                             [u'C', '10', '10', '10', '10', '0'],
+                             [u'F', '10', '10', '10', '10', '0'],
+                             [u'G', '10', '10', '10', '10', '0'],
+                             [u'K', '10', '0', '0', '0', '0']],
+                    'columns': [u'Aggregation area',
+                                u'Total Displaced Population',
+                                u'Male Displaced Count',
+                                u'Female Displaced Count',
+                                u'Weekly Hygiene Packs',
+                                u'Additional Weekly Rice kg for Pregnant and '
+                                u'Lactating Women [kg]'],
+                    'totals': [u'Total', '20', '10', '10', '10', '0']}),
                 ('minimum_needs', {
                     'header': u'Detailed Minimum Needs Report',
                     'notes': u'Columns and rows containing only 0 or "No '
                              u'data" values are excluded from the tables.',
                     'rows': [
-                        [u'B', '10', '10', '20', '80', '10', '10'],
-                        [u'C', '10', '20', '90', '340', '10', '10'],
-                        [u'D', '10', '10', '10', '20', '10', '10'],
-                        [u'F', '10', '20', '70', '260', '10', '10'],
-                        [u'G', '10', '20', '110', '420', '10', '10'],
-                        [u'H', '10', '10', '20', '60', '10', '10'],
-                        [u'K', '10', '10', '40', '130', '10', '10'],
-                        [u'L', '10', '10', '20', '70', '10', '10']],
+                        [u'B', '10', '10', '20', '80', '0', '0'],
+                        [u'C', '10', '20', '90', '340', '0', '0'],
+                        [u'F', '10', '10', '70', '260', '0', '0'],
+                        [u'G', '10', '20', '110', '410', '10', '0'],
+                        [u'K', '10', '10', '40', '130', '0', '0']],
                     'columns': [u'Aggregation area',
-                                u'Total Population',
-                                'Rice [kg]',
-                                'Drinking Water [l]',
-                                'Clean Water [l]',
-                                'Family Kits',
-                                'Toilets'],
-                    'totals': [u'Total', '30', '60', '350', '1,400', '10',
-                               '10']
+                                u'Total Displaced Population',
+                                u'Rice [kg]',
+                                u'Drinking Water [l]',
+                                u'Clean Water [l]',
+                                u'Family Kits',
+                                u'Toilets'],
+                    'totals': [u'Total', '20', '60', '350', '1,400', '10',
+                               '0']
                 })]),
             'use_aggregation': True
         }
@@ -1157,29 +1165,29 @@ class TestImpactReport(unittest.TestCase):
         expected_context = {
             'items': [
                 {
-                    'header': 'Rice',
+                    'header': u'Rice',
                     'number': '60',
-                    'unit': 'kg/weekly',
+                    'unit': u'kg/weekly',
                 },
                 {
-                    'header': 'Drinking Water',
+                    'header': u'Drinking Water',
                     'number': '350',
-                    'unit': 'l/weekly',
+                    'unit': u'l/weekly',
                 },
                 {
-                    'header': 'Clean Water',
+                    'header': u'Clean Water',
                     'number': '1,400',
-                    'unit': 'l/weekly',
+                    'unit': u'l/weekly',
                 },
                 {
-                    'header': 'Family Kits',
+                    'header': u'Family Kits',
                     'number': '10',
-                    'unit': 'units',
+                    'unit': u'units',
                 },
                 {
                     'header': 'Toilets',
-                    'number': '10',
-                    'unit': 'units',
+                    'number': '0',
+                    'unit': u'units',
                 },
             ]
         }
