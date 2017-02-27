@@ -1,4 +1,5 @@
 # coding=utf-8
+
 """Definitions relating to fields."""
 
 from PyQt4.QtCore import QVariant
@@ -459,13 +460,13 @@ female_count_field = {
     'description': tr(
         'The number of females for each feature.'),
     'help_text': tr(
-        '"Female" is defined as: ' + concepts['female']['description'] +
-        'In cases where population data is available, InaSAFE will calculate '
-        'the number of females per exposure feature, aggregate hazard area, '
-        'aggregation area and for the analysis area as a whole. The female '
-        'count is calculated based on standard ratios either provided as a '
-        'global setting in InaSAFE, or (if available) counts or ratios in the '
-        'input analysis data.'),
+        '"Female" is defined as: {concept} In cases where population data is '
+        'available, InaSAFE will calculate the number of females per exposure '
+        'feature, aggregate hazard area, aggregation area and for the '
+        'analysis area as a whole. The female count is calculated based on '
+        'standard ratios either provided as a global setting in InaSAFE, or '
+        '(if available) counts or ratios in the input analysis data.').format(
+            concept=concepts['female']['description']),
     'citations': [
         {
             'text': None,
@@ -489,13 +490,13 @@ male_count_field = {
     'description': tr(
         'The number of males for each feature.'),
     'help_text': tr(
-        '"Male" is defined as: ' + concepts['male']['description'] +
-        'In cases where population data is available, InaSAFE will calculate '
-        'the number of males per exposure feature, aggregate hazard area, '
-        'aggregation area and for the analysis area as a whole. The male '
-        'count is calculated based on standard ratios either provided as a '
-        'global setting in InaSAFE, or (if available) counts or ratios in the '
-        'input analysis data.'),
+        '"Male" is defined as: {concept} In cases where population data is '
+        'available, InaSAFE will calculate the number of males per exposure '
+        'feature, aggregate hazard area, aggregation area and for the '
+        'analysis area as a whole. The male count is calculated based on '
+        'standard ratios either provided as a global setting in InaSAFE, or '
+        '(if available) counts or ratios in the input analysis data.').format(
+            concept=concepts['male']['description']),
     'citations': [
         {
             'text': None,
@@ -518,13 +519,13 @@ youth_count_field = {
     'description': tr(
         'The number of young people for each feature.'),
     'help_text': tr(
-        '"Youth" is defined as: ' + concepts['youth']['description'] +
-        'In cases where population data is available, InaSAFE will calculate '
-        'the number of youths per exposure feature, aggregate hazard area, '
-        'aggregation area and for the analysis area as a whole. The youth '
-        'count is calculated based on standard ratios either provided as a '
-        'global setting in InaSAFE, or (if available) counts or ratios in the '
-        'input analysis data.'),
+        '"Youth" is defined as: {concept} In cases where population data is '
+        'available, InaSAFE will calculate the number of youths per exposure '
+        'feature, aggregate hazard area, aggregation area and for the '
+        'analysis area as a whole. The youth count is calculated based on '
+        'standard ratios either provided as a global setting in InaSAFE, or '
+        '(if available) counts or ratios in the input analysis data.').format(
+            concept=concepts['youth']['description']),
     'citations': [
         {
             'text': None,
@@ -547,13 +548,13 @@ adult_count_field = {
     'description': tr(
         'The number of adults for each feature.'),
     'help_text': tr(
-        '"Adult" is defined as: ' + concepts['adult']['description'] +
-        'In cases where population data is available, InaSAFE will calculate '
-        'the number of adults per exposure feature, aggregate hazard area, '
-        'aggregation area and for the analysis area as a whole. The adult '
-        'count is calculated based on standard ratios either provided as a '
-        'global setting in InaSAFE, or (if available) counts or ratios in the '
-        'input analysis data.'),
+        '"Adult" is defined as: {concept} In cases where population data is '
+        'available, InaSAFE will calculate the number of adults per exposure '
+        'feature, aggregate hazard area, aggregation area and for the '
+        'analysis area as a whole. The adult count is calculated based on '
+        'standard ratios either provided as a global setting in InaSAFE, or '
+        '(if available) counts or ratios in the input analysis data.').format(
+            concept=concepts['adult']['description']),
     'citations': [
         {
             'text': None,
@@ -576,13 +577,13 @@ elderly_count_field = {
     'description': tr(
         'The number of elderly people for each feature.'),
     'help_text': tr(
-        '"Elderly" is defined as: ' + concepts['elderly']['description'] +
-        'In cases where population data is available, InaSAFE will calculate '
-        'the number of adults per exposure feature, aggregate hazard area, '
-        'aggregation area and for the analysis area as a whole. The elderly '
-        'count is calculated based on standard ratios either provided as a '
-        'global setting in InaSAFE, or (if available) counts or ratios in the '
-        'input analysis data.'),
+        '"Elderly" is defined as: {concept} In cases where population data is '
+        'available, InaSAFE will calculate the number of adults per exposure '
+        'feature, aggregate hazard area, aggregation area and for the '
+        'analysis area as a whole. The elderly count is calculated based on '
+        'standard ratios either provided as a global setting in InaSAFE, or '
+        '(if available) counts or ratios in the input analysis data.').format(
+            concept=concepts['elderly']['description']),
     'citations': [
         {
             'text': None,
@@ -682,13 +683,13 @@ female_ratio_field = {
     'description': tr(
         'The proportion of females for each feature.'),
     'help_text': tr(
-        '"Female" is defined as: ' + concepts['female']['description'] +
-        'In cases where population data is available, InaSAFE will calculate '
-        'the number of females per exposure feature, aggregate hazard area, '
-        'aggregation area and for the analysis area as a whole. The female '
-        'count is calculated based on standard ratios either provided as a '
-        'global setting in InaSAFE, or (if available) ratios in the '
-        'input analysis data.'),
+        '"Female" is defined as: {concept} In cases where population data is '
+        'available, InaSAFE will calculate the number of females per exposure '
+        'feature, aggregate hazard area, aggregation area and for the '
+        'analysis area as a whole. The female count is calculated based on '
+        'standard ratios either provided as a global setting in InaSAFE, or '
+        '(if available) ratios in the input analysis data.').format(
+            concept=concepts['female']['description']),
     'citations': [
         {
             'text': None,
@@ -712,13 +713,13 @@ youth_ratio_field = {
     'description': tr(
         'The proportion of young people for each feature.'),
     'help_text': tr(
-        '"Youth" is defined as: ' + concepts['youth']['description'] +
-        'In cases where population data is available, InaSAFE will calculate '
-        'the number of youths per exposure feature, aggregate hazard area, '
-        'aggregation area and for the analysis area as a whole. The youth '
-        'count is calculated based on standard ratios either provided as a '
-        'global setting in InaSAFE, or (if available) ratios in the '
-        'input analysis data.'),
+        '"Youth" is defined as: {concept} In cases where population data is '
+        'available, InaSAFE will calculate the number of youths per exposure '
+        'feature, aggregate hazard area, aggregation area and for the '
+        'analysis area as a whole. The youth count is calculated based on '
+        'standard ratios either provided as a global setting in InaSAFE, or '
+        '(if available) ratios in the input analysis data.').format(
+            concept=concepts['youth']['description']),
     'citations': [
         {
             'text': None,
@@ -742,13 +743,13 @@ adult_ratio_field = {
     'description': tr(
         'The proportion of adults for each feature.'),
     'help_text': tr(
-        '"Adult" is defined as: ' + concepts['adult']['description'] +
-        'In cases where population data is available, InaSAFE will calculate '
-        'the number of adults per exposure feature, aggregate hazard area, '
-        'aggregation area and for the analysis area as a whole. The adult '
-        'count is calculated based on standard ratios either provided as a '
-        'global setting in InaSAFE, or (if available) ratios in the '
-        'input analysis data.'),
+        '"Adult" is defined as: {concept} In cases where population data is '
+        'available, InaSAFE will calculate the number of adults per exposure '
+        'feature, aggregate hazard area, aggregation area and for the '
+        'analysis area as a whole. The adult count is calculated based on '
+        'standard ratios either provided as a global setting in InaSAFE, or '
+        '(if available) ratios in the input analysis data.').format(
+            concept=concepts['adult']['description']),
     'citations': [
         {
             'text': None,
@@ -772,13 +773,13 @@ elderly_ratio_field = {
     'description': tr(
         'The proportion of elderly people for each feature.'),
     'help_text': tr(
-        '"Elderly" is defined as: ' + concepts['elderly']['description'] +
-        'In cases where population data is available, InaSAFE will calculate '
-        'the number of adults per exposure feature, aggregate hazard area, '
-        'aggregation area and for the analysis area as a whole. The elderly '
-        'count is calculated based on standard ratios either provided as a '
-        'global setting in InaSAFE, or (if available) ratios in the '
-        'input analysis data.'),
+        '"Elderly" is defined as: {concept} In cases where population data is '
+        'available, InaSAFE will calculate the number of adults per exposure '
+        'feature, aggregate hazard area, aggregation area and for the '
+        'analysis area as a whole. The elderly count is calculated based on '
+        'standard ratios either provided as a global setting in InaSAFE, or '
+        '(if available) ratios in the input analysis data.').format(
+            concept=concepts['elderly']['description']),
     'citations': [
         {
             'text': None,
@@ -806,7 +807,8 @@ affected_field = {
         'The affected field indicates whether a feature is affected by the '
         ' hazard.'),
     'help_text': tr(
-        '"Affected" is defined as: ' + concepts['affected']['description']),
+        '"Affected" is defined as: {concept}').format(
+            concept=concepts['affected']['description']),
     'citations': [
         {
             'text': None,
@@ -1056,11 +1058,12 @@ total_affected_field = {
         'The total affected field stores the cumulative total number of '
         'affected features or entities.'),
     'description': tr(
-        '"Affected" is defined as: ' + concepts['affected']['description'] +
-        'The total affected field is added to the analysis layer, aggregate '
-        'impact layer and aggregate hazard impact layer during the impact '
-        'analysis. It represents the cumulative count of affected exposure '
-        'features (e.g. buildings) or entities (e.g. people) for each area.'),
+        '"Affected" is defined as: {concept} The total affected field is '
+        'added to the analysis layer, aggregate impact layer and aggregate '
+        'hazard impact layer during the impact analysis. It represents the '
+        'cumulative count of affected exposure features (e.g. buildings) or '
+        'entities (e.g. people) for each area.').format(
+            concept=concepts['affected']['description']),
     'citations': [
         {
             'text': None,
@@ -1172,11 +1175,12 @@ affected_exposure_count_field = {
         'The total affected field stores the cumulative total number of '
         'affected exposure features or entities.'),
     'description': tr(
-        '"Affected" is defined as: ' + concepts['affected']['description'] +
-        'The total affected field is added to the analysis layer, aggregate '
-        'impact layer and aggregate hazard impact layer during the impact '
-        'analysis. It represents the cumulative count of affected exposure '
-        'features (e.g. buildings) or entities (e.g. people) for each area.'),
+        '"Affected" is defined as: {concept} The total affected field is '
+        'added to the analysis layer, aggregate impact layer and aggregate '
+        'hazard impact layer during the impact analysis. It represents the '
+        'cumulative count of affected exposure features (e.g. buildings) or '
+        'entities (e.g. people) for each area.').format(
+            concept=concepts['affected']['description']),
     'citations': [
         {
             'text': None,
@@ -1201,11 +1205,11 @@ hazard_count_field = {
         'The total affected field stores the cumulative total number of '
         'affected exposure features or entities.'),
     'description': tr(
-        '"Hazard" is defined as: ' + concepts['hazard']['description'] +
-        'The hazard count field is added to the analysis layer, aggregate '
-        'impact layer and aggregate hazard impact layer during the impact '
-        'analysis. It represents the cumulative count of hazard'
-        'features for each area.'),
+        '"Hazard" is defined as: {concept} The hazard count field is added to '
+        'the analysis layer, aggregate impact layer and aggregate hazard '
+        'impact layer during the impact analysis. It represents the '
+        'cumulative count of hazard features for each area.').format(
+            concept=concepts['hazard']['description']),
     'citations': [
         {
             'text': None,
