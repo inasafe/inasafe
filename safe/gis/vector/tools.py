@@ -4,6 +4,7 @@
 
 import logging
 from uuid import uuid4
+from math import isnan
 from PyQt4.QtCore import QPyNullVariant
 from qgis.core import (
     QgsGeometry,
@@ -19,8 +20,11 @@ from qgis.core import (
 )
 
 from safe.common.exceptions import MemoryLayerCreationError
+from safe.definitions.utilities import definition
+from safe.definitions.units import unit_metres, unit_square_metres
 from safe.gis.vector.clean_geometry import geometry_checker
 from safe.utilities.profiling import profile
+from safe.utilities.rounding import convert_unit
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -276,18 +280,73 @@ def read_dynamic_inasafe_field(inasafe_fields, dynamic_field):
     return unique_exposure
 
 
-@profile
-def size_calculator(crs):
-    """Helper function to create a size calculator according to a CRS.
+class SizeCalculator(object):
 
-    :param crs: The coordinate reference system to use.
-    :type crs: QgsCoordinateReferenceSystem
+    """Special object to handle size calculation with an output unit."""
 
-    :return: The QgsDistanceArea object.
-    :rtype: QgsDistanceArea
-    """
-    calculator = QgsDistanceArea()
-    calculator.setSourceCrs(crs)
-    calculator.setEllipsoid('WGS84')
-    calculator.setEllipsoidalMode(True)
-    return calculator
+    def __init__(
+            self, coordinate_reference_system, geometry_type, exposure_key):
+        """Constructor for the size calculator.
+
+        :param coordinate_reference_system: The Coordinate Reference System of
+            the layer.
+        :type coordinate_reference_system: QgsCoordinateReferenceSystem
+
+        :param exposure_key: The geometry type of the layer.
+        :type exposure_key: qgis.core.QgsWkbTypes.GeometryType
+        """
+        self.calculator = QgsDistanceArea()
+        self.calculator.setSourceCrs(coordinate_reference_system)
+        self.calculator.setEllipsoid('WGS84')
+        self.calculator.setEllipsoidalMode(True)
+
+        if geometry_type == QgsWKBTypes.LineGeometry:
+            self.default_unit = unit_metres
+        else:
+            self.default_unit = unit_square_metres
+
+        self.output_unit = None
+        if exposure_key:
+            exposure_definition = definition(exposure_key)
+            self.output_unit = exposure_definition['size_unit']
+
+    def measure(self, geometry):
+        """Measure the lenght or the area of a geometry.
+
+        :param geometry: The geometry.
+        :type geometry: QgsGeometry
+
+        :return: The geometric size in the expected exposure unit.
+        :rtype: float
+        """
+        message = 'Size with NaN value : geometry valid={valid}, WKT={wkt}'
+        feature_size = 0
+        if geometry.isMultipart():
+            # Be careful, the size calculator is not working well on a
+            # multipart.
+            # So we compute the size part per part. See ticket #3812
+            for single in geometry.asGeometryCollection():
+                geometry_size = self.calculator.measure(single)
+                if not isnan(geometry_size):
+                    feature_size += geometry_size
+                else:
+                    LOGGER.debug(message.format(
+                        valid=single.isGeosValid(),
+                        wkt=single.exportToWkt()))
+        else:
+            geometry_size = self.calculator.measure(geometry)
+            if not isnan(geometry_size):
+                feature_size = geometry_size
+            else:
+                LOGGER.debug(message.format(
+                    valid=geometry.isGeosValid(),
+                    wkt=geometry.exportToWkt()))
+
+        feature_size = round(feature_size)
+
+        if self.output_unit:
+            if self.output_unit != self.default_unit:
+                feature_size = convert_unit(
+                    feature_size, self.default_unit, self.output_unit)
+
+        return feature_size

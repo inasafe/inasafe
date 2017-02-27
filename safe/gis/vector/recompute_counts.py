@@ -11,7 +11,7 @@ from safe.definitions.post_processors import size
 from safe.definitions.processing_steps import (
     recompute_counts_steps)
 from safe.utilities.profiling import profile
-from safe.gis.vector.tools import size_calculator
+from safe.gis.vector.tools import SizeCalculator
 from safe.gis.sanity_check import check_layer
 
 
@@ -68,11 +68,14 @@ def recompute_counts(layer, callback=None):
 
     layer.startEditing()
 
+    exposure_key = layer.keywords['exposure_keywords']['exposure']
+    size_calculator = SizeCalculator(
+        layer.crs(), layer.geometryType(), exposure_key)
+
     for feature in layer.getFeatures():
         old_size = feature[size_field_name]
         new_size = size(
-            size_calculator=size_calculator(layer.crs()),
-            geometry=feature.geometry())
+            size_calculator=size_calculator, geometry=feature.geometry())
 
         layer.changeAttributeValue(feature.id(), size_field_index, new_size)
 

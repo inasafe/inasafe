@@ -16,7 +16,7 @@ from safe.definitions.post_processors import (
     layer_crs_input_value,
     size_calculator_input_value, constant_input_type)
 from safe.gis.vector.tools import (
-    create_field_from_definition, size_calculator)
+    create_field_from_definition, SizeCalculator)
 from safe.utilities.i18n import tr
 from safe.utilities.profiling import profile
 
@@ -198,7 +198,13 @@ def run_single_post_processor(layer, post_processor):
                         default_parameters[key] = layer.crs()
 
                     if value['value'] == size_calculator_input_value:
-                        default_parameters[key] = size_calculator(layer.crs())
+                        exposure = layer.keywords.get('exposure')
+                        if not exposure:
+                            keywords = layer.keywords.get('exposure_keywords')
+                            exposure = keywords.get('exposure')
+
+                        default_parameters[key] = SizeCalculator(
+                            layer.crs(), layer.geometryType(), exposure)
                     break
 
             else:
