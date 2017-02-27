@@ -819,6 +819,35 @@ affected_field = {
     'replace_null': False
 }
 
+# Displacement ratio
+population_displacement_ratio_field = {
+    'key': 'population_displacement_ratio_field',
+    'name': tr('Population Displacement Ratio'),
+    'field_name': 'population_displacement_ratio',
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': default_ratio_field_precision,
+    'absolute': False,
+    'description': tr(
+        'The population displacement ratio for a given hazard class.'),
+    'help_text': tr(
+        '"Displaced" is defined as: {concept} In cases where population data '
+        'is available, InaSAFE will calculate the number of displaced people '
+        'per exposure feature, aggregate hazard area, aggregation area and '
+        'for the analysis area as a whole. The population displaced ratio is '
+        'calculated based on definitions for each hazard class.').format(
+            concept=concepts['displaced_people']['description']),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False,
+    'default_value': None
+}
+
 female_displaced_count_field = {
     'key': 'female_displaced_count_field',
     'name': tr('Female Displaced Count'),
