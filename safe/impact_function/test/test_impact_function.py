@@ -824,9 +824,6 @@ class TestImpactFunction(unittest.TestCase):
 
         self._check_minimum_fields_value(expected_value, impact_function)
 
-    # expected to fail until raster postprocessor calculation in analysis
-    # impacted is fixed
-    @unittest.expectedFailure
     def test_raster_post_minimum_needs_value_generation(self):
         """Test minimum needs postprocessors on raster exposure.
 
@@ -836,12 +833,6 @@ class TestImpactFunction(unittest.TestCase):
         field is generated on the fly.
         The postprocessors need to expect generated population field exists.
         """
-
-        # # #
-        # Test with raster exposure data with population_exposure_count
-        # exists.
-        # # #
-
         hazard_layer = load_test_raster_layer(
             'hazard', 'tsunami_wgs84.tif')
         exposure_layer = load_test_raster_layer(
@@ -858,7 +849,6 @@ class TestImpactFunction(unittest.TestCase):
         # minimum needs fields should exists in the results
         self._check_minimum_fields_exists(impact_function)
 
-        # TODO: should include demographic postprocessor value too
         expected_value = {
             u'total_affected': 9.208200000039128,
             u'minimum_needs__rice': 25,
