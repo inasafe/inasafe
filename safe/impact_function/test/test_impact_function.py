@@ -778,7 +778,6 @@ class TestImpactFunction(unittest.TestCase):
 
         self.assertDictEqual(expected_provenance, impact_function.provenance)
 
-    @unittest.expectedFailure
     def test_vector_post_minimum_needs_value_generation(self):
         """Test minimum needs postprocessors on vector exposure.
 
@@ -791,9 +790,9 @@ class TestImpactFunction(unittest.TestCase):
         # # #
 
         hazard_layer = load_test_vector_layer(
-            'gisv4', 'hazard', 'classified_vector.geojson')
+            'gisv4', 'hazard', 'flood_polygon.geojson')
         exposure_layer = load_test_vector_layer(
-            'gisv4', 'exposure', 'buildings.geojson')
+            'gisv4', 'exposure', 'high_population.geojson')
         aggregation_layer = load_test_vector_layer(
             'gisv4', 'aggregation', 'small_grid.geojson')
 
@@ -813,11 +812,11 @@ class TestImpactFunction(unittest.TestCase):
         expected_value = {
             u'population': 69,
             u'total': 9.0,
-            u'minimum_needs__rice': 193,
-            u'minimum_needs__clean_water': 4623,
-            u'minimum_needs__toilets': 3,
-            u'minimum_needs__drinking_water': 1207,
-            u'minimum_needs__family_kits': 13,
+            u'minimum_needs__rice': 788.4967857252104,
+            u'minimum_needs__clean_water': 18867.601658424683,
+            u'minimum_needs__toilets': 14.080299745093043,
+            u'minimum_needs__drinking_water': 4928.104910782566,
+            u'minimum_needs__family_kits': 56.32119898037217,
             u'male': 34,
             u'female': 34,
             u'youth': 17,

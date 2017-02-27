@@ -44,7 +44,6 @@ class TestUnionVector(unittest.TestCase):
             layer.fields().count()
         )
 
-    @unittest.expectedFailure
     def test_union_error(self):
         """Test we can union two layers like hazard and aggregation (2)."""
 
@@ -58,7 +57,9 @@ class TestUnionVector(unittest.TestCase):
 
         layer = union(union_a, union_b)
 
-        self.assertEqual(layer.featureCount(), 11)
+        # total feature on hazard layer that intersecting aggregation layer is
+        # one, plus one feature after clipping aggregation and hazard layer.
+        self.assertEqual(layer.featureCount(), 2)
         self.assertEqual(
             union_a.fields().count() + union_b.fields().count(),
             layer.fields().count()
