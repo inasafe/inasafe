@@ -466,7 +466,7 @@ earthquake_mmi_scale = {
             'value': 1,
             'color': MMI_1,
             'name': tr('I'),
-            'affected': True,
+            'affected': False,
             'description':
                 tr('Not felt except by a very few under especially favorable '
                    'conditions.'),
@@ -858,7 +858,7 @@ ash_hazard_classes = {
             'value': 1,
             'color': light_green,
             'name': tr('Very low'),
-            'affected': False,
+            'affected': True,
             'description': tr(
                 'Impact on health (respiration), livestock, and contamination '
                 'of water supply.'),
@@ -925,7 +925,7 @@ tsunami_hazard_classes = {
             'displacement_rate': 1.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 3,
-            'numeric_default_max': 8,
+            'numeric_default_max': 9999,
             'citations': [
                 {
                     'text': None,
@@ -1056,7 +1056,7 @@ tsunami_hazard_population_classes = {
             'displacement_rate': 1.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 3,
-            'numeric_default_max': 8,
+            'numeric_default_max': 9999,
             'citations': [
                 {
                     'text': None,
@@ -1095,7 +1095,7 @@ tsunami_hazard_population_classes = {
             'value': 2,
             'color': yellow,
             'name': tr('Low hazard zone'),
-            'affected': False,
+            'affected': True,
             'description': tr(
                 'Water above ground height and less than 1.0m. The area is '
                 'potentially hit by a tsunami wave with an inundation '
@@ -1154,7 +1154,7 @@ tsunami_hazard_classes_ITB = {
             'displacement_rate': 1.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 8,
-            'numeric_default_max': 9999999999,
+            'numeric_default_max': 9999,
             'citations': [
                 {
                     'text': None,
@@ -1304,7 +1304,7 @@ tsunami_hazard_population_classes_ITB = {
             'displacement_rate': 1.0,
             'fatality_rate': 0.0,
             'numeric_default_min': 8,
-            'numeric_default_max': 9999999999,
+            'numeric_default_max': 9999,
             'citations': [
                 {
                     'text': None,
@@ -1372,7 +1372,7 @@ tsunami_hazard_population_classes_ITB = {
             'value': 2,
             'color': yellow,
             'name': tr('Low hazard zone'),
-            'affected': False,
+            'affected': True,
             'description': tr(
                 'Water above ground height and less than 1.0m. The area is '
                 'potentially hit by a tsunami wave with an inundation '

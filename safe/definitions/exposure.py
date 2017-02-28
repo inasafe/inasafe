@@ -152,6 +152,9 @@ exposure_population = {
            'functioning?')
 
     ],
+    'volcanic_ash_actions': [   # these are volcanic ash specific actions
+        tr('Do you have enough masks for people in the affected area?'),
+    ],
     'citations': [
         {
                 'text': tr(
