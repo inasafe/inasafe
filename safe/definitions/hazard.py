@@ -293,9 +293,7 @@ hazard_volcanic_ash = {
     ],
     'actions': [  # these are additional generic actions - IF has more
         tr('What action can be taken to secure water supplies and protect '
-           'crops?'),
-        tr('Do you have enough masks for people in the affected area?')
-
+           'crops?')
     ],
     'citations': [
         {
