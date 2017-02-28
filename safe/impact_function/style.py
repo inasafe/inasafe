@@ -28,7 +28,7 @@ from safe.definitions.fields import hazard_class_field, hazard_count_field
 from safe.definitions.hazard_classifications import not_exposed_class
 from safe.definitions.utilities import definition
 from safe.utilities.gis import is_line_layer
-from safe.utilities.rounding import format_number
+from safe.utilities.rounding import format_number, coefficient_between_units
 
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -134,10 +134,35 @@ def generate_classified_legend(
     else:
         hazard_unit = None
 
-    # TODO We need to work on the unit from the exposure.
     exposure = exposure.keywords['exposure']
     exposure_definitions = definition(exposure)
-    exposure_unit = exposure_definitions['units'][0]['abbreviation']
+    exposure_units = exposure_definitions['units']
+    exposure_unit = exposure_units[0]
+    coefficient = 1
+    # We check if can use a greater unit, such as kilometre for instance.
+    if len(exposure_units) > 1:
+        # We use only two units for now.
+        delta = coefficient_between_units(
+            exposure_units[1], exposure_units[0])
+
+        all_values_are_greater = True
+
+        # We check if all values are greater than the coefficient
+        for i, hazard_class in enumerate(hazard_classification['classes']):
+            field_name = hazard_count_field['field_name'] % hazard_class['key']
+            try:
+                value = analysis_row[field_name]
+            except KeyError:
+                value = 0
+
+            if 0 < value < delta:
+                # 0 is fine, we can still keep the second unit.
+                all_values_are_greater = False
+
+        if all_values_are_greater:
+            # If yes, we can use this unit.
+            exposure_unit = exposure_units[1]
+            coefficient = delta
 
     classes = OrderedDict()
 
@@ -155,7 +180,7 @@ def generate_classified_legend(
             # The field might not exist if no feature impacted in this hazard
             # zone.
             value = 0
-        value = format_number(value, enable_rounding)
+        value = format_number(value, enable_rounding, coefficient)
 
         minimum = None
         maximum = None
@@ -173,7 +198,7 @@ def generate_classified_legend(
         label = _format_label(
             hazard_class=hazard_class['name'],
             value=value,
-            exposure_unit=exposure_unit,
+            exposure_unit=exposure_unit['abbreviation'],
             minimum=minimum,
             maximum=maximum,
             hazard_unit=hazard_unit)
@@ -182,12 +207,16 @@ def generate_classified_legend(
 
     if exposure_definitions['display_not_exposed'] or debug_mode:
         classes[not_exposed_class['key']] = _add_not_exposed(
-            analysis_row, enable_rounding, exposure_unit)
+            analysis_row,
+            enable_rounding,
+            exposure_unit['abbreviation'],
+            coefficient)
 
     return classes
 
 
-def _add_not_exposed(analysis_row, enable_rounding, exposure_unit):
+def _add_not_exposed(
+        analysis_row, enable_rounding, exposure_unit, coefficient):
     """Helper to add the `not exposed` item to the legend.
 
     :param analysis_row: The analysis row as a list.
@@ -198,6 +227,9 @@ def _add_not_exposed(analysis_row, enable_rounding, exposure_unit):
 
     :param exposure_unit: The exposure unit.
     :type exposure_unit: safe.definitions.units
+
+    :param coefficient: Divide the result after the rounding.
+    :type coefficient:float
 
     :return: A tuple with the color and the formatted label.
     :rtype: tuple
@@ -210,7 +242,7 @@ def _add_not_exposed(analysis_row, enable_rounding, exposure_unit):
     except KeyError:
         # The field might not exist if there is not feature not exposed.
         value = 0
-    value = format_number(value, enable_rounding)
+    value = format_number(value, enable_rounding, coefficient)
     label = _format_label(
         hazard_class=not_exposed_class['name'],
         value=value,
