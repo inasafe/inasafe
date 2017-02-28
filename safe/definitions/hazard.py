@@ -337,8 +337,8 @@ hazard_tsunami = {
     'classified_notes': [  # notes specific to classified data
     ],
     'single_event_notes': [  # notes specific to single event data
-        tr('Tsunami hazard scenarios estimate the inundation of a tsunami '
-           'wave on land.')
+        tr('Tsunami hazard scenarios estimate the maximum extent of tsunami '
+           'waves on land.')
     ],
     'multi_event_notes': [  # notes specific to multi event data
     ],
