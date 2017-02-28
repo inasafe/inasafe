@@ -33,10 +33,13 @@ from qgis.utils import iface
 from safe.common.version import get_version
 from safe import messaging as m
 from safe.messaging import styles
-from safe.utilities.styling import mmi_ramp
+from safe.utilities.styling import mmi_ramp_roman
 from safe.utilities.resources import html_footer, html_header, get_ui_class
 from safe.gui.tools.shake_grid.shake_grid import convert_mmi_data
 from safe.gui.tools.help.shakemap_converter_help import shakemap_converter_help
+from safe.gis.raster.reclassify import reclassify
+from safe.utilities.keyword_io import KeywordIO
+from safe.definitions.hazard_classifications import earthquake_mmi_scale
 
 
 INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
@@ -183,14 +186,24 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
             algorithm=algorithm,
             algorithm_filename_flag=True)
 
+        # reclassify raster
+        file_info = QFileInfo(file_name)
+        base_name = file_info.baseName()
+        layer = QgsRasterLayer(file_name, base_name)
+        layer.keywords = KeywordIO.read_keywords(layer)
+        layer.keywords['classification'] = earthquake_mmi_scale['key']
+        keywords = layer.keywords
+        if layer.isValid():
+            layer = reclassify(layer, overwrite_input=True)
+            KeywordIO.write_keywords(layer, keywords)
+        else:
+            LOGGER.debug("Failed to load")
+
         QtGui.qApp.restoreOverrideCursor()
 
         if self.load_result.isChecked():
-            file_info = QFileInfo(file_name)
-            base_name = file_info.baseName()
-            layer = QgsRasterLayer(file_name, base_name)
             # noinspection PyTypeChecker
-            mmi_ramp(layer)
+            mmi_ramp_roman(layer)
             layer.saveDefaultStyle()
             if not layer.isValid():
                 LOGGER.debug("Failed to load")

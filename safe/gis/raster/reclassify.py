@@ -25,7 +25,7 @@ __revision__ = '$Format:%H$'
 
 
 @profile
-def reclassify(layer, overwrite_input=False, exposure_key=None, callback=None):
+def reclassify(layer, exposure_key=None, overwrite_input=False, callback=None):
     """Reclassify a continuous raster layer.
 
     Issue https://github.com/inasafe/inasafe/issues/3182
