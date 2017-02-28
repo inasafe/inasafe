@@ -99,7 +99,7 @@ def reclassify(layer, exposure_key=None, overwrite_input=False, callback=None):
         value_map[hazard_class['key']] = [hazard_class['value']]
 
     if overwrite_input:
-        output_raster = layer.publicSource()
+        output_raster = layer.source()
     else:
         output_raster = unique_filename(suffix='.tiff', dir=temp_dir())
 
