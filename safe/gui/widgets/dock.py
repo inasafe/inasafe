@@ -1166,7 +1166,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 'The impact function could not run because of a bug.'))
             LOGGER.exception(message.to_text())
             send_error_message(self, message)
-            self.validate_impact_function()
             return status, message
 
         LOGGER.info(tr('The impact function could run without errors.'))
