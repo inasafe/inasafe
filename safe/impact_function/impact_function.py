@@ -729,7 +729,7 @@ class ImpactFunction(object):
         if version != inasafe_keyword_version:
             parameters = {
                 'version': inasafe_keyword_version,
-                'source': layer.source()
+                'source': layer.publicSource()
             }
             message = generate_input_error_message(
                 tr('The %s layer is not up to date.' % purpose),
@@ -811,7 +811,7 @@ class ImpactFunction(object):
 
                 status, message = self._check_layer(
                     self.aggregation, 'aggregation')
-                aggregation_source = self.aggregation.source()
+                aggregation_source = self.aggregation.publicSource()
                 aggregation_keywords = deepcopy(self.aggregation.keywords)
 
                 if status != PREPARE_SUCCESS:
@@ -883,12 +883,12 @@ class ImpactFunction(object):
         else:
             # Everything was fine.
             self._is_ready = True
-            self._provenance['exposure_layer'] = self.exposure.source()
+            self._provenance['exposure_layer'] = self.exposure.publicSource()
             # reference to original layer being used
             self._provenance['exposure_layer_id'] = original_exposure.id()
             self._provenance['exposure_keywords'] = deepcopy(
                 self.exposure.keywords)
-            self._provenance['hazard_layer'] = self.hazard.source()
+            self._provenance['hazard_layer'] = self.hazard.publicSource()
             # reference to original layer being used
             self._provenance['hazard_layer_id'] = original_hazard.id()
             self._provenance['hazard_keywords'] = deepcopy(
