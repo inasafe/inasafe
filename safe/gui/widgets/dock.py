@@ -189,6 +189,14 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # Check the validity
         self.validate_impact_function()
 
+        # Default strings
+        self.label_without_selection = tr(
+            'will be affected? Summarise the results by')
+        self.label_with_selection = tr(
+            'will be affected? Summarise the results by selected '
+            'features in')
+        self.aggregation_question_label.setText(self.label_without_selection)
+
     @property
     def aggregation(self):
         """Property for the current aggregation layer.
@@ -1243,11 +1251,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         impact_function.exposure = self.get_exposure_layer()
         aggregation = self.get_aggregation_layer()
 
-        label_without_selection = tr(
-            'will be affected? Summarise the results by')
-        label_with_selection = tr(
-            'will be affected? Summarise the results by selected '
-            'features in')
         if aggregation:
             impact_function.aggregation = aggregation
             impact_function.use_selected_features_only = (
@@ -1255,12 +1258,14 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
             if self.use_selected_features_only and (
                         aggregation.selectedFeatureCount() > 0):
-                self.aggregation_question_label.setText(label_with_selection)
+                self.aggregation_question_label.setText(
+                    self.label_with_selection)
             else:
                 self.aggregation_question_label.setText(
-                    label_without_selection)
+                    self.label_without_selection)
         else:
-            self.aggregation_question_label.setText(label_without_selection)
+            self.aggregation_question_label.setText(
+                self.label_without_selection)
             mode = setting('analysis_extents_mode')
             if self.extent.user_extent:
                 # This like a hack to transform a geometry to a rectangle.
