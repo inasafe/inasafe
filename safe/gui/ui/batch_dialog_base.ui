@@ -6,17 +6,24 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>430</width>
-    <height>599</height>
+    <width>526</width>
+    <height>536</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Batch Runner</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_4">
-   <property name="margin">
-    <number>0</number>
-   </property>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="1" column="0">
+    <widget class="QDialogButtonBox" name="button_box">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Close|QDialogButtonBox::Help</set>
+     </property>
+    </widget>
+   </item>
    <item row="0" column="0">
     <widget class="QStackedWidget" name="main_stacked_widget">
      <property name="currentIndex">
@@ -24,6 +31,9 @@
      </property>
      <widget class="QWidget" name="page">
       <layout class="QGridLayout" name="gridLayout_5">
+       <property name="margin">
+        <number>0</number>
+       </property>
        <item row="0" column="0">
         <widget class="QWebView" name="help_web_view" native="true">
          <property name="url" stdset="0">
@@ -35,12 +45,9 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="page_2">
-      <layout class="QGridLayout" name="gridLayout_3">
-       <property name="margin">
-        <number>0</number>
-       </property>
-       <item row="0" column="0">
+     <widget class="QWidget" name="page_1">
+      <layout class="QFormLayout" name="formLayout">
+       <item row="0" column="0" colspan="2">
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
           <string>Scenario directory</string>
@@ -59,7 +66,7 @@
          </layout>
         </widget>
        </item>
-       <item row="1" column="0">
+       <item row="1" column="0" colspan="2">
         <widget class="QGroupBox" name="groupBox_2">
          <property name="title">
           <string>Result table</string>
@@ -92,12 +99,12 @@
          </layout>
         </widget>
        </item>
-       <item row="2" column="0">
+       <item row="2" column="0" colspan="2">
         <widget class="QGroupBox" name="groupBox_3">
          <property name="title">
           <string>Output destination</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout_2">
+         <layout class="QGridLayout" name="gridLayout_3">
           <item row="0" column="0">
            <widget class="QRadioButton" name="scenario_directory_radio">
             <property name="text">
@@ -146,16 +153,6 @@
      </widget>
     </widget>
    </item>
-   <item row="1" column="0">
-    <widget class="QDialogButtonBox" name="button_box">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Close|QDialogButtonBox::Help</set>
-     </property>
-    </widget>
-   </item>
   </layout>
  </widget>
  <customwidgets>
@@ -175,7 +172,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>248</x>
-     <y>598</y>
+     <y>254</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -191,7 +188,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>316</x>
-     <y>598</y>
+     <y>260</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>

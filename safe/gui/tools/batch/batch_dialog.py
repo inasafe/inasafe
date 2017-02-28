@@ -402,7 +402,7 @@ class BatchDialog(QDialog, FORM_CLASS):
             else:
                 LOGGER.critical('Failed to create layer from scenario')
                 return
-        elif extension in ['.shp', '.geojson', '.gpkg']:
+        elif extension in ['.shp', '.json', '.geojson', '.gpkg']:
             layer = QgsVectorLayer(full_path, base_name, 'ogr')
             if layer.isValid():
                 return layer
