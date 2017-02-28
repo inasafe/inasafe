@@ -13,7 +13,7 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
-def format_number(x, enable_rounding=True):
+def format_number(x, enable_rounding=True, coefficient=1):
     """Format a number according to the standards.
 
     :param x: A number to be formatted in a locale friendly way.
@@ -22,6 +22,9 @@ def format_number(x, enable_rounding=True):
     :param enable_rounding: Flag to enable a population rounding.
     :type enable_rounding: bool
 
+    :param coefficient: Divide the result after the rounding.
+    :type coefficient:float
+
     :returns: A locale friendly formatted string e.g. 1,000,0000.00
         representing the original x. If a ValueError exception occurs,
         x is simply returned.
@@ -29,6 +32,8 @@ def format_number(x, enable_rounding=True):
     """
     if enable_rounding:
         x = population_rounding(x)
+
+    x /= coefficient
 
     number = add_separators(x)
     return number
@@ -180,5 +185,26 @@ def convert_unit(number, input_unit, expected_unit):
             return number * mapping[2]
         if input_unit == mapping[1] and expected_unit == mapping[0]:
             return number / mapping[2]
+
+    return None
+
+
+def coefficient_between_units(unit_a, unit_b):
+    """A helper to get the coefficient between two units.
+
+    :param unit_a: The first unit.
+    :type unit_a: safe.definitions.units
+
+    :param unit_b: The second unit.
+    :type unit_b: safe.definitions.units
+
+    :return: The coefficient between these two units.
+    :rtype: float
+    """
+    for mapping in unit_mapping:
+        if unit_a == mapping[0] and unit_b == mapping[1]:
+            return mapping[2]
+        if unit_a == mapping[1] and unit_b == mapping[0]:
+            return 1 / mapping[2]
 
     return None

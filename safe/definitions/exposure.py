@@ -8,6 +8,7 @@ from safe.definitions.units import (
     unit_metres,
     unit_square_metres,
     unit_hectares,
+    unit_kilometres,
 )
 from safe.definitions.fields import (
     adult_count_field,
@@ -229,7 +230,7 @@ exposure_road = {
         'line'
     ],
     'size_unit': unit_metres,
-    'units': [unit_metres],
+    'units': [unit_metres, unit_kilometres],
     'classifications': [generic_road_classes],
     'compulsory_fields': [exposure_type_field],
     'fields': exposure_fields,
