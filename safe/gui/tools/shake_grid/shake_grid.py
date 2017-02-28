@@ -51,6 +51,13 @@ from safe.utilities.styling import mmi_colour
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.i18n import tr
 from safe.common.exceptions import CallGDALError
+from safe.definitions.hazard import hazard_earthquake
+from safe.definitions.hazard_category import hazard_category_single_event
+from safe.definitions.hazard_classifications import earthquake_mmi_scale
+from safe.definitions.layer_geometry import layer_geometry_raster
+from safe.definitions.layer_modes import layer_mode_continuous
+from safe.definitions.layer_purposes import layer_purpose_hazard
+from safe.definitions.units import unit_mmi
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -841,14 +848,21 @@ class ShakeGrid(object):
         """
         keyword_io = KeywordIO()
 
+        classes = {}
+        for item in earthquake_mmi_scale['classes']:
+            classes[item['key']] = [item['numeric_default_min'],
+                                      item['numeric_default_max']]
+
         keywords = {
-            'hazard': 'earthquake',
-            'hazard_category': 'single_event',
-            'keyword_version': '3.3',
-            'layer_geometry': 'raster',
-            'layer_mode': 'continuous',
-            'layer_purpose': 'hazard',
-            'continuous_hazard_unit': 'mmi',
+            'hazard': hazard_earthquake['key'],
+            'hazard_category': hazard_category_single_event['key'],
+            'keyword_version': '3.3',  # will be replaced later
+            'layer_geometry': layer_geometry_raster['key'],
+            'layer_mode': layer_mode_continuous['key'],
+            'layer_purpose': layer_purpose_hazard['key'],
+            'continuous_hazard_unit': unit_mmi['key'],
+            'classification': earthquake_mmi_scale['key'],
+            'thresholds': classes
         }
 
         if self.algorithm_name:

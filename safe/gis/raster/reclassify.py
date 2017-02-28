@@ -25,7 +25,7 @@ __revision__ = '$Format:%H$'
 
 
 @profile
-def reclassify(layer, exposure_key=None, callback=None):
+def reclassify(layer, exposure_key=None, overwrite_input=False, callback=None):
     """Reclassify a continuous raster layer.
 
     Issue https://github.com/inasafe/inasafe/issues/3182
@@ -50,6 +50,10 @@ def reclassify(layer, exposure_key=None, callback=None):
 
     :param layer: The raster layer.
     :type layer: QgsRasterLayer
+
+    :param overwrite_input: Option for the output layer. True will overwrite
+        the input layer. False will create a temporary layer.
+    :type overwrite_input: bool
 
     :param exposure_key: The exposure key.
     :type exposure_key: str
@@ -94,7 +98,10 @@ def reclassify(layer, exposure_key=None, callback=None):
         ranges[hazard_class['value']] = thresholds[hazard_class['key']]
         value_map[hazard_class['key']] = [hazard_class['value']]
 
-    output_raster = unique_filename(suffix='.tiff', dir=temp_dir())
+    if overwrite_input:
+        output_raster = layer.publicSource()
+    else:
+        output_raster = unique_filename(suffix='.tiff', dir=temp_dir())
 
     driver = gdal.GetDriverByName('GTiff')
 
