@@ -469,6 +469,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
 
         self.layer_purpose = None
         self.layer_mode = None
+        self.special_case_index = None
 
         self.value_maps = {}
         self.thresholds = {}

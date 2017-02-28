@@ -205,10 +205,14 @@ def clear_layout(layout):
                 item = layout.takeAt(0)
                 widget = item.widget()
                 if widget is not None:
-                    # Remove the item from layout
+                    # Remove the widget from layout
+                    widget.close()
                     widget.deleteLater()
                 else:
                     clear_layout(item.layout())
+
+                # Remove the item from layout
+                layout.removeItem(item)
 
     # If InaSAFE running on anything else than Windows or Linux
     else:
