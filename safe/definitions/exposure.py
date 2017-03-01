@@ -152,6 +152,7 @@ exposure_population = {
            'functioning?')
 
     ],
+
     'citations': [
         {
                 'text': tr(

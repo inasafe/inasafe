@@ -274,8 +274,8 @@ hazard_volcanic_ash = {
     'name': tr('Volcanic ash'),
     'description': tr(
         '<b>Volcanic ash</b> describes fragments of pulverized rock, minerals '
-        'and volcanic glass, created during volcanic eruptions, less than '
-        '2 mm (0.079 inches) in diameter.'),
+        'and volcanic glass, ejected into the atmosphere during volcanic '
+        'eruptions.'),
     'notes': [  # additional generic notes for volcanic ash - IF has more
         caveat_simulation,
         caveat_local_conditions,
@@ -293,8 +293,7 @@ hazard_volcanic_ash = {
     ],
     'actions': [  # these are additional generic actions - IF has more
         tr('What action can be taken to secure water supplies and protect '
-           'crops?'),
-        tr('Do you have enough masks for people in the affected area?')
+           'crops?')
 
     ],
     'citations': [
@@ -338,8 +337,8 @@ hazard_tsunami = {
     'classified_notes': [  # notes specific to classified data
     ],
     'single_event_notes': [  # notes specific to single event data
-        tr('Tsunami hazard scenarios estimate the inundation of a tsunami '
-           'wave on land.')
+        tr('Tsunami hazard scenarios estimate the maximum extent of tsunami '
+           'waves on land.')
     ],
     'multi_event_notes': [  # notes specific to multi event data
     ],
