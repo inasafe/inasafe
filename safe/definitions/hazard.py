@@ -38,8 +38,7 @@ from safe.definitions.exposure import (
     exposure_place,
     exposure_land_cover,
     exposure_road,
-    exposure_population,
-    exposure_structure)
+    exposure_population)
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -312,11 +311,7 @@ hazard_volcanic_ash = {
     'fields': hazard_fields,
     'extra_fields': [],
     'layer_modes': [layer_mode_classified, layer_mode_continuous],
-    'disabled_exposures': [
-        exposure_population,
-        exposure_structure,
-        exposure_road
-    ]
+    'disabled_exposures': []
 }
 hazard_tsunami = {
     'key': 'tsunami',
