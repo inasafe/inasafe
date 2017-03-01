@@ -667,7 +667,7 @@ feature_rate_field = {
         }
     ],
     # Null value can be replaced by default or not
-    'replace_null': True,
+    'replace_null': False,  # It should be True,but disabled in V4.0,ET 1/03/17
     'default_value': feature_rate_default_value
 }
 

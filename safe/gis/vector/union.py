@@ -248,14 +248,14 @@ def union(union_a, union_b, callback=None):
             res_geom = geom.difference(intA)
             if res_geom is None:
                 # LOGGER.debug(
-                #     tr('GEOS geoprocessing error: One or more input features '
+                #    tr('GEOS geoprocessing error: One or more input features '
                 #        'have null geometry.'))
                 pass
                 continue  # maybe it is better to fail like @gustry
                 # does below ....
             if res_geom.isGeosEmpty() or not res_geom.isGeosValid():
                 # LOGGER.debug(
-                #     tr('GEOS geoprocessing error: One or more input features '
+                #    tr('GEOS geoprocessing error: One or more input features '
                 #        'have invalid geometry.'))
                 pass
 
