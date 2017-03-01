@@ -180,6 +180,11 @@ class ShakeEvent(QObject):
         # falsely read as int
         self.shake_grid = ShakeGrid(
             str(self.event_id), get_grid_source(), self.grid_file_path())
+        # RM: add smoothed grid version. Only used for display in the map
+        self.shake_grid_smooth = ShakeGrid(
+            str(self.event_id), get_grid_source(), self.grid_file_path(),
+            output_basename='mmi-smooth',
+            smoothed=True)
 
         self.population_raster_path = population_raster_path
         self.geonames_sqlite_path = geonames_sqlite_path
@@ -1333,7 +1338,8 @@ class ShakeEvent(QObject):
         # 'average', 'invdist', 'nearest' - currently only nearest works
         algorithm = 'nearest'
         try:
-            contours_shapefile = self.shake_grid.mmi_to_contours(
+            # We just display the smoothed version
+            contours_shapefile = self.shake_grid_smooth.mmi_to_contours(
                 force_flag=force_flag,
                 algorithm=algorithm)
         except:

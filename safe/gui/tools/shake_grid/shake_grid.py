@@ -25,6 +25,8 @@ import shutil
 import logging
 import codecs
 import pytz
+import numpy as np
+from scipy.ndimage.filters import gaussian_filter
 from xml.dom import minidom
 from datetime import datetime
 from pytz import timezone
@@ -76,7 +78,9 @@ class ShakeGrid(object):
             grid_xml_path,
             output_dir=None,
             output_basename=None,
-            algorithm_filename_flag=True):
+            algorithm_filename_flag=True,
+            smoothed=False,
+            smooth_sigma=0.9):
         """Constructor.
 
         :param title: The title of the earthquake that will be also added to
@@ -99,6 +103,14 @@ class ShakeGrid(object):
         :param algorithm_filename_flag: Flag whether to use the algorithm in
             the output file's name.
         :type algorithm_filename_flag: bool
+
+        :param smoothed: Flag whether to use the smoothing functions for
+            the mmi contours.
+        :type smoothed: bool
+
+        :param smooth_sigma: parameter for gaussian filter used in smoothing
+            function.
+        :type smooth_sigma:
 
         :returns: The instance of the class.
         :rtype: ShakeGrid
@@ -140,6 +152,11 @@ class ShakeGrid(object):
             self.output_basename = output_basename
         self.algorithm_name = algorithm_filename_flag
         self.grid_xml_path = grid_xml_path
+        self.smooothed = smoothed
+        if smoothed:
+            # Used for gaussian filter
+            self.sigma = smooth_sigma
+
         self.parse_grid_xml()
 
     def extract_date_time(self, the_time_stamp):
@@ -284,8 +301,7 @@ class ShakeGrid(object):
                 specification_element.attributes['nlat'].nodeValue)
             self.columns = float(
                 specification_element.attributes['nlon'].nodeValue)
-            data_element = document.getElementsByTagName(
-                'grid_data')
+            data_element = document.getElementsByTagName('grid_data')
             data_element = data_element[0]
             data = data_element.firstChild.nodeValue
 
@@ -294,6 +310,9 @@ class ShakeGrid(object):
             latitude_column = 1
             mmi_column = 4
             self.mmi_data = []
+            lon_list = []
+            lat_list = []
+            mmi_list = []
             for line in data.split('\n'):
                 if not line:
                     continue
@@ -301,8 +320,26 @@ class ShakeGrid(object):
                 longitude = tokens[longitude_column]
                 latitude = tokens[latitude_column]
                 mmi = tokens[mmi_column]
-                mmi_tuple = (longitude, latitude, mmi)
-                self.mmi_data.append(mmi_tuple)
+                lon_list.append(float(longitude))
+                lat_list.append(float(latitude))
+                mmi_list.append(float(mmi))
+
+            if self.smooothed:
+                ncols = len(np.where(np.array(lon_list) == lon_list[0])[0])
+                nrows = len(np.where(np.array(lat_list) == lat_list[0])[0])
+
+                # reshape mmi_list to 2D array to apply gaussian filter
+                Z = np.reshape(mmi_list, (nrows, ncols))
+
+                # smooth MMI matrix
+                # Help from Hadi Ghasemi
+                mmi_list = gaussian_filter(Z, self.sigma)
+
+                # reshape array back to 1D longl list of mmi
+                mmi_list = np.reshape(mmi_list, ncols * nrows)
+
+            # zip lists as list of tuples
+            self.mmi_data = zip(lon_list, lat_list, mmi_list)
 
         except Exception, e:
             LOGGER.exception('Event parse failed')
@@ -365,7 +402,7 @@ class ShakeGrid(object):
         LOGGER.debug('mmi_to_delimited_text requested.')
 
         csv_path = os.path.join(
-            self.output_dir, 'mmi.csv')
+            self.output_dir, self.output_basename + '.csv')
         # short circuit if the csv is already created.
         if os.path.exists(csv_path) and force_flag is not True:
             return csv_path
@@ -409,13 +446,13 @@ class ShakeGrid(object):
 
         vrt_string = (
             '<OGRVRTDataSource>'
-            '  <OGRVRTLayer name="mmi">'
+            '  <OGRVRTLayer name="%s">'
             '    <SrcDataSource>%s</SrcDataSource>'
             '    <GeometryType>wkbPoint</GeometryType>'
             '    <GeometryField encoding="PointFromColumns"'
             '                      x="lon" y="lat" z="mmi"/>'
             '  </OGRVRTLayer>'
-            '</OGRVRTDataSource>' % csv_path)
+            '</OGRVRTDataSource>' % (self.output_basename, csv_path))
 
         with codecs.open(vrt_path, 'w', encoding='utf-8') as f:
             f.write(vrt_string)
@@ -524,8 +561,9 @@ class ShakeGrid(object):
         command = ((
             '%(gdal_grid)s -a %(alg)s -zfield "mmi" -txe %(xMin)s '
             '%(xMax)s -tye %(yMin)s %(yMax)s -outsize %(dimX)i '
-            '%(dimY)i -of GTiff -ot Float16 -a_srs EPSG:4326 -l mmi '
+            '%(dimY)i -of GTiff -ot Float16 -a_srs EPSG:4326 -l %(layer)s '
             '"%(vrt)s" "%(tif)s"') % {
+                'layer': self.output_basename,
                 'gdal_grid': which('gdal_grid')[0],
                 'alg': algorithm,
                 'xMin': self.x_minimum,
@@ -881,7 +919,8 @@ def convert_mmi_data(
         source,
         output_path=None,
         algorithm=None,
-        algorithm_filename_flag=True):
+        algorithm_filename_flag=True,
+        smoothed=False):
     """Convenience function to convert a single file.
 
     :param grid_xml_path: Path to the xml shake grid file.
@@ -904,6 +943,10 @@ def convert_mmi_data(
         output file's name.
     :type algorithm_filename_flag: bool
 
+    :param smoothed: Flag whether to use the smoothing functions for
+        the mmi contours.
+    :type smoothed: bool
+
     :returns: A path to the resulting raster file.
     :rtype: str
     """
@@ -923,5 +966,6 @@ def convert_mmi_data(
         grid_xml_path=grid_xml_path,
         output_dir=output_dir,
         output_basename=output_basename,
-        algorithm_filename_flag=algorithm_filename_flag)
+        algorithm_filename_flag=algorithm_filename_flag,
+        smoothed=smoothed)
     return converter.mmi_to_raster(force_flag=True, algorithm=algorithm)
