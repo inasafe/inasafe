@@ -128,16 +128,18 @@ def clip(layer_to_clip, mask_layer, callback=None):
                     int_com = in_feat.geometry().combine(new_geom)
                     int_sym = in_feat.geometry().symDifference(new_geom)
                     if not int_com or not int_sym:
-                        LOGGER.debug(
-                            tr('GEOS geoprocessing error: One or more input '
-                               'features have invalid geometry.'))
+                        # LOGGER.debug(
+                        #     tr('GEOS geoprocessing error: One or more input '
+                        #        'features have invalid geometry.'))
+                        pass
                     else:
                         new_geom = int_com.difference(int_sym)
                         if new_geom.isGeosEmpty()\
                                 or not new_geom.isGeosValid():
-                            LOGGER.debug(
-                                tr('GEOS geoprocessing error: One or more '
-                                   'input features have invalid geometry.'))
+                            # LOGGER.debug(
+                            #     tr('GEOS geoprocessing error: One or more '
+                            #        'input features have invalid geometry.'))
+                            pass
             else:
                 # clip geometry totally contains feature geometry,
                 # so no need to perform intersection

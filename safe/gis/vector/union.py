@@ -138,9 +138,10 @@ def union(union_a, union_b, callback=None):
 
                     if not int_geom:
                         # There was a problem creating the intersection
-                        LOGGER.debug(
-                            tr('GEOS geoprocessing error: One or more input '
-                               'features have invalid geometry.'))
+                        # LOGGER.debug(
+                        #     tr('GEOS geoprocessing error: One or more input '
+                        #        'features have invalid geometry.'))
+                        pass
                         int_geom = QgsGeometry()
                     else:
                         int_geom = QgsGeometry(int_geom)
@@ -194,9 +195,10 @@ def union(union_a, union_b, callback=None):
                 diff_geom = geometry_checker(diff_geom.difference(int_b))
                 if diff_geom is None or \
                     diff_geom.isGeosEmpty() or not diff_geom.isGeosValid():
-                    LOGGER.debug(
-                        tr('GEOS geoprocessing error: One or more input '
-                           'features have invalid geometry.'))
+                    # LOGGER.debug(
+                    #     tr('GEOS geoprocessing error: One or more input '
+                    #        'features have invalid geometry.'))
+                    pass
 
             if diff_geom is not None and (
                             diff_geom.wkbType() == 0 or QgsWKBTypes.flatType(
@@ -245,22 +247,25 @@ def union(union_a, union_b, callback=None):
             intA = QgsGeometry.unaryUnion(lstIntersectingA)
             res_geom = geom.difference(intA)
             if res_geom is None:
-                LOGGER.debug(
-                    tr('GEOS geoprocessing error: One or more input features '
-                       'have null geometry.'))
+                # LOGGER.debug(
+                #     tr('GEOS geoprocessing error: One or more input features '
+                #        'have null geometry.'))
+                pass
                 continue  # maybe it is better to fail like @gustry
                 # does below ....
             if res_geom.isGeosEmpty() or not res_geom.isGeosValid():
-                LOGGER.debug(
-                    tr('GEOS geoprocessing error: One or more input features '
-                       'have invalid geometry.'))
+                # LOGGER.debug(
+                #     tr('GEOS geoprocessing error: One or more input features '
+                #        'have invalid geometry.'))
+                pass
 
         try:
             _write_feature(atMap, res_geom, writer, not_null_field_index)
         except:
-            LOGGER.debug(
-                tr('Feature geometry error: One or more output features '
-                   'ignored due to invalid geometry.'))
+            # LOGGER.debug(
+            #     tr('Feature geometry error: One or more output features '
+            #        'ignored due to invalid geometry.'))
+            pass
 
         n_element += 1
 
