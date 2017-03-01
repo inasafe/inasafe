@@ -394,24 +394,18 @@ class BatchDialog(QDialog, FORM_CLASS):
         # get extension and basename to create layer
         base_name, extension = os.path.splitext(file_name)
 
-        # check if raster or vector layer from extension
-        if extension in ['.asc', '.tif', '.tiff']:
-            layer = QgsRasterLayer(full_path, base_name)
-            if layer.isValid():
-                return layer
-            else:
-                LOGGER.critical('Failed to create layer from scenario')
-                return
-        elif extension in ['.shp', '.geojson', '.gpkg']:
+        # load layer in scenario
+        layer = QgsRasterLayer(full_path, base_name)
+        if layer.isValid():
+            return layer
+        else:
             layer = QgsVectorLayer(full_path, base_name, 'ogr')
             if layer.isValid():
                 return layer
+            # if layer is not vector nor raster
             else:
-                LOGGER.critical('Failed to create layer from scenario')
+                LOGGER.warning('Input in scenario is not recognized/supported')
                 return
-        else:
-            LOGGER.warning('Input extension in scenario is not recognized')
-            return
 
     def run_task(self, task_item, status_item, count=0, index=''):
         """Run a single task.
