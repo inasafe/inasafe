@@ -154,6 +154,24 @@ unit_metres = {
         }
     ],
 }
+unit_hectares = {
+    'key': 'hectare',
+    'name': tr('Hectare'),
+    'base_unit': False,
+    'plural_name': tr('hectares'),
+    'measure': tr('Area'),
+    'abbreviation': 'ha',
+    'description': tr(
+        u'<b>Hectare</b> is an SI accepted metric system unit of area equal '
+        u'to 100 ares (10,000 m²) and primarily used in the measurement of '
+        u'land'),
+    'citations': [
+        {
+            'text': 'Wikipedia',
+            'link': 'https://en.wikipedia.org/wiki/Hectare'
+        }
+    ],
+}
 unit_square_metres = {
     'key': 'square_metres',
     'name': tr('Square Metres'),
@@ -291,6 +309,25 @@ exposure_unit = {
     ]
 }
 
+unit_mapping = (
+    (unit_metres, unit_millimetres, 1000),
+    (unit_metres, unit_centimetres, 100),
+    (unit_metres, unit_kilometres, 0.001),
+    (unit_square_metres, unit_hectares, 0.0001),
+    (unit_metres_per_second, unit_knots, 1.94384),
+    (unit_metres_per_second, unit_miles_per_hour, 2.23694),
+    (unit_metres_per_second, unit_kilometres_per_hour, 3.6),
+
+    # Unfortunately, we need to add every permutations.
+    # We need to improve convert_unit in safe.utilities.rounding.
+    (unit_millimetres, unit_centimetres, 0.1),
+    (unit_millimetres, unit_kilometres, 0.000001),
+    (unit_centimetres, unit_kilometres, 0.00001),
+    (unit_knots, unit_miles_per_hour, 1.15078),
+    (unit_knots, unit_kilometres_per_hour, 1.852),
+    (unit_miles_per_hour, unit_kilometres_per_hour, 1.60934),
+)
+
 units_all = [
     unit_feet,
     unit_generic,
@@ -303,6 +340,8 @@ units_all = [
     unit_metres,
     unit_millimetres,
     unit_centimetres,
+    unit_square_metres,
+    unit_hectares,
     unit_mmi,
     unit_percentage,
     count_exposure_unit,

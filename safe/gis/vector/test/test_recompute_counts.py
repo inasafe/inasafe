@@ -25,11 +25,12 @@ class TestRecomputeCounts(unittest.TestCase):
 
     def test_recompute_counts(self):
         """Test we can recompute counts in a layer."""
-
         layer = load_test_vector_layer(
             'gisv4', 'intermediate', 'impact_before_recount.geojson',
             clone=True)
-
+        layer.keywords['exposure_keywords'] = {
+            'exposure': 'population'
+        }
         count_fields = layer.fields().count()
 
         layer = recompute_counts(layer)

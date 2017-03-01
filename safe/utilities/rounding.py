@@ -4,6 +4,7 @@
 
 from math import ceil
 
+from safe.definitions.units import unit_mapping
 from safe.utilities.i18n import locale
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -157,3 +158,27 @@ def population_rounding(number):
     :rtype: int
     """
     return population_rounding_full(number)[0]
+
+
+def convert_unit(number, input_unit, expected_unit):
+    """A helper to convert the unit.
+
+    :param number: The number to update.
+    :type number: int
+
+    :param input_unit: The unit of the number.
+    :type input_unit: safe.definitions.units
+
+    :param expected_unit: The expected output unit.
+    :type expected_unit: safe.definitions.units
+
+    :return: The new number in the expected unit.
+    :rtype: int
+    """
+    for mapping in unit_mapping:
+        if input_unit == mapping[0] and expected_unit == mapping[1]:
+            return number * mapping[2]
+        if input_unit == mapping[1] and expected_unit == mapping[0]:
+            return number / mapping[2]
+
+    return None

@@ -6,7 +6,6 @@
 """Definitions relating to post-processing."""
 
 import logging
-from math import isnan
 from collections import OrderedDict
 
 from PyQt4.QtCore import QPyNullVariant
@@ -73,39 +72,18 @@ def multiply(**kwargs):
     return result
 
 
-def size(**kwargs):
+def size(size_calculator, geometry):
     """Simple postprocessor where we compute the size of a feature.
 
     :param geometry: The geometry.
     :type geometry: QgsGeometry
 
     :param size_calculator: The size calculator.
-    :type size_calculator: qgis.core.QgsDistanceArea
+    :type size_calculator: safe.gis.vector.tools.SizeCalculator
 
     :return: The size.
     """
-    geometry = kwargs['geometry']
-    size_calculator = kwargs['size_calculator']
-    message = 'Size with NaN value : geometry valid={valid}, WKT={wkt}'
-    feature_size = 0
-    if geometry.isMultipart():
-        # Be careful, the size calculator is not working well on a multipart.
-        # So we compute the size part per part. See ticket #3812
-        for single in geometry.asGeometryCollection():
-            geometry_size = size_calculator.measure(single)
-            if not isnan(geometry_size):
-                feature_size += geometry_size
-            else:
-                LOGGER.debug(message.format(
-                    valid=single.isGeosValid(), wkt=single.exportToWkt()))
-    else:
-        geometry_size = size_calculator.measure(geometry)
-        if not isnan(geometry_size):
-            feature_size = geometry_size
-        else:
-            LOGGER.debug(message.format(
-                valid=geometry.isGeosValid(), wkt=geometry.exportToWkt()))
-
+    feature_size = size_calculator.measure(geometry)
     return feature_size
 
 
@@ -579,9 +557,8 @@ post_processor_size = {
     'key': 'post_processor_size',
     'name': tr('Size Value Post Processor'),
     'description': tr(
-        u'A post processor to calculate the size of the feature. If the '
-        u'feature is a polygon, the result will be area in m². If the feature '
-        u'is a line we use length in metres.'),
+        u'A post processor to calculate the size of the feature. The unit is '
+        u'defined in the exposure definition.'),
     'input': {
         'size_calculator': {
             'type': layer_property_input_type,
