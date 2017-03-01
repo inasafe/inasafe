@@ -734,11 +734,14 @@ def reload_minimum_needs_post_processors():
     """
     global minimum_needs_post_processors, post_processors
     minimum_needs_post_processors = initialize_minimum_needs_post_processors()
-    post_processors = [
-        post_processor_size,
-        post_processor_affected,
-        post_processor_displaced_ratio,
-        post_processor_displaced,
-    ] + (female_postprocessors +
-         age_postprocessors +
-         minimum_needs_post_processors)
+    new_post_processors = []
+    for post_processor in post_processors:
+        no_needs_profile = True
+        for key, values in post_processor['input'].items():
+            values = values if isinstance(values, list) else [values]
+            if needs_profile_input_type in [
+                value['type'] for value in values]:
+                no_needs_profile = False
+        if no_needs_profile:
+            new_post_processors.append(post_processor)
+    post_processors = new_post_processors + minimum_needs_post_processors
