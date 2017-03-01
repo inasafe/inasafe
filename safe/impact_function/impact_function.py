@@ -94,6 +94,8 @@ from safe.definitions.constants import (
     PREPARE_FAILED_INSUFFICIENT_OVERLAP_REQUESTED_EXTENT,
     PREPARE_FAILED_BAD_LAYER,
     PREPARE_FAILED_BAD_CODE)
+from safe.definitions.hazard_exposure_notes_actions import (
+    specific_actions, specific_notes)
 from safe.definitions.versions import inasafe_keyword_version
 from safe.common.exceptions import (
     InaSAFEError,
@@ -2005,6 +2007,11 @@ class ImpactFunction(object):
         fields = fields + self.exposure_notes()
         # include any generic hazard specific notes from definitions
         fields = fields + self.hazard_notes()
+
+        # include any hazard/exposure notes from definitions
+        exposure = definition(self.exposure.keywords.get('exposure'))
+        hazard = definition(self.hazard.keywords.get('hazard'))
+        fields.extend(specific_notes(hazard, exposure))
         return fields
 
     def action_checklist(self):
@@ -2013,7 +2020,12 @@ class ImpactFunction(object):
         :return: The action check list.
         :rtype: list
         """
+        actions = []
         exposure = definition(self.exposure.keywords.get('exposure'))
-        hazard = definition(self.hazard.keywords.get('hazard'))
+        actions.extend(exposure.get('actions'))
 
-        return exposure.get('actions') + hazard.get('actions')
+        hazard = definition(self.hazard.keywords.get('hazard'))
+        actions.extend(hazard.get('actions'))
+
+        actions.extend(specific_actions(hazard, exposure))
+        return actions
