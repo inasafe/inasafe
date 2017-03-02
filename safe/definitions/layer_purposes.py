@@ -60,11 +60,11 @@ layer_purpose_exposure_summary = {
     'key': 'exposure_summary',
     'name': tr('Impact Layer - Exposure Summary'),
     'description': tr(
-        'This <b>impact layer exposure summary</b> contains all the results '
-        'for the spatial analysis of the hazard, exposure and aggregation '
-        'layers (if used) within the analysis extent. This layer is not '
-        'created if the input includes a continuous raster exposure layer ('
-        'eg population raster).'),
+        'This <b>impact layer - exposure summary</b> contains all the '
+        'results for the spatial analysis of the hazard, exposure and '
+        'aggregation layers (if used) within the analysis extent. This '
+        'layer is not created if the input includes a continuous raster '
+        'exposure layer (eg population raster).'),
     'allowed_geometries': [
         layer_geometry_point, layer_geometry_line, layer_geometry_polygon],
     'citations': [
@@ -160,21 +160,15 @@ layer_purpose_analysis_impacted = {
     ]
 }
 
-layer_purpose_exposure_breakdown = {
-    'key': 'exposure_breakdown',
-    'name': tr('Exposure Breakdown'),
+layer_purpose_exposure_summary_table = {
+    'key': 'exposure_summary_table',
+    'name': tr('Exposure Summary Table'),
     'description': tr(
-        'An <b>exposure breakdown</b> layer is non-spatial table (i.e. it '
-        'has '
-        'no geometries). It contains one row per exposure type. Columns are '
-        'created for each hazard class encountered in the analysis and for '
-        'analysis totals. For example there will be a column for the total '
-        'number of buildings considered affected in the entire analysis area,'
-        'and further columns for not affected total and the combined total '
-        'of '
-        'not affected + affected. This layer is used for generating reports '
-        'and can also be easily exported to a spreadsheet for further '
-        'analysis.'),
+        'This <b>exposure summary table</b> contains the analysis results '
+        'for exposure type by hazard type, summarised by exposure type. It '
+        'includes totals for affected and not affected status. It is used '
+        'to generate reports and can be exported to a spreadsheet for '
+        'further analysis.'),
     'allowed_geometries': [],
     'citations': [
         {

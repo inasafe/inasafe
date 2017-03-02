@@ -50,8 +50,8 @@ from safe.gis.vector.summary_2_aggregation import aggregation_summary
 from safe.gis.vector.summary_3_analysis import analysis_summary
 from safe.gis.vector.summary_33_eq_raster_analysis import (
     analysis_eartquake_summary)
-from safe.gis.vector.summary_4_exposure_breakdown import (
-    exposure_type_breakdown)
+from safe.gis.vector.summary_4_exposure_summary_table import (
+    exposure_summary_table)
 from safe.gis.vector.recompute_counts import recompute_counts
 from safe.gis.vector.update_value_map import update_value_map
 from safe.gis.raster.clip_bounding_box import clip_by_extent
@@ -75,7 +75,7 @@ from safe.definitions.layer_purposes import (
     layer_purpose_aggregate_hazard_impacted,
     layer_purpose_aggregation_impacted,
     layer_purpose_analysis_impacted,
-    layer_purpose_exposure_breakdown,
+    layer_purpose_exposure_summary_table,
     layer_purpose_profiling,
 )
 from safe.impact_function.provenance_utilities import (
@@ -172,7 +172,7 @@ class ImpactFunction(object):
         self._aggregate_hazard_impacted = None
         self._aggregation_impacted = None
         self._analysis_impacted = None
-        self._exposure_breakdown = None
+        self._exposure_summary_table = None
         self._profiling_table = None
 
         # Use debug to store intermediate results
@@ -357,8 +357,8 @@ class ImpactFunction(object):
             self._aggregation_impacted)
         layers[layer_purpose_analysis_impacted['key']] = (
             self._analysis_impacted)
-        layers[layer_purpose_exposure_breakdown['key']] = (
-            self._exposure_breakdown)
+        layers[layer_purpose_exposure_summary_table['key']] = (
+            self._exposure_summary_table)
         layers[layer_purpose_profiling['key']] = self._profiling_table
 
         for expected_purpose, layer in layers.iteritems():
@@ -428,15 +428,15 @@ class ImpactFunction(object):
         return self._analysis_impacted
 
     @property
-    def exposure_breakdown(self):
-        """Return the exposure breakdown if available.
+    def exposure_summary_table(self):
+        """Return the exposure summary table if available.
 
         It's a QgsVectorLayer without geometry.
 
         :returns: A vector layer.
         :rtype: QgsVectorLayer
         """
-        return self._exposure_breakdown
+        return self._exposure_summary_table
 
     @property
     def profiling(self):
@@ -1282,19 +1282,20 @@ class ImpactFunction(object):
             self.debug_layer(
                 self._aggregate_hazard_impacted, add_to_datastore=False)
 
-        # Exposure breakdown
+        # Exposure summary table
         if self._exposure.keywords.get('classification'):
-            self._exposure_breakdown.keywords[
+            self._exposure_summary_table.keywords[
                 'provenance_data'] = self.provenance
             result, name = self.datastore.add_layer(
-                self._exposure_breakdown,
-                layer_purpose_exposure_breakdown['key'])
+                self._exposure_summary_table,
+                layer_purpose_exposure_summary_table['key'])
             if not result:
                 raise Exception(
                     tr('Something went wrong with the datastore : '
                        '{error_message}').format(error_message=name))
-            self._exposure_breakdown = self.datastore.layer(name)
-            self.debug_layer(self._exposure_breakdown, add_to_datastore=False)
+            self._exposure_summary_table = self.datastore.layer(name)
+            self.debug_layer(
+                self._exposure_summary_table, add_to_datastore=False)
 
         # Aggregation impacted
         self.aggregation_impacted.keywords['provenance_data'] = self.provenance
@@ -1931,11 +1932,11 @@ class ImpactFunction(object):
             if self._exposure.keywords.get('classification'):
                 self.set_state_process(
                     'impact function',
-                    'Build the exposure breakdown')
-                self._exposure_breakdown = exposure_type_breakdown(
+                    'Build the exposure summary table')
+                self._exposure_summary_table = exposure_summary_table(
                     self._aggregate_hazard_impacted)
                 self.debug_layer(
-                    self._exposure_breakdown, add_to_datastore=False)
+                    self._exposure_summary_table, add_to_datastore=False)
         else:
             # We are running EQ raster on population raster.
             self.set_state_process(

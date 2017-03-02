@@ -1377,7 +1377,7 @@ aggregation_impacted_fields = [
     total_affected_field,
 ]
 
-exposure_breakdown_fields = [
+exposure_summary_table_fields = [
     exposure_class_field,
     hazard_count_field,
     total_affected_field,

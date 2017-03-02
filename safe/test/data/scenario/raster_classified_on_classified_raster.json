@@ -18,7 +18,7 @@
         "Aggregate the impact summary",
         "Aggregate the aggregation summary",
         "Aggregate the analysis summary",
-        "Build the exposure breakdown"
+        "Build the exposure summary table"
       ]
     },
     "post_processor":{

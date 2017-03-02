@@ -259,7 +259,7 @@ class ImpactReport(object):
             exposure=None,
             impact=None,
             analysis=None,
-            exposure_breakdown=None,
+            exposure_summary_table=None,
             aggregation_impacted=None,
             extra_layers=None,
             minimum_needs_profile=None):
@@ -286,8 +286,9 @@ class ImpactReport(object):
         self._impact = (
             impact or self._impact_function.impact)
         self._analysis = (analysis or self._impact_function.analysis_impacted)
-        self._exposure_breakdown = (
-            exposure_breakdown or self._impact_function.exposure_breakdown)
+        self._exposure_summary_table = (
+            exposure_summary_table or
+            self._impact_function.exposure_summary_table)
         self._aggregation_impacted = (
             aggregation_impacted or
             self._impact_function.aggregation_impacted)
@@ -501,24 +502,24 @@ class ImpactReport(object):
         self._analysis = layer
 
     @property
-    def exposure_breakdown(self):
+    def exposure_summary_table(self):
         """
 
         :return:
         :rtype: qgis.core.QgsVectorLayer
         """
-        # self._check_layer_count(self._exposure_breakdown)
-        return self._exposure_breakdown
+        # self._check_layer_count(self._exposure_summary_table)
+        return self._exposure_summary_table
 
-    @exposure_breakdown.setter
-    def exposure_breakdown(self, value):
+    @exposure_summary_table.setter
+    def exposure_summary_table(self, value):
         """
 
-        :param value: Exposure Breakdown
+        :param value: Exposure Summary Table
         :type value: qgis.core.QgsVectorLayer
         :return:
         """
-        self._exposure_breakdown = value
+        self._exposure_summary_table = value
 
     @property
     def aggregation_impacted(self):

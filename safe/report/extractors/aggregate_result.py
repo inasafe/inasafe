@@ -41,9 +41,9 @@ def aggregation_result_extractor(impact_report, component_metadata):
     # Find out aggregation report type
     exposure_layer = impact_report.exposure
     analysis_layer = impact_report.analysis
-    exposure_breakdown = impact_report.exposure_breakdown
-    if exposure_breakdown:
-        exposure_breakdown_fields = exposure_breakdown.keywords[
+    exposure_summary_table = impact_report.exposure_summary_table
+    if exposure_summary_table:
+        exposure_summary_table_fields = exposure_summary_table.keywords[
             'inasafe_fields']
     aggregation_impacted = impact_report.aggregation_impacted
     aggregation_impacted_fields = aggregation_impacted.keywords[
@@ -120,10 +120,10 @@ def aggregation_result_extractor(impact_report, component_metadata):
 
     """Generate total for footers"""
 
-    # calculate total values for each type. Taken from exposure breakdown
+    # calculate total values for each type. Taken from exposure summary table
     type_total_values = []
     # Get affected field index
-    affected_field_index = exposure_breakdown.fieldNameIndex(
+    affected_field_index = exposure_summary_table.fieldNameIndex(
         total_affected_field['field_name'])
 
     # Get breakdown field
@@ -136,18 +136,18 @@ def aggregation_result_extractor(impact_report, component_metadata):
         exposure_class_field
     ]
     for field in breakdown_fields:
-        if field['key'] in exposure_breakdown_fields:
+        if field['key'] in exposure_summary_table_fields:
             breakdown_field = field
             break
     breakdown_field_name = breakdown_field['field_name']
-    breakdown_field_index = exposure_breakdown.fieldNameIndex(
+    breakdown_field_index = exposure_summary_table.fieldNameIndex(
         breakdown_field_name)
 
     # Fetch total affected for each breakdown name
     value_dict = {}
-    for feat in exposure_breakdown.getFeatures():
-        # exposure breakdown is in csv format, so the field returned is always
-        # in text format
+    for feat in exposure_summary_table.getFeatures():
+        # exposure summary table is in csv format, so the field returned is
+        # always in text format
         affected_value = int(float(feat[affected_field_index]))
         affected_value = format_number(
             affected_value,

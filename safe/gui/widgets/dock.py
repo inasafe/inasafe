@@ -22,7 +22,7 @@ from safe.definitions.layer_purposes import (
     layer_purpose_aggregate_hazard_impacted,
     layer_purpose_aggregation_impacted,
     layer_purpose_analysis_impacted,
-    layer_purpose_exposure_breakdown,
+    layer_purpose_exposure_summary_table,
 )
 from safe.definitions.constants import (
     inasafe_keyword_version_key,
@@ -882,7 +882,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 layer_purpose_aggregate_hazard_impacted['key'],
                 layer_purpose_aggregation_impacted['key'],
                 layer_purpose_analysis_impacted['key'],
-                layer_purpose_exposure_breakdown['key'],
+                layer_purpose_exposure_summary_table['key'],
             ]
 
             show_keywords = True

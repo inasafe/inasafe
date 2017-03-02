@@ -21,9 +21,10 @@ from safe.definitions.fields import (
     exposure_count_field,
 )
 from safe.definitions.processing_steps import (
-    summary_4_exposure_breakdown_steps)
+    summary_4_exposure_summary_table_steps)
 from safe.definitions.post_processors import post_processor_affected_function
-from safe.definitions.layer_purposes import layer_purpose_exposure_breakdown
+from safe.definitions.layer_purposes import \
+    layer_purpose_exposure_summary_table
 from safe.definitions.hazard_classifications import not_exposed_class
 from safe.gis.vector.tools import (
     create_field_from_definition,
@@ -42,7 +43,7 @@ __revision__ = '$Format:%H$'
 
 
 @profile
-def exposure_type_breakdown(aggregate_hazard, callback=None):
+def exposure_summary_table(aggregate_hazard, callback=None):
     """Compute the summary from the aggregate hazard to analysis.
 
     Source layer :
@@ -64,8 +65,9 @@ def exposure_type_breakdown(aggregate_hazard, callback=None):
 
     .. versionadded:: 4.0
     """
-    output_layer_name = summary_4_exposure_breakdown_steps['output_layer_name']
-    processing_step = summary_4_exposure_breakdown_steps['step_name']
+    output_layer_name = summary_4_exposure_summary_table_steps[
+        'output_layer_name']
+    processing_step = summary_4_exposure_summary_table_steps['step_name']
 
     source_fields = aggregate_hazard.keywords['inasafe_fields']
 
@@ -223,8 +225,10 @@ def exposure_type_breakdown(aggregate_hazard, callback=None):
 
     tabular.commitChanges()
 
-    tabular.keywords['title'] = output_layer_name
-    tabular.keywords['layer_purpose'] = layer_purpose_exposure_breakdown['key']
+    tabular.keywords['title'] = layer_purpose_exposure_summary_table['name']
+    tabular.setLayerName(tabular.keywords['title'])
+    tabular.keywords['layer_purpose'] = layer_purpose_exposure_summary_table[
+        'key']
 
     check_layer(tabular, has_geometry=False)
     return tabular
