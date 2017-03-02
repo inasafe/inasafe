@@ -661,6 +661,7 @@ class ImpactFunction(object):
         :param process: A text explain the process.
         :type process: str, unicode
         """
+        LOGGER.info('%s: %s' % (context, process))
         self.state[context]["process"].append(process)
 
     def set_state_info(self, context, key, value):
@@ -676,7 +677,7 @@ class ImpactFunction(object):
         :param value: The value of the information. E.g point
         :type value: str, unicode, int, float, bool, list, dict
         """
-        LOGGER.debug('%s: %s: %s' % (context, key, value))
+        LOGGER.info('%s: %s: %s' % (context, key, value))
         self.state[context]["info"][key] = value
 
     @staticmethod
@@ -1172,6 +1173,7 @@ class ImpactFunction(object):
     @profile
     def _run(self):
         """Internal function to run the impact function with profiling."""
+        LOGGER.info('ANALYSIS : The impact function is starting.')
         step_count = len(analysis_steps)
         self.callback(0, step_count, analysis_steps['initialisation'])
 
@@ -1320,6 +1322,7 @@ class ImpactFunction(object):
     @profile
     def gis_overlay_analysis(self):
         """Perform an overlay analysis between the exposure and the hazard."""
+        LOGGER.info('Starting a GIS overlay analysis')
         step_count = len(analysis_steps)
 
         self._performance_log = profiling_log()
@@ -1349,6 +1352,8 @@ class ImpactFunction(object):
     def earthquake_raster_population_raster(self):
         """Perform a damage curve analysis with EQ raster on population raster.
         """
+        LOGGER.info('ANALYSIS : Starting a EQ raster on population raster')
+
         classification_key = active_classification(
             self.hazard.keywords, 'population')
         thresholds = active_thresholds_value_maps(
@@ -1401,8 +1406,12 @@ class ImpactFunction(object):
     @profile
     def aggregation_preparation(self):
         """This function is doing the aggregation preparation."""
+        LOGGER.info('ANALYSIS : Aggregation preparation')
         if not self.aggregation:
             self.set_state_info('aggregation', 'provided', False)
+            LOGGER.info(
+                'The aggregation layer is not provided. We are going to '
+                'create it from the analysis extent.')
 
             self.set_state_process(
                 'aggregation',
@@ -1414,6 +1423,9 @@ class ImpactFunction(object):
             if is_vector_layer(self.exposure):
                 # We need to check if we can add default ratios to the
                 # exposure (only if it's a vector).
+                LOGGER.info(
+                    'The exposure is a vector layer. We need to check if the '
+                    'exposure has some counts.')
                 exposure = definition(self.exposure.keywords['exposure'])
                 keywords = self.exposure.keywords
                 # inasafe_default_values will not exist as we can't use
@@ -1429,6 +1441,23 @@ class ImpactFunction(object):
                             default = definition(ratio_field)['default_value']
                             keywords['inasafe_default_values'][ratio_field] = (
                                 default['default_value'])
+                            LOGGER.info(
+                                'The exposure do not have field {count}, we '
+                                'can add {ratio} = {value} to the exposure '
+                                'default values.'.format(
+                                    count=count_key,
+                                    ratio=ratio_field,
+                                    value=default['default_value']))
+                        else:
+                            LOGGER.info(
+                                'The exposure layer has the count field '
+                                '{count}, we skip the equivalent '
+                                'ratio.'.format(count=count_key))
+
+            else:
+                LOGGER.info(
+                    'The exposure is a raster layer. The exposure can not '
+                    'have some counts. We do nothing in this step.')
 
         else:
             self.set_state_info('aggregation', 'provided', True)
@@ -1485,19 +1514,33 @@ class ImpactFunction(object):
                             # aggregate_hazard layer.
                             # Let's skip to the next field.
                             LOGGER.info(
-                                tr('{ratio} field detected, we will propagate '
-                                   'it to the exposure layer.').format(
-                                        ratio=ratio_field))
+                                '{ratio} field detected in the aggregation '
+                                'layer AND the equivalent count has not been '
+                                'detected in the exposure layer. We will '
+                                'propagate this ratio to the exposure layer '
+                                'later when we combine these two '
+                                'layers.'.format(ratio=ratio_field))
                             continue
 
                         if ratio_is_a_constant and not ratio_is_a_field:
                             # It's a constant. We need to add to the exposure.
-                            exposure_defaults[ratio_field] = (
-                                aggregation_default_fields[ratio_field])
+                            value = aggregation_default_fields[ratio_field]
+                            exposure_defaults[ratio_field] = value
                             LOGGER.info(
-                                tr('{ratio} constant detected, we will add it '
-                                   'to the exposure layer.').format(
-                                    ratio=ratio_field))
+                                '{ratio} = {value} constant detected in the '
+                                'aggregation layer AND the equivalent count '
+                                'has not been detected in the exposure layer. '
+                                'We are adding this ratio to the exposure '
+                                'layer.'.format(
+                                    ratio=ratio_field, value=value))
+
+                        if not ratio_is_a_constant and not ratio_is_a_field:
+                            LOGGER.info(
+                                '{ratio_field} is neither a constant nor a '
+                                'field AND the equivalent count has not been '
+                                'detected in the exposure layer. We will do '
+                                'nothing about it.'.format(
+                                    ratio_field=ratio_field))
 
                     else:
                         if ratio_field in aggregation_fields:
@@ -1508,6 +1551,22 @@ class ImpactFunction(object):
                                 self.aggregation,
                                 [aggregation_fields[ratio_field]])
                             del aggregation_fields[ratio_field]
+                            LOGGER.info(
+                                '{ratio_field} is detected in the aggregation '
+                                'layer AND {count_field} is detected in the '
+                                'exposure layer. We remove the ratio from the '
+                                'aggregation.'.format(
+                                    ratio_field=ratio_field,
+                                    count_field=count_field['key']))
+
+                        else:
+                            LOGGER.info(
+                                '{ratio_field} is not in the detected in the '
+                                'aggregation layer AND {count_field} is '
+                                'detected in the exposure layer. We do '
+                                'nothing in this step.'.format(
+                                    ratio_field=ratio_field,
+                                    count_field=count_field['key']))
 
         self.set_state_process(
             'aggregation',
@@ -1519,6 +1578,8 @@ class ImpactFunction(object):
     @profile
     def hazard_preparation(self):
         """This function is doing the hazard preparation."""
+        LOGGER.info('ANALYSIS : Hazard preparation')
+
         use_same_projection = (
             self.hazard.crs().authid() == self.exposure.crs().authid())
         self.set_state_info(
@@ -1594,6 +1655,7 @@ class ImpactFunction(object):
         It will prepare the aggregate layer and intersect hazard polygons with
         aggregation areas and assign hazard class.
         """
+        LOGGER.info('ANALYSIS : Aggregate hazard preparation')
         self.set_state_process('hazard', 'Make hazard layer valid')
         self.hazard = clean_layer(self.hazard)
         self.debug_layer(self.hazard)
@@ -1608,6 +1670,7 @@ class ImpactFunction(object):
     @profile
     def exposure_preparation(self):
         """This function is doing the exposure preparation."""
+        LOGGER.info('ANALYSIS : Exposure preparation')
         if is_raster_layer(self.exposure):
             if self.exposure.keywords.get('layer_mode') == 'continuous':
                 if self.exposure.keywords.get('exposure_unit') == 'density':
@@ -1674,6 +1737,7 @@ class ImpactFunction(object):
             will set the aggregate hazard layer.
         However, this function will set the impact layer.
         """
+        LOGGER.info('ANALYSIS : Intersect Exposure and Aggregate Hazard')
         if is_raster_layer(self.exposure):
             self.set_state_process(
                 'impact function',
@@ -1684,6 +1748,7 @@ class ImpactFunction(object):
             self.debug_layer(self._aggregate_hazard_impacted)
 
             # We can monkey patch keywords here for global defaults.
+            # todo WE NEED TO UPDATE THIS
             keywords = self._aggregate_hazard_impacted.keywords
             keywords['inasafe_default_values'] = {}
             for ratio in count_ratio_mapping.itervalues():
@@ -1740,6 +1805,9 @@ class ImpactFunction(object):
                     self.set_state_process(
                         'impact function',
                         'Recompute counts')
+                    LOGGER.info(
+                        'InaSAFE will not use these counts, as we have ratios '
+                        'since the exposure preparation step.')
                     self._exposure_impacted = recompute_counts(
                         self._exposure_impacted)
                     self.debug_layer(self._exposure_impacted)
@@ -1763,6 +1831,8 @@ class ImpactFunction(object):
         :param layer: The vector layer to use for post processing.
         :type layer: QgsVectorLayer
         """
+        LOGGER.info('ANALYSIS : Post processing')
+
         # Set the layer title
         layer_title(layer)
 
@@ -1791,6 +1861,7 @@ class ImpactFunction(object):
 
         We do not check layers here, we will check them in the next step.
         """
+        LOGGER.info('ANALYSIS : Summary calculation')
         if is_vector_layer(self._exposure_impacted):
             # The exposure impacted might be a raster if it's an EQ if.
             self.set_state_process(
@@ -1835,6 +1906,7 @@ class ImpactFunction(object):
 
     def style(self):
         """Function to apply some styles to the layers."""
+        LOGGER.info('ANALYSIS : Styling')
         classes = generate_classified_legend(
             self.analysis_impacted,
             self.exposure,

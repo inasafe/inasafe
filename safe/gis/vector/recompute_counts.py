@@ -2,6 +2,8 @@
 
 """Recompute counts."""
 
+import logging
+
 from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
 from safe.definitions.fields import (
     size_field,
@@ -14,6 +16,7 @@ from safe.utilities.profiling import profile
 from safe.gis.vector.tools import SizeCalculator
 from safe.gis.sanity_check import check_layer
 
+LOGGER = logging.getLogger('InaSAFE')
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -57,6 +60,10 @@ def recompute_counts(layer, callback=None):
     for field, field_name in fields.iteritems():
         if field in absolute_field_keys and field != size_field['key']:
             indexes.append(layer.fieldNameIndex(field_name))
+            LOGGER.info(
+                'We detected the count {field_name}, we will recompute the '
+                'count according to the new size.'.format(
+                    field_name=field_name))
 
     if not len(indexes):
         msg = 'Absolute field not found in the layer %s' % (
