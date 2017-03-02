@@ -44,9 +44,9 @@ def analysis_detail_extractor(impact_report, component_metadata):
     analysis_layer = impact_report.analysis
     analysis_layer_fields = analysis_layer.keywords['inasafe_fields']
     analysis_feature = analysis_layer.getFeatures().next()
-    exposure_breakdown = impact_report.exposure_breakdown
-    if exposure_breakdown:
-        exposure_breakdown_fields = exposure_breakdown.keywords[
+    exposure_summary_table = impact_report.exposure_summary_table
+    if exposure_summary_table:
+        exposure_summary_table_fields = exposure_summary_table.keywords[
             'inasafe_fields']
     provenance = impact_report.impact_function.provenance
     debug_mode = impact_report.impact_function.debug_mode
@@ -86,7 +86,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
         exposure_class_field
     ]
     for field in breakdown_fields:
-        if field['key'] in exposure_breakdown_fields:
+        if field['key'] in exposure_summary_table_fields:
             breakdown_field = field
             break
 
@@ -159,12 +159,13 @@ def analysis_detail_extractor(impact_report, component_metadata):
 
     """Create detail rows"""
     details = []
-    for feat in exposure_breakdown.getFeatures():
+    for feat in exposure_summary_table.getFeatures():
         row = []
 
         # Get breakdown name
-        breakdown_field_name = breakdown_field['field_name']
-        field_index = exposure_breakdown.fieldNameIndex(breakdown_field_name)
+        exposure_summary_table_field_name = breakdown_field['field_name']
+        field_index = exposure_summary_table.fieldNameIndex(
+            exposure_summary_table_field_name)
         class_key = feat[field_index]
 
         row.append(class_key)
@@ -186,9 +187,9 @@ def analysis_detail_extractor(impact_report, component_metadata):
                 # retrieve dynamic field name from analysis_fields keywords
                 # will cause key error if no hazard count for that particular
                 # class
-                field_name = exposure_breakdown_fields[field_key_name]
-                field_index = exposure_breakdown.fieldNameIndex(field_name)
-                # exposure breakdown is in csv format, so the field
+                field_name = exposure_summary_table_fields[field_key_name]
+                field_index = exposure_summary_table.fieldNameIndex(field_name)
+                # exposure summary table is in csv format, so the field
                 # returned is always in text format
                 count_value = int(float(feat[field_index]))
                 count_value = format_number(
@@ -209,7 +210,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
         skip_row = False
 
         for field in report_fields:
-            field_index = exposure_breakdown.fieldNameIndex(
+            field_index = exposure_summary_table.fieldNameIndex(
                 field['field_name'])
             total_count = int(float(feat[field_index]))
             total_count = format_number(

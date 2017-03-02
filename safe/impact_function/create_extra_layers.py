@@ -143,7 +143,8 @@ def create_profile_layer(profiling):
 
     # Generate profiling keywords
     tabular.keywords['layer_purpose'] = layer_purpose_profiling['key']
-    tabular.keywords['title'] = 'profiling'
+    tabular.keywords['title'] = layer_purpose_profiling['name']
+    tabular.setLayerName(tabular.keywords['title'])
     tabular.keywords['inasafe_fields'] = {
         profiling_function_field['key']:
             profiling_function_field['field_name'],

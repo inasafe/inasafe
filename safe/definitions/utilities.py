@@ -20,7 +20,7 @@ from safe.definitions import (
     layer_purpose_hazard,
     layer_purpose_exposure,
     layer_purpose_aggregation,
-    layer_purpose_exposure_impacted
+    layer_purpose_exposure_summary
 )
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -181,7 +181,7 @@ def get_fields(layer_purpose, layer_subcategory=None, replace_null=None):
             fields_for_purpose = deepcopy(hazard_fields)
     elif layer_purpose == layer_purpose_aggregation['key']:
         fields_for_purpose = deepcopy(aggregation_fields)
-    elif layer_purpose == layer_purpose_exposure_impacted['key']:
+    elif layer_purpose == layer_purpose_exposure_summary['key']:
         fields_for_purpose = deepcopy(impact_fields)
 
     if isinstance(replace_null, bool):

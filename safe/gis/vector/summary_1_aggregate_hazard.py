@@ -199,7 +199,9 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
 
     aggregate_hazard.commitChanges()
 
-    aggregate_hazard.keywords['title'] = output_layer_name
+    aggregate_hazard.keywords['title'] = (
+        layer_purpose_aggregate_hazard_impacted['name'])
+    aggregate_hazard.setLayerName(aggregate_hazard.keywords['title'])
     aggregate_hazard.keywords['layer_purpose'] = (
         layer_purpose_aggregate_hazard_impacted['key'])
 

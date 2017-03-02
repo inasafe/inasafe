@@ -11,7 +11,7 @@ from qgis.core import (
 )
 
 from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
-from safe.definitions.layer_purposes import layer_purpose_exposure_impacted
+from safe.definitions.layer_purposes import layer_purpose_exposure_summary
 from safe.definitions.fields import hazard_class_field
 from safe.definitions.hazard_classifications import (
     hazard_classification, not_exposed_class)
@@ -134,7 +134,7 @@ def assign_highest_value(exposure, hazard, callback=None):
 
     exposure.keywords['inasafe_fields'].update(
         hazard.keywords['inasafe_fields'])
-    exposure.keywords['layer_purpose'] = layer_purpose_exposure_impacted['key']
+    exposure.keywords['layer_purpose'] = layer_purpose_exposure_summary['key']
 
     exposure.keywords['exposure_keywords'] = exposure.keywords.copy()
     exposure.keywords['aggregation_keywords'] = (

@@ -126,6 +126,13 @@ def add_impact_layers_to_canvas(impact_function, iface):
         QgsMapLayerRegistry.instance().addMapLayer(layer, False)
         layer_node = group_analysis.addLayer(layer)
 
+        # set layer title if any
+        try:
+            title = layer.keywords['title']
+            layer.setLayerName(title)
+        except KeyError:
+            pass
+
         # Let's enable only the more detailed layer. See #2925
         if layer.id() == impact_function.impact.id():
             layer_node.setVisible(Qt.Checked)

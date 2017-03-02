@@ -101,7 +101,7 @@ class TestGeoPackage(unittest.TestCase):
 
         # Test layer without geometry
         layer = load_test_vector_layer(
-            'gisv4', 'impacts', 'exposure_breakdown_tabular.csv')
+            'gisv4', 'impacts', 'exposure_summary_table.csv')
         tabular_layer_name = 'breakdown'
         result = data_store.add_layer(layer, tabular_layer_name)
         self.assertTrue(result[0])

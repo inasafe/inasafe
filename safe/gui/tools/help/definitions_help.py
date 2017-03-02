@@ -331,12 +331,12 @@ def content():
         definitions.aggregate_hazard_fields)
     _create_fields_section(
         message,
-        tr('Aggregation impacted fields'),
-        definitions.aggregation_impacted_fields)
+        tr('Aggregation summary fields'),
+        definitions.aggregation_summary_fields)
     _create_fields_section(
         message,
-        tr('Exposure breakdown fields'),
-        definitions.exposure_breakdown_fields)
+        tr('Exposure summary table fields'),
+        definitions.exposure_summary_table_fields)
     _create_fields_section(
         message,
         tr('Analysis fields'),
@@ -392,14 +392,14 @@ def content():
     message.add(definition_to_message(
         definitions.layer_purpose_aggregation, SUBSECTION_STYLE))
     message.add(definition_to_message(
-        definitions.layer_purpose_exposure_impacted, SUBSECTION_STYLE))
-    message.add(definition_to_message(
-        definitions.layer_purpose_exposure_breakdown, SUBSECTION_STYLE))
-    message.add(definition_to_message(
-        definitions.layer_purpose_aggregation_impacted, SUBSECTION_STYLE))
+        definitions.layer_purpose_exposure_summary, SUBSECTION_STYLE))
     message.add(definition_to_message(
         definitions.layer_purpose_aggregate_hazard_impacted,
         SUBSECTION_STYLE))
+    message.add(definition_to_message(
+        definitions.layer_purpose_aggregation_summary, SUBSECTION_STYLE))
+    message.add(definition_to_message(
+        definitions.layer_purpose_exposure_summary_table, SUBSECTION_STYLE))
     message.add(definition_to_message(
         definitions.layer_purpose_profiling, SUBSECTION_STYLE))
 
