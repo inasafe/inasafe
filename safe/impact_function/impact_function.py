@@ -1420,24 +1420,26 @@ class ImpactFunction(object):
                 self.analysis_extent, self.exposure.crs())
             self.debug_layer(self.aggregation)
 
+            exposure = definition(self.exposure.keywords['exposure'])
+            keywords = self.exposure.keywords
+
+            # inasafe_default_values will not exist as we can't use
+            # default in the exposure layer.
+            keywords['inasafe_default_values'] = {}
+
             if is_vector_layer(self.exposure):
-                # We need to check if we can add default ratios to the
-                # exposure (only if it's a vector).
                 LOGGER.info(
-                    'The exposure is a vector layer. We need to check if the '
-                    'exposure has some counts.')
-                exposure = definition(self.exposure.keywords['exposure'])
-                keywords = self.exposure.keywords
-                # inasafe_default_values will not exist as we can't use
-                # default in the exposure layer.
-                keywords['inasafe_default_values'] = {}
+                    'The exposure is a vector layer. According to the kind of '
+                    'exposure, we need to check if the exposure has some '
+                    'counts before adding some default ratios.')
+
                 for count_field in exposure['extra_fields']:
                     count_key = count_field['key']
                     if count_key in count_ratio_mapping.keys():
+                        ratio_field = count_ratio_mapping[count_key]
                         if count_key not in keywords['inasafe_fields']:
                             # The exposure hasn't a count field, we should add
-                            #  it.
-                            ratio_field = count_ratio_mapping[count_key]
+                            # it.
                             default = definition(ratio_field)['default_value']
                             keywords['inasafe_default_values'][ratio_field] = (
                                 default['default_value'])
@@ -1451,13 +1453,29 @@ class ImpactFunction(object):
                         else:
                             LOGGER.info(
                                 'The exposure layer has the count field '
-                                '{count}, we skip the equivalent '
-                                'ratio.'.format(count=count_key))
+                                '{count}, we skip the ratio '
+                                '{ratio}.'.format(
+                                    count=count_key, ratio=ratio_field))
 
             else:
                 LOGGER.info(
                     'The exposure is a raster layer. The exposure can not '
-                    'have some counts. We do nothing in this step.')
+                    'have some counts. We add every global defaults to the '
+                    'exposure layer related to the exposure.')
+
+                for count_field in exposure['extra_fields']:
+                    count_key = count_field['key']
+                    if count_key in count_ratio_mapping.keys():
+                        ratio_field = count_ratio_mapping[count_key]
+                        default = definition(ratio_field)['default_value']
+                        keywords['inasafe_default_values'][ratio_field] = (
+                            default['default_value'])
+                        LOGGER.info(
+                            'We are adding {ratio} = {value} to the exposure '
+                            'default values.'.format(
+                                count=count_key,
+                                ratio=ratio_field,
+                                value=default['default_value']))
 
         else:
             self.set_state_info('aggregation', 'provided', True)
@@ -1491,12 +1509,15 @@ class ImpactFunction(object):
             exposure_defaults = exposure_keywords['inasafe_default_values']
             aggregation_keywords = self.aggregation.keywords
             aggregation_fields = aggregation_keywords['inasafe_fields']
+            if not aggregation_keywords.get('inasafe_default_values'):
+                aggregation_keywords['inasafe_default_values'] = {}
             aggregation_default_fields = aggregation_keywords.get(
-                'inasafe_default_values', {})
+                'inasafe_default_values')
             for count_field in exposure['extra_fields']:
                 if count_field['key'] in count_ratio_mapping.keys():
                     ratio_field = count_ratio_mapping[count_field['key']]
                     if count_field['key'] not in exposure_fields:
+                        # The exposure layer can be vector or a raster.
 
                         ratio_is_a_field = ratio_field in aggregation_fields
                         ratio_is_a_constant = (
@@ -1513,36 +1534,67 @@ class ImpactFunction(object):
                             # The ratio will be propagated to the
                             # aggregate_hazard layer.
                             # Let's skip to the next field.
-                            LOGGER.info(
-                                '{ratio} field detected in the aggregation '
-                                'layer AND the equivalent count has not been '
-                                'detected in the exposure layer. We will '
-                                'propagate this ratio to the exposure layer '
-                                'later when we combine these two '
-                                'layers.'.format(ratio=ratio_field))
-                            continue
+                            if is_vector_layer(self.exposure):
+                                LOGGER.info(
+                                    '{ratio} field detected in the '
+                                    'aggregation layer AND the equivalent '
+                                    'count has not been detected in the '
+                                    'exposure layer. We will propagate this '
+                                    'ratio to the exposure layer later when '
+                                    'we combine these two layers.'.format(
+                                        ratio=ratio_field))
+                                continue
+                            else:
+                                LOGGER.info(
+                                    '{ratio} field detected in the '
+                                    'aggregation layer. The exposure is a '
+                                    'raster so without the equivalent count. '
+                                    'We will propagate this ratio to the '
+                                    'exposure layer later when we combine '
+                                    'these two layers.'.format(
+                                        ratio=ratio_field))
 
                         if ratio_is_a_constant and not ratio_is_a_field:
                             # It's a constant. We need to add to the exposure.
                             value = aggregation_default_fields[ratio_field]
                             exposure_defaults[ratio_field] = value
-                            LOGGER.info(
-                                '{ratio} = {value} constant detected in the '
-                                'aggregation layer AND the equivalent count '
-                                'has not been detected in the exposure layer. '
-                                'We are adding this ratio to the exposure '
-                                'layer.'.format(
-                                    ratio=ratio_field, value=value))
+                            if is_vector_layer(self.exposure):
+                                LOGGER.info(
+                                    '{ratio} = {value} constant detected in '
+                                    'the aggregation layer AND the equivalent '
+                                    'count has not been detected in the '
+                                    'exposure layer. We are adding this ratio '
+                                    'to the exposure layer.'.format(
+                                        ratio=ratio_field, value=value))
+                            else:
+                                LOGGER.info(
+                                    '{ratio} = {value} constant detected in '
+                                    'the aggregation layer. The exposure is a '
+                                    'raster so without the equivalent count.'
+                                    'We are adding this ratio to the exposure '
+                                    'layer.'.format(
+                                        ratio=ratio_field, value=value))
 
                         if not ratio_is_a_constant and not ratio_is_a_field:
-                            LOGGER.info(
-                                '{ratio_field} is neither a constant nor a '
-                                'field AND the equivalent count has not been '
-                                'detected in the exposure layer. We will do '
-                                'nothing about it.'.format(
-                                    ratio_field=ratio_field))
+                            if is_vector_layer(self.exposure):
+                                LOGGER.info(
+                                    '{ratio_field} is neither a constant nor '
+                                    'a field in the aggregation layer AND the '
+                                    'equivalent count has not been detected '
+                                    'in the exposure layer. We will do '
+                                    'nothing about it.'.format(
+                                        ratio_field=ratio_field))
+                            else:
+                                LOGGER.info(
+                                    '{ratio_field} is neither a constant nor '
+                                    'a field in the aggregation layer. The '
+                                    'exposure is a raster so without the '
+                                    'equivalent count. We will do '
+                                    'nothing about it.'.format(
+                                        ratio_field=ratio_field))
 
                     else:
+                        # The exposure layer is a vector layer only.
                         if ratio_field in aggregation_fields:
                             # The count field is in the exposure and the ratio
                             # is in the aggregation. We need to remove it from
@@ -1747,22 +1799,6 @@ class ImpactFunction(object):
                 self.exposure, self._aggregate_hazard_impacted)
             self.debug_layer(self._aggregate_hazard_impacted)
 
-            # We can monkey patch keywords here for global defaults.
-            # todo WE NEED TO UPDATE THIS
-            keywords = self._aggregate_hazard_impacted.keywords
-            keywords['inasafe_default_values'] = {}
-            for ratio in count_ratio_mapping.itervalues():
-                ratio_field = definition(ratio)
-                default = ratio_field['default_value']['default_value']
-                key = ratio_field['key']
-                keywords['inasafe_default_values'][key] = default
-                LOGGER.info(
-                    'Adding default {value} for {type} into keywords'.format(
-                        value=default, type=key))
-
-            # We add ratios to the agrgegate hazard layer, we do not need them
-            # for post processing as we will use the population count. It's
-            # easier for user to see this field in the attribute tabler.
             self.set_state_process('impact function', 'Add default values')
             self._aggregate_hazard_impacted = add_default_values(
                 self._aggregate_hazard_impacted)
