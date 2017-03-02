@@ -2,6 +2,7 @@
 
 """From counts to ratio."""
 
+import logging
 from safe.definitions.utilities import definition
 from safe.definitions.fields import size_field, count_ratio_mapping
 from safe.definitions.processing_steps import (
@@ -10,6 +11,7 @@ from safe.utilities.profiling import profile
 from safe.gis.vector.tools import create_field_from_definition
 from safe.gis.sanity_check import check_layer
 
+LOGGER = logging.getLogger('InaSAFE')
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -54,6 +56,17 @@ def from_counts_to_ratios(layer, callback=None):
             name = ratio_field['field_name']
             layer.keywords['inasafe_fields'][ratio_field['key']] = name
             mapping[count_field['field_name']] = layer.fieldNameIndex(name)
+            LOGGER.info(
+                'Count field {count_field} detected in the exposure, we are '
+                'going to create a equivalent field {ratio_field} in the '
+                'exposure layer.'.format(
+                    count_field=count_field['key'],
+                    ratio_field=ratio_field['key']))
+        else:
+            LOGGER.info(
+                'Count field {count_field} not detected in the exposure. We '
+                'will not compute a ratio from this field.'.format(
+                    count_field=count_field['key']))
 
     if len(mapping) == 0:
         # There is not a count field. Let's skip this layer.

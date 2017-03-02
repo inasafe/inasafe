@@ -61,9 +61,9 @@ def add_default_values(layer, callback=None):
 
     if not defaults:
         # Case 1 and 2.
-        LOGGER.debug(
-            tr('inasafe_default_value is not present, we can not fill default '
-               'values.'))
+        LOGGER.info(
+            'inasafe_default_value is not present, we can not fill default '
+            'ratios for this layer.')
         return layer
 
     for default in defaults.keys():
@@ -74,11 +74,13 @@ def add_default_values(layer, callback=None):
 
         if not field:
             # Case 3
-            LOGGER.debug(
-                '{field} key is not present but the layer has {value} as a '
-                'default for {field}. We create the new field.'.format(
-                    **{'field': target_field['key'],
-                       'value': defaults[default]}))
+            LOGGER.info(
+                '{field} is not present but the layer has {value} as a '
+                'default for {field}. We create the new field '
+                '{new_field} with this value.'.format(
+                    field=target_field['key'],
+                    value=defaults[default],
+                    new_field=target_field['field_name']))
 
             new_field = create_field_from_definition(target_field)
 
@@ -95,11 +97,10 @@ def add_default_values(layer, callback=None):
 
         else:
             # Case 4
-            LOGGER.debug(
-                '{field} key is present and the layer has {value} as a '
-                'default for {field}, we should fill null values.'.format(
-                    **{'field': target_field['key'],
-                       'value': defaults[default]}))
+            LOGGER.info(
+                '{field} is present and the layer has {value} as a '
+                'default for {field}, we MUST do nothing.'.format(
+                    field=target_field['key'], value=defaults[default]))
 
             index = layer.fieldNameIndex(field)
 
