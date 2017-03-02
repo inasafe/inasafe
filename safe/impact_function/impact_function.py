@@ -975,7 +975,20 @@ class ImpactFunction(object):
             for area in self.aggregation.getFeatures():
                 list_geometry.append(QgsGeometry(area.geometry()))
 
-            self._analysis_extent = QgsGeometry.unaryUnion(list_geometry)
+            geometry = QgsGeometry.unaryUnion(list_geometry)
+            if geometry.isMultipart():
+                multi_polygon = geometry.asMultiPolygon()
+                for polygon in multi_polygon:
+                    for ring in polygon[1:]:
+                        polygon.remove(ring)
+                self._analysis_extent = QgsGeometry.fromMultiPolygon(
+                    multi_polygon)
+
+            else:
+                polygon = geometry.asPolygon()
+                for ring in polygon[1:]:
+                    polygon.remove(ring)
+                self._analysis_extent = QgsGeometry.fromPolygon(polygon)
             is_empty = self._analysis_extent.isGeosEmpty()
             is_invalid = not self._analysis_extent.isGeosValid()
             if is_empty or is_invalid:
