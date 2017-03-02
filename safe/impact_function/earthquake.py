@@ -28,7 +28,7 @@ from safe.definitions.fields import (
     fatalities_per_mmi_field,
 )
 from safe.definitions.layer_purposes import (
-    layer_purpose_aggregation_impacted, layer_purpose_exposure_summary)
+    layer_purpose_aggregation_summary, layer_purpose_exposure_summary)
 from safe.definitions.processing_steps import earthquake_displaced
 from safe.gis.vector.tools import create_field_from_definition
 from safe.gis.raster.write_raster import array_to_raster, make_array
@@ -298,7 +298,7 @@ def make_summary_layer(exposed, aggregation, fatality_rate):
             total_displaced)
 
     aggregation.keywords['layer_purpose'] = (
-        layer_purpose_aggregation_impacted['key'])
-    aggregation.keywords['title'] = layer_purpose_aggregation_impacted['key']
+        layer_purpose_aggregation_summary['key'])
+    aggregation.keywords['title'] = layer_purpose_aggregation_summary['key']
 
     return aggregation

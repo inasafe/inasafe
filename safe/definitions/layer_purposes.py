@@ -107,28 +107,15 @@ layer_purpose_aggregate_hazard_impacted = {
     ]
 }
 
-layer_purpose_aggregation_impacted = {
-    'key': 'aggregation_impacted',
-    'name': tr('Aggregation Impacted'),
+layer_purpose_aggregation_summary = {
+    'key': 'aggregation_summary',
+    'name': tr('Impact Layer - Aggregation Summary'),
     'description': tr(
-        'An <b>aggregate impacted</b> layer is created during an InaSAFE '
-        'analysis. This layer contains the geometries from the original '
-        'aggregation layer that were selected at the start of the analysis ('
-        'or all of the analysis layer geometries if there was no selection '
-        'when the analysis was started). If no aggregation layer was used '
-        'for the analysis, the extent of the analysis area based on the '
-        'intersection rules defined in the "Set Analysis Area" dialog will '
-        'be used to create an aggregation layer. In this case the '
-        'aggregation '
-        'layer will consist of a single rectangular polygon geometry. '
-        'If the exposure is indivisible (e.g. building polygons) or point '
-        'based (e.g. places, building points), the the aggregate hazard '
-        'impacted layer will include a count of the number of features per '
-        'aggregation area and, if applicable, either the length or the area '
-        'of the exposure features contained within each polygon. As well as '
-        'simple metrics of counts, areas or distances, additional columns '
-        'will be writen to the aggregation impacted layer breaking down '
-        'features by their classes and providing other similar metrics.'),
+        "This <b>impact layer - aggregation summary</b> contains the "
+        "analysis results for each exposure type by hazard type, summarised "
+        "by aggregation area. Where an aggregation layer was not used; the "
+        "analysis area is defined by the extent of the input layers or the "
+        "'analysis extent' set by the user."),
     'allowed_geometries': [layer_geometry_polygon],
     'citations': [
         {
@@ -146,7 +133,7 @@ layer_purpose_analysis_impacted = {
         'analysis. It contains only one geometry polygon. This geometry is '
         'created by computing the outer bounding polygon of all of the '
         'aggregation layer features that were used for the analysis. Whereas '
-        'the aggregation impacted layer provides summaries by the classes of '
+        'the aggregation summary layer provides summaries by the classes of '
         'exposure feature types, the analysis impacted layer provides '
         'summaries by <b>hazard zone</b>. For example, when carrying out an '
         'impact assessment of flood on roads, the analysis impacted layer '

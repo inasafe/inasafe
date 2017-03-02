@@ -45,8 +45,8 @@ def aggregation_result_extractor(impact_report, component_metadata):
     if exposure_summary_table:
         exposure_summary_table_fields = exposure_summary_table.keywords[
             'inasafe_fields']
-    aggregation_impacted = impact_report.aggregation_impacted
-    aggregation_impacted_fields = aggregation_impacted.keywords[
+    aggregation_summary = impact_report.aggregation_summary
+    aggregation_summary_fields = aggregation_summary.keywords[
         'inasafe_fields']
     debug_mode = impact_report.impact_function.debug_mode
 
@@ -70,7 +70,7 @@ def aggregation_result_extractor(impact_report, component_metadata):
     """Generating type name for columns"""
 
     type_fields = read_dynamic_inasafe_field(
-        aggregation_impacted_fields, affected_exposure_count_field)
+        aggregation_summary_fields, affected_exposure_count_field)
     # do not include total, to preserve ordering and proper reference
     type_fields.remove('total')
 
@@ -84,18 +84,18 @@ def aggregation_result_extractor(impact_report, component_metadata):
 
     # generate rows of values for values of each column
     rows = []
-    aggregation_name_index = aggregation_impacted.fieldNameIndex(
+    aggregation_name_index = aggregation_summary.fieldNameIndex(
         aggregation_name_field['field_name'])
-    total_field_index = aggregation_impacted.fieldNameIndex(
+    total_field_index = aggregation_summary.fieldNameIndex(
         total_affected_field['field_name'])
 
     type_field_index = []
     for type_name in type_fields:
         field_name = affected_exposure_count_field['field_name'] % type_name
-        type_index = aggregation_impacted.fieldNameIndex(field_name)
+        type_index = aggregation_summary.fieldNameIndex(field_name)
         type_field_index.append(type_index)
 
-    for feat in aggregation_impacted.getFeatures():
+    for feat in aggregation_summary.getFeatures():
         total_affected_value = format_number(
             feat[total_field_index],
             enable_rounding=is_rounded)
@@ -188,7 +188,7 @@ def aggregation_result_extractor(impact_report, component_metadata):
     aggregation_area_default_header = resolve_from_dictionary(
         extra_args, 'aggregation_area_default_header')
     header_label = (
-        aggregation_impacted.title() or aggregation_area_default_header)
+        aggregation_summary.title() or aggregation_area_default_header)
 
     section_header = resolve_from_dictionary(extra_args, 'header')
     notes = resolve_from_dictionary(extra_args, 'notes')

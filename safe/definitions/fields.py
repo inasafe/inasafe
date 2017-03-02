@@ -1370,7 +1370,7 @@ aggregate_hazard_fields = [
     total_field,
 ]
 
-aggregation_impacted_fields = [
+aggregation_summary_fields = [
     aggregation_id_field,
     aggregation_name_field,
     affected_exposure_count_field,

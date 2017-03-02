@@ -20,7 +20,7 @@ from qgis.core import (
 from safe.definitions.layer_purposes import (
     layer_purpose_exposure_summary,
     layer_purpose_aggregate_hazard_impacted,
-    layer_purpose_aggregation_impacted,
+    layer_purpose_aggregation_summary,
     layer_purpose_analysis_impacted,
     layer_purpose_exposure_summary_table,
 )
@@ -880,7 +880,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             impacted_layer = [
                 layer_purpose_exposure_summary['key'],
                 layer_purpose_aggregate_hazard_impacted['key'],
-                layer_purpose_aggregation_impacted['key'],
+                layer_purpose_aggregation_summary['key'],
                 layer_purpose_analysis_impacted['key'],
                 layer_purpose_exposure_summary_table['key'],
             ]

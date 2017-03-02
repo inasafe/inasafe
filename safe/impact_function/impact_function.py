@@ -73,7 +73,7 @@ from safe.definitions.fields import (
 from safe.definitions.layer_purposes import (
     layer_purpose_exposure_summary,
     layer_purpose_aggregate_hazard_impacted,
-    layer_purpose_aggregation_impacted,
+    layer_purpose_aggregation_summary,
     layer_purpose_analysis_impacted,
     layer_purpose_exposure_summary_table,
     layer_purpose_profiling,
@@ -170,7 +170,7 @@ class ImpactFunction(object):
         # Output layers
         self._exposure_summary = None
         self._aggregate_hazard_impacted = None
-        self._aggregation_impacted = None
+        self._aggregation_summary = None
         self._analysis_impacted = None
         self._exposure_summary_table = None
         self._profiling_table = None
@@ -353,8 +353,8 @@ class ImpactFunction(object):
             self._exposure_summary)
         layers[layer_purpose_aggregate_hazard_impacted['key']] = (
             self._aggregate_hazard_impacted)
-        layers[layer_purpose_aggregation_impacted['key']] = (
-            self._aggregation_impacted)
+        layers[layer_purpose_aggregation_summary['key']] = (
+            self._aggregation_summary)
         layers[layer_purpose_analysis_impacted['key']] = (
             self._analysis_impacted)
         layers[layer_purpose_exposure_summary_table['key']] = (
@@ -410,13 +410,13 @@ class ImpactFunction(object):
         return self._aggregate_hazard_impacted
 
     @property
-    def aggregation_impacted(self):
-        """Property for the aggregation impacted.
+    def aggregation_summary(self):
+        """Property for the aggregation summary.
 
         :returns: A vector layer.
         :rtype: QgsVectorLayer
         """
-        return self._aggregation_impacted
+        return self._aggregation_summary
 
     @property
     def analysis_impacted(self):
@@ -1244,7 +1244,7 @@ class ImpactFunction(object):
             else:
                 # We post process the aggregation.
                 # Earthquake raster on population raster.
-                self.post_process(self._aggregation_impacted)
+                self.post_process(self._aggregation_summary)
 
         self._performance_log = profiling_log()
         self.callback(8, step_count, analysis_steps['summary_calculation'])
@@ -1297,17 +1297,17 @@ class ImpactFunction(object):
             self.debug_layer(
                 self._exposure_summary_table, add_to_datastore=False)
 
-        # Aggregation impacted
-        self.aggregation_impacted.keywords['provenance_data'] = self.provenance
+        # Aggregation summary
+        self.aggregation_summary.keywords['provenance_data'] = self.provenance
         result, name = self.datastore.add_layer(
-            self._aggregation_impacted,
-            layer_purpose_aggregation_impacted['key'])
+            self._aggregation_summary,
+            layer_purpose_aggregation_summary['key'])
         if not result:
             raise Exception(
                 tr('Something went wrong with the datastore : '
                    '{error_message}').format(error_message=name))
-        self._aggregation_impacted = self.datastore.layer(name)
-        self.debug_layer(self._aggregation_impacted, add_to_datastore=False)
+        self._aggregation_summary = self.datastore.layer(name)
+        self.debug_layer(self._aggregation_summary, add_to_datastore=False)
 
         # Analysis impacted
         self.analysis_impacted.keywords['provenance_data'] = self.provenance
@@ -1396,13 +1396,13 @@ class ImpactFunction(object):
         self.debug_layer(self._exposure_summary)
 
         self.set_state_process('impact function', 'Set summaries')
-        self._aggregation_impacted = make_summary_layer(
+        self._aggregation_summary = make_summary_layer(
             exposed, self.aggregation, earthquake_function())
-        self._aggregation_impacted.keywords['exposure_keywords'] = dict(
+        self._aggregation_summary.keywords['exposure_keywords'] = dict(
             self.exposure_summary.keywords)
-        self._aggregation_impacted.keywords['hazard_keywords'] = dict(
+        self._aggregation_summary.keywords['hazard_keywords'] = dict(
             self.hazard.keywords)
-        self.debug_layer(self._aggregation_impacted)
+        self.debug_layer(self._aggregation_summary)
 
     @profile
     def aggregation_preparation(self):
@@ -1917,10 +1917,10 @@ class ImpactFunction(object):
             self.set_state_process(
                 'impact function',
                 'Aggregate the aggregation summary')
-            self._aggregation_impacted = aggregation_summary(
+            self._aggregation_summary = aggregation_summary(
                 self._aggregate_hazard_impacted, self.aggregation)
             self.debug_layer(
-                self._aggregation_impacted, add_to_datastore=False)
+                self._aggregation_summary, add_to_datastore=False)
 
             self.set_state_process(
                 'impact function',
@@ -1943,7 +1943,7 @@ class ImpactFunction(object):
                 'impact function',
                 'Aggregate the earthquake analysis summary')
             self._analysis_impacted = analysis_eartquake_summary(
-                self.aggregation_impacted, self.analysis_impacted)
+                self.aggregation_summary, self.analysis_impacted)
             self.debug_layer(self._analysis_impacted, add_to_datastore=False)
 
     def style(self):
@@ -1972,7 +1972,7 @@ class ImpactFunction(object):
                 displaced_people_style(layer)
 
         # Let's style the aggregation and analysis layer.
-        simple_polygon_without_brush(self.aggregation_impacted)
+        simple_polygon_without_brush(self.aggregation_summary)
         simple_polygon_without_brush(self.analysis_impacted)
 
     @property

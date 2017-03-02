@@ -210,4 +210,4 @@ class TestAggregateSummary(unittest.TestCase):
             self.assertNotEqual(-1, layer.fieldNameIndex(field_name), message)
 
         check_inasafe_fields(impact_function.analysis_impacted)
-        check_inasafe_fields(impact_function.aggregation_impacted)
+        check_inasafe_fields(impact_function.aggregation_summary)
