@@ -589,6 +589,8 @@ def mmi_ramp_roman(raster_layer):
 
     :param raster_layer: A raster layer that will have an mmi style applied.
     :type raster_layer: QgsRasterLayer
+
+    .. versionadded:: 4.0
     """
 
     items = []
