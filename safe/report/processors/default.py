@@ -9,9 +9,6 @@ Module for basic renderer we support. Currently we have:
 import io
 import logging
 import os
-from time import time
-
-import time
 from PyQt4 import QtXml
 from tempfile import mkdtemp
 
@@ -58,6 +55,8 @@ def jinja2_renderer(impact_report, component):
         safe.report.report_metadata.QgisComposerComponentsMetadata
 
     :return: whatever type of output the component should be
+
+    .. versionadded:: 4.0
     """
     context = component.context
 
@@ -110,6 +109,8 @@ def qgis_composer_html_renderer(impact_report, component):
         safe.report.report_metadata.QgisComposerComponentsMetadata
 
     :return: whatever type of output the component should be
+
+    .. versionadded:: 4.0
     """
     context = component.context
     """:type: safe.report.extractors.composer.QGISComposerContext"""
@@ -171,7 +172,7 @@ def qgis_composer_html_renderer(impact_report, component):
     # make sure directory is created
     dirname = os.path.dirname(output_path)
     if not os.path.exists(dirname):
-        os.makedirs(dirname, exist_ok=True)
+        os.makedirs(dirname)
 
     output_format = component.output_format
     # for QGIS composer only pdf and png output are available
@@ -208,6 +209,8 @@ def qgis_composer_renderer(impact_report, component):
         safe.report.report_metadata.QgisComposerComponentsMetadata
 
     :return: whatever type of output the component should be
+
+    .. versionadded:: 4.0
     """
     context = component.context
     """:type: safe.report.extractors.composer.QGISComposerContext"""
@@ -373,7 +376,7 @@ def qgis_composer_renderer(impact_report, component):
         # make sure directory is created
         dirname = os.path.dirname(output_path)
         if not os.path.exists(dirname):
-            os.makedirs(dirname, exist_ok=True)
+            os.makedirs(dirname)
 
         # for QGIS composer only pdf and png output are available
         if file_format == QgisComposerComponentsMetadata.OutputFormat.PDF:
@@ -412,7 +415,7 @@ def qgis_composer_renderer(impact_report, component):
         # make sure directory is created
         dirname = os.path.dirname(output_path)
         if not os.path.exists(dirname):
-            os.makedirs(dirname, exist_ok=True)
+            os.makedirs(dirname)
 
         template_document = QtXml.QDomDocument()
         element = template_document.createElement('Composer')
@@ -489,6 +492,8 @@ def qt_svg_to_png_renderer(impact_report, component):
         safe.report.report_metadata.QgisComposerComponentsMetadata
 
     :return: whatever type of output the component should be
+
+    .. versionadded:: 4.0
     """
     context = component.context
     filepath = context['filepath']

@@ -33,9 +33,13 @@ __revision__ = '$Format:%H$'
 
 class PeopleInfographicElement(object):
 
-    """Used as local context for People Infographic."""
+    """Used as local context for People Infographic.
+
+    .. versionadded:: 4.0
+    """
 
     def __init__(self, header, icon, number):
+        """Create context holder for PeopleInfographicElement."""
         self._header = header
         self._icon = icon
         self._number = number
@@ -61,9 +65,13 @@ class PeopleInfographicElement(object):
 
 class PeopleVulnerabilityInfographicElement(PeopleInfographicElement):
 
-    """Used as local context for Vulnerability section."""
+    """Used as local context for Vulnerability section.
+
+    .. versionadded:: 4.0
+    """
 
     def __init__(self, header, icon, number, percentage):
+        """Create context holder for PeopleVulnerabilityInfographicElement."""
         super(PeopleVulnerabilityInfographicElement, self).__init__(
             header, icon, number)
         self._percentage = percentage
@@ -77,9 +85,13 @@ class PeopleVulnerabilityInfographicElement(PeopleInfographicElement):
 
 class PeopleMinimumNeedsInfographicElement(PeopleInfographicElement):
 
-    """Used as local context for Minimum Needs section."""
+    """Used as local context for Minimum Needs section.
+
+    .. versionadded:: 4.0
+    """
 
     def __init__(self, header, icon, number, unit):
+        """Create context holder for PeopleMinimumNeedsInfographicElement."""
         super(PeopleMinimumNeedsInfographicElement, self).__init__(
             header, icon, number)
         self._unit = unit
@@ -91,8 +103,7 @@ class PeopleMinimumNeedsInfographicElement(PeopleInfographicElement):
 
 
 def population_infographic_extractor(impact_report, component_metadata):
-    """
-    Extracting aggregate result of demographic.
+    """Extracting aggregate result of demographic.
 
     :param impact_report: the impact report that acts as a proxy to fetch
         all the data that extractor needed
@@ -105,6 +116,8 @@ def population_infographic_extractor(impact_report, component_metadata):
 
     :return: context for rendering phase
     :rtype: dict
+
+    .. versionadded:: 4.0
     """
     context = {}
     extra_args = component_metadata.extra_args
@@ -188,11 +201,12 @@ def population_infographic_extractor(impact_report, component_metadata):
     vulnerability_fields = [
         postprocessor_output_field(p) for p in vulnerability_postprocessors]
 
-    vulnerability_items = [{
+    vulnerability_items = [
+        {
             'field': field,
             'header': header,
         } for field, header in zip(
-        vulnerability_fields, vulnerability_headers)]
+            vulnerability_fields, vulnerability_headers)]
 
     vulnerability_items = [
         item for item in vulnerability_items
@@ -231,7 +245,7 @@ def population_infographic_extractor(impact_report, component_metadata):
     sections['vulnerability'] = {
         'header': vulnerability_section_header,
         'small_header': vulnerability_section_sub_header_format.format(
-                number_affected=total_affected_rounded),
+            number_affected=total_affected_rounded),
         'items': infographic_elements
     }
 
@@ -313,8 +327,7 @@ def population_infographic_extractor(impact_report, component_metadata):
 
 
 def infographic_layout_extractor(impact_report, component_metadata):
-    """
-    Extracting infographic result and format it with a layout.
+    """Extracting infographic result and format it with a layout.
 
     :param impact_report: the impact report that acts as a proxy to fetch
         all the data that extractor needed
@@ -327,6 +340,8 @@ def infographic_layout_extractor(impact_report, component_metadata):
 
     :return: context for rendering phase
     :rtype: dict
+
+    .. versionadded:: 4.0
     """
     context = {}
     extra_args = component_metadata.extra_args
@@ -358,8 +373,7 @@ def infographic_layout_extractor(impact_report, component_metadata):
 
 
 def infographic_pdf_extractor(impact_report, component_metadata):
-    """
-    Extracting infographic result and format it for PDF generation.
+    """Extracting infographic result and format it for PDF generation.
 
     :param impact_report: the impact report that acts as a proxy to fetch
         all the data that extractor needed
@@ -372,6 +386,8 @@ def infographic_pdf_extractor(impact_report, component_metadata):
 
     :return: context for rendering phase
     :rtype: dict
+
+    .. versionadded:: 4.0
     """
     # QGIS Composer needed certain context to generate the output
     # - Map Settings

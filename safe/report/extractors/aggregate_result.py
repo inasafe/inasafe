@@ -1,5 +1,6 @@
 # coding=utf-8
-from safe.definitions.exposure import exposure_all, exposure_population
+"""Module used to generate context for aggregation result section."""
+from safe.definitions.exposure import exposure_all
 from safe.definitions.fields import (
     affected_exposure_count_field,
     aggregation_name_field,
@@ -32,6 +33,8 @@ def aggregation_result_extractor(impact_report, component_metadata):
 
     :return: context for rendering phase
     :rtype: dict
+
+    .. versionadded:: 4.0
     """
     context = {}
 
@@ -59,7 +62,6 @@ def aggregation_result_extractor(impact_report, component_metadata):
     # Only round the number when it is population exposure and it is not
     # in debug mode
     is_rounded = not debug_mode
-    use_population_rounding = exposure_type == exposure_population
 
     # For now aggregation report only applicable for breakable exposure types:
     itemizable_exposures_all = [

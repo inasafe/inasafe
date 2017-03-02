@@ -1,4 +1,5 @@
 # coding=utf-8
+"""Unittest for Earthquake Report."""
 import os
 
 import io
@@ -29,16 +30,22 @@ __revision__ = ':%H$'
 
 
 class TestEarthquakeReport(unittest.TestCase):
-    """Test Earthquake Report."""
+
+    """Test Earthquake Report.
+
+    .. versionadded:: 4.0
+    """
 
     maxDiff = None
 
     @classmethod
     def fixtures_dir(cls, path):
+        """Helper to return fixture path."""
         directory_name = os.path.dirname(__file__)
         return os.path.join(directory_name, 'fixtures', path)
 
-    def assertCompareFileControl(self, control_path, actual_path):
+    def assert_compare_file_control(self, control_path, actual_path):
+        """Helper to compare file."""
         current_directory = safe_dir(sub_dir='../resources')
         context = {
             'current_directory': current_directory
@@ -53,7 +60,10 @@ class TestEarthquakeReport(unittest.TestCase):
             self.assertEquals(control_string, actual_string)
 
     def test_earthquake_population_without_aggregation(self):
-        """Testing Earthquake in Population without aggregation."""
+        """Testing Earthquake in Population without aggregation.
+
+        .. versionadded:: 4.0
+        """
         output_folder = self.fixtures_dir('../output/earthquake_population')
 
         # Classified vector with building-points
