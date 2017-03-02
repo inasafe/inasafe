@@ -167,14 +167,13 @@ layer_purpose_exposure_summary_table = {
 
 layer_purpose_profiling = {
     'key': 'profiling',
-    'name': tr('Profiling'),
+    'name': tr('Analysis Log'),
     'description': tr(
-        'A <b>profiling</b> layer contains auxilliary information mainly '
-        'intended for developers and power users. The data in the profiling '
-        'table can be sent to the developers of InaSAFE should you be '
-        'encountering particularly long analysis times so that they can '
-        'identify any particular bottlenecks. This layer does not have a '
-        'geometry.'),
+        'The <b>analysis log</b> contains information intended for '
+        'developers and power users. The data in the analysis log can be '
+        'sent to the developers of InaSAFE if you encounter long processing '
+        'times. They will use the information to identify processing '
+        'bottlenecks.'),
     'allowed_geometries': [],
     'citations': [
         {
