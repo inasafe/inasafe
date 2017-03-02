@@ -18,7 +18,7 @@ from qgis.core import (
     QGis)
 
 from safe.definitions.layer_purposes import (
-    layer_purpose_exposure_impacted,
+    layer_purpose_exposure_summary,
     layer_purpose_aggregate_hazard_impacted,
     layer_purpose_aggregation_impacted,
     layer_purpose_analysis_impacted,
@@ -878,7 +878,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
             # list of layer purpose to show impact report
             impacted_layer = [
-                layer_purpose_exposure_impacted['key'],
+                layer_purpose_exposure_summary['key'],
                 layer_purpose_aggregate_hazard_impacted['key'],
                 layer_purpose_aggregation_impacted['key'],
                 layer_purpose_analysis_impacted['key'],

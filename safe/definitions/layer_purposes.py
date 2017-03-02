@@ -56,15 +56,15 @@ layer_purpose_aggregation = {
     ]
 }
 
-layer_purpose_exposure_impacted = {
-    'key': 'exposure_impacted',
-    'name': tr('Exposure Impacted'),
+layer_purpose_exposure_summary = {
+    'key': 'exposure_summary',
+    'name': tr('Impact Layer - Exposure Summary'),
     'description': tr(
-        'An <b>exposure impacted</b> layer is one of the possible results of '
-        'an InaSAFE analysis. It has fields that represent the impact on each '
-        'exposure feature by the hazard in each aggregation area. This type '
-        'of impact layer will not be created if the exposure layer is a '
-        'continuous raster exposure layer.'),
+        'This <b>impact layer exposure summary</b> contains all the results '
+        'for the spatial analysis of the hazard, exposure and aggregation '
+        'layers (if used) within the analysis extent. This layer is not '
+        'created if the input includes a continuous raster exposure layer ('
+        'eg population raster).'),
     'allowed_geometries': [
         layer_geometry_point, layer_geometry_line, layer_geometry_polygon],
     'citations': [
@@ -81,16 +81,19 @@ layer_purpose_aggregate_hazard_impacted = {
     'description': tr(
         'An <b>aggregate hazard impacted</b> layer is created during an '
         'InaSAFE analysis. This layer is a cross product between the hazard '
-        'layer, the aggregate layer and the exposure impacted layer. The '
+        'layer, the aggregate layer and the exposure summary layer. The '
         'layer geometries are firstly a union between the hazard layer and '
         'the aggregation layer. If the exposure is indivisible (e.g. '
         'building polygons) or point based (e.g. places, building points), '
         'the the aggregate hazard impacted layer will include a count of the '
         'number of features per intersected aggregate hazard polygon and, if '
         'applicable, either the length or the area of the exposure features '
-        'contained within each polygon. If the exposure data is divisible (e.g'
-        '. landcover polygons), those polygons will again be unioned with the '
-        'output from the aggregation layer / hazard layer intersection process'
+        'contained within each polygon. If the exposure data is divisible ('
+        'e.g'
+        '. landcover polygons), those polygons will again be unioned with '
+        'the '
+        'output from the aggregation layer / hazard layer intersection '
+        'process'
         '. As well as simple metrics of area or distance, additional columns '
         'will be writen to the aggregate hazard layer breaking down features '
         'by their classes and providing other similar metrics.'
@@ -115,7 +118,8 @@ layer_purpose_aggregation_impacted = {
         'when the analysis was started). If no aggregation layer was used '
         'for the analysis, the extent of the analysis area based on the '
         'intersection rules defined in the "Set Analysis Area" dialog will '
-        'be used to create an aggregation layer. In this case the aggregation '
+        'be used to create an aggregation layer. In this case the '
+        'aggregation '
         'layer will consist of a single rectangular polygon geometry. '
         'If the exposure is indivisible (e.g. building polygons) or point '
         'based (e.g. places, building points), the the aggregate hazard '
@@ -160,12 +164,14 @@ layer_purpose_exposure_breakdown = {
     'key': 'exposure_breakdown',
     'name': tr('Exposure Breakdown'),
     'description': tr(
-        'An <b>exposure breakdown</b> layer is non-spatial table (i.e. it has '
+        'An <b>exposure breakdown</b> layer is non-spatial table (i.e. it '
+        'has '
         'no geometries). It contains one row per exposure type. Columns are '
         'created for each hazard class encountered in the analysis and for '
         'analysis totals. For example there will be a column for the total '
         'number of buildings considered affected in the entire analysis area,'
-        'and further columns for not affected total and the combined total of '
+        'and further columns for not affected total and the combined total '
+        'of '
         'not affected + affected. This layer is used for generating reports '
         'and can also be easily exported to a spreadsheet for further '
         'analysis.'),
@@ -215,7 +221,6 @@ layer_purpose = {
         }
     ]
 }
-
 
 layer_purposes = [
     layer_purpose_hazard,

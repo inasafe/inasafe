@@ -10,7 +10,7 @@ from safe.definitions.layer_purposes import (
     layer_purpose_hazard,
     layer_purpose_exposure,
     layer_purpose_aggregation,
-    layer_purpose_exposure_impacted
+    layer_purpose_exposure_summary
 )
 from safe.definitions.layer_modes import layer_mode_continuous
 from safe.definitions.versions import inasafe_keyword_version
@@ -18,7 +18,7 @@ from safe.metadata import (
     ExposureLayerMetadata,
     HazardLayerMetadata,
     AggregationLayerMetadata,
-    ExposureImpactedLayerMetadata,
+    ExposureSummaryLayerMetadata,
     GenericLayerMetadata)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -45,8 +45,8 @@ def write_iso19115_metadata(layer_uri, keywords):
         elif keywords['layer_purpose'] == layer_purpose_aggregation['key']:
             metadata = AggregationLayerMetadata(layer_uri)
         elif keywords['layer_purpose'] == \
-                layer_purpose_exposure_impacted['key']:
-            metadata = ExposureImpactedLayerMetadata(layer_uri)
+                layer_purpose_exposure_summary['key']:
+            metadata = ExposureSummaryLayerMetadata(layer_uri)
         else:
             metadata = GenericLayerMetadata(layer_uri)
     else:
@@ -85,8 +85,8 @@ def read_iso19115_metadata(layer_uri, keyword=None):
         metadata = HazardLayerMetadata(layer_uri, xml_uri)
     elif metadata.layer_purpose == layer_purpose_aggregation['key']:
         metadata = AggregationLayerMetadata(layer_uri, xml_uri)
-    elif metadata.layer_purpose == layer_purpose_exposure_impacted['key']:
-        metadata = ExposureImpactedLayerMetadata(layer_uri, xml_uri)
+    elif metadata.layer_purpose == layer_purpose_exposure_summary['key']:
+        metadata = ExposureSummaryLayerMetadata(layer_uri, xml_uri)
 
     # dictionary comprehension
     keywords = {
@@ -126,7 +126,7 @@ def read_iso19115_metadata(layer_uri, keyword=None):
             message += 'Layer path: %s' % layer_uri
             raise KeywordNotFoundError(message)
 
-    if isinstance(metadata, ExposureImpactedLayerMetadata):
+    if isinstance(metadata, ExposureSummaryLayerMetadata):
         keywords['if_provenance'] = metadata.provenance
     return keywords
 
