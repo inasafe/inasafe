@@ -245,6 +245,10 @@ notes_assumptions_component = {
                 'bullet-list-section.html',
     'extra_args': {
         'header': tr('Notes and assumptions'),
+        'affected_note_format': tr(
+            'Exposures in this following hazard classes are considered '
+            'affected: {hazard_classes}'
+        ),
         'displacement_rates_note_format': tr(
             'For this analysis, the following displacement rates were used: '
             '{rate_description}'),

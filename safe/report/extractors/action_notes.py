@@ -70,6 +70,25 @@ def notes_assumptions_extractor(impact_report, component_metadata):
             hazard_classification = classification
             break
 
+    # Check hazard affected class
+    affected_classes = []
+    for hazard_class in hazard_classification['classes']:
+        if hazard_class.get('affected', False):
+            affected_classes.append(hazard_class)
+
+    if affected_classes:
+        affected_note_format = resolve_from_dictionary(
+            extra_args, 'affected_note_format')
+
+        # generate hazard classes
+        hazard_classes = ', '.join([
+            c['name'] for c in affected_classes
+        ])
+
+        context['items'].append(
+            affected_note_format.format(hazard_classes=hazard_classes)
+        )
+
     # Check hazard have displacement rate
     for hazard_class in hazard_classification['classes']:
         if hazard_class.get('displacement_rate', 0) > 0:
