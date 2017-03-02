@@ -91,6 +91,10 @@ class DefaultSelectParameterWidget(SelectParameterWidget):
         self.main_layout.addLayout(self.input_layout)
         self.main_layout.addLayout(self.help_layout)
 
+        # check every added combobox, it could have been toggled by
+        # the existing keyword
+        self.toggle_input()
+
         # Connect
         # noinspection PyUnresolvedReferences
         self.input.currentIndexChanged.connect(self.toggle_input)
