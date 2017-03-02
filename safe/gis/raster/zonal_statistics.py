@@ -92,6 +92,9 @@ def zonal_stats(raster, vector, callback=None):
 
     layer.keywords = raster.keywords.copy()
     layer.keywords['inasafe_fields'] = vector.keywords['inasafe_fields'].copy()
+    layer.keywords['inasafe_default_values'] = (
+        raster.keywords['inasafe_default_values'].copy())
+
     key = exposure_count_field['key'] % raster.keywords['exposure']
 
     # Special case here, one field is the exposure count and the total.

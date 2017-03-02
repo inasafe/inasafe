@@ -74,6 +74,8 @@ def create_virtual_aggregation(geometry, crs):
         aggregation_id_field['key']: aggregation_id_field['field_name'],
         aggregation_name_field['key']: aggregation_name_field['field_name']
     }
+    # We will fill default values later, according to the exposure.
+    aggregation_layer.keywords['inasafe_default_values'] = {}
 
     return aggregation_layer
 

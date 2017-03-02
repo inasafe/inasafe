@@ -227,9 +227,11 @@ def rename_remove_inasafe_fields(layer):
     copy_fields(layer, to_rename)
     to_remove = to_rename.keys()
 
-    LOGGER.debug(tr(
-        'Fields which have been renamed from %s : %s'
-        % (layer.keywords['layer_purpose'], to_rename)))
+    LOGGER.debug(
+        'Fields which have been renamed from %s :' % (
+            layer.keywords['layer_purpose']))
+    for old_name, new_name in to_rename.iteritems():
+        LOGGER.debug('%s -> %s' % (old_name, new_name))
 
     # Houra, InaSAFE keywords match our concepts !
     layer.keywords['inasafe_fields'].update(new_keywords)
@@ -240,9 +242,9 @@ def rename_remove_inasafe_fields(layer):
             if field.name() not in to_remove:
                 to_remove.append(field.name())
     remove_fields(layer, to_remove)
-    LOGGER.debug(tr(
+    LOGGER.debug(
         'Fields which have been removed from %s : %s'
-        % (layer.keywords['layer_purpose'], to_remove)))
+        % (layer.keywords['layer_purpose'], ' '.join(to_remove)))
 
 
 def _size_is_needed(layer):

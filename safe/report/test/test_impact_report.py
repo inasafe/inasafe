@@ -1131,7 +1131,7 @@ class TestImpactReport(unittest.TestCase):
                 {
                     'header': u'Youth',
                     'number': '10',
-                    'percentage': '26.3',
+                    'percentage': '21.1',
                 },
                 {
                     'header': u'Adult',
