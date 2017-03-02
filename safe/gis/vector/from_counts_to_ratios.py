@@ -4,7 +4,7 @@
 
 import logging
 from safe.definitions.utilities import definition
-from safe.definitions.fields import size_field, count_ratio_mapping
+from safe.definitions.fields import count_ratio_mapping, population_count_field
 from safe.definitions.processing_steps import (
     recompute_counts_steps)
 from safe.utilities.profiling import profile
@@ -22,6 +22,8 @@ __revision__ = '$Format:%H$'
 @profile
 def from_counts_to_ratios(layer, callback=None):
     """Transform counts to ratios.
+
+    Formula: ratio = subset count / total count
 
     :param layer: The vector layer.
     :type layer: QgsVectorLayer
@@ -43,6 +45,11 @@ def from_counts_to_ratios(layer, callback=None):
     inasafe_fields = layer.keywords['inasafe_fields']
 
     layer.keywords['title'] = output_layer_name
+
+    if not population_count_field['key'] in inasafe_fields:
+        # There is not a population count field. Let's skip this layer.
+        return layer
+
     layer.startEditing()
 
     mapping = {}
@@ -69,19 +76,17 @@ def from_counts_to_ratios(layer, callback=None):
                     count_field=count_field['key']))
 
     if len(mapping) == 0:
-        # There is not a count field. Let's skip this layer.
+        # There is not a subset count field. Let's skip this layer.
         layer.commitChanges()
         return layer
 
-    size_field_name = inasafe_fields[size_field['key']]
-
     for feature in layer.getFeatures():
-        size = feature[size_field_name]
+        total_count = feature[inasafe_fields[population_count_field['key']]]
 
         for count_field, index in mapping.iteritems():
             count = feature[count_field]
             try:
-                new_value = count / size
+                new_value = count / total_count
             except TypeError:
                 new_value = ''
             layer.changeAttributeValue(feature.id(), index, new_value)

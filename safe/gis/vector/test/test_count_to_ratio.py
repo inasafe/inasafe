@@ -6,7 +6,7 @@ import unittest
 
 from safe.test.utilities import qgis_iface, load_test_vector_layer
 from safe.definitions.fields import (
-    female_count_field, female_ratio_field, size_field)
+    female_count_field, female_ratio_field, size_field, population_count_field)
 
 from safe.gis.vector.from_counts_to_ratios import from_counts_to_ratios
 from safe.gis.vector.prepare_vector_layer import prepare_vector_layer
@@ -38,6 +38,13 @@ class TestRecomputeCounts(unittest.TestCase):
         self.assertIn(
             female_count_field['key'], layer.keywords['inasafe_fields'])
         self.assertIn(
-            size_field['key'], layer.keywords['inasafe_fields'])
-        self.assertIn(
             female_ratio_field['key'], layer.keywords['inasafe_fields'])
+
+        # Check that each feature has correct ratio
+        for feature in layer.getFeatures():
+            manual_ratio = feature[female_count_field['field_name']] / feature[
+                population_count_field['field_name']]
+            diff = abs(
+                manual_ratio - feature[female_ratio_field['field_name']])
+
+            self.assertTrue(diff < 10 ** -2, diff)
