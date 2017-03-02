@@ -365,12 +365,17 @@ class DonutChartContext(SVGChartContext):
                 label_position_y = 0
             label_position_y += 20
             label_position = (label_position_x, label_position_y)
+            show_label = True
+            # if percentage is less than 10%, do not show label
+            if 1.0 * v / total_values < 0.1:
+                show_label = False
 
             angle = next_angle
             one_slice = {
                 'center': (center_slice_x, center_slice_y),
                 'path': d,
                 'fill': colors[idx],
+                'show_label': show_label,
                 'label_position': label_position,
                 'value': v,
                 'percentage': v * 100.0 / total_values,

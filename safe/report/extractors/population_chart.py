@@ -2,13 +2,12 @@
 """Module used to generate context for population chart."""
 from safe.definitions.fields import (
     hazard_count_field, total_not_affected_field)
-from safe.definitions.hazard_classifications import hazard_classes_all
 from safe.definitions.styles import green
 from safe.report.extractors.infographic_elements.svg_charts import \
     DonutChartContext
 from safe.report.extractors.util import (
     value_from_field_name,
-    resolve_from_dictionary)
+    resolve_from_dictionary, layer_hazard_classification)
 from safe.utilities.rounding import round_affected_number
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -46,13 +45,7 @@ def population_chart_extractor(impact_report, component_metadata):
     # create context for the donut chart
 
     # retrieve hazard classification from hazard layer
-    for classification in hazard_classes_all:
-        classification_name = hazard_layer.keywords['classification']
-        if classification_name == classification['key']:
-            hazard_classification = classification
-            break
-    else:
-        hazard_classification = None
+    hazard_classification = layer_hazard_classification(hazard_layer)
 
     if not hazard_classification:
         return context
