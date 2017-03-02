@@ -41,6 +41,7 @@ def aggregation_result_extractor(impact_report, component_metadata):
     # Find out aggregation report type
     exposure_layer = impact_report.exposure
     analysis_layer = impact_report.analysis
+    provenance = impact_report.impact_function.provenance
     exposure_summary_table = impact_report.exposure_summary_table
     if exposure_summary_table:
         exposure_summary_table_fields = exposure_summary_table.keywords[
@@ -190,6 +191,26 @@ def aggregation_result_extractor(impact_report, component_metadata):
     header_label = (
         aggregation_summary.title() or aggregation_area_default_header)
 
+    table_header_format = resolve_from_dictionary(
+        extra_args, 'table_header_format')
+
+    # check unit
+    units = exposure_type['units']
+    if units:
+        unit = units[0]
+        abbreviation = unit['abbreviation']
+        if abbreviation:
+            unit_string = '({abbreviation})'.format(abbreviation=abbreviation)
+        else:
+            unit_string = ''
+    else:
+        unit_string = ''
+
+    table_header = table_header_format.format(
+        title=provenance['map_legend_title'],
+        unit=unit_string)
+    table_header = ' '.join(table_header.split())
+
     section_header = resolve_from_dictionary(extra_args, 'header')
     notes = resolve_from_dictionary(extra_args, 'notes')
     total_header = resolve_from_dictionary(extra_args, 'total_header')
@@ -198,6 +219,7 @@ def aggregation_result_extractor(impact_report, component_metadata):
     context['header'] = section_header
     context['notes'] = notes
     context['aggregation_result'] = {
+        'table_header': table_header,
         'header_label': header_label,
         'type_header_labels': type_header_labels,
         'total_label': total_header,

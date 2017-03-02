@@ -432,6 +432,8 @@ class TestImpactReport(unittest.TestCase):
             'notes': u'Columns and rows containing only 0 or "No data" '
                      u'values are excluded from the tables.',
             'aggregation_result': {
+                'table_header': u'Estimated Number of buildings by '
+                                u'aggregation area',
                 'header_label': u'Aggregation area',
                 'rows': [
                     {
@@ -629,6 +631,8 @@ class TestImpactReport(unittest.TestCase):
 
         expected_context = {
             'aggregation_result': {
+                'table_header': u'Estimated Number of buildings by '
+                                u'aggregation area',
                 'header_label': u'Aggregation area',
                 'rows': [
                     {
@@ -720,6 +724,8 @@ class TestImpactReport(unittest.TestCase):
 
         expected_context = {
             'aggregation_result': {
+                'table_header': u'Estimated Number of buildings by '
+                                u'aggregation area',
                 'header_label': u'Aggregation area',
                 'rows': [
                     {

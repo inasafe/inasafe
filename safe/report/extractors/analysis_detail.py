@@ -370,9 +370,24 @@ def analysis_detail_extractor(impact_report, component_metadata):
 
     table_header_format = resolve_from_dictionary(
         extra_args, 'table_header_format')
+
+    # check unit
+    units = exposure_type['units']
+    if units:
+        unit = units[0]
+        abbreviation = unit['abbreviation']
+        if abbreviation:
+            unit_string = '({abbreviation})'.format(abbreviation=abbreviation)
+        else:
+            unit_string = ''
+    else:
+        unit_string = ''
+
     table_header = table_header_format.format(
         title=provenance['map_legend_title'],
+        unit=unit_string,
         exposure=exposure_header)
+    table_header = ' '.join(table_header.split())
 
     context['detail_table'] = {
         'table_header': table_header,
