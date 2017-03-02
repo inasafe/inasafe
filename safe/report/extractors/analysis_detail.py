@@ -8,11 +8,11 @@ from safe.definitions.fields import (
     total_affected_field,
     total_not_affected_field,
     total_field, total_not_exposed_field)
-from safe.definitions.hazard_classifications import hazard_classes_all
 from safe.report.extractors.util import (
     layer_definition_type,
     resolve_from_dictionary,
-    value_from_field_name)
+    value_from_field_name,
+    layer_hazard_classification)
 from safe.utilities.i18n import tr
 from safe.utilities.rounding import format_number
 
@@ -57,13 +57,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
     """Initializations"""
 
     # Get hazard classification
-    hazard_classification = None
-    # retrieve hazard classification from hazard layer
-    for classification in hazard_classes_all:
-        classification_name = hazard_layer.keywords['classification']
-        if classification_name == classification['key']:
-            hazard_classification = classification
-            break
+    hazard_classification = layer_hazard_classification(hazard_layer)
 
     # Get exposure type definition
     exposure_type = layer_definition_type(exposure_layer)
