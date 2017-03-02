@@ -16,6 +16,7 @@ from qgis.core import (
     QgsFeature,
     QgsField,
     QgsDistanceArea,
+    QgsUnitTypes,
     QgsWKBTypes
 )
 
@@ -53,6 +54,32 @@ wkb_type_groups = {
 for key, value in list(wkb_type_groups.items()):
     for const in value:
         wkb_type_groups[const] = key
+
+# This table come from https://qgis.org/api/qgsunittypes_8h_source.html#l00043
+distance_unit = {
+    0: 'Meters',
+    1: 'Kilometres',
+    2: 'Feets',
+    3: 'Nautical Miles',
+    4: 'Yards',
+    5: 'Miles',
+    6: 'Degrees',
+    7: 'Unknown Unit'
+}
+
+# This table come from https://qgis.org/api/qgsunittypes_8h_source.html#l00065
+area_unit = {
+    0: 'Square Meters',
+    1: 'Square Kilometres',
+    2: 'Square Feet',
+    3: 'Square Yards',
+    4: 'Square Miles',
+    5: 'Hectares',
+    6: 'Acres',
+    7: 'Square Nautical Miles',
+    8: 'Square Degrees',
+    9: 'unknown Unit'
+}
 
 
 @profile
@@ -302,9 +329,13 @@ class SizeCalculator(object):
 
         if geometry_type == QgsWKBTypes.LineGeometry:
             self.default_unit = unit_metres
+            LOGGER.info('The size calculator is set to use {unit}'.format(
+                unit=distance_unit[self.calculator.lengthUnits()]))
         else:
             self.default_unit = unit_square_metres
-
+            LOGGER.info('The size calculator is set to use {unit}'.format(
+                unit=distance_unit[self.calculator.areaUnits()]))
+        self.geometry_type = geometry_type
         self.output_unit = None
         if exposure_key:
             exposure_definition = definition(exposure_key)
@@ -326,7 +357,10 @@ class SizeCalculator(object):
             # multipart.
             # So we compute the size part per part. See ticket #3812
             for single in geometry.asGeometryCollection():
-                geometry_size = self.calculator.measure(single)
+                if self.geometry_type == QgsWKBTypes.LineGeometry:
+                    geometry_size = self.calculator.measureLength(single)
+                else:
+                    geometry_size = self.calculator.measureArea(single)
                 if not isnan(geometry_size):
                     feature_size += geometry_size
                 else:
@@ -334,7 +368,10 @@ class SizeCalculator(object):
                         valid=single.isGeosValid(),
                         wkt=single.exportToWkt()))
         else:
-            geometry_size = self.calculator.measure(geometry)
+            if self.geometry_type == QgsWKBTypes.LineGeometry:
+                geometry_size = self.calculator.measureLength(geometry)
+            else:
+                geometry_size = self.calculator.measureArea(geometry)
             if not isnan(geometry_size):
                 feature_size = geometry_size
             else:

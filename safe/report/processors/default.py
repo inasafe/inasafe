@@ -242,7 +242,7 @@ def qgis_composer_renderer(impact_report, component):
         """:type: qgis.core.QgsComposerPicture"""
         if image is not None and path is not None:
             try:
-                image.setPictureFile(path)
+                image.setPicturePath(path)
             except:
                 pass
 
@@ -312,9 +312,9 @@ def qgis_composer_renderer(impact_report, component):
 
             # calculate intervals for grid
             x_interval = actual_extent.width() / split_count
-            composer_map.setGridIntervalX(x_interval)
+            composer_map.grid().setIntervalX(x_interval)
             y_interval = actual_extent.height() / split_count
-            composer_map.setGridIntervalY(y_interval)
+            composer_map.grid().setIntervalY(y_interval)
 
     # calculate legend element
     for leg_el in context.map_legends:
