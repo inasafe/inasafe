@@ -170,7 +170,7 @@
                <item>
                 <widget class="QLabel" name="label">
                  <property name="text">
-                  <string>Default Earthquake function</string>
+                  <string>Default earthquake fatality model</string>
                  </property>
                 </widget>
                </item>
