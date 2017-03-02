@@ -10,14 +10,15 @@ from jinja2.environment import Template
 
 from safe.common.utilities import safe_dir
 from safe.definitions.constants import ANALYSIS_SUCCESS
-from safe.definitions.reports.components import \
-    standard_impact_report_metadata_html
+from safe.definitions.reports.components import (
+    standard_impact_report_metadata_html,
+    general_report_component)
 from safe.impact_function.impact_function import ImpactFunction
 from safe.report.impact_report import ImpactReport
 from safe.report.report_metadata import ReportMetadata
 from safe.test.utilities import (
     get_qgis_app,
-    load_test_vector_layer, load_test_raster_layer)
+    load_test_raster_layer)
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -83,5 +84,52 @@ class TestEarthquakeReport(unittest.TestCase):
 
         self.assertEqual(
             return_code, ImpactReport.REPORT_GENERATION_SUCCESS, message)
+
+        """Checking generated context"""
+        empty_component_output_message = 'Empty component output'
+
+        # Check Analysis Summary
+        analysis_summary = impact_report.metadata.component_by_key(
+            general_report_component['key'])
+        """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
+
+        expected_context = {
+            'table_header': u'Estimated Number of people',
+            'header': u'General Report',
+            'summary': [
+                {
+                    'header_label': u'Hazard Zone',
+                    'rows': [{'value': '0', 'name': u'X', 'key': 'X'},
+                             {'value': '0', 'name': u'IX', 'key': 'IX'},
+                             {'value': '200', 'name': u'VIII', 'key': 'VIII'},
+                             {'value': '0', 'name': u'VII', 'key': 'VII'},
+                             {'value': '0', 'name': u'VI', 'key': 'VI'},
+                             {'value': '0', 'name': u'V', 'key': 'V'},
+                             {'value': '0', 'name': u'IV', 'key': 'IV'},
+                             {'value': '0', 'name': u'III', 'key': 'III'},
+                             {'value': '0', 'name': u'II', 'key': 'II'},
+                             {'value': '0', 'name': u'I', 'key': 'I'}],
+                    'value_label': u'Count'
+                },
+                {
+                    'header_label': u'Population',
+                    'rows': [{'value': '200',
+                              'name': u'Displaced',
+                              'key':
+                                  'displaced_field'},
+                             {'value': '0 - 100',
+                              'name':
+                                  u'Fatalities',
+                              'key':
+                                  'fatalities_field'}],
+                    'value_label': u'Count'
+                }
+            ]
+        }
+        actual_context = analysis_summary.context
+
+        self.assertDictEqual(expected_context, actual_context)
+        self.assertTrue(
+            analysis_summary.output, empty_component_output_message)
 
         shutil.rmtree(output_folder, ignore_errors=True)
