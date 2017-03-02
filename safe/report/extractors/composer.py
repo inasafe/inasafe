@@ -1,4 +1,12 @@
 # coding=utf-8
+"""Module used to generate context for composer related rendering.
+
+Particular example are:
+- Map rendering
+- PDF rendering
+- PNG rendering
+
+"""
 import datetime
 
 from qgis.core import QgsMapLayerRegistry
@@ -16,13 +24,17 @@ __revision__ = '$Format:%H$'
 
 
 class QGISComposerContext(object):
-    """Default context class for QGIS Composition
+
+    """Default context class for QGIS Composition.
 
     The reason we made it a class is because things needed for composition
     were much more obvious and solid than Jinja2 template context.
+
+    .. versionadded:: 4.0
     """
 
     def __init__(self):
+        """Create QGIS Composer context."""
         self._substitution_map = {}
         self._infographic_elements = []
         self._image_elements = []
@@ -32,7 +44,7 @@ class QGISComposerContext(object):
 
     @property
     def substitution_map(self):
-        """
+        """Substitution map.
 
         :return: Substitution map containing dict mapping used in QGIS
             Composition template
@@ -42,7 +54,7 @@ class QGISComposerContext(object):
 
     @substitution_map.setter
     def substitution_map(self, value):
-        """
+        """Substitution map.
 
         :param value: Substitution map containing dict mapping used in QGIS
             Composition template
@@ -52,7 +64,7 @@ class QGISComposerContext(object):
 
     @property
     def infographic_elements(self):
-        """
+        """Infographic elements.
 
         :return: Embedded infographics elements that needed to be generated
             for QGIS Composition
@@ -62,7 +74,7 @@ class QGISComposerContext(object):
 
     @infographic_elements.setter
     def infographic_elements(self, value):
-        """
+        """Infographic elements.
 
         :param value: Embedded infographics elements that needed to be
             generated for QGIS Composition
@@ -72,7 +84,7 @@ class QGISComposerContext(object):
 
     @property
     def image_elements(self):
-        """
+        """Image elements.
 
         :return: Scanned all the image elements in the composition that
             needed to be replaced
@@ -82,7 +94,7 @@ class QGISComposerContext(object):
 
     @image_elements.setter
     def image_elements(self, value):
-        """
+        """Image elements.
 
         :param value: Scanned all the image elements in the composition that
             needed to be replaced
@@ -92,7 +104,7 @@ class QGISComposerContext(object):
 
     @property
     def html_frame_elements(self):
-        """
+        """HTML frame elements.
 
         :return: Scanned all html frame elements
         :rtype: list(dict)
@@ -101,7 +113,7 @@ class QGISComposerContext(object):
 
     @html_frame_elements.setter
     def html_frame_elements(self, value):
-        """
+        """HTML frame elements.
 
         :param value: Scanned all html frame elements
         :type value: list(dict)
@@ -110,7 +122,7 @@ class QGISComposerContext(object):
 
     @property
     def map_elements(self):
-        """
+        """Map elements.
 
         :return: Scanned all map elements
         :rtype: list(dict)
@@ -119,7 +131,7 @@ class QGISComposerContext(object):
 
     @map_elements.setter
     def map_elements(self, value):
-        """
+        """Map elements.
 
         :param value: Scanned all map elements
         :type value: list(dict)
@@ -128,7 +140,7 @@ class QGISComposerContext(object):
 
     @property
     def map_legends(self):
-        """
+        """Map legends.
 
         :return: Scanned all map legends element
         :rtype: list(dict)
@@ -137,7 +149,7 @@ class QGISComposerContext(object):
 
     @map_legends.setter
     def map_legends(self, value):
-        """
+        """Map legends.
 
         :param value: Scanned all map legends
         :type value: list(dict)
@@ -147,6 +159,7 @@ class QGISComposerContext(object):
 
 def qgis_composer_extractor(impact_report, component_metadata):
     """Extract composer context.
+
     This method extract necessary context for a given impact report and
     component metadata and save the context so it can be used in composer
     rendering phase
@@ -162,6 +175,8 @@ def qgis_composer_extractor(impact_report, component_metadata):
 
     :return: context for rendering phase
     :rtype: dict
+
+    .. versionadded:: 4.0
     """
     # QGIS Composer needed certain context to generate the output
     # - Map Settings
@@ -264,12 +279,12 @@ def qgis_composer_extractor(impact_report, component_metadata):
         try:
             symbol_count += len(layer.legendSymbologyItems())
             continue
-        except:
+        except Exception:  # pylint: disable=broad-except
             pass
         try:
             symbol_count += len(layer.rendererV2().legendSymbolItemsV2())
             continue
-        except:
+        except Exception:  # pylint: disable=broad-except
             pass
         symbol_count += 1
 

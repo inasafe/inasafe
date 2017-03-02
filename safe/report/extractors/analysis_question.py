@@ -1,4 +1,5 @@
 # coding=utf-8
+"""Module used to generate context for analysis question section."""
 from safe.report.extractors.util import resolve_from_dictionary
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -21,6 +22,8 @@ def analysis_question_extractor(impact_report, component_metadata):
 
     :return: context for rendering phase
     :rtype: dict
+
+    .. versionadded:: 4.0
     """
     context = {}
     extra_args = component_metadata.extra_args

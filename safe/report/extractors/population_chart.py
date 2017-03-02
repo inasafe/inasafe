@@ -1,4 +1,5 @@
 # coding=utf-8
+"""Module used to generate context for population chart."""
 from safe.definitions.fields import (
     hazard_count_field, total_not_affected_field)
 from safe.definitions.hazard_classifications import hazard_classes_all
@@ -30,6 +31,8 @@ def population_chart_extractor(impact_report, component_metadata):
 
     :return: context for rendering phase
     :rtype: dict
+
+    .. versionadded:: 4.0
     """
     context = {}
     extra_args = component_metadata.extra_args
@@ -137,6 +140,8 @@ def population_chart_to_png_extractor(impact_report, component_metadata):
 
     :return: context for rendering phase
     :rtype: dict
+
+    .. versionadded:: 4.0
     """
     context = {}
 

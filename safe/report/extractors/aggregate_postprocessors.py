@@ -1,4 +1,7 @@
 # coding=utf-8
+"""Module used to generate context for aggregation postprocessors sections.
+"""
+
 from collections import OrderedDict
 
 from safe.common.parameters.resource_parameter import ResourceParameter
@@ -35,6 +38,8 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
 
     :return: context for rendering phase
     :rtype: dict
+
+    .. versionadded:: 4.0
     """
     context = {
         'sections': OrderedDict()
@@ -46,14 +51,14 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
     # Find out aggregation report type
     aggregation_summary = impact_report.aggregation_summary
     analysis_layer = impact_report.analysis
-    analysis_keywords = impact_report.analysis.keywords['inasafe_fields']
+    analysis_layer_fields = impact_report.analysis.keywords['inasafe_fields']
     debug_mode = impact_report.impact_function.debug_mode
     use_aggregation = bool(impact_report.impact_function.provenance[
         'aggregation_layer'])
 
     # check zero displaced (there will be no output to display)
     try:
-        displaced_field_name = analysis_keywords[displaced_field['key']]
+        displaced_field_name = analysis_layer_fields[displaced_field['key']]
         total_displaced = value_from_field_name(
             displaced_field_name, analysis_layer)
 
@@ -76,17 +81,19 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
 
     # check age_fields exists
     for field in age_fields:
-        if field['key'] not in analysis_keywords:
-            no_age_field = True
+        if field['key'] in analysis_layer_fields:
+            no_age_field = False
+            break
     else:
-        no_age_field = False
+        no_age_field = True
 
     # check gender_fields exists
     for field in gender_fields:
-        if field['key'] not in analysis_keywords:
-            no_gender_field = True
+        if field['key'] in analysis_layer_fields:
+            no_gender_field = False
+            break
     else:
-        no_gender_field = False
+        no_gender_field = True
 
     age_section_header = resolve_from_dictionary(
         extra_args, ['sections', 'age', 'header'])
@@ -112,7 +119,6 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
             age_section_header,
             use_aggregation=use_aggregation,
             debug_mode=debug_mode,
-            population_rounding=True,
             extra_component_args=extra_args)
 
     gender_section_header = resolve_from_dictionary(
@@ -139,7 +145,6 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
             gender_section_header,
             use_aggregation=use_aggregation,
             debug_mode=debug_mode,
-            population_rounding=True,
             extra_component_args=extra_args)
 
     minimum_needs_section_header = resolve_from_dictionary(
@@ -175,7 +180,6 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
             minimum_needs_section_header,
             units_label=units_label,
             debug_mode=debug_mode,
-            population_rounding=True,
             extra_component_args=extra_args)
     else:
         sections_not_empty = True
@@ -196,7 +200,6 @@ def create_section(
         use_aggregation=True,
         units_label=None,
         debug_mode=False,
-        population_rounding=False,
         extra_component_args=None):
     """Create demographic section context.
 
@@ -221,16 +224,14 @@ def create_section(
     :param debug_mode: flag for debug_mode, affect number representations
     :type debug_mode: bool
 
-    :param population_rounding: flag population rounding, used when
-        postprocessor represents population number
-    :type population_rounding: bool
-
     :param extra_component_args: extra_args passed from report component
         metadata
     :type extra_component_args: dict
 
     :return: context for gender section
     :rtype: dict
+
+    .. versionadded:: 4.0
     """
     if use_aggregation:
         return create_section_with_aggregation(
@@ -238,7 +239,6 @@ def create_section(
             section_header,
             units_label=units_label,
             debug_mode=debug_mode,
-            population_rounding=population_rounding,
             extra_component_args=extra_component_args)
     else:
         return create_section_without_aggregation(
@@ -246,7 +246,6 @@ def create_section(
             section_header,
             units_label=units_label,
             debug_mode=debug_mode,
-            population_rounding=population_rounding,
             extra_component_args=extra_component_args)
 
 
@@ -255,7 +254,6 @@ def create_section_with_aggregation(
         section_header,
         units_label=None,
         debug_mode=False,
-        population_rounding=False,
         extra_component_args=None):
     """Create demographic section context with aggregation breakdown.
 
@@ -277,16 +275,14 @@ def create_section_with_aggregation(
     :param debug_mode: flag for debug_mode, affect number representations
     :type debug_mode: bool
 
-    :param population_rounding: flag population rounding, used when
-        postprocessor represents population number
-    :type population_rounding: bool
-
     :param extra_component_args: extra_args passed from report component
         metadata
     :type extra_component_args: dict
 
     :return: context for gender section
     :rtype: dict
+
+    .. versionadded:: 4.0
     """
     aggregation_summary_fields = aggregation_summary.keywords[
         'inasafe_fields']
@@ -304,12 +300,10 @@ def create_section_with_aggregation(
         return {}
 
     # figuring out displaced field
-    try:
-        displaced_field_name = analysis_layer_fields[displaced_field['key']]
-        displaced_field_name = aggregation_summary_fields[
-            displaced_field['key']]
-    except KeyError:
-        # no displaced field, can't show result
+    # no displaced field, can't show result
+    if displaced_field['key'] not in analysis_layer_fields:
+        return {}
+    if displaced_field['key'] not in aggregation_summary_fields:
         return {}
 
     """Generating header name for columns"""
@@ -423,7 +417,6 @@ def create_section_without_aggregation(
         section_header,
         units_label=None,
         debug_mode=False,
-        population_rounding=False,
         extra_component_args=None):
     """Create demographic section context without aggregation.
 
@@ -444,10 +437,6 @@ def create_section_without_aggregation(
 
     :param debug_mode: flag for debug_mode, affect number representations
     :type debug_mode: bool
-
-    :param population_rounding: flag population rounding, used when
-        postprocessor represents population number
-    :type population_rounding: bool
 
     :param extra_component_args: extra_args passed from report component
         metadata

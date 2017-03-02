@@ -1,6 +1,5 @@
 # coding=utf-8
-"""
-Module for class container of Report and ReportComponent Metadata.
+"""Module for class container of Report and ReportComponent Metadata.
 """
 from importlib import import_module
 
@@ -19,13 +18,15 @@ class ReportComponentsMetadata(object):
     """ReportComponentsMetadata.
 
     Describing metadata for Report component
+
+    .. versionadded:: 4.0
     """
 
     def __init__(
             self, key, processor, extractor,
             output_format, template, output_path,
             tags=None, context=None, extra_args=None, **kwargs):
-        """Base class for component metadata
+        """Base class for component metadata.
 
         ReportComponentMetadata is a metadata about the component element of
         a report. This metadata explains what and how this component will be
@@ -60,6 +61,8 @@ class ReportComponentsMetadata(object):
         :param extra_args: Extra args sometimes needed for a component.
             Needed to pass it out to extractors.
         :type extra_args: str
+
+        .. versionadded:: 4.0
         """
         self._key = key
         if callable(processor):
@@ -137,7 +140,7 @@ class ReportComponentsMetadata(object):
 
     @property
     def tags(self):
-        """Tags for easy categorizations.
+        """List of tag for easy categorizations.
 
         :return: list
         """
@@ -155,7 +158,7 @@ class ReportComponentsMetadata(object):
 
     @output.setter
     def output(self, value):
-        """
+        """The output of rendering process.
 
         :param value: The output will be set only by rendering process and
             impact report
@@ -176,7 +179,7 @@ class ReportComponentsMetadata(object):
 
     @context.setter
     def context(self, value):
-        """
+        """The context provided by extractors.
 
         :param value: Only be set by extractors and impact report
         :type value: dict
@@ -202,7 +205,8 @@ class ReportComponentsMetadata(object):
 
     @property
     def info(self):
-        """
+        """Short info about the component.
+
         :return: Returned dictionary of information about the component.
         :rtype: dict
         """
@@ -222,9 +226,12 @@ class Jinja2ComponentsMetadata(ReportComponentsMetadata):
     """Jinja2 Component.
 
     Component that can be rendered by Jinja2
+
+    .. versionadded:: 4.0
     """
 
     class OutputFormat(object):
+
         """Class to hold this available output format."""
 
         String = 'string'
@@ -233,6 +240,7 @@ class Jinja2ComponentsMetadata(ReportComponentsMetadata):
     def __init__(
             self, key, processor, extractor,
             output_format, template, output_path, extra_args=None, **kwargs):
+        """Create Jinja2 Components Metadata holder"""
         super(Jinja2ComponentsMetadata, self).__init__(
             key, processor, extractor, output_format, template, output_path,
             extra_args=extra_args, **kwargs)
@@ -244,9 +252,11 @@ class QgisComposerComponentsMetadata(ReportComponentsMetadata):
 
     Component that can be rendered by QGIS Composition class
 
+    .. versionadded:: 4.0
     """
 
     class OutputFormat(object):
+
         """Class to hold this available output format."""
 
         PDF = 'pdf'
@@ -263,7 +273,8 @@ class QgisComposerComponentsMetadata(ReportComponentsMetadata):
             orientation='portrait',
             page_dpi=300, page_width=210, page_height=297,
             **kwargs):
-        """
+        """Create QGISComposer Components Metadata holder.
+
         Provides 3 more options
 
         :param orientation: the orientation of the paper
@@ -277,6 +288,8 @@ class QgisComposerComponentsMetadata(ReportComponentsMetadata):
 
         :param page_height: the page height of the output
         :type page_height: float
+
+        .. versionadded:: 4.0
         """
         super(QgisComposerComponentsMetadata, self).__init__(
             key, processor, extractor, output_format, template, output_path,
@@ -288,7 +301,8 @@ class QgisComposerComponentsMetadata(ReportComponentsMetadata):
 
     @property
     def orientation(self):
-        """
+        """Orientation of the document.
+
         :return: Page orientation of the output
         :rtype: 'portrait' | 'landscape'
         """
@@ -296,7 +310,8 @@ class QgisComposerComponentsMetadata(ReportComponentsMetadata):
 
     @property
     def page_dpi(self):
-        """
+        """Page DPI.
+
         :return: Page DPI of the output
         :rtype: float
         """
@@ -304,7 +319,8 @@ class QgisComposerComponentsMetadata(ReportComponentsMetadata):
 
     @property
     def page_width(self):
-        """
+        """Page Width.
+
         :return: Page width of the output
         :rtype: float
         """
@@ -312,7 +328,8 @@ class QgisComposerComponentsMetadata(ReportComponentsMetadata):
 
     @property
     def page_height(self):
-        """
+        """Page Height.
+
         :return: Page height of the output
         :rtype: float
         """
@@ -320,7 +337,8 @@ class QgisComposerComponentsMetadata(ReportComponentsMetadata):
 
     @property
     def info(self):
-        """
+        """Short info of the metadata.
+
         :return: Returned dictionary of information about the component.
         :rtype: dict
         """
@@ -334,8 +352,16 @@ class QgisComposerComponentsMetadata(ReportComponentsMetadata):
 
 class ReportMetadata(object):
 
+    """Class to hold report metadata.
+
+    This class is used to convert report metadata definitions.
+
+    .. versionadded:: 4.0
+    """
+
     def __init__(self, report_folder=None, metadata_dict=None):
-        """
+        """Create report metadata.
+
         Initialize report metadata from a dictionary or from report folders
         that contains the definitions and styles templates.
 
@@ -346,6 +372,8 @@ class ReportMetadata(object):
         :param metadata_dict: Optional param. Denote the report metadata
             structure
         :type metadata_dict: dict
+
+        .. versionadded:: 4.0
         """
         if metadata_dict:
             self._template_folder = metadata_dict.get('template_folder')
@@ -378,7 +406,7 @@ class ReportMetadata(object):
 
     @property
     def key(self):
-        """Key identifier of Report metadata
+        """Key identifier of Report metadata.
 
         :rtype: str
         """
@@ -386,34 +414,31 @@ class ReportMetadata(object):
 
     @property
     def name(self):
-        """
+        """Recognizable name of report metadata template.
 
-        :return: Recognizable name of report metadata template
         :rtype: str
         """
         return self._name
 
     @property
     def template_folder(self):
-        """
+        """The template folder where the subcomponent can be located.
 
-        :return: the template folder where the subcomponent can be located
         :rtype: str
         """
         return self._template_folder
 
     @property
     def output_folder(self):
-        """
+        """Output folder where the result will be saved.
 
-        :return: Output folder where the result will be saved
         :rtype: str
         """
         return self._output_folder
 
     @output_folder.setter
     def output_folder(self, value):
-        """
+        """Output folder where the result will be saved.
 
         :param value: Output folder where the result will be saved
         :type value: str
@@ -424,7 +449,7 @@ class ReportMetadata(object):
     def components(self):
         """List of report components.
 
-        A list of report components that needed to be generated each
+        A list of report components that needed to be generated each.
 
         :return: list of ReportComponentsMetadata
         :rtype: list[ReportComponentsMetadata]
@@ -438,6 +463,9 @@ class ReportMetadata(object):
         :type key: str
 
         :return: ReportComponentsMetadata
+        :rtype: ReportComponentsMetadata
+
+        .. versionadded:: 4.0
         """
         filtered = [c for c in self.components if c.key == key]
         if filtered:
@@ -452,6 +480,8 @@ class ReportMetadata(object):
 
         :return: List of ReportComponentsMetadata
         :rtype: list[ReportComponentsMetadata]
+
+        .. versionadded:: 4.0
         """
         tags_keys = [t['key'] for t in tags]
         filtered = [

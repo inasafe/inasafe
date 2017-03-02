@@ -1,5 +1,6 @@
 # coding=utf-8
-from safe.definitions.exposure import exposure_all, exposure_population
+"""Module used to generate context for analysis detail section."""
+from safe.definitions.exposure import exposure_all
 from safe.definitions.fields import (
     exposure_type_field,
     exposure_class_field,
@@ -35,6 +36,8 @@ def analysis_detail_extractor(impact_report, component_metadata):
 
     :return: context for rendering phase
     :rtype: dict
+
+    .. versionadded:: 4.0
     """
     context = {}
     extra_args = component_metadata.extra_args
@@ -67,7 +70,6 @@ def analysis_detail_extractor(impact_report, component_metadata):
     # Only round the number when it is population exposure and it is not
     # in debug mode
     is_rounding = not debug_mode
-    use_population_rounding = exposure_type == exposure_population
 
     # Analysis detail only applicable for breakable exposure types:
     itemizable_exposures_all = [
@@ -238,15 +240,18 @@ def analysis_detail_extractor(impact_report, component_metadata):
     # sort detail rows based on class order
     # create lambda function to sort
     def sort_classes(row):
-        """Sort method to retrieve exposure class key index"""
+        """Sort method to retrieve exposure class key index."""
         # class key is first column
         class_key = row[0]
         # find index in class list
         for i, exposure_class in enumerate(exposure_class_lists):
             if class_key == exposure_class['key']:
-                return i
+                index = i
+                break
         else:
-            return -1
+            index = -1
+
+        return index
 
     # sort
     details = sorted(details, key=sort_classes)

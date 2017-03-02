@@ -1,4 +1,6 @@
 # coding=utf-8
+"""Module used to generate context for action and notes sections.
+"""
 from safe.definitions.exposure import exposure_population
 from safe.definitions.hazard_classifications import hazard_classes_all
 from safe.report.extractors.util import resolve_from_dictionary, \
@@ -24,6 +26,8 @@ def action_checklist_extractor(impact_report, component_metadata):
 
     :return: context for rendering phase
     :rtype: dict
+
+    .. versionadded:: 4.0
     """
     context = {}
     provenance = impact_report.impact_function.provenance
@@ -36,8 +40,7 @@ def action_checklist_extractor(impact_report, component_metadata):
 
 
 def notes_assumptions_extractor(impact_report, component_metadata):
-    """
-    Extracting notes and assumptions of the exposure layer
+    """Extracting notes and assumptions of the exposure layer
 
     :param impact_report: the impact report that acts as a proxy to fetch
         all the data that extractor needed
@@ -50,6 +53,8 @@ def notes_assumptions_extractor(impact_report, component_metadata):
 
     :return: context for rendering phase
     :rtype: dict
+
+    .. versionadded:: 4.0
     """
     context = {}
     hazard_layer = impact_report.hazard

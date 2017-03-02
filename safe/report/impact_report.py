@@ -1,7 +1,9 @@
 # coding=utf-8
-"""
-Module to generate impact report using QgsComposition and Jinja2 Template
-engine.
+"""Module to generate impact report.
+
+Enable dynamic report generation based on report metadata.
+Easily customize map report or document based report.
+
 """
 
 import imp
@@ -11,8 +13,7 @@ import os
 from qgis.core import (
     QgsComposition,
     QgsRectangle,
-    QgsRasterLayer,
-    QgsMapSettings)
+    QgsRasterLayer)
 
 from safe.common.exceptions import (
     KeywordNotFoundError)
@@ -40,8 +41,14 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 class InaSAFEReportContext(object):
-    """A class to compile all InaSAFE related context for reporting uses"""
+
+    """A class to compile all InaSAFE related context for reporting uses.
+
+    .. versionadded:: 4.0
+    """
+
     def __init__(self):
+        """Create InaSAFE Report context."""
         self._black_inasafe_logo = black_inasafe_logo_path()
         self._white_inasafe_logo = white_inasafe_logo_path()
         # User can change this path in preferences
@@ -83,7 +90,7 @@ class InaSAFEReportContext(object):
 
     @property
     def black_inasafe_logo(self):
-        """Getter to black inasafe logo path
+        """Getter to black inasafe logo path.
 
         :rtype: str
         """
@@ -91,7 +98,7 @@ class InaSAFEReportContext(object):
 
     @property
     def white_inasafe_logo(self):
-        """Getter for white inasafe logo path
+        """Getter for white inasafe logo path.
 
         :rtype: str
         """
@@ -151,8 +158,14 @@ class InaSAFEReportContext(object):
 
 
 class QGISCompositionContext(object):
-    """A class to hold the value for QGISComposition object"""
+
+    """A class to hold the value for QGISComposition object.
+
+    .. versionadded:: 4.0
+    """
+
     def __init__(self, extent, map_settings, page_dpi):
+        """Create QGISComposition context."""
         self._extent = extent
         self._map_settings = map_settings
         self._page_dpi = page_dpi
@@ -171,7 +184,7 @@ class QGISCompositionContext(object):
 
     @page_dpi.setter
     def page_dpi(self, value):
-        """
+        """Page DPI.
 
         :param value: DPI value for printing
         :type value: float
@@ -191,7 +204,7 @@ class QGISCompositionContext(object):
 
     @extent.setter
     def extent(self, value):
-        """
+        """Extent of map element.
 
         :param value: Extent of map element to display
         :type value: QgsRectangle
@@ -204,22 +217,22 @@ class QGISCompositionContext(object):
 
         Used for QgsComposition
 
-        :rtype: QgsMapSettings
+        :rtype: qgis.core.QgsMapSettings
         """
         return self._map_settings
 
     @map_settings.setter
     def map_settings(self, value):
-        """
+        """QgsMapSettings instance.
 
         :param value: QgsMapSettings for QgsComposition
-        :type value: QgsMapSettings
+        :type value: qgis.core.QgsMapSettings
         """
         self._map_settings = value
 
     @property
     def plot_style(self):
-        """Constant options for composition rendering style
+        """Constant options for composition rendering style.
 
         Possible values:
         - QgsComposition.PlotStyle.Preview
@@ -232,7 +245,7 @@ class QGISCompositionContext(object):
 
     @property
     def save_as_raster(self):
-        """Boolean that indicates the composition will be saved as Raster
+        """Boolean that indicates the composition will be saved as Raster.
 
         :rtype: bool
         """
@@ -241,15 +254,25 @@ class QGISCompositionContext(object):
 
 class ImpactReport(object):
 
+    """A class for creating and generating report.
+
+    .. versionadded:: 4.0
+    """
+
     # constant for default PAGE_DPI settings
     DEFAULT_PAGE_DPI = 300
     REPORT_GENERATION_SUCCESS = 0
     REPORT_GENERATION_FAILED = 1
 
     class LayerException(Exception):
+
+        """Class for Layer Exception.
+
+        Raised if layer being used is not valid.
+        """
+
         pass
 
-    """A class for creating report using QgsComposition."""
     def __init__(
             self,
             iface,
@@ -274,6 +297,8 @@ class ImpactReport(object):
         :param impact_function: Impact function instance for the report
         :type impact_function:
             safe.impact_function.impact_function.ImpactFunction
+
+        .. versionadded:: 4.0
         """
         LOGGER.debug('InaSAFE Impact Report class initialised')
         self._iface = iface
@@ -310,7 +335,7 @@ class ImpactReport(object):
 
     @property
     def inasafe_context(self):
-        """Reference to default InaSAFE Context
+        """Reference to default InaSAFE Context.
 
         :rtype: InaSAFEReportContext
         """
@@ -318,7 +343,7 @@ class ImpactReport(object):
 
     @property
     def qgis_composition_context(self):
-        """Reference to default QGIS Composition Context
+        """Reference to default QGIS Composition Context.
 
         :rtype: QGISCompositionContext
         """
@@ -326,7 +351,7 @@ class ImpactReport(object):
 
     @property
     def metadata(self):
-        """Getter to the template
+        """Getter to the template.
 
         :return: ReportMetadata
         :rtype: safe.report.report_metadata.ReportMetadata
@@ -335,7 +360,7 @@ class ImpactReport(object):
 
     @property
     def output_folder(self):
-        """Output folder path for the rendering
+        """Output folder path for the rendering.
 
         :rtype: str
         """
@@ -343,7 +368,7 @@ class ImpactReport(object):
 
     @output_folder.setter
     def output_folder(self, value):
-        """
+        """Output folder path for the rendering.
 
         :param value: output folder path
         :type value: str
@@ -366,7 +391,10 @@ class ImpactReport(object):
         :param component_key: The component key
         :type component_key: str
 
-        :return:
+        :return: absolute output path
+        :rtype: str
+
+        .. versionadded:: 4.0
         """
         comp_keys = [c.key for c in components]
 
@@ -396,7 +424,10 @@ class ImpactReport(object):
         :param component_key: The component key
         :type component_key: str
 
-        :return:
+        :return: absolute output path
+        :rtype: str
+
+        .. versionadded:: 4.0
         """
         return ImpactReport.absolute_output_path(
             self.output_folder,
@@ -405,7 +436,7 @@ class ImpactReport(object):
 
     @property
     def impact_function(self):
-        """Getter for impact function instance to use
+        """Getter for impact function instance to use.
 
         :rtype: safe.impact_function.impact_function.ImpactFunction
         """
@@ -431,7 +462,7 @@ class ImpactReport(object):
 
     @property
     def hazard(self):
-        """Getter to hazard layer
+        """Getter to hazard layer.
 
         :rtype: qgis.core.QgsVectorLayer
         """
@@ -440,7 +471,7 @@ class ImpactReport(object):
 
     @hazard.setter
     def hazard(self, layer):
-        """
+        """Hazard layer.
 
         :param layer: hazard layer
         :type layer: qgis.core.QgsVectorLayer
@@ -449,7 +480,7 @@ class ImpactReport(object):
 
     @property
     def exposure(self):
-        """Getter to exposure layer
+        """Getter to exposure layer.
 
         :rtype: qgis.core.QgsVectorLayer
         """
@@ -458,7 +489,7 @@ class ImpactReport(object):
 
     @exposure.setter
     def exposure(self, layer):
-        """
+        """Exposure layer.
 
         :param layer: exposure layer
         :type layer: qgis.core.QgsVectorLayer
@@ -485,8 +516,8 @@ class ImpactReport(object):
 
     @property
     def analysis(self):
-        """
-        :return:
+        """Analysis layer.
+
         :rtype: qgis.core.QgsVectorLayer
         """
         self._check_layer_count(self._analysis)
@@ -494,7 +525,7 @@ class ImpactReport(object):
 
     @analysis.setter
     def analysis(self, layer):
-        """
+        """Analysis layer.
 
         :param layer: Analysis layer
         :type layer: qgis.core.QgsVectorLayer
@@ -503,9 +534,8 @@ class ImpactReport(object):
 
     @property
     def exposure_summary_table(self):
-        """
+        """Exposure summary table.
 
-        :return:
         :rtype: qgis.core.QgsVectorLayer
         """
         # self._check_layer_count(self._exposure_summary_table)
@@ -513,7 +543,7 @@ class ImpactReport(object):
 
     @exposure_summary_table.setter
     def exposure_summary_table(self, value):
-        """
+        """Exposure summary table.
 
         :param value: Exposure Summary Table
         :type value: qgis.core.QgsVectorLayer
@@ -523,9 +553,8 @@ class ImpactReport(object):
 
     @property
     def aggregation_summary(self):
-        """
+        """Aggregation summary.
 
-        :return:
         :rtype: qgis.core.QgsVectorLayer
         """
         self._check_layer_count(self._aggregation_summary)
@@ -533,17 +562,16 @@ class ImpactReport(object):
 
     @aggregation_summary.setter
     def aggregation_summary(self, value):
-        """
+        """Aggregation summary.
 
         :param value: Aggregation Summary
         :type value: qgis.core.QgsVectorLayer
-        :return:
         """
         self._aggregation_summary = value
 
     @property
     def extra_layers(self):
-        """Getter to extra layers
+        """Getter to extra layers.
 
         extra layers will be rendered alongside impact layer
         """
@@ -551,9 +579,10 @@ class ImpactReport(object):
 
     @extra_layers.setter
     def extra_layers(self, extra_layers):
-        """Set extra layers
+        """Set extra layers.
 
         extra layers will be rendered alongside impact layer
+
         :param extra_layers: List of QgsMapLayer
         :type extra_layers: list(QgsMapLayer)
         """
@@ -561,7 +590,7 @@ class ImpactReport(object):
 
     @property
     def minimum_needs(self):
-        """
+        """Minimum needs.
 
         :return: minimum needs used in impact report
         :rtype: safe.gui.tools.minimum_needs.needs_profile.NeedsProfile
@@ -570,7 +599,8 @@ class ImpactReport(object):
 
     @minimum_needs.setter
     def minimum_needs(self, value):
-        """
+        """Minimum needs.
+
         :param value: minimum needs used in impact report
         :type value: safe.gui.tools.minimum_needs.needs_profile.NeedsProfile
         """
@@ -623,6 +653,8 @@ class ImpactReport(object):
 
         :returns: Tuple of error code and message
         :type: tuple
+
+        .. versionadded:: 4.0
         """
         message = m.Message()
         warning_heading = m.Heading(
