@@ -208,3 +208,36 @@ def coefficient_between_units(unit_a, unit_b):
             return 1 / mapping[2]
 
     return None
+
+
+def fatalities_range(number):
+    """A helpr to return fatalities as a range of number.
+
+    :param number: The exact number. Will be converted as a range
+    :type number: int, float
+
+    :return: The range of the number
+    :rtype: str
+    """
+    range_format = '{min_range} - {max_range}'
+    more_than_format = '> {min_range}'
+    ranges = [
+        [0, 100],
+        [100, 1000],
+        [1000, 10000],
+        [10000, 100000],
+        [100000, float('inf')]
+    ]
+    for r in ranges:
+        min_range = r[0]
+        max_range = r[1]
+
+        if max_range == float('inf'):
+            return more_than_format.format(
+                min_range=add_separators(min_range))
+        else:
+            return range_format.format(
+                min_range=add_separators(min_range),
+                max_range=add_separators(max_range))
+    else:
+        return add_separators(number)
