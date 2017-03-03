@@ -1,41 +1,27 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
+"""InaSAFE Wizard Step for Choosing Exposure and Hazard."""
 
-This module provides: Function Centric Wizard Step: IF Constraint Selector 1
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
-__author__ = 'qgis@borysjurgiel.pl'
-__revision__ = '$Format:%H$'
-__date__ = '16/03/2016'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
-
-# noinspection PyPackageRequirements
+from copy import deepcopy
 from PyQt4 import QtCore, QtGui
-# noinspection PyPackageRequirements
 from PyQt4.QtCore import pyqtSignature
 
-from safe.definitions import (
-    hazard_category_single_event
-)
-
-from safe.utilities.resources import resources_path
-
-from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
+from safe.definitions.hazard import hazard_all
+from safe.definitions.exposure import exposure_all
+from safe.definitions.styles import (
+    available_option_color, unavailable_option_color)
+from safe.definitions.font import big_font
 from safe.gui.tools.wizard.wizard_step import WizardStep
-from safe.gui.tools.wizard.wizard_utils import (
-    RoleFunctions,
-    RoleHazard,
-    RoleExposure)
+from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
+from safe.gui.tools.wizard.wizard_utils import RoleHazard, RoleExposure
+from safe.definitions.layer_purposes import (
+    layer_purpose_exposure, layer_purpose_hazard)
+from safe.utilities.resources import resources_path
+from safe.utilities.settings import setting
 
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
@@ -52,14 +38,6 @@ class StepFcFunctions1(WizardStep, FORM_CLASS):
         """
         return bool(self.tblFunctions1.selectedItems())
 
-    def get_previous_step(self):
-        """Find the proper step when user clicks the Previous button.
-
-        :returns: The step to be switched to
-        :rtype: WizardStep instance or None
-        """
-        return None
-
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.
 
@@ -68,17 +46,28 @@ class StepFcFunctions1(WizardStep, FORM_CLASS):
         """
         return self.parent.step_fc_functions2
 
-    def selected_functions_1(self):
-        """Obtain functions available for hazard an exposure selected by user.
+    def selected_value(self, layer_purpose_key):
+        """Obtain selected hazard or exposure.
 
-        :returns: List of the available functions metadata.
-        :rtype: list, None
+        :param layer_purpose_key: A layer purpose key, can be hazard or
+            exposure.
+        :type layer_purpose_key: str
+
+        :returns: A selected hazard or exposure definition.
+        :rtype: dict
         """
-        selection = self.tblFunctions1.selectedItems()
-        if len(selection) != 1:
-            return []
+        if layer_purpose_key == layer_purpose_exposure['key']:
+            role = RoleExposure
+        elif layer_purpose_key == layer_purpose_hazard['key']:
+            role = RoleHazard
+        else:
+            return None
+
+        selected = self.tblFunctions1.selectedItems()
+        if len(selected) != 1:
+            return None
         try:
-            return selection[0].data(RoleFunctions)
+            return selected[0].data(role)
         except (AttributeError, NameError):
             return None
 
@@ -91,14 +80,6 @@ class StepFcFunctions1(WizardStep, FORM_CLASS):
         .. note:: This is an automatic Qt slot
            executed when the category selection changes.
         """
-        functions = self.selected_functions_1()
-        if not functions:
-            self.lblAvailableFunctions1.clear()
-        else:
-            txt = self.tr('Available functions:') + ' ' + ', '.join(
-                [f['name'] for f in functions])
-            self.lblAvailableFunctions1.setText(txt)
-
         # Clear the selection on the 2nd matrix
         self.parent.step_fc_functions2.tblFunctions2.clearContents()
         self.parent.step_fc_functions2.lblAvailableFunctions2.clear()
@@ -109,13 +90,13 @@ class StepFcFunctions1(WizardStep, FORM_CLASS):
         selection = self.tblFunctions1.selectedItems()
         selItem = (len(selection) == 1) and selection[0] or None
         for row in range(self.tblFunctions1.rowCount()):
-            for col in range(self.tblFunctions1.columnCount()):
-                item = self.tblFunctions1.item(row, col)
+            for column in range(self.tblFunctions1.columnCount()):
+                item = self.tblFunctions1.item(row, column)
                 item.setText((item == selItem) and u'\u2022' or '')
 
     # pylint: disable=W0613
     # noinspection PyPep8Naming
-    def on_tblFunctions1_cellDoubleClicked(self, row, column):
+    def on_tblFunctions1_cellDoubleClicked(self):
         """Choose selected hazard x exposure combination and go ahead.
 
         .. note:: This is an automatic Qt slot
@@ -126,68 +107,57 @@ class StepFcFunctions1(WizardStep, FORM_CLASS):
 
     def populate_function_table_1(self):
         """Populate the tblFunctions1 table with available functions."""
-        # The hazard category radio buttons are now removed -
-        # make this parameter of IFM.available_hazards() optional
-        hazard_category = hazard_category_single_event
-        hazards = self.impact_function_manager\
-            .available_hazards(hazard_category['key'])
-        # Remove 'generic' from hazards
-        for h in hazards:
-            if h['key'] == 'generic':
-                hazards.remove(h)
-        exposures = self.impact_function_manager.available_exposures()
+        hazards = deepcopy(hazard_all)
+        exposures = exposure_all
 
         self.lblAvailableFunctions1.clear()
         self.tblFunctions1.clear()
         self.tblFunctions1.setColumnCount(len(hazards))
         self.tblFunctions1.setRowCount(len(exposures))
         for i in range(len(hazards)):
-            h = hazards[i]
+            hazard = hazards[i]
             item = QtGui.QTableWidgetItem()
             item.setIcon(QtGui.QIcon(
                 resources_path('img', 'wizard', 'keyword-subcategory-%s.svg'
-                               % (h['key'] or 'notset'))))
-            item.setText(h['name'].capitalize())
+                               % (hazard['key'] or 'notset'))))
+            item.setText(hazard['name'].capitalize())
             self.tblFunctions1.setHorizontalHeaderItem(i, item)
         for i in range(len(exposures)):
-            e = exposures[i]
+            exposure = exposures[i]
             item = QtGui.QTableWidgetItem()
 
             item.setIcon(QtGui.QIcon(resources_path(
                 'img', 'wizard', 'keyword-subcategory-%s.svg'
-                % (e['key'] or 'notset'))))
-            item.setText(e['name'].capitalize())
+                % (exposure['key'] or 'notset'))))
+            item.setText(exposure['name'].capitalize())
             self.tblFunctions1.setVerticalHeaderItem(i, item)
-
-        big_font = QtGui.QFont()
-        big_font.setPointSize(80)
-
-        for h in hazards:
-            for e in exposures:
+        developer_mode = setting('developer_mode', False, bool)
+        for hazard in hazards:
+            for exposure in exposures:
                 item = QtGui.QTableWidgetItem()
-                functions = \
-                    self.impact_function_manager.functions_for_constraint(
-                        h['key'], e['key'])
-                if len(functions):
-                    background_colour = QtGui.QColor(120, 255, 120)
+                if (exposure in hazard['disabled_exposures'] and not
+                        developer_mode):
+                    background_colour = unavailable_option_color
+                    # Set it disable and un-selectable
+                    item.setFlags(
+                        item.flags() & ~
+                        QtCore.Qt.ItemIsEnabled & ~
+                        QtCore.Qt.ItemIsSelectable
+                    )
                 else:
-                    background_colour = QtGui.QColor(220, 220, 220)
-                    item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEnabled)
-                    item.setFlags(item.flags() & ~QtCore.Qt.ItemIsSelectable)
+                    background_colour = available_option_color
                 item.setBackground(QtGui.QBrush(background_colour))
                 item.setFont(big_font)
                 item.setTextAlignment(
                     QtCore.Qt.AlignCenter | QtCore.Qt.AlignHCenter)
-                item.setData(RoleFunctions, functions)
-                item.setData(RoleHazard, h)
-                item.setData(RoleExposure, e)
+                item.setData(RoleHazard, hazard)
+                item.setData(RoleExposure, exposure)
                 self.tblFunctions1.setItem(
-                    exposures.index(e), hazards.index(h), item)
+                    exposures.index(exposure), hazards.index(hazard), item)
         self.parent.pbnNext.setEnabled(False)
 
     def set_widgets(self):
         """Set widgets on the Impact Functions Table 1 tab."""
-
         self.tblFunctions1.horizontalHeader().setResizeMode(
             QtGui.QHeaderView.Stretch)
         self.tblFunctions1.verticalHeader().setResizeMode(

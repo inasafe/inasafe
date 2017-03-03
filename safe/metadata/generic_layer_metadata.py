@@ -121,6 +121,6 @@ class GenericLayerMetadata(BaseMetadata):
         """
         update the report.
         """
-        # TODO (MB): implement this by reading the kw and definitions.py
+        # TODO (MB): implement this by reading the kw and definitions
         self.report = self.report
         raise NotImplementedError()

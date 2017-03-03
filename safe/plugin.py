@@ -1,21 +1,5 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool by AusAid **QGIS plugin implementation.**
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
-
-__author__ = 'tim@kartoza.com'
-__revision__ = '$Format:%H$'
-__date__ = '10/01/2011'
-__copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
-__copyright__ += 'Disaster Reduction'
+"""InaSAFE Plugin"""
 
 import sys
 import os
@@ -29,6 +13,7 @@ from qgis.core import (
     QgsRectangle,
     QgsRasterLayer,
     QgsMapLayerRegistry,
+    QgsMapLayer,
     QgsProject)
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import (
@@ -51,8 +36,12 @@ from safe.common.version import release_status
 from safe.common.exceptions import TranslationLoadError
 from safe.utilities.resources import resources_path
 from safe.utilities.gis import is_raster_layer
-from safe.impact_functions.loader import register_impact_functions
 LOGGER = logging.getLogger('InaSAFE')
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 
 class Plugin(object):
@@ -75,8 +64,6 @@ class Plugin(object):
             plugin.
         :type iface: QGisAppInterface
         """
-        # Register all the impact functions
-        register_impact_functions()
         # Save reference to the QGIS interface
         self.iface = iface
         self.dock_widget = None
@@ -86,6 +73,7 @@ class Plugin(object):
         self.action_shake_converter = None
         self.action_minimum_needs = None
         self.action_minimum_needs_config = None
+        self.action_multi_buffer = None
         self.key_action = None
         self.action_options = None
         self.action_keywords_wizard = None
@@ -154,7 +142,7 @@ class Plugin(object):
         # noinspection PyTypeChecker,PyArgumentList,PyCallByClass
         return QCoreApplication.translate('Plugin', message)
 
-    def add_action(self, action, add_to_toolbar=True):
+    def add_action(self, action, add_to_toolbar=True, add_to_legend=False):
         """Add a toolbar icon to the InaSAFE toolbar.
 
         :param action: The action that should be added to the toolbar.
@@ -170,6 +158,20 @@ class Plugin(object):
         self.iface.addPluginToMenu(self.tr('InaSAFE'), action)
         if add_to_toolbar:
             self.toolbar.addAction(action)
+        if add_to_legend:
+            # The id is the action name without spaces, tabs ...
+            self.iface.legendInterface().addLegendLayerAction(
+                action,
+                self.tr('InaSAFE'),
+                ''.join(action.text().split()),
+                QgsMapLayer.VectorLayer,
+                True)
+            self.iface.legendInterface().addLegendLayerAction(
+                action,
+                self.tr('InaSAFE'),
+                ''.join(action.text().split()),
+                QgsMapLayer.RasterLayer,
+                True)
 
     def _create_dock_toggle_action(self):
         """Create action for plugin dockable window (show/hide)."""
@@ -206,7 +208,7 @@ class Plugin(object):
         self.action_keywords_wizard.setEnabled(False)
         self.action_keywords_wizard.triggered.connect(
             self.show_keywords_wizard)
-        self.add_action(self.action_keywords_wizard)
+        self.add_action(self.action_keywords_wizard, add_to_legend=True)
 
     def _create_analysis_wizard_action(self):
         """Create action for IF-centric wizard."""
@@ -250,6 +252,21 @@ class Plugin(object):
         self.action_minimum_needs.triggered.connect(self.show_minimum_needs)
         self.add_action(
             self.action_minimum_needs, add_to_toolbar=self.full_toolbar)
+
+    def _create_multi_buffer_action(self):
+        """Create action for multi buffer dialog."""
+        icon = resources_path('img', 'icons', 'show-multi-buffer.svg')
+        self.action_multi_buffer = QAction(
+            QIcon(icon),
+            self.tr('Multi Buffer'), self.iface.mainWindow())
+        self.action_multi_buffer.setStatusTip(self.tr(
+            'Open InaSAFE multi buffer'))
+        self.action_multi_buffer.setWhatsThis(self.tr(
+            'Open InaSAFE multi buffer'))
+        self.action_multi_buffer.triggered.connect(
+            self.show_multi_buffer)
+        self.add_action(self.action_multi_buffer,
+            add_to_toolbar=self.full_toolbar)
 
     def _create_minimum_needs_options_action(self):
         """Create action for global minimum needs dialog."""
@@ -339,48 +356,40 @@ class Plugin(object):
         self.action_add_osm_layer.triggered.connect(self.add_osm_layer)
         self.add_action(self.action_add_osm_layer)
 
-    def _create_add_petajakarta_layer_action(self):
-        """Create action for import OSM Dialog."""
-        icon = resources_path('img', 'icons', 'add-petajakarta-layer.svg')
-        self.action_add_petajakarta_layer = QAction(
+    def _create_show_definitions_action(self):
+        """Create action for showing definitions."""
+        icon = resources_path('img', 'icons', 'defintions.svg')
+        self.action_show_definitions = QAction(
             QIcon(icon),
-            self.tr('Add PetaJakarta Flood Layer'),
+            self.tr('InaSAFE Help'),
             self.iface.mainWindow())
-        self.action_add_petajakarta_layer.setStatusTip(self.tr(
-            'Add PetaJakarta Flood Layer'))
-        self.action_add_petajakarta_layer.setWhatsThis(self.tr(
-            'Use this to add a PetaJakarta layer to your map. '
-            'It needs internet access to function.'))
-        self.action_add_petajakarta_layer.triggered.connect(
-            self.add_petajakarta_layer)
+        self.action_show_definitions.setStatusTip(self.tr(
+            'Show InaSAFE Help'))
+        self.action_show_definitions.setWhatsThis(self.tr(
+            'Use this to show a document describing all InaSAFE concepts.'))
+        self.action_show_definitions.triggered.connect(
+            self.show_definitions)
         self.add_action(
-            self.action_add_petajakarta_layer,
-            add_to_toolbar=False)
+            self.action_show_definitions,
+            add_to_toolbar=True)
 
-    def _create_raster_reclassify_layer_action(self):
-        """Create action for Raster Reclassification to vector."""
-        # Disabled for 3.5
-        final_release = release_status() == 'final'
-        settings = QSettings()
-        self.developer_mode = settings.value(
-            'inasafe/developer_mode', False, type=bool)
-        if not final_release and self.developer_mode:
-            icon = resources_path(
-                'img', 'icons', 'raster-reclassify-layer.svg')
-            self.action_raster_reclassify_layer = QAction(
-                QIcon(icon),
-                self.tr('Reclassify Raster to Vector Layer'),
-                self.iface.mainWindow())
-            self.action_raster_reclassify_layer.setStatusTip(self.tr(
-                'Reclassify Raster to Vector Layer'))
-            self.action_raster_reclassify_layer.setWhatsThis(self.tr(
-                'Use this to reclassify Raster Layer into Vector Layer '
-                'with defined thresholds as classifier.'))
-            self.action_raster_reclassify_layer.triggered.connect(
-                self.raster_reclassify)
-            self.add_action(
-                self.action_raster_reclassify_layer,
-                add_to_toolbar=False)
+    def _create_add_petabencana_layer_action(self):
+        """Create action for import OSM Dialog."""
+        icon = resources_path('img', 'icons', 'add-petabencana-layer.svg')
+        self.action_add_petabencana_layer = QAction(
+            QIcon(icon),
+            self.tr('Add PetaBencana Flood Layer'),
+            self.iface.mainWindow())
+        self.action_add_petabencana_layer.setStatusTip(self.tr(
+            'Add PetaBencana Flood Layer'))
+        self.action_add_petabencana_layer.setWhatsThis(self.tr(
+            'Use this to add a PetaBencana layer to your map. '
+            'It needs internet access to function.'))
+        self.action_add_petabencana_layer.triggered.connect(
+            self.add_petabencana_layer)
+        self.add_action(
+            self.action_add_petabencana_layer,
+            add_to_toolbar=False)
 
     def _create_rubber_bands_action(self):
         """Create action for toggling rubber bands."""
@@ -526,15 +535,17 @@ class Plugin(object):
         self._add_spacer_to_menu()
         self._create_osm_downloader_action()
         self._create_add_osm_layer_action()
-        self._create_add_petajakarta_layer_action()
-        self._create_raster_reclassify_layer_action()
+        self._create_add_petabencana_layer_action()
         self._create_shakemap_converter_action()
         self._create_minimum_needs_action()
+        self._create_multi_buffer_action()
         self._create_test_layers_action()
         self._create_run_test_action()
         self._add_spacer_to_menu()
         self._create_batch_runner_action()
         self._create_save_scenario_action()
+        self._add_spacer_to_menu()
+        self._create_show_definitions_action()
 
         # Hook up a slot for when the dock is hidden using its close button
         # or  view-panels
@@ -550,7 +561,8 @@ class Plugin(object):
         separator.setSeparator(True)
         self.iface.addPluginToMenu(self.tr('InaSAFE'), separator)
 
-    def clear_modules(self):
+    @staticmethod
+    def clear_modules():
         """Unload inasafe functions and try to return QGIS to before InaSAFE.
 
         .. todo:: I think this function can be removed. TS.
@@ -600,6 +612,7 @@ class Plugin(object):
         for myAction in self.actions:
             self.iface.removePluginMenu(self.tr('InaSAFE'), myAction)
             self.iface.removeToolBarIcon(myAction)
+            self.iface.legendInterface().removeLegendLayerAction(myAction)
         self.iface.mainWindow().removeDockWidget(self.dock_widget)
         self.iface.mainWindow().removeToolBar(self.toolbar)
         self.dock_widget.setVisible(False)
@@ -681,19 +694,18 @@ class Plugin(object):
         """Show the extent selector widget for defining analysis extents."""
         # import here only so that it is AFTER i18n set up
         from safe.gui.tools.extent_selector_dialog import ExtentSelectorDialog
-
         widget = ExtentSelectorDialog(
             self.iface,
             self.iface.mainWindow(),
             extent=self.dock_widget.extent.user_extent,
-            crs=self.dock_widget.extent.user_extent_crs)
+            crs=self.dock_widget.extent.crs)
         widget.clear_extent.connect(
             self.dock_widget.extent.clear_user_analysis_extent)
         widget.extent_defined.connect(
             self.dock_widget.define_user_analysis_extent)
         # This ensures that run button state is updated on dialog close
         widget.extent_selector_closed.connect(
-            self.dock_widget.show_next_analysis_extent)
+            self.dock_widget.validate_impact_function)
         # Needs to be non modal to support hide -> interact with map -> show
         widget.show()  # non modal
 
@@ -778,6 +790,14 @@ class Plugin(object):
         dialog = ShakemapConverterDialog(self.iface.mainWindow())
         dialog.exec_()  # modal
 
+    def show_multi_buffer(self):
+        from safe.gui.tools.multi_buffer_dialog import (
+            MultiBufferDialog)
+
+        dialog = MultiBufferDialog(
+            self.iface.mainWindow(), self.iface, self.dock_widget)
+        dialog.exec_()  # modal
+
     def show_osm_downloader(self):
         """Show the OSM buildings downloader dialog."""
         from safe.gui.tools.osm_downloader_dialog import OsmDownloaderDialog
@@ -810,24 +830,24 @@ class Plugin(object):
         root.insertLayer(index, layer)
         QgsMapLayerRegistry.instance().addMapLayer(layer)
 
-    def add_petajakarta_layer(self):
-        """Add petajakarta layer to the map.
-
-        This uses the PetaJakarta API to fetch the latest floods in JK. See
-        https://petajakarta.org/banjir/en/data/api/#aggregates
+    def show_definitions(self):
+        """Show InaSAFE Definitions (a report showing all key metadata).
         """
-        from safe.gui.tools.peta_jakarta_dialog import PetaJakartaDialog
-        dialog = PetaJakartaDialog(self.iface.mainWindow(), self.iface)
+        from safe.gui.tools.help_dialog import HelpDialog
+        from safe.gui.tools.help import definitions_help
+        dialog = HelpDialog(
+            self.iface.mainWindow(),
+            definitions_help.definitions_help())
         dialog.show()  # non modal
 
-    def raster_reclassify(self):
-        """Show dialog for Raster Reclassification.
+    def add_petabencana_layer(self):
+        """Add petabencana layer to the map.
 
-        This will convert Raster Layer to Vector Layer
+        This uses the PetaBencana API to fetch the latest floods in JK. See
+        https://data.petabencana.id/floods
         """
-        from safe.gui.tools.raster_reclassify_dialog import \
-            RasterReclassifyDialog
-        dialog = RasterReclassifyDialog(self.iface.mainWindow(), self.iface)
+        from safe.gui.tools.peta_bencana_dialog import PetaBencanaDialog
+        dialog = PetaBencanaDialog(self.iface.mainWindow(), self.iface)
         dialog.show()  # non modal
 
     def show_batch_runner(self):

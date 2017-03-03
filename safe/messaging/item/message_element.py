@@ -73,6 +73,7 @@ class MessageElement(object):
     def _is_stringable(message):
         return (isinstance(message, basestring) or
                 isinstance(message, int) or
+                isinstance(message, long) or
                 isinstance(message, float))
 
     def to_html(self):

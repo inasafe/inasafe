@@ -23,14 +23,13 @@ from safe.utilities.styling import (
     setRasterStyle,
     add_extrema_to_style,
     mmi_colour)
-from safe.utilities.utilities import get_error_message
 from safe.test.utilities import (
     standard_data_path,
+    load_test_vector_layer,
     load_layer,
     get_qgis_app,
     clone_shp_layer)
-from safe.common.exceptions import StyleError, BoundingBoxError
-from safe.storage.utilities import bbox_intersection
+from safe.common.exceptions import StyleError
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -160,10 +159,8 @@ class StylingTest(unittest.TestCase):
         """Test that point symbol size can be set from style (issue 121).
         .. seealso:: https://github.com/AIFDR/inasafe/issues/121
         """
-        layer = clone_shp_layer(
-            name='volcano_point',
-            include_keywords=True,
-            source_directory=standard_data_path('hazard'))
+        layer = load_test_vector_layer(
+            'hazard', 'volcano_point.geojson', clone=True)
 
         # Note the float quantity values below
         style_info = {
@@ -195,19 +192,6 @@ class StylingTest(unittest.TestCase):
                 ' a size of %s, got %s') % (size, size, actual_size))
             assert size == actual_size, message
             size += 1
-
-    def test_issue157(self):
-        """Verify that we get the error class name back - issue #157
-           .. seealso:: https://github.com/AIFDR/inasafe/issues/121
-        """
-        try:
-            bbox_intersection('aoeu', 'oaeu', [])
-        except BoundingBoxError, e:
-            message = get_error_message(e)
-            myString = 'BoundingBoxError'
-            assert myString in message.to_text(), message
-            myString = 'Western boundary'
-            assert myString in message.to_text(), message
 
     def test_issue230(self):
         """Verify that we give informative errors when style is not correct

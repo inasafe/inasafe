@@ -1,43 +1,31 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
-
-This module provides: Keyword Wizard Step: Classification Selector
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
-__author__ = 'qgis@borysjurgiel.pl'
-__revision__ = '$Format:%H$'
-__date__ = '16/03/2016'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
+"""InaSAFE Keyword Wizard Step for Choosing Classifications."""
 
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore
-# noinspection PyPackageRequirements
 from PyQt4.QtGui import QListWidgetItem
 
-from safe.definitions import layer_purpose_hazard
-
-from safe.utilities.gis import is_raster_layer
-from safe.utilities.keyword_io import definition
-
-from safe.gui.tools.wizard.wizard_strings import classification_question
-from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
+from safe.utilities.i18n import tr
+from safe.common.exceptions import InvalidWizardStep
+from safe.definitions.layer_purposes import (
+    layer_purpose_hazard, layer_purpose_exposure)
+from safe.definitions.layer_modes import (
+    layer_mode_classified, layer_mode_continuous)
 from safe.gui.tools.wizard.wizard_step import WizardStep
+from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
+from safe.gui.tools.wizard.wizard_strings import classification_question
+from safe.definitions.utilities import definition, get_classifications
 
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
 class StepKwClassification(WizardStep, FORM_CLASS):
-    """Keyword Wizard Step: Classification Selector"""
+    """Keyword Wizard Step: Classification Selector."""
 
     def is_ready_to_next_step(self):
         """Check if the step is complete. If so, there is
@@ -48,25 +36,20 @@ class StepKwClassification(WizardStep, FORM_CLASS):
         """
         return bool(self.selected_classification())
 
-    def get_previous_step(self):
-        """Find the proper step when user clicks the Previous button.
-
-        :returns: The step to be switched to
-        :rtype: WizardStep instance or None
-        """
-        new_step = self.parent.step_kw_layermode
-        return new_step
-
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.
 
         :returns: The step to be switched to
         :rtype: WizardStep instance or None
         """
-        if is_raster_layer(self.parent.layer):
+        layer_mode = self.parent.step_kw_layermode.selected_layermode()
+        if layer_mode == layer_mode_classified:
             new_step = self.parent.step_kw_classify
+        elif layer_mode == layer_mode_continuous:
+            new_step = self.parent.step_kw_threshold
         else:
-            new_step = self.parent.step_kw_field
+            message = tr('Layer mode should be continuous or classified')
+            raise InvalidWizardStep(message)
         return new_step
 
     def classifications_for_layer(self):
@@ -75,32 +58,29 @@ class StepKwClassification(WizardStep, FORM_CLASS):
         :returns: A list where each value represents a valid classification.
         :rtype: list
         """
-        layer_geometry_id = self.parent.get_layer_geometry_id()
-        layer_mode_id = self.parent.step_kw_layermode.\
-            selected_layermode()['key']
-        subcategory_id = self.parent.step_kw_subcategory.\
+        subcategory_key = self.parent.step_kw_subcategory.\
             selected_subcategory()['key']
-        if self.parent.step_kw_purpose.\
-                selected_purpose() == layer_purpose_hazard:
-            hazard_category_id = self.parent.step_kw_hazard_category.\
-                selected_hazard_category()['key']
-            if is_raster_layer(self.parent.layer):
-                return self.impact_function_manager.\
-                    raster_hazards_classifications_for_layer(
-                        subcategory_id,
-                        layer_geometry_id,
-                        layer_mode_id,
-                        hazard_category_id)
-            else:
-                return self.impact_function_manager\
-                    .vector_hazards_classifications_for_layer(
-                        subcategory_id,
-                        layer_geometry_id,
-                        layer_mode_id,
-                        hazard_category_id)
+        layer_purpose = self.parent.step_kw_purpose.selected_purpose()
+        if layer_purpose in [layer_purpose_hazard, layer_purpose_exposure]:
+            classifications = []
+            selected_unit = self.parent.step_kw_unit.selected_unit()
+            for classification in get_classifications(subcategory_key):
+                if selected_unit is None:
+                    # we are using classified data, so let's allow all
+                    # classifications
+                    classifications.append(classification)
+                elif 'multiple_units' not in classification:
+                    # this classification is not multiple unit aware, so let's
+                    # allow it
+                    classifications.append(classification)
+                elif selected_unit in classification['multiple_units']:
+                    # we are using continuous data, and this classification
+                    # supports the chosen unit so we allow it
+                    classifications.append(classification)
+            return classifications
         else:
-            # There are no classifications for exposures defined yet, apart
-            # from postprocessor_classification, processed paralelly
+            # There are no classifications for non exposure and hazard
+            # defined yet
             return []
 
     def on_lstClassifications_itemSelectionChanged(self):
@@ -135,7 +115,6 @@ class StepKwClassification(WizardStep, FORM_CLASS):
         """ Clear all further steps
             in order to properly calculate the prev step
         """
-        self.parent.step_kw_field.lstFields.clear()
         self.parent.step_kw_classify.treeClasses.clear()
 
     def set_widgets(self):
@@ -159,10 +138,8 @@ class StepKwClassification(WizardStep, FORM_CLASS):
             self.lstClassifications.addItem(item)
 
         # Set values based on existing keywords (if already assigned)
-        geom = 'raster' if is_raster_layer(self.parent.layer) else 'vector'
-        key = '%s_%s_classification' % (
-            geom, self.parent.step_kw_purpose.selected_purpose()['key'])
-        classification_keyword = self.parent.get_existing_keyword(key)
+        classification_keyword = self.parent.get_existing_keyword(
+            'classification')
         if classification_keyword:
             classifications = []
             for index in xrange(self.lstClassifications.count()):

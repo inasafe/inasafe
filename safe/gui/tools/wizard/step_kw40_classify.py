@@ -1,57 +1,34 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
+"""Keyword Wizard Step: Classify (Value Mapping)."""
 
-This module provides: Keyword Wizard Step: Classify (Value Mapping)
+import json
 
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
-
+import numpy
+from PyQt4 import QtCore, QtGui
+from PyQt4.QtCore import QPyNullVariant
 from osgeo import gdal
 from osgeo.gdalconst import GA_ReadOnly
 
-import json
-import numpy
-
-# noinspection PyPackageRequirements
-from PyQt4 import QtCore, QtGui
-# noinspection PyPackageRequirements
-from PyQt4.QtCore import QPyNullVariant
-
-from safe.definitions import (
-    exposure_road,
-    exposure_place,
-    exposure_structure)
-
+from safe.definitions.layer_purposes import layer_purpose_aggregation
+from safe.definitions.layer_geometry import layer_geometry_raster
+from safe.definitions.utilities import get_fields, get_compulsory_fields
+from safe.gui.tools.wizard.wizard_step import WizardStep
+from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
+from safe.gui.tools.wizard.wizard_strings import (
+    classify_raster_question, classify_vector_question)
+from safe.gui.tools.wizard.wizard_utils import skip_inasafe_field
 from safe.utilities.gis import is_raster_layer
 
-from safe.gui.tools.wizard.wizard_strings import (
-    classify_raster_question,
-    classify_vector_question,
-    classify_vector_for_postprocessor_question)
-from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
-from safe.gui.tools.wizard.wizard_step import WizardStep
-
-from safe.definitions import (
-    road_class_mapping, structure_class_mapping, place_class_mapping)
-
-__author__ = 'qgis@borysjurgiel.pl'
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
-__date__ = '16/03/2016'
-__copyright__ = (
-    'Copyright 2012, Australia Indonesia Facility for Disaster Reduction')
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
 class StepKwClassify(WizardStep, FORM_CLASS):
-    """Keyword Wizard Step: Classify (Value Mapping)"""
+    """Keyword Wizard Step: Classify (Value Mapping)."""
 
     def __init__(self, parent=None):
         """Constructor for the tab.
@@ -72,67 +49,47 @@ class StepKwClassify(WizardStep, FORM_CLASS):
         """
         return True
 
-    def get_previous_step(self):
-        """Find the proper step when user clicks the Previous button.
-
-        :returns: The step to be switched to
-        :rtype: WizardStep instance or None
-        """
-        if is_raster_layer(self.parent.layer):
-            new_step = self.parent.step_kw_classification
-        else:
-            new_step = self.parent.step_kw_field
-        return new_step
-
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.
 
         :returns: The step to be switched to
-        :rtype: WizardStep instance or None
+        :rtype: WizardStep
         """
-        selected_subcategory = self.parent.step_kw_subcategory.\
-            selected_subcategory()
-        if selected_subcategory == exposure_place:
-            new_step = self.parent.step_kw_name_field
+        if self.parent.get_layer_geometry_key() == \
+                layer_geometry_raster['key']:
+            return self.parent.step_kw_source
+
+        layer_purpose = self.parent.step_kw_purpose.selected_purpose()
+        if layer_purpose['key'] != layer_purpose_aggregation['key']:
+            subcategory = self.parent.step_kw_subcategory. \
+                selected_subcategory()
         else:
-            new_step = self.parent.step_kw_extrakeywords
-        return new_step
+            subcategory = {'key': None}
 
-    def postprocessor_classification_for_layer(self):
-        """Returns a postprocessor classification if available for the
-           current layer.
+        # Get all fields with replace_null = False
+        inasafe_fields = get_fields(
+            layer_purpose['key'], subcategory['key'], replace_null=False)
+        # remove compulsory field since it has been set in previous step
+        try:
+            inasafe_fields.remove(get_compulsory_fields(
+                layer_purpose['key'], subcategory['key']))
+        except ValueError:
+            pass
 
-           It is parallel to classifications_for_layer(), with some
-           differences:
+        # Check if possible to skip inasafe field step
+        if skip_inasafe_field(self.parent.layer, inasafe_fields):
+            default_inasafe_fields = get_fields(
+                layer_purpose['key'], subcategory['key'], replace_null=True)
+            # Check if it can go to inasafe default step
+            if default_inasafe_fields:
+                return self.parent.step_kw_default_inasafe_fields
+            # Else, go to source step
+            else:
+                return self.parent.step_kw_source
 
-           The classifications_for_layer returns a list of classifications
-           obtained from ImpactFuctionManager and is currently available
-           for hazards only.
-
-           The postprocessor_classification_for_layer returns just one
-           classification, based on information obtained from
-           Type Postprocessors. Currently, only structure and road exposure
-           are supported.
-
-           Because there is at most one classification available, the returned
-           value is just a list of classes. Also, the postprocessor
-           classification doesn't cause displaying the classification
-           selection step (unlike the hazard classifications)
-
-        :returns: A list where each value represents a classification category.
-        :rtype: list
-
-        """
-        selected_subcategory = self.parent.step_kw_subcategory.\
-            selected_subcategory()
-        if selected_subcategory == exposure_road:
-            return road_class_mapping
-        elif selected_subcategory == exposure_structure:
-            return structure_class_mapping
-        elif selected_subcategory == exposure_place:
-            return place_class_mapping
+        # If not possible to skip inasafe field step, then go there
         else:
-            return None
+            return self.parent.step_kw_inasafe_fields
 
     # noinspection PyMethodMayBeStatic
     def update_dragged_item_flags(self, item, column):
@@ -175,24 +132,18 @@ class StepKwClassify(WizardStep, FORM_CLASS):
         """Set widgets on the Classify tab."""
         purpose = self.parent.step_kw_purpose.selected_purpose()
         subcategory = self.parent.step_kw_subcategory.selected_subcategory()
-        # There may be two cases this tab is displayed: either
-        # a classification or postprocessor_classification is available
 
-        sel_cl = self.parent.step_kw_classification.selected_classification()
-        if sel_cl:
-            default_classes = sel_cl['classes']
-            mapping_keyword = 'value_map'
-            classification_name = sel_cl['name']
-        else:
-            default_classes = self.postprocessor_classification_for_layer()
-            mapping_keyword = 'value_mapping'
-            classification_name = ''
+        classification = self.parent.step_kw_classification.\
+            selected_classification()
+        default_classes = classification['classes']
+        classification_name = classification['name']
+
         if is_raster_layer(self.parent.layer):
             self.lblClassify.setText(classify_raster_question % (
                 subcategory['name'], purpose['name'], classification_name))
-            ds = gdal.Open(self.parent.layer.source(), GA_ReadOnly)
+            dataset = gdal.Open(self.parent.layer.source(), GA_ReadOnly)
             unique_values = numpy.unique(numpy.array(
-                ds.GetRasterBand(1).ReadAsArray()))
+                dataset.GetRasterBand(1).ReadAsArray()))
             field_type = 0
             # Convert datatype to a json serializable type
             if numpy.issubdtype(unique_values.dtype, float):
@@ -205,14 +156,9 @@ class StepKwClassify(WizardStep, FORM_CLASS):
                 indexFromName(field)
             field_type = self.parent.layer.dataProvider().\
                 fields()[field_index].type()
-            if classification_name:
-                self.lblClassify.setText(classify_vector_question % (
+            self.lblClassify.setText(classify_vector_question % (
                     subcategory['name'], purpose['name'],
                     classification_name, field.upper()))
-            else:
-                self.lblClassify.setText(
-                    classify_vector_for_postprocessor_question % (
-                        subcategory['name'], purpose['name'], field.upper()))
             unique_values = self.parent.layer.uniqueValues(field_index)
 
         # Assign unique values to classes (according to default)
@@ -229,10 +175,14 @@ class StepKwClassify(WizardStep, FORM_CLASS):
             value_as_string = unicode(unique_value).upper().replace('_', ' ')
             assigned = False
             for default_class in default_classes:
-                condition_1 = (
-                    field_type > 9 and
-                    value_as_string in [
-                        c.upper() for c in default_class['string_defaults']])
+                if 'string_defaults' in default_class:
+                    condition_1 = (
+                        field_type > 9 and
+                        value_as_string in [
+                            c.upper() for c in
+                            default_class['string_defaults']])
+                else:
+                    condition_1 = False
                 condition_2 = (
                     field_type < 10 and
                     'numeric_default_min' in default_class and
@@ -251,14 +201,15 @@ class StepKwClassify(WizardStep, FORM_CLASS):
         # Overwrite assigned values according to existing keyword (if present).
         # Note the default_classes and unique_values are already loaded!
 
-        value_map = self.parent.get_existing_keyword(mapping_keyword)
+        value_map = self.parent.get_existing_keyword('value_map')
         # Do not continue if there is no value_map in existing keywords
         if value_map is None:
             return
 
         # Do not continue if user selected different field
         field_keyword = self.parent.field_keyword_for_the_layer()
-        field = self.parent.get_existing_keyword(field_keyword)
+        field = self.parent.get_existing_keyword('inasafe_fields').get(
+            field_keyword)
         if (not is_raster_layer(self.parent.layer) and
                 field != self.parent.step_kw_field.selected_field()):
             return

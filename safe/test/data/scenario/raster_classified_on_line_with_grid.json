@@ -1,0 +1,68 @@
+{
+  "scenario": {
+    "enable": true,
+    "hazard": "classified_flood_20_20.asc",
+    "exposure": "roads.shp",
+    "aggregation": "grid_jakarta.geojson"
+  },
+
+  "expected_outputs":{
+    "count": 5
+  },
+  "expected_steps":{
+    "impact function":{
+      "info": {},
+      "process":[
+        "Make aggregate hazard layer valid",
+        "Intersect divisible features with the aggregate hazard",
+        "Aggregate the impact summary",
+        "Aggregate the aggregation summary",
+        "Aggregate the analysis summary",
+        "Build the exposure summary table"
+      ]
+    },
+    "post_processor":{
+      "info": {},
+      "process":[
+        "Size Value Post Processor",
+        "Affected Post Processor"
+      ]
+    },
+    "aggregation":{
+      "info": {
+        "provided":true
+      },
+      "process":[
+        "Cleaning the aggregation layer",
+        "Reproject aggregation layer to exposure CRS",
+        "Convert the aggregation layer to the analysis layer",
+        "Union hazard polygons with aggregation areas and assign hazard class"
+      ]
+    },
+    "hazard":{
+      "info": {
+        "use_same_projection":true
+      },
+      "process":[
+        "Clip raster by analysis bounding box",
+        "Polygonize classified raster hazard",
+        "Clip and mask hazard polygons with the analysis layer",
+        "Cleaning the vector hazard attribute table",
+        "Assign classes based on value map",
+        "Make hazard layer valid"
+      ]
+    },
+    "exposure":{
+      "info": {},
+      "process":[
+        "Smart clip",
+        "Cleaning the vector exposure attribute table",
+        "Compute ratios from counts",
+        "Clip the exposure layer with the analysis layer",
+        "Add default values",
+        "Assign classes based on value map",
+        "Make exposure layer valid"
+      ]
+    }
+  }
+}

@@ -11,27 +11,24 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.utilities.i18n import tr
 
-__author__ = 'ismail@kartoza.com'
-__date__ = '12/10/2011'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
 import unittest
 import os
 import re
+from safe.utilities.i18n import tr
 
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import QCoreApplication, QTranslator
 
-from safe.test.utilities import get_qgis_app
-# In our tests, we need to have this line below before importing any other
-# safe_qgis.__init__ to load all the configurations that we make for testing
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
-from safe.impact_functions.impact_function_manager import ImpactFunctionManager
+from safe.test.utilities import get_qgis_app
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class SafeTranslationsTest(unittest.TestCase):
@@ -46,32 +43,6 @@ class SafeTranslationsTest(unittest.TestCase):
         """Runs after each test."""
         if 'LANG' in os.environ.iterkeys():
             os.environ.__delitem__('LANG')
-
-    # Skipped because it's not easy to unload qt translation
-    def Xtest_dynamic_translation_function_title(self):
-        """Test for dynamic translations for function title."""
-        impact_functions = ImpactFunctionManager().impact_functions
-        plugin_name = 'Volcano Building Impact'
-        message = '%s not found in %s' % (plugin_name, str(impact_functions))
-        self.assertIn(plugin_name, impact_functions, message)
-        function = impact_functions[plugin_name]
-
-        # English
-        function_title = ImpactFunctionManager().get_function_title(function)
-        expected_title = 'Be affected'
-        message = 'Expected %s but I got %s' % (expected_title, function_title)
-        self.assertEqual(expected_title, function_title, message)
-
-        # Indonesia
-        os.environ['LANG'] = 'id'
-        function_title = ImpactFunctionManager().get_function_title(function)
-        expected_title = 'Terkena dampak'
-        message = ('expected %s but got %s, in lang = %s' % (
-            expected_title, function_title, os.environ['LANG']))
-        self.assertEqual(expected_title, function_title, message)
-
-        # Set back to en
-        os.environ['LANG'] = 'en'
 
     # Skipped because it's not easy to unload qt translation
     def Xtest_dynamic_translation(self):

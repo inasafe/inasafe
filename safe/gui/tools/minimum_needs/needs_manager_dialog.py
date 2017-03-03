@@ -16,16 +16,10 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import os
+from PyQt4 import QtGui
 from os.path import expanduser, basename
 
-# This import must come first to force sip2 api
-# noinspection PyUnresolvedReferences
-# pylint: disable=unused-import
-from qgis.core import QGis  # force sip2 api
-
-# noinspection PyPackageRequirements
-from PyQt4 import QtGui
-# noinspection PyPackageRequirements
+from PyQt4.QtCore import pyqtSignature, pyqtSlot
 from PyQt4.QtGui import (
     QDialog,
     QFileDialog,
@@ -35,27 +29,29 @@ from PyQt4.QtGui import (
     QMessageBox,
     QIcon
 )
-from PyQt4.QtCore import pyqtSignature, pyqtSlot
+# This import must come first to force sip2 api
+# noinspection PyUnresolvedReferences
+# pylint: disable=unused-import
+from qgis.core import QGis  # force sip2 api
 
-from safe.common.resource_parameter import ResourceParameter
+from safe.common.parameters.resource_parameter import ResourceParameter
+from safe.gui.tools.help.needs_manager_help import needs_manager_helps
+from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
+from safe.messaging import styles
+from safe.utilities.i18n import tr
+from safe.utilities.resources import (
+    resources_path, get_ui_class, html_footer, html_header)
 from safe_extras.parameters.float_parameter import FloatParameter
-from safe_extras.parameters.qt_widgets.parameter_container import (
-    ParameterContainer)
 from safe_extras.parameters.parameter_exceptions import (
     ValueOutOfBounds,
     InvalidMaximumError,
     InvalidMinimumError)
+from safe_extras.parameters.qt_widgets.parameter_container import (
+    ParameterContainer)
 from safe_extras.parameters.string_parameter import StringParameter
 from safe_extras.parameters.text_parameter import TextParameter
-from safe.utilities.resources import (
-    resources_path, get_ui_class, html_footer, html_header)
-from safe.messaging import styles
-from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
-from safe.utilities.i18n import tr
-from safe.gui.tools.help.needs_manager_help import needs_manager_helps
 
-
-INFO_STYLE = styles.INFO_STYLE
+INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
 FORM_CLASS = get_ui_class('needs_manager_dialog_base.ui')
 
 
@@ -705,10 +701,6 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         self.minimum_needs.save()
         self.minimum_needs.save_profile(minimum_needs['profile'])
         self.mark_current_profile_as_saved()
-
-        # Emit combobox function in dock
-        current_index = self.dock.cboFunction.currentIndex()
-        self.dock.cboFunction.currentIndexChanged.emit(current_index)
 
     def save_profile_as(self):
         """Save the minimum needs under a new profile name.

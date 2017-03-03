@@ -9,6 +9,11 @@ import codecs
 import qgis  # pylint: disable=unused-import
 from PyQt4 import QtCore, uic
 
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
+
 
 def html_footer():
     """Get a standard html footer for wrapping content in.
@@ -38,6 +43,26 @@ def html_header():
     return content
 
 
+def html_help_header():
+    """Get a standard help html header for wrapping content in.
+
+    This one differs from the normal html header in that it will
+    include style rules to number headings.
+
+    ..versionadded:: 4.0
+
+    :returns: A header containing a web page preamble in html - up to and
+        including the body open tag.
+    :rtype: str
+    """
+    file_path = os.path.join(resources_path(), 'header-help.html')
+
+    with codecs.open(file_path, 'r', encoding='utf8') as header_file:
+        content = header_file.read()
+        content = content.replace('PATH', resources_path())
+    return content
+
+
 def resources_path(*args):
     """Get the path to our resources folder.
 
@@ -47,7 +72,7 @@ def resources_path(*args):
     favour of directly accessing on-disk resources.
 
     :param args List of path elements e.g. ['img', 'logos', 'image.png']
-    :type args: list
+    :type args: list[str]
 
     :return: Absolute path to the resources folder.
     :rtype: str

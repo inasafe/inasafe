@@ -14,23 +14,32 @@ __copyright__ = 'Copyright 2013, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import logging
-from qgis.core import QgsMapLayerRegistry, QgsVectorLayer
-from PyQt4 import QtGui, QtCore
+import os
 
-from PyQt4.QtCore import pyqtSignature, pyqtSlot
+from qgis.core import QgsMapLayerRegistry
+from qgis.gui import QgsMapLayerProxyModel, QgsFieldProxyModel
 
+from PyQt4 import QtGui
+from PyQt4.QtCore import pyqtSignature, pyqtSlot, QSettings
+
+from safe.common.utilities import temp_dir
 from safe.common.version import get_version
-from safe.storage.core import read_layer as safe_read_layer
-from safe.storage.vector import Vector
-from safe.utilities.gis import is_point_layer, is_polygon_layer
-from safe.utilities.resources import html_footer, html_header, get_ui_class
-from safe.utilities.utilities import add_ordered_combo_item
-from safe.impact_functions.core import evacuated_population_weekly_needs
-from safe import messaging as m
-from safe.messaging import styles
+from safe.datastore.folder import Folder
+from safe.definitions.fields import displaced_field, aggregation_name_field
+from safe.definitions.layer_purposes import layer_purpose_aggregation
+from safe.definitions.post_processors import minimum_needs_post_processors
+from safe.gis.vector.prepare_vector_layer import (
+    rename_remove_inasafe_fields)
+from safe.gis.vector.tools import (
+    create_memory_layer, copy_layer)
 from safe.gui.tools.help.needs_calculator_help import needs_calculator_help
+from safe.impact_function.postprocessors import run_single_post_processor
+from safe.messaging import styles
+from safe.utilities.qgis_utilities import display_critical_message_box
+from safe.utilities.resources import html_footer, html_header, get_ui_class
+from safe.utilities.utilities import humanise_exception
 
-INFO_STYLE = styles.INFO_STYLE
+INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
 LOGGER = logging.getLogger('InaSAFE')
 FORM_CLASS = get_ui_class('needs_calculator_dialog_base.ui')
 
@@ -49,7 +58,32 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         self.setupUi(self)
         self.setWindowTitle(self.tr(
             'InaSAFE %s Minimum Needs Calculator' % get_version()))
-        self.polygon_layers_to_combo()
+
+        self.result_layer = None
+        self.button_box.button(QtGui.QDialogButtonBox.Ok).setEnabled(False)
+
+        # get qgis map layer combobox object
+        self.layer.setFilters(QgsMapLayerProxyModel.VectorLayer)
+
+        # get field that represent displaced count(population)
+        self.displaced.setFilters(QgsFieldProxyModel.Numeric)
+
+        # get field that represent aggregation name
+        self.aggregation_name.setFilters(QgsFieldProxyModel.String)
+
+        # set field to the current selected layer
+        self.displaced.setLayer(self.layer.currentLayer())
+        self.aggregation_name.setLayer(self.layer.currentLayer())
+        self.aggregation_id.setLayer(self.layer.currentLayer())
+
+        # link map layer and field combobox
+        self.layer.layerChanged.connect(self.displaced.setLayer)
+        self.layer.layerChanged.connect(self.aggregation_name.setLayer)
+        self.layer.layerChanged.connect(self.aggregation_id.setLayer)
+
+        # enable/disable ok button
+        self.update_button_status()
+        self.displaced.fieldChanged.connect(self.update_button_status)
 
         # Set up things for context help
         self.help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
@@ -65,119 +99,86 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         ok_button = self.button_box.button(QtGui.QDialogButtonBox.Ok)
         ok_button.clicked.connect(self.accept)
 
-    def minimum_needs(self, input_layer, population_name):
+    def update_button_status(self):
+        """Function to enable or disable the Ok button.
+        """
+        # enable/disable ok button
+        if len(self.displaced.currentField()) > 0:
+            self.button_box.button(QtGui.QDialogButtonBox.Ok).setEnabled(True)
+        else:
+            self.button_box.button(QtGui.QDialogButtonBox.Ok).setEnabled(False)
+
+    def minimum_needs(self, input_layer):
         """Compute minimum needs given a layer and a column containing pop.
 
-        :param input_layer: InaSAFE layer object assumed to contain
-            population counts
-        :type input_layer: read_layer
+        :param input_layer: Vector layer assumed to contain
+            population counts.
+        :type input_layer: QgsVectorLayer
 
-        :param population_name: Attribute name that holds population count
-        :type population_name: str
-
-        :returns: Layer with attributes for minimum needs as per Perka 7
-        :rtype: read_layer
+        :returns: A tuple containing True and the vector layer if
+                  post processor success. Or False and an error message
+                  if something went wrong.
+        :rtype: tuple(bool,QgsVectorLayer or basetring)
         """
+        # Create a new layer for output layer
+        output_layer = self.prepare_new_layer(input_layer)
 
-        all_attributes = []
-        for attributes in input_layer.get_data():
-            # Get population count
-            population = attributes[population_name]
-            # Clean up and turn into integer
-            if population in ['-', None]:
-                displaced = 0
-            else:
-                if isinstance(population, basestring):
-                    population = str(population).replace(',', '')
+        # count each minimum needs for every features
+        for needs in minimum_needs_post_processors:
+            is_success, message = run_single_post_processor(
+                output_layer, needs)
+            # check if post processor not running successfully
+            if not is_success:
+                LOGGER.debug(message)
+                display_critical_message_box(
+                    title=self.tr('Error while running post processor'),
+                    message=message)
 
-                try:
-                    displaced = int(population)
-                except ValueError:
-                    # noinspection PyTypeChecker,PyArgumentList
-                    QtGui.QMessageBox.information(
-                        None,
-                        self.tr('Format error'),
-                        self.tr(
-                            'Please change the value of %1 in attribute '
-                            '%s to integer format') % (
-                                population, population_name))
-                    raise ValueError
+                return False, None
 
-            # Calculate estimated needs based on BNPB Perka 7/2008
-            # minimum needs
-            # weekly_needs = {
-            #     'rice': int(ceil(population * min_rice)),
-            #     'drinking_water': int(ceil(population * min_drinking_water)),
-            #     'water': int(ceil(population * min_water)),
-            #     'family_kits': int(ceil(population * min_family_kits)),
-            #     'toilets': int(ceil(population * min_toilets))}
+        return True, output_layer
 
-            # Add to attributes
-            weekly_needs = evacuated_population_weekly_needs(displaced)
+    def prepare_new_layer(self, input_layer):
+        """Prepare new layer for the output layer.
 
-            # Record attributes for this feature
-            all_attributes.append(weekly_needs)
+        :param input_layer: Vector layer.
+        :type input_layer: QgsVectorLayer
 
-        output_layer = Vector(
-            geometry=input_layer.get_geometry(),
-            data=all_attributes,
-            projection=input_layer.get_projection())
+        :return: New memory layer duplicated from input_layer.
+        :rtype: QgsVectorLayer
+        """
+        # create memory layer
+        output_layer_name = os.path.splitext(input_layer.name())[0]
+        output_layer = (
+            '%s_minimum_needs' % output_layer_name)
+        output_layer = create_memory_layer(
+            output_layer,
+            input_layer.geometryType(),
+            input_layer.crs(),
+            input_layer.fields())
+
+        # monkey patching input layer to make it work with
+        # prepare vector layer function
+        temp_layer = input_layer
+        temp_layer.keywords = {
+            'layer_purpose': layer_purpose_aggregation['key']}
+
+        # copy features to output layer
+        copy_layer(temp_layer, output_layer)
+
+        # Monkey patching output layer to make it work with
+        # minimum needs calculator
+        output_layer.keywords['layer_purpose'] = (
+            layer_purpose_aggregation['key'])
+        output_layer.keywords['inasafe_fields'] = (
+            {displaced_field['key']: self.displaced.currentField(),
+             aggregation_name_field['key']:
+                 self.aggregation_name.currentField()})
+
+        # remove unnecessary fields & rename inasafe fields
+        rename_remove_inasafe_fields(output_layer)
+
         return output_layer
-
-    def polygon_layers_to_combo(self):
-        """Populate the combo with all polygon layers loaded in QGIS."""
-
-        # noinspection PyArgumentList
-        registry = QgsMapLayerRegistry.instance()
-        layers = registry.mapLayers().values()
-        found_flag = False
-        for layer in layers:
-            name = layer.name()
-            source = layer.id()
-            # check if layer is a vector polygon layer
-            if is_polygon_layer(layer) or is_point_layer(layer):
-                found_flag = True
-                add_ordered_combo_item(self.cboPolygonLayers, name, source)
-        # Now disable the run button if no suitable layers were found
-        # see #2206
-        ok_button = self.button_box.button(QtGui.QDialogButtonBox.Ok)
-        if found_flag:
-            self.cboPolygonLayers.setCurrentIndex(0)
-            ok_button.setEnabled(True)
-        else:
-            ok_button.setEnabled(False)
-
-    # prevents actions being handled twice
-    # noinspection PyPep8Naming
-    @pyqtSignature('int')
-    def on_cboPolygonLayers_currentIndexChanged(self, index):
-        """Automatic slot executed when the layer is changed to update fields.
-
-        :param index: Passed by the signal that triggers this slot.
-        :type index: int
-        """
-        layer_id = self.cboPolygonLayers.itemData(
-            index, QtCore.Qt.UserRole)
-        # noinspection PyArgumentList
-        layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
-        fields = layer.pendingFields()
-        self.cboFields.clear()
-        has_fields = False
-        for field in fields:
-            # LOGGER.info(field.typeName())
-            # TODO exclude dates too? TS
-            if field.typeName() != 'String':
-                has_fields = True
-                add_ordered_combo_item(
-                    self.cboFields, field.name(), field.name())
-
-        # Now disable the run button if no suitable fields were found
-        # see #2206
-        ok_button = self.button_box.button(QtGui.QDialogButtonBox.Ok)
-        if not has_fields:
-            ok_button.setEnabled(False)
-        else:
-            ok_button.setEnabled(True)
 
     def accept(self):
         """Process the layer and field and generate a new layer.
@@ -185,32 +186,47 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         .. note:: This is called on OK click.
 
         """
-        index = self.cboFields.currentIndex()
-        field_name = self.cboFields.itemData(
-            index, QtCore.Qt.UserRole)
-
-        index = self.cboPolygonLayers.currentIndex()
-        layer_id = self.cboPolygonLayers.itemData(
-            index, QtCore.Qt.UserRole)
-        # noinspection PyArgumentList
-        layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
-
-        file_name = layer.source()
-
-        input_layer = safe_read_layer(file_name)
-
+        # run minimum needs calculator
         try:
-            output_layer = self.minimum_needs(input_layer, field_name)
-        except ValueError:
+            success, self.result_layer = (
+                self.minimum_needs(self.layer.currentLayer()))
+            if not success:
+                return
+        except Exception as e:
+            error_name, traceback = humanise_exception(e)
+            message = (
+                'Problem(s) occured. \n%s \nDiagnosis: \n%s' % (
+                    error_name, traceback))
+            display_critical_message_box(
+                title=self.tr('Error while calculating minimum needs'),
+                message=message)
             return
 
-        new_file = file_name[:-4] + '_perka7' + '.shp'
+        # remove monkey patching keywords
+        del self.result_layer.keywords
 
-        output_layer.write_to_file(new_file)
+        # write memory layer to file system
+        settings = QSettings()
+        default_user_directory = settings.value(
+            'inasafe/defaultUserDirectory', defaultValue='')
 
-        new_layer = QgsVectorLayer(new_file, 'Minimum Needs', 'ogr')
+        if default_user_directory:
+            path = os.path.join(
+                default_user_directory, self.result_layer.name())
+            if not os.path.exists(path):
+                os.makedirs(path)
+            data_store = Folder(path)
+        else:
+            data_store = Folder(temp_dir(sub_dir=self.result_layer.name()))
+
+        data_store.default_vector_format = 'geojson'
+        data_store.add_layer(self.result_layer, self.result_layer.name())
+
+        self.result_layer = data_store.layer(self.result_layer.name())
+
         # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().addMapLayers([new_layer])
+        QgsMapLayerRegistry.instance().addMapLayers(
+            [data_store.layer(self.result_layer.name())])
         self.done(QtGui.QDialog.Accepted)
 
     @pyqtSlot()

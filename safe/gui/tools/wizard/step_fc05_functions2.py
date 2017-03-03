@@ -1,38 +1,21 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
+"""InaSAFE Wizard Step for Choosing Layer Geometry"""
 
-This module provides: Function Centric Wizard Step: IF Constraint Selector 2
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
-__author__ = 'qgis@borysjurgiel.pl'
-__revision__ = '$Format:%H$'
-__date__ = '16/03/2016'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
-
+import logging
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore, QtGui
-# noinspection PyPackageRequirements
 from PyQt4.QtCore import pyqtSignature
 
-from safe.definitions import (
-    layer_geometry_point,
-    layer_geometry_line,
-    layer_geometry_polygon,
-    layer_geometry_raster)
-
+from safe.definitions.utilities import get_allowed_geometries
+from safe.definitions.layer_purposes import (
+    layer_purpose_exposure, layer_purpose_hazard)
+from safe.definitions.styles import (
+    available_option_color, unavailable_option_color)
+from safe.definitions.font import big_font
+from safe.gui.tools.wizard.wizard_step import WizardStep
+from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_strings import (
     select_function_constraints2_question)
-from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
-from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_utils import (
     RoleFunctions,
     RoleHazard,
@@ -40,6 +23,12 @@ from safe.gui.tools.wizard.wizard_utils import (
     RoleHazardConstraint,
     RoleExposureConstraint)
 
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
+
+LOGGER = logging.getLogger('InaSAFE')
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
@@ -56,23 +45,39 @@ class StepFcFunctions2(WizardStep, FORM_CLASS):
         """
         return bool(self.tblFunctions2.selectedItems())
 
-    def get_previous_step(self):
-        """Find the proper step when user clicks the Previous button.
-
-        :returns: The step to be switched to
-        :rtype: WizardStep instance or None
-        """
-        new_step = self.parent.step_fc_functions1
-        return new_step
-
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.
 
         :returns: The step to be switched to
         :rtype: WizardStep instance or None
         """
-        new_step = self.parent.step_fc_function
+        new_step = self.parent.step_fc_hazlayer_origin
         return new_step
+
+    def selected_value(self, layer_purpose_key):
+        """Obtain selected hazard or exposure.
+
+        :param layer_purpose_key: A layer purpose key, can be hazard or
+            exposure.
+        :type layer_purpose_key: str
+
+        :returns: A selected hazard or exposure definition.
+        :rtype: dict
+        """
+        if layer_purpose_key == layer_purpose_exposure['key']:
+            role = RoleExposureConstraint
+        elif layer_purpose_key == layer_purpose_hazard['key']:
+            role = RoleHazardConstraint
+        else:
+            return None
+
+        selected = self.tblFunctions2.selectedItems()
+        if len(selected) != 1:
+            return None
+        try:
+            return selected[0].data(role)
+        except (AttributeError, NameError):
+            return None
 
     def selected_functions_2(self):
         """Obtain functions available for hazard and exposure selected by user.
@@ -108,8 +113,8 @@ class StepFcFunctions2(WizardStep, FORM_CLASS):
         selection = self.tblFunctions2.selectedItems()
         selItem = (len(selection) == 1) and selection[0] or None
         for row in range(self.tblFunctions2.rowCount()):
-            for col in range(self.tblFunctions2.columnCount()):
-                item = self.tblFunctions2.item(row, col)
+            for column in range(self.tblFunctions2.columnCount()):
+                item = self.tblFunctions2.item(row, column)
                 item.setText((item == selItem) and u'\u2022' or '')
 
     # pylint: disable=W0613
@@ -132,19 +137,15 @@ class StepFcFunctions2(WizardStep, FORM_CLASS):
     def set_widgets(self):
         """Set widgets on the Impact Functions Table 2 tab."""
         self.tblFunctions2.clear()
-        h, e, _hc, _ec = self.parent.selected_impact_function_constraints()
-        hazard_layer_geometries = [
-            layer_geometry_raster,
-            layer_geometry_point,
-            layer_geometry_line,
-            layer_geometry_polygon]
-        exposure_layer_geometries = [
-            layer_geometry_raster,
-            layer_geometry_point,
-            layer_geometry_line,
-            layer_geometry_polygon]
+        hazard, exposure, _, _ = self.parent.\
+            selected_impact_function_constraints()
+        hazard_layer_geometries = get_allowed_geometries(
+            layer_purpose_hazard['key'])
+        exposure_layer_geometries = get_allowed_geometries(
+            layer_purpose_exposure['key'])
         self.lblSelectFunction2.setText(
-            select_function_constraints2_question % (h['name'], e['name']))
+            select_function_constraints2_question % (
+                hazard['name'], exposure['name']))
         self.tblFunctions2.setColumnCount(len(hazard_layer_geometries))
         self.tblFunctions2.setRowCount(len(exposure_layer_geometries))
         self.tblFunctions2.setHorizontalHeaderLabels(
@@ -160,35 +161,36 @@ class StepFcFunctions2(WizardStep, FORM_CLASS):
         self.tblFunctions2.verticalHeader().setResizeMode(
             QtGui.QHeaderView.Stretch)
 
-        big_font = QtGui.QFont()
-        big_font.setPointSize(80)
-
         active_items = []
-        for col in range(len(hazard_layer_geometries)):
+        for column in range(len(hazard_layer_geometries)):
             for row in range(len(exposure_layer_geometries)):
-                hc = hazard_layer_geometries[col]
-                ec = exposure_layer_geometries[row]
-                functions = self.impact_function_manager\
-                    .functions_for_constraint(
-                        h['key'], e['key'], hc['key'], ec['key'])
+                hazard_geometry = hazard_layer_geometries[column]
+                exposure_geometry = exposure_layer_geometries[row]
                 item = QtGui.QTableWidgetItem()
-                if len(functions):
-                    bgcolor = QtGui.QColor(120, 255, 120)
+
+                hazard_geometry_allowed = hazard_geometry['key'] in hazard[
+                    'allowed_geometries']
+                exposure_geometry_allowed = (
+                    exposure_geometry['key'] in exposure[
+                            'allowed_geometries'])
+
+                if hazard_geometry_allowed and exposure_geometry_allowed:
+                    background_color = available_option_color
                     active_items += [item]
                 else:
-                    bgcolor = QtGui.QColor(220, 220, 220)
+                    background_color = unavailable_option_color
                     item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEnabled)
                     item.setFlags(item.flags() & ~QtCore.Qt.ItemIsSelectable)
-                item.setBackground(QtGui.QBrush(bgcolor))
+
+                item.setBackground(QtGui.QBrush(background_color))
                 item.setFont(big_font)
                 item.setTextAlignment(
                     QtCore.Qt.AlignCenter | QtCore.Qt.AlignHCenter)
-                item.setData(RoleFunctions, functions)
-                item.setData(RoleHazard, h)
-                item.setData(RoleExposure, e)
-                item.setData(RoleHazardConstraint, hc)
-                item.setData(RoleExposureConstraint, ec)
-                self.tblFunctions2.setItem(row, col, item)
+                item.setData(RoleHazard, hazard)
+                item.setData(RoleExposure, exposure)
+                item.setData(RoleHazardConstraint, hazard_geometry)
+                item.setData(RoleExposureConstraint, exposure_geometry)
+                self.tblFunctions2.setItem(row, column, item)
         # Automatically select one item...
         if len(active_items) == 1:
             active_items[0].setSelected(True)

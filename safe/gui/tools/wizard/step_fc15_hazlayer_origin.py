@@ -12,13 +12,12 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-__author__ = 'qgis@borysjurgiel.pl'
-__revision__ = '$Format:%H$'
-__date__ = '16/03/2016'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
+
+# noinspection PyPackageRequirements
+from PyQt4.QtGui import QPixmap
 
 from safe.utilities.i18n import tr
+from safe.utilities.resources import resources_path
 
 from safe.gui.tools.wizard.wizard_strings import (
     select_hazard_origin_question,
@@ -27,6 +26,10 @@ from safe.gui.tools.wizard.wizard_strings import (
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step import WizardStep
 
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
@@ -43,15 +46,6 @@ class StepFcHazLayerOrigin(WizardStep, FORM_CLASS):
         """
         return (bool(self.rbHazLayerFromCanvas.isChecked() or
                      self.rbHazLayerFromBrowser.isChecked()))
-
-    def get_previous_step(self):
-        """Find the proper step when user clicks the Previous button.
-
-        :returns: The step to be switched to
-        :rtype: WizardStep instance or None
-        """
-        new_step = self.parent.step_fc_function
-        return new_step
 
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.
@@ -113,21 +107,21 @@ class StepFcHazLayerOrigin(WizardStep, FORM_CLASS):
         layer_geometry = hazard_constraints['name']
 
         text = (select_hazard_origin_question % (
-            layer_geometry,
-            hazard['name'],
-            self.parent.step_fc_function.selected_function()['name']))
+            layer_geometry, hazard['name']))
         self.lblSelectHazLayerOriginType.setText(text)
 
         text = (select_hazlayer_from_canvas_question % (
-            layer_geometry,
-            hazard['name'],
-            self.parent.step_fc_function.selected_function()['name']))
+            layer_geometry, hazard['name']))
         self.parent.step_fc_hazlayer_from_canvas.\
             lblSelectHazardLayer.setText(text)
 
         text = (select_hazlayer_from_browser_question % (
-            layer_geometry,
-            hazard['name'],
-            self.parent.step_fc_function.selected_function()['name']))
+            layer_geometry, hazard['name']))
         self.parent.step_fc_hazlayer_from_browser.\
             lblSelectBrowserHazLayer.setText(text)
+
+        # Set icon
+        icon_path = resources_path(
+            'img', 'wizard', 'keyword-subcategory-%s.svg' % (
+                hazard['key'] or 'notset'))
+        self.lblIconIFCWHazardOrigin.setPixmap(QPixmap(icon_path))

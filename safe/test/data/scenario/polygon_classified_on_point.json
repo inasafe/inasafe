@@ -1,0 +1,62 @@
+{
+  "scenario": {
+    "enable": true,
+    "hazard": "flood_multipart_polygons.shp",
+    "exposure": "building-points.shp",
+    "aggregation": null
+  },
+
+  "expected_outputs":{
+    "count": 5
+  },
+  "expected_steps":{
+    "impact function":{
+      "info": {},
+      "process":[
+        "Highest class of hazard is assigned to the exposure",
+        "Aggregate the impact summary",
+        "Aggregate the aggregation summary",
+        "Aggregate the analysis summary",
+        "Build the exposure summary table"
+      ]
+    },
+    "post_processor":{
+      "info": {},
+      "process":[
+        "Size Value Post Processor",
+        "Affected Post Processor"
+      ]
+    },
+    "aggregation":{
+      "info": {
+        "provided":false
+      },
+      "process":[
+        "Convert bbox aggregation to polygon layer with keywords",
+        "Convert the aggregation layer to the analysis layer",
+        "Union hazard polygons with aggregation areas and assign hazard class"
+      ]
+    },
+    "hazard":{
+      "info": {
+        "use_same_projection":true
+      },
+      "process":[
+        "Clip and mask hazard polygons with the analysis layer",
+        "Cleaning the vector hazard attribute table",
+        "Assign classes based on value map",
+        "Make hazard layer valid"
+      ]
+    },
+    "exposure":{
+      "info": {},
+      "process":[
+        "Smart clip",
+        "Cleaning the vector exposure attribute table",
+        "Compute ratios from counts",
+        "Add default values",
+        "Assign classes based on value map"
+      ]
+    }
+  }
+}

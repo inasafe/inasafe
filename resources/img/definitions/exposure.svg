@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.1"
+   width="256"
+   height="256"
+   id="svg5628">
+  <defs
+     id="defs5630" />
+  <metadata
+     id="metadata5633">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(0,-796.36218)"
+     id="layer1">
+    <g
+       transform="matrix(0.627184,0,0,-0.627184,-32.559104,1065.165)"
+       id="g4028">
+      <path
+         d="M 256,393 64,201 h 47 V 56 h 288 v 145 h 49 z m 68,-109 q 7,0 12,-5.5 5,-5.5 5,-12 0,-6.5 -5,-11.5 -5,-5 -12,-5 -7,0 -12,5 -5,5 -5,11.5 0,6.5 5,12 5,5.5 12,5.5 z M 256,181 q 9,0 9,-10.5 0,-10.5 -9,-10.5 -11,0 -11,10.5 0,10.5 11,10.5 z m -68,103 q 6,0 11.5,-5.5 5.5,-5.5 5.5,-12 0,-6.5 -5.5,-11.5 -5.5,-5 -11.5,-5 -8,0 -12.5,5 -4.5,5 -4.5,11.5 0,6.5 4.5,12 4.5,5.5 12.5,5.5 z m 15,-133 -2,-61 q 0,-5 -4.5,-5 -4.5,0 -4.5,5 l -4,61 h -2 l -5,-61 q 0,-5 -4,-5 -4,0 -4,5 l -2,61 h -11 l 11,71 -24,-47 q 0,-2 -4,-2 -4,4 -2,6 17,45 21,54 3,5 4.5,7 1.5,2 6,3.5 4.5,1.5 13.5,1.5 h 2 q 19,0 25,-12 l 20,-54 q 2,-2 -3,-6 -4,0 -4,2 l -23,47 12,-71 h -12 z m 85,18 q -11,-15 -15,-20 -2,0 -4,-1 -2,0 -2,-5 v -13 l 2,-40 q 0,-3 -2,-3 l -2,-2 q -5,0 -5,2 l -4,32 -6,-32 -3,-2 q -4,0 -4,2 v 3 l 2,40 -2,13 q 0,5 -2,5 -1,1 -2,1 -3,2 -7,7 -4,5 -6.5,9 -2.5,4 -3.5,4 v 2 q 0,4 2,4 l 2,-2 q 11,-15 19,-15 h 9 2 9 q 3,0 8,3.5 5,3.5 8,7.5 l 3,4 2,2 q 2,0 2.5,-1.5 Q 289,172 288,171 v -2 z m 79,4 q -4,0 -4,2 l -22,47 v -39 l 2,-91 q 0,-7 -6,-7 -6,0 -6,7 l -7,74 -8,-74 q 0,-7 -6.5,-7 -6.5,0 -6.5,7 l 2,91 v 39 l -21,-47 q 0,-2 -5,-2 -4,4 -2,6 15,45 17,54 7,12 28,12 h 2 q 22,0 28,-12 l 17,-54 q 2,-2 -2,-6 z"
+         id="path4030"
+         style="fill:currentColor" />
+    </g>
+  </g>
+</svg>

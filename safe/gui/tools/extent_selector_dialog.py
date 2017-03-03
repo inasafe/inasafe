@@ -37,18 +37,25 @@ from PyQt4.QtGui import QDialog
 from qgis.core import (
     QgsPoint,
     QgsRectangle,
+    QgsGeometry,
     QgsCoordinateReferenceSystem,
     QgsApplication,
     QgsCoordinateTransform,
     QgsCsException)
 
+from safe.definitions.constants import (
+    HAZARD_EXPOSURE,
+    HAZARD_EXPOSURE_VIEW,
+    HAZARD_EXPOSURE_BOOKMARK,
+    HAZARD_EXPOSURE_BOUNDINGBOX)
 from safe.utilities.resources import html_header, html_footer, get_ui_class
+from safe.utilities.gis import wkt_to_rectangle
 
 from safe.gui.tools.rectangle_map_tool import RectangleMapTool
 from safe.messaging import styles
 from safe.gui.tools.help.extent_selector_help import extent_selector_help
 
-INFO_STYLE = styles.INFO_STYLE
+INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
 LOGGER = logging.getLogger('InaSAFE')
 FORM_CLASS = get_ui_class('extent_selector_dialog_base.ui')
 
@@ -88,14 +95,19 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
         self.tool = RectangleMapTool(self.canvas)
         self.previous_map_tool = self.canvas.mapTool()
 
-        if extent is None and crs is None:
+        if extent is None:
             # Use the current map canvas extents as a starting point
             self.tool.set_rectangle(self.canvas.extent())
         else:
+
+            if isinstance(extent, QgsGeometry):
+                # In InaSAFE V4, the extent is a QgsGeometry.
+                # This like a hack to transform a geometry to a rectangle.
+                extent = wkt_to_rectangle(extent.exportToWkt())
+
             # Ensure supplied extent is in current canvas crs
             transform = QgsCoordinateTransform(
-                crs,
-                self.canvas.mapRenderer().destinationCrs())
+                crs, self.canvas.mapSettings().destinationCrs())
             transformed_extent = transform.transformBoundingBox(extent)
             self.tool.set_rectangle(transformed_extent)
 
@@ -139,30 +151,26 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
         # Reinstate the last used radio button
         settings = QSettings()
         mode = settings.value(
-            'inasafe/analysis_extents_mode',
-            'HazardExposureView')
-        if mode == 'HazardExposureView':
+            'inasafe/analysis_extents_mode', HAZARD_EXPOSURE_VIEW)
+
+        if mode == HAZARD_EXPOSURE_VIEW:
             self.hazard_exposure_view_extent.setChecked(True)
-        elif mode == 'HazardExposure':
+        elif mode == HAZARD_EXPOSURE:
             self.hazard_exposure_only.setChecked(True)
-        elif mode == 'HazardExposureBookmark':
+        elif mode == HAZARD_EXPOSURE_BOOKMARK:
             self.hazard_exposure_bookmark.setChecked(True)
-        elif mode == 'HazardExposureBoundingBox':
+        elif mode == HAZARD_EXPOSURE_BOUNDINGBOX:
             self.hazard_exposure_user_extent.setChecked(True)
 
         show_warnings = settings.value(
-            'inasafe/show_extent_warnings',
-            True,
-            type=bool)
+            'inasafe/show_extent_warnings', True, type=bool)
         if show_warnings:
             self.show_warnings.setChecked(True)
         else:
             self.show_warnings.setChecked(False)
 
         show_confirmations = settings.value(
-            'inasafe/show_extent_confirmations',
-            True,
-            type=bool)
+            'inasafe/show_extent_confirmations', True, type=bool)
         if show_confirmations:
             self.show_confirmations.setChecked(True)
         else:
@@ -223,16 +231,14 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
         self.show()
 
     def clear(self):
-        """Clear the currently set extent.
-        """
+        """Clear the currently set extent."""
         self.tool.reset()
         self._populate_coordinates()
         # Revert to using hazard, exposure and view as basis for analysis
         self.hazard_exposure_view_extent.setChecked(True)
 
     def reject(self):
-        """User rejected the rectangle.
-        """
+        """User rejected the rectangle."""
         self.canvas.unsetMapTool(self.tool)
         if self.previous_map_tool != self.tool:
             self.canvas.setMapTool(self.previous_map_tool)
@@ -241,21 +247,17 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
         super(ExtentSelectorDialog, self).reject()
 
     def accept(self):
-        """User accepted the rectangle.
-        """
+        """User accepted the rectangle."""
         mode = None
         if self.hazard_exposure_view_extent.isChecked():
-            mode = 'HazardExposureView'
+            mode = HAZARD_EXPOSURE_VIEW
         elif self.hazard_exposure_only.isChecked():
-            mode = 'HazardExposure'
+            mode = HAZARD_EXPOSURE
         elif self.hazard_exposure_bookmark.isChecked():
-            mode = 'HazardExposureBookmark'
+            mode = HAZARD_EXPOSURE_BOOKMARK
         elif self.hazard_exposure_user_extent.isChecked():
-            mode = 'HazardExposureBoundingBox'
+            mode = HAZARD_EXPOSURE_BOUNDINGBOX
 
-        # LOGGER.info(
-        #    'Setting analysis extent mode to %s' % mode
-        # )
         settings = QSettings()
         settings.setValue('inasafe/analysis_extents_mode', mode)
 
@@ -264,16 +266,13 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
             self.canvas.setMapTool(self.previous_map_tool)
 
         if self.tool.rectangle() is not None:
-            # LOGGER.info(
-            #     'Extent selector setting user extents to %s' %
-            #     self.tool.rectangle().toString())
             self.extent_defined.emit(
                 self.tool.rectangle(),
-                self.canvas.mapRenderer().destinationCrs()
-            )
+                self.canvas.mapSettings().destinationCrs())
+            extent = QgsGeometry.fromRect(self.tool.rectangle())
+            LOGGER.info(
+                'Requested extent : {wkt}'.format(wkt=extent.exportToWkt()))
         else:
-            # LOGGER.info(
-            #     'Extent selector setting user extents to nothing')
             self.clear_extent.emit()
 
         # State handlers for showing warning message bars
@@ -289,8 +288,7 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
         super(ExtentSelectorDialog, self).accept()
 
     def _are_coordinates_valid(self):
-        """
-        Check if the coordinates are valid.
+        """Check if the coordinates are valid.
 
         :return: True if coordinates are valid otherwise False.
         :type: bool
@@ -308,9 +306,7 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
         return True
 
     def _coordinates_changed(self):
-        """
-        Handle a change in the coordinate input boxes.
-        """
+        """Handle a change in the coordinate input boxes."""
         if self._are_coordinates_valid():
             point1 = QgsPoint(
                 self.x_minimum.value(),
@@ -323,9 +319,7 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
             self.tool.set_rectangle(rect)
 
     def _populate_coordinates(self):
-        """
-        Update the UI with the current active coordinates.
-        """
+        """Update the UI with the current active coordinates."""
         rect = self.tool.rectangle()
         self.blockSignals(True)
         if rect is not None:
@@ -341,8 +335,7 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
         self.blockSignals(False)
 
     def bookmarks_index_changed(self):
-        """Update the UI when the bookmarks combobox has changed.
-        """
+        """Update the UI when the bookmarks combobox has changed."""
         index = self.bookmarks_list.currentIndex()
         if index >= 0:
             self.tool.reset()
@@ -412,7 +405,7 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
                 'FROM tbl_bookmarks;')
             bookmarks = cursor.fetchall()
 
-            canvas_srid = self.canvas.mapRenderer().destinationCrs().srsid()
+            canvas_srid = self.canvas.mapSettings().destinationCrs().srsid()
 
             for bookmark in bookmarks:
                 name = bookmark[1]

@@ -12,11 +12,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-__author__ = 'qgis@borysjurgiel.pl'
-__revision__ = '$Format:%H$'
-__date__ = '16/03/2016'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
 
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore, QtGui
@@ -29,6 +24,10 @@ from safe.gui.tools.wizard.wizard_strings import (
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step import WizardStep
 
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
@@ -44,15 +43,6 @@ class StepFcFunction(WizardStep, FORM_CLASS):
         :rtype: bool
         """
         return bool(self.selected_function())
-
-    def get_previous_step(self):
-        """Find the proper step when user clicks the Previous button.
-
-        :returns: The step to be switched to
-        :rtype: WizardStep instance or None
-        """
-        new_step = self.parent.step_fc_functions2
-        return new_step
 
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.
@@ -111,8 +101,8 @@ class StepFcFunction(WizardStep, FORM_CLASS):
         self.lblDescribeFunction.setText('')
 
         h, e, hc, ec = self.parent.selected_impact_function_constraints()
-        functions = self.impact_function_manager.functions_for_constraint(
-            h['key'], e['key'], hc['key'], ec['key'])
+        # Set empty IF
+        functions = []
         self.lblSelectFunction.setText(
             select_function_question % (
                 hc['name'], h['name'], ec['name'], e['name']))
@@ -127,22 +117,11 @@ class StepFcFunction(WizardStep, FORM_CLASS):
             'img', 'wizard', 'keyword-subcategory-%s.svg'
             % (h['key'] or 'notset'))
         self.lblIconFunctionHazard.setPixmap(QPixmap(icon_path))
-        self.parent.step_fc_hazlayer_origin.\
-            lblIconIFCWHazardOrigin.setPixmap(QPixmap(icon_path))
-        self.parent.step_fc_hazlayer_from_canvas.\
-            lblIconIFCWHazardFromCanvas.setPixmap(QPixmap(icon_path))
-        self.parent.step_fc_hazlayer_from_browser.\
-            lblIconIFCWHazardFromBrowser.setPixmap(QPixmap(icon_path))
+
         icon_path = resources_path(
             'img', 'wizard', 'keyword-subcategory-%s.svg'
             % (e['key'] or 'notset'))
         self.lblIconFunctionExposure.setPixmap(QPixmap(icon_path))
-        self.parent.step_fc_explayer_origin.\
-            lblIconIFCWExposureOrigin.setPixmap(QPixmap(icon_path))
-        self.parent.step_fc_explayer_from_canvas.\
-            lblIconIFCWExposureFromCanvas.setPixmap(QPixmap(icon_path))
-        self.parent.step_fc_explayer_from_browser.\
-            lblIconIFCWExposureFromBrowser.setPixmap(QPixmap(icon_path))
 
         # icon_path = resources_path(
         #     'img', 'wizard', 'keyword-category-aggregation.svg')

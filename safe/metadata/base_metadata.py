@@ -38,7 +38,7 @@ from safe.metadata.utils import (
     reading_ancillary_files
 )
 from safe.utilities.i18n import tr
-from safe.definitions import multipart_polygon_key
+from safe.definitions.constants import multipart_polygon_key
 
 
 class BaseMetadata(object):
@@ -178,7 +178,21 @@ class BaseMetadata(object):
             'gmd:supplementalInformation/'
             'inasafe/'
             'resolution/'
-            'gco:FloatTuple')
+            'gco:FloatTuple'),
+        'inasafe_fields': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'inasafe_fields/'
+            'gco:Dictionary'),
+        'inasafe_default_values': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'inasafe_default_values/'
+            'gco:Dictionary'),
     }
 
     def __getattr__(self, name):

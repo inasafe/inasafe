@@ -1,0 +1,59 @@
+{
+  "scenario": {
+    "enable": true,
+    "hazard": "gisv4/hazard/earthquake.asc",
+    "exposure": "gisv4/exposure/raster/population.asc",
+    "aggregation": "gisv4/aggregation/small_grid.geojson"
+  },
+
+  "expected_outputs":{
+    "count": 3
+  },
+  "expected_steps":{
+    "impact function":{
+      "info": {},
+      "process":[
+        "Set summaries",
+        "Aggregate the earthquake analysis summary"
+      ]
+    },
+    "post_processor":{
+      "info": {},
+      "process":[
+        "Size Value Post Processor",
+        "Gender Post Processor",
+        "Weekly Hygiene Packs Post Processor",
+        "Additional Weekly Rice kg for Pregnant and Lactating Women Post Processor",
+        "Rice Post Processor",
+        "Drinking Water Post Processor",
+        "Clean Water Post Processor",
+        "Family Kits Post Processor",
+        "Toilets Post Processor"
+      ]
+    },
+    "aggregation":{
+      "info": {
+        "provided":true
+      },
+      "process":[
+        "Cleaning the aggregation layer",
+        "Aggregation layer already in exposure CRS",
+        "Convert the aggregation layer to the analysis layer",
+        "Rasterize the aggregation layer"
+      ]
+    },
+    "hazard":{
+      "info": {},
+      "process":[
+        "Align the hazard layer with the exposure"
+      ]
+    },
+    "exposure":{
+      "info": {},
+      "process":[
+        "Align the exposure layer with the hazard",
+        "Compute exposed people"
+      ]
+    }
+  }
+}

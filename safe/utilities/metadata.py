@@ -1,38 +1,30 @@
-# -*- coding: utf-8 -*-
-"""
-InaSAFE Disaster risk assessment tool developed by AusAid -
-**metadata utilities module.**
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. versionadded:: 3.3
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-"""
-
-__author__ = 'ismail@kartoza.com'
-__revision__ = '$Format:%H$'
-__date__ = '03/12/2015'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
+# coding=utf-8
+"""Metadata Utilities."""
 import os
+
 from safe.common.exceptions import (
     MetadataReadError,
     KeywordNotFoundError,
-    MissingMetadata,
-    NoKeywordsFoundError
+    NoKeywordsFoundError)
+from safe.definitions.layer_purposes import (
+    layer_purpose_hazard,
+    layer_purpose_exposure,
+    layer_purpose_aggregation,
+    layer_purpose_exposure_summary
 )
+from safe.definitions.layer_modes import layer_mode_continuous
+from safe.definitions.versions import inasafe_keyword_version
 from safe.metadata import (
     ExposureLayerMetadata,
     HazardLayerMetadata,
     AggregationLayerMetadata,
-    ImpactLayerMetadata,
-    GenericLayerMetadata
-)
-from safe.definitions import inasafe_keyword_version
+    ExposureSummaryLayerMetadata,
+    GenericLayerMetadata)
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 
 def write_iso19115_metadata(layer_uri, keywords):
@@ -46,14 +38,15 @@ def write_iso19115_metadata(layer_uri, keywords):
     """
 
     if 'layer_purpose' in keywords.keys():
-        if keywords['layer_purpose'] == 'exposure':
+        if keywords['layer_purpose'] == layer_purpose_exposure['key']:
             metadata = ExposureLayerMetadata(layer_uri)
-        elif keywords['layer_purpose'] == 'hazard':
+        elif keywords['layer_purpose'] == layer_purpose_hazard['key']:
             metadata = HazardLayerMetadata(layer_uri)
-        elif keywords['layer_purpose'] == 'aggregation':
+        elif keywords['layer_purpose'] == layer_purpose_aggregation['key']:
             metadata = AggregationLayerMetadata(layer_uri)
-        elif keywords['layer_purpose'] == 'impact':
-            metadata = ImpactLayerMetadata(layer_uri)
+        elif keywords['layer_purpose'] == \
+                layer_purpose_exposure_summary['key']:
+            metadata = ExposureSummaryLayerMetadata(layer_uri)
         else:
             metadata = GenericLayerMetadata(layer_uri)
     else:
@@ -86,14 +79,14 @@ def read_iso19115_metadata(layer_uri, keyword=None):
         message += 'Layer path: %s.' % layer_uri
         raise NoKeywordsFoundError(message)
     metadata = GenericLayerMetadata(layer_uri, xml_uri)
-    if metadata.layer_purpose == 'exposure':
+    if metadata.layer_purpose == layer_purpose_exposure['key']:
         metadata = ExposureLayerMetadata(layer_uri, xml_uri)
-    elif metadata.layer_purpose == 'hazard':
+    elif metadata.layer_purpose == layer_purpose_hazard['key']:
         metadata = HazardLayerMetadata(layer_uri, xml_uri)
-    elif metadata.layer_purpose == 'aggregation':
+    elif metadata.layer_purpose == layer_purpose_aggregation['key']:
         metadata = AggregationLayerMetadata(layer_uri, xml_uri)
-    elif metadata.layer_purpose == 'impact':
-        metadata = ImpactLayerMetadata(layer_uri, xml_uri)
+    elif metadata.layer_purpose == layer_purpose_exposure_summary['key']:
+        metadata = ExposureSummaryLayerMetadata(layer_uri, xml_uri)
 
     # dictionary comprehension
     keywords = {
@@ -133,6 +126,61 @@ def read_iso19115_metadata(layer_uri, keyword=None):
             message += 'Layer path: %s' % layer_uri
             raise KeywordNotFoundError(message)
 
-    if isinstance(metadata, ImpactLayerMetadata):
+    if isinstance(metadata, ExposureSummaryLayerMetadata):
         keywords['if_provenance'] = metadata.provenance
     return keywords
+
+
+def active_classification(keywords, exposure_key):
+    """Helper to retrieve active classification for an exposure.
+
+    :param keywords: Hazard layer keywords.
+    :type keywords: dict
+
+    :param exposure_key: The exposure key.
+    :type exposure_key: str
+
+    :returns: The active classification key. None if there is no active one.
+    :rtype: str
+    """
+    if 'classification' in keywords:
+        return keywords['classification']
+    if keywords['layer_mode'] == layer_mode_continuous['key']:
+        classifications = keywords['thresholds'].get(exposure_key)
+    else:
+        classifications = keywords['value_maps'].get(exposure_key)
+    if classifications is None:
+        return None
+    for classification, value in classifications.items():
+        if value['active']:
+            return classification
+    return None
+
+
+def active_thresholds_value_maps(keywords, exposure_key):
+    """Helper to retrieve active value maps or thresholds for an exposure.
+
+    :param keywords: Hazard layer keywords.
+    :type keywords: dict
+
+    :param exposure_key: The exposure key.
+    :type exposure_key: str
+
+    :returns: Active thresholds or value maps.
+    :rtype: dict
+    """
+    if 'classification' in keywords:
+        if keywords['layer_mode'] == layer_mode_continuous['key']:
+            return keywords['thresholds']
+        else:
+            return keywords['value_map']
+    if keywords['layer_mode'] == layer_mode_continuous['key']:
+        classifications = keywords['thresholds'].get(exposure_key)
+    else:
+        classifications = keywords['value_maps'].get(exposure_key)
+    if classifications is None:
+        return None
+    for value in classifications.values():
+        if value['active']:
+            return value['classes']
+    return None

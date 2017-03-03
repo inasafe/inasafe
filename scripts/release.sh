@@ -2,9 +2,18 @@
 echo "Export the plugin to a zip with no .git folder"
 echo "And build a windows installer" 
 
+# Make sure has the proper sub module state
+git submodule init
+git submodule update
+
 VERSION=`cat metadata.txt | grep ^version | sed 's/version=//g'`
-# TODO
-#replace _type_ = 'alpha' or 'beta' with final
+STATUS=`cat metadata.txt | grep ^status | sed 's/status=//g'`
+
+if [ "${STATUS}" != "final" ]; then
+    VERSION="${VERSION}.${STATUS}"
+fi
+
+echo ${VERSION}
 
 #see http://stackoverflow.com/questions/1371261/get-current-working-directory-name-in-bash-script
 DIR='inasafe'
@@ -12,8 +21,18 @@ DIR='inasafe'
 OUT="/tmp/${DIR}.${VERSION}.zip"
 
 WORKDIR=/tmp/${DIR}$$
-mkdir -p ${WORKDIR}/${DIR}
-git archive `git branch | grep '\*'| sed 's/^\* //g'` | tar -x -C ${WORKDIR}/${DIR}
+TARGZFILE="/tmp/${DIR}.tar.gz"
+
+mkdir -p ${WORKDIR}
+# Archive source code of the current branch to tar gz file.
+# Use git-archive-all since we use git submodule.
+brew install git-archive-all
+git-archive-all ${TARGZFILE}
+# Extract the file
+tar -xf ${TARGZFILE} -C ${WORKDIR}
+# Remove tar gz file
+rm ${TARGZFILE}
+
 rm -rf ${WORKDIR}/${DIR}/docs/en/_static/user*
 rm -rf ${WORKDIR}/${DIR}/docs/id/_static/user*
 rm -rf ${WORKDIR}/${DIR}/unit_test_data
@@ -23,11 +42,15 @@ rm -rf ${WORKDIR}/${DIR}/Vagrantfile
 rm -rf ${WORKDIR}/${DIR}/.idea
 rm -rf ${WORKDIR}/${DIR}/Makefile
 rm -rf ${WORKDIR}/${DIR}/.git*
+rm -rf ${WORKDIR}/${DIR}/.scrutinizer.yml
+rm -rf ${WORKDIR}/${DIR}/.checkignore.yml
 rm -rf ${WORKDIR}/${DIR}/scripts
 rm -rf ${WORKDIR}/${DIR}/pylintrc
 rm -rf ${WORKDIR}/${DIR}/extras
 rm -rf ${WORKDIR}/${DIR}/safe/test
 rm -rf ${WORKDIR}/${DIR}/realtime
+rm -rf ${WORKDIR}/${DIR}/bin
+rm -rf ${WORKDIR}/${DIR}/headless
 rm -rf ${WORKDIR}/${DIR}/files
 rm -rf ${WORKDIR}/${DIR}/fabfile.py
 # Commented out next line for #832 - reinstate when that issue is resolved

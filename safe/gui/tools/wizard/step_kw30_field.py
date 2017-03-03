@@ -1,101 +1,83 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
-
-This module provides: Keyword Wizard Step: Field
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
-__author__ = 'qgis@borysjurgiel.pl'
-__revision__ = '$Format:%H$'
-__date__ = '16/03/2016'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
+"""InaSAFE Keyword Wizard Field Step."""
 
 import re
+import logging
 
-# noinspection PyPackageRequirements
 from PyQt4 import QtCore
-# noinspection PyPackageRequirements
 from PyQt4.QtGui import QListWidgetItem
 
-from safe.definitions import (
-    layer_mode_classified,
-    layer_mode_continuous,
-    layer_purpose_aggregation)
-
-from safe.utilities.gis import is_raster_layer
-
+from safe.definitions.layer_purposes import (
+    layer_purpose_aggregation, layer_purpose_hazard, layer_purpose_exposure)
+from safe.definitions.layer_modes import layer_mode_continuous
+from safe.gui.tools.wizard.wizard_step import (
+    WizardStep, get_wizard_step_ui_class)
 from safe.gui.tools.wizard.wizard_strings import (
     field_question_subcategory_unit,
     field_question_subcategory_classified,
     field_question_aggregation)
-from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
-from safe.gui.tools.wizard.wizard_step import WizardStep
-from safe.gui.tools.wizard.wizard_utils import get_question_text
+from safe.gui.tools.wizard.wizard_utils import (
+    get_question_text, skip_inasafe_field)
+from safe.utilities.gis import is_raster_layer
+from safe.definitions.utilities import get_fields, get_non_compulsory_fields
 
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
+LOGGER = logging.getLogger('InaSAFE')
 
 
 class StepKwField(WizardStep, FORM_CLASS):
-    """Keyword Wizard Step: Field"""
+    """InaSAFE Keyword Wizard Field Step."""
 
     def is_ready_to_next_step(self):
-        """Check if the step is complete. If so, there is
-            no reason to block the Next button.
+        """Check if the step is complete.
+
+        If so, there is no reason to block the Next button.
 
         :returns: True if new step may be enabled.
         :rtype: bool
         """
-        return bool(self.selected_field() or not self.lstFields.count())
-
-    def get_previous_step(self):
-        """Find the proper step when user clicks the Previous button.
-
-        :returns: The step to be switched to
-        :rtype: WizardStep instance or None
-        """
-        if self.parent.step_kw_purpose.\
-                selected_purpose() == layer_purpose_aggregation:
-            new_step = self.parent.step_kw_purpose
-        elif self.parent.step_kw_layermode.\
-                selected_layermode() == layer_mode_continuous:
-            new_step = self.parent.step_kw_unit
-        elif self.parent.step_kw_classification.classifications_for_layer():
-            new_step = self.parent.step_kw_classification
-        else:
-            new_step = self.parent.step_kw_layermode
-        return new_step
+        # Choose hazard / exposure / aggregation field is mandatory
+        return bool(self.selected_field())
 
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.
 
         :returns: The step to be switched to
-        :rtype: WizardStep instance or None
+        :rtype: WizardStep
         """
+        layer_purpose = self.parent.step_kw_purpose.selected_purpose()
+        if layer_purpose != layer_purpose_aggregation:
+            subcategory = self.parent.step_kw_subcategory.\
+                selected_subcategory()
+        else:
+            subcategory = {'key': None}
 
-        if self.parent.step_kw_purpose.\
-                selected_purpose() == layer_purpose_aggregation:
-            # Aggregation layer
-            return self.parent.step_kw_aggregation
+        # Has classifications, go to multi classifications
+        if subcategory.get('classifications'):
+            if layer_purpose == layer_purpose_hazard:
+                return self.parent.step_kw_multi_classifications
+            elif layer_purpose == layer_purpose_exposure:
+                return self.parent.step_kw_classification
 
-        if self.parent.step_kw_layermode.\
-                selected_layermode() == layer_mode_classified:
-            if self.parent.step_kw_classification.\
-                    classifications_for_layer() or self.parent.\
-                    step_kw_classify.postprocessor_classification_for_layer():
-                # Classified data
-                return self.parent.step_kw_classify
+        # Check if it can go to inasafe field step
+        non_compulsory_fields = get_non_compulsory_fields(
+            layer_purpose['key'], subcategory['key'])
+        if not skip_inasafe_field(self.parent.layer, non_compulsory_fields):
+            return self.parent.step_kw_inasafe_fields
+
+        # Check if it can go to inasafe default field step
+        default_inasafe_fields = get_fields(
+            layer_purpose['key'], subcategory['key'], replace_null=True)
+        if default_inasafe_fields:
+            return self.parent.step_kw_default_inasafe_fields
 
         # Any other case
-        return self.parent.step_kw_extrakeywords
+        return self.parent.step_kw_source
 
     # noinspection PyPep8Naming
     def on_lstFields_itemSelectionChanged(self):
@@ -144,9 +126,7 @@ class StepKwField(WizardStep, FORM_CLASS):
             return None
 
     def clear_further_steps(self):
-        """ Clear all further steps
-            in order to properly calculate the prev step
-        """
+        """Clear all further steps to re-init widget."""
         self.parent.step_kw_classify.treeClasses.clear()
 
     def set_widgets(self):
@@ -159,9 +139,13 @@ class StepKwField(WizardStep, FORM_CLASS):
             question_text = field_question_aggregation
         elif self.parent.step_kw_layermode.\
                 selected_layermode() == layer_mode_continuous and unit:
-            # unique values, continuous or categorical data
             subcategory_unit_relation = get_question_text(
                 '%s_%s_question' % (subcategory['key'], unit['key']))
+            if 'MISSING' in subcategory_unit_relation:
+                subcategory_unit_relation = self.tr(
+                    '{subcategory} in {unit} unit').format(
+                    subcategory=subcategory['name'].lower(),
+                    unit=unit['plural_name'])
             question_text = field_question_subcategory_unit % (
                 purpose['name'],
                 subcategory['name'],
@@ -194,11 +178,13 @@ class StepKwField(WizardStep, FORM_CLASS):
 
         # Set values based on existing keywords (if already assigned)
         field_keyword = self.parent.field_keyword_for_the_layer()
-        field = self.parent.get_existing_keyword(field_keyword)
-        if field:
-            fields = []
-            for index in xrange(self.lstFields.count()):
-                fields.append(str(self.lstFields.item(index).text()))
-            if field in fields:
-                self.lstFields.setCurrentRow(fields.index(field))
-        self.auto_select_one_item(self.lstFields)
+        inasafe_field = self.parent.get_existing_keyword('inasafe_fields')
+        if inasafe_field:
+            field = inasafe_field.get(field_keyword)
+            if field:
+                fields = []
+                for index in xrange(self.lstFields.count()):
+                    fields.append(str(self.lstFields.item(index).text()))
+                if field in fields:
+                    self.lstFields.setCurrentRow(fields.index(field))
+            self.auto_select_one_item(self.lstFields)

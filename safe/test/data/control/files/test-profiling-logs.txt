@@ -1,0 +1,5 @@
+Function, Time
+Copy layer
+Exposure preparation
+Update value map
+Run single post processor

@@ -1,42 +1,30 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool by AusAid -**Wizard Utilities.**
+"""Wizard Utilities Functions"""
 
-The module provides utilities function for InaSAFE Wizard dialog.
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
-__author__ = 'qgis@borysjurgiel.pl'
-__revision__ = '$Format:%H$'
-__date__ = '24/04/2016'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
-
+import logging
 import re
-
-# noinspection PyPackageRequirements
+import sys
 from PyQt4 import QtCore
+from PyQt4.QtGui import QWidgetItem, QSpacerItem, QLayout
 
 from qgis.core import QgsCoordinateTransform
 
+import safe.gui.tools.wizard.wizard_strings
 from safe.common.version import get_version
-from safe.definitions import (
-    layer_purpose_hazard,
-    layer_purpose_exposure,
-    layer_mode_classified)
+from safe.definitions.constants import RECENT, GLOBAL
+from safe.definitions.layer_modes import layer_mode_classified
+from safe.definitions.layer_purposes import (
+    layer_purpose_exposure, layer_purpose_hazard)
 from safe.utilities.gis import (
-    is_raster_layer,
-    is_point_layer,
-    is_polygon_layer)
+    is_raster_layer, is_point_layer, is_polygon_layer)
 from safe.utilities.i18n import tr
 from safe.utilities.utilities import is_keyword_version_supported
-import safe.gui.tools.wizard.wizard_strings
+from safe.utilities.settings import get_inasafe_default_value_qsetting
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 
 # Data roles
@@ -45,6 +33,8 @@ RoleHazard = QtCore.Qt.UserRole + 1
 RoleExposure = QtCore.Qt.UserRole + 2
 RoleHazardConstraint = QtCore.Qt.UserRole + 3
 RoleExposureConstraint = QtCore.Qt.UserRole + 4
+
+LOGGER = logging.getLogger('InaSAFE')
 
 
 def get_question_text(constant):
@@ -173,3 +163,100 @@ def layer_description_html(layer, keywords=None):
                tr('In the next step you will be able' +
                   ' to assign keywords to this layer.'))
     return desc
+
+
+def get_inasafe_default_value_fields(qsetting, field_key):
+    """Obtain default value for a field with default value.
+
+    By default it will return label list and default value list
+    label: [Setting, Do not use, Custom]
+    values: [Value from setting, None, Value from QSetting (if exist)]
+
+    :param qsetting: QSetting object
+    :type qsetting: QSetting
+
+    :param field_key: The field's key.
+    :type field_key: str
+
+    :returns: Tuple of list. List of labels and list of values.
+    """
+    labels = [tr('Global (%s)'), tr('Do not use'), tr('Custom')]
+    values = [
+        get_inasafe_default_value_qsetting(qsetting, GLOBAL, field_key),
+        None,
+        get_inasafe_default_value_qsetting(qsetting, RECENT, field_key)
+    ]
+
+    return labels, values
+
+
+def clear_layout(layout):
+    """Clear layout content.
+
+    :param layout: A layout.
+    :type layout: QLayout
+    """
+    # Different platform has different treatment
+    # If InaSAFE running on Windows or Linux
+    if sys.platform in ['linux2', 'win32']:
+        # Adapted from http://stackoverflow.com/a/9383780
+        if layout is not None:
+            while layout.count():
+                item = layout.takeAt(0)
+                widget = item.widget()
+                if widget is not None:
+                    # Remove the widget from layout
+                    widget.close()
+                    widget.deleteLater()
+                else:
+                    clear_layout(item.layout())
+
+                # Remove the item from layout
+                layout.removeItem(item)
+
+    # If InaSAFE running on anything else than Windows or Linux
+    else:
+        # Adapted from http://stackoverflow.com/a/9375273/1198772
+        for i in reversed(range(layout.count())):
+            item = layout.itemAt(i)
+
+            if isinstance(item, QWidgetItem):
+                item.widget().close()
+            elif isinstance(item, QLayout):
+                clear_layout(item.layout())
+            elif isinstance(item, QSpacerItem):
+                # No need to do anything
+                pass
+            else:
+                pass
+
+            # Remove the item from layout
+            layout.removeItem(item)
+
+
+def skip_inasafe_field(layer, inasafe_fields):
+    """Check if it possible to skip inasafe field step.
+
+    The function will check if the layer has a specified field type.
+
+    :param layer: A Qgis Vector Layer.
+    :type layer: QgsVectorLayer
+
+    :param inasafe_fields: List of non compulsory InaSAFE fields default.
+    :type inasafe_fields: list
+
+    :returns: True if there are no specified field type.
+    :rtype: bool
+    """
+    layer_data_provider = layer.dataProvider()
+    # Iterate through all inasafe fields
+    for inasafe_field in inasafe_fields:
+        for field in layer_data_provider.fields():
+            # Check the field type
+            if isinstance(inasafe_field['type'], list):
+                if field.type() in inasafe_field['type']:
+                    return False
+            else:
+                if field.type() == inasafe_field['type']:
+                    return False
+    return True
