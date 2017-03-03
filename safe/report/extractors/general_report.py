@@ -1,11 +1,14 @@
 # coding=utf-8
-"""Module used to generate context for general report section."""
-from safe.definitions.fields import hazard_count_field, total_field, \
-    fatalities_field
-from safe.definitions.hazard_classifications import hazard_classes_all
+"""Module used to extract context for general summary."""
+from safe.definitions.fields import (
+    hazard_count_field,
+    total_field,
+    fatalities_field)
 from safe.report.extractors.util import (
     layer_definition_type,
-    resolve_from_dictionary, value_from_field_name)
+    resolve_from_dictionary,
+    value_from_field_name,
+    layer_hazard_classification)
 from safe.utilities.rounding import format_number, fatalities_range
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -45,7 +48,6 @@ def general_report_extractor(impact_report, component_metadata):
     is_rounded = not debug_mode
 
     # find hazard class
-    hazard_classification = None
     summary = []
 
     analysis_feature = analysis_layer.getFeatures().next()
@@ -62,11 +64,7 @@ def general_report_extractor(impact_report, component_metadata):
     if 'classification' in hazard_layer.keywords:
 
         # retrieve hazard classification from hazard layer
-        for classification in hazard_classes_all:
-            classification_name = hazard_layer.keywords['classification']
-            if classification_name == classification['key']:
-                hazard_classification = classification
-                break
+        hazard_classification = layer_hazard_classification(hazard_layer)
 
         # classified hazard must have hazard count in analysis layer
         hazard_stats = []

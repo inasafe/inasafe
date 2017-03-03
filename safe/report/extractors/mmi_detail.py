@@ -2,10 +2,13 @@
 """Module used to generate context for MMI detail section."""
 from safe.definitions.exposure import exposure_population
 from safe.definitions.hazard import hazard_earthquake
-from safe.definitions.layer_geometry import layer_geometry_raster, \
-    layer_geometry
-from safe.report.extractors.util import layer_definition_type, \
-    resolve_from_dictionary, value_from_field_name
+from safe.definitions.layer_geometry import (
+    layer_geometry_raster,
+    layer_geometry)
+from safe.report.extractors.util import (
+    layer_definition_type,
+    resolve_from_dictionary,
+    value_from_field_name)
 from safe.utilities.rounding import format_number
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

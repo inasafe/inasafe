@@ -5,6 +5,7 @@ import codecs
 
 from jinja2.exceptions import TemplateError
 
+from safe.definitions.hazard_classifications import hazard_classes_all
 from safe.definitions.utilities import definition
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -40,6 +41,31 @@ def layer_definition_type(layer):
     layer_purpose = layer_purpose[0]
 
     return definition(layer.keywords[layer_purpose])
+
+
+def layer_hazard_classification(layer):
+    """Returned this particular hazard classification.
+
+    :param layer: hazard layer or exposure layer
+    :type layer: qgis.core.QgsVectorLayer
+
+    :return: Hazard classification.
+    :rtype: dict
+
+    .. versionadded:: 4.0
+    """
+    if not layer.keywords.get('hazard'):
+        # return nothing if not hazard layer
+        return None
+
+    hazard_classification = None
+    # retrieve hazard classification from hazard layer
+    for classification in hazard_classes_all:
+        classification_name = layer.keywords['classification']
+        if classification_name == classification['key']:
+            hazard_classification = classification
+            break
+    return hazard_classification
 
 
 def jinja2_output_as_string(impact_report, component_key):

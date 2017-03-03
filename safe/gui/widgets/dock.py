@@ -1177,9 +1177,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         if self.zoom_to_impact_flag:
             self.iface.zoomToActiveLayer()
 
+        qgis_exposure = self.get_exposure_layer()
         if self.hide_exposure_flag:
             legend = self.iface.legendInterface()
-            qgis_exposure = self.get_exposure_layer()
             legend.setLayerVisible(qgis_exposure, False)
 
         if setting('generate_report', True, bool):
@@ -1211,7 +1211,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         self.extent.set_last_analysis_extent(
             self.impact_function.analysis_extent,
-            self.get_exposure_layer().crs())
+            qgis_exposure.crs())
 
         # We do not want to check the state of the next IF
         self.hide_busy(check_next_impact=False)

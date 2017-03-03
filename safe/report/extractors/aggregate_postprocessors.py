@@ -2,12 +2,15 @@
 """Module used to generate context for aggregation postprocessors sections.
 """
 
+from PyQt4.QtCore import QPyNullVariant
 from collections import OrderedDict
 
 from safe.common.parameters.resource_parameter import ResourceParameter
+from safe.definitions.exposure import exposure_population
 from safe.definitions.fields import (
     aggregation_name_field,
-    displaced_field, male_displaced_count_field)
+    displaced_field,
+    male_displaced_count_field)
 from safe.definitions.minimum_needs import minimum_needs_fields
 from safe.definitions.post_processors import (
     age_postprocessors,
@@ -15,7 +18,7 @@ from safe.definitions.post_processors import (
 from safe.definitions.utilities import postprocessor_output_field
 from safe.report.extractors.util import (
     value_from_field_name,
-    resolve_from_dictionary)
+    resolve_from_dictionary, layer_definition_type)
 from safe.utilities.rounding import format_number
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -49,12 +52,20 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
 
     extra_args = component_metadata.extra_args
     # Find out aggregation report type
+    exposure_layer = impact_report.exposure
     aggregation_summary = impact_report.aggregation_summary
     analysis_layer = impact_report.analysis
     analysis_layer_fields = impact_report.analysis.keywords['inasafe_fields']
     debug_mode = impact_report.impact_function.debug_mode
     use_aggregation = bool(impact_report.impact_function.provenance[
         'aggregation_layer'])
+
+    # Get exposure type definition
+    exposure_type = layer_definition_type(exposure_layer)
+
+    # this entire section is only for population exposure type
+    if not exposure_type == exposure_population:
+        return context
 
     # check zero displaced (there will be no output to display)
     try:
@@ -354,6 +365,12 @@ def create_section_with_aggregation(
             displaced_field_name)
 
         aggregation_name = feature[aggregation_name_index]
+        total_displaced = feature[displaced_field_index]
+
+        if not total_displaced or isinstance(total_displaced, QPyNullVariant):
+            # skip if total displaced null
+            continue
+
         total_displaced = format_number(
             feature[displaced_field_index],
             enable_rounding=enable_rounding)
