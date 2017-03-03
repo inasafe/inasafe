@@ -160,7 +160,6 @@ earthquake_mmi_hazard_classes = {
             'description': tr('The highest hazard class.'),
             'string_defaults': ['high'],
             'displacement_rate': 1.0,
-            # Not used because EQ algs take care of this
             'numeric_default_min': 8,
             'numeric_default_max': 10,
             'citations': [
@@ -179,7 +178,6 @@ earthquake_mmi_hazard_classes = {
             'description': tr('The medium hazard class.'),
             'string_defaults': ['medium'],
             'displacement_rate': 1.0,
-            # Not used because EQ algs take care of this
             'numeric_default_min': 6,
             'numeric_default_max': 8,
             'citations': [
@@ -198,7 +196,6 @@ earthquake_mmi_hazard_classes = {
             'description': tr('The lowest hazard class.'),
             'string_defaults': ['low'],
             'displacement_rate': 1.0,
-            # Not used because EQ algs take care of this
             'numeric_default_min': 5,
             'numeric_default_max': 6,
             'citations': [
@@ -245,7 +242,6 @@ earthquake_mmi_scale = {
                    'Rails bent.'),
             'string_defaults': ['extreme'],
             'displacement_rate': 1.0,
-            # Not used because EQ algs take care of this
             'numeric_default_min': 9.5,
             'numeric_default_max': 10.5,
             'citations': [
@@ -269,7 +265,6 @@ earthquake_mmi_scale = {
                    'collapse. Buildings shifted off foundations.'),
             'string_defaults': ['violent'],
             'displacement_rate': 1.0,
-            # Not used because EQ algs take care of this
             'numeric_default_min': 8.5,
             'numeric_default_max': 9.5,
             'citations': [
@@ -294,7 +289,6 @@ earthquake_mmi_scale = {
                    'monuments, walls. Heavy furniture overturned.'),
             'string_defaults': ['severe'],
             'displacement_rate': 1.0,
-            # Not used because EQ algs take care of this
             'numeric_default_min': 7.5,
             'numeric_default_max': 8.5,
             'citations': [
@@ -318,7 +312,6 @@ earthquake_mmi_scale = {
                    'designed structures; some chimneys broken.'),
             'string_defaults': ['very strong'],
             'displacement_rate': 1.0,
-            # Not used because EQ algs take care of this
             'numeric_default_min': 6.5,
             'numeric_default_max': 7.5,
             'citations': [
@@ -340,7 +333,6 @@ earthquake_mmi_scale = {
                    'a few instances of fallen plaster. Damage slight.'),
             'string_defaults': ['strong'],
             'displacement_rate': 1.0,
-            # Not used because EQ algs take care of this
             'numeric_default_min': 5.5,
             'numeric_default_max': 6.5,
             'citations': [
@@ -363,7 +355,6 @@ earthquake_mmi_scale = {
                    'clocks may stop.'),
             'string_defaults': ['moderate'],
             'displacement_rate': 0.0,
-            # Not used because EQ algs take care of this
             'numeric_default_min': 4.5,
             'numeric_default_max': 5.5,
             'citations': [
@@ -388,7 +379,6 @@ earthquake_mmi_scale = {
                    'noticeably.'),
             'string_defaults': ['light'],
             'displacement_rate': 0.0,
-            # Not used because EQ algs take care of this
             'numeric_default_min': 3.5,
             'numeric_default_max': 4.5,
             'citations': [
@@ -413,7 +403,6 @@ earthquake_mmi_scale = {
                    'Duration estimated.'),
             'string_defaults': ['weak'],
             'displacement_rate': 0.0,
-            # Not used because EQ algs take care of this
             'numeric_default_min': 2.5,
             'numeric_default_max': 3.5,
             'citations': [
@@ -435,7 +424,6 @@ earthquake_mmi_scale = {
                    'floors of buildings.'),
             'string_defaults': [],
             'displacement_rate': 0.0,
-            # Not used because EQ algs take care of this
             'numeric_default_min': 1.5,
             'numeric_default_max': 2.5,
             'citations': [
@@ -457,7 +445,6 @@ earthquake_mmi_scale = {
                    'conditions.'),
             'string_defaults': ['not felt'],
             'displacement_rate': 0.0,
-            # Not used because EQ algs take care of this
             'numeric_default_min': 0.5,
             'numeric_default_max': 1.5,
             'citations': [
