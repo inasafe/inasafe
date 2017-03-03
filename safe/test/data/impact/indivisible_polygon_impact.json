@@ -1,0 +1,145 @@
+{
+  "impact table": {
+    "attributes": [
+      "Building type", 
+      "Flooded", 
+      "Not Affected", 
+      "Total"
+    ], 
+    "fields": [
+      [
+        "Commercial", 
+        1, 
+        30, 
+        31
+      ], 
+      [
+        "Education", 
+        2, 
+        5, 
+        7
+      ], 
+      [
+        "Government", 
+        4, 
+        10, 
+        14
+      ], 
+      [
+        "Health", 
+        1, 
+        3, 
+        4
+      ], 
+      [
+        "Other", 
+        0, 
+        1, 
+        1
+      ], 
+      [
+        "Place of worship", 
+        4, 
+        5, 
+        9
+      ], 
+      [
+        "Residential", 
+        21, 
+        89, 
+        110
+      ], 
+      [
+        "Total", 
+        33, 
+        143, 
+        176
+      ]
+    ]
+  }, 
+  "action check list": {
+    "fields": [
+      "Which structures have warning capacity (eg. sirens, speakers, etc.)?", 
+      "Are the water and electricity services still operating?", 
+      "Are the health centres still open?", 
+      "Are the other public services accessible?", 
+      "Which buildings will be evacuation centres?", 
+      "Where will we locate the operations centre?", 
+      "Where will we locate warehouse and/or distribution centres?", 
+      "Are the schools and hospitals still active?"
+    ], 
+    "title": "Action checklist"
+  }, 
+  "impact summary": {
+    "attributes": [
+      "category", 
+      "value"
+    ], 
+    "headings": [
+      "Buildings", 
+      "Count"
+    ], 
+    "fields": [
+      [
+        "Flooded", 
+        33
+      ], 
+      [
+        "Not affected buildings", 
+        143
+      ], 
+      [
+        "Total", 
+        176
+      ]
+    ]
+  }, 
+  "notes": {
+    "fields": [
+      "Buildings are flooded when in a region with field \"FLOODPRONE\" in \"YES\".", 
+      "Numbers reported for structures have not been rounded.", 
+      "The extent and severity of the mapped scenario or hazard zones may not be consistent with future events.", 
+      "The impacts on roads, people, buildings and other exposure elements may differ from the analysis results due to local conditions such as terrain and infrastructure type."
+    ], 
+    "title": "Notes and assumptions"
+  }, 
+  "question": "In the event of flood polygon how many buildings might be flooded?", 
+  "exposure": "building", 
+  "post processing": {
+    "BuildingType": {
+      "caption": "Closed buildings", 
+      "notes": [
+        "Columns and rows containing only 0 or \"No data\" values are excluded from the tables."
+      ], 
+      "fields": [
+        [
+          "JAKARTA P\u00faSAT", 
+          21, 
+          2, 
+          1, 
+          4, 
+          4, 
+          1
+        ], 
+        [
+          "Total in aggregation areas", 
+          21, 
+          2, 
+          1, 
+          4, 
+          4, 
+          1
+        ]
+      ], 
+      "attributes": [
+        "Kab_name", 
+        "Residential", 
+        "Education", 
+        "Health", 
+        "Place of Worship", 
+        "Government", 
+        "Commercial"
+      ]
+    }
+  }
+}

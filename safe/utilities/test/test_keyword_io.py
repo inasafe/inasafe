@@ -1,22 +1,20 @@
 # coding=utf-8
 """Tests for keyword io class."""
 import unittest
-import os
-import shutil
 
 from qgis.core import QgsDataSourceURI, QgsVectorLayer
 
-from safe.definitions import inasafe_keyword_version
+from safe.definitions.versions import inasafe_keyword_version
+from safe.common.exceptions import NoKeywordsFoundError
 from safe.common.utilities import unique_filename
 from safe.test.utilities import (
     load_layer,
     get_qgis_app,
     standard_data_path,
     clone_raster_layer)
-from safe.utilities.keyword_io import KeywordIO, definition
-from safe.common.exceptions import NoKeywordsFoundError
-from safe.utilities.unicode import get_unicode
+from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.metadata import read_iso19115_metadata
+from safe.utilities.unicode import get_unicode
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -59,8 +57,7 @@ class KeywordIOTest(unittest.TestCase):
         self.vector_layer, _ = load_layer(vector_path)
         self.expected_vector_keywords = {
             'keyword_version': '3.5',
-            'structure_class_field': 'FLOODED',
-            'value_mapping': {},
+            'value_map': {},
             'title': 'buildings_osm_4326',
             'layer_geometry': 'polygon',
             'layer_purpose': 'exposure',
@@ -113,6 +110,17 @@ class KeywordIOTest(unittest.TestCase):
             extension='.tif',
             include_keywords=True,
             source_directory=standard_data_path('hazard'))
+        layer.keywords = {
+            'hazard_category': u'single_event',
+            'title': u'tsunami_wgs84',
+            'keyword_version': u'3.5',
+            'hazard': u'tsunami',
+            'continuous_hazard_unit': u'metres',
+            'inasafe_fields': {},
+            'layer_geometry': u'raster',
+            'layer_purpose': u'hazard',
+            'layer_mode': u'continuous',
+        }
         new_keywords = {
             'hazard_category': 'multiple_event'
         }
@@ -120,18 +128,83 @@ class KeywordIOTest(unittest.TestCase):
         keywords = self.keyword_io.read_keywords(layer)
         expected_keywords = {
             'hazard_category': 'multiple_event',
-            'title': 'Tsunami',
+            'title': 'tsunami_wgs84',
             'hazard': 'tsunami',
             'continuous_hazard_unit': 'metres',
             'layer_geometry': 'raster',
             'layer_purpose': 'hazard',
             'layer_mode': 'continuous',
+            'thresholds': {
+                'road': {
+                    'tsunami_hazard_classes': {
+                        'active': True,
+                        'classes': {
+                            'dry': [0.0, 0.1],
+                            'high': [3.0, 8.0],
+                            'medium': [1.0, 3.0],
+                            'low': [0.1, 1.0],
+                            'very high': [8.0, 16.68]
+                        }
+                    }
+                },
+                'structure': {
+                    'tsunami_hazard_classes': {
+                        'active': True,
+                        'classes': {
+                            'dry': [0.0, 0.1],
+                            'high': [3.0, 8.0],
+                            'medium': [1.0, 3.0],
+                            'low': [0.1, 1.0],
+                            'very high': [8.0, 16.68]
+                        }
+                    }
+                },
+                'place': {
+                    'tsunami_hazard_classes': {
+                        'active': True,
+                        'classes': {
+                            'dry': [0.0, 0.1],
+                            'high': [3.0, 8.0],
+                            'medium': [1.0, 3.0],
+                            'low': [0.1, 1.0],
+                            'very high': [8.0, 16.68]
+                        }
+                    }
+                },
+                'land_cover': {
+                    'tsunami_hazard_classes': {
+                        'active': True,
+                        'classes': {
+                            'dry': [0.0, 0.1],
+                            'high': [3.0, 8.0],
+                            'medium': [1.0, 3.0],
+                            'low': [0.1, 1.0],
+                            'very high': [8.0, 16.68]
+                        }
+                    }
+                },
+                'population': {
+                    'tsunami_hazard_classes': {
+                        'active': True,
+                        'classes': {
+                            'dry': [0.0, 0.1],
+                            'high': [3.0, 8.0],
+                            'medium': [1.0, 3.0],
+                            'low': [0.1, 1.0],
+                            'very high': [8.0, 16.68]
+                        }
+                    }
+                }
+            },
             'keyword_version': inasafe_keyword_version
         }
+        expected_thresholds = expected_keywords.pop('thresholds')
         expected_keywords = {
             k: get_unicode(v) for k, v in expected_keywords.iteritems()
         }
-        self.assertDictEqual(keywords, expected_keywords)
+        thresholds_keywords = keywords.pop('thresholds')
+        self.assertDictEqual(expected_keywords, keywords)
+        self.assertDictEqual(expected_thresholds, thresholds_keywords)
 
     def test_copy_keywords(self):
         """Test we can copy the keywords."""
@@ -150,16 +223,6 @@ class KeywordIOTest(unittest.TestCase):
         expected_keywords['keyword_version'] = inasafe_keyword_version
 
         self.assertDictEqual(copied_keywords, expected_keywords)
-
-    def test_definition(self):
-        """Test we can get definitions for keywords.
-
-        .. versionadded:: 3.2
-
-        """
-        keyword = 'hazards'
-        keyword_definition = definition(keyword)
-        self.assertTrue('description' in keyword_definition)
 
     def test_to_message(self):
         """Test we can convert keywords to a message object.
@@ -191,7 +254,7 @@ class KeywordIOTest(unittest.TestCase):
             "'low': ['Kawasan Rawan Bencana I']}")
         table = self.keyword_io._dict_to_row(keyword_value)
         self.assertIn(
-            u'\n---\n*high*, Kawasan Rawan Bencana III------',
+            u'\n---\n*High*, Kawasan Rawan Bencana III------',
             table.to_text())
         # should also work passing a dict
         keyword_value = {
@@ -200,7 +263,7 @@ class KeywordIOTest(unittest.TestCase):
             'low': ['Kawasan Rawan Bencana I']}
         table = self.keyword_io._dict_to_row(keyword_value)
         self.assertIn(
-            u'\n---\n*high*, Kawasan Rawan Bencana III------',
+            u'\n---\n*High*, Kawasan Rawan Bencana III------',
             table.to_text())
 
     def test_keyword_io(self):

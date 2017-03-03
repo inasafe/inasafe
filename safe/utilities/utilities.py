@@ -1,55 +1,44 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool developed by AusAid -
-  **IS Utilities implementation.**
 
-Contact : ole.moller.nielsen@gmail.com
+"""Utilities module."""
 
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
-
+import re
+import codecs
+import json
+import logging
 import sys
 import traceback
-import logging
-import webbrowser
 import unicodedata
-import codecs
-from collections import OrderedDict
-import json
+import webbrowser
 
 from PyQt4.QtCore import QPyNullVariant
 
+from safe.common.exceptions import NoKeywordsFoundError, MetadataReadError
+from safe.definitions.versions import (
+    inasafe_keyword_version,
+    keyword_version_compatibilities)
+from safe.definitions.messages import disclaimer
+from safe import messaging as m
 from safe.common.utilities import unique_filename
 from safe.common.version import get_version
-from safe.defaults import disclaimer
-from safe import messaging as m
 from safe.messaging import styles, Message
 from safe.messaging.error_message import ErrorMessage
-from safe.utilities.unicode import get_unicode
 from safe.utilities.i18n import tr
-from safe.definitions import (
-    inasafe_keyword_version,
-    keyword_version_compatibilities
-)
+from safe.utilities.unicode import get_unicode
+from safe.utilities.keyword_io import KeywordIO
 
-__author__ = 'tim@kartoza.com'
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
-__date__ = '29/01/2011'
-__copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
-__copyright__ += 'Disaster Reduction'
 
-INFO_STYLE = styles.INFO_STYLE
+INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
 
 LOGGER = logging.getLogger('InaSAFE')
 
 
 def get_error_message(exception, context=None, suggestion=None):
     """Convert exception into an ErrorMessage containing a stack trace.
-
 
     :param exception: Exception object.
     :type exception: Exception
@@ -66,9 +55,9 @@ def get_error_message(exception, context=None, suggestion=None):
     :rtype: ErrorMessage
     """
 
-    trace = ''.join(traceback.format_tb(sys.exc_info()[2]))
+    name, trace = humanise_exception(exception)
 
-    problem = m.Message(m.Text(exception.__class__.__name__))
+    problem = m.Message(name)
 
     if exception is None or exception == '':
         problem.append = m.Text(tr('No details provided'))
@@ -94,6 +83,22 @@ def get_error_message(exception, context=None, suggestion=None):
         error_message.details.append(arg)
 
     return error_message
+
+
+def humanise_exception(exception):
+    """Humanise a python exception by giving the class name and traceback.
+
+    The function will return a tuple with the exception name and the traceback.
+
+    :param exception: Exception object.
+    :type exception: Exception
+
+    :return: A tuple with the exception name and the traceback.
+    :rtype: (str, str)
+    """
+    trace = ''.join(traceback.format_tb(sys.exc_info()[2]))
+    name = exception.__class__.__name__
+    return name, trace
 
 
 def humanise_seconds(seconds):
@@ -130,70 +135,6 @@ def humanise_seconds(seconds):
         # If all else fails...
         return tr('%i days, %i hours and %i minutes' % (
             days, hours, minutes))
-
-
-def reorder_dictionary(unordered_dictionary, expected_key_order):
-    """Reorder a dictionary according to a list of keys.
-
-    .. versionadded: 3.4
-
-    :param unordered_dictionary: The dictionary to reorder.
-    :type unordered_dictionary: dict
-
-    :param expected_key_order: The list of keys.
-    :type expected_key_order: list
-
-    :return: The new ordered dictionary.
-    :type: OrderedDict
-    """
-
-    ordered_dictionary = OrderedDict()
-
-    for item in expected_key_order:
-        if item in unordered_dictionary:
-            ordered_dictionary[item] = unordered_dictionary[item]
-
-    # Check if something is missing see #2969
-    if len(unordered_dictionary) != len(ordered_dictionary):
-        for key, value in unordered_dictionary.items():
-            if key not in ordered_dictionary.keys():
-                ordered_dictionary[key] = value
-
-    return ordered_dictionary
-
-
-def main_type(feature_type, value_mapping):
-    """Return the the main class from a feature by reading the mapping.
-
-    This function is used by buildings/roads IF.
-
-    .. versionadded: 3.4
-
-    :param feature_type: The type of the feature to test.
-    :type feature_type: str
-
-    :param value_mapping: The value mapping.
-    :type value_mapping: dict
-
-    :return: The main class name, if not found, it will return 'other'.
-    :rtype: str
-    """
-    other = 'other'
-
-    if feature_type in [None, 'NULL', 'null', 'Null', 0]:
-        return other
-
-    if feature_type.__class__.__name__ == 'QPyNullVariant':
-        return other
-
-    for key, values in value_mapping.iteritems():
-        if feature_type in values:
-            feature_class = key
-            break
-    else:
-        feature_class = other
-
-    return feature_class
 
 
 def impact_attribution(keywords, inasafe_flag=False):
@@ -332,63 +273,6 @@ def html_to_file(html, file_path=None, open_browser=False):
         open_in_browser(file_path)
 
 
-def ranges_according_thresholds_list(list_of_thresholds):
-    """Return an ordered dictionary with the ranges according to thresholds.
-
-    This used to classify a raster according to arbitrary number of thresholds
-
-    Given input: [A, B, C, D]
-    it will produce ranges:
-
-    {
-        0: [A, B],
-        1: [B, C],
-        2: [C, D]
-    }
-
-    If you want to list infinite interval, you can set A or D as None. To
-    indicate the interval is open till infinity.
-
-    :param list_of_thresholds:
-    :type list_of_thresholds: list(float)
-    :return:
-    """
-    ranges = OrderedDict()
-    for i, threshold in enumerate(list_of_thresholds):
-        if i >= len(list_of_thresholds) - 1:
-            break
-        threshold_min = list_of_thresholds[i]
-        try:
-            threshold_max = list_of_thresholds[i + 1]
-        except IndexError:
-            threshold_max = None
-        ranges.update({
-            i: [threshold_min, threshold_max]
-        })
-    return ranges
-
-
-def ranges_according_thresholds(low_max, medium_max, high_max):
-    """Return an ordered dictionary with the ranges according to thresholds.
-
-    This used to classify a raster according three thresholds.
-
-    :param low_max: The low threshold.
-    :type low_max: float
-
-    :param medium_max: The medium threshold.
-    :type medium_max: float
-
-    :param high_max: The high threshold.
-    :type high_max: float
-
-    :return The ranges.
-    :rtype OrderedDict
-    """
-    return ranges_according_thresholds_list(
-        [None, 0.0, low_max, medium_max, high_max, None])
-
-
 def replace_accentuated_characters(message):
     """Normalize unicode data in Python to remove umlauts, accents etc.
 
@@ -466,3 +350,49 @@ def write_json(data, filename):
 
     with open(filename, 'w') as json_file:
         json.dump(data, json_file, indent=2, default=custom_default)
+
+
+def human_sorting(the_list):
+    """Sort the given list in the way that humans expect.
+
+    From http://stackoverflow.com/a/4623518
+
+    :param the_list: The list to sort.
+    :type the_list: list
+
+    :return: The new sorted list.
+    :rtype: list
+    """
+    def try_int(s):
+        try:
+            return int(s)
+        except ValueError:
+            return s
+
+    def alphanum_key(s):
+        """Turn a string into a list of string and number chunks.
+
+            For instance : "z23a" -> ["z", 23, "a"]
+        """
+        return [try_int(c) for c in re.split('([0-9]+)', s)]
+
+    the_list.sort(key=alphanum_key)
+    return the_list
+
+
+def monkey_patch_keywords(layer):
+    """In InaSAFE V4, we do monkey patching for keywords.
+
+    :param layer: The layer to monkey patch keywords.
+    :type layer: QgsMapLayer
+    """
+    keyword_io = KeywordIO()
+    try:
+        layer.keywords = keyword_io.read_keywords(layer)
+    except (NoKeywordsFoundError, MetadataReadError):
+        layer.keywords = {}
+
+    try:
+        layer.keywords['inasafe_fields']
+    except KeyError:
+        layer.keywords['inasafe_fields'] = {}

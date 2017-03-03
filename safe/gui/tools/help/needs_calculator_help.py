@@ -5,7 +5,7 @@ from safe.utilities.i18n import tr
 from safe import messaging as m
 from safe.messaging import styles
 
-INFO_STYLE = styles.INFO_STYLE
+SUBSECTION_STYLE = styles.SUBSECTION_LEVEL_3_STYLE
 
 __author__ = 'ismailsunni'
 
@@ -37,7 +37,7 @@ def heading():
     :returns: A heading object.
     :rtype: safe.messaging.heading.Heading
     """
-    message = m.Heading(tr('Needs calculator help'), **INFO_STYLE)
+    message = m.Heading(tr('Needs calculator help'), **SUBSECTION_STYLE)
     return message
 
 
@@ -67,7 +67,7 @@ def content():
         'displaced people associated with each feature.'
     ))
     tips.add(tr(
-        'Use the pick lists below to select the layer and the population '
+        'Use the pick lists to select the layer and the population '
         'field and then press \'OK\'.'
     ))
     tips.add(tr(

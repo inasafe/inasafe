@@ -1,37 +1,70 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
 
-This module provides: Function Centric Wizard Step: Analysis
+"""InaSAFE Function Centric Wizard Analysis Step."""
 
-Contact : ole.moller.nielsen@gmail.com
+import logging
+import os
+from PyQt4 import QtGui, QtCore
+from PyQt4.QtCore import pyqtSignature, QSettings
 
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
+from qgis.core import (
+    QgsGeometry,
+    QgsCoordinateReferenceSystem,
+    QgsMapLayerRegistry)
 
-"""
-__author__ = 'qgis@borysjurgiel.pl'
-__revision__ = '$Format:%H$'
-__date__ = '16/03/2016'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
-
-# noinspection PyPackageRequirements
-from PyQt4.QtCore import pyqtSignature
-
-from safe.utilities.analysis_handler import AnalysisHandler
-
+from safe.utilities.i18n import tr
+from safe.utilities.extent import Extent
+from safe.definitions.constants import (
+    ANALYSIS_FAILED_BAD_INPUT,
+    ANALYSIS_FAILED_BAD_CODE,
+    PREPARE_FAILED_BAD_INPUT,
+    PREPARE_FAILED_BAD_CODE,
+    HAZARD_EXPOSURE_VIEW,
+    HAZARD_EXPOSURE_BOUNDINGBOX
+)
+from safe.common.signals import send_static_message, send_error_message
+from safe.gui.widgets.message import enable_messaging
+from safe.utilities.qt import enable_busy_cursor, disable_busy_cursor
+from safe.impact_function.impact_function import ImpactFunction
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step import WizardStep
+from safe.gui.analysis_utilities import (
+    generate_impact_report, add_impact_layers_to_canvas)
+from safe import messaging as m
+from safe.messaging import styles
+from safe.utilities.settings import setting, set_setting
+from safe.utilities.gis import wkt_to_rectangle
 
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
+LOGGER = logging.getLogger('InaSAFE')
+PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
+INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
+WARNING_STYLE = styles.RED_LEVEL_4_STYLE
+KEYWORD_STYLE = styles.KEYWORD_STYLE
+SUGGESTION_STYLE = styles.GREEN_LEVEL_4_STYLE
+SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
+LOGO_ELEMENT = m.Brand()
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
 class StepFcAnalysis(WizardStep, FORM_CLASS):
-    """Function Centric Wizard Step: Analysis"""
+
+    """Function Centric Wizard Step: Analysis."""
+
+    def __init__(self, parent):
+        """Init method."""
+        WizardStep.__init__(self, parent)
+
+        enable_messaging(self.results_webview)
+        self.iface = parent.iface
+        self.impact_function = None
+        self.extent = Extent(self.iface)
+        self.zoom_to_impact_flag = None
+        self.hide_exposure_flag = None
 
     def is_ready_to_next_step(self):
         """Check if the step is complete. If so, there is
@@ -41,15 +74,6 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         :rtype: bool
         """
         return True
-
-    def get_previous_step(self):
-        """Find the proper step when user clicks the Previous button.
-
-        :returns: The step to be switched to
-        :rtype: WizardStep instance or None
-        """
-        new_step = self.parent.step_fc_summary
-        return new_step
 
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.
@@ -68,7 +92,7 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         .. note:: This is an automatic Qt slot
            executed when the Next button is released.
         """
-        self.wvResults.open_current_in_browser()
+        self.results_webview.open_current_in_browser()
 
     # prevents actions being handled twice
     # noinspection PyPep8Naming
@@ -79,30 +103,268 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         .. note:: This is an automatic Qt slot
            executed when the Next button is released.
         """
-        self.analysis_handler.print_map('pdf')
+        LOGGER.debug('Generate PDF Button is not implemented')
 
     # prevents actions being handled twice
     # noinspection PyPep8Naming
     @pyqtSignature('')
     def on_pbnReportComposer_released(self):
-        """Handle the Open Report in Web Broseer button release.
+        """Handle the Open in composer button release.
 
         .. note:: This is an automatic Qt slot
            executed when the Next button is released.
         """
-        self.analysis_handler.print_map('composer')
+        LOGGER.debug('Open in composer Button is not implemented')
 
     def setup_and_run_analysis(self):
-        """Execute analysis after the tab is displayed"""
-        # noinspection PyTypeChecker
-        self.analysis_handler = AnalysisHandler(self.parent)
-        self.analysis_handler.setup_and_run_analysis()
+        """Execute analysis after the tab is displayed."""
+        # IFCW 4.0:
+
+        # Show busy
+        self.show_busy()
+        # show next analysis extent
+        # Prepare impact function from wizard dialog user input
+        self.impact_function = self.prepare_impact_function()
+        # Read user's settings
+        self.read_settings()
+        # Prepare impact function
+        status, message = self.impact_function.prepare()
+        # Check status
+        if status == PREPARE_FAILED_BAD_INPUT:
+            self.hide_busy()
+            LOGGER.info(tr(
+                'The impact function will not be able to run because of the '
+                'inputs.'))
+            LOGGER.info(message.to_text())
+            send_error_message(self, message)
+            return
+        if status == PREPARE_FAILED_BAD_CODE:
+            self.hide_busy()
+            LOGGER.exception(tr(
+                'The impact function was not able to be prepared because of a '
+                'bug.'))
+            LOGGER.info(message.to_text())
+            send_error_message(self, message)
+            return
+        # Start the analysis
+        status, message = self.impact_function.run()
+        # Check status
+        if status == ANALYSIS_FAILED_BAD_INPUT:
+            self.hide_busy()
+            LOGGER.info(tr(
+                'The impact function could not run because of the inputs.'))
+            LOGGER.info(message.to_text())
+            send_error_message(self, message)
+            return
+        elif status == ANALYSIS_FAILED_BAD_CODE:
+            self.hide_busy()
+            LOGGER.exception(tr(
+                'The impact function could not run because of a bug.'))
+            LOGGER.exception(message.to_text())
+            send_error_message(self, message)
+            return
+
+        LOGGER.info(tr('The impact function could run without errors.'))
+
+        # Generate impact report
+        generate_impact_report(self.impact_function, self.parent.iface)
+        # Add result layer to QGIS
+        add_impact_layers_to_canvas(self.impact_function, self.parent.iface)
+
+        # Some if-s i.e. zoom, debug, hide exposure
+        if self.zoom_to_impact_flag:
+            self.iface.zoomToActiveLayer()
+
+        qgis_exposure = (
+            QgsMapLayerRegistry.instance().mapLayer(
+                self.parent.exposure_layer.id()))
+
+        if self.hide_exposure_flag:
+            legend = self.iface.legendInterface()
+            legend.setLayerVisible(qgis_exposure, False)
+
+        self.extent.set_last_analysis_extent(
+            self.impact_function.analysis_extent,
+            qgis_exposure.crs())
+
+        # Hide busy
+        self.hide_busy()
+        # Setup gui if analysis is done
+        self.setup_gui_analysis_done()
 
     def set_widgets(self):
-        """Set widgets on the Progress tab"""
-        self.pbProgress.setValue(0)
-        self.wvResults.setHtml('')
+        """Set widgets on the Progress tab."""
+        self.progress_bar.setValue(0)
+        self.results_webview.setHtml('')
         self.pbnReportWeb.hide()
         self.pbnReportPDF.hide()
         self.pbnReportComposer.hide()
         self.lblAnalysisStatus.setText(self.tr('Running analysis...'))
+
+    def read_settings(self):
+        """Set the IF state from QSettings."""
+        extent = setting('user_extent', None, str)
+        if extent:
+            extent = QgsGeometry.fromWkt(extent)
+            if not extent.isGeosValid():
+                extent = None
+
+        crs = setting('user_extent_crs', None, str)
+        if crs:
+            crs = QgsCoordinateReferenceSystem(crs)
+            if not crs.isValid():
+                crs = None
+
+        mode = setting('analysis_extents_mode', HAZARD_EXPOSURE_VIEW)
+        if crs and extent and mode == HAZARD_EXPOSURE_BOUNDINGBOX:
+            self.extent.set_user_extent(extent, crs)
+
+        self.extent.show_rubber_bands = setting(
+            'showRubberBands', False, bool)
+
+        self.zoom_to_impact_flag = setting('setZoomToImpactFlag', True, bool)
+
+        # whether exposure layer should be hidden after model completes
+        self.hide_exposure_flag = setting('setHideExposureFlag', False, bool)
+
+    def prepare_impact_function(self):
+        """Create analysis as a representation of current situation of IFCW."""
+
+        # Impact Functions
+        impact_function = ImpactFunction()
+        impact_function.callback = self.progress_callback
+
+        # Layers
+        impact_function.hazard = self.parent.hazard_layer
+        impact_function.exposure = self.parent.exposure_layer
+        aggregation = self.parent.aggregation_layer
+
+        if aggregation:
+            impact_function.aggregation = aggregation
+            impact_function.use_selected_features_only = (
+                setting('useSelectedFeaturesOnly', False, bool))
+        else:
+            mode = setting('analysis_extents_mode')
+            if self.extent.user_extent:
+                # This like a hack to transform a geometry to a rectangle.
+                # self.extent.user_extent is a QgsGeometry.
+                # impact_function.requested_extent needs a QgsRectangle.
+                wkt = self.extent.user_extent.exportToWkt()
+                impact_function.requested_extent = wkt_to_rectangle(wkt)
+                impact_function.requested_extent_crs = self.extent.crs
+
+            elif mode == HAZARD_EXPOSURE_VIEW:
+                impact_function.requested_extent = (
+                    self.iface.mapCanvas().extent())
+                impact_function.requested_extent_crs = self.extent.crs
+
+        # We don't have any checkbox in the wizard for the debug mode.
+        impact_function.debug_mode = False
+
+        return impact_function
+
+    def setup_gui_analysis_done(self):
+        """Helper method to setup gui if analysis is done."""
+        self.progress_bar.hide()
+        self.lblAnalysisStatus.setText(tr('Analysis done.'))
+        self.pbnReportWeb.show()
+        self.pbnReportPDF.show()
+        # self.pbnReportComposer.show()  # Hide until it works again.
+        self.pbnReportPDF.clicked.connect(self.print_map)
+
+    def show_busy(self):
+        """Lock buttons and enable the busy cursor."""
+        self.progress_bar.show()
+        self.parent.pbnNext.setEnabled(False)
+        self.parent.pbnBack.setEnabled(False)
+        self.parent.pbnCancel.setEnabled(False)
+        self.parent.repaint()
+        enable_busy_cursor()
+        QtGui.qApp.processEvents()
+
+    def hide_busy(self):
+        """Unlock buttons A helper function to indicate processing is done."""
+        self.progress_bar.hide()
+        self.parent.pbnNext.setEnabled(True)
+        self.parent.pbnBack.setEnabled(True)
+        self.parent.pbnCancel.setEnabled(True)
+        self.parent.repaint()
+        disable_busy_cursor()
+
+    def progress_callback(self, current_value, maximum_value, message=None):
+        """GUI based callback implementation for showing progress.
+
+        :param current_value: Current progress.
+        :type current_value: int
+
+        :param maximum_value: Maximum range (point at which task is complete.
+        :type maximum_value: int
+
+        :param message: Optional message dictionary to containing content
+            we can display to the user. See safe.definitions.analysis_steps
+            for an example of the expected format
+        :type message: dict
+        """
+        report = m.Message()
+        report.add(LOGO_ELEMENT)
+        report.add(m.Heading(
+            self.tr('Analysis status'), **INFO_STYLE))
+        if message is not None:
+            report.add(m.ImportantText(message['name']))
+            report.add(m.Paragraph(message['description']))
+        report.add(self.impact_function.performance_log_message())
+        send_static_message(self, report)
+        self.progress_bar.setMaximum(maximum_value)
+        self.progress_bar.setValue(current_value)
+        QtGui.QApplication.processEvents()
+
+    def print_map(self):
+        """Open impact report dialog used to tune report when printing."""
+        # Check if selected layer is valid
+        impact_layer = self.parent.iface.activeLayer()
+        if impact_layer is None:
+            # noinspection PyCallByClass,PyTypeChecker
+            QtGui.QMessageBox.warning(
+                self,
+                'InaSAFE',
+                self.tr('Please select a valid impact layer before '
+                        'trying to print.'))
+            return
+
+        # Get output path from datastore
+        # Fetch report for pdfs report
+        report_path = os.path.dirname(impact_layer.source())
+        output_paths = [
+            os.path.join(
+                report_path,
+                'output/impact-report-output.pdf'),
+            os.path.join(
+                report_path,
+                'output/a4-portrait-blue.pdf'),
+            os.path.join(
+                report_path,
+                'output/a4-landscape-blue.pdf'),
+        ]
+
+        # Make sure the file paths can wrap nicely:
+        wrapped_output_paths = [
+            path.replace(os.sep, '<wbr>' + os.sep) for path in
+            output_paths]
+
+        # create message to user
+        status = m.Message(
+            m.Heading(self.tr('Map Creator'), **INFO_STYLE),
+            m.Paragraph(self.tr(
+                'Your PDF was created....opening using the default PDF '
+                'viewer on your system. The generated pdfs were saved '
+                'as:')))
+
+        for path in wrapped_output_paths:
+            status.add(m.Paragraph(path))
+
+        send_static_message(self, status)
+
+        for path in output_paths:
+            # noinspection PyCallByClass,PyTypeChecker,PyTypeChecker
+            QtGui.QDesktopServices.openUrl(
+                QtCore.QUrl.fromLocalFile(path))

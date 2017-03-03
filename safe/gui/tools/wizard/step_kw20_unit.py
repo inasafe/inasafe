@@ -1,42 +1,25 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
-
-This module provides: Keyword Wizard Step: Unit
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
-__author__ = 'qgis@borysjurgiel.pl'
-__revision__ = '$Format:%H$'
-__date__ = '16/03/2016'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
+"""InaSAFE Keyword Wizard Unit Step."""
 
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore
-# noinspection PyPackageRequirements
 from PyQt4.QtGui import QListWidgetItem
 
-from safe.definitions import (
-    continuous_hazard_unit,
-    exposure_unit,
-    layer_purpose_hazard,
-    layer_purpose_exposure)
-
-from safe.utilities.keyword_io import definition
-
+from safe.definitions.layer_purposes import layer_purpose_hazard
+from safe.definitions.exposure import exposure_population
+from safe.definitions.units import exposure_unit
+from safe.definitions.hazard import continuous_hazard_unit
+from safe.definitions.utilities import (
+    definition, hazard_units, exposure_units, get_classifications)
+from safe.gui.tools.wizard.wizard_step import (
+    get_wizard_step_ui_class, WizardStep)
+from safe.gui.tools.wizard.wizard_strings import unit_question
 from safe.utilities.gis import is_raster_layer
 
-from safe.gui.tools.wizard.wizard_strings import unit_question
-from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
-from safe.gui.tools.wizard.wizard_step import WizardStep
-
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
@@ -45,22 +28,14 @@ class StepKwUnit(WizardStep, FORM_CLASS):
     """Keyword Wizard Step: Unit"""
 
     def is_ready_to_next_step(self):
-        """Check if the step is complete. If so, there is
-            no reason to block the Next button.
+        """Check if the step is complete.
+
+        If so, there is no reason to block the Next button.
 
         :returns: True if new step may be enabled.
         :rtype: bool
         """
         return bool(self.selected_unit())
-
-    def get_previous_step(self):
-        """Find the proper step when user clicks the Previous button.
-
-        :returns: The step to be switched to
-        :rtype: WizardStep instance or None
-        """
-        new_step = self.parent.step_kw_layermode
-        return new_step
 
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.
@@ -68,17 +43,21 @@ class StepKwUnit(WizardStep, FORM_CLASS):
         :returns: The step to be switched to
         :rtype: WizardStep instance or None
         """
-        if is_raster_layer(self.parent.layer):
-            if self.parent.step_kw_purpose.\
-                    selected_purpose() == layer_purpose_exposure:
-                # Only go to resample for continuous raster exposures
-                new_step = self.parent.step_kw_resample
-            else:
-                new_step = self.parent.step_kw_extrakeywords
+        subcategory = self.parent.step_kw_subcategory.selected_subcategory()
+        is_raster = is_raster_layer(self.parent.layer)
+        has_classifications = get_classifications(subcategory['key'])
+
+        # Vector
+        if not is_raster:
+            return self.parent.step_kw_field
+        # Raster and has classifications
+        elif has_classifications:
+            return self.parent.step_kw_multi_classifications
+        # If population, must go to resample step first
+        elif subcategory == exposure_population:
+            return self.parent.step_kw_resample
         else:
-            # Currently not used, as we don't have continuous vectors
-            new_step = self.parent.step_kw_field
-        return new_step
+            return self.parent.step_kw_source
 
     # noinspection PyPep8Naming
     def on_lstUnits_itemSelectionChanged(self):
@@ -127,24 +106,11 @@ class StepKwUnit(WizardStep, FORM_CLASS):
         self.lblDescribeUnit.setText('')
         self.lstUnits.clear()
         subcat = self.parent.step_kw_subcategory.selected_subcategory()['key']
-        laygeo = self.parent.get_layer_geometry_id()
-        laymod = self.parent.step_kw_layermode.selected_layermode()['key']
         if purpose == layer_purpose_hazard:
-            hazcat = self.parent.step_kw_hazard_category.\
-                selected_hazard_category()['key']
-            units_for_layer = self.impact_function_manager.\
-                continuous_hazards_units_for_layer(
-                    subcat, laygeo, laymod, hazcat)
+            units_for_layer = hazard_units(subcat)
         else:
-            units_for_layer = self.impact_function_manager\
-                .exposure_units_for_layer(
-                    subcat, laygeo, laymod)
+            units_for_layer = exposure_units(subcat)
         for unit_for_layer in units_for_layer:
-            # if (self.parent.get_layer_geometry_id() == 'raster' and
-            #         'constraint' in unit_for_layer and
-            #         unit_for_layer['constraint'] == 'categorical'):
-            #     continue
-            # else:
             item = QListWidgetItem(unit_for_layer['name'], self.lstUnits)
             item.setData(QtCore.Qt.UserRole, unit_for_layer['key'])
             self.lstUnits.addItem(item)
@@ -156,7 +122,6 @@ class StepKwUnit(WizardStep, FORM_CLASS):
         else:
             key = exposure_unit['key']
         unit_id = self.parent.get_existing_keyword(key)
-        # unit_id = definitions.old_to_new_unit_id(unit_id)
         if unit_id:
             units = []
             for index in xrange(self.lstUnits.count()):

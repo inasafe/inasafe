@@ -1,30 +1,34 @@
 # coding=utf-8
-"""Helper module for gui test suite
-"""
+"""Helper module for gui test suite."""
+import codecs
+import hashlib
+import inspect
+import logging
 import os
 import re
-import sys
-import hashlib
-import logging
 import shutil
+import sys
+from PyQt4 import QtGui  # pylint: disable=W0621
 from itertools import izip
+from os.path import exists, splitext, basename, join
+from tempfile import mkdtemp
+
 from qgis.core import (
     QgsVectorLayer,
     QgsRasterLayer,
     QgsRectangle,
     QgsCoordinateReferenceSystem,
     QgsMapLayerRegistry)
-# noinspection PyPackageRequirements
-from PyQt4 import QtGui  # pylint: disable=W0621
 from qgis.utils import iface
 
-from safe.gis.numerics import axes_to_points
-from safe.common.utilities import unique_filename, temp_dir
 from safe.common.exceptions import NoKeywordsFoundError
-
-from safe.utilities.clipper import extent_to_geoarray, clip_layer
-from safe.utilities.gis import get_wgs84_resolution
+from safe.common.utilities import unique_filename, temp_dir
+from safe.definitions.constants import HAZARD_EXPOSURE
+from safe.gis.vector.tools import create_memory_layer, copy_layer
+from safe.utilities.i18n import tr
 from safe.utilities.metadata import read_iso19115_metadata
+from safe.utilities.utilities import monkey_patch_keywords
+from safe.utilities.numerics import axes_to_points
 
 QGIS_APP = None  # Static variable used to hold hand to running QGIS app
 CANVAS = None
@@ -39,7 +43,7 @@ DEVNULL = open(os.devnull, 'w')
 # inasafe_data and just use data in standard_data_path. But until that is done,
 # we still keep TESTDATA, HAZDATA, EXPDATA, and BOUNDATA below
 
-# Assuming test data three lvls up
+# Assuming test data three levels up
 pardir = os.path.abspath(os.path.join(
     os.path.realpath(os.path.dirname(__file__)),
     '..',
@@ -56,13 +60,32 @@ HAZDATA = os.path.join(DATADIR, 'hazard')  # Real hazard layers
 EXPDATA = os.path.join(DATADIR, 'exposure')  # Real exposure layers
 BOUNDDATA = os.path.join(DATADIR, 'boundaries')  # Real exposure layers
 
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
+
+
+def qgis_iface():
+    """Helper method to get the iface for testing.
+
+    :return: The QGIS interface.
+    :rtype: QgsInterface
+    """
+    from qgis.utils import iface
+    if iface is not None:
+        return iface
+    else:
+        from qgis.testing.mocked import get_iface
+        return get_iface()
+
 
 def get_qgis_app():
     """ Start one QGIS application to test against.
 
     :returns: Handle to QGIS app, canvas, iface and parent. If there are any
         errors the tuple members will be returned as None.
-    :rtype: (QgsApplication, CANVAS, IFload_standard_layersACE, PARENT)
+    :rtype: (QgsApplication, CANVAS, IFACE, PARENT)
 
     If QGIS is already running the handle to that app will be returned.
     """
@@ -84,7 +107,7 @@ def get_qgis_app():
         from PyQt4 import QtGui, QtCore  # pylint: disable=W0621
         # noinspection PyPackageRequirements
         from PyQt4.QtCore import QCoreApplication, QSettings
-        from safe.gis.qgis_interface import QgisInterface
+        from safe.test.qgis_interface import QgisInterface
     except ImportError:
         return None, None, None, None
 
@@ -120,7 +143,7 @@ def get_qgis_app():
         settings.setValue('inasafe/show_extent_confirmations', False)
         settings.setValue('inasafe/show_extent_warnings', False)
         settings.setValue('inasafe/showRubberBands', True)
-        settings.setValue('inasafe/analysis_extents_mode', 'HazardExposure')
+        settings.setValue('inasafe/analysis_extents_mode', HAZARD_EXPOSURE)
 
     if PARENT is None:
         # noinspection PyPep8Naming
@@ -135,9 +158,6 @@ def get_qgis_app():
         # QgisInterface is a stub implementation of the QGIS plugin interface
         # noinspection PyPep8Naming
         IFACE = QgisInterface(CANVAS)
-        # Note(IS): I put here since it needs QGIS apps instance first
-        from safe.impact_functions.loader import register_impact_functions
-        register_impact_functions()
 
     return QGIS_APP, CANVAS, IFACE, PARENT
 
@@ -198,7 +218,7 @@ def standard_data_path(*args):
     :param args: List of path e.g. ['control', 'files',
         'test-error-message.txt'] or ['control', 'scenarios'] to get the path
         to scenarios dir.
-    :type args: list
+    :type args: list[str]
 
     :return: Absolute path to the test data or dir path.
     :rtype: str
@@ -210,6 +230,235 @@ def standard_data_path(*args):
         path = os.path.abspath(os.path.join(path, item))
 
     return path
+
+
+def load_local_vector_layer(test_file, **kwargs):
+    """Return the test vector layer.
+
+    See documentation of load_path_vector_layer
+
+    :param test_file: The file to load in the data directory next to the file.
+    :type test_file: str
+
+    :param kwargs: It can be :
+        clone=True if you want to copy the layer first to a temporary file.
+
+        clone_to_memory=True if you want to create a memory layer.
+
+        with_keywords=False if you do not want keywords. "clone_to_memory" is
+            required.
+
+    :type kwargs: dict
+
+    :return: The vector layer.
+    :rtype: QgsVectorLayer
+
+    .. versionadded:: 4.0
+    """
+    caller_path = inspect.getouterframes(inspect.currentframe())[1][1]
+    path = os.path.join(os.path.dirname(caller_path), 'data', test_file)
+    return load_path_vector_layer(path, **kwargs)
+
+
+def load_test_vector_layer(*args, **kwargs):
+    """Return the test vector layer.
+
+    See documentation of load_path_vector_layer
+
+    :param args: List of path e.g. ['exposure', 'buildings.shp'].
+    :type args: list[str]
+
+    :param kwargs: It can be :
+        clone=True if you want to copy the layer first to a temporary file.
+
+        clone_to_memory=True if you want to create a memory layer.
+
+        with_keywords=False if you do not want keywords. "clone_to_memory" is
+            required.
+
+    :type kwargs: dict
+
+    :return: The vector layer.
+    :rtype: QgsVectorLayer
+
+    .. versionadded:: 4.0
+    """
+    path = standard_data_path(*args)
+    return load_path_vector_layer(path, **kwargs)
+
+
+def load_path_vector_layer(path, **kwargs):
+    """Return the test vector layer.
+
+    :param path: Path to the vector layer.
+    :type path: str
+
+    :param kwargs: It can be :
+        clone=True if you want to copy the layer first to a temporary file.
+
+        clone_to_memory=True if you want to create a memory layer.
+
+        with_keywords=False if you do not want keywords. "clone_to_memory" is
+            required.
+
+    :type kwargs: dict
+
+    :return: The vector layer.
+    :rtype: QgsVectorLayer
+
+    .. versionadded:: 4.0
+    """
+    if not exists(path):
+        raise Exception('%s do not exist.' % path)
+
+    name = splitext(basename(path))[0]
+    extension = splitext(path)[1]
+
+    extensions = [
+        '.shp', '.shx', '.dbf', '.prj', '.gpkg', '.geojson', '.xml', '.qml']
+
+    if kwargs.get('with_keywords'):
+        if not kwargs.get('clone_to_memory'):
+            raise Exception('with_keywords needs a clone_to_memory')
+
+    if kwargs.get('clone', False):
+        target_directory = mkdtemp()
+        current_path = splitext(path)[0]
+        path = join(target_directory, name + extension)
+
+        for ext in extensions:
+            src_path = current_path + ext
+            if exists(src_path):
+                target_path = join(target_directory, name + ext)
+                shutil.copy2(src_path, target_path)
+
+    if path.endswith('.csv'):
+        layer = QgsVectorLayer(path, name, 'delimitedtext')
+    else:
+        layer = QgsVectorLayer(path, name, 'ogr')
+
+    if not layer.isValid():
+        raise Exception('%s is not a valid layer.' % name)
+
+    monkey_patch_keywords(layer)
+
+    if kwargs.get('clone_to_memory', False):
+        keywords = layer.keywords.copy()
+        memory_layer = create_memory_layer(
+            name, layer.geometryType(), layer.crs(), layer.fields())
+        copy_layer(layer, memory_layer)
+        if kwargs.get('with_keywords', True):
+            memory_layer.keywords = keywords
+        return memory_layer
+    else:
+        return layer
+
+
+def load_local_raster_layer(test_file, **kwargs):
+    """Return the test raster layer.
+
+    See documentation of load_path_raster_layer
+
+    :param test_file: The file to load in the data directory next to the file.
+    :type test_file: str
+
+    :param kwargs: It can be :
+        clone=True if you want to copy the layer first to a temporary file.
+
+        with_keywords=False if you do not want keywords. "clone" is
+            required.
+
+    :type kwargs: dict
+
+    :return: The raster layer.
+    :rtype: QgsRasterLayer
+
+    .. versionadded:: 4.0
+    """
+    caller_path = inspect.getouterframes(inspect.currentframe())[1][1]
+    path = os.path.join(os.path.dirname(caller_path), 'data', test_file)
+    return load_path_raster_layer(path, **kwargs)
+
+
+def load_test_raster_layer(*args, **kwargs):
+    """Return the test raster layer.
+
+    See documentation of load_path_raster_layer
+
+    :param args: List of path e.g. ['exposure', 'population.asc]'.
+    :type args: list[str]
+
+    :param kwargs: It can be :
+        clone=True if you want to copy the layer first to a temporary file.
+
+        with_keywords=False if you do not want keywords. "clone" is
+            required.
+
+    :type kwargs: dict
+
+    :return: The raster layer.
+    :rtype: QgsRasterLayer
+
+    .. versionadded:: 4.0
+    """
+    path = standard_data_path(*args)
+    return load_path_raster_layer(path, **kwargs)
+
+
+def load_path_raster_layer(path, **kwargs):
+    """Return the test raster layer.
+
+    :param path: Path to the raster layer.
+    :type path: str
+
+    :param kwargs: It can be :
+        clone=True if you want to copy the layer first to a temporary file.
+
+        with_keywords=False if you do not want keywords. "clone" is
+            required.
+
+    :return: The raster layer.
+    :rtype: QgsRasterLayer
+
+    .. versionadded:: 4.0
+    """
+    if not exists(path):
+        raise Exception('%s do not exist.' % path)
+
+    name = splitext(basename(path))[0]
+    extension = splitext(path)[1]
+
+    extensions = [
+        '.tiff', '.tif', '.asc', '.xml', '.qml']
+
+    if kwargs.get('with_keywords'):
+        if not kwargs.get('clone'):
+            raise Exception('with_keywords needs a clone')
+
+    if not kwargs.get('with_keywords', True):
+        index = extensions.index('.xml')
+        extensions.pop(index)
+
+    if kwargs.get('clone', False):
+        target_directory = mkdtemp()
+        current_path = splitext(path)[0]
+        path = join(target_directory, name + extension)
+
+        for ext in extensions:
+            src_path = current_path + ext
+            if exists(src_path):
+                target_path = join(target_directory, name + ext)
+                shutil.copy2(src_path, target_path)
+
+    name = os.path.basename(path)
+    layer = QgsRasterLayer(path, name)
+
+    if not layer.isValid():
+        raise Exception('%s is not a valid layer.' % name)
+
+    monkey_patch_keywords(layer)
+
+    return layer
 
 
 def load_layer(layer_path):
@@ -236,9 +485,9 @@ def load_layer(layer_path):
         pass
 
     # Create QGis Layer Instance
-    if extension in ['.asc', '.tif']:
+    if extension in ['.asc', '.tif', '.tiff']:
         layer = QgsRasterLayer(layer_path, base_name)
-    elif extension in ['.shp']:
+    elif extension in ['.shp', '.geojson', '.gpkg']:
         layer = QgsVectorLayer(layer_path, base_name, 'ogr')
     else:
         message = 'File %s had illegal extension' % layer_path
@@ -248,10 +497,11 @@ def load_layer(layer_path):
     message = 'Layer "%s" is not valid' % layer.source()
     # noinspection PyUnresolvedReferences
     if not layer.isValid():
-        LOGGER.log(message)
-    # noinspection PyUnresolvedReferences
-    if not layer.isValid():
+        LOGGER.debug(message)
         raise Exception(message)
+
+    monkey_patch_keywords(layer)
+
     return layer, layer_purpose
 
 
@@ -429,22 +679,16 @@ def get_ui_state(dock):
 
         {'Hazard': 'flood',
          'Exposure': 'population',
-         'Impact Function Title': 'be affected',
-         'Impact Function Id': 'FloodImpactFunction',
          'Run Button Enabled': False}
 
     """
 
-    hazard = str(dock.cboHazard.currentText())
-    exposure = str(dock.cboExposure.currentText())
-    impact_function_title = str(dock.cboFunction.currentText())
-    impact_function_id = dock.get_function_id()
-    run_button = dock.pbnRunStop.isEnabled()
+    hazard = str(dock.hazard_layer_combo.currentText())
+    exposure = str(dock.exposure_layer_combo.currentText())
+    run_button = dock.run_button.isEnabled()
 
     return {'Hazard': hazard,
             'Exposure': exposure,
-            'Impact Function Title': impact_function_title,
-            'Impact Function Id': impact_function_id,
             'Run Button Enabled': run_button}
 
 
@@ -474,9 +718,9 @@ def combos_to_string(dock):
 
     string = u'Hazard Layers\n'
     string += '-------------------------\n'
-    current_id = dock.cboHazard.currentIndex()
-    for count in range(0, dock.cboHazard.count()):
-        item_text = dock.cboHazard.itemText(count)
+    current_id = dock.hazard_layer_combo.currentIndex()
+    for count in range(0, dock.hazard_layer_combo.count()):
+        item_text = dock.hazard_layer_combo.itemText(count)
         if count == current_id:
             string += '>> '
         else:
@@ -485,9 +729,9 @@ def combos_to_string(dock):
     string += '\n'
     string += 'Exposure Layers\n'
     string += '-------------------------\n'
-    current_id = dock.cboExposure.currentIndex()
-    for count in range(0, dock.cboExposure.count()):
-        item_text = dock.cboExposure.itemText(count)
+    current_id = dock.exposure_layer_combo.currentIndex()
+    for count in range(0, dock.exposure_layer_combo.count()):
+        item_text = dock.exposure_layer_combo.itemText(count)
         if count == current_id:
             string += '>> '
         else:
@@ -495,24 +739,11 @@ def combos_to_string(dock):
         string += item_text + '\n'
 
     string += '\n'
-    string += 'Functions\n'
-    string += '-------------------------\n'
-    current_id = dock.cboFunction.currentIndex()
-    for count in range(0, dock.cboFunction.count()):
-        item_text = dock.cboFunction.itemText(count)
-        if count == current_id:
-            string += '>> '
-        else:
-            string += '   '
-        string += '%s (Function ID: %s)\n' % (
-            item_text, dock.get_function_id(current_id))
-
-    string += '\n'
     string += 'Aggregation Layers\n'
     string += '-------------------------\n'
-    current_id = dock.cboAggregation.currentIndex()
-    for count in range(0, dock.cboAggregation.count()):
-        item_text = dock.cboAggregation.itemText(count)
+    current_id = dock.aggregation_layer_combo.currentIndex()
+    for count in range(0, dock.aggregation_layer_combo.count()):
+        item_text = dock.aggregation_layer_combo.itemText(count)
         if count == current_id:
             string += '>> '
         else:
@@ -523,31 +754,10 @@ def combos_to_string(dock):
     return string
 
 
-def get_function_index(dock, function_id):
-    """Get the combo index for a function given its function_id.
-
-    :param dock: A dock instance.
-    :type dock: Dock
-
-    :param function_id: The function id e.g. FloodEvacuationImpactFunction.
-    :type function_id: str
-    """
-
-    index = -1
-    for count in range(dock.cboFunction.count()):
-        next_function_id = dock.get_function_id(count)
-        if function_id == next_function_id:
-            index = count
-            break
-    return index
-
-
 def setup_scenario(
         dock,
         hazard,
         exposure,
-        function_id,
-        function=None,
         ok_button_flag=True,
         aggregation_layer=None,
         aggregation_enabled_flag=None):
@@ -592,39 +802,32 @@ def setup_scenario(
     :rtype: (bool, str)
     """
     if hazard is not None:
-        index = dock.cboHazard.findText(hazard)
+        index = dock.hazard_layer_combo.findText(hazard)
         message = ('\nHazard Layer Not Found: %s\n Combo State:\n%s' %
                    (hazard, combos_to_string(dock)))
         if index == -1:
             return False, message
-        dock.cboHazard.setCurrentIndex(index)
+        dock.hazard_layer_combo.setCurrentIndex(index)
 
     if exposure is not None:
-        index = dock.cboExposure.findText(exposure)
+        index = dock.exposure_layer_combo.findText(exposure)
         message = ('\nExposure Layer Not Found: %s\n Combo State:\n%s' %
                    (exposure, combos_to_string(dock)))
         if index == -1:
             return False, message
-        dock.cboExposure.setCurrentIndex(index)
-
-    if function_id is not None:
-        index = get_function_index(dock, function_id)
-        message = ('\nImpact Function Not Found: %s\n Combo State:\n%s' %
-                   (function, combos_to_string(dock)))
-        if index == -1:
-            return False, message
-        dock.cboFunction.setCurrentIndex(index)
+        dock.exposure_layer_combo.setCurrentIndex(index)
 
     if aggregation_layer is not None:
-        index = dock.cboAggregation.findText(aggregation_layer)
+        index = dock.aggregation_layer_combo.findText(aggregation_layer)
         message = ('Aggregation layer Not Found: %s\n Combo State:\n%s' %
                    (aggregation_layer, combos_to_string(dock)))
         if index == -1:
             return False, message
-        dock.cboAggregation.setCurrentIndex(index)
+        dock.aggregation_layer_combo.setCurrentIndex(index)
 
     if aggregation_enabled_flag is not None:
-        if dock.cboAggregation.isEnabled() != aggregation_enabled_flag:
+        combo_enabled_flag = dock.aggregation_layer_combo.isEnabled()
+        if combo_enabled_flag != aggregation_enabled_flag:
             message = (
                 'The aggregation combobox should be %s' %
                 ('enabled' if aggregation_enabled_flag else 'disabled'))
@@ -634,13 +837,8 @@ def setup_scenario(
     state = get_ui_state(dock)
 
     expected_state = {'Run Button Enabled': ok_button_flag,
-                      'Impact Function Id': function_id,
                       'Hazard': hazard,
                       'Exposure': exposure}
-    if function is not None:
-        expected_state['Impact Function Title'] = function
-    else:
-        state.pop('Impact Function Title')
 
     message = 'Expected versus Actual State\n'
     message += '--------------------------------------------------------\n'
@@ -665,8 +863,8 @@ def populate_dock(dock):
     :type dock: Dock
     """
     load_standard_layers(dock)
-    dock.cboHazard.setCurrentIndex(0)
-    dock.cboExposure.setCurrentIndex(0)
+    dock.hazard_layer_combo.setCurrentIndex(0)
+    dock.exposure_layer_combo.setCurrentIndex(0)
 
 
 def load_standard_layers(dock=None):
@@ -692,20 +890,20 @@ def load_standard_layers(dock=None):
         standard_data_path('hazard', 'floods.shp'),
         standard_data_path('hazard', 'classified_generic_polygon.shp'),
         standard_data_path('hazard', 'volcano_krb.shp'),
-        standard_data_path('hazard', 'volcano_point.shp'),
         standard_data_path('hazard', 'classified_flood_20_20.asc'),
         standard_data_path('hazard', 'continuous_flood_20_20.asc'),
         standard_data_path('hazard', 'tsunami_wgs84.tif'),
         standard_data_path('hazard', 'earthquake.tif'),
         standard_data_path('hazard', 'ash_raster_wgs84.tif'),
+        standard_data_path('hazard', 'volcano_point.geojson'),
         standard_data_path('exposure', 'building-points.shp'),
         standard_data_path('exposure', 'buildings.shp'),
-        standard_data_path('exposure', 'census.shp'),
+        standard_data_path('exposure', 'census.geojson'),
         standard_data_path('exposure', 'roads.shp'),
-        standard_data_path('exposure', 'landcover.shp'),
+        standard_data_path('exposure', 'landcover.geojson'),
         standard_data_path('exposure', 'pop_binary_raster_20_20.asc'),
-        standard_data_path('boundaries', 'grid_jakarta.shp'),
-        standard_data_path('boundaries', 'district_osm_jakarta.shp'),
+        standard_data_path('aggregation', 'grid_jakarta.geojson'),
+        standard_data_path('aggregation', 'district_osm_jakarta.geojson'),
     ]
     hazard_layer_count, exposure_layer_count = load_layers(
         file_list, dock=dock)
@@ -845,6 +1043,9 @@ def clone_shp_layer(
 
     shp_path = '%s.shp' % temp_path
     layer = QgsVectorLayer(shp_path, os.path.basename(shp_path), 'ogr')
+
+    monkey_patch_keywords(layer)
+
     return layer
 
 
@@ -898,7 +1099,7 @@ def clone_raster_layer(
         put the files into. Default to 'testing'.
     :type target_directory: str
     """
-    extensions = ['.prj', '.sld', 'qml', '.prj', extension]
+    extensions = ['.prj', '.sld', 'qml', extension]
     if include_keywords:
         extensions.append('.xml')
     temp_path = unique_filename(dir=temp_dir(target_directory))
@@ -911,6 +1112,9 @@ def clone_raster_layer(
 
     raster_path = '%s%s' % (temp_path, extension)
     layer = QgsRasterLayer(raster_path, os.path.basename(raster_path))
+
+    monkey_patch_keywords(layer)
+
     return layer
 
 
@@ -954,51 +1158,21 @@ class FakeLayer(object):
         return self.layer_source
 
 
-# TODO(IS): This method doesn't belong to this file.
-def clip_layers(first_layer_path, second_layer_path):
-    """Clip and resample layers with the reference to the first layer.
+def get_control_text(file_name):
+    """Helper to get control text for string compares.
 
-    :param first_layer_path: Path to the first layer path.
-    :type first_layer_path: str
+    :param file_name: filename
+    :type file_name: str
 
-    :param second_layer_path: Path to the second layer path.
-    :type second_layer_path: str
-
-    :return: Path to the clipped datasets (clipped 1st layer, clipped 2nd
-        layer).
-    :rtype: tuple(str, str)
-
-    :raise
-        FileNotFoundError
+    :returns: A string containing the contents of the file.
     """
-    base_name, _ = os.path.splitext(first_layer_path)
-    # noinspection PyCallingNonCallable
-    first_layer = QgsRasterLayer(first_layer_path, base_name)
-    base_name, _ = os.path.splitext(second_layer_path)
-    # noinspection PyCallingNonCallable
-    second_layer = QgsRasterLayer(second_layer_path, base_name)
-
-    # Get the firs_layer extents as an array in EPSG:4326
-    first_layer_geo_extent = extent_to_geoarray(
-        first_layer.extent(),
-        first_layer.crs())
-
-    first_layer_geo_cell_size, _ = get_wgs84_resolution(first_layer)
-    second_layer_geo_cell_size, _ = get_wgs84_resolution(second_layer)
-
-    if first_layer_geo_cell_size < second_layer_geo_cell_size:
-        cell_size = first_layer_geo_cell_size
-    else:
-        cell_size = second_layer_geo_cell_size
-
-    clipped_first_layer = clip_layer(
-        layer=first_layer,
-        extent=first_layer_geo_extent,
-        cell_size=cell_size)
-
-    clipped_second_layer = clip_layer(
-        layer=second_layer,
-        extent=first_layer_geo_extent,
-        cell_size=cell_size)
-
-    return clipped_first_layer, clipped_second_layer
+    control_file_path = standard_data_path(
+        'control',
+        'files',
+        file_name
+    )
+    expected_result = codecs.open(
+        control_file_path,
+        mode='r',
+        encoding='utf-8').readlines()
+    return expected_result

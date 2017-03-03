@@ -13,33 +13,28 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-__author__ = 'qgis@borysjurgiel.pl'
-__revision__ = '$Format:%H$'
-__date__ = '16/03/2016'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
 
 import os
 
-# noinspection PyPackageRequirements
 from PyQt4 import QtCore
-# noinspection PyPackageRequirements
-from PyQt4.QtGui import (
-    QListWidgetItem,
-    QPixmap)
+from PyQt4.QtGui import QListWidgetItem, QPixmap
 
+from safe.definitions.layer_purposes import (
+    layer_purpose_exposure, layer_purpose_hazard)
+from safe.definitions.utilities import (
+    hazards_for_layer,
+    definition,
+    exposures_for_layer)
 
-from safe.definitions import (
-    layer_purpose_hazard,
-    layer_purpose_exposure)
-
-from safe.utilities.keyword_io import definition
+from safe.gui.tools.wizard.wizard_step import WizardStep
+from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
+from safe.gui.tools.wizard.wizard_utils import get_question_text
 from safe.utilities.resources import resources_path
 
-from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
-from safe.gui.tools.wizard.wizard_step import WizardStep
-from safe.gui.tools.wizard.wizard_utils import get_question_text
-
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
@@ -55,15 +50,6 @@ class StepKwSubcategory(WizardStep, FORM_CLASS):
         :rtype: bool
         """
         return bool(self.selected_subcategory())
-
-    def get_previous_step(self):
-        """Find the proper step when user clicks the Previous button.
-
-        :returns: The step to be switched to
-        :rtype: WizardStep instance or None
-        """
-        new_step = self.parent.step_kw_purpose
-        return new_step
 
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.
@@ -86,13 +72,11 @@ class StepKwSubcategory(WizardStep, FORM_CLASS):
         :rtype: list
         """
         purpose = self.parent.step_kw_purpose.selected_purpose()
-        layer_geometry_id = self.parent.get_layer_geometry_id()
+        layer_geometry_key = self.parent.get_layer_geometry_key()
         if purpose == layer_purpose_hazard:
-            return self.impact_function_manager.hazards_for_layer(
-                layer_geometry_id)
+            return hazards_for_layer(layer_geometry_key)
         elif purpose == layer_purpose_exposure:
-            return self.impact_function_manager.exposures_for_layer(
-                layer_geometry_id)
+            return exposures_for_layer(layer_geometry_key)
 
     # noinspection PyPep8Naming
     def on_lstSubcategories_itemSelectionChanged(self):
@@ -155,7 +139,9 @@ class StepKwSubcategory(WizardStep, FORM_CLASS):
         self.lblSelectSubcategory.setText(
             get_question_text('%s_question' % purpose['key']))
         for i in self.subcategories_for_layer():
+            # noinspection PyTypeChecker
             item = QListWidgetItem(i['name'], self.lstSubcategories)
+            # noinspection PyTypeChecker
             item.setData(QtCore.Qt.UserRole, i['key'])
             self.lstSubcategories.addItem(item)
 

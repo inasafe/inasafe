@@ -20,6 +20,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import json
 from types import NoneType
+from PyQt4.QtCore import QUrl, QDate, QDateTime, Qt
+from datetime import datetime, date
 
 from safe.common.exceptions import MetadataCastError
 from safe.metadata.property import BaseProperty
@@ -48,7 +50,25 @@ class DictionaryProperty(BaseProperty):
     @property
     def xml_value(self):
         if self.python_type is dict:
-            return json.dumps(self.value)
+            try:
+                return json.dumps(self.value)
+            except (TypeError, ValueError):
+                string_value = {}
+                for k, v in self.value.items():
+                    if isinstance(v, QUrl):
+                        string_value[k] = v.toString()
+                    elif isinstance(v, (QDate, QDateTime)):
+                        string_value[k] = v.toString(Qt.ISODate)
+                    elif isinstance(v, datetime):
+                        string_value[k] = v.date().isoformat()
+                    elif isinstance(v, date):
+                        string_value[k] = v.isoformat()
+                    elif isinstance(v, dict):
+                        string_value[k] = json.dumps(v)
+                    else:
+                        string_value[k] = v
+                return json.dumps(string_value)
+
         elif self.python_type is NoneType:
             return ''
         else:

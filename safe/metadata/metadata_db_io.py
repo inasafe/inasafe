@@ -15,9 +15,7 @@ import logging
 import sqlite3 as sqlite
 from sqlite3 import OperationalError
 
-# This import is to enable SIP API V2
-# noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=unused-import
+from qgis.core import QgsApplication
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import QObject, QSettings
 from safe.common.exceptions import (
@@ -64,14 +62,15 @@ class MetadataDbIO(QObject):
         """Helper to get the default path for the metadata file.
 
         :returns: The path to where the default location of the metadata
-            database is. Maps to which is ~/.inasafe/metadata.db
+            database is. Maps to which is ~/.qgis2/inasafe/metadata.db
         :rtype: str
         """
 
-        home = expanduser("~")
-        home = os.path.abspath(os.path.join(home, '.inasafe', 'metadata.db'))
-
-        return home
+        database_path = os.path.join(
+            QgsApplication.qgisSettingsDirPath(),
+            'inasafe',
+            'metadata.db')
+        return database_path
 
     def setup_metadata_db_path(self):
         """Helper to set the active path for the metadata.

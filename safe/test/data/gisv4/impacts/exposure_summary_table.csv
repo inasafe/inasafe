@@ -1,0 +1,6 @@
+exposure_type,NULL_hazard_count,high_hazard_count,medium_hazard_count
+government,1,0,1
+commercial,1,1,0
+residential,0,2,0
+education,1,0,0
+health,1,1,0

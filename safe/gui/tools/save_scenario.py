@@ -49,7 +49,6 @@ class SaveScenarioDialog(QDialog):
         self.exposure_layer = None
         self.hazard_layer = None
         self.aggregation_layer = None
-        self.function_id = None
         self.keyword_io = KeywordIO()
 
         # Calling some init methods
@@ -80,8 +79,6 @@ class SaveScenarioDialog(QDialog):
         """
         self.exposure_layer = self.dock.get_exposure_layer()
         self.hazard_layer = self.dock.get_hazard_layer()
-        self.function_id = self.dock.get_function_id(
-            self.dock.cboFunction.currentIndex())
         self.aggregation_layer = self.dock.get_aggregation_layer()
 
         is_valid = True
@@ -96,11 +93,6 @@ class SaveScenarioDialog(QDialog):
             warning_message = self.tr(
                 'Hazard layer is not found, can not save scenario. Please add '
                 'hazard layer to do so.')
-            is_valid = False
-
-        if self.function_id == '' or self.function_id is None:
-            warning_message = self.tr(
-                'The impact function is empty, can not save scenario')
             is_valid = False
 
         return is_valid, warning_message
@@ -126,10 +118,10 @@ class SaveScenarioDialog(QDialog):
 
         # Added in 2.2 to support user defined analysis extents
         if self.dock.extent.user_extent is not None \
-                and self.dock.extent.user_extent_crs is not None:
-            extent = extent_to_array(
-                self.dock.extent.user_extent,
-                self.dock.extent.user_extent_crs)
+                and self.dock.extent.crs is not None:
+            # In V4.0, user_extent is QgsGeometry.
+            user_extent = self.dock.extent.user_extent.boundingBox()
+            extent = extent_to_array(user_extent, self.dock.extent.crs)
         else:
             extent = viewport_geo_array(self.iface.mapCanvas())
         extent_string = ', '.join(('%f' % x) for x in extent)
@@ -154,27 +146,22 @@ class SaveScenarioDialog(QDialog):
             return
         self.output_directory = os.path.dirname(scenario_file_path)
 
-        # Get relative path for each layer
-        relative_exposure_path = self.relative_path(
-            scenario_file_path, exposure_path)
-        relative_hazard_path = self.relative_path(
-            scenario_file_path, hazard_path)
-
         #  Write to file
         parser = ConfigParser()
         parser.add_section(title)
-        parser.set(title, 'exposure', relative_exposure_path)
-        parser.set(title, 'hazard', relative_hazard_path)
-        parser.set(title, 'function', self.function_id)
+        # Relative path is not recognized by the batch runner, so we use
+        # absolute path.
+        parser.set(title, 'exposure', exposure_path)
+        parser.set(title, 'hazard', hazard_path)
+
         parser.set(title, 'extent', extent_string)
-        if self.dock.extent.user_extent_crs is None:
-            parser.set(title, 'extent_crs',
-                       'EPSG:4326')
+        if self.dock.extent.crs is None:
+            parser.set(title, 'extent_crs', 'EPSG:4326')
         else:
             parser.set(
                 title,
                 'extent_crs',
-                self.dock.extent.user_extent_crs.authid())
+                self.dock.extent.crs.authid())
         if self.aggregation_layer is not None:
             aggregation_path = self.aggregation_layer.publicSource()
             relative_aggregation_path = self.relative_path(

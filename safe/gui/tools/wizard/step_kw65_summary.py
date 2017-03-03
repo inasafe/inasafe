@@ -1,36 +1,20 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
-
-This module provides: Keyword Wizard Step: Summary
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
-__author__ = 'qgis@borysjurgiel.pl'
-__revision__ = '$Format:%H$'
-__date__ = '16/03/2016'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
+"""InaSAFE Keyword Wizard Summary Step."""
 
 import os
 import re
 
-from safe.definitions import (
-    inasafe_keyword_version,
-    inasafe_keyword_version_key,
-    layer_purpose_hazard,
-    layer_purpose_exposure,
-    layer_purpose_aggregation)
-
-from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
+from safe.definitions.constants import inasafe_keyword_version_key
+from safe.definitions.layer_purposes import (
+    layer_purpose_exposure, layer_purpose_aggregation, layer_purpose_hazard)
+from safe.definitions.versions import inasafe_keyword_version
 from safe.gui.tools.wizard.wizard_step import WizardStep
+from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
@@ -46,15 +30,6 @@ class StepKwSummary(WizardStep, FORM_CLASS):
         :rtype: bool
         """
         return True
-
-    def get_previous_step(self):
-        """Find the proper step when user clicks the Previous button.
-
-        :returns: The step to be switched to
-        :rtype: WizardStep instance or None
-        """
-        new_step = self.parent.step_kw_title
-        return new_step
 
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.
@@ -110,6 +85,8 @@ class StepKwSummary(WizardStep, FORM_CLASS):
         else:
             # Wizard complete
             new_step = None
+        # Reset the step history
+        self.parent.keyword_steps = []
         return new_step
 
     def set_widgets(self):

@@ -1,10 +1,7 @@
 # coding=utf-8
-"""Utilities for InaSAFE
-"""
+"""Utilities for InaSAFE."""
 import os
 import sys
-import numpy
-import zipfile
 import platform
 from datetime import date
 import getpass
@@ -18,7 +15,6 @@ import colorsys
 from collections import OrderedDict
 # pylint: enable=unused-import
 
-from PyQt4.QtCore import QPyNullVariant
 from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsCoordinateTransform,
@@ -26,7 +22,8 @@ from qgis.core import (
     QgsPoint)
 
 from safe.common.exceptions import VerificationError
-from safe.utilities.i18n import locale
+from safe.utilities.rounding import (
+    thousand_separator, decimal_separator, add_separators)
 
 
 import logging
@@ -67,6 +64,21 @@ def verify(statement, message=None):
     if bool(statement) is False:
         # noinspection PyExceptionInherit
         raise VerificationError(message)
+
+
+def safe_dir(sub_dir=None):
+    """Absolute path from safe package directory.
+
+    :param sub_dir: Sub directory relative to safe package directory.
+    :type sub_dir: str
+
+    :return: The Absolute path.
+    :rtype: str
+    """
+    safe_relative_path = os.path.join(
+        os.path.dirname(__file__), '../')
+    return os.path.abspath(
+        os.path.join(safe_relative_path, sub_dir))
 
 
 def temp_dir(sub_dir='work'):
@@ -173,45 +185,6 @@ def unique_filename(**kwargs):
     return filename
 
 
-def zip_shp(shp_path, extra_ext=None, remove_file=False):
-    """Zip shape file and its gang (.shx, .dbf, .prj).
-
-    Args:
-        * shp_path: str - path to the main shape file.
-        * extra_ext: [str] - list of extra extensions related to shapefile.
-
-    Returns:
-        str: full path to the created shapefile
-
-    Raises:
-        None
-    """
-    # go to the directory
-    current_working_dir = os.getcwd()
-    shp_dir, shp_name = os.path.split(shp_path)
-    os.chdir(shp_dir)
-
-    shp_basename, _ = os.path.splitext(shp_name)
-    exts = ['.shp', '.shx', '.dbf', '.prj']
-    if extra_ext is not None:
-        exts.extend(extra_ext)
-
-    # zip files
-    zip_filename = shp_basename + '.zip'
-    zip_object = zipfile.ZipFile(zip_filename, 'w')
-    for ext in exts:
-        if os.path.isfile(shp_basename + ext):
-            zip_object.write(shp_basename + ext)
-    zip_object.close()
-
-    if remove_file:
-        for ext in exts:
-            if os.path.isfile(shp_basename + ext):
-                os.remove(shp_basename + ext)
-
-    os.chdir(current_working_dir)
-
-
 def get_free_memory():
     """Return current free memory on the machine.
     Currently supported for Windows, Linux
@@ -291,56 +264,6 @@ def get_free_memory_osx():
         return int(inactive) + int(free)
 
 
-def format_int(x):
-    """Format integer with separator between thousands.
-
-    :param x: A number to be formatted in a locale friendly way.
-    :type x: int
-
-    :returns: A locale friendly formatted string e.g. 1,000,0000.00
-        representing the original x. If a ValueError exception occurs,
-        x is simply returned.
-    :rtype: basestring
-
-
-    From http://stackoverflow.com/questions/5513615/
-                add-thousands-separators-to-a-number
-
-    # FIXME (Ole)
-    Currently not using locale coz broken
-
-    Instead use this:
-    http://docs.python.org/library/string.html#formatspec
-
-    """
-    try:
-        s = '{0:,}'.format(x)
-        # s = '{0:n}'.format(x)  # n means locale aware (read up on this)
-    # see issue #526
-    except ValueError:
-        return x
-
-    # Quick solution for the moment
-    if locale() == 'id':
-        # Replace commas with dots
-        s = s.replace(',', '.')
-    return s
-
-
-def round_thousand(value):
-    """Round an integer to the nearest thousand if more than a thousand.
-
-    :param value: Number to be rounded
-    :type value: int
-
-    :returns: The input value rounded to the nearest 1000.
-    :rtype: int
-    """
-    if value > 1000:
-        value = value // 1000 * 1000
-    return value
-
-
 def humanize_min_max(min_value, max_value, interval):
     """Return humanize value format for max and min.
 
@@ -365,8 +288,8 @@ def humanize_min_max(min_value, max_value, interval):
     current_interval = max_value - min_value
     if interval > 1:
         # print 'case 1. Current interval : ', current_interval
-        humanize_min_value = format_int(int(round(min_value)))
-        humanize_max_value = format_int(int(round(max_value)))
+        humanize_min_value = add_separators(int(round(min_value)))
+        humanize_max_value = add_separators(int(round(max_value)))
 
     else:
         # print 'case 2. Current interval : ', current_interval
@@ -386,7 +309,7 @@ def format_decimal(interval, value):
     """
     interval = get_significant_decimal(interval)
     if isinstance(interval, Integral) or isinstance(value, Integral):
-        return format_int(int(value))
+        return add_separators(int(value))
     if interval != interval:
         # nan
         return str(value)
@@ -398,26 +321,8 @@ def format_decimal(interval, value):
     my_number_decimal = str(value).split('.')[1][:decimal_places]
     if len(set(my_number_decimal)) == 1 and my_number_decimal[-1] == '0':
         return my_number_int
-    return (format_int(int(my_number_int)) + get_decimal_separator() +
+    return (add_separators(int(my_number_int)) + decimal_separator() +
             my_number_decimal)
-
-
-def get_decimal_separator():
-    """Return decimal separator according to the locale."""
-    lang = os.getenv('LANG')
-    if lang == 'id':
-        return ','
-    else:
-        return '.'
-
-
-def get_thousand_separator():
-    """Return decimal separator according to the locale."""
-    lang = os.getenv('LANG')
-    if lang == 'id':
-        return '.'
-    else:
-        return ','
 
 
 def get_significant_decimal(my_decimal):
@@ -520,59 +425,12 @@ def unhumanize_number(number):
     @param number:
     """
     try:
-        number = number.replace(get_thousand_separator(), '')
+        number = number.replace(thousand_separator(), '')
         number = int(float(number))
     except (AttributeError, ValueError):
         pass
 
     return number
-
-
-def create_classes(class_list, num_classes):
-    """Create classes from class_list.
-
-    Classes will use linspace from numpy.
-    It will extend from min and max of elements in class_list. If min == 0,
-    it won't be included. The number of classes is equal to num_classes.
-    Please see the unit test for this function for more explanation
-
-    :param class_list: All values as a basis to create classes.
-    :type class_list: list
-
-    :param num_classes: The number of class to hold all values in class_list.
-    :type num_classes: int
-    """
-    min_value = numpy.nanmin(class_list)
-    max_value = numpy.nanmax(class_list)
-
-    if min_value == max_value == 0:
-        return [0]
-
-    # If min_value == max_value (it only has 1 unique class), or
-    # max_value <= 1.0, then we will populate the classes from 0 - max_value
-    if (min_value == max_value) or (max_value <= 1):
-        # noinspection PyTypeChecker,PyUnresolvedReferences
-        classes = numpy.linspace(0, max_value, num_classes + 1).tolist()
-        return classes[1:]
-
-    # Else from above cases, we will populate the 1st class by these rules:
-    # 1. The 1st class range: 0 - math.ceil(the smallest value that is not 0)
-    # 2. If math.ceil(the smallest value that's not 0) != 1, then subtract by
-    #    1 so that the this smallest value goes into the 2nd class.
-    # 3. (AG) Yes! The idea is to classify the non affected value to the 1st
-    #    class (see #637, #702)
-
-    # Now, Get the smallest value that is > 0
-    non_zero_min_value = class_list[class_list > 0].min()
-
-    lower_bound = math.ceil(non_zero_min_value)
-    if lower_bound != 1:
-        lower_bound -= 1
-
-    # noinspection PyTypeChecker,PyUnresolvedReferences
-    classes = numpy.linspace(lower_bound, max_value, num_classes).tolist()
-
-    return classes
 
 
 def create_label(label_tuple, extra_label=None):
@@ -631,24 +489,6 @@ def get_utm_epsg(longitude, latitude, crs=None):
         return get_utm_epsg(point.x(), point.y())
 
 
-def feature_attributes_as_dict(field_map, attributes):
-    """Converts list of attributes to dict of attributes.
-
-    :param field_map: Dictionary {'FieldName': FieldIndex}.
-    :type field_map: dict
-
-    :param attributes: list of field's values
-    :type attributes: list
-
-    :returns: Dictionary {'FieldName': FieldValue}
-    :rtype: dict
-    """
-    res = {}
-    for name in field_map:
-        res[name] = attributes[field_map[name]]
-    return res
-
-
 def which(name, flags=os.X_OK):
     """Search PATH for executable files with the given name.
 
@@ -704,31 +544,6 @@ def which(name, flags=os.X_OK):
                 result.append(path_extensions)
 
     return result
-
-
-def get_non_conflicting_attribute_name(default_name, attribute_names):
-    """Get a non conflicting attribute name from a set of attribute names.
-
-    It also complies the shp attribute name restriction that the name length
-    must be less than 10 character.
-
-    :param default_name: The default name for the attribute.
-    :type default_name: basestring
-
-    :param attribute_names: Set of attribute names that should not be
-        conflicted.
-    :type attribute_names: list
-    """
-    uppercase_attribute_names = [
-        x.upper() for x in attribute_names]
-    # For shp file, the attribute name must be <= 10
-    new_name = default_name[:10]
-    i = 0
-    while new_name.upper() in uppercase_attribute_names:
-        i += 1
-        string_len = 9 - len(str(i))
-        new_name = '%s_%s' % (new_name[:string_len], i)
-    return new_name
 
 
 def color_ramp(number_of_colour):
@@ -835,67 +650,3 @@ def add_to_list(my_list, my_element):
             my_list.append(my_element)
 
     return my_list
-
-
-def is_subset(element, container):
-    """Check the membership of element from container.
-
-    It will check based on the type. Only valid for string and list.
-
-    :param element: Element that will be searched for in container.
-    :type element: list, str
-
-    :param container: Container that will be checked.
-    :type container: list, str
-
-    :returns: boolean of the membership
-    :rtype: bool
-    """
-    if isinstance(element, list):
-        if isinstance(container, list):
-            return set(element) <= set(container)
-    else:
-        if isinstance(container, list):
-            return element in container
-        else:
-            return element == container
-    return False
-
-
-def convert_to_list(var):
-    """Convert a variable to list.
-
-    :param var: The variable to be converted.
-    """
-    return var if isinstance(var, list) else [var]
-
-
-def project_list(the_list, field):
-    return [s[field] for s in the_list]
-
-
-def get_list_key(list_dict):
-    """Return list of key from a list of dictionary.
-
-    :param list_dict: List of dict, each dict has key as dictionary key.
-    :type list_dict: list
-
-    :returns: A list of key.
-    :rtype: list
-    """
-    return [x['key'] for x in list_dict]
-
-
-def is_key_exist(key, list_dictionary):
-    """Check if a key is in list_dictionary's key
-
-    :param key: The key
-    :type key: str
-
-    :param list_dictionary: List of dictionary
-    :type list_dictionary: list
-
-    :returns: True if exist, else False
-    :rtype: bool
-    """
-    return key in get_list_key(list_dictionary)

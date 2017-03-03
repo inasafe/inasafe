@@ -35,14 +35,3 @@ class TestAggregationMetadata(TestCase):
 
         # from BaseMetadata
         metadata.get_property('organisation')
-
-        # from AggregationLayerMetadata
-        metadata.get_property('aggregation attribute')
-        metadata.get_property('adult ratio attribute')
-        metadata.get_property('adult ratio default')
-        metadata.get_property('elderly ratio attribute')
-        metadata.get_property('elderly ratio default')
-        metadata.get_property('female ratio attribute')
-        metadata.get_property('female ratio default')
-        metadata.get_property('youth ratio attribute')
-        metadata.get_property('youth ratio default')

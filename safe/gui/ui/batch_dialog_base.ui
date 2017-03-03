@@ -6,26 +6,24 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>430</width>
-    <height>599</height>
+    <width>526</width>
+    <height>536</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Batch Runner</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_4">
-   <property name="leftMargin">
-    <number>0</number>
-   </property>
-   <property name="topMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
-    <number>0</number>
-   </property>
-   <property name="bottomMargin">
-    <number>0</number>
-   </property>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="1" column="0">
+    <widget class="QDialogButtonBox" name="button_box">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Close|QDialogButtonBox::Help</set>
+     </property>
+    </widget>
+   </item>
    <item row="0" column="0">
     <widget class="QStackedWidget" name="main_stacked_widget">
      <property name="currentIndex">
@@ -33,9 +31,12 @@
      </property>
      <widget class="QWidget" name="page">
       <layout class="QGridLayout" name="gridLayout_5">
+       <property name="margin">
+        <number>0</number>
+       </property>
        <item row="0" column="0">
-        <widget class="QWebView" name="help_web_view">
-         <property name="url">
+        <widget class="QWebView" name="help_web_view" native="true">
+         <property name="url" stdset="0">
           <url>
            <string>about:blank</string>
           </url>
@@ -44,21 +45,9 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="page_2">
-      <layout class="QGridLayout" name="gridLayout_3">
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
-        <number>0</number>
-       </property>
-       <item row="0" column="0">
+     <widget class="QWidget" name="page_1">
+      <layout class="QFormLayout" name="formLayout">
+       <item row="0" column="0" colspan="2">
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
           <string>Scenario directory</string>
@@ -77,7 +66,7 @@
          </layout>
         </widget>
        </item>
-       <item row="1" column="0">
+       <item row="1" column="0" colspan="2">
         <widget class="QGroupBox" name="groupBox_2">
          <property name="title">
           <string>Result table</string>
@@ -97,15 +86,25 @@
             </column>
            </widget>
           </item>
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="toggle_new_project">
+            <property name="text">
+             <string>Run each scenario in new project</string>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>
-       <item row="2" column="0">
+       <item row="2" column="0" colspan="2">
         <widget class="QGroupBox" name="groupBox_3">
          <property name="title">
           <string>Output destination</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout_2">
+         <layout class="QGridLayout" name="gridLayout_3">
           <item row="0" column="0">
            <widget class="QRadioButton" name="scenario_directory_radio">
             <property name="text">
@@ -118,6 +117,9 @@
           </item>
           <item row="1" column="0">
            <widget class="QRadioButton" name="custom_directory_radio">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
             <property name="text">
              <string>Choose custom output directory</string>
             </property>
@@ -126,10 +128,17 @@
           <item row="2" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout_2">
             <item>
-             <widget class="QLineEdit" name="output_directory"/>
+             <widget class="QLineEdit" name="output_directory">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+             </widget>
             </item>
             <item>
              <widget class="QToolButton" name="output_directory_chooser">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="text">
                <string>...</string>
               </property>
@@ -144,23 +153,13 @@
      </widget>
     </widget>
    </item>
-   <item row="1" column="0">
-    <widget class="QDialogButtonBox" name="button_box">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Close|QDialogButtonBox::Help</set>
-     </property>
-    </widget>
-   </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
    <class>QWebView</class>
    <extends>QWidget</extends>
-   <header>QtWebKitWidgets/QWebView</header>
+   <header>QtWebKit/QWebView</header>
   </customwidget>
  </customwidgets>
  <resources/>
@@ -194,6 +193,70 @@
     <hint type="destinationlabel">
      <x>286</x>
      <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>scenario_directory_radio</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>output_directory</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>70</x>
+     <y>486</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>95</x>
+     <y>532</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>scenario_directory_radio</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>output_directory_chooser</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>170</x>
+     <y>475</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>410</x>
+     <y>536</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>custom_directory_radio</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>output_directory</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>70</x>
+     <y>508</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>49</x>
+     <y>545</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>custom_directory_radio</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>output_directory_chooser</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>128</x>
+     <y>512</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>415</x>
+     <y>544</y>
     </hint>
    </hints>
   </connection>

@@ -12,29 +12,23 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-__author__ = 'qgis@borysjurgiel.pl'
-__revision__ = '$Format:%H$'
-__date__ = '16/03/2016'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
 
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore
-# noinspection PyPackageRequirements
 from PyQt4.QtCore import pyqtSignature
-# noinspection PyPackageRequirements
 from PyQt4.QtGui import QListWidgetItem
 
-from safe.definitions import (
-    layer_purpose_hazard)
-
-from safe.utilities.keyword_io import definition
-
-from safe.gui.tools.wizard.wizard_strings import (
-    hazard_category_question)
-from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
+from safe.definitions.layer_purposes import layer_purpose_hazard
 from safe.gui.tools.wizard.wizard_step import WizardStep
+from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
+from safe.gui.tools.wizard.wizard_strings import hazard_category_question
+from safe.definitions.utilities import (
+    definition, hazard_categories_for_layer)
 
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
@@ -51,15 +45,6 @@ class StepKwHazardCategory(WizardStep, FORM_CLASS):
         """
         return bool(self.selected_hazard_category())
 
-    def get_previous_step(self):
-        """Find the proper step when user clicks the Previous button.
-
-        :returns: The step to be switched to
-        :rtype: WizardStep instance or None
-        """
-        new_step = self.parent.step_kw_subcategory
-        return new_step
-
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.
 
@@ -75,14 +60,10 @@ class StepKwHazardCategory(WizardStep, FORM_CLASS):
         :returns: A list where each value represents a valid hazard category.
         :rtype: list
         """
-        layer_geometry_id = self.parent.get_layer_geometry_id()
         if self.parent.step_kw_purpose.\
                 selected_purpose() != layer_purpose_hazard:
             return []
-        hazard_type_id = self.parent.step_kw_subcategory.\
-            selected_subcategory()['key']
-        return self.impact_function_manager.hazard_categories_for_layer(
-            layer_geometry_id, hazard_type_id)
+        return hazard_categories_for_layer()
 
     # prevents actions being handled twice
     # noinspection PyPep8Naming
@@ -136,10 +117,13 @@ class StepKwHazardCategory(WizardStep, FORM_CLASS):
         hazard_categories = self.hazard_categories_for_layer()
         for hazard_category in hazard_categories:
             if not isinstance(hazard_category, dict):
+                # noinspection PyTypeChecker
                 hazard_category = definition(hazard_category)
+            # noinspection PyTypeChecker
             item = QListWidgetItem(
                 hazard_category['name'],
                 self.lstHazardCategories)
+            # noinspection PyTypeChecker
             item.setData(QtCore.Qt.UserRole, hazard_category['key'])
             self.lstHazardCategories.addItem(item)
 

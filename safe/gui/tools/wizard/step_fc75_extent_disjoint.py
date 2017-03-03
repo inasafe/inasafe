@@ -12,19 +12,18 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-__author__ = 'qgis@borysjurgiel.pl'
-__revision__ = '$Format:%H$'
-__date__ = '16/03/2016'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
 
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QPixmap
 from safe.utilities.resources import resources_path
 
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
-
 from safe.gui.tools.wizard.wizard_step import WizardStep
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
@@ -41,15 +40,6 @@ class StepFcExtentDisjoint(WizardStep, FORM_CLASS):
         """
         # Never go further if layers disjoint!
         return False
-
-    def get_previous_step(self):
-        """Find the proper step when user clicks the Previous button.
-
-        :returns: The step to be switched to
-        :rtype: WizardStep instance or None
-        """
-        new_step = self.parent.step_fc_extent
-        return new_step
 
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.

@@ -1,51 +1,28 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool by AusAid **GUI InaSAFE Wizard Dialog.**
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-.. todo:: Check raster is single band
-
-"""
+"""Wizard Dialog"""
 
 import logging
-import json
 from sqlite3 import OperationalError
 
+from PyQt4 import QtGui
+from PyQt4.QtCore import pyqtSignature, QSettings
+from PyQt4.QtGui import QDialog, QPixmap
 from qgis.core import QgsMapLayerRegistry
 
-# noinspection PyPackageRequirements
-from PyQt4 import QtGui
-# noinspection PyPackageRequirements
-from PyQt4.QtCore import pyqtSignature
-# noinspection PyPackageRequirements
-from PyQt4.QtGui import (
-    QDialog,
-    QPixmap)
+from safe.definitions.layer_purposes import (
+    layer_purpose_exposure, layer_purpose_aggregation, layer_purpose_hazard)
+from safe.definitions.layer_geometry import (
+    layer_geometry_raster,
+    layer_geometry_line,
+    layer_geometry_point,
+    layer_geometry_polygon)
+from safe.definitions.layer_modes import (
+    layer_mode_continuous, layer_mode_classified)
+from safe.definitions.units import exposure_unit
+from safe.definitions.hazard import continuous_hazard_unit
+from safe.definitions.utilities import get_compulsory_fields
+from safe.definitions.constants import RECENT
 
-from safe.definitions import (
-    continuous_hazard_unit,
-    exposure_unit,
-    layer_purpose_hazard,
-    layer_purpose_exposure,
-    layer_purpose_aggregation,
-    layer_mode_continuous,
-    layer_mode_classified)
-from safe.impact_functions.impact_function_manager import ImpactFunctionManager
-from safe.utilities.keyword_io import KeywordIO
-from safe.utilities.gis import (
-    is_raster_layer,
-    is_point_layer,
-    is_polygon_layer)
-
-from safe.utilities.utilities import (
-    get_error_message,
-    is_keyword_version_supported)
 from safe.common.exceptions import (
     HashNotFoundError,
     NoKeywordsFoundError,
@@ -53,36 +30,26 @@ from safe.common.exceptions import (
     InvalidParameterError,
     UnsupportedProviderError,
     InaSAFEError,
-    MetadataReadError)
-from safe.utilities.resources import get_ui_class, resources_path
-from safe.utilities.unicode import get_unicode
+    MetadataReadError,
+    InvalidWizardStep)
 
 from safe.gui.tools.wizard.wizard_strings import (
     category_question_hazard,
     category_question_exposure,
     category_question_aggregation)
-from safe.gui.tools.wizard.wizard_utils import (
-    layer_description_html,
-    RoleHazard,
-    RoleExposure,
-    RoleHazardConstraint,
-    RoleExposureConstraint)
-from step_kw00_purpose import StepKwPurpose
-from step_kw05_subcategory import StepKwSubcategory
-from step_kw10_hazard_category import StepKwHazardCategory
-from step_kw15_layermode import StepKwLayerMode
-from step_kw20_unit import StepKwUnit
-from step_kw25_classification import StepKwClassification
-from step_kw30_field import StepKwField
-from step_kw35_resample import StepKwResample
-from step_kw40_classify import StepKwClassify
-from step_kw42_name_field import StepKwNameField
-from step_kw43_population_field import StepKwPopulationField
-from step_kw45_extrakeywords import StepKwExtraKeywords
-from step_kw50_aggregation import StepKwAggregation
-from step_kw55_source import StepKwSource
-from step_kw60_title import StepKwTitle
-from step_kw65_summary import StepKwSummary
+from safe.gui.tools.wizard.wizard_utils import layer_description_html
+
+from safe.utilities.settings import set_inasafe_default_value_qsetting
+from safe.utilities.gis import (
+    is_raster_layer,
+    is_point_layer,
+    is_polygon_layer)
+from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.resources import get_ui_class, resources_path
+from safe.utilities.unicode import get_unicode
+from safe.utilities.utilities import (
+    get_error_message, is_keyword_version_supported)
+
 from step_fc00_functions1 import StepFcFunctions1
 from step_fc05_functions2 import StepFcFunctions2
 from step_fc10_function import StepFcFunction
@@ -101,13 +68,30 @@ from step_fc70_extent import StepFcExtent
 from step_fc75_extent_disjoint import StepFcExtentDisjoint
 from step_fc80_params import StepFcParams
 from step_fc85_summary import StepFcSummary
+from step_kw00_purpose import StepKwPurpose
+from step_kw05_subcategory import StepKwSubcategory
+from step_kw10_hazard_category import StepKwHazardCategory
+from step_kw15_layermode import StepKwLayerMode
+from step_kw20_unit import StepKwUnit
+from step_kw25_classification import StepKwClassification
+from step_kw30_field import StepKwField
+from step_kw33_multi_classifications import StepKwMultiClassifications
+from step_kw35_resample import StepKwResample
+from step_kw40_classify import StepKwClassify
+from step_kw43_threshold import StepKwThreshold
+from step_kw45_inasafe_fields import StepKwInaSAFEFields
+from step_kw47_default_inasafe_fields import StepKwDefaultInaSAFEFields
+from step_kw49_inasafe_raster_default_values import (
+    StepKwInaSAFERasterDefaultValues)
+from step_kw55_source import StepKwSource
+from step_kw60_title import StepKwTitle
+from step_kw65_summary import StepKwSummary
 from.step_fc90_analysis import StepFcAnalysis
 
-__author__ = 'qgis@borysjurgiel.pl'
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
-__date__ = '21/02/2011'
-__copyright__ = (
-    'Copyright 2012, Australia Indonesia Facility for Disaster Reduction')
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -115,7 +99,6 @@ FORM_CLASS = get_ui_class('wizard/wizard_dialog_base.ui')
 
 
 class WizardDialog(QDialog, FORM_CLASS):
-
     """Dialog implementation class for the InaSAFE wizard."""
 
     def __init__(self, parent=None, iface=None, dock=None):
@@ -155,7 +138,6 @@ class WizardDialog(QDialog, FORM_CLASS):
             QPixmap(resources_path('img', 'icons', 'icon-white.svg')))
 
         self.keyword_io = KeywordIO()
-        self.impact_function_manager = ImpactFunctionManager()
 
         self.is_selected_layer_keywordless = False
         self.parent_step = None
@@ -170,7 +152,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.hazard_layer = None
         self.exposure_layer = None
         self.aggregation_layer = None
-        self.analysis_handler = None
 
         self.step_kw_purpose = StepKwPurpose(self)
         self.step_kw_subcategory = StepKwSubcategory(self)
@@ -179,12 +160,14 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.step_kw_unit = StepKwUnit(self)
         self.step_kw_classification = StepKwClassification(self)
         self.step_kw_field = StepKwField(self)
+        self.step_kw_multi_classifications = StepKwMultiClassifications(self)
         self.step_kw_resample = StepKwResample(self)
         self.step_kw_classify = StepKwClassify(self)
-        self.step_kw_name_field = StepKwNameField(self)
-        self.step_kw_population_field = StepKwPopulationField(self)
-        self.step_kw_extrakeywords = StepKwExtraKeywords(self)
-        self.step_kw_aggregation = StepKwAggregation(self)
+        self.step_kw_threshold = StepKwThreshold(self)
+        self.step_kw_inasafe_fields = StepKwInaSAFEFields(self)
+        self.step_kw_default_inasafe_fields = StepKwDefaultInaSAFEFields(self)
+        self.step_kw_inasafe_raster_default_values = \
+            StepKwInaSAFERasterDefaultValues(self)
         self.step_kw_source = StepKwSource(self)
         self.step_kw_title = StepKwTitle(self)
         self.step_kw_summary = StepKwSummary(self)
@@ -214,12 +197,14 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.stackedWidget.addWidget(self.step_kw_unit)
         self.stackedWidget.addWidget(self.step_kw_classification)
         self.stackedWidget.addWidget(self.step_kw_field)
+        self.stackedWidget.addWidget(self.step_kw_multi_classifications)
         self.stackedWidget.addWidget(self.step_kw_resample)
         self.stackedWidget.addWidget(self.step_kw_classify)
-        self.stackedWidget.addWidget(self.step_kw_name_field)
-        self.stackedWidget.addWidget(self.step_kw_population_field)
-        self.stackedWidget.addWidget(self.step_kw_extrakeywords)
-        self.stackedWidget.addWidget(self.step_kw_aggregation)
+        self.stackedWidget.addWidget(self.step_kw_threshold)
+        self.stackedWidget.addWidget(self.step_kw_inasafe_fields)
+        self.stackedWidget.addWidget(self.step_kw_default_inasafe_fields)
+        self.stackedWidget.addWidget(
+            self.step_kw_inasafe_raster_default_values)
         self.stackedWidget.addWidget(self.step_kw_source)
         self.stackedWidget.addWidget(self.step_kw_title)
         self.stackedWidget.addWidget(self.step_kw_summary)
@@ -243,9 +228,15 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.stackedWidget.addWidget(self.step_fc_summary)
         self.stackedWidget.addWidget(self.step_fc_analysis)
 
+        # QSetting
+        self.setting = QSettings()
+
+        # Wizard Steps
+        self.impact_function_steps = []
+        self.keyword_steps = []
+
     def set_mode_label_to_keywords_creation(self):
-        """Set the mode label to the Keywords Creation/Update mode
-        """
+        """Set the mode label to the Keywords Creation/Update mode."""
         self.setWindowTitle(self.keyword_creation_wizard_name)
         if self.get_existing_keyword('layer_purpose'):
             mode_name = (self.tr(
@@ -258,30 +249,33 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.lblSubtitle.setText(mode_name)
 
     def set_mode_label_to_ifcw(self):
-        """Set the mode label to the IFCW
-        """
+        """Set the mode label to the IFCW."""
         self.setWindowTitle(self.ifcw_name)
         self.lblSubtitle.setText(self.tr(
             'Use this wizard to run a guided impact assessment'))
 
     def set_keywords_creation_mode(self, layer=None):
-        """Set the Wizard to the Keywords Creation mode
+        """Set the Wizard to the Keywords Creation mode.
+
         :param layer: Layer to set the keywords for
         :type layer: QgsMapLayer
         """
         self.layer = layer or self.iface.mapCanvas().currentLayer()
         try:
-            self.existing_keywords = self.keyword_io.read_keywords(self.layer)
-            # if 'layer_purpose' not in self.existing_keywords:
-            #     self.existing_keywords = None
-        except (HashNotFoundError,
-                OperationalError,
-                NoKeywordsFoundError,
-                KeywordNotFoundError,
-                InvalidParameterError,
-                UnsupportedProviderError,
-                MetadataReadError):
-            self.existing_keywords = None
+            # Check the keywords in the layer properties first
+            self.existing_keywords = self.layer.keywords
+        except AttributeError:
+            try:
+                self.existing_keywords = self.keyword_io.read_keywords(
+                    self.layer)
+            except (HashNotFoundError,
+                    OperationalError,
+                    NoKeywordsFoundError,
+                    KeywordNotFoundError,
+                    InvalidParameterError,
+                    UnsupportedProviderError,
+                    MetadataReadError):
+                self.existing_keywords = None
         self.set_mode_label_to_keywords_creation()
 
         step = self.step_kw_purpose
@@ -289,7 +283,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.go_to_step(step)
 
     def set_function_centric_mode(self):
-        """Set the Wizard to the Function Centric mode"""
+        """Set the Wizard to the Function Centric mode."""
         self.set_mode_label_to_ifcw()
 
         step = self.step_fc_functions1
@@ -298,36 +292,21 @@ class WizardDialog(QDialog, FORM_CLASS):
 
     def field_keyword_for_the_layer(self):
         """Return the proper keyword for field for the current layer.
-        Expected values are: 'field', 'structure_class_field', road_class_field
 
         :returns: the field keyword
-        :rtype: string
+        :rtype: str
         """
-
-        if self.step_kw_purpose.selected_purpose() == \
-                layer_purpose_aggregation:
-            # purpose: aggregation
-            return 'aggregation attribute'
-        elif self.step_kw_purpose.selected_purpose() == layer_purpose_hazard:
-            # purpose: hazard
-            if (self.step_kw_layermode.selected_layermode() ==
-                    layer_mode_classified and
-                    is_point_layer(self.layer)):
-                # No field for classified point hazards
-                return ''
+        layer_purpose_key = self.step_kw_purpose.selected_purpose()['key']
+        if layer_purpose_key == layer_purpose_aggregation['key']:
+            return get_compulsory_fields(layer_purpose_key)['key']
+        elif layer_purpose_key in [
+                layer_purpose_exposure['key'], layer_purpose_hazard['key']]:
+            layer_subcategory_key = \
+                self.step_kw_subcategory.selected_subcategory()['key']
+            return get_compulsory_fields(
+                layer_purpose_key, layer_subcategory_key)['key']
         else:
-            # purpose: exposure
-            layer_mode_key = self.step_kw_layermode.selected_layermode()['key']
-            layer_geometry_key = self.get_layer_geometry_id()
-            exposure_key = self.step_kw_subcategory.\
-                selected_subcategory()['key']
-            exposure_class_fields = self.impact_function_manager.\
-                exposure_class_fields(
-                    layer_mode_key, layer_geometry_key, exposure_key)
-            if exposure_class_fields and len(exposure_class_fields) == 1:
-                return exposure_class_fields[0]['key']
-        # Fallback to default
-        return 'field'
+            raise InvalidParameterError
 
     def get_parent_mode_constraints(self):
         """Return the category and subcategory keys to be set in the
@@ -357,23 +336,20 @@ class WizardDialog(QDialog, FORM_CLASS):
         """Obtain impact function constraints selected by user.
 
         :returns: Tuple of metadata of hazard, exposure,
-            hazard layer constraints and exposure layer constraints
+            hazard layer geometry and exposure layer geometry
         :rtype: tuple
         """
-        selection = self.step_fc_functions1.tblFunctions1.selectedItems()
-        if len(selection) != 1:
-            return None, None, None, None
 
-        h = selection[0].data(RoleHazard)
-        e = selection[0].data(RoleExposure)
+        hazard = self.step_fc_functions1.selected_value(
+            layer_purpose_hazard['key'])
+        exposure = self.step_fc_functions1.selected_value(
+            layer_purpose_exposure['key'])
 
-        selection = self.step_fc_functions2.tblFunctions2.selectedItems()
-        if len(selection) != 1:
-            return h, e, None, None
-
-        hc = selection[0].data(RoleHazardConstraint)
-        ec = selection[0].data(RoleExposureConstraint)
-        return h, e, hc, ec
+        hazard_geometry = self.step_fc_functions2.selected_value(
+            layer_purpose_hazard['key'])
+        exposure_geometry = self.step_fc_functions2.selected_value(
+            layer_purpose_exposure['key'])
+        return hazard, exposure, hazard_geometry, exposure_geometry
 
     def is_layer_compatible(self, layer, layer_purpose=None, keywords=None):
         """Validate if a given layer is compatible for selected IF
@@ -431,7 +407,7 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         # Compare layer properties with explicitly set constraints
         # Reject if layer geometry doesn't match
-        if layer_geometry != self.get_layer_geometry_id(layer):
+        if layer_geometry != self.get_layer_geometry_key(layer):
             return False
 
         # If no keywords, there's nothing more we can check.
@@ -453,43 +429,6 @@ class WizardDialog(QDialog, FORM_CLASS):
                 keywords[layer_purpose] != subcategory):
             return False
 
-        # Compare layer keywords with the chosen function's constraints
-
-        imfunc = self.step_fc_function.selected_function()
-        lay_req = imfunc['layer_requirements'][layer_purpose]
-
-        # Reject if layer mode doesn't match
-        if ('layer_mode' in keywords and
-                lay_req['layer_mode']['key'] != keywords['layer_mode']):
-            return False
-
-        # Reject if classification doesn't match
-        classification_key = '%s_%s_classification' % (
-            'raster' if is_raster_layer(layer) else 'vector',
-            layer_purpose)
-        classification_keys = classification_key + 's'
-        if (lay_req['layer_mode'] == layer_mode_classified and
-                classification_key in keywords and
-                classification_keys in lay_req):
-            allowed_classifications = [
-                c['key'] for c in lay_req[classification_keys]]
-            if keywords[classification_key] not in allowed_classifications:
-                return False
-
-        # Reject if unit doesn't match
-        unit_key = ('continuous_hazard_unit'
-                    if layer_purpose == layer_purpose_hazard['key']
-                    else 'exposure_unit')
-        unit_keys = unit_key + 's'
-        if (lay_req['layer_mode'] == layer_mode_continuous and
-                unit_key in keywords and
-                unit_keys in lay_req):
-            allowed_units = [
-                c['key'] for c in lay_req[unit_keys]]
-            if keywords[unit_key] not in allowed_units:
-                return False
-
-        # Finally return True
         return True
 
     def get_compatible_canvas_layers(self, category):
@@ -537,7 +476,7 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         return layers
 
-    def get_layer_geometry_id(self, layer=None):
+    def get_layer_geometry_key(self, layer=None):
         """Obtain layer mode of a given layer.
 
         If no layer specified, the current layer is used
@@ -551,13 +490,13 @@ class WizardDialog(QDialog, FORM_CLASS):
         if not layer:
             layer = self.layer
         if is_raster_layer(layer):
-            return 'raster'
+            return layer_geometry_raster['key']
         elif is_point_layer(layer):
-            return 'point'
+            return layer_geometry_point['key']
         elif is_polygon_layer(layer):
-            return 'polygon'
+            return layer_geometry_polygon['key']
         else:
-            return 'line'
+            return layer_geometry_line['key']
 
     def get_existing_keyword(self, keyword):
         """Obtain an existing keyword's value.
@@ -569,11 +508,11 @@ class WizardDialog(QDialog, FORM_CLASS):
         :rtype: str, QUrl
         """
         if self.existing_keywords is None:
-            return None
+            return {}
         if keyword is not None:
-            return self.existing_keywords.get(keyword, None)
+            return self.existing_keywords.get(keyword, {})
         else:
-            return None
+            return {}
 
     def get_layer_description_from_canvas(self, layer, purpose):
         """Obtain the description of a canvas layer selected by user.
@@ -581,8 +520,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         :param layer: The QGIS layer.
         :type layer: QgsMapLayer
 
-        :param category: The category of the layer to get the description.
-        :type category: string
+        :param purpose: The layer purpose of the layer to get the description.
+        :type purpose: string
 
         :returns: description of the selected layer.
         :rtype: string
@@ -680,24 +619,26 @@ class WizardDialog(QDialog, FORM_CLASS):
            executed when the Next button is released.
         """
         current_step = self.get_current_step()
+        # For checking age sum == 1
+        if current_step == self.step_kw_default_inasafe_fields:
+            good_ratios = self.step_kw_default_inasafe_fields.\
+                is_good_age_ratios()
+            self.step_kw_default_inasafe_fields.toggle_age_ratio_sum_message(
+                    good_ratios)
+            if not good_ratios:
+                return
+
+        if current_step.step_type == 'step_fc':
+            self.impact_function_steps.append(current_step)
+        elif current_step.step_type == 'step_kw':
+            self.keyword_steps.append(current_step)
+        else:
+            LOGGER.debug(current_step.step_type)
+            raise InvalidWizardStep
 
         # Save keywords if it's the end of the keyword creation mode
         if current_step == self.step_kw_summary:
             self.save_current_keywords()
-
-        if current_step == self.step_kw_aggregation:
-            good_age_ratio, sum_age_ratios = self.step_kw_aggregation.\
-                age_ratios_are_valid()
-            if not good_age_ratio:
-                message = self.tr(
-                    'The sum of age ratio default is %s and it is more '
-                    'than 1. Please adjust the age ratio default so that they '
-                    'will not more than 1.' % sum_age_ratios)
-                if not self.suppress_warning_dialog:
-                    # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
-                    QtGui.QMessageBox.warning(
-                        self, self.tr('InaSAFE'), message)
-                return
 
         # After any step involving Browser, add selected layer to map canvas
         if current_step in [self.step_fc_hazlayer_from_browser,
@@ -717,11 +658,6 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         # Determine the new step to be switched
         new_step = current_step.get_next_step()
-        if (new_step == self.step_kw_extrakeywords and not
-                self.step_kw_extrakeywords.
-                additional_keywords_for_the_layer()):
-            # Skip the extra_keywords tab if no extra keywords available:
-            new_step = self.step_kw_source
 
         if new_step is not None:
             # Prepare the next tab
@@ -743,7 +679,16 @@ class WizardDialog(QDialog, FORM_CLASS):
            executed when the Back button is released.
         """
         current_step = self.get_current_step()
-        new_step = current_step.get_previous_step()
+        if current_step.step_type == 'step_fc':
+            new_step = self.impact_function_steps.pop()
+        elif current_step.step_type == 'step_kw':
+            try:
+                new_step = self.keyword_steps.pop()
+            except IndexError:
+                new_step = self.impact_function_steps.pop()
+        else:
+            raise InvalidWizardStep
+
         # set focus to table widgets, as the inactive selection style is gray
         if new_step == self.step_fc_functions1:
             self.step_fc_functions1.tblFunctions1.setFocus()
@@ -772,21 +717,20 @@ class WizardDialog(QDialog, FORM_CLASS):
         :rtype: dict
         """
         keywords = {}
-        keywords['layer_geometry'] = self.get_layer_geometry_id()
+        inasafe_fields = {}
+        keywords['layer_geometry'] = self.get_layer_geometry_key()
         if self.step_kw_purpose.selected_purpose():
             keywords['layer_purpose'] = self.step_kw_purpose.\
                 selected_purpose()['key']
-            if keywords['layer_purpose'] == 'aggregation':
-                keywords.update(
-                    self.step_kw_aggregation.get_aggregation_attributes())
         if self.step_kw_subcategory.selected_subcategory():
             key = self.step_kw_purpose.selected_purpose()['key']
             keywords[key] = self.step_kw_subcategory.\
                 selected_subcategory()['key']
-        if self.step_kw_hazard_category.selected_hazard_category():
-            keywords['hazard_category'] \
-                = self.step_kw_hazard_category.\
-                selected_hazard_category()['key']
+        if keywords['layer_purpose'] == layer_purpose_hazard['key']:
+            if self.step_kw_hazard_category.selected_hazard_category():
+                keywords['hazard_category'] \
+                    = self.step_kw_hazard_category.\
+                    selected_hazard_category()['key']
         if self.step_kw_layermode.selected_layermode():
             keywords['layer_mode'] = self.step_kw_layermode.\
                 selected_layermode()['key']
@@ -796,41 +740,39 @@ class WizardDialog(QDialog, FORM_CLASS):
             else:
                 key = exposure_unit['key']
             keywords[key] = self.step_kw_unit.selected_unit()['key']
-        if self.step_kw_resample.selected_allowresampling() is not None:
+        if self.step_kw_resample.selected_allow_resampling() is not None:
             keywords['allow_resampling'] = (
-                self.step_kw_resample.selected_allowresampling() and
+                self.step_kw_resample.selected_allow_resampling() and
                 'true' or 'false')
         if self.step_kw_field.lstFields.currentItem():
-            field_keyword = self.field_keyword_for_the_layer()
-            keywords[field_keyword] = self.step_kw_field.\
+            field_key = self.field_keyword_for_the_layer()
+            inasafe_fields[field_key] = self.step_kw_field.\
                 lstFields.currentItem().text()
         if self.step_kw_classification.selected_classification():
-            geom = 'raster' if is_raster_layer(self.layer) else 'vector'
-            key = '%s_%s_classification' % (
-                geom, self.step_kw_purpose.selected_purpose()['key'])
-            keywords[key] = self.step_kw_classification.\
+            keywords['classification'] = self.step_kw_classification.\
                 selected_classification()['key']
-        value_map = self.step_kw_classify.selected_mapping()
-        if value_map:
-            if self.step_kw_classification.selected_classification():
-                # hazard mapping
-                keyword = 'value_map'
-            else:
-                # exposure mapping
-                keyword = 'value_mapping'
-            keywords[keyword] = json.dumps(value_map)
 
-        name_field = self.step_kw_name_field.selected_field()
-        if name_field:
-            keywords['name_field'] = name_field
+        if keywords['layer_purpose'] == layer_purpose_hazard['key']:
+            multi_classifications = self.step_kw_multi_classifications.\
+                get_current_state()
+            value_maps = multi_classifications.get('value_maps')
+            if value_maps is not None:
+                keywords['value_maps'] = value_maps
+            thresholds = multi_classifications.get('thresholds')
+            if thresholds is not None:
+                keywords['thresholds'] = thresholds
+        else:
+            if self.step_kw_layermode.selected_layermode():
+                layer_mode = self.step_kw_layermode.selected_layermode()
+                if layer_mode == layer_mode_continuous:
+                    thresholds = self.step_kw_threshold.get_threshold()
+                    if thresholds:
+                        keywords['thresholds'] = thresholds
+                elif layer_mode == layer_mode_classified:
+                    value_map = self.step_kw_classify.selected_mapping()
+                    if value_map:
+                        keywords['value_map'] = value_map
 
-        population_field = self.step_kw_population_field.selected_field()
-        if population_field:
-            keywords['population_field'] = population_field
-
-        extra_keywords = self.step_kw_extrakeywords.selected_extra_keywords()
-        for key in extra_keywords:
-            keywords[key] = extra_keywords[key]
         if self.step_kw_source.leSource.text():
             keywords['source'] = get_unicode(
                 self.step_kw_source.leSource.text())
@@ -847,6 +789,28 @@ class WizardDialog(QDialog, FORM_CLASS):
                 self.step_kw_source.leSource_license.text())
         if self.step_kw_title.leTitle.text():
             keywords['title'] = get_unicode(self.step_kw_title.leTitle.text())
+
+        inasafe_fields.update(self.step_kw_inasafe_fields.get_inasafe_fields())
+        inasafe_fields.update(
+            self.step_kw_default_inasafe_fields.get_inasafe_fields())
+
+        if inasafe_fields:
+            keywords['inasafe_fields'] = inasafe_fields
+
+        inasafe_default_values = {}
+        if keywords['layer_geometry'] == layer_geometry_raster['key']:
+            pass
+            # Notes(IS): Skipped assigning raster inasafe default value for
+            # now.
+            # inasafe_default_values = self.\
+            #     step_kw_inasafe_raster_default_values.\
+            #     get_inasafe_default_values()
+        else:
+            inasafe_default_values = self.step_kw_default_inasafe_fields.\
+                get_inasafe_default_values()
+
+        if inasafe_default_values:
+            keywords['inasafe_default_values'] = inasafe_default_values
 
         return keywords
 
@@ -871,3 +835,10 @@ class WizardDialog(QDialog, FORM_CLASS):
         if self.dock is not None:
             # noinspection PyUnresolvedReferences
             self.dock.get_layers()
+
+        # Save default value to QSetting
+        if current_keywords.get('inasafe_default_values'):
+            for key, value in \
+                    current_keywords['inasafe_default_values'].items():
+                set_inasafe_default_value_qsetting(
+                    self.setting, key, RECENT, value)

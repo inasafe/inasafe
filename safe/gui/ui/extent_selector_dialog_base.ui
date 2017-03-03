@@ -24,7 +24,7 @@
   </property>
   <layout class="QGridLayout" name="gridLayout_3">
    <property name="margin">
-    <number>12</number>
+    <number>0</number>
    </property>
    <item row="0" column="0">
     <widget class="QStackedWidget" name="main_stacked_widget">
@@ -33,6 +33,9 @@
      </property>
      <widget class="QWidget" name="page">
       <layout class="QGridLayout" name="gridLayout_4">
+       <property name="margin">
+        <number>0</number>
+       </property>
        <item row="0" column="0">
         <widget class="QWebView" name="help_web_view">
          <property name="minimumSize">
@@ -58,7 +61,7 @@
        <item row="0" column="0">
         <widget class="QLabel" name="label">
          <property name="text">
-          <string>When carrying out an analysis, which clipping behaviour should be used?</string>
+          <string>When carrying out an analysis without an aggregation layer, which clipping behaviour should be used?</string>
          </property>
         </widget>
        </item>
@@ -269,7 +272,7 @@
   <customwidget>
    <class>QWebView</class>
    <extends>QWidget</extends>
-   <header>QtWebKit/QWebView</header>
+   <header>PyQt4.QtWebKit</header>
   </customwidget>
  </customwidgets>
  <tabstops>

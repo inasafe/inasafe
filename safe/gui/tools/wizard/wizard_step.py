@@ -12,11 +12,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-__author__ = 'qgis@borysjurgiel.pl'
-__revision__ = '$Format:%H$'
-__date__ = '15/03/2016'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
 
 import re
 import os
@@ -24,9 +19,13 @@ import os
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QWidget
 
-from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.resources import get_ui_class
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 
 def get_wizard_step_ui_class(py_file_name):
@@ -51,7 +50,6 @@ class WizardStep(QWidget):
         self.setupUi(self)
 
         self.keyword_io = KeywordIO()
-        self.impact_function_manager = ImpactFunctionManager()
 
     # noinspection PyUnresolvedReferences,PyMethodMayBeStatic
     def auto_select_one_item(self, list_widget):
@@ -75,17 +73,6 @@ class WizardStep(QWidget):
         """
         return False
 
-    def get_previous_step(self):
-        """Find the proper step when user clicks the Previous button.
-
-           This method must be implemented in derived classes.
-
-        :returns: The step to be switched to
-        :rtype: WizardStep instance or None
-        """
-        raise NotImplementedError("The current step class doesn't implement \
-            the get_previous_step method")
-
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.
 
@@ -104,3 +91,11 @@ class WizardStep(QWidget):
         """
         raise NotImplementedError("The current step class doesn't implement \
             the set_widgets method")
+
+    @property
+    def step_type(self):
+        """Whether it's a IFCW step or Keyword Wizard Step."""
+        if 'stepfc' in self.__class__.__name__.lower():
+            return 'step_fc'
+        if 'stepkw' in self.__class__.__name__.lower():
+            return 'step_kw'

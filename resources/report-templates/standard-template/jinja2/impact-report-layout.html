@@ -1,0 +1,27 @@
+{% include 'standard-template/jinja2/header.html' %}
+<div class="branding">
+    <img src="{{ brand_logo }}" title="InaSAFE" alt="InaSAFE" />
+</div>
+
+{{ analysis_question }}
+{{ general_report }}
+{{ mmi_detail }}
+{{ analysis_detail }}
+{{ minimum_needs }}
+{{ action_checklist }}
+{{ notes_assumptions }}
+{{ aggregation_result }}
+{{ aggregation_postprocessors }}
+
+<h5 class="info">
+    <i class="icon-info-sign icon-white"></i> Analysis details
+</h5>
+{% for key, item in analysis_details.iteritems() %}
+{% if item %}
+<p>
+    <b>{{ item.header }}</b> {{ item.provenance }}
+</p>
+{% endif %}
+{% endfor %}
+
+{% include 'standard-template/jinja2/footer.html' %}

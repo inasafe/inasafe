@@ -12,23 +12,26 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-__author__ = 'qgis@borysjurgiel.pl'
-__revision__ = '$Format:%H$'
-__date__ = '16/03/2016'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
 
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore, QtGui
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import pyqtSignature
 # noinspection PyPackageRequirements
-from PyQt4.QtGui import QListWidgetItem
+from PyQt4.QtGui import QListWidgetItem, QPixmap
 
 from qgis.core import QgsMapLayerRegistry
 
+from safe.definitions.layer_purposes import layer_purpose_hazard
+from safe.utilities.resources import resources_path
+
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step import WizardStep
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
@@ -45,15 +48,6 @@ class StepFcHazLayerFromCanvas(WizardStep, FORM_CLASS):
         :rtype: bool
         """
         return bool(self.selected_canvas_hazlayer())
-
-    def get_previous_step(self):
-        """Find the proper step when user clicks the Previous button.
-
-        :returns: The step to be switched to
-        :rtype: WizardStep instance or None
-        """
-        new_step = self.parent.step_fc_hazlayer_origin
-        return new_step
 
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.
@@ -136,8 +130,16 @@ class StepFcHazLayerFromCanvas(WizardStep, FORM_CLASS):
         # Try to select the last_layer, if found:
         if last_layer:
             layers = []
-            for indx in xrange(self.lstCanvasHazLayers.count()):
-                item = self.lstCanvasHazLayers.item(indx)
+            for index in xrange(self.lstCanvasHazLayers.count()):
+                item = self.lstCanvasHazLayers.item(index)
                 layers += [item.data(QtCore.Qt.UserRole)]
             if last_layer in layers:
                 self.lstCanvasHazLayers.setCurrentRow(layers.index(last_layer))
+
+        # Set icon
+        hazard = self.parent.step_fc_functions1.selected_value(
+            layer_purpose_hazard['key'])
+        icon_path = resources_path(
+            'img', 'wizard', 'keyword-subcategory-%s.svg' % (
+                hazard['key'] or 'notset'))
+        self.lblIconIFCWHazardFromCanvas.setPixmap(QPixmap(icon_path))

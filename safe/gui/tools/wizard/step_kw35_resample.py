@@ -1,31 +1,16 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
+"""InaSAFE Wizard Step for Set Allow Resampling Value."""
 
-This module provides: Keyword Wizard Step: Allow Resample
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
-__author__ = 'qgis@borysjurgiel.pl'
-__revision__ = '$Format:%H$'
-__date__ = '16/03/2016'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
-
-from safe.definitions import layer_purpose_exposure
-
+from safe.definitions.layer_purposes import layer_purpose_exposure
+from safe.gui.tools.wizard.wizard_step import WizardStep
+from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
+from safe.gui.tools.wizard.wizard_strings import allow_resampling_question
 from safe.utilities.gis import is_raster_layer
 
-from safe.gui.tools.wizard.wizard_strings import allow_resampling_question
-from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
-from safe.gui.tools.wizard.wizard_step import WizardStep
-
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
@@ -42,25 +27,18 @@ class StepKwResample(WizardStep, FORM_CLASS):
         """
         return True
 
-    def get_previous_step(self):
-        """Find the proper step when user clicks the Previous button.
-
-        :returns: The step to be switched to
-        :rtype: WizardStep instance or None
-        """
-        new_step = self.parent.step_kw_unit
-        return new_step
-
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.
 
         :returns: The step to be switched to
         :rtype: WizardStep instance or None
         """
-        new_step = self.parent.step_kw_extrakeywords
+        # Notes(IS): Skipped assigning raster inasafe default value for now.
+        # new_step = self.parent.step_kw_inasafe_raster_default_values
+        new_step = self.parent.step_kw_source
         return new_step
 
-    def selected_allowresampling(self):
+    def selected_allow_resampling(self):
         """Obtain the allow_resampling state selected by user.
 
         .. note:: Returns none if not set or not relevant

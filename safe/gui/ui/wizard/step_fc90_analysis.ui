@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
+    <width>479</width>
     <height>300</height>
    </rect>
   </property>
@@ -33,7 +33,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QProgressBar" name="pbProgress">
+      <widget class="QProgressBar" name="progress_bar">
        <property name="value">
         <number>24</number>
        </property>
@@ -42,7 +42,7 @@
     </layout>
    </item>
    <item>
-    <widget class="MessageViewer" name="wvResults" native="true">
+    <widget class="MessageViewer" name="results_webview" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
        <horstretch>0</horstretch>
@@ -96,7 +96,7 @@
   </layout>
  </widget>
  <customwidgets>
-   <customwidget>
+  <customwidget>
    <class>MessageViewer</class>
    <extends>QWidget</extends>
    <header>safe.gui.widgets.message_viewer</header>

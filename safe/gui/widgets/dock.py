@@ -1,124 +1,106 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool developed by AusAid - **GUI Dialog.**
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-.. todo:: Check raster is single band
-
-"""
+"""InaSAFE Dock."""
 
 import os
 import shutil
 import logging
-import json
-from collections import OrderedDict
-from datetime import datetime
+import codecs
 
-# noinspection PyPackageRequirements
+from PyQt4 import QtGui, QtCore
+from PyQt4.QtCore import Qt, pyqtSlot
 from qgis.core import (
-    QgsCoordinateTransform,
     QgsRectangle,
+    QgsGeometry,
     QgsMapLayer,
     QgsMapLayerRegistry,
     QgsCoordinateReferenceSystem,
-    QGis,
     QgsProject,
-    QgsLayerTreeLayer)
-# noinspection PyPackageRequirements
-from PyQt4 import QtGui, QtCore
-# noinspection PyPackageRequirements
-from PyQt4.QtCore import Qt, pyqtSlot, QSettings, pyqtSignal
+    QGis)
 
+from safe.definitions.layer_purposes import (
+    layer_purpose_exposure_summary,
+    layer_purpose_aggregate_hazard_impacted,
+    layer_purpose_aggregation_summary,
+    layer_purpose_analysis_impacted,
+    layer_purpose_exposure_summary_table,
+)
+from safe.definitions.constants import (
+    inasafe_keyword_version_key,
+    HAZARD_EXPOSURE_VIEW,
+    HAZARD_EXPOSURE_BOUNDINGBOX,
+    ANALYSIS_FAILED_BAD_INPUT,
+    ANALYSIS_FAILED_BAD_CODE,
+    ANALYSIS_SUCCESS,
+    PREPARE_FAILED_BAD_INPUT,
+    PREPARE_FAILED_INSUFFICIENT_OVERLAP,
+    PREPARE_FAILED_INSUFFICIENT_OVERLAP_REQUESTED_EXTENT,
+    PREPARE_FAILED_BAD_LAYER,
+    PREPARE_SUCCESS,
+)
+from safe.defaults import supporters_logo_path
+from safe.definitions.reports import (
+    final_product_tag,
+    pdf_product_tag,
+    html_product_tag,
+    qpt_product_tag)
+from safe.definitions.reports.components import (
+    standard_impact_report_metadata_pdf,
+    report_a4_blue)
+from safe.report.impact_report import ImpactReport
+from safe.report.report_metadata import ReportMetadata
+from safe.utilities.gis import wkt_to_rectangle
+from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.utilities import (
     get_error_message,
-    impact_attribution,
     add_ordered_combo_item,
     is_keyword_version_supported,
-    write_json
 )
-from safe.defaults import (
-    disclaimer,
-    default_north_arrow_path)
-from safe.utilities.gis import (
-    viewport_geo_array,
-    extent_string_to_array,
-    read_impact_layer,
-    vector_geometry_string)
-from safe.utilities.resources import (
-    resources_path,
-    get_ui_class)
+from safe.utilities.settings import setting, set_setting
+from safe.utilities.resources import get_ui_class
 from safe.utilities.qgis_utilities import (
-    add_above_layer,
     display_critical_message_bar,
     display_warning_message_bar,
     display_information_message_bar)
-from safe.utilities.memory_checker import memory_error
-from safe.defaults import (
-    limitations,
-    supporters_logo_path)
-from safe.utilities.styling import (
-    setRasterStyle,
-    set_vector_graduated_style,
-    set_vector_categorized_style)
-from safe.gui.tools.function_options_dialog import (
-    FunctionOptionsDialog)
-from safe.common.utilities import temp_dir
-from safe.common.exceptions import ReadLayerError, TemplateLoadingError
+from safe.utilities.extent import Extent
+from safe.utilities.qt import disable_busy_cursor, enable_busy_cursor
+
 from safe.common.version import get_version
-from safe.common.signals import (
-    DYNAMIC_MESSAGE_SIGNAL,
-    STATIC_MESSAGE_SIGNAL,
-    ERROR_MESSAGE_SIGNAL,
-    BUSY_SIGNAL,
-    NOT_BUSY_SIGNAL,
-    ANALYSIS_DONE_SIGNAL,
-    send_static_message,
-    send_error_message,
-    send_dynamic_message)
+from safe.common.signals import (send_static_message, send_error_message)
 from safe import messaging as m
 from safe.messaging import styles
 from safe.common.exceptions import (
     KeywordNotFoundError,
     NoKeywordsFoundError,
-    InsufficientOverlapError,
     InvalidParameterError,
     HashNotFoundError,
-    InvalidGeometryError,
-    UnsupportedProviderError,
-    InvalidAggregationKeywords,
-    InsufficientMemoryWarning,
-    MissingImpactReport,
-    MetadataReadError
-)
-from safe.report.impact_report import ImpactReport
+    MetadataReadError)
+from safe.impact_function.impact_function import ImpactFunction
 from safe.gui.tools.about_dialog import AboutDialog
 from safe.gui.tools.help_dialog import HelpDialog
-from safe.gui.tools.impact_report_dialog import ImpactReportDialog
-from safe_extras.pydispatch import dispatcher
-from safe.utilities.extent import Extent
-from safe.impact_functions.impact_function_manager import ImpactFunctionManager
-from safe.utilities.unicode import get_unicode
-from safe.impact_template.utilities import get_report_template
-from safe.gui.widgets.message import missing_keyword_message
+from safe.gui.widgets.message import (
+    show_no_keywords_message,
+    show_keyword_version_message,
+    getting_started_message,
+    no_overlap_message,
+    ready_message,
+    enable_messaging)
+from safe.gui.analysis_utilities import (
+    generate_impact_report,
+    generate_impact_map_report,
+    add_impact_layers_to_canvas,
+    add_debug_layers_to_canvas)
 
-__author__ = 'tim@kartoza.com'
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
-__date__ = '10/01/2011'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
-INFO_STYLE = styles.INFO_STYLE
-WARNING_STYLE = styles.WARNING_STYLE
+INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
+WARNING_STYLE = styles.RED_LEVEL_4_STYLE
 KEYWORD_STYLE = styles.KEYWORD_STYLE
-SUGGESTION_STYLE = styles.SUGGESTION_STYLE
+SUGGESTION_STYLE = styles.GREEN_LEVEL_4_STYLE
 SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
 LOGO_ELEMENT = m.Brand()
 
@@ -131,8 +113,6 @@ LOGGER = logging.getLogger('InaSAFE')
 # noinspection PyUnresolvedReferences
 class Dock(QtGui.QDockWidget, FORM_CLASS):
     """Dock implementation class for the inaSAFE plugin."""
-
-    analysis_done = pyqtSignal(bool)
 
     def __init__(self, iface):
         """Constructor for the dialog.
@@ -150,8 +130,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         """
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
-        self.pbnShowQuestion.setVisible(False)
-        self.enable_messaging()
+        self.show_question_button.setVisible(False)
+        self.progress_bar.hide()
+        enable_messaging(self.results_webview, self)
         self.inasafe_version = get_version()
 
         self.set_dock_title()
@@ -159,15 +140,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # Save reference to the QGIS interface
         self.iface = iface
 
-        # Impact Function Manager to deal with IF needs
-        self.impact_function_manager = ImpactFunctionManager()
-
         self.impact_function = None
         self.keyword_io = KeywordIO()
-        self.active_impact_function = None
-        self.impact_function_parameters = None
         self.state = None
-        self.last_used_function = ''
         self.extent = Extent(self.iface)
         self.composer = None
         self.composition = None
@@ -179,100 +154,86 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # Flag so we can see if the dock is busy processing
         self.busy = False
 
-        # Values for settings these get set in read_settings.
-        self.run_in_thread_flag = None
         self.show_only_visible_layers_flag = None
         self.set_layer_from_title_flag = None
         self.zoom_to_impact_flag = None
+        self.use_selected_features_only = None
         self.hide_exposure_flag = None
-        self.clip_hard = None
         self.map_canvas = None
-        self.show_intermediate_layers = None
         self.developer_mode = None
         self.organisation_logo_path = None
 
-        self.pbnPrint.setEnabled(False)
-        self.runtime_keywords_dialog = None
+        self.print_button.setEnabled(False)
 
         self.setup_button_connectors()
 
-        if QGis.QGIS_VERSION_INT >= 20700:
-            self.iface.layerSavedAs.connect(self.save_auxiliary_files)
+        self.iface.layerSavedAs.connect(self.save_auxiliary_files)
 
         canvas = self.iface.mapCanvas()
+
+        # Current aggregation layer
+        self._aggregation = None
 
         # Enable on the fly projection by default
         canvas.setCrsTransformEnabled(True)
         self.connect_layer_listener()
-        self.grpQuestion.setEnabled(False)
-        self.grpQuestion.setVisible(False)
-        self.set_run_button_status()
+        self.question_group.setEnabled(False)
+        self.question_group.setVisible(False)
 
         self.read_settings()  # get_project_layers called by this
+
+        # debug_mode is a check box to know if we run the IF with debug mode.
+        self.debug_mode.setVisible(self.developer_mode)
+        self.debug_mode.setChecked(False)
+
+        # Check the validity
+        self.validate_impact_function()
+
+        # Default strings
+        self.label_without_selection = tr(
+            'will be affected? Summarise the results by')
+        self.label_with_selection = tr(
+            'will be affected? Summarise the results by selected '
+            'features in')
+        self.aggregation_question_label.setText(self.label_without_selection)
+
+    @property
+    def aggregation(self):
+        """Property for the current aggregation layer.
+
+        :return: The aggregation layer or None.
+        :rtype: QgsVectorLayer
+        """
+        return self._aggregation
+
+    @aggregation.setter
+    def aggregation(self, layer):
+        """Setter for the current aggregation layer.
+
+        :param layer: The current aggregation layer.
+        :type layer: QgsVectorLayer
+        """
+        # We need to disconnect first.
+        if self._aggregation and self.use_selected_features_only:
+            self._aggregation.selectionChanged.disconnect(
+                self.validate_impact_function)
+
+        self._aggregation = layer
+
+        if self.use_selected_features_only and layer:
+            self._aggregation.selectionChanged.connect(
+                self.validate_impact_function)
 
     def set_dock_title(self):
         """Set the title of the dock using the current version of InaSAFE."""
         self.setWindowTitle(self.tr('InaSAFE %s' % self.inasafe_version))
 
-    def enable_signal_receiver(self):
-        """Setup dispatcher for all available signal from Analysis."""
-        dispatcher.connect(
-            self.show_busy,
-            signal=BUSY_SIGNAL)
-
-        dispatcher.connect(
-            self.hide_busy,
-            signal=NOT_BUSY_SIGNAL)
-
-        dispatcher.connect(
-            self.completed,
-            signal=ANALYSIS_DONE_SIGNAL)
-
-    def disable_signal_receiver(self):
-        """Remove dispatcher for all available signal from Analysis."""
-        dispatcher.disconnect(
-            self.show_busy,
-            signal=BUSY_SIGNAL)
-
-        dispatcher.disconnect(
-            self.hide_busy,
-            signal=NOT_BUSY_SIGNAL)
-
-        dispatcher.disconnect(
-            self.completed,
-            signal=ANALYSIS_DONE_SIGNAL)
-
-    def enable_messaging(self):
-        """Set up the dispatcher for messaging."""
-        # Set up dispatcher for dynamic messages
-        # Dynamic messages will not clear the message queue so will be appended
-        # to existing user messages
-        # noinspection PyArgumentEqualDefault
-        dispatcher.connect(
-            self.wvResults.dynamic_message_event,
-            signal=DYNAMIC_MESSAGE_SIGNAL,
-            sender=dispatcher.Any)
-        # Set up dispatcher for static messages
-        # Static messages clear the message queue and so the display is 'reset'
-        # noinspection PyArgumentEqualDefault
-        dispatcher.connect(
-            self.wvResults.static_message_event,
-            signal=STATIC_MESSAGE_SIGNAL,
-            sender=dispatcher.Any)
-        # Set up dispatcher for error messages
-        # Error messages clear the message queue and so the display is 'reset'
-        # noinspection PyArgumentEqualDefault
-        dispatcher.connect(
-            self.wvResults.error_message_event,
-            signal=ERROR_MESSAGE_SIGNAL,
-            sender=dispatcher.Any)
-
     def setup_button_connectors(self):
         """Setup signal/slot mechanisms for dock buttons."""
-        self.pbnHelp.clicked.connect(self.show_help)
-        self.pbnPrint.clicked.connect(self.print_map)
-        self.pbnRunStop.clicked.connect(self.accept)
+        self.help_button.clicked.connect(self.show_help)
+        self.run_button.clicked.connect(self.accept)
         self.about_button.clicked.connect(self.about)
+        self.print_button.clicked.connect(self.print_map)
 
     def about(self):
         """Open the About dialog."""
@@ -312,86 +273,55 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         Do this on init and after changing options in the options dialog.
         """
+        extent = setting('user_extent', None, str)
+        if extent:
+            extent = QgsGeometry.fromWkt(extent)
+            if not extent.isGeosValid():
+                extent = None
 
-        settings = QSettings()
+        crs = setting('user_extent_crs', None, str)
+        if crs:
+            crs = QgsCoordinateReferenceSystem(crs)
+            if not crs.isValid():
+                crs = None
 
-        flag = bool(settings.value(
-            'inasafe/showRubberBands', False, type=bool))
-        self.extent.show_rubber_bands = flag
-        try:
-            extent = settings.value('inasafe/analysis_extent', '', type=str)
-            crs = settings.value('inasafe/analysis_extent_crs', '', type=str)
-        except TypeError:
-            # Any bogus stuff in settings and we just clear them
-            extent = ''
-            crs = ''
+        mode = setting('analysis_extents_mode', HAZARD_EXPOSURE_VIEW)
+        if crs and extent and mode == HAZARD_EXPOSURE_BOUNDINGBOX:
+            self.extent.set_user_extent(extent, crs)
 
-        if extent != '' and crs != '':
-            extent = extent_string_to_array(extent)
-            try:
-                # noinspection PyCallingNonCallable
-                self.extent.user_extent = QgsRectangle(*extent)
-                # noinspection PyCallingNonCallable
-                self.extent.user_extent_crs = QgsCoordinateReferenceSystem(crs)
-                self.extent.show_user_analysis_extent()
-            except TypeError:
-                self.extent.user_extent = None
-                self.extent.user_extent_crs = None
+        # It's better to set the show_rubber_bands after setting the user
+        # extent.
+        self.extent.show_rubber_bands = setting(
+            'showRubberBands', False, bool)
 
-        self.draw_rubber_bands()
-
-        flag = settings.value(
-            'inasafe/useThreadingFlag', False, type=bool)
-        self.run_in_thread_flag = flag
-
-        flag = settings.value(
-            'inasafe/visibleLayersOnlyFlag', True, type=bool)
+        flag = setting('visibleLayersOnlyFlag', True, bool)
         self.show_only_visible_layers_flag = flag
 
-        flag = settings.value(
-            'inasafe/set_layer_from_title_flag', True, type=bool)
+        flag = setting('set_layer_from_title_flag', True, bool)
         self.set_layer_from_title_flag = flag
 
-        flag = settings.value(
-            'inasafe/setZoomToImpactFlag', True, type=bool)
-        self.zoom_to_impact_flag = flag
+        self.zoom_to_impact_flag = setting('setZoomToImpactFlag', True, bool)
+
         # whether exposure layer should be hidden after model completes
-        flag = settings.value(
-            'inasafe/setHideExposureFlag', False, type=bool)
-        self.hide_exposure_flag = flag
-
-        # whether to 'hard clip' layers (e.g. cut buildings in half if they
-        # lie partially in the AOI
-        self.clip_hard = settings.value(
-            'inasafe/clip_hard', False, type=bool)
-
-        # whether to show or not postprocessing generated layers
-        self.show_intermediate_layers = settings.value(
-            'inasafe/show_intermediate_layers', False, type=bool)
+        self.hide_exposure_flag = setting('setHideExposureFlag', False, bool)
 
         # whether to show or not dev only options
-        self.developer_mode = settings.value(
-            'inasafe/developer_mode', False, type=bool)
+        self.developer_mode = setting('developer_mode', False, bool)
+
+        # If we use selected features only
+        flag = setting('useSelectedFeaturesOnly', True, bool)
+        self.use_selected_features_only = flag
+        # We need to re-trigger the aggregation combobox with the new flag.
+        index = self.aggregation_layer_combo.currentIndex()
+        self.aggregation_layer_combo.setCurrentIndex(index)
 
         # whether to show or not a custom Logo
-        self.organisation_logo_path = settings.value(
-            'inasafe/organisation_logo_path',
-            supporters_logo_path(),
-            type=str)
-        # This is a fix for 3.0.0 change where we no longer provide Qt4
-        # Qt4 resource bundles, so if the path points into a resource
-        # bundle we clear it and overwrite the setting
-        invalid_path_flag = False
-        if self.organisation_logo_path.startswith(':/'):
-            self.organisation_logo_path = None
-            invalid_path_flag = True
-            settings.setValue(
-                'inasafe/organisation_logo_path',
-                supporters_logo_path())
+        flag = setting('organisation_logo_path', supporters_logo_path(), str)
+        self.organisation_logo_path = flag
 
         # Changed default to False for new users in 3.2 - see #2171
-        show_logos_flag = bool(settings.value(
-            'inasafe/showOrganisationLogoInDockFlag', False, type=bool))
+        show_logos_flag = setting(
+            'showOrganisationLogoInDockFlag', False, bool)
 
         # Flag to check valid organization logo
         invalid_logo_size = False
@@ -439,30 +369,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         else:
             self.organisation_logo.hide()
 
-        # This is a fix for 3.0.0 change where we no longer provide Qt4
-        # Qt4 resource bundles, so if the path points into a resource
-        # bundle we clear it and overwrite the setting
-        north_arrow_path = settings.value(
-            'inasafe/north_arrow_path',
-            default_north_arrow_path(),
-            type=str)
-        if north_arrow_path.startswith(':/'):
-            invalid_path_flag = True
-            settings.setValue(
-                'inasafe/north_arrow_path', default_north_arrow_path())
-
-        if invalid_path_flag:
-            # noinspection PyCallByClass
-            QtGui.QMessageBox.warning(
-                self, self.tr('InaSAFE %s' % self.inasafe_version),
-                self.tr(
-                    'Due to backwards incompatibility with InaSAFE 2.0.0, the '
-                    'paths to your preferred organisation logo and north '
-                    'arrow may have been reset to their default values. '
-                    'Please check in Plugins -> InaSAFE -> Options that your '
-                    'paths are still correct and update them if needed.'
-                ), QtGui.QMessageBox.Ok)
-
         # RM: this is a fix for nonexistent organization logo or zero height
         if logo_not_exist:
             # noinspection PyCallByClass
@@ -484,9 +390,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     'provide valid file for organization logo.'
                 ), QtGui.QMessageBox.Ok)
         if logo_not_exist or invalid_logo_size:
-            settings.setValue(
-                'inasafe/organisation_logo_path',
-                supporters_logo_path())
+            set_setting('organisation_logo_path', supporters_logo_path())
 
     def connect_layer_listener(self):
         """Establish a signal/slot to listen for layers loaded in QGIS.
@@ -500,7 +404,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         self.iface.mapCanvas().layersChanged.connect(self.get_layers)
         self.iface.currentLayerChanged.connect(self.layer_changed)
-        self.iface.mapCanvas().extentsChanged.connect(self.draw_rubber_bands)
+
+        if not self._aggregation:
+            self.iface.mapCanvas().extentsChanged.connect(
+                self.validate_impact_function)
 
     # pylint: disable=W0702
     def disconnect_layer_listener(self):
@@ -515,155 +422,16 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         self.iface.mapCanvas().layersChanged.disconnect(self.get_layers)
         self.iface.currentLayerChanged.disconnect(self.layer_changed)
-        self.iface.mapCanvas().extentsChanged.disconnect(
-            self.draw_rubber_bands)
 
-    def getting_started_message(self):
-        """Generate a message for initial application state.
-
-        :returns: Information for the user on how to get started.
-        :rtype: safe.messaging.Message
-        """
-        message = m.Message()
-        message.add(LOGO_ELEMENT)
-        message.add(m.Heading(self.tr('Getting started'), **INFO_STYLE))
-        notes = m.Paragraph(
-            self.tr(
-                'These are the minimum steps you need to follow in order '
-                'to use InaSAFE:'))
-        message.add(notes)
-        basics_list = m.NumberedList()
-        basics_list.add(m.Paragraph(
-            self.tr('Add at least one '),
-            m.ImportantText(self.tr('hazard'), **KEYWORD_STYLE),
-            self.tr(' layer (e.g. earthquake MMI) to QGIS.')))
-        basics_list.add(m.Paragraph(
-            self.tr('Add at least one '),
-            m.ImportantText(self.tr('exposure'), **KEYWORD_STYLE),
-            self.tr(' layer (e.g. structures) to QGIS.')))
-        basics_list.add(m.Paragraph(
-            self.tr(
-                'Make sure you have defined keywords for your hazard and '
-                'exposure layers. You can do this using the '
-                'keywords creation wizard '),
-            m.Image(
-                'file:///%s/img/icons/show-keyword-wizard.svg' %
-                (resources_path()), **SMALL_ICON_STYLE),
-            self.tr(' in the toolbar.')))
-        basics_list.add(m.Paragraph(
-            self.tr('Click on the '),
-            m.ImportantText(self.tr('Run'), **KEYWORD_STYLE),
-            self.tr(' button below.')))
-        message.add(basics_list)
-
-        message.add(m.Heading(self.tr('Limitations'), **WARNING_STYLE))
-        caveat_list = m.NumberedList()
-        for limitation in limitations():
-            caveat_list.add(limitation)
-        message.add(caveat_list)
-
-        message.add(m.Heading(self.tr('Disclaimer'), **WARNING_STYLE))
-        message.add(m.Paragraph(disclaimer()))
-
-        return message
-
-    def ready_message(self):
-        """Helper to create a message indicating inasafe is ready.
-
-        :returns Message: A localised message indicating we are ready to run.
-        """
-        title = m.Heading(
-            self.tr('Ready'), **PROGRESS_UPDATE_STYLE)
-        notes = m.Paragraph(
-            self.tr(
-                'You can now proceed to run your analysis by clicking the '),
-            m.EmphasizedText(self.tr('Run'), **KEYWORD_STYLE),
-            self.tr('button.'))
-        message = m.Message(LOGO_ELEMENT, title, notes)
-        return message
-
-    def not_ready_message(self):
-        """Help to create a message indicating inasafe is NOT ready.
-
-        .. note:: Assumes a valid hazard and exposure layer are loaded.
-
-        :returns: A localised message indicating we are not ready.
-        :rtype: safe.messaging.Message
-        """
-        heading = m.Heading(
-            self.tr('No valid functions'), **WARNING_STYLE)
-        notes = m.Paragraph(self.tr(
-            'No functions are available for the inputs you have specified. '
-            'Try selecting a different combination of inputs. Please '
-            'consult the user manual for details on what constitute '
-            'valid inputs for a given risk function.'))
-        hazard_heading = m.Heading(
-            self.tr('Hazard keywords'), **INFO_STYLE)
-        hazard_keywords = KeywordIO(self.get_hazard_layer()).to_message(
-            show_header=False)
-        exposure_heading = m.Heading(
-            self.tr('Exposure keywords'), **INFO_STYLE)
-        exposure_keywords = KeywordIO(self.get_exposure_layer()).to_message(
-            show_header=False)
-        message = m.Message(
-            heading,
-            notes,
-            exposure_heading,
-            exposure_keywords,
-            hazard_heading,
-            hazard_keywords)
-        return message
-
-    def no_overlap_message(self):
-        """Helper which returns a message indicating no valid overlap."""
-        return self.tr(
-            'Currently there are no overlapping extents between '
-            'the hazard layer, the exposure layer and the user '
-            'defined analysis area. Try zooming to the analysis '
-            'area, clearing the analysis area or defining a new '
-            'one using the analysis area definition tool.')
-
-    def validate(self):
-        """Helper method to evaluate the current state of the dialog.
-
-        This function will determine if it is appropriate for the OK button to
-        be enabled or not.
-
-        .. note:: The enabled state of the OK button on the dialog will
-           NOT be updated (set True or False) depending on the outcome of
-           the UI readiness tests performed - **only** True or False
-           will be returned by the function.
-
-        :returns: A two-tuple where the first element is a Boolean reflecting
-         the results of the validation tests and the second is a message
-         indicating any reason why the validation may have failed.
-        :rtype: (Boolean, safe.messaging.Message)
-
-        Example::
-
-            flag,message = self.validate()
-        """
-        if self.busy:
-            return False, None
-        hazard_index = self.cboHazard.currentIndex()
-        exposure_index = self.cboExposure.currentIndex()
-        if hazard_index == -1 or exposure_index == -1:
-            message = self.getting_started_message()
-            return False, message
-
-        if self.cboFunction.currentIndex() == -1:
-            message = self.not_ready_message()
-            return False, message
-        # Now check if extents are ok for #1811
-        else:
-            message = self.ready_message()
-            return True, message
+        if not self._aggregation:
+            self.iface.mapCanvas().extentsChanged.disconnect(
+                self.validate_impact_function)
 
     @pyqtSlot(QgsMapLayer, str)
     def save_auxiliary_files(self, layer, destination):
         """Save auxiliary files when using the 'save as' function.
 
-        If some auxiliary files (.xml or .json) exist, this function will
+        If some auxiliary files (.xml, .json) exist, this function will
         copy them when the 'save as' function is used on the layer.
 
         :param layer: The layer which has been saved as.
@@ -671,10 +439,12 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         :param destination: The new filename of the layer.
         :type destination: str
-
         """
 
+        enable_busy_cursor()
+
         auxiliary_files = ['xml', 'json']
+
         for auxiliary_file in auxiliary_files:
             source_basename = os.path.splitext(layer.source())[0]
             source_file = "%s.%s" % (source_basename, auxiliary_file)
@@ -698,70 +468,73 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     title=self.tr('Error while saving'),
                     message=self.tr('Something went wrong.'))
 
-        self.disable_busy_cursor()
+        disable_busy_cursor()
 
     # noinspection PyPep8Naming
     @pyqtSlot(int)
-    def on_cboHazard_currentIndexChanged(self, index):
+    def on_hazard_layer_combo_currentIndexChanged(self, index):
         """Automatic slot executed when the Hazard combo is changed.
 
         This is here so that we can see if the ok button should be enabled.
 
         :param index: The index number of the selected hazard layer.
-
         """
         # Add any other logic you might like here...
         del index
-        self.get_functions()
-        self.toggle_aggregation_combo()
-        self.set_run_button_status()
-        self.draw_rubber_bands()
+        self.toggle_aggregation_layer_combo()
+        self.validate_impact_function()
 
     # noinspection PyPep8Naming
     @pyqtSlot(int)
-    def on_cboExposure_currentIndexChanged(self, index):
+    def on_exposure_layer_combo_currentIndexChanged(self, index):
         """Automatic slot executed when the Exposure combo is changed.
 
         This is here so that we can see if the ok button should be enabled.
 
         :param index: The index number of the selected exposure layer.
-
         """
         # Add any other logic you might like here...
         del index
-        self.get_functions()
-        self.toggle_aggregation_combo()
-        self.set_run_button_status()
-        self.draw_rubber_bands()
+        self.toggle_aggregation_layer_combo()
+        self.validate_impact_function()
 
     # noinspection PyPep8Naming
     @pyqtSlot(int)
-    def on_cboFunction_currentIndexChanged(self, index):
-        """Automatic slot executed when the Function combo is changed.
+    def on_aggregation_layer_combo_currentIndexChanged(self, index):
+        """Automatic slot executed when the Aggregation combo is changed.
 
-        This is here so that we can see if the ok button should be enabled.
-
-        :param index: The index number of the selected function.
+        :param index: The index number of the selected exposure layer.
+        :type index: int
         """
-        # Add any other logic you might like here...
-        if index > -1:
-            function_id = self.get_function_id()
+        if index == 0:
+            # No aggregation layer, we should display the user requested extent
+            self.aggregation = None
 
-            function = self.impact_function_manager.get(function_id)
-            self.active_impact_function = function
-            self.impact_function_parameters = None
-            if hasattr(self.active_impact_function, 'parameters'):
-                self.impact_function_parameters = \
-                    self.active_impact_function.parameters
-            self.set_function_options_status()
+            extent = setting('user_extent', None, str)
+            if extent:
+                extent = QgsGeometry.fromWkt(extent)
+                if not extent.isGeosValid():
+                    extent = None
+
+            crs = setting('user_extent_crs', None, str)
+            if crs:
+                crs = QgsCoordinateReferenceSystem(crs)
+                if not crs.isValid():
+                    crs = None
+
+            mode = setting('analysis_extents_mode', HAZARD_EXPOSURE_VIEW)
+            if crs and extent and mode == HAZARD_EXPOSURE_BOUNDINGBOX:
+                self.extent.set_user_extent(extent, crs)
+
         else:
-            self.impact_function_parameters = None
-            self.set_function_options_status()
+            # We have one aggregation layer. We should not display the user
+            # extent.
+            self.extent.clear_user_analysis_extent()
+            self.aggregation = self.get_aggregation_layer()
 
-        self.toggle_aggregation_combo()
-        self.set_run_button_status()
+        self.validate_impact_function()
 
-    def toggle_aggregation_combo(self):
+    def toggle_aggregation_layer_combo(self):
         """Toggle the aggregation combo enabled status.
 
         Whether the combo is toggled on or off will depend on the current dock
@@ -771,91 +544,35 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         selected_exposure_layer = self.get_exposure_layer()
 
         # more than 1 because No aggregation is always there
-        if ((self.cboAggregation.count() > 1) and
+        if ((self.aggregation_layer_combo.count() > 1) and
                 (selected_hazard_layer is not None) and
                 (selected_exposure_layer is not None)):
-            self.cboAggregation.setEnabled(True)
+            self.aggregation_layer_combo.setEnabled(True)
         else:
-            self.cboAggregation.setCurrentIndex(0)
-            self.cboAggregation.setEnabled(False)
-
-    def set_run_button_status(self):
-        """Helper function to set the run button status based on form validity.
-        """
-        button = self.pbnRunStop
-        flag, message = self.validate()
-
-        button.setEnabled(flag)
-        if message is not None:
-            send_static_message(self, message)
-
-    def set_function_options_status(self):
-        """Helper function to toggle the tool function button based on context.
-
-        If there are function parameters to configure then enable it, otherwise
-        disable it.
-        """
-        # Check if function_parameters initialized
-        if self.impact_function_parameters is None:
-            self.toolFunctionOptions.setEnabled(False)
-        else:
-            self.toolFunctionOptions.setEnabled(True)
-
-    # noinspection PyPep8Naming
-    @pyqtSlot()
-    def on_toolFunctionOptions_clicked(self):
-        """Automatic slot executed when toolFunctionOptions is clicked."""
-        dialog = FunctionOptionsDialog(self)
-        dialog.set_dialog_info(self.get_function_id())
-        dialog.build_form(self.impact_function_parameters)
-
-        if dialog.exec_():
-            self.active_impact_function.parameters = dialog.result()
-            self.impact_function_parameters = \
-                self.active_impact_function.parameters
-
-    @pyqtSlot()
-    def canvas_layerset_changed(self):
-        """A helper slot to update dock combos if canvas layerset changes.
-
-        Activated when the layerset has been changed (e.g. one or more layer
-        visibilities changed). If self.show_only_visible_layers_flag is set to
-        False this method will simply return, doing nothing.
-        """
-        if self.show_only_visible_layers_flag:
-            self.get_layers()
+            self.aggregation_layer_combo.setCurrentIndex(0)
+            self.aggregation_layer_combo.setEnabled(False)
 
     def unblock_signals(self):
         """Let the combos listen for event changes again."""
-        self.cboAggregation.blockSignals(False)
-        self.cboExposure.blockSignals(False)
-        self.cboHazard.blockSignals(False)
+        self.aggregation_layer_combo.blockSignals(False)
+        self.exposure_layer_combo.blockSignals(False)
+        self.hazard_layer_combo.blockSignals(False)
 
     def block_signals(self):
         """Prevent the combos and dock listening for event changes."""
         self.disconnect_layer_listener()
-        self.cboAggregation.blockSignals(True)
-        self.cboExposure.blockSignals(True)
-        self.cboHazard.blockSignals(True)
-
-    @pyqtSlot()
-    def update_layer_name(self):
-        """Writes the sender's new layer name into the layer's keywords"""
-        layer = self.sender()
-        name = layer.name()
-        try:
-            self.keyword_io.update_keywords(layer, {'title': name})
-        except NoKeywordsFoundError:
-            # the layer has no keyword file. we leave it alone.
-            pass
+        self.aggregation_layer_combo.blockSignals(True)
+        self.exposure_layer_combo.blockSignals(True)
+        self.hazard_layer_combo.blockSignals(True)
 
     # noinspection PyUnusedLocal
     @pyqtSlot('QgsMapLayer')
     def get_layers(self, *args):
-        r"""Obtain a list of layers currently loaded in QGIS.
+        """Obtain a list of layers currently loaded in QGIS.
 
-        On invocation, this method will populate cboHazard, cboExposure and
-        cboAggregation on the dialog with a list of available layers.
+        On invocation, this method will populate hazard_layer_combo,
+        exposure_layer_combo and aggregation_layer_combo on the dialog
+        with a list of available layers.
 
         Only **polygon vector** layers will be added to the aggregate list.
 
@@ -871,8 +588,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         if self.get_layers_lock:
             return
 
-        # for arg in args:
-        # LOGGER.debug('get_layer argument: %s' % arg)
         # Map registry may be invalid if QGIS is shutting down
         registry = QgsMapLayerRegistry.instance()
         canvas_layers = self.iface.mapCanvas().layers()
@@ -881,7 +596,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         # For issue #618
         if len(layers) == 0:
-            send_static_message(self, self.getting_started_message())
+            send_static_message(self, getting_started_message())
             return
 
         self.get_layers_lock = True
@@ -890,21 +605,11 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # disconnection without reconnection
         self.block_signals()
         self.save_state()
-        self.cboHazard.clear()
-        self.cboExposure.clear()
-        self.cboAggregation.clear()
+        self.hazard_layer_combo.clear()
+        self.exposure_layer_combo.clear()
+        self.aggregation_layer_combo.clear()
 
         for layer in layers:
-
-            try:
-                # disconnect all connections
-                layer.layerNameChanged.disconnect(self.update_layer_name)
-            except TypeError:
-                # disconnect() trows a TypeError if no connections are active
-                pass
-            finally:
-                layer.layerNameChanged.connect(self.update_layer_name)
-
             if (self.show_only_visible_layers_flag and
                     (layer not in canvas_layers)):
                 continue
@@ -920,36 +625,18 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             # noinspection PyBroadException
             try:
                 title = self.keyword_io.read_keywords(layer, 'title')
-            except NoKeywordsFoundError:
-                # Skip if there are no keywords at all
-                continue
-            except KeywordNotFoundError:
-                # There is a missing mandatory keyword, ignore it
-                continue
-            except MetadataReadError:
+            except (NoKeywordsFoundError,
+                    KeywordNotFoundError, MetadataReadError):
+                # Skip if there are no keywords at all, or missing keyword
                 continue
             except:  # pylint: disable=W0702
-                # automatically adding file name to title in keywords
-                # See #575
-                try:
-                    self.keyword_io.update_keywords(layer, {'title': name})
-                    title = name
-                except UnsupportedProviderError:
-                    continue
+                pass
             else:
                 # Lookup internationalised title if available
                 title = self.tr(title)
             # Register title with layer
             if title and self.set_layer_from_title_flag:
                 layer.setLayerName(title)
-
-            # NOTE : I commented out this due to
-            # https://github.com/AIFDR/inasafe/issues/528
-            # check if layer is a vector polygon layer
-            # if isPolygonLayer(layer):
-            #     addComboItemInOrder(self.cboAggregation, title,
-            #                         source)
-            #     self.aggregationLayers.append(layer)
 
             # Find out if the layer is a hazard or an exposure
             # layer by querying its keywords. If the query fails,
@@ -959,7 +646,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 layer_purpose = self.keyword_io.read_keywords(
                     layer, 'layer_purpose')
                 keyword_version = str(self.keyword_io.read_keywords(
-                    layer, 'keyword_version'))
+                    layer, inasafe_keyword_version_key))
                 if not is_keyword_version_supported(keyword_version):
                     continue
             except:  # pylint: disable=W0702
@@ -967,24 +654,25 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 continue
 
             if layer_purpose == 'hazard':
-                add_ordered_combo_item(self.cboHazard, title, source)
+                add_ordered_combo_item(
+                    self.hazard_layer_combo, title, source)
             elif layer_purpose == 'exposure':
-                add_ordered_combo_item(self.cboExposure, title, source)
+                add_ordered_combo_item(
+                    self.exposure_layer_combo, title, source)
             elif layer_purpose == 'aggregation':
-                add_ordered_combo_item(self.cboAggregation, title, source)
+                add_ordered_combo_item(
+                    self.aggregation_layer_combo, title, source)
 
         self.unblock_signals()
-        # handle the cboAggregation combo
-        self.cboAggregation.insertItem(0, self.tr('Entire area'))
-        self.cboAggregation.setCurrentIndex(0)
-        self.toggle_aggregation_combo()
+        # handle the aggregation_layer_combo combo
+        self.aggregation_layer_combo.insertItem(0, self.tr('Entire area'))
+        self.aggregation_layer_combo.setCurrentIndex(0)
+        self.toggle_aggregation_layer_combo()
 
-        # Now populate the functions list based on the layers loaded
-        self.get_functions()
         self.restore_state()
-        self.grpQuestion.setEnabled(True)
-        self.grpQuestion.setVisible(True)
-        self.pbnShowQuestion.setVisible(False)
+        self.question_group.setEnabled(True)
+        self.question_group.setVisible(True)
+        self.show_question_button.setVisible(False)
         # Note: Don't change the order of the next two lines otherwise there
         # will be a lot of unneeded looping around as the signal is handled
         self.connect_layer_listener()
@@ -992,69 +680,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # ensure the dock keywords info panel is updated
         # make sure to do this after the lock is released!
         self.layer_changed(self.iface.activeLayer())
-        # Make sure to update the analysis area preview
-        self.draw_rubber_bands()
-
-    def get_functions(self):
-        """Obtain a list of impact functions from the IF manager."""
-        # remember what the current function is
-        original_function = self.cboFunction.currentText()
-        self.cboFunction.clear()
-
-        # Get the keyword dictionaries for hazard and exposure
-        hazard_layer = self.get_hazard_layer()
-        if hazard_layer is None:
-            return
-        exposure_layer = self.get_exposure_layer()
-        if exposure_layer is None:
-            return
-        # noinspection PyTypeChecker
-        hazard_keywords = self.keyword_io.read_keywords(hazard_layer)
-        # We need to add the layer type to the returned keywords
-        if hazard_layer.type() == QgsMapLayer.VectorLayer:
-            # noinspection PyTypeChecker
-            hazard_keywords['layer_geometry'] = vector_geometry_string(
-                hazard_layer)
-        elif hazard_layer.type() == QgsMapLayer.RasterLayer:
-            hazard_keywords['layer_geometry'] = 'raster'
-
-        # noinspection PyTypeChecker
-        exposure_keywords = self.keyword_io.read_keywords(exposure_layer)
-        # We need to add the layer type to the returned keywords
-        if exposure_layer.type() == QgsMapLayer.VectorLayer:
-            # noinspection PyTypeChecker
-            exposure_keywords['layer_geometry'] = vector_geometry_string(
-                exposure_layer)
-        elif exposure_layer.type() == QgsMapLayer.RasterLayer:
-            exposure_keywords['layer_geometry'] = 'raster'
-
-        # Find out which functions can be used with these layers
-        try:
-            # from pprint import pprint
-            # pprint(hazard_keywords)
-            # pprint(exposure_keywords)
-            # print '---------------------------------------------------------'
-            impact_functions = self.impact_function_manager.filter_by_keywords(
-                hazard_keywords, exposure_keywords)
-            # Populate the hazard combo with the available functions
-            for impact_function in impact_functions:
-                function_id = self.impact_function_manager.get_function_id(
-                    impact_function)
-                function_title = \
-                    self.impact_function_manager.get_function_title(
-                        impact_function)
-
-                # Provide function title and ID to function combo:
-                # function_title is the text displayed in the combo
-                # function_name is the canonical identifier
-                add_ordered_combo_item(
-                    self.cboFunction,
-                    function_title,
-                    data=function_id)
-        except Exception, e:
-            raise e
-
-        self.restore_function_state(original_function)
 
     def get_hazard_layer(self):
         """Get the QgsMapLayer currently selected in the hazard combo.
@@ -1066,10 +691,11 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         :rtype: QgsMapLayer
 
         """
-        index = self.cboHazard.currentIndex()
+        index = self.hazard_layer_combo.currentIndex()
         if index < 0:
             return None
-        layer_id = self.cboHazard.itemData(
+
+        layer_id = self.hazard_layer_combo.itemData(
             index, QtCore.Qt.UserRole)
         layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
         return layer
@@ -1083,32 +709,30 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         :returns: Currently selected map layer in the exposure combo.
         :rtype: QgsMapLayer
         """
-
-        index = self.cboExposure.currentIndex()
+        index = self.exposure_layer_combo.currentIndex()
         if index < 0:
             return None
-        layer_id = self.cboExposure.itemData(
+
+        layer_id = self.exposure_layer_combo.itemData(
             index, QtCore.Qt.UserRole)
         layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
         return layer
 
     def get_aggregation_layer(self):
-
         """Get the QgsMapLayer currently selected in the post processing combo.
 
         Obtain QgsMapLayer id from the userrole of the QtCombo for post
         processing combo return it as a QgsMapLayer.
 
-        :returns: None if no aggregation is selected or cboAggregation is
-                disabled, otherwise a polygon layer.
-        :rtype: QgsMapLayer, QgsVectorLayer or None
+        :returns: None if no aggregation is selected or aggregation_layer_combo
+            is disabled, otherwise a polygon layer.
+        :rtype: QgsVectorLayer or None
         """
-
-        no_selection_value = 0
-        index = self.cboAggregation.currentIndex()
-        if index <= no_selection_value:
+        index = self.aggregation_layer_combo.currentIndex()
+        if index < 0:
             return None
-        layer_id = self.cboAggregation.itemData(
+
+        layer_id = self.aggregation_layer_combo.itemData(
             index, QtCore.Qt.UserRole)
         layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
         return layer
@@ -1117,516 +741,96 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
     def toggle_rubber_bands(self, flag):
         """Disabled/enable the rendering of rubber bands.
 
+        This slot is called from the button.
+
         :param flag: Flag to indicate if drawing of bands is active.
         :type flag: bool
         """
         self.extent.show_rubber_bands = flag
-        settings = QSettings()
-        settings.setValue('inasafe/showRubberBands', flag)
-        if not flag:
-            self.extent.hide_last_analysis_extent()  # red
-            self.extent.hide_next_analysis_extent()  # green
-            self.extent.hide_user_analysis_extent()  # blue
-        else:
-            self.draw_rubber_bands()
+        set_setting('showRubberBands', flag)
 
-    @pyqtSlot()
-    def draw_rubber_bands(self):
-        """Draw any rubber bands that are enabled."""
-        settings = QSettings()
-        try:
-            flag = settings.value('inasafe/showRubberBands', type=bool)
-        except TypeError:
-            flag = False
-        if flag:
-            self.show_next_analysis_extent()  # green
-            self.extent.show_user_analysis_extent()  # blue
-            try:
-                clip_parameters = self.impact_function.clip_parameters
-                self.extent.show_last_analysis_extent(
-                    clip_parameters['adjusted_geo_extent'])  # red
-            except (AttributeError, TypeError):
-                pass
+    def progress_callback(self, current_value, maximum_value, message=None):
+        """GUI based callback implementation for showing progress.
 
-    def accept(self):
-        """Execute analysis when run button is clicked.
+        :param current_value: Current progress.
+        :type current_value: int
 
-        .. todo:: FIXME (Tim) We may have to implement some polling logic
-            because the button click accept() function and the updating
-            of the web view after model completion are asynchronous (when
-            threading mode is enabled especially)
+        :param maximum_value: Maximum range (point at which task is complete.
+        :type maximum_value: int
+
+        :param message: Optional message dictionary to containing content
+            we can display to the user. See safe.definitions.analysis_steps
+            for an example of the expected format
+        :type message: dict
         """
-        self.enable_signal_receiver()
-        try:
-            self.enable_busy_cursor()
-            self.show_next_analysis_extent()
-            self.impact_function = self.prepare_impact_function()
-            clip_parameters = self.impact_function.clip_parameters
-            self.extent.show_last_analysis_extent(
-                clip_parameters['adjusted_geo_extent'])
-
-            # Start the analysis
-            self.impact_function.run_analysis()
-        except KeywordNotFoundError as e:
-            self.hide_busy()
-            missing_keyword_message(self, e)
-            self.analysis_done.emit(False)
-            return  # Will abort the analysis if there is exception
-        except InsufficientOverlapError as e:
-            context = self.tr(
-                'A problem was encountered when trying to determine the '
-                'analysis extents.'
-            )
-            self.analysis_error(e, context)
-            return  # Will abort the analysis if there is exception
-        except InvalidAggregationKeywords as e:
-            # TODO: Launch keywords wizard
-            # Show message box
-            message = self.tr(
-                'Your aggregation layer does not have valid keywords for '
-                'aggregation. Please launch keyword wizard to assign keywords '
-                'in this layer.'
-            )
-            # noinspection PyCallByClass
-            QtGui.QMessageBox.warning(self, self.tr('InaSAFE'), message)
-            context = self.tr(
-                'A problem was encountered because the aggregation layer '
-                'does not have proper keywords for aggregation layer.'
-            )
-            self.analysis_error(e, context)
-            self.disable_busy_cursor()
-            return
-        except MemoryError:
-            memory_error()
-            self.disable_busy_cursor()
-            return
-        except InsufficientMemoryWarning:
-            # noinspection PyCallByClass,PyTypeChecker
-            result = QtGui.QMessageBox.warning(
-                self, self.tr('InaSAFE'),
-                self.tr('You may not have sufficient free system memory to '
-                        'carry out this analysis. See the dock panel '
-                        'message for more information. Would you like to '
-                        'continue regardless?'), QtGui.QMessageBox.Yes |
-                QtGui.QMessageBox.No, QtGui.QMessageBox.No)
-            if result == QtGui.QMessageBox.No:
-                # stop work here and return to QGIS
-                self.hide_busy()
-                return
-            elif result == QtGui.QMessageBox.Yes:
-                # Set analysis to ignore memory warning
-                self.impact_function.force_memory = True
-                self.accept()
-        finally:
-            # Set back analysis to not ignore memory warning
-            if self.impact_function:
-                self.impact_function.force_memory = False
-            self.disable_signal_receiver()
-
-    def accept_cancelled(self, old_keywords):
-        """Deal with user cancelling post processing option dialog.
-
-        :param old_keywords: A keywords dictionary that should be reinstated.
-        :type old_keywords: dict
-        """
-        LOGGER.debug('Setting old dictionary: ' + str(old_keywords))
-        self.keyword_io.write_keywords(
-            self.impact_function.aggregator.layer, old_keywords)
-        self.hide_busy()
-        self.set_run_button_status()
-
-    def show_busy(self):
-        """Hide the question group box and enable the busy cursor."""
-        self.grpQuestion.setEnabled(False)
-        self.grpQuestion.setVisible(False)
-        QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
-        self.repaint()
-        QtGui.qApp.processEvents()
-        self.busy = True
-
-    def analysis_error(self, exception, message):
-        """A helper to spawn an error and halt processing.
-
-        An exception will be logged, busy status removed and a message
-        displayed.
-
-        :param message: an ErrorMessage to display
-        :type message: ErrorMessage, Message
-
-        :param exception: An exception that was raised
-        :type exception: Exception
-        """
-        self.hide_busy()
-        LOGGER.exception(message)
-        message = get_error_message(exception, context=message)
-        send_error_message(self, message)
-        self.analysis_done.emit(False)
-
-    def prepare_impact_function(self):
-        """Create analysis as a representation of current situation of dock."""
-
-        # Impact Functions
-        impact_function = self.impact_function_manager.get(
-            self.get_function_id())
-        impact_function.parameters = self.impact_function_parameters
-
-        # Layers
-        impact_function.hazard = self.get_hazard_layer()
-        impact_function.exposure = self.get_exposure_layer()
-        impact_function.aggregation = self.get_aggregation_layer()
-
-        # Variables
-        impact_function.clip_hard = self.clip_hard
-        impact_function.show_intermediate_layers = \
-            self.show_intermediate_layers
-        viewport = viewport_geo_array(self.iface.mapCanvas())
-        impact_function.viewport_extent = viewport
-        if self.extent.user_extent:
-            impact_function.requested_extent = self.extent.user_extent
-            impact_function.requested_extent_crs = self.extent.user_extent_crs
-
-        return impact_function
-
-    def add_above_layer(self, new_layer, *existing_layers):
-        """Add a layer (e.g. impact layer) above another layer in the legend.
-
-        .. versionadded:: 3.2
-
-        .. note:: This method works in QGIS 2.4 and better only. In
-            earlier versions it will just add the layer to the top of the
-            layer stack.
-
-        .. seealso:: issue #2322
-
-        :param existing_layers: Layers which the new layer
-            should be added above.
-        :type existing_layers: QgsMapLayer
-
-        :param new_layer: The new layer being added. An assumption is made
-            that the newly added layer is not already loaded in the legend
-            or the map registry.
-        :type new_layer: QgsMapLayer
-
-        """
-        # Some existing layers might be None, ie the aggregation layer #2948.
-        existing_layers = [l for l in existing_layers if l is not None]
-        if not len(existing_layers) or new_layer is None:
-            return
-
-        registry = QgsMapLayerRegistry.instance()
-
-        if QGis.QGIS_VERSION_INT < 20400:
-            # True flag adds layer directly to legend
-            registry.addMapLayer(existing_layer, True)
-            return
-
-        # False flag prevents layer being added to legend
-        registry.addMapLayer(new_layer, False)
-        minimum_index = len(QgsProject.instance().layerTreeRoot().children())
-        for layer in existing_layers:
-            index = self.layer_legend_index(layer)
-            if index < minimum_index:
-                minimum_index = index
-        root = QgsProject.instance().layerTreeRoot()
-        root.insertLayer(minimum_index, new_layer)
-
-    @staticmethod
-    def layer_legend_index(layer):
-        """Find out where in the legend layer stack a layer is.
-
-        .. note:: This function requires QGIS 2.4 or greater to work. In older
-            versions it will simply return 0.
-
-        .. version_added:: 3.2
-
-        :param layer: A map layer currently loaded in the legend.
-        :type layer: QgsMapLayer
-
-        :returns: An integer representing the z-order of the given layer in
-            the legend tree. If the layer cannot be found, or the QGIS version
-            is < 2.4 it will return 0.
-        :rtype: int
-        """
-        if QGis.QGIS_VERSION_INT < 20400:
-            return 0
-
-        root = QgsProject.instance().layerTreeRoot()
-        layer_id = layer.id()
-        current_index = 0
-        nodes = root.children()
-        for node in nodes:
-            # check if the node is a layer as opposed to a group
-            if isinstance(node, QgsLayerTreeLayer):
-                if layer_id == node.layerId():
-                    return current_index
-            current_index += 1
-        return current_index
-
-    def completed(self, zero_impact):
-        """Slot activated when the process is done.
-
-        :param zero_impact: Flag for zero impact.
-        :type zero_impact: bool
-        """
-        # save the ID of the function that just ran
-        self.last_used_function = self.get_function_id()
-
-        # Show the result in the dock from layer if there is an impact.
-        if not zero_impact:
-            # Try to run completion code
-            try:
-                LOGGER.debug(datetime.now())
-                LOGGER.debug(self.impact_function is None)
-                report = self.show_results()
-            except Exception, e:  # pylint: disable=W0703
-                # FIXME (Ole): This branch is not covered by the tests
-                self.analysis_error(e, self.tr('Error loading impact layer.'))
-            else:
-                # On success, display generated report
-                message = m.Message(report)
-                send_static_message(self, message)
-
-        self.save_state()
-        self.hide_busy()
-        self.analysis_done.emit(True)
-
-    def show_results(self):
-        """Helper function for slot activated when the process is done.
-
-        .. versionchanged:: 3.2 - removed parameters.
-
-        .. note:: If you update this function, please report your change to
-            safe.utilities.analysis_handler.show_results too.
-
-        :returns: Provides a report for writing to the dock.
-        :rtype: str
-        """
-        qgis_exposure = self.get_exposure_layer()
-        qgis_hazard = self.get_hazard_layer()
-        qgis_aggregation = self.get_aggregation_layer()
-
-        safe_impact_layer = self.impact_function.impact
-        qgis_impact_layer = read_impact_layer(safe_impact_layer)
-
-        keywords = self.keyword_io.read_keywords(qgis_impact_layer)
-        json_path = os.path.splitext(qgis_impact_layer.source())[0] + '.json'
-
-        # write postprocessing report to keyword
-        post_processing_report = m.Message()
-        if os.path.exists(json_path):
-            # Make sure if there is post processor
-            if self.impact_function.postprocessor_manager:
-                postprocessor_data = self.impact_function.\
-                    postprocessor_manager.get_json_data(
-                        self.impact_function.aggregator.aoi_mode)
-                with open(json_path) as json_file:
-                    impact_data = json.load(
-                        json_file, object_pairs_hook=OrderedDict)
-                    impact_data['post processing'] = postprocessor_data
-                    write_json(impact_data, json_path)
-        else:
-            post_processing_report = self.impact_function.\
-                postprocessor_manager.get_output(
-                    self.impact_function.aggregator.aoi_mode)
-            keywords['postprocessing_report'] = post_processing_report.to_html(
-                suppress_newlines=True)
-            self.keyword_io.write_keywords(qgis_impact_layer, keywords)
-
-        # Get tabular information from impact layer
         report = m.Message()
         report.add(LOGO_ELEMENT)
-        report.add(m.Heading(self.tr('Analysis Results'), **INFO_STYLE))
-        # If JSON Impact Data Exist, use JSON
-        json_path = qgis_impact_layer.source()[:-3] + 'json'
-        LOGGER.debug('JSON Path %s' % json_path)
-        if os.path.exists(json_path):
-            impact_template = get_report_template(json_file=json_path)
-            impact_report = impact_template.generate_message_report()
-            report.add(impact_report)
-        else:
-            report.add(self.keyword_io.read_keywords(
-                qgis_impact_layer, 'impact_summary'))
-            # append postprocessing report
-            report.add(post_processing_report.to_html())
-
-        # Layer attribution comes last
-        report.add(impact_attribution(keywords).to_html(True))
-
-        # Get requested style for impact layer of either kind
-        style = safe_impact_layer.get_style_info()
-        style_type = safe_impact_layer.get_style_type()
-
-        # Determine styling for QGIS layer
-        if safe_impact_layer.is_vector:
-            LOGGER.debug('myEngineImpactLayer.is_vector')
-            if not style:
-                # Set default style if possible
-                pass
-            elif style_type == 'categorizedSymbol':
-                LOGGER.debug('use categorized')
-                set_vector_categorized_style(qgis_impact_layer, style)
-            elif style_type == 'graduatedSymbol':
-                LOGGER.debug('use graduated')
-                set_vector_graduated_style(qgis_impact_layer, style)
-
-        elif safe_impact_layer.is_raster:
-            LOGGER.debug('myEngineImpactLayer.is_raster')
-            if not style:
-                qgis_impact_layer.setDrawingStyle("SingleBandPseudoColor")
-            else:
-                setRasterStyle(qgis_impact_layer, style)
-
-        else:
-            message = self.tr(
-                'Impact layer %s was neither a raster or a vector layer') % (
-                    qgis_impact_layer.source())
-            # noinspection PyExceptionInherit
-            raise ReadLayerError(message)
-
-        legend = self.iface.legendInterface()
-
-        # Insert the aggregation output above the input aggregation layer
-        if self.show_intermediate_layers:
-            add_above_layer(
-                self.impact_function.aggregator.layer,
-                qgis_aggregation)
-            legend.setLayerVisible(self.impact_function.aggregator.layer, True)
-
-        if self.hide_exposure_flag:
-            # Insert the impact always above the hazard
-            add_above_layer(qgis_impact_layer, qgis_hazard)
-        else:
-            # Insert the impact above the hazard and the exposure if
-            # we don't hide the exposure. See #2899
-            add_above_layer(
-                qgis_impact_layer,
-                qgis_exposure,
-                qgis_hazard)
-
-        active_function = self.active_impact_function
-        self.active_impact_function = active_function
-        self.impact_function_parameters = \
-            self.active_impact_function.parameters
-
-        # In QGIS 2.14.2 and GDAL 1.11.3, if the exposure is in 3857,
-        # the impact layer is in 54004, we need to change it. See issue #2790.
-        if qgis_exposure.crs().authid() == 'EPSG:3857':
-            if qgis_impact_layer.crs().authid() != 'EPSG:3857':
-                epsg_3857 = QgsCoordinateReferenceSystem(3857)
-                qgis_impact_layer.setCrs(epsg_3857)
-
-        # make sure it is active in the legend - needed since QGIS 2.4
-        self.iface.setActiveLayer(qgis_impact_layer)
-        # then zoom to it
-        if self.zoom_to_impact_flag:
-            self.iface.zoomToActiveLayer()
-        if self.hide_exposure_flag:
-            legend.setLayerVisible(qgis_exposure, False)
-
-        # Make the layer visible. Might be hidden by default. See #2925
-        legend.setLayerVisible(qgis_impact_layer, True)
-
-        # Return text to display in report panel
-        return report
+        report.add(m.Heading(
+            self.tr('Analysis status'), **INFO_STYLE))
+        if message is not None:
+            report.add(m.ImportantText(message['name']))
+            report.add(m.Paragraph(message['description']))
+        report.add(self.impact_function.performance_log_message())
+        send_static_message(self, report)
+        self.progress_bar.setMaximum(maximum_value)
+        self.progress_bar.setValue(current_value)
+        QtGui.QApplication.processEvents()
 
     def show_help(self):
-        """Open the About dialog."""
+        """Open the help dialog."""
         # noinspection PyTypeChecker
         dialog = HelpDialog(self)
         dialog.show()
 
-    def hide_busy(self):
-        """A helper function to indicate processing is done."""
-        self.pbnShowQuestion.setVisible(True)
-        self.grpQuestion.setEnabled(True)
-        self.grpQuestion.setVisible(False)
-        # for #706 - if the exposure is hidden
-        # due to self.hide_exposure_flag being enabled
-        # we may have no exposure layers left
-        # so we handle that here and disable run
-        if self.cboExposure.count() == 0:
-            self.pbnRunStop.setEnabled(False)
-        else:
-            self.pbnRunStop.setEnabled(True)
+    def show_busy(self):
+        """Hide the question group box and enable the busy cursor."""
+        self.progress_bar.show()
+        self.question_group.setEnabled(False)
+        self.question_group.setVisible(False)
+        enable_busy_cursor()
         self.repaint()
-        self.disable_busy_cursor()
+        QtGui.qApp.processEvents()
+        self.busy = True
+
+    def hide_busy(self, check_next_impact=True):
+        """A helper function to indicate processing is done.
+
+        :param check_next_impact: Flag to check if we can validate the next IF.
+        :type check_next_impact: bool
+        """
+        self.progress_bar.hide()
+        self.show_question_button.setVisible(True)
+        self.question_group.setEnabled(True)
+        self.question_group.setVisible(False)
+
+        if check_next_impact:
+            # We check if we can run an IF
+            self.validate_impact_function()
+
+        self.repaint()
+        disable_busy_cursor()
         self.busy = False
 
-    @staticmethod
-    def enable_busy_cursor():
-        """Set the hourglass enabled and stop listening for layer changes."""
-        QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
+    def show_impact(self, report_path):
+        """Show the report.
 
-    @staticmethod
-    def disable_busy_cursor():
-        """Disable the hourglass cursor and listen for layer changes."""
-        while QtGui.qApp.overrideCursor() is not None and \
-                QtGui.qApp.overrideCursor().shape() == QtCore.Qt.WaitCursor:
-            QtGui.qApp.restoreOverrideCursor()
+        .. versionadded: 4.0
 
-    def show_impact_report(self, layer, keywords):
-        """Show the report for an impact layer.
-
-        .. versionadded: 3.4
-
-        .. note:: The print button will be enabled if this method is called.
-            Also, the question group box will be hidden and the 'show
-            question' button will be shown.
-
-        :param layer: QgsMapLayer instance that is now active
-        :type layer: QgsMapLayer, QgsRasterLayer, QgsVectorLayer
-
-        :param keywords: A keywords dictionary.
-        :type keywords: dict
+        :param report_path: The path to the report.
+        :type report_path: basestring
         """
-        LOGGER.debug('Showing Impact Report')
-        # Init report
-        report = m.Message()
-        report.add(LOGO_ELEMENT)
-        report.add(m.Heading(self.tr('Analysis Results'), **INFO_STYLE))
+        # We can display an impact report.
+        # We need to open the file in UTF-8, the HTML may have some accents
+        with codecs.open(report_path, 'r', 'utf-8') as report_file:
+            report = report_file.read()
 
-        impact_template = get_report_template(impact_layer_path=layer.source())
-        impact_report = impact_template.generate_message_report()
-        report.add(impact_report)
-
-        if 'postprocessing_report' in keywords:
-            report.add(keywords['postprocessing_report'])
-        report.add(impact_attribution(keywords))
-        self.pbnPrint.setEnabled(True)
+        self.print_button.setEnabled(True)
+        # right now send the report as html texts, not message
         send_static_message(self, report)
         # also hide the question and show the show question button
-        self.pbnShowQuestion.setVisible(True)
-        self.grpQuestion.setEnabled(True)
-        self.grpQuestion.setVisible(False)
-
-    def show_impact_keywords(self, keywords):
-        """Show the keywords for an impact layer.
-
-        .. note:: The print button will be enabled if this method is called.
-            Also, the question group box will be hidden and the 'show
-            question' button will be shown.
-
-        :param keywords: A keywords dictionary.
-        :type keywords: dict
-        """
-        LOGGER.debug('Showing Impact Keywords')
-        if 'impact_summary' not in keywords:
-            return
-
-        report = m.Message()
-        report.add(LOGO_ELEMENT)
-        report.add(m.Heading(self.tr(
-            'Analysis Results'), **INFO_STYLE))
-        report.add(m.Text(keywords['impact_summary']))
-        if 'postprocessing_report' in keywords:
-            report.add(keywords['postprocessing_report'])
-        report.add(impact_attribution(keywords))
-        self.pbnPrint.setEnabled(True)
-        send_static_message(self, report)
-        # also hide the question and show the show question button
-        self.pbnShowQuestion.setVisible(True)
-        self.grpQuestion.setEnabled(True)
-        self.grpQuestion.setVisible(False)
+        self.show_question_button.setVisible(True)
+        self.question_group.setEnabled(True)
+        self.question_group.setVisible(False)
 
     def show_generic_keywords(self, layer):
         """Show the keywords defined for the active layer.
@@ -1641,74 +845,12 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         :type layer: QgsMapLayer
         """
         keywords = KeywordIO(layer)
-        self.pbnPrint.setEnabled(False)
+        self.print_button.setEnabled(False)
         message = keywords.to_message()
         send_static_message(self, message)
-
-    def show_no_keywords_message(self):
-        """Show a message indicating that no keywords are defined.
-
-        .. note:: The print button will be disabled if this method is called.
-        """
-        LOGGER.debug('Showing No Keywords Message')
-        report = m.Message()
-        report.add(LOGO_ELEMENT)
-        report.add(m.Heading(self.tr(
-            'Layer keywords missing:'), **WARNING_STYLE))
-        context = m.Paragraph(
-            self.tr(
-                'No keywords have been defined for this layer yet or there is '
-                'an issue with the currently defined keywords and they need '
-                'to be reviewed. If you wish to use this layer as an '
-                'exposure, hazard, or aggregation layer in an analysis, '
-                'please use the keyword wizard to update the keywords. You '
-                'can open the wizard by clicking on the '),
-            m.Image(
-                'file:///%s/img/icons/'
-                'show-keyword-wizard.svg' % resources_path(),
-                **SMALL_ICON_STYLE),
-            self.tr(
-                ' icon in the toolbar.'))
-        report.add(context)
-        self.pbnPrint.setEnabled(False)
-        send_static_message(self, report)
-
-    def show_keyword_version_message(
-            self, keyword_version, inasafe_version):
-        """Show a message indicating that the keywords version is mismatch
-
-        .. versionadded: 3.2
-
-        :param keyword_version: The version of the layer's keywords
-        :type keyword_version: str
-
-        :param inasafe_version: The version of the InaSAFE
-        :type inasafe_version: str
-
-        .. note:: The print button will be disabled if this method is called.
-        """
-        LOGGER.debug('Showing Mismatch Version Message')
-        report = m.Message()
-        report.add(LOGO_ELEMENT)
-        report.add(m.Heading(self.tr(
-            'Layer Keyword\'s Version Mismatch:'), **WARNING_STYLE))
-        context = m.Paragraph(
-            self.tr(
-                'Your layer\'s keyword\'s version (%s) does not match with '
-                'your InaSAFE version (%s). If you wish to use it as an '
-                'exposure, hazard, or aggregation layer in an analysis, '
-                'please use the keyword wizard to update the keywords. You '
-                'can open the wizard by clicking on the ' % (
-                    keyword_version, inasafe_version)),
-            m.Image(
-                'file:///%s/img/icons/'
-                'show-keyword-wizard.svg' % resources_path(),
-                **SMALL_ICON_STYLE),
-            self.tr(
-                ' icon in the toolbar.'))
-        report.add(context)
-        self.pbnPrint.setEnabled(False)
-        send_static_message(self, report)
+        self.show_question_button.setVisible(False)
+        self.question_group.setEnabled(True)
+        self.question_group.setVisible(True)
 
     @pyqtSlot('QgsMapLayer')
     def layer_changed(self, layer):
@@ -1728,31 +870,48 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         # Do nothing if there is no active layer - see #1861
         if not self._has_active_layer():
-            send_static_message(self, self.getting_started_message())
+            send_static_message(self, getting_started_message())
 
         # Now try to read the keywords and show them in the dock
         try:
             keywords = self.keyword_io.read_keywords(layer)
 
-            if keywords.get('layer_purpose') == 'impact':
-                try:
-                    self.show_impact_report(layer, keywords)
-                except MissingImpactReport:
-                    self.show_impact_keywords(keywords)
-            else:
-                if 'keyword_version' not in keywords.keys():
-                    self.show_keyword_version_message(
-                        'No Version', self.inasafe_version)
+            # list of layer purpose to show impact report
+            impacted_layer = [
+                layer_purpose_exposure_summary['key'],
+                layer_purpose_aggregate_hazard_impacted['key'],
+                layer_purpose_aggregation_summary['key'],
+                layer_purpose_analysis_impacted['key'],
+                layer_purpose_exposure_summary_table['key'],
+            ]
+
+            show_keywords = True
+            if keywords.get('layer_purpose') in impacted_layer:
+                report_path = os.path.dirname(layer.source())
+                report_path = os.path.join(
+                    report_path, 'output/impact-report-output.html')
+
+                if os.path.exists(report_path):
+                    show_keywords = False
+                    self.show_impact(report_path)
+
+            if show_keywords:
+                if inasafe_keyword_version_key not in keywords.keys():
+                    show_keyword_version_message(
+                        self, 'No Version', self.inasafe_version)
+                    self.print_button.setEnabled(False)
                 else:
-                    keyword_version = str(keywords.get('keyword_version'))
+                    keyword_version = str(keywords.get(
+                        inasafe_keyword_version_key))
                     supported = is_keyword_version_supported(
                         keyword_version)
                     if supported:
                         self.show_generic_keywords(layer)
                     else:
                         # Layer version is not supported
-                        self.show_keyword_version_message(
-                            keyword_version, self.inasafe_version)
+                        show_keyword_version_message(
+                            self, keyword_version, self.inasafe_version)
+                    self.print_button.setEnabled(False)
 
         # TODO: maybe we need to split these apart more to give mode
         # TODO: granular error messages TS
@@ -1762,21 +921,16 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 NoKeywordsFoundError,
                 MetadataReadError,
                 AttributeError):
-            # LOGGER.info(e.message)
             # Added this check in 3.2 for #1861
             active_layer = self.iface.activeLayer()
             if active_layer is None:
-                send_static_message(self, self.getting_started_message())
+                send_static_message(self, getting_started_message())
             else:
-                self.show_no_keywords_message()
-            # Append the error message.
-            # error_message = get_error_message(e)
-            # send_error_message(self, error_message)
-            return
-        except Exception, e:  # pylint: disable=broad-except
+                show_no_keywords_message(self)
+                self.print_button.setEnabled(False)
+        except Exception as e:  # pylint: disable=broad-except
             error_message = get_error_message(e)
             send_error_message(self, error_message)
-            return
 
     def save_state(self):
         """Save the current state of the ui to an internal class member.
@@ -1785,48 +939,32 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         :func:`restore_state`
         """
         state = {
-            'hazard': self.cboHazard.currentText(),
-            'exposure': self.cboExposure.currentText(),
-            'function': self.cboFunction.currentText(),
-            'aggregation': self.cboAggregation.currentText(),
-            'report': self.wvResults.page().currentFrame().toHtml()}
+            'hazard': self.hazard_layer_combo.currentText(),
+            'exposure': self.exposure_layer_combo.currentText(),
+            'aggregation': self.aggregation_layer_combo.currentText(),
+            'report': self.results_webview.page().currentFrame().toHtml()}
         self.state = state
 
     def restore_state(self):
         """Restore the state of the dock to the last known state."""
         if self.state is None:
             return
-        for myCount in range(0, self.cboExposure.count()):
-            item_text = self.cboExposure.itemText(myCount)
+        for myCount in range(0, self.exposure_layer_combo.count()):
+            item_text = self.exposure_layer_combo.itemText(myCount)
             if item_text == self.state['exposure']:
-                self.cboExposure.setCurrentIndex(myCount)
+                self.exposure_layer_combo.setCurrentIndex(myCount)
                 break
-        for myCount in range(0, self.cboHazard.count()):
-            item_text = self.cboHazard.itemText(myCount)
+        for myCount in range(0, self.hazard_layer_combo.count()):
+            item_text = self.hazard_layer_combo.itemText(myCount)
             if item_text == self.state['hazard']:
-                self.cboHazard.setCurrentIndex(myCount)
+                self.hazard_layer_combo.setCurrentIndex(myCount)
                 break
-        for myCount in range(0, self.cboAggregation.count()):
-            item_text = self.cboAggregation.itemText(myCount)
+        for myCount in range(0, self.aggregation_layer_combo.count()):
+            item_text = self.aggregation_layer_combo.itemText(myCount)
             if item_text == self.state['aggregation']:
-                self.cboAggregation.setCurrentIndex(myCount)
+                self.aggregation_layer_combo.setCurrentIndex(myCount)
                 break
-        self.restore_function_state(self.state['function'])
-        self.wvResults.setHtml(self.state['report'])
-
-    def restore_function_state(self, original_function):
-        """Restore the function combo to a known state.
-
-        :param original_function: Name of function that should be selected.
-        :type original_function: str
-
-        """
-        # Restore previous state of combo
-        for count in range(0, self.cboFunction.count()):
-            item_text = self.cboFunction.itemText(count)
-            if item_text == original_function:
-                self.cboFunction.setCurrentIndex(count)
-                break
+        self.results_webview.setHtml(self.state['report'])
 
     def print_map(self):
         """Open impact report dialog used to tune report when printing."""
@@ -1841,216 +979,96 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                         'trying to print.'))
             return
 
-        # Open Impact Report Dialog
-        print_dialog = ImpactReportDialog(self.iface)
-        if not print_dialog.exec_() == QtGui.QDialog.Accepted:
-            send_dynamic_message(
-                self,
-                m.Message(
-                    m.Heading(self.tr('Map Creator'), **WARNING_STYLE),
-                    m.Text(self.tr('Report generation cancelled!'))))
-            return
+        # Get output path from datastore
+        # Fetch report for pdfs report
+        report_path = os.path.dirname(impact_layer.source())
 
-        # Get the extent of the map for report
-        use_full_extent = print_dialog.analysis_extent_radio.isChecked()
-        if use_full_extent:
-            map_crs = self.iface.mapCanvas().mapRenderer().destinationCrs()
-            layer_crs = self.iface.activeLayer().crs()
-            layer_extent = self.iface.activeLayer().extent()
-            if map_crs != layer_crs:
-                # noinspection PyCallingNonCallable
-                transform = QgsCoordinateTransform(layer_crs, map_crs)
-                layer_extent = transform.transformBoundingBox(layer_extent)
-            area_extent = layer_extent
-        else:
-            area_extent = self.iface.mapCanvas().extent()
+        # TODO: temporary hack until Impact Function becomes serializable
+        # need to have impact report
+        standard_impact_report_metadata = ReportMetadata(
+            metadata_dict=standard_impact_report_metadata_pdf)
+        standard_map_report_metadata = ReportMetadata(
+            metadata_dict=report_a4_blue)
 
-        # Get selected template path to use
-        if print_dialog.default_template_radio.isChecked():
-            template_path = print_dialog.template_combo.itemData(
-                print_dialog.template_combo.currentIndex())
-        else:
-            template_path = print_dialog.template_path.text()
-            if not os.path.exists(template_path):
-                # noinspection PyCallByClass,PyTypeChecker
-                QtGui.QMessageBox.warning(
-                    self,
-                    self.tr('InaSAFE'),
-                    self.tr('Please select a valid template before printing. '
-                            'The template you choose does not exist.'))
-                return
+        standard_report_metadata = [
+            standard_impact_report_metadata,
+            standard_map_report_metadata
+        ]
 
-        # Open in PDF or Open in Composer Flag
-        create_pdf_flag = print_dialog.create_pdf
+        def retrieve_components(tags):
+            products = []
+            for report_metadata in standard_report_metadata:
+                products += (report_metadata.component_by_tags(tags))
+            return products
 
-        # Instantiate and prepare Report
-        send_dynamic_message(
-            self,
-            m.Message(
-                m.Heading(self.tr('Map Creator'), **PROGRESS_UPDATE_STYLE),
-                m.Text(self.tr('Preparing map and report'))))
+        def retrieve_paths(products, suffix=None):
+            paths = []
+            for c in products:
+                path = ImpactReport.absolute_output_path(
+                    os.path.join(report_path, 'output'),
+                    products,
+                    c.key)
+                if isinstance(path, list):
+                    for p in path:
+                        paths.append(p)
+                elif isinstance(path, dict):
+                    for p in path.itervalues():
+                        paths.append(p)
+                else:
+                    paths.append(path)
+            if suffix:
+                paths = [p for p in paths if p.endswith(suffix)]
 
-        impact_report = ImpactReport(self.iface, template_path, impact_layer)
-        impact_report.extent = area_extent
+            paths = [p for p in paths if os.path.exists(p)]
+            return paths
 
-        # Get other setting
-        settings = QSettings()
-        logo_path = settings.value(
-            'inasafe/organisation_logo_path', '', type=str)
-        impact_report.organisation_logo = logo_path
+        def wrap_output_paths(paths):
+            """Make sure the file paths can wrap nicely."""
+            return [p.replace(os.sep, '<wbr>' + os.sep) for p in paths]
 
-        disclaimer_text = settings.value(
-            'inasafe/reportDisclaimer', '', type=str)
-        impact_report.disclaimer = disclaimer_text
+        pdf_products = retrieve_components(
+            [final_product_tag, pdf_product_tag])
+        pdf_output_paths = retrieve_paths(pdf_products, '.pdf')
 
-        north_arrow_path = settings.value(
-            'inasafe/north_arrow_path', '', type=str)
-        impact_report.north_arrow = north_arrow_path
+        html_products = retrieve_components(
+                [final_product_tag, html_product_tag])
+        html_output_paths = retrieve_paths(html_products, '.html')
 
-        template_warning_verbose = bool(settings.value(
-            'inasafe/template_warning_verbose', True, type=bool))
+        qpt_products = retrieve_components(
+            [final_product_tag, qpt_product_tag])
+        qpt_output_paths = retrieve_paths(qpt_products, '.qpt')
 
-        # Check if there's missing elements needed in the template
-        component_ids = ['safe-logo', 'north-arrow', 'organisation-logo',
-                         'impact-map', 'impact-legend']
-        impact_report.component_ids = component_ids
-        length = len(impact_report.missing_elements)
-        if template_warning_verbose and length != 0:
-            title = self.tr('Template is missing some elements')
-            question = self.tr(
-                'The composer template you are printing to is missing '
-                'these elements: %s. Do you still want to continue') % (
-                    ', '.join(impact_report.missing_elements))
-            # noinspection PyCallByClass,PyTypeChecker
-            answer = QtGui.QMessageBox.question(
-                self,
-                title,
-                question,
-                QtGui.QMessageBox.Yes | QtGui.QMessageBox.No)
-            if answer == QtGui.QMessageBox.No:
-                return
+        # create message to user
+        status = m.Message(
+            m.Heading(self.tr('Map Creator'), **INFO_STYLE),
+            m.Paragraph(self.tr(
+                'Your PDF was created....opening using the default PDF '
+                'viewer on your system.')),
+            m.ImportantText(self.tr(
+                'The generated pdfs were saved '
+                'as:')))
 
-        self.enable_busy_cursor()
-        if create_pdf_flag:
-            self.print_map_to_pdf(impact_report)
-        else:
-            self.open_map_in_composer(impact_report)
+        for path in wrap_output_paths(pdf_output_paths):
+            status.add(m.Paragraph(path))
 
-        self.disable_busy_cursor()
+        status.add(m.Paragraph(
+            m.ImportantText(self.tr('The generated htmls were saved as:'))))
 
-    def print_map_to_pdf(self, impact_report):
-        """Print map to PDF given MapReport instance.
+        for path in wrap_output_paths(html_output_paths):
+            status.add(m.Paragraph(path))
 
-        :param impact_report: Impact Report instance that is ready to print
-        :type impact_report: ImpactReport
-        """
-        impact_report.setup_composition()
+        status.add(m.Paragraph(
+            m.ImportantText(self.tr('The generated qpts were saved as:'))))
 
-        # Get Filename
-        map_title = impact_report.map_title
-        if map_title is not None:
-            default_file_name = map_title + '.pdf'
-            default_file_name = default_file_name.replace(' ', '_')
-        else:
-            send_error_message(
-                self,
-                self.tr('Keyword "map_title" not found.'))
-            return
+        for path in wrap_output_paths(qpt_output_paths):
+            status.add(m.Paragraph(path))
 
-        # Get output path
-        # noinspection PyCallByClass,PyTypeChecker
-        output_path = QtGui.QFileDialog.getSaveFileName(
-            self,
-            self.tr('Write to PDF'),
-            os.path.join(temp_dir(), default_file_name),
-            self.tr('Pdf File (*.pdf)'))
-        output_path = get_unicode(output_path)
+        send_static_message(self, status)
 
-        if output_path is None or output_path == '':
-            # noinspection PyTypeChecker
-            send_dynamic_message(
-                self,
-                m.Message(
-                    m.Heading(self.tr('Map Creator'), **WARNING_STYLE),
-                    m.Text(self.tr('Printing cancelled!'))))
-            return
-
-        try:
-            map_pdf_path, table_pdf_path = impact_report.print_to_pdf(
-                output_path)
-
-            # Make sure the file paths can wrap nicely:
-            wrapped_map_path = map_pdf_path.replace(os.sep, '<wbr>' + os.sep)
-            wrapped_table_path = table_pdf_path.replace(
-                os.sep, '<wbr>' + os.sep)
-            status = m.Message(
-                m.Heading(self.tr('Map Creator'), **INFO_STYLE),
-                m.Paragraph(self.tr(
-                    'Your PDF was created....opening using the default PDF '
-                    'viewer on your system. The generated pdfs were saved '
-                    'as:')),
-                m.Paragraph(wrapped_map_path),
-                m.Paragraph(self.tr('and')),
-                m.Paragraph(wrapped_table_path))
-
+        for path in pdf_output_paths:
             # noinspection PyCallByClass,PyTypeChecker,PyTypeChecker
             QtGui.QDesktopServices.openUrl(
-                QtCore.QUrl.fromLocalFile(table_pdf_path))
-            # noinspection PyCallByClass,PyTypeChecker,PyTypeChecker
-            QtGui.QDesktopServices.openUrl(
-                QtCore.QUrl.fromLocalFile(map_pdf_path))
-
-            send_dynamic_message(self, status)
-        except TemplateLoadingError, e:
-            send_error_message(self, get_error_message(e))
-        except Exception, e:  # pylint: disable=broad-except
-            send_error_message(self, get_error_message(e))
-
-    def open_map_in_composer(self, impact_report):
-        """Open map in composer given MapReport instance.
-
-        ..note:: (AG) See https://github.com/AIFDR/inasafe/issues/911. We
-            need to set the composition to the composer before loading the
-            template.
-
-        :param impact_report: Impact Report to be opened in composer.
-        :type impact_report: ImpactReport
-        """
-        impact_report.setup_composition()
-        self.composer = self.iface.createNewComposer()
-        self.composer.setComposition(impact_report.composition)
-        impact_report.load_template()
-        impact_report.draw_composition()
-
-        # Fit In View
-        number_pages = impact_report.composition.numPages()
-        paper_height = impact_report.composition.paperHeight()
-        paper_width = impact_report.composition.paperWidth()
-        space_between_pages = impact_report.composition.spaceBetweenPages()
-        if number_pages > 0:
-            height = (paper_height * number_pages) + (
-                space_between_pages * (number_pages - 1))
-            self.composer.fitInView(
-                0, 0, paper_width + 1, height + 1, QtCore.Qt.KeepAspectRatio)
-
-    def get_function_id(self, index=None):
-        """Get the canonical impact function ID for the currently selected
-           function (or the specified combo entry if theIndex is supplied.
-
-        :param index: Optional index position in the combo that you
-            want the function id for. Defaults to None. If not set / None
-            the currently selected combo item's function id will be
-            returned.
-        :type index: int
-
-        :returns: Id of the currently selected function.
-        :rtype: str
-        """
-        if index is None:
-            index = self.cboFunction.currentIndex()
-        item_data = self.cboFunction.itemData(index, QtCore.Qt.UserRole)
-        function_id = '' if item_data is None else str(item_data)
-        return function_id
+                QtCore.QUrl.fromLocalFile(path))
 
     @pyqtSlot('QgsRectangle', 'QgsCoordinateReferenceSystem')
     def define_user_analysis_extent(self, extent, crs):
@@ -2065,11 +1083,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             extent.
         :type crs: QgsCoordinateReferenceSystem
         """
-        try:
-            self.extent.define_user_analysis_extent(extent, crs)
-            self.show_next_analysis_extent()
-        except InvalidGeometryError:
-            return
+        extent = QgsGeometry.fromRect(extent)
+        self.extent.set_user_extent(extent, crs)
+        self.validate_impact_function()
 
     def _has_active_layer(self):
         """Check if there is a layer active in the legend.
@@ -2113,35 +1129,161 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 visible_count += 1
         return visible_count
 
-    def show_next_analysis_extent(self):
-        """Update the rubber band showing where the next analysis extent is.
+    def accept(self):
+        """Execute analysis when run button is clicked."""
+        # Start the analysis
+        self.impact_function = self.validate_impact_function()
+        if not isinstance(self.impact_function, ImpactFunction):
+            # This should not happen as the "accept" button should disabled if
+            # the impact function is not ready.
+            return ANALYSIS_FAILED_BAD_CODE, None
+        if not self.impact_function.is_ready:
+            LOGGER.info(tr('The impact function should not have been ready.'))
+            return ANALYSIS_FAILED_BAD_CODE, None
 
-        Primary purpose of this slot is to draw a rubber band of where the
-        analysis will be carried out based on valid intersection between
-        layers.
+        self.show_busy()
+        self.impact_function.callback = self.progress_callback
+        self.impact_function.debug_mode = self.debug_mode.isChecked()
+        try:
+            status, message = self.impact_function.run()
+        except:
+            # We have an exception only if we are in debug mode.
+            # We want to display the datastore and then
+            # we want to re-raise it to get the first aid plugin popup.
+            add_debug_layers_to_canvas(self.impact_function)
+            disable_busy_cursor()
+            raise
+        if status == ANALYSIS_FAILED_BAD_INPUT:
+            self.hide_busy()
+            LOGGER.info(tr(
+                'The impact function could not run because of the inputs.'))
+            send_error_message(self, message)
+            LOGGER.info(message.to_text())
+            return status, message
+        elif status == ANALYSIS_FAILED_BAD_CODE:
+            self.hide_busy()
+            LOGGER.exception(tr(
+                'The impact function could not run because of a bug.'))
+            LOGGER.exception(message.to_text())
+            send_error_message(self, message)
+            return status, message
 
-        This slot is called on pan, zoom, layer visibility changes and
+        LOGGER.info(tr('The impact function could run without errors.'))
 
-        .. versionadded:: 2.1.0
+        # Add result layer to QGIS
+        add_impact_layers_to_canvas(self.impact_function, self.iface)
+
+        # execute this before generating report
+        if self.zoom_to_impact_flag:
+            self.iface.zoomToActiveLayer()
+
+        qgis_exposure = self.get_exposure_layer()
+        if self.hide_exposure_flag:
+            legend = self.iface.legendInterface()
+            legend.setLayerVisible(qgis_exposure, False)
+
+        if setting('generate_report', True, bool):
+            # Generate impact report
+            error_code, message = generate_impact_report(
+                self.impact_function, self.iface)
+
+            if error_code == ImpactReport.REPORT_GENERATION_FAILED:
+                self.hide_busy()
+                LOGGER.info(tr(
+                    'The impact report could not be generated.'))
+                send_error_message(self, message)
+                LOGGER.info(message.to_text())
+                return ANALYSIS_FAILED_BAD_CODE, message
+
+            error_code, message = generate_impact_map_report(
+                self.impact_function, self.iface)
+
+            if error_code == ImpactReport.REPORT_GENERATION_FAILED:
+                self.hide_busy()
+                LOGGER.info(tr(
+                    'The impact report could not be generated.'))
+                send_error_message(self, message)
+                LOGGER.info(message.to_text())
+                return ANALYSIS_FAILED_BAD_CODE, message
+
+        if self.impact_function.debug_mode:
+            add_debug_layers_to_canvas(self.impact_function)
+
+        self.extent.set_last_analysis_extent(
+            self.impact_function.analysis_extent,
+            qgis_exposure.crs())
+
+        # We do not want to check the state of the next IF
+        self.hide_busy(check_next_impact=False)
+        return ANALYSIS_SUCCESS, None
+
+    def validate_impact_function(self):
+        """Helper method to evaluate the current state of the impact function.
+
+        This function will determine if it is appropriate for the OK button to
+        be enabled or not. Only this function is able to change the status of
+        the button.
+
+        This function will return a ready to run impact function or None if it
+        is not ready.
+
+        This slot is called on pan, zoom, layer visibility changes.
+
+        .. versionadded:: 4.0
         """
-        settings = QSettings()
-        self.extent.hide_next_analysis_extent()
-        # check if we actually have correct hazard, exposure and IF
-        # if we don't we exit immediately to avoid cluttering up the display
-        # with unneeded status messages...
-        flag, _ = self.validate()
-        if not flag:
-            self.pbnRunStop.setEnabled(False)
-            return
+        # First, we check if the dock is not busy.
+        if self.busy:
+            return False, None
 
-        # IF could potentially run - lets see if the extents will work well...
-        valid, extents = self.validate_extents()
-        if valid:
-            self.extent.show_next_analysis_extent(extents)
-            show_confirmations = settings.value(
-                'inasafe/show_extent_confirmations',
-                True,
-                type=bool)
+        # Then, we need to check if the question area is correct.
+        flag, message = self._validate_question_area()
+        if not flag:
+            send_static_message(self, message)
+            self.run_button.setEnabled(False)
+            self.extent.clear_next_analysis_extent()
+            self.impact_function = None
+            return False, None
+
+        # Finally, we need to check if an IF can run.
+        impact_function = ImpactFunction()
+        impact_function.hazard = self.get_hazard_layer()
+        impact_function.exposure = self.get_exposure_layer()
+        aggregation = self.get_aggregation_layer()
+
+        if aggregation:
+            impact_function.aggregation = aggregation
+            impact_function.use_selected_features_only = (
+                self.use_selected_features_only)
+
+            if self.use_selected_features_only and (
+                        aggregation.selectedFeatureCount() > 0):
+                self.aggregation_question_label.setText(
+                    self.label_with_selection)
+            else:
+                self.aggregation_question_label.setText(
+                    self.label_without_selection)
+        else:
+            self.aggregation_question_label.setText(
+                self.label_without_selection)
+            mode = setting('analysis_extents_mode')
+            if self.extent.user_extent:
+                # This like a hack to transform a geometry to a rectangle.
+                # self.extent.user_extent is a QgsGeometry.
+                # impact_function.requested_extent needs a QgsRectangle.
+                wkt = self.extent.user_extent.exportToWkt()
+                impact_function.requested_extent = wkt_to_rectangle(wkt)
+                impact_function.requested_extent_crs = self.extent.crs
+
+            elif mode == HAZARD_EXPOSURE_VIEW:
+                impact_function.requested_extent = (
+                    self.iface.mapCanvas().extent())
+                impact_function.requested_extent_crs = self.extent.crs
+
+        status, message = impact_function.prepare()
+        if status == PREPARE_SUCCESS:
+
+            show_confirmations = setting(
+                'show_extent_confirmations', True, bool)
 
             if show_confirmations:
                 message = self.tr(
@@ -2150,65 +1292,91 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     'run button below to continue with the analysis.')
 
                 display_information_message_bar(
-                    self.tr('InaSAFE'),
+                    'InaSAFE',
                     self.tr('Analysis environment ready'),
                     message,
                     self.tr('More info ...'),
                     2)
-            self.pbnRunStop.setEnabled(True)
+
+            self.extent.set_next_analysis_extent(
+                impact_function.analysis_extent,
+                self.get_exposure_layer().crs())
+
+            self.run_button.setEnabled(True)
+            send_static_message(self, ready_message())
+            self.impact_function = None
+            return impact_function
+
+        elif status == PREPARE_FAILED_BAD_LAYER:
+            self.extent.clear_next_analysis_extent()
+            send_error_message(self, message)
+            self.run_button.setEnabled(False)
+            self.impact_function = None
+            return None
+
+        elif status == PREPARE_FAILED_INSUFFICIENT_OVERLAP_REQUESTED_EXTENT:
+            self.extent.clear_next_analysis_extent()
+            show_warnings = setting('show_extent_warnings', True, bool)
+            if show_warnings:
+                display_warning_message_bar(
+                    'InaSAFE',
+                    tr('The requested extent is not overlapping your layers.'))
+            self.run_button.setEnabled(False)
+            self.impact_function = None
+            return None
+
+        elif status == PREPARE_FAILED_INSUFFICIENT_OVERLAP:
+            self.extent.clear_next_analysis_extent()
+            show_warnings = setting('show_extent_warnings', True, bool)
+            if show_warnings:
+                display_warning_message_bar(
+                    'InaSAFE',
+                    self.tr('No overlapping extents'),
+                    no_overlap_message())
+            self.run_button.setEnabled(False)
+            self.impact_function = None
+            return None
+
+        elif status == PREPARE_FAILED_BAD_INPUT:
+            # The user should fix the message. It should be in orange.
+            self.extent.clear_next_analysis_extent()
+            send_error_message(self, message)
+            self.run_button.setEnabled(False)
+            self.impact_function = None
+            return None
+
         else:
-            # For issue #618, #1811
-            if self.show_only_visible_layers_flag:
-                layer_count = self._visible_layers_count()
-            else:
-                layer_count = self._layer_count()
+            # An exception has been raised. It should be in red.
+            self.extent.clear_next_analysis_extent()
+            send_error_message(self, message)
+            self.run_button.setEnabled(False)
+            self.impact_function = None
+            return None
 
-            if layer_count == 0:
-                send_static_message(self, self.getting_started_message())
-            else:
-                show_warnings = settings.value(
-                    'inasafe/show_extent_warnings',
-                    True,
-                    type=bool)
-                if show_warnings:
-                    message = self.no_overlap_message()
-                    display_warning_message_bar(
-                        self.tr('InaSAFE'),
-                        self.tr('No overlapping extents'),
-                        message)
-            self.pbnRunStop.setEnabled(False)
-            # For #2077 somewhat kludgy hack to prevent positive
-            # message when we cant actually run
-            match = self.tr(
-                'You can now proceed to run your analysis by clicking the ')
-            current_text = self.wvResults.page_to_text()
-            if match in current_text:
-                message = m.Message()
-                message.add(LOGO_ELEMENT)
-                message.add(m.Heading(self.tr(
-                    'Insufficient overlap'), **WARNING_STYLE))
-                message.add(self.no_overlap_message())
-                send_static_message(self, message)
+    def _validate_question_area(self):
+        """Helper method to evaluate the current state of the dialog.
 
-    def validate_extents(self):
-        """Check if the current extents are valid.
+        This function will determine if it is appropriate for the OK button to
+        be enabled or not.
 
-        Look at the intersection between Hazard, exposure and user analysis
-        area and see if they represent a valid, usable area for analysis.
+        .. note:: The enabled state of the OK button on the dialog will
+           NOT be updated (set True or False) depending on the outcome of
+           the UI readiness tests performed - **only** True or False
+           will be returned by the function.
 
-        .. versionadded:: 3.1
+        :returns: A two-tuple where the first element is a Boolean reflecting
+         the results of the validation tests and the second is a message
+         indicating any reason why the validation may have failed.
+        :rtype: (Boolean, safe.messaging.Message)
 
-        :returns: A two-tuple. The first element will be True if extents are
-            usable, otherwise False. It will also return False if an invalid
-            condition exists e.g. no hazard layer etc. The second element will
-            be a rectangle for the analysis extent (if valid) or None.
-        :rtype: (bool, QgisRectangle)
+        Example::
+
+            flag,message = self._validate_question_area()
         """
-
-        try:
-            # Temporary only, for checking the user extent
-            impact_function = self.prepare_impact_function()
-            clip_parameters = impact_function.clip_parameters
-            return True, clip_parameters['adjusted_geo_extent']
-        except (AttributeError, InsufficientOverlapError):
-            return False, None
+        hazard_index = self.hazard_layer_combo.currentIndex()
+        exposure_index = self.exposure_layer_combo.currentIndex()
+        if hazard_index == -1 or exposure_index == -1:
+            message = getting_started_message()
+            return False, message
+        else:
+            return True, None

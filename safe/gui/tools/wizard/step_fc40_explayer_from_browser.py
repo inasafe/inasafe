@@ -12,16 +12,20 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-__author__ = 'qgis@borysjurgiel.pl'
-__revision__ = '$Format:%H$'
-__date__ = '16/03/2016'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
 
+# noinspection PyPackageRequirements
+from PyQt4.QtGui import QPixmap
+
+from safe.definitions.layer_purposes import layer_purpose_exposure
+from safe.utilities.resources import resources_path
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step_browser import WizardStepBrowser
 from safe.gui.tools.wizard.wizard_utils import layers_intersect
 
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
@@ -49,15 +53,6 @@ class StepFcExpLayerFromBrowser(WizardStepBrowser, FORM_CLASS):
         :rtype: bool
         """
         return self.get_layer_description_from_browser('exposure')[0]
-
-    def get_previous_step(self):
-        """Find the proper step when user clicks the Previous button.
-
-        :returns: The step to be switched to
-        :rtype: WizardStep instance or None
-        """
-        new_step = self.parent.step_fc_explayer_origin
-        return new_step
 
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.
@@ -89,3 +84,11 @@ class StepFcExpLayerFromBrowser(WizardStepBrowser, FORM_CLASS):
     def set_widgets(self):
         """Set widgets on the Exposure Layer From Browser tab"""
         self.tvBrowserExposure_selection_changed()
+
+        # Set icon
+        exposure = self.parent.step_fc_functions1.selected_value(
+            layer_purpose_exposure['key'])
+        icon_path = resources_path(
+            'img', 'wizard', 'keyword-subcategory-%s.svg' % (
+                exposure['key'] or 'notset'))
+        self.lblIconIFCWExposureFromBrowser.setPixmap(QPixmap(icon_path))

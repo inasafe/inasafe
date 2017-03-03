@@ -9,6 +9,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '27/05/2013'
@@ -24,9 +25,11 @@ import qgis  # pylint: disable=unused-import
 from PyQt4 import QtCore, QtGui, QtWebKit
 
 from safe import messaging as m
+from safe.messaging.message import MessageElement
 from safe.common.exceptions import InvalidParameterError
 from safe.utilities.utilities import html_to_file, open_in_browser
 from safe.utilities.qt import qt_at_least
+from safe.utilities.utilities import unique_filename
 from safe.utilities.resources import html_footer, html_header, resources_path
 
 DYNAMIC_MESSAGE_SIGNAL = 'ImpactFunctionMessage'
@@ -74,6 +77,10 @@ class MessageViewer(QtWebKit.QWebView):
         self.action_show_report.setEnabled(False)
         # noinspection PyUnresolvedReferences
         self.action_show_report.triggered.connect(self.show_report)
+
+        self.action_print_to_pdf = QtGui.QAction(self.tr('Save as PDF'), None)
+        self.action_print_to_pdf.setEnabled(True)
+        self.action_print_to_pdf.triggered.connect(self.generate_pdf)
 
         self.log_path = None
         self.report_path = None
@@ -139,6 +146,9 @@ class MessageViewer(QtWebKit.QWebView):
         action_page_to_html_file.triggered.connect(
             self.open_current_in_browser)
         context_menu.addAction(action_page_to_html_file)
+
+        # Add the PDF export menu
+        context_menu.addAction(self.action_print_to_pdf)
 
         # add load report
         context_menu.addAction(self.action_show_report)
@@ -240,22 +250,45 @@ class MessageViewer(QtWebKit.QWebView):
 
     def show_messages(self):
         """Show all messages."""
-        string = html_header()
-        if self.static_message is not None:
-            string += self.static_message.to_html()
+        if isinstance(self.static_message, MessageElement):
+            # Handle sent Message instance
+            string = html_header()
+            if self.static_message is not None:
+                string += self.static_message.to_html()
 
-        # Keep track of the last ID we had so we can scroll to it
-        self.last_id = 0
-        for message in self.dynamic_messages:
-            if message.element_id is None:
-                self.last_id += 1
-                message.element_id = str(self.last_id)
+            # Keep track of the last ID we had so we can scroll to it
+            self.last_id = 0
+            for message in self.dynamic_messages:
+                if message.element_id is None:
+                    self.last_id += 1
+                    message.element_id = str(self.last_id)
 
-            html = message.to_html(in_div_flag=True)
-            if html is not None:
-                string += html
+                html = message.to_html(in_div_flag=True)
+                if html is not None:
+                    string += html
 
-        string += html_footer()
+            string += html_footer()
+        elif (isinstance(self.static_message, str) or
+                isinstance(self.static_message, unicode)):
+            # Handle sent text directly
+            string = self.static_message
+        elif not self.static_message:
+            # handle dynamic message
+            # Handle sent Message instance
+            string = html_header()
+
+            # Keep track of the last ID we had so we can scroll to it
+            self.last_id = 0
+            for message in self.dynamic_messages:
+                if message.element_id is None:
+                    self.last_id += 1
+                    message.element_id = str(self.last_id)
+
+                html = message.to_html(in_div_flag=True)
+                if html is not None:
+                    string += html
+
+            string += html_footer()
 
         # Set HTML
         self.load_html(HTML_STR_MODE, string)
@@ -332,6 +365,19 @@ class MessageViewer(QtWebKit.QWebView):
                 open_in_browser(self.log_path)
             else:
                 open_in_browser(self.report_path)
+
+    def generate_pdf(self):
+        """Generate a PDF from the displayed content."""
+        printer = QtGui.QPrinter(QtGui.QPrinter.HighResolution)
+        printer.setPageSize(QtGui.QPrinter.A4)
+        printer.setColorMode(QtGui.QPrinter.Color)
+        printer.setOutputFormat(QtGui.QPrinter.PdfFormat)
+        report_path = unique_filename(suffix='.pdf')
+        printer.setOutputFileName(report_path)
+        self.print_(printer)
+        url = QtCore.QUrl.fromLocalFile(report_path)
+        # noinspection PyTypeChecker,PyCallByClass,PyArgumentList
+        QtGui.QDesktopServices.openUrl(url)
 
     def load_html_file(self, file_path):
         """Load html file into webkit.

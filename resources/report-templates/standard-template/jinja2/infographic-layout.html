@@ -1,0 +1,13 @@
+{% if infographic_content %}
+{% include 'standard-template/jinja2/header.html' %}
+
+{{ infographic_content }}
+
+<div class="row footer">
+    <div class="text-center">
+        {{ footer }}
+    </div>
+</div>
+
+{% include 'standard-template/jinja2/footer.html' %}
+{% endif %}

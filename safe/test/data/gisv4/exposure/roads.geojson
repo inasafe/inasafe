@@ -1,0 +1,11 @@
+{
+"type": "FeatureCollection",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "exposure_id": 1, "exposure_type": "primary_road", "absolute": 10.0, "ratio": 20 }, "geometry": { "type": "LineString", "coordinates": [ [ 106.692939973325906, -6.149711945369869 ], [ 106.960543214505975, -6.149711945369869 ] ] } },
+{ "type": "Feature", "properties": { "exposure_id": 2, "exposure_type": "secondary_road", "absolute": 10.0, "ratio": 20 }, "geometry": { "type": "LineString", "coordinates": [ [ 106.693542683328559, -6.173231658549902 ], [ 107.00182884968801, -6.173231658549902 ] ] } },
+{ "type": "Feature", "properties": { "exposure_id": 3, "exposure_type": "secondary_road", "absolute": 10.0, "ratio": 20 }, "geometry": { "type": "LineString", "coordinates": [ [ 106.800523708800299, -6.081993345381721 ], [ 106.800523708800299, -6.199746261096857 ], [ 106.829303111427208, -6.199746261096857 ], [ 106.829303111427208, -6.08528958165666 ] ] } },
+{ "type": "Feature", "properties": { "exposure_id": 4, "exposure_type": "primary_road", "absolute": 10.0, "ratio": 20 }, "geometry": { "type": "LineString", "coordinates": [ [ 106.69685758834315, -6.265053370481185 ], [ 106.828248368922544, -6.265053370481185 ], [ 106.828248368922544, -6.325560005797148 ] ] } },
+{ "type": "Feature", "properties": { "exposure_id": 5, "exposure_type": "secondary_road", "absolute": 10.0, "ratio": 20 }, "geometry": { "type": "LineString", "coordinates": [ [ 106.944420721934847, -6.238691846368802 ], [ 106.943338769600672, -6.318352906199071 ] ] } }
+]
+}

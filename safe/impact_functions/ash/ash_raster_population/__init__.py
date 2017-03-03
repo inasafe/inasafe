@@ -1,5 +1,0 @@
-__author__ = 'ismailsunni'
-__project_name__ = 'inasafe-dev'
-__filename__ = '__init__.py'
-__date__ = '7/13/16'
-__copyright__ = 'imajimatika@gmail.com'

@@ -1,40 +1,20 @@
 # coding=utf-8
-"""**Keyword IO implementation.**
+"""Keyword IO implementation."""
 
-.. tip:: Provides functionality for reading and writing keywords from within
-   QGIS. It is an abstraction for the keywords system used by the underlying
-   library.
-
-"""
-
-__author__ = 'tim@kartoza.com'
-__revision__ = '$Format:%H$'
-__date__ = '29/01/2011'
-__license__ = "GPL"
-__copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
-__copyright__ += 'Disaster Reduction'
-
-import os
-from os.path import expanduser
 import logging
-from sqlite3 import OperationalError
+import os
 from ast import literal_eval
-from PyQt4.QtCore import QUrl, QDateTime
 from datetime import datetime
+from os.path import expanduser
+from sqlite3 import OperationalError
 
-# This import is to enable SIP API V2
-# noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=unused-import
-from qgis.core import QgsDataSourceURI
-# noinspection PyPackageRequirements
 from PyQt4.QtCore import QObject, QSettings
+from PyQt4.QtCore import QUrl, QDateTime
 
-import safe.definitions
+from qgis.core import QgsMapLayer
+
+from safe.definitions.utilities import definition
 from safe import messaging as m
-from safe.messaging import styles
-from safe.utilities.i18n import tr
-from safe.utilities.unicode import get_string
-from safe.common.utilities import verify
 from safe.common.exceptions import (
     HashNotFoundError,
     KeywordNotFoundError,
@@ -43,42 +23,23 @@ from safe.common.exceptions import (
     NoKeywordsFoundError,
     MetadataReadError
 )
+from safe.common.utilities import verify
+from safe.messaging import styles
+from safe.utilities.i18n import tr
 from safe.utilities.metadata import (
     write_iso19115_metadata,
     read_iso19115_metadata,
 )
+from safe.utilities.unicode import get_string
+
+__author__ = 'tim@kartoza.com'
+__revision__ = '$Format:%H$'
+__date__ = '29/01/2011'
+__license__ = "GPL"
+__copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
+__copyright__ += 'Disaster Reduction'
 
 LOGGER = logging.getLogger('InaSAFE')
-
-
-def definition(keyword):
-    """Given a keyword, try to get a definition dict for it.
-
-    .. versionadded:: 3.2
-
-    Definition dicts are defined in keywords.py. We try to return
-    one if present, otherwise we return none. Using this method you
-    can present rich metadata to the user e.g.
-
-    keyword = 'layer_purpose'
-    kio = safe.utilities.keyword_io.Keyword_IO()
-    definition = kio.definition(keyword)
-    print definition
-
-    :param keyword: A keyword key.
-    :type keyword: str
-
-    :returns: A dictionary containing the matched key definition
-        from definitions.py, otherwise None if no match was found.
-    :rtype: dict, None
-    """
-    for item in dir(safe.definitions):
-        if not item.startswith("__"):
-            var = getattr(safe.definitions, item)
-            if isinstance(var, dict):
-                if var.get('key') == keyword:
-                    return var
-    return None
 
 
 class KeywordIO(QObject):
@@ -141,13 +102,15 @@ class KeywordIO(QObject):
         if keyword is None:
             return dictionary
         if keyword not in dictionary:
-            message = tr('No value was found in file %s for keyword %s' % (
-                filename, keyword))
+            message = tr(
+                'No value was found in file {filename} for keyword {keyword}'
+                .format(filename=filename, keyword=keyword))
             raise KeywordNotFoundError(message)
 
         return dictionary[keyword]
 
-    def read_keywords(self, layer, keyword=None):
+    @staticmethod
+    def read_keywords(layer, keyword=None):
         """Read keywords for a datasource and return them as a dictionary.
 
         This is a wrapper method that will 'do the right thing' to fetch
@@ -180,7 +143,8 @@ class KeywordIO(QObject):
         # Try to read from ISO metadata first.
         return read_iso19115_metadata(source, keyword)
 
-    def write_keywords(self, layer, keywords):
+    @staticmethod
+    def write_keywords(layer, keywords):
         """Write keywords for a datasource.
 
         This is a wrapper method that will 'do the right thing' to store
@@ -197,6 +161,11 @@ class KeywordIO(QObject):
 
         :raises: UnsupportedProviderError
         """
+        if not isinstance(layer, QgsMapLayer):
+            raise Exception(
+                tr('The layer is not a QgsMapLayer : {type}').format(
+                    type=type(layer)))
+
         source = layer.source()
         write_iso19115_metadata(source, keywords)
 
@@ -217,10 +186,10 @@ class KeywordIO(QObject):
         existing_keywords.update(keywords)
         try:
             self.write_keywords(layer, existing_keywords)
-        except OperationalError, e:
-            message = (
-                self.tr('Keyword database path: %s') %
-                self.keyword_db_path)
+        except OperationalError as e:
+            message = tr(
+                'Keyword database path: {keyword_db_path}').format(
+                    keyword_db_path=self.keyword_db_path)
             raise KeywordDbError(str(e) + '\n' + message)
 
     def copy_keywords(
@@ -272,16 +241,17 @@ class KeywordIO(QObject):
                 keywords[key] = extra_keywords[key]
             write_iso19115_metadata(destination_file, keywords)
             # write_keywords_to_file(new_destination, keywords)
-        except Exception, e:
+        except Exception as e:
             message = self.tr(
                 'Failed to copy keywords file from : \n%s\nto\n%s: %s' % (
                     source_layer.source(), new_destination, str(e)))
             raise Exception(message)
         return
 
-# methods below here should be considered private
+    # methods below here should be considered private
 
-    def default_keyword_db_path(self):
+    @staticmethod
+    def default_keyword_db_path():
         """Helper to get the default path for the keywords file.
 
         :returns: The path to where the default location of the keywords
@@ -343,17 +313,14 @@ class KeywordIO(QObject):
             'hazard_category',
             'layer_geometry',
             'layer_mode',
-            'vector_hazard_classification',
+            'classification',
             'exposure_unit',
             'continuous_hazard_unit',
-            'volcano_name_field',
-            'road_class_field',
-            'population_field',
-            'name_field',
-            'structure_class_field',
-            'field',
             'value_map',  # attribute values
-            'value_mapping',  # attribute values
+            'thresholds',  # attribute values
+            'value_maps',  # attribute values
+            'inasafe_fields',
+            'inasafe_default_values',
             'resample',
             'source',
             'url',
@@ -367,7 +334,7 @@ class KeywordIO(QObject):
             logo_element = m.Brand()
             report.add(logo_element)
             report.add(m.Heading(self.tr(
-                'Layer keywords:'), **styles.INFO_STYLE))
+                'Layer keywords:'), **styles.BLUE_LEVEL_4_STYLE))
             report.add(m.Text(self.tr(
                 'The following keywords are defined for the active layer:')))
 
@@ -445,29 +412,38 @@ class KeywordIO(QObject):
         # if possible. TS
         keyword_definition = definition(keyword)
         if keyword_definition is None:
-            keyword_definition = self.tr(keyword.capitalize().replace(
+            keyword_definition = tr(keyword.capitalize().replace(
                 '_', ' '))
         else:
-            keyword_definition = keyword_definition['name']
+            try:
+                keyword_definition = keyword_definition['name']
+            except KeyError:
+                # Handling if name is not exist.
+                keyword_definition = keyword_definition['key'].capitalize()
+                keyword_definition = keyword_definition.replace('_', ' ')
 
         # We deal with some special cases first:
 
         # In this case the value contains a DICT that we want to present nicely
-        if keyword in ['value_map',
-                       'value_mapping']:
+        if keyword in [
+                'value_map',
+                'inasafe_fields',
+                'inasafe_default_values']:
             value = self._dict_to_row(value)
+        elif keyword == 'value_maps':
+            value = self._value_maps_row(value)
+        elif keyword == 'thresholds':
+            value = self._threshold_to_row(value)
         # In these KEYWORD cases we show the DESCRIPTION for
         # the VALUE keyword_definition
-        elif keyword in [
-                'vector_hazard_classification',
-                'raster_hazard_classification']:
-            # get the keyword_definition for this class from definitions.py
+        elif keyword in ['classification']:
+            # get the keyword_definition for this class from definitions
             value = definition(value)
             value = value['description']
         # In these VALUE cases we show the DESCRIPTION for
         # the VALUE keyword_definition
         elif value in []:
-            # get the keyword_definition for this class from definitions.py
+            # get the keyword_definition for this class from definitions
             value = definition(value)
             value = value['description']
         # In these VALUE cases we show the NAME for the VALUE
@@ -479,7 +455,7 @@ class KeywordIO(QObject):
                 'line',
                 'polygon'
                 'field']:
-            # get the name for this class from definitions.py
+            # get the name for this class from definitions
             value = definition(value)
             value = value['name']
         # otherwise just treat the keyword as literal text
@@ -492,7 +468,142 @@ class KeywordIO(QObject):
         row.add(m.Cell(value, wrap_slash=wrap_slash))
         return row
 
-    def _dict_to_row(self, keyword_value):
+    def _threshold_to_row(self, thresholds_keyword):
+        """Helper to make a message row from a threshold
+
+        We are expecting something like this:
+
+        {
+            'thresholds': {
+                'structure': {
+                    'ina_structure_flood_hazard_classification': {
+                        'classes': {
+                            'low': [1, 2],
+                            'medium': [3, 4],
+                            'high': [5, 6]
+                        },
+                        'active': True
+                    },
+                    'ina_structure_flood_hazard_4_class_classification':
+                    {
+                        'classes': {
+                            'low': [1, 2],
+                            'medium': [3, 4],
+                            'high': [5, 6],
+                            'very_high': [7, 8]
+                        },
+                        'active': False
+
+                    }
+                },
+                'population': {
+                    'ina_population_flood_hazard_classification': {
+                        'classes': {
+                            'low': [1, 2.5],
+                            'medium': [2.5, 4.5],
+                            'high': [4.5, 6]
+                        },
+                        'active': False
+                    },
+                    'ina_population_flood_hazard_4_class_classification':
+                    {
+                        'classes': {
+                            'low': [1, 2.5],
+                            'medium': [2.5, 4],
+                            'high': [4, 6],
+                            'very_high': [6, 8]
+                        },
+                        'active': True
+                    }
+                },
+            },
+
+        Each value is a list with exactly two element [a, b], where a <= b.
+
+        :param thresholds_keyword: Value of the keyword to be rendered. This
+            must be a string representation of a dict, or a dict.
+        :type thresholds_keyword: basestring, dict
+
+        :returns: A table to be added into a cell in the keywords table.
+        :rtype: safe.messaging.items.table
+        """
+        if isinstance(thresholds_keyword, basestring):
+            thresholds_keyword = literal_eval(thresholds_keyword)
+
+        for k, v in thresholds_keyword.items():
+            # If the v is not dictionary, it should be the old value maps.
+            # To handle thresholds in the Impact Function.
+            if not isinstance(v, dict):
+                table = m.Table(style_class='table table-condensed')
+
+                for key, value in thresholds_keyword.items():
+                    row = m.Row()
+                    name = definition(key)['name'] if definition(key) else key
+                    row.add(m.Cell(m.ImportantText(name)))
+                    pretty_value = tr('%s to %s' % (value[0], value[1]))
+                    row.add(m.Cell(pretty_value))
+
+                    table.add(row)
+                return table
+
+        table = m.Table(style_class='table table-condensed table-striped')
+
+        i = 0
+        for exposure_key, classifications in thresholds_keyword.items():
+            i += 1
+            exposure = definition(exposure_key)
+            exposure_row = m.Row()
+            exposure_row.add(m.Cell(m.ImportantText('Exposure')))
+            exposure_row.add(m.Cell(m.Text(exposure['name'])))
+            exposure_row.add(m.Cell(''))
+            table.add(exposure_row)
+
+            active_classification = None
+            classification_row = m.Row()
+            classification_row.add(m.Cell(m.ImportantText('Classification')))
+            for classification, value in classifications.items():
+                if value.get('active'):
+                    active_classification = definition(classification)
+                    classification_row.add(
+                        m.Cell(active_classification['name']))
+                    classification_row.add(m.Cell(''))
+                    break
+
+            if not active_classification:
+                classification_row.add(m.Cell(tr('No classifications set.')))
+                classification_row.add(m.Cell(''))
+                continue
+
+            table.add(classification_row)
+
+            header = m.Row()
+            header.add(m.Cell(tr('Class name')))
+            header.add(m.Cell(tr('Minimum')))
+            header.add(m.Cell(tr('Maximum')))
+            table.add(header)
+            classes = active_classification.get('classes')
+            # Sort by value, put the lowest first
+            classes = sorted(classes, key=lambda k: k['value'])
+            for the_class in classes:
+                threshold = classifications[active_classification['key']][
+                    'classes'][the_class['key']]
+                row = m.Row()
+                row.add(m.Cell(the_class['name']))
+                row.add(m.Cell(threshold[0]))
+                row.add(m.Cell(threshold[1]))
+                table.add(row)
+
+            if i < len(thresholds_keyword):
+                # Empty row
+                empty_row = m.Row()
+                empty_row.add(m.Cell(''))
+                empty_row.add(m.Cell(''))
+                table.add(empty_row)
+
+        return table
+
+    @staticmethod
+    def _dict_to_row(keyword_value):
         """Helper to make a message row from a keyword where value is a dict.
 
         .. versionadded:: 3.2
@@ -519,23 +630,139 @@ class KeywordIO(QObject):
         :returns: A table to be added into a cell in the keywords table.
         :rtype: safe.messaging.items.table
         """
-        # LOGGER.info('Converting to dict: %s' % keyword_value)
         if isinstance(keyword_value, basestring):
             keyword_value = literal_eval(keyword_value)
         table = m.Table(style_class='table table-condensed')
-        for key, value_list in keyword_value.iteritems():
+        for key, value in keyword_value.items():
             row = m.Row()
-            # Firs the heading
-            key = m.ImportantText(key)
-            row.add(m.Cell(key))
+            # First the heading
+            if definition(key):
+                name = definition(key)['name']
+            else:
+                name = tr(key.capitalize())
+            row.add(m.Cell(m.ImportantText(name)))
             # Then the value. If it contains more than one element we
             # present it as a bullet list, otherwise just as simple text
-            if len(value_list) > 1:
-                bullets = m.BulletedList()
-                for item in value_list:
-                    bullets.add(item)
-                row.add(m.Cell(bullets))
+            if isinstance(value, (tuple, list, dict, set)):
+                if len(value) > 1:
+                    bullets = m.BulletedList()
+                    for item in value:
+                        bullets.add(item)
+                    row.add(m.Cell(bullets))
+                else:
+                    row.add(m.Cell(value[0]))
             else:
-                row.add(m.Cell(value_list[0]))
+                row.add(m.Cell(value))
+
             table.add(row)
+        return table
+
+    @staticmethod
+    def _value_maps_row(value_maps_keyword):
+        """Helper to make a message row from a value maps.
+
+        Expected keywords:
+        'value_maps': {
+            'structure': {
+                'ina_structure_flood_hazard_classification': {
+                    'classes': {
+                        'low': [1, 2, 3],
+                        'medium': [4],
+                        'high': [5, 6]
+                    },
+                    'active': True
+                },
+                'ina_structure_flood_hazard_4_class_classification':
+                {
+                    'classes': {
+                        'low': [1],
+                        'medium': [2, 3, 4],
+                        'high': [5, 6, 7],
+                        'very_high': [8]
+                    },
+                    'active': False
+
+                }
+            },
+            'population': {
+                'ina_population_flood_hazard_classification': {
+                    'classes': {
+                        'low': [1],
+                        'medium': [2, 3],
+                        'high': [4, 5, 6]
+                    },
+                    'active': False
+                },
+                'ina_population_flood_hazard_4_class_classification':
+                {
+                    'classes': {
+                        'low': [1, 2],
+                        'medium': [3, 4],
+                        'high': [4, 5, 6],
+                        'very_high': [6, 7, 8]
+                    },
+                    'active': True
+                }
+            },
+        }
+
+        :param value_maps_keyword: Value of the keyword to be rendered. This
+            must be a string representation of a dict, or a dict.
+        :type value_maps_keyword: basestring, dict
+
+        :returns: A table to be added into a cell in the keywords table.
+        :rtype: safe.messaging.items.table
+        """
+        if isinstance(value_maps_keyword, basestring):
+            value_maps_keyword = literal_eval(value_maps_keyword)
+
+        table = m.Table(style_class='table table-condensed table-striped')
+
+        i = 0
+        for exposure_key, classifications in value_maps_keyword.items():
+            i += 1
+            exposure = definition(exposure_key)
+            exposure_row = m.Row()
+            exposure_row.add(m.Cell(m.ImportantText(tr('Exposure'))))
+            exposure_row.add(m.Cell(exposure['name']))
+            table.add(exposure_row)
+
+            classification_row = m.Row()
+            classification_row.add(m.Cell(m.ImportantText(tr(
+                'Classification'))))
+            active_classification = None
+            for classification, value in classifications.items():
+                if value.get('active'):
+                    active_classification = definition(classification)
+                    classification_row.add(
+                        m.Cell(active_classification['name']))
+                    break
+
+            if not active_classification:
+                classification_row.add(m.Cell(tr('No classifications set.')))
+                continue
+            table.add(classification_row)
+
+            header = m.Row()
+            header.add(m.Cell(tr('Class name')))
+            header.add(m.Cell(tr('Values')))
+            table.add(header)
+            classes = active_classification.get('classes')
+            # Sort by value, put the lowest first
+            classes = sorted(classes, key=lambda k: k['value'])
+            for the_class in classes:
+                value_map = classifications[active_classification['key']][
+                    'classes'].get(the_class['key'], [])
+                row = m.Row()
+                row.add(m.Cell(the_class['name']))
+                row.add(m.Cell(', '.join([str(v) for v in value_map])))
+                table.add(row)
+
+            if i < len(value_maps_keyword):
+                # Empty row
+                empty_row = m.Row()
+                empty_row.add(m.Cell(''))
+                empty_row.add(m.Cell(''))
+                table.add(empty_row)
+
         return table

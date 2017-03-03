@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>541</width>
+    <height>436</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="0" column="0">
+    <widget class="QStackedWidget" name="main_stacked_widget">
+     <property name="currentIndex">
+      <number>1</number>
+     </property>
+     <widget class="QWidget" name="page_3">
+      <layout class="QGridLayout" name="gridLayout_4">
+       <item row="0" column="0">
+        <widget class="QWebView" name="help_web_view" native="true">
+         <property name="url" stdset="0">
+          <url>
+           <string>about:blank</string>
+          </url>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="page_1">
+      <layout class="QGridLayout" name="gridLayout_3">
+       <item row="0" column="0">
+        <layout class="QGridLayout" name="gridLayout">
+         <item row="4" column="1">
+          <widget class="QListWidget" name="hazard_class_form"/>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>Input layer</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="1" alignment="Qt::AlignRight">
+          <widget class="QPushButton" name="remove_class_button">
+           <property name="maximumSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="baseSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="toolTip">
+            <string>Remove selected resource</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset>
+             <normaloff>../../safe/resources/img/icons/remove.svg</normaloff>../../safe/resources/img/icons/remove.svg</iconset>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QgsMapLayerComboBox" name="layer"/>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>Output layer</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <item>
+            <widget class="QLineEdit" name="output_form"/>
+           </item>
+           <item>
+            <widget class="QToolButton" name="directory_button">
+             <property name="text">
+              <string>...</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item row="3" column="1">
+          <layout class="QGridLayout" name="gridLayout_5">
+           <item row="1" column="2">
+            <widget class="QLineEdit" name="class_form"/>
+           </item>
+           <item row="1" column="3">
+            <widget class="QPushButton" name="add_class_button">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <weight>50</weight>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="toolTip">
+              <string>Add new resource</string>
+             </property>
+             <property name="autoFillBackground">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>../../safe/resources/img/icons/add.svg</normaloff>../../safe/resources/img/icons/add.svg</iconset>
+             </property>
+             <property name="checkable">
+              <bool>false</bool>
+             </property>
+             <property name="autoDefault">
+              <bool>true</bool>
+             </property>
+             <property name="default">
+              <bool>false</bool>
+             </property>
+             <property name="flat">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QLabel" name="label_6">
+             <property name="text">
+              <string>Class</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_5">
+             <property name="text">
+              <string>Radius</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0" colspan="2">
+            <layout class="QHBoxLayout" name="horizontalLayout_2">
+             <item>
+              <widget class="QSpinBox" name="radius_form">
+               <property name="suffix">
+                <string>m</string>
+               </property>
+               <property name="maximum">
+                <number>999999999</number>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="0" column="1">
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
+         <item row="4" column="0" alignment="Qt::AlignTop">
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Hazard&lt;br/&gt;classes&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="label_4">
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;New &lt;br/&gt;buffer&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="0">
+          <widget class="QCheckBox" name="keyword_wizard_checkbox">
+           <property name="text">
+            <string>Launch keywords wizard</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QDialogButtonBox" name="button_box">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Help|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QgsMapLayerComboBox</class>
+   <extends>QComboBox</extends>
+   <header>qgis.gui</header>
+  </customwidget>
+  <customwidget>
+   <class>QWebView</class>
+   <extends>QWidget</extends>
+   <header>PyQt4.QtWebKit</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>layer</tabstop>
+  <tabstop>output_form</tabstop>
+  <tabstop>directory_button</tabstop>
+  <tabstop>radius_form</tabstop>
+  <tabstop>class_form</tabstop>
+  <tabstop>add_class_button</tabstop>
+  <tabstop>hazard_class_form</tabstop>
+  <tabstop>remove_class_button</tabstop>
+  <tabstop>button_box</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

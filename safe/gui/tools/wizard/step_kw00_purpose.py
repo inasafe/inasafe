@@ -1,71 +1,41 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
-
-This module provides: Keyword Wizard Step: Layer Purpose
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
-__author__ = 'qgis@borysjurgiel.pl'
-__revision__ = '$Format:%H$'
-__date__ = '16/03/2016'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
+"""Keyword Wizard Step Layer Purpose."""
 
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore
-# noinspection PyPackageRequirements
 from PyQt4.QtCore import pyqtSignature
-# noinspection PyPackageRequirements
-from PyQt4.QtGui import (
-    QListWidgetItem,
-    QPixmap)
+from PyQt4.QtGui import QListWidgetItem, QPixmap
 
-from safe.definitions import layer_purpose_aggregation
+from safe.definitions.layer_purposes import layer_purpose_aggregation
+from safe.definitions.utilities import purposes_for_layer
+from safe.definitions.utilities import definition
 
-from safe.utilities.keyword_io import definition
 from safe.utilities.resources import resources_path
 
-from safe.gui.tools.wizard.wizard_strings import category_question
-from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step import WizardStep
+from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
+from safe.gui.tools.wizard.wizard_strings import category_question
 
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
 class StepKwPurpose(WizardStep, FORM_CLASS):
-    """Keyword Wizard Step: Layer Purpose"""
+    """Keyword Wizard Step Layer Purpose."""
 
     def is_ready_to_next_step(self):
-        """Check if the step is complete. If so, there is
-            no reason to block the Next button.
+        """Check if the step is complete.
+
+        If so, there is no reason to block the Next button.
 
         :returns: True if new step may be enabled.
         :rtype: bool
         """
         return bool(self.selected_purpose())
-
-    def get_previous_step(self):
-        """Find the proper step when user clicks the Previous button.
-
-        :returns: The step to be switched to
-        :rtype: WizardStep instance or None
-        """
-        if self.parent.parent_step:
-            # Come back to the parent thread
-            self.parent.set_mode_label_to_ifcw()
-            new_step = self.parent.parent_step
-            self.parent.parent_step = None
-        else:
-            new_step = None
-        return new_step
 
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.
@@ -120,9 +90,8 @@ class StepKwPurpose(WizardStep, FORM_CLASS):
         :returns: A list where each value represents a valid purpose.
         :rtype: list
         """
-        layer_geometry_id = self.parent.get_layer_geometry_id()
-        return self.impact_function_manager.purposes_for_layer(
-            layer_geometry_id)
+        layer_geometry_key = self.parent.get_layer_geometry_key()
+        return purposes_for_layer(layer_geometry_key)
 
     def clear_further_steps(self):
         """ Clear all further steps
@@ -134,6 +103,14 @@ class StepKwPurpose(WizardStep, FORM_CLASS):
         self.parent.step_kw_unit.lstUnits.clear()
         self.parent.step_kw_field.lstFields.clear()
         self.parent.step_kw_classification.lstClassifications.clear()
+        self.parent.step_kw_threshold.classes.clear()
+
+        self.parent.step_kw_multi_classifications.clear()
+        self.parent.step_kw_inasafe_fields.clear()
+        self.parent.step_kw_default_inasafe_fields.clear()
+        self.parent.step_kw_inasafe_raster_default_values.clear()
+
+        self.parent.step_kw_multi_classifications.clear()
 
     def set_widgets(self):
         """Set widgets on the layer purpose tab."""
@@ -145,8 +122,6 @@ class StepKwPurpose(WizardStep, FORM_CLASS):
         self.lblSelectCategory.setText(
             category_question % self.parent.layer.name())
         purposes = self.purposes_for_layer()
-        if self.parent.get_layer_geometry_id() == 'polygon':
-            purposes += ['aggregation']
         for purpose in purposes:
             if not isinstance(purpose, dict):
                 purpose = definition(purpose)

@@ -12,13 +12,12 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-__author__ = 'qgis@borysjurgiel.pl'
-__revision__ = '$Format:%H$'
-__date__ = '16/03/2016'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
+
+# noinspection PyPackageRequirements
+from PyQt4.QtGui import QPixmap
 
 from safe.utilities.i18n import tr
+from safe.utilities.resources import resources_path
 
 from safe.gui.tools.wizard.wizard_strings import (
     select_exposure_origin_question,
@@ -27,6 +26,10 @@ from safe.gui.tools.wizard.wizard_strings import (
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step import WizardStep
 
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
@@ -43,19 +46,6 @@ class StepFcExpLayerOrigin(WizardStep, FORM_CLASS):
         """
         return (bool(self.rbExpLayerFromCanvas.isChecked() or
                      self.rbExpLayerFromBrowser.isChecked()))
-
-    def get_previous_step(self):
-        """Find the proper step when user clicks the Previous button.
-
-        :returns: The step to be switched to
-        :rtype: WizardStep instance or None
-        """
-        if self.parent.step_fc_hazlayer_origin.rbHazLayerFromCanvas.\
-                isChecked():
-            new_step = self.parent.step_fc_hazlayer_from_canvas
-        else:
-            new_step = self.parent.step_fc_hazlayer_from_browser
-        return new_step
 
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.
@@ -121,21 +111,21 @@ class StepFcExpLayerOrigin(WizardStep, FORM_CLASS):
         layer_geometry = exposure_constraints['name']
 
         text = (select_exposure_origin_question % (
-            layer_geometry,
-            exposure['name'],
-            self.parent.step_fc_function.selected_function()['name']))
+            layer_geometry, exposure['name']))
         self.lblSelectExpLayerOriginType.setText(text)
 
         text = (select_explayer_from_canvas_question % (
-            layer_geometry,
-            exposure['name'],
-            self.parent.step_fc_function.selected_function()['name']))
+            layer_geometry, exposure['name']))
         self.parent.step_fc_explayer_from_canvas.lblSelectExposureLayer.\
             setText(text)
 
         text = (select_explayer_from_browser_question % (
-            layer_geometry,
-            exposure['name'],
-            self.parent.step_fc_function.selected_function()['name']))
+            layer_geometry, exposure['name']))
         self.parent.step_fc_explayer_from_browser.lblSelectBrowserExpLayer.\
             setText(text)
+
+        # Set icon
+        icon_path = resources_path(
+            'img', 'wizard', 'keyword-subcategory-%s.svg' % (
+                exposure['key'] or 'notset'))
+        self.lblIconIFCWExposureOrigin.setPixmap(QPixmap(icon_path))

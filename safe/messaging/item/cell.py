@@ -36,6 +36,11 @@ class Cell(MessageElement):
             differently e.g. with bold text.
         :type header: bool
 
+        :param span: The number of columns this cell should span. If not
+            specified it will span 1 column only. Note that if the renderer
+            does not support column spanning this option will be ignored.
+        :type span: int
+
         :param align: A flag to indicate if special alignment should
             be given to cells if supported in the output renderer.
             Valid options are: None, 'left', 'right', 'center'
@@ -63,6 +68,13 @@ class Cell(MessageElement):
             # dont pass the kw on to the base class as we handled it here
             kwargs.pop('header')
 
+        # Also check for column spanning
+        self.span = 1
+        if 'span' in kwargs:
+            self.span = kwargs['span']
+            # dont pass the kw on to the base class as we handled it here
+            kwargs.pop('span')
+
         # Also check if align parameter is called before calling the ABC
         self.align = None
         if 'align' in kwargs:
@@ -75,15 +87,15 @@ class Cell(MessageElement):
         self.wrap_slash = False
         if 'wrap_slash' in kwargs:
             self.wrap_slash = kwargs['wrap_slash']
-            # dont pass the kw on to the base class as we handled it here
+            # don't pass the kw on to the base class as we handled it here
             kwargs.pop('wrap_slash')
 
         super(Cell, self).__init__(**kwargs)
 
         # Special case for when we want to put a nested table in a cell
-        # We dont use isinstance because of recursive imports with table
+        # We don't use isinstance because of recursive imports with table
         class_name = args[0].__class__.__name__
-        if class_name in ['BulletedList', 'Table']:
+        if class_name in ['BulletedList', 'Table', 'Message']:
             self.content = args[0]
         else:
             self.content = Text(*args)
@@ -114,18 +126,18 @@ class Cell(MessageElement):
         # Special case for when we want to put a nested table in a cell
         # We don't use isinstance because of recursive imports with table
         class_name = self.content.__class__.__name__
-        if class_name in ['BulletedList', 'Table']:
+        if class_name in ['BulletedList', 'Table', 'Message']:
             html = self.content.to_html()
         else:
             html = self.content.to_html(wrap_slash=self.wrap_slash)
 
         # Check if we have a header or not then render
         if self.header_flag is True:
-            return '<th%s>%s</th>\n' % (
-                self.html_attributes(), html)
+            return '<th%s colspan=%i>%s</th>\n' % (
+                self.html_attributes(), self.span, html)
         else:
-            return '<td%s>%s</td>\n' % (
-                self.html_attributes(), html)
+            return '<td%s colspan=%i>%s</td>\n' % (
+                self.html_attributes(), self.span, html)
 
     def to_text(self):
         """Render a Cell MessageElement as plain text

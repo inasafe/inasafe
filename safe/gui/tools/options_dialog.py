@@ -1,49 +1,50 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool developed by AusAid - **Options Dialog.**
+"""InaSAFE Options Dialog"""
 
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-.. todo:: Check raster is single band
-
-"""
-__author__ = 'tim@kartoza.com'
-__revision__ = '$Format:%H$'
-__date__ = '10/01/2011'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
-
+import logging
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import pyqtSignature, pyqtSlot
+from PyQt4.QtCore import pyqtSignature, pyqtSlot, QVariant
 
+from safe_extras.parameters.qt_widgets.parameter_container import (
+    ParameterContainer)
+from safe_extras.parameters.float_parameter import FloatParameter
+from safe_extras.parameters.integer_parameter import IntegerParameter
+
+from safe.definitions.utilities import all_default_fields
+from safe.definitions.constants import qvariant_whole_numbers, GLOBAL
+from safe.definitions.default_settings import inasafe_default_settings
+from safe.definitions.messages import disclaimer
 from safe.common.utilities import temp_dir
-from safe.defaults import (
-    disclaimer,
-    supporters_logo_path,
-    default_north_arrow_path,
-    get_defaults)
-from safe.utilities.keyword_io import KeywordIO
+from safe.defaults import supporters_logo_path, default_north_arrow_path
+from safe.definitions.earthquake import EARTHQUAKE_FUNCTIONS
+from safe.utilities.i18n import tr
 from safe.utilities.resources import get_ui_class, html_header, html_footer
+from safe.utilities.settings import setting, set_setting
 from safe.common.version import get_version
 from safe.gui.tools.help.options_help import options_help
 
+from safe.utilities.settings import (
+    set_inasafe_default_value_qsetting,
+    get_inasafe_default_value_qsetting)
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
+
+LOGGER = logging.getLogger('InaSAFE')
 FORM_CLASS = get_ui_class('options_dialog_base.ui')
 
 
 class OptionsDialog(QtGui.QDialog, FORM_CLASS):
     """Options dialog for the InaSAFE plugin."""
 
-    def __init__(self, iface, dock=None, parent=None):
+    def __init__(self, iface, dock=None, parent=None, qsetting=''):
         """Constructor for the dialog.
 
         :param iface: A Quantum GIS QGisAppInterface instance.
@@ -55,17 +56,55 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         :param dock: Optional dock widget instance that we can notify of
             changes to the keywords.
         :type dock: Dock
+
+        :param qsetting: String to specify the QSettings. By default,
+            use empty string.
+        :type qsetting: str
         """
 
         QtGui.QDialog.__init__(self, parent)
         self.setupUi(self)
+
         self.setWindowTitle(self.tr('InaSAFE %s Options' % get_version()))
         # Save reference to the QGIS interface and parent
         self.iface = iface
         self.parent = parent
         self.dock = dock
-        self.keyword_io = KeywordIO()
-        self.defaults = get_defaults()
+        if qsetting:
+            self.settings = QtCore.QSettings(qsetting)
+        else:
+            self.settings = QtCore.QSettings()
+
+        # InaSAFE default values
+        self.default_value_parameters = []
+        self.default_value_parameter_container = None
+
+        # Flag for restore default values
+        self.is_restore_default = False
+
+        # List of setting key and control
+        self.boolean_settings = {
+            'visibleLayersOnlyFlag': self.cbxVisibleLayersOnly,
+            'set_layer_from_title_flag': self.cbxSetLayerNameFromTitle,
+            'setZoomToImpactFlag': self.cbxZoomToImpact,
+            'set_show_only_impact_on_report': self.cbx_show_only_impact,
+            'setHideExposureFlag': self.cbxHideExposure,
+            'useSelectedFeaturesOnly': self.cbxUseSelectedFeaturesOnly,
+            'useSentry': self.cbxUseSentry,
+            'template_warning_verbose': self.template_warning_checkbox,
+            'showOrganisationLogoInDockFlag':
+                self.organisation_on_dock_checkbox,
+            'developer_mode': self.cbxDevMode,
+            'generate_report': self.checkbox_generate_reports,
+        }
+        self.text_settings = {
+            'keywordCachePath': self.leKeywordCachePath,
+            'ISO19115_ORGANIZATION': self.iso19115_organization_le,
+            'ISO19115_URL': self.iso19115_url_le,
+            'ISO19115_EMAIL': self.iso19115_email_le,
+            'ISO19115_TITLE': self.iso19115_title_le,
+            'ISO19115_LICENSE': self.iso19115_license_le,
+        }
 
         # Set up things for context help
         self.help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
@@ -74,12 +113,17 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         self.help_button.toggled.connect(self.help_toggled)
         self.main_stacked_widget.setCurrentIndex(1)
 
+        # Always set first tab to be open, 0-th index
+        self.tabWidget.setCurrentIndex(0)
+
+        # Hide not implemented group
         self.grpNotImplemented.hide()
         self.adjustSize()
         self.restore_state()
-        # hack prevent showing use thread visible and set it false see #557
-        self.cbxUseThread.setChecked(True)
-        self.cbxUseThread.setVisible(False)
+
+        # Hide checkbox if not developers
+        if not self.cbxDevMode.isChecked():
+            self.checkbox_generate_reports.hide()
 
         # Set up listener for various UI
         self.custom_org_logo_checkbox.toggled.connect(
@@ -92,58 +136,81 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         self.custom_org_disclaimer_checkbox.toggled.connect(
             self.set_org_disclaimer)
 
-    def restore_state(self):
-        """Reinstate the options based on the user's stored session info.
+        # Set up listener for restore defaults button
+        self.restore_defaults = self.button_box_restore_defaults.button(
+            QtGui.QDialogButtonBox.RestoreDefaults)
+        self.restore_defaults.setCheckable(True)
+        self.restore_defaults.clicked.connect(
+            self.restore_defaults_ratio)
+
+        # TODO: Hide this until behaviour is defined
+        # hide template warning toggle
+        self.template_warning_checkbox.hide()
+
+        # hide custom template dir toggle
+        self.custom_templates_dir_checkbox.hide()
+        self.splitter_custom_report.hide()
+
+    def save_boolean_setting(self, key, check_box):
+        """Save boolean setting according to check_box state.
+
+        :param key: Key to retrieve setting value.
+        :type key: str
+
+        :param check_box: Check box to show and set the setting.
+        :type check_box: PyQt4.QtGui.QCheckBox.QCheckBox
         """
-        settings = QtCore.QSettings()
-        # flag = settings.value(
-        #     'inasafe/useThreadingFlag', False)
-        # hack set use thread to false see #557
-        flag = False
-        self.cbxUseThread.setChecked(flag)
+        self.settings.setValue('inasafe/%s' % key, check_box.isChecked())
 
-        flag = bool(settings.value(
-            'inasafe/visibleLayersOnlyFlag', True, type=bool))
-        self.cbxVisibleLayersOnly.setChecked(flag)
+    def restore_boolean_setting(self, key, check_box):
+        """Set check_box according to setting of key.
 
-        flag = bool(settings.value(
-            'inasafe/set_layer_from_title_flag', True, type=bool))
-        self.cbxSetLayerNameFromTitle.setChecked(flag)
+        :param key: Key to retrieve setting value.
+        :type key: str
 
-        flag = bool(settings.value(
-            'inasafe/setZoomToImpactFlag', True, type=bool))
-        self.cbxZoomToImpact.setChecked(flag)
-        # whether exposure layer should be hidden after model completes
-        flag = bool(settings.value(
-            'inasafe/setHideExposureFlag', False, type=bool))
-        self.cbxHideExposure.setChecked(flag)
+        :param check_box: Check box to show and set the setting.
+        :type check_box: PyQt4.QtGui.QCheckBox.QCheckBox
+        """
+        flag = bool(self.settings.value(
+            'inasafe/%s' % key, inasafe_default_settings[key], type=bool))
+        check_box.setChecked(flag)
 
-        flag = bool(settings.value(
-            'inasafe/clip_hard', False, type=bool))
-        self.cbxClipHard.setChecked(flag)
+    def save_text_setting(self, key, line_edit):
+        """Save text setting according to line_edit value.
 
-        flag = bool(settings.value(
-            'inasafe/useSentry', False, type=bool))
-        self.cbxUseSentry.setChecked(flag)
+        :param key: Key to retrieve setting value.
+        :type key: str
 
-        flag = bool(settings.value(
-            'inasafe/show_intermediate_layers', False, type=bool))
-        self.cbxShowPostprocessingLayers.setChecked(flag)
+        :param line_edit: Line edit for user to edit the setting
+        :type line_edit: PyQt4.QtGui.QLineEdit.QLineEdit
+        """
+        self.settings.setValue('inasafe/%s' % key, line_edit.text())
 
-        ratio = self.defaults['FEMALE_RATIO']
-        self.dsbFemaleRatioDefault.setValue(ratio)
+    def restore_text_setting(self, key, line_edit):
+        """Set line_edit text according to setting of key
 
-        path = settings.value(
-            'inasafe/keywordCachePath',
-            self.keyword_io.default_keyword_db_path(), type=str)
-        self.leKeywordCachePath.setText(path)
+        :param key: Key to retrieve setting value.
+        :type key: str
 
-        flag = bool(settings.value(
-            'inasafe/template_warning_verbose', True, type=bool))
-        self.template_warning_checkbox.setChecked(flag)
+        :param line_edit: Line edit for user to edit the setting
+        :type line_edit: PyQt4.QtGui.QLineEdit.QLineEdit
+        """
+        value = self.settings.value(
+            'inasafe/%s' % key, inasafe_default_settings[key], type=str)
+        line_edit.setText(value)
+
+    def restore_state(self):
+        """Reinstate the options based on the user's stored session info."""
+        # Restore boolean setting as check box.
+        for key, check_box in self.boolean_settings.items():
+            self.restore_boolean_setting(key, check_box)
+
+        # Restore text setting as line edit.
+        for key, line_edit in self.text_settings.items():
+            self.restore_text_setting(key, line_edit)
 
         # Restore Organisation Logo Path
-        org_logo_path = settings.value(
+        org_logo_path = self.settings.value(
             'inasafe/organisation_logo_path',
             supporters_logo_path(),
             type=str)
@@ -152,7 +219,8 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         self.custom_org_logo_checkbox.setChecked(custom_org_logo_flag)
         self.leOrganisationLogoPath.setText(org_logo_path)
 
-        user_directory_path = settings.value(
+        # User Directory
+        user_directory_path = self.settings.value(
             'inasafe/defaultUserDirectory',
             temp_dir('impacts'), type=str)
         custom_user_directory_flag = (
@@ -162,13 +230,21 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         self.splitter_user_directory.setEnabled(custom_user_directory_flag)
         self.leUserDirectoryPath.setText(user_directory_path)
 
-        # Restore Show Organisation Logo in Dock Flag
-        flag = bool(settings.value(
-            'inasafe/showOrganisationLogoInDockFlag', False, type=bool))
-        self.organisation_on_dock_checkbox.setChecked(flag)
+        # Earthquake function.
+        # Populate the combobox first.
+        for model in EARTHQUAKE_FUNCTIONS:
+            self.earthquake_function.addItem(model['name'], model['key'])
+
+        # Then make selected the default one.
+        default_earthquake_function = setting('earthquake_function', str)
+        keys = [model['key'] for model in EARTHQUAKE_FUNCTIONS]
+        if default_earthquake_function not in keys:
+            default_earthquake_function = EARTHQUAKE_FUNCTIONS[0]['key']
+        index = self.earthquake_function.findData(default_earthquake_function)
+        self.earthquake_function.setCurrentIndex(index)
 
         # Restore North Arrow Image Path
-        north_arrow_path = settings.value(
+        north_arrow_path = self.settings.value(
             'inasafe/north_arrow_path', default_north_arrow_path(), type=str)
         custom_north_arrow_flag = (
             north_arrow_path != default_north_arrow_path())
@@ -176,118 +252,61 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         self.leNorthArrowPath.setText(north_arrow_path)
 
         # Restore Report Template Directory Path
-        report_template_dir = settings.value(
-            'inasafe/reportTemplatePath',
-            '',
-            type=str)
+        report_template_dir = self.settings.value(
+            'inasafe/reportTemplatePath', '', type=str)
         custom_templates_dir_flag = (report_template_dir != '')
         self.custom_templates_dir_checkbox.setChecked(
             custom_templates_dir_flag)
         self.leReportTemplatePath.setText(report_template_dir)
 
         # Restore Disclaimer
-        org_disclaimer = settings.value(
+        org_disclaimer = self.settings.value(
             'inasafe/reportDisclaimer', disclaimer(), type=str)
         custom_org_disclaimer_flag = (org_disclaimer != disclaimer())
         self.custom_org_disclaimer_checkbox.setChecked(
             custom_org_disclaimer_flag)
         self.txtDisclaimer.setPlainText(org_disclaimer)
 
-        flag = bool(
-            settings.value('inasafe/developer_mode', False, type=bool))
-        self.cbxDevMode.setChecked(flag)
-
-        # Restore ISO19115 metadata tab
-        value = self.defaults['ISO19115_ORGANIZATION']
-        self.iso19115_organization_le.setText(value)
-        value = self.defaults['ISO19115_URL']
-        self.iso19115_url_le.setText(value)
-        value = self.defaults['ISO19115_EMAIL']
-        self.iso19115_email_le.setText(value)
-        value = self.defaults['ISO19115_TITLE']
-        self.iso19115_title_le.setText(value)
-        value = self.defaults['ISO19115_LICENSE']
-        self.iso19115_license_le.setText(value)
+        # Restore InaSAFE default values
+        self.restore_default_values_page()
 
     def save_state(self):
-        """Store the options into the user's stored session info.
-        """
-        settings = QtCore.QSettings()
-        settings.setValue(
-            'inasafe/useThreadingFlag', False)
-        settings.setValue(
-            'inasafe/visibleLayersOnlyFlag',
-            self.cbxVisibleLayersOnly.isChecked())
-        settings.setValue(
-            'inasafe/set_layer_from_title_flag',
-            self.cbxSetLayerNameFromTitle.isChecked())
-        settings.setValue(
-            'inasafe/setZoomToImpactFlag',
-            self.cbxZoomToImpact.isChecked())
-        settings.setValue(
-            'inasafe/setHideExposureFlag',
-            self.cbxHideExposure.isChecked())
-        settings.setValue(
-            'inasafe/clip_hard',
-            self.cbxClipHard.isChecked())
-        settings.setValue(
-            'inasafe/useSentry',
-            self.cbxUseSentry.isChecked())
-        settings.setValue(
-            'inasafe/show_intermediate_layers',
-            self.cbxShowPostprocessingLayers.isChecked())
-        settings.setValue(
-            'inasafe/defaultFemaleRatio',
-            self.dsbFemaleRatioDefault.value())
-        settings.setValue(
-            'inasafe/keywordCachePath',
-            self.leKeywordCachePath.text())
-        settings.setValue(
-            'inasafe/template_warning_verbose',
-            self.template_warning_checkbox.isChecked())
-        settings.setValue(
+        """Store the options into the user's stored session info."""
+        # Save boolean settings
+        for key, check_box in self.boolean_settings.items():
+            self.save_boolean_setting(key, check_box)
+        # Save text settings
+        for key, line_edit in self.text_settings.items():
+            self.save_text_setting(key, line_edit)
+
+        self.settings.setValue(
             'inasafe/north_arrow_path',
             self.leNorthArrowPath.text())
-        settings.setValue(
+        self.settings.setValue(
             'inasafe/organisation_logo_path',
             self.leOrganisationLogoPath.text())
-        settings.setValue(
-            'inasafe/showOrganisationLogoInDockFlag',
-            self.organisation_on_dock_checkbox.isChecked())
-        settings.setValue(
+        self.settings.setValue(
             'inasafe/reportTemplatePath',
             self.leReportTemplatePath.text())
-        settings.setValue(
+        self.settings.setValue(
             'inasafe/reportDisclaimer',
             self.txtDisclaimer.toPlainText())
-        settings.setValue(
-            'inasafe/developer_mode',
-            self.cbxDevMode.isChecked())
-        settings.setValue(
+        self.settings.setValue(
             'inasafe/defaultUserDirectory',
             self.leUserDirectoryPath.text())
+        index = self.earthquake_function.currentIndex()
+        value = self.earthquake_function.itemData(index)
+        set_setting('earthquake_function', value)
 
-        # save metadata values
-        settings.setValue(
-            'inasafe/ISO19115_ORGANIZATION',
-            self.iso19115_organization_le.text())
-        settings.setValue(
-            'inasafe/ISO19115_URL',
-            self.iso19115_url_le.text())
-        settings.setValue(
-            'inasafe/ISO19115_EMAIL',
-            self.iso19115_email_le.text())
-        settings.setValue(
-            'inasafe/ISO19115_TITLE',
-            self.iso19115_title_le.text())
-        settings.setValue(
-            'inasafe/ISO19115_LICENSE',
-            self.iso19115_license_le.text())
+        # Save InaSAFE default values
+        self.save_default_values()
 
     def accept(self):
         """Method invoked when OK button is clicked."""
         self.save_state()
-        self.dock.read_settings()
+        # FIXME: Option dialog should be independent from dock.
+        if self.dock:
+            self.dock.read_settings()
         self.close()
 
     # noinspection PyPep8Naming
@@ -299,7 +318,7 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         file_name = QtGui.QFileDialog.getSaveFileName(
             self,
             self.tr('Set keyword cache file'),
-            self.keyword_io.default_keyword_db_path(),
+            inasafe_default_settings['keywordCachePath'],
             self.tr('Sqlite DB File (*.db)'))
         self.leKeywordCachePath.setText(file_name)
 
@@ -368,11 +387,10 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
 
     def set_organisation_logo(self):
         """Auto-connect slot activated when org logo checkbox is toggled."""
-        settings = QtCore.QSettings()
         is_checked = self.custom_org_logo_checkbox.isChecked()
         if is_checked:
             # Use previous org logo path
-            path = settings.value(
+            path = self.settings.value(
                 'inasafe/organisation_logo_path',
                 supporters_logo_path(),
                 type=str)
@@ -385,11 +403,10 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
 
     def set_north_arrow(self):
         """Auto-connect slot activated when north arrow checkbox is toggled."""
-        settings = QtCore.QSettings()
         is_checked = self.custom_north_arrow_checkbox.isChecked()
         if is_checked:
             # Show previous north arrow path
-            path = settings.value(
+            path = self.settings.value(
                 'inasafe/north_arrow_path',
                 default_north_arrow_path(),
                 type=str)
@@ -403,14 +420,11 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
     def set_user_dir(self):
         """Auto-connect slot activated when user dir checkbox is toggled.
         """
-        settings = QtCore.QSettings()
         is_checked = self.custom_UseUserDirectory_checkbox.isChecked()
         if is_checked:
             # Show previous templates dir
-            path = settings.value(
-                'inasafe/defaultUserDirectory',
-                '',
-                type=str)
+            path = self.settings.value(
+                'inasafe/defaultUserDirectory', '', type=str)
         else:
             # Set the template report dir to ''
             path = temp_dir('impacts')
@@ -421,14 +435,11 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
     def set_templates_dir(self):
         """Auto-connect slot activated when templates dir checkbox is toggled.
         """
-        settings = QtCore.QSettings()
         is_checked = self.custom_templates_dir_checkbox.isChecked()
         if is_checked:
             # Show previous templates dir
-            path = settings.value(
-                'inasafe/reportTemplatePath',
-                '',
-                type=str)
+            path = self.settings.value(
+                'inasafe/reportTemplatePath', '', type=str)
         else:
             # Set the template report dir to ''
             path = ''
@@ -439,14 +450,11 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
     def set_org_disclaimer(self):
         """Auto-connect slot activated when org disclaimer checkbox is toggled.
         """
-        settings = QtCore.QSettings()
         is_checked = self.custom_org_disclaimer_checkbox.isChecked()
         if is_checked:
             # Show previous organisation disclaimer
-            org_disclaimer = settings.value(
-                'inasafe/reportDisclaimer',
-                disclaimer(),
-                type=str)
+            org_disclaimer = self.settings.value(
+                'inasafe/reportDisclaimer', disclaimer(), type=str)
         else:
             # Set the organisation disclaimer to the default one
             org_disclaimer = disclaimer()
@@ -493,3 +501,87 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         string += footer
 
         self.help_web_view.setHtml(string)
+
+    def restore_default_values_page(self):
+        """Setup UI for default values setting."""
+        # Clear parameters so it doesn't add parameters when
+        # restore from changes.
+        if self.default_value_parameters:
+            self.default_value_parameters = []
+
+        default_fields = all_default_fields()
+        for default_field in default_fields:
+            if default_field.get('type') == QVariant.Double:
+                parameter = FloatParameter()
+            elif default_field.get('type') in qvariant_whole_numbers:
+                parameter = IntegerParameter()
+            else:
+                continue
+            default_value = default_field.get('default_value')
+            if not default_value:
+                message = (
+                    'InaSAFE default field %s does not have default value'
+                    % default_field.get('name'))
+                LOGGER.exception(message)
+                continue
+
+            parameter.guid = default_field.get('key')
+            parameter.name = default_value.get('name')
+            parameter.is_required = True
+            parameter.precision = default_field.get('precision')
+            parameter.minimum_allowed_value = default_value.get(
+                'min_value', 0)
+            parameter.maximum_allowed_value = default_value.get(
+                'max_value', 100000000)
+            parameter.help_text = default_value.get('description')
+
+            # Check if user ask to restore to the most default value.
+            if self.is_restore_default:
+                parameter._value = default_value.get('default_value')
+            else:
+                # Current value
+                qsetting_default_value = get_inasafe_default_value_qsetting(
+                    self.settings, GLOBAL, default_field['key'])
+
+                # To avoid python error
+                if qsetting_default_value > parameter.maximum_allowed_value:
+                    qsetting_default_value = parameter.maximum_allowed_value
+                if qsetting_default_value < parameter.minimum_allowed_value:
+                    qsetting_default_value = parameter.minimum_allowed_value
+
+                parameter.value = qsetting_default_value
+
+            self.default_value_parameters.append(parameter)
+
+        description_text = tr(
+            'In this options you can change the global default values for '
+            'these variables.')
+        self.default_value_parameter_container = ParameterContainer(
+            self.default_value_parameters, description_text=description_text)
+        self.default_value_parameter_container.setup_ui()
+        self.default_values_layout.addWidget(
+            self.default_value_parameter_container)
+
+    def save_default_values(self):
+        """Save InaSAFE default values."""
+        parameters = self.default_value_parameter_container.get_parameters()
+        for parameter in parameters:
+            set_inasafe_default_value_qsetting(
+                self.settings,
+                GLOBAL,
+                parameter.guid,
+                parameter.value
+            )
+
+    def restore_defaults_ratio(self):
+        """Restore InaSAFE default ratio."""
+        # Set the flag to true because user ask to.
+        self.is_restore_default = True
+        # remove current default ratio
+        for i in reversed(range(self.default_values_layout.count())):
+            widget = self.default_values_layout.itemAt(i).widget()
+            if widget is not None:
+                widget.setParent(None)
+
+        # reload default ratio
+        self.restore_default_values_page()

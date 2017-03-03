@@ -12,22 +12,15 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-__author__ = 'qgis@borysjurgiel.pl'
-__revision__ = '$Format:%H$'
-__date__ = '16/03/2016'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
 
-# noinspection PyPackageRequirements
-from PyQt4.QtCore import QDateTime
-
-from safe.definitions import layer_mode_classified, layer_purpose_aggregation
-
+from safe.gui.tools.wizard.wizard_step import WizardStep
+from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.utilities.unicode import get_unicode
 
-from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
-from safe.gui.tools.wizard.wizard_step import WizardStep
-
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
@@ -74,37 +67,6 @@ class StepKwSource(WizardStep, FORM_CLASS):
         """
         return True
 
-    def get_previous_step(self):
-        """Find the proper step when user clicks the Previous button.
-
-        :returns: The step to be switched to
-        :rtype: WizardStep instance or None
-        """
-        if self.parent.step_kw_purpose.selected_purpose()\
-                == layer_purpose_aggregation:
-            new_step = self.parent.step_kw_aggregation
-        elif self.parent.step_kw_extrakeywords.\
-                additional_keywords_for_the_layer():
-            new_step = self.parent.step_kw_extrakeywords
-        # otherwise behave like it was step_kw_extrakeywords
-        elif self.parent.step_kw_layermode.\
-                selected_layermode() == layer_mode_classified:
-            if self.parent.step_kw_classification.selected_classification() \
-                    or self.parent.step_kw_classify.\
-                    postprocessor_classification_for_layer():
-                new_step = self.parent.step_kw_classify
-            elif self.parent.step_kw_field.selected_field():
-                new_step = self.parent.step_kw_field
-            else:
-                new_step = self.parent.step_kw_layermode
-        else:
-            if self.parent.step_kw_resample.\
-                    selected_allowresampling() is not None:
-                new_step = self.parent.step_kw_resample
-            else:
-                new_step = self.parent.step_kw_unit
-        return new_step
-
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.
 
@@ -141,9 +103,7 @@ class StepKwSource(WizardStep, FORM_CLASS):
         source_date = self.parent.get_existing_keyword('date')
         if source_date:
             self.ckbSource_date.setChecked(True)
-            self.dtSource_date.setDateTime(
-                QDateTime.fromString(get_unicode(source_date),
-                                     'yyyy-MM-dd HH:mm:ss'))
+            self.dtSource_date.setDateTime(source_date)
         else:
             self.ckbSource_date.setChecked(False)
             self.dtSource_date.clear()

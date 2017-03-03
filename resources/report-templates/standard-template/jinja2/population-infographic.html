@@ -1,0 +1,213 @@
+{% if sections %}
+<style>
+    .title-header, .footer{
+        background-color: #3DB2DD;
+        color: white;
+        padding: 5px;
+    }
+
+    .title-header h3{
+        margin-top: 10px;
+        margin-bottom: 0;
+
+    }
+
+    .brand-logo{
+        width: 100%;
+        max-width: 100px;
+        float: right;
+    }
+
+    .section-header{
+        color: #7f7f7f;
+        background-color: #dceef4;
+        padding-bottom: 5px;
+        padding-top: 5px;
+    }
+
+    .number-element{
+        color: #1eb1ed;
+        font-size: 18pt;
+        font-weight: bold;
+    }
+
+    .people-section .number-element{
+        font-size: 30pt;
+    }
+
+    .header-element{
+        color: #7f7f7f;
+        font-size: 14pt;
+        font-weight: bold;
+    }
+
+    .small-header{
+        font-size: 8pt;
+        margin-left: 10px;
+    }
+
+    .percentage-element{
+        color: #dceef4;
+        font-size: 18pt;
+        font-weight: bold;
+    }
+
+    .unit-element{
+        color: #7f7f7f;
+        font-style: italic;
+    }
+
+    #population-chart{
+        padding-bottom: 16px;
+    }
+
+    .total-value, .slice-value, .slice-percentage {
+        font-weight: bold;
+        font-size: 12pt;
+    }
+
+    .total-value-header{
+        font-size: 12pt;
+    }
+
+    .chart-title{
+        font-size: 14px;
+        font-weight: bold;
+        color: #7f7f7f;
+    }
+
+    .legend-label{
+        font-size: 8pt;
+        font-weight: bold;
+        margin-right: 8px;
+    }
+
+{% if sections['population_chart']['context'] %}
+    {% for slice in sections['population_chart']['context'].slices %}
+    .hazard-class.label-class-{{ sections.population_chart.css_label_classes[loop.index] }}{
+        width: 8px;
+        height: 8px;
+        display: inline-block;
+        margin: 0 8px;
+        background-color: {{ slice.fill }};
+    }
+    {% endfor %}
+{% endif %}
+
+</style>
+
+<div class="row title-header">
+    <div class="col-xs-9 col-md-9">
+        <h3>{{ title|capitalize }}</h3>
+    </div>
+    <div class="col-xs-3 col-md-3">
+        <img class="brand-logo" src="{{ brand_logo }}" title="InaSAFE" alt="InaSAFE" />
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-12 col-md-4">
+        <div id="population-chart">
+            <div class="chart-title">{{ sections.population_chart.context.title|capitalize }}</div>
+            <img src="{{ sections.population_chart.img_path }}">
+            {% if sections['population_chart']['context'] %}
+            <div>
+                {% for slice in sections['population_chart']['context'].slices %}
+                <span class="legend-label">
+                    <span class="hazard-class label-class-{{ sections.population_chart.css_label_classes[loop.index] }}"></span>
+                    {{ slice.label|capitalize }}
+                </span>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="col-xs-12 col-md-8 people-section">
+        {# People section #}
+        <div class="row">
+            <div class="col-md-12">
+                <h5 class="section-header">{{ sections.people.header|capitalize }}</h5>
+            </div>
+        </div>
+        <div class="row">
+            {% for item in sections['people']['items'] %}
+            <div class="col-xs-2 col-md-2">
+                <img
+                        width="100%"
+                        src="{{ resource }}{{ item.icon }}" />
+            </div>
+            <div class="col-xs-10 col-md-10">
+                <div class="row">
+                    <div class="number-element">
+                        {{ item.number }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="header-element">
+                        {{ item.header|capitalize }}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% if sections['vulnerability']['items'] %}
+    <div class="col-xs-12 col-md-8 vulnerability-section">
+        {# Vulnerability section #}
+        <div class="row">
+            <div class="col-md-12">
+                <h5 class="section-header">{{ sections.vulnerability.header|capitalize }}
+                    <span class="small-header">{{ sections.vulnerability.small_header|capitalize }}</span>
+                </h5>
+            </div>
+        </div>
+        <div class="row">
+            {% for item in sections['vulnerability']['items'] %}
+            <div class="col-xs-3 col-md-2">
+                <img
+                        width="100%"
+                        src="{{ item.icon }}" />
+                <div class="number-element text-center">
+                    {{ item.number }}
+                </div>
+                <div class="percentage-element text-center">
+                    {{ item.percentage }}%
+                </div>
+                <div class="header-element text-center">
+                    {{ item.header|capitalize }}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    <div class="col-xs-12 col-md-12 minimum-needs-section">
+        {# Minimum needs section #}
+        <div class="row">
+            <div class="col-md-12">
+                <h5 class="section-header">{{ sections.minimum_needs.header|capitalize }}
+                    <span class="small-header">{{ sections.minimum_needs.small_header|capitalize }}</span>
+                </h5>
+            </div>
+        </div>
+        <div class="row">
+            {% for item in sections['minimum_needs']['items'] %}
+            <div class="col-xs-3 col-md-2">
+                <img
+                        width="100%"
+                        src="{{ item.icon }}" />
+                <div class="number-element text-center">
+                    {{ item.number }}
+                </div>
+                <div class="unit-element text-center">
+                    {{ item.unit }}
+                </div>
+                <div class="header-element text-center">
+                    {{ item.header|capitalize }}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}

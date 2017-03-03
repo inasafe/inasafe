@@ -52,8 +52,7 @@ from safe.utilities.i18n import tr
 
 # Don't call this function
 def dynamic_translations():
-    """These listed here so they get translated apriori to loading data.
-    """
+    """These listed here so they get translated apriori to loading data."""
     # Bangunan DKI
     tr('DKI buildings')
     # Banjir seperti 2007
@@ -182,6 +181,17 @@ def dynamic_translations():
     # Aggregation
     tr('Area')
 
+    # Boolean
+    tr('True')
+    tr('False')
+
+    # Keywords
+    tr('Value map')
+    tr('value map')
+    tr('Inasafe fields')
+    tr('Keyword version')
+    tr('Inasafe default values')
+
     # OSM Downloader
     tr('Afghanistan')
     tr('Ethiopia')
@@ -194,3 +204,35 @@ def dynamic_translations():
     tr('South Africa')
     tr('Thailand')
     tr('Zimbabwe')
+
+    # Words that we have in minimum needs BNPB EN
+    tr('Rice')
+    tr('Drinking Water')
+    tr('Clean Water')
+    tr('Family Kits')
+    tr('Toilets')
+    tr('weekly')
+
+    # Words that we have in SPHERE EN
+    tr('daily')
+    tr('monthly')
+    tr('Daily food requirements')
+    tr('Monthly soap allocation')
+    tr('Monthly detergent requirements')
+    tr('Washing')
+    tr('Trash bags')
+    tr('Water collecting container')
+    tr('Water storage container')
+    tr('Saucepan')
+    tr('Basin')
+    tr('Knife')
+    tr('Rice ladle')
+    tr('Plate')
+    tr('Spoon')
+    tr('Mug')
+    tr('Stove')
+    tr('Clothing')
+    tr('Mattress')
+    tr('Insecticide bed nets')
+    tr('Covered floor area (3.5mx3.5m)')
+    tr('Infants blanket (100x70cm)')

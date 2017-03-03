@@ -1,0 +1,12 @@
+{%  if items %}
+<h5 class="info">
+    <i class="icon-info-sign icon-white"></i> {{ header|capitalize }}
+</h5>
+{% endif %}
+{% if items %}
+<ul>
+    {% for item in items %}
+    <li colspan="100%">{{ item }}</li>
+    {% endfor %}
+</ul>
+{% endif %}

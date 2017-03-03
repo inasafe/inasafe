@@ -13,18 +13,13 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-__author__ = 'qgis@borysjurgiel.pl'
-__revision__ = '$Format:%H$'
-__date__ = '16/03/2016'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
 
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore, QtGui
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import pyqtSignature
 # noinspection PyPackageRequirements
-from PyQt4.QtGui import QListWidgetItem
+from PyQt4.QtGui import QListWidgetItem, QPixmap
 
 from qgis.core import QgsMapLayerRegistry
 
@@ -32,6 +27,10 @@ from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_utils import layers_intersect
 
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
@@ -48,15 +47,6 @@ class StepFcAggLayerFromCanvas(WizardStep, FORM_CLASS):
         """
         return bool(self.selected_canvas_agglayer())
 
-    def get_previous_step(self):
-        """Find the proper step when user clicks the Previous button.
-
-        :returns: The step to be switched to
-        :rtype: WizardStep instance or None
-        """
-        new_step = self.parent.step_fc_agglayer_origin
-        return new_step
-
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.
 
@@ -72,7 +62,7 @@ class StepFcAggLayerFromCanvas(WizardStep, FORM_CLASS):
         else:
             if layers_intersect(self.parent.exposure_layer,
                                 self.parent.aggregation_layer):
-                new_step = self.parent.step_fc_extent
+                new_step = self.parent.step_fc_summary
             else:
                 new_step = self.parent.step_fc_agglayer_disjoint
         return new_step
@@ -145,3 +135,5 @@ class StepFcAggLayerFromCanvas(WizardStep, FORM_CLASS):
                 layers += [item.data(QtCore.Qt.UserRole)]
             if last_layer in layers:
                 self.lstCanvasAggLayers.setCurrentRow(layers.index(last_layer))
+        # Set icon
+        self.lblIconIFCWAggregationFromCanvas.setPixmap(QPixmap(None))

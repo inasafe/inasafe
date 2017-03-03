@@ -14,17 +14,12 @@ from safe.test.utilities import (
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.utilities.utilities import (
-    get_error_message,
     humanise_seconds,
     impact_attribution,
     replace_accentuated_characters,
-    reorder_dictionary,
-    main_type,
     is_keyword_version_supported
 )
 from safe.utilities.gis import qgis_version
-
-from safe.storage.utilities import bbox_intersection
 
 
 class UtilitiesTest(unittest.TestCase):
@@ -38,38 +33,6 @@ class UtilitiesTest(unittest.TestCase):
     def tearDown(self):
         """Test tear down."""
         pass
-
-    def test_stacktrace_html(self):
-        """Stack traces can be caught and rendered as html
-        """
-
-        # This is about general exception handling, so ok to use catch-all
-        # pylint: disable=W0703
-        try:
-            bbox_intersection('aoeu', 'oaeu', [])
-        except Exception, e:
-            # Display message and traceback
-
-            message = get_error_message(e)
-            # print message
-            message = message.to_text()
-            self.assertIn(str(e), message)
-            self.assertIn('line', message)
-            self.assertIn('file', message)
-
-            message = get_error_message(e)
-            message = message.to_html()
-            assert str(e) in message
-
-            message = message.decode('string_escape')
-            control_file_path = standard_data_path(
-                'control',
-                'files',
-                'test-stacktrace-html.txt')
-            expected_results = open(control_file_path).read().replace('\n', '')
-            self.assertIn(expected_results, message)
-
-            # pylint: enable=W0703
 
     def test_get_qgis_version(self):
         """Test we can get the version of QGIS"""
@@ -135,38 +98,6 @@ class UtilitiesTest(unittest.TestCase):
         self.assertTrue(is_keyword_version_supported('3.2.1-alpha', '3.2'))
         self.assertTrue(is_keyword_version_supported('3.2.1', '3.3'))
         self.assertFalse(is_keyword_version_supported('3.02.1', '3.2'))
-
-    def test_order_dictionary(self):
-        """Test if we can reorder a dictionary correctly."""
-        unordered = {
-            1: 'a',
-            2: 'b',
-            3: 'c',
-            4: 'd',
-            5: 'e'
-        }
-        expected = [5, 4, 3, 2, 1]
-
-        new_dict = reorder_dictionary(unordered, expected)
-        self.assertItemsEqual(expected, new_dict.keys())
-
-        # These keys don't exist, but we still show the dictionary
-        expected = ['Z', 'X', 'Y']
-        new_dict = reorder_dictionary(unordered, expected)
-        self.assertEqual(len(new_dict), 5)
-
-    def test_main_type(self):
-        """Test the good feature type according to the value mapping."""
-        mapping = {
-            'residential': ['house', 'apartments', 'residential'],
-            'industrial': ['commercial', 'retail']
-        }
-        self.assertEqual(main_type('residential', mapping), 'residential')
-        self.assertEqual(main_type('house', mapping), 'residential')
-        self.assertEqual(main_type('apartments', mapping), 'residential')
-        self.assertEqual(main_type('warehouse', mapping), 'other')
-        self.assertEqual(main_type(None, mapping), 'other')
-        self.assertEqual(main_type('null', mapping), 'other')
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(UtilitiesTest)

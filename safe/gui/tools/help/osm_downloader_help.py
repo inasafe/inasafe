@@ -5,7 +5,7 @@ from safe.utilities.i18n import tr
 from safe import messaging as m
 from safe.messaging import styles
 
-INFO_STYLE = styles.INFO_STYLE
+SUBSECTION_STYLE = styles.SUBSECTION_LEVEL_3_STYLE
 
 
 def osm_downloader_help():
@@ -35,7 +35,7 @@ def heading():
     :returns: A heading object.
     :rtype: safe.messaging.heading.Heading
     """
-    message = m.Heading(tr('OSM downloader help'), **INFO_STYLE)
+    message = m.Heading(tr('OSM downloader help'), **SUBSECTION_STYLE)
     return message
 
 
@@ -94,7 +94,7 @@ def content():
             'Downloaded data is copyright OpenStreetMap contributors '
             '(click for more info).')
     ))
-    message.add(body)
+    message.add(m.Paragraph(body))
     message.add(tips)
 
     message.add(m.Paragraph(

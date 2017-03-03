@@ -1,0 +1,14 @@
+{
+"type": "FeatureCollection",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "exposure_id": 6, "population": 10, "exposure_class": "residential", "hazard_id": 1, "hazard_class": "high", "aggregation_id": 1, "aggregation_name": "area 1", "size": 0.0 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ 106.753210973591692, -6.172482639175887 ] ] } },
+{ "type": "Feature", "properties": { "exposure_id": 5, "population": 1, "exposure_class": "health", "hazard_id": 1, "hazard_class": "high", "aggregation_id": 3, "aggregation_name": "area 3", "size": 0.0 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ 106.76556652864619, -6.196750327497575 ] ] } },
+{ "type": "Feature", "properties": { "exposure_id": 4, "population": 15, "exposure_class": "commercial", "hazard_id": 1, "hazard_class": "high", "aggregation_id": 3, "aggregation_name": "area 3", "size": 0.0 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ 106.741458128539875, -6.197649109363691 ] ] } },
+{ "type": "Feature", "properties": { "exposure_id": 8, "population": null, "exposure_class": "residential", "hazard_id": 2, "hazard_class": "high", "aggregation_id": 3, "aggregation_name": "area 3", "size": 0.0 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ 106.753813683594359, -6.262956479734641 ] ] } },
+{ "type": "Feature", "properties": { "exposure_id": 11, "population": 0, "exposure_class": "government", "hazard_id": 5, "hazard_class": "medium", "aggregation_id": 1, "aggregation_name": "area 1", "size": 0.0 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ 106.801427773804321, -6.173081854759827 ] ] } },
+{ "type": "Feature", "properties": { "exposure_id": 9, "population": 15, "exposure_class": "education", "hazard_id": null, "hazard_class": "null", "aggregation_id": 1, "aggregation_name": "area 1", "size": 0.0 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ 106.756827233607638, -6.119749021099483 ] ] } },
+{ "type": "Feature", "properties": { "exposure_id": 3, "population": 20, "exposure_class": "commercial", "hazard_id": null, "hazard_class": "null", "aggregation_id": 3, "aggregation_name": "area 3", "size": 0.0 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ 106.754416393596998, -6.230902960241568 ] ] } },
+{ "type": "Feature", "properties": { "exposure_id": 10, "population": 5, "exposure_class": "health", "hazard_id": null, "hazard_class": "null", "aggregation_id": 3, "aggregation_name": "area 3", "size": 0.0 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ 106.815892813868103, -6.262956479734641 ] ] } }
+]
+}

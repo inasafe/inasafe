@@ -1,0 +1,7 @@
+{
+"type": "FeatureCollection",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "NUMBER": "0603", "RN": 6, "SN": 3, "VN": "-25-", "NAME": "Merapi", "LOCATION": "Java", "STATUS": "Historical", "LATX": "-7.541666667", "NS": "S", "VF": null, "LONGX": "110.4416667", "EW": "E", "ELEV": "2968", "TIMEFRAME": "D1" }, "geometry": { "type": "Point", "coordinates": [ 106.804053680438628, -6.197362821727205 ] } }
+]
+}
