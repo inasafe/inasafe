@@ -200,7 +200,8 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
 
     analysis.commitChanges()
 
-    analysis.keywords['title'] = output_layer_name
+    analysis.keywords['title'] = layer_purpose_analysis_impacted['name']
+    analysis.setLayerName(analysis.keywords['title'])
     analysis.keywords['layer_purpose'] = layer_purpose_analysis_impacted['key']
 
     check_layer(analysis)

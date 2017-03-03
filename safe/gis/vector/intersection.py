@@ -12,7 +12,7 @@ from qgis.core import (
 )
 
 from safe.utilities.i18n import tr
-from safe.definitions.layer_purposes import layer_purpose_exposure_impacted
+from safe.definitions.layer_purposes import layer_purpose_exposure_summary
 from safe.definitions.processing_steps import intersection_steps
 from safe.gis.vector.tools import (
     create_memory_layer, wkb_type_groups, create_spatial_index)
@@ -132,7 +132,7 @@ def intersection(source, mask, callback=None):
 
     writer.keywords = dict(source.keywords)
     writer.keywords['title'] = output_layer_name
-    writer.keywords['layer_purpose'] = layer_purpose_exposure_impacted['key']
+    writer.keywords['layer_purpose'] = layer_purpose_exposure_summary['key']
     writer.keywords['inasafe_fields'] = dict(source.keywords['inasafe_fields'])
     writer.keywords['inasafe_fields'].update(mask.keywords['inasafe_fields'])
     writer.keywords['hazard_keywords'] = dict(mask.keywords['hazard_keywords'])

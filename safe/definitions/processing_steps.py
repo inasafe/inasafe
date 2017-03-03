@@ -89,9 +89,9 @@ summary_3_analysis_steps = {
     'output_layer_name': 'analysis',
 }
 
-summary_4_exposure_breakdown_steps = {
-    'step_name': tr('Compute exposure breakdown'),
-    'output_layer_name': 'exposure_breakdown',
+summary_4_exposure_summary_table_steps = {
+    'step_name': tr('Compute exposure summary table'),
+    'output_layer_name': 'exposure_summary_table',
 }
 
 union_steps = {

@@ -1,4 +1,5 @@
 # coding=utf-8
+"""Module used to generate context for MMI detail section."""
 from safe.definitions.exposure import exposure_population
 from safe.definitions.hazard import hazard_earthquake
 from safe.definitions.layer_geometry import layer_geometry_raster, \
@@ -29,13 +30,14 @@ def mmi_detail_extractor(impact_report, component_metadata):
 
     :return: context for rendering phase
     :rtype: dict
+
+    .. versionadded:: 4.0
     """
     context = {}
     exposure_layer = impact_report.exposure
     hazard_layer = impact_report.hazard
     analysis_layer = impact_report.analysis
     analysis_layer_keywords = analysis_layer.keywords
-    provenance = impact_report.impact_function.provenance
     hazard_keywords = hazard_layer.keywords
     extra_args = component_metadata.extra_args
     enable_rounding = not impact_report.impact_function.debug_mode
@@ -68,8 +70,20 @@ def mmi_detail_extractor(impact_report, component_metadata):
     # mmi is ranged from 1 to 10, which means: [1, 11)
     mmi_range = range(1, 11)
     rows = []
+    roman_numeral = [
+        'I',
+        'II',
+        'III',
+        'IV',
+        'V',
+        'VI',
+        'VII',
+        'VIII',
+        'IX',
+        'X'
+    ]
     for i in mmi_range:
-        columns = [i]
+        columns = [roman_numeral[i - 1]]
         for value in reported_fields:
             field = value['field']
             try:
@@ -97,7 +111,7 @@ def mmi_detail_extractor(impact_report, component_metadata):
     for field in total_fields:
         try:
             field_name = analysis_layer_keywords[field['key']]
-            total = value_from_field_name(field_name)
+            total = value_from_field_name(field_name, analysis_layer)
             if not total:
                 total = 0
         except KeyError:

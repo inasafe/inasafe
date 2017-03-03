@@ -1,11 +1,10 @@
 # coding=utf-8
+"""Module that contains helper function for report context extraction."""
 import os
 import codecs
 
-from PyQt4 import QtCore
 from jinja2.exceptions import TemplateError
 
-from safe.definitions.default_settings import inasafe_default_settings
 from safe.definitions.utilities import definition
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -28,6 +27,8 @@ def layer_definition_type(layer):
 
     :return: Layer definitions.
     :rtype: dict
+
+    .. versionadded:: 4.0
     """
     layer_purposes = ['exposure', 'hazard']
 
@@ -54,6 +55,8 @@ def jinja2_output_as_string(impact_report, component_key):
 
     :return: output as string.
     :rtype: str
+
+    .. versionadded:: 4.0
     """
     metadata = impact_report.metadata
     for c in metadata.components:
@@ -89,6 +92,8 @@ def value_from_field_name(field_name, analysis_layer):
     :type analysis_layer: qgis.core.QgsVectorLayer
 
     :return: return the valeu of a given field name of the analysis.
+
+    .. versionadded:: 4.0
     """
     field_index = analysis_layer.fieldNameIndex(field_name)
     return analysis_layer.getFeatures().next()[field_index]
@@ -110,6 +115,8 @@ def resolve_from_dictionary(dictionary, key_list, default_value=None):
     :param default_value: Any arbitrary default value to return.
 
     :return: intended value, if fails, return default_value.
+
+    .. versionadded:: 4.0
     """
     try:
         current_value = dictionary

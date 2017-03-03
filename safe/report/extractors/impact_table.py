@@ -1,5 +1,8 @@
 # coding=utf-8
+"""Module used to generate context for impact table report.
 
+This is useful to do layouting.
+"""
 from __future__ import absolute_import
 
 from collections import OrderedDict
@@ -33,6 +36,8 @@ def impact_table_extractor(impact_report, component_metadata):
 
     :return: context for rendering phase
     :rtype: dict
+
+    .. versionadded:: 4.0
     """
     context = {}
     extra_args = component_metadata.extra_args
@@ -47,7 +52,7 @@ def impact_table_extractor(impact_report, component_metadata):
         components_list.pop('mmi_detail', None)
 
     context['brand_logo'] = resource_url(
-            resources_path('img', 'logos', 'inasafe-logo-white.png'))
+        resources_path('img', 'logos', 'inasafe-logo-white.png'))
     for key, component in components_list.iteritems():
         context[key] = jinja2_output_as_string(
             impact_report, component['key'])
@@ -143,9 +148,13 @@ def impact_table_pdf_extractor(impact_report, component_metadata):
 
     :param component_metadata: the component metadata. Used to obtain
         information about the component we want to render
-    :type component_metadata: safe.report.report_metadata.ReportMetadata
+    :type component_metadata: safe.report.report_metadata.
+        ReportComponentsMetadata
 
     :return: context for rendering phase
+    :rtype: dict
+
+    .. versionadded:: 4.0
     """
     # QGIS Composer needed certain context to generate the output
     # - Map Settings

@@ -122,7 +122,7 @@ class DataStore(object):
 
         if result[0]:
             LOGGER.info(
-                'Layer saved {layer_name}'.format(layer_name=result[1]))
+                u'Layer saved {layer_name}'.format(layer_name=result[1]))
 
         try:
             layer.keywords

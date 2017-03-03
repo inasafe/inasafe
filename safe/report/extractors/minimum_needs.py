@@ -1,4 +1,5 @@
 # coding=utf-8
+"""Module used to generate context for minimum needs section."""
 from safe.common.parameters.resource_parameter import ResourceParameter
 from safe.definitions.fields import displaced_field
 from safe.definitions.minimum_needs import (
@@ -30,6 +31,8 @@ def minimum_needs_extractor(impact_report, component_metadata):
 
     :return: context for rendering phase
     :rtype: dict
+
+    .. versionadded:: 4.0
     """
     context = {}
     extra_args = component_metadata.extra_args

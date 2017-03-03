@@ -50,8 +50,8 @@ from safe.gis.vector.summary_2_aggregation import aggregation_summary
 from safe.gis.vector.summary_3_analysis import analysis_summary
 from safe.gis.vector.summary_33_eq_raster_analysis import (
     analysis_eartquake_summary)
-from safe.gis.vector.summary_4_exposure_breakdown import (
-    exposure_type_breakdown)
+from safe.gis.vector.summary_4_exposure_summary_table import (
+    exposure_summary_table)
 from safe.gis.vector.recompute_counts import recompute_counts
 from safe.gis.vector.update_value_map import update_value_map
 from safe.gis.raster.clip_bounding_box import clip_by_extent
@@ -71,11 +71,11 @@ from safe.definitions.fields import (
     count_ratio_mapping,
 )
 from safe.definitions.layer_purposes import (
-    layer_purpose_exposure_impacted,
+    layer_purpose_exposure_summary,
     layer_purpose_aggregate_hazard_impacted,
-    layer_purpose_aggregation_impacted,
+    layer_purpose_aggregation_summary,
     layer_purpose_analysis_impacted,
-    layer_purpose_exposure_breakdown,
+    layer_purpose_exposure_summary_table,
     layer_purpose_profiling,
 )
 from safe.impact_function.provenance_utilities import (
@@ -168,11 +168,11 @@ class ImpactFunction(object):
         self.use_selected_features_only = False
 
         # Output layers
-        self._exposure_impacted = None
+        self._exposure_summary = None
         self._aggregate_hazard_impacted = None
-        self._aggregation_impacted = None
+        self._aggregation_summary = None
         self._analysis_impacted = None
-        self._exposure_breakdown = None
+        self._exposure_summary_table = None
         self._profiling_table = None
 
         # Use debug to store intermediate results
@@ -349,16 +349,16 @@ class ImpactFunction(object):
         :rtype: list
         """
         layers = OrderedDict()
-        layers[layer_purpose_exposure_impacted['key']] = (
-            self._exposure_impacted)
+        layers[layer_purpose_exposure_summary['key']] = (
+            self._exposure_summary)
         layers[layer_purpose_aggregate_hazard_impacted['key']] = (
             self._aggregate_hazard_impacted)
-        layers[layer_purpose_aggregation_impacted['key']] = (
-            self._aggregation_impacted)
+        layers[layer_purpose_aggregation_summary['key']] = (
+            self._aggregation_summary)
         layers[layer_purpose_analysis_impacted['key']] = (
             self._analysis_impacted)
-        layers[layer_purpose_exposure_breakdown['key']] = (
-            self._exposure_breakdown)
+        layers[layer_purpose_exposure_summary_table['key']] = (
+            self._exposure_summary_table)
         layers[layer_purpose_profiling['key']] = self._profiling_table
 
         for expected_purpose, layer in layers.iteritems():
@@ -387,18 +387,18 @@ class ImpactFunction(object):
         if is_vector_layer(self.outputs[0]):
             return self.outputs[0]
         else:
-            # In case of EQ raster on population, the exposure impacted is a
+            # In case of EQ raster on population, the exposure summary is a
             # raster.
             return self.outputs[1]
 
     @property
-    def exposure_impacted(self):
-        """Property for the exposure impacted.
+    def exposure_summary(self):
+        """Property for the exposure summary.
 
         :returns: A vector layer.
         :rtype: QgsVectorLayer
         """
-        return self._exposure_impacted
+        return self._exposure_summary
 
     @property
     def aggregate_hazard_impacted(self):
@@ -410,13 +410,13 @@ class ImpactFunction(object):
         return self._aggregate_hazard_impacted
 
     @property
-    def aggregation_impacted(self):
-        """Property for the aggregation impacted.
+    def aggregation_summary(self):
+        """Property for the aggregation summary.
 
         :returns: A vector layer.
         :rtype: QgsVectorLayer
         """
-        return self._aggregation_impacted
+        return self._aggregation_summary
 
     @property
     def analysis_impacted(self):
@@ -428,15 +428,15 @@ class ImpactFunction(object):
         return self._analysis_impacted
 
     @property
-    def exposure_breakdown(self):
-        """Return the exposure breakdown if available.
+    def exposure_summary_table(self):
+        """Return the exposure summary table if available.
 
         It's a QgsVectorLayer without geometry.
 
         :returns: A vector layer.
         :rtype: QgsVectorLayer
         """
-        return self._exposure_breakdown
+        return self._exposure_summary_table
 
     @property
     def profiling(self):
@@ -661,6 +661,7 @@ class ImpactFunction(object):
         :param process: A text explain the process.
         :type process: str, unicode
         """
+        LOGGER.info('%s: %s' % (context, process))
         self.state[context]["process"].append(process)
 
     def set_state_info(self, context, key, value):
@@ -676,7 +677,7 @@ class ImpactFunction(object):
         :param value: The value of the information. E.g point
         :type value: str, unicode, int, float, bool, list, dict
         """
-        LOGGER.debug('%s: %s: %s' % (context, key, value))
+        LOGGER.info('%s: %s: %s' % (context, key, value))
         self.state[context]["info"][key] = value
 
     @staticmethod
@@ -974,7 +975,20 @@ class ImpactFunction(object):
             for area in self.aggregation.getFeatures():
                 list_geometry.append(QgsGeometry(area.geometry()))
 
-            self._analysis_extent = QgsGeometry.unaryUnion(list_geometry)
+            geometry = QgsGeometry.unaryUnion(list_geometry)
+            if geometry.isMultipart():
+                multi_polygon = geometry.asMultiPolygon()
+                for polygon in multi_polygon:
+                    for ring in polygon[1:]:
+                        polygon.remove(ring)
+                self._analysis_extent = QgsGeometry.fromMultiPolygon(
+                    multi_polygon)
+
+            else:
+                polygon = geometry.asPolygon()
+                for ring in polygon[1:]:
+                    polygon.remove(ring)
+                self._analysis_extent = QgsGeometry.fromPolygon(polygon)
             is_empty = self._analysis_extent.isGeosEmpty()
             is_invalid = not self._analysis_extent.isGeosValid()
             if is_empty or is_invalid:
@@ -1172,6 +1186,7 @@ class ImpactFunction(object):
     @profile
     def _run(self):
         """Internal function to run the impact function with profiling."""
+        LOGGER.info('ANALYSIS : The impact function is starting.')
         step_count = len(analysis_steps)
         self.callback(0, step_count, analysis_steps['initialisation'])
 
@@ -1231,9 +1246,9 @@ class ImpactFunction(object):
 
         self._performance_log = profiling_log()
         self.callback(7, step_count, analysis_steps['post_processing'])
-        if is_vector_layer(self._exposure_impacted):
-            # We post process the exposure impacted
-            self.post_process(self._exposure_impacted)
+        if is_vector_layer(self._exposure_summary):
+            # We post process the exposure summary
+            self.post_process(self._exposure_summary)
         else:
             if is_vector_layer(self._aggregate_hazard_impacted):
                 # We post process the aggregate hazard.
@@ -1242,7 +1257,7 @@ class ImpactFunction(object):
             else:
                 # We post process the aggregation.
                 # Earthquake raster on population raster.
-                self.post_process(self._aggregation_impacted)
+                self.post_process(self._aggregation_summary)
 
         self._performance_log = profiling_log()
         self.callback(8, step_count, analysis_steps['summary_calculation'])
@@ -1251,19 +1266,19 @@ class ImpactFunction(object):
         # End of the impact function, we can add layers to the datastore.
         # We replace memory layers by the real layer from the datastore.
 
-        # Exposure impacted
-        if self._exposure_impacted:
-            self._exposure_impacted.keywords[
+        # Exposure summary
+        if self._exposure_summary:
+            self._exposure_summary.keywords[
                 'provenance_data'] = self.provenance
             result, name = self.datastore.add_layer(
-                self._exposure_impacted,
-                layer_purpose_exposure_impacted['key'])
+                self._exposure_summary,
+                layer_purpose_exposure_summary['key'])
             if not result:
                 raise Exception(
                     tr('Something went wrong with the datastore : '
                        '{error_message}').format(error_message=name))
-            self._exposure_impacted = self.datastore.layer(name)
-            self.debug_layer(self._exposure_impacted, add_to_datastore=False)
+            self._exposure_summary = self.datastore.layer(name)
+            self.debug_layer(self._exposure_summary, add_to_datastore=False)
 
         # Aggregate hazard impacted
         if self.aggregate_hazard_impacted:
@@ -1280,31 +1295,32 @@ class ImpactFunction(object):
             self.debug_layer(
                 self._aggregate_hazard_impacted, add_to_datastore=False)
 
-        # Exposure breakdown
+        # Exposure summary table
         if self._exposure.keywords.get('classification'):
-            self._exposure_breakdown.keywords[
+            self._exposure_summary_table.keywords[
                 'provenance_data'] = self.provenance
             result, name = self.datastore.add_layer(
-                self._exposure_breakdown,
-                layer_purpose_exposure_breakdown['key'])
+                self._exposure_summary_table,
+                layer_purpose_exposure_summary_table['key'])
             if not result:
                 raise Exception(
                     tr('Something went wrong with the datastore : '
                        '{error_message}').format(error_message=name))
-            self._exposure_breakdown = self.datastore.layer(name)
-            self.debug_layer(self._exposure_breakdown, add_to_datastore=False)
+            self._exposure_summary_table = self.datastore.layer(name)
+            self.debug_layer(
+                self._exposure_summary_table, add_to_datastore=False)
 
-        # Aggregation impacted
-        self.aggregation_impacted.keywords['provenance_data'] = self.provenance
+        # Aggregation summary
+        self.aggregation_summary.keywords['provenance_data'] = self.provenance
         result, name = self.datastore.add_layer(
-            self._aggregation_impacted,
-            layer_purpose_aggregation_impacted['key'])
+            self._aggregation_summary,
+            layer_purpose_aggregation_summary['key'])
         if not result:
             raise Exception(
                 tr('Something went wrong with the datastore : '
                    '{error_message}').format(error_message=name))
-        self._aggregation_impacted = self.datastore.layer(name)
-        self.debug_layer(self._aggregation_impacted, add_to_datastore=False)
+        self._aggregation_summary = self.datastore.layer(name)
+        self.debug_layer(self._aggregation_summary, add_to_datastore=False)
 
         # Analysis impacted
         self.analysis_impacted.keywords['provenance_data'] = self.provenance
@@ -1320,6 +1336,7 @@ class ImpactFunction(object):
     @profile
     def gis_overlay_analysis(self):
         """Perform an overlay analysis between the exposure and the hazard."""
+        LOGGER.info('Starting a GIS overlay analysis')
         step_count = len(analysis_steps)
 
         self._performance_log = profiling_log()
@@ -1349,6 +1366,8 @@ class ImpactFunction(object):
     def earthquake_raster_population_raster(self):
         """Perform a damage curve analysis with EQ raster on population raster.
         """
+        LOGGER.info('ANALYSIS : Starting a EQ raster on population raster')
+
         classification_key = active_classification(
             self.hazard.keywords, 'population')
         thresholds = active_thresholds_value_maps(
@@ -1382,27 +1401,31 @@ class ImpactFunction(object):
         self.debug_layer(aggregation_aligned)
 
         self.set_state_process('exposure', 'Compute exposed people')
-        exposed, self._exposure_impacted = exposed_people_stats(
+        exposed, self._exposure_summary = exposed_people_stats(
             self.hazard,
             self.exposure,
             aggregation_aligned,
             earthquake_function())
-        self.debug_layer(self._exposure_impacted)
+        self.debug_layer(self._exposure_summary)
 
         self.set_state_process('impact function', 'Set summaries')
-        self._aggregation_impacted = make_summary_layer(
+        self._aggregation_summary = make_summary_layer(
             exposed, self.aggregation, earthquake_function())
-        self._aggregation_impacted.keywords['exposure_keywords'] = dict(
-            self.exposure_impacted.keywords)
-        self._aggregation_impacted.keywords['hazard_keywords'] = dict(
+        self._aggregation_summary.keywords['exposure_keywords'] = dict(
+            self.exposure_summary.keywords)
+        self._aggregation_summary.keywords['hazard_keywords'] = dict(
             self.hazard.keywords)
-        self.debug_layer(self._aggregation_impacted)
+        self.debug_layer(self._aggregation_summary)
 
     @profile
     def aggregation_preparation(self):
         """This function is doing the aggregation preparation."""
+        LOGGER.info('ANALYSIS : Aggregation preparation')
         if not self.aggregation:
             self.set_state_info('aggregation', 'provided', False)
+            LOGGER.info(
+                'The aggregation layer is not provided. We are going to '
+                'create it from the analysis extent.')
 
             self.set_state_process(
                 'aggregation',
@@ -1411,24 +1434,62 @@ class ImpactFunction(object):
                 self.analysis_extent, self.exposure.crs())
             self.debug_layer(self.aggregation)
 
+            exposure = definition(self.exposure.keywords['exposure'])
+            keywords = self.exposure.keywords
+
+            # inasafe_default_values will not exist as we can't use
+            # default in the exposure layer.
+            keywords['inasafe_default_values'] = {}
+
             if is_vector_layer(self.exposure):
-                # We need to check if we can add default ratios to the
-                # exposure (only if it's a vector).
-                exposure = definition(self.exposure.keywords['exposure'])
-                keywords = self.exposure.keywords
-                # inasafe_default_values will not exist as we can't use
-                # default in the exposure layer.
-                keywords['inasafe_default_values'] = {}
+                LOGGER.info(
+                    'The exposure is a vector layer. According to the kind of '
+                    'exposure, we need to check if the exposure has some '
+                    'counts before adding some default ratios.')
+
                 for count_field in exposure['extra_fields']:
                     count_key = count_field['key']
                     if count_key in count_ratio_mapping.keys():
+                        ratio_field = count_ratio_mapping[count_key]
                         if count_key not in keywords['inasafe_fields']:
                             # The exposure hasn't a count field, we should add
-                            #  it.
-                            ratio_field = count_ratio_mapping[count_key]
+                            # it.
                             default = definition(ratio_field)['default_value']
                             keywords['inasafe_default_values'][ratio_field] = (
                                 default['default_value'])
+                            LOGGER.info(
+                                'The exposure do not have field {count}, we '
+                                'can add {ratio} = {value} to the exposure '
+                                'default values.'.format(
+                                    count=count_key,
+                                    ratio=ratio_field,
+                                    value=default['default_value']))
+                        else:
+                            LOGGER.info(
+                                'The exposure layer has the count field '
+                                '{count}, we skip the ratio '
+                                '{ratio}.'.format(
+                                    count=count_key, ratio=ratio_field))
+
+            else:
+                LOGGER.info(
+                    'The exposure is a raster layer. The exposure can not '
+                    'have some counts. We add every global defaults to the '
+                    'exposure layer related to the exposure.')
+
+                for count_field in exposure['extra_fields']:
+                    count_key = count_field['key']
+                    if count_key in count_ratio_mapping.keys():
+                        ratio_field = count_ratio_mapping[count_key]
+                        default = definition(ratio_field)['default_value']
+                        keywords['inasafe_default_values'][ratio_field] = (
+                            default['default_value'])
+                        LOGGER.info(
+                            'We are adding {ratio} = {value} to the exposure '
+                            'default values.'.format(
+                                count=count_key,
+                                ratio=ratio_field,
+                                value=default['default_value']))
 
         else:
             self.set_state_info('aggregation', 'provided', True)
@@ -1462,12 +1523,15 @@ class ImpactFunction(object):
             exposure_defaults = exposure_keywords['inasafe_default_values']
             aggregation_keywords = self.aggregation.keywords
             aggregation_fields = aggregation_keywords['inasafe_fields']
+            if not aggregation_keywords.get('inasafe_default_values'):
+                aggregation_keywords['inasafe_default_values'] = {}
             aggregation_default_fields = aggregation_keywords.get(
-                'inasafe_default_values', {})
+                'inasafe_default_values')
             for count_field in exposure['extra_fields']:
                 if count_field['key'] in count_ratio_mapping.keys():
                     ratio_field = count_ratio_mapping[count_field['key']]
                     if count_field['key'] not in exposure_fields:
+                        # The exposure layer can be vector or a raster.
 
                         ratio_is_a_field = ratio_field in aggregation_fields
                         ratio_is_a_constant = (
@@ -1484,22 +1548,67 @@ class ImpactFunction(object):
                             # The ratio will be propagated to the
                             # aggregate_hazard layer.
                             # Let's skip to the next field.
-                            LOGGER.info(
-                                tr('{ratio} field detected, we will propagate '
-                                   'it to the exposure layer.').format(
+                            if is_vector_layer(self.exposure):
+                                LOGGER.info(
+                                    '{ratio} field detected in the '
+                                    'aggregation layer AND the equivalent '
+                                    'count has not been detected in the '
+                                    'exposure layer. We will propagate this '
+                                    'ratio to the exposure layer later when '
+                                    'we combine these two layers.'.format(
                                         ratio=ratio_field))
-                            continue
+                                continue
+                            else:
+                                LOGGER.info(
+                                    '{ratio} field detected in the '
+                                    'aggregation layer. The exposure is a '
+                                    'raster so without the equivalent count. '
+                                    'We will propagate this ratio to the '
+                                    'exposure layer later when we combine '
+                                    'these two layers.'.format(
+                                        ratio=ratio_field))
 
                         if ratio_is_a_constant and not ratio_is_a_field:
                             # It's a constant. We need to add to the exposure.
-                            exposure_defaults[ratio_field] = (
-                                aggregation_default_fields[ratio_field])
-                            LOGGER.info(
-                                tr('{ratio} constant detected, we will add it '
-                                   'to the exposure layer.').format(
-                                    ratio=ratio_field))
+                            value = aggregation_default_fields[ratio_field]
+                            exposure_defaults[ratio_field] = value
+                            if is_vector_layer(self.exposure):
+                                LOGGER.info(
+                                    '{ratio} = {value} constant detected in '
+                                    'the aggregation layer AND the equivalent '
+                                    'count has not been detected in the '
+                                    'exposure layer. We are adding this ratio '
+                                    'to the exposure layer.'.format(
+                                        ratio=ratio_field, value=value))
+                            else:
+                                LOGGER.info(
+                                    '{ratio} = {value} constant detected in '
+                                    'the aggregation layer. The exposure is a '
+                                    'raster so without the equivalent count.'
+                                    'We are adding this ratio to the exposure '
+                                    'layer.'.format(
+                                        ratio=ratio_field, value=value))
+
+                        if not ratio_is_a_constant and not ratio_is_a_field:
+                            if is_vector_layer(self.exposure):
+                                LOGGER.info(
+                                    '{ratio_field} is neither a constant nor '
+                                    'a field in the aggregation layer AND the '
+                                    'equivalent count has not been detected '
+                                    'in the exposure layer. We will do '
+                                    'nothing about it.'.format(
+                                        ratio_field=ratio_field))
+                            else:
+                                LOGGER.info(
+                                    '{ratio_field} is neither a constant nor '
+                                    'a field in the aggregation layer. The '
+                                    'exposure is a raster so without the '
+                                    'equivalent count. We will do '
+                                    'nothing about it.'.format(
+                                        ratio_field=ratio_field))
 
                     else:
+                        # The exposure layer is a vector layer only.
                         if ratio_field in aggregation_fields:
                             # The count field is in the exposure and the ratio
                             # is in the aggregation. We need to remove it from
@@ -1508,6 +1617,22 @@ class ImpactFunction(object):
                                 self.aggregation,
                                 [aggregation_fields[ratio_field]])
                             del aggregation_fields[ratio_field]
+                            LOGGER.info(
+                                '{ratio_field} is detected in the aggregation '
+                                'layer AND {count_field} is detected in the '
+                                'exposure layer. We remove the ratio from the '
+                                'aggregation.'.format(
+                                    ratio_field=ratio_field,
+                                    count_field=count_field['key']))
+
+                        else:
+                            LOGGER.info(
+                                '{ratio_field} is not in the detected in the '
+                                'aggregation layer AND {count_field} is '
+                                'detected in the exposure layer. We do '
+                                'nothing in this step.'.format(
+                                    ratio_field=ratio_field,
+                                    count_field=count_field['key']))
 
         self.set_state_process(
             'aggregation',
@@ -1519,6 +1644,8 @@ class ImpactFunction(object):
     @profile
     def hazard_preparation(self):
         """This function is doing the hazard preparation."""
+        LOGGER.info('ANALYSIS : Hazard preparation')
+
         use_same_projection = (
             self.hazard.crs().authid() == self.exposure.crs().authid())
         self.set_state_info(
@@ -1594,6 +1721,7 @@ class ImpactFunction(object):
         It will prepare the aggregate layer and intersect hazard polygons with
         aggregation areas and assign hazard class.
         """
+        LOGGER.info('ANALYSIS : Aggregate hazard preparation')
         self.set_state_process('hazard', 'Make hazard layer valid')
         self.hazard = clean_layer(self.hazard)
         self.debug_layer(self.hazard)
@@ -1608,6 +1736,7 @@ class ImpactFunction(object):
     @profile
     def exposure_preparation(self):
         """This function is doing the exposure preparation."""
+        LOGGER.info('ANALYSIS : Exposure preparation')
         if is_raster_layer(self.exposure):
             if self.exposure.keywords.get('layer_mode') == 'continuous':
                 if self.exposure.keywords.get('exposure_unit') == 'density':
@@ -1674,6 +1803,7 @@ class ImpactFunction(object):
             will set the aggregate hazard layer.
         However, this function will set the impact layer.
         """
+        LOGGER.info('ANALYSIS : Intersect Exposure and Aggregate Hazard')
         if is_raster_layer(self.exposure):
             self.set_state_process(
                 'impact function',
@@ -1683,21 +1813,6 @@ class ImpactFunction(object):
                 self.exposure, self._aggregate_hazard_impacted)
             self.debug_layer(self._aggregate_hazard_impacted)
 
-            # We can monkey patch keywords here for global defaults.
-            keywords = self._aggregate_hazard_impacted.keywords
-            keywords['inasafe_default_values'] = {}
-            for ratio in count_ratio_mapping.itervalues():
-                ratio_field = definition(ratio)
-                default = ratio_field['default_value']['default_value']
-                key = ratio_field['key']
-                keywords['inasafe_default_values'][key] = default
-                LOGGER.info(
-                    'Adding default {value} for {type} into keywords'.format(
-                        value=default, type=key))
-
-            # We add ratios to the agrgegate hazard layer, we do not need them
-            # for post processing as we will use the population count. It's
-            # easier for user to see this field in the attribute tabler.
             self.set_state_process('impact function', 'Add default values')
             self._aggregate_hazard_impacted = add_default_values(
                 self._aggregate_hazard_impacted)
@@ -1705,7 +1820,7 @@ class ImpactFunction(object):
 
             # I know it's redundant, it's just to be sure that we don't have
             # any impact layer for that IF.
-            self._exposure_impacted = None
+            self._exposure_summary = None
 
         else:
             indivisible_keys = [f['key'] for f in indivisible_exposure]
@@ -1729,32 +1844,40 @@ class ImpactFunction(object):
                 self.set_state_process(
                     'impact function',
                     'Intersect divisible features with the aggregate hazard')
-                self._exposure_impacted = intersection(
+                self._exposure_summary = intersection(
                     self._exposure, self._aggregate_hazard_impacted)
-                self.debug_layer(self._exposure_impacted)
+                self.debug_layer(self._exposure_summary)
 
                 # If the layer has the size field, it means we need to
                 # recompute counts based on the old and new size.
-                fields = self._exposure_impacted.keywords['inasafe_fields']
+                fields = self._exposure_summary.keywords['inasafe_fields']
                 if size_field['key'] in fields:
                     self.set_state_process(
                         'impact function',
                         'Recompute counts')
-                    self._exposure_impacted = recompute_counts(
-                        self._exposure_impacted)
-                    self.debug_layer(self._exposure_impacted)
+                    LOGGER.info(
+                        'InaSAFE will not use these counts, as we have ratios '
+                        'since the exposure preparation step.')
+                    self._exposure_summary = recompute_counts(
+                        self._exposure_summary)
+                    self.debug_layer(self._exposure_summary)
 
             else:
                 self.set_state_process(
                     'impact function',
                     'Highest class of hazard is assigned to the exposure')
-                self._exposure_impacted = assign_highest_value(
+                self._exposure_summary = assign_highest_value(
                     self._exposure, self._aggregate_hazard_impacted)
-                self.debug_layer(self._exposure_impacted)
+                self.debug_layer(self._exposure_summary)
 
-            if self._exposure_impacted:
-                self._exposure_impacted.keywords['title'] = (
-                    layer_purpose_exposure_impacted['key'])
+            if self._exposure_summary:
+                # set title using definition
+                # the title will be overwritten anyway by standard title
+                # set this as fallback.
+                self._exposure_summary.keywords['title'] = (
+                    layer_purpose_exposure_summary['name'])
+                self._exposure_summary.setLayerName(
+                    self._exposure_summary.keywords['title'])
 
     @profile
     def post_process(self, layer):
@@ -1763,6 +1886,8 @@ class ImpactFunction(object):
         :param layer: The vector layer to use for post processing.
         :type layer: QgsVectorLayer
         """
+        LOGGER.info('ANALYSIS : Post processing')
+
         # Set the layer title
         layer_title(layer)
 
@@ -1791,23 +1916,24 @@ class ImpactFunction(object):
 
         We do not check layers here, we will check them in the next step.
         """
-        if is_vector_layer(self._exposure_impacted):
-            # The exposure impacted might be a raster if it's an EQ if.
+        LOGGER.info('ANALYSIS : Summary calculation')
+        if is_vector_layer(self._exposure_summary):
+            # The exposure summary might be a raster if it's an EQ if.
             self.set_state_process(
                 'impact function',
                 'Aggregate the impact summary')
             self._aggregate_hazard_impacted = aggregate_hazard_summary(
-                self.exposure_impacted, self._aggregate_hazard_impacted)
-            self.debug_layer(self._exposure_impacted, add_to_datastore=False)
+                self.exposure_summary, self._aggregate_hazard_impacted)
+            self.debug_layer(self._exposure_summary, add_to_datastore=False)
 
         if self._aggregate_hazard_impacted:
             self.set_state_process(
                 'impact function',
                 'Aggregate the aggregation summary')
-            self._aggregation_impacted = aggregation_summary(
+            self._aggregation_summary = aggregation_summary(
                 self._aggregate_hazard_impacted, self.aggregation)
             self.debug_layer(
-                self._aggregation_impacted, add_to_datastore=False)
+                self._aggregation_summary, add_to_datastore=False)
 
             self.set_state_process(
                 'impact function',
@@ -1819,22 +1945,23 @@ class ImpactFunction(object):
             if self._exposure.keywords.get('classification'):
                 self.set_state_process(
                     'impact function',
-                    'Build the exposure breakdown')
-                self._exposure_breakdown = exposure_type_breakdown(
+                    'Build the exposure summary table')
+                self._exposure_summary_table = exposure_summary_table(
                     self._aggregate_hazard_impacted)
                 self.debug_layer(
-                    self._exposure_breakdown, add_to_datastore=False)
+                    self._exposure_summary_table, add_to_datastore=False)
         else:
             # We are running EQ raster on population raster.
             self.set_state_process(
                 'impact function',
                 'Aggregate the earthquake analysis summary')
             self._analysis_impacted = analysis_eartquake_summary(
-                self.aggregation_impacted, self.analysis_impacted)
+                self.aggregation_summary, self.analysis_impacted)
             self.debug_layer(self._analysis_impacted, add_to_datastore=False)
 
     def style(self):
         """Function to apply some styles to the layers."""
+        LOGGER.info('ANALYSIS : Styling')
         classes = generate_classified_legend(
             self.analysis_impacted,
             self.exposure,
@@ -1858,12 +1985,12 @@ class ImpactFunction(object):
                 displaced_people_style(layer)
 
         # Let's style the aggregation and analysis layer.
-        simple_polygon_without_brush(self.aggregation_impacted)
+        simple_polygon_without_brush(self.aggregation_summary)
         simple_polygon_without_brush(self.analysis_impacted)
 
     @property
     def provenance(self):
-        """Helper method to gather provenance for exposure_impacted layer.
+        """Helper method to gather provenance for exposure_summary layer.
 
         If the impact function is not ready (has not called prepare method),
         it will return empty dict to avoid miss information.

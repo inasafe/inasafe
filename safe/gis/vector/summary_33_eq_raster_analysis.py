@@ -120,7 +120,10 @@ def analysis_eartquake_summary(aggregation, analysis, callback=None):
     request.setFlags(QgsFeatureRequest.NoGeometry)
     for area in aggregation.getFeatures():
         for index in summaries.keys():
-            summaries[index] += area[index[0]]
+            value = area[index[0]]
+            if not value or isinstance(value, QPyNullVariant):
+                value = 0
+            summaries[index] += value
         for mmi_level in range(2, 11):
             field_name = (
                 population_exposed_per_mmi_field['field_name'] % mmi_level)

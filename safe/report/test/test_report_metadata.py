@@ -1,4 +1,5 @@
 # coding=utf-8
+"""Unittest for Report Metadata."""
 import unittest
 
 from safe.report.extractors.action_notes import action_checklist_extractor
@@ -15,6 +16,10 @@ __revision__ = ':%H$'
 class TestReportMetadata(unittest.TestCase):
 
     def test_metadata_parsing(self):
+        """Test general report metadata parsing.
+
+        .. versionadded:: 4.0
+        """
         sample_report_metadata_dict = {
             'key': 'analysis-result-html',
             'name': 'analysis-result-html',

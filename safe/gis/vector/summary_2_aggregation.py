@@ -16,7 +16,7 @@ from safe.definitions.fields import (
     affected_field,
 )
 from safe.definitions.layer_purposes import (
-    layer_purpose_aggregation_impacted)
+    layer_purpose_aggregation_summary)
 from safe.definitions.processing_steps import (
     summary_2_aggregation_steps)
 from safe.gis.vector.tools import read_dynamic_inasafe_field
@@ -164,9 +164,10 @@ def aggregation_summary(aggregate_hazard, aggregation, callback=None):
 
     aggregation.commitChanges()
 
-    aggregation.keywords['title'] = output_layer_name
+    aggregation.keywords['title'] = layer_purpose_aggregation_summary['name']
+    aggregation.setLayerName(aggregation.keywords['title'])
     aggregation.keywords['layer_purpose'] = (
-        layer_purpose_aggregation_impacted['key'])
+        layer_purpose_aggregation_summary['key'])
 
     check_layer(aggregation)
     return aggregation

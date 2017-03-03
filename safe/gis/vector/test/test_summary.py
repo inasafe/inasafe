@@ -19,8 +19,8 @@ from safe.gis.vector.summary_1_aggregate_hazard import (
     aggregate_hazard_summary)
 from safe.gis.vector.summary_2_aggregation import aggregation_summary
 from safe.gis.vector.summary_3_analysis import analysis_summary
-from safe.gis.vector.summary_4_exposure_breakdown import (
-    exposure_type_breakdown)
+from safe.gis.vector.summary_4_exposure_summary_table import (
+    exposure_summary_table)
 from safe.impact_function.impact_function import ImpactFunction
 from safe.gis.sanity_check import check_inasafe_fields
 
@@ -147,7 +147,7 @@ class TestAggregateSummary(unittest.TestCase):
             len(unique_hazard) + number_of_fields + 4
         )
 
-    def test_exposure_breakdown_summary(self):
+    def test_exposure_summary_table(self):
         """Test we can produce the breakdown for the exposure type."""
         aggregate_hazard = load_test_vector_layer(
             'gisv4',
@@ -169,7 +169,7 @@ class TestAggregateSummary(unittest.TestCase):
         hazard_class_index = aggregate_hazard.fieldNameIndex(hazard_class)
         unique_hazard = aggregate_hazard.uniqueValues(hazard_class_index)
 
-        layer = exposure_type_breakdown(aggregate_hazard)
+        layer = exposure_summary_table(aggregate_hazard)
 
         check_inasafe_fields(layer)
 
@@ -210,4 +210,4 @@ class TestAggregateSummary(unittest.TestCase):
             self.assertNotEqual(-1, layer.fieldNameIndex(field_name), message)
 
         check_inasafe_fields(impact_function.analysis_impacted)
-        check_inasafe_fields(impact_function.aggregation_impacted)
+        check_inasafe_fields(impact_function.aggregation_summary)

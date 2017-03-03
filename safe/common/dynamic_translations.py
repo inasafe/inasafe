@@ -52,8 +52,7 @@ from safe.utilities.i18n import tr
 
 # Don't call this function
 def dynamic_translations():
-    """These listed here so they get translated apriori to loading data.
-    """
+    """These listed here so they get translated apriori to loading data."""
     # Bangunan DKI
     tr('DKI buildings')
     # Banjir seperti 2007
@@ -185,6 +184,13 @@ def dynamic_translations():
     # Boolean
     tr('True')
     tr('False')
+
+    # Keywords
+    tr('Value map')
+    tr('value map')
+    tr('Inasafe fields')
+    tr('Keyword version')
+    tr('Inasafe default values')
 
     # OSM Downloader
     tr('Afghanistan')

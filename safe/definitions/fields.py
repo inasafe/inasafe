@@ -63,9 +63,9 @@ exposure_name_field = {
     'type': QVariant.String,
     'length': default_field_length,
     'precision': 0,
-    'help_text': tr(  # short description
+    'description': tr(  # short description
         'A NAME attribute in the exposure layer.'),
-    'description': tr(
+    'help_text': tr(
         'This will be carried over to the impact layer if provided. The name '
         'can be useful in some cases e.g. where exposure is a place, the '
         'name can be used to label the place names.'),
@@ -87,9 +87,9 @@ exposure_type_field = {
     'type': QVariant.String,
     'length': default_field_length,
     'precision': 0,
-    'help_text': tr(  # 'Short description'
+    'description': tr(  # 'Short description'
         'A TYPE attribute in the exposure layer.'),
-    'description': tr(
+    'help_text': tr(
         'The type attribute will be used to differentiate between different '
         'kinds of features when generating reports. For example with roads '
         'the type attribute will be used to report on affected roads based '
@@ -115,9 +115,9 @@ exposure_class_field = {
     'type': QVariant.String,
     'length': default_field_length,
     'precision': 0,
-    'help_text': tr(  # Short description
+    'description': tr(  # Short description
         'A CLASS attribute in the exposure layer.'),
-    'description': tr(
+    'help_text': tr(
         'The class attribute will be used to group features according to '
         'their types. For example several types of ("secondary, residential") '
         'may be  grouped into a single class ("other").'),
@@ -143,9 +143,9 @@ hazard_id_field = {
     'type': qvariant_whole_numbers,
     'length': default_field_length,
     'precision': 0,
-    'help_text': tr(  # short description
+    'description': tr(  # short description
         'An ID attribute in the hazard layer.'),
-    'description': tr(
+    'help_text': tr(
         'A unique identifier for each hazard feature. If you provide this '
         'we will persist these identifiers in the output datasets so that '
         'you can do a table join back to the original hazard layer if '
@@ -168,9 +168,9 @@ hazard_name_field = {
     'type': QVariant.String,
     'length': default_field_length,
     'precision': 0,
-    'help_text': tr(  # short description
+    'description': tr(  # short description
         'A NAME attribute in the hazard layer.'),
-    'description': tr(
+    'help_text': tr(
         'This will be carried over to the impact layer if provided. The name '
         'can be useful in some cases e.g. where hazard is a known entity '
         'such as a volcano, the name can be used to label the place names.'),
@@ -606,8 +606,8 @@ size_field = {
     'description': tr(
         'Attribute where the size of the gemetry is located.'
     ),
-    'help_text': tr(''
-
+    'help_text': tr(
+        'Attribute where the size of the gemetry is located.'
     ),
     'citations': [
         {
@@ -628,7 +628,7 @@ buffer_distance_field = {
     'precision': 0,
     'absolute': True,
     'description': tr('The distance of the buffer for each feature.'),
-    'help_text': tr(''),
+    'help_text': tr('The distance of the buffer for each feature.'),
     'citations': [
         {
             'text': None,
@@ -858,7 +858,8 @@ female_displaced_count_field = {
     'absolute': True,
     'description': tr(
         'The number of displaced females for each feature.'),
-    'help_text': tr(''),
+    'help_text': tr(
+        'The number of displaced females for each feature.'),
     'citations': [
         {
             'text': None,
@@ -899,7 +900,8 @@ youth_displaced_count_field = {
     'absolute': True,
     'description': tr(
         'The number of young people displaced for each feature.'),
-    'help_text': tr(''),
+    'help_text': tr(
+        'The number of young people displaced for each feature.'),
     'citations': [
         {
             'text': None,
@@ -920,7 +922,8 @@ adult_displaced_count_field = {
     'absolute': True,
     'description': tr(
         'The number of adults displaced for each feature.'),
-    'help_text': tr(''),
+    'help_text': tr(
+        'The number of adults displaced for each feature.'),
     'citations': [
         {
             'text': None,
@@ -941,7 +944,8 @@ elderly_displaced_count_field = {
     'absolute': True,
     'description': tr(
         'The number of elderly people displaced for each feature.'),
-    'help_text': tr(''),
+    'help_text': tr(
+        'The number of elderly people displaced for each feature.'),
     'citations': [
         {
             'text': None,
@@ -965,10 +969,10 @@ total_field = {
     'length': default_field_length,
     'precision': 2,
     'absolute': True,
-    'help_text': tr(
+    'description': tr(
         'The total field stores the cumulative total number of features or '
         'entities.'),
-    'description': tr(
+    'help_text': tr(
         'The total field is added to the analysis layer, aggregate impact '
         'layer and aggregate hazard impact layer during the impact analysis. '
         'It represents the cumulative count of exposure features (e.g. '
@@ -992,8 +996,8 @@ fatalities_field = {
     'length': default_field_length,
     'precision': 0,
     'absolute': True,
-    'help_text': tr('Number of fatalities.'),
     'description': tr('Number of fatalities.'),
+    'help_text': tr('Number of fatalities.'),
     'citations': [
         {
             'text': None,
@@ -1014,8 +1018,8 @@ displaced_field = {
     'length': default_field_length,
     'precision': 0,
     'absolute': True,
-    'help_text': tr('Number of displaced.'),
-    'description': tr('Number of displaced.'),
+    'description': tr('Number of displaced people.'),
+    'help_text': tr('Number of displaced people.'),
     'citations': [
         {
             'text': None,
@@ -1035,8 +1039,8 @@ hygiene_packs_count_field = {
     'length': default_field_length,
     'precision': 0,
     'absolute': True,
-    'help_text': tr('Number of Hygiene Packs Weekly for Women.'),
     'description': tr('Number of Hygiene Packs Weekly for Women.'),
+    'help_text': tr('Number of Hygiene Packs Weekly for Women.'),
     'citations': [
         {
             'text': None,
@@ -1083,10 +1087,10 @@ total_affected_field = {
     'length': default_field_length,
     'precision': 2,
     'absolute': True,
-    'help_text': tr(
+    'description': tr(
         'The total affected field stores the cumulative total number of '
         'affected features or entities.'),
-    'description': tr(
+    'help_text': tr(
         '"Affected" is defined as: {concept} The total affected field is '
         'added to the analysis layer, aggregate impact layer and aggregate '
         'hazard impact layer during the impact analysis. It represents the '
@@ -1140,10 +1144,10 @@ total_not_exposed_field = {
     'length': default_field_length,
     'precision': 2,
     'absolute': True,
-    'help_text': tr(
+    'description': tr(
         'The total not exposed field stores the cumulative total number of '
         'not exposed features or entities.'),
-    'description': tr(
+    'help_text': tr(
         'The total not exposed field is added to the analysis layer, '
         'aggregate impact layer and aggregate hazard impact layer during the '
         'impact analysis. It represents the cumulative count of not exposed '
@@ -1172,10 +1176,10 @@ exposure_count_field = {
     'length': default_field_length,
     'precision': default_field_precision,
     'absolute': True,
-    'help_text': tr(
+    'description': tr(
         'The total exposure count field stores the cumulative total number of '
         'exposed features or entities.'),
-    'description': tr(
+    'help_text': tr(
         'The total exposure count field is added to the analysis layer, '
         'aggregate impact layer and aggregate hazard impact layer during the '
         'impact analysis. It represents the cumulative count of affected '
@@ -1200,10 +1204,10 @@ affected_exposure_count_field = {
     'length': default_field_length,
     'precision': default_field_precision,
     'absolute': True,
-    'help_text': tr(
+    'description': tr(
         'The total affected field stores the cumulative total number of '
         'affected exposure features or entities.'),
-    'description': tr(
+    'help_text': tr(
         '"Affected" is defined as: {concept} The total affected field is '
         'added to the analysis layer, aggregate impact layer and aggregate '
         'hazard impact layer during the impact analysis. It represents the '
@@ -1230,10 +1234,10 @@ hazard_count_field = {
     'precision': 2,
     'absolute': True,
     # TODO: Etienne review this
-    'help_text': tr(
+    'description': tr(
         'The total affected field stores the cumulative total number of '
         'affected exposure features or entities.'),
-    'description': tr(
+    'help_text': tr(
         '"Hazard" is defined as: {concept} The hazard count field is added to '
         'the analysis layer, aggregate impact layer and aggregate hazard '
         'impact layer during the impact analysis. It represents the '
@@ -1258,8 +1262,9 @@ population_exposed_per_mmi_field = {
     'length': default_field_length,
     'precision': 0,
     'absolute': True,
-    'help_text': tr('The number of exposed population for a given MMI level.'),
     'description': tr(
+        'The number of exposed population for a given MMI level.'),
+    'help_text': tr(
         'The number of exposed population for a given MMI level.'),
     'citations': [
         {
@@ -1280,9 +1285,9 @@ fatalities_per_mmi_field = {
     'length': default_field_length,
     'precision': 0,
     'absolute': True,
-    'help_text': tr('The number of fatalities for a given MMI level.'),
     'description': tr(
         'The number of fatalities for a given MMI level.'),
+    'help_text': tr('The number of fatalities for a given MMI level.'),
     'citations': [
         {
             'text': None,
@@ -1370,14 +1375,14 @@ aggregate_hazard_fields = [
     total_field,
 ]
 
-aggregation_impacted_fields = [
+aggregation_summary_fields = [
     aggregation_id_field,
     aggregation_name_field,
     affected_exposure_count_field,
     total_affected_field,
 ]
 
-exposure_breakdown_fields = [
+exposure_summary_table_fields = [
     exposure_class_field,
     hazard_count_field,
     total_affected_field,

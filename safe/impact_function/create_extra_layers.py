@@ -74,6 +74,8 @@ def create_virtual_aggregation(geometry, crs):
         aggregation_id_field['key']: aggregation_id_field['field_name'],
         aggregation_name_field['key']: aggregation_name_field['field_name']
     }
+    # We will fill default values later, according to the exposure.
+    aggregation_layer.keywords['inasafe_default_values'] = {}
 
     return aggregation_layer
 
@@ -141,7 +143,8 @@ def create_profile_layer(profiling):
 
     # Generate profiling keywords
     tabular.keywords['layer_purpose'] = layer_purpose_profiling['key']
-    tabular.keywords['title'] = 'profiling'
+    tabular.keywords['title'] = layer_purpose_profiling['name']
+    tabular.setLayerName(tabular.keywords['title'])
     tabular.keywords['inasafe_fields'] = {
         profiling_function_field['key']:
             profiling_function_field['field_name'],

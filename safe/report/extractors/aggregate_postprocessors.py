@@ -1,4 +1,7 @@
 # coding=utf-8
+"""Module used to generate context for aggregation postprocessors sections.
+"""
+
 from collections import OrderedDict
 
 from safe.common.parameters.resource_parameter import ResourceParameter
@@ -35,6 +38,8 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
 
     :return: context for rendering phase
     :rtype: dict
+
+    .. versionadded:: 4.0
     """
     context = {
         'sections': OrderedDict()
@@ -44,16 +49,16 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
 
     extra_args = component_metadata.extra_args
     # Find out aggregation report type
-    aggregation_impacted = impact_report.aggregation_impacted
+    aggregation_summary = impact_report.aggregation_summary
     analysis_layer = impact_report.analysis
-    analysis_keywords = impact_report.analysis.keywords['inasafe_fields']
+    analysis_layer_fields = impact_report.analysis.keywords['inasafe_fields']
     debug_mode = impact_report.impact_function.debug_mode
     use_aggregation = bool(impact_report.impact_function.provenance[
         'aggregation_layer'])
 
     # check zero displaced (there will be no output to display)
     try:
-        displaced_field_name = analysis_keywords[displaced_field['key']]
+        displaced_field_name = analysis_layer_fields[displaced_field['key']]
         total_displaced = value_from_field_name(
             displaced_field_name, analysis_layer)
 
@@ -76,17 +81,19 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
 
     # check age_fields exists
     for field in age_fields:
-        if field['key'] not in analysis_keywords:
-            no_age_field = True
+        if field['key'] in analysis_layer_fields:
+            no_age_field = False
+            break
     else:
-        no_age_field = False
+        no_age_field = True
 
     # check gender_fields exists
     for field in gender_fields:
-        if field['key'] not in analysis_keywords:
-            no_gender_field = True
+        if field['key'] in analysis_layer_fields:
+            no_gender_field = False
+            break
     else:
-        no_gender_field = False
+        no_gender_field = True
 
     age_section_header = resolve_from_dictionary(
         extra_args, ['sections', 'age', 'header'])
@@ -106,13 +113,12 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
         }
     else:
         context['sections']['age'] = create_section(
-            aggregation_impacted,
+            aggregation_summary,
             analysis_layer,
             age_fields,
             age_section_header,
             use_aggregation=use_aggregation,
             debug_mode=debug_mode,
-            population_rounding=True,
             extra_component_args=extra_args)
 
     gender_section_header = resolve_from_dictionary(
@@ -133,13 +139,12 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
         }
     else:
         context['sections']['gender'] = create_section(
-            aggregation_impacted,
+            aggregation_summary,
             analysis_layer,
             gender_fields,
             gender_section_header,
             use_aggregation=use_aggregation,
             debug_mode=debug_mode,
-            population_rounding=True,
             extra_component_args=extra_args)
 
     minimum_needs_section_header = resolve_from_dictionary(
@@ -169,13 +174,12 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
                 units_label.append(unit)
 
         context['sections']['minimum_needs'] = create_section(
-            aggregation_impacted,
+            aggregation_summary,
             analysis_layer,
             minimum_needs_fields,
             minimum_needs_section_header,
             units_label=units_label,
             debug_mode=debug_mode,
-            population_rounding=True,
             extra_component_args=extra_args)
     else:
         sections_not_empty = True
@@ -191,17 +195,16 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
 
 
 def create_section(
-        aggregation_impacted, analysis_layer, postprocessor_fields,
+        aggregation_summary, analysis_layer, postprocessor_fields,
         section_header,
         use_aggregation=True,
         units_label=None,
         debug_mode=False,
-        population_rounding=False,
         extra_component_args=None):
     """Create demographic section context.
 
-    :param aggregation_impacted: Aggregation impacted
-    :type aggregation_impacted: qgis.core.QgsVectorlayer
+    :param aggregation_summary: Aggregation summary
+    :type aggregation_summary: qgis.core.QgsVectorlayer
 
     :param analysis_layer: Analysis layer
     :type analysis_layer: qgis.core.QgsVectorLayer
@@ -221,46 +224,41 @@ def create_section(
     :param debug_mode: flag for debug_mode, affect number representations
     :type debug_mode: bool
 
-    :param population_rounding: flag population rounding, used when
-        postprocessor represents population number
-    :type population_rounding: bool
-
     :param extra_component_args: extra_args passed from report component
         metadata
     :type extra_component_args: dict
 
     :return: context for gender section
     :rtype: dict
+
+    .. versionadded:: 4.0
     """
     if use_aggregation:
         return create_section_with_aggregation(
-            aggregation_impacted, analysis_layer, postprocessor_fields,
+            aggregation_summary, analysis_layer, postprocessor_fields,
             section_header,
             units_label=units_label,
             debug_mode=debug_mode,
-            population_rounding=population_rounding,
             extra_component_args=extra_component_args)
     else:
         return create_section_without_aggregation(
-            aggregation_impacted, analysis_layer, postprocessor_fields,
+            aggregation_summary, analysis_layer, postprocessor_fields,
             section_header,
             units_label=units_label,
             debug_mode=debug_mode,
-            population_rounding=population_rounding,
             extra_component_args=extra_component_args)
 
 
 def create_section_with_aggregation(
-        aggregation_impacted, analysis_layer, postprocessor_fields,
+        aggregation_summary, analysis_layer, postprocessor_fields,
         section_header,
         units_label=None,
         debug_mode=False,
-        population_rounding=False,
         extra_component_args=None):
     """Create demographic section context with aggregation breakdown.
 
-    :param aggregation_impacted: Aggregation impacted
-    :type aggregation_impacted: qgis.core.QgsVectorlayer
+    :param aggregation_summary: Aggregation summary
+    :type aggregation_summary: qgis.core.QgsVectorlayer
 
     :param analysis_layer: Analysis layer
     :type analysis_layer: qgis.core.QgsVectorLayer
@@ -277,18 +275,16 @@ def create_section_with_aggregation(
     :param debug_mode: flag for debug_mode, affect number representations
     :type debug_mode: bool
 
-    :param population_rounding: flag population rounding, used when
-        postprocessor represents population number
-    :type population_rounding: bool
-
     :param extra_component_args: extra_args passed from report component
         metadata
     :type extra_component_args: dict
 
     :return: context for gender section
     :rtype: dict
+
+    .. versionadded:: 4.0
     """
-    aggregation_impacted_fields = aggregation_impacted.keywords[
+    aggregation_summary_fields = aggregation_summary.keywords[
         'inasafe_fields']
     analysis_layer_fields = analysis_layer.keywords[
         'inasafe_fields']
@@ -297,19 +293,17 @@ def create_section_with_aggregation(
     # retrieving postprocessor
     postprocessors_fields_found = []
     for output_field in postprocessor_fields:
-        if output_field['key'] in aggregation_impacted_fields:
+        if output_field['key'] in aggregation_summary_fields:
             postprocessors_fields_found.append(output_field)
 
     if not postprocessors_fields_found:
         return {}
 
     # figuring out displaced field
-    try:
-        displaced_field_name = analysis_layer_fields[displaced_field['key']]
-        displaced_field_name = aggregation_impacted_fields[
-            displaced_field['key']]
-    except KeyError:
-        # no displaced field, can't show result
+    # no displaced field, can't show result
+    if displaced_field['key'] not in analysis_layer_fields:
+        return {}
+    if displaced_field['key'] not in aggregation_summary_fields:
         return {}
 
     """Generating header name for columns"""
@@ -320,7 +314,7 @@ def create_section_with_aggregation(
     total_population_header = resolve_from_dictionary(
         extra_component_args, ['defaults', 'total_population_header'])
     columns = [
-        aggregation_impacted.title() or default_aggregation_header,
+        aggregation_summary.title() or default_aggregation_header,
         total_population_header,
     ]
     row_values = []
@@ -350,13 +344,13 @@ def create_section_with_aggregation(
 
     """Generating values for rows"""
 
-    for feature in aggregation_impacted.getFeatures():
+    for feature in aggregation_summary.getFeatures():
 
-        aggregation_name_index = aggregation_impacted.fieldNameIndex(
+        aggregation_name_index = aggregation_summary.fieldNameIndex(
             aggregation_name_field['field_name'])
-        displaced_field_name = aggregation_impacted_fields[
+        displaced_field_name = aggregation_summary_fields[
             displaced_field['key']]
-        displaced_field_index = aggregation_impacted.fieldNameIndex(
+        displaced_field_index = aggregation_summary.fieldNameIndex(
             displaced_field_name)
 
         aggregation_name = feature[aggregation_name_index]
@@ -373,8 +367,8 @@ def create_section_with_aggregation(
             continue
 
         for output_field in postprocessors_fields_found:
-            field_name = aggregation_impacted_fields[output_field['key']]
-            field_index = aggregation_impacted.fieldNameIndex(field_name)
+            field_name = aggregation_summary_fields[output_field['key']]
+            field_index = aggregation_summary.fieldNameIndex(field_name)
             value = feature[field_index]
 
             value = format_number(
@@ -419,16 +413,15 @@ def create_section_with_aggregation(
 
 
 def create_section_without_aggregation(
-        aggregation_impacted, analysis_layer, postprocessor_fields,
+        aggregation_summary, analysis_layer, postprocessor_fields,
         section_header,
         units_label=None,
         debug_mode=False,
-        population_rounding=False,
         extra_component_args=None):
     """Create demographic section context without aggregation.
 
-    :param aggregation_impacted: Aggregation impacted
-    :type aggregation_impacted: qgis.core.QgsVectorlayer
+    :param aggregation_summary: Aggregation summary
+    :type aggregation_summary: qgis.core.QgsVectorlayer
 
     :param analysis_layer: Analysis layer
     :type analysis_layer: qgis.core.QgsVectorLayer
@@ -445,10 +438,6 @@ def create_section_without_aggregation(
     :param debug_mode: flag for debug_mode, affect number representations
     :type debug_mode: bool
 
-    :param population_rounding: flag population rounding, used when
-        postprocessor represents population number
-    :type population_rounding: bool
-
     :param extra_component_args: extra_args passed from report component
         metadata
     :type extra_component_args: dict
@@ -456,7 +445,7 @@ def create_section_without_aggregation(
     :return: context for gender section
     :rtype: dict
     """
-    aggregation_impacted_fields = aggregation_impacted.keywords[
+    aggregation_summary_fields = aggregation_summary.keywords[
         'inasafe_fields']
     analysis_layer_fields = analysis_layer.keywords[
         'inasafe_fields']
@@ -465,7 +454,7 @@ def create_section_without_aggregation(
     # retrieving postprocessor
     postprocessors_fields_found = []
     for output_field in postprocessor_fields:
-        if output_field['key'] in aggregation_impacted_fields:
+        if output_field['key'] in aggregation_summary_fields:
             postprocessors_fields_found.append(output_field)
 
     if not postprocessors_fields_found:
@@ -475,7 +464,7 @@ def create_section_without_aggregation(
     try:
         displaced_field_name = analysis_layer_fields[
             displaced_field['key']]
-        displaced_field_name = aggregation_impacted_fields[
+        displaced_field_name = aggregation_summary_fields[
             displaced_field['key']]
     except KeyError:
         # no displaced field, can't show result
@@ -518,7 +507,7 @@ def create_section_without_aggregation(
 
         row.append(header)
 
-        # if no aggregation layer, then aggregation impacted only contain one
+        # if no aggregation layer, then aggregation summary only contain one
         # feature
         field_name = analysis_layer_fields[output_field['key']]
         value = value_from_field_name(

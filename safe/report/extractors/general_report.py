@@ -1,10 +1,12 @@
 # coding=utf-8
-from safe.definitions.fields import hazard_count_field, total_field
+"""Module used to generate context for general report section."""
+from safe.definitions.fields import hazard_count_field, total_field, \
+    fatalities_field
 from safe.definitions.hazard_classifications import hazard_classes_all
 from safe.report.extractors.util import (
     layer_definition_type,
     resolve_from_dictionary, value_from_field_name)
-from safe.utilities.rounding import format_number
+from safe.utilities.rounding import format_number, fatalities_range
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -26,6 +28,8 @@ def general_report_extractor(impact_report, component_metadata):
 
     :return: context for rendering phase
     :rtype: dict
+
+    .. versionadded:: 4.0
     """
     context = {}
     extra_args = component_metadata.extra_args
@@ -132,9 +136,14 @@ def general_report_extractor(impact_report, component_metadata):
         if field['key'] in analysis_inasafe_fields:
             field_index = analysis_layer.fieldNameIndex(
                 field['field_name'])
-            row_value = format_number(
-                analysis_feature[field_index],
-                enable_rounding=is_rounded)
+            if field == fatalities_field:
+                # For fatalities field, we show a range of number
+                # instead
+                row_value = fatalities_range(analysis_feature[field_index])
+            else:
+                row_value = format_number(
+                    analysis_feature[field_index],
+                    enable_rounding=is_rounded)
             row_stats = {
                 'key': field['key'],
                 'name': header,
