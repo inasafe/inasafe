@@ -673,6 +673,94 @@ generic_landcover_classes = {
     ]
 }
 
+badan_geologi_landcover_classes = {
+    'key': 'volcanic_ash_landcover_classes',
+    'name': tr('Volcanic Ash Landcover Classification'),
+    'description': tr(
+        'Classification of landcover for volcanic ash based on Badan Geologi'),
+    'type': exposure_classification_type,
+    'citations': [
+        {
+            'text': None,
+            'linl': None
+        }
+    ],
+    'classes': [
+        {
+            'key': 'settlement',
+            'name': tr('Settlement'),
+            'description': None,
+            'osm_downloader': [],
+            'string_defaults': ['Permukiman dan Tempat Kegiatan'],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
+            'key': 'rice_field',
+            'name': tr('Rice Field'),
+            'description': None,
+            'osm_downloader': [],
+            'string_defaults': ['Sawah'],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
+            'key': 'plantation',
+            'name': tr('Plantation'),
+            'description': None,
+            'osm_downloader': [],
+            'string_defaults': ['Perkebunan / Kebun'],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
+            'key': 'water_supply',
+            'name': tr('Water Supply'),
+            'description': None,
+            'osm_downloader': [],
+            'string_defaults': [
+                'Air Danau / Situ',
+                'Air Empang',
+                'Air Penggaraman',
+                'Air Tambak',
+                'Air Tawar Sungai',
+                'Air Waduk',
+                'Perairan Lainnya'],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
+            'key': 'forest',
+            'name': tr('Forest'),
+            'description': None,
+            'osm_downloader': [],
+            'string_defaults': ['Hutan Rimba'],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        }
+    ]
+}
+
 # Classes order
 structure_class_order = [
     item['key'] for item in generic_structure_classes['classes']]
