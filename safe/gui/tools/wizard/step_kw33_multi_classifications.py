@@ -526,7 +526,6 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         for empty_exposure_classification in empty_exposure_classifications:
             output[key].pop(empty_exposure_classification)
 
-
         return output
 
     @staticmethod
