@@ -255,7 +255,15 @@ def make_summary_layer(exposed, aggregation, fatality_rate):
         total_displaced = 0
 
         LOGGER.debug('Aggregation %s is being processed by EQ IF' % agg_zone)
-        stats_aggregation = exposed_per_agg_zone[agg_zone]
+        try:
+            stats_aggregation = exposed_per_agg_zone[agg_zone]
+        except KeyError:
+            # 1. We might have aggregation area outside of the hazard and
+            # exposure extent.
+            # 2. We got some broken datatset with an empty geometry for the
+            # aggregation.
+            # See ticket : https://github.com/inasafe/inasafe/issues/3803
+            continue
         for mmi, mmi_exposed in stats_aggregation.iteritems():
             mmi_fatalities = (
                 int(mmi_exposed * fatality_rate[mmi]))  # rounding down
