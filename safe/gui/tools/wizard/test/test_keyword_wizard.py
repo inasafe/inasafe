@@ -69,7 +69,10 @@ class TestKeywordWizard(unittest.TestCase):
     def tearDown(self):
         """Run after each test."""
         # Remove the mess that we made on each test
-        shutil.rmtree(temp_dir(sub_dir='test'))
+        try:
+            shutil.rmtree(temp_dir(sub_dir='test'))
+        except:
+            pass
 
     def check_list(self, expected_list, list_widget):
         """Helper function to check that list_widget is equal to expected_list.

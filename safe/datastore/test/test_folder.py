@@ -14,7 +14,7 @@ Contact : ole.moller.nielsen@gmail.com
 import unittest
 
 from tempfile import mkdtemp
-from os.path import join
+from os.path import join, normpath, normcase
 
 from safe.test.utilities import qgis_iface
 from PyQt4.QtCore import QDir
@@ -64,8 +64,11 @@ class TestFolder(unittest.TestCase):
 
         # Check if we have the correct URI.
         # self.assertIsNone(data_store.layer_uri(layer_name))
-        expected = join(path, vector_layer_name + '.shp')
-        self.assertEqual(data_store.layer_uri(vector_layer_name), expected)
+        expected = unicode(
+            normcase(normpath(join(path, vector_layer_name + '.shp'))))
+        self.assertEquals(
+            normcase(normpath(
+                data_store.layer_uri(vector_layer_name))), expected)
 
         # This layer do not exist
         self.assertIsNone(data_store.layer_uri('fake_layer'))
@@ -83,9 +86,10 @@ class TestFolder(unittest.TestCase):
         self.assertEqual(len(data_store.layers()), 2)
 
         # Check the URI for the raster layer.
-        expected = join(path, raster_layer_name)
+        expected = normpath(normpath(join(path, raster_layer_name)))
         self.assertEqual(
-            data_store.layer_uri(raster_layer_name), expected + '.tif')
+            normcase(normpath(data_store.layer_uri(raster_layer_name))),
+            expected + '.tif')
 
         # Check keywords files
         data_store.uri.setNameFilters('*.xml')

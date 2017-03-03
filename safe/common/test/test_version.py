@@ -58,7 +58,11 @@ class TestVersion(unittest.TestCase):
     def test_get_current_hash(self):
         """Test for get_current_hash."""
         git_hash = current_git_hash()
-        self.assertEqual(len(git_hash), 7)
+        if 'win32' in sys.platform:
+            # On windows we get 9 chars of the git hash back
+            self.assertEqual(len(git_hash), 9)
+        else:
+            self.assertEqual(len(git_hash), 7)
 
 if __name__ == '__main__':
     unittest.main()
