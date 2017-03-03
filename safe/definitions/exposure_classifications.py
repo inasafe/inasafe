@@ -689,7 +689,7 @@ badan_geologi_landcover_classes = {
         {
             'key': 'settlement',
             'name': tr('Settlement'),
-            'description': None,
+            'description': tr('Settlement'),
             'osm_downloader': [],
             'string_defaults': ['Permukiman dan Tempat Kegiatan', '50102'],
             'citations': [
@@ -702,7 +702,7 @@ badan_geologi_landcover_classes = {
         {
             'key': 'rice_field',
             'name': tr('Rice Field'),
-            'description': None,
+            'description': tr('Rice Field'),
             'osm_downloader': [],
             'string_defaults': ['Sawah', '50306'],
             'citations': [
@@ -715,7 +715,7 @@ badan_geologi_landcover_classes = {
         {
             'key': 'plantation',
             'name': tr('Plantation'),
-            'description': None,
+            'description': tr('Plantation'),
             'osm_downloader': [],
             'string_defaults': ['Perkebunan / Kebun', '50304'],
             'citations': [
@@ -728,7 +728,7 @@ badan_geologi_landcover_classes = {
         {
             'key': 'water_supply',
             'name': tr('Water Supply'),
-            'description': None,
+            'description': tr('Water Supply'),
             'osm_downloader': [],
             'string_defaults': [
                 'Air Danau / Situ',
@@ -755,7 +755,7 @@ badan_geologi_landcover_classes = {
         {
             'key': 'forest',
             'name': tr('Forest'),
-            'description': None,
+            'description': tr('Forest'),
             'osm_downloader': [],
             'string_defaults': ['Hutan Rimba', '50202'],
             'citations': [
