@@ -674,10 +674,10 @@ generic_landcover_classes = {
 }
 
 badan_geologi_landcover_classes = {
-    'key': 'volcanic_ash_landcover_classes',
-    'name': tr('Volcanic Ash Landcover Classification'),
+    'key': 'badan_geologi_landcover_classes',
+    'name': tr('Badan Geologi Landcover Classification'),
     'description': tr(
-        'Classification of landcover for volcanic ash based on Badan Geologi'),
+        'Classification of landcover based on Badan Geologi'),
     'type': exposure_classification_type,
     'citations': [
         {
