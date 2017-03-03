@@ -36,6 +36,7 @@ before_install:
 install:
   - sudo add-apt-repository ${QGIS_REPO}
   # - wget -O - http://qgis.org/downloads/qgis-2016.gpg.key | gpg --import gpg --fingerprint 073D307A618E5811
+  - sudo add-apt-repository ppa:ubuntugis/ppa
   - sudo apt-get update
   - sudo apt-get install -y --force-yes qgis python-qgis xvfb pyflakes python-scientific
   - sudo pip install coverage
