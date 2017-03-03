@@ -1400,7 +1400,7 @@ cyclone_au_bom_hazard_classes = {
                 'These winds correspond to the highest category on the '
                 'Beaufort scale, Beaufort 12 (Hurricane).'
             ),
-            'displacement_rate': 0.0,
+            'displacement_rate': 1.0,
             'numeric_default_min': {
                 unit_knots['key']: 107,
                 unit_metres_per_second['key']: 55,
@@ -1411,8 +1411,11 @@ cyclone_au_bom_hazard_classes = {
             'string_defaults': ['cat 5', 'category 5'],
             'citations': [
                 {
-                    'text': None,
-                    'link': None
+                    'text': tr(
+                        'Displacement rate is a generalized estimate ('
+                        'personal communication Craig Arthur)'),
+                    'link': u'https://github.com/inasafe/inasafe/issues/3762'
+                            u'#issuecomment-283839365'
                 }
             ]
         },
@@ -1431,7 +1434,7 @@ cyclone_au_bom_hazard_classes = {
                 'correspond to the highest category on the Beaufort scale, '
                 'Beaufort 12 (Hurricane).'
             ),
-            'displacement_rate': 0.0,
+            'displacement_rate': 0.97,
             'numeric_default_min': {
                 unit_knots['key']: 85,
                 unit_metres_per_second['key']: 44,
@@ -1447,8 +1450,11 @@ cyclone_au_bom_hazard_classes = {
             'string_defaults': ['cat 4', 'category 4'],
             'citations': [
                 {
-                    'text': None,
-                    'link': None
+                    'text': tr(
+                        'Displacement rate is a generalized estimate ('
+                        'personal communication Craig Arthur)'),
+                    'link': u'https://github.com/inasafe/inasafe/issues/3762'
+                            u'#issuecomment-283839365'
                 }
             ]
         },
@@ -1465,7 +1471,7 @@ cyclone_au_bom_hazard_classes = {
                 'open flat land of 90 - 121 kt. These winds correspond to the '
                 'highest category on the Beaufort scale, Beaufort 12 ('
                 'Hurricane).'),
-            'displacement_rate': 0.0,
+            'displacement_rate': 0.55,
             'numeric_default_min': {
                 unit_knots['key']: 63,
                 unit_metres_per_second['key']: 33,
@@ -1481,8 +1487,11 @@ cyclone_au_bom_hazard_classes = {
             'string_defaults': ['cat 3', 'category 3'],
             'citations': [
                 {
-                    'text': None,
-                    'link': None
+                    'text': tr(
+                        'Displacement rate is a generalized estimate ('
+                        'personal communication Craig Arthur)'),
+                    'link': u'https://github.com/inasafe/inasafe/issues/3762'
+                            u'#issuecomment-283839365'
                 }
             ]
         },
@@ -1500,7 +1509,7 @@ cyclone_au_bom_hazard_classes = {
                 'typical gusts over open flat land of 68 - 89 kt. '
                 'These winds correspond to Beaufort 10 and 11 (Storm '
                 'and violent storm).'),
-            'displacement_rate': 0.0,
+            'displacement_rate': 0.06,
             'numeric_default_min': {
                 unit_knots['key']: 47,
                 unit_metres_per_second['key']: 24,
@@ -1516,8 +1525,11 @@ cyclone_au_bom_hazard_classes = {
             'string_defaults': ['cat 2', 'category 2'],
             'citations': [
                 {
-                    'text': None,
-                    'link': None
+                    'text': tr(
+                        'Displacement rate is a generalized estimate ('
+                        'personal communication Craig Arthur)'),
+                    'link': u'https://github.com/inasafe/inasafe/issues/3762'
+                            u'#issuecomment-283839365'
                 }
             ]
         },
@@ -1549,8 +1561,11 @@ cyclone_au_bom_hazard_classes = {
             'string_defaults': ['cat 1', 'category 1'],
             'citations': [
                 {
-                    'text': None,
-                    'link': None
+                    'text': tr(
+                        'Displacement rate is a generalized estimate ('
+                        'personal communication Craig Arthur)'),
+                    'link': u'https://github.com/inasafe/inasafe/issues/3762'
+                            u'#issuecomment-283839365'
                 }
             ]
         },
@@ -1575,8 +1590,11 @@ cyclone_au_bom_hazard_classes = {
             'string_defaults': ['tropical depression', 'no', 'false'],
             'citations': [
                 {
-                    'text': None,
-                    'link': None
+                    'text': tr(
+                        'Displacement rate is a generalized estimate ('
+                        'personal communication Craig Arthur)'),
+                    'link': u'https://github.com/inasafe/inasafe/issues/3762'
+                            u'#issuecomment-283839365'
                 }
             ]
         },
@@ -1631,7 +1649,7 @@ cyclone_sshws_hazard_classes = {
                 'possibly months. Most of the area will be uninhabitable for '
                 'weeks or months.'
             ),
-            'displacement_rate': 0.0,
+            'displacement_rate': 1.0,
             'numeric_default_min': {
                 unit_knots['key']: 136,
                 unit_metres_per_second['key']: 70,
@@ -1642,8 +1660,11 @@ cyclone_sshws_hazard_classes = {
             'string_defaults': ['cat 5', 'category 5'],
             'citations': [
                 {
-                    'text': None,
-                    'link': None
+                    'text': tr(
+                        'Displacement rate is a generalized estimate ('
+                        'personal communication Craig Arthur)'),
+                    'link': u'https://github.com/inasafe/inasafe/issues/3762'
+                            u'#issuecomment-283839365'
                 }
             ]
         },
@@ -1662,7 +1683,7 @@ cyclone_sshws_hazard_classes = {
                 'outages will last weeks to possibly months. Most of the '
                 'area will be uninhabitable for weeks or months.'
             ),
-            'displacement_rate': 0.0,
+            'displacement_rate': 0.97,
             'numeric_default_min': {
                 unit_knots['key']: 112,
                 unit_metres_per_second['key']: 58,
@@ -1678,8 +1699,11 @@ cyclone_sshws_hazard_classes = {
             'string_defaults': ['cat 4', 'category 4'],
             'citations': [
                 {
-                    'text': None,
-                    'link': None
+                    'text': tr(
+                        'Displacement rate is a generalized estimate ('
+                        'personal communication Craig Arthur)'),
+                    'link': u'https://github.com/inasafe/inasafe/issues/3762'
+                            u'#issuecomment-283839365'
                 }
             ]
         },
@@ -1696,7 +1720,7 @@ cyclone_sshws_hazard_classes = {
                 'blocking numerous roads. Electricity and water will be '
                 'unavailable for several days to weeks after the storm '
                 'passes.'),
-            'displacement_rate': 0.0,
+            'displacement_rate': 0.55,
             'numeric_default_min': {
                 unit_knots['key']: 95,
                 unit_metres_per_second['key']: 50,
@@ -1712,8 +1736,11 @@ cyclone_sshws_hazard_classes = {
             'string_defaults': ['cat 3', 'category 3'],
             'citations': [
                 {
-                    'text': None,
-                    'link': None
+                    'text': tr(
+                        'Displacement rate is a generalized estimate ('
+                        'personal communication Craig Arthur)'),
+                    'link': u'https://github.com/inasafe/inasafe/issues/3762'
+                            u'#issuecomment-283839365'
                 }
             ]
         },
@@ -1730,7 +1757,7 @@ cyclone_sshws_hazard_classes = {
                 'snapped or uprooted and block numerous roads. Near-total '
                 'power loss is expected with outages that could last from '
                 'several days to weeks.'),
-            'displacement_rate': 0.0,
+            'displacement_rate': 0.06,
             'numeric_default_min': {
                 unit_knots['key']: 82,
                 unit_metres_per_second['key']: 42,
@@ -1746,8 +1773,11 @@ cyclone_sshws_hazard_classes = {
             'string_defaults': ['cat 2', 'category 2'],
             'citations': [
                 {
-                    'text': None,
-                    'link': None
+                    'text': tr(
+                        'Displacement rate is a generalized estimate ('
+                        'personal communication Craig Arthur)'),
+                    'link': u'https://github.com/inasafe/inasafe/issues/3762'
+                            u'#issuecomment-283839365'
                 }
             ]
         },
@@ -1780,8 +1810,11 @@ cyclone_sshws_hazard_classes = {
             'string_defaults': ['cat 1', 'category 1'],
             'citations': [
                 {
-                    'text': None,
-                    'link': None
+                    'text': tr(
+                        'Displacement rate is a generalized estimate ('
+                        'personal communication Craig Arthur)'),
+                    'link': u'https://github.com/inasafe/inasafe/issues/3762'
+                            u'#issuecomment-283839365'
                 }
             ]
         },
@@ -1803,8 +1836,11 @@ cyclone_sshws_hazard_classes = {
             'string_defaults': ['no', 'false'],
             'citations': [
                 {
-                    'text': None,
-                    'link': None
+                    'text': tr(
+                        'Displacement rate is a generalized estimate ('
+                        'personal communication Craig Arthur)'),
+                    'link': u'https://github.com/inasafe/inasafe/issues/3762'
+                            u'#issuecomment-283839365'
                 }
             ]
         },
