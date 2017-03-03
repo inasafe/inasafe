@@ -1,26 +1,3 @@
-services:
-    - docker
-
-env:
-  global:
-    - ON_TRAVIS=true
-    # - IMAGE=elpaso/qgis-testing-environment
-    # - IMAGE=boundlessgeo/qgis-testing-environment
-    - IMAGE=kartoza/qgis-testing
-
-  matrix:
-    # Tags from elpaso
-    # - QGIS_VERSION_TAG=release-2_8
-    # - QGIS_VERSION_TAG=release-2_14
-
-    # Tags from boundlessgeo
-    # - QGIS_VERSION_TAG=release # Current 2.14
-    # - QGIS_VERSION_TAG=master_2 # Current 2.17
-    # - QGIS_VERSION_TAG=master # Current 3.0
-
-    # Tags from kartoza
-    - QGIS_VERSION_TAG=boundlessgeo-2.14.7
-
 language: python
 
 cache:
@@ -46,18 +23,42 @@ addons:
       - python-software-properties
 
 before_install:
-  - docker pull ${IMAGE}:${QGIS_VERSION_TAG}
+  - sudo apt-get -qq -y update
 
 install:
+#  - sudo apt-get install -y software-properties-common
+#  - sudo add-apt-repository http://qgis.org/debian-ltr  # for QGIS LTR
+  - sudo add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable  # for QGIS
+  - sudo apt-get update
+  - sudo apt-get install -y --force-yes qgis python-qgis pyflakes python-scientific
+  - pip install coverage
+  - pip install nosexcover
+  - pip install nose
+  - pip install beautifulsoup
   - pip install --upgrade pip
   - pip install --upgrade pep8
-  - docker run -d --name qgis-testing-environment -v ${TRAVIS_BUILD_DIR}:/tests_directory -e ON_TRAVIS=${ON_TRAVIS} -e DISPLAY=:99 ${IMAGE}:${QGIS_VERSION_TAG}
-  - sleep 10
-  - docker exec -it qgis-testing-environment sh -c "qgis_setup.sh inasafe"
+  - pip install --upgrade pylint
+  - pip install scrutinizer-ocular
+  - echo "Checking out test data at" `date`
+  - make testdata
+
+before_script:
+  - echo "Build starting on " `date`
+  - export QGIS_PREFIX_PATH=/usr
+  - export PYTHONPATH=${QGIS_PREFIX_PATH}/share/qgis/python/:${QGIS_PREFIX_PATH}/share/qgis/python/plugins:`pwd`
+  - echo "PYTHONPATH:" $PYTHONPATH
+  - export LD_LIBRARY_PATH=${QGIS_PREFIX_PATH}/lib
+  - dpkg -s qgis | grep 'Version'
+  - echo "InaSAFE Headless configuration"
+  - export CELERY_ALWAYS_EAGER=True
+  - cp headless/celeryconfig_sample.py headless/celeryconfig.py
 
 script:
-  - docker exec -it qgis-testing-environment sh -c "qgis_testrunner.sh test_suite.test_package"
   - make pep8
+#  - make pylint  # disable it until we make it works in Travis.
+  - xvfb-run --server-args="-screen 0, 1024x768x24" nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe safe
+# disable below tests until we make headless works in Travis
+#  - xvfb-run --server-args="-screen 0, 1024x768x24" nosetests --with-id --verbose headless
 
 notifications:
   irc:
@@ -70,12 +71,10 @@ notifications:
       - https://webhooks.gitter.im/e/a021ad05fffeac7b0a92L
     on_success: change  # options: [always|never|change] default: always
     on_failure: always  # options: [always|never|change] default: always
-    on_start: always    # options: [always|never|change] default: always
+    on_start: always     # options: [always|never|change] default: always
 
   email:
     - tim@kartoza.com
     - ismail@kartoza.com
     - rizky@kartoza.com
     - etienne@kartoza.com
-
-sudo: false
