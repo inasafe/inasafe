@@ -179,7 +179,7 @@
             <gco:Boolean/>
           </multipart_polygon>
           <thresholds>
-            <gco:Dictionary></gco:Dictionary>
+            <gco:Dictionary>{&quot;road&quot;: {&quot;earthquake_mmi_scale&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;IX&quot;: [8.5, 9.5], &quot;I&quot;: [0.5, 1.5], &quot;VI&quot;: [5.5, 6.5], &quot;VII&quot;: [6.5, 7.5], &quot;IV&quot;: [3.5, 4.5], &quot;II&quot;: [1.5, 2.5], &quot;VIII&quot;: [7.5, 8.5], &quot;V&quot;: [4.5, 5.5], &quot;X&quot;: [9.5, 10.5], &quot;III&quot;: [2.5, 3.5]}}}, &quot;structure&quot;: {&quot;earthquake_mmi_scale&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;IX&quot;: [8.5, 9.5], &quot;I&quot;: [0.5, 1.5], &quot;VI&quot;: [5.5, 6.5], &quot;VII&quot;: [6.5, 7.5], &quot;IV&quot;: [3.5, 4.5], &quot;II&quot;: [1.5, 2.5], &quot;VIII&quot;: [7.5, 8.5], &quot;V&quot;: [4.5, 5.5], &quot;X&quot;: [9.5, 10.5], &quot;III&quot;: [2.5, 3.5]}}}, &quot;population&quot;: {&quot;earthquake_mmi_scale&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;IX&quot;: [8.5, 9.5], &quot;I&quot;: [0.5, 1.5], &quot;VI&quot;: [5.5, 6.5], &quot;VII&quot;: [6.5, 7.5], &quot;IV&quot;: [3.5, 4.5], &quot;II&quot;: [1.5, 2.5], &quot;VIII&quot;: [7.5, 8.5], &quot;V&quot;: [4.5, 5.5], &quot;X&quot;: [9.5, 10.5], &quot;III&quot;: [2.5, 3.5]}}}}</gco:Dictionary>
           </thresholds>
           <continuous_hazard_unit>
             <gco:CharacterString>mmi</gco:CharacterString>
