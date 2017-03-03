@@ -38,16 +38,16 @@ install:
   # - wget -O - http://qgis.org/downloads/qgis-2016.gpg.key | gpg --import gpg --fingerprint 073D307A618E5811
   - sudo apt-get update
   - sudo apt-get install -y --force-yes qgis python-qgis xvfb pyflakes python-scientific
-  - pip install coverage
-  - pip install nosexcover
-  - pip install nose
-  - pip install beautifulsoup
-  - pip install --upgrade pip
-  - pip install --upgrade pep8
-  - pip install --upgrade pylint
-  - pip install scrutinizer-ocular
-  - echo "Checking out test data at" `date`
-  - make testdata
+  - sudo pip install coverage
+  - sudo pip install nosexcover
+  - sudo pip install nose
+  - sudo pip install beautifulsoup
+  - sudo pip install --upgrade pip
+  - sudo pip install --upgrade pep8
+  - sudo pip install --upgrade pylint
+  - sudo pip install scrutinizer-ocular
+  # - echo "Checking out test data at" `date`
+  # - make testdata
 
 before_script:
   - echo "Build starting on " `date`
