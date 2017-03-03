@@ -210,7 +210,8 @@ analysis_detail_component = {
         'breakdown_header_type_format': tr('{exposure} type'),
         'breakdown_header_class_format': tr('{exposure} class'),
         'header': tr('Analysis Detail'),
-        'table_header_format': tr('Estimated {title} by {exposure} type'),
+        'table_header_format': tr(
+            'Estimated {title} {unit} by {exposure} type'),
         'notes': tr(
             'Columns and rows containing only 0 or "No data" values are '
             'excluded from the tables.')
@@ -244,6 +245,10 @@ notes_assumptions_component = {
                 'bullet-list-section.html',
     'extra_args': {
         'header': tr('Notes and assumptions'),
+        'affected_note_format': tr(
+            'Exposures in this following hazard classes are considered '
+            'affected: {hazard_classes}'
+        ),
         'displacement_rates_note_format': tr(
             'For this analysis, the following displacement rates were used: '
             '{rate_description}'),
@@ -288,6 +293,8 @@ aggregation_result_component = {
         'notes': tr(
             'Columns and rows containing only 0 or "No data" values are '
             'excluded from the tables.'),
+        'table_header_format': tr(
+            'Estimated {title} {unit} by aggregation area'),
         'aggregation_area_default_header': tr('Aggregation area'),
         'total_header': tr('Total'),
         'total_in_aggregation_header': tr('Total'),

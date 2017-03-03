@@ -29,6 +29,7 @@ class TestReclassifyRaster(unittest.TestCase):
         """Test we can do zonal statistics."""
         raster = load_test_raster_layer(
             'exposure', 'pop_binary_raster_20_20.asc')
+        raster.keywords['inasafe_default_values'] = {}
         vector = load_test_vector_layer(
             'aggregation', 'grid_jakarta_4326.geojson')
 

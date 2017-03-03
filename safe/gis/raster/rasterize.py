@@ -12,7 +12,7 @@ from safe.common.utilities import unique_filename, which
 from safe.datastore.folder import Folder
 from safe.definitions.fields import aggregation_id_field
 from safe.definitions.processing_steps import rasterize_steps
-from safe.definitions.layer_purposes import layer_purpose_aggregation_impacted
+from safe.definitions.layer_purposes import layer_purpose_aggregation_summary
 from safe.gis.sanity_check import check_layer
 from safe.utilities.profiling import profile
 
@@ -113,7 +113,7 @@ def rasterize_vector_layer(layer, width, height, extent):
     layer_aligned.keywords['title'] = (
         rasterize_steps['output_layer_name'] % 'aggregation')
     layer_aligned.keywords['layer_purpose'] = (
-        layer_purpose_aggregation_impacted['key'])
+        layer_purpose_aggregation_summary['key'])
     del layer_aligned.keywords['inasafe_fields']
 
     check_layer(layer_aligned)

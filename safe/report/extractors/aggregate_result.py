@@ -1,5 +1,6 @@
 # coding=utf-8
-from safe.definitions.exposure import exposure_all, exposure_population
+"""Module used to generate context for aggregation result section."""
+from safe.definitions.exposure import exposure_all
 from safe.definitions.fields import (
     affected_exposure_count_field,
     aggregation_name_field,
@@ -32,6 +33,8 @@ def aggregation_result_extractor(impact_report, component_metadata):
 
     :return: context for rendering phase
     :rtype: dict
+
+    .. versionadded:: 4.0
     """
     context = {}
 
@@ -41,12 +44,13 @@ def aggregation_result_extractor(impact_report, component_metadata):
     # Find out aggregation report type
     exposure_layer = impact_report.exposure
     analysis_layer = impact_report.analysis
-    exposure_breakdown = impact_report.exposure_breakdown
-    if exposure_breakdown:
-        exposure_breakdown_fields = exposure_breakdown.keywords[
+    provenance = impact_report.impact_function.provenance
+    exposure_summary_table = impact_report.exposure_summary_table
+    if exposure_summary_table:
+        exposure_summary_table_fields = exposure_summary_table.keywords[
             'inasafe_fields']
-    aggregation_impacted = impact_report.aggregation_impacted
-    aggregation_impacted_fields = aggregation_impacted.keywords[
+    aggregation_summary = impact_report.aggregation_summary
+    aggregation_summary_fields = aggregation_summary.keywords[
         'inasafe_fields']
     debug_mode = impact_report.impact_function.debug_mode
 
@@ -58,7 +62,6 @@ def aggregation_result_extractor(impact_report, component_metadata):
     # Only round the number when it is population exposure and it is not
     # in debug mode
     is_rounded = not debug_mode
-    use_population_rounding = exposure_type == exposure_population
 
     # For now aggregation report only applicable for breakable exposure types:
     itemizable_exposures_all = [
@@ -70,7 +73,7 @@ def aggregation_result_extractor(impact_report, component_metadata):
     """Generating type name for columns"""
 
     type_fields = read_dynamic_inasafe_field(
-        aggregation_impacted_fields, affected_exposure_count_field)
+        aggregation_summary_fields, affected_exposure_count_field)
     # do not include total, to preserve ordering and proper reference
     type_fields.remove('total')
 
@@ -84,18 +87,18 @@ def aggregation_result_extractor(impact_report, component_metadata):
 
     # generate rows of values for values of each column
     rows = []
-    aggregation_name_index = aggregation_impacted.fieldNameIndex(
+    aggregation_name_index = aggregation_summary.fieldNameIndex(
         aggregation_name_field['field_name'])
-    total_field_index = aggregation_impacted.fieldNameIndex(
+    total_field_index = aggregation_summary.fieldNameIndex(
         total_affected_field['field_name'])
 
     type_field_index = []
     for type_name in type_fields:
         field_name = affected_exposure_count_field['field_name'] % type_name
-        type_index = aggregation_impacted.fieldNameIndex(field_name)
+        type_index = aggregation_summary.fieldNameIndex(field_name)
         type_field_index.append(type_index)
 
-    for feat in aggregation_impacted.getFeatures():
+    for feat in aggregation_summary.getFeatures():
         total_affected_value = format_number(
             feat[total_field_index],
             enable_rounding=is_rounded)
@@ -120,10 +123,10 @@ def aggregation_result_extractor(impact_report, component_metadata):
 
     """Generate total for footers"""
 
-    # calculate total values for each type. Taken from exposure breakdown
+    # calculate total values for each type. Taken from exposure summary table
     type_total_values = []
     # Get affected field index
-    affected_field_index = exposure_breakdown.fieldNameIndex(
+    affected_field_index = exposure_summary_table.fieldNameIndex(
         total_affected_field['field_name'])
 
     # Get breakdown field
@@ -136,18 +139,18 @@ def aggregation_result_extractor(impact_report, component_metadata):
         exposure_class_field
     ]
     for field in breakdown_fields:
-        if field['key'] in exposure_breakdown_fields:
+        if field['key'] in exposure_summary_table_fields:
             breakdown_field = field
             break
     breakdown_field_name = breakdown_field['field_name']
-    breakdown_field_index = exposure_breakdown.fieldNameIndex(
+    breakdown_field_index = exposure_summary_table.fieldNameIndex(
         breakdown_field_name)
 
     # Fetch total affected for each breakdown name
     value_dict = {}
-    for feat in exposure_breakdown.getFeatures():
-        # exposure breakdown is in csv format, so the field returned is always
-        # in text format
+    for feat in exposure_summary_table.getFeatures():
+        # exposure summary table is in csv format, so the field returned is
+        # always in text format
         affected_value = int(float(feat[affected_field_index]))
         affected_value = format_number(
             affected_value,
@@ -188,7 +191,27 @@ def aggregation_result_extractor(impact_report, component_metadata):
     aggregation_area_default_header = resolve_from_dictionary(
         extra_args, 'aggregation_area_default_header')
     header_label = (
-        aggregation_impacted.title() or aggregation_area_default_header)
+        aggregation_summary.title() or aggregation_area_default_header)
+
+    table_header_format = resolve_from_dictionary(
+        extra_args, 'table_header_format')
+
+    # check unit
+    units = exposure_type['units']
+    if units:
+        unit = units[0]
+        abbreviation = unit['abbreviation']
+        if abbreviation:
+            unit_string = '({abbreviation})'.format(abbreviation=abbreviation)
+        else:
+            unit_string = ''
+    else:
+        unit_string = ''
+
+    table_header = table_header_format.format(
+        title=provenance['map_legend_title'],
+        unit=unit_string)
+    table_header = ' '.join(table_header.split())
 
     section_header = resolve_from_dictionary(extra_args, 'header')
     notes = resolve_from_dictionary(extra_args, 'notes')
@@ -198,6 +221,7 @@ def aggregation_result_extractor(impact_report, component_metadata):
     context['header'] = section_header
     context['notes'] = notes
     context['aggregation_result'] = {
+        'table_header': table_header,
         'header_label': header_label,
         'type_header_labels': type_header_labels,
         'total_label': total_header,

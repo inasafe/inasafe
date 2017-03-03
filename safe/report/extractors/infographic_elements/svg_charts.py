@@ -1,5 +1,6 @@
 # coding=utf-8
 """Module to generate context for SVG Chart.
+
 This context then used for SVG Jinja2 generation.
 """
 import math
@@ -12,13 +13,18 @@ __revision__ = '$Format:%H$'
 
 class SVGChartContext(object):
 
-    """Context to hold information to generate SVG."""
+    """Context to hold information to generate SVG.
+
+    .. versionadded:: 4.0
+    """
 
     def __init__(self, as_file=False):
         """Hold context for SVG generation.
 
         :param as_file: Information to generate the svg as file
         :type as_file: bool
+
+        .. versionadded:: 4.0
         """
         self._as_file = as_file
 
@@ -33,7 +39,7 @@ class SVGChartContext(object):
 
     @as_file.setter
     def as_file(self, value):
-        """Setter for as_file property
+        """Setter for as_file property.
 
         :param value: boolean value
         :type value: bool
@@ -63,7 +69,10 @@ class SVGChartContext(object):
 
 class DonutChartContext(SVGChartContext):
 
-    """Context to hold information to generate donut chart."""
+    """Context to hold information to generate donut chart.
+
+    .. versionadded:: 4.0
+    """
 
     DEFAULT_RADIUS = 128
 
@@ -111,7 +120,7 @@ class DonutChartContext(SVGChartContext):
             python 3 style
         :type thousand_separator_format: str
 
-        :param
+        .. versionadded:: 4.0
         """
         super(DonutChartContext, self).__init__(as_file=as_file)
         self._data = data
@@ -144,6 +153,7 @@ class DonutChartContext(SVGChartContext):
     @property
     def inner_radius_ratio(self):
         """Ratio of how big the inner radius is.
+
         Used to create donut chart
 
         :return: Ratio value [0,1]
@@ -154,6 +164,7 @@ class DonutChartContext(SVGChartContext):
     @property
     def stroke_color(self):
         """Stroke color when drawing slices.
+
         Color represented as hex string
 
         :return: Color hex
@@ -182,6 +193,7 @@ class DonutChartContext(SVGChartContext):
     @property
     def thousand_separator_format(self):
         """Thousand separator format in Python 3 style.
+
         Default value is '{0:,}'
 
         :return: python string format
@@ -249,6 +261,8 @@ class DonutChartContext(SVGChartContext):
 
         :return: list of dictionary
         :rtype: list[dict]
+
+        .. versionadded:: 4.0
         """
         labels = self.labels
         values = self.data

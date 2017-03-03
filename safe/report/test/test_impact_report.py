@@ -1,5 +1,5 @@
 # coding=utf-8
-"""Test Impact Report."""
+"""Unittest for Impact Report generation."""
 
 import io
 import os
@@ -23,10 +23,6 @@ from safe.test.utilities import (
     get_qgis_app,
     load_test_vector_layer,
     load_test_raster_layer)
-
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-
-from qgis.core import QgsMapLayerRegistry
 from safe.definitions.reports.components import (
     report_a4_blue,
     standard_impact_report_metadata_html,
@@ -41,6 +37,10 @@ from safe.definitions.reports.components import (
     population_infographic_component)
 from safe.report.impact_report import ImpactReport
 
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
+from qgis.core import QgsMapLayerRegistry
+
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
@@ -48,16 +48,22 @@ __revision__ = ':%H$'
 
 
 class TestImpactReport(unittest.TestCase):
-    """Test Impact Report."""
+
+    """Test Impact Report.
+
+    .. versionadded:: 4.0
+    """
 
     maxDiff = None
 
     @classmethod
     def fixtures_dir(cls, path):
+        """Helper to return fixture path."""
         directory_name = os.path.dirname(__file__)
         return os.path.join(directory_name, 'fixtures', path)
 
-    def assertCompareFileControl(self, control_path, actual_path):
+    def assert_compare_file_control(self, control_path, actual_path):
+        """Helper to compare file."""
         current_directory = safe_dir(sub_dir='../resources')
         context = {
             'current_directory': current_directory
@@ -72,6 +78,7 @@ class TestImpactReport(unittest.TestCase):
             self.assertEquals(control_string, actual_string)
 
     def setUp(self):
+        """Executed before test method."""
         self.maxDiff = None
         # change displacement rate so the result is easily distinguished
         self.default_displacement_rate = flood_hazard_classes['classes'][0][
@@ -80,13 +87,16 @@ class TestImpactReport(unittest.TestCase):
             'displacement_rate'] = 0.90
 
     def tearDown(self):
+        """Executed after test method."""
         # restore displacement rate
         flood_hazard_classes['classes'][0][
             'displacement_rate'] = self.default_displacement_rate
 
     def test_general_report_from_impact_function(self):
-        """Test generate analysis result from impact function."""
+        """Test generate analysis result from impact function.
 
+        .. versionadded:: 4.0
+        """
         output_folder = self.fixtures_dir('../output/general_report')
 
         # Classified vector with building-points
@@ -259,7 +269,10 @@ class TestImpactReport(unittest.TestCase):
         shutil.rmtree(output_folder, ignore_errors=True)
 
     def test_analysis_detail(self):
-        """Test generate analysis breakdown and aggregation report."""
+        """Test generate analysis breakdown and aggregation report.
+
+        .. versionadded:: 4.0
+        """
         output_folder = self.fixtures_dir('../output/analysis_detail')
 
         # Classified vector with buildings
@@ -432,6 +445,8 @@ class TestImpactReport(unittest.TestCase):
             'notes': u'Columns and rows containing only 0 or "No data" '
                      u'values are excluded from the tables.',
             'aggregation_result': {
+                'table_header': u'Estimated Number of buildings by '
+                                u'aggregation area',
                 'header_label': u'Aggregation area',
                 'rows': [
                     {
@@ -480,7 +495,10 @@ class TestImpactReport(unittest.TestCase):
         shutil.rmtree(output_folder, ignore_errors=True)
 
     def test_minimum_needs_outputs(self):
-        """Test generate minimum needs section."""
+        """Test generate minimum needs section.
+
+        .. versionadded:: 4.0
+        """
         output_folder = self.fixtures_dir('../output/minimum_needs')
         shutil.rmtree(output_folder, ignore_errors=True)
 
@@ -586,6 +604,8 @@ class TestImpactReport(unittest.TestCase):
         """Test generate aggregation area results.
 
         This test should not handle postprocessors (covered in other tests).
+
+        .. versionadded:: 4.0
         """
         output_folder = self.fixtures_dir(
             '../output/aggregation_entire_area_result')
@@ -629,6 +649,8 @@ class TestImpactReport(unittest.TestCase):
 
         expected_context = {
             'aggregation_result': {
+                'table_header': u'Estimated Number of buildings by '
+                                u'aggregation area',
                 'header_label': u'Aggregation area',
                 'rows': [
                     {
@@ -675,6 +697,8 @@ class TestImpactReport(unittest.TestCase):
         """Test generate aggregation area results.
 
         This test should not handle postprocessors (covered in other tests).
+
+        .. versionadded:: 4.0
         """
         output_folder = self.fixtures_dir(
             '../output/aggregation_area_result')
@@ -720,6 +744,8 @@ class TestImpactReport(unittest.TestCase):
 
         expected_context = {
             'aggregation_result': {
+                'table_header': u'Estimated Number of buildings by '
+                                u'aggregation area',
                 'header_label': u'Aggregation area',
                 'rows': [
                     {
@@ -778,8 +804,10 @@ class TestImpactReport(unittest.TestCase):
         shutil.rmtree(output_folder, ignore_errors=True)
 
     def test_aggregate_post_processors_vector(self):
-        """Test generate aggregate postprocessors sections."""
+        """Test generate aggregate postprocessors sections.
 
+        .. versionadded:: 4.0
+        """
         output_folder = self.fixtures_dir(
             '../output/aggregate_post_processors')
         shutil.rmtree(output_folder, ignore_errors=True)
@@ -913,8 +941,9 @@ class TestImpactReport(unittest.TestCase):
 
         This test is not using actual displacement rate in order to
         distinguish the result more clearly.
-        """
 
+        .. versionadded:: 4.0
+        """
         output_folder = self.fixtures_dir(
             '../output/aggregate_post_processors')
         shutil.rmtree(output_folder, ignore_errors=True)
@@ -1037,6 +1066,8 @@ class TestImpactReport(unittest.TestCase):
 
         This test is not using actual displacement rate in order to
         distinguish the result more clearly.
+
+        .. versionadded:: 4.0
         """
         output_folder = self.fixtures_dir(
             '../output/population_infographic')
@@ -1131,7 +1162,7 @@ class TestImpactReport(unittest.TestCase):
                 {
                     'header': u'Youth',
                     'number': '10',
-                    'percentage': '26.3',
+                    'percentage': '21.1',
                 },
                 {
                     'header': u'Adult',
@@ -1218,8 +1249,10 @@ class TestImpactReport(unittest.TestCase):
         shutil.rmtree(output_folder, ignore_errors=True)
 
     def test_qgis_html_pdf_report(self):
-        """Test generate analysis breakdown and aggregation report."""
+        """Test generate analysis breakdown and aggregation report.
 
+        .. versionadded:: 4.0
+        """
         output_folder = self.fixtures_dir('../output/impact_summary_pdf')
 
         # Classified vector with buildings
@@ -1263,8 +1296,10 @@ class TestImpactReport(unittest.TestCase):
         shutil.rmtree(output_folder, ignore_errors=True)
 
     def test_qgis_map_pdf_report(self):
-        """Test generate analysis map report."""
+        """Test generate analysis map report.
 
+        .. versionadded:: 4.0
+        """
         output_folder = self.fixtures_dir('../output/impact_map_pdf')
 
         # Classified vector with buildings

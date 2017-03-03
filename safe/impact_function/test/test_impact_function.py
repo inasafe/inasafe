@@ -15,8 +15,11 @@ from os.path import join, isfile
 from os import listdir
 
 from safe.definitions.fields import (
+    exposure_type_field,
     female_ratio_field,
     female_count_field,
+    youth_ratio_field,
+    adult_ratio_field,
     elderly_ratio_field,
     female_displaced_count_field,
     youth_displaced_count_field,
@@ -58,7 +61,6 @@ from qgis.core import (
 from osgeo import gdal
 from PyQt4.QtCore import QT_VERSION_STR
 from PyQt4.Qt import PYQT_VERSION_STR
-from safe.definitions.fields import exposure_type_field
 from safe.definitions.post_processors import (
     post_processor_gender,
     post_processor_youth,
@@ -422,12 +424,13 @@ class TestImpactFunction(unittest.TestCase):
 
         impact = impact_function.impact
 
-        # Check that we don't have only one unique value.
+        # Check that we have only one unique value since the ratio for all
+        # female is the same
         field = impact.fieldNameIndex(
             female_ratio_field['field_name'])
         self.assertNotEqual(-1, field)
         unique_ratio = impact.uniqueValues(field)
-        self.assertNotEqual(1, len(unique_ratio))
+        self.assertEqual(1, len(unique_ratio))
 
     def test_ratios_with_raster_exposure(self):
         """Test if we can add defaults to a raster exposure.
@@ -490,6 +493,56 @@ class TestImpactFunction(unittest.TestCase):
             female_displaced_count_field['field_name'])
         value = analysis.uniqueValues(index)[0]
         self.assertGreater(value, 0)
+
+        # Let do another test with the special aggregation layer
+        hazard_layer = load_test_vector_layer(
+            'gisv4', 'hazard', 'tsunami_vector.geojson')
+        exposure_layer = load_test_raster_layer(
+            'gisv4', 'exposure', 'raster', 'population.asc')
+
+        aggregation_layer = load_test_vector_layer(
+            'gisv4', 'aggregation', 'small_grid_ratios.geojson')
+        # This aggregation layer has :
+        # * a field for female ratio : 1, 0.5 and 0
+        # * use global default for youth ratio
+        # * do not ust for adult ratio
+        # * use custom 0.75 for elderly ratio
+
+        # Set up impact function
+        impact_function = ImpactFunction()
+        impact_function.debug_mode = True
+        impact_function.exposure = exposure_layer
+        impact_function.hazard = hazard_layer
+        impact_function.aggregation = aggregation_layer
+        status, message = impact_function.prepare()
+        self.assertEqual(PREPARE_SUCCESS, status, message)
+        status, message = impact_function.run()
+        self.assertEqual(ANALYSIS_SUCCESS, status, message)
+
+        impact = impact_function.impact
+
+        # We should have a female_ratio with many values
+        index = impact.fieldNameIndex(female_ratio_field['field_name'])
+        self.assertNotEqual(-1, index)
+        values = impact.uniqueValues(index)
+        self.assertEqual(3, len(values))
+
+        # We should have a youth_ratio with global default
+        index = impact.fieldNameIndex(youth_ratio_field['field_name'])
+        self.assertNotEqual(-1, index)
+        values = impact.uniqueValues(index)
+        self.assertEqual(1, len(values))
+
+        # We should not have an adult_ratio
+        index = impact.fieldNameIndex(adult_ratio_field['field_name'])
+        self.assertEqual(-1, index)
+
+        # We should have a elderly_ratio = 0.75
+        index = impact.fieldNameIndex(elderly_ratio_field['field_name'])
+        self.assertNotEqual(-1, index)
+        values = impact.uniqueValues(index)
+        self.assertEqual(1, len(values))
+        self.assertEqual(0.75, values[0])
 
     def test_profiling(self):
         """Test running impact function on test data."""

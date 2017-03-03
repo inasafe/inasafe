@@ -412,7 +412,7 @@ class KeywordIO(QObject):
         # if possible. TS
         keyword_definition = definition(keyword)
         if keyword_definition is None:
-            keyword_definition = self.tr(keyword.capitalize().replace(
+            keyword_definition = tr(keyword.capitalize().replace(
                 '_', ' '))
         else:
             try:
@@ -636,7 +636,10 @@ class KeywordIO(QObject):
         for key, value in keyword_value.items():
             row = m.Row()
             # First the heading
-            name = definition(key)['name'] if definition(key) else key
+            if definition(key):
+                name = definition(key)['name']
+            else:
+                name = tr(key.capitalize())
             row.add(m.Cell(m.ImportantText(name)))
             # Then the value. If it contains more than one element we
             # present it as a bullet list, otherwise just as simple text

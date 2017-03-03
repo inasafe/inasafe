@@ -47,7 +47,7 @@
       <gmd:citation>
         <gmd:CI_Citation>
           <gmd:title>
-            <gco:CharacterString>exposure_impacted</gco:CharacterString>
+            <gco:CharacterString>exposure_summary</gco:CharacterString>
           </gmd:title>
           <gmd:date>
             <gmd:CI_Date>
@@ -227,7 +227,7 @@
             <gco:CharacterString/>
           </report>
           <exposure_keywords>
-            <gco:Dictionary>{&quot;license&quot;: &quot;Open Data Commons Open Database License (ODbL)&quot;, &quot;classification&quot;: &quot;generic_structure_classes&quot;, &quot;keyword_version&quot;: &quot;4.0&quot;, &quot;url&quot;: &quot;www.openstreetmap.org&quot;, &quot;title&quot;: &quot;exposure_value_mapped&quot;, &quot;source&quot;: &quot;OpenStreetMap - www.openstreetmap.org&quot;, &quot;inasafe_fields&quot;: &quot;{\&quot;size_field\&quot;: \&quot;size\&quot;, \&quot;female_ratio_field\&quot;: \&quot;female_ratio\&quot;, \&quot;aggregation_id_field\&quot;: \&quot;aggregation_id\&quot;, \&quot;hazard_class_field\&quot;: \&quot;hazard_class\&quot;, \&quot;affected_field\&quot;: \&quot;affected\&quot;, \&quot;exposure_id_field\&quot;: \&quot;exposure_id\&quot;, \&quot;hazard_id_field\&quot;: \&quot;hazard_id\&quot;, \&quot;exposure_class_field\&quot;: \&quot;exposure_class\&quot;, \&quot;aggregation_name_field\&quot;: \&quot;aggregation_name\&quot;}&quot;, &quot;layer_geometry&quot;: &quot;polygon&quot;, &quot;layer_purpose&quot;: &quot;exposure_impacted&quot;, &quot;layer_mode&quot;: &quot;classified&quot;, &quot;exposure&quot;: &quot;structure&quot;}</gco:Dictionary>
+            <gco:Dictionary>{&quot;license&quot;: &quot;Open Data Commons Open Database License (ODbL)&quot;, &quot;classification&quot;: &quot;generic_structure_classes&quot;, &quot;keyword_version&quot;: &quot;4.0&quot;, &quot;url&quot;: &quot;www.openstreetmap.org&quot;, &quot;title&quot;: &quot;exposure_value_mapped&quot;, &quot;source&quot;: &quot;OpenStreetMap - www.openstreetmap.org&quot;, &quot;inasafe_fields&quot;: &quot;{\&quot;size_field\&quot;: \&quot;size\&quot;, \&quot;female_ratio_field\&quot;: \&quot;female_ratio\&quot;, \&quot;aggregation_id_field\&quot;: \&quot;aggregation_id\&quot;, \&quot;hazard_class_field\&quot;: \&quot;hazard_class\&quot;, \&quot;affected_field\&quot;: \&quot;affected\&quot;, \&quot;exposure_id_field\&quot;: \&quot;exposure_id\&quot;, \&quot;hazard_id_field\&quot;: \&quot;hazard_id\&quot;, \&quot;exposure_class_field\&quot;: \&quot;exposure_class\&quot;, \&quot;aggregation_name_field\&quot;: \&quot;aggregation_name\&quot;}&quot;, &quot;layer_geometry&quot;: &quot;polygon&quot;, &quot;layer_purpose&quot;: &quot;exposure_summary&quot;, &quot;layer_mode&quot;: &quot;classified&quot;, &quot;exposure&quot;: &quot;structure&quot;}</gco:Dictionary>
           </exposure_keywords>
           <keyword_version>
             <gco:CharacterString>4.0</gco:CharacterString>
@@ -248,7 +248,7 @@
             <gco:CharacterString/>
           </host_name>
           <layer_purpose>
-            <gco:CharacterString>exposure_impacted</gco:CharacterString>
+            <gco:CharacterString>exposure_summary</gco:CharacterString>
           </layer_purpose>
           <provenance_data>
             <gco:Dictionary>{}</gco:Dictionary>
