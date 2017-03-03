@@ -29,6 +29,7 @@ from safe.gui.tools.wizard.wizard_step import (
     WizardStep, get_wizard_step_ui_class)
 from safe.utilities.gis import is_raster_layer
 from safe.definitions.utilities import (
+    definition,
     get_fields,
     get_non_compulsory_fields,
     default_classification_thresholds,
@@ -503,8 +504,27 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
 
         if self.layer_mode == layer_mode_continuous:
             output = {'thresholds': clean_state(self.thresholds)}
+            key = 'thresholds'
         else:
             output = {'value_maps': clean_state(self.value_maps)}
+            key = 'value_maps'
+
+        # Clean non existing hazard class key
+        empty_exposure_classifications = []
+        for the_exposure, the_hazard_classifications in output[key].items():
+            for the_hazard_classification in the_hazard_classifications.\
+                    keys():
+                invalid_classifications = []
+                if not definition(the_hazard_classification):
+                    invalid_classifications.append(
+                        the_hazard_classification)
+                for invalid_classification in invalid_classifications:
+                    the_hazard_classifications.pop(invalid_classification)
+            if not the_hazard_classifications:
+                empty_exposure_classifications.append(the_exposure)
+
+        for empty_exposure_classification in empty_exposure_classifications:
+            output[key].pop(empty_exposure_classification)
 
         return output
 
