@@ -18,12 +18,14 @@
                 <g class="slice">
                     <path class="surface" d="{{ slice.path }}" fill="{{ slice.fill }}" style="pointer-events: all; stroke-width: {{ slice.stroke.width }}; stroke: {{ slice.stroke }}; stroke-opacity: {{ slice.stroke_opacity }};" />
                 </g>
-                <text class="slice-value" text-anchor="middle" alignment-baseline="middle" x="{{ slice.center[0] }}" y="{{ slice.center[1] - 8 }}">
-                    {{ context.thousand_separator_format.format(slice.value|int) }}
-                </text>
-                <text class="slice-percentage" text-anchor="middle" alignment-baseline="middle" x="{{ slice.center[0] }}" y="{{ slice.center[1] + 8 }}">
-                    {{ '{0:.2f}%'.format(slice.percentage|float) }}
-                </text>
+                    {% if slice.show_label %}
+                    <text class="slice-value" text-anchor="middle" alignment-baseline="middle" x="{{ slice.center[0] }}" y="{{ slice.center[1] - 8 }}">
+                        {{ context.thousand_separator_format.format(slice.value|int) }}
+                    </text>
+                    <text class="slice-percentage" text-anchor="middle" alignment-baseline="middle" x="{{ slice.center[0] }}" y="{{ slice.center[1] + 8 }}">
+                        {{ '{0:.2f}%'.format(slice.percentage|float) }}
+                    </text>
+                    {% endif %}
                 {% endfor %}
             </g>
         </g>

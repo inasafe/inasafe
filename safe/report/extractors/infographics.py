@@ -14,14 +14,13 @@ from safe.definitions.fields import (
     exposure_count_field,
     analysis_name_field, displaced_field)
 from safe.definitions.minimum_needs import minimum_needs_fields
-from safe.definitions.post_processors import vulnerability_postprocessors
-from safe.definitions.utilities import postprocessor_output_field
 from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
 from safe.report.extractors.composer import QGISComposerContext
 from safe.report.extractors.util import (
     jinja2_output_as_string,
     value_from_field_name,
-    resolve_from_dictionary)
+    resolve_from_dictionary,
+    layer_hazard_classification)
 from safe.utilities.resources import resource_url, resources_path
 from safe.utilities.rounding import format_number
 
@@ -38,9 +37,10 @@ class PeopleInfographicElement(object):
     .. versionadded:: 4.0
     """
 
-    def __init__(self, header, icon, number):
+    def __init__(self, header, icon, number, header_note=None):
         """Create context holder for PeopleInfographicElement."""
         self._header = header
+        self._header_note = header_note
         self._icon = icon
         self._number = number
 
@@ -48,6 +48,11 @@ class PeopleInfographicElement(object):
     def header(self):
         """Header of the section."""
         return self._header
+
+    @property
+    def header_note(self):
+        """Note of the header"""
+        return self._header_note
 
     @property
     def icon(self):
@@ -123,6 +128,7 @@ def population_infographic_extractor(impact_report, component_metadata):
     extra_args = component_metadata.extra_args
 
     """Initializations"""
+    hazard_layer = impact_report.hazard
     analysis_layer = impact_report.analysis
     analysis_layer_fields = analysis_layer.keywords['inasafe_fields']
     icons = component_metadata.extra_args.get('icons')
@@ -168,27 +174,61 @@ def population_infographic_extractor(impact_report, component_metadata):
     # Take default value from definitions
     people_header = resolve_from_dictionary(
         extra_args, ['sections', 'people', 'header'])
+    people_items = resolve_from_dictionary(
+        extra_args, ['sections', 'people', 'items'])
+
+    # create context for affected infographic
     sub_header = resolve_from_dictionary(
-        extra_args, ['sections', 'people', 'sub_header'])
+        people_items[0], 'sub_header')
+
+    affected_infographic = PeopleInfographicElement(
+        header=sub_header,
+        icon=icons.get(
+            total_affected_field['key']),
+        number=total_affected)
+
+    # create context for displaced infographic
+    sub_header = resolve_from_dictionary(
+        people_items[1], 'sub_header')
+    sub_header_note_format = resolve_from_dictionary(
+        people_items[1], 'sub_header_note_format')
+    rate_description_format = resolve_from_dictionary(
+        people_items[1], 'rate_description_format')
+    rate_description = []
+
+    hazard_classification = layer_hazard_classification(hazard_layer)
+    for hazard_class in hazard_classification['classes']:
+        displacement_rate = hazard_class.get('displacement_rate', 0)
+        if displacement_rate:
+            rate_description.append(
+                rate_description_format.format(**hazard_class))
+
+    rate_description_string = ', '.join(rate_description)
+
+    sub_header_note = sub_header_note_format.format(
+        rate_description=rate_description_string)
+
+    displaced_infographic = PeopleInfographicElement(
+        header=sub_header,
+        header_note=sub_header_note,
+        icon=icons.get(
+            displaced_field['key']),
+        number=total_displaced)
 
     sections['people'] = {
         'header': people_header,
         'items': [
-            PeopleInfographicElement(
-                header=sub_header,
-                icon=icons.get(
-                    total_affected_field['key']),
-                number=total_affected
-            )
+            affected_infographic,
+            displaced_infographic
         ]
     }
 
     """Vulnerability Section"""
 
     # Take default value from definitions
-    vulnerability_headers = resolve_from_dictionary(
+    vulnerability_items = resolve_from_dictionary(
         extra_args,
-        ['sections', 'vulnerability', 'items', 'headers'])
+        ['sections', 'vulnerability', 'items'])
 
     vulnerability_section_header = resolve_from_dictionary(
         extra_args,
@@ -198,54 +238,52 @@ def population_infographic_extractor(impact_report, component_metadata):
         extra_args,
         ['sections', 'vulnerability', 'sub_header_format'])
 
-    vulnerability_fields = [
-        postprocessor_output_field(p) for p in vulnerability_postprocessors]
-
-    vulnerability_items = [
-        {
-            'field': field,
-            'header': header,
-        } for field, header in zip(
-            vulnerability_fields, vulnerability_headers)]
-
-    vulnerability_items = [
-        item for item in vulnerability_items
-        if item['field']['key'] in analysis_layer_fields]
-
     infographic_elements = []
-    for item in vulnerability_items:
-        field = item['field']
-        field_key = field['key']
-        header = item['header']
-        try:
-            field_name = analysis_layer_fields[field_key]
-            value = value_from_field_name(
-                field_name, analysis_layer)
-        except KeyError:
-            # It means the field is not there
-            value = 0
+    for group in vulnerability_items:
+        fields = group['fields']
+        group_header = group['sub_group_header']
+        bootstrap_column = group['bootstrap_column']
+        element_column = group['element_column']
+        headers = group['headers']
+        elements = []
+        for field, header in zip(fields, headers):
+            field_key = field['key']
+            try:
+                field_name = analysis_layer_fields[field_key]
+                value = value_from_field_name(
+                    field_name, analysis_layer)
+            except KeyError:
+                # It means the field is not there
+                continue
 
-        if value:
-            value_percentage = value * 100.0 / total_displaced
-        else:
-            value_percentage = 0
+            if value:
+                value_percentage = value * 100.0 / total_displaced
+            else:
+                value_percentage = 0
 
-        infographic_element = PeopleVulnerabilityInfographicElement(
-            header=header,
-            icon=icons.get(field_key),
-            number=value,
-            percentage=value_percentage
-        )
-        infographic_elements.append(infographic_element)
+            infographic_element = PeopleVulnerabilityInfographicElement(
+                header=header,
+                icon=icons.get(field_key),
+                number=value,
+                percentage=value_percentage
+            )
+            elements.append(infographic_element)
+        if elements:
+            infographic_elements.append({
+                'group_header': group_header,
+                'bootstrap_column': bootstrap_column,
+                'element_column': element_column,
+                'items': elements
+            })
 
-    total_affected_rounded = format_number(
-        total_affected,
+    total_displaced_rounded = format_number(
+        total_displaced,
         enable_rounding=True)
 
     sections['vulnerability'] = {
         'header': vulnerability_section_header,
         'small_header': vulnerability_section_sub_header_format.format(
-            number_affected=total_affected_rounded),
+            number_displaced=total_displaced_rounded),
         'items': infographic_elements
     }
 
@@ -314,7 +352,7 @@ def population_infographic_extractor(impact_report, component_metadata):
     sections['population_chart'] = {
         'img_path': population_donut_path,
         'context': population_chart_context,
-        'css_label_classes': css_class
+        'css_label_classes': css_label_classes
     }
 
     context['brand_logo'] = resource_url(
