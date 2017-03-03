@@ -179,7 +179,7 @@
             <gco:Boolean/>
           </multipart_polygon>
           <thresholds>
-            <gco:Dictionary>{&quot;road&quot;: {&quot;earthquake_mmi_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [8.0, 999999.0], &quot;medium&quot;: [7.0, 8.0], &quot;low&quot;: [6.0, 7.0]}}}, &quot;structure&quot;: {&quot;earthquake_mmi_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [8.0, 999999.0], &quot;medium&quot;: [7.0, 8.0], &quot;low&quot;: [6.0, 7.0]}}}, &quot;population&quot;: {&quot;earthquake_mmi_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [8, 9999999999], &quot;medium&quot;: [7, 8.0], &quot;low&quot;: [6, 7.0]}}}}</gco:Dictionary>
+            <gco:Dictionary></gco:Dictionary>
           </thresholds>
           <continuous_hazard_unit>
             <gco:CharacterString>mmi</gco:CharacterString>
