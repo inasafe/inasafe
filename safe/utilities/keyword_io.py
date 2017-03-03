@@ -734,8 +734,9 @@ class KeywordIO(QObject):
             for classification, value in classifications.items():
                 if value.get('active'):
                     active_classification = definition(classification)
-                    classification_row.add(
-                        m.Cell(active_classification['name']))
+                    if active_classification.get('name'):
+                        classification_row.add(
+                            m.Cell(active_classification['name']))
                     break
 
             if not active_classification:
