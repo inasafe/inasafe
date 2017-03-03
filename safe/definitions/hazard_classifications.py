@@ -137,81 +137,6 @@ generic_hazard_classes = {
         exposure_structure
     ]
 }
-earthquake_mmi_hazard_classes = {
-    'key': 'earthquake_mmi_hazard_classes',
-    'name': tr('Earthquake MMI classes'),
-    'description': tr(
-        'Three classes are supported for earthquake vector hazard data: '
-        '<b>low</b>, <b>medium</b>, or <b>high</b>.'),
-    'type': hazard_classification_type,
-    'citations': [
-        {
-            'text': None,
-            'link': None
-        }
-    ],
-    'classes': [
-        {
-            'key': 'high',
-            'value': 8,
-            'color': red,
-            'name': tr('High hazard zone'),
-            'affected': True,
-            'description': tr('The highest hazard class.'),
-            'string_defaults': ['high'],
-            'displacement_rate': 1.0,
-            'numeric_default_min': 8,
-            'numeric_default_max': 10,
-            'citations': [
-                {
-                    'text': None,
-                    'link': None
-                }
-            ]
-        },
-        {
-            'key': 'medium',
-            'value': 2,
-            'color': orange,
-            'name': tr('Medium hazard zone'),
-            'affected': True,
-            'description': tr('The medium hazard class.'),
-            'string_defaults': ['medium'],
-            'displacement_rate': 1.0,
-            'numeric_default_min': 6,
-            'numeric_default_max': 8,
-            'citations': [
-                {
-                    'text': None,
-                    'link': None
-                }
-            ]
-        },
-        {
-            'key': 'low',
-            'value': 1,
-            'color': yellow,
-            'name': tr('Low hazard zone'),
-            'affected': True,
-            'description': tr('The lowest hazard class.'),
-            'string_defaults': ['low'],
-            'displacement_rate': 1.0,
-            'numeric_default_min': 5,
-            'numeric_default_max': 6,
-            'citations': [
-                {
-                    'text': None,
-                    'link': None
-                }
-            ]
-        }
-    ],
-    'exposures': [
-        exposure_population,
-        exposure_road,
-        exposure_structure
-    ]
-}
 
 earthquake_mmi_scale = {
     'key': 'earthquake_mmi_scale',
@@ -1864,7 +1789,6 @@ hazard_classification = {
         generic_hazard_classes,
         flood_hazard_classes,
         flood_petabencana_hazard_classes,
-        earthquake_mmi_hazard_classes,
         earthquake_mmi_scale,
         tsunami_hazard_classes,
         tsunami_hazard_population_classes,
