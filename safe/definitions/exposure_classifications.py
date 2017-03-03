@@ -681,8 +681,8 @@ badan_geologi_landcover_classes = {
     'type': exposure_classification_type,
     'citations': [
         {
-            'text': None,
-            'linl': None
+            'text': tr('Badan Geologi'),
+            'link': 'https://github.com/inasafe/inasafe/issues/3947'
         }
     ],
     'classes': [
