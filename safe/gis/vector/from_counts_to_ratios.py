@@ -48,6 +48,12 @@ def from_counts_to_ratios(layer, callback=None):
 
     if not population_count_field['key'] in inasafe_fields:
         # There is not a population count field. Let's skip this layer.
+        LOGGER.info(
+            'Population count field {population_count_field} is not detected '
+            'in the exposure. We will not compute a ratio from this field '
+            'because the formula needs Population count field. Formula: '
+            'ratio = subset count / total count.'.format(
+                population_count_field=population_count_field['key']))
         return layer
 
     layer.startEditing()

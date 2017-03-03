@@ -424,12 +424,13 @@ class TestImpactFunction(unittest.TestCase):
 
         impact = impact_function.impact
 
-        # Check that we don't have only one unique value.
+        # Check that we have only one unique value since the ratio for all
+        # female is the same
         field = impact.fieldNameIndex(
             female_ratio_field['field_name'])
         self.assertNotEqual(-1, field)
         unique_ratio = impact.uniqueValues(field)
-        self.assertNotEqual(1, len(unique_ratio))
+        self.assertEqual(1, len(unique_ratio))
 
     def test_ratios_with_raster_exposure(self):
         """Test if we can add defaults to a raster exposure.
