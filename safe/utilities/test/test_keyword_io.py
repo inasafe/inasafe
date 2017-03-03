@@ -254,7 +254,7 @@ class KeywordIOTest(unittest.TestCase):
             "'low': ['Kawasan Rawan Bencana I']}")
         table = self.keyword_io._dict_to_row(keyword_value)
         self.assertIn(
-            u'\n---\n*high*, Kawasan Rawan Bencana III------',
+            u'\n---\n*High*, Kawasan Rawan Bencana III------',
             table.to_text())
         # should also work passing a dict
         keyword_value = {
@@ -263,7 +263,7 @@ class KeywordIOTest(unittest.TestCase):
             'low': ['Kawasan Rawan Bencana I']}
         table = self.keyword_io._dict_to_row(keyword_value)
         self.assertIn(
-            u'\n---\n*high*, Kawasan Rawan Bencana III------',
+            u'\n---\n*High*, Kawasan Rawan Bencana III------',
             table.to_text())
 
     def test_keyword_io(self):
