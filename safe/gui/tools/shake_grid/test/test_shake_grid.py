@@ -20,7 +20,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import unittest
 import shutil
-import ogr
 
 from qgis.core import QgsVectorLayer
 from safe.common.utilities import unique_filename, temp_dir
