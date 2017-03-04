@@ -22,6 +22,7 @@ import unittest
 import shutil
 import ogr
 
+from qgis.core import QgsVectorLayer
 from safe.common.utilities import unique_filename, temp_dir
 from safe.test.utilities import standard_data_path, get_qgis_app
 from safe.gui.tools.shake_grid.shake_grid import (
@@ -60,19 +61,14 @@ class ShakeGridTest(unittest.TestCase):
         :param count: The base number to check against.
         :type count: int
         """
-        data_source = ogr.Open(path)
-        base_name = os.path.splitext(os.path.basename(path))[0]
-        # do a little query to make sure we got some results...
-        sql_statement = 'select * from \'%s\' order by MMI asc' % base_name
-        # print sql_statement
-        layer = data_source.ExecuteSQL(sql_statement)
-        feature_count = layer.GetFeatureCount()
+        # Needed for windows
+        path = os.path.normcase(os.path.abspath(path))
+        layer = QgsVectorLayer(path, 'Test Layer', 'ogr')
+        feature_count = layer.featureCount()
         flag = feature_count == count
         message = ''
         if not flag:
             message = 'Expected %s features, got %s' % (count, feature_count)
-        data_source.ReleaseResultSet(layer)
-        data_source.Destroy()
         return flag, message
 
     def test_extract_date_time(self):
