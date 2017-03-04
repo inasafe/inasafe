@@ -7,6 +7,7 @@ import shutil
 import unittest
 from collections import OrderedDict
 
+from copy import deepcopy
 from jinja2.environment import Template
 
 from safe.common.utilities import safe_dir
@@ -1134,7 +1135,7 @@ class TestImpactReport(unittest.TestCase):
         self.assertDictEqual(
             expected_context, actual_context)
 
-        # Check people section
+        # Check people section affected
         expected_context = {
             'number': '30'
         }
@@ -1151,43 +1152,88 @@ class TestImpactReport(unittest.TestCase):
         self.assertDictEqual(
             expected_context, actual_context)
 
+        # Check people section displaced
+        expected_context = {
+            'number': '20'
+        }
+
+        people_context = population_infographic['sections']['people'][
+            'items'][1]
+        """:type: safe.report.extractors.infographics.PeopleInfographicElement
+        """
+
+        actual_context = {
+            'number': people_context.number
+        }
+
+        self.assertDictEqual(
+            expected_context, actual_context)
+
         # Check vulnerabilities section
         expected_context = {
+            'header': u'Vulnerability',
+            'small_header': u'from 20 displaced',
             'items': [
                 {
-                    'header': u'Female',
-                    'number': '10',
-                    'percentage': '47.4',
+                    'bootstrap_column': 'col-xs-3',
+                    'element_column': 'col-xs-12',
+                    'group_header': u'Gender group',
+                    'items': [
+                        {
+                            'header': u'Female',
+                            'header_note': None,
+                            'number': '10',
+                            'percentage': '47.4',
+                        },
+                    ]
                 },
                 {
-                    'header': u'Youth',
-                    'number': '10',
-                    'percentage': '21.1',
+                    'bootstrap_column': 'col-xs-9',
+                    'element_column': 'col-xs-4',
+                    'group_header': u'Age group',
+                    'items': [
+                        {
+                            'header': u'Youth',
+                            'header_note': None,
+                            'number': '10',
+                            'percentage': '21.1',
+                        },
+                        {
+                            'header': u'Adult',
+                            'header_note': None,
+                            'number': '20',
+                            'percentage': '68.4',
+                        },
+                        {
+                            'header': u'Elderly',
+                            'header_note': None,
+                            'number': '10',
+                            'percentage': '5.3',
+                        }
+                    ]
                 },
-                {
-                    'header': u'Adult',
-                    'number': '20',
-                    'percentage': '68.4',
-                },
-                {
-                    'header': u'Elderly',
-                    'number': '10',
-                    'percentage': '5.3',
-                }
             ]
         }
 
         vulnerabilities_context = population_infographic['sections'][
             'vulnerability']
 
-        actual_context = {
-            'items': [
-                {
-                    'header': item.header,
-                    'number': item.number,
-                    'percentage': item.percentage
-                } for item in vulnerabilities_context['items']]
-        }
+        actual_context = deepcopy(vulnerabilities_context)
+        actual_context['items'] = [
+            {
+                'bootstrap_column': group['bootstrap_column'],
+                'element_column': group['element_column'],
+                'group_header': group['group_header'],
+                'items': [
+                    {
+                        'header': item.header,
+                        'header_note': None,
+                        'number': item.number,
+                        'percentage': item.percentage,
+                    } for item in group['items']
+                ]
+            } for group in vulnerabilities_context['items']
+        ]
 
         self.assertDictEqual(
             expected_context, actual_context)

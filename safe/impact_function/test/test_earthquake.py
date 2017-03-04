@@ -5,7 +5,7 @@
 import unittest
 
 from safe.definitions.hazard_classifications import (
-    earthquake_mmi_hazard_classes)
+    earthquake_mmi_scale)
 from safe.impact_function.earthquake import from_mmi_to_hazard_class
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -21,7 +21,7 @@ class TestEarthquake(unittest.TestCase):
     def test_from_mmi_hazard_class_key(self):
         """Test we can get the hazard class key given a MMI level."""
         self.assertEqual(
-            'medium',
-            from_mmi_to_hazard_class(8, earthquake_mmi_hazard_classes['key']))
+            'VIII',
+            from_mmi_to_hazard_class(8, earthquake_mmi_scale['key']))
         self.assertIsNone(
-            from_mmi_to_hazard_class(2, earthquake_mmi_hazard_classes['key']))
+            from_mmi_to_hazard_class(99, earthquake_mmi_scale['key']))

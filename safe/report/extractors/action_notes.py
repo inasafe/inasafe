@@ -2,9 +2,9 @@
 """Module used to generate context for action and notes sections.
 """
 from safe.definitions.exposure import exposure_population
-from safe.definitions.hazard_classifications import hazard_classes_all
-from safe.report.extractors.util import resolve_from_dictionary, \
-    layer_definition_type
+from safe.report.extractors.util import (
+    resolve_from_dictionary,
+    layer_definition_type, layer_hazard_classification)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -67,13 +67,7 @@ def notes_assumptions_extractor(impact_report, component_metadata):
     context['items'] = provenance['notes']
 
     # Get hazard classification
-    hazard_classification = None
-    # retrieve hazard classification from hazard layer
-    for classification in hazard_classes_all:
-        classification_name = hazard_layer.keywords['classification']
-        if classification_name == classification['key']:
-            hazard_classification = classification
-            break
+    hazard_classification = layer_hazard_classification(hazard_layer)
 
     # Check hazard affected class
     affected_classes = []

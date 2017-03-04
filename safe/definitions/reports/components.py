@@ -35,7 +35,9 @@ from safe.definitions.fields import (
     fatalities_per_mmi_field,
     population_count_field,
     displaced_field,
-    fatalities_field)
+    fatalities_field, female_displaced_count_field,
+    youth_displaced_count_field, adult_displaced_count_field,
+    elderly_displaced_count_field)
 from safe.definitions.styles import charcoal_black
 from safe.report.extractors.action_notes import (
     action_checklist_extractor,
@@ -392,19 +394,55 @@ population_infographic_component = {
         'sections': {
             'people': {
                 'header': tr('People'),
-                'sub_header': tr('Affected')
+                'items': [
+                    {
+                        'sub_header': tr('Affected'),
+                    },
+                    {
+                        'sub_header': tr('Displaced<sup>*</sup>'),
+                        'sub_header_note_format': tr(
+                            '<sup>*</sup> Displacement rate: '
+                            '{rate_description}'),
+                        'rate_description_format': tr(
+                            '{displacement_rate:.2%} of affected {name}')
+                    },
+                ]
             },
             'vulnerability': {
                 'header': tr('Vulnerability'),
-                'sub_header_format': tr('from {number_affected} affected'),
-                'items': {
-                    'headers': [
-                        tr('Female'),
-                        tr('Youth'),
-                        tr('Adult'),
-                        tr('Elderly')
-                    ]
-                }
+                'sub_header_format': tr('from {number_displaced} displaced'),
+                'items': [
+                    {
+                        'sub_group_header': tr('Gender group'),
+                        # used to specify group column width in css
+                        'bootstrap_column': 'col-xs-3',
+                        # used to specify each element column in css
+                        'element_column': 'col-xs-12',
+                        'fields': [
+                            female_displaced_count_field,
+                        ],
+                        'headers': [
+                            tr('Female'),
+                        ]
+                    },
+                    {
+                        'sub_group_header': tr('Age group'),
+                        # used to specify group column width in css
+                        'bootstrap_column': 'col-xs-9',
+                        # used to specify each element column in css
+                        'element_column': 'col-xs-4',
+                        'fields': [
+                            youth_displaced_count_field,
+                            adult_displaced_count_field,
+                            elderly_displaced_count_field
+                        ],
+                        'headers': [
+                            tr('Youth'),
+                            tr('Adult'),
+                            tr('Elderly')
+                        ]
+                    }
+                ]
             },
             'minimum_needs': {
                 'header': tr('Minimum needs'),
@@ -414,25 +452,27 @@ population_infographic_component = {
         # definitions for icons
         'icons': {
             'total_affected_field': resource_url(resources_path(
-                'img/definitions/people.png')),
+                'img/definitions/people.svg')),
+            'displaced_field': resource_url(resources_path(
+                'img/definitions/displaced.svg')),
             'female_displaced_count_field': resource_url(resources_path(
-                'img/definitions/female.png')),
+                'img/definitions/female.svg')),
             'youth_displaced_count_field': resource_url(resources_path(
-                'img/definitions/youth.png')),
+                'img/definitions/youth.svg')),
             'adult_displaced_count_field': resource_url(resources_path(
-                'img/definitions/adult.png')),
+                'img/definitions/adult.svg')),
             'elderly_displaced_count_field': resource_url(resources_path(
-                'img/definitions/elderly.png')),
+                'img/definitions/elderly.svg')),
             'minimum_needs__rice_count_field': resource_url(resources_path(
-                'img/definitions/rice.png')),
+                'img/definitions/rice.svg')),
             'minimum_needs__toilets_count_field': resource_url(resources_path(
-                'img/definitions/toilets.png')),
+                'img/definitions/toilets.svg')),
             'minimum_needs__drinking_water_count_field': resource_url(
-                resources_path('img/definitions/drinking_water.png')),
+                resources_path('img/definitions/drinking_water.svg')),
             'minimum_needs__clean_water_count_field': resource_url(
-                resources_path('img/definitions/clean_water.png')),
+                resources_path('img/definitions/clean_water.svg')),
             'minimum_needs__family_kits_count_field': resource_url(
-                resources_path('img/definitions/family_kits.png')),
+                resources_path('img/definitions/family_kits.svg')),
         }
     }
 }
@@ -471,7 +511,8 @@ standard_impact_report_metadata_html = {
                 'infographics': [population_infographic_component['key']],
                 'footer_format': tr(
                     'InaSAFE {version} | {analysis_date} | {analysis_time} | '
-                    'info@inasafe.org | Indonesian Government-'
+                    'info@inasafe.org | Icons source: OCHA | '
+                    'Indonesian Government-'
                     'Australian Government-World Bank-GFDRR')
             },
             'template': 'standard-template/'
@@ -574,6 +615,8 @@ standard_impact_report_metadata_pdf = {
             'page_width': 297,
             'page_height': 210,
             'tags': [
+                # untag this from final product until donut png were
+                # rendered correctly by qgis
                 final_product_tag,
                 infographic_product_tag,
                 pdf_product_tag
