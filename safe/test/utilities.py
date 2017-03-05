@@ -311,6 +311,7 @@ def load_path_vector_layer(path, **kwargs):
     if not exists(path):
         raise Exception('%s do not exist.' % path)
 
+    path = os.path.normcase(os.path.abspath(path))
     name = splitext(basename(path))[0]
     extension = splitext(path)[1]
 
@@ -333,7 +334,9 @@ def load_path_vector_layer(path, **kwargs):
                 shutil.copy2(src_path, target_path)
 
     if path.endswith('.csv'):
-        layer = QgsVectorLayer(path, name, 'delimitedtext')
+        # Explicitly use URI with delimiter or tests fail in Windows. TS.
+        uri = 'file:///%s?delimiter=%s' % (path, ',')
+        layer = QgsVectorLayer(uri, name, 'delimitedtext')
     else:
         layer = QgsVectorLayer(path, name, 'ogr')
 

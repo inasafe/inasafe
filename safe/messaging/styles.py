@@ -17,14 +17,9 @@ This will result in some standardised styling being applied to the important
 text element.
 
 """
-__author__ = 'tim@kartoza.com'
-__revision__ = '$Format:%H$'
-__date__ = '06/06/2013'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
-
 import os
-
+import urlparse
+import urllib
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
@@ -32,6 +27,12 @@ from PyQt4.QtCore import QUrl
 # These all apply to heading elements
 
 from safe.utilities.resources import resources_path
+
+__author__ = 'tim@kartoza.com'
+__revision__ = '$Format:%H$'
+__date__ = '06/06/2013'
+__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
+                 'Disaster Reduction')
 
 
 # Used for section headers in definitions_help.py
@@ -113,10 +114,13 @@ KEYWORD_STYLE = {
 def logo_element():
     """Create a sanitised local url to the logo for insertion into html.
 
-    :returns: A sanitised local url to the logo.
+    :returns: A sanitised local url to the logo prefixed with file://.
     :rtype: str
+
+    ..note:: We are not using QUrl here because on Windows 10 it returns
+        an empty path if using QUrl.toLocalPath
     """
+
     path = os.path.join(resources_path(), 'img', 'logos', 'inasafe-logo.png')
-    url = QUrl(path)
-    path = url.toLocalFile()
-    return path
+    url = urlparse.urljoin('file:', urllib.pathname2url(path))
+    return url
