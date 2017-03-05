@@ -212,19 +212,29 @@ hazard_cyclone = {
     'key': 'cyclone',
     'name': tr('Cyclone'),
     'description': tr(
-        'A <b>Cyclone</b> is a rapidly rotating storm system characterised '
-        'by a low-pressure centre, a closed low-level atmospheric '
-        'circulation, strong winds, and a spiral arrangement of thunderstorms '
-        'that produce heavy rain. It is also referred to as <b>hurricane</b> '
-        'or <b>typhoon</b>.'),
+        'A <b>Tropical Cyclone</b> is a rapidly rotating storm system '
+        'characterised by a low-pressure centre, a closed low-level '
+        'atmospheric circulation, strong winds, and a spiral arrangement '
+        'of thunderstorms that produce heavy rain. It is also referred '
+        'to as <b>hurricane</b> in the Atlantic Ocean or <b>typhoon</b> '
+        'in the North West Pacific Ocean.'),
     'notes': [  # additional generic notes for flood - IF has more
+        tr('The analysis performed here only considers the impact '
+           'of <b>severe winds</b> from tropical cyclones. The impact '
+           'of other associated hazards (storm surge inundation, '
+           'flood) must be analysed separately.'),
         caveat_simulation,
         caveat_local_conditions,
         caveat_analysis_extent,
     ],
     'continuous_notes': [  # notes specific to continuous data
+        tr(
+       'Continuous data are normally used to represent the gust wind speed '
+       'of the cyclone, representing the 10-m above ground wind speed.'
+        )
     ],
     'classified_notes': [  # notes specific to classified data
+        tr('Classified cyclone hazard data is not presently supported.' )
     ],
     'single_event_notes': [  # notes specific to single event data
     ],
