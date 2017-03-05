@@ -8,4 +8,4 @@ from safe.messaging.styles import logo_element
 class TestStyles(TestCase):
     def test_logo_element(self):
         path = logo_element()
-        self.assertTrue(os.path.exists(path))
+        self.assertTrue('file:///' in path)

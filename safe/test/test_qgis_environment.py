@@ -40,6 +40,7 @@ class QGISTest(unittest.TestCase):
         assert 'gdal' in r.providerList()
         assert 'ogr' in r.providerList()
         assert 'postgres' in r.providerList()
+        assert 'delimitedtext' in r.providerList()
         # assert 'wfs' in r.providerList()
 
     def test_proj_interpretation(self):
