@@ -1592,7 +1592,7 @@ cyclone_sshws_hazard_classes = {
                 'outages will last weeks to possibly months. Most of the '
                 'area will be uninhabitable for weeks or months.'
             ),
-            'displacement_rate': 0.97,
+            'displacement_rate': 0.99,
             'numeric_default_min': {
                 unit_knots['key']: 112,
                 unit_metres_per_second['key']: 58,
@@ -1629,7 +1629,7 @@ cyclone_sshws_hazard_classes = {
                 'blocking numerous roads. Electricity and water will be '
                 'unavailable for several days to weeks after the storm '
                 'passes.'),
-            'displacement_rate': 0.55,
+            'displacement_rate': 0.9,
             'numeric_default_min': {
                 unit_knots['key']: 95,
                 unit_metres_per_second['key']: 50,
@@ -1666,7 +1666,7 @@ cyclone_sshws_hazard_classes = {
                 'snapped or uprooted and block numerous roads. Near-total '
                 'power loss is expected with outages that could last from '
                 'several days to weeks.'),
-            'displacement_rate': 0.06,
+            'displacement_rate': 0.65,
             'numeric_default_min': {
                 unit_knots['key']: 82,
                 unit_metres_per_second['key']: 42,
@@ -1703,7 +1703,7 @@ cyclone_sshws_hazard_classes = {
                 'and shallowly rooted trees may be toppled. Extensive damage '
                 'to power lines and poles likely will result in power outages '
                 'that could last a few to several days.'),
-            'displacement_rate': 0.0,
+            'displacement_rate': 0.15,
             'numeric_default_min': {
                 unit_knots['key']: 64,
                 unit_metres_per_second['key']: 33,
