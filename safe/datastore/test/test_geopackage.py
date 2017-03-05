@@ -28,6 +28,7 @@ from safe.datastore.geopackage import GeoPackage
 
 
 # Decorator for expecting fails in windows but not other OS's
+# Probably we should move this somewhere in utils for easy re-use...TS
 def expect_failure_in_windows(exception):
     """Marks test to expect a fail in windows - call assertRaises internally.
 

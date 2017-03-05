@@ -61,7 +61,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 # noinspection PyArgumentList
-class TestDock(TestCase):
+class TestDock():
     """Test the InaSAFE GUI."""
 
     @classmethod
