@@ -24,7 +24,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import os
-
+import urlparse, urllib
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
@@ -113,10 +113,13 @@ KEYWORD_STYLE = {
 def logo_element():
     """Create a sanitised local url to the logo for insertion into html.
 
-    :returns: A sanitised local url to the logo.
+    :returns: A sanitised local url to the logo prefixed with file://.
     :rtype: str
+
+    ..note:: We are not using QUrl here because on Windows 10 it returns
+        an empty path if using QUrl.toLocalPath
     """
+
     path = os.path.join(resources_path(), 'img', 'logos', 'inasafe-logo.png')
-    url = QUrl(path)
-    path = url.toLocalFile()
-    return path
+    url = urlparse.urljoin('file:', urllib.pathname2url(path))
+    return url
