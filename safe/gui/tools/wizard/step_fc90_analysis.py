@@ -17,6 +17,7 @@ from safe.utilities.extent import Extent
 from safe.definitions.constants import (
     ANALYSIS_FAILED_BAD_INPUT,
     ANALYSIS_FAILED_BAD_CODE,
+    ANALYSIS_SUCCESS,
     PREPARE_FAILED_BAD_INPUT,
     PREPARE_FAILED_BAD_CODE,
     HAZARD_EXPOSURE_VIEW,
@@ -29,10 +30,14 @@ from safe.impact_function.impact_function import ImpactFunction
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.analysis_utilities import (
-    generate_impact_report, add_impact_layers_to_canvas)
+    generate_impact_report,
+    generate_impact_map_report,
+    add_impact_layers_to_canvas,
+)
 from safe import messaging as m
 from safe.messaging import styles
-from safe.utilities.settings import setting, set_setting
+from safe.report.impact_report import ImpactReport
+from safe.utilities.settings import setting
 from safe.utilities.gis import wkt_to_rectangle
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -117,16 +122,17 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         LOGGER.debug('Open in composer Button is not implemented')
 
     def setup_and_run_analysis(self):
-        """Execute analysis after the tab is displayed."""
-        # IFCW 4.0:
+        """Execute analysis after the tab is displayed.
 
-        # Show busy
+        Please check the code in dock.py accept(). It should follow
+        approximately the same code.
+        """
         self.show_busy()
-        # show next analysis extent
-        # Prepare impact function from wizard dialog user input
-        self.impact_function = self.prepare_impact_function()
         # Read user's settings
         self.read_settings()
+        # Prepare impact function from wizard dialog user input
+        self.impact_function = self.prepare_impact_function()
+
         # Prepare impact function
         status, message = self.impact_function.prepare()
         # Check status
@@ -137,7 +143,7 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
                 'inputs.'))
             LOGGER.info(message.to_text())
             send_error_message(self, message)
-            return
+            return status, message
         if status == PREPARE_FAILED_BAD_CODE:
             self.hide_busy()
             LOGGER.exception(tr(
@@ -145,7 +151,8 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
                 'bug.'))
             LOGGER.info(message.to_text())
             send_error_message(self, message)
-            return
+            return status, message
+
         # Start the analysis
         status, message = self.impact_function.run()
         # Check status
@@ -155,19 +162,17 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
                 'The impact function could not run because of the inputs.'))
             LOGGER.info(message.to_text())
             send_error_message(self, message)
-            return
+            return status, message
         elif status == ANALYSIS_FAILED_BAD_CODE:
             self.hide_busy()
             LOGGER.exception(tr(
                 'The impact function could not run because of a bug.'))
             LOGGER.exception(message.to_text())
             send_error_message(self, message)
-            return
+            return status, message
 
         LOGGER.info(tr('The impact function could run without errors.'))
 
-        # Generate impact report
-        generate_impact_report(self.impact_function, self.parent.iface)
         # Add result layer to QGIS
         add_impact_layers_to_canvas(self.impact_function, self.parent.iface)
 
@@ -178,10 +183,33 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         qgis_exposure = (
             QgsMapLayerRegistry.instance().mapLayer(
                 self.parent.exposure_layer.id()))
-
         if self.hide_exposure_flag:
             legend = self.iface.legendInterface()
             legend.setLayerVisible(qgis_exposure, False)
+
+        # Generate impact report
+        error_code, message = generate_impact_report(
+            self.impact_function, self.parent.iface)
+
+        if error_code == ImpactReport.REPORT_GENERATION_FAILED:
+            self.hide_busy()
+            LOGGER.info(tr(
+                'The impact report could not be generated.'))
+            send_error_message(self, message)
+            LOGGER.info(message.to_text())
+            return ANALYSIS_FAILED_BAD_CODE, message
+
+        # Generate Impact Map Report
+        error_code, message = generate_impact_map_report(
+            self.impact_function, self.iface)
+
+        if error_code == ImpactReport.REPORT_GENERATION_FAILED:
+            self.hide_busy()
+            LOGGER.info(tr(
+                'The impact report could not be generated.'))
+            send_error_message(self, message)
+            LOGGER.info(message.to_text())
+            return ANALYSIS_FAILED_BAD_CODE, message
 
         self.extent.set_last_analysis_extent(
             self.impact_function.analysis_extent,
@@ -191,6 +219,7 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         self.hide_busy()
         # Setup gui if analysis is done
         self.setup_gui_analysis_done()
+        return ANALYSIS_SUCCESS, None
 
     def set_widgets(self):
         """Set widgets on the Progress tab."""
