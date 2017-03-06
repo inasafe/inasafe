@@ -7,7 +7,6 @@ import qgis  # pylint: disable=unused-import
 from PyQt4 import QtGui
 from PyQt4.QtCore import Qt
 
-from safe.common.version import get_version
 from safe.utilities.resources import (
     get_ui_class, html_footer, html_help_header)
 from safe.gui.tools.help.dock_help import dock_help
