@@ -83,7 +83,7 @@ hazard_generic = {
         'You can use the generic hazard functionality in InaSAFE to carry '
         'out an assessment for hazard data that are not explicitly supported '
         'yet in InaSAFE.'),
-    'notes': [  # additional generic notes for generic - IF has more
+    'notes': [  # additional generic notes for generic
         caveat_simulation,
         caveat_local_conditions,
         caveat_analysis_extent,
@@ -96,7 +96,7 @@ hazard_generic = {
     ],
     'multi_event_notes': [  # notes specific to multi event data
     ],
-    'actions': [  # these are additional generic actions - IF has more
+    'actions': [  # these are additional generic actions
 
     ],
     'citations': [
@@ -124,7 +124,7 @@ hazard_earthquake = {
         'An <b>earthquake</b> describes the sudden violent shaking of the '
         'ground that occurs as a result of volcanic activity or movement '
         'in the earth\'s crust.'),
-    'notes': [  # additional generic notes for earthquake - IF has more
+    'notes': [  # additional generic notes for earthquake
         caveat_simulation,
         caveat_local_conditions,
         caveat_analysis_extent,
@@ -137,7 +137,7 @@ hazard_earthquake = {
     ],
     'multi_event_notes': [  # notes specific to multi event data
     ],
-    'actions': [  # these are additional generic actions - IF has more
+    'actions': [  # these are additional generic actions
 
     ],
     'citations': [
@@ -170,7 +170,7 @@ hazard_flood = {
         'after heavy rainfall, when a river overflows its banks or when a '
         'dam breaks. The effect of a <b>flood</b> is for land that is '
         'normally dry to become wet.'),
-    'notes': [  # additional generic notes for flood - IF has more
+    'notes': [  # additional generic notes for flood
         caveat_simulation,
         caveat_local_conditions,
         caveat_analysis_extent,
@@ -183,7 +183,7 @@ hazard_flood = {
     ],
     'multi_event_notes': [  # notes specific to multi event data
     ],
-    'actions': [  # these are additional generic actions - IF has more
+    'actions': [  # these are additional generic actions
 
     ],
     'citations': [
@@ -240,7 +240,7 @@ hazard_cyclone = {
     ],
     'multi_event_notes': [  # notes specific to multi event data
     ],
-    'actions': [  # these are additional generic actions - IF has more
+    'actions': [  # these are additional generic actions
 
     ],
     'citations': [
@@ -283,7 +283,7 @@ hazard_volcanic_ash = {
         '<b>Volcanic ash</b> describes fragments of pulverized rock, minerals '
         'and volcanic glass, ejected into the atmosphere during volcanic '
         'eruptions.'),
-    'notes': [  # additional generic notes for volcanic ash - IF has more
+    'notes': [  # additional generic notes for volcanic ash
         caveat_simulation,
         caveat_local_conditions,
         caveat_analysis_extent,
@@ -298,7 +298,7 @@ hazard_volcanic_ash = {
     ],
     'multi_event_notes': [  # notes specific to multi event data
     ],
-    'actions': [  # these are additional generic actions - IF has more
+    'actions': [  # these are additional volcanic ash actions
         tr('What action can be taken to secure water supplies and protect '
            'crops?')
     ],
@@ -329,7 +329,7 @@ hazard_tsunami = {
         'A <b>tsunami</b> at sea may go unnoticed but a <b>tsunami</b> '
         'wave that strikes land may cause massive destruction and '
         'flooding.'),
-    'notes': [  # additional generic notes for tsunami - IF has more
+    'notes': [  # additional generic notes for tsunami
         caveat_simulation,
         caveat_local_conditions,
         caveat_analysis_extent,
@@ -344,7 +344,7 @@ hazard_tsunami = {
     ],
     'multi_event_notes': [  # notes specific to multi event data
     ],
-    'actions': [  # these are additional generic actions - IF has more
+    'actions': [  # these are additional tsunami actions
 
     ],
     'citations': [
@@ -383,7 +383,7 @@ hazard_volcano = {
         caveat_local_conditions,
         caveat_analysis_extent,
     ],
-    'actions': [  # these are additional generic actions - IF has more
+    'actions': [  # these are additional volcano actions
 
     ],
     'continuous_notes': [  # notes specific to continuous data
