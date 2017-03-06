@@ -154,9 +154,13 @@ EARTHQUAKE_FUNCTIONS = (
             'developed by Institut Teknologi Bandung (ITB) and implemented by '
             'Dr. Hyeuk Ryu, Geoscience Australia.'
         ),
-        'notes': tr(
-            'The ITB bayesian fatality model is based on the ITB fatality '
-            'model and uses Indonesian fatality data'),
+        'notes': [
+            tr(
+                'The ITB bayesian fatality model, from Institut Teknologi '
+                'Bandung 2012, is based on the ITB fatality model and uses '
+                'Indonesian fatality data'
+            ),
+        ],
         'citations': [
             {
                 'text': tr(
@@ -176,9 +180,13 @@ EARTHQUAKE_FUNCTIONS = (
             'model was developed by Institut Teknologi Bandung (ITB) and '
             'implemented by Dr. Hadi Ghasemi, Geoscience Australia.'
         ),
-        'notes': tr(
-            'The ITB fatality model is based on the USGS Pager model and '
-            'modified to use a different source.'),
+        'notes': [
+            tr(
+                'The ITB fatality model, from Institut Teknologi Bandung '
+                '2012, is based on the USGS Pager model and modified to use a '
+                'different source.'
+            ),
+        ],
         'citations': [
             {
                 'text': tr(
@@ -197,9 +205,12 @@ EARTHQUAKE_FUNCTIONS = (
             'by Institut Teknologi Bandung (ITB) and implemented by Dr. Hyeuk '
             'Ryu, Geoscience Australia.'
         ),
-        'notes': tr(
-            'The USGS Pager fatality model using Indonesian country '
-            'coefficients.'),
+        'notes': [
+            tr(
+                'The USGS Population Vulnerability Pager fatality model using '
+                'Indonesian country coefficients.'
+            ),
+        ],
         'citations': [
             {
                 'text': tr(

@@ -636,25 +636,6 @@ def definition_to_message(definition, heading_style=None):
             bullets.add(m.Text(note))
         message.add(bullets)
 
-    # This is a bit hacky but we want to be sure that extra notes
-    # also show up in the help. See issue #3906 and
-    # https://github.com/inasafe/inasafe/pull/3891#issuecomment-281034766
-    extra_notes = {
-        'earthquake_notes': tr('Earthquake notes:'),
-        'earthquake_pager_notes': tr('Earthquake Pager notes:'),
-        'earthquake_itb_notes': tr('Earthquake ITB notes:'),
-        'earthquake_fatality_model_limitations':
-            tr('Earthquake fatality model limitations')}
-    for extra_note, title in extra_notes.iteritems():
-        if extra_note in definition:
-            message.add(m.Heading(
-                title, **DETAILS_SUBGROUP_STYLE))
-            bullets = m.BulletedList()
-            for note in definition[extra_note]:
-                bullets.add(m.Text(note))
-            message.add(bullets)
-    # end of
-
     if 'continuous_notes' in definition:
         message.add(m.Heading(
             tr('Notes for continuous datasets:'),
