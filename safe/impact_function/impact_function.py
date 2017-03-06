@@ -1337,6 +1337,9 @@ class ImpactFunction(object):
     def gis_overlay_analysis(self):
         """Perform an overlay analysis between the exposure and the hazard."""
         LOGGER.info('Starting a GIS overlay analysis')
+        # This is not a EQ raster on raster population. We need to set it to
+        # None as we don't want notes specific to EQ raster on population.
+        self._earthquake_function = None
         step_count = len(analysis_steps)
 
         self._performance_log = profiling_log()
@@ -2139,6 +2142,13 @@ class ImpactFunction(object):
         exposure = definition(self.exposure.keywords.get('exposure'))
         hazard = definition(self.hazard.keywords.get('hazard'))
         fields.extend(specific_notes(hazard, exposure))
+
+        if self.earthquake_function is not None:
+            # Get notes specific to the fatality model
+            for fatality_model in EARTHQUAKE_FUNCTIONS:
+                if fatality_model['key'] == self.earthquake_function:
+                    fields.extend(fatality_model.get('notes', []))
+
         return fields
 
     def action_checklist(self):
