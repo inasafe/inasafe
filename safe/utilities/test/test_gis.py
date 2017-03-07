@@ -37,8 +37,9 @@ class TestQGIS(unittest.TestCase):
         message = '%s layer should be polygonal' % layer
         self.assertFalse(is_polygon_layer(layer), message)
 
+        # Raster layer
         layer = clone_raster_layer(
-            name='padang_tsunami_mw8',
+            name='earthquake',
             extension='.tif',
             include_keywords=True,
             source_directory=standard_data_path('hazard')

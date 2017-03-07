@@ -1102,7 +1102,7 @@ def clone_raster_layer(
         put the files into. Default to 'testing'.
     :type target_directory: str
     """
-    extensions = ['.prj', '.sld', 'qml', extension]
+    extensions = ['.prj', '.sld', '.qml', extension]
     if include_keywords:
         extensions.append('.xml')
     temp_path = unique_filename(dir=temp_dir(target_directory))
@@ -1114,7 +1114,12 @@ def clone_raster_layer(
             shutil.copy2(src_path, trg_path)
 
     raster_path = '%s%s' % (temp_path, extension)
+    if not os.path.exists(raster_path):
+        raise Exception('Path not found : %s' % raster_path)
+
     layer = QgsRasterLayer(raster_path, os.path.basename(raster_path))
+    if not layer.isValid:
+        raise Exception('Layer is not valid.')
 
     monkey_patch_keywords(layer)
 
