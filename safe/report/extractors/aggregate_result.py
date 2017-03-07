@@ -1,5 +1,7 @@
 # coding=utf-8
+
 """Module used to generate context for aggregation result section."""
+
 from safe.definitions.exposure import exposure_all
 from safe.definitions.fields import (
     affected_exposure_count_field,
@@ -12,6 +14,7 @@ from safe.report.extractors.util import (
     layer_definition_type,
     resolve_from_dictionary)
 from safe.utilities.rounding import format_number
+from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -80,7 +83,7 @@ def aggregation_result_extractor(impact_report, component_metadata):
     # generate type_header_labels for column header
     type_header_labels = []
     for type_name in type_fields:
-        type_label = type_name.capitalize()
+        type_label = tr(type_name.capitalize())
         type_header_labels.append(type_label)
 
     """Generating values for rows"""
