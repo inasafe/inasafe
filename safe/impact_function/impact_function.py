@@ -1892,7 +1892,10 @@ class ImpactFunction(object):
         LOGGER.info('ANALYSIS : Post processing')
 
         # Set the layer title
-        layer_title(layer)
+        purpose = layer.keywords['layer_purpose']
+        if purpose != layer_purpose_aggregation_summary['key']:
+            # On an aggregation layer, the default title does make any sense.
+            layer_title(layer)
 
         for post_processor in post_processors:
             valid, message = enough_input(layer, post_processor['input'])
