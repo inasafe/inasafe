@@ -217,7 +217,7 @@
         <translation>Dân số Jakarta</translation>
     </message>
     <message>
-        <location filename="components.py" line="394"/>
+        <location filename="components.py" line="396"/>
         <source>People</source>
         <translation>Người</translation>
     </message>
@@ -312,7 +312,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="250"/>
+        <location filename="exposure.py" line="207"/>
         <source>Structures</source>
         <translation type="unfinished"/>
     </message>
@@ -517,7 +517,7 @@
         <translation>trạm cứu hỏa</translation>
     </message>
     <message>
-        <location filename="step_kw33_multi_classifications.py" line="376"/>
+        <location filename="step_kw33_multi_classifications.py" line="377"/>
         <source>Thresholds</source>
         <translation>ngưỡng</translation>
     </message>
@@ -587,7 +587,7 @@
         <translation>tỉ lệ người già</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="942"/>
+        <location filename="definitions_help.py" line="923"/>
         <source>Displacement rate</source>
         <translation type="unfinished"/>
     </message>
@@ -707,12 +707,12 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="330"/>
+        <location filename="components.py" line="332"/>
         <source>Total</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="360"/>
+        <location filename="components.py" line="362"/>
         <source>Population</source>
         <translation type="unfinished"/>
     </message>
@@ -727,37 +727,37 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="794"/>
+        <location filename="hazard_classifications.py" line="720"/>
         <source>Low</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="772"/>
+        <location filename="hazard_classifications.py" line="698"/>
         <source>Medium</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="750"/>
+        <location filename="hazard_classifications.py" line="676"/>
         <source>High</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="281"/>
+        <location filename="exposure.py" line="238"/>
         <source>Which buildings will be evacuation centres?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="282"/>
+        <location filename="exposure.py" line="239"/>
         <source>Where will we locate the operations centre?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="283"/>
+        <location filename="exposure.py" line="240"/>
         <source>Where will we locate warehouse and/or distribution centres?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="103"/>
+        <location filename="exposure.py" line="63"/>
         <source>How will warnings be disseminated?</source>
         <translation type="unfinished"/>
     </message>
@@ -772,17 +772,17 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard.py" line="124"/>
+        <location filename="hazard.py" line="123"/>
         <source>An &lt;b&gt;earthquake&lt;/b&gt; describes the sudden violent shaking of the ground that occurs as a result of volcanic activity or movement in the earth&apos;s crust.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard.py" line="169"/>
+        <location filename="hazard.py" line="167"/>
         <source>A &lt;b&gt;flood&lt;/b&gt; describes the inundation of land that is normally dry by a large amount of water. For example: A &lt;b&gt;flood&lt;/b&gt; can occur after heavy rainfall, when a river overflows its banks or when a dam breaks. The effect of a &lt;b&gt;flood&lt;/b&gt; is for land that is normally dry to become wet.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard.py" line="368"/>
+        <location filename="hazard.py" line="366"/>
         <source>A &lt;b&gt;volcano&lt;/b&gt; describes a mountain which has a vent through which rock fragments, ash, lava, steam and gases can be ejected from below the earth&apos;s surface. The type of material ejected depends on the type of &lt;b&gt;volcano&lt;/b&gt;.</source>
         <translation type="unfinished"/>
     </message>
@@ -807,7 +807,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1200"/>
+        <location filename="hazard_classifications.py" line="1126"/>
         <source>No water above ground height.</source>
         <translation type="unfinished"/>
     </message>
@@ -1172,22 +1172,22 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard.py" line="123"/>
+        <location filename="hazard.py" line="122"/>
         <source>Earthquake</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard.py" line="168"/>
+        <location filename="hazard.py" line="166"/>
         <source>Flood</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard.py" line="317"/>
+        <location filename="hazard.py" line="315"/>
         <source>Tsunami</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard.py" line="367"/>
+        <location filename="hazard.py" line="365"/>
         <source>Volcano</source>
         <translation type="unfinished"/>
     </message>
@@ -1287,37 +1287,37 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="71"/>
+        <location filename="hazard_classifications.py" line="72"/>
         <source>Generic classes</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="468"/>
+        <location filename="hazard_classifications.py" line="394"/>
         <source>Volcano classes</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="486"/>
+        <location filename="hazard_classifications.py" line="412"/>
         <source>The highest hazard class.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="504"/>
+        <location filename="hazard_classifications.py" line="430"/>
         <source>The medium hazard class.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="522"/>
+        <location filename="hazard_classifications.py" line="448"/>
         <source>The lowest hazard class.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="608"/>
+        <location filename="hazard_classifications.py" line="534"/>
         <source>Flood classes</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="847"/>
+        <location filename="hazard_classifications.py" line="773"/>
         <source>Tsunami classes</source>
         <translation type="unfinished"/>
     </message>
@@ -1334,11 +1334,6 @@
     <message>
         <location filename="units.py" line="297"/>
         <source>Exposure unit defines the unit for the exposure, for example people can either be measured as count or density (count per area.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="exposure.py" line="76"/>
-        <source>Fatality model is from Institut Teknologi Bandung 2012.</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -1448,7 +1443,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard.py" line="418"/>
+        <location filename="hazard.py" line="416"/>
         <source>Hazards</source>
         <translation type="unfinished"/>
     </message>
@@ -1498,12 +1493,12 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard.py" line="273"/>
+        <location filename="hazard.py" line="271"/>
         <source>Volcanic ash</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="195"/>
+        <location filename="components.py" line="197"/>
         <source>Land cover</source>
         <translation type="unfinished"/>
     </message>
@@ -1513,7 +1508,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1846"/>
+        <location filename="hazard_classifications.py" line="1772"/>
         <source>Classes</source>
         <translation type="unfinished"/>
     </message>
@@ -1533,7 +1528,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="592"/>
+        <location filename="components.py" line="635"/>
         <source>Date</source>
         <translation type="unfinished"/>
     </message>
@@ -1543,32 +1538,32 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="596"/>
+        <location filename="components.py" line="639"/>
         <source>Note</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="597"/>
+        <location filename="components.py" line="640"/>
         <source>This assessment is a guide - we strongly recommend that you ground truth the results shown here before deploying resources and / or personnel.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="602"/>
+        <location filename="components.py" line="645"/>
         <source>Legend</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="603"/>
+        <location filename="components.py" line="646"/>
         <source>Analysis information</source>
         <translation>thông tin phân tích</translation>
     </message>
     <message>
-        <location filename="components.py" line="604"/>
+        <location filename="components.py" line="647"/>
         <source>Report produced by</source>
         <translation>báo cáo được cung cấp bởi</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="216"/>
+        <location filename="exposure.py" line="174"/>
         <source>Which roads can be used to evacuate people or to distribute logistics?</source>
         <translation type="unfinished"/>
     </message>
@@ -1578,7 +1573,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="247"/>
+        <location filename="components.py" line="249"/>
         <source>Notes and assumptions</source>
         <translation type="unfinished"/>
     </message>
@@ -1593,12 +1588,12 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="564"/>
+        <location filename="hazard_classifications.py" line="490"/>
         <source>Wet</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="948"/>
+        <location filename="hazard_classifications.py" line="874"/>
         <source>Dry</source>
         <translation type="unfinished"/>
     </message>
@@ -2358,42 +2353,42 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="277"/>
+        <location filename="exposure.py" line="234"/>
         <source>Are the water and electricity services still operating?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="279"/>
+        <location filename="exposure.py" line="236"/>
         <source>Are the health centres still open?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="280"/>
+        <location filename="exposure.py" line="237"/>
         <source>Are the other public services accessible?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="278"/>
+        <location filename="exposure.py" line="235"/>
         <source>Are the schools and hospitals still active?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="105"/>
+        <location filename="exposure.py" line="65"/>
         <source>Which group or population is most affected?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="106"/>
+        <location filename="exposure.py" line="66"/>
         <source>Who are the vulnerable people in the population and why?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="111"/>
+        <location filename="exposure.py" line="71"/>
         <source>What are the security factors for relief responders?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="110"/>
+        <location filename="exposure.py" line="70"/>
         <source>Who are the key people responsible for coordination?</source>
         <translation type="unfinished"/>
     </message>
@@ -2453,7 +2448,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="114"/>
+        <location filename="exposure.py" line="74"/>
         <source>What are people&apos;s likely movements?</source>
         <translation type="unfinished"/>
     </message>
@@ -2513,12 +2508,12 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard.py" line="318"/>
+        <location filename="hazard.py" line="316"/>
         <source>A &lt;b&gt;tsunami&lt;/b&gt; describes a large ocean wave or series or waves usually caused by an underwater earthquake or volcano. A &lt;b&gt;tsunami&lt;/b&gt; at sea may go unnoticed but a &lt;b&gt;tsunami&lt;/b&gt; wave that strikes land may cause massive destruction and flooding.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="251"/>
+        <location filename="exposure.py" line="208"/>
         <source>A &lt;b&gt;structure&lt;/b&gt; can be any relatively permanent man made feature such as a building (an enclosed structure with walls and a roof), telecommunications facility or bridge.</source>
         <translation type="unfinished"/>
     </message>
@@ -2828,7 +2823,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="941"/>
+        <location filename="definitions_help.py" line="922"/>
         <source>Affected</source>
         <translation type="unfinished"/>
     </message>
@@ -2878,52 +2873,52 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="373"/>
+        <location filename="exposure.py" line="329"/>
         <source>What type of crops are planted in the affected fields?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="374"/>
+        <location filename="exposure.py" line="330"/>
         <source>How long will the activity or function of the land cover be disturbed?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="376"/>
+        <location filename="exposure.py" line="332"/>
         <source>What proportion of the land cover is damaged?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="377"/>
+        <location filename="exposure.py" line="333"/>
         <source>What potential losses will result from the land cover damage?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="379"/>
+        <location filename="exposure.py" line="335"/>
         <source>How much productivity will be lost during this event?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="380"/>
+        <location filename="exposure.py" line="336"/>
         <source>Which crops were ready for harvest during this event?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="381"/>
+        <location filename="exposure.py" line="337"/>
         <source>What is the ownership system of the land/crops/field?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="382"/>
+        <location filename="exposure.py" line="338"/>
         <source>Are the land/crops/field accessible after the event?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="383"/>
+        <location filename="exposure.py" line="339"/>
         <source>What urgent actions can be taken to normalize the land/crops/field?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="385"/>
+        <location filename="exposure.py" line="341"/>
         <source>What tools or equipment are needed for early recovery of the land/crops/field?</source>
         <translation type="unfinished"/>
     </message>
@@ -2993,32 +2988,32 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1263"/>
+        <location filename="hazard_classifications.py" line="1189"/>
         <source>High hazard zone</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1291"/>
+        <location filename="hazard_classifications.py" line="1217"/>
         <source>Medium hazard zone</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1316"/>
+        <location filename="hazard_classifications.py" line="1242"/>
         <source>Low hazard zone</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1198"/>
+        <location filename="hazard_classifications.py" line="1124"/>
         <source>Dry zone</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1245"/>
+        <location filename="hazard_classifications.py" line="1171"/>
         <source>Very high hazard zone</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1247"/>
+        <location filename="hazard_classifications.py" line="1173"/>
         <source>Water above 8.0m.</source>
         <translation type="unfinished"/>
     </message>
@@ -3103,27 +3098,27 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="203"/>
+        <location filename="exposure.py" line="161"/>
         <source>Roads marked as not affected may still be unusable due to network isolation. Roads marked as affected may still be usable if they are elevated above the local landscape.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="208"/>
+        <location filename="exposure.py" line="166"/>
         <source>Roads are closed if they are affected.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="209"/>
+        <location filename="exposure.py" line="167"/>
         <source>Roads are open if they are not affected.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="221"/>
+        <location filename="exposure.py" line="179"/>
         <source>Which government department is responsible for supplying equipment?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="313"/>
+        <location filename="exposure.py" line="269"/>
         <source>A &lt;b&gt;place&lt;/b&gt; is used to indicate that a particular location is known by a particular name.</source>
         <translation type="unfinished"/>
     </message>
@@ -3148,7 +3143,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="469"/>
+        <location filename="hazard_classifications.py" line="395"/>
         <source>Three classes are supported for volcano vector hazard data: &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, or &lt;b&gt;high&lt;/b&gt;.</source>
         <translation type="unfinished"/>
     </message>
@@ -3259,17 +3254,17 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="312"/>
+        <location filename="exposure.py" line="268"/>
         <source>Places</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="190"/>
+        <location filename="exposure.py" line="148"/>
         <source>Roads</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="881"/>
+        <location filename="definitions_help.py" line="862"/>
         <source>Length</source>
         <translation type="unfinished"/>
     </message>
@@ -3304,22 +3299,22 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="115"/>
+        <location filename="exposure.py" line="75"/>
         <source>How will we reach displaced people?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="318"/>
+        <location filename="exposure.py" line="274"/>
         <source>Where places are represented as a single point, the effect of the hazard over the entire place may differ from the point at which the place is represented on the map.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="130"/>
+        <location filename="exposure.py" line="90"/>
         <source>What kind of food does the population normally consume?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="126"/>
+        <location filename="exposure.py" line="86"/>
         <source>What are the critical non-food items required by the affected population?</source>
         <translation type="unfinished"/>
     </message>
@@ -3584,162 +3579,157 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="72"/>
-        <source>Fatality model is from Population Vulnerability Pager Model.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="exposure.py" line="109"/>
+        <location filename="exposure.py" line="69"/>
         <source>How will we distribute relief items?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="108"/>
+        <location filename="exposure.py" line="68"/>
         <source>Where can we obtain additional relief items?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="112"/>
+        <location filename="exposure.py" line="72"/>
         <source>Are there enough victim identification units?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="116"/>
+        <location filename="exposure.py" line="76"/>
         <source>Are there enough covered floor areas available for the displaced people?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="118"/>
+        <location filename="exposure.py" line="78"/>
         <source>What are the land-use rights for the settlement location?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="120"/>
+        <location filename="exposure.py" line="80"/>
         <source>What is the appropriate construction for temporary or transitional household shelter?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="122"/>
+        <location filename="exposure.py" line="82"/>
         <source>What are the existing environmental risks or vulnerabilities at the shelter location?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="124"/>
+        <location filename="exposure.py" line="84"/>
         <source>Are there enough clothing, bedding and household items available for the displaced people?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="128"/>
+        <location filename="exposure.py" line="88"/>
         <source>Are the non-food items available at an active local market?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="131"/>
+        <location filename="exposure.py" line="91"/>
         <source>Are there any alternative source of food?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="132"/>
+        <location filename="exposure.py" line="92"/>
         <source>Is there enough food for the displaced people?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="133"/>
+        <location filename="exposure.py" line="93"/>
         <source>Are there any crops that can be used for consumption?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="134"/>
+        <location filename="exposure.py" line="94"/>
         <source>Are there large numbers of separated children?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="136"/>
+        <location filename="exposure.py" line="96"/>
         <source>What water and sanitation practices were the population accustomed to before the emergency?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="138"/>
+        <location filename="exposure.py" line="98"/>
         <source>What type of outreach system would work for hygiene promotion for this situation?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="140"/>
+        <location filename="exposure.py" line="100"/>
         <source>What is the current water supply source and who are the present users?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="142"/>
+        <location filename="exposure.py" line="102"/>
         <source>Are there enough water supply, sanitation and hygiene, items available for displaced people?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="144"/>
+        <location filename="exposure.py" line="104"/>
         <source>Are water collection points close enough to where people live?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="145"/>
+        <location filename="exposure.py" line="105"/>
         <source>Are water collection points safe?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="146"/>
+        <location filename="exposure.py" line="106"/>
         <source>Is the water source contaminated or at risk of contamination?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="147"/>
+        <location filename="exposure.py" line="107"/>
         <source>Are there alternative sources of water nearby?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="148"/>
+        <location filename="exposure.py" line="108"/>
         <source>Is there a drainage problem?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="150"/>
+        <location filename="exposure.py" line="110"/>
         <source>What are the existing health problems?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="151"/>
+        <location filename="exposure.py" line="111"/>
         <source>What are the potential epidemic diseases?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="152"/>
+        <location filename="exposure.py" line="112"/>
         <source>Are there any potential disease outbreaks?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="153"/>
+        <location filename="exposure.py" line="113"/>
         <source>Are there any healthcare sources that are accessible and functioning?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="160"/>
+        <location filename="exposure.py" line="118"/>
         <source>The Sphere Handbook: Humanitarian Charter and Minimum Standards in Humanitarian Response</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="219"/>
+        <location filename="exposure.py" line="177"/>
         <source>What sort of equipment will be needed to reopen roads?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="220"/>
+        <location filename="exposure.py" line="178"/>
         <source>Where will we get the equipment needed to open roads?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="275"/>
+        <location filename="exposure.py" line="232"/>
         <source>Which structures have warning capacity (e.g. sirens or speakers)?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="353"/>
+        <location filename="exposure.py" line="309"/>
         <source>The &lt;b&gt;land cover&lt;/b&gt; exposure data describes features on the surface of the earth that might be exposed to a particular hazard. This might include crops, forest and urban areas. </source>
         <translation type="unfinished"/>
     </message>
@@ -4044,7 +4034,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="606"/>
+        <location filename="components.py" line="649"/>
         <source>Analysis Name</source>
         <translation type="unfinished"/>
     </message>
@@ -4184,11 +4174,6 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="fields.py" line="656"/>
-        <source>The rate field is used to indicate the financial value of an exposed feature. The rate, when multiplied by the of the length or area of a given exposure feature, can be used to calculate an estimated value of the feature.For example in buildings the rate * the area of a building can be used to estimate the value of the building.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="fields.py" line="677"/>
         <source>Female Ratio</source>
         <translation type="unfinished"/>
@@ -4244,7 +4229,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="164"/>
+        <location filename="components.py" line="166"/>
         <source>Fatalities</source>
         <translation type="unfinished"/>
     </message>
@@ -4254,7 +4239,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="styles.py" line="44"/>
+        <location filename="styles.py" line="43"/>
         <source>Displaced</source>
         <translation type="unfinished"/>
     </message>
@@ -4334,167 +4319,157 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard.py" line="52"/>
+        <location filename="hazard.py" line="51"/>
         <source>Hazard units are used for continuous data. Examples of hazard units include metres and feet.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard.py" line="80"/>
+        <location filename="hazard.py" line="79"/>
         <source>A &lt;b&gt;generic hazard&lt;/b&gt; can be used for any type of hazard where the data have been classified or generalised. For example: earthquake, flood, volcano, tsunami, landslide, smoke haze or strong wind. You can use the generic hazard functionality in InaSAFE to carry out an assessment for hazard data that are not explicitly supported yet in InaSAFE.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard.py" line="215"/>
+        <location filename="hazard.py" line="213"/>
         <source>Cyclone</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard.py" line="216"/>
+        <location filename="hazard.py" line="214"/>
         <source>A &lt;b&gt;Cyclone&lt;/b&gt; is a rapidly rotating storm system characterised by a low-pressure centre, a closed low-level atmospheric circulation, strong winds, and a spiral arrangement of thunderstorms that produce heavy rain. It is also referred to as &lt;b&gt;hurricane&lt;/b&gt; or &lt;b&gt;typhoon&lt;/b&gt;.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="142"/>
-        <source>Earthquake MMI classes</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="143"/>
-        <source>Three classes are supported for earthquake vector hazard data: &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, or &lt;b&gt;high&lt;/b&gt;.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="547"/>
+        <location filename="hazard_classifications.py" line="473"/>
         <source>This is a binary classification for an area. The area is either &lt;b&gt;wet&lt;/b&gt; (affected by flood water) or &lt;b&gt;dry&lt;/b&gt; (not affected by flood water). This unit does not describe how &lt;b&gt;wet&lt;/b&gt; or &lt;b&gt;dry&lt;/b&gt; an area is.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="566"/>
+        <location filename="hazard_classifications.py" line="492"/>
         <source>Water is present above ground height.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="584"/>
+        <location filename="hazard_classifications.py" line="510"/>
         <source>No water encountered above ground height.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="712"/>
+        <location filename="hazard_classifications.py" line="638"/>
         <source>Ash classes</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="730"/>
+        <location filename="hazard_classifications.py" line="656"/>
         <source>Very high</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1348"/>
+        <location filename="hazard_classifications.py" line="1274"/>
         <source>Cyclone classes (AU - BOM)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1349"/>
+        <location filename="hazard_classifications.py" line="1275"/>
         <source>&lt;b&gt;Tropical cyclone&lt;/b&gt; intensity is classified using five classes according to the Australian Bureau of Meteorology. Tropical Cyclone intensity is defined as the maximum mean wind speed over open flat land or water. This is sometimes referred to as the maximum sustained wind and will be experienced around the eye-wall of the cyclone.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1381"/>
+        <location filename="hazard_classifications.py" line="1307"/>
         <source>Category 5 (severe tropical cyclone)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1413"/>
+        <location filename="hazard_classifications.py" line="1339"/>
         <source>Category 4 (severe tropical cyclone)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1452"/>
+        <location filename="hazard_classifications.py" line="1378"/>
         <source>Category 3 (severe tropical cyclone)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1489"/>
+        <location filename="hazard_classifications.py" line="1415"/>
         <source>Category 2 (tropical cyclone)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1527"/>
+        <location filename="hazard_classifications.py" line="1453"/>
         <source>Category 1 (tropical cyclone)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1563"/>
+        <location filename="hazard_classifications.py" line="1489"/>
         <source>Tropical Depression</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1600"/>
+        <location filename="hazard_classifications.py" line="1526"/>
         <source>Hurricane classes (SSHWS)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1601"/>
+        <location filename="hazard_classifications.py" line="1527"/>
         <source>The &lt;b&gt;Saffir-Simpson Hurricane Wind Scale&lt;/b&gt; is a 1 to 5 rating based on a hurricane&apos;s sustained wind speed. This scale estimates potential property damage. Hurricanes reaching Category 3 and higher are considered major hurricanes because of their potential for significant loss of life and damage. Category 1 and 2 storms are still dangerous, however, and require preventative measures. In the western North Pacific, the term &quot;super typhoon&quot; is used for tropical cyclones with sustained winds exceeding 150 mph.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1629"/>
+        <location filename="hazard_classifications.py" line="1555"/>
         <source>Category 5 (major hurricane)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1631"/>
+        <location filename="hazard_classifications.py" line="1557"/>
         <source>Catastrophic damage will occur: A high percentage of framed homes will be destroyed, with total roof failure and wall collapse. Fallen trees and power poles will isolate residential areas. Power outages will last for weeks to possibly months. Most of the area will be uninhabitable for weeks or months.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1662"/>
+        <location filename="hazard_classifications.py" line="1588"/>
         <source>Category 4 (major hurricane)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1664"/>
+        <location filename="hazard_classifications.py" line="1590"/>
         <source>Catastrophic damage will occur: Well-built framed homes can sustain severe damage with loss of most of the roof structure and/or some exterior walls. Most trees will be snapped or uprooted and power poles downed. Fallen trees and power poles will isolate residential areas. Power outages will last weeks to possibly months. Most of the area will be uninhabitable for weeks or months.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1701"/>
+        <location filename="hazard_classifications.py" line="1627"/>
         <source>Category 3 (major hurricane)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1703"/>
+        <location filename="hazard_classifications.py" line="1629"/>
         <source>Devastating damage will occur: Well-built framed homes may incur major damage or removal of roof decking and gable ends. Many trees will be snapped or uprooted, blocking numerous roads. Electricity and water will be unavailable for several days to weeks after the storm passes.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1738"/>
+        <location filename="hazard_classifications.py" line="1664"/>
         <source>Category 2 (hurricane)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1740"/>
+        <location filename="hazard_classifications.py" line="1666"/>
         <source>Extremely dangerous winds will cause extensive damage: Well-constructed frame homes could sustain major roof and siding damage. Many shallowly rooted trees will be snapped or uprooted and block numerous roads. Near-total power loss is expected with outages that could last from several days to weeks.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1775"/>
+        <location filename="hazard_classifications.py" line="1701"/>
         <source>Category 1 (hurricane)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1777"/>
+        <location filename="hazard_classifications.py" line="1703"/>
         <source>Very dangerous winds will produce some damage: Well-constructed frame homes could have damage to roof, shingles, vinyl siding and gutters. Large branches of trees will snap and shallowly rooted trees may be toppled. Extensive damage to power lines and poles likely will result in power outages that could last a few to several days.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1812"/>
+        <location filename="hazard_classifications.py" line="1738"/>
         <source>No hurricane</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1814"/>
+        <location filename="hazard_classifications.py" line="1740"/>
         <source>Winds less than Category 1 Hurricane</source>
         <translation type="unfinished"/>
     </message>
@@ -4839,7 +4814,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="940"/>
+        <location filename="definitions_help.py" line="921"/>
         <source>Name</source>
         <translation type="unfinished"/>
     </message>
@@ -4849,12 +4824,12 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="944"/>
+        <location filename="definitions_help.py" line="925"/>
         <source>Default min</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="945"/>
+        <location filename="definitions_help.py" line="926"/>
         <source>Default max</source>
         <translation type="unfinished"/>
     </message>
@@ -4934,12 +4909,12 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="713"/>
+        <location filename="definitions_help.py" line="694"/>
         <source>Plural</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="714"/>
+        <location filename="definitions_help.py" line="695"/>
         <source>Abbreviation</source>
         <translation type="unfinished"/>
     </message>
@@ -4984,97 +4959,97 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="660"/>
+        <location filename="definitions_help.py" line="641"/>
         <source>Notes for continuous datasets:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="669"/>
+        <location filename="definitions_help.py" line="650"/>
         <source>Notes for classified datasets:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="678"/>
+        <location filename="definitions_help.py" line="659"/>
         <source>Notes for single events</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="689"/>
+        <location filename="definitions_help.py" line="670"/>
         <source>Notes for multi events / scenarios:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="702"/>
+        <location filename="definitions_help.py" line="683"/>
         <source>Actions:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="709"/>
+        <location filename="definitions_help.py" line="690"/>
         <source>Units:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="735"/>
+        <location filename="definitions_help.py" line="716"/>
         <source>Hazard classifications</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="807"/>
+        <location filename="definitions_help.py" line="788"/>
         <source>unspecified</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="829"/>
+        <location filename="definitions_help.py" line="810"/>
         <source>Exposure entities in this class ARE considered affected</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="832"/>
+        <location filename="definitions_help.py" line="813"/>
         <source>Exposure entities in this class are NOT considered affected</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="838"/>
+        <location filename="definitions_help.py" line="819"/>
         <source>This class is NOT required in the hazard keywords.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="841"/>
+        <location filename="definitions_help.py" line="822"/>
         <source>This class IS required in the hazard keywords.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="879"/>
+        <location filename="definitions_help.py" line="860"/>
         <source>Field Name</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="880"/>
+        <location filename="definitions_help.py" line="861"/>
         <source>Type</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="882"/>
+        <location filename="definitions_help.py" line="863"/>
         <source>Precision</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="927"/>
+        <location filename="definitions_help.py" line="908"/>
         <source>Decimal number</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="928"/>
+        <location filename="definitions_help.py" line="909"/>
         <source>Text</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="929"/>
+        <location filename="definitions_help.py" line="910"/>
         <source>Whole number</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="943"/>
+        <location filename="definitions_help.py" line="924"/>
         <source>Default values</source>
         <translation type="unfinished"/>
     </message>
@@ -5139,27 +5114,27 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="step_fc90_analysis.py" line="135"/>
+        <location filename="step_fc90_analysis.py" line="141"/>
         <source>The impact function will not be able to run because of the inputs.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1158"/>
+        <location filename="dock.py" line="1162"/>
         <source>The impact function could not run because of the inputs.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1165"/>
+        <location filename="dock.py" line="1169"/>
         <source>The impact function could not run because of a bug.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1171"/>
+        <location filename="dock.py" line="1175"/>
         <source>The impact function could run without errors.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="step_fc90_analysis.py" line="269"/>
+        <location filename="step_fc90_analysis.py" line="298"/>
         <source>Analysis done.</source>
         <translation type="unfinished"/>
     </message>
@@ -5254,12 +5229,12 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1141"/>
+        <location filename="dock.py" line="1145"/>
         <source>The impact function should not have been ready.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1203"/>
+        <location filename="dock.py" line="1207"/>
         <source>The impact report could not be generated.</source>
         <translation type="unfinished"/>
     </message>
@@ -5384,132 +5359,132 @@
         <translation>chức năng</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="702"/>
+        <location filename="impact_function.py" line="697"/>
         <source>The %s layer is invalid</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="702"/>
+        <location filename="impact_function.py" line="697"/>
         <source>The impact function needs a %s layer to run. You must provide a valid %s layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="715"/>
+        <location filename="impact_function.py" line="710"/>
         <source>The %s layer do not have keywords.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="724"/>
+        <location filename="impact_function.py" line="719"/>
         <source>The %s layer is not an %s.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="737"/>
+        <location filename="impact_function.py" line="732"/>
         <source>The %s layer is not up to date.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="737"/>
+        <location filename="impact_function.py" line="732"/>
         <source>The layer {source} must be updated to {version}.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="769"/>
+        <location filename="impact_function.py" line="764"/>
         <source>The exposure layer is compulsory</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="769"/>
+        <location filename="impact_function.py" line="764"/>
         <source>The impact function needs an exposure layer to run. You must provide it.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="783"/>
+        <location filename="impact_function.py" line="778"/>
         <source>The hazard layer is compulsory</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="783"/>
+        <location filename="impact_function.py" line="778"/>
         <source>The impact function needs a hazard layer to run. You must provide it.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="826"/>
+        <location filename="impact_function.py" line="821"/>
         <source>Error with the requested extent</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="798"/>
+        <location filename="impact_function.py" line="793"/>
         <source>Requested Extent must be null when an aggregation is provided.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="807"/>
+        <location filename="impact_function.py" line="802"/>
         <source>Requested Extent CRS must be null when an aggregation is provided.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="826"/>
+        <location filename="impact_function.py" line="821"/>
         <source>Requested Extent CRS must be set when requested is not null.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="865"/>
+        <location filename="impact_function.py" line="860"/>
         <source>%s %s On %s %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="874"/>
+        <location filename="impact_function.py" line="869"/>
         <source>need evacuation</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="876"/>
+        <location filename="impact_function.py" line="871"/>
         <source>be affected</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="935"/>
+        <location filename="impact_function.py" line="930"/>
         <source>Layers need to overlap.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="935"/>
+        <location filename="impact_function.py" line="930"/>
         <source>The exposure and the hazard layer need to overlap.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="954"/>
+        <location filename="impact_function.py" line="949"/>
         <source>The bounding box need to overlap layers.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="954"/>
+        <location filename="impact_function.py" line="949"/>
         <source>The requested analysis extent is not overlaping the exposure and the hazard.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="1075"/>
+        <location filename="impact_function.py" line="1070"/>
         <source>You need to run `prepare` first.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="1104"/>
+        <location filename="impact_function.py" line="1099"/>
         <source>No features in the extent</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="1110"/>
+        <location filename="impact_function.py" line="1105"/>
         <source>Try zooming in to a bigger area or check your features (geometry and attribute table). For instance, an empty geometry or an hazard without value are removed during the process.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="1124"/>
+        <location filename="impact_function.py" line="1119"/>
         <source>Configuration issue</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="1126"/>
+        <location filename="impact_function.py" line="1121"/>
         <source>There is a problem with the Processing plugin.</source>
         <translation type="unfinished"/>
     </message>
@@ -5564,107 +5539,107 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="232"/>
+        <location filename="components.py" line="234"/>
         <source>Action Checklist</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="315"/>
+        <location filename="components.py" line="317"/>
         <source>Detailed demographic breakdown</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="318"/>
+        <location filename="components.py" line="320"/>
         <source>Detailed Age Report</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="321"/>
+        <location filename="components.py" line="323"/>
         <source>Detailed Gender Report</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="411"/>
+        <location filename="components.py" line="449"/>
         <source>units</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="324"/>
+        <location filename="components.py" line="326"/>
         <source>Detailed Minimum Needs Report</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="328"/>
+        <location filename="components.py" line="330"/>
         <source>Aggregation area</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="331"/>
+        <location filename="components.py" line="333"/>
         <source>Columns and rows containing only 0 or &quot;No data&quot; values are excluded from the tables.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="292"/>
+        <location filename="components.py" line="294"/>
         <source>Aggregation Result</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="110"/>
+        <location filename="components.py" line="112"/>
         <source>Hazard Zone</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="587"/>
+        <location filename="components.py" line="630"/>
         <source>Unknown</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="588"/>
+        <location filename="components.py" line="631"/>
         <source>Not used</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="608"/>
+        <location filename="components.py" line="651"/>
         <source>Geographic Coordinates - {crs}</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="605"/>
+        <location filename="components.py" line="648"/>
         <source>Data Source</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="398"/>
+        <location filename="components.py" line="412"/>
         <source>Vulnerability</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="402"/>
+        <location filename="components.py" line="425"/>
         <source>Female</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="403"/>
+        <location filename="components.py" line="440"/>
         <source>Youth</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="404"/>
+        <location filename="components.py" line="441"/>
         <source>Adult</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="405"/>
+        <location filename="components.py" line="442"/>
         <source>Elderly</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="410"/>
+        <location filename="components.py" line="448"/>
         <source>Minimum needs</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="359"/>
+        <location filename="components.py" line="361"/>
         <source>Estimated total population</source>
         <translation type="unfinished"/>
     </message>
@@ -5714,7 +5689,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="258"/>
+        <location filename="exposure.py" line="215"/>
         <source>Structures overlapping the analysis extent may be assigned a hazard status lower than that to which they are exposed outside the analysis area.</source>
         <translation type="unfinished"/>
     </message>
@@ -5779,72 +5754,72 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="184"/>
+        <location filename="exposure.py" line="142"/>
         <source>Number of people</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="348"/>
+        <location filename="exposure.py" line="304"/>
         <source>how many</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="191"/>
+        <location filename="exposure.py" line="149"/>
         <source>A &lt;b&gt;road&lt;/b&gt; is defined as a route used by a vehicle or people to travel between two or more points.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="196"/>
+        <location filename="exposure.py" line="154"/>
         <source>Numbers for road lengths have been rounded to the nearest 10 metres if the total is less than 1,000; nearest 100 metres if more than 1,000 and less than 100,000; and nearest 1000 metres if more than 100,000.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="200"/>
+        <location filename="exposure.py" line="158"/>
         <source>Rounding is applied to all road lengths, which may cause discrepancies between subtotals and totals.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="245"/>
+        <location filename="exposure.py" line="202"/>
         <source>Length of roads</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="246"/>
+        <location filename="exposure.py" line="203"/>
         <source>what length of</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="265"/>
+        <location filename="exposure.py" line="222"/>
         <source>Rounding is applied to all structure counts, which may cause discrepancies between subtotals and totals.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="307"/>
+        <location filename="exposure.py" line="263"/>
         <source>Number of buildings</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="347"/>
+        <location filename="exposure.py" line="303"/>
         <source>Number of places</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="360"/>
+        <location filename="exposure.py" line="316"/>
         <source>Areas reported for land cover have been rounded to the nearest 10 hectares if the total is less than 1,000; nearest 100 hectares if more than 1,000 and less than 100,000; and nearest 1000 hectares if more than 100,000.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="364"/>
+        <location filename="exposure.py" line="320"/>
         <source>Rounding is applied to all land cover areas, which may cause discrepancies between subtotals and totals.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="410"/>
+        <location filename="exposure.py" line="366"/>
         <source>Area of landcover</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="411"/>
+        <location filename="exposure.py" line="367"/>
         <source>what area of</source>
         <translation type="unfinished"/>
     </message>
@@ -5879,42 +5854,42 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="63"/>
+        <location filename="hazard_classifications.py" line="64"/>
         <source>Not exposed</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="67"/>
+        <location filename="hazard_classifications.py" line="68"/>
         <source>Hazard Classification</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="818"/>
+        <location filename="hazard_classifications.py" line="744"/>
         <source>Very low</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1359"/>
+        <location filename="hazard_classifications.py" line="1285"/>
         <source>Australian Bureau of Meteorology - Tropical Cyclone Intensity and Impacts</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1366"/>
+        <location filename="hazard_classifications.py" line="1292"/>
         <source>Tropical cyclone scales - wikpedia</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1613"/>
+        <location filename="hazard_classifications.py" line="1539"/>
         <source>NOAA - NHC</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1617"/>
+        <location filename="hazard_classifications.py" line="1543"/>
         <source>Saffir-Simpson scale - wikipedia</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1847"/>
+        <location filename="hazard_classifications.py" line="1773"/>
         <source>A hazard classification is used to define a range of severity thresholds (classes) for a continuous hazard layer. The classification will be used to create zones of data that each present a similar hazard level. During the analysis, each exposure feature will be assessed to determine which hazard class it coincides with, and then a determination will be made as to whether and how the exposure feature is likely to be impacted by the hazard.</source>
         <translation type="unfinished"/>
     </message>
@@ -5939,42 +5914,37 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="210"/>
+        <location filename="components.py" line="212"/>
         <source>{exposure} type</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="211"/>
+        <location filename="components.py" line="213"/>
         <source>{exposure} class</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="272"/>
+        <location filename="components.py" line="274"/>
         <source>Relief items to be provided {frequency}</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="275"/>
+        <location filename="components.py" line="277"/>
         <source>{name} [{unit_abbreviation}]</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="472"/>
-        <source>InaSAFE {version} | {analysis_date} | {analysis_time} | info@inasafe.org | Indonesian Government-Australian Government-World Bank-GFDRR</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="components.py" line="590"/>
+        <location filename="components.py" line="633"/>
         <source>Software</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="601"/>
+        <location filename="components.py" line="644"/>
         <source>InaSAFE {version}</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="607"/>
+        <location filename="components.py" line="650"/>
         <source>Reference</source>
         <translation type="unfinished"/>
     </message>
@@ -6019,22 +5989,22 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="681"/>
+        <location filename="definitions_help.py" line="662"/>
         <source>No single event notes defined.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="694"/>
+        <location filename="definitions_help.py" line="675"/>
         <source>No multi-event notes defined.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="727"/>
+        <location filename="definitions_help.py" line="708"/>
         <source>Fields:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="746"/>
+        <location filename="definitions_help.py" line="727"/>
         <source>Classes:</source>
         <translation type="unfinished"/>
     </message>
@@ -6069,37 +6039,37 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="step_kw33_multi_classifications.py" line="193"/>
+        <location filename="step_kw33_multi_classifications.py" line="194"/>
         <source>Classifications</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="step_kw33_multi_classifications.py" line="232"/>
+        <location filename="step_kw33_multi_classifications.py" line="233"/>
         <source>No classifications</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="step_kw33_multi_classifications.py" line="266"/>
+        <location filename="step_kw33_multi_classifications.py" line="267"/>
         <source>Edit</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="step_kw33_multi_classifications.py" line="368"/>
+        <location filename="step_kw33_multi_classifications.py" line="369"/>
         <source>Status</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="step_kw33_multi_classifications.py" line="378"/>
+        <location filename="step_kw33_multi_classifications.py" line="379"/>
         <source>Value maps</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="keyword_io.py" line="745"/>
+        <location filename="keyword_io.py" line="746"/>
         <source>No classifications set.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="keyword_io.py" line="750"/>
+        <location filename="keyword_io.py" line="751"/>
         <source>Class name</source>
         <translation type="unfinished"/>
     </message>
@@ -6114,12 +6084,12 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="step_kw33_multi_classifications.py" line="419"/>
+        <location filename="step_kw33_multi_classifications.py" line="420"/>
         <source>Value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="step_kw33_multi_classifications.py" line="719"/>
+        <location filename="step_kw33_multi_classifications.py" line="739"/>
         <source>Save</source>
         <translation type="unfinished"/>
     </message>
@@ -6144,7 +6114,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1321"/>
+        <location filename="dock.py" line="1325"/>
         <source>The requested extent is not overlapping your layers.</source>
         <translation type="unfinished"/>
     </message>
@@ -6164,7 +6134,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="995"/>
+        <location filename="impact_function.py" line="990"/>
         <source>There is a problem with the aggregation layer.</source>
         <translation type="unfinished"/>
     </message>
@@ -6304,22 +6274,22 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="838"/>
+        <location filename="impact_function.py" line="833"/>
         <source>Incompatible exposure/hazard</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="840"/>
+        <location filename="impact_function.py" line="835"/>
         <source>The hazard layer is not set up for this kind of exposure. In InaSAFE, you need to define keywords in the hazard layer for each exposure type that you want to use with the hazard.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="847"/>
+        <location filename="impact_function.py" line="842"/>
         <source>Please select the hazard layer in the legend and then run the keyword wizard to define the needed keywords for {exposure_type} exposure.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="1130"/>
+        <location filename="impact_function.py" line="1125"/>
         <source>InaSAFE depends on the QGIS Processing plugin. This is a core plugin that ships with QGIS. It used to be possible to install the processing plugin from the QGIS Plugin Manager, however we advise you not to use these version since the Plugin Manager version may be incompatible with the version needed by InaSAFE. To resolve this issue, check in your .qgis2/python/plugins directory if you have a processing folder. If you do, remove the processing folder and then restart QGIS. If this issue persists, please report the problem to the InaSAFE team.</source>
         <translation type="unfinished"/>
     </message>
@@ -6334,7 +6304,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="218"/>
+        <location filename="exposure.py" line="176"/>
         <source>What type of vehicles can use the not affected roads?</source>
         <translation type="unfinished"/>
     </message>
@@ -6354,38 +6324,33 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1383"/>
+        <location filename="hazard_classifications.py" line="1309"/>
         <source>Extremely dangerous with widespread destruction. A Category 5 cyclone&apos;s strongest winds are VERY DESTRUCTIVE winds with typical gusts over open flat land of more than 151 kt. These winds correspond to the highest category on the Beaufort scale, Beaufort 12 (Hurricane).</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1415"/>
+        <location filename="hazard_classifications.py" line="1341"/>
         <source>Significant roofing loss and structural damage. Many caravans destroyed and blown away. Dangerous airborne debris . Widespread power failures. A Category 4 cyclone&apos;s strongest winds are VERY DESTRUCTIVE winds with typical gusts over open flat land of 122 - 151 kt. These winds correspond to the highest category on the Beaufort scale, Beaufort 12 (Hurricane).</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1454"/>
+        <location filename="hazard_classifications.py" line="1380"/>
         <source>Some roof and structural damage. Some caravans destroyed.Power failures likely. A Category 3 cyclone&apos;s strongest winds are VERY DESTRUCTIVE winds with typical gusts over open flat land of 90 - 121 kt. These winds correspond to the highest category on the Beaufort scale, Beaufort 12 (Hurricane).</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1491"/>
+        <location filename="hazard_classifications.py" line="1417"/>
         <source>Minor house damage. Significant damage to signs, trees and caravans. Heavy damage to some crops. Risk of power failure. Small craft may break moorings. A Category 2 cyclone&apos;s strongest winds are DESTRUCTIVE winds with typical gusts over open flat land of 68 - 89 kt. These winds correspond to Beaufort 10 and 11 (Storm and violent storm).</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1529"/>
+        <location filename="hazard_classifications.py" line="1455"/>
         <source>Negligible house damage. Damage to some crops, trees and caravans. Craft may drag moorings. A Category 1 cyclone&apos;s strongest winds are GALES with typical gusts over open flat land of 49 - 67 kt. These winds correspond to Beaufort 8 and 9 (Gales and strong gales).</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1565"/>
+        <location filename="hazard_classifications.py" line="1491"/>
         <source>A tropical depression is a tropical disturbance, that has a clearly defined surface circulation, which has maximum sustained winds of less than 34 kt.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="components.py" line="399"/>
-        <source>from {number_affected} affected</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -6399,12 +6364,12 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="step_fc90_analysis.py" line="143"/>
+        <location filename="step_fc90_analysis.py" line="149"/>
         <source>The impact function was not able to be prepared because of a bug.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="1106"/>
+        <location filename="impact_function.py" line="1101"/>
         <source>There are no features in the analysis extent.</source>
         <translation type="unfinished"/>
     </message>
@@ -6419,12 +6384,12 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="keyword_io.py" line="751"/>
+        <location filename="keyword_io.py" line="752"/>
         <source>Values</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="715"/>
+        <location filename="impact_function.py" line="710"/>
         <source>The %s layer do not have keywords. Use the wizard to assign keywords to the layer.</source>
         <translation type="unfinished"/>
     </message>
@@ -6440,22 +6405,12 @@
     </message>
     <message>
         <location filename="earthquake.py" line="148"/>
-        <source>The ITB bayesian fatality model is based on the ITB fatality model and uses Indonesian fatality data</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="earthquake.py" line="148"/>
         <source>An Empirical Fatality Model for Indonesia Based on a Bayesian Approach by W. Sengara, M. Suarjana, M.A. Yulman, H. Ghasemi, and H. Ryu. submitted for Journal of the Geological Society.</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="earthquake.py" line="148"/>
         <source>ITB fatality model is modified from the USGS Pager model. This model was developed by Institut Teknologi Bandung (ITB) and implemented by Dr. Hadi Ghasemi, Geoscience Australia.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="earthquake.py" line="148"/>
-        <source>The ITB fatality model is based on the USGS Pager model and modified to use a different source.</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -6470,11 +6425,6 @@
     </message>
     <message>
         <location filename="earthquake.py" line="148"/>
-        <source>The USGS Pager fatality model using Indonesian country coefficients.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="earthquake.py" line="148"/>
         <source>Jaiswal, K. S., Wald, D. J., and Hearne, M. (2009a). Estimating casualties for large worldwide earthquakes using an empirical approach. U.S. Geological Survey Open-File Report 2009-1136.</source>
         <translation type="unfinished"/>
     </message>
@@ -6484,302 +6434,297 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="60"/>
+        <location filename="hazard_exposure_notes_actions.py" line="12"/>
         <source>Map shows the estimated displaced population. People are displaced if they experience and survive a shake level of more than 5 on the MMI scale.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="63"/>
+        <location filename="hazard_exposure_notes_actions.py" line="12"/>
         <source>Exposed population varies by the time (day or night, weekends, holidays etc.). Such variations are not considered in the estimates in the InaSAFE.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="66"/>
+        <location filename="hazard_exposure_notes_actions.py" line="12"/>
         <source>The fatality calculation assumes that no fatalities occur for shake levels below 4 and fatality counts of less than 50 are rounded down.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="81"/>
+        <location filename="hazard_exposure_notes_actions.py" line="12"/>
         <source>Earthquake fatalities are due to a number of factors, such as destructive level of ground shaking, tsunami, landsliding and fire. The implemented fatality models only consider the number of fatalities due to the earthquake ground shaking and do not include losses due to the other secondary hazards.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="86"/>
+        <location filename="hazard_exposure_notes_actions.py" line="12"/>
         <source>The fatality models do not estimate number of injuries or displaced people. </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="88"/>
-        <source>Empirical fatality models provide an estimate of the number of fatalities. There are several sources of uncertainty contributing to the overall uncertainty of any estimate, such as uncertainties in shaking intensity, and population estimates. </source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="exposure.py" line="92"/>
+        <location filename="hazard_exposure_notes_actions.py" line="12"/>
         <source>Care should be taken when applying empirical earthquake fatality models for ground-motion estimation methods that are inconsistent with the methods used to calibrate the model.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard.py" line="288"/>
+        <location filename="hazard.py" line="286"/>
         <source>Volcanic ash is modelled hazard data estimating the thickness of ash on the ground following a volcanic eruption.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard.py" line="294"/>
+        <location filename="hazard.py" line="292"/>
         <source>What action can be taken to secure water supplies and protect crops?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="82"/>
+        <location filename="hazard_classifications.py" line="83"/>
         <source>The area with the highest hazard.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="100"/>
+        <location filename="hazard_classifications.py" line="101"/>
         <source>The area with the medium hazard.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="118"/>
+        <location filename="hazard_classifications.py" line="119"/>
         <source>The area with the lowest hazard.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="218"/>
+        <location filename="hazard_classifications.py" line="144"/>
         <source>Earthquake MMI scale</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="219"/>
+        <location filename="hazard_classifications.py" line="145"/>
         <source>This scale, composed of increasing levels of intensity that range from imperceptible shaking to catastrophic destruction, is designated by Roman numerals. It does not have a mathematical basis; instead it is an arbitrary ranking based on observed effects.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="237"/>
+        <location filename="hazard_classifications.py" line="163"/>
         <source>X</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="240"/>
+        <location filename="hazard_classifications.py" line="166"/>
         <source>Some well-built wooden structures destroyed; most masonry and frame structures destroyed with foundations. Rails bent.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="259"/>
+        <location filename="hazard_classifications.py" line="185"/>
         <source>IX</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="262"/>
+        <location filename="hazard_classifications.py" line="188"/>
         <source>Damage considerable in specially designed structures; well-designed frame structures thrown out of plumb. Damage great in substantial buildings, with partial collapse. Buildings shifted off foundations.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="282"/>
+        <location filename="hazard_classifications.py" line="208"/>
         <source>VIII</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="285"/>
+        <location filename="hazard_classifications.py" line="211"/>
         <source>Damage slight in specially designed structures; considerable damage in ordinary substantial buildings with partial collapse. Damage great in poorly built structures. Fall of chimneys, factory stacks, columns, monuments, walls. Heavy furniture overturned.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="306"/>
+        <location filename="hazard_classifications.py" line="232"/>
         <source>VII</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="309"/>
+        <location filename="hazard_classifications.py" line="235"/>
         <source>Damage negligible in buildings of good design and construction; slight to moderate in well-built ordinary structures; considerable damage in poorly built or badly designed structures; some chimneys broken.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="329"/>
+        <location filename="hazard_classifications.py" line="255"/>
         <source>VI</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="332"/>
+        <location filename="hazard_classifications.py" line="258"/>
         <source>Felt by all, many frightened. Some heavy furniture moved; a few instances of fallen plaster. Damage slight.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="350"/>
+        <location filename="hazard_classifications.py" line="276"/>
         <source>V</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="353"/>
+        <location filename="hazard_classifications.py" line="279"/>
         <source>Felt by nearly everyone; many awakened. Some dishes, windows broken. Unstable objects overturned. Pendulum clocks may stop.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="372"/>
+        <location filename="hazard_classifications.py" line="298"/>
         <source>IV</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="375"/>
+        <location filename="hazard_classifications.py" line="301"/>
         <source>Felt indoors by many, outdoors by few during the day. At night, some awakened. Dishes, windows, doors disturbed; walls make cracking sound. Sensation like heavy truck striking building. Standing motor cars rocked noticeably.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="396"/>
+        <location filename="hazard_classifications.py" line="322"/>
         <source>III</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="399"/>
+        <location filename="hazard_classifications.py" line="325"/>
         <source>Felt quite noticeably by persons indoors, especially on upper floors of buildings. Many people do not recognize  it as an earthquake. Standing motor cars may rock slightly. Vibrations similar to the passing of a truck. Duration estimated.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="420"/>
+        <location filename="hazard_classifications.py" line="346"/>
         <source>II</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="423"/>
+        <location filename="hazard_classifications.py" line="349"/>
         <source>Felt only by a few persons at rest, especially on upper floors of buildings.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="441"/>
+        <location filename="hazard_classifications.py" line="367"/>
         <source>I</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="444"/>
+        <location filename="hazard_classifications.py" line="370"/>
         <source>Not felt except by a very few under especially favorable conditions.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="546"/>
+        <location filename="hazard_classifications.py" line="472"/>
         <source>Flood wet/dry classes</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="610"/>
+        <location filename="hazard_classifications.py" line="536"/>
         <source>This is a flood classification for an area. The area is broken down into a number of flood classes of increasing severity based on the water depth.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="616"/>
+        <location filename="hazard_classifications.py" line="542"/>
         <source>PetaBencana.id</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="627"/>
+        <location filename="hazard_classifications.py" line="553"/>
         <source>Water is above waist height.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="647"/>
+        <location filename="hazard_classifications.py" line="573"/>
         <source>Water is above knee height, below waist height.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="668"/>
+        <location filename="hazard_classifications.py" line="594"/>
         <source>Water encountered up to knee deep.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="687"/>
+        <location filename="hazard_classifications.py" line="613"/>
         <source>Use caution</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="689"/>
+        <location filename="hazard_classifications.py" line="615"/>
         <source>No water encountered above ground height but there are may be floods in surrounding areas and you should use caution when moving around in this area.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="713"/>
+        <location filename="hazard_classifications.py" line="639"/>
         <source>Five classes are supported for volcanic ash hazard data: &lt;b&gt;very low&lt;/b&gt;, &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, &lt;b&gt;high&lt;/b&gt; or &lt;b&gt;very high&lt;/b&gt;.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="732"/>
+        <location filename="hazard_classifications.py" line="658"/>
         <source>Dry loading on buildings causing structural collapse.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="752"/>
+        <location filename="hazard_classifications.py" line="678"/>
         <source>Dry loading on buildings causing structural damage but not collapse; wet loading on buildings (i.e. ash loading + heavy rainfall) causing structural collapse.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="774"/>
+        <location filename="hazard_classifications.py" line="700"/>
         <source>Damage to less vulnerable agricultural crops (e.g. tea plantations) and destruction of more vulnerable crops; destruction of critical infrastructure; cosmetic (non-structural) damage to buildings</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="798"/>
+        <location filename="hazard_classifications.py" line="724"/>
         <source>Damage to transportation routes (e.g. airports, roads, railways); damage to critical infrastructure (e.g. electricity supply); damage to more vulnerable agricultural crops (e.g. rice fields)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="820"/>
+        <location filename="hazard_classifications.py" line="746"/>
         <source>Impact on health (respiration), livestock, and contamination of water supply.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="849"/>
+        <location filename="hazard_classifications.py" line="775"/>
         <source>Tsunami hazards can be classified into one of four classes for an area. The area is either &lt;b&gt;dry&lt;/b&gt;, &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, or &lt;b&gt;high&lt;/b&gt;, for tsunami hazard classification. The following description for these classes is provided by Badan Geologi based on BNPB Perka 2/2012</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="986"/>
+        <location filename="hazard_classifications.py" line="912"/>
         <source>BNPB Perka 2/2012</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="998"/>
+        <location filename="hazard_classifications.py" line="924"/>
         <source>The area is potentially hit by a tsunami wave with an inundation depth &gt; 3 m or reach a tsunami intensity scale of VII or more (Papadopoulos and Imamura, 2001). Tsunami wave with 4 m inundation depth cause damage to small vessel, a few ships are drifted inland, severe damage on most wooden houses. Boulders are deposited on shore. If tsunami height reaches 8 m, it will cause severe damage. Dykes, wave breaker, tsunami protection walls and green belts will be washed away.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1293"/>
+        <location filename="hazard_classifications.py" line="1219"/>
         <source>Water above 1.1m and less than 3.0m. The area is potentially hit by a tsunami wave with an inundation depth of 1 - 3 m or equal to V-VI tsunami intensity scale (Papadopoulos and Imamura, 2001). Tsunami wave with a 3m inundation depth causes most people frightened and to flee to higher ground. Small vessels drift and collide. Damage occurs to some wooden houses, while most of them are safe.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1318"/>
+        <location filename="hazard_classifications.py" line="1244"/>
         <source>Water above ground height and less than 1.0m. The area is potentially hit by a tsunami wave with an inundation depth less than 1 m or similar to tsunami intensity scale of V or less in (Papadopoulos and Imamura, 2001). Tsunami wave of 1m height causes few people to be frightened and flee to higher elevation. Felt by most people on large ship, observed from shore. Small vessels drift and collide and some turn over. Sand is deposited and there is flooding of areas close to the shore.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="974"/>
+        <location filename="hazard_classifications.py" line="900"/>
         <source>Tsunami population classes</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="976"/>
+        <location filename="hazard_classifications.py" line="902"/>
         <source>Tsunami hazards can be classified into one of three classes for an area. The area is either &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, or &lt;b&gt;high&lt;/b&gt;, for tsunami hazard classification. The following description for these classes is provided by Badan Geologi based on BNPB Perka 2/2012, and modified for population by Pak Hamza</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1025"/>
+        <location filename="hazard_classifications.py" line="951"/>
         <source>Water above 0.7m and less than 3.0m. The area is potentially hit by a tsunami wave with an inundation depth of 1 - 3 m or equal to V-VI tsunami intensity scale (Papadopoulos and Imamura, 2001). Tsunami wave with a 3m inundation depth causes most people frightened and to flee to higher ground. Small vessels drift and collide. Damage occurs to some wooden houses, while most of them are safe.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1080"/>
+        <location filename="hazard_classifications.py" line="1006"/>
         <source>Tsunami classes ITB</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1226"/>
+        <location filename="hazard_classifications.py" line="1152"/>
         <source>Tsunami hazards can be classified into one of five classes for an area. The area is either &lt;b&gt;dry&lt;/b&gt;, &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, &lt;b&gt;high&lt;/b&gt;, or &lt;b&gt;very high&lt;/b&gt; for tsunami hazard classification. The following description for these classes is provided by Pak Hamza ITB based on Papadopoulos and Imamura, 2001.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1265"/>
+        <location filename="hazard_classifications.py" line="1191"/>
         <source>Water above 3.1m and less than 8.0m. The area is potentially hit by a tsunami wave with an inundation depth &gt; 3 m or reach a tsunami intensity scale of VII or even more (Papadopoulos and Imamura, 2001). Tsunami wave with 4 m inundation depth cause damage to small vessel, a few ships are drifted inland, severe damage on most wooden houses. Boulders are deposited on shore. If tsunami height reaches 8 m, it will cause severe damage. Dykes, wave breaker, tsunami protection walls and green belts will be washed away.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1225"/>
+        <location filename="hazard_classifications.py" line="1151"/>
         <source>Tsunami population classes ITB</source>
         <translation type="unfinished"/>
     </message>
@@ -6929,77 +6874,77 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="109"/>
+        <location filename="components.py" line="111"/>
         <source>Estimated {title}</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="121"/>
+        <location filename="components.py" line="123"/>
         <source>Not Affected</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="125"/>
+        <location filename="components.py" line="127"/>
         <source>Not Exposed</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="206"/>
+        <location filename="components.py" line="208"/>
         <source>Not affected</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="252"/>
+        <location filename="components.py" line="254"/>
         <source>For this analysis, the following displacement rates were used: {rate_description}</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="255"/>
+        <location filename="components.py" line="257"/>
         <source>{name} - {displacement_rate:.2%}</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="503"/>
+        <location filename="components.py" line="544"/>
         <source>source not available</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="504"/>
+        <location filename="components.py" line="545"/>
         <source>reference unspecified</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="505"/>
+        <location filename="components.py" line="546"/>
         <source>not used</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="520"/>
+        <location filename="components.py" line="561"/>
         <source>Hazard source</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="532"/>
+        <location filename="components.py" line="573"/>
         <source>{layer_name} - {source} - </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="525"/>
+        <location filename="components.py" line="566"/>
         <source>Exposure source</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="530"/>
+        <location filename="components.py" line="571"/>
         <source>Aggregation source</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="535"/>
+        <location filename="components.py" line="576"/>
         <source>Impact Function</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="537"/>
+        <location filename="components.py" line="578"/>
         <source>{impact_function_name}</source>
         <translation type="unfinished"/>
     </message>
@@ -7049,26 +6994,6 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="644"/>
-        <source>Earthquake notes:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions_help.py" line="645"/>
-        <source>Earthquake Pager notes:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions_help.py" line="646"/>
-        <source>Earthquake ITB notes:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions_help.py" line="648"/>
-        <source>Earthquake fatality model limitations</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="dock_help.py" line="268"/>
         <source>All datasets will be clipped to the behaviours defined in the analysis extents dialog if you do not use an aggregation layer.</source>
         <translation type="unfinished"/>
@@ -7089,7 +7014,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="step_kw33_multi_classifications.py" line="275"/>
+        <location filename="step_kw33_multi_classifications.py" line="276"/>
         <source>InaSAFE use default classification for Raster Earthquake hazard on population.</source>
         <translation type="unfinished"/>
     </message>
@@ -7119,12 +7044,12 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="995"/>
+        <location filename="impact_function.py" line="990"/>
         <source>The aggregation layer seems to have a problem. Some features might be invalid. You should check the validity of this layer or use a selection within this layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="1330"/>
+        <location filename="impact_function.py" line="1325"/>
         <source>Something went wrong with the datastore : {error_message}</source>
         <translation type="unfinished"/>
     </message>
@@ -7279,12 +7204,12 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="119"/>
+        <location filename="exposure.py" line="79"/>
         <source>What is the ownership of the shelter or settlement location?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="exposure.py" line="261"/>
+        <location filename="exposure.py" line="218"/>
         <source>Numbers reported for structures have been rounded to the nearest 10 if the total is less than 1,000; nearest 100 if more than 1,000 and less than 100,000; and nearest 1000 if more than 100,000.</source>
         <translation type="unfinished"/>
     </message>
@@ -7304,11 +7229,6 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="styles.py" line="43"/>
-        <source>Not Displaced</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="definitions_help.py" line="117"/>
         <source>Glossary of terms</source>
         <translation type="unfinished"/>
@@ -7324,11 +7244,6 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_exposure_notes_actions.py" line="9"/>
-        <source>Do you have enough masks for people in the affected area?</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="multi_buffer_help.py" line="77"/>
         <source>Check the &quot;launch keywords wizard&quot; checkbox to launch the keywords creation wizard after the buffering is complete. If you want assign keywords later, uncheck the &quot;launch keywords wizard&quot; checkbox.</source>
         <translation type="unfinished"/>
@@ -7339,33 +7254,8 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="step_kw33_multi_classifications.py" line="222"/>
+        <location filename="step_kw33_multi_classifications.py" line="223"/>
         <source>{hazard_name} on {exposure_name} Classifications</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="dynamic_translations.py" line="189"/>
-        <source>Value map</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="dynamic_translations.py" line="190"/>
-        <source>value map</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="dynamic_translations.py" line="191"/>
-        <source>Inasafe fields</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="dynamic_translations.py" line="192"/>
-        <source>Keyword version</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="dynamic_translations.py" line="193"/>
-        <source>Inasafe default values</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -7376,46 +7266,6 @@
     <message>
         <location filename="exposure.py" line="55"/>
         <source>If displacement counts are 0, no minimum needs and displaced related postprocessors will be shown.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="exposure_classifications.py" line="678"/>
-        <source>Badan Geologi Landcover Classification</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="exposure_classifications.py" line="679"/>
-        <source>Classification of landcover based on Badan Geologi</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="exposure_classifications.py" line="684"/>
-        <source>Badan Geologi</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="exposure_classifications.py" line="692"/>
-        <source>Settlement</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="exposure_classifications.py" line="705"/>
-        <source>Rice Field</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="exposure_classifications.py" line="718"/>
-        <source>Plantation</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="exposure_classifications.py" line="731"/>
-        <source>Water Supply</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="exposure_classifications.py" line="758"/>
-        <source>Forest</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -7469,6 +7319,86 @@
         <translation type="unfinished"/>
     </message>
     <message>
+        <location filename="fields.py" line="1210"/>
+        <source>&quot;Affected&quot; is defined as: {concept} The total affected field is added to the analysis layer, aggregate impact layer and aggregate hazard impact layer during the impact analysis. It represents the cumulative count of affected exposure features (e.g. buildings) or entities (e.g. people) for each area.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="fields.py" line="1240"/>
+        <source>&quot;Hazard&quot; is defined as: {concept} The hazard count field is added to the analysis layer, aggregate impact layer and aggregate hazard impact layer during the impact analysis. It represents the cumulative count of hazard features for each area.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="components.py" line="95"/>
+        <source>Analysis question</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="components.py" line="110"/>
+        <source>General Report</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="components.py" line="153"/>
+        <source>MMI Detail</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="components.py" line="158"/>
+        <source>Exposed</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="components.py" line="195"/>
+        <source>Structure</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="components.py" line="196"/>
+        <source>Road</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="components.py" line="214"/>
+        <source>Analysis Detail</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="components.py" line="336"/>
+        <source>Analysis produced 0 displaced count. No calculations produced.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="components.py" line="331"/>
+        <source>Total Displaced Population</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="components.py" line="339"/>
+        <source>Gender ratio not exists. No calculations produced.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="components.py" line="342"/>
+        <source>Age ratio not exists. No calculations produced.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="dock_help.py" line="145"/>
+        <source>InaSAFE will combine these two layers in a mathematical model. The results of this model will show what the effect of the hazard will be on the exposed infrastructure or people. The plugin relies on simple keyword metadata associated with each layer to determine what kind of information the layer represents. You can define these keywords by selecting a layer and then clicking the InaSAFE Keywords Wizard icon on the toolbar: </source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="dock.py" line="193"/>
+        <source>will be affected? Summarise the results by</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="dock.py" line="195"/>
+        <source>will be affected? Summarise the results by selected features in</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="fields.py" line="825"/>
         <source>Population Displacement Ratio</source>
         <translation type="unfinished"/>
@@ -7484,33 +7414,53 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="fields.py" line="1022"/>
-        <source>Number of displaced people.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="fields.py" line="1210"/>
-        <source>&quot;Affected&quot; is defined as: {concept} The total affected field is added to the analysis layer, aggregate impact layer and aggregate hazard impact layer during the impact analysis. It represents the cumulative count of affected exposure features (e.g. buildings) or entities (e.g. people) for each area.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="fields.py" line="1240"/>
-        <source>&quot;Hazard&quot; is defined as: {concept} The hazard count field is added to the analysis layer, aggregate impact layer and aggregate hazard impact layer during the impact analysis. It represents the cumulative count of hazard features for each area.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="hazard.py" line="274"/>
+        <location filename="hazard.py" line="272"/>
         <source>&lt;b&gt;Volcanic ash&lt;/b&gt; describes fragments of pulverized rock, minerals and volcanic glass, ejected into the atmosphere during volcanic eruptions.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard.py" line="334"/>
+        <location filename="hazard.py" line="332"/>
         <source>Tsunami hazard scenarios estimate the maximum extent of tsunami waves on land.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1826"/>
-        <source>Displacement rate is a generalized estimate (personal communication Craig Arthur)</source>
+        <location filename="post_processors.py" line="263"/>
+        <source>Population Displacement Ratio Post Processor</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="post_processors.py" line="264"/>
+        <source>A post processor to add the population displacement ratio according to the hazard class</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="post_processors.py" line="559"/>
+        <source>A post processor to calculate the size of the feature. The unit is defined in the exposure definition.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="units.py" line="159"/>
+        <source>Hectare</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="units.py" line="161"/>
+        <source>hectares</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="units.py" line="164"/>
+        <source>&lt;b&gt;Hectare&lt;/b&gt; is an SI accepted metric system unit of area equal to 100 ares (10,000 mÂ²) and primarily used in the measurement of land</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="hazard_exposure_notes_actions.py" line="12"/>
+        <source>Do you have enough masks for people in the affected area?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="fields.py" line="1022"/>
+        <source>Number of displaced people.</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -7564,108 +7514,23 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="post_processors.py" line="263"/>
-        <source>Population Displacement Ratio Post Processor</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="post_processors.py" line="264"/>
-        <source>A post processor to add the population displacement ratio according to the hazard class</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="post_processors.py" line="559"/>
-        <source>A post processor to calculate the size of the feature. The unit is defined in the exposure definition.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="processing_steps.py" line="93"/>
         <source>Compute exposure summary table</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="93"/>
-        <source>Analysis question</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="components.py" line="108"/>
-        <source>General Report</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="components.py" line="151"/>
-        <source>MMI Detail</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="components.py" line="156"/>
-        <source>Exposed</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="components.py" line="193"/>
-        <source>Structure</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="components.py" line="194"/>
-        <source>Road</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="components.py" line="212"/>
-        <source>Analysis Detail</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="components.py" line="213"/>
+        <location filename="components.py" line="215"/>
         <source>Estimated {title} {unit} by {exposure} type</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="248"/>
+        <location filename="components.py" line="250"/>
         <source>Exposures in this following hazard classes are considered affected: {hazard_classes}</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="components.py" line="334"/>
-        <source>Analysis produced 0 displaced count. No calculations produced.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="components.py" line="296"/>
+        <location filename="components.py" line="298"/>
         <source>Estimated {title} {unit} by aggregation area</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="components.py" line="329"/>
-        <source>Total Displaced Population</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="components.py" line="337"/>
-        <source>Gender ratio not exists. No calculations produced.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="components.py" line="340"/>
-        <source>Age ratio not exists. No calculations produced.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="units.py" line="159"/>
-        <source>Hectare</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="units.py" line="161"/>
-        <source>hectares</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="units.py" line="164"/>
-        <source>&lt;b&gt;Hectare&lt;/b&gt; is an SI accepted metric system unit of area equal to 100 ares (10,000 mÂ²) and primarily used in the measurement of land</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -7679,18 +7544,133 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock_help.py" line="145"/>
-        <source>InaSAFE will combine these two layers in a mathematical model. The results of this model will show what the effect of the hazard will be on the exposed infrastructure or people. The plugin relies on simple keyword metadata associated with each layer to determine what kind of information the layer represents. You can define these keywords by selecting a layer and then clicking the InaSAFE Keywords Wizard icon on the toolbar: </source>
+        <location filename="dynamic_translations.py" line="189"/>
+        <source>Value map</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="193"/>
-        <source>will be affected? Summarise the results by</source>
+        <location filename="dynamic_translations.py" line="190"/>
+        <source>value map</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="195"/>
-        <source>will be affected? Summarise the results by selected features in</source>
+        <location filename="dynamic_translations.py" line="191"/>
+        <source>Inasafe fields</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="dynamic_translations.py" line="192"/>
+        <source>Keyword version</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="dynamic_translations.py" line="193"/>
+        <source>Inasafe default values</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="exposure_classifications.py" line="678"/>
+        <source>Badan Geologi Landcover Classification</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="exposure_classifications.py" line="679"/>
+        <source>Classification of landcover based on Badan Geologi</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="exposure_classifications.py" line="684"/>
+        <source>Badan Geologi</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="exposure_classifications.py" line="692"/>
+        <source>Settlement</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="exposure_classifications.py" line="705"/>
+        <source>Rice Field</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="exposure_classifications.py" line="718"/>
+        <source>Plantation</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="exposure_classifications.py" line="731"/>
+        <source>Water Supply</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="exposure_classifications.py" line="758"/>
+        <source>Forest</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="1752"/>
+        <source>Displacement rate is a generalized estimate (personal communication Craig Arthur)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="earthquake.py" line="148"/>
+        <source>The ITB bayesian fatality model, from Institut Teknologi Bandung 2012, is based on the ITB fatality model and uses Indonesian fatality data</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="earthquake.py" line="148"/>
+        <source>The ITB fatality model, from Institut Teknologi Bandung 2012, is based on the USGS Pager model and modified to use a different source.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="earthquake.py" line="148"/>
+        <source>The USGS Population Vulnerability Pager fatality model using Indonesian country coefficients.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="fields.py" line="656"/>
+        <source>The rate field is used to indicate the financial value of an exposed feature. The rate, when multiplied by the of the length or area of a given exposure feature, can be used to calculate an estimated value of the feature. For example in buildings the rate * the area of a building can be used to estimate the value of the building.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="hazard_exposure_notes_actions.py" line="12"/>
+        <source>Empirical fatality models provide an estimate of the number of fatalities. There are several sources of uncertainty contributing to the overall uncertainty of any estimate, such as uncertainties in shaking intensity, and population estimates.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="components.py" line="402"/>
+        <source>Displaced&lt;sup&gt;*&lt;/sup&gt;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="components.py" line="403"/>
+        <source>&lt;sup&gt;*&lt;/sup&gt; Displacement rate: {rate_description}</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="components.py" line="406"/>
+        <source>{displacement_rate:.2%} of affected {name}</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="components.py" line="413"/>
+        <source>from {number_displaced} displaced</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="components.py" line="416"/>
+        <source>Gender group</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="components.py" line="429"/>
+        <source>Age group</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="components.py" line="512"/>
+        <source>InaSAFE {version} | {analysis_date} | {analysis_time} | info@inasafe.org | Icons source: OCHA | Indonesian Government-Australian Government-World Bank-GFDRR</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -8065,22 +8045,22 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1289"/>
+        <location filename="dock.py" line="1293"/>
         <source>The hazard layer, exposure layer and your defined analysis area extents all overlap. Press the run button below to continue with the analysis.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1294"/>
+        <location filename="dock.py" line="1298"/>
         <source>Analysis environment ready</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1294"/>
+        <location filename="dock.py" line="1298"/>
         <source>More info ...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1332"/>
+        <location filename="dock.py" line="1336"/>
         <source>No overlapping extents</source>
         <translation type="unfinished"/>
     </message>
@@ -9793,27 +9773,27 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>StepFcAnalysis</name>
     <message>
-        <location filename="step_fc90_analysis.py" line="202"/>
+        <location filename="step_fc90_analysis.py" line="231"/>
         <source>Running analysis...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="step_fc90_analysis.py" line="310"/>
+        <location filename="step_fc90_analysis.py" line="339"/>
         <source>Analysis status</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="step_fc90_analysis.py" line="327"/>
+        <location filename="step_fc90_analysis.py" line="356"/>
         <source>Please select a valid impact layer before trying to print.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="step_fc90_analysis.py" line="355"/>
+        <location filename="step_fc90_analysis.py" line="384"/>
         <source>Map Creator</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="step_fc90_analysis.py" line="355"/>
+        <location filename="step_fc90_analysis.py" line="384"/>
         <source>Your PDF was created....opening using the default PDF viewer on your system. The generated pdfs were saved as:</source>
         <translation type="unfinished"/>
     </message>
@@ -10552,7 +10532,7 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>self.dock</name>
     <message>
-        <location filename="test_dock.py" line="705"/>
+        <location filename="test_dock.py" line="178"/>
         <source>Entire area</source>
         <translation type="unfinished"/>
     </message>
