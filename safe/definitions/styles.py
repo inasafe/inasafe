@@ -40,7 +40,6 @@ MMI_12 = QColor('#440000')
 # Displaced people raster after an EQ raster. The first item is the value in
 # the raster.
 legend_raster_displaced = [
-    QgsColorRampShader.ColorRampItem(0, transparent, tr('Not Displaced')),
     QgsColorRampShader.ColorRampItem(1, QColor('#a53c12'), tr('Displaced')),
 ]
 
