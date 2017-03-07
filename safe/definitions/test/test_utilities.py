@@ -276,9 +276,9 @@ class TestDefinitionsUtilities(unittest.TestCase):
         }
         self.assertDictEqual(thresholds, expected)
 
-        thresholds = default_classification_thresholds(
-            cyclone_au_bom_hazard_classes, unit_knots)
         unit_knots_key = unit_knots['key']
+        thresholds = default_classification_thresholds(
+            cyclone_au_bom_hazard_classes, unit_knots_key)
         category_5_class = cyclone_au_bom_hazard_classes['classes'][0]
         category_4_class = cyclone_au_bom_hazard_classes['classes'][1]
         category_3_class = cyclone_au_bom_hazard_classes['classes'][2]

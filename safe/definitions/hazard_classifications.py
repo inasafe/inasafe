@@ -9,6 +9,7 @@ Minimum value IS NOT included, but maximum value IS included to the range.
 Mathematical expression:
 minimum_value < x <= maximum_value
 """
+from safe.definitions.constants import big_number
 from safe.definitions import concepts
 from safe.utilities.i18n import tr
 from safe.definitions.units import (
@@ -492,7 +493,7 @@ flood_hazard_classes = {
             'string_defaults': ['wet', '1', 'YES', 'y', 'yes', 'true'],
             'displacement_rate': 0.01,
             'numeric_default_min': 1,
-            'numeric_default_max': 9999999999,
+            'numeric_default_max': big_number,
             'citations': [
                 {
                     'text': None,
@@ -554,7 +555,7 @@ flood_petabencana_hazard_classes = {
             # flood data and IDP numbers
             'displacement_rate': 0.05,
             'numeric_default_min': 1.5,
-            'numeric_default_max': 9999999999,
+            'numeric_default_max': big_number,
             'string_defaults': ['high'],
             'citations': [
                 {
@@ -659,7 +660,7 @@ ash_hazard_classes = {
             # Displacement rate of 100% advised by Ibu Estu - BG Feb 2017
             'displacement_rate': 1.0,
             'numeric_default_min': 10,
-            'numeric_default_max': 9999999999,
+            'numeric_default_max': big_number,
             'string_defaults': ['very hight'],
             'citations': [
                 {
@@ -806,7 +807,7 @@ tsunami_hazard_classes = {
             'string_defaults': ['high'],
             'displacement_rate': 1.0,
             'numeric_default_min': 3,
-            'numeric_default_max': 9999,
+            'numeric_default_max': big_number,
             'citations': [
                 {
                     'text': None,
@@ -933,7 +934,7 @@ tsunami_hazard_population_classes = {
             'string_defaults': ['high'],
             'displacement_rate': 1.0,
             'numeric_default_min': 3,
-            'numeric_default_max': 9999,
+            'numeric_default_max': big_number,
             'citations': [
                 {
                     'text': None,
@@ -1028,7 +1029,7 @@ tsunami_hazard_classes_ITB = {
             'string_defaults': ['very high'],
             'displacement_rate': 1.0,
             'numeric_default_min': 8,
-            'numeric_default_max': 9999,
+            'numeric_default_max': big_number,
             'citations': [
                 {
                     'text': None,
@@ -1173,7 +1174,7 @@ tsunami_hazard_population_classes_ITB = {
             'string_defaults': ['very high'],
             'displacement_rate': 1.0,
             'numeric_default_min': 8,
-            'numeric_default_max': 9999,
+            'numeric_default_max': big_number,
             'citations': [
                 {
                     'text': None,
@@ -1319,7 +1320,7 @@ cyclone_au_bom_hazard_classes = {
                 unit_miles_per_hour['key']: 123,
                 unit_kilometres_per_hour['key']: 198
             },
-            'numeric_default_max': 9999999999,
+            'numeric_default_max': big_number,
             'string_defaults': ['cat 5', 'category 5'],
             'citations': [
                 {
@@ -1568,7 +1569,7 @@ cyclone_sshws_hazard_classes = {
                 unit_miles_per_hour['key']: 156,
                 unit_kilometres_per_hour['key']: 251
             },
-            'numeric_default_max': 9999999999,
+            'numeric_default_max': big_number,
             'string_defaults': ['cat 5', 'category 5'],
             'citations': [
                 {
