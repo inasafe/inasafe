@@ -382,14 +382,9 @@ class ImpactFunction(object):
         """Property for the most detailed output vector layer.
 
         :returns: A vector layer.
-        :rtype: QgsVectorLayer
+        :rtype: QgsMapLayer
         """
-        if is_vector_layer(self.outputs[0]):
-            return self.outputs[0]
-        else:
-            # In case of EQ raster on population, the exposure summary is a
-            # raster.
-            return self.outputs[1]
+        return self.outputs[0]
 
     @property
     def exposure_summary(self):
