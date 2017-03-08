@@ -1772,8 +1772,8 @@ hazard_classification = {
     'name': tr('Classes'),
     'description': tr(
         'A hazard classification is used to define a range of severity '
-        'thresholds (classes) for a continuous hazard layer. The '
-        'classification will be used to create zones of data that each '
+        'thresholds (classes) for a hazard layer. '
+        'The classification will be used to create zones of data that each '
         'present a similar hazard level. During the analysis, each exposure '
         'feature will be assessed to determine which hazard class it '
         'coincides with, and then a determination will be made as to '

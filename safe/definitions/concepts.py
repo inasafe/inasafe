@@ -230,7 +230,7 @@ concepts['evacuated_people'] = {
         'occurrence of a hazardous event. Evacuation can occur from '
         'places of residence, workplaces, schools and hospitals to other '
         'places. Evacuation is usually a planned and organised '
-        'mobilisation of persons, animals and goods for eventual return.'
+        'mobilisation of persons, animals and goods for eventual return. '
         'In InaSAFE, demographic and minimum needs reports are based on '
         'displaced / evacuated people.'),
     'citations': [
