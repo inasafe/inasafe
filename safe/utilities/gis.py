@@ -1,6 +1,7 @@
 # coding=utf-8
 """Helpers for GIS related functionality."""
 
+from osgeo import gdal
 from qgis.core import (
     QgsMapLayer,
     QgsField,
@@ -183,6 +184,23 @@ def is_raster_layer(layer):
         return layer.type() == QgsMapLayer.RasterLayer
     except AttributeError:
         return False
+
+
+def is_raster_y_inverted(layer):
+    """Check if the raster is upside down, ie Y inverted.
+
+    See issue : https://github.com/inasafe/inasafe/issues/4026
+
+    :param layer: The layer to test.
+    :type layer: QgsRasterLayer
+
+    :return: A boolean to know if the raster is correct or not.
+    :rtype: bool
+    """
+    info = gdal.Info(layer.source(), format='json')
+    y_maximum = info['cornerCoordinates']['upperRight'][1]
+    y_minimum = info['cornerCoordinates']['lowerRight'][1]
+    return y_maximum < y_minimum
 
 
 def is_vector_layer(layer):
