@@ -533,7 +533,8 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
                 'min_value', 0)
             parameter.maximum_allowed_value = default_value.get(
                 'max_value', 100000000)
-            parameter.help_text = default_value.get('description')
+            parameter.help_text = default_value.get('help_text')
+            parameter.description = default_value.get('description')
 
             # Check if user ask to restore to the most default value.
             if self.is_restore_default:
