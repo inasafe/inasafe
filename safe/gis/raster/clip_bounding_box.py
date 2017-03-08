@@ -50,7 +50,15 @@ def clip_by_extent(layer, extent, callback=None):
 
     output_raster = unique_filename(dir=temp_dir())
 
+    # We make one pixel size buffer on the extent to cover every pixels.
+    # See https://github.com/inasafe/inasafe/issues/3655
+    pixel_size_x = layer.rasterUnitsPerPixelX()
+    pixel_size_y = layer.rasterUnitsPerPixelY()
+    buffer_size = max(pixel_size_x, pixel_size_y)
+    extent = extent.buffer(buffer_size)
+
     if is_raster_y_inverted(layer):
+        # The raster is Y inverted. We need to switch Y min and Y max.
         bbox = [
             str(extent.xMinimum()),
             str(extent.xMaximum()),
@@ -58,6 +66,7 @@ def clip_by_extent(layer, extent, callback=None):
             str(extent.yMinimum())
         ]
     else:
+        # The raster is normal.
         bbox = [
             str(extent.xMinimum()),
             str(extent.xMaximum()),
