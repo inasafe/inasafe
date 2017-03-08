@@ -19,6 +19,11 @@ from safe.definitions.utilities import all_default_fields
 from safe.definitions.constants import qvariant_whole_numbers, GLOBAL
 from safe.definitions.default_settings import inasafe_default_settings
 from safe.definitions.messages import disclaimer
+from safe.definitions.fields import (
+    youth_ratio_field,
+    adult_ratio_field,
+    elderly_ratio_field
+)
 from safe.common.utilities import temp_dir
 from safe.defaults import supporters_logo_path, default_north_arrow_path
 from safe.definitions.earthquake import EARTHQUAKE_FUNCTIONS
@@ -509,6 +514,8 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         if self.default_value_parameters:
             self.default_value_parameters = []
 
+        unordered_parameters = []
+
         default_fields = all_default_fields()
         for default_field in default_fields:
             if default_field.get('type') == QVariant.Double:
@@ -552,7 +559,23 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
 
                 parameter.value = qsetting_default_value
 
-            self.default_value_parameters.append(parameter)
+            unordered_parameters.append(parameter)
+
+        preferred_order = [
+            youth_ratio_field,
+            adult_ratio_field,
+            elderly_ratio_field
+        ]
+
+        for order in preferred_order:
+            parameter_index = [
+                p.guid for p in unordered_parameters].index(order['key'])
+            if parameter_index > -1:
+                self.default_value_parameters.append(
+                    unordered_parameters[parameter_index])
+                unordered_parameters.pop(parameter_index)
+
+        self.default_value_parameters.extend(unordered_parameters)
 
         description_text = tr(
             'In this options you can change the global default values for '
