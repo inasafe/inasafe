@@ -67,7 +67,8 @@ def check_layer(layer, has_geometry=True):
     """
     if is_vector_layer(layer) or is_raster_layer(layer):
         if not layer.isValid():
-            raise InvalidLayerError(tr('The layer is invalid.'))
+            raise InvalidLayerError(
+                'The layer is invalid : %s' % layer.publicSource())
 
         if is_vector_layer(layer):
 

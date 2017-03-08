@@ -636,7 +636,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 title = self.tr(title)
             # Register title with layer
             if title and self.set_layer_from_title_flag:
-                layer.setLayerName(title)
+                layer.setTitle(title)
 
             # Find out if the layer is a hazard or an exposure
             # layer by querying its keywords. If the query fails,
