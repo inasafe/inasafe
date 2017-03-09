@@ -179,6 +179,13 @@ class ExposureSummaryLayerMetadata(BaseMetadata):
             'inasafe/'
             'hazard_keywords/'
             'gco:Dictionary'),
+        'aggregation_keywords': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'aggregation_keywords/'
+            'gco:Dictionary'),
         'provenance_data': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
