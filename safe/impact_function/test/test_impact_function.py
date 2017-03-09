@@ -766,7 +766,7 @@ class TestImpactFunction(unittest.TestCase):
             'impact_function_title': impact_function.title,
             'notes': impact_function.notes(),
             'requested_extent': impact_function.requested_extent,
-            'data_store_uri': impact_function.datastore.uri,
+            'data_store_uri': impact_function.datastore.uri.absolutePath(),
             'datetime': impact_function.datetime,
         })
 
@@ -825,7 +825,7 @@ class TestImpactFunction(unittest.TestCase):
             'impact_function_title': impact_function.title,
             'notes': impact_function.notes(),
             'requested_extent': impact_function.requested_extent,
-            'data_store_uri': impact_function.datastore.uri,
+            'data_store_uri': impact_function.datastore.uri.absolutePath(),
             'datetime': impact_function.datetime,
         })
 
