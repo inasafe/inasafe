@@ -78,7 +78,6 @@ from safe.definitions.layer_purposes import (
 )
 from safe.impact_function.provenance_utilities import (
     get_map_title,
-    get_report_question,
     get_analysis_question
 )
 from safe.definitions.constants import (
@@ -2049,7 +2048,6 @@ class ImpactFunction(object):
 
         self._provenance['analysis_question'] = get_analysis_question(
             hazard, exposure)
-        self._provenance['report_question'] = get_report_question(exposure)
 
         if self.requested_extent:
             self._provenance['requested_extent'] = (

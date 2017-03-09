@@ -56,29 +56,20 @@ def get_analysis_question(hazard, exposure):
     :returns: Analysis question based on reporting standards.
     :rtype: str
     """
+    if hazard == hazard_generic:
+        # If the hazard is generic, we don't need the hazard.
+        question = tr(
+            'In each of the hazard zones {exposure_measure} {exposure_name} '
+            'might be affected?').format(
+            exposure_measure=exposure['measure_question'],
+            exposure_name=exposure['name'])
+        return question
+
+    # We fallback to a generated string on the fly.
     question = tr(
         'In the event of a {hazard_name}, {exposure_measure} {exposure_name} '
         'might be affected?').format(
             hazard_name=hazard['name'],
-            exposure_measure=exposure['measure_question'],
-            exposure_name=exposure['name'])
-    return question
-
-
-def get_report_question(exposure):
-    """Construct report question based on exposure.
-
-    :param exposure: An exposure definition.
-    :type exposure: dict
-
-    :returns: Report question based on reporting standards.
-    :rtype: str
-    """
-    # In each of the hazard zones <exposure measure> <exposure> might be
-    # affected?
-    question = tr(
-        'In each of the hazard zones {exposure_measure} {exposure_name} might '
-        'be affected?').format(
             exposure_measure=exposure['measure_question'],
             exposure_name=exposure['name'])
     return question
