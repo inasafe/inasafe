@@ -344,13 +344,15 @@ def population_infographic_extractor(impact_report, component_metadata):
         """
         for pie_slice in population_chart_context.slices:
             label = pie_slice['label']
+            if not label:
+                continue
             css_class = label.replace(' ', '').lower()
             css_label_classes.append(css_class)
     except KeyError:
         population_chart_context = None
 
     sections['population_chart'] = {
-        'img_path': population_donut_path,
+        'img_path': resource_url(population_donut_path),
         'context': population_chart_context,
         'css_label_classes': css_label_classes
     }
@@ -420,7 +422,7 @@ def infographic_pdf_extractor(impact_report, component_metadata):
     :param component_metadata: the component metadata. Used to obtain
         information about the component we want to render
     :type component_metadata: safe.report.report_metadata.
-        ReportComponentsMetadata
+        QgisComposerComponentsMetadata
 
     :return: context for rendering phase
     :rtype: dict
@@ -442,14 +444,27 @@ def infographic_pdf_extractor(impact_report, component_metadata):
         return context
 
     if infographic_html.strip():
+        # get component object
+        margin_left = 0
+        margin_right = 0
+        margin_top = 4.5
+        margin_bottom = 0
         html_frame_elements = [
             {
                 'id': 'infographic',
                 'mode': 'text',
                 'text': jinja2_output_as_string(
                     impact_report, 'infographic-layout'),
-                'margin_left': 10,
-                'margin_right': 10,
+                'margin_left': margin_left,
+                'margin_top': margin_top,
+                'height': (
+                    component_metadata.page_height -
+                    margin_top -
+                    margin_bottom),
+                'width': (
+                    component_metadata.page_width -
+                    margin_left -
+                    margin_right)
             }
         ]
         context.html_frame_elements = html_frame_elements
