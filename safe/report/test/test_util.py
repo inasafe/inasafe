@@ -88,10 +88,9 @@ class TestReportUtil(unittest.TestCase):
                     **actual_definition))
                 raise e
 
-    # TODO: We are using multi hazard classification so this test will fail
+    # We are using multi hazard classification so this test will fail
     # the layer needs to run on impact function first or we can inject
     # the classification for this test.
-    @unittest.case.expectedFailure
     def test_layer_hazard_classification(self):
         """Test layer_hazard_classification method.
 
@@ -113,6 +112,10 @@ class TestReportUtil(unittest.TestCase):
                 layer_paths, expected_classifications):
             path = standard_data_path(*layer_path)
             layer, _ = load_layer(path)
+            # inject classification keyword
+            if expected_classification:
+                layer.keywords['classification'] = (
+                    expected_classification['key'])
             actual_classification = layer_hazard_classification(layer)
             try:
                 self.assertEqual(
@@ -186,8 +189,8 @@ class TestReportUtil(unittest.TestCase):
             layer, _ = load_layer(path)
             actual_classes = retrieve_exposure_classes_lists(layer)
             try:
-                self.assertEqual(expected_classes,
-                                 actual_classes)
+                self.assertEqual(
+                    expected_classes, actual_classes)
             except Exception as e:
                 LOGGER.error('Layer path: {path}'.format(
                     path=path))

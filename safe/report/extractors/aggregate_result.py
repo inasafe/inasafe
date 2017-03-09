@@ -12,7 +12,8 @@ from safe.definitions.fields import (
 from safe.gis.vector.tools import read_dynamic_inasafe_field
 from safe.report.extractors.util import (
     layer_definition_type,
-    resolve_from_dictionary, retrieve_exposure_classes_lists)
+    resolve_from_dictionary,
+    retrieve_exposure_classes_lists)
 from safe.utilities.rounding import format_number
 from safe.utilities.i18n import tr
 
