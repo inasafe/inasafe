@@ -1256,7 +1256,7 @@ class ImpactFunction(object):
 
         self._datetime = datetime.now()
         self._provenance['datetime'] = self.datetime
-        self._provenance_ready = True
+        self._generate_provenance()
 
         # End of the impact function, we can add layers to the datastore.
         # We replace memory layers by the real layer from the datastore.
@@ -1997,6 +1997,8 @@ class ImpactFunction(object):
         If the impact function is not ready (has not called prepare method),
         it will return empty dict to avoid miss information.
 
+        The impact function will call generate_provenance at the end of the IF.
+
         List of keys (for quick lookup):
 
         [
@@ -2018,9 +2020,13 @@ class ImpactFunction(object):
         :returns: Dictionary that contains all provenance.
         :rtype: dict
         """
-        if not self._provenance_ready:
+        if self._provenance_ready:
+            return self._provenance
+        else:
             return {}
 
+    def _generate_provenance(self):
+        """Function to generate provenance at the end of the IF."""
         # noinspection PyTypeChecker
         exposure = definition(
             self._provenance['exposure_keywords']['exposure'])
@@ -2060,7 +2066,7 @@ class ImpactFunction(object):
         self._provenance['notes'] = self.notes()
         self._provenance['action_checklist'] = self.action_checklist()
 
-        return self._provenance
+        self._provenance_ready = True
 
     def exposure_notes(self):
         """Get the exposure specific notes defined in definitions.
