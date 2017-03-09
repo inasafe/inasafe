@@ -2054,7 +2054,7 @@ class ImpactFunction(object):
         self._provenance['analysis_extent'] = (
             self.analysis_extent.exportToWkt()
         )
-        self._provenance['data_store_uri'] = self.datastore.uri.absolutePath()
+        self._provenance['data_store_uri'] = self.datastore.uri_path
 
         # Notes and Action
         self._provenance['notes'] = self.notes()
