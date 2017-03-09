@@ -5,6 +5,8 @@ from safe.utilities.i18n import tr
 
 from safe.definitions.hazard import hazard_generic
 from safe.definitions.hazard_category import hazard_category_single_event
+from safe.definitions.hazard_exposure_specifications import (
+    specific_analysis_question)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -56,8 +58,13 @@ def get_analysis_question(hazard, exposure):
     :returns: Analysis question based on reporting standards.
     :rtype: str
     """
+    # First we look for a translated hardcoded question.
+    question = specific_analysis_question(hazard, exposure)
+    if question:
+        return question
+
     if hazard == hazard_generic:
-        # If the hazard is generic, we don't need the hazard.
+        # Secondly, if the hazard is generic, we don't need the hazard.
         question = tr(
             'In each of the hazard zones {exposure_measure} {exposure_name} '
             'might be affected?').format(
@@ -65,7 +72,7 @@ def get_analysis_question(hazard, exposure):
             exposure_name=exposure['name'])
         return question
 
-    # We fallback to a generated string on the fly.
+    # Then, we fallback on a generated string on the fly.
     question = tr(
         'In the event of a {hazard_name}, {exposure_measure} {exposure_name} '
         'might be affected?').format(
