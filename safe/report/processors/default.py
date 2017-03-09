@@ -16,6 +16,7 @@ from PyQt4.QtCore import QUrl
 from PyQt4.QtGui import QImage, QPainter
 from PyQt4.QtSvg import QSvgRenderer
 from jinja2.environment import Environment
+from jinja2.exceptions import TemplateNotFound
 from jinja2.loaders import FileSystemLoader
 from qgis.core import (
     QgsMapLayer,

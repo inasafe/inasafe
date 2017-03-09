@@ -188,7 +188,7 @@
             <gco:Boolean/>
           </multipart_polygon>
           <source>
-            <gco:CharacterString/>
+            <gco:CharacterString>InaSAFE v4 GeoJSON test layer</gco:CharacterString>
           </source>
           <value_map>
             <gco:Dictionary>{&quot;residential&quot;: [&quot;house&quot;], &quot;commercial&quot;: [&quot;shop&quot;], &quot;education&quot;: [&quot;school&quot;], &quot;health&quot;: [&quot;hospital&quot;], &quot;government&quot;: [&quot;ministry&quot;]}</gco:Dictionary>
