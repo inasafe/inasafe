@@ -32,6 +32,7 @@ from safe.utilities.resources import get_ui_class, html_header, html_footer
 from safe.utilities.settings import setting, set_setting
 from safe.common.version import get_version
 from safe.gui.tools.help.options_help import options_help
+from safe.utilities.qgis_utilities import display_warning_message_box
 
 from safe.utilities.settings import (
     set_inasafe_default_value_qsetting,
@@ -308,6 +309,13 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
 
     def accept(self):
         """Method invoked when OK button is clicked."""
+        if not self.is_good_age_ratios():
+            display_warning_message_box(
+                self,
+                tr('Wrong Age Ratio'),
+                tr('You have set age ratio whose sum is not 1. Please fix it '
+                   'in the <b>Global Default</b> tab before you can save it.'))
+            return
         self.save_state()
         # FIXME: Option dialog should be independent from dock.
         if self.dock:
@@ -585,6 +593,35 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         self.default_value_parameter_container.setup_ui()
         self.default_values_layout.addWidget(
             self.default_value_parameter_container)
+
+    def is_good_age_ratios(self):
+        """Method to check the sum of age ratio is 1.
+
+        :returns: True if the sum is 1 or the sum less than 1 but there is
+            None.
+        :rtype: bool
+        """
+        parameter_container = self.default_value_parameter_container
+
+        youth_ratio = parameter_container.get_parameter_by_guid(
+            youth_ratio_field['key']).value
+        adult_ratio = parameter_container.get_parameter_by_guid(
+            adult_ratio_field['key']).value
+        elderly_ratio = parameter_container.get_parameter_by_guid(
+            youth_ratio_field['key']).value
+        ratios = [youth_ratio, adult_ratio, elderly_ratio]
+
+        if None in ratios:
+            # If there is None, just check to not exceeding 1
+            clean_ratios = [x for x in ratios if x is not None]
+            ratios.remove(None)
+            if sum(clean_ratios) > 1:
+                return False
+        else:
+            if sum(ratios) != 1:
+                return False
+
+        return True
 
     def save_default_values(self):
         """Save InaSAFE default values."""
