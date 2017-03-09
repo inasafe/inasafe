@@ -773,3 +773,11 @@ structure_class_order = [
     item['key'] for item in generic_structure_classes['classes']]
 road_class_order = [item['key'] for item in generic_road_classes['classes']]
 place_class_order = [item['key'] for item in generic_place_classes['classes']]
+
+exposure_classifications = [
+    generic_structure_classes,
+    generic_road_classes,
+    generic_place_classes,
+    generic_landcover_classes,
+    badan_geologi_landcover_classes
+]

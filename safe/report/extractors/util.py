@@ -153,3 +153,24 @@ def resolve_from_dictionary(dictionary, key_list, default_value=None):
         return current_value
     except KeyError:
         return default_value
+
+
+def retrieve_exposure_classes_lists(exposure_layer):
+    """Retrieve exposures classes.
+
+    Only if the exposure has some classifications.
+
+    :param exposure_layer: exposure layer
+    :type exposure_layer: qgis.core.QgsMapLayer
+
+    :return: lists of classes used in the classifications.
+    :rtype: list(dict)
+    """
+    # return None in case exposure doesn't have classifications
+    keywords = exposure_layer.keywords
+    classification = keywords.get('classification')
+    if not classification:
+        return None
+    # retrieve classes definitions
+    exposure_classifications = definition(classification)
+    return exposure_classifications['classes']

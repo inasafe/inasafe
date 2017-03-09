@@ -12,7 +12,7 @@ from safe.definitions.fields import (
 from safe.gis.vector.tools import read_dynamic_inasafe_field
 from safe.report.extractors.util import (
     layer_definition_type,
-    resolve_from_dictionary)
+    resolve_from_dictionary, retrieve_exposure_classes_lists)
 from safe.utilities.rounding import format_number
 from safe.utilities.i18n import tr
 
@@ -79,6 +79,29 @@ def aggregation_result_extractor(impact_report, component_metadata):
         aggregation_summary_fields, affected_exposure_count_field)
     # do not include total, to preserve ordering and proper reference
     type_fields.remove('total')
+
+    # we need to sort the column
+    # get the classes lists
+    # retrieve classes definitions
+    exposure_classes_lists = retrieve_exposure_classes_lists(exposure_layer)
+
+    # sort columns based on class order
+    # create function to sort
+    def sort_classes(_type_field):
+        """Sort method to retrieve exposure class key index."""
+        # class key is the type field name
+        # find index in class list
+        for i, _exposure_class in enumerate(exposure_classes_lists):
+            if _type_field == _exposure_class['key']:
+                index = i
+                break
+        else:
+            index = -1
+
+        return index
+
+    # sort
+    type_fields = sorted(type_fields, key=sort_classes)
 
     # generate type_header_labels for column header
     type_header_labels = []

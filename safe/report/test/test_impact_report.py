@@ -45,7 +45,7 @@ from qgis.core import QgsMapLayerRegistry
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
-__revision__ = ':%H$'
+__revision__ = '$Format:%H$'
 
 
 class TestImpactReport(unittest.TestCase):
@@ -467,27 +467,27 @@ class TestImpactReport(unittest.TestCase):
                 'header_label': u'Aggregation area',
                 'rows': [
                     {
-                        'type_values': ['0', '10', '10', '10', '0'],
+                        'type_values': ['10', '0', '0', '10', '10'],
                         'total': '10',
                         'name': u'area 1'
                     },
                     {
-                        'type_values': ['10', '0', '0', '0', '0'],
+                        'type_values': ['0', '0', '10', '0', '0'],
                         'total': '10',
                         'name': u'area 2'
                     },
                     {
-                        'type_values': ['0', '0', '0', '10', '10'],
+                        'type_values': ['10', '10', '0', '0', '0'],
                         'total': '10',
                         'name': u'area 3'
                     }
                 ],
                 'type_header_labels': [
-                    u'Government',
-                    u'Other',
-                    u'Commercial',
                     u'Education',
-                    u'Health'
+                    u'Health',
+                    u'Government',
+                    u'Commercial',
+                    u'Other',
                 ],
                 'type_total_values': ['10', '10', '10', '10', '10'],
                 'total_label': u'Total',
@@ -708,23 +708,23 @@ class TestImpactReport(unittest.TestCase):
                 'header_label': u'Aggregation area',
                 'rows': [
                     {
-                        'type_values': ['10', '30', '10', '10', '10', '10'],
+                        'type_values': ['30', '10', '10', '10', '10', '10'],
                         'total': '40',
                         'name': u'Entire Area'
                     }
                 ],
                 'type_header_labels': [
-                    u'Government',
                     u'Residential',
-                    u'Commercial',
                     u'Education',
+                    u'Health',
                     u'Place of worship',
-                    u'Health'
+                    u'Government',
+                    u'Commercial',
                 ],
                 'total_in_aggregation_area_label': u'Total',
                 'total_label': u'Total',
                 'total_all': '40',
-                'type_total_values': ['10', '30', '10', '10', '10', '10']
+                'type_total_values': ['30', '10', '10', '10', '10', '10']
             },
             'header': u'Aggregation Result',
             'notes': u'Columns and rows containing only 0 or "No data" '
@@ -786,12 +786,12 @@ class TestImpactReport(unittest.TestCase):
                 'header_label': u'Aggregation area',
                 'rows': [
                     {
-                        'type_values': ['10', '0', '0', '10', '10', '0'],
+                        'type_values': ['0', '10', '0', '10', '10', '0'],
                         'total': '10',
                         'name': u'B'
                     },
                     {
-                        'type_values': ['0', '10', '0', '0', '0', '0'],
+                        'type_values': ['10', '0', '0', '0', '0', '0'],
                         'total': '10',
                         'name': u'C'
                     },
@@ -801,23 +801,23 @@ class TestImpactReport(unittest.TestCase):
                         'name': u'F'
                     },
                     {
-                        'type_values': ['0', '20', '10', '0', '0', '10'],
+                        'type_values': ['20', '0', '10', '0', '0', '10'],
                         'total': '20',
                         'name': u'G'
                     }
                 ],
                 'type_header_labels': [
-                    u'Government',
                     u'Residential',
-                    u'Commercial',
                     u'Education',
+                    u'Health',
                     u'Place of worship',
-                    u'Health'
+                    u'Government',
+                    u'Commercial',
                 ],
                 'total_in_aggregation_area_label': u'Total',
                 'total_label': u'Total',
                 'total_all': '40',
-                'type_total_values': ['10', '30', '10', '10', '10', '10']
+                'type_total_values': ['30', '10', '10', '10', '10', '10']
             },
             'header': u'Aggregation Result',
             'notes': u'Columns and rows containing only 0 or "No data" '
