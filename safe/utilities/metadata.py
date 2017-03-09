@@ -1,6 +1,9 @@
 # coding=utf-8
 """Metadata Utilities."""
 import os
+from copy import deepcopy
+
+from PyQt4.QtCore import QUrl
 
 from safe.common.exceptions import (
     MetadataReadError,
@@ -184,3 +187,22 @@ def active_thresholds_value_maps(keywords, exposure_key):
         if value['active']:
             return value['classes']
     return None
+
+
+def copy_layer_keywords(layer_keywords):
+    """Helper to make a deep copy of a layer keywords.
+
+    :param layer_keywords: A dictionary of layer's keywords.
+    :type layer_keywords: dict
+
+    :returns: A deep copy of layer keywords.
+    :rtype: dict
+    """
+    copy_keywords = {}
+    for key, value in layer_keywords.items():
+        if isinstance(value, QUrl):
+            copy_keywords[key] = value.toString()
+        else:
+            copy_keywords[key] = deepcopy(value)
+
+    return copy_keywords
