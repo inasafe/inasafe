@@ -732,17 +732,20 @@ class TestImpactFunction(unittest.TestCase):
             'qgis_version': QGis.QGIS_VERSION,
             'qt_version': QT_VERSION_STR,
             'inasafe_version': get_version(),
-            'aggregation_keywords': deepcopy(aggregation_layer.keywords),
             'aggregation_layer': aggregation_layer.source(),
             'aggregation_layer_id': aggregation_layer.id(),
-            'exposure_keywords': deepcopy(exposure_layer.keywords),
             'exposure_layer': exposure_layer.source(),
             'exposure_layer_id': exposure_layer.id(),
-            'hazard_keywords': deepcopy(hazard_layer.keywords),
             'hazard_layer': hazard_layer.source(),
             'hazard_layer_id': hazard_layer.id(),
             'analysis_question': get_analysis_question(hazard, exposure),
             'report_question': get_report_question(exposure)
+        }
+
+        expected_layer_keywords = {
+            'aggregation_keywords': deepcopy(aggregation_layer.keywords),
+            'exposure_keywords': deepcopy(exposure_layer.keywords),
+            'hazard_keywords': deepcopy(hazard_layer.keywords),
         }
 
         # Set up impact function
@@ -771,6 +774,8 @@ class TestImpactFunction(unittest.TestCase):
         })
 
         self.assertDictEqual(expected_provenance, impact_function.provenance)
+        self.assertDictEqual(
+            expected_layer_keywords, impact_function.layer_keywords)
 
     def test_provenance_without_aggregation(self):
         """Test provenance of impact function without aggregation."""
@@ -794,17 +799,20 @@ class TestImpactFunction(unittest.TestCase):
             'qt_version': QT_VERSION_STR,
             'user': getpass.getuser(),
             'os': platform.version(),
-            'aggregation_keywords': None,
             'aggregation_layer': None,
             'aggregation_layer_id': None,
-            'exposure_keywords': deepcopy(exposure_layer.keywords),
             'exposure_layer': exposure_layer.source(),
             'exposure_layer_id': exposure_layer.id(),
-            'hazard_keywords': deepcopy(hazard_layer.keywords),
             'hazard_layer': hazard_layer.source(),
             'hazard_layer_id': hazard_layer.id(),
             'analysis_question': get_analysis_question(hazard, exposure),
             'report_question': get_report_question(exposure)
+        }
+
+        expected_layer_keywords = {
+            'aggregation_keywords': None,
+            'exposure_keywords': deepcopy(exposure_layer.keywords),
+            'hazard_keywords': deepcopy(hazard_layer.keywords),
         }
 
         # Set up impact function
@@ -830,6 +838,8 @@ class TestImpactFunction(unittest.TestCase):
         })
 
         self.assertDictEqual(expected_provenance, impact_function.provenance)
+        self.assertDictEqual(
+            expected_layer_keywords, impact_function.layer_keywords)
 
     def test_vector_post_minimum_needs_value_generation(self):
         """Test minimum needs postprocessors on vector exposure.

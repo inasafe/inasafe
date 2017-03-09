@@ -216,6 +216,8 @@ class ImpactFunction(object):
             'os': platform.version(),
             'inasafe_version': get_version(),
         }
+        # We store layer keywords separately from provenance
+        self.layer_keywords = {}
 
         # Earthquake function
         self._earthquake_function = None
@@ -884,12 +886,12 @@ class ImpactFunction(object):
             self._provenance['exposure_layer'] = self.exposure.publicSource()
             # reference to original layer being used
             self._provenance['exposure_layer_id'] = original_exposure.id()
-            self._provenance['exposure_keywords'] = deepcopy(
+            self.layer_keywords['exposure_keywords'] = deepcopy(
                 self.exposure.keywords)
             self._provenance['hazard_layer'] = self.hazard.publicSource()
             # reference to original layer being used
             self._provenance['hazard_layer_id'] = original_hazard.id()
-            self._provenance['hazard_keywords'] = deepcopy(
+            self.layer_keywords['hazard_keywords'] = deepcopy(
                 self.hazard.keywords)
             # reference to original layer being used
             if original_aggregation:
@@ -898,7 +900,7 @@ class ImpactFunction(object):
             else:
                 self._provenance['aggregation_layer_id'] = None
             self._provenance['aggregation_layer'] = aggregation_source
-            self._provenance['aggregation_keywords'] = aggregation_keywords
+            self.layer_keywords['aggregation_keywords'] = aggregation_keywords
 
             return PREPARE_SUCCESS, None
 
@@ -1266,6 +1268,8 @@ class ImpactFunction(object):
         if self._exposure_summary:
             self._exposure_summary.keywords[
                 'provenance_data'] = self.provenance
+            self._exposure_summary.keywords.update(self.layer_keywords)
+
             result, name = self.datastore.add_layer(
                 self._exposure_summary,
                 layer_purpose_exposure_summary['key'])
@@ -2023,13 +2027,13 @@ class ImpactFunction(object):
 
         # noinspection PyTypeChecker
         exposure = definition(
-            self._provenance['exposure_keywords']['exposure'])
+            self.layer_keywords['exposure_keywords']['exposure'])
 
         # noinspection PyTypeChecker
         hazard = definition(
-            self._provenance['hazard_keywords']['hazard'])
+            self.layer_keywords['hazard_keywords']['hazard'])
         # noinspection PyTypeChecker
-        hazard_category = definition(self._provenance['hazard_keywords'][
+        hazard_category = definition(self.layer_keywords['hazard_keywords'][
             'hazard_category'])
 
         # InaSAFE
