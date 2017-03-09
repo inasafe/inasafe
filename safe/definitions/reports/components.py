@@ -47,6 +47,8 @@ from safe.report.extractors.aggregate_postprocessors import \
 from safe.report.extractors.aggregate_result import \
     aggregation_result_extractor
 from safe.report.extractors.analysis_detail import analysis_detail_extractor
+from safe.report.extractors.analysis_provenance_details import \
+    analysis_provenance_details_extractor
 from safe.report.extractors.analysis_question import \
     analysis_question_extractor
 from safe.report.extractors.general_report import general_report_extractor
@@ -346,6 +348,49 @@ aggregation_postprocessors_component = {
     }
 }
 
+analysis_provenance_details_component = {
+    'key': 'analysis-provenance-details',
+    'type': jinja2_component_type,
+    'processor': jinja2_renderer,
+    'extractor': analysis_provenance_details_extractor,
+    'output_format': Jinja2ComponentsMetadata.OutputFormat.String,
+    'output_path': 'analysis-provenance-details-output.html',
+    'template': 'standard-template/'
+                'jinja2/'
+                'analysis-provenance-details.html',
+    'extra_args': {
+        'defaults': {
+            'source': tr('source not available'),
+            'reference': tr('reference unspecified'),
+            'aggregation_not_used': tr('not used')
+        },
+        'header': {
+            'analysis_detail': tr('Analysis details')
+        },
+        'provenance_format': {
+            'hazard_header': tr(
+                'Hazard source'),
+            'hazard_format': tr(
+                '{layer_name} - {source} - '),
+
+            'exposure_header': tr(
+                'Exposure source'),
+            'exposure_format': tr(
+                '{layer_name} - {source} - '),
+
+            'aggregation_header': tr(
+                'Aggregation source'),
+            'aggregation_format': tr(
+                '{layer_name} - {source} - '),
+
+            'impact_function_header': tr(
+                'Impact Function'),
+            'impact_function_format': tr(
+                '{impact_function_name}'),
+        }
+    }
+}
+
 population_chart_svg_component = {
     'key': 'population-chart',
     'type': jinja2_component_type,
@@ -488,6 +533,7 @@ impact_report_component_metadata = [
     minimum_needs_component,
     aggregation_result_component,
     aggregation_postprocessors_component,
+    analysis_provenance_details_component
 ]
 
 # Standard HTML output for impact report
@@ -540,11 +586,6 @@ standard_impact_report_metadata_html = {
                 html_product_tag
             ],
             'extra_args': {
-                'defaults': {
-                    'source': tr('source not available'),
-                    'reference': tr('reference unspecified'),
-                    'aggregation_not_used': tr('not used')
-                },
                 'components_list': {
                     'analysis_question': analysis_question_component,
                     'general_report': general_report_component,
@@ -555,28 +596,9 @@ standard_impact_report_metadata_html = {
                     'minimum_needs': minimum_needs_component,
                     'aggregation_result': aggregation_result_component,
                     'aggregation_postprocessors': (
-                        aggregation_postprocessors_component)
-                },
-                'provenance_format': {
-                    'hazard_header': tr(
-                        'Hazard source'),
-                    'hazard_format': tr(
-                        '{layer_name} - {source} - '),
-
-                    'exposure_header': tr(
-                        'Exposure source'),
-                    'exposure_format': tr(
-                        '{layer_name} - {source} - '),
-
-                    'aggregation_header': tr(
-                        'Aggregation source'),
-                    'aggregation_format': tr(
-                        '{layer_name} - {source} - '),
-
-                    'impact_function_header': tr(
-                        'Impact Function'),
-                    'impact_function_format': tr(
-                        '{impact_function_name}'),
+                        aggregation_postprocessors_component),
+                    'analysis_provenance_details': (
+                        analysis_provenance_details_component)
                 }
             }
         }
