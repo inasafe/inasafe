@@ -187,6 +187,9 @@
           <inasafe_default_values>
             <gco:Dictionary/>
           </inasafe_default_values>
+          <aggregation_keywords>
+            <gco:Dictionary/>
+          </aggregation_keywords>
           <map_title>
             <gco:CharacterString/>
           </map_title>
