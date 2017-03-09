@@ -312,9 +312,10 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         if not self.is_good_age_ratios():
             display_warning_message_box(
                 self,
-                tr('Wrong Age Ratio'),
-                tr('You have set age ratio whose sum is not 1. Please fix it '
-                   'in the <b>Global Default</b> tab before you can save it.'))
+                tr('Wrong Sum Age Ratio'),
+                tr('You have set age ratio whose sum is not equal to 1. '
+                   'Please fix it in the <b>Global Default</b> tab before you '
+                   'can save it.'))
             return
         self.save_state()
         # FIXME: Option dialog should be independent from dock.
@@ -594,12 +595,11 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         self.default_values_layout.addWidget(
             self.default_value_parameter_container)
 
-    def is_good_age_ratios(self):
-        """Method to check the sum of age ratio is 1.
+    def age_ratios(self):
+        """Helper to get list of age ratio from the options dialog.
 
-        :returns: True if the sum is 1 or the sum less than 1 but there is
-            None.
-        :rtype: bool
+        :returns: List of age ratio.
+        :rtype: list
         """
         parameter_container = self.default_value_parameter_container
 
@@ -608,8 +608,19 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         adult_ratio = parameter_container.get_parameter_by_guid(
             adult_ratio_field['key']).value
         elderly_ratio = parameter_container.get_parameter_by_guid(
-            youth_ratio_field['key']).value
+            elderly_ratio_field['key']).value
         ratios = [youth_ratio, adult_ratio, elderly_ratio]
+
+        return ratios
+
+    def is_good_age_ratios(self):
+        """Method to check the sum of age ratio is 1.
+
+        :returns: True if the sum is 1 or the sum less than 1 but there is
+            None.
+        :rtype: bool
+        """
+        ratios = self.age_ratios()
 
         if None in ratios:
             # If there is None, just check to not exceeding 1
