@@ -47,7 +47,6 @@ from safe.test.debug_helper import print_attribute_table
 from safe.impact_function.provenance_utilities import (
     get_map_title,
     get_analysis_question,
-    get_report_question
 )
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -739,7 +738,6 @@ class TestImpactFunction(unittest.TestCase):
             'hazard_layer': hazard_layer.source(),
             'hazard_layer_id': hazard_layer.id(),
             'analysis_question': get_analysis_question(hazard, exposure),
-            'report_question': get_report_question(exposure),
             'aggregation_keywords': deepcopy(aggregation_layer.keywords),
             'exposure_keywords': deepcopy(exposure_layer.keywords),
             'hazard_keywords': deepcopy(hazard_layer.keywords),
@@ -801,7 +799,6 @@ class TestImpactFunction(unittest.TestCase):
             'hazard_layer': hazard_layer.source(),
             'hazard_layer_id': hazard_layer.id(),
             'analysis_question': get_analysis_question(hazard, exposure),
-            'report_question': get_report_question(exposure),
             'aggregation_keywords': None,
             'exposure_keywords': deepcopy(exposure_layer.keywords),
             'hazard_keywords': deepcopy(hazard_layer.keywords),

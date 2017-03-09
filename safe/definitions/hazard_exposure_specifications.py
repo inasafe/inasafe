@@ -1,13 +1,21 @@
 # coding=utf-8
 
-"""Notes which are specific for an exposure and a hazard."""
+"""Actions, notes, questions which are specials for a given hazard/exposure."""
 
-from safe.utilities.i18n import tr
+from safe.utilities.i18n import tr, locale
 from safe.definitions.hazard import (
     hazard_volcanic_ash,
     hazard_earthquake,
+    hazard_flood,
 )
-from safe.definitions.exposure import exposure_population
+from safe.definitions.exposure import (
+    exposure_population,
+    exposure_road,
+)
+
+# Notes, for the analysis question, this is specific for French. I put the
+# singular and masculine sentence on transifex.
+# I put here when it's plural and/or feminine.
 
 ITEMS = (
     {
@@ -55,7 +63,15 @@ ITEMS = (
                 'model.'),
             # end notes provided by Hadi Ghasemi
         ]
-    }
+    },
+    {
+        'hazard': hazard_flood,
+        'exposure': exposure_road,
+        'analysis_question': {
+            'fr': u"Dans l'événement d'une inondation, quelle longueur de "
+                  u"routes peut-être affectée?"
+        }
+    },
 )
 
 
@@ -73,7 +89,7 @@ def specific_notes(hazard, exposure):
     """
     for item in ITEMS:
         if item['hazard'] == hazard and item['exposure'] == exposure:
-            return item['notes']
+            return item.get('notes', [])
     return []
 
 
@@ -91,5 +107,27 @@ def specific_actions(hazard, exposure):
     """
     for item in ITEMS:
         if item['hazard'] == hazard and item['exposure'] == exposure:
-            return item['actions']
+            return item.get('actions', [])
     return []
+
+
+def specific_analysis_question(hazard, exposure):
+    """Return a translated hardcoded analysis question a given hazard/exposure.
+
+    :param hazard: The hazard definition.
+    :type hazard: safe.definition.hazard
+
+    :param exposure: The exposure definition.
+    :type hazard: safe.definition.exposure
+
+    :return: The analysis question or None if it's not hardcoded.
+    :rtype: basestring
+    """
+    lang = locale()
+    for item in ITEMS:
+        if item['hazard'] == hazard and item['exposure'] == exposure:
+            analysis_questions = item.get('analysis_question', None)
+            if not analysis_questions:
+                return None
+            return analysis_questions.get(lang, None)
+    return None

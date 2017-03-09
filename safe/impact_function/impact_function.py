@@ -91,7 +91,7 @@ from safe.definitions.constants import (
     PREPARE_FAILED_INSUFFICIENT_OVERLAP_REQUESTED_EXTENT,
     PREPARE_FAILED_BAD_LAYER,
     PREPARE_FAILED_BAD_CODE)
-from safe.definitions.hazard_exposure_notes_actions import (
+from safe.definitions.hazard_exposure_specifications import (
     specific_actions, specific_notes)
 from safe.definitions.versions import inasafe_keyword_version
 from safe.common.exceptions import (
