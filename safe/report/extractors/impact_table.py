@@ -95,7 +95,7 @@ def impact_table_pdf_extractor(impact_report, component_metadata):
             'text': jinja2_output_as_string(
                 impact_report, 'impact-report'),
             'margin_left': 10,
-            'margin_right': 10,
+            'margin_top': 10,
         }
     ]
     context.html_frame_elements = html_frame_elements

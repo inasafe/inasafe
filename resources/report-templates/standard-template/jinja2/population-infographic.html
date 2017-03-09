@@ -57,6 +57,39 @@
         font-size: 30pt;
     }
 
+    .people-item{
+        display: inline-block;
+        margin: 20px 15px 0 15px;
+    }
+
+    .people-item .icon-container{
+        display: inline-block;
+        vertical-align: top;
+        width: 100px;
+        height: 100px;
+    }
+
+    .people-item .text-container{
+        display: inline-block;
+        vertical-align: top;
+        margin: 0 15px;
+    }
+
+    .vulnerability-section .icon-container, .minimum-needs-section .icon-container{
+        width: 100px;
+        height: 100px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 20px;
+        display: flex;
+    }
+
+    .icon-container img{
+        margin: auto;
+        max-width: 100%;
+        max-height: 100%;
+    }
+
     .header-element{
         color: #7f7f7f;
         font-size: 14pt;
@@ -66,6 +99,7 @@
     .header-note-element{
         color: #8490a8;
         font-size: 10pt;
+        max-width: 270px;
     }
 
     .small-header{
@@ -82,16 +116,6 @@
     .unit-element{
         color: #7f7f7f;
         font-style: italic;
-    }
-
-    .vulnerability-section img{
-        height: 100px;
-        margin-top: 20px;
-    }
-
-    .minimum-needs-section img{
-        height: 100px;
-        margin-top: 20px;
     }
 
     #population-chart{
@@ -150,10 +174,12 @@
             {% if sections['population_chart']['context'] %}
             <div>
                 {% for slice in sections['population_chart']['context'].slices %}
-                <span class="legend-label">
-                    <span class="hazard-class label-class-{{ sections.population_chart.css_label_classes[loop.index] }}"></span>
-                    {{ slice.label }}
-                </span>
+                    {% if slice.label %}
+                    <span class="legend-label">
+                        <span class="hazard-class label-class-{{ sections.population_chart.css_label_classes[loop.index] }}"></span>
+                        {{ slice.label }}
+                    </span>
+                    {% endif %}
                 {% endfor %}
             </div>
             {% endif %}
@@ -167,32 +193,34 @@
             </div>
         </div>
         <div class="row">
-            {% for item in sections['people']['items'] %}
-            <div class="col-xs-2 col-md-2">
-                <img
-                        width="100%"
-                        src="{{ resource }}{{ item.icon }}" />
+            <div class="col-xs-12 col-md-12">
+                {% for item in sections['people']['items'] %}
+                <span class="people-item">
+                    <span class="icon-container">
+                        <img src="{{ resource }}{{ item.icon }}" />
+                    </span>
+                    <span class="text-container">
+                        <div class="">
+                            <div class="number-element">
+                                {{ item.number }}
+                            </div>
+                        </div>
+                        <div class="">
+                            <div class="header-element">
+                                {{ item.header|capitalize }}
+                            </div>
+                        </div>
+                        <div class="">
+                            <div class="header-note-element">
+                                {% if item.header_note %}
+                                {{ item.header_note }}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </span>
+                </span>
+                {% endfor %}
             </div>
-            <div class="col-xs-2 col-md-2">
-                <div class="row">
-                    <div class="number-element">
-                        {{ item.number }}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="header-element">
-                        {{ item.header|capitalize }}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="header-note-element">
-                        {% if item.header_note %}
-                        {{ item.header_note }}
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
         </div>
     </div>
     {% if sections['vulnerability']['items'] %}
@@ -214,9 +242,9 @@
                     <div class="row">
                     {% for element in item['items'] %}
                         <div class="{{ item.element_column }}">
-                            <img
-                                    width="100%"
-                                    src="{{ element.icon }}" />
+                            <div class="icon-container">
+                                <img src="{{ element.icon }}" />
+                            </div>
                             <div class="number-element text-center">
                                 {{ element.number }}
                             </div>
@@ -246,9 +274,9 @@
         <div class="row">
             {% for item in sections['minimum_needs']['items'] %}
             <div class="col-xs-3 col-md-2">
-                <img
-                        width="100%"
-                        src="{{ item.icon }}" />
+                <div class="icon-container">
+                    <img src="{{ item.icon }}" />
+                </div>
                 <div class="number-element text-center">
                     {{ item.number }}
                 </div>

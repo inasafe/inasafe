@@ -631,8 +631,14 @@ standard_impact_report_metadata_pdf = {
             'type': qgis_composer_component_type,
             'processor': qgis_composer_html_renderer,
             'extractor': infographic_pdf_extractor,
-            'output_format': QgisComposerComponentsMetadata.OutputFormat.PDF,
-            'output_path': 'infographic.pdf',
+            'output_format': {
+                'doc': QgisComposerComponentsMetadata.OutputFormat.PDF,
+                'template': QgisComposerComponentsMetadata.OutputFormat.QPT
+            },
+            'output_path': {
+                'doc': 'infographic.pdf',
+                'template': 'infographic.qpt'
+            },
             'page_dpi': 300,
             'page_width': 297,
             'page_height': 210,
@@ -641,7 +647,8 @@ standard_impact_report_metadata_pdf = {
                 # rendered correctly by qgis
                 final_product_tag,
                 infographic_product_tag,
-                pdf_product_tag
+                pdf_product_tag,
+                qpt_product_tag
             ]
         }
     ]
