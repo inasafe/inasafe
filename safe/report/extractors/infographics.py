@@ -145,10 +145,14 @@ def population_infographic_extractor(impact_report, component_metadata):
     else:
         return context
 
+    # We try to get total affected field
+    # if it didn't exists, check other fields to show
     total_affected_fields = [
+        total_affected_field['key'],
+        # We might want to check other fields, but turn it off until further
+        # discussion
         population_count_field['key'],
         exposure_count_field['key'] % (exposure_population['key'], ),
-        total_affected_field['key']
     ]
 
     for item in total_affected_fields:
@@ -156,6 +160,7 @@ def population_infographic_extractor(impact_report, component_metadata):
             total_affected = value_from_field_name(
                 analysis_layer_fields[item],
                 analysis_layer)
+            total_affected_field_used = item
             break
     else:
         return context
@@ -180,6 +185,9 @@ def population_infographic_extractor(impact_report, component_metadata):
     # create context for affected infographic
     sub_header = resolve_from_dictionary(
         people_items[0], 'sub_header')
+
+    # retrieve relevant header based on the fields we showed.
+    sub_header = sub_header[total_affected_field_used]
 
     affected_infographic = PeopleInfographicElement(
         header=sub_header,

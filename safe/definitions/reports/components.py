@@ -7,7 +7,8 @@ from __future__ import absolute_import
 from safe.definitions.exposure import (
     exposure_structure,
     exposure_road,
-    exposure_land_cover)
+    exposure_land_cover,
+    exposure_population)
 from safe.definitions.reports import (
     jinja2_component_type,
     qgis_composer_component_type,
@@ -35,9 +36,12 @@ from safe.definitions.fields import (
     fatalities_per_mmi_field,
     population_count_field,
     displaced_field,
-    fatalities_field, female_displaced_count_field,
-    youth_displaced_count_field, adult_displaced_count_field,
-    elderly_displaced_count_field)
+    fatalities_field,
+    female_displaced_count_field,
+    youth_displaced_count_field,
+    adult_displaced_count_field,
+    elderly_displaced_count_field,
+    exposure_count_field)
 from safe.definitions.styles import charcoal_black
 from safe.report.extractors.action_notes import (
     action_checklist_extractor,
@@ -433,7 +437,13 @@ population_infographic_component = {
                 'header': tr('People'),
                 'items': [
                     {
-                        'sub_header': tr('Affected'),
+                        'sub_header': {
+                            total_affected_field['key']: tr('Affected'),
+                            population_count_field['key']: tr('Population'),
+                            exposure_count_field['key'] % (
+                                exposure_population['key'], ): tr(
+                                'Population')
+                        }
                     },
                     {
                         'sub_header': tr('Displaced<sup>*</sup>'),
