@@ -894,10 +894,10 @@ class TestImpactReport(unittest.TestCase):
                     'notes': u'Columns and rows containing only 0 or "No '
                              u'data" values are excluded from the tables.',
                     'rows': [
-                        [u'B', '2,700', '1,400', '1,400', '1,100', '130'],
-                        [u'C', '6,500', '3,300', '3,300', '2,600', '310'],
-                        [u'F', '7,100', '3,600', '3,600', '2,800', '330'],
-                        [u'G', '9,500', '4,800', '4,800', '3,800', '440']],
+                        [u'B', '2,700', '1,400', '1,400', '1,100', '360'],
+                        [u'C', '6,500', '3,300', '3,300', '2,600', '880'],
+                        [u'F', '7,100', '3,600', '3,600', '2,800', '960'],
+                        [u'G', '9,500', '4,800', '4,800', '3,800', '1,300']],
                     'columns': [
                         u'Aggregation area',
                         u'Total Displaced Population',
@@ -908,7 +908,7 @@ class TestImpactReport(unittest.TestCase):
                         u'Lactating Women [kg]'],
                     'totals': [
                         u'Total', '25,700', '12,900', '12,900', '10,200',
-                        '1,200']}),
+                        '3,500']}),
                 ('minimum_needs', {
                     'header': u'Detailed Minimum Needs Report',
                     'notes': u'Columns and rows containing only 0 or "No '
@@ -1024,7 +1024,7 @@ class TestImpactReport(unittest.TestCase):
                                 u'Weekly Hygiene Packs',
                                 u'Additional Weekly Rice kg for Pregnant and '
                                 u'Lactating Women [kg]'],
-                    'totals': [u'Total', '20', '10', '10', '10', '0']}),
+                    'totals': [u'Total', '20', '10', '10', '10', '10']}),
                 ('minimum_needs', {
                     'header': u'Detailed Minimum Needs Report',
                     'notes': u'Columns and rows containing only 0 or "No '
