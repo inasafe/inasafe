@@ -175,9 +175,6 @@
           <multipart_polygon>
             <gco:Boolean/>
           </multipart_polygon>
-          <impact_table>
-            <gco:CharacterString/>
-          </impact_table>
           <hazard_keywords>
             <gco:Dictionary/>
           </hazard_keywords>
@@ -190,42 +187,15 @@
           <aggregation_keywords>
             <gco:Dictionary/>
           </aggregation_keywords>
-          <map_title>
-            <gco:CharacterString/>
-          </map_title>
           <scale>
             <gco:CharacterString/>
           </scale>
-          <exposure_title>
-            <gco:CharacterString/>
-          </exposure_title>
-          <elapsed_time>
-            <gco:Integer/>
-          </elapsed_time>
           <source>
             <gco:CharacterString/>
           </source>
           <layer_geometry>
             <gco:CharacterString/>
           </layer_geometry>
-          <time_stamp>
-            <gco:CharacterString/>
-          </time_stamp>
-          <hazard_title>
-            <gco:CharacterString/>
-          </hazard_title>
-          <hazard_source>
-            <gco:CharacterString/>
-          </hazard_source>
-          <postprocessing_report>
-            <gco:CharacterString/>
-          </postprocessing_report>
-          <legend_units>
-            <gco:CharacterString/>
-          </legend_units>
-          <user>
-            <gco:CharacterString/>
-          </user>
           <report>
             <gco:CharacterString/>
           </report>
@@ -235,21 +205,9 @@
           <keyword_version>
             <gco:CharacterString/>
           </keyword_version>
-          <legend_title>
-            <gco:CharacterString/>
-          </legend_title>
-          <legend_notes>
-            <gco:CharacterString/>
-          </legend_notes>
-          <exposure_source>
-            <gco:CharacterString/>
-          </exposure_source>
           <datatype>
             <gco:CharacterString/>
           </datatype>
-          <host_name>
-            <gco:CharacterString/>
-          </host_name>
           <layer_purpose>
             <gco:CharacterString/>
           </layer_purpose>
@@ -262,12 +220,6 @@
           <layer_mode>
             <gco:CharacterString/>
           </layer_mode>
-          <target_field>
-            <gco:CharacterString/>
-          </target_field>
-          <impact_summary>
-            <gco:CharacterString/>
-          </impact_summary>
         </inasafe>
         <inasafe_provenance>
           <provenance_step timestamp="2015-06-25T13:07:13.100000">
