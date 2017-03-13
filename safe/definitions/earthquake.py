@@ -2,7 +2,8 @@
 
 """Definitions about earthquake."""
 
-from safe.utilities.numerics import log_normal_cdf
+import numpy
+
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -224,3 +225,111 @@ EARTHQUAKE_FUNCTIONS = (
         'fatality_rates': pager_fatality_rates
     }
 )
+
+
+def normal_cdf(x, mu=0, sigma=1):
+    """Cumulative Normal Distribution Function.
+
+    :param x: scalar or array of real numbers.
+    :type x: numpy.ndarray, float
+
+    :param mu: Mean value. Default 0.
+    :type mu: float, numpy.ndarray
+
+    :param sigma: Standard deviation. Default 1.
+    :type sigma: float
+
+    :returns: An approximation of the cdf of the normal.
+    :rtype: numpy.ndarray
+
+    Note:
+        CDF of the normal distribution is defined as
+        \frac12 [1 + erf(\frac{x - \mu}{\sigma \sqrt{2}})], x \in \R
+
+        Source: http://en.wikipedia.org/wiki/Normal_distribution
+    """
+    arg = (x - mu) / (sigma * numpy.sqrt(2))
+    res = (1 + erf(arg)) / 2
+    return res
+
+
+def log_normal_cdf(x, median=1, sigma=1):
+    """Cumulative Log Normal Distribution Function.
+
+    :param x: scalar or array of real numbers.
+    :type x: numpy.ndarray, float
+
+    :param median: Median (exp(mean of log(x)). Default 1.
+    :type median: float
+
+    :param sigma: Log normal standard deviation. Default 1.
+    :type sigma: float
+
+    :returns: An approximation of the cdf of the normal.
+    :rtype: numpy.ndarray
+
+    .. note::
+        CDF of the normal distribution is defined as
+        \frac12 [1 + erf(\frac{x - \mu}{\sigma \sqrt{2}})], x \in \R
+
+        Source: http://en.wikipedia.org/wiki/Normal_distribution
+    """
+    return normal_cdf(numpy.log(x), mu=numpy.log(median), sigma=sigma)
+
+
+# noinspection PyUnresolvedReferences
+def erf(z):
+    """Approximation to ERF.
+
+    :param z: Input array or scalar to perform erf on.
+    :type z: numpy.ndarray, float
+
+    :returns: The approximate error.
+    :rtype: numpy.ndarray, float
+
+    Note:
+        from:
+        http://www.cs.princeton.edu/introcs/21function/ErrorFunction.java.html
+        Implements the Gauss error function.
+        erf(z) = 2 / sqrt(pi) * integral(exp(-t*t), t = 0..z)
+
+        Fractional error in math formula less than 1.2 * 10 ^ -7.
+        although subject to catastrophic cancellation when z in very close to 0
+        from Chebyshev fitting formula for erf(z) from Numerical Recipes, 6.2
+
+        Source:
+        http://stackoverflow.com/questions/457408/
+        is-there-an-easily-available-implementation-of-erf-for-python
+    """
+    # Input check
+    try:
+        len(z)
+    except TypeError:
+        scalar = True
+        z = [z]
+    else:
+        scalar = False
+
+    z = numpy.array(z)
+
+    # Begin algorithm
+    t = 1.0 / (1.0 + 0.5 * numpy.abs(z))
+
+    # Use Horner's method
+    ans = 1 - t * numpy.exp(
+        -z * z - 1.26551223 + t * (
+            1.00002368 + t * (0.37409196 + t * (
+                0.09678418 + t * (
+                    -0.18628806 + t * (
+                        0.27886807 + t * (
+                            -1.13520398 + t * (
+                                1.48851587 + t * (
+                                    -0.82215223 + t * 0.17087277)))))))))
+
+    neg = (z < 0.0)  # Mask for negative input values
+    ans[neg] = -ans[neg]
+
+    if scalar:
+        return ans[0]
+    else:
+        return ans

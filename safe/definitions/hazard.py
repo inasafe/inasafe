@@ -1,5 +1,7 @@
 # coding=utf-8
+
 """Definitions relating to hazards."""
+
 from safe.definitions.hazard_classifications import (
     generic_hazard_classes,
     volcano_hazard_classes,
@@ -33,6 +35,7 @@ from safe.definitions.layer_modes import (
     layer_mode_classified, layer_mode_continuous)
 from safe.definitions.fields import (
     hazard_name_field, hazard_fields, hazard_value_field)
+from safe.definitions.earthquake import EARTHQUAKE_FUNCTIONS
 from safe.definitions.exposure import (
     exposure_place,
     exposure_land_cover,
@@ -138,8 +141,8 @@ hazard_earthquake = {
     'multi_event_notes': [  # notes specific to multi event data
     ],
     'actions': [  # these are additional generic actions
-
     ],
+    'earthquake_fatality_models': EARTHQUAKE_FUNCTIONS,  # Only for EQ
     'citations': [
         {
             'text': None,
