@@ -1,5 +1,6 @@
 # coding=utf-8
 """Helper module for gui test suite."""
+
 import codecs
 import hashlib
 import inspect
@@ -25,10 +26,8 @@ from safe.common.exceptions import NoKeywordsFoundError
 from safe.common.utilities import unique_filename, temp_dir
 from safe.definitions.constants import HAZARD_EXPOSURE
 from safe.gis.vector.tools import create_memory_layer, copy_layer
-from safe.utilities.i18n import tr
 from safe.utilities.metadata import read_iso19115_metadata
 from safe.utilities.utilities import monkey_patch_keywords
-from safe.utilities.numerics import axes_to_points
 
 QGIS_APP = None  # Static variable used to hold hand to running QGIS app
 CANVAS = None
@@ -1140,14 +1139,6 @@ def remove_vector_temp_file(file_path):
     for ext in extensions:
         if os.path.exists(file_path + ext):
             os.remove(file_path + ext)
-
-
-def combine_coordinates(x, y):
-    """Make list of all combinations of points for x and y coordinates
-    :param x:
-    :param y:
-    """
-    return axes_to_points(x, y)
 
 
 class FakeLayer(object):
