@@ -27,10 +27,13 @@ from safe.common.utilities import temp_dir
 TEMP_DIR = temp_dir(sub_dir='test/metadata')
 TEST_DIR = os.path.dirname(__file__)
 
-EXISTING_IMPACT_FILE = os.path.join(TEST_DIR, 'data', 'existing_impact.shp')
+EXISTING_IMPACT_FILE = os.path.join(
+    TEST_DIR, 'data', 'existing_exposure_impacted.shp')
 # this is a file generated from TestImpactMetadata.generate_test_metadata()
-EXISTING_IMPACT_JSON = os.path.join(TEST_DIR, 'data', 'existing_impact.json')
-EXISTING_IMPACT_XML = os.path.join(TEST_DIR, 'data', 'existing_impact.xml')
+EXISTING_IMPACT_JSON = os.path.join(
+    TEST_DIR, 'data', 'existing_exposure_impacted.json')
+EXISTING_IMPACT_XML = os.path.join(
+    TEST_DIR, 'data', 'existing_exposure_impacted.xml')
 
 EXISTING_GENERIC_FILE = os.path.join(TEST_DIR, 'data', 'existing_generic.shp')
 # this is a file generated from TestGenericMetadata.generate_test_metadata()
