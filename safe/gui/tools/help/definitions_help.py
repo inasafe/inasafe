@@ -771,7 +771,7 @@ def definition_to_message(definition, heading_style=None):
 
             row.add(m.Cell(inasafe_class['name']))
             if 'affected' in inasafe_class:
-                row.add(m.Cell(inasafe_class['affected']))
+                row.add(m.Cell(tr(inasafe_class['affected'])))
             else:
                 row.add(m.Cell(tr('unspecified')))
 
