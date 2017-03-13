@@ -1,6 +1,7 @@
 # coding=utf-8
 """Test Metadata Utilities."""
 import unittest
+from datetime import datetime
 # Do not remove this, needed for QUrl
 from qgis.utils import iface  # pylint: disable=W0621
 from PyQt4.QtCore import QUrl
@@ -166,10 +167,15 @@ class TestMetadataUtilities(unittest.TestCase):
 
     def test_copy_layer_keywords(self):
         """Test for copy_layer_keywords."""
-        keywords = {'url': QUrl('inasafe.org')}
+        keywords = {
+            'url': QUrl('inasafe.org'),
+            'date': datetime(1990, 7, 13)
+        }
         copy_keywords = copy_layer_keywords(keywords)
 
         self.assertEqual(keywords['url'].toString(), copy_keywords['url'])
+        self.assertEqual(
+            keywords['date'].date().isoformat(), copy_keywords['date'])
 
 if __name__ == '__main__':
     unittest.main()
