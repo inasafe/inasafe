@@ -202,10 +202,12 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         base_name = file_info.baseName()
         self.output_layer = QgsRasterLayer(file_name, base_name)
         self.output_layer.keywords = KeywordIO.read_keywords(self.output_layer)
-        self.output_layer.keywords['classification'] = earthquake_mmi_scale['key']
+        self.output_layer.keywords['classification'] = (
+            earthquake_mmi_scale['key'])
         keywords = self.output_layer.keywords
         if self.output_layer.isValid():
-            self.output_layer = reclassify(self.output_layer, overwrite_input=True)
+            self.output_layer = reclassify(
+                self.output_layer, overwrite_input=True)
             KeywordIO.write_keywords(self.output_layer, keywords)
         else:
             LOGGER.debug("Failed to load")
@@ -220,7 +222,8 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
                 LOGGER.debug("Failed to load")
             else:
                 # noinspection PyArgumentList
-                QgsMapLayerRegistry.instance().addMapLayers([self.output_layer])
+                QgsMapLayerRegistry.instance().addMapLayers(
+                    [self.output_layer])
                 iface.zoomToActiveLayer()
 
         if (self.keyword_wizard_checkbox.isChecked() and
