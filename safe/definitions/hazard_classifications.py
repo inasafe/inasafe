@@ -1564,10 +1564,10 @@ cyclone_sshws_hazard_classes = {
             ),
             'displacement_rate': 1.0,
             'numeric_default_min': {
-                unit_knots['key']: 136,
+                unit_knots['key']: 137,
                 unit_metres_per_second['key']: 70,
-                unit_miles_per_hour['key']: 156,
-                unit_kilometres_per_hour['key']: 251
+                unit_miles_per_hour['key']: 157,
+                unit_kilometres_per_hour['key']: 252
             },
             'numeric_default_max': big_number,
             'string_defaults': ['cat 5', 'category 5'],
@@ -1598,16 +1598,16 @@ cyclone_sshws_hazard_classes = {
             ),
             'displacement_rate': 0.97,
             'numeric_default_min': {
-                unit_knots['key']: 112,
+                unit_knots['key']: 113,
                 unit_metres_per_second['key']: 58,
-                unit_miles_per_hour['key']: 129,
-                unit_kilometres_per_hour['key']: 208
+                unit_miles_per_hour['key']: 130,
+                unit_kilometres_per_hour['key']: 209
             },
             'numeric_default_max': {
-                unit_knots['key']: 136,
+                unit_knots['key']: 137,
                 unit_metres_per_second['key']: 70,
-                unit_miles_per_hour['key']: 156,
-                unit_kilometres_per_hour['key']: 251
+                unit_miles_per_hour['key']: 157,
+                unit_kilometres_per_hour['key']: 252
             },
             'string_defaults': ['cat 4', 'category 4'],
             'citations': [
@@ -1635,16 +1635,16 @@ cyclone_sshws_hazard_classes = {
                 'passes.'),
             'displacement_rate': 0.55,
             'numeric_default_min': {
-                unit_knots['key']: 95,
-                unit_metres_per_second['key']: 50,
-                unit_miles_per_hour['key']: 110,
-                unit_kilometres_per_hour['key']: 177
+                unit_knots['key']: 96,
+                unit_metres_per_second['key']: 49,
+                unit_miles_per_hour['key']: 111,
+                unit_kilometres_per_hour['key']: 178
             },
             'numeric_default_max': {
-                unit_knots['key']: 112,
+                unit_knots['key']: 113,
                 unit_metres_per_second['key']: 58,
-                unit_miles_per_hour['key']: 129,
-                unit_kilometres_per_hour['key']: 208
+                unit_miles_per_hour['key']: 130,
+                unit_kilometres_per_hour['key']: 209
             },
             'string_defaults': ['cat 3', 'category 3'],
             'citations': [
@@ -1672,16 +1672,16 @@ cyclone_sshws_hazard_classes = {
                 'several days to weeks.'),
             'displacement_rate': 0.06,
             'numeric_default_min': {
-                unit_knots['key']: 82,
-                unit_metres_per_second['key']: 42,
-                unit_miles_per_hour['key']: 95,
-                unit_kilometres_per_hour['key']: 153
+                unit_knots['key']: 83,
+                unit_metres_per_second['key']: 43,
+                unit_miles_per_hour['key']: 96,
+                unit_kilometres_per_hour['key']: 154
             },
             'numeric_default_max': {
-                unit_knots['key']: 95,
-                unit_metres_per_second['key']: 50,
-                unit_miles_per_hour['key']: 110,
-                unit_kilometres_per_hour['key']: 177
+                unit_knots['key']: 96,
+                unit_metres_per_second['key']: 49,
+                unit_miles_per_hour['key']: 111,
+                unit_kilometres_per_hour['key']: 178
             },
             'string_defaults': ['cat 2', 'category 2'],
             'citations': [
@@ -1712,13 +1712,13 @@ cyclone_sshws_hazard_classes = {
                 unit_knots['key']: 64,
                 unit_metres_per_second['key']: 33,
                 unit_miles_per_hour['key']: 74,
-                unit_kilometres_per_hour['key']: 119
+                unit_kilometres_per_hour['key']: 120
             },
             'numeric_default_max': {
-                unit_knots['key']: 82,
-                unit_metres_per_second['key']: 42,
-                unit_miles_per_hour['key']: 95,
-                unit_kilometres_per_hour['key']: 153
+                unit_knots['key']: 83,
+                unit_metres_per_second['key']: 43,
+                unit_miles_per_hour['key']: 96,
+                unit_kilometres_per_hour['key']: 154
             },
             'string_defaults': ['cat 1', 'category 1'],
             'citations': [
@@ -1744,7 +1744,7 @@ cyclone_sshws_hazard_classes = {
                 unit_knots['key']: 64,
                 unit_metres_per_second['key']: 33,
                 unit_miles_per_hour['key']: 74,
-                unit_kilometres_per_hour['key']: 119
+                unit_kilometres_per_hour['key']: 120
             },
             'string_defaults': ['no', 'false'],
             'citations': [
