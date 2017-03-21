@@ -48,7 +48,7 @@ from safe.definitions.reports.components import (
     report_a4_blue)
 from safe.report.impact_report import ImpactReport
 from safe.report.report_metadata import ReportMetadata
-from safe.utilities.gis import wkt_to_rectangle
+from safe.utilities.gis import wkt_to_rectangle, qgis_version
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.utilities import (
@@ -112,6 +112,7 @@ LOGGER = logging.getLogger('InaSAFE')
 # noinspection PyArgumentList
 # noinspection PyUnresolvedReferences
 class Dock(QtGui.QDockWidget, FORM_CLASS):
+
     """Dock implementation class for the inaSAFE plugin."""
 
     def __init__(self, iface):
@@ -636,7 +637,11 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 title = self.tr(title)
             # Register title with layer
             if title and self.set_layer_from_title_flag:
-                layer.setTitle(title)
+                if qgis_version() >= 21800:
+                    layer.setName(title)
+                else:
+                    # QGIS 2.14
+                    layer.setLayerName(title)
 
             # Find out if the layer is a hazard or an exposure
             # layer by querying its keywords. If the query fails,

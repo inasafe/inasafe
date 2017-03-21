@@ -49,7 +49,7 @@ def get_error_message(exception, context=None, suggestion=None):
     :param suggestion: Optional suggestion.
     :type suggestion: str
 
-    .. see also:: https://github.com/AIFDR/inasafe/issues/577
+    .. see also:: https://github.com/inasafe/inasafe/issues/577
 
     :returns: An error message with stack trace info suitable for display.
     :rtype: ErrorMessage
