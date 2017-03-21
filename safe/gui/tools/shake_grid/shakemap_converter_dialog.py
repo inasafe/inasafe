@@ -86,7 +86,7 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         self.input_path.textChanged.connect(self.on_input_path_textChanged)
         # noinspection PyUnresolvedReferences
         self.output_path.textChanged.connect(self.on_output_path_textChanged)
-        self.load_result.clicked.connect(self.on_load_result_toggled)
+        self.load_result.clicked.connect(self.load_result_toggled)
 
         # Set up things for context help
         self.help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
@@ -222,8 +222,7 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
                 LOGGER.debug("Failed to load")
             else:
                 # noinspection PyArgumentList
-                QgsMapLayerRegistry.instance().addMapLayers(
-                    [self.output_layer])
+                QgsMapLayerRegistry.instance().addMapLayer(self.output_layer)
                 iface.zoomToActiveLayer()
 
         if (self.keyword_wizard_checkbox.isChecked() and
@@ -252,11 +251,9 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
             self.tr('Raster file (*.tif)'))
         self.output_path.setText(filename)
 
-    @pyqtSignature('')  # prevents actions being handled twice
-    def on_load_result_toggled(self):
-        """Autoconnect slot activated when load_result checkbox is clicked.
+    def load_result_toggled(self):
+        """Function that perform action when load_result checkbox is clicked.
         """
-        # noinspection PyCallByClass,PyTypeChecker
         if self.load_result.isChecked():
             self.keyword_wizard_checkbox.setEnabled(True)
         else:
