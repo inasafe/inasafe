@@ -636,7 +636,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 title = self.tr(title)
             # Register title with layer
             if title and self.set_layer_from_title_flag:
-                layer.setLayerName(title)
+                layer.setTitle(title)
 
             # Find out if the layer is a hazard or an exposure
             # layer by querying its keywords. If the query fails,
@@ -1130,7 +1130,11 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         return visible_count
 
     def accept(self):
-        """Execute analysis when run button is clicked."""
+        """Execute analysis when run button is clicked.
+
+        Please update the code in step_fc990_analysis.py in function
+        setup_and_run_analysis(). It should follow approximately the same code.
+        """
         # Start the analysis
         self.impact_function = self.validate_impact_function()
         if not isinstance(self.impact_function, ImpactFunction):

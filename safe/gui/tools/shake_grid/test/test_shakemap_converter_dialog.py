@@ -40,14 +40,14 @@ class ShakemapImporterTest(unittest.TestCase):
 
     def test_init_dialog(self):
         """Test for showing table in the first."""
-        shakemap_converter_dialog = ShakemapConverterDialog(PARENT)
+        shakemap_converter_dialog = ShakemapConverterDialog(PARENT, IFACE)
         msg = 'Dialog is failed to create'
         self.assertIsNotNone(shakemap_converter_dialog, msg)
 
     def test_behaviour(self):
         """Test behaviour of elements in the dialog
         """
-        shakemap_importer_dialog = ShakemapConverterDialog(PARENT)
+        shakemap_importer_dialog = ShakemapConverterDialog(PARENT, IFACE)
         shakemap_importer_dialog.use_output_default.setEnabled(True)
         my_grid_path = os.path.join(TESTDATA, 'grid.xml')
         shakemap_importer_dialog.input_path.setText(my_grid_path)
@@ -63,7 +63,7 @@ class ShakemapImporterTest(unittest.TestCase):
 
     def test_converting(self):
         """Test converting grif file to tiff."""
-        dialog = ShakemapConverterDialog(PARENT)
+        dialog = ShakemapConverterDialog(PARENT, IFACE)
         dialog.use_output_default.setEnabled(False)
         grid_path = standard_data_path(
             'hazard',

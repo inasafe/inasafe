@@ -263,7 +263,7 @@ class QgisComposerComponentsMetadata(ReportComponentsMetadata):
         PNG = 'png'
         QPT = 'qpt'
 
-        MAP_OUTPUT = [PDF, PNG]
+        DOC_OUTPUT = [PDF, PNG]
         TEMPLATE_OUTPUT = QPT
         SUPPORTED_OUTPUT = [PDF, PNG, QPT]
 

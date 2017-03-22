@@ -1,22 +1,5 @@
-# -*- coding: utf-8 -*-
-"""
-InaSAFE Disaster risk assessment tool developed by AusAid -
-**metadata module.**
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-"""
-
-__author__ = 'marco@opengis.ch'
-__revision__ = '$Format:%H$'
-__date__ = '27/05/2015'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
-
+# coding=utf-8
+"""Date Property."""
 
 from datetime import datetime, date
 from types import NoneType
@@ -26,10 +9,14 @@ from PyQt4.QtCore import QDate, Qt, QDateTime
 from safe.common.exceptions import MetadataCastError
 from safe.metadata.property import BaseProperty
 
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
+
 
 class DateProperty(BaseProperty):
-    """A property that accepts date input
-    """
+    """A property that accepts date input."""
     # if you edit this you need to adapt accordingly xml_value and is_valid
     _allowed_python_types = [QDate, datetime, date, NoneType, QDateTime]
 
@@ -56,16 +43,17 @@ class DateProperty(BaseProperty):
 
     @property
     def xml_value(self):
-        if self.python_type is QDate:
+        if self.python_type is datetime:
+            return self.value.date().isoformat()
+        elif self.python_type is QDate:
             return self.value.toString(Qt.ISODate)
         elif self.python_type is QDateTime:
             return self.value.toString(Qt.ISODate)
         elif self.python_type is date:
             return self.value.isoformat()
-        elif self.python_type is datetime:
-            return self.value.date().isoformat()
         elif self.python_type is NoneType:
             return ''
         else:
-            raise RuntimeError('self._allowed_python_types and self.xml_value'
-                               'are out of sync. This should never happen')
+            raise RuntimeError(
+                'self._allowed_python_types and self.xml_value are out of '
+                'sync. This should never happen')

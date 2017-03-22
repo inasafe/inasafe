@@ -9,6 +9,7 @@ Minimum value IS NOT included, but maximum value IS included to the range.
 Mathematical expression:
 minimum_value < x <= maximum_value
 """
+from safe.definitions.constants import big_number
 from safe.definitions import concepts
 from safe.utilities.i18n import tr
 from safe.definitions.units import (
@@ -492,7 +493,7 @@ flood_hazard_classes = {
             'string_defaults': ['wet', '1', 'YES', 'y', 'yes', 'true'],
             'displacement_rate': 0.01,
             'numeric_default_min': 1,
-            'numeric_default_max': 9999999999,
+            'numeric_default_max': big_number,
             'citations': [
                 {
                     'text': None,
@@ -554,7 +555,7 @@ flood_petabencana_hazard_classes = {
             # flood data and IDP numbers
             'displacement_rate': 0.05,
             'numeric_default_min': 1.5,
-            'numeric_default_max': 9999999999,
+            'numeric_default_max': big_number,
             'string_defaults': ['high'],
             'citations': [
                 {
@@ -659,7 +660,7 @@ ash_hazard_classes = {
             # Displacement rate of 100% advised by Ibu Estu - BG Feb 2017
             'displacement_rate': 1.0,
             'numeric_default_min': 10,
-            'numeric_default_max': 9999999999,
+            'numeric_default_max': big_number,
             'string_defaults': ['very hight'],
             'citations': [
                 {
@@ -806,7 +807,7 @@ tsunami_hazard_classes = {
             'string_defaults': ['high'],
             'displacement_rate': 1.0,
             'numeric_default_min': 3,
-            'numeric_default_max': 9999,
+            'numeric_default_max': big_number,
             'citations': [
                 {
                     'text': None,
@@ -933,7 +934,7 @@ tsunami_hazard_population_classes = {
             'string_defaults': ['high'],
             'displacement_rate': 1.0,
             'numeric_default_min': 3,
-            'numeric_default_max': 9999,
+            'numeric_default_max': big_number,
             'citations': [
                 {
                     'text': None,
@@ -1028,7 +1029,7 @@ tsunami_hazard_classes_ITB = {
             'string_defaults': ['very high'],
             'displacement_rate': 1.0,
             'numeric_default_min': 8,
-            'numeric_default_max': 9999,
+            'numeric_default_max': big_number,
             'citations': [
                 {
                     'text': None,
@@ -1173,7 +1174,7 @@ tsunami_hazard_population_classes_ITB = {
             'string_defaults': ['very high'],
             'displacement_rate': 1.0,
             'numeric_default_min': 8,
-            'numeric_default_max': 9999,
+            'numeric_default_max': big_number,
             'citations': [
                 {
                     'text': None,
@@ -1319,7 +1320,7 @@ cyclone_au_bom_hazard_classes = {
                 unit_miles_per_hour['key']: 123,
                 unit_kilometres_per_hour['key']: 198
             },
-            'numeric_default_max': 9999999999,
+            'numeric_default_max': big_number,
             'string_defaults': ['cat 5', 'category 5'],
             'citations': [
                 {
@@ -1563,12 +1564,12 @@ cyclone_sshws_hazard_classes = {
             ),
             'displacement_rate': 1.0,
             'numeric_default_min': {
-                unit_knots['key']: 136,
+                unit_knots['key']: 137,
                 unit_metres_per_second['key']: 70,
-                unit_miles_per_hour['key']: 156,
-                unit_kilometres_per_hour['key']: 251
+                unit_miles_per_hour['key']: 157,
+                unit_kilometres_per_hour['key']: 252
             },
-            'numeric_default_max': 9999999999,
+            'numeric_default_max': big_number,
             'string_defaults': ['cat 5', 'category 5'],
             'citations': [
                 {
@@ -1597,16 +1598,16 @@ cyclone_sshws_hazard_classes = {
             ),
             'displacement_rate': 0.97,
             'numeric_default_min': {
-                unit_knots['key']: 112,
+                unit_knots['key']: 113,
                 unit_metres_per_second['key']: 58,
-                unit_miles_per_hour['key']: 129,
-                unit_kilometres_per_hour['key']: 208
+                unit_miles_per_hour['key']: 130,
+                unit_kilometres_per_hour['key']: 209
             },
             'numeric_default_max': {
-                unit_knots['key']: 136,
+                unit_knots['key']: 137,
                 unit_metres_per_second['key']: 70,
-                unit_miles_per_hour['key']: 156,
-                unit_kilometres_per_hour['key']: 251
+                unit_miles_per_hour['key']: 157,
+                unit_kilometres_per_hour['key']: 252
             },
             'string_defaults': ['cat 4', 'category 4'],
             'citations': [
@@ -1634,16 +1635,16 @@ cyclone_sshws_hazard_classes = {
                 'passes.'),
             'displacement_rate': 0.55,
             'numeric_default_min': {
-                unit_knots['key']: 95,
-                unit_metres_per_second['key']: 50,
-                unit_miles_per_hour['key']: 110,
-                unit_kilometres_per_hour['key']: 177
+                unit_knots['key']: 96,
+                unit_metres_per_second['key']: 49,
+                unit_miles_per_hour['key']: 111,
+                unit_kilometres_per_hour['key']: 178
             },
             'numeric_default_max': {
-                unit_knots['key']: 112,
+                unit_knots['key']: 113,
                 unit_metres_per_second['key']: 58,
-                unit_miles_per_hour['key']: 129,
-                unit_kilometres_per_hour['key']: 208
+                unit_miles_per_hour['key']: 130,
+                unit_kilometres_per_hour['key']: 209
             },
             'string_defaults': ['cat 3', 'category 3'],
             'citations': [
@@ -1671,16 +1672,16 @@ cyclone_sshws_hazard_classes = {
                 'several days to weeks.'),
             'displacement_rate': 0.06,
             'numeric_default_min': {
-                unit_knots['key']: 82,
-                unit_metres_per_second['key']: 42,
-                unit_miles_per_hour['key']: 95,
-                unit_kilometres_per_hour['key']: 153
+                unit_knots['key']: 83,
+                unit_metres_per_second['key']: 43,
+                unit_miles_per_hour['key']: 96,
+                unit_kilometres_per_hour['key']: 154
             },
             'numeric_default_max': {
-                unit_knots['key']: 95,
-                unit_metres_per_second['key']: 50,
-                unit_miles_per_hour['key']: 110,
-                unit_kilometres_per_hour['key']: 177
+                unit_knots['key']: 96,
+                unit_metres_per_second['key']: 49,
+                unit_miles_per_hour['key']: 111,
+                unit_kilometres_per_hour['key']: 178
             },
             'string_defaults': ['cat 2', 'category 2'],
             'citations': [
@@ -1711,13 +1712,13 @@ cyclone_sshws_hazard_classes = {
                 unit_knots['key']: 64,
                 unit_metres_per_second['key']: 33,
                 unit_miles_per_hour['key']: 74,
-                unit_kilometres_per_hour['key']: 119
+                unit_kilometres_per_hour['key']: 120
             },
             'numeric_default_max': {
-                unit_knots['key']: 82,
-                unit_metres_per_second['key']: 42,
-                unit_miles_per_hour['key']: 95,
-                unit_kilometres_per_hour['key']: 153
+                unit_knots['key']: 83,
+                unit_metres_per_second['key']: 43,
+                unit_miles_per_hour['key']: 96,
+                unit_kilometres_per_hour['key']: 154
             },
             'string_defaults': ['cat 1', 'category 1'],
             'citations': [
@@ -1743,7 +1744,7 @@ cyclone_sshws_hazard_classes = {
                 unit_knots['key']: 64,
                 unit_metres_per_second['key']: 33,
                 unit_miles_per_hour['key']: 74,
-                unit_kilometres_per_hour['key']: 119
+                unit_kilometres_per_hour['key']: 120
             },
             'string_defaults': ['no', 'false'],
             'citations': [
@@ -1771,8 +1772,8 @@ hazard_classification = {
     'name': tr('Classes'),
     'description': tr(
         'A hazard classification is used to define a range of severity '
-        'thresholds (classes) for a continuous hazard layer. The '
-        'classification will be used to create zones of data that each '
+        'thresholds (classes) for a hazard layer. '
+        'The classification will be used to create zones of data that each '
         'present a similar hazard level. During the analysis, each exposure '
         'feature will be assessed to determine which hazard class it '
         'coincides with, and then a determination will be made as to '

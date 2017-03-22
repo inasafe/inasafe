@@ -25,7 +25,8 @@ FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
 class StepKwUnit(WizardStep, FORM_CLASS):
-    """Keyword Wizard Step: Unit"""
+
+    """Keyword Wizard Step: Unit."""
 
     def is_ready_to_next_step(self):
         """Check if the step is complete.
@@ -40,7 +41,7 @@ class StepKwUnit(WizardStep, FORM_CLASS):
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.
 
-        :returns: The step to be switched to
+        :returns: The step to be switched to.
         :rtype: WizardStep instance or None
         """
         subcategory = self.parent.step_kw_subcategory.selected_subcategory()
@@ -89,8 +90,7 @@ class StepKwUnit(WizardStep, FORM_CLASS):
             return None
 
     def clear_further_steps(self):
-        """ Clear all further steps
-            in order to properly calculate the prev step
+        """Clear all further steps in order to properly compute the prev step.
         """
         self.parent.step_kw_field.lstFields.clear()
         self.parent.step_kw_classification.lstClassifications.clear()

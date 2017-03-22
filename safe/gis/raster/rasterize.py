@@ -3,8 +3,9 @@
 """Rasterize a vector layer."""
 
 import logging
+import sys
+import subprocess
 from tempfile import mkdtemp
-from subprocess import check_call
 from qgis.core import QgsRasterLayer, QgsRasterBandStats
 from processing import runalg
 
@@ -68,6 +69,12 @@ def rasterize_vector_layer(layer, width, height, extent):
     use_gdal_command_line = True
 
     if use_gdal_command_line:
+        startupinfo = None
+        if sys.platform == 'win32':
+            # On windows, we don't want to display the bash shell.
+            # https://github.com/inasafe/inasafe/issues/3980
+            startupinfo = subprocess.STARTUPINFO()
+            startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
         commands = [which('gdal_rasterize')[0]]
         commands += ['-a', field]
         commands += ['-ts', str(width), str(height)]
@@ -76,7 +83,7 @@ def rasterize_vector_layer(layer, width, height, extent):
         commands += [layer.source(), output_filename]
 
         LOGGER.info(' '.join(commands))
-        result = check_call(commands)
+        result = subprocess.check_call(commands, startupinfo=startupinfo)
         LOGGER.info('Result : %s' % result)
     else:
         parameters = dict()

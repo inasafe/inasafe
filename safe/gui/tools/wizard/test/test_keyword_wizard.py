@@ -1,5 +1,7 @@
 # coding=utf-8
+
 """Tests for the keyword wizard."""
+
 import shutil
 import unittest
 import os
@@ -14,12 +16,13 @@ from safe.test.utilities import (
 # safe.gui.tools.wizard
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from datetime import datetime
+from safe.definitions.constants import big_number
 from safe.definitions.layer_modes import (
     layer_mode_continuous, layer_mode_classified)
 from safe.definitions.layer_purposes import (
     layer_purpose_hazard, layer_purpose_exposure, layer_purpose_aggregation)
 from safe.definitions.hazard import (
-    hazard_volcano, hazard_flood, hazard_earthquake)
+    hazard_volcano, hazard_flood, hazard_earthquake, hazard_cyclone)
 from safe.definitions.exposure import (
     exposure_structure,
     exposure_population,
@@ -28,6 +31,7 @@ from safe.definitions.hazard_category import hazard_category_multiple_event
 from safe.definitions.hazard_classifications import (
     flood_hazard_classes,
     volcano_hazard_classes,
+    cyclone_au_bom_hazard_classes,
     earthquake_mmi_scale)
 from safe.definitions.constants import no_field
 from safe.definitions.fields import (
@@ -40,8 +44,8 @@ from safe.definitions.layer_geometry import (
     layer_geometry_polygon, layer_geometry_raster)
 from safe.definitions.exposure_classifications import (
     generic_structure_classes)
-from safe.definitions.units import count_exposure_unit, unit_metres, unit_mmi
-
+from safe.definitions.units import (
+    count_exposure_unit, unit_metres, unit_mmi, unit_kilometres_per_hour)
 from safe.gui.tools.wizard.wizard_dialog import WizardDialog
 from safe.definitions.utilities import (
     get_compulsory_fields, default_classification_thresholds)
@@ -63,7 +67,9 @@ layer_title = u'Layer Title'
 
 # noinspection PyTypeChecker
 class TestKeywordWizard(unittest.TestCase):
+
     """Test the InaSAFE keyword wizard GUI"""
+
     maxDiff = None
 
     def tearDown(self):
@@ -89,7 +95,7 @@ class TestKeywordWizard(unittest.TestCase):
         self.assertItemsEqual(expected_list, real_list)
 
     def check_current_step(self, expected_step):
-        """Helper function to check the current step is expected_step
+        """Helper function to check the current step is expected_step.
 
         :param expected_step: The expected current step.
         :type expected_step: WizardStep instance
@@ -100,7 +106,7 @@ class TestKeywordWizard(unittest.TestCase):
         self.assertEqual(expected_step, current_step, message)
 
     def check_current_text(self, expected_text, list_widget):
-        """Check the current text in list widget is expected_text
+        """Check the current text in list widget is expected_text.
 
         :param expected_text: The expected current step.
         :type expected_text: str
@@ -124,9 +130,9 @@ class TestKeywordWizard(unittest.TestCase):
     # noinspection PyUnresolvedReferences
     @staticmethod
     def select_from_list_widget(option, list_widget):
-        """Helper function to select option from list_widget
+        """Helper function to select option from list_widget.
 
-        :param option: Option to be chosen
+        :param option: Option to be chosen.
         :type option: str
 
         :param list_widget: List widget that wants to be checked.
@@ -1706,7 +1712,7 @@ class TestKeywordWizard(unittest.TestCase):
                         'active': True,
                         'classes': {
                             'dry': [0.0, 1.0],
-                            'wet': [1.0, 999999.0]
+                            'wet': [1.0, big_number]
                         }
                     }
                 }
@@ -1985,7 +1991,7 @@ class TestKeywordWizard(unittest.TestCase):
                     flood_hazard_classes['key']: {
                         'classes': {
                             'dry': [0, 1],
-                            'wet': [1, 999999.0]
+                            'wet': [1, big_number]
                         },
                         'active': True
                     }
@@ -2006,7 +2012,7 @@ class TestKeywordWizard(unittest.TestCase):
         message = "Path %s is not found" % path
         self.assertTrue(os.path.exists(path), message)
         layer = clone_raster_layer(
-            name='people_allow_resample_false',
+            name='people_allow_resampling_false',
             extension='.tif',
             include_keywords=False,
             source_directory=standard_data_path('exposure'))
@@ -2273,6 +2279,146 @@ class TestKeywordWizard(unittest.TestCase):
                         'active': True,
                         'classes': default_classification_thresholds(
                             earthquake_mmi_scale)
+                    }
+                }
+            }
+        }
+
+        real_keywords = dialog.get_keywords()
+        self.assertDictEqual(real_keywords, expected_keyword)
+
+    def test_cyclone_raster(self):
+        """Test for cyclone raster keyword wizard when we have many units."""
+        path = standard_data_path('gisv4', 'hazard', 'cyclone_AUBOM_km_h.asc')
+        message = "Path %s is not found" % path
+        self.assertTrue(os.path.exists(path), message)
+        layer = clone_raster_layer(
+            name='cyclone_AUBOM_km_h',
+            extension='.asc',
+            include_keywords=False,
+            source_directory=standard_data_path('gisv4', 'hazard'))
+        self.assertIsNotNone(layer)
+        layer.keywords = {}
+
+        # noinspection PyTypeChecker
+        dialog = WizardDialog(iface=IFACE)
+        dialog.set_keywords_creation_mode(layer)
+
+        # Check if in select purpose step
+        self.check_current_step(dialog.step_kw_purpose)
+
+        # Select hazard
+        self.select_from_list_widget(
+            layer_purpose_hazard['name'], dialog.step_kw_purpose.lstCategories)
+
+        # Click next to select hazard
+        dialog.pbnNext.click()
+
+        # Check if in select hazard step
+        self.check_current_step(dialog.step_kw_subcategory)
+
+        # select cyclone
+        self.select_from_list_widget(
+            hazard_cyclone['name'],
+            dialog.step_kw_subcategory.lstSubcategories)
+
+        # Click next to select EQ
+        dialog.pbnNext.click()
+
+        # Check if in select hazard category step
+        self.check_current_step(dialog.step_kw_hazard_category)
+
+        # select multiple_event
+        self.select_from_list_widget(
+            hazard_category_multiple_event['name'],
+            dialog.step_kw_hazard_category.lstHazardCategories)
+
+        # Click next to select multiple event
+        dialog.pbnNext.click()
+
+        # Check if in select layer mode step
+        self.check_current_step(dialog.step_kw_layermode)
+
+        # select continuous mode
+        self.select_from_list_widget(
+            layer_mode_continuous['name'],
+            dialog.step_kw_layermode.lstLayerModes)
+
+        # Click next to select continuous
+        dialog.pbnNext.click()
+
+        # Check if in unit step
+        self.check_current_step(dialog.step_kw_unit)
+
+        # select MMI
+        self.select_from_list_widget(
+            unit_kilometres_per_hour['name'],
+            dialog.step_kw_unit.lstUnits)
+
+        # Click next to select MMI
+        dialog.pbnNext.click()
+
+        # Check if in select multi classifications step
+        self.check_current_step(dialog.step_kw_multi_classifications)
+
+        # Change combo box
+        dialog.step_kw_multi_classifications.exposure_combo_boxes[
+            0].setCurrentIndex(1)
+
+        # Click save
+        dialog.step_kw_multi_classifications.save_button.click()
+
+        # Click next to finish multi classifications step
+        dialog.pbnNext.click()
+
+        # Check if in source step
+        self.check_current_step(dialog.step_kw_source)
+
+        dialog.step_kw_source.leSource.setText(source)
+        dialog.step_kw_source.leSource_scale.setText(source_scale)
+        dialog.step_kw_source.leSource_url.setText(source_url)
+        dialog.step_kw_source.ckbSource_date.setChecked(True)
+        dialog.step_kw_source.dtSource_date.setDateTime(source_date)
+        dialog.step_kw_source.leSource_license.setText(source_license)
+
+        # Click next to finish source step and go to title step
+        dialog.pbnNext.click()
+
+        # Check if in title step
+        self.check_current_step(dialog.step_kw_title)
+
+        dialog.step_kw_title.leTitle.setText(layer_title)
+
+        # Click next to finish title step and go to kw summary step
+        dialog.pbnNext.click()
+
+        # Check if in title step
+        self.check_current_step(dialog.step_kw_summary)
+
+        # Click finish
+        dialog.pbnNext.click()
+
+        # Checking Keyword Created
+        expected_keyword = {
+            'continuous_hazard_unit': unit_kilometres_per_hour['key'],
+            'scale': source_scale,
+            'hazard_category': hazard_category_multiple_event['key'],
+            'license': source_license,
+            'source': source,
+            'url': source_url,
+            'title': layer_title,
+            'hazard': hazard_cyclone['key'],
+            'date': source_date,
+            'layer_geometry': layer_geometry_raster['key'],
+            'layer_purpose': layer_purpose_hazard['key'],
+            'layer_mode': layer_mode_continuous['key'],
+            'thresholds': {
+                exposure_structure['key']: {
+                    cyclone_au_bom_hazard_classes['key']: {
+                        'active': True,
+                        'classes': default_classification_thresholds(
+                            cyclone_au_bom_hazard_classes,
+                            unit_kilometres_per_hour['key'])
                     }
                 }
             }

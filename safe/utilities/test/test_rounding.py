@@ -11,6 +11,7 @@ from safe.utilities.rounding import (
     population_rounding,
     add_separators,
     convert_unit,
+    fatalities_range,
 )
 from safe.utilities.i18n import locale
 
@@ -75,6 +76,15 @@ class TestCore(unittest.TestCase):
         self.assertEqual(
             1000000, convert_unit(1, unit_kilometres, unit_millimetres))
         self.assertIsNone(convert_unit(1, unit_kilometres, unit_knots))
+
+    def test_fatalities_range(self):
+        """Test we can create a fatality range."""
+        self.assertEqual('0 - 100', fatalities_range(0))
+        self.assertEqual('0 - 100', fatalities_range(50))
+        self.assertEqual('0 - 100', fatalities_range(100))
+        self.assertEqual('1,000 - 10,000', fatalities_range(8000))
+        self.assertEqual('10,000 - 100,000', fatalities_range(18000))
+        self.assertEqual('> 100,000', fatalities_range(101000))
 
 if __name__ == '__main__':
     unittest.main()

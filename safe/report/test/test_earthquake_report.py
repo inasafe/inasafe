@@ -13,7 +13,8 @@ from safe.common.utilities import safe_dir
 from safe.definitions.constants import ANALYSIS_SUCCESS
 from safe.definitions.reports.components import (
     standard_impact_report_metadata_html,
-    general_report_component)
+    general_report_component,
+    population_chart_svg_component)
 from safe.impact_function.impact_function import ImpactFunction
 from safe.report.impact_report import ImpactReport
 from safe.report.report_metadata import ReportMetadata
@@ -26,7 +27,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
-__revision__ = ':%H$'
+__revision__ = '$Format:%H$'
 
 
 class TestEarthquakeReport(unittest.TestCase):
@@ -141,5 +142,88 @@ class TestEarthquakeReport(unittest.TestCase):
         self.assertDictEqual(expected_context, actual_context)
         self.assertTrue(
             analysis_summary.output, empty_component_output_message)
+
+        # check population pie chart if we have 100% donut slice
+        population_chart_svg = impact_report.metadata.component_by_key(
+            population_chart_svg_component['key'])
+
+        expected_slices = [
+            {'value': 0, 'show_label': False, 'center': (128.0, 32.0),
+             'stroke_opacity': 1,
+             'path': 'M128.000000,0.000000a128.000000,128.000000 0 0 1 '
+                     '0.000000,0.000000l-0.000000,64.000000a64.000000,'
+                     '64.000000 0 0 0 0.000000,0.000000Z',
+             'percentage': 0.0, 'label': u'X', 'stroke': '#fff',
+             'label_position': (256, 0), 'fill': u'#dd0000'},
+            {'value': 0, 'show_label': False, 'center': (128.0, 32.0),
+             'stroke_opacity': 1,
+             'path': 'M128.000000,0.000000a128.000000,128.000000 0 0 1 '
+                     '0.000000,0.000000l-0.000000,64.000000a64.000000,'
+                     '64.000000 0 0 0 0.000000,0.000000Z',
+             'percentage': 0.0, 'label': u'IX', 'stroke': '#fff',
+             'label_position': (256, 0), 'fill': u'#ff0000'},
+            {'value': 200, 'show_label': True, 'center': (224.0, 128.0),
+             'stroke_opacity': 1,
+             'path': 'M128.000000,0.000000a128.000000,128.000000 0 0 1 '
+                     '0.000000,256.000000l-0.000000,-64.000000a64.000000,'
+                     '64.000000 0 0 0 0.000000,-128.000000Z',
+             'percentage': 100, 'label': u'VIII', 'stroke': u'#ff7000',
+             'label_position': (256, 0), 'fill': u'#ff7000'},
+            {'value': 100, 'show_label': False, 'center': (32.0, 128.0),
+             'stroke_opacity': 1,
+             'path': 'M128.000000,256.000000a128.000000,128.000000 0 0 1 '
+                     '-0.000000,-256.000000l0.000000,64.000000a64.000000,'
+                     '64.000000 0 0 0 0.000000,128.000000Z',
+             'percentage': 50.0, 'label': '', 'stroke': u'#ff7000',
+             'label_position': (256, 0), 'fill': u'#ff7000'},
+            {'value': 0, 'show_label': False, 'center': (128.0, 224.0),
+             'stroke_opacity': 1,
+             'path': 'M128.000000,256.000000a128.000000,128.000000 0 0 1 '
+                     '0.000000,0.000000l-0.000000,-64.000000a64.000000,'
+                     '64.000000 0 0 0 0.000000,0.000000Z',
+             'percentage': 0.0, 'label': u'VII', 'stroke': '#fff',
+             'label_position': (256, 0), 'fill': u'#ffa800'},
+            {'value': 0, 'show_label': False, 'center': (128.0, 224.0),
+             'stroke_opacity': 1,
+             'path': 'M128.000000,256.000000a128.000000,128.000000 0 0 1 '
+                     '0.000000,0.000000l-0.000000,-64.000000a64.000000,'
+                     '64.000000 0 0 0 0.000000,0.000000Z',
+             'percentage': 0.0, 'label': u'VI', 'stroke': '#fff',
+             'label_position': (256, 0), 'fill': u'#fff000'},
+            {'value': 0, 'show_label': False, 'center': (128.0, 224.0),
+             'stroke_opacity': 1,
+             'path': 'M128.000000,256.000000a128.000000,128.000000 0 0 1 '
+                     '0.000000,0.000000l-0.000000,-64.000000a64.000000,'
+                     '64.000000 0 0 0 0.000000,0.000000Z',
+             'percentage': 0.0, 'label': u'V', 'stroke': '#fff',
+             'label_position': (256, 0), 'fill': u'#aaffff'},
+            {'value': 0, 'show_label': False, 'center': (128.0, 224.0),
+             'stroke_opacity': 1,
+             'path': 'M128.000000,256.000000a128.000000,128.000000 0 0 1 '
+                     '0.000000,0.000000l-0.000000,-64.000000a64.000000,'
+                     '64.000000 0 0 0 0.000000,0.000000Z',
+             'percentage': 0.0, 'label': u'IV', 'stroke': '#fff',
+             'label_position': (256, 0), 'fill': u'#55ffff'},
+            {'value': 0, 'show_label': False, 'center': (128.0, 224.0),
+             'stroke_opacity': 1,
+             'path': 'M128.000000,256.000000a128.000000,128.000000 0 0 1 '
+                     '0.000000,0.000000l-0.000000,-64.000000a64.000000,'
+                     '64.000000 0 0 0 0.000000,0.000000Z',
+             'percentage': 0.0, 'label': u'III', 'stroke': '#fff',
+             'label_position': (256, 0), 'fill': u'#00cfff'},
+            {'value': 0, 'show_label': False, 'center': (128.0, 224.0),
+             'stroke_opacity': 1,
+             'path': 'M128.000000,256.000000a128.000000,128.000000 0 0 1 '
+                     '0.000000,0.000000l-0.000000,-64.000000a64.000000,'
+                     '64.000000 0 0 0 0.000000,0.000000Z',
+             'percentage': 0.0, 'label': u'II', 'stroke': '#fff',
+             'label_position': (256, 0), 'fill': u'#209fff'}]
+
+        actual_context = population_chart_svg.context['context']
+        actual_slices = actual_context.slices
+
+        self.assertEqual(expected_slices, actual_slices)
+        self.assertTrue(
+            population_chart_svg.output, empty_component_output_message)
 
         shutil.rmtree(output_folder, ignore_errors=True)
