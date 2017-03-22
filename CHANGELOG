@@ -1,3 +1,834 @@
+Changelog for version 4.0.1
+================================
+
+cd241b3d5 (HEAD -> master) Update changelog.
+afb2bcbb7 Merge remote-tracking branch 'inasafe/develop'
+4c85bcb84 (inasafe/develop) small issues: unicode, layer title
+dad192c18 (inasafe/master) Merge pull request #4063 from ismailsunni/master
+74d10e9be (ismail/master) Compile translation.
+75bfbca3a Bump version 4.0.1 and add changelog 4.0.1
+543f8e3be Fix merge conflict.
+72ee9e411 fix SSHWS classification
+45c9ebb41 add option to launch keyword wizard on shakemap importer (#4060)
+56ca2906e infographic fixes:
+6b6259d05 match petabencana's keyword with its classification (#4056)
+5ccf26c6b update translations from transifex
+94ba5e900 add interactive test for definition help
+8d67f171b move numerics function into earthquake, add definitions for notes and actions
+452bbeef9 Fix #4049. Handle more types in metadata copying.
+092230ed1 Rename files.
+35709dadf Remove unused metadata in exposure summary layer.
+1eccea110 add other group to Badan Geologi Landcover
+f0646542c regarding issue #3607: change calculation of additional rice
+d1eda2740 add one missing translation
+267a96679 Allow QLongLong length 11 in minimum needs fields
+90de8d4a6 improve translation for IF name
+fa6172c87 add translated analysis question support
+0a5fad16a remove report_question
+d5dd71c3d generate provenance only once
+61f636354 tidying up translations and tests
+cbd7c2415 fix issues with infographic:
+022078c0f fix issue #3998: update qgis report templates
+58fa84f76 fix issue #3887: Add ordering for exposure classes in aggregation
+820e487cb Refactor analysis provenance
+59cdb098e skip clip_by_extent if we have an exception
+9ac9c8f3c Fix wrong age ratio.
+f1a4b8695 Add sum ratio checker in option dialog.
+9eadc8790 Address Etienne's comments.
+0d801e2fd Add custom copy function to copy keywords.
+5fa757ca0 Fix unit test for provenance.
+e65574c47 Add aggregation keywords in exposure summary layer metadata.
+d03b8707d Fix unit test.
+73332cf10 Preserve datetime in provenance.
+47c74559f Make dictionary of dictionary deserializable.
+2c8853c98 restore the not displaced legend
+545c47a33 make one pixel buffer on the analysis extent when we split a raster
+6a6fe705f manage inverted Y raster and skip clip_raste_by_extent if the layer is invalid
+dfd363d16 Sort global default values in options dialog.
+62ce08e85 disable GDAL bash window on windows
+ba9ee00d2 fix fatality range
+b3ae71cf5 missing translations
+99590b3cf Switch help text and description in option dialog.
+98f5631b0 Update parameter library.
+50873a34d Set to alpha version for develop branch.
+af3b90e0b update translations
+577cd46f9 add missing translations in aggregation report
+4e6411cf9 fix hazard with many units
+31746366e add test data cyclone
+3dfe2d002 enable the displaced raster to be the impact layer
+7975a0c9c fix title and displaced raster
+a06199a5e review comments in hazard.py
+2b78f7576 add missing notes for EQ impact function
+391d0181b enable inasafe for QGIS 2.14, 2.16 and 2.18
+85a1205db generate map report in IFCW too
+8847b1d1c (tag: version-4_0_0) Merge develop to master (#4014)
+16e4451a4 Upstream master (#4013)
+fb7d9c3d0 Updated metadata.txt and CHANGELOG for 4.0 release (#4011)
+07fd12f47 Fix failing dock tests (which are anyway expected to fail (#4010)
+6c09dbbcf Small tweaks pre release (#4009)
+bc43c18b1 Merge pull request #4008 from timlinux/master
+56cd5adde Merge branch 'develop'
+66b62c2a2 Merge remote-tracking branch 'upstream/develop' into develop
+2bd26c91f Test tweaks - improve testing on windows (#4007)
+e2081b0b9 Merge remote-tracking branch 'upstream/develop' into develop
+1f1958ce5 Remove mmi high medium low classifications in favour of having only mmi scale - see #3874 (#3981)
+87a073e52 Fixes for tests in windows and remove unused tests.
+463254e72 Merge remote-tracking branch 'upstream/develop' into develop
+d3f0f955a Merge pull request #4005 from timlinux/upstream-master
+338c4d6a0 fix issue #3934: tidying up infographics:
+e8c915de1 Update translation.
+1cd0c23d6 Clean invalid classification before save the keywords. (#4003)
+197cd41b1 added parameters submodule that got lost when we merged
+043ea6651 add landcover definition from badan geologi for volcanic ash (#3999)
+25f404c35 Merge changes from develop
+5e61cbeab Remove useless comment.
+b76f04fcb Update displacement rate for cyclone. Fix #3762
+6772aedd8 Remove fatality rate.
+09896d4e6 anticipate inactive exposure layer (#3995)
+40b609621 Merge remote-tracking branch 'upstream/develop' into develop
+7f11051f7 skip if KeyError see #3803 in EQ IF
+ea97f76f2 remove interior rings from the analysis_extent
+ab4135e79 fix unicode in layer saved
+ab5b63d15 add some missing translations in dock
+073c984d3 tidying up docstring
+e52c7049b Fix unit test and add Logger info.
+53154870c Fix calculate ratio in diagram.
+71f3f437b Fix formula for ratio from count.
+c509d0213 Fix for fields help so that short text is visible long text is hidden (#3986)
+4ad6fd8cc fix issue #3974: add an affected note for affecting hazard class
+e0691b43f add unit for table header in analysis detail and aggregation result
+6b05b2a68 address issue #3726
+b01741bb8 remove deprecated functions from the QGIS api
+0897955ab use ratios from keywords when we use a raster exposure
+7f016c129 add small_grid_ratios to test data
+cfeb46630 fix issue #3666: show ranges in fatalities field
+b0684cabe update label about default EQ fatality function (#3985)
+fd66b7f65 (timlinux/fix-help) Fix for fields help so that short text is visible long text is hidden
+8bab1cb98 add many logs in the IF
+5851c2a9f .. versionadded:: 4.0 (#3979)
+d4c827ffc handle inasafe default wizard behaviour if layer has keywords (#3978)
+3c537df9e handle json file on batch runner + ui polish (#3966)
+a2b159dce disable feature default rate in settings
+0fe9bcd3b disable logs about GEOS errors
+250cf27c0 use kilometre if possible in the legend
+60234f0c6 add notes and actions which are specific for a hazard and an exposure (#3968)
+3e8b11844 Fix #3932 Re-enable all exposure for volcanic ash.
+6eec04046 Minor updates to affected status and notes (#3963)
+6dff549c1 avoid check IF status after an error
+d61cb9573 fix default string in dock when we add new layers
+c8436abc4 convert unit, for landcover to hectare for instance)
+2f8d7802e use source instead of publicSource on reclassify function (#3958)
+c32e3c10a use publicSource instead of source on QgsMapLayer
+2f4fe80e3 another scrambling kcw and greyed out combobox (#3952)
+9cd753eca Shakemap importer (reclassify raster) (#3953)
+c5da64b0b add displacement ratio to the attribute table
+0a9fe50c3 improve some debug helpers if the CRS is not in 4326
+84f3b70bc remove strings concatenation, they are missing in transifex
+1c2cdbdcc enable a test about minimum needs with a vector layer
+4877e65bf additional customization for earthquake report
+58b5c5606 fix save scenario
+bc268878d Fix action notes (#3939)
+6a31f048f add some default values into the hazard classifications
+215c0c8c4 fill None values after zonal stats algorithm
+b827cba03 Update translation (#3935)
+abe473f32 fix strings
+f9d5397ab use selected features by default and update question area if selected features
+7db989478 show report after IF is finished
+03b573e6c fix issue #3879: Make maps showing all layer related with analysis
+8de40df85 fix scrambling wizard (#3936)
+9f28305d5 Fix more wrong usage of string format.
+ff4b7d9c0 Fix unit test.
+cca1c60bb Fix translation problem.
+bcceef7b0 Use mmi scale as EQ Raster population classification.
+3f7e7d16d Multi buffer patch (#3911)
+db7e6f111 fix min needs manager not showing min needs profile #3925
+9846ebedb handle none geometry (#3929)
+b9193d9f9 Update volcanic ash with exposures, displacement rates and notes from discussion with PVMBG (#3928)
+a6ebe186e fix size calculator with a multi geometry
+cafe416fb Update translation
+6fbda81d1 Fix typos
+ec87668a4 reduce the size of the EQ raster
+0f43e6b17 remove hardcoded displacement rates for EQ and use hazard_classification instead
+3a72bd8f2 add EQ analysis summary layer
+8830de21e update earthquake QML and qgis project
+2b1e68b7f refactor styles definitions
+298339eeb use gdal with commandline instead of processing
+4a60e5776 add earthquake scenario
+6ccf3f879 add raster style for displaced people
+be85360ef enable relative paths in test scenario
+c7bc15343 fix geometries on the fly for the aggregation layer
+2e236a6cd add some hard-coded translations from SPHERE and BNPB
+511dda47c Improvements to definitions help to add glossary and notes to explain roundings. (#3917)
+be549046d fix notes failing when there is no displacement
+6c3f74a40 Add color.
+7b9b5e032 make sure sum of the ratio is 1.
+c896d27ea Update translation.
+c68da991c update strings
+68a8b0998 improve report table:
+f148940dd Tweaks (#3909)
+c6a04782c update graph with ratios and counts
+7ffaa0cb4 fix needs calculator ui (#3910)
+d5ec9c2ba fix issue #3880: Making InaSAFE option linked with map report (#3897)
+9db05e5f8 fix issue #3877: Add displacement rates description in the notes (#3903)
+99834f5fe setting up docker with an environment variable
+4f72b9c45 Partial fix for #3906 - include earthquake specific notes in population exposure help. Funded by DFAT. (#3907)
+1217612c8 Fix #3904 - add  displacement rates to definitions help. Funded by DFAT. (#3905)
+364d4d10a avoid using QgsMapLayer.source() and use QGIS api instead
+cce194e15 Use better displacement rates for PetaBencana floods based on per. comm with @charlotte-morgan in gitter. Funded by DFAT. (#3896)
+6323b2ff8 Refactor. Peta Jakarta -> Peta Bencana (#3866)
+0c1fc9411 Update from @timlinux
+14555b631 Add concept for thresholds and value maps.
+67ec61bea Remove small number hacky fix.
+a53c075d7 Mmi classes (#3891)
+69fb1d682 change relative path to absolute path
+03beb7760 fix issue #3822: When generating reports, the QPT should be made available to the user
+ed57a9b17 Fix for #3667 - add PetaBencana hazard classes. Funded by DFAT. (#3672)
+7ab6f99a3 Reverse help_text and description.
+16d18d68b Always set first tab in option to be opened.
+19415bed2 Add min max in custom value.
+271c9ea99 fix unicode strings in reporting
+62bd7a902 fix typos
+1ccc78f0c manage ratios if there is a raster population exposure
+ff10f58ab add tsunami vector, EQ raster and population raster
+beefd60dd fix impact function is None in Dock for reporting
+27ecd4844 needs profile patch. ignore empty root_directory
+d2c5e379f Disable EQ Raster Population classification.
+c91c77568 add comment about a test
+3924d64a9 fix dock IF behaviour
+c935b44a3 fix strings
+e863204ae enable check_layer in the IF
+823982ab5 Remove generic classification from tsunami hazard fix #3854
+4a5ef03e0 Add unit test.
+560c02458 Hardcode for EQ Raster on population thresholds.
+cd6418022 Fix #3853
+af6fa10dc Filter classification based on supported exposure.
+2eee01617 fix typos
+8d692043c add funded by in PR template
+bae5bfbd6 improve ticket template
+f1c7c5722 fix unicode in french
+4f1d98388 fix some english strings
+57ad28d35 add more checking to layers in the IF
+1dedb1fa0 check_inasafe_fields everytime in the IF
+f7b449da6 check if layers are valid along the workflow
+51564b96b disable busy cursor if exception is raised in the report
+95452f365 open HTML in UTF8
+4dc152b36 fix issue #3861: Flood on buildings with no aggregation fails
+36c48c2cd move EQ definitions into definitions
+19329c7b3 add notes in report when aggregation layer is not used
+1ea2b5a5f change min needs profile path to ~/.qgis2/inasafe/minimum_needs (#3810)
+57864d98d use FileDownloader instead of python's import (#3858)
+d27ef3ea3 Hazard classifications and notes (#3850)
+1a02ef3e4 fix minimum and maximum thresholds
+09e01b161 fix issue #3824 Map extent not properly used in Map Report
+f21f5fdbd Use true minimum value in raster.
+3c078f4ff Update string in wizard per #3849
+253577423 Fix bug in thresholds classification.
+f2d8e93b1 fix issue #3688: Report template papercuts
+bc4494420 fix some unicode in French
+fe4420861 changes to follow coding standard
+3f0a95593 batchrunner fix start new project
+2af20248f batchrunner fix running on selected tasks
+b90ee1fb0 fix running scenario in new project toggle
+b6b825199 fix the need to print layers in order for the map to show properly
+739461633 BR:fix Run Relected not running all selected scenario
+7dcc69db1 skip extent selector if aggregation layer is selected
+af2a6e3bb More filter in IFCW.
+ecfc6a382 More filter on IFCW. Fix #3823
+1101f3c16 radio button enabler as an object's attribute
+69e7ee305 use itemData instead of raw string for comparison
+bab1e0063 add test for radio button behaviour
+37c4b9e72 fix failing test
+5e81c02d2 fix radio button behaviour on inasafe default step
+0077482db Compile translation
+9e930fe87 Remove realtime from translation script.
+e80730f8e Update from transifex and local.
+60ab734ff Update translation.
+8113555be Typo in impact_function.py
+20638bbb6 Word wrap in needs calculator.
+d5487ca5d remove options about conditional styling
+6fc38716f revamp of the hazard conditional styling
+66ba86db2 disable size_rate postprocessor
+8966a12d5 fix translated strings and tests not affected
+df7938fcf replace "unaffected" by "not affected"
+f385ebda7 fix strings
+b08bef918 add template for PR
+d65f197ea improve a little bit ticket template
+cc73541d1 improve exceptions display
+a7d5266bb avoid adding default ratios to a raster exposure layer
+3de77f382 fix issue #3787: zero rows should not be displayed
+cc5ed9404 fix issue #3752: fix url for PetaBencana.id
+c86ac87c7 disable sanity check in summary calculation
+cedfa0a73 add from count to ratio algo in the GIS overlay analysis
+845b4656a fix display keywords when there is no report
+8974ed961 some log cleaning and add option to not generate the report in dev mode only
+f64469c44 add algo from count to ratio
+05da2648e Fix issue when wizard not skip empty inasafe fields.
+878027594 add ratios if there is a default in aggregation layer
+2781caa38 add ratios to the exposure layer if there is no aggregation layer
+460584d4b Fix value map pretty format if there is empty value map.
+ef5c5bb19 Tidy up code.
+ef48cff06 Fix unit test in test keyword wizard.
+1884effa2 Enable next button if it has at least one classification
+1cbfb62e8 Remove header in tree widget.
+eddbe23cc Remove cancel buttons.
+7cd57f3cc Open edit panel after change combobox.
+88bffc7fa Disable next button if still editing in multi classificaiton step.
+01f2f0f94 Disable next button if not ready.
+a211b045c Disable load default button for 4.0
+cb5cb8d49 Show current value maps.
+09d49d424 fix ifcw so its behaviour sisiliar with the dock
+b8e884998 add iface param to WizardDialog
+d45e3eb05 fix ifcw error without importing iface
+1f82c5883 fix IFCW extent error
+f1df7001e cyclone fixes (#3807)
+0674f9520 Remove unused tr and handle for threshold in IF.
+9443454b1 Make the keywords viewer prettier.
+e40151101 Fix bug in thresholds viewer in dock.
+91059b5cc check if the hazard can run on the exposure
+6e9f46d71 Fix for #3777 - use clearer message if processing plugin in missing (#3797)
+374016452 Make help non-modal and minimazable / maximizable (#3796)
+92b5380d8 use format function in strings
+86ade0a07 remove unused imports in postprocessors
+dd9fe7355 minor fix in the impact function about exposure_impacted
+1686b4a22 review displaced/affected in postprocessors
+bbfafd78e update strings
+a951df67a add the size field before to clip features if we have a count
+2c6efc6d8 stop using the dataProvider in reproject algo
+94e7d7034 Updte test data for hazard_generic
+a022824a9 Avoid missing wizars string in fields step.
+8bc69c765 Fix variable name in wizard_strings
+ca1131adf Add unit test to test uniqueesness key.
+5fee3b589 remove useless code about IF function combobox in minimumneeds dialog
+2f7e6ea39 remove features if the geometry is None
+fd62ab1da Fix wrong commit in parameters.
+60cef4d44 issue #3730 #3731
+0b01c251f issue #3711
+11391832b issue #3693 : Adjustments for map template
+e31c5c5fb Update from parameters package.
+e6e540605 add square meters symbol
+ac74d9373 open the report in UTF8
+0c1034201 do not translate strings in tests
+978e0c930 add population data
+adba6a151 fix next analysis extent display when there is not enough layer
+eee46a97e fix restore default behaviour
+de65e382b add button for restore default ratio
+d0c88dcf1 Fix #3135. Only check safe package and always run update.
+942970da7 Fix comment from Etienne.
+ae45a618d Fix missing classification, value_map, and thresholds.
+7a0ed8575 Update test data keywords.
+9cd001a77 Add missing classification and value_map for hazard layer.
+530c79e0d Fix refactor reclassify raster.
+b0356a47a Fix test in reclassify vector.
+fb19b00d9 Update test data keywords.
+7bccaeef0 Fix unit test in update_value_map.
+971548480 Fix reference problem in unit test.
+6f5d991ae Fix unit test and clean multi classification result.
+8e2626db9 Small landscape fixes.
+c95e79f41 Remove classification from Hazard Metadata.
+a63d0a691 Fix unit test in test keywords wizard.
+d0ad2f4fd Update test data keywords
+d8dbe56e0 Update wizard flow for exposure.
+8bc6cb294 Fix unit tests in test_keyword_wizard.
+83271b318 Fix persistent data from previous wizard.
+ce11cf4e9 Better viewer size policy for the multiclassification step.
+15c52b4e5 Add helper to retrieve classifications, thresholds, and value map.
+ee9f60aff Value maps read and save for multiple hazard classification.
+f955860fa Add default value maps classification method.
+5f4a7005f Read and write for value maps for multi hazard classification.
+5e9058098 Add buttons.
+af21125cb First work on value mapping in multi classifications hazard.
+9348b477f Rework left panel based on new structure.
+fa91446d2 Use constant instead of string.
+a7950e344 Make keywords wizard read the keywords back.
+802aac9d7 Fix test keyword wizard for continuous raster.
+8d0b93630 Able to save multi classifications keywords.
+8ae347dab Fixing pep8 and landscape.
+dd400fae8 Able to edit threshold.
+0e52a2ae3 Add cancel button behaviour.
+8184e2410 Add state viewer in multi hazard step.
+d5ecd327e Add classification thresholds helper method.
+57d24d482 Add behaviour for edit button.
+5862fc0cb Polish basic ui file.
+b846f3af2 Fix letfover problem from rebasing.
+007c1055b Move skip inasafe fields to wizard utils.
+5c838f98e Add clear layout helper.
+900e957bf Set label for multiple hazard wizard step.
+b89a09ae5 Use layer purpose instead category.
+9baf6079b New wizard string for multiple hazard classifications.
+6d8e3407a Update omnigraffle for keyword wizard.
+33af0ff7b Fix wizard flow.
+cbe6514ad Update Keyword Wizard Flow.
+c2f6291c5 Rename and update wizard flow chart.
+de14c96f1 Fix flow in step unit.
+5fbe8eab1 Fix wizard flow in multi classifications stepwq
+b0966be34 Fix step in step field.
+6952549bf Fix step in layermode step.
+84917491f Add UI and step for multi classifications.
+6a53d0ddd Add exposures in hazard_classifications
+e31401ccc Add multiple classifications, thresholds, and value_maps in hazard layer metadata.
+e5fe057e9 (rohmat/develop) update multi-buffer icon
+08d37b93b use a double in the minimum needs fields
+846e65e40 fix summary about absolute values
+e54794fbe Added displacement rates for all hazard classes. See #3553 (#3722)
+6c0dc9e6e add ±1 tolerance in the summary calculation
+7b7165bbe replace MapRenderer by MapSettings
+0c336d311 review titles in gis package
+cf0c5a5bd fix default analysis extent behaviour
+148727cb3 fix url variable error
+278f28487 replace print and iface with QgsMapLayerRegistry and anticipate error
+48057bc36 add printing layer so it can be recognized when creating map pdf
+daa0c1c64 add printing mapcanvas layer
+def5dd8fe add new tool: multi-buffer (#3708)
+919ca8ed6 improve error message when the requested extent is outside
+ff4894563 move check_inasafe_fields outside of tests
+c3cdc9b41 Move monkey patch for keyword fix #3737 (#3738)
+1feb7262a docstring and typo
+527f461f5 use locale function in the OSM downloader URL
+9ce51f5bb disable invert bool in test
+c10cf2121 add function to format integer according to standards
+7160b8d11 fix some locale issues
+2c60ec601 Refactor i18n to report definitions
+fe889f989 add features for infographics
+8a0405abd fix rasterize call if QGIS < 2.16
+bbb84610f Standards (#3725)
+7b9cc5690 Standards (#3724)
+3cd4eba36 vulnerability icons and updated svg icon files - real svg (#3705)
+33f67c8c3 make pep8 at the end of travis
+02216caee disable not_exposed in the map for for landcover and population exposures
+6028b9782 review postprocessors logs
+33df8fef8 Small fixes to definitions help and fix heading counting (#3707)
+a0e12c872 In progress improvements to definitions (#3683)
+0d303cf6e fixing some landscape issues
+d7ae8f5b9 rename colors to styles in definitions
+111a066ce add not_exposed class
+4270fde49 Add displaced postprocessor
+f6ad8abf9 add not exposed in the summary calculation
+aaa58a3b3 add `not exposed` to the affected postprocessor
+7d914d9b5 add labels according to standards in the legend
+5922aae52 add method the get URI of the datastore as a string
+6ecf496be Fix string error on minimum needs calculator
+0e979d2a6 fix tests and pep8
+672814b5a  fix failing test
+5bde396b1 update impact report test to fix failing test
+b427a9c93 add unit hectares to rounding notes for land cover
+39500de5c concept typo, notes on rounding for all exposures, notes on ommission for structures, new caveat for ommissions
+6c6652964 revised population exposure concepts
+13e3f616a fix minimum needs calculator to use the new post-processor (#3645)
+4dfa7ed6e update map legend examples (#3681)
+7c18e18c1 add comments about standards in gis algo
+09ba44405 fix union algo from https://github.com/qgis/QGIS/pull/4037
+b09d47f67 use rounding in the map legend
+fbe810fe6 remove useless code
+72add9c6c add humanise python exception
+431112319 check if the analysis extent is valid from the aggregation layer
+67cb1ab95 rounded disabled until we have some inputs
+9dafb604b fix earthquake IF when we try to style the layer
+7b050ea9f add the feature count in the legend
+2244aa19f add units to exposure
+e614d395c move rounding to safe.utilities.rounding
+4c210633a add options to choose the EQ function
+7db5d793a change the EQ output raster to displaced people
+f644de387 update graph about the waterfall
+7d57d0f42 Fix infographic error when vulnerability not found
+e94732d31 Fix error expanding os ['HOME'] (#3659)
+ab03b83ce add not exposed color, improve line style
+0d28ab62a Add question to provenance.
+5ba8a1776 Fix conflict.
+abc6871e7 set the layer title as in the standards
+1a0aa35ff add small value to the hazard classification and fix the reclassify algorithm
+438a6543b Update command for translation.
+dfbc3bd8c Added new diagram to omnigraffle (#3646)
+5d122fa62 Show all options in IFCW for developer mode.
+7a96e372d Enable place for volcanic ash and road for cyclone.
+40fc583bf add profiling to eartquake IF
+b16f48543 small fixes in the IF
+779a45d36 clip the hazard raster with the analysis layer
+5be4181fa improve checks about raster/vector
+f8ec17dd3 fix test in qgis desktop
+1fabcd42f Optimize impact function for flooding on buildings
+4bb7082bb Fix typo for #3626
+09cd548b3 fix #3624 - add QGIS to python path in run-env-osx script (#3628)
+6a98a3cf5 fix #3627 - broken english in error message when there are no features in teh extent
+988ee775f (tag: version-4_0_0b2) Fix numbering and address some other defintions report papercuts from… (#3623)
+ba73da0b5 rename gisv4 to gis
+9b6c223cc remove test_data from travis
+584df76df remove storage
+210841f49 remove gis package
+5227b8576 remove code from GIS
+5a3cd70f3 remove code in commom/utilities and utilities/gis
+6fd77a4e8 remove clipper
+c84fe711a Added missing batch runner help to definitions document (#3614)
+9870cc655 Updated supporters logo to fix #3606 (#3613)
+d9492306c fix #210 - show the limitations of using InaSAFE in terms of memory requirements etc. (#3612)
+39328d5ea code revision #2
+0a572cf34 remove settings from map pdf generation
+07041e922 code revision
+d9174f865 fix impact layer analysis information not shown in the dock
+c819e4b3b add pdf creation function
+4630606e5 PEP8 fix
+86be62534 call map report generation
+d468921c4 code clean up, implement impact function usage from impact_function.py
+945b0d68c code clean up, add function to define layer from scenario
+36087a806 code clean up
+1486288db check and show scenario status in dialog
+544792090 Move hygiene packs and additional rice as postprocessors
+5eb529ab6 PEP8
+cb6cedded Address comment from Etienne and Rizky.
+b5b3e1cfe Fix unit test.
+c32c8ae10 Add <= in the threshold step.
+3e651e641 Better messaging from assertion.
+ec705eba3 Default value to Global default.
+99d2e7f23 Typo eldery.
+acba08761 Fix scenario test data.
+6a8e69f6c More fix on extent IFCW.
+60cbb167c Enable extent step in IFCW.
+ecb3e79a7 Fix unit test.
+197f9997b PEP8.
+d7f48400b Switch between help text and description.
+86a9fff05 Re-assign test data keywords.
+bc27a9e5f Update description for threshold wizard step.
+9203e97c7 Hide open composer button.
+c0efdf2ea Fix undefined variable.
+138355871 Enable print map in wizard.
+a168c4afb Disable road for cyclone.
+c6eabde22 Fix unit test for population layer in keyword wizard.
+868511cb9 Remove unused aggregation.py from definitions.
+4e1df7b8f Skip empty fields in aggregation keyword assignment.
+3ae383824 Add description for the threshold max.
+1f85431b7 Change setting to global default.
+8ba2a5f45 remove feature rate and value from population.
+e29e12090 Fix ratio descriptions and typos (#3620)
+db96efa4c add EQ IF working
+d72c463e7 add comments about fatality rates  EQ IF from InaSAFE 3
+09e25c588 add displaced and fatalities to count_fields
+b457948f5 Add female hygiene and rice minimum needs calculations
+23b34a201 remove realtime directory
+bc0130054 fix landscape issues
+6c00829a9 use definitions for fields in EQ IF
+26680e251 update the aggregation layer instead of creating a new one in the EQ analysis
+0760237ef docstring the earthquake IF
+608bce64c first run of the earthquake IF
+bdac655db fix landscape issues in gis/raster/align.py
+983627742 use exposure CRS in the EQ IF
+58e50fcde Add maxDiff=None for testing.
+0077ebb7d Fix unit test.
+b95043188 remove expected failure.
+d6ef9220c Add expected failure for @lucernae.
+aee0248e5 Update test data.
+3abd6fd04 Fix unit test and test data.
+bd993b1d1 Remove ratio from exposure and count from aggregation.
+45b14565d Update reporting and mapping standards (#3602)
+f906db6dc Add demographic breakdown when no aggregation layer is used
+c89ead8dd Papercut fixes
+ab164f5c5 Inasafe 3548 (#3594)
+ff95e228a PEP8.
+a24840188 Add get map legend title.
+e6ce8bb32 Add get map title and provenance utilities.
+7ea8ffd16 Fix unit test.
+e042f9fe3 Disable landcover raster and volcano raster.
+8f1ab96ac Add generic hazard, remove place.
+5146e1a5d fix geometry can be None
+79183c6e0 Papercut fixes
+ca4b9f36d add a geometry cleaner in the union algo with a buffer 0
+7a44e6bc7 Refactor reportv4 to report packages
+38dbe9646 Add fix for map report
+aeb1922d2 Add initial infographic support for minimum needs and population
+04d47616a disable busy cursor in the dock when we use debug mode
+b7a301767 fix docstring in raster alignment
+d195b4fe8 add damage curve analysis in the impact function
+ee4a5a2eb fix wrong imports
+354b6a61e More improvements to definitions and definitions help (#3591)
+cd1146359 add conditional formatting to the attribute table
+4b791d66a add a function to clean a geometry by buffer of zero
+0e7736e4e Merge pull request #3587 from ismailsunni/timlinux-inasafe-3548
+4247c07f5 (ismail/timlinux-inasafe-3548) Fix failing unit test.
+5acccc64f Use deepcopy to avoid updating the hazard_all.
+2dfac9b57 Merge branch 'inasafe-3548' of github.com:timlinux/inasafe into timlinux-fix-3548
+b18002e08 Fix failed unit test in travis.
+9d92549eb Merge branch 'develop' of github.com:inasafe/inasafe into timlinux-fix-3548
+ba2adc0bd Revert the version of parameter.
+7406d497c fix pep8 and landscape
+a8f9be919 Implementation of earthquake impact calculation
+1c388bdec (inasafe-3548) Revert parameter version.
+fc089a49b Merge branch 'inasafe-3548' of https://github.com/timlinux/inasafe into timlinux-inasafe-3548
+133e45aa3 Do not update any metadata after load the layers to QGIS.
+c57dbe82f update crs saving to match changes in dock.extent
+488fe158f Cleaner way to test layer_purpose_for_layer
+b91b3d00c (inasafe/inasafe-3548) Merge remote-tracking branch 'upstream/develop' into inasafe-3548
+247f5f190 Skip step raster inasafe default values in wizard.
+4800c92e4 Remove v4 definition import
+c2beee592 Remove v4 definition import
+c94e0163f Resolve merge conflicts from develop branch
+ade888ae1 Fix pep8 and merge conflicts
+d5db09216 Set pop count to use float also.
+4b7abc73c Resolved merge conflicts
+11aa53d91 Skip inasafe-field step when there is no specified field found
+66606b04b add earthquake scenario
+05d053f23 add earthquake definitions
+a6e231891 add align raster algo
+ce4dfe272 add test about default values
+3280db95b update scenarii with default values
+a26d64091 update graph about default values
+be4781dbf add default value algorithm
+3b41dde09 Update test data metadata.
+01abb3ceb Remove unused property in hazard layer metadata.
+facaae75f Add clear widget from wizard steps.
+8f71100fc try to use the mocked QGIS interface
+3718219b3 trying to check this random bug in the IF (#3573)
+d66833a0b Remove unused metadata property in aggregation layer metadata.
+1a8755832 Remove unused properties from exposure and hazard layer metadata.
+74c5b8797 Fix landscape.
+06812ee41 Add omnigraffle for keyword wizard flow chart.
+827d26ac2 Update test data keywords.
+cbc086da1 Remove vector and raster hazard classifications.
+3e40311b0 Tidy up metadata utilities.
+5f1f69b30 Remove hazard_classification_v3
+07f90f240 Fix incorrect import
+d609018a9 Fix wondering messages package
+050f55858 Refactor v4 to nothing
+dfcbb7e3c Fix repeated text in definitions help caused by cut & paste
+f5f649b71 Fix pep8 errors
+fd5d1e3d0 Resolved merge conflicts
+2aa6d58a1 Further improvements to definitions report - adds the dialog help into the report too...
+90fa41a12 better handling errors in the impact function
+70dde4b23 remove some code from defaults.py
+6ba2fe912 Add postprocessor report
+330713a88 remove the use of TEST_DATA for two tests in dock
+a390c1eed Fix for failing tests
+8b79b9940 Resolved merge conflicts
+3ea660bc5 Small fixes to definitions based on Etienne's PR review
+7c40b3d54 fix missing key issue in fields
+30b56a89b Further revisions to fields in definitions
+4f9e5310c In progress updates to review of definitions. Reviewing fields.py
+15596ce6d rename buffer algo to multi_buffer
+166ac9e6b Pep8
+0c1a19e88 Resolved merge conflicts
+009462d36 Fix landscape.
+9b09e1162 Fix travis.
+024172369 Make InaSAFE Default works for raster.
+95fa797e4 Better naming.
+6d841e904 Add example usage of custom parameter and better UI for default value parameter.
+78b34a3fd Put custom parameter test in separated folder.
+c7eea11cc Show default values in wizard step.
+84949f9e3 Add default value parameter widget and unit test.
+70e605b22 Add default value parameter and the test.
+9ed434f97 Add new wizard step for raster default values.
+53b86529d fix import PyQT
+2cf99b62d Fix key error when name is not in the definitions.
+864f46fe6 Renamed definitionsv4 to definitions
+88f36cb30 Merge remote-tracking branch 'upstream/develop' into inasafe-3548
+da29a0e18 In progress revision of definitions. See #3548
+414d3bee4 fix landscape issues
+f4280a6f5 disable a test about the minimum needs calculator
+1182f14cb rename impact_function_v4 to impact_function
+eb520eaea remove the old impact_function package
+beff2dd17 clean the GIS package
+f1d5f0b1f remove impact_functions/bases
+6fd93c785 remove engine and impact_template
+0b59befca remove impact_report package
+9cacbe1c7 remove report package
+163d026f1 remove earthquake IF
+b7b3a3187 remove interpolation1d
+e675b035e remove functions from gis module
+6ffcca5b2 remove old code from engine
+11be68f0e remove tests files from impact_function
+0fe100933 move rounding to its own file
+b3ea4c3d6 remove some calls to register_impact_functions
+df22266ae fix busy status when we launch the IF
+0ee7857de fix coding standards
+d720eb197 fix user extent not defined and None value
+9b4cae32b Fix min max for threshold in wizard per #3540
+ac5e77865 Merge pull request #3542 from mbernasocchi/fix_hurricanes_names
+ffa460813 mark category 1 as affected
+91931d312 make landscape happier
+5ddf9b8cb hide_busy should not touch the run button (#3543)
+9f747652e multi unit classifications for categorized data (#3541)
+c03e4a312 reformat code
+e1707c7fd add missing strings for vector hazard
+5f4018abd updated parameters to latest
+c28f321c4 fixed formatting
+c4c599a96 fixed unit tests
+3379b6718 pep3
+d3a6619a5 added Saffir–Simpson hurricane wind scale
+66a78afed show only hazard classes that support the chosen unit if multiple_units is present in the classification
+190a8452c allow multi unit  defaults values in hazard classes
+d32f2c880 completed initial TC support
+f9951b4f3 add warning wen processing is missing
+a052302bb cyclone support in KW editor
+176942628 Provenance (#3530)
+bbd73b8c7 add missing layer_purpose
+56fd82334 add helper function to set and get values from QSettings (#3536)
+016d90183 add comment about the TypeError while reading settings
+2763c00cc clear next analysis if the IF can not run
+8df94a06d refactor user_extent using OOP
+3b6d631a8 refactor the dock part
+268179435 return a code status for not enough overlap
+b825f9138 use constants for extent selector
+86e1bce40 Add exception to catch TypeError when read setting. (#3534)
+ee117250e OOP for next and last analysis extent
+4a0e289cb add last_analysis_extent
+9063c08e4 update rubberband based on the aggregation layer
+082d5b2cb remove test empty geometry
+c70a39c27 fix use requested extent with the dock
+2eea0a34b use a WKT string instead of a list of coordinates to store the extent
+f575df9ae add function from wkt to rectangle
+a7e8a0949 rename analysis_extent to user_extent
+7b3d457e9 display extent
+1a9428858 Fix bug in test impact functions.
+217aeea0b Small change to make PyCharm knows the type.
+1ba44fbc0 Remove unused code in impact function base.
+5e58a41a8 Remove unused code in core.py
+064df7088 Use loop to set and restore option dialog.
+3d2a28617 Add more unit test for options dialog.
+0295f49ff Better unit test for option dialog.
+4cfbb205a Add default InaSAFE settings
+84c07473f Add minimum needs test
+cd4e60d32 Add minimum needs post processors.
+a38fb8139 Fix more landscape suggestion.
+aa90aeac8 Use list[str] for *args.
+c0fd04e29 Fix issue reported by quantifiedcode.
+aa3ab0c79 Fix some issue reported by landscape and delete not used test.
+4d6b3af6a Add landscape badge in README.
+876d29f4c Delete fabfile.py, no longer maintained.
+20ba23af8 Add landscape config file.
+2f3af45a4 Try to remove get_defaults for settings.
+e3eeeff48 Add unit test for option dialog
+845f841c6 Take female, youth, adult, elderly ratio from default values.
+5485b815b Fix pycharm refactor.
+c81bf2788 Set default page of option to basic tab.
+d2792acd0 Fix naming same to outer scope.
+66ff1d284 Add test_settings.
+e0c142649 Revert back deletion until we remove EQ IF.
+e7ac9dc9b Reorganize methods to better files.
+b20ec7ab3 Remove default values from defaults.py to definitions/default_values.py
+fe0cc1cbe Add comment in default.
+dfddcff54 Clean code.
+c4fbc1416 Add checker to avoid python error.
+62bf81738 Save and load InaSAFE Fields from QSettings.
+4a527b92c Fix rebase conflict.
+7f911c689 Basic GUI for InaSAFE default values options.
+d86a615be Add min max for default value.
+2145cca1b Fix rebase conflict.
+eb4e9b777 More coding standard.
+a10b5d288 Use GIS order.
+b0d7571af Fix conflict in color.py
+acab524e9 Fix failed unit test.
+67589ae23 Add raster in volcano hazard allowed geometry.
+2913cc083 Only show available geometry for hazard and exposure in IFCW
+b0a43ffa8 Remove unused get_previous_step
+9ba54cc9d [issues_3343] Fix truncated address
+d8af48af8 Updated diagram with reporting workflow
+63acbadf4 Added brew install command to get git-export-all needed for release script to work.
+0f5657d3e use definitions for color and width in the extent
+5f7be82ea refactor settings
+75cb812db (serialize_provenance) fix qsettings with an aggregation layer
+bc4cc1526 update graph about minimum extent for an analysis (#3510)
+bf5c16347 Merge pull request #3514 from Charlotte-Morgan/icons_minneeds
+987ad0174 update and change icon
+0f32cb977 add min needs icons
+d2bd7e5f1 add min needs concepts and lic
+0eb776908 (rohmat/master, fix_3498_min_need_calculator) PEP8.
+c915c035c update metadata
+286f37c5c Make ITB Bayesian IF as default. Fix #3497.
+42fcb2280 update hash for google image
+9fff46aaf fix #3487 save as from QGIS should also save the json
+9f19af7f3 (tag: version-3_5_4) Fix issue when multipart to singlepart results in none geometries. (#3501)
+26a8f790b (tag: version-3_5_3) Fix problem with affected and displaced counts being incorrectly calculated in ITB EQ Function (#3491)
+460d29739 (tag: version-3_5_2) Merge pull request #3166 from ismailsunni/backport_fix_3164
+f8e7a7cf9 (ismail/backport_fix_3164) Bump version number 3.5.2 and update changelog.
+dec7a1cc0 Compile translation.
+08a13f0a1 Update translation.
+b04b42dd0 Add checker to see the translation is good or not. Fix #3164
+528ed4a71 (tag: version-3_5_1) Merge pull request #3163 from ismailsunni/release-version-3.5.1
+2d265f61b (ismail/release-version-3.5.1) PEP8.
+c1c7fc5ef Merge pull request #3162 from ismailsunni/release-version-3.5.1
+d49579636 Translation thing
+5e545e9e0 Update changelog and bump version 3.5.1
+8596da6b8 Merge pull request #3160 from ismailsunni/master
+d7e504c53 Add changelog for backport.
+4daa0f535 Fix #3151 Add handler for Zero Impact in IFCW.
+66a6aff8e Handle NULL in writing JSON File. Fix #3153.
+41bb378f4 kill the injured people
+6849c5a21 (tag: version-3_5_0) Merge all changes from develop (#3149)
+9134673c7 Merge pull request #3143 from ismailsunni/master
+6a6b3758b Fix non conflicting error.
+66da0c6e4 Merge pull request #3138 from timlinux/master
+ead30abc1 Resolve merge conflicts with pep8 fixes
+0527cac71 Merged changes from master
+655ce8ec8 Merge 3.5 changes from develop to master (#3137)
+3a17a79c8 Merge branch 'develop'
+1ab950e73 PEP8 fixes
+3bb4f3a86 Merged develop to master
+e0a49bd2c (tag: version-3_4_2) Added changelog notes (#2968)
+54e678343 bump to 3.4.2
+759d6a71a (gustry/3-4-2-release) Run full tests again. Make travis great again.
+6c2b1a3cc remove all gdal use exceptions.
+5b37fbbe2 Fix wrong path to coverage.
+c042a3842 Modify coverage.
+ff170a7a5 Revert back to run full tests.
+f506c0015 Move up get_qgis_app.
+abfb83e0e Use gdal again.
+52174bd1b Revert back QGIS App retrieving.
+d02b71e01 Remove gdal completely.
+48bf94f6e Revert logger and experimental things
+696ce5315 Fix test.
+798d1b24e Comment out gdal.
+42fadc55a Verbos logger.
+6a2c7153a Comment out the code.
+c22bb8bff Replace .click with actual function.
+2cd5366c6 Wrong path to batch package.
+c560da627 Remove .click from the test.
+10ba5775b Disable test run single scenario.
+dd00076f8 Ignore test all scenario.
+7ec788da9 Only test tool package.
+e4de68776 #2385 legend order in classified raster building IF
+a35a90c75 fix #2896
+3ed415f4a Changelog updates for 3.4.1
+0d65a2a32 Changelog updates for 3.4.1
+bb4f8456b Fix comments from Gustry for #2950
+bf1a8dcdc Fix failing tsunnami impact on roads tests
+50ee34dd1 Remove impact length test
+62beecb75 Remove debug and use <= 0 for dry
+477528dbe Use gdal to get nodata and exclude dry cells too.
+280117826 Improvement for tsunami on roads IF performance - don't vectorise nodata raster cells
+2f90204ae faster impact flood on roads
+209629bab Remove print statement.
+cf2d6b6d4 Fix failed test in test_shake_grid.py
+69a0ba93a fix legend order when the layer is None
+e25ba9b0a fix sentence about no data in the report
+5dee5bdde add missing thousands separator
+695ab8fb9 fix tests
+4a322f4dd update notes about no data and 0
+fecbf9a50 remove empty lines from postprocessing outputs #2318
+f5d4b6478 fix tests value mapping
+8ec321edd add tests about the JSON in the generic polygon on buildings
+c92d0a060 add categorized rendering to test buildings
+a66aa4869 fix #2927 enable lineEdit if the checkbox is toggled in settings
+711c402a0 add setLayerVisible to the fake qgis legend interface
+d2819805e fix #2925 set the layer visible when we add it the map canvas
+61c2458b6 fix #2899 impact layer should draw over the hazard layer
+54dbfaf0a fix #2684
+617a8d0f7 [BACKPORT] Fix failing dock test on QGIS 2.15 (and possibly earlier versions).
+6b7ed42b2 Fix #2908, handle KeyError in keywords.
+99e99ddaa [Wizard] Follow up the previous commit
+0e9f392be [Wizard] Fix compatibility with recent QGIS versions. Fixes #2906.
+d95587e2e add missing map_title in EQ IF
+d6e8ad1b4 fix tests
+471345233 make these legend parameters compulsory
+d9e65fa6b add missing IF to automatic testing
+62573ffd8 move layer name and map parameters to metadata in earthquake IF
+bc03f1bdf move layer name and map parameters to metadata in inundation IF
+8b3fd19e0 move layer name and map parameters to metadata in volcano IF
+e419a8f2a move layer name and map parameters to metadata in generic IF
+a3d33b1dc add get key in IF metadata
+562039678 remove "by each hazard zone"
+f9ac66752 Add test with special character.
+386a7c4d3 Fix #2898. Handle special character in xml.
+5b3370464 Compile translation strings.
+ff2b6adac Update translation.
+8b58604d1 typo
+c51e36a97 fix #2884 mistake in the tsunami legend
+
 Changelog for version 4.0.0
 ================================
 
