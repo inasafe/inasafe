@@ -212,6 +212,7 @@ def dynamic_translations():
     tr('Family Kits')
     tr('Toilets')
     tr('weekly')
+    tr('once')
 
     # Words that we have in SPHERE EN
     tr('daily')

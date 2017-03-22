@@ -211,12 +211,14 @@ def coefficient_between_units(unit_a, unit_b):
 
 
 def fatalities_range(number):
-    """A helpr to return fatalities as a range of number.
+    """A helper to return fatalities as a range of number.
 
-    :param number: The exact number. Will be converted as a range
+    See https://github.com/inasafe/inasafe/issues/3666#issuecomment-283565297
+
+    :param number: The exact number. Will be converted as a range.
     :type number: int, float
 
-    :return: The range of the number
+    :return: The range of the number.
     :rtype: str
     """
     range_format = '{min_range} - {max_range}'
@@ -235,9 +237,7 @@ def fatalities_range(number):
         if max_range == float('inf'):
             return more_than_format.format(
                 min_range=add_separators(min_range))
-        else:
+        elif min_range <= number <= max_range:
             return range_format.format(
                 min_range=add_separators(min_range),
                 max_range=add_separators(max_range))
-    else:
-        return add_separators(number)

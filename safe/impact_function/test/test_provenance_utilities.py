@@ -10,7 +10,6 @@ from safe.definitions import (
 from safe.impact_function.provenance_utilities import (
     get_map_title,
     get_analysis_question,
-    get_report_question
 )
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -39,16 +38,6 @@ class TestProvenanceUtilities(unittest.TestCase):
             'In the event of a {hazard_name}, {exposure_measure} '
             '{exposure_name} might be affected?').format(
                 hazard_name=hazard_earthquake['name'],
-                exposure_measure=exposure_population['measure_question'],
-                exposure_name=exposure_population['name'])
-        self.assertEqual(question, expected)
-
-    def test_get_report_question(self):
-        """Test get_report_question."""
-        question = get_report_question(exposure_population)
-        expected = (
-            'In each of the hazard zones {exposure_measure} {exposure_name} '
-            'might be affected?').format(
                 exposure_measure=exposure_population['measure_question'],
                 exposure_name=exposure_population['name'])
         self.assertEqual(question, expected)

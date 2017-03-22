@@ -170,12 +170,14 @@ def show_keyword_version_message(sender, keyword_version, inasafe_version):
         tr('Layer Keyword\'s Version Mismatch:'),
         m.Paragraph(
             tr(
-                'Your layer\'s keyword\'s version (%s) does not match with '
-                'your InaSAFE version (%s). If you wish to use it as an '
-                'exposure, hazard, or aggregation layer in an analysis, '
-                'please use the keyword wizard to update the keywords. You '
-                'can open the wizard by clicking on the ' % (
-                    keyword_version, inasafe_version)),
+                'Your layer\'s keyword\'s version ({layer_version}) does not '
+                'match with your InaSAFE version ({inasafe_version}). If you '
+                'wish to use it as an exposure, hazard, or aggregation layer '
+                'in an analysis, please use the keyword wizard to update the '
+                'keywords. You can open the wizard by clicking on '
+                'the ').format(
+                layer_version=keyword_version,
+                inasafe_version=inasafe_version),
             m.Image(
                 'file:///%s/img/icons/'
                 'show-keyword-wizard.svg' % resources_path(),

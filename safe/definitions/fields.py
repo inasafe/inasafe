@@ -657,7 +657,7 @@ feature_rate_field = {
         'The rate field is used to indicate the financial value of an '
         'exposed feature. The rate, when multiplied by the '
         'of the length or area of a given exposure feature, can be used '
-        'to calculate an estimated value of the feature.'
+        'to calculate an estimated value of the feature. '
         'For example in buildings the rate * the area of a building '
         'can be used to estimate the value of the building.'),
     'citations': [

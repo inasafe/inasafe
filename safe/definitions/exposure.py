@@ -40,7 +40,7 @@ exposure_population = {
     'description': tr(
         'The <b>population</b> describes the people that might be '
         'exposed to a particular hazard.'),
-    'notes': [  # these are additional generic notes for people - IF has more
+    'notes': [  # these are additional generic notes for people
         caveat_incomplete_data,
         tr('Exposed population varies by the time (day or night, weekends, '
            'holidays etc.). Such variations are not included in the analysis.'
@@ -55,46 +55,6 @@ exposure_population = {
         tr('If displacement counts are 0, no minimum needs and displaced '
            'related postprocessors will be shown.')
     ],
-    'earthquake_notes': [
-        # these are earthquake specific notes for population
-        tr('Map shows the estimated displaced population. People are '
-           'displaced if they experience and survive a shake level of more '
-           'than 5 on the MMI scale.'),
-        tr('Exposed population varies by the time (day or night, weekends, '
-           'holidays etc.). Such variations are not considered in the '
-           'estimates in the InaSAFE.'),
-        tr('The fatality calculation assumes that no fatalities occur for '
-           'shake levels below 4 and fatality counts of less than 50 are '
-           'rounded down.'),
-
-    ],
-    'earthquake_pager_notes': [   # these are earthquake Pager specific notes
-        tr('Fatality model is from Population Vulnerability '
-            'Pager Model.'),
-    ],
-    'earthquake_itb_notes': [   # these are earthquake ITB specific notes
-        tr('Fatality model is from Institut Teknologi Bandung 2012.'),
-
-    ],
-    'earthquake_fatality_model_limitations': [
-        # notes provided by Hadi Ghasemi
-        tr('Earthquake fatalities are due to a number of factors, such as '
-           'destructive level of ground shaking, tsunami, landsliding and '
-           'fire. The implemented fatality models only consider the number of '
-           'fatalities due to the earthquake ground shaking and do not '
-           'include losses due to the other secondary hazards.'),
-        tr('The fatality models do not estimate number of injuries or '
-           'displaced people. '),
-        tr('Empirical fatality models provide an estimate of the number of '
-           'fatalities. There are several sources of uncertainty contributing '
-           'to the overall uncertainty of any estimate, such as uncertainties '
-           'in shaking intensity, and population estimates. '),
-        tr('Care should be taken when applying empirical earthquake fatality '
-           'models for ground-motion estimation methods that are inconsistent '
-           'with the methods used to calibrate the model.'),
-
-    ],
-
     'continuous_notes': [  # notes specific to continuous data
     ],
     'classified_notes': [  # notes specific to classified data
@@ -152,9 +112,7 @@ exposure_population = {
         tr('Are there any potential disease outbreaks?'),
         tr('Are there any healthcare sources that are accessible and '
            'functioning?')
-
     ],
-
     'citations': [
         {
                 'text': tr(
@@ -191,7 +149,7 @@ exposure_road = {
     'description': tr(
         'A <b>road</b> is defined as a route used by a vehicle or people to '
         'travel between two or more points.'),
-    'notes': [  # these are additional generic notes for roads - IF has more
+    'notes': [  # these are additional generic notes for roads
         caveat_incomplete_data,
         tr('Numbers for road lengths have been rounded to the nearest 10 '
            'metres if the total is less than 1,000; nearest 100 metres if '
@@ -212,7 +170,7 @@ exposure_road = {
     ],
     'classified_notes': [  # notes specific to classified data
     ],
-    'actions': [  # these are additional generic actions - IF has more
+    'actions': [  # these are additional generic actions
         tr('Which roads can be used to evacuate people or to distribute '
            'logistics?'),
         tr('What type of vehicles can use the not affected roads?'),
@@ -220,7 +178,6 @@ exposure_road = {
         tr('Where will we get the equipment needed to open roads?'),
         tr('Which government department is responsible for supplying '
            'equipment?')
-
     ],
     'citations': [
         {
@@ -253,7 +210,7 @@ exposure_structure = {
         'made feature such as a building (an enclosed structure '
         'with walls and a roof), telecommunications facility or '
         'bridge.'),
-    'notes': [  # additional generic notes for structures - IF has more
+    'notes': [  # additional generic notes for structures
         caveat_incomplete_data,
         tr('Structures overlapping the analysis extent may be assigned a '
            'hazard status lower than that to which they are exposed outside '
@@ -271,7 +228,7 @@ exposure_structure = {
     'classified_notes': [  # notes specific to classified data
     ],
     'actions': [
-        # these are additional generic actions - IF has more
+        # these are additional generic actions
         tr('Which structures have warning capacity '
            '(e.g. sirens or speakers)?'),
         tr('Are the water and electricity services still operating?'),
@@ -281,7 +238,6 @@ exposure_structure = {
         tr('Which buildings will be evacuation centres?'),
         tr('Where will we locate the operations centre?'),
         tr('Where will we locate warehouse and/or distribution centres?')
-
     ],
     'citations': [
         {
@@ -313,7 +269,7 @@ exposure_place = {
     'description': tr(
         'A <b>place</b> is used to indicate that a particular location is '
         'known by a particular name.'),
-    'notes': [  # additional generic notes for places - IF has more
+    'notes': [  # additional generic notes for places
         caveat_incomplete_data,
         tr('Where places are represented as a single point, the effect of the '
            'hazard over the entire place may differ from the point at which '
@@ -323,7 +279,7 @@ exposure_place = {
     ],
     'classified_notes': [  # notes specific to classified data
     ],
-    'actions': [  # these are additional generic actions - IF has more
+    'actions': [  # these are additional generic actions
     ],
     'citations': [
         {
@@ -355,7 +311,7 @@ exposure_land_cover = {
         'the surface of the earth that might be exposed to a particular '
         'hazard. This might include crops, forest and urban areas. '),
     'notes': [
-        # these are additional generic notes for landcover - IF has more
+        # these are additional generic notes for landcover
         caveat_incomplete_data,
         tr('Areas reported for land cover have been rounded to the nearest '
            '10 hectares if the total is less than 1,000; nearest 100 hectares '
@@ -369,7 +325,7 @@ exposure_land_cover = {
     ],
     'classified_notes': [  # notes specific to classified data
     ],
-    'actions': [  # these are additional generic actions - IF has more
+    'actions': [  # these are additional generic actions
         tr('What type of crops are planted in the affected fields?'),
         tr('How long will the activity or function of the land cover be '
            'disturbed?'),

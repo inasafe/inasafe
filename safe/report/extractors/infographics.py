@@ -145,10 +145,14 @@ def population_infographic_extractor(impact_report, component_metadata):
     else:
         return context
 
+    # We try to get total affected field
+    # if it didn't exists, check other fields to show
     total_affected_fields = [
+        total_affected_field['key'],
+        # We might want to check other fields, but turn it off until further
+        # discussion
         population_count_field['key'],
         exposure_count_field['key'] % (exposure_population['key'], ),
-        total_affected_field['key']
     ]
 
     for item in total_affected_fields:
@@ -156,6 +160,7 @@ def population_infographic_extractor(impact_report, component_metadata):
             total_affected = value_from_field_name(
                 analysis_layer_fields[item],
                 analysis_layer)
+            total_affected_field_used = item
             break
     else:
         return context
@@ -180,6 +185,9 @@ def population_infographic_extractor(impact_report, component_metadata):
     # create context for affected infographic
     sub_header = resolve_from_dictionary(
         people_items[0], 'sub_header')
+
+    # retrieve relevant header based on the fields we showed.
+    sub_header = sub_header[total_affected_field_used]
 
     affected_infographic = PeopleInfographicElement(
         header=sub_header,
@@ -344,13 +352,15 @@ def population_infographic_extractor(impact_report, component_metadata):
         """
         for pie_slice in population_chart_context.slices:
             label = pie_slice['label']
+            if not label:
+                continue
             css_class = label.replace(' ', '').lower()
             css_label_classes.append(css_class)
     except KeyError:
         population_chart_context = None
 
     sections['population_chart'] = {
-        'img_path': population_donut_path,
+        'img_path': resource_url(population_donut_path),
         'context': population_chart_context,
         'css_label_classes': css_label_classes
     }
@@ -420,7 +430,7 @@ def infographic_pdf_extractor(impact_report, component_metadata):
     :param component_metadata: the component metadata. Used to obtain
         information about the component we want to render
     :type component_metadata: safe.report.report_metadata.
-        ReportComponentsMetadata
+        QgisComposerComponentsMetadata
 
     :return: context for rendering phase
     :rtype: dict
@@ -442,14 +452,27 @@ def infographic_pdf_extractor(impact_report, component_metadata):
         return context
 
     if infographic_html.strip():
+        # get component object
+        margin_left = 0
+        margin_right = 0
+        margin_top = 4.5
+        margin_bottom = 0
         html_frame_elements = [
             {
                 'id': 'infographic',
                 'mode': 'text',
                 'text': jinja2_output_as_string(
                     impact_report, 'infographic-layout'),
-                'margin_left': 10,
-                'margin_right': 10,
+                'margin_left': margin_left,
+                'margin_top': margin_top,
+                'height': (
+                    component_metadata.page_height -
+                    margin_top -
+                    margin_bottom),
+                'width': (
+                    component_metadata.page_width -
+                    margin_left -
+                    margin_right)
             }
         ]
         context.html_frame_elements = html_frame_elements

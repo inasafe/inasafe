@@ -1,6 +1,10 @@
 # coding=utf-8
 """Test Metadata Utilities."""
 import unittest
+from datetime import datetime
+# Do not remove this, needed for QUrl
+from qgis.utils import iface  # pylint: disable=W0621
+from PyQt4.QtCore import QUrl
 
 from safe.definitions.versions import inasafe_keyword_version
 from safe.test.utilities import standard_data_path, clone_shp_layer
@@ -8,7 +12,8 @@ from safe.utilities.metadata import (
     write_iso19115_metadata,
     read_iso19115_metadata,
     active_classification,
-    active_thresholds_value_maps
+    active_thresholds_value_maps,
+    copy_layer_keywords
 )
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -159,6 +164,18 @@ class TestMetadataUtilities(unittest.TestCase):
 
         classification = active_thresholds_value_maps(keywords, 'structure')
         self.assertIsNone(classification)
+
+    def test_copy_layer_keywords(self):
+        """Test for copy_layer_keywords."""
+        keywords = {
+            'url': QUrl('inasafe.org'),
+            'date': datetime(1990, 7, 13)
+        }
+        copy_keywords = copy_layer_keywords(keywords)
+
+        self.assertEqual(keywords['url'].toString(), copy_keywords['url'])
+        self.assertEqual(
+            keywords['date'].date().isoformat(), copy_keywords['date'])
 
 if __name__ == '__main__':
     unittest.main()

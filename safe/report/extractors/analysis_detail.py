@@ -12,7 +12,8 @@ from safe.report.extractors.util import (
     layer_definition_type,
     resolve_from_dictionary,
     value_from_field_name,
-    layer_hazard_classification)
+    layer_hazard_classification,
+    retrieve_exposure_classes_lists)
 from safe.utilities.i18n import tr
 from safe.utilities.rounding import format_number
 
@@ -224,22 +225,17 @@ def analysis_detail_extractor(impact_report, component_metadata):
         details.append(row)
 
     # retrieve classes definitions
-    exposure_classifications = exposure_type['classifications']
-    exposure_class_lists = []
-    for classes_definition in exposure_classifications:
-        classes = classes_definition.get('classes')
-        if classes:
-            exposure_class_lists += classes
+    exposure_classes_lists = retrieve_exposure_classes_lists(exposure_layer)
 
     # sort detail rows based on class order
-    # create lambda function to sort
-    def sort_classes(row):
+    # create function to sort
+    def sort_classes(_row):
         """Sort method to retrieve exposure class key index."""
         # class key is first column
-        class_key = row[0]
+        _class_key = _row[0]
         # find index in class list
-        for i, exposure_class in enumerate(exposure_class_lists):
-            if class_key == exposure_class['key']:
+        for i, _exposure_class in enumerate(exposure_classes_lists):
+            if _class_key == _exposure_class['key']:
                 index = i
                 break
         else:
@@ -253,7 +249,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
     # retrieve breakdown name from classes list
     for row in details:
         class_key = row[0]
-        for exposure_class in exposure_class_lists:
+        for exposure_class in exposure_classes_lists:
             if class_key == exposure_class['key']:
                 breakdown_name = exposure_class['name']
                 break

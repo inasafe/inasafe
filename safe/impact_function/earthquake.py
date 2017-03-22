@@ -4,6 +4,7 @@
 
 import logging
 
+from osgeo import gdal, gdalconst
 from qgis.core import (
     QGis,
     QgsCoordinateReferenceSystem,
@@ -136,6 +137,7 @@ def exposed_people_stats(hazard, exposure, aggregation, fatality_rate):
     for i in xrange(width * height):
         hazard_mmi = hazard_block.value(long(i))
         people_count = exposure_block.value(long(i))
+        agg_zone_index = int(agg_block.value(long(i)))
 
         if hazard_mmi >= 2.0 and people_count >= 0.0:
             hazard_mmi = int(round(hazard_mmi))
@@ -144,8 +146,6 @@ def exposed_people_stats(hazard, exposure, aggregation, fatality_rate):
             mmi_displaced = (
                 (people_count - mmi_fatalities) *
                 displacement_rate(hazard_mmi, classification_key))
-
-            agg_zone_index = int(agg_block.value(long(i)))
 
             key = (hazard_mmi, agg_zone_index)
             if key not in exposed:
@@ -156,10 +156,19 @@ def exposed_people_stats(hazard, exposure, aggregation, fatality_rate):
             # If hazard is less than 2 or population is less than 0
             mmi_displaced = -1
 
-        exposed_array[i / width, i % width] = mmi_displaced
+        # We build a raster only for the aggregation area.
+        if agg_zone_index > 0:
+            exposed_array[i / width, i % width] = mmi_displaced
+        else:
+            exposed_array[i / width, i % width] = -1
 
     # output raster data - e.g. displaced people
     array_to_raster(exposed_array, exposed_raster_filename, hazard)
+
+    # I didn't find a way to do that with the QGIS API.
+    data = gdal.Open(exposed_raster_filename, gdalconst.GA_Update)
+    data.GetRasterBand(1).SetNoDataValue(-1)
+    del data
 
     exposed_raster = QgsRasterLayer(exposed_raster_filename, 'exposed', 'gdal')
     assert exposed_raster.isValid()

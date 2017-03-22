@@ -1,6 +1,11 @@
 # coding=utf-8
 """Metadata Utilities."""
 import os
+import logging
+from copy import deepcopy
+from datetime import datetime, date
+
+from PyQt4.QtCore import QUrl, QDate, QDateTime, Qt
 
 from safe.common.exceptions import (
     MetadataReadError,
@@ -25,6 +30,8 @@ __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
+
+LOGGER = logging.getLogger('InaSAFE')
 
 
 def write_iso19115_metadata(layer_uri, keywords):
@@ -184,3 +191,30 @@ def active_thresholds_value_maps(keywords, exposure_key):
         if value['active']:
             return value['classes']
     return None
+
+
+def copy_layer_keywords(layer_keywords):
+    """Helper to make a deep copy of a layer keywords.
+
+    :param layer_keywords: A dictionary of layer's keywords.
+    :type layer_keywords: dict
+
+    :returns: A deep copy of layer keywords.
+    :rtype: dict
+    """
+    copy_keywords = {}
+    for key, value in layer_keywords.items():
+        if isinstance(value, QUrl):
+            copy_keywords[key] = value.toString()
+        elif isinstance(value, datetime):
+            copy_keywords[key] = value.date().isoformat()
+        elif isinstance(value, QDate):
+            copy_keywords[key] = value.toString(Qt.ISODate)
+        elif isinstance(value, QDateTime):
+            copy_keywords[key] = value.toString(Qt.ISODate)
+        elif isinstance(value, date):
+            copy_keywords[key] = value.isoformat()
+        else:
+            copy_keywords[key] = deepcopy(value)
+
+    return copy_keywords

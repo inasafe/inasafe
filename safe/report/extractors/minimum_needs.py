@@ -108,7 +108,7 @@ def minimum_needs_extractor(impact_report, component_metadata):
 
             need_parameter = field['need_parameter']
             """:type: ResourceParameter"""
-            header = need_parameter.name
+            header = tr(need_parameter.name)
             if need_parameter.unit.abbreviation:
                 header = need_header_format.format(
                     name=header,
