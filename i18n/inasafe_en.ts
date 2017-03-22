@@ -218,7 +218,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="433"/>
+        <location filename="components.py" line="437"/>
         <source>People</source>
         <translation type="unfinished"></translation>
     </message>
@@ -708,12 +708,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="334"/>
+        <location filename="components.py" line="338"/>
         <source>Total</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="399"/>
+        <location filename="components.py" line="444"/>
         <source>Population</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1499,7 +1499,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="199"/>
+        <location filename="components.py" line="203"/>
         <source>Land cover</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1529,7 +1529,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="656"/>
+        <location filename="components.py" line="666"/>
         <source>Date</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1539,27 +1539,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="660"/>
+        <location filename="components.py" line="670"/>
         <source>Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="661"/>
+        <location filename="components.py" line="671"/>
         <source>This assessment is a guide - we strongly recommend that you ground truth the results shown here before deploying resources and / or personnel.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="666"/>
+        <location filename="components.py" line="676"/>
         <source>Legend</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="667"/>
+        <location filename="components.py" line="677"/>
         <source>Analysis information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="668"/>
+        <location filename="components.py" line="678"/>
         <source>Report produced by</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1574,7 +1574,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="251"/>
+        <location filename="components.py" line="255"/>
         <source>Notes and assumptions</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4033,7 +4033,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="670"/>
+        <location filename="components.py" line="680"/>
         <source>Analysis Name</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4228,7 +4228,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="168"/>
+        <location filename="components.py" line="172"/>
         <source>Fatalities</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5528,107 +5528,107 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="236"/>
+        <location filename="components.py" line="240"/>
         <source>Action Checklist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="319"/>
+        <location filename="components.py" line="323"/>
         <source>Detailed demographic breakdown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="322"/>
+        <location filename="components.py" line="326"/>
         <source>Detailed Age Report</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="325"/>
+        <location filename="components.py" line="329"/>
         <source>Detailed Gender Report</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="486"/>
+        <location filename="components.py" line="496"/>
         <source>units</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="328"/>
+        <location filename="components.py" line="332"/>
         <source>Detailed Minimum Needs Report</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="332"/>
+        <location filename="components.py" line="336"/>
         <source>Aggregation area</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="335"/>
+        <location filename="components.py" line="339"/>
         <source>Columns and rows containing only 0 or &quot;No data&quot; values are excluded from the tables.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="296"/>
+        <location filename="components.py" line="300"/>
         <source>Aggregation Result</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="114"/>
+        <location filename="components.py" line="118"/>
         <source>Hazard Zone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="651"/>
+        <location filename="components.py" line="661"/>
         <source>Unknown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="652"/>
+        <location filename="components.py" line="662"/>
         <source>Not used</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="672"/>
+        <location filename="components.py" line="682"/>
         <source>Geographic Coordinates - {crs}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="669"/>
+        <location filename="components.py" line="679"/>
         <source>Data Source</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="449"/>
+        <location filename="components.py" line="459"/>
         <source>Vulnerability</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="462"/>
+        <location filename="components.py" line="472"/>
         <source>Female</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="477"/>
+        <location filename="components.py" line="487"/>
         <source>Youth</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="478"/>
+        <location filename="components.py" line="488"/>
         <source>Adult</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="479"/>
+        <location filename="components.py" line="489"/>
         <source>Elderly</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="485"/>
+        <location filename="components.py" line="495"/>
         <source>Minimum needs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="398"/>
+        <location filename="components.py" line="402"/>
         <source>Estimated total population</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5893,37 +5893,37 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="214"/>
+        <location filename="components.py" line="218"/>
         <source>{exposure} type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="215"/>
+        <location filename="components.py" line="219"/>
         <source>{exposure} class</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="276"/>
+        <location filename="components.py" line="280"/>
         <source>Relief items to be provided {frequency}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="279"/>
+        <location filename="components.py" line="283"/>
         <source>{name} [{unit_abbreviation}]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="654"/>
+        <location filename="components.py" line="664"/>
         <source>Software</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="665"/>
+        <location filename="components.py" line="675"/>
         <source>InaSAFE {version}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="671"/>
+        <location filename="components.py" line="681"/>
         <source>Reference</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6853,67 +6853,67 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="113"/>
+        <location filename="components.py" line="117"/>
         <source>Estimated {title}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="125"/>
+        <location filename="components.py" line="129"/>
         <source>Not Affected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="129"/>
+        <location filename="components.py" line="133"/>
         <source>Not Exposed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="210"/>
+        <location filename="components.py" line="214"/>
         <source>Not affected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="256"/>
+        <location filename="components.py" line="260"/>
         <source>For this analysis, the following displacement rates were used: {rate_description}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="259"/>
+        <location filename="components.py" line="263"/>
         <source>{name} - {displacement_rate:.2%}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="363"/>
+        <location filename="components.py" line="367"/>
         <source>source not available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="364"/>
+        <location filename="components.py" line="368"/>
         <source>reference unspecified</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="365"/>
+        <location filename="components.py" line="369"/>
         <source>not used</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="371"/>
+        <location filename="components.py" line="375"/>
         <source>Hazard source</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="374"/>
+        <location filename="components.py" line="378"/>
         <source>Exposure source</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="377"/>
+        <location filename="components.py" line="381"/>
         <source>Aggregation source</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="380"/>
+        <location filename="components.py" line="384"/>
         <source>Impact Function</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7293,57 +7293,57 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="97"/>
+        <location filename="components.py" line="101"/>
         <source>Analysis question</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="112"/>
+        <location filename="components.py" line="116"/>
         <source>General Report</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="155"/>
+        <location filename="components.py" line="159"/>
         <source>MMI Detail</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="160"/>
+        <location filename="components.py" line="164"/>
         <source>Exposed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="197"/>
+        <location filename="components.py" line="201"/>
         <source>Structure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="198"/>
+        <location filename="components.py" line="202"/>
         <source>Road</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="216"/>
+        <location filename="components.py" line="220"/>
         <source>Analysis Detail</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="338"/>
+        <location filename="components.py" line="342"/>
         <source>Analysis produced 0 displaced count. No calculations produced.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="333"/>
+        <location filename="components.py" line="337"/>
         <source>Total Displaced Population</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="341"/>
+        <location filename="components.py" line="345"/>
         <source>Gender ratio not exists. No calculations produced.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="344"/>
+        <location filename="components.py" line="348"/>
         <source>Age ratio not exists. No calculations produced.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7483,17 +7483,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="217"/>
+        <location filename="components.py" line="221"/>
         <source>Estimated {title} {unit} by {exposure} type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="252"/>
+        <location filename="components.py" line="256"/>
         <source>Exposures in this following hazard classes are considered affected: {hazard_classes}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="300"/>
+        <location filename="components.py" line="304"/>
         <source>Estimated {title} {unit} by aggregation area</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7603,37 +7603,37 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="439"/>
+        <location filename="components.py" line="449"/>
         <source>Displaced&lt;sup&gt;*&lt;/sup&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="440"/>
+        <location filename="components.py" line="450"/>
         <source>&lt;sup&gt;*&lt;/sup&gt; Displacement rate: {rate_description}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="443"/>
+        <location filename="components.py" line="453"/>
         <source>{displacement_rate:.2%} of affected {name}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="450"/>
+        <location filename="components.py" line="460"/>
         <source>from {number_displaced} displaced</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="453"/>
+        <location filename="components.py" line="463"/>
         <source>Gender group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="466"/>
+        <location filename="components.py" line="476"/>
         <source>Age group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="components.py" line="550"/>
+        <location filename="components.py" line="560"/>
         <source>InaSAFE {version} | {analysis_date} | {analysis_time} | info@inasafe.org | Icons source: OCHA | Indonesian Government-Australian Government-World Bank-GFDRR</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9615,7 +9615,7 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="816"/>
+        <location filename="plugin.py" line="817"/>
         <source>OpenStreetMap</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9656,67 +9656,67 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>ShakemapConverterDialog</name>
     <message>
-        <location filename="shakemap_converter_dialog.py" line="64"/>
+        <location filename="shakemap_converter_dialog.py" line="73"/>
         <source>InaSAFE %s Shakemap Converter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="shakemap_converter_dialog.py" line="92"/>
+        <location filename="shakemap_converter_dialog.py" line="103"/>
         <source>output file is not .tif</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="shakemap_converter_dialog.py" line="104"/>
+        <location filename="shakemap_converter_dialog.py" line="115"/>
         <source>input file is not .xml</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="shakemap_converter_dialog.py" line="124"/>
+        <location filename="shakemap_converter_dialog.py" line="135"/>
         <source>Shakemap Grid Importer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="shakemap_converter_dialog.py" line="170"/>
+        <location filename="shakemap_converter_dialog.py" line="181"/>
         <source>InaSAFE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="shakemap_converter_dialog.py" line="164"/>
+        <location filename="shakemap_converter_dialog.py" line="175"/>
         <source>Output file name must be tif file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="shakemap_converter_dialog.py" line="170"/>
+        <location filename="shakemap_converter_dialog.py" line="181"/>
         <source>Input file does not exist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="shakemap_converter_dialog.py" line="223"/>
+        <location filename="shakemap_converter_dialog.py" line="241"/>
         <source>Input file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="shakemap_converter_dialog.py" line="223"/>
+        <location filename="shakemap_converter_dialog.py" line="241"/>
         <source>Raw grid file (*.xml)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="shakemap_converter_dialog.py" line="233"/>
+        <location filename="shakemap_converter_dialog.py" line="251"/>
         <source>Output file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="shakemap_converter_dialog.py" line="233"/>
+        <location filename="shakemap_converter_dialog.py" line="251"/>
         <source>Raster file (*.tif)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="shakemap_converter_dialog.py" line="249"/>
+        <location filename="shakemap_converter_dialog.py" line="275"/>
         <source>Hide Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="shakemap_converter_dialog.py" line="252"/>
+        <location filename="shakemap_converter_dialog.py" line="278"/>
         <source>Show Help</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9729,68 +9729,73 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="shakemap_importer_dialog_base.ui" line="75"/>
+        <location filename="shakemap_importer_dialog_base.ui" line="57"/>
         <source>about:blank</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="shakemap_importer_dialog_base.ui" line="83"/>
+        <location filename="shakemap_importer_dialog_base.ui" line="65"/>
         <source>Input</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="shakemap_importer_dialog_base.ui" line="163"/>
+        <location filename="shakemap_importer_dialog_base.ui" line="145"/>
         <source>...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="shakemap_importer_dialog_base.ui" line="110"/>
+        <location filename="shakemap_importer_dialog_base.ui" line="92"/>
         <source>Title</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="shakemap_importer_dialog_base.ui" line="117"/>
+        <location filename="shakemap_importer_dialog_base.ui" line="99"/>
         <source>Input File (grid.xml)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="shakemap_importer_dialog_base.ui" line="124"/>
+        <location filename="shakemap_importer_dialog_base.ui" line="106"/>
         <source>Source</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="shakemap_importer_dialog_base.ui" line="145"/>
+        <location filename="shakemap_importer_dialog_base.ui" line="127"/>
         <source>Output</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="shakemap_importer_dialog_base.ui" line="172"/>
+        <location filename="shakemap_importer_dialog_base.ui" line="154"/>
         <source>The output will be a .tif raster file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="shakemap_importer_dialog_base.ui" line="179"/>
+        <location filename="shakemap_importer_dialog_base.ui" line="161"/>
         <source>Same directory as input file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="shakemap_importer_dialog_base.ui" line="192"/>
+        <location filename="shakemap_importer_dialog_base.ui" line="174"/>
         <source>Add output layer to QGIS project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="shakemap_importer_dialog_base.ui" line="205"/>
+        <location filename="shakemap_importer_dialog_base.ui" line="194"/>
         <source>Algorithm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="shakemap_importer_dialog_base.ui" line="211"/>
+        <location filename="shakemap_importer_dialog_base.ui" line="200"/>
         <source>Nearest neighbour</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="shakemap_importer_dialog_base.ui" line="221"/>
+        <location filename="shakemap_importer_dialog_base.ui" line="210"/>
         <source>Inverse Distance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="shakemap_importer_dialog_base.ui" line="184"/>
+        <source>Launch keywords wizard</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

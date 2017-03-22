@@ -589,7 +589,7 @@
     <message>
         <location filename="definitions_help.py" line="957"/>
         <source>Displacement rate</source>
-        <translation>Taux de déplacement</translation>
+        <translation>Taux de d&apos;évacuation</translation>
     </message>
     <message>
         <location filename="dynamic_translations.py" line="161"/>
@@ -4049,7 +4049,7 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
     <message>
         <location filename="fields.py" line="327"/>
         <source>This will be carried over to the analysis layer if provided. The name will provide context if the analysis layer is shared since the recipient of the layer will be able to tell what kind of analysis was carried out when generating the impact layer. For example when doing a flood on roads analysis, &quot;flood on roads&quot; will be written to the analysis name field in the analysis layer.</source>
-        <translation type="unfinished"/>
+        <translation>Le nom fournira le contexte de l&apos;analyse. Par exemple lors d&apos;une analyse d&apos;inondation sur les routes, &quot;inondation sur les routes&quot; sera écrit dans la table attributaire de la couche d&apos;analyse.</translation>
     </message>
     <message>
         <location filename="fields.py" line="348"/>
@@ -4064,7 +4064,7 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
     <message>
         <location filename="fields.py" line="354"/>
         <source>The profiling system in InaSAFE provide metrics about which python functions were called during the analysis workflow and how long was spent in each function. These data are assembled into a table and shown in QGIS as part of the analysis layer group. Using the profiling function name field we are able to refer back to a specific python function when doing performance optimisation.</source>
-        <translation type="unfinished"/>
+        <translation>Le système de profilage dans InaSAFE fournit des métriques sur les fonctions Python qui sont appelés pendant l&apos;analyse et les temps d&apos;éxécution pour chacune d&apos;elles. Ces données sont assemblées dans une table et affichées dans QGIS. En utilisant le champ contenant le nom de la fonction, nous sommes capables de vérifier les temps d&apos;éxécution afin d&apos;effectuer des optimisations.</translation>
     </message>
     <message>
         <location filename="fields.py" line="371"/>
@@ -4079,7 +4079,7 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
     <message>
         <location filename="fields.py" line="378"/>
         <source>The profiling system in InaSAFE provide metrics about which python functions were called during the analysis workflow and how long was spent in each function. These data are assembled into a table and shown in QGIS as part of the analysis layer group. Using the profiling time field we are able to refer back to a how long was spent in each specific python function when doing performance optimisation.</source>
-        <translation type="unfinished"/>
+        <translation>Le système de profilage dans InaSAFE fournit des métriques sur les fonctions Python qui sont appelés pendant l&apos;analyse et les temps d&apos;éxécution pour chacune d&apos;elles. Ces données sont assemblées dans une table et affichées dans QGIS. En utilisant le champ temps de profilage, nous sommes capables de vérifier les temps d&apos;éxécution afin d&apos;effectuer des optimisations.</translation>
     </message>
     <message>
         <location filename="fields.py" line="401"/>
@@ -6880,7 +6880,7 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
     <message>
         <location filename="components.py" line="256"/>
         <source>For this analysis, the following displacement rates were used: {rate_description}</source>
-        <translation>Pour cette analyse, les ratios de déplacement suivants ont été utilisés: {rate_description}</translation>
+        <translation>Pour cette analyse, les ratios d&apos;évacuations suivants ont été utilisés: {rate_description}</translation>
     </message>
     <message>
         <location filename="components.py" line="259"/>
@@ -7235,7 +7235,7 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
     <message>
         <location filename="exposure.py" line="55"/>
         <source>If displacement counts are 0, no minimum needs and displaced related postprocessors will be shown.</source>
-        <translation>Si les effectifs de déplacement sont égal à 0, les besoins minimaux et les post-processeurs liés aux personnes déplacées ne seront pas affichés.</translation>
+        <translation>Si les effectifs d&apos;évacuations sont égaux à 0, les besoins minimaux et les post-processeurs liés aux personnes déplacées ne seront pas affichés.</translation>
     </message>
     <message>
         <location filename="fields.py" line="462"/>
@@ -7370,17 +7370,17 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
     <message>
         <location filename="fields.py" line="825"/>
         <source>Population Displacement Ratio</source>
-        <translation>Taux de déplacement de la population</translation>
+        <translation>Taux d&apos;évacuation de la population</translation>
     </message>
     <message>
         <location filename="fields.py" line="831"/>
         <source>The population displacement ratio for a given hazard class.</source>
-        <translation>La ratio de déplacement de la population pour une classe d&apos;aléa donnée.</translation>
+        <translation>La ratio de d&apos;évacuation de la population pour une classe d&apos;aléa donnée.</translation>
     </message>
     <message>
         <location filename="fields.py" line="833"/>
         <source>&quot;Displaced&quot; is defined as: {concept} In cases where population data is available, InaSAFE will calculate the number of displaced people per exposure feature, aggregate hazard area, aggregation area and for the analysis area as a whole. The population displaced ratio is calculated based on definitions for each hazard class.</source>
-        <translation>&quot;Déplacée&quot; est défini comme: {concept} Dans le cas ou des données populations sont disponibles, InaSAFE calculera le nombre de personnes déplacées par entité d&apos;enjeu, par agrégation et pour l&apos;analyse. La ratio de déplacement est calculé grâce aux définitions pour chaque classe d&apos;aléa.</translation>
+        <translation>&quot;Déplacée&quot; est défini comme: {concept} Dans le cas ou des données populations sont disponibles, InaSAFE calculera le nombre de personnes déplacées par entité d&apos;enjeu, par agrégation et pour l&apos;analyse. La ratio de d&apos;évacuation est calculé grâce aux définitions pour chaque classe d&apos;aléa.</translation>
     </message>
     <message>
         <location filename="hazard.py" line="275"/>
@@ -7395,12 +7395,12 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
     <message>
         <location filename="post_processors.py" line="263"/>
         <source>Population Displacement Ratio Post Processor</source>
-        <translation>Post-Processeur Ratio de Déplacement de la Population </translation>
+        <translation>Post-Processeur Ratio d&apos;Évacuation de la Population </translation>
     </message>
     <message>
         <location filename="post_processors.py" line="264"/>
         <source>A post processor to add the population displacement ratio according to the hazard class</source>
-        <translation>Un post processeur pour ajouter le ratio de déplacement de la population selon une classe d&apos;aléa</translation>
+        <translation>Un post processeur pour ajouter le ratio de d&apos;évacuation de la population selon une classe d&apos;aléa</translation>
     </message>
     <message>
         <location filename="post_processors.py" line="569"/>
@@ -7580,7 +7580,7 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
     <message>
         <location filename="hazard_classifications.py" line="1752"/>
         <source>Displacement rate is a generalized estimate (personal communication Craig Arthur)</source>
-        <translation>Le ratio de déplacement est une estimation généralisée (communication personnelle Craig Arthur)</translation>
+        <translation>Le ratio de d&apos;évacuation est une estimation généralisée (communication personnelle Craig Arthur)</translation>
     </message>
     <message>
         <location filename="earthquake.py" line="149"/>
@@ -7615,7 +7615,7 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
     <message>
         <location filename="components.py" line="440"/>
         <source>&lt;sup&gt;*&lt;/sup&gt; Displacement rate: {rate_description}</source>
-        <translation>&lt;sup&gt;*&lt;/sup&gt; Taux de déplacement: {rate_description}</translation>
+        <translation>&lt;sup&gt;*&lt;/sup&gt; Taux de d&apos;évacuation: {rate_description}</translation>
     </message>
     <message>
         <location filename="components.py" line="443"/>
@@ -7655,7 +7655,7 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
     <message>
         <location filename="hazard_classifications.py" line="1773"/>
         <source>A hazard classification is used to define a range of severity thresholds (classes) for a hazard layer. The classification will be used to create zones of data that each present a similar hazard level. During the analysis, each exposure feature will be assessed to determine which hazard class it coincides with, and then a determination will be made as to whether and how the exposure feature is likely to be impacted by the hazard.</source>
-        <translation type="unfinished"/>
+        <translation>Une classification d&apos;aléa est utilisée pour définir les seuils de sévérité (classes) pour un aléa donné. La classification sera utilisée pour créer des zones qui possèdent un niveau d&apos;aléa similaire. Pendant l&apos;analyse, chaque enjeu sera évalué pour déterminer le niveau d&apos;aléa et ainsi connaître si l&apos;enjeu est affecté ou pas par l&apos;aléa.</translation>
     </message>
     <message>
         <location filename="styles.py" line="43"/>
