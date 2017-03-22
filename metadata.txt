@@ -46,6 +46,7 @@ changelog=
     - Add missing notes for EQ impact function
     - Enable inasafe for QGIS 2.14, 2.16 and 2.18
     - Generate map report in IFCW too
+    - Fix unicode issue in layer title
     
     Version 4.0.0
     - Complete overhaul of the InaSAFE code base
