@@ -1,4 +1,4 @@
 ### What does it fix ?
-* Ticket #
+* Ticket : #
 * Funded by : 
 * Description : 
