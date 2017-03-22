@@ -164,7 +164,8 @@ def general_report_extractor(impact_report, component_metadata):
     table_header_format = resolve_from_dictionary(
         extra_args, 'table_header_format')
     table_header = table_header_format.format(
-        title=provenance['map_legend_title'])
+        title=provenance['map_legend_title'],
+        unit=hazard_classification['classification_unit'])
 
     context['header'] = header
     context['summary'] = summary

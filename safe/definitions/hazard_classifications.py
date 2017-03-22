@@ -136,7 +136,8 @@ generic_hazard_classes = {
         exposure_population,
         exposure_road,
         exposure_structure
-    ]
+    ],
+    'classification_unit': tr('hazard zone')
 }
 
 earthquake_mmi_scale = {
@@ -386,7 +387,8 @@ earthquake_mmi_scale = {
         exposure_population,
         exposure_road,
         exposure_structure
-    ]
+    ],
+    'classification_unit': tr('MMI intensity')
 }
 
 volcano_hazard_classes = {
@@ -464,7 +466,8 @@ volcano_hazard_classes = {
         exposure_population,
         exposure_road,
         exposure_structure
-    ]
+    ],
+    'classification_unit': tr('hazard zone')
 }
 
 flood_hazard_classes = {
@@ -526,7 +529,8 @@ flood_hazard_classes = {
         exposure_population,
         exposure_road,
         exposure_structure
-    ]
+    ],
+    'classification_unit': tr('hazard zone')
 }
 
 flood_petabencana_hazard_classes = {
@@ -630,7 +634,8 @@ flood_petabencana_hazard_classes = {
                 }
             ]
         }
-    ]
+    ],
+    'classification_unit': tr('hazard zone')
 }
 
 ash_hazard_classes = {
@@ -764,7 +769,8 @@ ash_hazard_classes = {
         exposure_population,
         exposure_road,
         exposure_structure
-    ]
+    ],
+    'classification_unit': tr('hazard zone')
 }
 
 # Original tsunami hazard classes with displacement rates added
@@ -891,7 +897,8 @@ tsunami_hazard_classes = {
         exposure_place,
         exposure_road,
         exposure_structure
-    ]
+    ],
+    'classification_unit': tr('hazard zone')
 }
 
 # Duplicate classes for tsunami hazard; modified for population exposure
@@ -998,7 +1005,8 @@ tsunami_hazard_population_classes = {
     ],
     'exposures': [
         exposure_population
-    ]
+    ],
+    'classification_unit': tr('hazard zone')
 }
 # duplicate classes for tsunami hazard based on advice from Pak Hamza
 tsunami_hazard_classes_ITB = {
@@ -1141,7 +1149,8 @@ tsunami_hazard_classes_ITB = {
         exposure_place,
         exposure_road,
         exposure_structure
-    ]
+    ],
+    'classification_unit': tr('hazard zone')
 }
 
 # duplicate classes for tsunami hazard based on advice from Pak Hamza and
@@ -1266,7 +1275,8 @@ tsunami_hazard_population_classes_ITB = {
     ],
     'exposures': [
         exposure_population
-    ]
+    ],
+    'classification_unit': tr('hazard zone')
 }
 
 cyclone_au_bom_hazard_classes = {
@@ -1518,7 +1528,8 @@ cyclone_au_bom_hazard_classes = {
         exposure_population,
         exposure_road,
         exposure_structure
-    ]
+    ],
+    'classification_unit': tr('cyclone category')
 }
 
 cyclone_sshws_hazard_classes = {
@@ -1764,7 +1775,8 @@ cyclone_sshws_hazard_classes = {
         exposure_population,
         exposure_road,
         exposure_structure
-    ]
+    ],
+    'classification_unit': tr('cyclone category')
 }
 
 hazard_classification = {
