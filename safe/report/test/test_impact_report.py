@@ -176,7 +176,8 @@ class TestImpactReport(unittest.TestCase):
 
         expected_context = {
             'header': u'General Report',
-            'table_header': u'Estimated Number of buildings',
+            'table_header': (
+                u'Estimated Number of buildings affected per hazard zone'),
             'summary': [
                 {
                     'header_label': u'Hazard Zone',
