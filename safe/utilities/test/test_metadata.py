@@ -23,7 +23,9 @@ __revision__ = '$Format:%H$'
 
 
 class TestMetadataUtilities(unittest.TestCase):
+
     """Test for Metadata Utilities module."""
+
     maxDiff = None
 
     def test_write_iso19115_metadata(self):
@@ -35,7 +37,7 @@ class TestMetadataUtilities(unittest.TestCase):
         keywords = {
             'date': '26-03-2015 14:03',
             'exposure': 'structure',
-            'keyword_version': '',
+            'keyword_version': inasafe_keyword_version,
             'layer_geometry': 'polygon',
             'layer_mode': 'classified',
             'layer_purpose': 'exposure',
