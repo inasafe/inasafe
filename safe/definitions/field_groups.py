@@ -20,7 +20,7 @@ __revision__ = '$Format:%H$'
 
 age_count_group = {
     'key': 'age_count_group',
-    'name': 'Age Count Group',
+    'name': tr('Age Count'),
     'description': tr(
         'The group of fields that consists of population count per age '
         'class.'),
@@ -33,7 +33,7 @@ age_count_group = {
 
 age_ratio_group = {
     'key': 'age_ratio_group',
-    'name': 'Age Ratio Group',
+    'name': tr('Age Ratio'),
     'description': tr(
         'The group of fields that consists of population ratio per age '
         'class.'),
