@@ -103,3 +103,15 @@ class GroupSelectParameter(GenericParameter):
         :rtype: dict
         """
         return self.options.get(self._selected_key, {}).get('value')
+
+    def set_value_for_key(self, key, value):
+        """Set the value of key to value.
+
+        :param key: The key.
+        :type key: str
+
+        :param value: The value to be assigned.
+        :type value: list, float, int
+        """
+        if key in self.options:
+            self.options[key]['value'] = value
