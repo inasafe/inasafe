@@ -56,59 +56,90 @@ exposure_population = {
     ],
     'classified_notes': [  # notes specific to classified data
     ],
-    'actions': [  # these are additional generic actions
-        tr('How will warnings be disseminated?'),
-        tr('What are people\'s likely movements?'),
-        tr('Which group or population is most affected?'),
-        tr('Who are the vulnerable people in the population and why?'),
-        tr('How will we distribute relief items?'),
-        tr('Where can we obtain additional relief items?'),
-        tr('How will we distribute relief items?'),
-        tr('Who are the key people responsible for coordination?'),
-        tr('What are the security factors for relief responders?'),
-        tr('Are there enough victim identification units?'),
-        # these are shelter actions
-        tr('What are people\'s likely movements?'),
-        tr('How will we reach displaced people?'),
-        tr('Are there enough covered floor areas available for the displaced '
-           'people?'),
-        tr('What are the land-use rights for the settlement location?'),
-        tr('What is the ownership of the shelter or settlement location?'),
-        tr('What is the appropriate construction for temporary or '
-           'transitional household shelter?'),
-        tr('What are the existing environmental risks or vulnerabilities at '
-           'the shelter location?'),
-        tr('Are there enough clothing, bedding and household items available '
-           'for the displaced people?'),
-        tr('What are the critical non-food items required by the affected '
-           'population?'),
-        tr('Are the non-food items available at an active local market?'),
-        # these are food security and nutrition actions
-        tr('What kind of food does the population normally consume?'),
-        tr('Are there any alternative source of food?'),
-        tr('Is there enough food for the displaced people?'),
-        tr('Are there any crops that can be used for consumption?'),
-        tr('Are there large numbers of separated children?'),
-        # these are WASH actions
-        tr('What water and sanitation practices were the population '
-           'accustomed to before the emergency?'),
-        tr('What type of outreach system would work for hygiene promotion for '
-           'this situation?'),
-        tr('What is the current water supply source and who are the present '
-           'users?'),
-        tr('Are there enough water supply, sanitation and hygiene, items '
-           'available for displaced people?'),
-        tr('Are water collection points close enough to where people live?'),
-        tr('Are water collection points safe?'),
-        tr('Is the water source contaminated or at risk of contamination?'),
-        tr('Are there alternative sources of water nearby?'),
-        tr('Is there a drainage problem?'),
-        # these are health actions
-        tr('What are the existing health problems?'),
-        tr('What are the potential epidemic diseases?'),
-        tr('Are there any potential disease outbreaks?'),
-        tr('Are there any healthcare sources that are accessible and '
-           'functioning?')
+    'actions': [
+        {
+            'action_category': 'general',
+            'action_header': tr('general checklist'),
+            'action_list': [
+                tr('How will warnings be disseminated?'),
+                tr('What are people\'s likely movements?'),
+                tr('Which group or population is most affected?'),
+                tr('Who are the vulnerable people in the population and why?'),
+                tr('How will we distribute relief items?'),
+                tr('Where can we obtain additional relief items?'),
+                tr('How will we distribute relief items?'),
+                tr('Who are the key people responsible for coordination?'),
+                tr('What are the security factors for relief responders?'),
+                tr('Are there enough victim identification units?')
+            ]
+        },
+        {
+            'action_category': 'shelter',
+            'action_header': tr('shelter and housing'),
+            'action_list': [
+                tr('What are people\'s likely movements?'),
+                tr('How will we reach displaced people?'),
+                tr('Are there enough covered floor areas available for '
+                   'the displaced people?'),
+                tr('What are the land-use rights for '
+                   'the settlement location?'),
+                tr('What is the ownership of the shelter or '
+                   'settlement location?'),
+                tr('What is the appropriate construction for temporary or '
+                   'transitional household shelter?'),
+                tr('What are the existing environmental risks or '
+                   'vulnerabilities at the shelter location?'),
+                tr('Are there enough clothing, bedding and household items '
+                   'available for the displaced people?'),
+                tr('What are the critical non-food items required by '
+                   'the affected population?'),
+                tr('Are the non-food items available at an active '
+                   'local market?')
+            ]
+        },
+        {
+            'action_category': 'food',
+            'action_header': tr('food security'),
+            'action_list': [
+                tr('What kind of food does the population normally consume?'),
+                tr('Are there any alternative source of food?'),
+                tr('Is there enough food for the displaced people?'),
+                tr('Are there any crops that can be used for consumption?'),
+                tr('Are there large numbers of separated children?')
+            ]
+        },
+        {
+            'action_category': 'wash',
+            'action_header': tr('sanitation and clean water'),
+            'action_list': [
+                tr('What water and sanitation practices were '
+                   'the population accustomed to before the emergency?'),
+                tr('What type of outreach system would work for '
+                   'hygiene promotion for this situation?'),
+                tr('What is the current water supply source and '
+                   'who are the present users?'),
+                tr('Are there enough water supply, sanitation and '
+                   'hygiene, items available for displaced people?'),
+                tr('Are water collection points close enough to '
+                   'where people live?'),
+                tr('Are water collection points safe?'),
+                tr('Is the water source contaminated or at risk of '
+                   'contamination?'),
+                tr('Are there alternative sources of water nearby?'),
+                tr('Is there a drainage problem?')
+            ]
+        },
+        {
+            'action_category': 'health',
+            'action_header': tr('health facilities'),
+            'action_list': [
+                tr('What are the existing health problems?'),
+                tr('What are the potential epidemic diseases?'),
+                tr('Are there any potential disease outbreaks?'),
+                tr('Are there any healthcare sources that are accessible and '
+                   'functioning?')
+            ]
+        }
     ],
     'citations': [
         {
@@ -163,14 +194,20 @@ exposure_road = {
     ],
     'classified_notes': [  # notes specific to classified data
     ],
-    'actions': [  # these are additional generic actions
-        tr('Which roads can be used to evacuate people or to distribute '
-           'logistics?'),
-        tr('What type of vehicles can use the not affected roads?'),
-        tr('What sort of equipment will be needed to reopen roads?'),
-        tr('Where will we get the equipment needed to open roads?'),
-        tr('Which government department is responsible for supplying '
-           'equipment?')
+    'actions': [
+        {
+            'action_category': 'general',
+            'action_header': tr('general checklist'),
+            'action_list': [
+                tr('Which roads can be used to evacuate people or '
+                   'to distribute logistics?'),
+                tr('What type of vehicles can use the not affected roads?'),
+                tr('What sort of equipment will be needed to reopen roads?'),
+                tr('Where will we get the equipment needed to open roads?'),
+                tr('Which government department is responsible for supplying '
+                   'equipment?')
+            ]
+        }
     ],
     'citations': [
         {
@@ -223,16 +260,22 @@ exposure_structure = {
     'classified_notes': [  # notes specific to classified data
     ],
     'actions': [
-        # these are additional generic actions
-        tr('Which structures have warning capacity '
-           '(e.g. sirens or speakers)?'),
-        tr('Are the water and electricity services still operating?'),
-        tr('Are the schools and hospitals still active?'),
-        tr('Are the health centres still open?'),
-        tr('Are the other public services accessible?'),
-        tr('Which buildings will be evacuation centres?'),
-        tr('Where will we locate the operations centre?'),
-        tr('Where will we locate warehouse and/or distribution centres?')
+        {
+            'action_category': 'general',
+            'action_header': tr('general checklist'),
+            'action_list': [
+                tr('Which structures have warning capacity '
+                   '(e.g. sirens or speakers)?'),
+                tr('Are the water and electricity services still operating?'),
+                tr('Are the schools and hospitals still active?'),
+                tr('Are the health centres still open?'),
+                tr('Are the other public services accessible?'),
+                tr('Which buildings will be evacuation centres?'),
+                tr('Where will we locate the operations centre?'),
+                tr('Where will we locate warehouse and/or '
+                   'distribution centres?')
+            ]
+        }
     ],
     'citations': [
         {
@@ -322,21 +365,27 @@ exposure_land_cover = {
     ],
     'classified_notes': [  # notes specific to classified data
     ],
-    'actions': [  # these are additional generic actions
-        tr('What type of crops are planted in the affected fields?'),
-        tr('How long will the activity or function of the land cover be '
-           'disturbed?'),
-        tr('What proportion of the land cover is damaged?'),
-        tr('What potential losses will result from the land cover '
-           'damage?'),
-        tr('How much productivity will be lost during this event?'),
-        tr('Which crops were ready for harvest during this event?'),
-        tr('What is the ownership system of the land/crops/field?'),
-        tr('Are the land/crops/field accessible after the event?'),
-        tr('What urgent actions can be taken to normalize the land/crops/'
-           'field?'),
-        tr('What tools or equipment are needed for early recovery of the '
-           'land/crops/field?')
+    'actions': [
+        {
+            'action_category': 'general',
+            'action_header': tr('general checklist'),
+            'action_list': [
+                tr('What type of crops are planted in the affected fields?'),
+                tr('How long will the activity or function of '
+                   'the land cover be disturbed?'),
+                tr('What proportion of the land cover is damaged?'),
+                tr('What potential losses will result from the land cover '
+                   'damage?'),
+                tr('How much productivity will be lost during this event?'),
+                tr('Which crops were ready for harvest during this event?'),
+                tr('What is the ownership system of the land/crops/field?'),
+                tr('Are the land/crops/field accessible after the event?'),
+                tr('What urgent actions can be taken to normalize '
+                   'the land/crops/field?'),
+                tr('What tools or equipment are needed for early recovery of '
+                   'the land/crops/field?')
+            ]
+        }
     ],
     'citations': [
         {
