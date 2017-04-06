@@ -101,7 +101,7 @@ class FieldMapping(QWidget, object):
     def set_layer(self, layer):
         """Set layer and update UI accordingly.
 
-        :param layer: A vector ayer that has been already patched with
+        :param layer: A vector layer that has been already patched with
             metadata.
         :type layer: QgsVectorLayer
         """

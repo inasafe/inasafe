@@ -373,21 +373,21 @@ class Plugin(object):
             self.action_show_definitions,
             add_to_toolbar=True)
 
-    def _create_keyword_value_mapping(self):
-        """Create action for showing keyword value mapping dialog.."""
+    def _create_field_mapping_action(self):
+        """Create action for showing field mapping dialog.."""
         icon = resources_path('img', 'icons', 'icon.svg')
-        self.keyword_value_mapping = QAction(
+        self.field_mapping_action = QAction(
             QIcon(icon),
-            self.tr('InaSAFE Keyword Value Mapping'),
+            self.tr('InaSAFE Field Mapping'),
             self.iface.mainWindow())
-        self.keyword_value_mapping.setStatusTip(self.tr(
-            'Assign value mapping to layer.'))
-        self.keyword_value_mapping.setWhatsThis(self.tr(
-            'Use this tool to assign value mapping in layer.'))
-        self.keyword_value_mapping.triggered.connect(
-            self.show_definitions)
+        self.field_mapping_action.setStatusTip(self.tr(
+            'Assign field mapping to layer.'))
+        self.field_mapping_action.setWhatsThis(self.tr(
+            'Use this tool to assign field mapping in layer.'))
+        self.field_mapping_action.triggered.connect(
+            self.show_field_mapping)
         self.add_action(
-            self.keyword_value_mapping,
+            self.field_mapping_action,
             add_to_toolbar=True)
 
     def _create_add_petabencana_layer_action(self):
@@ -563,7 +563,7 @@ class Plugin(object):
         self._create_save_scenario_action()
         self._add_spacer_to_menu()
         self._create_show_definitions_action()
-        self._create_keyword_value_mapping()
+        self._create_field_mapping_action()
 
         # Hook up a slot for when the dock is hidden using its close button
         # or  view-panels
@@ -858,6 +858,15 @@ class Plugin(object):
             self.iface.mainWindow(),
             definitions_help.definitions_help())
         dialog.show()  # non modal
+
+    def show_field_mapping(self):
+        """Show InaSAFE Field Mapping.
+        """
+        from safe.gui.tools.field_mapping_tool import FieldMappingDialog
+        dialog = FieldMappingDialog(
+            parent=self.iface.mainWindow(),
+            iface=self.iface,)
+        dialog.exec_()  # modal
 
     def show_keyword_value_mapping(self):
         """Show Keyword value mapping tool."""
