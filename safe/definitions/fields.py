@@ -9,6 +9,7 @@ from safe.definitions.constants import (
     qvariant_whole_numbers, qvariant_numbers)
 from safe.definitions.default_values import (
     female_ratio_default_value,
+    male_ratio_default_value,
     feature_rate_default_value,
     youth_ratio_default_value,
     adult_ratio_default_value,
@@ -699,6 +700,36 @@ female_ratio_field = {
     # Null value can be replaced by default or not
     'replace_null': True,
     'default_value': female_ratio_default_value
+}
+
+# Male Ratio
+male_ratio_field = {
+    'key': 'male_ratio_field',
+    'name': tr('Male Ratio'),
+    'field_name': 'male_ratio',
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': default_ratio_field_precision,
+    'absolute': False,
+    'description': tr(
+        'The proportion of male for each feature.'),
+    'help_text': tr(
+        '"Male" is defined as: {concept} In cases where population data is '
+        'available, InaSAFE will calculate the number of males per exposure '
+        'feature, aggregate hazard area, aggregation area and for the '
+        'analysis area as a whole. The male count is calculated based on '
+        'standard ratios either provided as a global setting in InaSAFE, or '
+        '(if available) ratios in the input analysis data.').format(
+            concept=concepts['male']['description']),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': True,
+    'default_value': male_ratio_default_value
 }
 
 # Youth Ratio

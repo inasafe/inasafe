@@ -19,6 +19,17 @@ female_ratio_default_value = {
     'description': tr('Default value for female ratio')
 }
 
+male_ratio_default_value = {
+    'key': 'male_ratio_default_value',
+    'name': tr('Male Ratio Global Default'),
+    # https://www.cia.gov/library/publications/the-world-factbook/geos/xx.html
+    # total population: 1.01 male(s)/female (2011 est.)
+    'default_value': 0.5,
+    'min_value': 0,
+    'max_value': 1,
+    'description': tr('Default value for male ratio')
+}
+
 feature_rate_default_value = {
     'key': 'feature_rate_default_value',
     'name': tr('Feature Rate Global Default'),

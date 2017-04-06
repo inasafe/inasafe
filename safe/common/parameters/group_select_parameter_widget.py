@@ -8,11 +8,14 @@ from PyQt4.QtGui import (
 
 from safe_extras.parameters.qt_widgets.generic_parameter_widget import (
     GenericParameterWidget)
+import logging
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
+
+LOGGER = logging.getLogger('InaSAFE')
 
 
 class GroupSelectParameterWidget(GenericParameterWidget):
@@ -64,6 +67,11 @@ class GroupSelectParameterWidget(GenericParameterWidget):
                 double_spin_box.setSingleStep(value.get('constraint', {}).get(
                     'step', 0.1))
                 self.spin_boxes[key] = double_spin_box
+            elif value.get('type') == 'static':
+                static_value = value.get('value', 0)
+                if static_value is not None:
+                    self.radio_button_layout.addWidget(
+                        QLabel(str(static_value)), i, 1)
             self.input_button_group.addButton(radio_button, i)
             if self._parameter.selected == key:
                 radio_button.setChecked(True)
