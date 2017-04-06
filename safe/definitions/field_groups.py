@@ -10,7 +10,9 @@ from safe.definitions.fields import (
     elderly_count_field,
     youth_ratio_field,
     adult_ratio_field,
-    elderly_ratio_field
+    elderly_ratio_field,
+    female_ratio_field,
+    male_ratio_field
 )
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
@@ -44,7 +46,25 @@ age_ratio_group = {
     ]
 }
 
+gender_ratio_group = {
+    'key': 'gender_ratio_group',
+    'name': tr('Gender Ratio'),
+    'description': tr(
+        'The group of fields that consists of population ratio per gender '
+        'class.'),
+    'fields': [
+        female_ratio_field,
+        male_ratio_field
+    ]
+}
+
 field_groups_all = [
     age_count_group,
     age_ratio_group
+]
+
+
+aggregation_field_groups = [
+    age_ratio_group,
+    gender_ratio_group
 ]
