@@ -114,7 +114,7 @@ general_report_component = {
                 'general-report.html',
     'extra_args': {
         'header': tr('General Report'),
-        'table_header_format': tr('Estimated {title}'),
+        'table_header_format': tr('Estimated {title} affected per {unit}'),
         'hazard_header': tr('Hazard Zone'),
         # Used to customize header.
         # See issue inasafe#3688: remove all 'total' words

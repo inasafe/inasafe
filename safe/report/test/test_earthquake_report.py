@@ -105,7 +105,8 @@ class TestEarthquakeReport(unittest.TestCase):
         """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
 
         expected_context = {
-            'table_header': u'Estimated Number of people',
+            'table_header': (
+                u'Estimated Number of people affected per MMI intensity'),
             'header': u'General Report',
             'summary': [
                 {
