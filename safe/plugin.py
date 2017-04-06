@@ -358,7 +358,7 @@ class Plugin(object):
 
     def _create_show_definitions_action(self):
         """Create action for showing definitions."""
-        icon = resources_path('img', 'icons', 'defintions.svg')
+        icon = resources_path('img', 'icons', 'definitions.svg')
         self.action_show_definitions = QAction(
             QIcon(icon),
             self.tr('InaSAFE Help'),
@@ -371,6 +371,23 @@ class Plugin(object):
             self.show_definitions)
         self.add_action(
             self.action_show_definitions,
+            add_to_toolbar=True)
+
+    def _create_keyword_value_mapping(self):
+        """Create action for showing keyword value mapping dialog.."""
+        icon = resources_path('img', 'icons', 'icon.svg')
+        self.keyword_value_mapping = QAction(
+            QIcon(icon),
+            self.tr('InaSAFE Keyword Value Mapping'),
+            self.iface.mainWindow())
+        self.keyword_value_mapping.setStatusTip(self.tr(
+            'Assign value mapping to layer.'))
+        self.keyword_value_mapping.setWhatsThis(self.tr(
+            'Use this tool to assign value mapping in layer.'))
+        self.keyword_value_mapping.triggered.connect(
+            self.show_definitions)
+        self.add_action(
+            self.keyword_value_mapping,
             add_to_toolbar=True)
 
     def _create_add_petabencana_layer_action(self):
@@ -546,6 +563,7 @@ class Plugin(object):
         self._create_save_scenario_action()
         self._add_spacer_to_menu()
         self._create_show_definitions_action()
+        self._create_keyword_value_mapping()
 
         # Hook up a slot for when the dock is hidden using its close button
         # or  view-panels
@@ -840,6 +858,16 @@ class Plugin(object):
             self.iface.mainWindow(),
             definitions_help.definitions_help())
         dialog.show()  # non modal
+
+    def show_keyword_value_mapping(self):
+        """Show Keyword value mapping tool."""
+        from safe.gui.tools.batch.batch_dialog import BatchDialog
+
+        dialog = BatchDialog(
+            parent=self.iface.mainWindow(),
+            iface=self.iface,
+            dock=self.dock_widget)
+        dialog.exec_()  # modal
 
     def add_petabencana_layer(self):
         """Add petabencana layer to the map.
