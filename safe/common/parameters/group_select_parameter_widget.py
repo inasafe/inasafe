@@ -76,8 +76,6 @@ class GroupSelectParameterWidget(GenericParameterWidget):
             if self._parameter.selected == key:
                 radio_button.setChecked(True)
 
-        self.inner_input_layout.addLayout(self.radio_button_layout)
-
         self.list_widget = QListWidget()
         self.inner_input_layout.addLayout(self.radio_button_layout)
         self.inner_input_layout.addWidget(self.list_widget)
