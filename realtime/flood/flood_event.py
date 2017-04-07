@@ -762,7 +762,7 @@ Jl. Abdul Muis No. 66, Telp. 121
         layer_registry.addMapLayer(hazard_layer, True)
         # add boundary layer
         boundary_layer = read_qgis_layer(
-            self.flood_fixtures_dir('boundary-5.shp'))
+            self.flood_fixtures_dir('Jakarta_District_Boundary_WGS84.shp'))
         layer_registry.addMapLayer(boundary_layer, False)
         CANVAS.setExtent(boundary_layer.extent())
         CANVAS.refresh()
