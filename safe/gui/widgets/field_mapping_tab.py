@@ -131,6 +131,7 @@ class FieldMapping(QWidget, object):
     def populate_parameter(self):
         """Helper to setup the parameter widget."""
         self.parameters = []
+        selected_option = 'do not use'
         for field in self.field_group.get('fields', []):
             options = OrderedDict([
                 ('do not use',
@@ -159,8 +160,13 @@ class FieldMapping(QWidget, object):
                     'constraint': {}
                 }
                 # TODO(IS): Check from keywords first
-                custom_value = get_inasafe_default_value_qsetting(
+
+                default_custom_value = get_inasafe_default_value_qsetting(
                     self.setting, RECENT, field['key'])
+                custom_value = self.metadata['inasafe_default_values'].get(
+                    field['key'], default_custom_value)
+                if field['key'] in self.metadata['inasafe_default_values']:
+                    selected_option = 'custom value'  # TODO use global variable
                 min_value = field['default_value'].get('min_value', 0)
                 max_value = field['default_value'].get('max_value', 100)
                 step = (max_value - min_value) / 100.0
@@ -174,9 +180,16 @@ class FieldMapping(QWidget, object):
                         'step': step
                     }
                 }
+
+            custom_fields = self.metadata['inasafe_fields'].get(
+                field['key'], [])
+            if field['key'] in self.metadata['inasafe_fields']:
+                selected_option = 'field'
+            if isinstance(custom_fields, basestring):
+                custom_fields = [custom_fields]
             options['field'] = {
                 'label': field_label,
-                'value': [], # Taken from keywords
+                'value': custom_fields,
                 'type': 'multiple dynamic',
                 'constraint': {}
             }
@@ -186,7 +199,7 @@ class FieldMapping(QWidget, object):
             parameter.guid = field['key']
             parameter.name = field['name']
             parameter.options = options
-            parameter.selected = 'do not use'
+            parameter.selected = selected_option
 
             self.parameters.append(parameter)
 

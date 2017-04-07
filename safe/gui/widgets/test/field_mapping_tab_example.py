@@ -32,7 +32,6 @@ def main():
     layout.addWidget(field_mapping)
 
     widget.setLayout(layout)
-    widget.setGeometry(0, 0, 500, 500)
 
     widget.show()
 
