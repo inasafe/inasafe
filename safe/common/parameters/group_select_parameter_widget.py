@@ -65,8 +65,15 @@ class GroupSelectParameterWidget(GenericParameterWidget):
                 double_spin_box.setMaximum(value.get('constraint', {}).get(
                     'max', 1))
                 double_spin_box.setSingleStep(value.get('constraint', {}).get(
-                    'step', 0.1))
+                    'step', 0.01))
                 self.spin_boxes[key] = double_spin_box
+
+                # Enable spin box depends on the selected option
+                if self._parameter.selected == key:
+                    double_spin_box.setEnabled(True)
+                else:
+                    double_spin_box.setEnabled(False)
+
             elif value.get('type') == 'static':
                 static_value = value.get('value', 0)
                 if static_value is not None:
@@ -77,6 +84,7 @@ class GroupSelectParameterWidget(GenericParameterWidget):
                 radio_button.setChecked(True)
 
         self.list_widget = QListWidget()
+        self.list_widget.setEnabled(False)
         self.inner_input_layout.addLayout(self.radio_button_layout)
         self.inner_input_layout.addWidget(self.list_widget)
 

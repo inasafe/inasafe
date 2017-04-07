@@ -68,3 +68,7 @@ aggregation_field_groups = [
     age_ratio_group,
     gender_ratio_group
 ]
+
+exposure_field_groups = [
+    age_count_group
+]
