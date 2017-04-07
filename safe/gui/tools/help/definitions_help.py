@@ -974,7 +974,8 @@ def definition_to_message(
         message.add(m.Paragraph(m.ImportantText(tr('Actions:'))))
         bullets = m.BulletedList()
         for note in definition['actions']:
-            bullets.add(m.Text(note))
+            for action in note['action_list']:
+                bullets.add(m.Text(action))
         message.add(bullets)
 
     for exposure in exposure_all:
@@ -985,7 +986,8 @@ def definition_to_message(
             message.add(m.Heading(title, **DETAILS_SUBGROUP_STYLE))
             bullets = m.BulletedList()
             for note in extra_exposure_actions:
-                bullets.add(m.Text(note))
+                for action in note['action_list']:
+                    bullets.add(m.Text(action))
             message.add(bullets)
 
     if 'continuous_hazard_units' in definition:
