@@ -6,6 +6,9 @@ from collections import OrderedDict
 
 from safe.common.parameters.group_select_parameter import (
     GroupSelectParameter)
+from safe.definitions.constants import (
+    DO_NOT_USE, CUSTOM_VALUE, GLOBAL_DEFAULT, FIELDS, STATIC, SINGLE_DYNAMIC,
+    MULTIPLE_DYNAMIC)
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -20,36 +23,37 @@ class TestGroupSelectParameter(unittest.TestCase):
     def test_setup(self):
         """Test setup for group select parameter."""
         options = OrderedDict([
-            ('do not use',
+            (DO_NOT_USE,
              {
                  'label': 'Do not use',
                  'value': None,
-                 'type': 'static',
+                 'type': STATIC,
                  'constraint': {}
              }),
-            ('global default',
+            (GLOBAL_DEFAULT,
              {
                  'label': 'Global default',
                  'value': 0.5,
-                 'type': 'static',
+                 'type': STATIC,
                  'constraint': {}
              }),
-            ('custom value',
+            (CUSTOM_VALUE,
              {
                  'label': 'Custom',
                  'value': 0.7,  # Taken from keywords / recent value
-                 'type': 'single dynamic',
+                 'type': SINGLE_DYNAMIC,
                  'constraint':
                      {
                          'min': 0,
                          'max': 1
                      }
              }),
-            ('ratio fields',
+            (FIELDS,
              {
                  'label': 'Ratio fields',
-                 'value': [],  # Taken from keywords
-                 'type': 'multiple dynamic',
+                 'value': ['field A', 'field B', 'field C'],
+             # Taken from keywords
+                 'type': MULTIPLE_DYNAMIC,
                  'constraint': {}
              })
         ])

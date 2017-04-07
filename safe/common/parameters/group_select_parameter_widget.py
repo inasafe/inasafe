@@ -8,6 +8,7 @@ from PyQt4.QtGui import (
 
 from safe_extras.parameters.qt_widgets.generic_parameter_widget import (
     GenericParameterWidget)
+from safe.definitions.constants import STATIC, SINGLE_DYNAMIC, MULTIPLE_DYNAMIC
 import logging
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
@@ -56,7 +57,7 @@ class GroupSelectParameterWidget(GenericParameterWidget):
             value = self._parameter.options[key]
             radio_button = QRadioButton(value.get('label'))
             self.radio_button_layout.addWidget(radio_button, i, 0)
-            if value.get('type') == 'single dynamic':
+            if value.get('type') == SINGLE_DYNAMIC:
                 double_spin_box = QDoubleSpinBox()
                 self.radio_button_layout.addWidget(double_spin_box, i, 1)
                 double_spin_box.setValue(value.get('value', 0))
@@ -74,7 +75,7 @@ class GroupSelectParameterWidget(GenericParameterWidget):
                 else:
                     double_spin_box.setEnabled(False)
 
-            elif value.get('type') == 'static':
+            elif value.get('type') == STATIC:
                 static_value = value.get('value', 0)
                 if static_value is not None:
                     self.radio_button_layout.addWidget(
@@ -116,12 +117,12 @@ class GroupSelectParameterWidget(GenericParameterWidget):
         """
         # Set value for each key
         for key, value in self._parameter.options.items():
-            if value.get('type') == 'static':
+            if value.get('type') == STATIC:
                 continue
-            elif value.get('type') == 'single dynamic':
+            elif value.get('type') == SINGLE_DYNAMIC:
                 new_value = self.spin_boxes.get(key).value()
                 self._parameter.set_value_for_key(key, new_value)
-            elif value.get('type') == 'multiple dynamic':
+            elif value.get('type') == MULTIPLE_DYNAMIC:
                 # Need to iterate through all items
                 items = []
                 for index in xrange(self.list_widget.count()):
@@ -148,7 +149,7 @@ class GroupSelectParameterWidget(GenericParameterWidget):
         if radio_button_checked_id > -1:
             selected_dict = self._parameter.options.values()[
                 radio_button_checked_id]
-            if selected_dict.get('type') == 'multiple dynamic':
+            if selected_dict.get('type') == MULTIPLE_DYNAMIC:
                 # Update list widget
                 self.list_widget.addItems(selected_dict.get('value', []))
 
@@ -166,10 +167,10 @@ class GroupSelectParameterWidget(GenericParameterWidget):
         if radio_button_checked_id > -1:
             selected_value = self._parameter.options.values()[
                 radio_button_checked_id]
-            if selected_value.get('type') == 'multiple dynamic':
+            if selected_value.get('type') == MULTIPLE_DYNAMIC:
                 # Enable list widget
                 self.list_widget.setEnabled(True)
-            elif selected_value.get('type') == 'single dynamic':
+            elif selected_value.get('type') == SINGLE_DYNAMIC:
                 selected_key = self._parameter.options.keys()[
                     radio_button_checked_id]
                 self.spin_boxes[selected_key].setEnabled(True)
