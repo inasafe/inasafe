@@ -10,6 +10,10 @@ from safe.common.parameters.group_select_parameter import (
 from safe.common.parameters.group_select_parameter_widget import (
     GroupSelectParameterWidget)
 
+from safe.definitions.constants import (
+    DO_NOT_USE, CUSTOM_VALUE, GLOBAL_DEFAULT, FIELDS, STATIC, SINGLE_DYNAMIC,
+    MULTIPLE_DYNAMIC)
+
 from safe.test.utilities import get_qgis_app
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -28,60 +32,60 @@ class TestGroupSelectParameterWidget(unittest.TestCase):
         """Test init."""
 
         options = OrderedDict([
-            ('do not use',
+            (DO_NOT_USE,
              {
                  'label': 'Do not use',
                  'value': None,
-                 'type': 'static',
+                 'type': STATIC,
                  'constraint': {}
              }),
-            ('global default',
+            (GLOBAL_DEFAULT,
              {
                  'label': 'Global default',
                  'value': 0.5,
-                 'type': 'static',
+                 'type': STATIC,
                  'constraint': {}
              }),
-            ('custom value',
+            (CUSTOM_VALUE,
              {
                  'label': 'Custom',
                  'value': 0.7,  # Taken from keywords / recent value
-                 'type': 'single dynamic',
+                 'type': SINGLE_DYNAMIC,
                  'constraint':
                      {
                          'min': 0,
-                         'max': 1,
-                         'step': 0.1
+                         'max': 1
                      }
              }),
-            ('ratio fields',
+            (FIELDS,
              {
                  'label': 'Ratio fields',
                  'value': ['field A', 'field B', 'field C'],
-                 'type': 'multiple dynamic',
+                 # Taken from keywords
+                 'type': MULTIPLE_DYNAMIC,
                  'constraint': {}
              })
         ])
 
         parameter = GroupSelectParameter()
         parameter.options = options
-        parameter.selected = 'ratio fields'
+        parameter.selected = FIELDS
 
         self.widget = GroupSelectParameterWidget(parameter)
 
-        self.widget.select_radio_button('custom value')
+        self.widget.select_radio_button(CUSTOM_VALUE)
         self.assertEqual(self.widget.get_parameter().value, 0.7)
 
-        self.widget.spin_boxes['custom value'].setValue(0.6)
+        self.widget.spin_boxes[CUSTOM_VALUE].setValue(0.6)
         self.assertEqual(self.widget.get_parameter().value, 0.6)
 
-        self.widget.select_radio_button('global default')
+        self.widget.select_radio_button(GLOBAL_DEFAULT)
         self.assertEqual(self.widget.get_parameter().value, 0.5)
 
-        self.widget.select_radio_button('do not use')
+        self.widget.select_radio_button(DO_NOT_USE)
         self.assertEqual(self.widget.get_parameter().value, None)
 
-        self.widget.select_radio_button('ratio fields')
+        self.widget.select_radio_button(FIELDS)
         self.assertListEqual(
             self.widget.get_parameter().value,
             ['field A', 'field B', 'field C'])

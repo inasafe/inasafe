@@ -14,6 +14,9 @@ from PyQt4.QtCore import Qt, QSettings
 from collections import OrderedDict
 
 from safe.definitions.constants import RECENT, GLOBAL
+from safe.definitions.constants import (
+    DO_NOT_USE, CUSTOM_VALUE, GLOBAL_DEFAULT, FIELDS, STATIC, SINGLE_DYNAMIC,
+    MULTIPLE_DYNAMIC)
 
 from safe_extras.parameters.qt_widgets.parameter_container import (
     ParameterContainer)
@@ -131,14 +134,14 @@ class FieldMapping(QWidget, object):
     def populate_parameter(self):
         """Helper to setup the parameter widget."""
         self.parameters = []
-        selected_option = 'do not use'
+        selected_option = DO_NOT_USE
         for field in self.field_group.get('fields', []):
             options = OrderedDict([
-                ('do not use',
+                (DO_NOT_USE,
                  {
                      'label': tr('Do not use'),
                      'value': None,
-                     'type': 'static',
+                     'type': STATIC,
                      'constraint': {}
                  }),
             ])
@@ -153,10 +156,10 @@ class FieldMapping(QWidget, object):
                 field_label = tr('Ratio fields')
                 global_default_value = get_inasafe_default_value_qsetting(
                     self.setting, GLOBAL, field['key'])
-                options['global default'] = {
+                options[GLOBAL_DEFAULT] = {
                     'label': tr('Global default'),
                     'value': global_default_value,
-                    'type': 'static',
+                    'type': STATIC,
                     'constraint': {}
                 }
                 # TODO(IS): Check from keywords first
@@ -166,16 +169,16 @@ class FieldMapping(QWidget, object):
                     field['key'], default_custom_value)
                 if field['key'] in self.metadata['inasafe_default_values']:
                     if custom_value == global_default_value:
-                        selected_option = 'global default'
+                        selected_option = GLOBAL_DEFAULT
                     else:
-                        selected_option = 'custom value'
+                        selected_option = CUSTOM_VALUE
                 min_value = field['default_value'].get('min_value', 0)
                 max_value = field['default_value'].get('max_value', 100)
                 step = (max_value - min_value) / 1000.0
-                options['custom value'] = {
+                options[CUSTOM_VALUE] = {
                     'label': tr('Custom'),
                     'value': custom_value,
-                    'type': 'single dynamic',
+                    'type': SINGLE_DYNAMIC,
                     'constraint': {
                         'min': min_value,
                         'max': max_value,
@@ -189,10 +192,10 @@ class FieldMapping(QWidget, object):
                 selected_option = 'field'
             if isinstance(custom_fields, basestring):
                 custom_fields = [custom_fields]
-            options['field'] = {
+            options[FIELDS] = {
                 'label': field_label,
                 'value': custom_fields,
-                'type': 'multiple dynamic',
+                'type': MULTIPLE_DYNAMIC,
                 'constraint': {}
             }
 

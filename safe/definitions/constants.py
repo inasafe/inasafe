@@ -54,3 +54,14 @@ GLOBAL = 'global'
 # RECENT is to indicate that a setting is stored as a recent input from the
 # user
 RECENT = 'recent'
+
+# Options keys in the field mapping
+DO_NOT_USE = 'do not use'
+CUSTOM_VALUE = 'custom value'
+GLOBAL_DEFAULT = 'global default'
+FIELDS = 'fields'
+
+# Type in the field mapping
+STATIC = 'static'
+SINGLE_DYNAMIC = 'single dynamic'
+MULTIPLE_DYNAMIC = 'multiple dynamic'
