@@ -246,15 +246,23 @@ class TestImpactReport(unittest.TestCase):
         expected_context = {
             'header': u'Action Checklist',
             'items': [
-                u'Which structures have warning capacity (e.g. sirens or '
-                u'speakers)?',
-                u'Are the water and electricity services still operating?',
-                u'Are the schools and hospitals still active?',
-                u'Are the health centres still open?',
-                u'Are the other public services accessible?',
-                u'Which buildings will be evacuation centres?',
-                u'Where will we locate the operations centre?',
-                u'Where will we locate warehouse and/or distribution centres?'
+                {
+                    'action_category': 'general',
+                    'action_header': 'general checklist',
+                    'action_list': [
+                        'Which structures have warning capacity '
+                        '(e.g. sirens or speakers)?',
+                        'Are the water and electricity services '
+                        'still operating?',
+                        'Are the schools and hospitals still active?',
+                        'Are the health centres still open?',
+                        'Are the other public services accessible?',
+                        'Which buildings will be evacuation centres?',
+                        'Where will we locate the operations centre?',
+                        'Where will we locate warehouse and/or '
+                        'distribution centres?'
+                    ]
+                }
             ]
         }
         actual_context = action_notes.context

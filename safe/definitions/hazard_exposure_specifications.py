@@ -22,7 +22,14 @@ ITEMS = (
         'hazard': hazard_volcanic_ash,
         'exposure': exposure_population,
         'actions': [
-            tr('Do you have enough masks for people in the affected area?'),
+            {
+                'action_category': 'additional_volcanic_ash_on_population',
+                'action_header': tr('volcanic ash on population specific'),
+                'action_list': [
+                    tr('Do you have enough masks for people in '
+                       'the affected area?')
+                ]
+            },
         ],
         'notes': [
         ]

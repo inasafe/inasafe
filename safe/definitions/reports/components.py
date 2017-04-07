@@ -235,7 +235,7 @@ action_checklist_component = {
     'output_path': 'action-checklist-output.html',
     'template': 'standard-template/'
                 'jinja2/'
-                'bullet-list-section.html',
+                'action-categorized.html',
     'extra_args': {
         'header': tr('Action Checklist')
     }

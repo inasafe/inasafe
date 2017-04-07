@@ -305,9 +305,16 @@ hazard_volcanic_ash = {
     ],
     'multi_event_notes': [  # notes specific to multi event data
     ],
-    'actions': [  # these are additional volcanic ash actions
-        tr('What action can be taken to secure water supplies and protect '
-           'crops?')
+    'actions': [
+        {
+            'action_category': 'additional_volcanic_ash',
+            'action_header': tr('volcanic ash specific'),
+            'action_list': [
+                # these are additional volcanic ash actions
+                tr('What action can be taken to secure water supplies and '
+                   'protect crops?')
+            ]
+        }
     ],
     'citations': [
         {
