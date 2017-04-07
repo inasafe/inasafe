@@ -160,16 +160,18 @@ class FieldMapping(QWidget, object):
                     'constraint': {}
                 }
                 # TODO(IS): Check from keywords first
-
                 default_custom_value = get_inasafe_default_value_qsetting(
                     self.setting, RECENT, field['key'])
                 custom_value = self.metadata['inasafe_default_values'].get(
                     field['key'], default_custom_value)
                 if field['key'] in self.metadata['inasafe_default_values']:
-                    selected_option = 'custom value'  # TODO use global variable
+                    if custom_value == global_default_value:
+                        selected_option = 'global default'
+                    else:
+                        selected_option = 'custom value'
                 min_value = field['default_value'].get('min_value', 0)
                 max_value = field['default_value'].get('max_value', 100)
-                step = (max_value - min_value) / 100.0
+                step = (max_value - min_value) / 1000.0
                 options['custom value'] = {
                     'label': tr('Custom'),
                     'value': custom_value,

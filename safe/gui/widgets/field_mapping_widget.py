@@ -6,7 +6,8 @@ import logging
 
 from safe.definitions.layer_purposes import (
     layer_purpose_aggregation, layer_purpose_exposure)
-from safe.definitions.field_groups import aggregation_field_groups
+from safe.definitions.field_groups import (
+    aggregation_field_groups, exposure_field_groups)
 
 from safe.gui.widgets.field_mapping_tab import FieldMapping
 
@@ -51,6 +52,8 @@ class FieldMappingWidget(QTabWidget, object):
         field_groups = []
         if self.metadata['layer_purpose'] == layer_purpose_aggregation['key']:
             field_groups = aggregation_field_groups
+        elif self.metadata['layer_purpose'] == layer_purpose_exposure['key']:
+            field_groups = exposure_field_groups
         for field_group in field_groups:
             tab = FieldMapping(field_group, self, self.iface)
             tab.set_layer(self.layer)
