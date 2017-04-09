@@ -115,3 +115,7 @@ class GroupSelectParameter(GenericParameter):
         """
         if key in self.options:
             self.options[key]['value'] = value
+
+    def selected_option_type(self):
+        """Helper to get the type of selected options."""
+        return self.options[self.selected]['type']
