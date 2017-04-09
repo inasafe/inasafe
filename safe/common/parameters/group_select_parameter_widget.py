@@ -4,7 +4,8 @@
 from PyQt4.QtGui import (
     QHBoxLayout, QDoubleSpinBox, QVBoxLayout, QRadioButton, QButtonGroup,
     QWidget, QLabel, QSizePolicy, QSpacerItem, QSpinBox, QListWidget,
-    QGridLayout)
+    QGridLayout, QAbstractItemView, QListWidgetItem)
+from PyQt4.QtCore import Qt
 
 from safe_extras.parameters.qt_widgets.generic_parameter_widget import (
     GenericParameterWidget)
@@ -53,6 +54,13 @@ class GroupSelectParameterWidget(GenericParameterWidget):
         # Create radio button group
         self.input_button_group = QButtonGroup()
 
+        # List widget
+        self.list_widget = QListWidget()
+        self.list_widget.setSelectionMode(QAbstractItemView.ExtendedSelection)
+        self.list_widget.setDragDropMode(QAbstractItemView.DragDrop)
+        self.list_widget.setDefaultDropAction(Qt.MoveAction)
+        self.list_widget.setEnabled(False)
+
         for i, key in enumerate(self._parameter.options):
             value = self._parameter.options[key]
             radio_button = QRadioButton(value.get('label'))
@@ -80,12 +88,17 @@ class GroupSelectParameterWidget(GenericParameterWidget):
                 if static_value is not None:
                     self.radio_button_layout.addWidget(
                         QLabel(str(static_value)), i, 1)
+            elif value.get('type') == MULTIPLE_DYNAMIC:
+                selected_fields = value.get('value', [])
+                if self._parameter.selected == key:
+                    self.list_widget.setEnabled(True)
+                else:
+                    self.list_widget.setEnabled(False)
+
             self.input_button_group.addButton(radio_button, i)
             if self._parameter.selected == key:
                 radio_button.setChecked(True)
 
-        self.list_widget = QListWidget()
-        self.list_widget.setEnabled(False)
         self.inner_input_layout.addLayout(self.radio_button_layout)
         self.inner_input_layout.addWidget(self.list_widget)
 
@@ -150,8 +163,17 @@ class GroupSelectParameterWidget(GenericParameterWidget):
             selected_dict = self._parameter.options.values()[
                 radio_button_checked_id]
             if selected_dict.get('type') == MULTIPLE_DYNAMIC:
-                # Update list widget
-                self.list_widget.addItems(selected_dict.get('value', []))
+                for field in selected_dict.get('value'):
+                    # Update list widget
+                    field_item = QListWidgetItem(self.list_widget)
+                    field_item.setFlags(
+                        Qt.ItemIsEnabled |
+                        Qt.ItemIsSelectable |
+                        Qt.ItemIsDragEnabled |
+                        Qt.ItemIsDropEnabled)
+                    field_item.setData(Qt.UserRole, field.name())
+                    field_item.setText(field.name())
+                    self.list_widget.addItem(field_item)
 
     def radio_buttons_clicked(self):
         """Handler when selected radio button changed."""
