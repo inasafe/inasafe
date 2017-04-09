@@ -1,14 +1,17 @@
 # coding=utf-8
 """Field Mapping Tool Implementation."""
 
-from PyQt4.QtGui import QDialog, QHBoxLayout, QLabel, QDialogButtonBox
+from PyQt4.QtGui import (
+    QDialog, QHBoxLayout, QLabel, QDialogButtonBox, QMessageBox)
 from qgis.gui import QgsMapLayerComboBox, QgsMapLayerProxyModel
-from PyQt4.QtCore import pyqtSignature, pyqtSlot, QVariant
+from PyQt4.QtCore import pyqtSignature, pyqtSlot, QSettings
 
 import logging
 
+from safe.definitions.constants import RECENT
 from safe.common.exceptions import (
-    NoKeywordsFoundError, KeywordNotFoundError, MetadataReadError)
+    NoKeywordsFoundError, KeywordNotFoundError, MetadataReadError,
+    InaSAFEError)
 from safe.utilities.resources import (
     get_ui_class,
     resources_path,
@@ -18,6 +21,9 @@ from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.gui.widgets.field_mapping_widget import FieldMappingWidget
 from safe.gui.tools.help.field_mapping_help import field_mapping_help
+from safe.utilities.utilities import (
+    get_error_message, is_keyword_version_supported)
+from safe.utilities.settings import set_inasafe_default_value_qsetting
 
 FORM_CLASS = get_ui_class('field_mapping_dialog_base.ui')
 
@@ -28,13 +34,17 @@ class FieldMappingDialog(QDialog, FORM_CLASS):
 
     """Dialog implementation class for the InaSAFE field mapping tool."""
 
-    def __init__(self, parent=None, iface=None):
+    def __init__(self, parent=None, iface=None, setting=None):
         """Constructor."""
         QDialog.__init__(self, parent)
         self.setupUi(self)
+
         self.setWindowTitle(self.tr('InaSAFE Field Mapping Tool'))
         self.parent = parent
         self.iface = iface
+        if setting is None:
+            setting = QSettings()
+        self.setting = setting
 
         self.keyword_io = KeywordIO()
 
@@ -68,6 +78,14 @@ class FieldMappingDialog(QDialog, FORM_CLASS):
         self.help_button.setCheckable(True)
         self.help_button.toggled.connect(self.help_toggled)
 
+        # Set up things for ok button
+        self.ok_button = self.button_box.button(QDialogButtonBox.Ok)
+        self.ok_button.clicked.connect(self.accept)
+
+        # Set up things for cancel button
+        self.cancel_button = self.button_box.button(QDialogButtonBox.Cancel)
+        self.cancel_button.clicked.connect(self.reject)
+
     def set_layer(self, layer=None):
         """Set layer and update UI accordingly."""
         if self.field_mapping_widget is not None:
@@ -96,7 +114,10 @@ class FieldMappingDialog(QDialog, FORM_CLASS):
                 KeywordNotFoundError,
                 MetadataReadError) as e:
                 raise e
-
+        if 'inasafe_default_values' not in self.metadata:
+            self.metadata['inasafe_default_values'] = {}
+        if 'inasafe_fields' not in self.metadata:
+            self.metadata['inasafe_fields'] = {}
         self.field_mapping_widget = FieldMappingWidget(
             parent=self, iface=self.iface)
         self.field_mapping_widget.set_layer(self.layer)
@@ -142,3 +163,51 @@ class FieldMappingDialog(QDialog, FORM_CLASS):
         string += footer
 
         self.help_web_view.setHtml(string)
+
+    def save_metadata(self):
+        """Save metadata based on the field mapping state."""
+        LOGGER.debug('Save metadata')
+        metadata = self.field_mapping_widget.get_field_mapping()
+        for key, value in metadata['fields'].items():
+            # Delete the key if it's set to None
+            if key in self.metadata['inasafe_default_values']:
+                self.metadata['inasafe_default_values'].pop(key)
+            if value is None:
+                if key in self.metadata['inasafe_fields']:
+                    self.metadata['inasafe_fields'].pop(key)
+            else:
+                self.metadata['inasafe_fields'][key] = value
+
+        for key, value in metadata['values'].items():
+            # Delete the key if it's set to None
+            if key in self.metadata['inasafe_fields']:
+                self.metadata['inasafe_fields'].pop(key)
+            if value is None:
+                if key in self.metadata['inasafe_default_values']:
+                    self.metadata['inasafe_default_values'].pop(key)
+            else:
+                self.metadata['inasafe_default_values'][key] = value
+        try:
+            self.keyword_io.write_keywords(
+                layer=self.layer, keywords=self.metadata)
+        except InaSAFEError, e:
+            error_message = get_error_message(e)
+            # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
+            QMessageBox.warning(
+                self, self.tr('InaSAFE'),
+                ((self.tr(
+                    'An error was encountered when saving the following '
+                    'keywords:\n %s') % error_message.to_html())))
+
+        if self.metadata.get('inasafe_default_values'):
+            for key, value in \
+                    self.metadata['inasafe_default_values'].items():
+                set_inasafe_default_value_qsetting(
+                    self.setting, key, RECENT, value)
+
+
+    def accept(self):
+        """Method invoked when OK button is clicked."""
+        LOGGER.debug('Accepted.')
+        self.save_metadata()
+        self.close()

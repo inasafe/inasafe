@@ -166,9 +166,11 @@ class FieldMappingTab(QWidget, object):
                 # TODO(IS): Check from keywords first
                 default_custom_value = get_inasafe_default_value_qsetting(
                     self.setting, RECENT, field['key'])
-                custom_value = self.metadata['inasafe_default_values'].get(
+                custom_value = self.metadata.get(
+                    'inasafe_default_values', {}).get(
                     field['key'], default_custom_value)
-                if field['key'] in self.metadata['inasafe_default_values']:
+                if field['key'] in self.metadata.get(
+                        'inasafe_default_values', {}):
                     if custom_value == global_default_value:
                         selected_option = GLOBAL_DEFAULT
                     else:
@@ -187,10 +189,10 @@ class FieldMappingTab(QWidget, object):
                     }
                 }
 
-            custom_fields = self.metadata['inasafe_fields'].get(
+            custom_fields = self.metadata.get('inasafe_fields', {}).get(
                 field['key'], [])
-            if field['key'] in self.metadata['inasafe_fields']:
-                selected_option = 'field'
+            if field['key'] in self.metadata.get('inasafe_fields', {}):
+                selected_option = FIELDS
             if isinstance(custom_fields, basestring):
                 custom_fields = [custom_fields]
             options[FIELDS] = {
@@ -217,3 +219,18 @@ class FieldMappingTab(QWidget, object):
         self.parameter_container.setup_ui()
 
         self.parameter_layout.addWidget(self.parameter_container)
+
+    def get_parameter_value(self):
+        """Get parameter of the tab."""
+        parameters = self.parameter_container.get_parameters(True)
+        field_parameters = {}
+        value_parameters = {}
+        for parameter in parameters:
+            if parameter.selected_option_type() in [SINGLE_DYNAMIC, STATIC]:
+                value_parameters[parameter.guid] = parameter.value
+            elif parameter.selected_option_type() == MULTIPLE_DYNAMIC:
+                field_parameters[parameter.guid] = parameter.value
+        return {
+            'fields': field_parameters,
+            'values': value_parameters
+        }
