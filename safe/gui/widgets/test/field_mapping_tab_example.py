@@ -8,7 +8,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from PyQt4.QtGui import QApplication, QWidget, QGridLayout
 
-from safe.gui.widgets.field_mapping_tab import FieldMapping
+from safe.gui.widgets.field_mapping_tab import FieldMappingTab
 from safe.definitions.field_groups import age_ratio_group
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
@@ -24,7 +24,7 @@ def main():
 
     app = QApplication([])
 
-    field_mapping = FieldMapping(age_ratio_group, PARENT, IFACE)
+    field_mapping = FieldMappingTab(age_ratio_group, PARENT, IFACE)
     field_mapping.set_layer(layer)
 
     widget = QWidget()

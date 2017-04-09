@@ -33,7 +33,7 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
-class FieldMapping(QWidget, object):
+class FieldMappingTab(QWidget, object):
     """Widget class for field mapping."""
 
     def __init__(self, field_group=None, parent=None, iface=None):
