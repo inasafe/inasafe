@@ -11,6 +11,11 @@ from safe.definitions.field_groups import (
 
 from safe.gui.widgets.field_mapping_tab import FieldMappingTab
 
+__copyright__ = "Copyright 2017, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
+
 LOGGER = logging.getLogger('InaSAFE')
 
 
