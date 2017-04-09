@@ -64,3 +64,16 @@ class FieldMappingWidget(QTabWidget, object):
             tab.set_layer(self.layer)
             self.addTab(tab, field_group['name'])
             self.tabs.append(tab)
+
+    def get_field_mapping(self):
+        """Obtain metadata from current state of the widget."""
+        fields = {}
+        values = {}
+        for tab in self.tabs:
+            parameter_values = tab.get_parameter_value()
+            fields.update(parameter_values['fields'])
+            values.update(parameter_values['values'])
+        return {
+            'fields': fields,
+            'values': values
+        }
