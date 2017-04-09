@@ -75,17 +75,28 @@ class TestGroupSelectParameterWidget(unittest.TestCase):
 
         self.widget.select_radio_button(CUSTOM_VALUE)
         self.assertEqual(self.widget.get_parameter().value, 0.7)
+        self.assertEqual(
+            self.widget.get_parameter().selected_option_type(), SINGLE_DYNAMIC)
 
         self.widget.spin_boxes[CUSTOM_VALUE].setValue(0.6)
         self.assertEqual(self.widget.get_parameter().value, 0.6)
+        self.assertEqual(
+            self.widget.get_parameter().selected_option_type(), SINGLE_DYNAMIC)
 
         self.widget.select_radio_button(GLOBAL_DEFAULT)
         self.assertEqual(self.widget.get_parameter().value, 0.5)
+        self.assertEqual(
+            self.widget.get_parameter().selected_option_type(), STATIC)
 
         self.widget.select_radio_button(DO_NOT_USE)
         self.assertEqual(self.widget.get_parameter().value, None)
+        self.assertEqual(
+            self.widget.get_parameter().selected_option_type(), STATIC)
 
         self.widget.select_radio_button(FIELDS)
         self.assertListEqual(
             self.widget.get_parameter().value,
             ['field A', 'field B', 'field C'])
+        self.assertEqual(
+            self.widget.get_parameter().selected_option_type(),
+            MULTIPLE_DYNAMIC)

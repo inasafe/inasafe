@@ -171,8 +171,8 @@ class GroupSelectParameterWidget(GenericParameterWidget):
                         Qt.ItemIsSelectable |
                         Qt.ItemIsDragEnabled |
                         Qt.ItemIsDropEnabled)
-                    field_item.setData(Qt.UserRole, field.name())
-                    field_item.setText(field.name())
+                    field_item.setData(Qt.UserRole, field)
+                    field_item.setText(field)
                     self.list_widget.addItem(field_item)
 
     def radio_buttons_clicked(self):
