@@ -126,7 +126,8 @@ class FieldMapping(QWidget, object):
             field_item.setFlags(
                 Qt.ItemIsEnabled |
                 Qt.ItemIsSelectable |
-                Qt.ItemIsDragEnabled)
+                Qt.ItemIsDragEnabled |
+                Qt.ItemIsDropEnabled)
             field_item.setData(Qt.UserRole, field.name())
             field_item.setText(field.name())
             self.field_list.addItem(field_item)
