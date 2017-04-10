@@ -24,7 +24,12 @@ from safe.definitions.fields import (
     disabled_ratio_field,
     under_5_count_field,
     over_60_count_field,
-    disabled_count_field
+    disabled_count_field,
+    child_bearing_age_ratio_field,
+    pregnant_lactating_ratio_field,
+    child_bearing_age_count_field,
+    pregnant_lactating_count_field
+
 )
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
@@ -70,7 +75,8 @@ gender_ratio_group = {
         'class.'),
     'fields': [
         female_ratio_field,
-        male_ratio_field
+        child_bearing_age_ratio_field,
+        pregnant_lactating_ratio_field
     ]
 }
 
@@ -82,7 +88,8 @@ gender_count_group = {
         'class.'),
     'fields': [
         female_count_field,
-        male_count_field
+        child_bearing_age_count_field,
+        pregnant_lactating_count_field
     ]
 }
 
