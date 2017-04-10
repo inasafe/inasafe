@@ -27,6 +27,8 @@ from safe.definitions.fields import (
 from safe.common.utilities import temp_dir
 from safe.defaults import supporters_logo_path, default_north_arrow_path
 from safe.definitions.earthquake import EARTHQUAKE_FUNCTIONS
+from safe.utilities.default_values import (
+    set_inasafe_default_value_qsetting, get_inasafe_default_value_qsetting)
 from safe.utilities.i18n import tr
 from safe.utilities.resources import get_ui_class, html_header, html_footer
 from safe.utilities.settings import setting, set_setting
@@ -34,9 +36,6 @@ from safe.common.version import get_version
 from safe.gui.tools.help.options_help import options_help
 from safe.utilities.qgis_utilities import display_warning_message_box
 
-from safe.utilities.settings import (
-    set_inasafe_default_value_qsetting,
-    get_inasafe_default_value_qsetting)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -48,6 +47,7 @@ FORM_CLASS = get_ui_class('options_dialog_base.ui')
 
 
 class OptionsDialog(QtGui.QDialog, FORM_CLASS):
+
     """Options dialog for the InaSAFE plugin."""
 
     def __init__(self, iface, dock=None, parent=None, qsetting=''):
@@ -67,7 +67,6 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             use empty string.
         :type qsetting: str
         """
-
         QtGui.QDialog.__init__(self, parent)
         self.setupUi(self)
 
