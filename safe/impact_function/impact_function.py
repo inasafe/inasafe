@@ -215,10 +215,11 @@ class ImpactFunction(object):
         }
 
         # Earthquake function
-        self._earthquake_function = None
         value = setting(
             'earthquake_function', EARTHQUAKE_FUNCTIONS[0]['key'], str)
-        self.earthquake_function = value  # Use the setter to check the value.
+        if value not in [model['key'] for model in EARTHQUAKE_FUNCTIONS]:
+            raise WrongEarthquakeFunction
+        self._earthquake_function = value
 
     @property
     def performance_log(self):
@@ -551,22 +552,13 @@ class ImpactFunction(object):
     def earthquake_function(self):
         """The current earthquake function to use.
 
+        There is not setter for the earthquake fatality function. You need to
+        use the key inasafe/earthquake_function in QSettings.
+
         :return: The earthquake function.
         :rtype: str
         """
         return self._earthquake_function
-
-    @earthquake_function.setter
-    def earthquake_function(self, function):
-        """Set the earthquake function to use.
-
-        :param function: The earthquake function to use.
-        :type function: str
-        """
-        if function not in [model['key'] for model in EARTHQUAKE_FUNCTIONS]:
-            raise WrongEarthquakeFunction
-        else:
-            self._earthquake_function = function
 
     @property
     def callback(self):
@@ -1379,11 +1371,6 @@ class ImpactFunction(object):
         self.aggregation.keywords['hazard_keywords'] = dict(
             self.hazard.keywords)
 
-        fatality_rates = {}
-        for model in EARTHQUAKE_FUNCTIONS:
-            fatality_rates[model['key']] = model['fatality_rates']
-        earthquake_function = fatality_rates[self.earthquake_function]
-
         self.set_state_process(
             'hazard', 'Align the hazard layer with the exposure')
         self.set_state_process(
@@ -1406,13 +1393,12 @@ class ImpactFunction(object):
         exposed, self._exposure_summary = exposed_people_stats(
             self.hazard,
             self.exposure,
-            aggregation_aligned,
-            earthquake_function())
+            aggregation_aligned)
         self.debug_layer(self._exposure_summary)
 
         self.set_state_process('impact function', 'Set summaries')
         self._aggregation_summary = make_summary_layer(
-            exposed, self.aggregation, earthquake_function())
+            exposed, self.aggregation)
         self._aggregation_summary.keywords['exposure_keywords'] = dict(
             self.exposure_summary.keywords)
         self._aggregation_summary.keywords['hazard_keywords'] = dict(
@@ -2150,10 +2136,10 @@ class ImpactFunction(object):
         hazard = definition(self.hazard.keywords.get('hazard'))
         fields.extend(specific_notes(hazard, exposure))
 
-        if self.earthquake_function is not None:
+        if self._earthquake_function is not None:
             # Get notes specific to the fatality model
             for fatality_model in EARTHQUAKE_FUNCTIONS:
-                if fatality_model['key'] == self.earthquake_function:
+                if fatality_model['key'] == self._earthquake_function:
                     fields.extend(fatality_model.get('notes', []))
 
         return fields
