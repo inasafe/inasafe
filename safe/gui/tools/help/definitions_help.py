@@ -775,6 +775,13 @@ def definition_to_message(definition, heading_style=None):
             else:
                 row.add(m.Cell(tr('unspecified')))
 
+            if inasafe_class.get('fatality_rate') >= 0:
+                rate = inasafe_class['fatality_rate'] * 100
+                rate = u'%s%%' % rate
+                row.add(m.Cell(rate))
+            else:
+                row.add(m.Cell(tr('unspecified')))
+
             if 'displacement_rate' in inasafe_class:
                 rate = inasafe_class['displacement_rate'] * 100
                 rate = u'%s%%' % rate
@@ -833,7 +840,7 @@ def definition_to_message(definition, heading_style=None):
             row.add(m.Cell(
                 u'', attributes='style="background: %s;"' % colour))
             description = definitions.not_exposed_class['description']
-            row.add(m.Cell(description, span=5))
+            row.add(m.Cell(description, span=6))
             table.add(row)
 
         message.add(table)
@@ -946,6 +953,11 @@ def _type_to_string(value):
 
 
 def _make_defaults_table():
+    """Build headers for a table related to classes.
+
+    :return: A table with headers.
+    :rtype: m.Table
+    """
     table = m.Table(style_class='table table-condensed table-striped')
     row = m.Row()
     # first row is for colour - we dont use a header here as some tables
@@ -953,6 +965,7 @@ def _make_defaults_table():
     row.add(m.Cell(tr('')), header_flag=True)
     row.add(m.Cell(tr('Name')), header_flag=True)
     row.add(m.Cell(tr('Affected')), header_flag=True)
+    row.add(m.Cell(tr('Fatality rate')), header_flag=True)
     row.add(m.Cell(tr('Displacement rate')), header_flag=True)
     row.add(m.Cell(tr('Default values')), header_flag=True)
     row.add(m.Cell(tr('Default min')), header_flag=True)
