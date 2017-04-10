@@ -62,8 +62,8 @@ class TestGroupSelectParameter(unittest.TestCase):
         parameter.options = options
 
         self.assertEqual(parameter.value, None)
-        parameter.selected = 'ratio fields'
-        self.assertEqual(parameter.value, options['ratio fields']['value'])
+        parameter.selected = FIELDS
+        self.assertEqual(parameter.value, options[FIELDS]['value'])
 
 
 if __name__ == '__main__':
