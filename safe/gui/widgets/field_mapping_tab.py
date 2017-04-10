@@ -2,21 +2,29 @@
 """Field Mapping Widget Implementation."""
 
 from PyQt4.QtGui import (
-    QWidget, QListWidget, QAbstractItemView, QListWidgetItem,
+    QWidget,
+    QListWidget,
+    QAbstractItemView,
+    QListWidgetItem,
     QLayout,
     QHBoxLayout,
     QVBoxLayout,
     QLabel,
-    QToolButton, QTabWidget,
-    QGridLayout,
     QSizePolicy)
 from PyQt4.QtCore import Qt, QSettings
 from collections import OrderedDict
 
 from safe.definitions.constants import RECENT, GLOBAL
 from safe.definitions.constants import (
-    DO_NOT_USE, CUSTOM_VALUE, GLOBAL_DEFAULT, FIELDS, STATIC, SINGLE_DYNAMIC,
-    MULTIPLE_DYNAMIC)
+    DO_NOT_USE,
+    CUSTOM_VALUE,
+    GLOBAL_DEFAULT,
+    FIELDS,
+    STATIC,
+    SINGLE_DYNAMIC,
+    MULTIPLE_DYNAMIC,
+    qvariant_numbers
+)
 
 from safe_extras.parameters.qt_widgets.parameter_container import (
     ParameterContainer)
@@ -116,14 +124,22 @@ class FieldMappingTab(QWidget, object):
         self.populate_parameter()
 
     def populate_field_list(self, excluded_fields=None):
-        """Helper to add field of the layer to the list."""
+        """Helper to add field of the layer to the list.
+
+        :param excluded_fields: List of field that want to be excluded.
+        :type excluded_fields: list
+        """
         # Populate fields list
         if excluded_fields is None:
             excluded_fields = []
         self.field_list.clear()
         self.field_list.setSelectionMode(QAbstractItemView.ExtendedSelection)
         for field in self.layer.dataProvider().fields():
+            # Skip if it's excluded
             if field.name() in excluded_fields:
+                continue
+            # Skip if it's not number (float, int, etc)
+            if field.type() not in qvariant_numbers:
                 continue
             field_item = QListWidgetItem(self.field_list)
             field_item.setFlags(
