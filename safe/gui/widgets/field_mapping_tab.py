@@ -113,15 +113,18 @@ class FieldMappingTab(QWidget, object):
             raise
         self.layer = layer
         self.metadata = layer.keywords
-        self.populate_field_list()
         self.populate_parameter()
 
-    def populate_field_list(self):
+    def populate_field_list(self, excluded_fields=None):
         """Helper to add field of the layer to the list."""
         # Populate fields list
+        if excluded_fields is None:
+            excluded_fields = []
         self.field_list.clear()
         self.field_list.setSelectionMode(QAbstractItemView.ExtendedSelection)
         for field in self.layer.dataProvider().fields():
+            if field.name() in excluded_fields:
+                continue
             field_item = QListWidgetItem(self.field_list)
             field_item.setFlags(
                 Qt.ItemIsEnabled |
@@ -134,6 +137,7 @@ class FieldMappingTab(QWidget, object):
 
     def populate_parameter(self):
         """Helper to setup the parameter widget."""
+        used_fields = []
         self.parameters = []
         selected_option = DO_NOT_USE
         for field in self.field_group.get('fields', []):
@@ -201,7 +205,7 @@ class FieldMappingTab(QWidget, object):
                 'type': MULTIPLE_DYNAMIC,
                 'constraint': {}
             }
-
+            used_fields.extend(custom_fields)
 
             parameter = GroupSelectParameter()
             parameter.guid = field['key']
@@ -219,6 +223,8 @@ class FieldMappingTab(QWidget, object):
         self.parameter_container.setup_ui()
 
         self.parameter_layout.addWidget(self.parameter_container)
+
+        self.populate_field_list(excluded_fields=used_fields)
 
     def get_parameter_value(self):
         """Get parameter of the tab."""
