@@ -138,3 +138,21 @@ disabled_ratio_default_value = {
     'max_value': 1,
     'description': tr('Default value for disabled people ratio')
 }
+
+child_bearing_age_ratio_default_value = {
+    'key': 'child_bearing_age_ratio_default_value',
+    'name': tr('Child Bearing Age Ratio Global Default'),
+    'default_value': 0.0,  # FIXME:It's random number
+    'min_value': 0,
+    'max_value': 1,
+    'description': tr('Default value for child bearing age people ratio')
+}
+
+pregnant_lactating_ratio_default_value = {
+    'key': 'pregnant_lactating_ratio_default_value',
+    'name': tr('Pregnant or Lactating Ratio Global Default'),
+    'default_value': 0.0,  # FIXME:It's random number
+    'min_value': 0,
+    'max_value': 1,
+    'description': tr('Default value for pregnant or lactating people ratio')
+}

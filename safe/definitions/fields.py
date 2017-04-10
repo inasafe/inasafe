@@ -18,7 +18,9 @@ from safe.definitions.default_values import (
     child_ratio_default_value,
     under_5_ratio_default_value,
     over_60_ratio_default_value,
-    disabled_ratio_default_value
+    disabled_ratio_default_value,
+    child_bearing_age_ratio_default_value,
+    pregnant_lactating_ratio_default_value
 )
 from safe.definitions import concepts
 
@@ -513,6 +515,66 @@ male_count_field = {
     'replace_null': False
 }
 
+# Child Bearing Age Count
+child_bearing_age_count_field = {
+    'key': 'child_bearing_age_count_field',
+    'name': tr('Child Bearing Age Count'),
+    'field_name': 'child_bearing_age',
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'description': tr(
+        'The number of child bearing age for each feature.'),
+    'help_text': tr(
+        '"Child Bearing Age" is defined as: {concept} In cases where '
+        'population data is available, InaSAFE will calculate the number of '
+        'child bearing age per exposure feature, aggregate hazard area, '
+        'aggregation area and for the analysis area as a whole. The child '
+        'bearing age count is calculated based on standard ratios either '
+        'provided as a global setting in InaSAFE, or (if available) ratios in '
+        'the input analysis data.').format(
+            concept=concepts['child_bearing_age']['description']),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+# Pregnant or Lactating Count
+pregnant_lactating_count_field = {
+    'key': 'pregnant_lactating_count_field',
+    'name': tr('Pregnant or Lactating Count'),
+    'field_name': 'pregnant_lactating',
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'description': tr(
+        'The number of pregnant or lactating for each feature.'),
+    'help_text': tr(
+        '"Pregnant or Lactating" is defined as: {concept} In cases where '
+        'population data is available, InaSAFE will calculate the number of '
+        'pregnant or lactating people per exposure feature, aggregate hazard '
+        'area, aggregation area and for the analysis area as a whole. The '
+        'pregnant or lactating count is calculated based on standard ratios '
+        'either provided as a global setting in InaSAFE, or (if available) '
+        'ratios in the input analysis data.').format(
+            concept=concepts['pregnant_lactating']['description']),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
 # Infant Count
 infant_count_field = {
     'key': 'infant_count_field',
@@ -668,7 +730,7 @@ under_5_count_field = {
     'precision': 0,
     'absolute': True,
     'description': tr(
-        'The proportion of under 5 years old for each feature.'),
+        'The number of under 5 years old for each feature.'),
     'help_text': tr(
         '"Under 5" is defined as: {concept} In cases where population data is '
         'available, InaSAFE will calculate the number of people under 5 years '
@@ -697,7 +759,7 @@ over_60_count_field = {
     'precision': 0,
     'absolute': True,
     'description': tr(
-        'The proportion of over 60 years old for each feature.'),
+        'The number of over 60 years old for each feature.'),
     'help_text': tr(
         '"Over 60" is defined as: {concept} In cases where population data is '
         'available, InaSAFE will calculate the number of people over 60 years '
@@ -880,6 +942,68 @@ male_ratio_field = {
     # Null value can be replaced by default or not
     'replace_null': True,
     'default_value': male_ratio_default_value
+}
+
+# Child Bearing Age Ratio
+child_bearing_age_ratio_field = {
+    'key': 'child_bearing_age_ratio_field',
+    'name': tr('Child Bearing Age Ratio'),
+    'field_name': 'child_bearing_age_ratio',
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': default_ratio_field_precision,
+    'absolute': False,
+    'description': tr(
+        'The proportion of child bearing age for each feature.'),
+    'help_text': tr(
+        '"Child Bearing Age" is defined as: {concept} In cases where '
+        'population data is available, InaSAFE will calculate the number of '
+        'child bearing age per exposure feature, aggregate hazard area, '
+        'aggregation area and for the analysis area as a whole. The child '
+        'bearing age count is calculated based on standard ratios either '
+        'provided as a global setting in InaSAFE, or (if available) ratios in '
+        'the input analysis data.').format(
+            concept=concepts['child_bearing_age']['description']),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': True,
+    'default_value': child_bearing_age_ratio_default_value
+}
+
+# Child Bearing Age Ratio
+pregnant_lactating_ratio_field = {
+    'key': 'pregnant_lactating_ratio_field',
+    'name': tr('Pregnant Lactating Ratio'),
+    'field_name': 'pregnant_lactating_ratio',
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': default_ratio_field_precision,
+    'absolute': False,
+    'description': tr(
+        'The proportion of pregnant or lactating for each feature.'),
+    'help_text': tr(
+        '"Pregnant or Lactating" is defined as: {concept} In cases where '
+        'population data is available, InaSAFE will calculate the number of '
+        'pregnant or lactating people per exposure feature, aggregate hazard '
+        'area, aggregation area and for the analysis area as a whole. The '
+        'pregnant or lactating count is calculated based on standard ratios '
+        'either provided as a global setting in InaSAFE, or (if available) '
+        'ratios in the input analysis data.').format(
+            concept=concepts['pregnant_lactating']['description']),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': True,
+    'default_value': pregnant_lactating_ratio_default_value
 }
 
 # Infant Ratio

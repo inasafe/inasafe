@@ -588,6 +588,29 @@ concepts['over_60'] = {
     ],
 }
 
+concepts['child_bearing_age'] = {
+    'group': tr(''),
+    'key': 'child_bearing_age',
+    'description': tr(''),
+    'citations': [
+        {
+            'text': tr(''),
+            'link': u''
+        }
+    ],
+}
+
+concepts['pregnant_lactating'] = {
+    'group': tr(''),
+    'key': 'child_bearing_age',
+    'description': tr(''),
+    'citations': [
+        {
+            'text': tr(''),
+            'link': u''
+        }
+    ],
+}
 # Boilerplate for adding a new concept...
 #  concepts[''] = {
 #    'description': tr(
