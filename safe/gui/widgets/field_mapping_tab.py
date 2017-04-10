@@ -16,7 +16,6 @@ from PyQt4.QtCore import Qt, QSettings
 from collections import OrderedDict
 import logging
 
-from safe.definitions.constants import RECENT, GLOBAL
 from safe.definitions.constants import (
     DO_NOT_USE,
     CUSTOM_VALUE,
@@ -25,7 +24,9 @@ from safe.definitions.constants import (
     STATIC,
     SINGLE_DYNAMIC,
     MULTIPLE_DYNAMIC,
-    qvariant_numbers
+    qvariant_numbers,
+    RECENT,
+    GLOBAL
 )
 
 from safe_extras.parameters.qt_widgets.parameter_container import (
@@ -46,11 +47,11 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 class FieldMappingTab(QWidget, object):
+
     """Widget class for field mapping."""
 
     def __init__(self, field_group=None, parent=None, iface=None):
         """Constructor."""
-
         # Init from parent class
         QWidget.__init__(self, parent)
 
@@ -187,7 +188,6 @@ class FieldMappingTab(QWidget, object):
                     'type': STATIC,
                     'constraint': {}
                 }
-                # TODO(IS): Check from keywords first
                 default_custom_value = get_inasafe_default_value_qsetting(
                     self.setting, RECENT, field['key'])
                 custom_value = self.metadata.get(
@@ -251,7 +251,12 @@ class FieldMappingTab(QWidget, object):
         header_text = tr('Pleas drag the field/s that represent')
 
     def get_parameter_value(self):
-        """Get parameter of the tab."""
+        """Get parameter of the tab.
+
+        :returns: Dictionary of parameters by type in this format:
+            {'fields': {}, 'values': {}}.
+        :rtype: dict
+        """
         parameters = self.parameter_container.get_parameters(True)
         field_parameters = {}
         value_parameters = {}

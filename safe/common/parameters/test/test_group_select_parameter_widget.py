@@ -1,7 +1,6 @@
 # coding=utf-8
 """Test class for group_select_parameter_widget."""
 
-
 import unittest
 from collections import OrderedDict
 
@@ -30,7 +29,6 @@ class TestGroupSelectParameterWidget(unittest.TestCase):
 
     def test_init(self):
         """Test init."""
-
         options = OrderedDict([
             (DO_NOT_USE,
              {

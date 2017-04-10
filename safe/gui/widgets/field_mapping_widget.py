@@ -20,11 +20,11 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 class FieldMappingWidget(QTabWidget, object):
+
     """Field Mapping Widget."""
 
     def __init__(self, parent=None, iface=None):
         """Constructor."""
-
         super(FieldMappingWidget, self).__init__(parent)
 
         # Attributes
@@ -39,7 +39,7 @@ class FieldMappingWidget(QTabWidget, object):
     def set_layer(self, layer):
         """Set layer and update UI accordingly.
 
-        :param layer: A vector ayer that has been already patched with
+        :param layer: A vector layer that has been already patched with
             metadata.
         :type layer: QgsVectorLayer
         """
@@ -64,7 +64,12 @@ class FieldMappingWidget(QTabWidget, object):
             self.tabs.append(tab)
 
     def get_field_mapping(self):
-        """Obtain metadata from current state of the widget."""
+        """Obtain metadata from current state of the widget.
+
+        :returns: Dictionary of values by type in this format:
+            {'fields': {}, 'values': {}}.
+        :rtype: dict
+        """
         fields = {}
         values = {}
         for tab in self.tabs:
