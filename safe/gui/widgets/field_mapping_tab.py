@@ -12,7 +12,9 @@ from PyQt4.QtGui import (
     QLabel,
     QSizePolicy)
 from PyQt4.QtCore import Qt, QSettings
+
 from collections import OrderedDict
+import logging
 
 from safe.definitions.constants import RECENT, GLOBAL
 from safe.definitions.constants import (
@@ -39,6 +41,8 @@ __copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
+
+LOGGER = logging.getLogger('InaSAFE')
 
 
 class FieldMappingTab(QWidget, object):
@@ -79,9 +83,10 @@ class FieldMappingTab(QWidget, object):
         self.field_list.setDefaultDropAction(Qt.MoveAction)
         self.field_list.setSizePolicy(
             QSizePolicy.Maximum, QSizePolicy.Expanding)
+        self.field_list.itemSelectionChanged.connect(self.update_footer)
 
         # Footer
-        self.footer_label = QLabel('This is a footer')
+        self.footer_label = QLabel()
 
         # Parameters
         self.extra_parameters = [
@@ -256,3 +261,18 @@ class FieldMappingTab(QWidget, object):
             'fields': field_parameters,
             'values': value_parameters
         }
+
+    def update_footer(self):
+        """Update footer when the field list change."""
+        field_item = self.field_list.currentItem()
+
+        field_name = field_item.data(Qt.UserRole)
+        field = self.layer.fields().field(field_name)
+
+        index = self.layer.fieldNameIndex(field_name)
+        unique_values = self.layer.uniqueValues(index)
+        pretty_unique_values = ', '.join([str(v) for v in unique_values[:10]])
+
+        footer_text = tr('Field type: {0}\n').format(field.typeName())
+        footer_text += tr('Unique values: {0}').format(pretty_unique_values)
+        self.footer_label.setText(footer_text)
