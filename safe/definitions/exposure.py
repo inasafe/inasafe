@@ -75,7 +75,7 @@ exposure_population = {
         },
         {
             'action_category': 'shelter',
-            'action_header': tr('shelter and housing'),
+            'action_header': tr('shelter, settlement, and non-food item'),
             'action_list': [
                 tr('What are people\'s likely movements?'),
                 tr('How will we reach displaced people?'),
@@ -99,7 +99,7 @@ exposure_population = {
         },
         {
             'action_category': 'food',
-            'action_header': tr('food security'),
+            'action_header': tr('food security and nutrition'),
             'action_list': [
                 tr('What kind of food does the population normally consume?'),
                 tr('Are there any alternative source of food?'),
