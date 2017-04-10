@@ -86,7 +86,11 @@ class FieldMappingDialog(QDialog, FORM_CLASS):
         self.cancel_button.clicked.connect(self.reject)
 
     def set_layer(self, layer=None):
-        """Set layer and update UI accordingly."""
+        """Set layer and update UI accordingly.
+
+        :param layer: A QgsVectorLayer.
+        :type layer: QgsVectorLayer
+        """
         if self.field_mapping_widget is not None:
             self.field_mapping_widget.setParent(None)
             self.field_mapping_widget.close()

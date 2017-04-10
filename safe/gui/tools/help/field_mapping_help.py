@@ -22,7 +22,6 @@ def field_mapping_help():
     :returns: A message object containing helpful information.
     :rtype: messaging.message.Message
     """
-
     message = m.Message()
     message.add(m.Brand())
     message.add(heading())

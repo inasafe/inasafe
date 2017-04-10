@@ -1,5 +1,5 @@
 # coding=utf-8
-"""Example usage of group select parameter.."""
+"""Example usage of group select parameter."""
 
 import sys
 from collections import OrderedDict

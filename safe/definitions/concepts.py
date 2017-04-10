@@ -416,8 +416,6 @@ concepts['disabled'] = {
         }
     ],
 }
-
-
 concepts['pregnant'] = {
     'group': tr('Vulnerability'),
     'key': 'pregnant',
@@ -587,9 +585,8 @@ concepts['over_60'] = {
         }
     ],
 }
-
 concepts['child_bearing_age'] = {
-    'group': tr(''),
+    'group': tr('Gender'),
     'key': 'child_bearing_age',
     'description': tr(''),
     'citations': [
@@ -599,9 +596,8 @@ concepts['child_bearing_age'] = {
         }
     ],
 }
-
 concepts['pregnant_lactating'] = {
-    'group': tr(''),
+    'group': tr('Gender'),
     'key': 'child_bearing_age',
     'description': tr(''),
     'citations': [

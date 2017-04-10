@@ -2,8 +2,8 @@
 """Group Select Parameter Widget."""
 
 from PyQt4.QtGui import (
-    QHBoxLayout, QDoubleSpinBox, QVBoxLayout, QRadioButton, QButtonGroup,
-    QWidget, QLabel, QSizePolicy, QSpacerItem, QSpinBox, QListWidget,
+    QDoubleSpinBox, QVBoxLayout, QRadioButton, QButtonGroup,
+    QWidget, QLabel, QSizePolicy, QSpacerItem, QListWidget,
     QGridLayout, QAbstractItemView, QListWidgetItem)
 from PyQt4.QtCore import Qt
 
@@ -29,7 +29,6 @@ class GroupSelectParameterWidget(GenericParameterWidget):
 
         :param parameter: A GroupSelectParameter object.
         :type parameter: GroupSelectParameter
-
         """
         QWidget.__init__(self, parent)
         self._parameter = parameter
@@ -46,7 +45,6 @@ class GroupSelectParameterWidget(GenericParameterWidget):
         self.input_layout = QVBoxLayout()
 
         # _inner_input_layout must be filled with widget in the child class
-
         self.inner_input_layout = QVBoxLayout()
 
         self.radio_button_layout = QGridLayout()
