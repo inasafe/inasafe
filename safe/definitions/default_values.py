@@ -63,6 +63,25 @@ feature_rate_default_value = {
 
 # if CM can add up then youth 0.254; adult 0.659; elderly 0.087
 
+# TODO(IS): Please complete this
+infant_ratio_default_value = {
+    'key': 'infant_ratio_default_value',
+    'name': tr('Infant Ratio Global Default'),
+    'default_value': 0.0,  # FIXME:It's random number
+    'min_value': 0,
+    'max_value': 1,
+    'description': tr('Default value for infant ratio')
+}
+
+child_ratio_default_value = {
+    'key': 'child_ratio_default_value',
+    'name': tr('Child Ratio Global Default'),
+    'default_value': 0.0,  # FIXME:It's random number
+    'min_value': 0,
+    'max_value': 1,
+    'description': tr('Default value for child ratio')
+}
+
 youth_ratio_default_value = {
     'key': 'youth_ratio_default_value',
     'name': tr('Youth Ratio Global Default'),

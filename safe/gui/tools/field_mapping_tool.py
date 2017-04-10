@@ -123,7 +123,7 @@ class FieldMappingDialog(QDialog, FORM_CLASS):
         self.field_mapping_widget.show()
         self.main_layout.addWidget(self.field_mapping_widget)
 
-         # Set header label
+        # Set header label
         group_names = [self.field_mapping_widget.tabText(i) for i in
              range(self.field_mapping_widget.count())]
         if len(group_names) == 1:

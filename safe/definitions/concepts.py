@@ -387,6 +387,20 @@ concepts['infant'] = {
         }
     ],
 }
+concepts['child'] = {
+    'group': tr('Demographics'),
+    'key': 'child',
+    'description': tr(
+        'A young human being below the age of puberty or below the legal age '
+        'of majority.'),
+    'citations': [
+        {
+            'text': tr(
+                'Oxford Dictionary.'),
+            'link': u'https://en.oxforddictionaries.com/definition/child'
+        }
+    ],
+}
 concepts['disabled'] = {
     'group': tr('Vulnerability'),
     'key': 'disabled',
@@ -402,6 +416,8 @@ concepts['disabled'] = {
         }
     ],
 }
+
+
 concepts['pregnant'] = {
     'group': tr('Vulnerability'),
     'key': 'pregnant',
