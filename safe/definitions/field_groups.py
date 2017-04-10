@@ -5,14 +5,20 @@
 from safe.utilities.i18n import tr
 
 from safe.definitions.fields import (
+    infant_count_field,
+    child_count_field,
     youth_count_field,
     adult_count_field,
     elderly_count_field,
+    infant_ratio_field,
+    child_ratio_field,
     youth_ratio_field,
     adult_ratio_field,
     elderly_ratio_field,
     female_ratio_field,
-    male_ratio_field
+    male_ratio_field,
+    female_count_field,
+    male_count_field
 )
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
@@ -27,6 +33,8 @@ age_count_group = {
         'The group of fields that consists of population count per age '
         'class.'),
     'fields': [
+        infant_count_field,
+        child_count_field,
         youth_count_field,
         adult_count_field,
         elderly_count_field
@@ -40,6 +48,8 @@ age_ratio_group = {
         'The group of fields that consists of population ratio per age '
         'class.'),
     'fields': [
+        infant_ratio_field,
+        child_ratio_field,
         youth_ratio_field,
         adult_ratio_field,
         elderly_ratio_field
@@ -58,9 +68,22 @@ gender_ratio_group = {
     ]
 }
 
+gender_count_group = {
+    'key': 'gender_count_group',
+    'name': tr('Gender Count'),
+    'description': tr(
+        'The group of fields that consists of population count per gender '
+        'class.'),
+    'fields': [
+        female_count_field,
+        male_count_field
+    ]
+}
+
 field_groups_all = [
     age_count_group,
-    age_ratio_group
+    age_ratio_group,
+    gender_ratio_group
 ]
 
 
@@ -70,5 +93,6 @@ aggregation_field_groups = [
 ]
 
 exposure_field_groups = [
-    age_count_group
+    age_count_group,
+    gender_count_group
 ]

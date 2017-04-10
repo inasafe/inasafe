@@ -13,7 +13,9 @@ from safe.definitions.default_values import (
     feature_rate_default_value,
     youth_ratio_default_value,
     adult_ratio_default_value,
-    elderly_ratio_default_value
+    elderly_ratio_default_value,
+    infant_ratio_default_value,
+    child_ratio_default_value
 )
 from safe.definitions import concepts
 
@@ -508,6 +510,64 @@ male_count_field = {
     'replace_null': False
 }
 
+# Infant Count
+infant_count_field = {
+    'key': 'infant_count_field',
+    'name': tr('Infant Count'),
+    'field_name': 'infant',
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'description': tr(
+        'The number of infant people for each feature.'),
+    'help_text': tr(
+        '"Infant" is defined as: {concept} In cases where population data is '
+        'available, InaSAFE will calculate the number of infants per exposure '
+        'feature, aggregate hazard area, aggregation area and for the '
+        'analysis area as a whole. The infant count is calculated based on '
+        'standard ratios either provided as a global setting in InaSAFE, or '
+        '(if available) counts or ratios in the input analysis data.').format(
+            concept=concepts['infant']['description']),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+# Child Count
+child_count_field = {
+    'key': 'child_count_field',
+    'name': tr('Child Count'),
+    'field_name': 'child',
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'description': tr(
+        'The number of child people for each feature.'),
+    'help_text': tr(
+        '"Child" is defined as: {concept} In cases where population data is '
+        'available, InaSAFE will calculate the number of child per exposure '
+        'feature, aggregate hazard area, aggregation area and for the '
+        'analysis area as a whole. The child count is calculated based on '
+        'standard ratios either provided as a global setting in InaSAFE, or '
+        '(if available) counts or ratios in the input analysis data.').format(
+            concept=concepts['child']['description']),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
 # Youth Count
 youth_count_field = {
     'key': 'youth_count_field',
@@ -730,6 +790,66 @@ male_ratio_field = {
     # Null value can be replaced by default or not
     'replace_null': True,
     'default_value': male_ratio_default_value
+}
+
+# Infant Ratio
+infant_ratio_field = {
+    'key': 'infant_ratio_field',
+    'name': tr('Infant Ratio'),
+    'field_name': 'infant_ratio',
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': default_ratio_field_precision,
+    'absolute': False,
+    'description': tr(
+        'The proportion of infant people for each feature.'),
+    'help_text': tr(
+        '"Infant" is defined as: {concept} In cases where population data is '
+        'available, InaSAFE will calculate the number of infants per exposure '
+        'feature, aggregate hazard area, aggregation area and for the '
+        'analysis area as a whole. The infant count is calculated based on '
+        'standard ratios either provided as a global setting in InaSAFE, or '
+        '(if available) ratios in the input analysis data.').format(
+            concept=concepts['infant']['description']),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': True,
+    'default_value': infant_ratio_default_value
+}
+
+# Child Ratio
+child_ratio_field = {
+    'key': 'child_ratio_field',
+    'name': tr('Child Ratio'),
+    'field_name': 'child_ratio',
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': default_ratio_field_precision,
+    'absolute': False,
+    'description': tr(
+        'The proportion of child people for each feature.'),
+    'help_text': tr(
+        '"Child" is defined as: {concept} In cases where population data is '
+        'available, InaSAFE will calculate the number of child per exposure '
+        'feature, aggregate hazard area, aggregation area and for the '
+        'analysis area as a whole. The child count is calculated based on '
+        'standard ratios either provided as a global setting in InaSAFE, or '
+        '(if available) ratios in the input analysis data.').format(
+            concept=concepts['child']['description']),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': True,
+    'default_value': child_ratio_default_value
 }
 
 # Youth Ratio
