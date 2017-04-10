@@ -61,9 +61,9 @@ class FieldMappingDialog(QDialog, FORM_CLASS):
         self.layer_input_layout.addWidget(self.layer_label)
         self.layer_input_layout.addWidget(self.layer_combo_box)
 
-        self.main_layout.addWidget(QLabel('Hello world'))
+        self.header_label = QLabel()
+        self.main_layout.addWidget(self.header_label)
         self.main_layout.addLayout(self.layer_input_layout)
-        # self.main_layout.addWidget(self.field_mapping_widget)
 
         # Signal
         self.layer_combo_box.layerChanged.connect(self.set_layer)
@@ -122,6 +122,21 @@ class FieldMappingDialog(QDialog, FORM_CLASS):
         self.field_mapping_widget.set_layer(self.layer)
         self.field_mapping_widget.show()
         self.main_layout.addWidget(self.field_mapping_widget)
+
+         # Set header label
+        group_names = [self.field_mapping_widget.tabText(i) for i in
+             range(self.field_mapping_widget.count())]
+        if len(group_names) == 1:
+            pretty_group_name = group_names[0]
+        elif len(group_names) == 2:
+            pretty_group_name = group_names[0] + tr(' and ') + group_names[1]
+        else:
+            pretty_group_name = ', '.join(group_names[:-1])
+            pretty_group_name += tr(', and {0}').format(group_names[-1])
+        header_text = tr(
+            'Please fill the information for every tab to determine the '
+            'attribute for {0} group.').format(pretty_group_name)
+        self.header_label.setText(header_text)
 
     @pyqtSlot()
     @pyqtSignature('bool')  # prevents actions being handled twice

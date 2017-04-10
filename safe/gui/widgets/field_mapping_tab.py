@@ -71,7 +71,7 @@ class FieldMappingTab(QWidget, object):
         self.footer_layout = QHBoxLayout()
 
         # Header
-        self.header_label = QLabel('This is a header')
+        self.header_label = QLabel()
 
         # Content
         self.field_layout = QVBoxLayout()
@@ -245,6 +245,10 @@ class FieldMappingTab(QWidget, object):
         self.parameter_layout.addWidget(self.parameter_container)
 
         self.populate_field_list(excluded_fields=used_fields)
+
+        # Set header
+        # TODO(IS): Set header text here
+        header_text = tr('Pleas drag the field/s that represent')
 
     def get_parameter_value(self):
         """Get parameter of the tab."""

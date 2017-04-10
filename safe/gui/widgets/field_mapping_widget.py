@@ -36,8 +36,6 @@ class FieldMappingWidget(QTabWidget, object):
 
         self.tabs = []  # Store all tabs
 
-        # Layout
-
     def set_layer(self, layer):
         """Set layer and update UI accordingly.
 
