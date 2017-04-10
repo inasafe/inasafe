@@ -15,7 +15,10 @@ from safe.definitions.default_values import (
     adult_ratio_default_value,
     elderly_ratio_default_value,
     infant_ratio_default_value,
-    child_ratio_default_value
+    child_ratio_default_value,
+    under_5_ratio_default_value,
+    over_60_ratio_default_value,
+    disabled_ratio_default_value
 )
 from safe.definitions import concepts
 
@@ -655,6 +658,93 @@ elderly_count_field = {
     'replace_null': False
 }
 
+# Under 5 Count
+under_5_count_field = {
+    'key': 'under_5_count_field',
+    'name': tr('Under 5 Count'),
+    'field_name': 'under_5',
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'description': tr(
+        'The proportion of under 5 years old for each feature.'),
+    'help_text': tr(
+        '"Under 5" is defined as: {concept} In cases where population data is '
+        'available, InaSAFE will calculate the number of people under 5 years '
+        'old per exposure feature, aggregate hazard area, aggregation area '
+        'and for the analysis area as a whole. The under 5 years count is '
+        'calculated based on standard ratios either provided as a global '
+        'setting in InaSAFE, or (if available) ratios in the input analysis '
+        'data.').format(concept=concepts['under_5']['description']),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+# Over 60 Count
+over_60_count_field = {
+    'key': 'over_60_count_field',
+    'name': tr('Over 60 Count'),
+    'field_name': 'over_60',
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'description': tr(
+        'The proportion of over 60 years old for each feature.'),
+    'help_text': tr(
+        '"Over 60" is defined as: {concept} In cases where population data is '
+        'available, InaSAFE will calculate the number of people over 60 years '
+        'old per exposure feature, aggregate hazard area, aggregation area '
+        'and for the analysis area as a whole. The over 60 years count is '
+        'calculated based on standard ratios either provided as a global '
+        'setting in InaSAFE, or (if available) ratios in the input analysis '
+        'data.').format(concept=concepts['over_60']['description']),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+# Disabled Count
+disabled_count_field = {
+    'key': 'disabled_count_field',
+    'name': tr('Disabled Count'),
+    'field_name': 'disabled',
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'description': tr(
+        'The proportion of disabled people for each feature.'),
+    'help_text': tr(
+        '"Disabled" is defined as: {concept} In cases where population data '
+        'is available, InaSAFE will calculate the number of disabled people '
+        'per exposure feature, aggregate hazard area, aggregation area '
+        'and for the analysis area as a whole. The disabled count is '
+        'calculated based on standard ratios either provided as a global '
+        'setting in InaSAFE, or (if available) ratios in the input analysis '
+        'data.').format(concept=concepts['disabled']['description']),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
 # Size
 size_field = {
     'key': 'size_field',
@@ -940,6 +1030,96 @@ elderly_ratio_field = {
     # Null value can be replaced by default or not
     'replace_null': True,
     'default_value': elderly_ratio_default_value
+}
+
+# Under 5 years ratio
+under_5_ratio_field = {
+    'key': 'under_5_ratio_field',
+    'name': tr('Under 5 Years Ratio'),
+    'field_name': 'under_5_ratio',
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': default_ratio_field_precision,
+    'absolute': False,
+    'description': tr(
+        'The proportion of under 5 years old for each feature.'),
+    'help_text': tr(
+        '"Under 5" is defined as: {concept} In cases where population data is '
+        'available, InaSAFE will calculate the number of people under 5 years '
+        'old per exposure feature, aggregate hazard area, aggregation area '
+        'and for the analysis area as a whole. The under 5 years count is '
+        'calculated based on standard ratios either provided as a global '
+        'setting in InaSAFE, or (if available) ratios in the input analysis '
+        'data.').format(concept=concepts['under_5']['description']),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': True,
+    'default_value': under_5_ratio_default_value
+}
+
+# Over 60 years ratio
+over_60_ratio_field = {
+    'key': 'over_60_ratio_field',
+    'name': tr('Over 60 Years Ratio'),
+    'field_name': 'over_60_ratio',
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': default_ratio_field_precision,
+    'absolute': False,
+    'description': tr(
+        'The proportion of over 60 years old for each feature.'),
+    'help_text': tr(
+        '"Over 60" is defined as: {concept} In cases where population data is '
+        'available, InaSAFE will calculate the number of people over 60 years '
+        'old per exposure feature, aggregate hazard area, aggregation area '
+        'and for the analysis area as a whole. The over 60 years count is '
+        'calculated based on standard ratios either provided as a global '
+        'setting in InaSAFE, or (if available) ratios in the input analysis '
+        'data.').format(concept=concepts['over_60']['description']),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': True,
+    'default_value': over_60_ratio_default_value
+}
+
+# Over 60 years ratio
+disabled_ratio_field = {
+    'key': 'disabled_ratio_field',
+    'name': tr('Disabled Ratio'),
+    'field_name': 'disabled_ratio',
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': default_ratio_field_precision,
+    'absolute': False,
+    'description': tr(
+        'The proportion of disabled people for each feature.'),
+    'help_text': tr(
+        '"Disabled" is defined as: {concept} In cases where population data '
+        'is available, InaSAFE will calculate the number of disabled people '
+        'per exposure feature, aggregate hazard area, aggregation area '
+        'and for the analysis area as a whole. The disabled count is '
+        'calculated based on standard ratios either provided as a global '
+        'setting in InaSAFE, or (if available) ratios in the input analysis '
+        'data.').format(concept=concepts['disabled']['description']),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': True,
+    'default_value': disabled_ratio_default_value
 }
 
 # # # # # # # # # #

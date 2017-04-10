@@ -110,3 +110,31 @@ elderly_ratio_default_value = {
     'max_value': 1,
     'description': tr('Default value for elderly ratio')
 }
+
+# Default values for vulnerabilities
+under_5_ratio_default_value = {
+    'key': 'under_5_ratio_default_value',
+    'name': tr('Under 5 Years Ratio Global Default'),
+    'default_value': 0.0,  # FIXME:It's random number
+    'min_value': 0,
+    'max_value': 1,
+    'description': tr('Default value for under 5 years old ratio')
+}
+
+over_60_ratio_default_value = {
+    'key': 'over_60_ratio_default_value',
+    'name': tr('Over 60 Years Ratio Global Default'),
+    'default_value': 0.0,  # FIXME:It's random number
+    'min_value': 0,
+    'max_value': 1,
+    'description': tr('Default value for over 60 years old ratio')
+}
+
+disabled_ratio_default_value = {
+    'key': 'disabled_ratio_default_value',
+    'name': tr('Disabled Ratio Global Default'),
+    'default_value': 0.0,  # FIXME:It's random number
+    'min_value': 0,
+    'max_value': 1,
+    'description': tr('Default value for disabled people ratio')
+}
