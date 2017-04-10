@@ -18,7 +18,13 @@ from safe.definitions.fields import (
     female_ratio_field,
     male_ratio_field,
     female_count_field,
-    male_count_field
+    male_count_field,
+    under_5_ratio_field,
+    over_60_ratio_field,
+    disabled_ratio_field,
+    under_5_count_field,
+    over_60_count_field,
+    disabled_count_field
 )
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
@@ -80,19 +86,40 @@ gender_count_group = {
     ]
 }
 
-field_groups_all = [
-    age_count_group,
-    age_ratio_group,
-    gender_ratio_group
-]
+vulnerability_ratio_group = {
+    'key': 'vulnerability_ratio_group',
+    'name': tr('Vulnerability Ratio'),
+    'description': tr(
+        'The group of fields that consists of population ratio per '
+        'vulnerability class.'),
+    'fields': [
+        under_5_ratio_field,
+        over_60_ratio_field,
+        disabled_ratio_field
+    ]
+}
 
+vulnerability_count_group = {
+    'key': 'vulnerability_count_group',
+    'name': tr('Vulnerability Count'),
+    'description': tr(
+        'The group of fields that consists of population count per '
+        'vulnerability class.'),
+    'fields': [
+        under_5_count_field,
+        over_60_count_field,
+        disabled_count_field
+    ]
+}
 
 aggregation_field_groups = [
     age_ratio_group,
-    gender_ratio_group
+    gender_ratio_group,
+    vulnerability_ratio_group
 ]
 
 exposure_field_groups = [
     age_count_group,
-    gender_count_group
+    gender_count_group,
+    vulnerability_count_group
 ]

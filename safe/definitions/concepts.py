@@ -565,6 +565,29 @@ concepts['rounding_methodology'] = {
         }
     ],
 }
+concepts['under_5'] = {
+    'group': tr('Vulnerability'),
+    'key': 'under_5',
+    'description': tr(''),
+    'citations': [
+        {
+            'text': tr(''),
+            'link': u''
+        }
+    ],
+}
+concepts['over_60'] = {
+    'group': tr('Vulnerability'),
+    'key': 'over_60',
+    'description': tr(''),
+    'citations': [
+        {
+            'text': tr(''),
+            'link': u''
+        }
+    ],
+}
+
 # Boilerplate for adding a new concept...
 #  concepts[''] = {
 #    'description': tr(
