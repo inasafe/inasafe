@@ -176,8 +176,7 @@ class FieldMappingTab(QWidget, object):
             if field['absolute']:
                 # Used in field options
                 field_label = tr('Count fields')
-                pass
-            else: # Example: ratio
+            else:  # Example: ratio
                 # Used in field options
                 field_label = tr('Ratio fields')
                 global_default_value = get_inasafe_default_value_qsetting(

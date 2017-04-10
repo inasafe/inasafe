@@ -14,7 +14,6 @@ from safe.common.exceptions import (
     InaSAFEError)
 from safe.utilities.resources import (
     get_ui_class,
-    resources_path,
     html_footer,
     html_header)
 from safe.utilities.i18n import tr
@@ -204,7 +203,6 @@ class FieldMappingDialog(QDialog, FORM_CLASS):
                     self.metadata['inasafe_default_values'].items():
                 set_inasafe_default_value_qsetting(
                     self.setting, key, RECENT, value)
-
 
     def accept(self):
         """Method invoked when OK button is clicked."""
