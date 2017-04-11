@@ -422,18 +422,28 @@ post_processor_additional_rice = {
     'input': {
         'female_displaced':
             {
-                'value': female_displaced_count_field,
+                'value': displaced_field,
                 'type': field_input_type,
             },
         'additional_rice_ratio':
             {
                 'type': constant_input_type,
-                'value': 2 * (0.033782 + 0.01281),
+                'value': (0.024 + 0.026) * 500 * 7 * 0.1 / 129,
             }
     },
     'output': {
         # The formula:
-        # displaced_female * 2 * (0.033782 + 0.01281)
+        # See: https://github.com/inasafe/inasafe/issues/3607
+        # for reference
+        #
+        # displaced_population * (pregnant_rate + breastfeeding_rate) *
+        #   extra_calories_needed_per_day * day_in_week * kg_rice_per_calories
+        #
+        # The number:
+        # displaced_population * (0.024 + 0.026) * 550 Kkal/day * 7 day/week *
+        #   0.1 kg rice / 129 Kkal
+        #
+        # displaced_population * (0.024 + 0.026) * 550 * 7 * 0.1 / 129
         'additional_rice': {
             'value': additional_rice_count_field,
             'type': function_process,
@@ -696,7 +706,7 @@ minimum_needs_post_processors = initialize_minimum_needs_post_processors()
 # |   |--- displaced count
 # |      |--- gender
 # |      |   |--- hygiene packs
-# |      |   `--- additional rice
+# |      |--- additional rice
 # |      |--- youth
 # |      |--- adult
 # |      |--- elderly

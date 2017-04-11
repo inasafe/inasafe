@@ -36,6 +36,7 @@ from safe.messaging import styles
 from safe.utilities.styling import mmi_ramp_roman
 from safe.utilities.resources import html_footer, html_header, get_ui_class
 from safe.gui.tools.shake_grid.shake_grid import convert_mmi_data
+from safe.gui.tools.wizard.wizard_dialog import WizardDialog
 from safe.gui.tools.help.shakemap_converter_help import shakemap_converter_help
 from safe.gis.raster.reclassify import reclassify
 from safe.utilities.keyword_io import KeywordIO
@@ -49,7 +50,7 @@ FORM_CLASS = get_ui_class('shakemap_importer_dialog_base.ui')
 
 class ShakemapConverterDialog(QDialog, FORM_CLASS):
     """Importer for shakemap grid.xml files."""
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, iface=None, dock_widget=None):
         """Constructor for the dialog.
 
         Show the grid converter dialog.
@@ -57,9 +58,17 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         :param parent: parent - widget to use as parent.
         :type parent: QWidget
 
+        :param iface: QGIS QGisAppInterface instance.
+        :type iface: QGisAppInterface
+
+        :param dock_widget: Dock widget instance.
+        :type dock_widget: Dock
+
         """
         QDialog.__init__(self, parent)
         self.parent = parent
+        self.iface = iface
+        self.dock_widget = dock_widget
         self.setupUi(self)
         self.setWindowTitle(
             self.tr('InaSAFE %s Shakemap Converter' % get_version()))
@@ -67,6 +76,7 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         self.on_input_path_textChanged()
         self.on_output_path_textChanged()
         self.update_warning()
+        self.output_layer = None
 
         # Event register
         # noinspection PyUnresolvedReferences
@@ -76,6 +86,7 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         self.input_path.textChanged.connect(self.on_input_path_textChanged)
         # noinspection PyUnresolvedReferences
         self.output_path.textChanged.connect(self.on_output_path_textChanged)
+        self.load_result.clicked.connect(self.load_result_toggled)
 
         # Set up things for context help
         self.help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
@@ -189,13 +200,15 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         # reclassify raster
         file_info = QFileInfo(file_name)
         base_name = file_info.baseName()
-        layer = QgsRasterLayer(file_name, base_name)
-        layer.keywords = KeywordIO.read_keywords(layer)
-        layer.keywords['classification'] = earthquake_mmi_scale['key']
-        keywords = layer.keywords
-        if layer.isValid():
-            layer = reclassify(layer, overwrite_input=True)
-            KeywordIO.write_keywords(layer, keywords)
+        self.output_layer = QgsRasterLayer(file_name, base_name)
+        self.output_layer.keywords = KeywordIO.read_keywords(self.output_layer)
+        self.output_layer.keywords['classification'] = (
+            earthquake_mmi_scale['key'])
+        keywords = self.output_layer.keywords
+        if self.output_layer.isValid():
+            self.output_layer = reclassify(
+                self.output_layer, overwrite_input=True)
+            KeywordIO.write_keywords(self.output_layer, keywords)
         else:
             LOGGER.debug("Failed to load")
 
@@ -203,14 +216,19 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
 
         if self.load_result.isChecked():
             # noinspection PyTypeChecker
-            mmi_ramp_roman(layer)
-            layer.saveDefaultStyle()
-            if not layer.isValid():
+            mmi_ramp_roman(self.output_layer)
+            self.output_layer.saveDefaultStyle()
+            if not self.output_layer.isValid():
                 LOGGER.debug("Failed to load")
             else:
                 # noinspection PyArgumentList
-                QgsMapLayerRegistry.instance().addMapLayers([layer])
+                QgsMapLayerRegistry.instance().addMapLayer(self.output_layer)
                 iface.zoomToActiveLayer()
+
+        if (self.keyword_wizard_checkbox.isChecked() and
+                self.keyword_wizard_checkbox.isEnabled()):
+            self.launch_keyword_wizard()
+
         self.done(self.Accepted)
 
     @pyqtSignature('')  # prevents actions being handled twice
@@ -232,6 +250,14 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
             self, self.tr('Output file'), 'grid.tif',
             self.tr('Raster file (*.tif)'))
         self.output_path.setText(filename)
+
+    def load_result_toggled(self):
+        """Function that perform action when load_result checkbox is clicked.
+        """
+        if self.load_result.isChecked():
+            self.keyword_wizard_checkbox.setEnabled(True)
+        else:
+            self.keyword_wizard_checkbox.setEnabled(False)
 
     @pyqtSlot()
     @pyqtSignature('bool')  # prevents actions being handled twice
@@ -272,3 +298,17 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         string += footer
 
         self.help_web_view.setHtml(string)
+
+    def launch_keyword_wizard(self):
+        """Launch keyword creation wizard."""
+        # make sure selected layer is the output layer
+        if self.iface.activeLayer() != self.output_layer:
+            return
+
+        # launch wizard dialog
+        self.keyword_wizard = WizardDialog(
+            self.iface.mainWindow(),
+            self.iface,
+            self.dock_widget)
+        self.keyword_wizard.set_keywords_creation_mode(self.output_layer)
+        self.keyword_wizard.exec_()  # modal

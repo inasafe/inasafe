@@ -344,8 +344,8 @@ def default_classification_thresholds(classification, unit=None):
     :param classification: Classification definition.
     :type classification: dict
 
-    :param unit: Unit definition.
-    :type unit: dict
+    :param unit: Unit key definition.
+    :type unit: basestring
 
     :returns: Dictionary with key = the class key and value = list of
         default numeric minimum and maximum value.
@@ -354,11 +354,11 @@ def default_classification_thresholds(classification, unit=None):
     thresholds = {}
     for hazard_class in classification['classes']:
         if isinstance(hazard_class['numeric_default_min'], dict):
-            min_value = hazard_class['numeric_default_min'][unit['key']]
+            min_value = hazard_class['numeric_default_min'][unit]
         else:
             min_value = hazard_class['numeric_default_min']
         if isinstance(hazard_class['numeric_default_max'], dict):
-            max_value = hazard_class['numeric_default_max'][unit['key']]
+            max_value = hazard_class['numeric_default_max'][unit]
         else:
             max_value = hazard_class['numeric_default_max']
         thresholds[hazard_class['key']] = [min_value, max_value]

@@ -8,6 +8,9 @@ from safe.utilities.i18n import tr
 from safe import messaging as m
 from safe.messaging import styles
 import safe.definitions as definitions
+from safe.definitions.exposure import exposure_all
+from safe.definitions.hazard_exposure_specifications import (
+    specific_notes, specific_actions)
 from safe.gui.tools.help.dock_help import content as dock_help
 from safe.gui.tools.help.extent_selector_help import content as extent_help
 from safe.gui.tools.help.impact_report_help import content as report_help
@@ -636,6 +639,26 @@ def definition_to_message(definition, heading_style=None):
             bullets.add(m.Text(note))
         message.add(bullets)
 
+    # This only for EQ
+    if 'earthquake_fatality_models' in definition:
+        for model in definition['earthquake_fatality_models']:
+            message.add(m.Heading(model['name'], **DETAILS_SUBGROUP_STYLE))
+            bullets = m.BulletedList()
+            for note in model['notes']:
+                bullets.add(m.Text(note))
+                message.add(bullets)
+
+    for exposure in exposure_all:
+        extra_exposure_notes = specific_notes(definition, exposure)
+        if extra_exposure_notes:
+            title = tr(u'Notes for exposure : {exposure_name}').format(
+                exposure_name=exposure['name'])
+            message.add(m.Heading(title, **DETAILS_SUBGROUP_STYLE))
+            bullets = m.BulletedList()
+            for note in extra_exposure_notes:
+                bullets.add(m.Text(note))
+            message.add(bullets)
+
     if 'continuous_notes' in definition:
         message.add(m.Heading(
             tr('Notes for continuous datasets:'),
@@ -684,6 +707,17 @@ def definition_to_message(definition, heading_style=None):
         for note in definition['actions']:
             bullets.add(m.Text(note))
         message.add(bullets)
+
+    for exposure in exposure_all:
+        extra_exposure_actions = specific_actions(definition, exposure)
+        if extra_exposure_actions:
+            title = tr(u'Actions for exposure : {exposure_name}').format(
+                exposure_name=exposure['name'])
+            message.add(m.Heading(title, **DETAILS_SUBGROUP_STYLE))
+            bullets = m.BulletedList()
+            for note in extra_exposure_actions:
+                bullets.add(m.Text(note))
+            message.add(bullets)
 
     if 'continuous_hazard_units' in definition:
         message.add(m.Paragraph(m.ImportantText(tr('Units:'))))
@@ -737,7 +771,7 @@ def definition_to_message(definition, heading_style=None):
 
             row.add(m.Cell(inasafe_class['name']))
             if 'affected' in inasafe_class:
-                row.add(m.Cell(inasafe_class['affected']))
+                row.add(m.Cell(tr(inasafe_class['affected'])))
             else:
                 row.add(m.Cell(tr('unspecified')))
 

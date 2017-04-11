@@ -206,7 +206,7 @@
             <gco:FloatTuple/>
           </resolution>
           <source>
-            <gco:CharacterString/>
+            <gco:CharacterString>InaSAFE v4 GeoJSON test layer</gco:CharacterString>
           </source>
         </inasafe>
       </gmd:supplementalInformation>

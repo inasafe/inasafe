@@ -14,6 +14,7 @@ multipart_polygon_key = 'multipart_polygon'
 no_field = tr('No Field')
 no_data_value = 200
 zero_default_value = 0.0
+big_number = 9999
 
 # Whole Number in QVariant / Integer as in math
 qvariant_whole_numbers = [

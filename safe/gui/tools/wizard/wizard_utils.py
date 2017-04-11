@@ -131,13 +131,14 @@ def layer_description_html(layer, keywords=None):
                tr('Source'), keywords.get('source'))
     elif keywords:
         # The layer has keywords, but the version is wrong
+        layer_version = keyword_version or tr('No Version')
         desc = tr(
-            'Your layer\'s keyword\'s version (%s) does not match with '
-            'your InaSAFE version (%s). If you wish to use it as an '
-            'exposure, hazard, or aggregation layer in an analysis, '
-            'please update the keywords. Click Next if you want to assign '
-            'keywords now.' % (keyword_version or 'No Version',
-                               get_version()))
+            'Your layer\'s keyword\'s version ({layer_version}) does not '
+            'match with your InaSAFE version ({inasafe_version}). If you wish '
+            'to use it as an exposure, hazard, or aggregation layer in an '
+            'analysis, please update the keywords. Click Next if you want to '
+            'assign keywords now.').format(
+            layer_version=layer_version, inasafe_version=get_version())
     else:
         # The layer is keywordless
         if is_point_layer(layer):
@@ -148,9 +149,7 @@ def layer_description_html(layer, keywords=None):
             geom_type = 'line'
 
         # hide password in the layer source
-        source = re.sub(
-            r'password=\'.*\'', r'password=*****', layer.source())
-
+        source = layer.publicSource()
         desc = """
             %s<br/><br/>
             <b>%s</b>: %s<br/>

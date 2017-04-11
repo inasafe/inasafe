@@ -1,5 +1,7 @@
 # coding=utf-8
+
 """Test for GIS utilities functions."""
+
 import unittest
 
 # noinspection PyUnresolvedReferences
@@ -8,11 +10,13 @@ from qgis.core import QgsRectangle
 
 from safe.utilities.gis import (
     is_polygon_layer,
+    is_raster_y_inverted,
     wkt_to_rectangle,
     validate_geo_array)
 from safe.test.utilities import (
     clone_raster_layer,
     load_test_vector_layer,
+    load_test_raster_layer,
     standard_data_path,
     get_qgis_app)
 
@@ -37,14 +41,22 @@ class TestQGIS(unittest.TestCase):
         message = '%s layer should be polygonal' % layer
         self.assertFalse(is_polygon_layer(layer), message)
 
+        # Raster layer
         layer = clone_raster_layer(
-            name='padang_tsunami_mw8',
+            name='earthquake',
             extension='.tif',
             include_keywords=True,
             source_directory=standard_data_path('hazard')
         )
         message = ('%s raster layer should not be polygonal' % layer)
         self.assertFalse(is_polygon_layer(layer), message)
+
+    def test_raster_y_inverted(self):
+        """Test if we can detect an upside down raster."""
+        # We should have one test with an inverted raster but as it's not
+        # usual, I'm not going to spend time.
+        layer = load_test_raster_layer('gisv4', 'hazard', 'earthquake.asc')
+        self.assertFalse(is_raster_y_inverted(layer))
 
     def test_rectangle_from_wkt(self):
         """Test we can a create a rectangle from a WKT."""

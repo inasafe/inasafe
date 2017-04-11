@@ -1,5 +1,7 @@
 # coding=utf-8
+
 """Definitions relating to exposure classifications."""
+
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -764,12 +766,28 @@ badan_geologi_landcover_classes = {
                     'link': None
                 }
             ]
+        },
+        {
+            'key': 'other',
+            'name': tr('Other'),
+            'description': tr(
+                'Any other land use type.'),
+            'osm_downloader': [],
+            'string_defaults': ['other'],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
         }
     ]
 }
 
-# Classes order
-structure_class_order = [
-    item['key'] for item in generic_structure_classes['classes']]
-road_class_order = [item['key'] for item in generic_road_classes['classes']]
-place_class_order = [item['key'] for item in generic_place_classes['classes']]
+exposure_classifications = [
+    generic_structure_classes,
+    generic_road_classes,
+    generic_place_classes,
+    generic_landcover_classes,
+    badan_geologi_landcover_classes
+]

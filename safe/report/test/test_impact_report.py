@@ -35,7 +35,7 @@ from safe.definitions.reports.components import (
     aggregation_result_component,
     minimum_needs_component,
     aggregation_postprocessors_component,
-    population_infographic_component)
+    population_infographic_component, analysis_provenance_details_component)
 from safe.report.impact_report import ImpactReport
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -45,7 +45,7 @@ from qgis.core import QgsMapLayerRegistry
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
-__revision__ = ':%H$'
+__revision__ = '$Format:%H$'
 
 
 class TestImpactReport(unittest.TestCase):
@@ -93,34 +93,45 @@ class TestImpactReport(unittest.TestCase):
         flood_hazard_classes['classes'][0][
             'displacement_rate'] = self.default_displacement_rate
 
-    def test_general_report_from_impact_function(self):
-        """Test generate analysis result from impact function.
+    def run_impact_report_scenario(
+            self, output_folder,
+            report_metadata,
+            hazard_layer,
+            exposure_layer,
+            aggregation_layer=None):
+        """Method to automate scenario runs.
+
+        :param output_folder: the output folder
+        :type output_folder: str
+
+        :param report_metadata: report metadata to generate
+        :type report_metadata: dict
+
+        :param hazard_layer: QgsMapLayer for hazard
+        :type hazard_layer: qgis.core.QgsMapLayer
+
+        :param exposure_layer: QgsMapLayer for exposure
+        :type exposure_layer: qgis.core.QgsMapLayer
+
+        :return: will return impact_report object
+        :rtype: safe.report.impact_report.ImpactReport
 
         .. versionadded:: 4.0
         """
-        output_folder = self.fixtures_dir('../output/general_report')
-
-        # Classified vector with building-points
+        # clear folders before use
         shutil.rmtree(output_folder, ignore_errors=True)
 
-        hazard_layer = load_test_vector_layer(
-            'gisv4', 'hazard', 'classified_vector.geojson')
-        exposure_layer = load_test_vector_layer(
-            'gisv4', 'exposure', 'building-points.geojson')
-        aggregation_layer = load_test_vector_layer(
-            'gisv4', 'aggregation', 'small_grid.geojson')
-
         impact_function = ImpactFunction()
-        impact_function.aggregation = aggregation_layer
         impact_function.exposure = exposure_layer
         impact_function.hazard = hazard_layer
+        impact_function.aggregation = aggregation_layer
         impact_function.prepare()
         return_code, message = impact_function.run()
 
         self.assertEqual(return_code, ANALYSIS_SUCCESS, message)
 
         report_metadata = ReportMetadata(
-            metadata_dict=standard_impact_report_metadata_html)
+            metadata_dict=report_metadata)
 
         impact_report = ImpactReport(
             IFACE,
@@ -132,6 +143,29 @@ class TestImpactReport(unittest.TestCase):
         self.assertEqual(
             return_code, ImpactReport.REPORT_GENERATION_SUCCESS, message)
 
+        return impact_report
+
+    def test_general_report_from_impact_function(self):
+        """Test generate analysis result from impact function.
+
+        .. versionadded:: 4.0
+        """
+        output_folder = self.fixtures_dir('../output/general_report')
+
+        # Classified vector with building-points
+        hazard_layer = load_test_vector_layer(
+            'gisv4', 'hazard', 'classified_vector.geojson')
+        exposure_layer = load_test_vector_layer(
+            'gisv4', 'exposure', 'building-points.geojson')
+        aggregation_layer = load_test_vector_layer(
+            'gisv4', 'aggregation', 'small_grid.geojson')
+
+        impact_report = self.run_impact_report_scenario(
+            output_folder,
+            standard_impact_report_metadata_html,
+            hazard_layer, exposure_layer,
+            aggregation_layer=aggregation_layer)
+
         """Checking generated context"""
         empty_component_output_message = 'Empty component output'
 
@@ -142,7 +176,8 @@ class TestImpactReport(unittest.TestCase):
 
         expected_context = {
             'header': u'General Report',
-            'table_header': u'Estimated Number of buildings',
+            'table_header': (
+                u'Estimated Number of buildings affected per hazard zone'),
             'summary': [
                 {
                     'header_label': u'Hazard Zone',
@@ -277,8 +312,6 @@ class TestImpactReport(unittest.TestCase):
         output_folder = self.fixtures_dir('../output/analysis_detail')
 
         # Classified vector with buildings
-        shutil.rmtree(output_folder, ignore_errors=True)
-
         hazard_layer = load_test_vector_layer(
             'gisv4', 'hazard', 'classified_vector.geojson')
         exposure_layer = load_test_vector_layer(
@@ -286,27 +319,11 @@ class TestImpactReport(unittest.TestCase):
         aggregation_layer = load_test_vector_layer(
             'gisv4', 'aggregation', 'small_grid.geojson')
 
-        impact_function = ImpactFunction()
-        impact_function.aggregation = aggregation_layer
-        impact_function.exposure = exposure_layer
-        impact_function.hazard = hazard_layer
-        impact_function.prepare()
-        return_code, message = impact_function.run()
-
-        self.assertEqual(return_code, ANALYSIS_SUCCESS, message)
-
-        report_metadata = ReportMetadata(
-            metadata_dict=standard_impact_report_metadata_html)
-
-        impact_report = ImpactReport(
-            IFACE,
-            report_metadata,
-            impact_function=impact_function)
-        impact_report.output_folder = output_folder
-        return_code, message = impact_report.process_component()
-
-        self.assertEqual(
-            return_code, ImpactReport.REPORT_GENERATION_SUCCESS, message)
+        impact_report = self.run_impact_report_scenario(
+            output_folder,
+            standard_impact_report_metadata_html,
+            hazard_layer, exposure_layer,
+            aggregation_layer=aggregation_layer)
 
         """Checking generated context"""
         empty_component_output_message = 'Empty component output'
@@ -451,27 +468,27 @@ class TestImpactReport(unittest.TestCase):
                 'header_label': u'Aggregation area',
                 'rows': [
                     {
-                        'type_values': ['0', '10', '10', '10', '0'],
+                        'type_values': ['10', '0', '0', '10', '10'],
                         'total': '10',
                         'name': u'area 1'
                     },
                     {
-                        'type_values': ['10', '0', '0', '0', '0'],
+                        'type_values': ['0', '0', '10', '0', '0'],
                         'total': '10',
                         'name': u'area 2'
                     },
                     {
-                        'type_values': ['0', '0', '0', '10', '10'],
+                        'type_values': ['10', '10', '0', '0', '0'],
                         'total': '10',
                         'name': u'area 3'
                     }
                 ],
                 'type_header_labels': [
-                    u'Government',
-                    u'Other',
-                    u'Commercial',
                     u'Education',
-                    u'Health'
+                    u'Health',
+                    u'Government',
+                    u'Commercial',
+                    u'Other',
                 ],
                 'type_total_values': ['10', '10', '10', '10', '10'],
                 'total_label': u'Total',
@@ -495,13 +512,83 @@ class TestImpactReport(unittest.TestCase):
 
         shutil.rmtree(output_folder, ignore_errors=True)
 
+    def test_analysis_provenance_details(self):
+        """Test generate analysis provenance details section.
+
+        .. versionadded: 4.0
+        """
+        output_folder = self.fixtures_dir('../output/general_report')
+
+        # Classified vector with building-points
+        hazard_layer = load_test_vector_layer(
+            'gisv4', 'hazard', 'classified_vector.geojson')
+        exposure_layer = load_test_vector_layer(
+            'gisv4', 'exposure', 'building-points.geojson')
+        aggregation_layer = load_test_vector_layer(
+            'gisv4', 'aggregation', 'small_grid.geojson')
+
+        impact_report = self.run_impact_report_scenario(
+            output_folder,
+            standard_impact_report_metadata_html,
+            hazard_layer, exposure_layer,
+            aggregation_layer=aggregation_layer)
+
+        """Checking generated context"""
+        empty_component_output_message = 'Empty component output'
+
+        impact_table = impact_report.metadata.component_by_key(
+            analysis_provenance_details_component['key'])
+
+        expected_context = {
+            'header': u'Analysis details',
+            'details': OrderedDict(
+                [
+                    ('hazard', {
+                        'header': u'Hazard source',
+                        'provenance': u'classified_vector - '
+                                      u'InaSAFE v4 GeoJSON test layer - '}),
+                    ('exposure', {
+                        'header':
+                            u'Exposure '
+                            u'source',
+                        'provenance':
+                            u'building-points - '
+                            u'InaSAFE v4 GeoJSON test layer - '}),
+                    ('aggregation', {
+                        'header': u'Aggregation source',
+                        'provenance': u'small grid - '
+                                      u'InaSAFE v4 GeoJSON test layer - '}),
+                    ('impact_function', {
+                        'header': u'Impact Function',
+                        'provenance': u'Hazard_Generic '
+                                      u'Polygon On '
+                                      u'Structure Point'})
+                ])
+        }
+
+        actual_context = impact_table.context
+
+        self.assertDictEqual(
+            expected_context, actual_context)
+        self.assertTrue(
+            impact_table.output, empty_component_output_message)
+
+        """Check output generated"""
+
+        output_path = impact_report.component_absolute_output_path(
+            'impact-report')
+
+        # for now, test that output exists
+        self.assertTrue(os.path.exists(output_path))
+
+        shutil.rmtree(output_folder, ignore_errors=True)
+
     def test_minimum_needs_outputs(self):
         """Test generate minimum needs section.
 
         .. versionadded:: 4.0
         """
         output_folder = self.fixtures_dir('../output/minimum_needs')
-        shutil.rmtree(output_folder, ignore_errors=True)
 
         # Minimum needs only occured when population is displaced
         # so, use flood hazard.
@@ -510,26 +597,10 @@ class TestImpactReport(unittest.TestCase):
         exposure_layer = load_test_raster_layer(
             'exposure', 'pop_binary_raster_20_20.asc')
 
-        impact_function = ImpactFunction()
-        impact_function.exposure = exposure_layer
-        impact_function.hazard = hazard_layer
-        impact_function.prepare()
-        return_code, message = impact_function.run()
-
-        self.assertEqual(return_code, ANALYSIS_SUCCESS, message)
-
-        report_metadata = ReportMetadata(
-            metadata_dict=standard_impact_report_metadata_html)
-
-        impact_report = ImpactReport(
-            IFACE,
-            report_metadata,
-            impact_function=impact_function)
-        impact_report.output_folder = output_folder
-        return_code, message = impact_report.process_component()
-
-        self.assertEqual(
-            return_code, ImpactReport.REPORT_GENERATION_SUCCESS, message)
+        impact_report = self.run_impact_report_scenario(
+            output_folder,
+            standard_impact_report_metadata_html,
+            hazard_layer, exposure_layer)
 
         """Checking generated context"""
         empty_component_output_message = 'Empty component output'
@@ -610,7 +681,6 @@ class TestImpactReport(unittest.TestCase):
         """
         output_folder = self.fixtures_dir(
             '../output/aggregation_entire_area_result')
-        shutil.rmtree(output_folder, ignore_errors=True)
 
         # Only flood and earthquake who deals with evacuated population report
         hazard_layer = load_test_vector_layer(
@@ -620,26 +690,10 @@ class TestImpactReport(unittest.TestCase):
         # Check when we doesn't use aggregation area.
         # In other words, Entire Area aggregations.
 
-        impact_function = ImpactFunction()
-        impact_function.exposure = exposure_layer
-        impact_function.hazard = hazard_layer
-        impact_function.prepare()
-        return_code, message = impact_function.run()
-
-        self.assertEqual(return_code, ANALYSIS_SUCCESS, message)
-
-        report_metadata = ReportMetadata(
-            metadata_dict=standard_impact_report_metadata_html)
-
-        impact_report = ImpactReport(
-            IFACE,
-            report_metadata,
-            impact_function=impact_function)
-        impact_report.output_folder = output_folder
-        return_code, message = impact_report.process_component()
-
-        self.assertEqual(
-            return_code, ImpactReport.REPORT_GENERATION_SUCCESS, message)
+        impact_report = self.run_impact_report_scenario(
+            output_folder,
+            standard_impact_report_metadata_html,
+            hazard_layer, exposure_layer)
 
         """Check generated context"""
         empty_component_output_message = 'Empty component output'
@@ -655,23 +709,23 @@ class TestImpactReport(unittest.TestCase):
                 'header_label': u'Aggregation area',
                 'rows': [
                     {
-                        'type_values': ['10', '30', '10', '10', '10', '10'],
+                        'type_values': ['30', '10', '10', '10', '10', '10'],
                         'total': '40',
                         'name': u'Entire Area'
                     }
                 ],
                 'type_header_labels': [
-                    u'Government',
                     u'Residential',
-                    u'Commercial',
                     u'Education',
+                    u'Health',
                     u'Place of worship',
-                    u'Health'
+                    u'Government',
+                    u'Commercial',
                 ],
                 'total_in_aggregation_area_label': u'Total',
                 'total_label': u'Total',
                 'total_all': '40',
-                'type_total_values': ['10', '30', '10', '10', '10', '10']
+                'type_total_values': ['30', '10', '10', '10', '10', '10']
             },
             'header': u'Aggregation Result',
             'notes': u'Columns and rows containing only 0 or "No data" '
@@ -703,7 +757,6 @@ class TestImpactReport(unittest.TestCase):
         """
         output_folder = self.fixtures_dir(
             '../output/aggregation_area_result')
-        shutil.rmtree(output_folder, ignore_errors=True)
 
         # Only flood and earthquake who deals with evacuated population report
         hazard_layer = load_test_vector_layer(
@@ -714,27 +767,11 @@ class TestImpactReport(unittest.TestCase):
         aggregation_layer = load_test_vector_layer(
             'aggregation', 'grid_jakarta.geojson')
 
-        impact_function = ImpactFunction()
-        impact_function.exposure = exposure_layer
-        impact_function.hazard = hazard_layer
-        impact_function.aggregation = aggregation_layer
-        impact_function.prepare()
-        return_code, message = impact_function.run()
-
-        self.assertEqual(return_code, ANALYSIS_SUCCESS, message)
-
-        report_metadata = ReportMetadata(
-            metadata_dict=standard_impact_report_metadata_html)
-
-        impact_report = ImpactReport(
-            IFACE,
-            report_metadata,
-            impact_function=impact_function)
-        impact_report.output_folder = output_folder
-        return_code, message = impact_report.process_component()
-
-        self.assertEqual(
-            return_code, ImpactReport.REPORT_GENERATION_SUCCESS, message)
+        impact_report = self.run_impact_report_scenario(
+            output_folder,
+            standard_impact_report_metadata_html,
+            hazard_layer, exposure_layer,
+            aggregation_layer=aggregation_layer)
 
         """Check generated context"""
         empty_component_output_message = 'Empty component output'
@@ -750,12 +787,12 @@ class TestImpactReport(unittest.TestCase):
                 'header_label': u'Aggregation area',
                 'rows': [
                     {
-                        'type_values': ['10', '0', '0', '10', '10', '0'],
+                        'type_values': ['0', '10', '0', '10', '10', '0'],
                         'total': '10',
                         'name': u'B'
                     },
                     {
-                        'type_values': ['0', '10', '0', '0', '0', '0'],
+                        'type_values': ['10', '0', '0', '0', '0', '0'],
                         'total': '10',
                         'name': u'C'
                     },
@@ -765,23 +802,23 @@ class TestImpactReport(unittest.TestCase):
                         'name': u'F'
                     },
                     {
-                        'type_values': ['0', '20', '10', '0', '0', '10'],
+                        'type_values': ['20', '0', '10', '0', '0', '10'],
                         'total': '20',
                         'name': u'G'
                     }
                 ],
                 'type_header_labels': [
-                    u'Government',
                     u'Residential',
-                    u'Commercial',
                     u'Education',
+                    u'Health',
                     u'Place of worship',
-                    u'Health'
+                    u'Government',
+                    u'Commercial',
                 ],
                 'total_in_aggregation_area_label': u'Total',
                 'total_label': u'Total',
                 'total_all': '40',
-                'type_total_values': ['10', '30', '10', '10', '10', '10']
+                'type_total_values': ['30', '10', '10', '10', '10', '10']
             },
             'header': u'Aggregation Result',
             'notes': u'Columns and rows containing only 0 or "No data" '
@@ -811,7 +848,6 @@ class TestImpactReport(unittest.TestCase):
         """
         output_folder = self.fixtures_dir(
             '../output/aggregate_post_processors')
-        shutil.rmtree(output_folder, ignore_errors=True)
 
         # Only flood and earthquake who deals with evacuated population report
         hazard_layer = load_test_vector_layer(
@@ -823,27 +859,11 @@ class TestImpactReport(unittest.TestCase):
         aggregation_layer = load_test_vector_layer(
             'aggregation', 'grid_jakarta.geojson')
 
-        impact_function = ImpactFunction()
-        impact_function.exposure = exposure_layer
-        impact_function.hazard = hazard_layer
-        impact_function.aggregation = aggregation_layer
-        impact_function.prepare()
-        return_code, message = impact_function.run()
-
-        self.assertEqual(return_code, ANALYSIS_SUCCESS, message)
-
-        report_metadata = ReportMetadata(
-            metadata_dict=standard_impact_report_metadata_html)
-
-        impact_report = ImpactReport(
-            IFACE,
-            report_metadata,
-            impact_function=impact_function)
-        impact_report.output_folder = output_folder
-        return_code, message = impact_report.process_component()
-
-        self.assertEqual(
-            return_code, ImpactReport.REPORT_GENERATION_SUCCESS, message)
+        impact_report = self.run_impact_report_scenario(
+            output_folder,
+            standard_impact_report_metadata_html,
+            hazard_layer, exposure_layer,
+            aggregation_layer=aggregation_layer)
 
         """Checking generated context"""
         empty_component_output_message = 'Empty component output'
@@ -875,10 +895,10 @@ class TestImpactReport(unittest.TestCase):
                     'notes': u'Columns and rows containing only 0 or "No '
                              u'data" values are excluded from the tables.',
                     'rows': [
-                        [u'B', '2,700', '1,400', '1,400', '1,100', '130'],
-                        [u'C', '6,500', '3,300', '3,300', '2,600', '310'],
-                        [u'F', '7,100', '3,600', '3,600', '2,800', '330'],
-                        [u'G', '9,500', '4,800', '4,800', '3,800', '440']],
+                        [u'B', '2,700', '1,400', '1,400', '1,100', '360'],
+                        [u'C', '6,500', '3,300', '3,300', '2,600', '880'],
+                        [u'F', '7,100', '3,600', '3,600', '2,800', '960'],
+                        [u'G', '9,500', '4,800', '4,800', '3,800', '1,300']],
                     'columns': [
                         u'Aggregation area',
                         u'Total Displaced Population',
@@ -889,7 +909,7 @@ class TestImpactReport(unittest.TestCase):
                         u'Lactating Women [kg]'],
                     'totals': [
                         u'Total', '25,700', '12,900', '12,900', '10,200',
-                        '1,200']}),
+                        '3,500']}),
                 ('minimum_needs', {
                     'header': u'Detailed Minimum Needs Report',
                     'notes': u'Columns and rows containing only 0 or "No '
@@ -947,7 +967,6 @@ class TestImpactReport(unittest.TestCase):
         """
         output_folder = self.fixtures_dir(
             '../output/aggregate_post_processors')
-        shutil.rmtree(output_folder, ignore_errors=True)
 
         # Only flood and earthquake who deals with evacuated population report
         hazard_layer = load_test_vector_layer(
@@ -959,27 +978,11 @@ class TestImpactReport(unittest.TestCase):
         aggregation_layer = load_test_vector_layer(
             'aggregation', 'grid_jakarta.geojson')
 
-        impact_function = ImpactFunction()
-        impact_function.exposure = exposure_layer
-        impact_function.hazard = hazard_layer
-        impact_function.aggregation = aggregation_layer
-        impact_function.prepare()
-        return_code, message = impact_function.run()
-
-        self.assertEqual(return_code, ANALYSIS_SUCCESS, message)
-
-        report_metadata = ReportMetadata(
-            metadata_dict=standard_impact_report_metadata_html)
-
-        impact_report = ImpactReport(
-            IFACE,
-            report_metadata,
-            impact_function=impact_function)
-        impact_report.output_folder = output_folder
-        return_code, message = impact_report.process_component()
-
-        self.assertEqual(
-            return_code, ImpactReport.REPORT_GENERATION_SUCCESS, message)
+        impact_report = self.run_impact_report_scenario(
+            output_folder,
+            standard_impact_report_metadata_html,
+            hazard_layer, exposure_layer,
+            aggregation_layer=aggregation_layer)
 
         """Checking generated context"""
         empty_component_output_message = 'Empty component output'
@@ -1022,7 +1025,7 @@ class TestImpactReport(unittest.TestCase):
                                 u'Weekly Hygiene Packs',
                                 u'Additional Weekly Rice kg for Pregnant and '
                                 u'Lactating Women [kg]'],
-                    'totals': [u'Total', '20', '10', '10', '10', '0']}),
+                    'totals': [u'Total', '20', '10', '10', '10', '10']}),
                 ('minimum_needs', {
                     'header': u'Detailed Minimum Needs Report',
                     'notes': u'Columns and rows containing only 0 or "No '
@@ -1072,7 +1075,6 @@ class TestImpactReport(unittest.TestCase):
         """
         output_folder = self.fixtures_dir(
             '../output/population_infographic')
-        shutil.rmtree(output_folder, ignore_errors=True)
 
         # Only flood and earthquake who deals with evacuated population report
         hazard_layer = load_test_vector_layer(
@@ -1084,27 +1086,11 @@ class TestImpactReport(unittest.TestCase):
         aggregation_layer = load_test_vector_layer(
             'aggregation', 'grid_jakarta.geojson')
 
-        impact_function = ImpactFunction()
-        impact_function.exposure = exposure_layer
-        impact_function.hazard = hazard_layer
-        impact_function.aggregation = aggregation_layer
-        impact_function.prepare()
-        return_code, message = impact_function.run()
-
-        self.assertEqual(return_code, ANALYSIS_SUCCESS, message)
-
-        report_metadata = ReportMetadata(
-            metadata_dict=standard_impact_report_metadata_html)
-
-        impact_report = ImpactReport(
-            IFACE,
-            report_metadata,
-            impact_function=impact_function)
-        impact_report.output_folder = output_folder
-        return_code, message = impact_report.process_component()
-
-        self.assertEqual(
-            return_code, ImpactReport.REPORT_GENERATION_SUCCESS, message)
+        impact_report = self.run_impact_report_scenario(
+            output_folder,
+            standard_impact_report_metadata_html,
+            hazard_layer, exposure_layer,
+            aggregation_layer=aggregation_layer)
 
         """Checking generated context"""
         # Check population infographic
@@ -1302,8 +1288,6 @@ class TestImpactReport(unittest.TestCase):
         output_folder = self.fixtures_dir('../output/impact_summary_pdf')
 
         # Classified vector with buildings
-        shutil.rmtree(output_folder, ignore_errors=True)
-
         hazard_layer = load_test_vector_layer(
             'gisv4', 'hazard', 'classified_vector.geojson')
         exposure_layer = load_test_vector_layer(
@@ -1311,27 +1295,11 @@ class TestImpactReport(unittest.TestCase):
         aggregation_layer = load_test_vector_layer(
             'gisv4', 'aggregation', 'small_grid.geojson')
 
-        impact_function = ImpactFunction()
-        impact_function.aggregation = aggregation_layer
-        impact_function.exposure = exposure_layer
-        impact_function.hazard = hazard_layer
-        impact_function.prepare()
-        return_code, message = impact_function.run()
-
-        self.assertEqual(return_code, ANALYSIS_SUCCESS, message)
-
-        report_metadata = ReportMetadata(
-            metadata_dict=standard_impact_report_metadata_pdf)
-
-        impact_report = ImpactReport(
-            IFACE,
-            report_metadata,
-            impact_function=impact_function)
-        impact_report.output_folder = output_folder
-        return_code, message = impact_report.process_component()
-
-        self.assertEqual(
-            return_code, ImpactReport.REPORT_GENERATION_SUCCESS, message)
+        impact_report = self.run_impact_report_scenario(
+            output_folder,
+            standard_impact_report_metadata_pdf,
+            hazard_layer, exposure_layer,
+            aggregation_layer=aggregation_layer)
 
         output_path = impact_report.component_absolute_output_path(
             'impact-report-pdf')
@@ -1349,8 +1317,6 @@ class TestImpactReport(unittest.TestCase):
         output_folder = self.fixtures_dir('../output/impact_map_pdf')
 
         # Classified vector with buildings
-        shutil.rmtree(output_folder, ignore_errors=True)
-
         hazard_layer = load_test_vector_layer(
             'gisv4', 'hazard', 'classified_vector.geojson')
         exposure_layer = load_test_vector_layer(

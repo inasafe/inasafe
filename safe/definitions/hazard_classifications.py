@@ -9,6 +9,7 @@ Minimum value IS NOT included, but maximum value IS included to the range.
 Mathematical expression:
 minimum_value < x <= maximum_value
 """
+from safe.definitions.constants import big_number
 from safe.definitions import concepts
 from safe.utilities.i18n import tr
 from safe.definitions.units import (
@@ -135,7 +136,8 @@ generic_hazard_classes = {
         exposure_population,
         exposure_road,
         exposure_structure
-    ]
+    ],
+    'classification_unit': tr('hazard zone')
 }
 
 earthquake_mmi_scale = {
@@ -385,7 +387,8 @@ earthquake_mmi_scale = {
         exposure_population,
         exposure_road,
         exposure_structure
-    ]
+    ],
+    'classification_unit': tr('MMI intensity')
 }
 
 volcano_hazard_classes = {
@@ -463,7 +466,8 @@ volcano_hazard_classes = {
         exposure_population,
         exposure_road,
         exposure_structure
-    ]
+    ],
+    'classification_unit': tr('hazard zone')
 }
 
 flood_hazard_classes = {
@@ -492,7 +496,7 @@ flood_hazard_classes = {
             'string_defaults': ['wet', '1', 'YES', 'y', 'yes', 'true'],
             'displacement_rate': 0.01,
             'numeric_default_min': 1,
-            'numeric_default_max': 9999999999,
+            'numeric_default_max': big_number,
             'citations': [
                 {
                     'text': None,
@@ -525,7 +529,8 @@ flood_hazard_classes = {
         exposure_population,
         exposure_road,
         exposure_structure
-    ]
+    ],
+    'classification_unit': tr('hazard zone')
 }
 
 flood_petabencana_hazard_classes = {
@@ -554,7 +559,7 @@ flood_petabencana_hazard_classes = {
             # flood data and IDP numbers
             'displacement_rate': 0.05,
             'numeric_default_min': 1.5,
-            'numeric_default_max': 9999999999,
+            'numeric_default_max': big_number,
             'string_defaults': ['high'],
             'citations': [
                 {
@@ -629,7 +634,8 @@ flood_petabencana_hazard_classes = {
                 }
             ]
         }
-    ]
+    ],
+    'classification_unit': tr('hazard zone')
 }
 
 ash_hazard_classes = {
@@ -659,7 +665,7 @@ ash_hazard_classes = {
             # Displacement rate of 100% advised by Ibu Estu - BG Feb 2017
             'displacement_rate': 1.0,
             'numeric_default_min': 10,
-            'numeric_default_max': 9999999999,
+            'numeric_default_max': big_number,
             'string_defaults': ['very hight'],
             'citations': [
                 {
@@ -763,7 +769,8 @@ ash_hazard_classes = {
         exposure_population,
         exposure_road,
         exposure_structure
-    ]
+    ],
+    'classification_unit': tr('hazard zone')
 }
 
 # Original tsunami hazard classes with displacement rates added
@@ -806,7 +813,7 @@ tsunami_hazard_classes = {
             'string_defaults': ['high'],
             'displacement_rate': 1.0,
             'numeric_default_min': 3,
-            'numeric_default_max': 9999,
+            'numeric_default_max': big_number,
             'citations': [
                 {
                     'text': None,
@@ -890,7 +897,8 @@ tsunami_hazard_classes = {
         exposure_place,
         exposure_road,
         exposure_structure
-    ]
+    ],
+    'classification_unit': tr('hazard zone')
 }
 
 # Duplicate classes for tsunami hazard; modified for population exposure
@@ -933,7 +941,7 @@ tsunami_hazard_population_classes = {
             'string_defaults': ['high'],
             'displacement_rate': 1.0,
             'numeric_default_min': 3,
-            'numeric_default_max': 9999,
+            'numeric_default_max': big_number,
             'citations': [
                 {
                     'text': None,
@@ -997,7 +1005,8 @@ tsunami_hazard_population_classes = {
     ],
     'exposures': [
         exposure_population
-    ]
+    ],
+    'classification_unit': tr('hazard zone')
 }
 # duplicate classes for tsunami hazard based on advice from Pak Hamza
 tsunami_hazard_classes_ITB = {
@@ -1028,7 +1037,7 @@ tsunami_hazard_classes_ITB = {
             'string_defaults': ['very high'],
             'displacement_rate': 1.0,
             'numeric_default_min': 8,
-            'numeric_default_max': 9999,
+            'numeric_default_max': big_number,
             'citations': [
                 {
                     'text': None,
@@ -1140,7 +1149,8 @@ tsunami_hazard_classes_ITB = {
         exposure_place,
         exposure_road,
         exposure_structure
-    ]
+    ],
+    'classification_unit': tr('hazard zone')
 }
 
 # duplicate classes for tsunami hazard based on advice from Pak Hamza and
@@ -1173,7 +1183,7 @@ tsunami_hazard_population_classes_ITB = {
             'string_defaults': ['very high'],
             'displacement_rate': 1.0,
             'numeric_default_min': 8,
-            'numeric_default_max': 9999,
+            'numeric_default_max': big_number,
             'citations': [
                 {
                     'text': None,
@@ -1265,7 +1275,8 @@ tsunami_hazard_population_classes_ITB = {
     ],
     'exposures': [
         exposure_population
-    ]
+    ],
+    'classification_unit': tr('hazard zone')
 }
 
 cyclone_au_bom_hazard_classes = {
@@ -1317,7 +1328,7 @@ cyclone_au_bom_hazard_classes = {
                 unit_miles_per_hour['key']: 176,
                 unit_kilometres_per_hour['key']: 283
             },
-            'numeric_default_max': 9999999999,
+            'numeric_default_max': big_number,
             'string_defaults': ['cat 5', 'category 5'],
             'citations': [
                 {
@@ -1513,7 +1524,8 @@ cyclone_au_bom_hazard_classes = {
         exposure_population,
         exposure_road,
         exposure_structure
-    ]
+    ],
+    'classification_unit': tr('cyclone category')
 }
 
 cyclone_sshws_hazard_classes = {
@@ -1565,7 +1577,7 @@ cyclone_sshws_hazard_classes = {
                 unit_miles_per_hour['key']: 210,
                 unit_kilometres_per_hour['key']: 337
             },
-            'numeric_default_max': 9999999999,
+            'numeric_default_max': big_number,
             'string_defaults': ['cat 5', 'category 5'],
             'citations': [
                 {
@@ -1760,7 +1772,8 @@ cyclone_sshws_hazard_classes = {
         exposure_population,
         exposure_road,
         exposure_structure
-    ]
+    ],
+    'classification_unit': tr('cyclone category')
 }
 
 hazard_classification = {
@@ -1768,8 +1781,8 @@ hazard_classification = {
     'name': tr('Classes'),
     'description': tr(
         'A hazard classification is used to define a range of severity '
-        'thresholds (classes) for a continuous hazard layer. The '
-        'classification will be used to create zones of data that each '
+        'thresholds (classes) for a hazard layer. '
+        'The classification will be used to create zones of data that each '
         'present a similar hazard level. During the analysis, each exposure '
         'feature will be assessed to determine which hazard class it '
         'coincides with, and then a determination will be made as to '

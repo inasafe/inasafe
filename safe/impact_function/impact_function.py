@@ -8,7 +8,6 @@ from datetime import datetime
 from os.path import join, exists
 from os import makedirs
 from collections import OrderedDict
-from copy import deepcopy
 from socket import gethostname
 
 from PyQt4.QtCore import QT_VERSION_STR, QSettings
@@ -18,7 +17,6 @@ from qgis.core import (
     QgsMapLayer,
     QgsGeometry,
     QgsCoordinateTransform,
-    QgsFeatureRequest,
     QgsCoordinateReferenceSystem,
     QgsRectangle,
     QgsVectorLayer,
@@ -80,7 +78,6 @@ from safe.definitions.layer_purposes import (
 )
 from safe.impact_function.provenance_utilities import (
     get_map_title,
-    get_report_question,
     get_analysis_question
 )
 from safe.definitions.constants import (
@@ -94,7 +91,7 @@ from safe.definitions.constants import (
     PREPARE_FAILED_INSUFFICIENT_OVERLAP_REQUESTED_EXTENT,
     PREPARE_FAILED_BAD_LAYER,
     PREPARE_FAILED_BAD_CODE)
-from safe.definitions.hazard_exposure_notes_actions import (
+from safe.definitions.hazard_exposure_specifications import (
     specific_actions, specific_notes)
 from safe.definitions.versions import inasafe_keyword_version
 from safe.common.exceptions import (
@@ -130,7 +127,7 @@ from safe.utilities.i18n import tr
 from safe.utilities.unicode import get_unicode
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.metadata import (
-    active_thresholds_value_maps, active_classification)
+    active_thresholds_value_maps, active_classification, copy_layer_keywords)
 from safe.utilities.utilities import (
     replace_accentuated_characters, get_error_message)
 from safe.utilities.profiling import (
@@ -382,14 +379,9 @@ class ImpactFunction(object):
         """Property for the most detailed output vector layer.
 
         :returns: A vector layer.
-        :rtype: QgsVectorLayer
+        :rtype: QgsMapLayer
         """
-        if is_vector_layer(self.outputs[0]):
-            return self.outputs[0]
-        else:
-            # In case of EQ raster on population, the exposure summary is a
-            # raster.
-            return self.outputs[1]
+        return self.outputs[0]
 
     @property
     def exposure_summary(self):
@@ -815,7 +807,8 @@ class ImpactFunction(object):
                 status, message = self._check_layer(
                     self.aggregation, 'aggregation')
                 aggregation_source = self.aggregation.publicSource()
-                aggregation_keywords = deepcopy(self.aggregation.keywords)
+                aggregation_keywords = copy_layer_keywords(
+                    self.aggregation.keywords)
 
                 if status != PREPARE_SUCCESS:
                     return status, message
@@ -862,12 +855,16 @@ class ImpactFunction(object):
                 return status, message
 
             # Set the name
-            self._name = tr('%s %s On %s %s' % (
-                self.hazard.keywords.get('hazard').title(),
-                self.hazard.keywords.get('layer_geometry').title(),
-                self.exposure.keywords.get('exposure').title(),
-                self.exposure.keywords.get('layer_geometry').title(),
-            ))
+            self._name = tr(
+                '{hazard_type} {hazard_geometry} On {exposure_type} '
+                '{exposure_geometry}').format(
+                hazard_type=tr(self.hazard.keywords.get('hazard').title()),
+                hazard_geometry=tr(
+                    self.hazard.keywords.get('layer_geometry').title()),
+                exposure_type=tr(
+                    self.exposure.keywords.get('exposure').title()),
+                exposure_geometry=tr(
+                    self.exposure.keywords.get('layer_geometry').title()))
 
             # Set the title
             if self.exposure.keywords.get('exposure') == 'population':
@@ -889,12 +886,12 @@ class ImpactFunction(object):
             self._provenance['exposure_layer'] = self.exposure.publicSource()
             # reference to original layer being used
             self._provenance['exposure_layer_id'] = original_exposure.id()
-            self._provenance['exposure_keywords'] = deepcopy(
+            self._provenance['exposure_keywords'] = copy_layer_keywords(
                 self.exposure.keywords)
             self._provenance['hazard_layer'] = self.hazard.publicSource()
             # reference to original layer being used
             self._provenance['hazard_layer_id'] = original_hazard.id()
-            self._provenance['hazard_keywords'] = deepcopy(
+            self._provenance['hazard_keywords'] = copy_layer_keywords(
                 self.hazard.keywords)
             # reference to original layer being used
             if original_aggregation:
@@ -1178,9 +1175,6 @@ class ImpactFunction(object):
                 return ANALYSIS_FAILED_BAD_CODE, message
 
         else:
-            self._provenance_ready = True
-            self._datetime = datetime.now()
-            self._provenance['datetime'] = self.datetime
             return ANALYSIS_SUCCESS, None
 
     @profile
@@ -1263,6 +1257,10 @@ class ImpactFunction(object):
         self.callback(8, step_count, analysis_steps['summary_calculation'])
         self.summary_calculation()
 
+        self._datetime = datetime.now()
+        self._provenance['datetime'] = self.datetime
+        self._generate_provenance()
+
         # End of the impact function, we can add layers to the datastore.
         # We replace memory layers by the real layer from the datastore.
 
@@ -1270,6 +1268,7 @@ class ImpactFunction(object):
         if self._exposure_summary:
             self._exposure_summary.keywords[
                 'provenance_data'] = self.provenance
+
             result, name = self.datastore.add_layer(
                 self._exposure_summary,
                 layer_purpose_exposure_summary['key'])
@@ -1892,7 +1891,10 @@ class ImpactFunction(object):
         LOGGER.info('ANALYSIS : Post processing')
 
         # Set the layer title
-        layer_title(layer)
+        purpose = layer.keywords['layer_purpose']
+        if purpose != layer_purpose_aggregation_summary['key']:
+            # On an aggregation layer, the default title does make any sense.
+            layer_title(layer)
 
         for post_processor in post_processors:
             valid, message = enough_input(layer, post_processor['input'])
@@ -1998,6 +2000,8 @@ class ImpactFunction(object):
         If the impact function is not ready (has not called prepare method),
         it will return empty dict to avoid miss information.
 
+        The impact function will call generate_provenance at the end of the IF.
+
         List of keys (for quick lookup):
 
         [
@@ -2019,9 +2023,13 @@ class ImpactFunction(object):
         :returns: Dictionary that contains all provenance.
         :rtype: dict
         """
-        if not self._provenance_ready:
+        if self._provenance_ready:
+            return self._provenance
+        else:
             return {}
 
+    def _generate_provenance(self):
+        """Function to generate provenance at the end of the IF."""
         # noinspection PyTypeChecker
         exposure = definition(
             self._provenance['exposure_keywords']['exposure'])
@@ -2044,7 +2052,6 @@ class ImpactFunction(object):
 
         self._provenance['analysis_question'] = get_analysis_question(
             hazard, exposure)
-        self._provenance['report_question'] = get_report_question(exposure)
 
         if self.requested_extent:
             self._provenance['requested_extent'] = (
@@ -2055,13 +2062,13 @@ class ImpactFunction(object):
         self._provenance['analysis_extent'] = (
             self.analysis_extent.exportToWkt()
         )
-        self._provenance['data_store_uri'] = self.datastore.uri
+        self._provenance['data_store_uri'] = self.datastore.uri_path
 
         # Notes and Action
         self._provenance['notes'] = self.notes()
         self._provenance['action_checklist'] = self.action_checklist()
 
-        return self._provenance
+        self._provenance_ready = True
 
     def exposure_notes(self):
         """Get the exposure specific notes defined in definitions.

@@ -194,7 +194,7 @@
             <gco:CharacterString/>
           </scale>
           <source>
-            <gco:CharacterString>Test layer</gco:CharacterString>
+            <gco:CharacterString>InaSAFE v4 GeoJSON test layer</gco:CharacterString>
           </source>
           <layer_geometry>
             <gco:CharacterString>polygon</gco:CharacterString>

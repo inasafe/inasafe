@@ -787,7 +787,8 @@ class Plugin(object):
         from safe.gui.tools.shake_grid.shakemap_converter_dialog import (
             ShakemapConverterDialog)
 
-        dialog = ShakemapConverterDialog(self.iface.mainWindow())
+        dialog = ShakemapConverterDialog(
+            self.iface.mainWindow(), self.iface, self.dock_widget)
         dialog.exec_()  # modal
 
     def show_multi_buffer(self):

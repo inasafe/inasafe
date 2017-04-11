@@ -12,7 +12,8 @@ VERSION=$1
 # Make a git friendly version of the release no
 UNDER_VERSION=`echo $VERSION | sed 's/\./\_/g'`
 echo "Git friendly Version: ${UNDER_VERSION}"
-echo git tag version-${UNDER_VERSION} -m "Version ${VERSION}"
+echo
+echo "Run these two commands to tag the release."
+echo
+echo git tag version-${UNDER_VERSION} -m \"Version ${VERSION}\"
 echo git push --tag upstream version-${UNDER_VERSION}
-
-

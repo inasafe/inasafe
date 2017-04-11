@@ -7,7 +7,8 @@ from __future__ import absolute_import
 from safe.definitions.exposure import (
     exposure_structure,
     exposure_road,
-    exposure_land_cover)
+    exposure_land_cover,
+    exposure_population)
 from safe.definitions.reports import (
     jinja2_component_type,
     qgis_composer_component_type,
@@ -35,9 +36,12 @@ from safe.definitions.fields import (
     fatalities_per_mmi_field,
     population_count_field,
     displaced_field,
-    fatalities_field, female_displaced_count_field,
-    youth_displaced_count_field, adult_displaced_count_field,
-    elderly_displaced_count_field)
+    fatalities_field,
+    female_displaced_count_field,
+    youth_displaced_count_field,
+    adult_displaced_count_field,
+    elderly_displaced_count_field,
+    exposure_count_field)
 from safe.definitions.styles import charcoal_black
 from safe.report.extractors.action_notes import (
     action_checklist_extractor,
@@ -47,6 +51,8 @@ from safe.report.extractors.aggregate_postprocessors import \
 from safe.report.extractors.aggregate_result import \
     aggregation_result_extractor
 from safe.report.extractors.analysis_detail import analysis_detail_extractor
+from safe.report.extractors.analysis_provenance_details import \
+    analysis_provenance_details_extractor
 from safe.report.extractors.analysis_question import \
     analysis_question_extractor
 from safe.report.extractors.general_report import general_report_extractor
@@ -108,7 +114,7 @@ general_report_component = {
                 'general-report.html',
     'extra_args': {
         'header': tr('General Report'),
-        'table_header_format': tr('Estimated {title}'),
+        'table_header_format': tr('Estimated {title} affected per {unit}'),
         'hazard_header': tr('Hazard Zone'),
         # Used to customize header.
         # See issue inasafe#3688: remove all 'total' words
@@ -346,6 +352,41 @@ aggregation_postprocessors_component = {
     }
 }
 
+analysis_provenance_details_component = {
+    'key': 'analysis-provenance-details',
+    'type': jinja2_component_type,
+    'processor': jinja2_renderer,
+    'extractor': analysis_provenance_details_extractor,
+    'output_format': Jinja2ComponentsMetadata.OutputFormat.String,
+    'output_path': 'analysis-provenance-details-output.html',
+    'template': 'standard-template/'
+                'jinja2/'
+                'analysis-provenance-details.html',
+    'extra_args': {
+        'defaults': {
+            'source': tr('source not available'),
+            'reference': tr('reference unspecified'),
+            'aggregation_not_used': tr('not used')
+        },
+        'header': {
+            'analysis_detail': tr('Analysis details')
+        },
+        'provenance_format': {
+            'hazard_header': tr('Hazard source'),
+            'hazard_format': u'{layer_name} - {source} - ',
+
+            'exposure_header': tr('Exposure source'),
+            'exposure_format': u'{layer_name} - {source} - ',
+
+            'aggregation_header': tr('Aggregation source'),
+            'aggregation_format': u'{layer_name} - {source} - ',
+
+            'impact_function_header': tr('Impact Function'),
+            'impact_function_format': u'{impact_function_name}',
+        }
+    }
+}
+
 population_chart_svg_component = {
     'key': 'population-chart',
     'type': jinja2_component_type,
@@ -396,7 +437,13 @@ population_infographic_component = {
                 'header': tr('People'),
                 'items': [
                     {
-                        'sub_header': tr('Affected'),
+                        'sub_header': {
+                            total_affected_field['key']: tr('Affected'),
+                            population_count_field['key']: tr('Population'),
+                            exposure_count_field['key'] % (
+                                exposure_population['key'], ): tr(
+                                'Population')
+                        }
                     },
                     {
                         'sub_header': tr('Displaced<sup>*</sup>'),
@@ -488,6 +535,7 @@ impact_report_component_metadata = [
     minimum_needs_component,
     aggregation_result_component,
     aggregation_postprocessors_component,
+    analysis_provenance_details_component
 ]
 
 # Standard HTML output for impact report
@@ -540,11 +588,6 @@ standard_impact_report_metadata_html = {
                 html_product_tag
             ],
             'extra_args': {
-                'defaults': {
-                    'source': tr('source not available'),
-                    'reference': tr('reference unspecified'),
-                    'aggregation_not_used': tr('not used')
-                },
                 'components_list': {
                     'analysis_question': analysis_question_component,
                     'general_report': general_report_component,
@@ -555,28 +598,9 @@ standard_impact_report_metadata_html = {
                     'minimum_needs': minimum_needs_component,
                     'aggregation_result': aggregation_result_component,
                     'aggregation_postprocessors': (
-                        aggregation_postprocessors_component)
-                },
-                'provenance_format': {
-                    'hazard_header': tr(
-                        'Hazard source'),
-                    'hazard_format': tr(
-                        '{layer_name} - {source} - '),
-
-                    'exposure_header': tr(
-                        'Exposure source'),
-                    'exposure_format': tr(
-                        '{layer_name} - {source} - '),
-
-                    'aggregation_header': tr(
-                        'Aggregation source'),
-                    'aggregation_format': tr(
-                        '{layer_name} - {source} - '),
-
-                    'impact_function_header': tr(
-                        'Impact Function'),
-                    'impact_function_format': tr(
-                        '{impact_function_name}'),
+                        aggregation_postprocessors_component),
+                    'analysis_provenance_details': (
+                        analysis_provenance_details_component)
                 }
             }
         }
@@ -609,8 +633,14 @@ standard_impact_report_metadata_pdf = {
             'type': qgis_composer_component_type,
             'processor': qgis_composer_html_renderer,
             'extractor': infographic_pdf_extractor,
-            'output_format': QgisComposerComponentsMetadata.OutputFormat.PDF,
-            'output_path': 'infographic.pdf',
+            'output_format': {
+                'doc': QgisComposerComponentsMetadata.OutputFormat.PDF,
+                'template': QgisComposerComponentsMetadata.OutputFormat.QPT
+            },
+            'output_path': {
+                'doc': 'infographic.pdf',
+                'template': 'infographic.qpt'
+            },
             'page_dpi': 300,
             'page_width': 297,
             'page_height': 210,
@@ -619,7 +649,8 @@ standard_impact_report_metadata_pdf = {
                 # rendered correctly by qgis
                 final_product_tag,
                 infographic_product_tag,
-                pdf_product_tag
+                pdf_product_tag,
+                qpt_product_tag
             ]
         }
     ]
