@@ -37,20 +37,27 @@ exposure_population = {
     'description': tr(
         'The <b>population</b> describes the people that might be '
         'exposed to a particular hazard.'),
-    'notes': [  # these are additional generic notes for people
-        caveat_incomplete_data,
-        tr('Exposed population varies by the time (day or night, weekends, '
-           'holidays etc.). Such variations are not included in the analysis.'
-        ),
-        tr('Numbers reported for population counts have been rounded to the '
-           'nearest 10 people if the total is less than 1,000; nearest 100 '
-           'people if more than 1,000 and less than 100,000; and nearest '
-           '1000 if more than 100,000.'),
-        tr('Rounding is applied to all population values, which may cause '
-           'discrepancies between subtotals and totals. '),
-        concepts['rounding_methodology']['description'],
-        tr('If displacement counts are 0, no minimum needs and displaced '
-           'related postprocessors will be shown.')
+    'notes': [
+        {
+            'item_category': 'population_general',
+            'item_header': tr('population exposure general notes'),
+            'item_list': [
+                # these are additional generic notes for people
+                caveat_incomplete_data,
+                tr('Exposed population varies by the time (day or night, weekends, '
+                   'holidays etc.). Such variations are not included in the analysis.'
+                ),
+                tr('Numbers reported for population counts have been rounded to the '
+                   'nearest 10 people if the total is less than 1,000; nearest 100 '
+                   'people if more than 1,000 and less than 100,000; and nearest '
+                   '1000 if more than 100,000.'),
+                tr('Rounding is applied to all population values, which may cause '
+                   'discrepancies between subtotals and totals. '),
+                concepts['rounding_methodology']['description'],
+                tr('If displacement counts are 0, no minimum needs and displaced '
+                   'related postprocessors will be shown.')
+            ]
+        }
     ],
     'continuous_notes': [  # notes specific to continuous data
     ],
@@ -58,9 +65,9 @@ exposure_population = {
     ],
     'actions': [
         {
-            'action_category': 'general',
-            'action_header': tr('general checklist'),
-            'action_list': [
+            'item_category': 'general',
+            'item_header': tr('general checklist'),
+            'item_list': [
                 tr('How will warnings be disseminated?'),
                 tr('What are people\'s likely movements?'),
                 tr('Which group or population is most affected?'),
@@ -74,9 +81,9 @@ exposure_population = {
             ]
         },
         {
-            'action_category': 'shelter',
-            'action_header': tr('shelter, settlement, and non-food item'),
-            'action_list': [
+            'item_category': 'shelter',
+            'item_header': tr('shelter, settlement, and non-food item'),
+            'item_list': [
                 tr('What are people\'s likely movements?'),
                 tr('How will we reach displaced people?'),
                 tr('Are there enough covered floor areas available for '
@@ -98,9 +105,9 @@ exposure_population = {
             ]
         },
         {
-            'action_category': 'food',
-            'action_header': tr('food security and nutrition'),
-            'action_list': [
+            'item_category': 'food',
+            'item_header': tr('food security and nutrition'),
+            'item_list': [
                 tr('What kind of food does the population normally consume?'),
                 tr('Are there any alternative source of food?'),
                 tr('Is there enough food for the displaced people?'),
@@ -109,9 +116,9 @@ exposure_population = {
             ]
         },
         {
-            'action_category': 'wash',
-            'action_header': tr('sanitation and clean water'),
-            'action_list': [
+            'item_category': 'wash',
+            'item_header': tr('sanitation and clean water'),
+            'item_list': [
                 tr('What water and sanitation practices were '
                    'the population accustomed to before the emergency?'),
                 tr('What type of outreach system would work for '
@@ -130,9 +137,9 @@ exposure_population = {
             ]
         },
         {
-            'action_category': 'health',
-            'action_header': tr('health facilities'),
-            'action_list': [
+            'item_category': 'health',
+            'item_header': tr('health facilities'),
+            'item_list': [
                 tr('What are the existing health problems?'),
                 tr('What are the potential epidemic diseases?'),
                 tr('Are there any potential disease outbreaks?'),
@@ -173,22 +180,29 @@ exposure_road = {
     'description': tr(
         'A <b>road</b> is defined as a route used by a vehicle or people to '
         'travel between two or more points.'),
-    'notes': [  # these are additional generic notes for roads
-        caveat_incomplete_data,
-        tr('Numbers for road lengths have been rounded to the nearest 10 '
-           'metres if the total is less than 1,000; nearest 100 metres if '
-           'more than 1,000 and less than 100,000; and nearest 1000 metres if '
-           'more than 100,000.'),
-        tr('Rounding is applied to all road lengths, which may cause '
-           'discrepancies between subtotals and totals.'),
-        concepts['rounding_methodology']['description'],
-        tr('Roads marked as not affected may still be unusable due to network '
-           'isolation. Roads marked as affected may still be usable if they '
-           'are elevated above the local landscape.'),
-        # only flood and tsunami are used with road
-        # currently to it is safe to use inundated here ...
-        tr('Roads are closed if they are affected.'),
-        tr('Roads are open if they are not affected.')
+    'notes': [
+        {
+            'item_category': 'road_general',
+            'item_header': tr('road exposure general notes'),
+            'item_list': [
+                # these are additional generic notes for roads
+                caveat_incomplete_data,
+                tr('Numbers for road lengths have been rounded to the nearest 10 '
+                   'metres if the total is less than 1,000; nearest 100 metres if '
+                   'more than 1,000 and less than 100,000; and nearest 1000 metres if '
+                   'more than 100,000.'),
+                tr('Rounding is applied to all road lengths, which may cause '
+                   'discrepancies between subtotals and totals.'),
+                concepts['rounding_methodology']['description'],
+                tr('Roads marked as not affected may still be unusable due to network '
+                   'isolation. Roads marked as affected may still be usable if they '
+                   'are elevated above the local landscape.'),
+                # only flood and tsunami are used with road
+                # currently to it is safe to use inundated here ...
+                tr('Roads are closed if they are affected.'),
+                tr('Roads are open if they are not affected.')
+            ]
+        }
     ],
     'continuous_notes': [  # notes specific to continuous data
     ],
@@ -196,9 +210,9 @@ exposure_road = {
     ],
     'actions': [
         {
-            'action_category': 'general',
-            'action_header': tr('general checklist'),
-            'action_list': [
+            'item_category': 'general',
+            'item_header': tr('general checklist'),
+            'item_list': [
                 tr('Which roads can be used to evacuate people or '
                    'to distribute logistics?'),
                 tr('What type of vehicles can use the not affected roads?'),
@@ -242,18 +256,25 @@ exposure_structure = {
         'made feature such as a building (an enclosed structure '
         'with walls and a roof), telecommunications facility or '
         'bridge.'),
-    'notes': [  # additional generic notes for structures
-        caveat_incomplete_data,
-        tr('Structures overlapping the analysis extent may be assigned a '
-           'hazard status lower than that to which they are exposed outside '
-           'the analysis area.'),
-        tr('Numbers reported for structures have been rounded to the nearest '
-           '10 if the total is less than 1,000; nearest 100 if more than '
-           '1,000 and less than 100,000; and nearest 1000 if more than '
-           '100,000.'),
-        tr('Rounding is applied to all structure counts, which may cause '
-           'discrepancies between subtotals and totals.'),
-        concepts['rounding_methodology']['description'],
+    'notes': [
+        {
+            'item_category': 'structure_general',
+            'item_header': tr('structure exposure general notes'),
+            'item_list': [
+                # additional generic notes for structures
+                caveat_incomplete_data,
+                tr('Structures overlapping the analysis extent may be assigned a '
+                   'hazard status lower than that to which they are exposed outside '
+                   'the analysis area.'),
+                tr('Numbers reported for structures have been rounded to the nearest '
+                   '10 if the total is less than 1,000; nearest 100 if more than '
+                   '1,000 and less than 100,000; and nearest 1000 if more than '
+                   '100,000.'),
+                tr('Rounding is applied to all structure counts, which may cause '
+                   'discrepancies between subtotals and totals.'),
+                concepts['rounding_methodology']['description'],
+            ]
+        }
     ],
     'continuous_notes': [  # notes specific to continuous data
     ],
@@ -261,9 +282,9 @@ exposure_structure = {
     ],
     'actions': [
         {
-            'action_category': 'general',
-            'action_header': tr('general checklist'),
-            'action_list': [
+            'item_category': 'general',
+            'item_header': tr('general checklist'),
+            'item_list': [
                 tr('Which structures have warning capacity '
                    '(e.g. sirens or speakers)?'),
                 tr('Are the water and electricity services still operating?'),
@@ -309,11 +330,18 @@ exposure_place = {
     'description': tr(
         'A <b>place</b> is used to indicate that a particular location is '
         'known by a particular name.'),
-    'notes': [  # additional generic notes for places
-        caveat_incomplete_data,
-        tr('Where places are represented as a single point, the effect of the '
-           'hazard over the entire place may differ from the point at which '
-           'the place is represented on the map.'),
+    'notes': [
+        {
+            'item_category': 'place_general',
+            'item_header': tr('place exposure general notes'),
+            'item_list': [
+                # additional generic notes for places
+                caveat_incomplete_data,
+                tr('Where places are represented as a single point, the effect of the '
+                   'hazard over the entire place may differ from the point at which '
+                   'the place is represented on the map.'),
+            ]
+        }
     ],
     'continuous_notes': [  # notes specific to continuous data
     ],
@@ -351,15 +379,21 @@ exposure_land_cover = {
         'the surface of the earth that might be exposed to a particular '
         'hazard. This might include crops, forest and urban areas. '),
     'notes': [
-        # these are additional generic notes for landcover
-        caveat_incomplete_data,
-        tr('Areas reported for land cover have been rounded to the nearest '
-           '10 hectares if the total is less than 1,000; nearest 100 hectares '
-           'if more than 1,000 and less than 100,000; and nearest 1000 '
-           'hectares if more than 100,000.'),
-        tr('Rounding is applied to all land cover areas, which may cause '
-           'discrepancies between subtotals and totals.'),
-        concepts['rounding_methodology']['description']
+        {
+            'item_category': 'land_cover_general',
+            'item_header': tr('land cover exposure general notes'),
+            'item_list': [
+                # these are additional generic notes for landcover
+                caveat_incomplete_data,
+                tr('Areas reported for land cover have been rounded to '
+                   'the nearest 10 hectares if the total is less than 1,000; '
+                   'nearest 100 hectares if more than 1,000 and less than '
+                   '100,000; and nearest 1000 hectares if more than 100,000.'),
+                tr('Rounding is applied to all land cover areas, which may cause '
+                   'discrepancies between subtotals and totals.'),
+                concepts['rounding_methodology']['description']
+            ]
+        }
     ],
     'continuous_notes': [  # notes specific to continuous data
     ],
@@ -367,9 +401,9 @@ exposure_land_cover = {
     ],
     'actions': [
         {
-            'action_category': 'general',
-            'action_header': tr('general checklist'),
-            'action_list': [
+            'item_category': 'general',
+            'item_header': tr('general checklist'),
+            'item_list': [
                 tr('What type of crops are planted in the affected fields?'),
                 tr('How long will the activity or function of '
                    'the land cover be disturbed?'),

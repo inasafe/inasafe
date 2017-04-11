@@ -235,7 +235,7 @@ action_checklist_component = {
     'output_path': 'action-checklist-output.html',
     'template': 'standard-template/'
                 'jinja2/'
-                'action-categorized.html',
+                'action-note-categorized.html',
     'extra_args': {
         'header': tr('Action Checklist')
     }
@@ -250,16 +250,23 @@ notes_assumptions_component = {
     'output_path': 'notes-assumptions-output.html',
     'template': 'standard-template/'
                 'jinja2/'
-                'bullet-list-section.html',
+                'action-note-categorized.html',
     'extra_args': {
         'header': tr('Notes and assumptions'),
-        'affected_note_format': tr(
-            'Exposures in this following hazard classes are considered '
-            'affected: {hazard_classes}'
-        ),
-        'displacement_rates_note_format': tr(
-            'For this analysis, the following displacement rates were used: '
-            '{rate_description}'),
+        'affected_note_format': {
+            'item_header': tr('affected notes'),
+            'item_list': [
+                tr('Exposures in this following hazard classes are considered '
+                   'affected: {hazard_classes}')
+            ]
+        },
+        'displacement_rates_note_format': {
+            'item_header': tr('displacement rates notes'),
+            'item_list': [
+                tr('For this analysis, the following displacement rates were '
+                   'used: {rate_description}')
+            ]
+        },
         'hazard_displacement_rates_note_format': tr(
             '{name} - {displacement_rate:.2%}')
     }

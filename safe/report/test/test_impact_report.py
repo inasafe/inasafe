@@ -247,9 +247,9 @@ class TestImpactReport(unittest.TestCase):
             'header': u'Action Checklist',
             'items': [
                 {
-                    'action_category': 'general',
-                    'action_header': 'general checklist',
-                    'action_list': [
+                    'item_category': 'general',
+                    'item_header': 'general checklist',
+                    'item_list': [
                         'Which structures have warning capacity '
                         '(e.g. sirens or speakers)?',
                         'Are the water and electricity services '
@@ -295,8 +295,9 @@ class TestImpactReport(unittest.TestCase):
             # Iterate to see if expected_item is in at least one of the
             # actual content items ...
             for actual_item in actual_context['items']:
-                if expected_item in actual_item:
-                    current_flag = True
+                for item in actual_item['item_list']:
+                    if expected_item in item:
+                        current_flag = True
             # It was not found in any item :-(
             self.assertTrue(
                 current_flag,
@@ -732,7 +733,7 @@ class TestImpactReport(unittest.TestCase):
         expected_context = (
             'For this analysis, the following displacement rates were used: '
             'Wet - 90.00%, Dry - 0.00%')
-        actual_context = notes_assumptions.context['items'][-1]
+        actual_context = notes_assumptions.context['items'][-1]['item_list'][0]
         self.assertEqual(expected_context.strip(), actual_context.strip())
 
         """Check generated report"""

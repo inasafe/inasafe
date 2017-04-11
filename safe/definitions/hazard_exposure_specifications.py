@@ -23,9 +23,9 @@ ITEMS = (
         'exposure': exposure_population,
         'actions': [
             {
-                'action_category': 'additional_volcanic_ash_on_population',
-                'action_header': tr('volcanic ash on population specific'),
-                'action_list': [
+                'item_category': 'additional_volcanic_ash_on_population',
+                'item_header': tr('volcanic ash on population specific'),
+                'item_list': [
                     tr('Do you have enough masks for people in '
                        'the affected area?')
                 ]
@@ -38,38 +38,40 @@ ITEMS = (
         'hazard': hazard_earthquake,
         'exposure': exposure_population,
         'actions': [],
-        'notes': [
-            tr('Map shows the estimated displaced population. People are '
-               'displaced if they experience and survive a shake level of '
-               'more than 5 on the MMI scale.'),
-            tr(
-                'Exposed population varies by the time (day or night, '
-                'weekends, holidays etc.). Such variations are not considered '
-                'in the estimates in the InaSAFE.'),
-            tr('The fatality calculation assumes that no fatalities occur for '
-               'shake levels below 4 and fatality counts of less than 50 are '
-               'rounded down.'),
-            # notes provided by Hadi Ghasemi
-            tr('Earthquake fatalities are due to a number of factors, such as '
-               'destructive level of ground shaking, tsunami, landsliding and '
-               'fire. The implemented fatality models only consider the '
-               'number of fatalities due to the earthquake ground shaking and '
-               'do not include losses due to the other secondary hazards.'),
-            tr('The fatality models do not estimate number of injuries or '
-               'displaced people. '),
-            tr(
-                'Empirical fatality models provide an estimate of the number '
-                'of fatalities. There are several sources of uncertainty '
-                'contributing to the overall uncertainty of any estimate, '
-                'such as uncertainties in shaking intensity, and population '
-                'estimates.'),
-            tr(
-                'Care should be taken when applying empirical earthquake '
-                'fatality models for ground-motion estimation methods that '
-                'are inconsistent with the methods used to calibrate the '
-                'model.'),
-            # end notes provided by Hadi Ghasemi
-        ]
+        'notes': {
+            'item_category': 'additional_earthquake_on_population',
+            'item_header': tr('earthquake on population specific notes'),
+            'item_list': [
+                tr('Map shows the estimated displaced population. People are '
+                   'displaced if they experience and survive a shake level of '
+                   'more than 5 on the MMI scale.'),
+                tr('Exposed population varies by the time (day or night, '
+                   'weekends, holidays etc.). Such variations are not '
+                   'considered in the estimates in the InaSAFE.'),
+                tr('The fatality calculation assumes that no fatalities occur '
+                   'for shake levels below 4 and fatality counts of less than '
+                   '50 are rounded down.'),
+                # notes provided by Hadi Ghasemi
+                tr('Earthquake fatalities are due to a number of factors, '
+                   'such as destructive level of ground shaking, tsunami, '
+                   'landsliding and fire. The implemented fatality models '
+                   'only consider the number of fatalities due to '
+                   'the earthquake ground shaking and do not include losses '
+                   'due to the other secondary hazards.'),
+                tr('The fatality models do not estimate number of injuries or '
+                   'displaced people. '),
+                tr('Empirical fatality models provide an estimate of '
+                   'the number of fatalities. There are several sources of '
+                   'uncertainty contributing to the overall uncertainty of '
+                   'any estimate, such as uncertainties in shaking intensity, '
+                   'and population estimates.'),
+                tr('Care should be taken when applying empirical earthquake '
+                   'fatality models for ground-motion estimation methods that '
+                   'are inconsistent with the methods used to calibrate '
+                   'the model.'),
+                # end notes provided by Hadi Ghasemi
+            ]
+        }
     },
     {
         'hazard': hazard_flood,
@@ -96,7 +98,7 @@ def specific_notes(hazard, exposure):
     """
     for item in ITEMS:
         if item['hazard'] == hazard and item['exposure'] == exposure:
-            return item.get('notes', [])
+            return [item.get('notes')]
     return []
 
 
@@ -114,7 +116,7 @@ def specific_actions(hazard, exposure):
     """
     for item in ITEMS:
         if item['hazard'] == hazard and item['exposure'] == exposure:
-            return item.get('actions', [])
+            return [item.get('actions')]
     return []
 
 

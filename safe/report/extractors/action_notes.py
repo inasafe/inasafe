@@ -76,7 +76,7 @@ def notes_assumptions_extractor(impact_report, component_metadata):
             affected_classes.append(hazard_class)
 
     if affected_classes:
-        affected_note_format = resolve_from_dictionary(
+        affected_note_dict = resolve_from_dictionary(
             extra_args, 'affected_note_format')
 
         # generate hazard classes
@@ -84,9 +84,12 @@ def notes_assumptions_extractor(impact_report, component_metadata):
             c['name'] for c in affected_classes
         ])
 
-        context['items'].append(
-            affected_note_format.format(hazard_classes=hazard_classes)
-        )
+        for index, affected_note in enumerate(affected_note_dict['item_list']):
+            affected_note_dict['item_list'][index] = (
+                affected_note.format(hazard_classes=hazard_classes)
+            )
+
+        context['items'].append(affected_note_dict)
 
     # Check hazard have displacement rate
     for hazard_class in hazard_classification['classes']:
@@ -99,7 +102,7 @@ def notes_assumptions_extractor(impact_report, component_metadata):
     # Only show displacement note if analysis about population exposure
     if have_displacement_rate and exposure_type == exposure_population:
         # add notes for displacement rate used
-        displacement_note_format = resolve_from_dictionary(
+        displacement_note_dict = resolve_from_dictionary(
             extra_args, 'displacement_rates_note_format')
 
         # generate rate description
@@ -110,7 +113,13 @@ def notes_assumptions_extractor(impact_report, component_metadata):
             hazard_note.append(hazard_note_format.format(**hazard_class))
 
         rate_description = ', '.join(hazard_note)
-        context['items'].append(
-            displacement_note_format.format(rate_description=rate_description))
+
+        for index, displacement_note in enumerate(
+                displacement_note_dict['item_list']):
+            displacement_note_dict['item_list'][index] = (
+                displacement_note.format(rate_description=rate_description)
+            )
+
+        context['items'].append(displacement_note_dict)
 
     return context
