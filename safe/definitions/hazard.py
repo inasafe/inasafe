@@ -237,7 +237,7 @@ hazard_cyclone = {
         )
     ],
     'classified_notes': [  # notes specific to classified data
-        tr('Classified cyclone hazard data is not presently supported.' )
+        tr('Classified cyclone hazard data is not presently supported.')
     ],
     'single_event_notes': [  # notes specific to single event data
     ],
