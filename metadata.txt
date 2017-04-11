@@ -10,12 +10,12 @@
 
 [general]
 name=InaSAFE
-qgisMinimumVersion=2.14
-qgisMaximumVersion=2.18
+qgisMinimumVersion=2.14.0
+qgisMaximumVersion=2.18.99
 description=InaSAFE is free software that allows disaster managers to study realistic natural hazard impact scenarios for better planning, preparedness and response activities.
 about=Developed for the Indonesian Government - BNPB, Australian Government - AIFDR and DMInnovation and, and World Bank - GFDRR
 
-version=4.0.1
+version=4.0.2
 # alpha, beta, rc or final
 status=final
 
@@ -25,6 +25,8 @@ status=final
 # Optional items:
 
 changelog=
+    Version 4.0.2
+    - Fix to support sub versions of QGIS > 2.18.0
     Version 4.0.1
     - Fix SSHWS classification
     - Add option to launch keyword wizard on shakemap importer
