@@ -993,7 +993,7 @@ class ShakeEvent(QObject):
 
         affected_row = m.Row()
         affected_row.add(
-            m.Cell(self.tr('People Affected (x 1000)'), header=True))
+            m.Cell(self.tr('People Exposed (x 1000)'), header=True))
 
         impact_row = m.Row()
         impact_row.add(m.Cell(self.tr('Perceived Shaking'), header=True))
@@ -1004,12 +1004,14 @@ class ShakeEvent(QObject):
             if mmi in self.affected_counts:
                 # noinspection PyTypeChecker
                 affected_row.add(m.Cell(
-                    '%i' % round(self.affected_counts[mmi] / 1000)))
+                    '%i' % round(self.affected_counts[mmi] / 1000),
+                    style_class='number'))
             else:
                 # noinspection PyTypeChecker
-                affected_row.add(m.Cell(0.00))
+                affected_row.add(m.Cell(0.00, style_class='number'))
 
-            impact_row.add(m.Cell(self.mmi_shaking(mmi)))
+            impact_row.add(m.Cell(
+                self.mmi_shaking(mmi), style_class='shaking'))
 
         table.add(header_row)
         table.add(affected_row)
@@ -1652,7 +1654,7 @@ class ShakeEvent(QObject):
         """
         map_name = self.tr('Estimated Earthquake Impact')
         exposure_table_name = self.tr(
-            'Estimated number of people affected by each MMI level')
+            'Estimated number of people exposed by each MMI level')
         fatalities_name = self.tr('Estimated fatalities')
         fatalities_count = self.fatality_total
 
@@ -1667,21 +1669,22 @@ class ShakeEvent(QObject):
         city_table_name = self.tr('Nearby Places')
         legend_name = self.tr('Population count per grid cell')
         limitations = self.tr(
-            'This impact estimation is automatically generated and only takes'
-            ' into account the population and cities affected by different '
-            'levels of ground shaking. The estimate is based on ground '
-            'shaking data from BMKG, population count data derived by '
-            'Australian Government from worldpop.org.uk, place information '
-            'from geonames.org and software developed by BNPB. '
-            'Limitations in the estimates of '
-            'ground shaking, population and place names datasets may '
-            'result in significant misrepresentation of the on-the-ground '
-            'situation in the figures shown here. Consequently decisions '
-            'should not be made solely on the information presented here and '
-            'should always be verified by ground truthing and other reliable '
-            'information sources. The fatality calculation assumes that '
-            'no fatalities occur for shake levels below MMI 4. Fatality '
-            'counts of less than 50 are disregarded.')
+            'This impact estimation is automatically generated and only '
+            'takes into account the population and cities affected by '
+            'different levels of ground shaking. The estimate is based on '
+            'ground shaking data from BMKG, population count data derived '
+            'by DMInnovation from worldpop.org.uk, place information data '
+            'provided by Indonesian Geospatial Portal at '
+            'http://portal.ina-sdi.or.id and software developed by BNPB. '
+            'Limitations in the estimates of ground shaking, population and '
+            'place names datasets may result in significant '
+            'misrepresentation of the on-the-ground situation in the '
+            'figures shown here. Consequently, decisions should not be made '
+            'solely on the information presented here and should always be '
+            'verified by ground truthing and other reliable information '
+            'sources. The fatality calculation assumes that no fatalities '
+            'occur for shake levels below MMI 4. Fatality counts of less '
+            'than 50 are rounded down.')
         software_tag = self.tr(
             'This report was created using InaSAFE version %s. Visit '
             'http://inasafe.org for more information.') % get_version()
