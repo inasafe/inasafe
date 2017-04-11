@@ -848,4 +848,4 @@ class WizardDialog(QDialog, FORM_CLASS):
             for key, value in \
                     current_keywords['inasafe_default_values'].items():
                 set_inasafe_default_value_qsetting(
-                    self.setting, key, RECENT, value)
+                    self.setting, RECENT, key, value)
