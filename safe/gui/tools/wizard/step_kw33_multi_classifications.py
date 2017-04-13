@@ -153,7 +153,11 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
 
         # Check if it can go to inasafe default field step
         default_inasafe_fields = get_fields(
-            self.layer_purpose['key'], subcategory['key'], replace_null=True)
+            self.layer_purpose['key'],
+            subcategory['key'],
+            replace_null=True,
+            in_group=False
+        )
         if default_inasafe_fields:
             return self.parent.step_kw_default_inasafe_fields
 
