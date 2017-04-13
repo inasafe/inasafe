@@ -130,7 +130,13 @@ class FieldMappingDialog(QDialog, FORM_CLASS):
         # Set header label
         group_names = [self.field_mapping_widget.tabText(i) for i in
              range(self.field_mapping_widget.count())]
-        if len(group_names) == 1:
+        if len(group_names) == 0:
+            header_text = tr(
+                'There is no field group for this layer. Please select '
+                'another layer.')
+            self.header_label.setText(header_text)
+            return
+        elif len(group_names) == 1:
             pretty_group_name = group_names[0]
         elif len(group_names) == 2:
             pretty_group_name = group_names[0] + tr(' and ') + group_names[1]
