@@ -1,20 +1,6 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
-- **Import Dialog Test Cases.**
 
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
-__author__ = 'bungcip@gmail.com'
-__date__ = '05/02/2013'
-__copyright__ = ('Copyright 2013, Australia Indonesia Facility for '
-                 'Disaster Reduction')
+"""Tests for OSM downloader dialog."""
 
 # noinspection PyUnresolvedReferences
 import unittest
@@ -30,14 +16,22 @@ import qgis  # pylint: disable=unused-import
 from safe.gui.tools.osm_downloader_dialog import OsmDownloaderDialog
 from safe.test.utilities import get_qgis_app
 
+__copyright__ = "Copyright 2013, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
+
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 LOGGER = logging.getLogger('InaSAFE')
 
 
 class OsmDownloaderDialogTest(unittest.TestCase):
+
     """Test Osm Downloader Dialog widget
+
     .. versionchanged:: 3.2
     """
+
     # noinspection PyPep8Naming
     def setUp(self):
         """Runs before each test."""

@@ -161,8 +161,8 @@ class FieldMappingTab(QWidget, object):
         """Helper to setup the parameter widget."""
         used_fields = []
         self.parameters = []
-        selected_option = DO_NOT_USE
         for field in self.field_group.get('fields', []):
+            selected_option = DO_NOT_USE
             options = OrderedDict([
                 (DO_NOT_USE,
                  {

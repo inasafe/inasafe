@@ -1,5 +1,5 @@
 # coding=utf-8
-"""Field Mapping Tool Implementation."""
+"""Field Mapping Dialog Implementation."""
 
 from PyQt4.QtGui import (
     QDialog, QHBoxLayout, QLabel, QDialogButtonBox, QMessageBox)
@@ -10,18 +10,17 @@ import logging
 
 from safe.definitions.constants import RECENT
 from safe.common.exceptions import (
-    NoKeywordsFoundError, KeywordNotFoundError, MetadataReadError,
+    NoKeywordsFoundError,
+    KeywordNotFoundError,
+    MetadataReadError,
     InaSAFEError)
 from safe.utilities.resources import (
-    get_ui_class,
-    html_footer,
-    html_header)
+    get_ui_class, html_footer, html_header)
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.gui.widgets.field_mapping_widget import FieldMappingWidget
 from safe.gui.tools.help.field_mapping_help import field_mapping_help
-from safe.utilities.utilities import (
-    get_error_message, is_keyword_version_supported)
+from safe.utilities.utilities import get_error_message
 from safe.utilities.default_values import set_inasafe_default_value_qsetting
 
 FORM_CLASS = get_ui_class('field_mapping_dialog_base.ui')
@@ -211,6 +210,8 @@ class FieldMappingDialog(QDialog, FORM_CLASS):
                     self.metadata['inasafe_default_values'].pop(key)
             else:
                 self.metadata['inasafe_default_values'][key] = value
+
+        # Save metadata
         try:
             self.keyword_io.write_keywords(
                 layer=self.layer, keywords=self.metadata)
@@ -223,6 +224,7 @@ class FieldMappingDialog(QDialog, FORM_CLASS):
                     'An error was encountered when saving the following '
                     'keywords:\n %s') % error_message.to_html())))
 
+        # Update setting fir recent value
         if self.metadata.get('inasafe_default_values'):
             for key, value in \
                     self.metadata['inasafe_default_values'].items():
