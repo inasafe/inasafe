@@ -197,7 +197,7 @@
             <gco:CharacterString>aggregation</gco:CharacterString>
           </layer_purpose>
           <inasafe_fields>
-            <gco:Dictionary>{&quot;adult_ratio_field&quot;: [&quot;adult_ratio&quot;], &quot;female_ratio_field&quot;: [&quot;ratio_female&quot;], &quot;elderly_ratio_field&quot;: [&quot;65_67_years&quot;, &quot;60_65_years&quot;], &quot;aggregation_name_field&quot;: &quot;area_name&quot;, &quot;aggregation_id_field&quot;: &quot;area_id&quot;}</gco:Dictionary>
+            <gco:Dictionary>{&quot;adult_ratio_field&quot;: [&quot;adult_ratio&quot;], &quot;aggregation_name_field&quot;: &quot;area_name&quot;, &quot;female_ratio_field&quot;: [&quot;ratio_female&quot;], &quot;aggregation_id_field&quot;: &quot;area_id&quot;, &quot;elderly_ratio_field&quot;: [&quot;65_67_years&quot;, &quot;60_65_years&quot;]}</gco:Dictionary>
           </inasafe_fields>
           <inasafe_default_values>
             <gco:Dictionary>{&quot;youth_ratio_field&quot;: 0.25}</gco:Dictionary>

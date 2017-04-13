@@ -862,7 +862,7 @@ class Plugin(object):
     def show_field_mapping(self):
         """Show InaSAFE Field Mapping.
         """
-        from safe.gui.tools.field_mapping_tool import FieldMappingDialog
+        from safe.gui.tools.field_mapping_dialog import FieldMappingDialog
         dialog = FieldMappingDialog(
             parent=self.iface.mainWindow(),
             iface=self.iface,)
