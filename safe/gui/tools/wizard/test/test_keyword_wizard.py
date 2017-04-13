@@ -317,16 +317,6 @@ class TestKeywordWizard(unittest.TestCase):
         # Click next
         dialog.pbnNext.click()
 
-        # Check if in default inasafe fields
-        self.check_current_step(dialog.step_kw_default_inasafe_fields)
-
-        # Check behaviour
-        self.check_radio_button_behaviour(
-            dialog.step_kw_default_inasafe_fields)
-
-        # Click next
-        dialog.pbnNext.click()
-
         # Check if in source step
         self.check_current_step(dialog.step_kw_source)
 
@@ -965,14 +955,7 @@ class TestKeywordWizard(unittest.TestCase):
         self.check_radio_button_behaviour(
             dialog.step_kw_default_inasafe_fields)
 
-        # Click next to finish inasafe fields step and go to inasafe default
-        # field step
-        dialog.pbnNext.click()
-
-        # Check if in InaSAFE Default field step
-        self.check_current_step(dialog.step_kw_default_inasafe_fields)
-
-        # Click next to finish InaSAFE Default Field step and go to source step
+        # Click next to finish inasafe fields step and go to source step
         dialog.pbnNext.click()
 
         # Check if in source step
@@ -1052,14 +1035,7 @@ class TestKeywordWizard(unittest.TestCase):
         self.check_radio_button_behaviour(
             dialog.step_kw_default_inasafe_fields)
 
-        # Click next to finish inasafe fields step and go to inasafe default
-        # field step
-        dialog.pbnNext.click()
-
-        # Check if in InaSAFE Default field step
-        self.check_current_step(dialog.step_kw_default_inasafe_fields)
-
-        # Click next to finish InaSAFE Default Field step and go to source step
+        # Click next to finish inasafe fields step and go to source step
         dialog.pbnNext.click()
 
         # Check if in source step
