@@ -44,8 +44,8 @@ age_count_group = {
         'The group of fields that consists of population count per age '
         'class.'),
     'fields': [
-        # infant_count_field,
-        # child_count_field,
+        infant_count_field,
+        child_count_field,
         youth_count_field,
         adult_count_field,
         elderly_count_field
@@ -59,8 +59,8 @@ age_ratio_group = {
         'The group of fields that consists of population ratio per age '
         'class.'),
     'fields': [
-        # infant_ratio_field,
-        # child_ratio_field,
+        infant_ratio_field,
+        child_ratio_field,
         youth_ratio_field,
         adult_ratio_field,
         elderly_ratio_field
@@ -75,8 +75,8 @@ gender_ratio_group = {
         'class.'),
     'fields': [
         female_ratio_field,
-        # child_bearing_age_ratio_field,
-        # pregnant_lactating_ratio_field
+        child_bearing_age_ratio_field,
+        pregnant_lactating_ratio_field
     ]
 }
 
@@ -88,8 +88,8 @@ gender_count_group = {
         'class.'),
     'fields': [
         female_count_field,
-        # child_bearing_age_count_field,
-        # pregnant_lactating_count_field
+        child_bearing_age_count_field,
+        pregnant_lactating_count_field
     ]
 }
 
@@ -122,11 +122,35 @@ vulnerability_count_group = {
 aggregation_field_groups = [
     age_ratio_group,
     gender_ratio_group,
-    # vulnerability_ratio_group
+    vulnerability_ratio_group
 ]
 
 exposure_field_groups = [
     age_count_group,
     gender_count_group,
-    # vulnerability_count_group
+    vulnerability_count_group
 ]
+
+# Count ratio pairs field group
+count_ratio_group_pairs = [
+    (gender_count_group, gender_ratio_group),
+    (age_count_group, age_ratio_group),
+    (vulnerability_count_group, vulnerability_ratio_group)
+]
+
+
+# This table is useful when we need to match between counts and ratios.
+count_ratio_mapping = {
+    female_count_field['key']: female_ratio_field['key'],
+    youth_count_field['key']: youth_ratio_field['key'],
+    adult_count_field['key']: adult_ratio_field['key'],
+    elderly_count_field['key']: elderly_ratio_field['key'],
+    # feature_value_field['key']: feature_rate_field['key'], disabled V4.0 ET
+}
+
+for count_ratio_pair in count_ratio_group_pairs:
+    count_fields = count_ratio_pair[0]['fields']
+    ratio_fields = count_ratio_pair[1]['fields']
+    for index in range(len(count_fields)):
+        count_ratio_mapping[
+            count_fields[index]['key']] = ratio_fields[index]['key']

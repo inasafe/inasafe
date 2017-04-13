@@ -66,11 +66,10 @@ from safe.definitions.fields import (
     size_field,
     exposure_class_field,
     hazard_class_field,
-    count_ratio_mapping,
 )
+from safe.definitions import count_ratio_mapping
 from safe.definitions.layer_purposes import (
     layer_purpose_exposure,
-    layer_purpose_aggregation,
     layer_purpose_exposure_summary,
     layer_purpose_aggregate_hazard_impacted,
     layer_purpose_aggregation_summary,

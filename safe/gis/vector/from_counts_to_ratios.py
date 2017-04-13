@@ -4,7 +4,8 @@
 
 import logging
 from safe.definitions.utilities import definition, get_non_compulsory_fields
-from safe.definitions.fields import count_ratio_mapping, population_count_field
+from safe.definitions.fields import population_count_field
+from safe.definitions import count_ratio_mapping
 from safe.definitions.processing_steps import (
     recompute_counts_steps)
 from safe.definitions.layer_purposes import layer_purpose_exposure
