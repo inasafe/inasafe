@@ -60,7 +60,7 @@ from safe.gis.raster.align import align_rasters
 from safe.gis.raster.rasterize import rasterize_vector_layer
 from safe.definitions.post_processors import post_processors
 from safe.definitions.analysis_steps import analysis_steps
-from safe.definitions.utilities import definition
+from safe.definitions.utilities import definition, get_non_compulsory_fields
 from safe.definitions.exposure import indivisible_exposure
 from safe.definitions.fields import (
     size_field,
@@ -69,6 +69,8 @@ from safe.definitions.fields import (
     count_ratio_mapping,
 )
 from safe.definitions.layer_purposes import (
+    layer_purpose_exposure,
+    layer_purpose_aggregation,
     layer_purpose_exposure_summary,
     layer_purpose_aggregate_hazard_impacted,
     layer_purpose_aggregation_summary,
@@ -1434,8 +1436,9 @@ class ImpactFunction(object):
                     'The exposure is a vector layer. According to the kind of '
                     'exposure, we need to check if the exposure has some '
                     'counts before adding some default ratios.')
-
-                for count_field in exposure['extra_fields']:
+                non_compulsory_fields = get_non_compulsory_fields(
+                    layer_purpose_exposure['key'], exposure['key'])
+                for count_field in non_compulsory_fields:
                     count_key = count_field['key']
                     if count_key in count_ratio_mapping.keys():
                         ratio_field = count_ratio_mapping[count_key]
@@ -1465,7 +1468,9 @@ class ImpactFunction(object):
                     'have some counts. We add every global defaults to the '
                     'exposure layer related to the exposure.')
 
-                for count_field in exposure['extra_fields']:
+                non_compulsory_fields = get_non_compulsory_fields(
+                    layer_purpose_exposure['key'], exposure['key'])
+                for count_field in non_compulsory_fields:
                     count_key = count_field['key']
                     if count_key in count_ratio_mapping.keys():
                         ratio_field = count_ratio_mapping[count_key]
@@ -1515,7 +1520,9 @@ class ImpactFunction(object):
                 aggregation_keywords['inasafe_default_values'] = {}
             aggregation_default_fields = aggregation_keywords.get(
                 'inasafe_default_values')
-            for count_field in exposure['extra_fields']:
+            non_compulsory_fields = get_non_compulsory_fields(
+                layer_purpose_exposure['key'], exposure['key'])
+            for count_field in non_compulsory_fields:
                 if count_field['key'] in count_ratio_mapping.keys():
                     ratio_field = count_ratio_mapping[count_field['key']]
                     if count_field['key'] not in exposure_fields:
