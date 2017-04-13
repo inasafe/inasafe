@@ -78,7 +78,7 @@ class FieldMappingTab(QWidget, object):
         self.field_layout = QVBoxLayout()
         self.parameter_layout = QHBoxLayout()
 
-        self.field_description = QLabel('List of fields')
+        self.field_description = QLabel(tr('List of fields'))
         self.field_list = QListWidget()
         self.field_list.setDragDropMode(QAbstractItemView.DragDrop)
         self.field_list.setDefaultDropAction(Qt.MoveAction)
