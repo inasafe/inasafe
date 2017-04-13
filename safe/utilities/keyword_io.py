@@ -649,6 +649,8 @@ class KeywordIO(QObject):
                     for item in value:
                         bullets.add(item)
                     row.add(m.Cell(bullets))
+                elif len(value) == 0:
+                    row.add(m.Cell(""))
                 else:
                     row.add(m.Cell(value[0]))
             else:
