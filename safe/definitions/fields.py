@@ -4,7 +4,7 @@
 
 from PyQt4.QtCore import QVariant
 
-from safe.utilities.i18n import tr
+from safe.definitions import concepts
 from safe.definitions.constants import (
     qvariant_whole_numbers, qvariant_numbers)
 from safe.definitions.default_values import (
@@ -22,7 +22,7 @@ from safe.definitions.default_values import (
     child_bearing_age_ratio_default_value,
     pregnant_lactating_ratio_default_value
 )
-from safe.definitions import concepts
+from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -1880,12 +1880,3 @@ ratio_fields = [
     adult_ratio_field,
     elderly_ratio_field,
 ]
-
-# This table is useful when we need to match between counts and ratios.
-count_ratio_mapping = {
-    female_count_field['key']: female_ratio_field['key'],
-    youth_count_field['key']: youth_ratio_field['key'],
-    adult_count_field['key']: adult_ratio_field['key'],
-    elderly_count_field['key']: elderly_ratio_field['key'],
-    # feature_value_field['key']: feature_rate_field['key'], disabled V4.0 ET
-}

@@ -391,12 +391,9 @@ class TestDefinitionsUtilities(unittest.TestCase):
     def test_fields_in_field_groups(self):
         """Test for fields_in_field_groups method."""
         fields = fields_in_field_groups(exposure_field_groups)
-        expected = [
-            youth_count_field,
-            adult_count_field,
-            elderly_count_field,
-            female_count_field
-        ]
+        expected = []
+        for field_group in exposure_field_groups:
+            expected += field_group['fields']
         self.assertListEqual(fields, expected)
 
 
