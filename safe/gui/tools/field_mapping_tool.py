@@ -22,7 +22,7 @@ from safe.gui.widgets.field_mapping_widget import FieldMappingWidget
 from safe.gui.tools.help.field_mapping_help import field_mapping_help
 from safe.utilities.utilities import (
     get_error_message, is_keyword_version_supported)
-from safe.utilities.settings import set_inasafe_default_value_qsetting
+from safe.utilities.default_values import set_inasafe_default_value_qsetting
 
 FORM_CLASS = get_ui_class('field_mapping_dialog_base.ui')
 
