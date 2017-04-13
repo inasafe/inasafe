@@ -15,6 +15,7 @@ from safe.definitions.default_values import *
 from safe.definitions.exposure import *
 from safe.definitions.exposure_classifications import *
 from safe.definitions.fields import *
+from safe.definitions.field_groups import *
 from safe.definitions.hazard import *
 from safe.definitions.hazard_category import *
 from safe.definitions.hazard_classifications import *

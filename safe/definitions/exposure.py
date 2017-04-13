@@ -130,13 +130,7 @@ exposure_population = {
     'classifications': [],
     'compulsory_fields': [population_count_field],
     'fields': exposure_fields,
-    'extra_fields': [
-        exposure_name_field,
-        female_count_field,
-        youth_count_field,
-        adult_count_field,
-        elderly_count_field
-    ],
+    'extra_fields': [exposure_name_field],
     'layer_modes': [layer_mode_continuous],
     'display_not_exposed': False,
     'use_population_rounding': True,
