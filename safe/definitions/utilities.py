@@ -146,7 +146,9 @@ def get_classifications(subcategory_key):
     return sorted(classifications, key=lambda k: k['key'])
 
 
-def get_fields(layer_purpose, layer_subcategory=None, replace_null=None):
+def get_fields(
+        layer_purpose, layer_subcategory=None, replace_null=None,
+        in_group=True):
     """Get all field based on the layer purpose.
 
     :param layer_purpose: The layer purpose.
@@ -183,6 +185,11 @@ def get_fields(layer_purpose, layer_subcategory=None, replace_null=None):
         fields_for_purpose = deepcopy(aggregation_fields)
     elif layer_purpose == layer_purpose_exposure_summary['key']:
         fields_for_purpose = deepcopy(impact_fields)
+
+    if in_group:
+        layer_purpose_dict = definition(layer_purpose)
+        fields_for_purpose += fields_in_field_groups(
+            layer_purpose_dict['field_groups'])
 
     if isinstance(replace_null, bool):
         fields_for_purpose = [
@@ -381,3 +388,18 @@ def default_classification_value_maps(classification):
             'string_defaults', [])
 
     return value_maps
+
+
+def fields_in_field_groups(field_groups):
+    """Obtain list of fields from a list of field groups
+
+    :param layer_purpose: List of field group.
+    :type field_groups: list
+
+    :returns: List of fields.
+    :rtype: list
+    """
+    fields = []
+    for field_group in field_groups:
+        fields += field_group['fields']
+    return fields

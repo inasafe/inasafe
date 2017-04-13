@@ -1787,11 +1787,7 @@ hazard_fields = [
 
 aggregation_fields = [
     aggregation_id_field,
-    aggregation_name_field,
-    female_ratio_field,
-    youth_ratio_field,
-    adult_ratio_field,
-    elderly_ratio_field
+    aggregation_name_field
 ]
 
 # Outputs
