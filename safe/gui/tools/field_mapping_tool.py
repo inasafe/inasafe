@@ -196,7 +196,7 @@ class FieldMappingDialog(QDialog, FORM_CLASS):
             # Delete the key if it's set to None
             if key in self.metadata['inasafe_default_values']:
                 self.metadata['inasafe_default_values'].pop(key)
-            if value is None:
+            if value is None or value == []:
                 if key in self.metadata['inasafe_fields']:
                     self.metadata['inasafe_fields'].pop(key)
             else:
