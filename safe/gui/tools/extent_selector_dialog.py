@@ -23,6 +23,7 @@ __copyright__ = '(C) 2010, Giuseppe Sucameli'
 # This will get replaced with a git SHA1 when you do a git archive
 __revision__ = '$Format:%H$'
 
+import os
 import logging
 import sqlite3
 # noinspection PyUnresolvedReferences
@@ -390,6 +391,9 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
         # Connect to the QGIS sqlite database and check if the table exists.
         # noinspection PyArgumentList
         db_file_path = QgsApplication.qgisUserDbFilePath()
+        if not os.path.exists(db_file_path):
+            return
+
         db = sqlite3.connect(db_file_path)
         cursor = db.cursor()
         cursor.execute(
