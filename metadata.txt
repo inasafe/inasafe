@@ -10,14 +10,14 @@
 
 [general]
 name=InaSAFE
-qgisMinimumVersion=2.14
-qgisMaximumVersion=2.18
+qgisMinimumVersion=2.14.0
+qgisMaximumVersion=2.18.99
 description=InaSAFE is free software that allows disaster managers to study realistic natural hazard impact scenarios for better planning, preparedness and response activities.
 about=Developed for the Indonesian Government - BNPB, Australian Government - AIFDR and DMInnovation and, and World Bank - GFDRR
 
-version=4.0.0
+version=4.1.0
 # alpha, beta, rc or final
-status=alpha
+status=beta
 
 
 # end of mandatory metadata
@@ -25,40 +25,66 @@ status=alpha
 # Optional items:
 
 changelog=
-    Complete overhaul of the InaSAFE code base
-    Deprecated numpy / matrix based geometry manipulation
-    New reporting system including Jinja2 support
-    Experimental support for Infographics
-    Removed all impact functions in favour of a shared workflow for all hazards
-    Added support for exposure specfic thresholds in hazard metadata
-    Produce rich data outputs instead of simple HTML reports
-    Added new hazard support for Tropical Cyclone
-    Extensive updates to the help reference and a new help browser
-    Removal of all logic that uses interpolation to assess impact level
-    Application of standards to reporting and calculations for more consistent presentation
-    Ability to work with larger datasets in many cases (just be patient while analysis runs)
-    Speed ups and improvements to many parts of the code base
-    Improvements to the batch runner tool
-    Improvements to the shake grid importer tool
-    Port of the minimum needs tool to use our new architecture
-    Added support for analysis of irregular areas (as defined by aggregation layer)
-    Features or population outside of aggregation areas are no longer counted as part of the total exposure count
-    Added support for working with data subsets
-    Analysis no longer works only with local file sources
-    All geometry operations are performed using the QGIS API now
-    QGIS layers list items now have a context menu for InaSAFE
-    Input layers no longer need to be in EPSG:4326
-    Moved realtime code to its own repository
-    Improved error handling system
-    Added profiling for all analysis steps so we can easily identify performance bottlenecks
-    Improved how partial overlaps with a hazard are managed (feature is assigned highest impact zone)
-    Generate rich provenance for use in reporting
-    Generate multiple sub products (impact layer, aggregation by hazard layer)
-    PDF Reports are generated directly once analysis completes
-    Earthquake sub-algorithm selection has been moved to the InaSAFE options dialog
-    ITB Bayesian algorithm is now default for earthquake
-    Earthquake analysis map output is now a boolean layer indicating if a cell contains displaced people
-    Many, many more improvements...
+    Version 4.0.2
+    - Fix to support sub versions of QGIS > 2.18.0
+    Version 4.0.1
+    - Fix SSHWS classification
+    - Add option to launch keyword wizard on shakemap importer
+    - Change fallback font to Arial in Windows
+    - Create fallback header if affected field not found
+    - Match petabencana's keyword with its classification (#4056)
+    - Fix #4049. Handle more types in metadata copying.
+    - Change calculation of additional rice #3607
+    - Improve translation for IF name
+    - Add translated analysis question support
+    - Add sum ratio checker in option dialog.
+    - Fix issue #3887: Add ordering for exposure classes in aggregation
+    - Fix issue #3998: update qgis report templates
+    - Improvement in infographic
+    - Disable GDAL bash window on windows
+    - Fix hazard with many units
+    - Enable the displaced raster to be the impact layer
+    - Fix title and displaced raster
+    - Add missing notes for EQ impact function
+    - Enable inasafe for QGIS 2.14, 2.16 and 2.18
+    - Generate map report in IFCW too
+    - Fix unicode issue in layer title
+    
+    Version 4.0.0
+    - Complete overhaul of the InaSAFE code base
+    - Deprecated numpy / matrix based geometry manipulation
+    - New reporting system including Jinja2 support
+    - Experimental support for Infographics
+    - Removed all impact functions in favour of a shared workflow for all hazards
+    - Added support for exposure specfic thresholds in hazard metadata
+    - Produce rich data outputs instead of simple HTML reports
+    - Added new hazard support for Tropical Cyclone
+    - Extensive updates to the help reference and a new help browser
+    - Removal of all logic that uses interpolation to assess impact level
+    - Application of standards to reporting and calculations for more consistent presentation
+    - Ability to work with larger datasets in many cases (just be patient while analysis runs)
+    - Speed ups and improvements to many parts of the code base
+    - Improvements to the batch runner tool
+    - Improvements to the shake grid importer tool
+    - Port of the minimum needs tool to use our new architecture
+    - Added support for analysis of irregular areas (as defined by aggregation layer)
+    - Features or population outside of aggregation areas are no longer counted as part of the total exposure count
+    - Added support for working with data subsets
+    - Analysis no longer works only with local file sources
+    - All geometry operations are performed using the QGIS API now
+    - QGIS layers list items now have a context menu for InaSAFE
+    - Input layers no longer need to be in EPSG:4326
+    - Moved realtime code to its own repository
+    - Improved error handling system
+    - Added profiling for all analysis steps so we can easily identify performance bottlenecks
+    - Improved how partial overlaps with a hazard are managed (feature is assigned highest impact zone)
+    - Generate rich provenance for use in reporting
+    - Generate multiple sub products (impact layer, aggregation by hazard layer)
+    - PDF Reports are generated directly once analysis completes
+    - Earthquake sub-algorithm selection has been moved to the InaSAFE options dialog
+    - ITB Bayesian algorithm is now default for earthquake
+    - Earthquake analysis map output is now a boolean layer indicating if a cell contains displaced people
+    - Many, many more improvements...
     
 
 # tags are comma separated with spaces allowed
