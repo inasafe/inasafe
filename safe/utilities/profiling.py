@@ -60,6 +60,8 @@ class Tree(object):
     def memory_used(self):
         """To know the allocated memory at function termination.
 
+        ..versionadded:: 4.1
+
         This property might return None if the function is still running.
 
         This function should help to show memory leaks or ram greedy code.

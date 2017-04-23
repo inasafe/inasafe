@@ -2,6 +2,7 @@
 
 """Create extra layers in the impact function."""
 
+import logging
 from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsVectorLayer,
@@ -30,6 +31,8 @@ from safe.gis.vector.tools import (
     create_memory_layer, create_field_from_definition, copy_layer)
 from safe.utilities.profiling import profile
 from safe.utilities.i18n import tr
+
+LOGGER = logging.getLogger('InaSAFE')
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -138,7 +141,8 @@ def create_profile_layer(profiling):
     """
     fields = [
         create_field_from_definition(profiling_function_field),
-        create_field_from_definition(profiling_time_field)
+        create_field_from_definition(profiling_time_field),
+        create_field_from_definition(profiling_memory_field)
     ]
     tabular = create_memory_layer('profiling', QGis.NoGeometry, fields=fields)
 
@@ -160,10 +164,12 @@ def create_profile_layer(profiling):
     table = profiling.to_text().splitlines()[3:]
     tabular.startEditing()
     for line in table:
+        LOGGER.info(line)
         feature = QgsFeature()
         items = line.split(', ')
         time = items[1].replace('-', '')
-        feature.setAttributes([items[0], time])
+        memory = items[2].replace('-', '')
+        feature.setAttributes([items[0], time, memory])
         tabular.addFeature(feature)
 
     tabular.commitChanges()
