@@ -16,7 +16,8 @@ from safe.definitions.fields import (
     analysis_id_field,
     analysis_name_field,
     profiling_function_field,
-    profiling_time_field
+    profiling_time_field,
+    profiling_memory_field
 )
 from safe.definitions.constants import inasafe_keyword_version_key
 from safe.definitions.versions import inasafe_keyword_version
@@ -149,7 +150,9 @@ def create_profile_layer(profiling):
         profiling_function_field['key']:
             profiling_function_field['field_name'],
         profiling_time_field['key']:
-            profiling_time_field['field_name']
+            profiling_time_field['field_name'],
+        profiling_memory_field['key']:
+            profiling_memory_field['field_name']
     }
     tabular.keywords[inasafe_keyword_version_key] = (
         inasafe_keyword_version)

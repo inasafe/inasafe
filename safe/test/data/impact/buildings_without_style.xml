@@ -199,6 +199,9 @@
           <elapsed_time>
             <gco:Integer/>
           </elapsed_time>
+          <memory_used>
+            <gco:Integer/>
+          </memory_used>
           <source>
             <gco:CharacterString>OpenStreetMap - www.openstreetmap.org</gco:CharacterString>
           </source>

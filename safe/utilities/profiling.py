@@ -9,6 +9,7 @@ This code was taken from http://stackoverflow.com/a/3620972
 import time
 import inspect
 from functools import wraps
+from safe.utilities.memory_checker import get_free_memory
 
 __copyright__ = "Vadim Shender (original poster in stack overflow), InaSAFE"
 __license__ = "Creative Commons"
@@ -29,12 +30,19 @@ class Tree(object):
         # Time at the end.
         self._end_time = None
 
+        # memory at creation
+        self._start_memory = get_free_memory()
+
+        # memory at termination
+        self._end_memory = None
+
         # Children
         self.children = []
 
     def ended(self):
         """We call this method when the function is finished."""
         self._end_time = time.time()
+        self._end_memory = get_free_memory()
 
     @property
     def elapsed_time(self):
@@ -45,6 +53,20 @@ class Tree(object):
         if self._end_time:
             elapsed_time = round(self._end_time - self._start_time, 3)
             return elapsed_time
+        else:
+            return None
+
+    @property
+    def memory_used(self):
+        """To know the allocated memory at function termination.
+
+        This property might return None if the function is still running.
+
+        This function should help to show memory leaks or ram greedy code.
+        """
+        if self._end_memory:
+            memory_used = self._end_memory - self._start_memory
+            return memory_used
         else:
             return None
 
