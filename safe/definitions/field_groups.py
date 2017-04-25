@@ -154,3 +154,12 @@ for count_ratio_pair in count_ratio_group_pairs:
     for index in range(len(count_fields)):
         count_ratio_mapping[
             count_fields[index]['key']] = ratio_fields[index]['key']
+
+all_field_groups = [
+    age_count_group,
+    age_ratio_group,
+    gender_count_group,
+    gender_ratio_group,
+    vulnerability_count_group,
+    vulnerability_ratio_group
+]
