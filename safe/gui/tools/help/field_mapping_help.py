@@ -104,10 +104,11 @@ def content():
         'The illustration above shows the principle behind InaSAFE\'s '
         'demographic breakdown reporting system. The idea here is to support '
         'the production of a detailed demographic breakdown when carrying out '
-        'an analysis with a population exposure vector dataset. So for example '
-        'instead of simply reporting on the total number of people exposed to '
-        'a hazard, we want to break down the affected population into distinct '
-        'demographic groups. In InaSAFE by default we consider three groups:'
+        'an analysis with a population exposure vector dataset. So for '
+        'example instead of simply reporting on the total number of people '
+        'exposed to a hazard, we want to break down the affected population '
+        'into distinct demographic groups. In InaSAFE by default we consider '
+        'three groups:'
     ))
     message.add(paragraph)
 
@@ -124,8 +125,8 @@ def content():
         m.ImportantText(tr('Age: ')),
         tr(
             'The age group reports on age specific demographics including '
-            'things like the number of infants, children, young adults, adults '
-            'elderly people and so on.'
+            'things like the number of infants, children, young adults, '
+            'adults elderly people and so on.'
         )
     ))
     bullets.add(m.Paragraph(
@@ -137,6 +138,5 @@ def content():
         )
     ))
     message.add(bullets)
-
 
     return message
