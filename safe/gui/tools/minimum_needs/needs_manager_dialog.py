@@ -35,6 +35,9 @@ from PyQt4.QtGui import (
 from qgis.core import QGis  # force sip2 api
 
 from safe.common.parameters.resource_parameter import ResourceParameter
+from safe.definitions.minimum_needs import reload_minimum_needs_definition
+from safe.definitions.post_processors import (
+    reload_minimum_needs_post_processors)
 from safe.gui.tools.help.needs_manager_help import needs_manager_helps
 from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
 from safe.messaging import styles
@@ -701,6 +704,11 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         self.minimum_needs.save()
         self.minimum_needs.save_profile(minimum_needs['profile'])
         self.mark_current_profile_as_saved()
+
+        # Call function for giving direct effect after
+        # changes on needs profile.
+        reload_minimum_needs_definition()
+        reload_minimum_needs_post_processors()
 
     def save_profile_as(self):
         """Save the minimum needs under a new profile name.

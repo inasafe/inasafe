@@ -151,3 +151,13 @@ def _declare_minimum_fields():
         setattr(sys.modules[__name__], field['key'], field)
 
 _declare_minimum_fields()
+
+
+def reload_minimum_needs_definition():
+    """Re-declare minimum_needs_fields variable.
+
+    This function is useful for removing the needs of restarting qgis to get
+    the effect of changing minimum needs profile.
+    """
+    global minimum_needs_fields
+    minimum_needs_fields = _initializes_minimum_needs_fields()

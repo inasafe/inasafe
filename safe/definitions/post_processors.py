@@ -12,7 +12,6 @@ from PyQt4.QtCore import QPyNullVariant
 
 from safe.definitions.hazard_classifications import not_exposed_class
 from safe.definitions.exposure import exposure_population
-from safe.definitions.minimum_needs import minimum_needs_fields
 from safe.utilities.i18n import tr
 from safe.definitions.fields import (
     population_displacement_ratio_field,
@@ -656,6 +655,8 @@ def initialize_minimum_needs_post_processors():
     """Generate definitions for minimum needs post processors."""
     processors = []
 
+    from safe.definitions.minimum_needs import (
+        minimum_needs_fields)
     for field in minimum_needs_fields:
         field_key = field['key']
         field_name = field['name']
@@ -733,3 +734,24 @@ post_processors = [
     post_processor_displaced_ratio,
     post_processor_displaced,
 ] + female_postprocessors + age_postprocessors + minimum_needs_post_processors
+
+
+def reload_minimum_needs_post_processors():
+    """Re-declare minimum_needs_fields and post_processors variable.
+
+    This function is useful for removing the needs of restarting qgis to get
+    the effect of changing minimum needs profile.
+    """
+    global minimum_needs_post_processors, post_processors
+    minimum_needs_post_processors = initialize_minimum_needs_post_processors()
+    new_post_processors = []
+    for post_processor in post_processors:
+        no_needs_profile = True
+        for key, values in post_processor['input'].items():
+            values = values if isinstance(values, list) else [values]
+            if needs_profile_input_type in [
+                value['type'] for value in values]:
+                no_needs_profile = False
+        if no_needs_profile:
+            new_post_processors.append(post_processor)
+    post_processors = new_post_processors + minimum_needs_post_processors

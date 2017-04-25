@@ -27,7 +27,6 @@ from safe.common.version import get_version
 from safe.datastore.folder import Folder
 from safe.definitions.fields import displaced_field, aggregation_name_field
 from safe.definitions.layer_purposes import layer_purpose_aggregation
-from safe.definitions.post_processors import minimum_needs_post_processors
 from safe.gis.vector.prepare_vector_layer import (
     rename_remove_inasafe_fields)
 from safe.gis.vector.tools import (
@@ -124,6 +123,8 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         output_layer = self.prepare_new_layer(input_layer)
 
         # count each minimum needs for every features
+        from safe.definitions.post_processors import (
+            minimum_needs_post_processors)
         for needs in minimum_needs_post_processors:
             is_success, message = run_single_post_processor(
                 output_layer, needs)

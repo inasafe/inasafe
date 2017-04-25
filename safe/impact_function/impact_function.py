@@ -58,7 +58,6 @@ from safe.gis.raster.polygonize import polygonize
 from safe.gis.raster.zonal_statistics import zonal_stats
 from safe.gis.raster.align import align_rasters
 from safe.gis.raster.rasterize import rasterize_vector_layer
-from safe.definitions.post_processors import post_processors
 from safe.definitions.analysis_steps import analysis_steps
 from safe.definitions.utilities import definition, get_non_compulsory_fields
 from safe.definitions.exposure import indivisible_exposure
@@ -1888,6 +1887,7 @@ class ImpactFunction(object):
             # On an aggregation layer, the default title does make any sense.
             layer_title(layer)
 
+        from safe.definitions.post_processors import post_processors
         for post_processor in post_processors:
             valid, message = enough_input(layer, post_processor['input'])
             name = get_unicode(post_processor['name'])
