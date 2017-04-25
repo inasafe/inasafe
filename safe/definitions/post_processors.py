@@ -18,15 +18,27 @@ from safe.definitions.fields import (
     population_displacement_ratio_field,
     displaced_field,
     female_ratio_field,
+    child_bearing_age_ratio_field,
     population_count_field,
+    infant_ratio_field,
+    child_ratio_field,
     youth_ratio_field,
     adult_ratio_field,
     elderly_ratio_field,
+    under_5_ratio_field,
+    over_60_ratio_field,
+    disabled_ratio_field,
     female_displaced_count_field,
     male_displaced_count_field,
+    child_bearing_age_displaced_count_field,
+    infant_displaced_count_field,
+    child_displaced_count_field,
     youth_displaced_count_field,
     adult_displaced_count_field,
     elderly_displaced_count_field,
+    under_5_displaced_count_field,
+    over_60_displaced_count_field,
+    disabled_displaced_count_field,
     feature_rate_field,
     feature_value_field,
     size_field,
@@ -330,6 +342,84 @@ post_processor_displaced = {
     }
 }
 
+post_processor_child_bearing_age = {
+    'key': 'post_processor_child_bearing_age',
+    'name': tr('Child Bearing Age Post Processor'),
+    'description': tr(
+        'A post processor to calculate the number of displaced child bearing '
+        'age. "Child Bearing Age" is defined as: {child_bearing_age_concept} '
+        '"Displaced" is defined as: '
+        '{displaced_concept}').format(
+        child_bearing_age_concept=concepts[
+            'child_bearing_age']['description'],
+        displaced_concept=concepts['displaced_people']['description']),
+    'input': {
+        'population_displaced': {
+            'value': displaced_field,
+            'type': field_input_type,
+        },
+        # input as a list means, try to get the input from the
+        # listed source. Pick the first available
+        'child_bearing_age_ratio': [{
+                'value': child_bearing_age_ratio_field,
+                'type': field_input_type
+            },
+            {
+                'type': keyword_input_type,
+                'value': [
+                    'inasafe_default_values',
+                    child_bearing_age_ratio_field['key'],
+                ],
+            }]
+    },
+    'output': {
+        'child_bearing_age_displaced': {
+            'value': child_bearing_age_displaced_count_field,
+            'type': function_process,
+            'function': multiply
+        }
+    }
+}
+
+post_processor_pregnant_lactating = {
+    'key': 'post_processor_pregnant_lactating',
+    'name': tr('Pregnant and Lactating Post Processor'),
+    'description': tr(
+        'A post processor to calculate the number of displaced pregnant and '
+        'lactating women. "Pregnant or Lacatating" is defined as: {'
+        'pregnant_lactating_concept} "Displaced" is defined as: '
+        '{displaced_concept}').format(
+        pregnant_lactating_concept=concepts[
+                'pregnant_lactating']['description'],
+        displaced_concept=concepts['displaced_people']['description']),
+    'input': {
+        'population_displaced': {
+            'value': displaced_field,
+            'type': field_input_type,
+        },
+        # input as a list means, try to get the input from the
+        # listed source. Pick the first available
+        'pregnant_lactating_ratio': [{
+                'value': child_bearing_age_ratio_field,
+                'type': field_input_type
+            },
+            {
+                'type': keyword_input_type,
+                'value': [
+                    'inasafe_default_values',
+                    child_bearing_age_ratio_field['key'],
+                ],
+            }]
+    },
+    'output': {
+        'pregnant_lactating_displaced': {
+            'value': child_bearing_age_displaced_count_field,
+            'type': function_process,
+            'function': multiply
+        }
+    }
+}
+
 post_processor_gender = {
     'key': 'post_processor_gender',
     'name': tr('Gender Post Processor'),
@@ -452,6 +542,80 @@ post_processor_additional_rice = {
     }
 }
 
+post_processor_infant = {
+    'key': 'post_processor_infant',
+    'name': tr('Youth Post Processor'),
+    'description': tr(
+        'A post processor to calculate the number of displaced infant. '
+        '"Infant" is defined as: {infant_concept} "Displaced" is defined as: '
+        '{displaced_concept}').format(
+            infant_concept=concepts['infant']['description'],
+            displaced_concept=concepts['displaced_people']['description']),
+    'input': {
+        'population_displaced': {
+            'value': displaced_field,
+            'type': field_input_type,
+        },
+        # input as a list means, try to get the input from the
+        # listed source. Pick the first available
+        'infant_ratio': [{
+                'value': infant_ratio_field,
+                'type': field_input_type
+            },
+            {
+                'type': keyword_input_type,
+                'value': [
+                    'inasafe_default_values',
+                    infant_ratio_field['key'],
+                ],
+            }]
+    },
+    'output': {
+        'infant_displaced': {
+            'value': infant_displaced_count_field,
+            'type': function_process,
+            'function': multiply
+        }
+    }
+}
+
+post_processor_child = {
+    'key': 'post_processor_child',
+    'name': tr('Child Post Processor'),
+    'description': tr(
+        'A post processor to calculate the number of displaced child. '
+        '"Child" is defined as: {child_concept} "Displaced" is defined as: '
+        '{displaced_concept}').format(
+            child_concept=concepts['child']['description'],
+            displaced_concept=concepts['displaced_people']['description']),
+    'input': {
+        'population_displaced': {
+            'value': displaced_field,
+            'type': field_input_type,
+        },
+        # input as a list means, try to get the input from the
+        # listed source. Pick the first available
+        'child_ratio': [{
+                'value': child_ratio_field,
+                'type': field_input_type
+            },
+            {
+                'type': keyword_input_type,
+                'value': [
+                    'inasafe_default_values',
+                    child_ratio_field['key'],
+                ],
+            }]
+    },
+    'output': {
+        'child_displaced': {
+            'value': child_displaced_count_field,
+            'type': function_process,
+            'function': multiply
+        }
+    }
+}
+
 post_processor_youth = {
     'key': 'post_processor_youth',
     'name': tr('Youth Post Processor'),
@@ -557,6 +721,117 @@ post_processor_elderly = {
     'output': {
         'elderly_displaced': {
             'value': elderly_displaced_count_field,
+            'type': function_process,
+            'function': multiply
+        }
+    }
+}
+
+post_processor_under_5 = {
+    'key': 'post_processor_under_5',
+    'name': tr('Under 5 Years Old Post Processor'),
+    'description': tr(
+        'A post processor to calculate the number of displaced under 5 '
+        'years old. "Under 5 Years Old" is defined as: {under_5_concept}. '
+        '"Displaced" is defined as: {displaced_concept}').format(
+        under_5_concept=concepts['under_5']['description'],
+        displaced_concept=concepts['displaced_people']['description']),
+    'input': {
+        'population_displaced': {
+            'value': displaced_field,
+            'type': field_input_type,
+        },
+        # input as a list means, try to get the input from the
+        # listed source. Pick the first available
+        'under_5_ratio': [{
+                'value': under_5_ratio_field,
+                'type': field_input_type
+            },
+            {
+                'type': keyword_input_type,
+                'value': [
+                    'inasafe_default_values',
+                    under_5_ratio_field['key'],
+                ],
+            }]
+    },
+    'output': {
+        'under_5_displaced': {
+            'value': under_5_displaced_count_field,
+            'type': function_process,
+            'function': multiply
+        }
+    }
+}
+
+post_processor_over_60 = {
+    'key': 'post_processor_over_60',
+    'name': tr('Over 60 Years Old Post Processor'),
+    'description': tr(
+        'A post processor to calculate the number of displaced over 60 '
+        'years old. "Over 60 Years Old" is defined as: {over_60_concept}. '
+        '"Displaced" is defined as: {displaced_concept}').format(
+        over_60_concept=concepts['over_60']['description'],
+        displaced_concept=concepts['displaced_people']['description']),
+    'input': {
+        'population_displaced': {
+            'value': displaced_field,
+            'type': field_input_type,
+        },
+        # input as a list means, try to get the input from the
+        # listed source. Pick the first available
+        'over_60_ratio': [{
+                'value': over_60_ratio_field,
+                'type': field_input_type
+            },
+            {
+                'type': keyword_input_type,
+                'value': [
+                    'inasafe_default_values',
+                    over_60_ratio_field['key'],
+                ],
+            }]
+    },
+    'output': {
+        'over_60_displaced': {
+            'value': over_60_displaced_count_field,
+            'type': function_process,
+            'function': multiply
+        }
+    }
+}
+
+post_processor_disabled = {
+    'key': 'post_processor_over_60',
+    'name': tr('Disabled Post Processor'),
+    'description': tr(
+        'A post processor to calculate the number of displaced disabled. '
+        '"Disabled" is defined as: {disabled_concept}. '
+        '"Displaced" is defined as: {displaced_concept}').format(
+        disabled_concept=concepts['disabled']['description'],
+        displaced_concept=concepts['displaced_people']['description']),
+    'input': {
+        'population_displaced': {
+            'value': displaced_field,
+            'type': field_input_type,
+        },
+        # input as a list means, try to get the input from the
+        # listed source. Pick the first available
+        'over_60_ratio': [{
+                'value': disabled_ratio_field,
+                'type': field_input_type
+            },
+            {
+                'type': keyword_input_type,
+                'value': [
+                    'inasafe_default_values',
+                    disabled_ratio_field['key'],
+                ],
+            }]
+    },
+    'output': {
+        'over_60_displaced': {
+            'value': disabled_displaced_count_field,
             'type': function_process,
             'function': multiply
         }
@@ -719,12 +994,24 @@ female_postprocessors = [
 ]
 
 age_postprocessors = [
+    post_processor_infant,
+    post_processor_child,
     post_processor_youth,
     post_processor_adult,
     post_processor_elderly,
 ]
 
-vulnerability_postprocessors = [post_processor_gender] + age_postprocessors
+gender_postprocessors = [
+    post_processor_gender,
+    post_processor_child_bearing_age,
+    post_processor_pregnant_lactating
+]
+
+vulnerability_postprocessors = [
+    post_processor_under_5,
+    post_processor_over_60,
+    post_processor_disabled
+]
 
 post_processors = [
     post_processor_size,
@@ -732,4 +1019,7 @@ post_processors = [
     post_processor_affected,
     post_processor_displaced_ratio,
     post_processor_displaced,
-] + female_postprocessors + age_postprocessors + minimum_needs_post_processors
+] + (female_postprocessors +
+     age_postprocessors +
+     minimum_needs_post_processors +
+     vulnerability_postprocessors)
