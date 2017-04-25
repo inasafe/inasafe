@@ -357,8 +357,8 @@ class Plugin(object):
         self.add_action(self.action_add_osm_layer)
 
     def _create_show_definitions_action(self):
-        """Create action for showing definitions."""
-        icon = resources_path('img', 'icons', 'definitions.svg')
+        """Create action for showing definitions / help."""
+        icon = resources_path('img', 'icons', 'show-inasafe-help.svg')
         self.action_show_definitions = QAction(
             QIcon(icon),
             self.tr('InaSAFE Help'),
@@ -375,10 +375,10 @@ class Plugin(object):
 
     def _create_field_mapping_action(self):
         """Create action for showing field mapping dialog.."""
-        icon = resources_path('img', 'icons', 'icon.svg')
+        icon = resources_path('img', 'icons', 'show-mapping-tool.svg')
         self.field_mapping_action = QAction(
             QIcon(icon),
-            self.tr('InaSAFE Field Mapping'),
+            self.tr('InaSAFE Field Mapping Tool'),
             self.iface.mainWindow())
         self.field_mapping_action.setStatusTip(self.tr(
             'Assign field mapping to layer.'))

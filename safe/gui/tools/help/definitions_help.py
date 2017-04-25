@@ -19,6 +19,8 @@ from safe.gui.tools.help.batch_help import content as batch_help
 from safe.gui.tools.help.needs_manager_help import content as \
     needs_manager_help
 from safe.gui.tools.help.options_help import content as options_help
+from safe.gui.tools.help.field_mapping_help import content as \
+    field_mapping_tool_help
 from safe.gui.tools.help.osm_downloader_help import content as osm_help
 from safe.gui.tools.help.peta_bencana_help import content as petabencana_help
 from safe.gui.tools.help.shakemap_converter_help \
@@ -197,6 +199,10 @@ def content():
     header = m.Heading(tr('The Multi Buffer Tool'), **SUBSECTION_STYLE)
     message.add(header)
     message.add(multi_buffer_help())
+
+    header = m.Heading(tr('The Field Mapping Tool'), **SUBSECTION_STYLE)
+    message.add(header)
+    message.add(field_mapping_tool_help())
 
     # Keep this last in the tool section please as it has subsections
     # and so uses the top level section style
