@@ -58,6 +58,11 @@ def content():
     :rtype: safe.messaging.message.Message
     """
     message = m.Message()
+    paragraph = m.Paragraph(
+        m.Image(
+            'file:///%s/img/screenshots/'
+            'batch-calculator-screenshot.png' % resources_path()))
+    message.add(paragraph)
     message.add(m.Paragraph(tr(
         'Depending on which Impact Function you have chosen you have '
         'different options available for adjusting the parameters of the '
