@@ -544,7 +544,7 @@ post_processor_additional_rice = {
 
 post_processor_infant = {
     'key': 'post_processor_infant',
-    'name': tr('Youth Post Processor'),
+    'name': tr('Infant Post Processor'),
     'description': tr(
         'A post processor to calculate the number of displaced infant. '
         '"Infant" is defined as: {infant_concept} "Displaced" is defined as: '
@@ -802,7 +802,7 @@ post_processor_over_60 = {
 }
 
 post_processor_disabled = {
-    'key': 'post_processor_over_60',
+    'key': 'post_processor_disabled',
     'name': tr('Disabled Post Processor'),
     'description': tr(
         'A post processor to calculate the number of displaced disabled. '
