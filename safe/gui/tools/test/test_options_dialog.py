@@ -23,6 +23,7 @@ __revision__ = '$Format:%H$'
 
 
 class TestOptionsDialog(unittest.TestCase):
+
     """Test Options Dialog"""
 
     def setUp(self):

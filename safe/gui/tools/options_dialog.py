@@ -7,7 +7,8 @@ import logging
 import qgis  # pylint: disable=unused-import
 
 from PyQt4.QtCore import pyqtSignature, pyqtSlot, QVariant, QSettings
-from PyQt4.QtGui import QDialog, QFileDialog, QDialogButtonBox, QGroupBox, QVBoxLayout
+from PyQt4.QtGui import (
+    QDialog, QFileDialog, QDialogButtonBox, QGroupBox, QVBoxLayout)
 
 from safe_extras.parameters.qt_widgets.parameter_container import (
     ParameterContainer)
@@ -82,7 +83,7 @@ class OptionsDialog(QDialog, FORM_CLASS):
 
         # InaSAFE default values
         self.default_value_parameters = []
-        self.default_value_parameter_container = None
+        self.default_value_parameter_containers = []
 
         # Flag for restore default values
         self.is_restore_default = False
@@ -308,14 +309,14 @@ class OptionsDialog(QDialog, FORM_CLASS):
 
     def accept(self):
         """Method invoked when OK button is clicked."""
-        if not self.is_good_age_ratios():
-            display_warning_message_box(
-                self,
-                tr('Wrong Sum Age Ratio'),
-                tr('You have set age ratio whose sum is not equal to 1. '
-                   'Please fix it in the <b>Global Default</b> tab before you '
-                   'can save it.'))
-            return
+        # if not self.is_good_age_ratios():
+        #     display_warning_message_box(
+        #         self,
+        #         tr('Wrong Sum Age Ratio'),
+        #         tr('You have set age ratio whose sum is not equal to 1. '
+        #            'Please fix it in the <b>Global Default</b> tab before '
+        #            'you can save it.'))
+        #     return
         self.save_state()
         # FIXME: Option dialog should be independent from dock.
         if self.dock:
@@ -521,6 +522,8 @@ class OptionsDialog(QDialog, FORM_CLASS):
         # restore from changes.
         if self.default_value_parameters:
             self.default_value_parameters = []
+        if self.default_value_parameter_containers:
+            self.default_value_parameter_containers = []
 
         default_fields = all_default_fields()
 
@@ -552,6 +555,9 @@ class OptionsDialog(QDialog, FORM_CLASS):
             group_box_inner_layout.addWidget(parameter_container)
             group_box.setLayout(group_box_inner_layout)
 
+            # Add to attribute
+            self.default_value_parameter_containers.append(parameter_container)
+
         for default_field in default_fields:
             parameter = self.default_field_to_parameter(default_field)
             if parameter:
@@ -560,15 +566,17 @@ class OptionsDialog(QDialog, FORM_CLASS):
         description_text = tr(
             'In this options you can change the global default values for '
             'these variables.')
-        self.default_value_parameter_container = ParameterContainer(
+        parameter_container = ParameterContainer(
             self.default_value_parameters, description_text=description_text)
-        self.default_value_parameter_container.setup_ui()
+        parameter_container.setup_ui()
         self.other_group_box = QGroupBox(tr('Non-group fields'))
         other_group_inner_layout = QVBoxLayout()
-        other_group_inner_layout.addWidget(
-            self.default_value_parameter_container)
+        other_group_inner_layout.addWidget(parameter_container)
         self.other_group_box.setLayout(other_group_inner_layout)
         self.default_values_layout.addWidget(self.other_group_box)
+
+        # Add to attribute
+        self.default_value_parameter_containers.append(parameter_container)
 
     def age_ratios(self):
         """Helper to get list of age ratio from the options dialog.
@@ -576,7 +584,8 @@ class OptionsDialog(QDialog, FORM_CLASS):
         :returns: List of age ratio.
         :rtype: list
         """
-        parameter_container = self.default_value_parameter_container
+        # FIXME(IS) set a correct parameter container
+        parameter_container = None
 
         youth_ratio = parameter_container.get_parameter_by_guid(
             youth_ratio_field['key']).value
@@ -611,14 +620,15 @@ class OptionsDialog(QDialog, FORM_CLASS):
 
     def save_default_values(self):
         """Save InaSAFE default values."""
-        parameters = self.default_value_parameter_container.get_parameters()
-        for parameter in parameters:
-            set_inasafe_default_value_qsetting(
-                self.settings,
-                GLOBAL,
-                parameter.guid,
-                parameter.value
-            )
+        for parameter_container in self.default_value_parameter_containers:
+            parameters = parameter_container.get_parameters()
+            for parameter in parameters:
+                set_inasafe_default_value_qsetting(
+                    self.settings,
+                    GLOBAL,
+                    parameter.guid,
+                    parameter.value
+                )
 
     def restore_defaults_ratio(self):
         """Restore InaSAFE default ratio."""
