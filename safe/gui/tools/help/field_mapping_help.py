@@ -92,5 +92,51 @@ def content():
     ))
     message.add(paragraph)
 
+    paragraph = m.Paragraph(
+        m.Image(
+            'file:///%s/img/screenshots/'
+            'demographic-concepts-screenshot.png' % resources_path()),
+        style_class='text-center'
+    )
+    message.add(paragraph)
+
+    paragraph = m.Paragraph(tr(
+        'The illustration above shows the principle behind InaSAFE\'s '
+        'demographic breakdown reporting system. The idea here is to support '
+        'the production of a detailed demographic breakdown when carrying out '
+        'an analysis with a population exposure vector dataset. So for example '
+        'instead of simply reporting on the total number of people exposed to '
+        'a hazard, we want to break down the affected population into distinct '
+        'demographic groups. In InaSAFE by default we consider three groups:'
+    ))
+    message.add(paragraph)
+
+    bullets = m.BulletedList()
+    bullets.add(m.Paragraph(
+        m.ImportantText(tr('Gender: ')),
+        tr(
+            'The gender group reports on gender specific demographics '
+            'including things like the number of women of child bearing age, '
+            'number of pregnant women, number of lactating women and so on.'
+        )
+    ))
+    bullets.add(m.Paragraph(
+        m.ImportantText(tr('Age: ')),
+        tr(
+            'The age group reports on age specific demographics including '
+            'things like the number of infants, children, young adults, adults '
+            'elderly people and so on.'
+        )
+    ))
+    bullets.add(m.Paragraph(
+        m.ImportantText(tr('Vulnerable people: ')),
+        tr(
+            'The vulnerable people group reports on specific demographics '
+            'relating to vulnerability including things like the number of '
+            'infants, elderly people, disabled peopled and so on.'
+        )
+    ))
+    message.add(bullets)
+
 
     return message
