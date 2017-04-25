@@ -55,7 +55,9 @@ def content():
     paragraph = m.Paragraph(
         m.Image(
             'file:///%s/img/screenshots/'
-            'osm-downloader-screenshot.png' % resources_path()))
+            'osm-downloader-screenshot.png' % resources_path()),
+        style_class='text-center'
+    )
     message.add(paragraph)
     body = tr(
         'This tool will fetch building (\'structure\') or road ('

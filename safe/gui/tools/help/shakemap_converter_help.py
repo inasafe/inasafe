@@ -59,7 +59,9 @@ def content():
     paragraph = m.Paragraph(
         m.Image(
             'file:///%s/img/screenshots/'
-            'shakemap-converter-screenshot.png' % resources_path()))
+            'shakemap-converter-screenshot.png' % resources_path()),
+        style_class='text-center'
+    )
     message.add(paragraph)
     body = tr(
         'This tool will convert an earthquake \'shakemap\' that is in '

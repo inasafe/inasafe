@@ -61,7 +61,8 @@ def content():
     paragraph = m.Paragraph(
         m.Image(
             'file:///%s/img/screenshots/'
-            'field-mapping-tool-screenshot.png' % resources_path())
+            'field-mapping-tool-screenshot.png' % resources_path()),
+        style_class='text-center'
     )
     message.add(paragraph)
 

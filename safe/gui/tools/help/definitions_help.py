@@ -233,7 +233,7 @@ def content():
     message.add(analysis['description'])
     url = _definition_screenshot_url(analysis)
     if url:
-        message.add(m.Image(url))
+        message.add(m.Paragraph(m.Image(url), style_class='text-center'))
     header = m.Heading(tr('Progress reporting steps'), **SUBSECTION_STYLE)
     message.add(header)
     steps = definitions.analysis_steps.values()
@@ -622,7 +622,7 @@ def definition_to_message(definition, heading_style=None):
 
     url = _definition_screenshot_url(definition)
     if url:
-        message.add(m.Image(url))
+        message.add(m.Paragraph(m.Image(url), style_class='text-center'))
 
     # types contains e.g. hazard_all
     if 'types' in definition:

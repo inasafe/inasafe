@@ -56,7 +56,9 @@ def content():
     paragraph = m.Paragraph(
         m.Image(
             'file:///%s/img/screenshots/'
-            'petabencana-screenshot.png' % resources_path()))
+            'petabencana-screenshot.png' % resources_path()),
+        style_class='text-center'
+    )
     message.add(paragraph)
     link = m.Link('https://petabencana.id', 'PetaBencana.id')
     body = m.Paragraph(tr(
