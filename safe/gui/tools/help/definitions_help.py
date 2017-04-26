@@ -11,6 +11,8 @@ import safe.definitions as definitions
 from safe.definitions.exposure import exposure_all
 from safe.definitions.hazard_exposure_specifications import (
     specific_notes, specific_actions)
+from safe.definitions.field_groups import (
+    exposure_field_groups, aggregation_field_groups)
 from safe.gui.tools.help.dock_help import content as dock_help
 from safe.gui.tools.help.extent_selector_help import content as extent_help
 from safe.gui.tools.help.impact_report_help import content as report_help
@@ -200,9 +202,30 @@ def content():
     message.add(header)
     message.add(multi_buffer_help())
 
+
+    # Field mappint tool has a few added bits to enumerate the groups
     header = m.Heading(tr('The Field Mapping Tool'), **SUBSECTION_STYLE)
     message.add(header)
     message.add(field_mapping_tool_help())
+
+    header = m.Heading(tr('Exposure Groups'), **BLUE_CHAPTER_STYLE)
+    message.add(header)
+    message.add(m.Paragraph(
+        'The following demographic groups apply only to vector population '
+        'exposure layers:'
+    ))
+    for group in exposure_field_groups:
+        message.add(definition_to_message(group, DETAILS_STYLE))
+
+    header = m.Heading(tr('Aggregation Groups'), **BLUE_CHAPTER_STYLE)
+    message.add(header)
+    message.add(m.Paragraph(
+        'The following demographic groups apply only to aggregation layers:'
+    ))
+    for group in aggregation_field_groups:
+        message.add(definition_to_message(group, DETAILS_STYLE))
+    # End of field mapping tool help
+
 
     # Keep this last in the tool section please as it has subsections
     # and so uses the top level section style
@@ -593,14 +616,15 @@ def definition_to_message(definition, heading_style=None):
     if url is None:
         LOGGER.info('No URL for definition icon')
         message.add(m.Paragraph(definition['description']))
-        for citation in definition['citations']:
-            if citation['text'] in [None, '']:
-                continue
-            if citation['link'] in [None, '']:
-                message.add(m.Paragraph(citation['text']))
-            else:
-                message.add(m.Paragraph(
-                    m.Link(citation['link'], citation['text'])))
+        if 'citations' in definition:
+            for citation in definition['citations']:
+                if citation['text'] in [None, '']:
+                    continue
+                if citation['link'] in [None, '']:
+                    message.add(m.Paragraph(citation['text']))
+                else:
+                    message.add(m.Paragraph(
+                        m.Link(citation['link'], citation['text'])))
     else:
         LOGGER.info('Creating mini table for definition description: ' + url)
         table = m.Table(style_class='table table-condensed')
@@ -743,10 +767,15 @@ def definition_to_message(definition, heading_style=None):
             table.add(row)
         message.add(table)
 
-    if 'extra_fields' and 'fields' in definition:
+    if 'fields' in definition:
         message.add(m.Paragraph(m.ImportantText(tr('Fields:'))))
         table = _create_fields_table()
-        all_fields = definition['fields'] + definition['extra_fields']
+
+        if 'extra_fields' in definition:
+            all_fields = definition['fields'] + definition['extra_fields']
+        else:
+            all_fields = definition['fields']
+
         for field in all_fields:
             _add_field_to_table(field, table)
         message.add(table)

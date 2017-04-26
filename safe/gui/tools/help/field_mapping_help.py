@@ -161,9 +161,9 @@ def content():
         'datasets versus when used for vector population exposure datasets:'
     ))
     message.add(paragraph)
-    paragraph = m.Paragraph(tr(
+    paragraph = m.Paragraph(
         m.ImportantText(tr('Aggregation datasets: ')),
-        m.Text(tr(
+        tr(
             'For aggregation datasets, the field mapping tool uses global '
             'defaults (see the InaSAFE Options Dialog documentation for more '
             'details) or dataset level defaults to determine which ratios '
@@ -171,15 +171,17 @@ def content():
             'age group the aggregation dataset may specify that infants should '
             'by calculated as a ratio of 0.1% of the total population. '
             'Note that for aggregation datasets you can only use ratios, '
-            'not counts.'))
-    ))
-    paragraph = m.Paragraph(tr(
+            'not counts.')
+    )
+    message.add(paragraph)
+    paragraph = m.Paragraph(
         m.ImportantText(tr('Vector population exposure datasets: ')),
-        m.Text(tr(
+        tr(
             'For exposure datasets, ratios are not supported, only counts. '
             'The field mappings carried out here will be used to generate '
             'new columns during a pre-processing step before the actual '
-            'analysis is carried out.'))
-    ))
+            'analysis is carried out.')
+    )
+    message.add(paragraph)
 
     return message
