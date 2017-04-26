@@ -138,5 +138,48 @@ def content():
         )
     ))
     message.add(bullets)
+    paragraph = m.Paragraph(tr(
+        'In the diagram above, you can see that we have an "age" group '
+        '(column on the right) which, for purposes of illustration, has two '
+        'age classes: "infant" and "child" (center column). These age classes '
+        'are defined in InaSAFE metadata and there are actually five classes '
+        'in a default installation. In the left hand column you can see a '
+        'number of columns listed from the attribute table. In this example '
+        'our population data contains columns for different age ranges ('
+        '0-1, 1-2, 2-4, 4-6). The field mapping tool can be used in order '
+        'to combine the data in the "0 - 1" and "1 - 2" columns into a '
+        'new column called "infant". In the next section of this document we '
+        'enumerate the different groups and concepts that InaSAFE supports '
+        'when generating demographic breakdowns.'))
+    message.add(paragraph)
+    paragraph = m.Paragraph(tr(
+        'When the tool is used, it will write additional data to the '
+        'exposure or aggregation layer keywords so that your preferred '
+        'concept mappings will be used when reports are generated after the '
+        'analysis is carried out. You should note the following special '
+        'characteristics of the field mapping tool when used for aggregation '
+        'datasets versus when used for vector population exposure datasets:'
+    ))
+    message.add(paragraph)
+    paragraph = m.Paragraph(tr(
+        m.ImportantText(tr('Aggregation datasets: ')),
+        m.Text(tr(
+            'For aggregation datasets, the field mapping tool uses global '
+            'defaults (see the InaSAFE Options Dialog documentation for more '
+            'details) or dataset level defaults to determine which ratios '
+            'should be used to calculate concept values. For example, in the '
+            'age group the aggregation dataset may specify that infants should '
+            'by calculated as a ratio of 0.1% of the total population. '
+            'Note that for aggregation datasets you can only use ratios, '
+            'not counts.'))
+    ))
+    paragraph = m.Paragraph(tr(
+        m.ImportantText(tr('Vector population exposure datasets: ')),
+        m.Text(tr(
+            'For exposure datasets, ratios are not supported, only counts. '
+            'The field mappings carried out here will be used to generate '
+            'new columns during a pre-processing step before the actual '
+            'analysis is carried out.'))
+    ))
 
     return message
