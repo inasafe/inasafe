@@ -3,12 +3,13 @@
 """Prepare layers for InaSAFE."""
 
 import logging
-from PyQt4.QtCore import QPyNullVariant
+from PyQt4.QtCore import QPyNullVariant, QVariant
 from qgis.core import (
     QgsVectorLayer,
     QgsField,
     QgsFeatureRequest,
     QGis,
+    QgsExpression
 )
 
 from safe.common.exceptions import (
@@ -48,6 +49,7 @@ from safe.utilities.i18n import tr
 from safe.utilities.profiling import profile
 from safe.utilities.metadata import (
     active_thresholds_value_maps, active_classification)
+from safe.test.debug_helper import print_attribute_table
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -437,3 +439,40 @@ def _add_default_exposure_class(layer):
 
     layer.commitChanges()
     return
+
+
+@profile
+def sum_fields(layer, output_field_name, input_fields):
+    """Sum the value of input_fields and put it as output_field.
+
+    :param layer: The vector layer.
+    :type layer: QgsVectorLayer
+
+    :param output_field_name: The output field name.
+    :type output_field_name: str
+
+    :param input_fields: List of input fields' name.
+    :type input_fields: list
+    """
+    # Creating expression
+    string_expression = ' + '.join(input_fields)
+    sum_expression = QgsExpression(string_expression)
+    sum_expression.prepare(layer.pendingFields())
+
+    # Get the output field index
+    output_idx = layer.fieldNameIndex(output_field_name)
+    # Output index is not found
+    if output_idx == -1:
+        output_field = QgsField(output_field_name, QVariant.Double)
+        layer.startEditing()
+        layer.dataProvider().addAttributes([output_field])
+        layer.commitChanges()
+        output_idx = layer.fieldNameIndex(output_field_name)
+
+    layer.startEditing()
+    # Iterate to all features
+    for feature in layer.getFeatures():
+        feature[output_idx] = sum_expression.evaluate(feature)
+        layer.updateFeature(feature)
+
+    layer.commitChanges()
