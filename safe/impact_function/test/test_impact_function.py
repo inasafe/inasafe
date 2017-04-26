@@ -616,6 +616,7 @@ class TestImpactFunction(unittest.TestCase):
             'polygon_classified_on_line': False,
             'polygon_classified_on_point': False,
             'polygon_classified_on_vector_population': False,
+            'polygon_classified_on_vector_population_multi_fields': True,
             'polygon_continuous_on_line': False,
             'raster_classified_on_classified_raster': False,
             'raster_classified_on_indivisible_polygons_with_grid': False,
