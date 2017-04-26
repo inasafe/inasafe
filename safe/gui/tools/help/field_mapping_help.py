@@ -168,8 +168,8 @@ def content():
             'defaults (see the InaSAFE Options Dialog documentation for more '
             'details) or dataset level defaults to determine which ratios '
             'should be used to calculate concept values. For example, in the '
-            'age group the aggregation dataset may specify that infants should '
-            'by calculated as a ratio of 0.1% of the total population. '
+            'age group the aggregation dataset may specify that infants '
+            'should by calculated as a ratio of 0.1% of the total population. '
             'Note that for aggregation datasets you can only use ratios, '
             'not counts.')
     )

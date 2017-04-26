@@ -202,7 +202,6 @@ def content():
     message.add(header)
     message.add(multi_buffer_help())
 
-
     # Field mappint tool has a few added bits to enumerate the groups
     header = m.Heading(tr('The Field Mapping Tool'), **SUBSECTION_STYLE)
     message.add(header)
@@ -225,7 +224,6 @@ def content():
     for group in aggregation_field_groups:
         message.add(definition_to_message(group, DETAILS_STYLE))
     # End of field mapping tool help
-
 
     # Keep this last in the tool section please as it has subsections
     # and so uses the top level section style
