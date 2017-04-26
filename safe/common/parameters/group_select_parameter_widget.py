@@ -167,8 +167,7 @@ class GroupSelectParameterWidget(GenericParameterWidget):
                     field_item.setFlags(
                         Qt.ItemIsEnabled |
                         Qt.ItemIsSelectable |
-                        Qt.ItemIsDragEnabled |
-                        Qt.ItemIsDropEnabled)
+                        Qt.ItemIsDragEnabled)
                     field_item.setData(Qt.UserRole, field)
                     field_item.setText(field)
                     self.list_widget.addItem(field_item)
