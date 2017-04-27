@@ -28,7 +28,7 @@ from qgis.core import QgsMapLayerRegistry, QgsVectorLayer
 from safe.test.utilities import standard_data_path, get_qgis_app
 from safe.definitions.fields import displaced_field
 from safe.definitions.layer_purposes import layer_purpose_aggregation
-from safe.gis.vector.prepare_vector_layer import rename_remove_inasafe_fields
+from safe.gis.vector.prepare_vector_layer import clean_inasafe_fields
 from PyQt4 import QtGui
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
