@@ -170,10 +170,13 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         # minimum needs calculator
         output_layer.keywords['layer_purpose'] = (
             layer_purpose_aggregation['key'])
-        output_layer.keywords['inasafe_fields'] = (
-            {displaced_field['key']: self.displaced.currentField(),
-             aggregation_name_field['key']:
-                 self.aggregation_name.currentField()})
+        output_layer.keywords['inasafe_fields'] = {
+            displaced_field['key']: self.displaced.currentField()
+        }
+        if self.aggregation_name.currentField():
+            output_layer.keywords['inasafe_fields'][
+                aggregation_name_field['key']] = (
+                    self.aggregation_name.currentField())
 
         # remove unnecessary fields & rename inasafe fields
         clean_inasafe_fields(output_layer)
