@@ -593,7 +593,7 @@ class TestImpactFunction(unittest.TestCase):
         self.assertEqual(0, status, steps)
         # self.assertDictEqual(expected_steps, steps, scenario_path)
         try:
-            self.assertDictEqual(expected_steps, steps)
+            self.assertDictEqual(byteify(expected_steps), byteify(steps))
         except AssertionError as e:
             raise AssertionError(e.message + '\nThe file is ' + scenario_path)
         # - 1 because I added the profiling table, and this table is not
@@ -616,11 +616,12 @@ class TestImpactFunction(unittest.TestCase):
             'polygon_classified_on_line': False,
             'polygon_classified_on_point': False,
             'polygon_classified_on_vector_population': False,
-            'polygon_classified_on_vector_population_multi_fields': True,
+            'polygon_classified_on_vector_population_multi_fields': False,
             'polygon_continuous_on_line': False,
             'raster_classified_on_classified_raster': False,
             'raster_classified_on_indivisible_polygons_with_grid': False,
             'raster_classified_on_line_with_grid': False,
+            'raster_classified_on_vector_population_multi_fields': True,
             'raster_continuous_on_divisible_polygons_with_grid': False,
             'raster_continuous_on_line': False,
             'raster_continuous_on_raster_population': False,
