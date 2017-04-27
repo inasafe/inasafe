@@ -59,6 +59,13 @@ def content():
     :rtype: safe.messaging.message.Message
     """
     message = m.Message()
+    paragraph = m.Paragraph(
+        m.Image(
+            'file:///%s/img/screenshots/'
+            'inasafe-options-screenshot.png' % resources_path()),
+        style_class='text-center'
+    )
+    message.add(paragraph)
     message.add(m.Paragraph(tr(
         'The InaSAFE options dialog is used to control various aspects of '
         'the InaSAFE analysis and reporting environment. Here are brief '

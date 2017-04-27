@@ -4,6 +4,7 @@
 from safe.utilities.i18n import tr
 from safe import messaging as m
 from safe.messaging import styles
+from safe.utilities.resources import resources_path
 
 SUBSECTION_STYLE = styles.SUBSECTION_LEVEL_3_STYLE
 
@@ -51,6 +52,13 @@ def content():
     :rtype: safe.messaging.message.Message
     """
     message = m.Message()
+    paragraph = m.Paragraph(
+        m.Image(
+            'file:///%s/img/screenshots/'
+            'osm-downloader-screenshot.png' % resources_path()),
+        style_class='text-center'
+    )
+    message.add(paragraph)
     body = tr(
         'This tool will fetch building (\'structure\') or road ('
         '\'highway\') data from the OpenStreetMap project for you. '

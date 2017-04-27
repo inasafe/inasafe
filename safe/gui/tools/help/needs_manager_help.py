@@ -4,6 +4,7 @@
 from safe.utilities.i18n import tr
 from safe import messaging as m
 from safe.messaging import styles
+from safe.utilities.resources import resources_path
 
 SUBSECTION_STYLE = styles.SUBSECTION_LEVEL_3_STYLE
 INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
@@ -54,6 +55,13 @@ def content():
     :rtype: safe.messaging.message.Message
     """
     message = m.Message()
+    paragraph = m.Paragraph(
+        m.Image(
+            'file:///%s/img/screenshots/'
+            'minimum-needs-screenshot.png' % resources_path()),
+        style_class='text-center'
+    )
+    message.add(paragraph)
     message.add(m.Paragraph(tr(
         'During and after a disaster, providing for the basic human minimum '
         'needs of food, water, hygiene and shelter is an important element of '
