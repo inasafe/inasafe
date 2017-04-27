@@ -384,12 +384,37 @@ profiling_time_field = {
     'help_text': tr(
         'The total elapsed time spent in the function being measured.'),
     'description': tr(
-        'The profiling system in InaSAFE provide metrics about which '
+        'The profiling system in InaSAFE provides metrics about which '
         'python functions were called during the analysis workflow and '
         'how long was spent in each function. These data are assembled into '
         'a table and shown in QGIS as part of the analysis layer group. '
         'Using the profiling time field we are able to refer back '
         'to a how long was spent in each specific python function when '
+        'doing performance optimisation.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+
+profiling_memory_field = {
+    'key': 'profiling_memory_field',
+    'name': tr('Profiling memory'),
+    'field_name': 'memory_mb',
+    'type': QVariant.Int,
+    'length': default_field_length,
+    'precision': default_field_precision,
+    'help_text': tr(
+        'The total used memory (in mb) in the function being measured.'),
+    'description': tr(
+        'The profiling system in InaSAFE provides metrics about which '
+        'python functions were called during the analysis workflow and '
+        'how much memory is used in each function. These data are assembled '
+        'into a table and shown in QGIS as part of the analysis layer group. '
+        'Using the profiling memory field we are able to refer back '
+        'to a how much memory was used in each specific python function when '
         'doing performance optimisation.'),
     'citations': [
         {
