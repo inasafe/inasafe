@@ -28,7 +28,7 @@ layer_purpose_exposure = {
         layer_geometry_raster
     ],
     'citations': concepts['exposure']['citations'],
-    'field_groups': exposure_field_groups
+    'field_groups': []  # Set in each exposure definition
 }
 
 layer_purpose_hazard = {
@@ -40,7 +40,7 @@ layer_purpose_hazard = {
         layer_geometry_raster
     ],
     'citations': concepts['hazard']['citations'],
-    'field_groups': []
+    'field_groups': []  # Set in each exposure definition
 }
 
 layer_purpose_aggregation = {

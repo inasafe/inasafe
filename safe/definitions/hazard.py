@@ -117,6 +117,7 @@ hazard_generic = {
     'compulsory_fields': [hazard_value_field],
     'fields': hazard_fields,
     'extra_fields': [],
+    'field_groups': [],
     'layer_modes': [layer_mode_classified],
     'disabled_exposures': [exposure_place]
 }
@@ -158,6 +159,7 @@ hazard_earthquake = {
     'compulsory_fields': [hazard_value_field],
     'fields': hazard_fields,
     'extra_fields': [],
+    'field_groups': [],
     'layer_modes': [layer_mode_classified, layer_mode_continuous],
     'disabled_exposures': [
         exposure_place,
@@ -207,6 +209,7 @@ hazard_flood = {
     'compulsory_fields': [hazard_value_field],
     'fields': hazard_fields,
     'extra_fields': [],
+    'field_groups': [],
     'layer_modes': [layer_mode_classified, layer_mode_continuous],
     'disabled_exposures': [exposure_place]
 }
@@ -260,6 +263,7 @@ hazard_cyclone = {
     'compulsory_fields': [hazard_value_field],
     'fields': hazard_fields,
     'extra_fields': [],
+    'field_groups': [],
     'layer_modes': [layer_mode_classified, layer_mode_continuous],
     'disabled_exposures': [
         exposure_place,
@@ -310,6 +314,7 @@ hazard_volcanic_ash = {
     'compulsory_fields': [hazard_value_field],
     'fields': hazard_fields,
     'extra_fields': [],
+    'field_groups': [],
     'layer_modes': [layer_mode_classified, layer_mode_continuous],
     'disabled_exposures': []
 }
@@ -360,6 +365,7 @@ hazard_tsunami = {
     'compulsory_fields': [hazard_value_field],
     'fields': hazard_fields,
     'extra_fields': [],
+    'field_groups': [],
     'layer_modes': [layer_mode_classified, layer_mode_continuous],
     'disabled_exposures': [exposure_place]
 }
@@ -402,6 +408,7 @@ hazard_volcano = {
     'compulsory_fields': [hazard_value_field],
     'fields': hazard_fields,
     'extra_fields': [hazard_name_field],
+    'field_groups': [],
     'layer_modes': [layer_mode_classified],
     'disabled_exposures': [exposure_place]
 }
