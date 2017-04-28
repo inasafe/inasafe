@@ -38,10 +38,7 @@ from safe.definitions import (
     cyclone_au_bom_hazard_classes,
     unit_knots,
     exposure_field_groups,
-    youth_count_field,
-    adult_count_field,
-    elderly_count_field,
-    female_count_field
+    aggregation_field_groups
 )
 
 from safe.definitions.utilities import (
@@ -60,7 +57,8 @@ from safe.definitions.utilities import (
     get_non_compulsory_fields,
     default_classification_thresholds,
     default_classification_value_maps,
-    fields_in_field_groups
+    fields_in_field_groups,
+    get_field_groups
 )
 
 
@@ -270,8 +268,6 @@ class TestDefinitionsUtilities(unittest.TestCase):
             layer_geometry_polygon,
             layer_geometry_raster
         ]
-        print[x['key'] for x in expected]
-        print[x['key'] for x in allowed_geometries]
         self.assertEqual(allowed_geometries, expected)
 
     def test_all_default_fields(self):
@@ -395,6 +391,26 @@ class TestDefinitionsUtilities(unittest.TestCase):
         for field_group in exposure_field_groups:
             expected += field_group['fields']
         self.assertListEqual(fields, expected)
+
+    def test_get_field_groups(self):
+        """Test for get_field_groups method."""
+        field_groups = get_field_groups(layer_purpose_aggregation['key'])
+        expected = aggregation_field_groups
+        self.assertListEqual(field_groups, expected)
+
+        field_groups = get_field_groups(layer_purpose_exposure['key'])
+        expected = []
+        self.assertListEqual(field_groups, expected)
+
+        field_groups = get_field_groups(
+            layer_purpose_exposure['key'], exposure_population['key'])
+        expected = exposure_field_groups
+        self.assertListEqual(field_groups, expected)
+
+        field_groups = get_field_groups(layer_purpose_hazard['key'])
+        expected = []
+        self.assertListEqual(field_groups, expected)
+
 
 
 if __name__ == '__main__':
