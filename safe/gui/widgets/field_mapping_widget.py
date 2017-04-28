@@ -6,7 +6,9 @@ import logging
 
 from safe.utilities.i18n import tr
 from safe.common.exceptions import KeywordNotFoundError
-from safe.definitions.utilities import definition
+from safe.definitions.utilities import definition, get_field_groups
+from safe.definitions.layer_purposes import (
+    layer_purpose_exposure, layer_purpose_hazard)
 
 from safe.gui.widgets.field_mapping_tab import FieldMappingTab
 
@@ -51,13 +53,20 @@ class FieldMappingWidget(QTabWidget, object):
 
     def populate_tabs(self):
         """Populating tabs based on layer metadata."""
-        if 'layer_purpose' not in self.metadata:
+        layer_purpose = self.metadata.get('layer_purpose')
+        if not layer_purpose:
             message = tr(
                 'Key layer_purpose is not found in the layer {layer_name}'
             ).format(layer_name=self.layer.name())
             raise KeywordNotFoundError(message)
-        layer_purpose = definition(self.metadata['layer_purpose'])
-        field_groups = layer_purpose.get('field_groups', [])
+        if layer_purpose == layer_purpose_exposure['key']:
+            layer_subcategory = self.metadata.get('exposure')
+        elif layer_purpose == layer_purpose_hazard['key']:
+            layer_subcategory = self.metadata.get('hazard')
+        else:
+            layer_subcategory = None
+
+        field_groups = get_field_groups(layer_purpose, layer_subcategory)
         for field_group in field_groups:
             tab = FieldMappingTab(field_group, self, self.iface)
             tab.set_layer(self.layer)
