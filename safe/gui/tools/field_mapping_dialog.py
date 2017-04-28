@@ -9,6 +9,8 @@ from PyQt4.QtCore import pyqtSignature, pyqtSlot, QSettings
 import logging
 
 from safe.definitions.constants import RECENT
+from safe.definitions.layer_purposes import (
+    layer_purpose_exposure, layer_purpose_aggregation)
 from safe.common.exceptions import (
     NoKeywordsFoundError,
     KeywordNotFoundError,
@@ -52,13 +54,28 @@ class FieldMappingDialog(QDialog, FORM_CLASS):
         self.layer_input_layout = QHBoxLayout()
         self.layer_label = QLabel(tr('Layer'))
         self.layer_combo_box = QgsMapLayerComboBox()
-        self.layer_combo_box.setFilters(QgsMapLayerProxyModel.VectorLayer)
+        # Filter only for Polygon and Point
+        self.layer_combo_box.setFilters(
+            QgsMapLayerProxyModel.PolygonLayer |
+            QgsMapLayerProxyModel.PointLayer)
+        # Filter out non exposure / aggregation
+        excepted_layers = []
+        for i in range(self.layer_combo_box.count()):
+            layer = self.layer_combo_box.layer(i)
+            keywords = self.keyword_io.read_keywords(layer)
+            if keywords['layer_purpose'] not in [
+                layer_purpose_exposure['key'], layer_purpose_aggregation['key']
+            ]:
+                excepted_layers.append(layer)
+        self.layer_combo_box.setExceptedLayerList(excepted_layers)
+
         # Select the active layer.
         if self.iface.activeLayer():
             found = self.layer_combo_box.findText(
                 self.iface.activeLayer().name())
             if found > -1:
                 self.layer_combo_box.setLayer(self.iface.activeLayer())
+
         self.field_mapping_widget = None
         self.main_stacked_widget.setCurrentIndex(1)
 
