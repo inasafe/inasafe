@@ -10,7 +10,7 @@ import logging
 
 from safe.definitions.constants import RECENT
 from safe.definitions.layer_purposes import (
-    layer_purpose_exposure, layer_purpose_aggregation)
+    layer_purpose_exposure, layer_purpose_hazard)
 from safe.common.exceptions import (
     NoKeywordsFoundError,
     KeywordNotFoundError,
@@ -24,6 +24,7 @@ from safe.gui.widgets.field_mapping_widget import FieldMappingWidget
 from safe.gui.tools.help.field_mapping_help import field_mapping_help
 from safe.utilities.utilities import get_error_message
 from safe.utilities.default_values import set_inasafe_default_value_qsetting
+from safe.definitions.utilities import get_field_groups
 
 FORM_CLASS = get_ui_class('field_mapping_dialog_base.ui')
 
@@ -58,15 +59,26 @@ class FieldMappingDialog(QDialog, FORM_CLASS):
         self.layer_combo_box.setFilters(
             QgsMapLayerProxyModel.PolygonLayer |
             QgsMapLayerProxyModel.PointLayer)
-        # Filter out non exposure / aggregation
+        # Filter out a layer that don't have layer groups
         excepted_layers = []
         for i in range(self.layer_combo_box.count()):
             layer = self.layer_combo_box.layer(i)
             keywords = self.keyword_io.read_keywords(layer)
-            if keywords['layer_purpose'] not in [
-                layer_purpose_exposure['key'], layer_purpose_aggregation['key']
-            ]:
+            layer_purpose = keywords.get('layer_purpose')
+            if not layer_purpose:
                 excepted_layers.append(layer)
+                continue
+            if layer_purpose == layer_purpose_exposure['key']:
+                layer_subcategory = keywords.get('exposure')
+            elif layer_purpose == layer_purpose_hazard['key']:
+                layer_subcategory = keywords.get('hazard')
+            else:
+                layer_subcategory = None
+
+            field_groups = get_field_groups(layer_purpose, layer_subcategory)
+            if len(field_groups) == 0:
+                excepted_layers.append(layer)
+                continue
         self.layer_combo_box.setExceptedLayerList(excepted_layers)
 
         # Select the active layer.
