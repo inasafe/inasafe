@@ -5,7 +5,7 @@ import re
 import logging
 
 from PyQt4 import QtCore
-from PyQt4.QtGui import QListWidgetItem
+from PyQt4.QtGui import QListWidgetItem, QAbstractItemView
 
 from safe.definitions.layer_purposes import (
     layer_purpose_aggregation, layer_purpose_hazard, layer_purpose_exposure)
@@ -138,6 +138,8 @@ class StepKwField(WizardStep, FORM_CLASS):
         purpose = self.parent.step_kw_purpose.selected_purpose()
         subcategory = self.parent.step_kw_subcategory.selected_subcategory()
         unit = self.parent.step_kw_unit.selected_unit()
+        layer_mode = self.parent.step_kw_layermode.selected_layermode()
+
         if purpose == layer_purpose_aggregation:
             question_text = field_question_aggregation
         elif self.parent.step_kw_layermode.\
@@ -159,6 +161,11 @@ class StepKwField(WizardStep, FORM_CLASS):
                 subcategory['name'])
         self.lblSelectField.setText(question_text)
         self.lstFields.clear()
+        if layer_mode == layer_mode_continuous:
+            self.lstFields.setSelectionMode(
+                QAbstractItemView.ExtendedSelection)
+        else:
+            self.lstFields.setSelectionMode(QAbstractItemView.SingleSelection)
         default_item = None
         for field in self.parent.layer.dataProvider().fields():
             field_name = field.name()
@@ -174,7 +181,8 @@ class StepKwField(WizardStep, FORM_CLASS):
                 field_type = field.type()
                 if field_type > 9 or re.match(
                         '.{0,2}id$', field_name, re.I):
-                    item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEnabled)
+                    continue
+                    # item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEnabled)
         if default_item:
             self.lstFields.setCurrentItem(default_item)
         self.lblDescribeField.clear()
