@@ -412,6 +412,5 @@ class TestDefinitionsUtilities(unittest.TestCase):
         self.assertListEqual(field_groups, expected)
 
 
-
 if __name__ == '__main__':
     unittest.main()
