@@ -113,6 +113,7 @@ class StepKwField(WizardStep, FORM_CLASS):
             return
         if not isinstance(field_names, list):
             field_names = [field_names]
+        field_descriptions = ''
         for field_name in field_names:
             layer_fields = self.parent.layer.dataProvider().fields()
             field_index = layer_fields.indexFromName(field_name)
@@ -125,12 +126,19 @@ class StepKwField(WizardStep, FORM_CLASS):
             unique_values_str = [
                 i is not None and unicode(i) or 'NULL'
                 for i in unique_values]
+            unique_values_str = ', '.join(unique_values_str)
             if unique_values != self.parent.layer.uniqueValues(field_index):
                 unique_values_str += ['...']
-            desc = '<br/>%s: %s<br/><br/>' % (
-                self.tr('Field type'), field_type)
-            desc += self.tr('Unique values: %s') % ', '.join(unique_values_str)
-            self.lblDescribeField.setText(desc)
+            field_descriptions += tr('<b>Field name</b>: {field_name}').format(
+                field_name=field_name)
+            field_descriptions += tr(
+                '<br><b>Field type</b>: {field_type}').format(
+                field_type=field_type)
+            field_descriptions += tr(
+                '<br><b>Unique values</b>: {unique_values_str}<br><br>'
+            ).format(unique_values_str=unique_values_str)
+
+        self.lblDescribeField.setText(field_descriptions)
 
         self.parent.pbnNext.setEnabled(True)
 
