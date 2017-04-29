@@ -115,9 +115,11 @@ class TestKeywordWizard(unittest.TestCase):
         :type list_widget: QListWidget
         """
         try:
-            # noinspection PyUnresolvedReferences
-            current_text = list_widget.currentItem().text()
-            self.assertEqual(expected_text, current_text)
+            selected_items = list_widget.selectedItems()
+            selected_texts = [item.text() for item in selected_items]
+            if isinstance(expected_text, basestring):
+                expected_text = [expected_text]
+                self.assertListEqual(expected_text, selected_texts)
         except AttributeError:
             options = [
                 list_widget.item(i).text()
@@ -1174,7 +1176,7 @@ class TestKeywordWizard(unittest.TestCase):
             'exposure_unit': count_exposure_unit['key'],
             'inasafe_fields':
                 {
-                    population_count_field['key']: u'population',
+                    population_count_field['key']: [u'population'],
                 },
             'date': source_date,
             'layer_geometry': layer_geometry_polygon['key'],
@@ -1200,7 +1202,8 @@ class TestKeywordWizard(unittest.TestCase):
             'exposure_unit': count_exposure_unit['key'],
             'inasafe_fields':
                 {
-                    population_count_field['key']: u'population',
+                    # Dummy, select more than fields to show we can do it.
+                    population_count_field['key']: [u'population', u'id'],
                 },
             'date': source_date,
             'layer_geometry': layer_geometry_polygon['key'],
@@ -1261,7 +1264,8 @@ class TestKeywordWizard(unittest.TestCase):
         self.check_current_step(dialog.step_kw_field)
 
         # Check if population is selected
-        population_field = 'population'
+        population_field = expected_keyword['inasafe_fields'][
+            population_count_field['key']]
         self.check_current_text(
             population_field, dialog.step_kw_field.lstFields)
 
