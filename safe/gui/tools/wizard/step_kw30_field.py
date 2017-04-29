@@ -19,8 +19,8 @@ from safe.gui.tools.wizard.wizard_strings import (
     field_question_aggregation)
 from safe.gui.tools.wizard.wizard_utils import (
     get_question_text, skip_inasafe_field)
-from safe.utilities.gis import is_raster_layer
-from safe.definitions.utilities import get_fields, get_non_compulsory_fields
+from safe.definitions.utilities import (
+    get_fields, get_non_compulsory_fields, get_field_groups)
 from safe.definitions.fields import population_count_field
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -72,6 +72,12 @@ class StepKwField(WizardStep, FORM_CLASS):
                 selected_subcategory()
         else:
             subcategory = {'key': None}
+
+        # Has layer groups, go to field mapping
+        field_groups = get_field_groups(
+            layer_purpose['key'], subcategory['key'])
+        if field_groups:
+            return self.parent.step_kw_fields_mapping
 
         # Has classifications, go to multi classifications
         if subcategory.get('classifications'):
