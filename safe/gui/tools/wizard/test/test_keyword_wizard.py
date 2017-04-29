@@ -1174,7 +1174,7 @@ class TestKeywordWizard(unittest.TestCase):
             'exposure_unit': count_exposure_unit['key'],
             'inasafe_fields':
                 {
-                    population_count_field['key']: u'population',
+                    population_count_field['key']: [u'population'],
                 },
             'date': source_date,
             'layer_geometry': layer_geometry_polygon['key'],
@@ -1200,7 +1200,7 @@ class TestKeywordWizard(unittest.TestCase):
             'exposure_unit': count_exposure_unit['key'],
             'inasafe_fields':
                 {
-                    population_count_field['key']: u'population',
+                    population_count_field['key']: [u'population'],
                 },
             'date': source_date,
             'layer_geometry': layer_geometry_polygon['key'],
@@ -1261,7 +1261,7 @@ class TestKeywordWizard(unittest.TestCase):
         self.check_current_step(dialog.step_kw_field)
 
         # Check if population is selected
-        population_field = 'population'
+        population_field = u'population'
         self.check_current_text(
             population_field, dialog.step_kw_field.lstFields)
 
