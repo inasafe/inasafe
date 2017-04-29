@@ -115,9 +115,11 @@ class TestKeywordWizard(unittest.TestCase):
         :type list_widget: QListWidget
         """
         try:
-            # noinspection PyUnresolvedReferences
-            current_text = list_widget.currentItem().text()
-            self.assertEqual(expected_text, current_text)
+            selected_items = list_widget.selectedItems()
+            selected_texts = [item.text() for item in selected_items]
+            if isinstance(expected_text, basestring):
+                expected_text = [expected_text]
+                self.assertListEqual(expected_text, selected_texts)
         except AttributeError:
             options = [
                 list_widget.item(i).text()
