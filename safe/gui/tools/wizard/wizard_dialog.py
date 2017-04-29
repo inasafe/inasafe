@@ -744,10 +744,9 @@ class WizardDialog(QDialog, FORM_CLASS):
             keywords['allow_resampling'] = (
                 self.step_kw_resample.selected_allow_resampling() and
                 'true' or 'false')
-        if self.step_kw_field.lstFields.currentItem():
+        if self.step_kw_field.selected_fields():
             field_key = self.field_keyword_for_the_layer()
-            inasafe_fields[field_key] = self.step_kw_field.\
-                lstFields.currentItem().text()
+            inasafe_fields[field_key] = self.step_kw_field.selected_fields()
         if self.step_kw_classification.selected_classification():
             keywords['classification'] = self.step_kw_classification.\
                 selected_classification()['key']
