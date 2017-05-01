@@ -1,28 +1,15 @@
 # coding=utf-8
 """InaSAFE Keyword Wizard Multi Fields Step."""
 
-import re
 import logging
 
-from PyQt4 import QtCore
-from PyQt4.QtGui import QListWidgetItem, QAbstractItemView
-
-from safe.utilities.i18n import tr
 from safe.definitions.layer_purposes import (
     layer_purpose_aggregation, layer_purpose_hazard, layer_purpose_exposure)
-from safe.definitions.layer_modes import layer_mode_continuous
 from safe.gui.tools.wizard.wizard_step import (
     WizardStep, get_wizard_step_ui_class)
-from safe.gui.tools.wizard.wizard_strings import (
-    field_question_subcategory_unit,
-    field_question_subcategory_classified,
-    field_question_aggregation)
-from safe.gui.tools.wizard.wizard_utils import (
-    get_question_text, skip_inasafe_field)
+from safe.gui.tools.wizard.wizard_utils import skip_inasafe_field
 from safe.definitions.utilities import get_fields, get_non_compulsory_fields
-from safe.definitions.fields import population_count_field
 from safe.gui.widgets.field_mapping_widget import FieldMappingWidget
-from safe.definitions.utilities import get_field_groups
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -31,10 +18,6 @@ __revision__ = '$Format:%H$'
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 LOGGER = logging.getLogger('InaSAFE')
-
-
-SINGLE_MODE = 'single'
-MULTI_MODE = 'multi'
 
 
 class StepKwFieldsMapping(WizardStep, FORM_CLASS):
@@ -58,6 +41,7 @@ class StepKwFieldsMapping(WizardStep, FORM_CLASS):
         :returns: True if new step may be enabled.
         :rtype: bool
         """
+        # Always ready
         return True
 
     def get_next_step(self):
@@ -98,15 +82,8 @@ class StepKwFieldsMapping(WizardStep, FORM_CLASS):
         # Any other case
         return self.parent.step_kw_source
 
-    def clear_further_steps(self):
-        """Clear all further steps to re-init widget."""
-        # self.parent.step_kw_classify.treeClasses.clear()
-        pass
-
     def set_widgets(self):
         """Set widgets on the Field Mapping step."""
-        self.clear_further_steps()
-
         on_the_fly_metadata = {}
         layer_purpose = self.parent.step_kw_purpose.selected_purpose()
         on_the_fly_metadata['layer_purpose'] = layer_purpose['key']
@@ -129,7 +106,14 @@ class StepKwFieldsMapping(WizardStep, FORM_CLASS):
         self.main_layout.addWidget(self.field_mapping_widget)
 
     def get_field_mapping(self):
-        """Obtain field mapping from the current state."""
+        """Obtain metadata from current state of the widget.
+
+        Null or empty list will be removed.
+
+        :returns: Dictionary of values by type in this format:
+            {'fields': {}, 'values': {}}.
+        :rtype: dict
+        """
         field_mapping = self.field_mapping_widget.get_field_mapping()
         for k, v in field_mapping['values'].items():
             if not v:

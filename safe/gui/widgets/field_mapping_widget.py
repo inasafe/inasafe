@@ -43,6 +43,9 @@ class FieldMappingWidget(QTabWidget, object):
         :param layer: A vector layer that has been already patched with
             metadata.
         :type layer: QgsVectorLayer
+
+        :param keywords: Custom keywor for the layer.
+        :type keywords: dict, None
         """
         self.layer = layer
         if keywords:
