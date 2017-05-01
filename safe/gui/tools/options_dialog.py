@@ -8,7 +8,8 @@ import qgis  # pylint: disable=unused-import
 
 from PyQt4.QtCore import pyqtSignature, pyqtSlot, QVariant, QSettings
 from PyQt4.QtGui import (
-    QDialog, QFileDialog, QDialogButtonBox, QGroupBox, QVBoxLayout)
+    QDialog, QFileDialog, QDialogButtonBox, QGroupBox, QVBoxLayout,
+    QScrollArea, QWidget)
 
 from safe_extras.parameters.qt_widgets.parameter_container import (
     ParameterContainer)
@@ -125,6 +126,16 @@ class OptionsDialog(QDialog, FORM_CLASS):
         # Hide not implemented group
         self.grpNotImplemented.hide()
         self.adjustSize()
+
+        # Demographic tab
+        self.scroll_area = QScrollArea()
+        self.scroll_area.setWidgetResizable(True)
+        self.widget_container = QWidget()
+        self.scroll_area.setWidget(self.widget_container)
+        self.container_layout = QVBoxLayout()
+        self.widget_container.setLayout(self.container_layout)
+        self.default_values_layout.addWidget(self.scroll_area)
+
         self.restore_state()
 
         # Hide checkbox if not developers
@@ -541,7 +552,7 @@ class OptionsDialog(QDialog, FORM_CLASS):
             # Create group box for each field group
             group_box = QGroupBox(self)
             group_box.setTitle(field_group['name'])
-            self.default_values_layout.addWidget(group_box)
+            self.container_layout.addWidget(group_box)
             parameters = []
             for settable_field in settable_fields:
                 parameter = self.default_field_to_parameter(settable_field)
@@ -550,7 +561,7 @@ class OptionsDialog(QDialog, FORM_CLASS):
             parameter_container = ParameterContainer(
                 parameters, description_text=field_group['description']
             )
-            parameter_container.setup_ui()
+            parameter_container.setup_ui(must_scroll=False)
             group_box_inner_layout = QVBoxLayout()
             group_box_inner_layout.addWidget(parameter_container)
             group_box.setLayout(group_box_inner_layout)
@@ -568,12 +579,12 @@ class OptionsDialog(QDialog, FORM_CLASS):
             'these variables.')
         parameter_container = ParameterContainer(
             self.default_value_parameters, description_text=description_text)
-        parameter_container.setup_ui()
+        parameter_container.setup_ui(must_scroll=False)
         self.other_group_box = QGroupBox(tr('Non-group fields'))
         other_group_inner_layout = QVBoxLayout()
         other_group_inner_layout.addWidget(parameter_container)
         self.other_group_box.setLayout(other_group_inner_layout)
-        self.default_values_layout.addWidget(self.other_group_box)
+        self.container_layout.addWidget(self.other_group_box)
 
         # Add to attribute
         self.default_value_parameter_containers.append(parameter_container)
@@ -635,8 +646,8 @@ class OptionsDialog(QDialog, FORM_CLASS):
         # Set the flag to true because user ask to.
         self.is_restore_default = True
         # remove current default ratio
-        for i in reversed(range(self.default_values_layout.count())):
-            widget = self.default_values_layout.itemAt(i).widget()
+        for i in reversed(range(self.container_layout.count())):
+            widget = self.container_layout.itemAt(i).widget()
             if widget is not None:
                 widget.setParent(None)
 
