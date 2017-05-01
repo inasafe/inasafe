@@ -37,6 +37,7 @@ from safe.common.parameters.group_select_parameter import (
     GroupSelectParameter)
 from safe.common.parameters.group_select_parameter_widget import (
     GroupSelectParameterWidget)
+from safe.common.parameters.validators import validate_sum
 from safe.utilities.default_values import get_inasafe_default_value_qsetting
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
@@ -248,6 +249,8 @@ class FieldMappingTab(QWidget, object):
             vertical=False
         )
         self.parameter_container.setup_ui()
+
+        self.parameter_container.add_validator(validate_sum)
 
         self.parameter_layout.addWidget(self.parameter_container)
 
