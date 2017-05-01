@@ -31,7 +31,7 @@ __revision__ = '$Format:%H$'
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 LOGGER = logging.getLogger('InaSAFE')
 
-
+# Mode
 SINGLE_MODE = 'single'
 MULTI_MODE = 'multi'
 
@@ -117,6 +117,8 @@ class StepKwField(WizardStep, FORM_CLASS):
         if not field_names:
             self.parent.pbnNext.setEnabled(False)
             return
+        # Compulsory fields can be list of field name or single field name.
+        # We need to iterate through all of them
         if not isinstance(field_names, list):
             field_names = [field_names]
         field_descriptions = ''
@@ -126,6 +128,8 @@ class StepKwField(WizardStep, FORM_CLASS):
             # Exit if the selected field_names comes from a previous wizard run
             if field_index < 0:
                 return
+
+            # Generate description for the field.
             field_type = layer_fields.field(field_name).typeName()
             field_index = layer_fields.indexFromName(field_name)
             unique_values = self.parent.layer.uniqueValues(field_index)[0:48]
@@ -149,10 +153,10 @@ class StepKwField(WizardStep, FORM_CLASS):
         self.parent.pbnNext.setEnabled(True)
 
     def selected_fields(self):
-        """Obtain the field selected by user.
+        """Obtain the fields selected by user.
 
         :returns: Keyword of the selected field.
-        :rtype: list
+        :rtype: list, str
         """
         items = self.lstFields.selectedItems()
         if items and self.mode == MULTI_MODE:
@@ -172,13 +176,12 @@ class StepKwField(WizardStep, FORM_CLASS):
         purpose = self.parent.step_kw_purpose.selected_purpose()
         subcategory = self.parent.step_kw_subcategory.selected_subcategory()
         unit = self.parent.step_kw_unit.selected_unit()
-        layer_mode = self.parent.step_kw_layermode.selected_layermode()
 
         # Set mode
         # Notes(IS) I hard coded this one, need to fix it after it's working.
         LOGGER.debug(self.parent.field_keyword_for_the_layer())
-        if self.parent.field_keyword_for_the_layer() == population_count_field[
-            'key']:
+        if (self.parent.field_keyword_for_the_layer() ==
+                population_count_field['key']):
             self.mode = MULTI_MODE
         else:
             self.mode = SINGLE_MODE

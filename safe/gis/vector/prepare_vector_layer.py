@@ -49,7 +49,6 @@ from safe.utilities.i18n import tr
 from safe.utilities.profiling import profile
 from safe.utilities.metadata import (
     active_thresholds_value_maps, active_classification)
-from safe.test.debug_helper import print_attribute_table
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -297,14 +296,16 @@ def _remove_features(layer):
     compulsory_field = get_compulsory_fields(layer_purpose, layer_subcategory)
 
     inasafe_fields = layer.keywords['inasafe_fields']
+    # Compulsory fields can be list of field name or single field name.
+    # We need to iterate through all of them
     field_names = inasafe_fields.get(compulsory_field['key'])
     if not isinstance(field_names, list):
         field_names = [field_names]
     for field_name in field_names:
         if not field_name:
-            msg = 'Keyword %s is missing from %s' % (
+            message = 'Keyword %s is missing from %s' % (
                 compulsory_field['key'], layer_purpose)
-            raise InvalidKeywordsForProcessingAlgorithm(msg)
+            raise InvalidKeywordsForProcessingAlgorithm(message)
         index = layer.fieldNameIndex(field_name)
 
         request = QgsFeatureRequest()

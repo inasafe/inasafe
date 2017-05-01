@@ -255,7 +255,7 @@ class FieldMappingTab(QWidget, object):
 
         # Set header
         # TODO(IS): Set header text here
-        header_text = tr('Pleas drag the field/s that represent')
+        # header_text = tr('Pleas drag the field/s that represent')
 
     def get_parameter_value(self):
         """Get parameter of the tab.
