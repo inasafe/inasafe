@@ -149,7 +149,14 @@ vulnerability_ratio_group = {
         over_60_ratio_field,
         disabled_ratio_field
     ],
-    'notes': []
+    'notes': [],
+    'constraint': {
+        'key': 'sum',
+        'args': {
+            'max': 1
+        },
+        'message': tr('The sum of vulnerability ratios is more than 1.')
+    }
 }
 
 vulnerability_count_group = {
