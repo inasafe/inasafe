@@ -319,6 +319,12 @@ class TestKeywordWizard(unittest.TestCase):
         # Click next
         dialog.pbnNext.click()
 
+        # Check field mapping steps
+        self.check_current_step(dialog.step_kw_fields_mapping)
+
+        # Click next to continue
+        dialog.pbnNext.click()
+
         # Check if in source step
         self.check_current_step(dialog.step_kw_source)
 
@@ -950,6 +956,12 @@ class TestKeywordWizard(unittest.TestCase):
         # Click next to select area_name
         dialog.pbnNext.click()
 
+        # Check field mapping steps
+        self.check_current_step(dialog.step_kw_fields_mapping)
+
+        # Click next to continue
+        dialog.pbnNext.click()
+
         # select inasafe fields step
         self.check_current_step(dialog.step_kw_inasafe_fields)
 
@@ -1030,7 +1042,13 @@ class TestKeywordWizard(unittest.TestCase):
         # Click next to select KRB
         dialog.pbnNext.click()
 
-        # select inasafe fields step
+        # Check field mapping steps
+        self.check_current_step(dialog.step_kw_fields_mapping)
+
+        # Click next to continue
+        dialog.pbnNext.click()
+
+        # Check inasafe fields step
         self.check_current_step(dialog.step_kw_inasafe_fields)
 
         # Check behaviour
@@ -1130,6 +1148,12 @@ class TestKeywordWizard(unittest.TestCase):
             population_field, dialog.step_kw_field.lstFields)
 
         # Click next to select population
+        dialog.pbnNext.click()
+
+        # Check field mapping steps
+        self.check_current_step(dialog.step_kw_fields_mapping)
+
+        # Click next to continue
         dialog.pbnNext.click()
 
         # Check if in InaSAFE field step
@@ -1270,6 +1294,12 @@ class TestKeywordWizard(unittest.TestCase):
             population_field, dialog.step_kw_field.lstFields)
 
         # Click next to select population
+        dialog.pbnNext.click()
+
+        # Check field mapping steps
+        self.check_current_step(dialog.step_kw_fields_mapping)
+
+        # Click next to continue
         dialog.pbnNext.click()
 
         # Check if in InaSAFE field step
