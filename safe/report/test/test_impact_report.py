@@ -911,14 +911,13 @@ class TestImpactReport(unittest.TestCase):
                     'notes': [u'Columns and rows containing only 0 or "No '
                               u'data" values are excluded from the tables.'],
                     'rows': [
-                        [u'B', '2,700', '1,400', '1,400'],
-                        [u'C', '6,500', '3,300', '3,300'],
-                        [u'F', '7,100', '3,600', '3,600'],
-                        [u'G', '9,500', '4,800', '4,800']],
+                        [u'B', '2,700', '1,400'],
+                        [u'C', '6,500', '3,300'],
+                        [u'F', '7,100', '3,600'],
+                        [u'G', '9,500', '4,800']],
                     'columns': [
                         u'Aggregation area',
                         u'Total Displaced Population',
-                        u'Male Displaced Count',
                         {
                             'start_group_header': True,
                             'name': u'Female Displaced Count',
@@ -927,7 +926,7 @@ class TestImpactReport(unittest.TestCase):
                         }],
                     'group_header_colspan': 1,
                     'totals': [
-                        u'Total', '25,700', '12,900', '12,900']}),
+                        u'Total', '25,700', '12,900']}),
                 ('vulnerability', {
                     'header': u'Detailed Vulnerability Report',
                     'message': u'Vulnerability ratio not exists. '
@@ -1079,15 +1078,14 @@ class TestImpactReport(unittest.TestCase):
                     'header': u'Detailed Gender Report',
                     'notes': [u'Columns and rows containing only 0 or "No '
                               u'data" values are excluded from the tables.'],
-                    'rows': [[u'B', '10', '0', '0'],
-                             [u'C', '10', '10', '10'],
-                             [u'F', '10', '10', '10'],
-                             [u'G', '10', '10', '10'],
-                             [u'K', '10', '0', '0']],
+                    'rows': [[u'B', '10', '0'],
+                             [u'C', '10', '10'],
+                             [u'F', '10', '10'],
+                             [u'G', '10', '10'],
+                             [u'K', '10', '0']],
                     'columns': [
                         u'Aggregation area',
                         u'Total Displaced Population',
-                        u'Male Displaced Count',
                         {
                             'start_group_header': True,
                             'name': u'Female Displaced Count',
@@ -1095,7 +1093,7 @@ class TestImpactReport(unittest.TestCase):
                                             u'(in affected area)'
                         }],
                     'group_header_colspan': 1,
-                    'totals': [u'Total', '20', '10', '10']}),
+                    'totals': [u'Total', '20', '10']}),
                 ('vulnerability', {
                     'header': u'Detailed Vulnerability Report',
                     'message': u'Vulnerability ratio not exists. '
