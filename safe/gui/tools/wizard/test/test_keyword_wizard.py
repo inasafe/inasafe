@@ -39,7 +39,9 @@ from safe.definitions.fields import (
     exposure_type_field,
     hazard_name_field,
     hazard_value_field,
-    population_count_field)
+    population_count_field,
+    female_count_field,
+    elderly_count_field)
 from safe.definitions.layer_geometry import (
     layer_geometry_polygon, layer_geometry_raster)
 from safe.definitions.exposure_classifications import (
@@ -115,9 +117,11 @@ class TestKeywordWizard(unittest.TestCase):
         :type list_widget: QListWidget
         """
         try:
-            # noinspection PyUnresolvedReferences
-            current_text = list_widget.currentItem().text()
-            self.assertEqual(expected_text, current_text)
+            selected_items = list_widget.selectedItems()
+            selected_texts = [item.text() for item in selected_items]
+            if isinstance(expected_text, basestring):
+                expected_text = [expected_text]
+                self.assertListEqual(expected_text, selected_texts)
         except AttributeError:
             options = [
                 list_widget.item(i).text()
@@ -315,6 +319,12 @@ class TestKeywordWizard(unittest.TestCase):
             dialog.step_kw_field.lstFields)
 
         # Click next
+        dialog.pbnNext.click()
+
+        # Check field mapping steps
+        self.check_current_step(dialog.step_kw_fields_mapping)
+
+        # Click next to continue
         dialog.pbnNext.click()
 
         # Check if in source step
@@ -948,6 +958,12 @@ class TestKeywordWizard(unittest.TestCase):
         # Click next to select area_name
         dialog.pbnNext.click()
 
+        # Check field mapping steps
+        self.check_current_step(dialog.step_kw_fields_mapping)
+
+        # Click next to continue
+        dialog.pbnNext.click()
+
         # select inasafe fields step
         self.check_current_step(dialog.step_kw_inasafe_fields)
 
@@ -1028,7 +1044,13 @@ class TestKeywordWizard(unittest.TestCase):
         # Click next to select KRB
         dialog.pbnNext.click()
 
-        # select inasafe fields step
+        # Check field mapping steps
+        self.check_current_step(dialog.step_kw_fields_mapping)
+
+        # Click next to continue
+        dialog.pbnNext.click()
+
+        # Check inasafe fields step
         self.check_current_step(dialog.step_kw_inasafe_fields)
 
         # Check behaviour
@@ -1130,6 +1152,12 @@ class TestKeywordWizard(unittest.TestCase):
         # Click next to select population
         dialog.pbnNext.click()
 
+        # Check field mapping steps
+        self.check_current_step(dialog.step_kw_fields_mapping)
+
+        # Click next to continue
+        dialog.pbnNext.click()
+
         # Check if in InaSAFE field step
         self.check_current_step(dialog.step_kw_inasafe_fields)
 
@@ -1174,7 +1202,7 @@ class TestKeywordWizard(unittest.TestCase):
             'exposure_unit': count_exposure_unit['key'],
             'inasafe_fields':
                 {
-                    population_count_field['key']: u'population',
+                    population_count_field['key']: [u'population'],
                 },
             'date': source_date,
             'layer_geometry': layer_geometry_polygon['key'],
@@ -1200,7 +1228,8 @@ class TestKeywordWizard(unittest.TestCase):
             'exposure_unit': count_exposure_unit['key'],
             'inasafe_fields':
                 {
-                    population_count_field['key']: u'population',
+                    # Dummy, select more than fields to show we can do it.
+                    population_count_field['key']: [u'population', u'id'],
                 },
             'date': source_date,
             'layer_geometry': layer_geometry_polygon['key'],
@@ -1261,11 +1290,18 @@ class TestKeywordWizard(unittest.TestCase):
         self.check_current_step(dialog.step_kw_field)
 
         # Check if population is selected
-        population_field = 'population'
+        population_field = expected_keyword['inasafe_fields'][
+            population_count_field['key']]
         self.check_current_text(
             population_field, dialog.step_kw_field.lstFields)
 
         # Click next to select population
+        dialog.pbnNext.click()
+
+        # Check field mapping steps
+        self.check_current_step(dialog.step_kw_fields_mapping)
+
+        # Click next to continue
         dialog.pbnNext.click()
 
         # Check if in InaSAFE field step
@@ -1309,6 +1345,154 @@ class TestKeywordWizard(unittest.TestCase):
         real_keywords = dialog.get_keywords()
 
         self.assertDictEqual(real_keywords, expected_keyword)
+
+    def test_exposure_multi_fields_existing_keyword(self):
+        """Test for exposure layer with multiple fields."""
+        layer = load_test_vector_layer(
+            'gisv4',
+            'exposure',
+            'population_multi_fields.geojson',
+            clone_to_memory=True)
+        self.assertIsNotNone(layer)
+        expected_keyword = {
+            'scale': source_scale,
+            'license': source_license,
+            'source': source,
+            'url': source_url,
+            'title': layer_title,
+            'exposure': exposure_population['key'],
+            'exposure_unit': count_exposure_unit['key'],
+            'inasafe_fields':
+                {
+                    # Dummy, select more than fields to show we can do it.
+                    population_count_field['key']: [
+                        'right_hand',
+                        'left_hand'
+                    ],
+                    female_count_field['key']: [
+                        'F_0_4',
+                        'F_5_9',
+                        'F_9_15',
+                        'F_15_30',
+                        'F_30_60',
+                        'F_60_100'
+                    ]
+
+                },
+            'date': source_date,
+            'layer_geometry': layer_geometry_polygon['key'],
+            'layer_purpose': layer_purpose_exposure['key'],
+            'layer_mode': layer_mode_continuous['key']
+        }
+        layer.keywords = expected_keyword
+
+        # noinspection PyTypeChecker
+        dialog = WizardDialog(iface=IFACE)
+        dialog.set_keywords_creation_mode(layer)
+
+        # Check if in select purpose step
+        self.check_current_step(dialog.step_kw_purpose)
+
+        # Check if exposure is selected
+        self.select_from_list_widget(
+            layer_purpose_exposure['name'],
+            dialog.step_kw_purpose.lstCategories)
+
+        # Click next to select exposure
+        dialog.pbnNext.click()
+
+        # Check if in select exposure step
+        self.check_current_step(dialog.step_kw_subcategory)
+
+        # Check if population is selected
+        self.check_current_text(
+            exposure_population['name'],
+            dialog.step_kw_subcategory.lstSubcategories)
+
+        # Click next to select population
+        dialog.pbnNext.click()
+
+        # Check if in select layer mode step
+        self.check_current_step(dialog.step_kw_layermode)
+
+        # Check if continuous is selected
+        self.check_current_text(
+            layer_mode_continuous['name'],
+            dialog.step_kw_layermode.lstLayerModes)
+
+        # Click next to select continuous
+        dialog.pbnNext.click()
+
+        # Check if in select unit step
+        self.check_current_step(dialog.step_kw_unit)
+
+        # Check if count is selected
+        self.check_current_text(
+            count_exposure_unit['name'],
+            dialog.step_kw_unit.lstUnits)
+
+        # Click next to select count
+        dialog.pbnNext.click()
+
+        # Check if in select unit step
+        self.check_current_step(dialog.step_kw_field)
+
+        # Check if population is selected
+        population_field = expected_keyword['inasafe_fields'][
+            population_count_field['key']]
+        self.check_current_text(
+            population_field, dialog.step_kw_field.lstFields)
+
+        # Click next to select population
+        dialog.pbnNext.click()
+
+        # Check field mapping steps
+        self.check_current_step(dialog.step_kw_fields_mapping)
+
+        # Click next to continue
+        dialog.pbnNext.click()
+
+        # Check if in InaSAFE field step
+        self.check_current_step(dialog.step_kw_inasafe_fields)
+
+        # Click next to finish inasafe fields step and go to source step
+        # field step
+        dialog.pbnNext.click()
+
+        # Check if in source step
+        self.check_current_step(dialog.step_kw_source)
+
+        self.assertEqual(dialog.step_kw_source.leSource.text(), source)
+        self.assertEqual(
+            dialog.step_kw_source.leSource_scale.text(), source_scale)
+        self.assertEqual(
+            dialog.step_kw_source.ckbSource_date.isChecked(), True)
+        self.assertEqual(
+            dialog.step_kw_source.dtSource_date.dateTime(), source_date)
+        self.assertEqual(
+            dialog.step_kw_source.leSource_license.text(), source_license)
+
+        # Click next to finish source step and go to title step
+        dialog.pbnNext.click()
+
+        # Check if in title step
+        self.check_current_step(dialog.step_kw_title)
+
+        self.assertEqual(dialog.step_kw_title.leTitle.text(), layer_title)
+
+        # Click next to finish title step and go to kw summary step
+        dialog.pbnNext.click()
+
+        # Check if in title step
+        self.check_current_step(dialog.step_kw_summary)
+
+        # Click finish
+        dialog.pbnNext.click()
+
+        # Checking Keyword Created
+        real_keywords = dialog.get_keywords()
+
+        self.assertDictEqual(byteify(real_keywords), byteify(expected_keyword))
 
     def test_classified_raster_keywords(self):
         """Test keyword wizard for classified raster."""

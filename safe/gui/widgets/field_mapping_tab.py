@@ -31,6 +31,7 @@ from safe.definitions.constants import (
 
 from safe_extras.parameters.qt_widgets.parameter_container import (
     ParameterContainer)
+from safe.common.exceptions import KeywordNotFoundError
 from safe.utilities.i18n import tr
 from safe.common.parameters.group_select_parameter import (
     GroupSelectParameter)
@@ -118,18 +119,23 @@ class FieldMappingTab(QWidget, object):
 
         self.setLayout(self.main_layout)
 
-    def set_layer(self, layer):
+    def set_layer(self, layer, keywords=None):
         """Set layer and update UI accordingly.
 
         :param layer: A vector layer that has been already patched with
             metadata.
         :type layer: QgsVectorLayer
         """
-        # Check if it has keywords
-        if not hasattr(layer, 'keywords'):
-            raise
         self.layer = layer
-        self.metadata = layer.keywords
+        if keywords:
+            self.metadata = keywords
+        else:
+            # Check if it has keywords
+            if not hasattr(layer, 'keywords'):
+                message = 'Layer {layer_name} does not have keywords.'.format(
+                    layer_name=layer.name())
+                raise KeywordNotFoundError(message)
+            self.metadata = layer.keywords
         self.populate_parameter()
 
     def populate_field_list(self, excluded_fields=None):
@@ -249,7 +255,7 @@ class FieldMappingTab(QWidget, object):
 
         # Set header
         # TODO(IS): Set header text here
-        header_text = tr('Pleas drag the field/s that represent')
+        # header_text = tr('Pleas drag the field/s that represent')
 
     def get_parameter_value(self):
         """Get parameter of the tab.

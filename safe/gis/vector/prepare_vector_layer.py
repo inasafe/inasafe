@@ -49,7 +49,6 @@ from safe.utilities.i18n import tr
 from safe.utilities.profiling import profile
 from safe.utilities.metadata import (
     active_thresholds_value_maps, active_classification)
-from safe.test.debug_helper import print_attribute_table
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -297,64 +296,69 @@ def _remove_features(layer):
     compulsory_field = get_compulsory_fields(layer_purpose, layer_subcategory)
 
     inasafe_fields = layer.keywords['inasafe_fields']
-    field_name = inasafe_fields.get(compulsory_field['key'])
-    if not field_name:
-        msg = 'Keyword %s is missing from %s' % (
-            compulsory_field['key'], layer_purpose)
-        raise InvalidKeywordsForProcessingAlgorithm(msg)
-    index = layer.fieldNameIndex(field_name)
+    # Compulsory fields can be list of field name or single field name.
+    # We need to iterate through all of them
+    field_names = inasafe_fields.get(compulsory_field['key'])
+    if not isinstance(field_names, list):
+        field_names = [field_names]
+    for field_name in field_names:
+        if not field_name:
+            message = 'Keyword %s is missing from %s' % (
+                compulsory_field['key'], layer_purpose)
+            raise InvalidKeywordsForProcessingAlgorithm(message)
+        index = layer.fieldNameIndex(field_name)
 
-    request = QgsFeatureRequest()
-    request.setSubsetOfAttributes([field_name], layer.pendingFields())
-    layer.startEditing()
-    i = 0
-    for feature in layer.getFeatures(request):
-        if isinstance(feature.attributes()[index], QPyNullVariant):
-            if layer_purpose == 'hazard':
-                # Remove the feature if the hazard is null.
+        request = QgsFeatureRequest()
+        request.setSubsetOfAttributes([field_name], layer.pendingFields())
+        layer.startEditing()
+        i = 0
+        for feature in layer.getFeatures(request):
+            if isinstance(feature.attributes()[index], QPyNullVariant):
+                if layer_purpose == 'hazard':
+                    # Remove the feature if the hazard is null.
+                    layer.deleteFeature(feature.id())
+                    i += 1
+                elif layer_purpose == 'aggregation':
+                    # Put the ID if the value is null.
+                    layer.changeAttributeValue(
+                        feature.id(), index, str(feature.id()))
+                elif layer_purpose == 'exposure':
+                    # Put an empty value, the value mapping will take care of
+                    # it in the 'other' group.
+                    layer.changeAttributeValue(
+                        feature.id(), index, '')
+
+            # Check if there is en empty geometry.
+            geometry = feature.geometry()
+            if not geometry:
                 layer.deleteFeature(feature.id())
                 i += 1
-            elif layer_purpose == 'aggregation':
-                # Put the ID if the value is null.
-                layer.changeAttributeValue(
-                    feature.id(), index, str(feature.id()))
-            elif layer_purpose == 'exposure':
-                # Put an empty value, the value mapping will take care of it
-                # in the 'other' group.
-                layer.changeAttributeValue(
-                    feature.id(), index, '')
+                continue
 
-        # Check if there is en empty geometry.
-        geometry = feature.geometry()
-        if not geometry:
-            layer.deleteFeature(feature.id())
-            i += 1
-            continue
+            # Check if the geometry is empty.
+            if geometry.isGeosEmpty():
+                layer.deleteFeature(feature.id())
+                i += 1
+                continue
 
-        # Check if the geometry is empty.
-        if geometry.isGeosEmpty():
-            layer.deleteFeature(feature.id())
-            i += 1
-            continue
+            # Check if the geometry is valid.
+            if not geometry.isGeosValid():
+                # polygonize can produce some invalid geometries
+                # For instance a polygon like this, sharing a same point :
+                #      _______
+                #      |  ___|__
+                #      |  |__|  |
+                #      |________|
+                # layer.deleteFeature(feature.id())
+                # i += 1
+                pass
 
-        # Check if the geometry is valid.
-        if not geometry.isGeosValid():
-            # polygonize can produce some invalid geometries
-            # For instance a polygon like this, sharing a same point :
-            #      _______
-            #      |  ___|__
-            #      |  |__|  |
-            #      |________|
-            # layer.deleteFeature(feature.id())
-            # i += 1
-            pass
-
-        # TODO We need to add more tests
-        # like checking if the value is in the value_mapping.
-    layer.commitChanges()
-    LOGGER.debug(tr(
-        'Features which have been removed from %s : %s'
-        % (layer.keywords['layer_purpose'], i)))
+            # TODO We need to add more tests
+            # like checking if the value is in the value_mapping.
+        layer.commitChanges()
+        LOGGER.debug(tr(
+            'Features which have been removed from %s : %s'
+            % (layer.keywords['layer_purpose'], i)))
 
 
 @profile

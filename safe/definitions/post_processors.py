@@ -31,6 +31,7 @@ from safe.definitions.fields import (
     female_displaced_count_field,
     male_displaced_count_field,
     child_bearing_age_displaced_count_field,
+    pregnant_lactating_displaced_count_field,
     infant_displaced_count_field,
     child_displaced_count_field,
     youth_displaced_count_field,
@@ -413,7 +414,7 @@ post_processor_pregnant_lactating = {
     },
     'output': {
         'pregnant_lactating_displaced': {
-            'value': child_bearing_age_displaced_count_field,
+            'value': pregnant_lactating_displaced_count_field,
             'type': function_process,
             'function': multiply
         }
@@ -1022,4 +1023,5 @@ post_processors = [
 ] + (female_postprocessors +
      age_postprocessors +
      minimum_needs_post_processors +
-     vulnerability_postprocessors)
+     vulnerability_postprocessors +
+     gender_postprocessors)

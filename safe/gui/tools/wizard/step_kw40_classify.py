@@ -159,7 +159,7 @@ class StepKwClassify(WizardStep, FORM_CLASS):
             else:
                 unique_values = [int(i) for i in unique_values]
         else:
-            field = self.parent.step_kw_field.selected_field()
+            field = self.parent.step_kw_field.selected_fields()
             field_index = self.parent.layer.dataProvider().fields().\
                 indexFromName(field)
             field_type = self.parent.layer.dataProvider().\
@@ -219,7 +219,7 @@ class StepKwClassify(WizardStep, FORM_CLASS):
         field = self.parent.get_existing_keyword('inasafe_fields').get(
             field_keyword)
         if (not is_raster_layer(self.parent.layer) and
-                field != self.parent.step_kw_field.selected_field()):
+                field != self.parent.step_kw_field.selected_fields()):
             return
 
         unassigned_values = list()

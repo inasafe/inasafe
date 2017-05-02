@@ -79,6 +79,7 @@ from step_kw33_multi_classifications import StepKwMultiClassifications
 from step_kw35_resample import StepKwResample
 from step_kw40_classify import StepKwClassify
 from step_kw43_threshold import StepKwThreshold
+from step_kw44_fields_mapping import StepKwFieldsMapping
 from step_kw45_inasafe_fields import StepKwInaSAFEFields
 from step_kw47_default_inasafe_fields import StepKwDefaultInaSAFEFields
 from step_kw49_inasafe_raster_default_values import (
@@ -164,6 +165,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.step_kw_resample = StepKwResample(self)
         self.step_kw_classify = StepKwClassify(self)
         self.step_kw_threshold = StepKwThreshold(self)
+        self.step_kw_fields_mapping = StepKwFieldsMapping(self)
         self.step_kw_inasafe_fields = StepKwInaSAFEFields(self)
         self.step_kw_default_inasafe_fields = StepKwDefaultInaSAFEFields(self)
         self.step_kw_inasafe_raster_default_values = \
@@ -201,6 +203,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.stackedWidget.addWidget(self.step_kw_resample)
         self.stackedWidget.addWidget(self.step_kw_classify)
         self.stackedWidget.addWidget(self.step_kw_threshold)
+        self.stackedWidget.addWidget(self.step_kw_fields_mapping)
         self.stackedWidget.addWidget(self.step_kw_inasafe_fields)
         self.stackedWidget.addWidget(self.step_kw_default_inasafe_fields)
         self.stackedWidget.addWidget(
@@ -744,10 +747,9 @@ class WizardDialog(QDialog, FORM_CLASS):
             keywords['allow_resampling'] = (
                 self.step_kw_resample.selected_allow_resampling() and
                 'true' or 'false')
-        if self.step_kw_field.lstFields.currentItem():
+        if self.step_kw_field.selected_fields():
             field_key = self.field_keyword_for_the_layer()
-            inasafe_fields[field_key] = self.step_kw_field.\
-                lstFields.currentItem().text()
+            inasafe_fields[field_key] = self.step_kw_field.selected_fields()
         if self.step_kw_classification.selected_classification():
             keywords['classification'] = self.step_kw_classification.\
                 selected_classification()['key']
@@ -793,6 +795,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         inasafe_fields.update(self.step_kw_inasafe_fields.get_inasafe_fields())
         inasafe_fields.update(
             self.step_kw_default_inasafe_fields.get_inasafe_fields())
+        inasafe_fields.update(
+            self.step_kw_fields_mapping.get_field_mapping()['fields'])
 
         if inasafe_fields:
             keywords['inasafe_fields'] = inasafe_fields
@@ -806,8 +810,11 @@ class WizardDialog(QDialog, FORM_CLASS):
             #     step_kw_inasafe_raster_default_values.\
             #     get_inasafe_default_values()
         else:
-            inasafe_default_values = self.step_kw_default_inasafe_fields.\
-                get_inasafe_default_values()
+            inasafe_default_values.update(
+                self.step_kw_default_inasafe_fields.get_inasafe_default_values(
+                ))
+            inasafe_default_values.update(
+                self.step_kw_fields_mapping.get_field_mapping()['values'])
 
         if inasafe_default_values:
             keywords['inasafe_default_values'] = inasafe_default_values

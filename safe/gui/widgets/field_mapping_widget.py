@@ -6,7 +6,7 @@ import logging
 
 from safe.utilities.i18n import tr
 from safe.common.exceptions import KeywordNotFoundError
-from safe.definitions.utilities import definition, get_field_groups
+from safe.definitions.utilities import get_field_groups
 from safe.definitions.layer_purposes import (
     layer_purpose_exposure, layer_purpose_hazard)
 
@@ -37,22 +37,31 @@ class FieldMappingWidget(QTabWidget, object):
 
         self.tabs = []  # Store all tabs
 
-    def set_layer(self, layer):
+    def set_layer(self, layer, keywords=None):
         """Set layer and update UI accordingly.
 
         :param layer: A vector layer that has been already patched with
             metadata.
         :type layer: QgsVectorLayer
+
+        :param keywords: Custom keywor for the layer.
+        :type keywords: dict, None
         """
-        # Check if it has keywords
-        if not hasattr(layer, 'keywords'):
-            raise
         self.layer = layer
-        self.metadata = layer.keywords
+        if keywords:
+            self.metadata = keywords
+        else:
+            # Check if it has keywords
+            if not hasattr(layer, 'keywords'):
+                message = 'Layer {layer_name} does not have keywords.'.format(
+                    layer_name=layer.name())
+                raise KeywordNotFoundError(message)
+            self.metadata = layer.keywords
         self.populate_tabs()
 
     def populate_tabs(self):
         """Populating tabs based on layer metadata."""
+        self.delete_tabs()
         layer_purpose = self.metadata.get('layer_purpose')
         if not layer_purpose:
             message = tr(
@@ -69,9 +78,14 @@ class FieldMappingWidget(QTabWidget, object):
         field_groups = get_field_groups(layer_purpose, layer_subcategory)
         for field_group in field_groups:
             tab = FieldMappingTab(field_group, self, self.iface)
-            tab.set_layer(self.layer)
+            tab.set_layer(self.layer, self.metadata)
             self.addTab(tab, field_group['name'])
             self.tabs.append(tab)
+
+    def delete_tabs(self):
+        """Methods to delete tabs."""
+        self.clear()
+        self.tabs = []
 
     def get_field_mapping(self):
         """Obtain metadata from current state of the widget.
