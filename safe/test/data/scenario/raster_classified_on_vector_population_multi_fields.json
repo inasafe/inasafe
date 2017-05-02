@@ -1,8 +1,8 @@
 {
   "scenario": {
     "enable": true,
-    "hazard": "flood_multipart_polygons.shp",
-    "exposure": "census.geojson",
+    "hazard": "classified_flood_20_20.asc",
+    "exposure": "gisv4/exposure/population_multi_fields.geojson",
     "aggregation": null
   },
 
@@ -60,6 +60,8 @@
         "use_same_projection":true
       },
       "process":[
+        "Clip raster by analysis bounding box",
+        "Polygonize classified raster hazard",
         "Clip and mask hazard polygons with the analysis layer",
         "Cleaning the vector hazard attribute table",
         "Assign classes based on value map",

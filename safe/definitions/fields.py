@@ -384,12 +384,37 @@ profiling_time_field = {
     'help_text': tr(
         'The total elapsed time spent in the function being measured.'),
     'description': tr(
-        'The profiling system in InaSAFE provide metrics about which '
+        'The profiling system in InaSAFE provides metrics about which '
         'python functions were called during the analysis workflow and '
         'how long was spent in each function. These data are assembled into '
         'a table and shown in QGIS as part of the analysis layer group. '
         'Using the profiling time field we are able to refer back '
         'to a how long was spent in each specific python function when '
+        'doing performance optimisation.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+
+profiling_memory_field = {
+    'key': 'profiling_memory_field',
+    'name': tr('Profiling memory'),
+    'field_name': 'memory_mb',
+    'type': QVariant.Int,
+    'length': default_field_length,
+    'precision': default_field_precision,
+    'help_text': tr(
+        'The total used memory (in mb) in the function being measured.'),
+    'description': tr(
+        'The profiling system in InaSAFE provides metrics about which '
+        'python functions were called during the analysis workflow and '
+        'how much memory is used in each function. These data are assembled '
+        'into a table and shown in QGIS as part of the analysis layer group. '
+        'Using the profiling memory field we are able to refer back '
+        'to a how much memory was used in each specific python function when '
         'doing performance optimisation.'),
     'citations': [
         {
@@ -1325,6 +1350,51 @@ female_displaced_count_field = {
     'replace_null': False
 }
 
+child_bearing_age_displaced_count_field = {
+    'key': 'child_bearing_age_displaced_count_field',
+    'name': tr('Child Bearing Age Displaced Count'),
+    'field_name': 'child_bearing_age_displaced',
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'description': tr(
+        'The number of displaced child bearing age for each feature.'),
+    'help_text': tr(
+        'The number of displaced child bearing age for each feature.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+pregnant_lactating_displaced_count_field = {
+    'key': 'pregnant_lactating_displaced_count_field',
+    'name': tr('Pregnant or Lactating Displaced Count'),
+    'field_name': 'pregnant_lactating_displaced',
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'description': tr(
+        'The number of displaced pregnant or lactating for each feature.'),
+    'help_text': tr(
+        'The number of displaced pregnant or lactating for each feature.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+
 male_displaced_count_field = {
     'key': 'male_displaced_count_field',
     'name': tr('Male Displaced Count'),
@@ -1335,6 +1405,50 @@ male_displaced_count_field = {
     'absolute': True,
     'description': tr(
         'Attribute where the number of displaced males for each feature.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+infant_displaced_count_field = {
+    'key': 'infant_displaced_count_field',
+    'name': tr('Infant Displaced Count'),
+    'field_name': 'infant_displaced',
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'description': tr(
+        'The number of infant displaced for each feature.'),
+    'help_text': tr(
+        'The number of infant displaced for each feature.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+child_displaced_count_field = {
+    'key': 'child_displaced_count_field',
+    'name': tr('Child Displaced Count'),
+    'field_name': 'child_displaced',
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'description': tr(
+        'The number of child displaced for each feature.'),
+    'help_text': tr(
+        'The number of child displaced for each feature.'),
     'citations': [
         {
             'text': None,
@@ -1401,6 +1515,72 @@ elderly_displaced_count_field = {
         'The number of elderly people displaced for each feature.'),
     'help_text': tr(
         'The number of elderly people displaced for each feature.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+under_5_displaced_count_field = {
+    'key': 'under_5_displaced_count_field',
+    'name': tr('Under 5 Displaced Count'),
+    'field_name': 'under_5_displaced',
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'description': tr(
+        'The number of under 5 years old displaced for each feature.'),
+    'help_text': tr(
+        'The number of under 5 years old displaced for each feature.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+over_60_displaced_count_field = {
+    'key': 'over_60_displaced_count_field',
+    'name': tr('Over 60 Years Displaced Count'),
+    'field_name': 'over_60_displaced',
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'description': tr(
+        'The number of over 60 years old displaced for each feature.'),
+    'help_text': tr(
+        'The number of over 60 years old displaced for each feature.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+disabled_displaced_count_field = {
+    'key': 'disabled_displaced_count_field',
+    'name': tr('Disabled Displaced Count'),
+    'field_name': 'disabled_displaced',
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'description': tr(
+        'The number of disabled people displaced for each feature.'),
+    'help_text': tr(
+        'The number of disabled people displaced for each feature.'),
     'citations': [
         {
             'text': None,
@@ -1859,24 +2039,38 @@ count_fields = [
     population_count_field,
     displaced_field,
     fatalities_field,
+    # Gender count fields
     female_count_field,
+    child_bearing_age_count_field,
+    pregnant_lactating_count_field,
     male_count_field,
+    # Additional needs count fields
     hygiene_packs_count_field,
     additional_rice_count_field,
+    # Age count fields
+    infant_count_field,
+    child_count_field,
     youth_count_field,
     adult_count_field,
     elderly_count_field,
+    # Vulnerability fields
+    under_5_count_field,
+    over_60_count_field,
+    disabled_count_field,
+    # Displaced
+    # Gender displaced count fields
     female_displaced_count_field,
+    child_bearing_age_displaced_count_field,
+    pregnant_lactating_displaced_count_field,
     male_displaced_count_field,
+    # Age count fields
+    infant_displaced_count_field,
+    child_displaced_count_field,
     youth_displaced_count_field,
     adult_displaced_count_field,
     elderly_displaced_count_field,
+    # Vulnerability fields
+    under_5_displaced_count_field,
+    over_60_displaced_count_field,
+    disabled_displaced_count_field
 ] + minimum_needs_fields
-
-ratio_fields = [
-    feature_rate_field,
-    female_ratio_field,
-    youth_ratio_field,
-    adult_ratio_field,
-    elderly_ratio_field,
-]

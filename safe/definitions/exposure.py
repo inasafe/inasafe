@@ -11,14 +11,11 @@ from safe.definitions.units import (
     unit_kilometres,
 )
 from safe.definitions.fields import (
-    adult_count_field,
-    elderly_count_field,
     exposure_fields,
     exposure_name_field,
-    female_count_field,
-    youth_count_field,
     population_count_field,
     exposure_type_field)
+from safe.definitions.field_groups import exposure_field_groups
 from safe.definitions.layer_modes import (
     layer_mode_continuous, layer_mode_classified)
 from safe.definitions.exposure_classifications import (
@@ -115,10 +112,10 @@ exposure_population = {
     ],
     'citations': [
         {
-                'text': tr(
-                    'The Sphere Handbook: Humanitarian Charter and Minimum '
-                    'Standards in Humanitarian Response'),
-                'link': u'http://www.spherehandbook.org/'
+            'text': tr(
+                'The Sphere Handbook: Humanitarian Charter and Minimum '
+                'Standards in Humanitarian Response'),
+            'link': u'http://www.spherehandbook.org/'
         }
     ],
     'allowed_geometries': [
@@ -131,6 +128,7 @@ exposure_population = {
     'compulsory_fields': [population_count_field],
     'fields': exposure_fields,
     'extra_fields': [exposure_name_field],
+    'field_groups': exposure_field_groups,
     'layer_modes': [layer_mode_continuous],
     'display_not_exposed': False,
     'use_population_rounding': True,
@@ -192,6 +190,7 @@ exposure_road = {
         # feature_value_field, disabled in V4.0, ET 13/02/17
         # feature_rate_field disabled in V4.0, ET 13/02/17
     ],
+    'field_groups': [],
     'layer_modes': [layer_mode_classified],
     'display_not_exposed': True,
     'use_population_rounding': False,
@@ -254,6 +253,7 @@ exposure_structure = {
         # feature_value_field, disabled in V4.0, ET 13/02/17
         # feature_rate_field disabled in V4.0, ET 13/02/17
     ],
+    'field_groups': [],
     'layer_modes': [layer_mode_classified],
     'display_not_exposed': True,
     'use_population_rounding': False,
@@ -292,9 +292,8 @@ exposure_place = {
     'classifications': [generic_place_classes],
     'compulsory_fields': [exposure_type_field],
     'fields': exposure_fields,
-    'extra_fields': [
-        exposure_name_field
-    ],
+    'extra_fields': [exposure_name_field],
+    'field_groups': exposure_field_groups,
     'layer_modes': [layer_mode_classified],
     'display_not_exposed': True,
     'use_population_rounding': False,
@@ -359,6 +358,7 @@ exposure_land_cover = {
         # feature_value_field, disabled in V4.0, ET 13/02/17
         # feature_rate_field disabled in V4.0, ET 13/02/17
     ],
+    'field_groups': [],
     'layer_modes': [layer_mode_classified],
     'display_not_exposed': False,
     'use_population_rounding': False,

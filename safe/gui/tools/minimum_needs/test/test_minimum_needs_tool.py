@@ -1,54 +1,30 @@
 # coding=utf-8
-"""
-Minimum Needs Tool Test Cases.
 
-InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
+"""Test Minimum Needs Tools."""
 
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
-
-__author__ = 'ismail@kartoza.com'
-__date__ = '14/09/2012'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
-
-# this import required to enable PyQt API v2 - DO NOT REMOVE!
-# noinspection PyUnresolvedReferences
 import unittest
 import os
+from qgis.core import QgsMapLayerRegistry
 
-from qgis.core import QgsMapLayerRegistry, QgsVectorLayer
+from safe.test.utilities import (
+    standard_data_path, get_qgis_app, load_test_vector_layer)
 
-from safe.test.utilities import standard_data_path, get_qgis_app
-from safe.definitions.fields import displaced_field
-from safe.definitions.layer_purposes import layer_purpose_aggregation
-from safe.gis.vector.prepare_vector_layer import rename_remove_inasafe_fields
 from PyQt4 import QtGui
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.gui.tools.minimum_needs.needs_calculator_dialog import (
     NeedsCalculatorDialog)
-
-shapefile_path = standard_data_path('other', 'minimum_needs.shp')
-result_path_base = standard_data_path('other', 'minimum_needs_perka7')
+from safe.utilities.unicode import byteify
 
 
 class MinimumNeedsTest(unittest.TestCase):
-    """Test class to facilitate importing shakemaps."""
 
-    def setUp(self):
-        """Test initialisation run before each test."""
-        pass
+    """Test class to facilitate importing shakemaps."""
 
     def tearDown(self):
         """Run after each test."""
+        result_path_base = standard_data_path('other', 'minimum_needs_perka7')
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().removeAllMapLayers()
         for extension in ['shp', 'shx', 'dbf', 'prj', 'keywords']:
@@ -59,10 +35,7 @@ class MinimumNeedsTest(unittest.TestCase):
     def test_minimum_needs_calculator(self):
         """Test behaviour of the minimum needs function."""
         dialog = NeedsCalculatorDialog(PARENT)
-        layer = QgsVectorLayer(
-            shapefile_path,
-            os.path.basename(shapefile_path),
-            'ogr')
+        layer = load_test_vector_layer('other', 'minimum_needs.shp')
         QgsMapLayerRegistry.instance().addMapLayers([layer])
 
         # Set selected layer and displaced field
@@ -90,7 +63,9 @@ class MinimumNeedsTest(unittest.TestCase):
             'minimum_needs__family_kits': 200,
             'minimum_needs__toilets': 50}
 
-        self.assertDictEqual(expected_attributes, actual_attributes)
+        self.assertDictEqual(
+            byteify(expected_attributes),
+            byteify(actual_attributes))
 
     def test_ok_button(self):
         """Test behaviour of Ok button."""
@@ -100,10 +75,8 @@ class MinimumNeedsTest(unittest.TestCase):
 
         self.assertFalse(ok_button.isEnabled())
 
-        input_layer = QgsVectorLayer(
-            shapefile_path,
-            os.path.basename(shapefile_path),
-            'ogr')
+        input_layer = load_test_vector_layer('other', 'minimum_needs.shp')
+
         QgsMapLayerRegistry.instance().addMapLayers([input_layer])
 
         # Test Ok button with layer and displaced field
