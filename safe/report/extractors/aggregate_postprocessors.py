@@ -96,15 +96,13 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
     age_items = {
         'group': age_displaced_count_groups,
         'group_header': u'Age breakdown (in affected area)',
-        'fields': [
-            postprocessor_output_field(p) for p in age_postprocessors]
+        'fields': [postprocessor_output_field(p) for p in age_postprocessors]
     }
     gender_items = {
         'group': gender_displaced_count_group,
         'group_header': u'Gender breakdown (in affected area)',
-        'fields': (
-            [male_displaced_count_field] +
-            [postprocessor_output_field(p) for p in gender_postprocessors])
+        'fields': [
+            postprocessor_output_field(p) for p in gender_postprocessors]
     }
     vulnerability_items = {
         'group': vulnerability_displaced_count_group,
