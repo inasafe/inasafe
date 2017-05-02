@@ -42,7 +42,9 @@
         "Toilets Post Processor",
         "Under 5 Years Old Post Processor",
         "Over 60 Years Old Post Processor",
-        "Disabled Post Processor"
+        "Disabled Post Processor",
+        "Child Bearing Age Post Processor",
+        "Pregnant and Lactating Post Processor"
       ]
     },
     "aggregation":{
