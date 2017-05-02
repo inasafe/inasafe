@@ -116,6 +116,7 @@ class StepKwField(WizardStep, FORM_CLASS):
         # Exit if no selection
         if not field_names:
             self.parent.pbnNext.setEnabled(False)
+            self.lblDescribeField.setText('')
             return
         # Compulsory fields can be list of field name or single field name.
         # We need to iterate through all of them
@@ -137,8 +138,6 @@ class StepKwField(WizardStep, FORM_CLASS):
                 i is not None and unicode(i) or 'NULL'
                 for i in unique_values]
             unique_values_str = ', '.join(unique_values_str)
-            if unique_values != self.parent.layer.uniqueValues(field_index):
-                unique_values_str += ['...']
             field_descriptions += tr('<b>Field name</b>: {field_name}').format(
                 field_name=field_name)
             field_descriptions += tr(
