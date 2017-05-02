@@ -328,6 +328,9 @@ aggregation_postprocessors_component = {
             'gender': {
                 'header': tr('Detailed Gender Report')
             },
+            'vulnerability': {
+                'header': tr('Detailed Vulnerability Report')
+            },
             'minimum_needs': {
                 'header': tr('Detailed Minimum Needs Report')
             }
@@ -348,6 +351,9 @@ aggregation_postprocessors_component = {
             'no_age_rate_message': tr(
                 'Age ratio not found. '
                 'No calculations produced.'),
+            'no_vulnerability_rate_message': tr(
+                'Vulnerability ratio not exists. '
+                'No calculations produced.')
         }
     }
 }
