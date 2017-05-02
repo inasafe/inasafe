@@ -1023,4 +1023,5 @@ post_processors = [
 ] + (female_postprocessors +
      age_postprocessors +
      minimum_needs_post_processors +
-     vulnerability_postprocessors)
+     vulnerability_postprocessors +
+     gender_postprocessors)
