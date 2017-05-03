@@ -187,9 +187,8 @@ def get_fields(
         fields_for_purpose = deepcopy(impact_fields)
 
     if in_group:
-        layer_purpose_dict = definition(layer_purpose)
-        fields_for_purpose += fields_in_field_groups(
-            layer_purpose_dict['field_groups'])
+        field_groups = get_field_groups(layer_purpose, layer_subcategory)
+        fields_for_purpose += fields_in_field_groups(field_groups)
 
     if isinstance(replace_null, bool):
         fields_for_purpose = [
@@ -403,3 +402,25 @@ def fields_in_field_groups(field_groups):
     for field_group in field_groups:
         fields += field_group['fields']
     return fields
+
+
+def get_field_groups(layer_purpose, layer_subcategory=None):
+    """Obtain list of field groups from layer purpose and subcategory.
+
+    :param layer_purpose: The layer purpose.
+    :type layer_purpose: str
+
+    :param layer_subcategory: Exposure or hazard value.
+    :type layer_subcategory: str
+
+    :returns: List of layer groups.
+    :rtype: list
+    """
+    layer_purpose_dict = definition(layer_purpose)
+    field_groups = deepcopy(layer_purpose_dict.get('field_groups', []))
+    if layer_purpose in [
+        layer_purpose_exposure['key'], layer_purpose_hazard['key']]:
+        if layer_subcategory:
+            subcategory = definition(layer_subcategory)
+            field_groups += deepcopy(subcategory['field_groups'])
+    return field_groups

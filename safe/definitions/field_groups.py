@@ -28,14 +28,44 @@ from safe.definitions.fields import (
     child_bearing_age_ratio_field,
     pregnant_lactating_ratio_field,
     child_bearing_age_count_field,
-    pregnant_lactating_count_field
-
+    pregnant_lactating_count_field,
+    infant_displaced_count_field,
+    child_displaced_count_field,
+    youth_displaced_count_field,
+    adult_displaced_count_field,
+    elderly_displaced_count_field,
+    female_displaced_count_field,
+    child_bearing_age_displaced_count_field,
+    pregnant_lactating_displaced_count_field,
+    under_5_displaced_count_field,
+    over_60_displaced_count_field,
+    disabled_displaced_count_field
 )
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
+
+age_ratio_group = {
+    'key': 'age_ratio_group',
+    'name': tr('Age Ratio'),
+    'description': tr(
+        'Demographic breakdown to use for displaced population based on age '
+        'groups. Age ratio groupings are used when there is a vector '
+        'aggregation layer that contains detailed demographic information ( '
+        'as ratios) about the population living in each administrative or '
+        'census area. These ratios are then applied to the count of displaced '
+        'population per aggregation area to provide a more detailed break '
+        'down of the number of people displaced in each age group.'),
+    'fields': [
+        infant_ratio_field,
+        child_ratio_field,
+        youth_ratio_field,
+        adult_ratio_field,
+        elderly_ratio_field
+    ]
+}
 
 age_count_group = {
     'key': 'age_count_group',
@@ -56,23 +86,19 @@ age_count_group = {
     ]
 }
 
-age_ratio_group = {
-    'key': 'age_ratio_group',
-    'name': tr('Age Ratio'),
+age_displaced_count_groups = {
+    'key': 'age_displaced_count_group',
+    'name': tr('Age Displaced Count'),
     'description': tr(
-        'Demographic breakdown to use for displaced population based on age '
-        'groups. Age ratio groupings are used when there is a vector '
-        'aggregation layer that contains detailed demographic information ( '
-        'as ratios) about the population living in each administrative or '
-        'census area. These ratios are then applied to the count of displaced '
-        'population per aggregation area to provide a more detailed break '
-        'down of the number of people displaced in each age group.'),
+        'The group of fields that consists of displaced population count per '
+        'age '
+        'class.'),
     'fields': [
-        infant_ratio_field,
-        child_ratio_field,
-        youth_ratio_field,
-        adult_ratio_field,
-        elderly_ratio_field
+        infant_displaced_count_field,
+        child_displaced_count_field,
+        youth_displaced_count_field,
+        adult_displaced_count_field,
+        elderly_displaced_count_field
     ]
 }
 
@@ -109,6 +135,19 @@ gender_count_group = {
     ]
 }
 
+gender_displaced_count_group = {
+    'key': 'gender_displaced_count_group',
+    'name': tr('Gender Displaced Count'),
+    'description': tr(
+        'The group of fields that consists of displaced population count per '
+        'gender class.'),
+    'fields': [
+        female_displaced_count_field,
+        child_bearing_age_displaced_count_field,
+        pregnant_lactating_displaced_count_field
+    ]
+}
+
 vulnerability_ratio_group = {
     'key': 'vulnerability_ratio_group',
     'name': tr('Vulnerability Ratio'),
@@ -140,6 +179,19 @@ vulnerability_count_group = {
         under_5_count_field,
         over_60_count_field,
         disabled_count_field
+    ]
+}
+
+vulnerability_displaced_count_group = {
+    'key': 'vulnerability_displaced_count_group',
+    'name': tr('Vulnerability Displaced Count'),
+    'description': tr(
+        'The group of fields that consists of displaced population count per '
+        'vulnerability class.'),
+    'fields': [
+        under_5_displaced_count_field,
+        over_60_displaced_count_field,
+        disabled_displaced_count_field
     ]
 }
 
@@ -180,10 +232,13 @@ for count_ratio_pair in count_ratio_group_pairs:
             count_fields[index]['key']] = ratio_fields[index]['key']
 
 all_field_groups = [
-    age_count_group,
     age_ratio_group,
-    gender_count_group,
+    age_count_group,
+    age_displaced_count_groups,
     gender_ratio_group,
+    gender_count_group,
+    gender_displaced_count_group,
+    vulnerability_ratio_group,
     vulnerability_count_group,
-    vulnerability_ratio_group
+    vulnerability_displaced_count_group
 ]

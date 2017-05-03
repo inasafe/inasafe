@@ -598,7 +598,7 @@ concepts['child_bearing_age'] = {
 }
 concepts['pregnant_lactating'] = {
     'group': tr('Gender'),
-    'key': 'child_bearing_age',
+    'key': 'pregnant_lactating',
     'description': tr(''),
     'citations': [
         {

@@ -25,7 +25,7 @@ __revision__ = '$Format:%H$'
 
 class TestFieldMappingDialog(unittest.TestCase):
 
-    """Test Definitions Help Generation."""
+    """Test Field Mapping Dialog."""
 
     def test_init(self):
         """Test init the tool."""

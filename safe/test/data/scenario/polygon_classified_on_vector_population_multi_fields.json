@@ -2,7 +2,7 @@
   "scenario": {
     "enable": true,
     "hazard": "flood_multipart_polygons.shp",
-    "exposure": "census.geojson",
+    "exposure": "gisv4/exposure/population_multi_fields.geojson",
     "aggregation": null
   },
 

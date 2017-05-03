@@ -238,6 +238,7 @@ class ImpactFunction(object):
         row = m.Row()
         row.add(m.Cell(tr('Function')), header_flag=True)
         row.add(m.Cell(tr('Time')), header_flag=True)
+        row.add(m.Cell(tr('Memory')), header_flag=True)
         table.add(row)
 
         if self.performance_log is None:
@@ -262,6 +263,7 @@ class ImpactFunction(object):
 
             new_row.add(m.Cell(text))
             new_row.add(m.Cell(tree.elapsed_time))
+            new_row.add(m.Cell(tree.memory_used))
             table.add(new_row)
             if tree.children:
                 for child in tree.children:

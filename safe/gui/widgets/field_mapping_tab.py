@@ -79,9 +79,12 @@ class FieldMappingTab(QWidget, object):
         self.parameter_layout = QHBoxLayout()
 
         self.field_description = QLabel(tr('List of fields'))
+
         self.field_list = QListWidget()
+        self.field_list.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.field_list.setDragDropMode(QAbstractItemView.DragDrop)
         self.field_list.setDefaultDropAction(Qt.MoveAction)
+
         self.field_list.setSizePolicy(
             QSizePolicy.Maximum, QSizePolicy.Expanding)
         self.field_list.itemSelectionChanged.connect(self.update_footer)
@@ -139,7 +142,6 @@ class FieldMappingTab(QWidget, object):
         if excluded_fields is None:
             excluded_fields = []
         self.field_list.clear()
-        self.field_list.setSelectionMode(QAbstractItemView.ExtendedSelection)
         for field in self.layer.dataProvider().fields():
             # Skip if it's excluded
             if field.name() in excluded_fields:
@@ -151,8 +153,7 @@ class FieldMappingTab(QWidget, object):
             field_item.setFlags(
                 Qt.ItemIsEnabled |
                 Qt.ItemIsSelectable |
-                Qt.ItemIsDragEnabled |
-                Qt.ItemIsDropEnabled)
+                Qt.ItemIsDragEnabled)
             field_item.setData(Qt.UserRole, field.name())
             field_item.setText(field.name())
             self.field_list.addItem(field_item)

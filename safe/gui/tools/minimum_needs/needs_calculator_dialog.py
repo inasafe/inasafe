@@ -29,7 +29,7 @@ from safe.definitions.fields import displaced_field, aggregation_name_field
 from safe.definitions.layer_purposes import layer_purpose_aggregation
 from safe.definitions.post_processors import minimum_needs_post_processors
 from safe.gis.vector.prepare_vector_layer import (
-    rename_remove_inasafe_fields)
+    clean_inasafe_fields)
 from safe.gis.vector.tools import (
     create_memory_layer, copy_layer)
 from safe.gui.tools.help.needs_calculator_help import needs_calculator_help
@@ -170,13 +170,16 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         # minimum needs calculator
         output_layer.keywords['layer_purpose'] = (
             layer_purpose_aggregation['key'])
-        output_layer.keywords['inasafe_fields'] = (
-            {displaced_field['key']: self.displaced.currentField(),
-             aggregation_name_field['key']:
-                 self.aggregation_name.currentField()})
+        output_layer.keywords['inasafe_fields'] = {
+            displaced_field['key']: self.displaced.currentField()
+        }
+        if self.aggregation_name.currentField():
+            output_layer.keywords['inasafe_fields'][
+                aggregation_name_field['key']] = (
+                    self.aggregation_name.currentField())
 
         # remove unnecessary fields & rename inasafe fields
-        rename_remove_inasafe_fields(output_layer)
+        clean_inasafe_fields(output_layer)
 
         return output_layer
 

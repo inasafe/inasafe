@@ -3,12 +3,13 @@
 """Prepare layers for InaSAFE."""
 
 import logging
-from PyQt4.QtCore import QPyNullVariant
+from PyQt4.QtCore import QPyNullVariant, QVariant
 from qgis.core import (
     QgsVectorLayer,
     QgsField,
     QgsFeatureRequest,
     QGis,
+    QgsExpression
 )
 
 from safe.common.exceptions import (
@@ -48,6 +49,7 @@ from safe.utilities.i18n import tr
 from safe.utilities.profiling import profile
 from safe.utilities.metadata import (
     active_thresholds_value_maps, active_classification)
+from safe.test.debug_helper import print_attribute_table
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -109,7 +111,7 @@ def prepare_vector_layer(layer, callback=None):
         raise NoFeaturesInExtentError
 
     _add_id_column(cleaned)
-    rename_remove_inasafe_fields(cleaned)
+    clean_inasafe_fields(cleaned)
 
     if _size_is_needed(cleaned):
         LOGGER.info(
@@ -183,8 +185,12 @@ def _check_value_mapping(layer, exposure_key=None):
 
 
 @profile
-def rename_remove_inasafe_fields(layer):
-    """Loop over fields and rename fields which are used in InaSAFE.
+def clean_inasafe_fields(layer):
+    """Clean inasafe_fields based on keywords.
+
+    1. Must use standard field names.
+    2. Sum up list of fields' value and put in the standard field name.
+    3. Remove un-used fields.
 
     :param layer: The layer
     :type layer: QgsVectorLayer
@@ -215,32 +221,23 @@ def rename_remove_inasafe_fields(layer):
 
     expected_fields = {field['key']: field['field_name'] for field in fields}
 
-    # Rename fields
-    to_rename = {}
+    # Convert the field name and sum up if needed
     new_keywords = {}
     for key, val in layer.keywords.get('inasafe_fields').iteritems():
         if key in expected_fields:
-            if expected_fields[key] != val:
-                to_rename[val] = expected_fields[key]
-                new_keywords[key] = expected_fields[key]
-
-    copy_fields(layer, to_rename)
-    to_remove = to_rename.keys()
-
-    LOGGER.debug(
-        'Fields which have been renamed from %s :' % (
-            layer.keywords['layer_purpose']))
-    for old_name, new_name in to_rename.iteritems():
-        LOGGER.debug('%s -> %s' % (old_name, new_name))
+            if isinstance(val, basestring):
+                val = [val]
+            sum_fields(layer, expected_fields[key], val)
+            new_keywords[key] = expected_fields[key]
 
     # Houra, InaSAFE keywords match our concepts !
     layer.keywords['inasafe_fields'].update(new_keywords)
 
-    # Remove unnecessary fields
+    to_remove = []
+    # Remove unnecessary fields (the one that is not in the inasafe_fields)
     for field in layer.fields().toList():
-        if field.name() not in expected_fields.values():
-            if field.name() not in to_remove:
-                to_remove.append(field.name())
+        if field.name() not in layer.keywords['inasafe_fields'].values():
+            to_remove.append(field.name())
     remove_fields(layer, to_remove)
     LOGGER.debug(
         'Fields which have been removed from %s : %s'
@@ -437,3 +434,48 @@ def _add_default_exposure_class(layer):
 
     layer.commitChanges()
     return
+
+
+@profile
+def sum_fields(layer, output_field_name, input_fields):
+    """Sum the value of input_fields and put it as output_field.
+
+    :param layer: The vector layer.
+    :type layer: QgsVectorLayer
+
+    :param output_field_name: The output field name.
+    :type output_field_name: str
+
+    :param input_fields: List of input fields' name.
+    :type input_fields: list
+    """
+    # If the fields only has one element
+    if len(input_fields) == 1:
+        # Name is different, copy it
+        if input_fields[0] != output_field_name:
+            copy_fields(layer, {input_fields[0]: output_field_name})
+        # Name is same, do nothing
+        else:
+            return
+    # Creating expression
+    string_expression = ' + '.join(input_fields)
+    sum_expression = QgsExpression(string_expression)
+    sum_expression.prepare(layer.pendingFields())
+
+    # Get the output field index
+    output_idx = layer.fieldNameIndex(output_field_name)
+    # Output index is not found
+    if output_idx == -1:
+        output_field = QgsField(output_field_name, QVariant.Double)
+        layer.startEditing()
+        layer.dataProvider().addAttributes([output_field])
+        layer.commitChanges()
+        output_idx = layer.fieldNameIndex(output_field_name)
+
+    layer.startEditing()
+    # Iterate to all features
+    for feature in layer.getFeatures():
+        feature[output_idx] = sum_expression.evaluate(feature)
+        layer.updateFeature(feature)
+
+    layer.commitChanges()

@@ -1,4 +1,5 @@
 # coding=utf-8
+"""Unit Test for Prepare Vector Layer."""
 
 import unittest
 from osgeo import gdal
@@ -19,12 +20,15 @@ from safe.gis.vector.prepare_vector_layer import (
     _add_id_column,
     _size_is_needed,
     _check_value_mapping,
+    sum_fields,
+    clean_inasafe_fields
 )
 from safe.definitions.fields import (
     exposure_id_field,
     population_count_field,
     female_ratio_field,
-    exposure_type_field
+    exposure_type_field,
+    female_count_field
 )
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -35,11 +39,7 @@ __revision__ = '$Format:%H$'
 
 class TestPrepareLayer(unittest.TestCase):
 
-    def setUp(self):
-        pass
-
-    def tearDown(self):
-        pass
+    """Test for Prepare Vector Layer."""
 
     def test_copy_vector_layer(self):
         """Test we can copy a vector layer."""
@@ -57,10 +57,13 @@ class TestPrepareLayer(unittest.TestCase):
         copy_fields(new_layer, new_fields)
         self.assertEqual(
             len(new_layer.fields().toList()), expected)
+        self.assertGreater(new_layer.fieldNameIndex('my_new_field'), -1)
 
         remove_fields(new_layer, ['STRUCTURE', 'OSM_TYPE'])
         self.assertEqual(
             len(new_layer.fields().toList()), expected - 2)
+        self.assertEqual(new_layer.fieldNameIndex('STRUCTURE'), -1)
+        self.assertEqual(new_layer.fieldNameIndex('OSM_TYPE'), -1)
 
         _add_id_column(new_layer)
         field_name = exposure_id_field['field_name']
@@ -80,7 +83,6 @@ class TestPrepareLayer(unittest.TestCase):
 
     def test_prepare_layer(self):
         """Test we can prepare a vector layer."""
-
         layer = load_test_vector_layer('exposure', 'building-points.shp')
         cleaned = prepare_vector_layer(layer)
 
@@ -171,3 +173,73 @@ class TestPrepareLayer(unittest.TestCase):
         }
         layer = _check_value_mapping(layer)
         self.assertDictEqual(expected_value_map, layer.keywords['value_map'])
+
+    def test_sum_fields(self):
+        """Test sum_fields method."""
+        layer = load_test_vector_layer(
+            'gisv4', 'exposure', 'population_multi_fields.geojson', clone=True)
+        sum_fields(layer, 'exposure_id', ['F_0_4', 'F_5_9', 'F_9_15'])
+        exposure_id__idx = layer.fieldNameIndex('exposure_id')
+        F_0_4__idx = layer.fieldNameIndex('F_0_4')
+        F_5_9__idx = layer.fieldNameIndex('F_5_9')
+        F_9_15__idx = layer.fieldNameIndex('F_9_15')
+        for feature in layer.getFeatures():
+            sum_value = (
+                feature[F_0_4__idx] + feature[F_5_9__idx] + feature[
+                    F_9_15__idx])
+            self.assertEqual(feature[exposure_id__idx], sum_value)
+
+        new_field__idx = layer.fieldNameIndex('new_field')
+        # Check if the new field doesn't exist
+        self.assertEqual(new_field__idx, -1)
+        sum_fields(layer, 'new_field', ['F_0_4', 'F_5_9'])
+        new_field__idx = layer.fieldNameIndex('new_field')
+        for feature in layer.getFeatures():
+            sum_value = (feature[F_0_4__idx] + feature[F_5_9__idx])
+            self.assertEqual(feature[new_field__idx], sum_value)
+
+    def test_clean_inasafe_fields(self):
+        """Test clean_inasafe_fields."""
+        layer = load_test_vector_layer(
+            'gisv4', 'exposure', 'population_multi_fields.geojson', clone=True)
+        original_female_fields = [
+            u'F_0_4',
+            u'F_5_9',
+            u'F_9_15',
+            u'F_15_30',
+            u'F_30_60',
+            u'F_60_100'
+        ]
+        layer.keywords = {
+            u'layer_purpose': u'exposure',
+            u'exposure': u'population',
+            u'inasafe_fields': {
+                u'exposure_id_field': u'exposure_id',
+                u'population_count_field': u'population',
+                u'female_count_field': original_female_fields
+            }
+        }
+        clean_inasafe_fields(layer)
+
+        # Check if the female count name does exist
+        female_count_field_idx = layer.fieldNameIndex(
+            female_count_field['field_name'])
+        self.assertGreater(female_count_field_idx, -1)
+
+        # Check the keyword is updated properly
+        expected_inasafe_fields = {
+            population_count_field['key']: population_count_field[
+                'field_name'],
+            female_count_field['key']: female_count_field['field_name'],
+            exposure_id_field['key']: exposure_id_field['field_name']
+        }
+        self.assertDictEqual(
+            expected_inasafe_fields, layer.keywords['inasafe_fields'])
+
+        # Check if the original fields are gone
+        for original_female_field in original_female_fields:
+            self.assertEqual(layer.fieldNameIndex(original_female_field), -1)
+
+
+if __name__ == '__main__':
+    unittest.main()
