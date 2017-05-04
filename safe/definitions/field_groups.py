@@ -59,7 +59,8 @@ age_ratio_group = {
         youth_ratio_field,
         adult_ratio_field,
         elderly_ratio_field
-    ]
+    ],
+    'notes': []
 }
 
 age_count_group = {
@@ -74,7 +75,8 @@ age_count_group = {
         youth_count_field,
         adult_count_field,
         elderly_count_field
-    ]
+    ],
+    'notes': []
 }
 
 age_displaced_count_groups = {
@@ -90,7 +92,8 @@ age_displaced_count_groups = {
         youth_displaced_count_field,
         adult_displaced_count_field,
         elderly_displaced_count_field
-    ]
+    ],
+    'notes': []
 }
 
 gender_ratio_group = {
@@ -103,7 +106,8 @@ gender_ratio_group = {
         female_ratio_field,
         child_bearing_age_ratio_field,
         pregnant_lactating_ratio_field
-    ]
+    ],
+    'notes': []
 }
 
 gender_count_group = {
@@ -116,7 +120,8 @@ gender_count_group = {
         female_count_field,
         child_bearing_age_count_field,
         pregnant_lactating_count_field
-    ]
+    ],
+    'notes': []
 }
 
 gender_displaced_count_group = {
@@ -129,7 +134,8 @@ gender_displaced_count_group = {
         female_displaced_count_field,
         child_bearing_age_displaced_count_field,
         pregnant_lactating_displaced_count_field
-    ]
+    ],
+    'notes': []
 }
 
 vulnerability_ratio_group = {
@@ -142,7 +148,8 @@ vulnerability_ratio_group = {
         under_5_ratio_field,
         over_60_ratio_field,
         disabled_ratio_field
-    ]
+    ],
+    'notes': []
 }
 
 vulnerability_count_group = {
@@ -155,7 +162,8 @@ vulnerability_count_group = {
         under_5_count_field,
         over_60_count_field,
         disabled_count_field
-    ]
+    ],
+    'notes': []
 }
 
 vulnerability_displaced_count_group = {
@@ -168,7 +176,8 @@ vulnerability_displaced_count_group = {
         under_5_displaced_count_field,
         over_60_displaced_count_field,
         disabled_displaced_count_field
-    ]
+    ],
+    'notes': []
 }
 
 aggregation_field_groups = [
