@@ -51,8 +51,13 @@ age_ratio_group = {
     'key': 'age_ratio_group',
     'name': tr('Age Ratio'),
     'description': tr(
-        'The group of fields that consists of population ratio per age '
-        'class.'),
+        'Demographic breakdown to use for displaced population based on age '
+        'groups. Age ratio groupings are used when there is a vector '
+        'aggregation layer that contains detailed demographic information ( '
+        'as ratios) about the population living in each administrative or '
+        'census area. These ratios are then applied to the count of displaced '
+        'population per aggregation area to provide a more detailed break '
+        'down of the number of people displaced in each age group.'),
     'fields': [
         infant_ratio_field,
         child_ratio_field,
@@ -66,8 +71,12 @@ age_count_group = {
     'key': 'age_count_group',
     'name': tr('Age Count'),
     'description': tr(
-        'The group of fields that consists of population count per age '
-        'class.'),
+        'Demographic breakdown to use for displaced population based on age '
+        'groups. Age count groupings are used when there is a vector '
+        'population dataset that contains detailed demographic information ('
+        'as counts) about the population living in each administrative or '
+        'census area.'
+    ),
     'fields': [
         infant_count_field,
         child_count_field,
@@ -97,8 +106,15 @@ gender_ratio_group = {
     'key': 'gender_ratio_group',
     'name': tr('Gender Ratio'),
     'description': tr(
-        'The group of fields that consists of population ratio per gender '
-        'class.'),
+        'Demographic breakdown to use for displaced population based on '
+        'gender. Gender ratio groupings are used when there is a vector '
+        'aggregation layer that contains detailed demographic information ( '
+        'as ratios) about the population living in each administrative or '
+        'census area. These ratios are then applied to the count of displaced '
+        'population per aggregation area to provide a more detailed break '
+        'down of the number of people displaced in each gender profile. '
+        'Gender specific info can include criteria like the number of '
+        'females, the number of females of child bearing age, and so on.'),
     'fields': [
         female_ratio_field,
         child_bearing_age_ratio_field,
@@ -136,8 +152,16 @@ vulnerability_ratio_group = {
     'key': 'vulnerability_ratio_group',
     'name': tr('Vulnerability Ratio'),
     'description': tr(
-        'The group of fields that consists of population ratio per '
-        'vulnerability class.'),
+        'Demographic breakdown to use for displaced population based on '
+        'vulnerability. Vulnerability ratio groupings are used when there '
+        'is a vector aggregation layer that contains detailed demographic '
+        'information (as ratios) about the population living in each '
+        'administrative or census area. These ratios are then applied to the '
+        'count of displaced population per aggregation area to provide a more '
+        'detailed break down of the number of people displaced in each '
+        'vulnerability profile. Vulnerable segments of the population '
+        'can include criteria like the number of infants, the number of '
+        'elderly, the number of disabled people, and so on.'),
     'fields': [
         under_5_ratio_field,
         over_60_ratio_field,
