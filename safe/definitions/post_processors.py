@@ -19,6 +19,7 @@ from safe.definitions.fields import (
     displaced_field,
     female_ratio_field,
     child_bearing_age_ratio_field,
+    pregnant_lactating_ratio_field,
     population_count_field,
     infant_ratio_field,
     child_ratio_field,
@@ -401,14 +402,14 @@ post_processor_pregnant_lactating = {
         # input as a list means, try to get the input from the
         # listed source. Pick the first available
         'pregnant_lactating_ratio': [{
-                'value': child_bearing_age_ratio_field,
+                'value': pregnant_lactating_ratio_field,
                 'type': field_input_type
             },
             {
                 'type': keyword_input_type,
                 'value': [
                     'inasafe_default_values',
-                    child_bearing_age_ratio_field['key'],
+                    pregnant_lactating_ratio_field['key'],
                 ],
             }]
     },

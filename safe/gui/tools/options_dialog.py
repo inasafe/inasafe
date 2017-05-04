@@ -204,7 +204,7 @@ class OptionsDialog(QDialog, FORM_CLASS):
         self.settings.setValue('inasafe/%s' % key, line_edit.text())
 
     def restore_text_setting(self, key, line_edit):
-        """Set line_edit text according to setting of key
+        """Set line_edit text according to setting of key.
 
         :param key: Key to retrieve setting value.
         :type key: str

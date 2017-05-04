@@ -83,6 +83,7 @@ from safe.impact_function.provenance_utilities import (
 )
 from safe.definitions.constants import (
     inasafe_keyword_version_key,
+    GLOBAL,
     ANALYSIS_SUCCESS,
     ANALYSIS_FAILED_BAD_INPUT,
     ANALYSIS_FAILED_BAD_CODE,
@@ -125,6 +126,7 @@ from safe.impact_function.style import (
 )
 from safe.utilities.gis import is_vector_layer, is_raster_layer
 from safe.utilities.i18n import tr
+from safe.utilities.default_values import get_inasafe_default_value_qsetting
 from safe.utilities.unicode import get_unicode
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.metadata import (
@@ -1446,16 +1448,17 @@ class ImpactFunction(object):
                         if count_key not in keywords['inasafe_fields']:
                             # The exposure hasn't a count field, we should add
                             # it.
-                            default = definition(ratio_field)['default_value']
+                            default_value = get_inasafe_default_value_qsetting(
+                                    QSettings(), GLOBAL, ratio_field)
                             keywords['inasafe_default_values'][ratio_field] = (
-                                default['default_value'])
+                                default_value)
                             LOGGER.info(
                                 'The exposure do not have field {count}, we '
                                 'can add {ratio} = {value} to the exposure '
                                 'default values.'.format(
                                     count=count_key,
                                     ratio=ratio_field,
-                                    value=default['default_value']))
+                                    value=default_value))
                         else:
                             LOGGER.info(
                                 'The exposure layer has the count field '
@@ -1475,15 +1478,16 @@ class ImpactFunction(object):
                     count_key = count_field['key']
                     if count_key in count_ratio_mapping.keys():
                         ratio_field = count_ratio_mapping[count_key]
-                        default = definition(ratio_field)['default_value']
+                        default_value = get_inasafe_default_value_qsetting(
+                            QSettings(), GLOBAL, ratio_field)
                         keywords['inasafe_default_values'][ratio_field] = (
-                            default['default_value'])
+                            default_value)
                         LOGGER.info(
                             'We are adding {ratio} = {value} to the exposure '
                             'default values.'.format(
                                 count=count_key,
                                 ratio=ratio_field,
-                                value=default['default_value']))
+                                value=default_value))
 
         else:
             self.set_state_info('aggregation', 'provided', True)
