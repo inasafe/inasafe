@@ -79,7 +79,7 @@ age_count_group = {
     'notes': []
 }
 
-age_displaced_count_groups = {
+age_displaced_count_group = {
     'key': 'age_displaced_count_group',
     'name': tr('Age Displaced Count'),
     'description': tr(
@@ -202,13 +202,10 @@ count_ratio_group_pairs = [
 
 # This table is useful when we need to match between counts and ratios.
 count_ratio_mapping = {
-    female_count_field['key']: female_ratio_field['key'],
-    youth_count_field['key']: youth_ratio_field['key'],
-    adult_count_field['key']: adult_ratio_field['key'],
-    elderly_count_field['key']: elderly_ratio_field['key'],
     # feature_value_field['key']: feature_rate_field['key'], disabled V4.0 ET
 }
 
+# Generate count ratio mapping from the count ratio field group pairs
 for count_ratio_pair in count_ratio_group_pairs:
     count_fields = count_ratio_pair[0]['fields']
     ratio_fields = count_ratio_pair[1]['fields']
@@ -219,7 +216,7 @@ for count_ratio_pair in count_ratio_group_pairs:
 all_field_groups = [
     age_ratio_group,
     age_count_group,
-    age_displaced_count_groups,
+    age_displaced_count_group,
     gender_ratio_group,
     gender_count_group,
     gender_displaced_count_group,
