@@ -23,11 +23,17 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
-def validate_sum(parameter_container):
+def validate_sum(parameter_container, sum_threshold, validation_message):
     """Validate the sum of parameter value's.
 
     :param parameter_container: The container that use this validator.
     :type parameter_container: ParameterContainer
+
+    :param sum_threshold: The threshold for the sum of the parameters.
+    :type sum_threshold: float
+
+    :param validation_message: The message if there is validation error.
+    :type validation_message: str
 
     :returns: Dictionary of valid and message.
     :rtype: dict
@@ -43,19 +49,20 @@ def validate_sum(parameter_container):
             values.append(parameter.value)
 
     if None in values:
-        # If there is None, just check to not exceeding 1
+        # If there is None, just check to not exceeding validation_threshold
         clean_value = [x for x in values if x is not None]
         values.remove(None)
-        if sum(clean_value) > 1:
+        if sum(clean_value) > sum_threshold:
             return {
                 'valid': False,
-                'message': tr('The sum of ratio is more than 1.')
+                'message': validation_message
             }
     else:
-        if sum(values) > 1:  # Just make sure to not have more than 1.
+        # Just make sure to not have more than validation_threshold.
+        if sum(values) > sum_threshold:
             return {
                 'valid': False,
-                'message': tr('The sum of ratio is more than 1.')
+                'message': validation_message
             }
     return {
         'valid': True,
