@@ -68,7 +68,11 @@ class FieldMappingDialog(QDialog, FORM_CLASS):
         excepted_layers = []
         for i in range(self.layer_combo_box.count()):
             layer = self.layer_combo_box.layer(i)
-            keywords = self.keyword_io.read_keywords(layer)
+            try:
+                keywords = self.keyword_io.read_keywords(layer)
+            except (KeywordNotFoundError, NoKeywordsFoundError):
+                excepted_layers.append(layer)
+                continue
             layer_purpose = keywords.get('layer_purpose')
             if not layer_purpose:
                 excepted_layers.append(layer)
