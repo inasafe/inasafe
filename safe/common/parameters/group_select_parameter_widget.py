@@ -73,6 +73,14 @@ class GroupSelectParameterWidget(GenericParameterWidget):
                     'max', 1))
                 double_spin_box.setSingleStep(value.get('constraint', {}).get(
                     'step', 0.01))
+                step = double_spin_box.singleStep()
+                if step > 1:
+                    precision = 0
+                else:
+                    precision = len(str(step).split('.')[1])
+                    if precision > 3:
+                        precision = 3
+                double_spin_box.setDecimals(precision)
                 self.spin_boxes[key] = double_spin_box
 
                 # Enable spin box depends on the selected option

@@ -16,6 +16,7 @@ female_ratio_default_value = {
     'default_value': 0.5,
     'min_value': 0,
     'max_value': 1,
+    'increment': 0.001,
     'description': tr('Default value for female ratio')
 }
 
@@ -27,6 +28,7 @@ male_ratio_default_value = {
     'default_value': 0.5,
     'min_value': 0,
     'max_value': 1,
+    'increment': 0.001,
     'description': tr('Default value for male ratio')
 }
 
@@ -36,6 +38,7 @@ feature_rate_default_value = {
     'default_value': 1000000,
     'min_value': 0,
     'max_value': 1000000000,
+    'increment': 1000000,
     'description': tr(u'Default value for feature rate per m²')
 }
 
@@ -70,6 +73,7 @@ infant_ratio_default_value = {
     'default_value': 0.0,  # FIXME:It's random number
     'min_value': 0,
     'max_value': 1,
+    'increment': 0.001,
     'description': tr('Default value for infant ratio')
 }
 
@@ -79,6 +83,7 @@ child_ratio_default_value = {
     'default_value': 0.0,  # FIXME:It's random number
     'min_value': 0,
     'max_value': 1,
+    'increment': 0.001,
     'description': tr('Default value for child ratio')
 }
 
@@ -89,6 +94,7 @@ youth_ratio_default_value = {
     'default_value': 0.254,
     'min_value': 0,
     'max_value': 1,
+    'increment': 0.001,
     'description': tr('Default value for youth ratio')
 }
 
@@ -98,6 +104,7 @@ adult_ratio_default_value = {
     'default_value': 0.659,
     'min_value': 0,
     'max_value': 1,
+    'increment': 0.001,
     'description': tr('Default value for adult ratio')
 }
 
@@ -108,6 +115,7 @@ elderly_ratio_default_value = {
     'default_value': 0.087,
     'min_value': 0,
     'max_value': 1,
+    'increment': 0.001,
     'description': tr('Default value for elderly ratio')
 }
 
@@ -118,6 +126,7 @@ under_5_ratio_default_value = {
     'default_value': 0.0,  # FIXME:It's random number
     'min_value': 0,
     'max_value': 1,
+    'increment': 0.001,
     'description': tr('Default value for under 5 years old ratio')
 }
 
@@ -127,6 +136,7 @@ over_60_ratio_default_value = {
     'default_value': 0.0,  # FIXME:It's random number
     'min_value': 0,
     'max_value': 1,
+    'increment': 0.001,
     'description': tr('Default value for over 60 years old ratio')
 }
 
@@ -136,6 +146,7 @@ disabled_ratio_default_value = {
     'default_value': 0.0,  # FIXME:It's random number
     'min_value': 0,
     'max_value': 1,
+    'increment': 0.001,
     'description': tr('Default value for disabled people ratio')
 }
 
@@ -145,6 +156,7 @@ child_bearing_age_ratio_default_value = {
     'default_value': 0.0,  # FIXME:It's random number
     'min_value': 0,
     'max_value': 1,
+    'increment': 0.001,
     'description': tr('Default value for child bearing age people ratio')
 }
 
@@ -154,5 +166,6 @@ pregnant_lactating_ratio_default_value = {
     'default_value': 0.0,  # FIXME:It's random number
     'min_value': 0,
     'max_value': 1,
+    'increment': 0.001,
     'description': tr('Default value for pregnant or lactating people ratio')
 }
