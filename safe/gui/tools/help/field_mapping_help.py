@@ -88,7 +88,8 @@ def content():
     message.add(paragraph)
     paragraph = m.Paragraph(m.ImportantText(
         'Note: It is not possible to use this tool with raster population '
-        'exposure data.'
+        'exposure data, but ratios defined in aggregation layers will be '
+        'used when raster exposure population data is used.'
     ))
     message.add(paragraph)
 

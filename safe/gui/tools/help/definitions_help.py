@@ -2,6 +2,7 @@
 """Help text for the dock widget."""
 
 from os.path import exists
+import copy
 import logging
 from PyQt4 import QtCore
 from safe.utilities.i18n import tr
@@ -42,6 +43,13 @@ DETAILS_SUBGROUP_STYLE = styles.GREY_LEVEL_6_STYLE  # h5 numbered
 # For images
 SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
 MEDIUM_ICON_STYLE = styles.MEDIUM_ICON_STYLE
+HEADING_LOOKUPS = {
+    1: SECTION_STYLE,
+    2: SUBSECTION_STYLE,
+    3: BLUE_CHAPTER_STYLE,
+    4: DETAILS_STYLE,
+    5: DETAILS_SUBGROUP_STYLE,
+}
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -100,16 +108,25 @@ def content():
         message,
         table_of_contents,
         'overview',
-        tr('Overview'))
+        tr('Overview'),
+        heading_level=1)
     ##
     # Credits and disclaimers ...
     ##
-    header = m.Heading(tr('Disclaimer'), **BLUE_CHAPTER_STYLE)
-    message.add(header)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'disclaimer',
+        tr('Disclaimer'),
+        heading_level=2)
     message.add(m.Paragraph(definitions.messages.disclaimer()))
 
-    header = m.Heading(tr('Limitations and License'), **BLUE_CHAPTER_STYLE)
-    message.add(header)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'limitations',
+        tr('Limitations and License'),
+        heading_level=2)
     bullets = m.BulletedList()
     for item in definitions.limitations():
         bullets.add(item)
@@ -125,7 +142,8 @@ def content():
         message,
         table_of_contents,
         'glossary',
-        tr('Glossary of terms'))
+        tr('Glossary of terms'),
+        heading_level=1)
 
     last_group = None
     table = None
@@ -134,8 +152,12 @@ def content():
         if current_group != last_group:
             if last_group is not None:
                 message.add(table)
-            header = m.Heading(current_group, **SUBSECTION_STYLE)
-            message.add(header)
+            _create_section_header(
+                message,
+                table_of_contents,
+                current_group.replace(' ', '-'),
+                current_group,
+                heading_level=2)
             table = _start_glossary_table(current_group)
             last_group = current_group
         row = m.Row()
@@ -162,53 +184,96 @@ def content():
         message,
         table_of_contents,
         'core-functionality',
-        tr('Core functionality and tools'))
+        tr('Core functionality and tools'),
+        heading_level=1)
 
-    header = m.Heading(tr('The InaSAFE Dock'), **SUBSECTION_STYLE)
-    message.add(header)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'dock',
+        tr('The InaSAFE Dock'),
+        heading_level=2)
     message.add(dock_help())
 
-    header = m.Heading(tr('InaSAFE Reports'), **SUBSECTION_STYLE)
-    message.add(header)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'reports',
+        tr('InaSAFE Reports'),
+        heading_level=2)
     message.add(report_help())
 
-    header = m.Heading(tr(
-        'Managing analysis extents with the extents selector'),
-        **SUBSECTION_STYLE)
-    message.add(header)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'extents',
+        tr('Managing analysis extents with the extents selector'),
+        heading_level=2)
     message.add(extent_help())
 
-    header = m.Heading(tr('InaSAFE Options'), **SUBSECTION_STYLE)
-    message.add(header)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'options',
+        tr('InaSAFE Options'),
+        heading_level=2)
     message.add(options_help())
 
-    header = m.Heading(tr('The Batch Runner'), **SUBSECTION_STYLE)
-    message.add(header)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'batch-runner',
+        tr('The Batch Runner'),
+        heading_level=2)
     message.add(batch_help())
 
-    header = m.Heading(tr('The OpenStreetMap Downloader'), **SUBSECTION_STYLE)
-    message.add(header)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'osm-downloader',
+        tr('The OpenStreetmap Downloader'),
+        heading_level=2)
     message.add(osm_help())
 
-    header = m.Heading(tr('The PetaBencana Downloader'), **SUBSECTION_STYLE)
-    message.add(header)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'petabencana-downloader',
+        tr('The PetaBencana Downloader'),
+        heading_level=2)
     message.add(petabencana_help())
 
-    header = m.Heading(tr('The Shakemap Converter'), **SUBSECTION_STYLE)
-    message.add(header)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'shakemap-converter',
+        tr('The Shakemap Converter'),
+        heading_level=2)
     message.add(shakemap_help())
 
-    header = m.Heading(tr('The Multi Buffer Tool'), **SUBSECTION_STYLE)
-    message.add(header)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'multi-buffer-tool',
+        tr('The Multi Buffer Tool'),
+        heading_level=2)
     message.add(multi_buffer_help())
 
-    # Field mappint tool has a few added bits to enumerate the groups
-    header = m.Heading(tr('The Field Mapping Tool'), **SUBSECTION_STYLE)
-    message.add(header)
+    # Field mapping tool has a few added bits to enumerate the groups
+    _create_section_header(
+        message,
+        table_of_contents,
+        'field-mapping-tool',
+        tr('The Field MappingTool'),
+        heading_level=2)
     message.add(field_mapping_tool_help())
 
-    header = m.Heading(tr('Exposure Groups'), **BLUE_CHAPTER_STYLE)
-    message.add(header)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'exposure-groups',
+        tr('Exposure Groups'),
+        heading_level=3)
     message.add(m.Paragraph(
         'The following demographic groups apply only to vector population '
         'exposure layers:'
@@ -216,8 +281,12 @@ def content():
     for group in exposure_field_groups:
         message.add(definition_to_message(group, DETAILS_STYLE))
 
-    header = m.Heading(tr('Aggregation Groups'), **BLUE_CHAPTER_STYLE)
-    message.add(header)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'aggregation-groups',
+        tr('Aggregation Groups'),
+        heading_level=3)
     message.add(m.Paragraph(
         'The following demographic groups apply only to aggregation layers:'
     ))
@@ -231,12 +300,21 @@ def content():
         message,
         table_of_contents,
         'minimum-needs',
-        tr('Minimum Needs'))
-    header = m.Heading(tr('The minimum needs tool'), **SUBSECTION_STYLE)
-    message.add(header)
+        tr('Minimum Needs'),
+        heading_level=2)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'minimum-needs-tool',
+        tr('The minimum needs tool'),
+        heading_level=3)
     message.add(needs_help())
-    header = m.Heading(tr('The minimum needs manager'), **SUBSECTION_STYLE)
-    message.add(header)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'minimum-manager',
+        tr('The minimum needs manager'),
+        heading_level=3)
     message.add(needs_manager_help())
 
     ##
@@ -247,7 +325,8 @@ def content():
         message,
         table_of_contents,
         'analysis-steps',
-        tr('Analysis steps'))
+        tr('Analysis steps'),
+        heading_level=1)
     header = m.Heading(tr('Analysis internal process'), **SUBSECTION_STYLE)
     message.add(header)
     analysis = definitions.concepts['analysis']
@@ -552,14 +631,23 @@ def _start_glossary_table(group):
     return table
 
 
-def _create_section_header(message, table_of_contents, id, text):
+def _create_section_header(
+        message,
+        table_of_contents,
+        id,
+        text,
+        heading_level=1):
     # Warning a side effect here is that the SECTION_STYLE is updated
-    # when setting style as we don't have a deep copy
-    style = SECTION_STYLE
+    # when setting style as we modify the id so we have to make a deep copy
+    style = copy.deepcopy(HEADING_LOOKUPS[heading_level])
     style['element_id'] = id
     header = m.Heading(text, **style)
     link = m.Link('#%s' % id, text)
-    paragraph = m.Paragraph(link)
+    # See bootstrap docs for ml-1 explanation
+    # https://v4-alpha.getbootstrap.com/utilities/spacing/#examples
+    paragraph = m.Paragraph(
+        link,
+        style_class='ml-%i' % heading_level)
     table_of_contents.add(paragraph)
     message.add(header)
 
