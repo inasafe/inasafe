@@ -255,7 +255,14 @@ class FieldMappingTab(QWidget, object):
         )
         self.parameter_container.setup_ui()
 
-        self.parameter_container.add_validator(validate_sum)
+        sum_threshold = self.field_group.get('constraint', {}).get('max', 1)
+        validation_message = self.field_group.get('constraint', {}).get(
+            'message', '')
+
+        self.parameter_container.add_validator(
+            validate_sum,
+            sum_threshold=sum_threshold,
+            validation_message=validation_message)
 
         self.parameter_layout.addWidget(self.parameter_container)
 
