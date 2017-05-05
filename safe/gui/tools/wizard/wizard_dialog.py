@@ -9,6 +9,10 @@ from PyQt4.QtCore import pyqtSignature, QSettings
 from PyQt4.QtGui import QDialog, QPixmap
 from qgis.core import QgsMapLayerRegistry
 
+from safe_extras.parameters.parameter_exceptions import (
+    InvalidValidationException)
+
+from safe.utilities.i18n import tr
 from safe.definitions.layer_purposes import (
     layer_purpose_exposure, layer_purpose_aggregation, layer_purpose_hazard)
 from safe.definitions.layer_geometry import (
@@ -46,9 +50,10 @@ from safe.utilities.gis import (
     is_polygon_layer)
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.resources import get_ui_class, resources_path
-from safe.utilities.unicode import get_unicode
+from safe.utilities.unicode import get_unicode, get_string
 from safe.utilities.utilities import (
     get_error_message, is_keyword_version_supported)
+from safe.utilities.qgis_utilities import display_warning_message_box
 
 from step_fc00_functions1 import StepFcFunctions1
 from step_fc05_functions2 import StepFcFunctions2
@@ -629,6 +634,14 @@ class WizardDialog(QDialog, FORM_CLASS):
             self.step_kw_default_inasafe_fields.toggle_age_ratio_sum_message(
                     good_ratios)
             if not good_ratios:
+                return
+
+        if current_step == self.step_kw_fields_mapping:
+            try:
+                _ = self.step_kw_fields_mapping.get_field_mapping()
+            except InvalidValidationException as e:
+                display_warning_message_box(
+                    self, tr('Invalid Field Mapping'), get_string(e.message))
                 return
 
         if current_step.step_type == 'step_fc':
