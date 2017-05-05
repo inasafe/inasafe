@@ -214,7 +214,8 @@ class FieldMappingTab(QWidget, object):
                         selected_option = CUSTOM_VALUE
                 min_value = field['default_value'].get('min_value', 0)
                 max_value = field['default_value'].get('max_value', 100)
-                step = (max_value - min_value) / 1000.0
+                default_step = (max_value - min_value) / 100.0
+                step = field['default_value'].get('increment', default_step)
                 options[CUSTOM_VALUE] = {
                     'label': tr('Custom'),
                     'value': custom_value,
