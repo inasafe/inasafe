@@ -66,7 +66,7 @@ age_ratio_group = {
         'args': {
             'max': 1
         },
-        'message': tr('The sum of age ratios is more than 1.')
+        'message': tr('The sum of age ratios should not more than 1.')
     }
 }
 
@@ -162,7 +162,8 @@ vulnerability_ratio_group = {
         'args': {
             'max': 1
         },
-        'message': tr('The sum of vulnerability ratios is more than 1.')
+        'message': tr(
+            'The sum of vulnerability ratios should not more than 1.')
     }
 }
 
