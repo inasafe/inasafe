@@ -3,6 +3,9 @@
 
 import logging
 
+from safe_extras.parameters.parameter_exceptions import (
+    InvalidValidationException)
+
 from safe.definitions.layer_purposes import (
     layer_purpose_aggregation, layer_purpose_hazard, layer_purpose_exposure)
 from safe.gui.tools.wizard.wizard_step import (
@@ -41,7 +44,10 @@ class StepKwFieldsMapping(WizardStep, FORM_CLASS):
         :returns: True if new step may be enabled.
         :rtype: bool
         """
-        # Always ready
+        try:
+            self.get_field_mapping()
+        except InvalidValidationException as e:
+            return False
         return True
 
     def get_next_step(self):
