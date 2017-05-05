@@ -60,7 +60,14 @@ age_ratio_group = {
         adult_ratio_field,
         elderly_ratio_field
     ],
-    'notes': []
+    'notes': [],
+    'constraint': {
+        'key': 'sum',
+        'args': {
+            'max': 1
+        },
+        'message': tr('The sum of age ratios is more than 1.')
+    }
 }
 
 age_count_group = {

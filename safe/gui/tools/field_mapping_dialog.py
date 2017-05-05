@@ -8,6 +8,9 @@ from PyQt4.QtCore import pyqtSignature, pyqtSlot, QSettings
 
 import logging
 
+from safe_extras.parameters.parameter_exceptions import (
+    InvalidValidationException)
+
 from safe.definitions.constants import RECENT
 from safe.definitions.layer_purposes import (
     layer_purpose_exposure, layer_purpose_hazard)
@@ -24,7 +27,9 @@ from safe.gui.widgets.field_mapping_widget import FieldMappingWidget
 from safe.gui.tools.help.field_mapping_help import field_mapping_help
 from safe.utilities.utilities import get_error_message
 from safe.utilities.default_values import set_inasafe_default_value_qsetting
+from safe.utilities.qgis_utilities import display_warning_message_box
 from safe.definitions.utilities import get_field_groups
+from safe.utilities.unicode import get_string
 
 FORM_CLASS = get_ui_class('field_mapping_dialog_base.ui')
 
@@ -269,5 +274,9 @@ class FieldMappingDialog(QDialog, FORM_CLASS):
     def accept(self):
         """Method invoked when OK button is clicked."""
         LOGGER.debug('Accepted.')
-        self.save_metadata()
+        try:
+            self.save_metadata()
+        except InvalidValidationException as e:
+            display_warning_message_box(self, '', get_string(e.message))
+            return
         self.close()

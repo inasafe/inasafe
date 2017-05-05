@@ -30,8 +30,13 @@ from safe.definitions.constants import (
 )
 
 from safe_extras.parameters.qt_widgets.parameter_container import (
-    ParameterContainer)
+    ParameterContainer, InvalidValidationException)
 from safe.common.exceptions import KeywordNotFoundError
+
+# Note(IS): I need to use alias to make sure it throws the same exception class
+from safe_extras.parameters.parameter_exceptions import (
+    InvalidValidationException as OriginalValidationException)
+
 from safe.utilities.i18n import tr
 from safe.common.parameters.group_select_parameter import (
     GroupSelectParameter)
@@ -267,7 +272,10 @@ class FieldMappingTab(QWidget, object):
             {'fields': {}, 'values': {}}.
         :rtype: dict
         """
-        parameters = self.parameter_container.get_parameters(True)
+        try:
+            parameters = self.parameter_container.get_parameters(True)
+        except InvalidValidationException as e:
+            raise OriginalValidationException(e)
         field_parameters = {}
         value_parameters = {}
         for parameter in parameters:
