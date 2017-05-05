@@ -12,7 +12,7 @@ from safe.definitions.fields import (
     displaced_field,
     male_displaced_count_field)
 from safe.definitions.field_groups import (
-    age_displaced_count_groups,
+    age_displaced_count_group,
     gender_displaced_count_group,
     vulnerability_displaced_count_group)
 from safe.definitions.minimum_needs import minimum_needs_fields
@@ -21,7 +21,6 @@ from safe.definitions.post_processors import (
     female_postprocessors,
     gender_postprocessors,
     vulnerability_postprocessors)
-from safe.test.utilities import load_test_vector_layer
 from safe.definitions.utilities import postprocessor_output_field
 from safe.report.extractors.util import (
     value_from_field_name,
@@ -94,7 +93,7 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
             extra_args, 'header')
 
     age_items = {
-        'group': age_displaced_count_groups,
+        'group': age_displaced_count_group,
         'group_header': u'Age breakdown (in affected area)',
         'fields': [postprocessor_output_field(p) for p in age_postprocessors]
     }
