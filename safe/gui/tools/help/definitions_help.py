@@ -379,7 +379,7 @@ def content():
     exposures = definitions.exposures
 
     definition_to_message(
-        message, table_of_contents, exposures, heading_level=3)
+        message, table_of_contents, exposures, heading_level=2)
 
     ##
     #  Defaults
@@ -511,21 +511,35 @@ def content():
         heading_level=1)
     definition_to_message(message, table_of_contents,
         definitions.layer_purpose_hazard, heading_level=2)
-    message.add(definition_to_message(
-        definitions.layer_purpose_exposure, SUBSECTION_STYLE))
-    message.add(definition_to_message(
-        definitions.layer_purpose_aggregation, SUBSECTION_STYLE))
-    message.add(definition_to_message(
-        definitions.layer_purpose_exposure_summary, SUBSECTION_STYLE))
-    message.add(definition_to_message(
+    definition_to_message(
+        message,
+        table_of_contents,
+        definitions.layer_purpose_exposure, heading_level=2)
+    definition_to_message(
+        message,
+        table_of_contents,
+        definitions.layer_purpose_aggregation, heading_level=2)
+    definition_to_message(
+        message,
+        table_of_contents,
+        definitions.layer_purpose_exposure_summary, heading_level=2)
+    definition_to_message(
+        message,
+        table_of_contents,
         definitions.layer_purpose_aggregate_hazard_impacted,
-        SUBSECTION_STYLE))
-    message.add(definition_to_message(
-        definitions.layer_purpose_aggregation_summary, SUBSECTION_STYLE))
-    message.add(definition_to_message(
-        definitions.layer_purpose_exposure_summary_table, SUBSECTION_STYLE))
-    message.add(definition_to_message(
-        definitions.layer_purpose_profiling, SUBSECTION_STYLE))
+        heading_level=2)
+    definition_to_message(
+        message,
+        table_of_contents,
+        definitions.layer_purpose_aggregation_summary, heading_level=2)
+    definition_to_message(
+        message,
+        table_of_contents,
+        definitions.layer_purpose_exposure_summary_table, heading_level=2)
+    definition_to_message(
+        message,
+        table_of_contents,
+        definitions.layer_purpose_profiling, heading_level=2)
 
     ##
     # All units
