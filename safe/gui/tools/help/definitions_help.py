@@ -50,6 +50,13 @@ HEADING_LOOKUPS = {
     4: DETAILS_STYLE,
     5: DETAILS_SUBGROUP_STYLE,
 }
+HEADING_COUNTS= {
+    1: 1,
+    2: 1,
+    3: 1,
+    4: 1,
+    5: 1,
+}
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -294,6 +301,7 @@ def content():
     for group in aggregation_field_groups:
         definition_to_message(
             message, table_of_contents, group, heading_level=4)
+
     # End of field mapping tool help
 
     # Keep this last in the tool section please as it has subsections
@@ -360,15 +368,22 @@ def content():
         message,
         table_of_contents,
         'hazards',
-        tr('Hazard Concepts'))
+        tr('Hazard Concepts'),
+        heading_level=1)
 
     hazard_category = definitions.hazard_category
-    definition_to_message(message, table_of_contents,
-        hazard_category, heading_level=3)
+    definition_to_message(
+        message,
+        table_of_contents,
+        hazard_category,
+        heading_level=2)
 
     hazards = definitions.hazards
-    definition_to_message(message, table_of_contents,
-        hazards, heading_level=3)
+    definition_to_message(
+        message,
+        table_of_contents,
+        hazards,
+        heading_level=2)
 
     ##
     #  Exposure definitions
@@ -383,7 +398,10 @@ def content():
     exposures = definitions.exposures
 
     definition_to_message(
-        message, table_of_contents, exposures, heading_level=2)
+        message,
+        table_of_contents,
+        exposures,
+        heading_level=2)
 
     ##
     #  Defaults
@@ -740,8 +758,19 @@ def _create_section_header(
     # when setting style as we modify the id so we have to make a deep copy
     style = copy.deepcopy(HEADING_LOOKUPS[heading_level])
     style['element_id'] = id
+
+    HEADING_COUNTS[heading_level] += 1
+    # Reset the heading counts for headings below this level
+    # Also calculate the index of the TOC entry
+    index_number = ''
+    for key in HEADING_COUNTS.keys():
+        if key > heading_level:
+            HEADING_COUNTS[key] = 1
+        else:
+            index_number += str(HEADING_COUNTS[key]) + '.'
+
     header = m.Heading(text, **style)
-    link = m.Link('#%s' % id, text)
+    link = m.Link('#%s' % id, index_number + ' ' + text)
     # See bootstrap docs for ml-1 explanation
     # https://v4-alpha.getbootstrap.com/utilities/spacing/#examples
     paragraph = m.Paragraph(
