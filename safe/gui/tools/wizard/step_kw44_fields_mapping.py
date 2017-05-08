@@ -46,7 +46,7 @@ class StepKwFieldsMapping(WizardStep, FORM_CLASS):
         """
         try:
             self.get_field_mapping()
-        except InvalidValidationException as e:
+        except InvalidValidationException:
             return False
         return True
 

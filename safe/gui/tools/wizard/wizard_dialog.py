@@ -638,7 +638,7 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         if current_step == self.step_kw_fields_mapping:
             try:
-                _ = self.step_kw_fields_mapping.get_field_mapping()
+                self.step_kw_fields_mapping.get_field_mapping()
             except InvalidValidationException as e:
                 display_warning_message_box(
                     self, tr('Invalid Field Mapping'), get_string(e.message))

@@ -1,19 +1,7 @@
 # coding=utf-8
 """List of custom validations for parameter container.."""
 
-from safe.definitions.constants import (
-    DO_NOT_USE,
-    CUSTOM_VALUE,
-    GLOBAL_DEFAULT,
-    FIELDS,
-    STATIC,
-    SINGLE_DYNAMIC,
-    MULTIPLE_DYNAMIC,
-    qvariant_numbers,
-    RECENT,
-    GLOBAL
-)
-from safe.utilities.i18n import tr
+from safe.definitions.constants import STATIC, SINGLE_DYNAMIC
 import logging
 LOGGER = logging.getLogger('InaSAFE')
 
