@@ -404,6 +404,7 @@ class Plugin(object):
             'Assign field mapping to layer.'))
         self.action_field_mapping.setWhatsThis(self.tr(
             'Use this tool to assign field mapping in layer.'))
+        self.action_field_mapping.setEnabled(False)
         self.action_field_mapping.triggered.connect(
             self.show_field_mapping)
         self.add_action(
@@ -928,10 +929,6 @@ class Plugin(object):
             dock=self.dock_widget)
         dialog.save_scenario()
 
-    def _disable_keyword_tools(self):
-        """Internal helper to disable the keyword and wizard actions."""
-        self.action_keywords_wizard.setEnabled(False)
-
     def layer_changed(self, layer):
         """Enable or disable keywords editor icon when active layer changes.
 
@@ -953,22 +950,26 @@ class Plugin(object):
             enable_keyword_wizard = True
 
         try:
-            keywords = KeywordIO().read_keywords(layer)
-            layer_purpose = keywords.get('layer_purpose')
-            if not layer_purpose:
-                self.action_field_mapping.setEnabled(False)
-            if layer_purpose == layer_purpose_exposure['key']:
-                layer_subcategory = keywords.get('exposure')
-            elif layer_purpose == layer_purpose_hazard['key']:
-                layer_subcategory = keywords.get('hazard')
+            if layer:
+                keywords = KeywordIO().read_keywords(layer)
+                layer_purpose = keywords.get('layer_purpose')
+                if not layer_purpose:
+                    self.action_field_mapping.setEnabled(False)
+                if layer_purpose == layer_purpose_exposure['key']:
+                    layer_subcategory = keywords.get('exposure')
+                elif layer_purpose == layer_purpose_hazard['key']:
+                    layer_subcategory = keywords.get('hazard')
+                else:
+                    layer_subcategory = None
+                field_groups = get_field_groups(layer_purpose,
+                                                layer_subcategory)
+                if len(field_groups) == 0:
+                    # No field group, disable field mapping tool.
+                    enable_field_mapping_tool = False
+                else:
+                    enable_field_mapping_tool = True
             else:
-                layer_subcategory = None
-            field_groups = get_field_groups(layer_purpose, layer_subcategory)
-            if len(field_groups) == 0:
-                # No field group, disable field mapping tool.
                 enable_field_mapping_tool = False
-            else:
-                enable_field_mapping_tool = True
         except (KeywordNotFoundError, NoKeywordsFoundError):
             # No keywords, disable field mapping tool.
             enable_field_mapping_tool = False
