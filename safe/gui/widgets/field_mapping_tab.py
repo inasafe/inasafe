@@ -42,7 +42,7 @@ from safe.common.parameters.group_select_parameter import (
     GroupSelectParameter)
 from safe.common.parameters.group_select_parameter_widget import (
     GroupSelectParameterWidget)
-from safe.common.parameters.validators import validate_sum
+from safe.common.parameters.validators import validators
 from safe.utilities.default_values import get_inasafe_default_value_qsetting
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
@@ -256,14 +256,13 @@ class FieldMappingTab(QWidget, object):
         )
         self.parameter_container.setup_ui()
 
-        sum_threshold = self.field_group.get('constraint', {}).get('max', 1)
-        validation_message = self.field_group.get('constraint', {}).get(
-            'message', '')
+        constraints = self.field_group.get('constraints', {})
 
-        self.parameter_container.add_validator(
-            validate_sum,
-            sum_threshold=sum_threshold,
-            validation_message=validation_message)
+        for key, value in constraints.items():
+            self.parameter_container.add_validator(
+                validators[key],
+                kwargs=value['kwargs'],
+                validation_message=value['message'])
 
         self.parameter_layout.addWidget(self.parameter_container)
 

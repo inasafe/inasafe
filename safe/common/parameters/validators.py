@@ -23,17 +23,17 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
-def validate_sum(parameter_container, sum_threshold, validation_message):
+def validate_sum(parameter_container, validation_message, **kwargs):
     """Validate the sum of parameter value's.
 
     :param parameter_container: The container that use this validator.
     :type parameter_container: ParameterContainer
 
-    :param sum_threshold: The threshold for the sum of the parameters.
-    :type sum_threshold: float
-
     :param validation_message: The message if there is validation error.
     :type validation_message: str
+
+    :param kwargs: Keywords Argument.
+    :type kwargs: dict
 
     :returns: Dictionary of valid and message.
     :rtype: dict
@@ -47,6 +47,8 @@ def validate_sum(parameter_container, sum_threshold, validation_message):
     for parameter in parameters:
         if parameter.selected_option_type() in [SINGLE_DYNAMIC, STATIC]:
             values.append(parameter.value)
+
+    sum_threshold = kwargs.get('max', 1)
 
     if None in values:
         # If there is None, just check to not exceeding validation_threshold
@@ -68,3 +70,8 @@ def validate_sum(parameter_container, sum_threshold, validation_message):
         'valid': True,
         'message': ''
     }
+
+# Add validator here.
+validators = {
+    'sum': validate_sum
+}
