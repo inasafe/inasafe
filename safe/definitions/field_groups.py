@@ -61,12 +61,13 @@ age_ratio_group = {
         elderly_ratio_field
     ],
     'notes': [],
-    'constraint': {
-        'key': 'sum',
-        'args': {
-            'max': 1
-        },
-        'message': tr('The sum of age ratios should not more than 1.')
+    'constraints': {
+        'sum': {
+            'kwargs': {
+                'max': 1
+            },
+            'message': tr('The sum of age ratios should not more than 1.')
+        }
     }
 }
 
@@ -157,13 +158,14 @@ vulnerability_ratio_group = {
         disabled_ratio_field
     ],
     'notes': [],
-    'constraint': {
-        'key': 'sum',
-        'args': {
-            'max': 1
-        },
-        'message': tr(
-            'The sum of vulnerability ratios should not more than 1.')
+    'constraints': {
+        'sum': {
+            'kwargs': {
+                'max': 1
+            },
+            'message': tr(
+                'The sum of vulnerability ratios should not more than 1.')
+        }
     }
 }
 
