@@ -3,6 +3,7 @@
 """Definitions relating to group of fields."""
 
 from safe.utilities.i18n import tr
+from safe.definitions.concepts import concepts
 
 from safe.definitions.fields import (
     infant_count_field,
@@ -110,8 +111,18 @@ age_displaced_count_group = {
         adult_displaced_count_field,
         elderly_displaced_count_field
     ],
-    'notes': []
+    'notes': [
+        tr('Infant: ' + concepts['infant']['description']),
+        tr('Child: ' + concepts['child']['description']),
+        tr('Youth: ' + concepts['youth']['description']),
+        tr('Adult: ' + concepts['adult']['description']),
+        tr('Elderly: ' + concepts['elderly']['description'])
+    ]
 }
+age_displaced_count_groups['notes'].insert(
+    0,
+    tr('Age group: ' + (
+        age_displaced_count_groups['description'])))
 
 gender_ratio_group = {
     'key': 'gender_ratio_group',
@@ -163,8 +174,18 @@ gender_displaced_count_group = {
         child_bearing_age_displaced_count_field,
         pregnant_lactating_displaced_count_field
     ],
-    'notes': []
+    'notes': [
+        tr('Female: ' + concepts['female']['description']),
+        tr('Child bearing age: ' + (
+            concepts['child_bearing_age']['description'])),
+        tr('Pregnant lactating: ' + (
+            concepts['pregnant_lactating']['description']))
+    ]
 }
+gender_displaced_count_group['notes'].insert(
+    0,
+    tr('Gender group: ' + (
+        gender_displaced_count_group['description'])))
 
 vulnerability_ratio_group = {
     'key': 'vulnerability_ratio_group',
@@ -234,8 +255,16 @@ vulnerability_displaced_count_group = {
         over_60_displaced_count_field,
         disabled_displaced_count_field
     ],
-    'notes': []
+    'notes': [
+        tr('Under 5: ' + concepts['under_5']['description']),
+        tr('Over 60: ' + concepts['over_60']['description']),
+        tr('Disabled: ' + concepts['disabled']['description'])
+    ]
 }
+vulnerability_displaced_count_group['notes'].insert(
+    0,
+    tr('Vulnerability group: ' + (
+        vulnerability_displaced_count_group['description'])))
 
 aggregation_field_groups = [
     age_ratio_group,
