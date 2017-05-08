@@ -33,9 +33,17 @@ from PyQt4.QtGui import (
     QInputDialog)
 
 from safe.common.version import release_status
-from safe.common.exceptions import TranslationLoadError
+from safe.common.exceptions import (
+    TranslationLoadError,
+    KeywordNotFoundError,
+    NoKeywordsFoundError)
 from safe.utilities.resources import resources_path
 from safe.utilities.gis import is_raster_layer
+from safe.definitions.layer_purposes import (
+    layer_purpose_exposure, layer_purpose_hazard
+)
+from safe.definitions.utilities import get_field_groups
+from safe.utilities.keyword_io import KeywordIO
 LOGGER = logging.getLogger('InaSAFE')
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -67,24 +75,33 @@ class Plugin(object):
         # Save reference to the QGIS interface
         self.iface = iface
         self.dock_widget = None
-        self.action_import_dialog = None
-        self.action_save_scenario = None
+
+        # Actions
+        self.action_add_layers = None
+        self.action_add_osm_layer = None
+        self.action_add_petabencana_layer = None
         self.action_batch_runner = None
-        self.action_shake_converter = None
+        self.action_dock = None
+        self.action_extent_selector = None
+        self.action_field_mapping = None
+        self.action_function_centric_wizard = None
+        self.action_import_dialog = None
+        self.action_keywords_wizard = None
         self.action_minimum_needs = None
         self.action_minimum_needs_config = None
         self.action_multi_buffer = None
-        self.key_action = None
         self.action_options = None
-        self.action_keywords_wizard = None
-        self.action_function_centric_wizard = None
-        self.action_extent_selector = None
+        self.action_run_tests = None
+        self.action_save_scenario = None
+        self.action_shake_converter = None
+        self.action_show_definitions = None
+        self.action_toggle_rubberbands = None
+
         self.translator = None
         self.toolbar = None
         self.wizard = None
         self.actions = []  # list of all QActions we create for InaSAFE
-        self.action_dock = None
-        self.action_toggle_rubberbands = None
+
         self.message_bar_item = None
         # Flag indicating if toolbar should show only common icons or not
         self.full_toolbar = False
@@ -152,6 +169,9 @@ class Plugin(object):
             be added to the InaSAFE toolbar. Defaults to True.
         :type add_to_toolbar: bool
 
+        :param add_to_legend: Flag indicating whether the action should also
+            be added to the layer legend menu. Default to False.
+        :type add_to_legend: bool
         """
         # store in the class list of actions for easy plugin unloading
         self.actions.append(action)
@@ -376,18 +396,18 @@ class Plugin(object):
     def _create_field_mapping_action(self):
         """Create action for showing field mapping dialog.."""
         icon = resources_path('img', 'icons', 'show-mapping-tool.svg')
-        self.field_mapping_action = QAction(
+        self.action_field_mapping = QAction(
             QIcon(icon),
             self.tr('InaSAFE Field Mapping Tool'),
             self.iface.mainWindow())
-        self.field_mapping_action.setStatusTip(self.tr(
+        self.action_field_mapping.setStatusTip(self.tr(
             'Assign field mapping to layer.'))
-        self.field_mapping_action.setWhatsThis(self.tr(
+        self.action_field_mapping.setWhatsThis(self.tr(
             'Use this tool to assign field mapping in layer.'))
-        self.field_mapping_action.triggered.connect(
+        self.action_field_mapping.triggered.connect(
             self.show_field_mapping)
         self.add_action(
-            self.field_mapping_action,
+            self.action_field_mapping,
             add_to_toolbar=True)
 
     def _create_add_petabencana_layer_action(self):
@@ -524,6 +544,7 @@ class Plugin(object):
                 legend_tab, self.dock_widget)
             self.dock_widget.raise_()
 
+    # noinspection PyPep8Naming
     def initGui(self):
         """Gui initialisation procedure (for QGIS plugin api).
 
@@ -917,20 +938,43 @@ class Plugin(object):
         :param layer: The layer that is now active.
         :type layer: QgsMapLayer
         """
-        if not layer:
-            self._disable_keyword_tools()
-            return
-        if not hasattr(layer, 'providerType'):
-            self._disable_keyword_tools()
-            return
-        if layer.providerType() == 'wms':
-            self._disable_keyword_tools()
-            return
-        if is_raster_layer(layer) and layer.bandCount() > 1:
-            self._disable_keyword_tools()
-            return
+        enable_keyword_wizard = True
+        enable_field_mapping_tool = True
 
-        self.action_keywords_wizard.setEnabled(True)
+        if not layer:
+            enable_keyword_wizard = False
+        elif not hasattr(layer, 'providerType'):
+            enable_keyword_wizard = False
+        elif layer.providerType() == 'wms':
+            enable_keyword_wizard = False
+        elif is_raster_layer(layer) and layer.bandCount() > 1:
+            enable_keyword_wizard = False
+        else:
+            enable_keyword_wizard = True
+
+        try:
+            keywords = KeywordIO().read_keywords(layer)
+            layer_purpose = keywords.get('layer_purpose')
+            if not layer_purpose:
+                self.action_field_mapping.setEnabled(False)
+            if layer_purpose == layer_purpose_exposure['key']:
+                layer_subcategory = keywords.get('exposure')
+            elif layer_purpose == layer_purpose_hazard['key']:
+                layer_subcategory = keywords.get('hazard')
+            else:
+                layer_subcategory = None
+            field_groups = get_field_groups(layer_purpose, layer_subcategory)
+            if len(field_groups) == 0:
+                # No field group, disable field mapping tool.
+                enable_field_mapping_tool = False
+            else:
+                enable_field_mapping_tool = True
+        except (KeywordNotFoundError, NoKeywordsFoundError):
+            # No keywords, disable field mapping tool.
+            enable_field_mapping_tool = False
+
+        self.action_keywords_wizard.setEnabled(enable_keyword_wizard)
+        self.action_field_mapping.setEnabled(enable_field_mapping_tool)
 
     def shortcut_f7(self):
         """Executed when user press F7 - will show the shakemap importer."""
