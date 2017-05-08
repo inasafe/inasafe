@@ -287,7 +287,7 @@ def content():
     ))
     for group in exposure_field_groups:
         definition_to_message(
-            message, table_of_contents, group, heading_level=4)
+            group, message, table_of_contents,  heading_level=4)
 
     _create_section_header(
         message,
@@ -300,7 +300,7 @@ def content():
     ))
     for group in aggregation_field_groups:
         definition_to_message(
-            message, table_of_contents, group, heading_level=4)
+            group, message, table_of_contents,  heading_level=4)
 
     # End of field mapping tool help
 
@@ -358,7 +358,7 @@ def content():
     steps = definitions.analysis_steps.values()
     for step in steps:
         definition_to_message(
-            message, table_of_contents, step, heading_level=3)
+            step, message, table_of_contents,  heading_level=3)
 
     ##
     #  Hazard definitions
@@ -373,16 +373,16 @@ def content():
 
     hazard_category = definitions.hazard_category
     definition_to_message(
+        hazard_category,
         message,
         table_of_contents,
-        hazard_category,
         heading_level=2)
 
     hazards = definitions.hazards
     definition_to_message(
+        hazards,
         message,
         table_of_contents,
-        hazards,
         heading_level=2)
 
     ##
@@ -398,9 +398,9 @@ def content():
     exposures = definitions.exposures
 
     definition_to_message(
+        exposures,
         message,
         table_of_contents,
-        exposures,
         heading_level=2)
 
     ##
@@ -518,19 +518,19 @@ def content():
         tr('Vector'),
         heading_level=2)
     definition_to_message(
-        message,
-        table_of_contents,
         definitions.layer_geometry_point,
-        heading_level=3)
-    definition_to_message(
         message,
         table_of_contents,
+        heading_level=3)
+    definition_to_message(
         definitions.layer_geometry_line,
-        heading_level=3)
-    definition_to_message(
         message,
         table_of_contents,
+        heading_level=3)
+    definition_to_message(
         definitions.layer_geometry_polygon,
+        message,
+        table_of_contents,
         heading_level=3)
     _create_section_header(
         message,
@@ -539,9 +539,9 @@ def content():
         tr('Raster'),
         heading_level=2)
     definition_to_message(
+        definitions.layer_geometry_raster,
         message,
         table_of_contents,
-        definitions.layer_geometry_raster,
         heading_level=3)
 
     ##
@@ -555,9 +555,9 @@ def content():
         tr('Layer Modes'),
         heading_level=1)
     definition_to_message(
+        definitions.layer_mode,
         message,
         table_of_contents,
-        definitions.layer_mode,
         heading_level=2)
 
     ##
@@ -571,44 +571,44 @@ def content():
         tr('Layer Purposes'),
         heading_level=1)
     definition_to_message(
-        message,
-        table_of_contents,
         definitions.layer_purpose_hazard,
-        heading_level=2)
-    definition_to_message(
         message,
         table_of_contents,
+        heading_level=2)
+    definition_to_message(
         definitions.layer_purpose_exposure,
-        heading_level=2)
-    definition_to_message(
         message,
         table_of_contents,
+        heading_level=2)
+    definition_to_message(
         definitions.layer_purpose_aggregation,
-        heading_level=2)
-    definition_to_message(
         message,
         table_of_contents,
+        heading_level=2)
+    definition_to_message(
         definitions.layer_purpose_exposure_summary,
-        heading_level=2)
-    definition_to_message(
         message,
         table_of_contents,
+        heading_level=2)
+    definition_to_message(
         definitions.layer_purpose_aggregate_hazard_impacted,
-        heading_level=2)
-    definition_to_message(
         message,
         table_of_contents,
+        heading_level=2)
+    definition_to_message(
         definitions.layer_purpose_aggregation_summary,
-        heading_level=2)
-    definition_to_message(
         message,
         table_of_contents,
+        heading_level=2)
+    definition_to_message(
         definitions.layer_purpose_exposure_summary_table,
-        heading_level=2)
-    definition_to_message(
         message,
         table_of_contents,
+        heading_level=2)
+    definition_to_message(
         definitions.layer_purpose_profiling,
+        message,
+        table_of_contents,
         heading_level=2)
 
     ##
@@ -808,8 +808,11 @@ def _create_fields_section(message, table_of_contents, title, fields):
 
 
 def definition_to_message(
-        message, table_of_contents, definition, heading_level=None):
+        definition, message=None, table_of_contents=None, heading_level=None):
     """Helper function to render a definition to a message.
+    
+    :param definition: A definition dictionary (see definitions package).
+    :type definition: dict
 
     :param message: The message that the definition should be appended to.
     :type message: safe_extras.parameters.message.Message
@@ -817,9 +820,6 @@ def definition_to_message(
     :param table_of_contents: Table of contents that the headings should be
         included in.
     :type message: safe_extras.parameters.message.Message
-
-    :param definition: A definition dictionary (see definitions package).
-    :type definition: dict
 
     :param heading_level: Optional style to apply to the definition
         heading. See HEADING_LOOKUPS
@@ -831,6 +831,9 @@ def definition_to_message(
 
     if message is None:
         message = m.Message()
+
+    if table_of_contents is None:
+        table_of_contents = m.Message()
 
     if heading_level:
         _create_section_header(
@@ -885,8 +888,10 @@ def definition_to_message(
     if 'types' in definition:
         for sub_definition in definition['types']:
             definition_to_message(
-                message, table_of_contents,
-                sub_definition, heading_level=3)
+                sub_definition,
+                message,
+                table_of_contents,
+                heading_level=3)
 
     #
     # Notes section if available
@@ -1022,8 +1027,9 @@ def definition_to_message(
             definitions.hazard_classification['description']))
         for inasafe_class in definition['classifications']:
             definition_to_message(
-                message, table_of_contents,
                 inasafe_class,
+                message,
+                table_of_contents,
                 heading_level=3)
 
     if 'classes' in definition:
