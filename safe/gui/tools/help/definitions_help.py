@@ -287,7 +287,7 @@ def content():
     ))
     for group in exposure_field_groups:
         definition_to_message(
-            group, message, table_of_contents,  heading_level=4)
+            group, message, table_of_contents, heading_level=4)
 
     _create_section_header(
         message,
@@ -300,7 +300,7 @@ def content():
     ))
     for group in aggregation_field_groups:
         definition_to_message(
-            group, message, table_of_contents,  heading_level=4)
+            group, message, table_of_contents, heading_level=4)
 
     # End of field mapping tool help
 
@@ -358,7 +358,7 @@ def content():
     steps = definitions.analysis_steps.values()
     for step in steps:
         definition_to_message(
-            step, message, table_of_contents,  heading_level=3)
+            step, message, table_of_contents, heading_level=3)
 
     ##
     #  Hazard definitions
@@ -810,7 +810,7 @@ def _create_fields_section(message, table_of_contents, title, fields):
 def definition_to_message(
         definition, message=None, table_of_contents=None, heading_level=None):
     """Helper function to render a definition to a message.
-    
+
     :param definition: A definition dictionary (see definitions package).
     :type definition: dict
 
