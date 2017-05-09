@@ -262,26 +262,32 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.lblSubtitle.setText(self.tr(
             'Use this wizard to run a guided impact assessment'))
 
-    def set_keywords_creation_mode(self, layer=None):
+    def set_keywords_creation_mode(self, layer=None, keywords=None):
         """Set the Wizard to the Keywords Creation mode.
 
         :param layer: Layer to set the keywords for
         :type layer: QgsMapLayer
+
+        :param keywords: Keywords for the layer.
+        :type keywords: dict, None
         """
         self.layer = layer or self.iface.mapCanvas().currentLayer()
 
-        # Always read from metadata file.
-        try:
-            self.existing_keywords = self.keyword_io.read_keywords(
-                self.layer)
-        except (HashNotFoundError,
-                OperationalError,
-                NoKeywordsFoundError,
-                KeywordNotFoundError,
-                InvalidParameterError,
-                UnsupportedProviderError,
-                MetadataReadError):
-            self.existing_keywords = None
+        if keywords is not None:
+            self.existing_keywords = keywords
+        else:
+            # Always read from metadata file.
+            try:
+                self.existing_keywords = self.keyword_io.read_keywords(
+                    self.layer)
+            except (HashNotFoundError,
+                    OperationalError,
+                    NoKeywordsFoundError,
+                    KeywordNotFoundError,
+                    InvalidParameterError,
+                    UnsupportedProviderError,
+                    MetadataReadError):
+                self.existing_keywords = None
         self.set_mode_label_to_keywords_creation()
 
         step = self.step_kw_purpose
