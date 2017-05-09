@@ -67,12 +67,12 @@ class GroupSelectParameterWidget(GenericParameterWidget):
                 double_spin_box = QDoubleSpinBox()
                 self.radio_button_layout.addWidget(double_spin_box, i, 1)
                 double_spin_box.setValue(value.get('value', 0))
-                double_spin_box.setMinimum(value.get('constraint', {}).get(
-                    'min', 0))
-                double_spin_box.setMaximum(value.get('constraint', {}).get(
-                    'max', 1))
-                double_spin_box.setSingleStep(value.get('constraint', {}).get(
-                    'step', 0.01))
+                double_spin_box.setMinimum(
+                    value.get('constraint', {}).get('min', 0))
+                double_spin_box.setMaximum(value.get(
+                    'constraint', {}).get('max', 1))
+                double_spin_box.setSingleStep(
+                    value.get('constraint', {}).get('step', 0.01))
                 step = double_spin_box.singleStep()
                 if step > 1:
                     precision = 0
