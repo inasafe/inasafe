@@ -11,6 +11,7 @@ from safe.definitions import (
     hazard_volcano,
     hazard_volcanic_ash,
     hazard_generic,
+    hazard_cyclone,
     exposure_population,
     exposure_land_cover,
     exposure_road,
@@ -29,14 +30,16 @@ from safe.definitions import (
     aggregation_fields,
     layer_purpose_hazard,
     layer_purpose_exposure,
+    layer_purpose_aggregation,
     layer_geometry_raster,
     layer_geometry_line,
     layer_geometry_point,
     layer_geometry_polygon,
     cyclone_au_bom_hazard_classes,
-    unit_knots
+    unit_knots,
+    exposure_field_groups,
+    aggregation_field_groups
 )
-from safe.definitions.hazard import hazard_cyclone
 
 from safe.definitions.utilities import (
     definition,
@@ -53,7 +56,9 @@ from safe.definitions.utilities import (
     get_compulsory_fields,
     get_non_compulsory_fields,
     default_classification_thresholds,
-    default_classification_value_maps
+    default_classification_value_maps,
+    fields_in_field_groups,
+    get_field_groups
 )
 
 
@@ -64,6 +69,7 @@ __revision__ = '$Format:%H$'
 
 
 class TestDefinitionsUtilities(unittest.TestCase):
+
     """Test Utilities Class for Definitions."""
 
     def test_definition(self):
@@ -188,6 +194,10 @@ class TestDefinitionsUtilities(unittest.TestCase):
         expected_fields += [
             field for field in exposure_structure['extra_fields'] if not
             field['replace_null']]
+        expected_fields += [
+            field for field in fields_in_field_groups(
+                layer_purpose_exposure['field_groups']) if not
+            field['replace_null']]
 
         for field in expected_fields:
             if field.get('replace_null'):
@@ -200,6 +210,8 @@ class TestDefinitionsUtilities(unittest.TestCase):
         expected_fields = deepcopy(exposure_structure['compulsory_fields'])
         expected_fields += exposure_structure['fields']
         expected_fields += exposure_structure['extra_fields']
+        expected_fields += fields_in_field_groups(
+            layer_purpose_exposure['field_groups'])
         self.assertListEqual(fields, expected_fields)
 
         fields = get_fields('hazard', 'flood')
@@ -214,19 +226,28 @@ class TestDefinitionsUtilities(unittest.TestCase):
 
         fields = get_fields('exposure')
         expected_fields = deepcopy(exposure_fields)
+        expected_fields += fields_in_field_groups(
+            layer_purpose_exposure['field_groups'])
         self.assertListEqual(fields, expected_fields)
 
         fields = get_fields('aggregation')
         expected_fields = deepcopy(aggregation_fields)
+        expected_fields += fields_in_field_groups(
+            layer_purpose_aggregation['field_groups'])
         self.assertListEqual(fields, expected_fields)
 
         fields = get_fields('aggregation', replace_null=True)
-        expected_fields = [f for f in aggregation_fields if f['replace_null']]
+        expected_fields = deepcopy(aggregation_fields)
+        expected_fields += fields_in_field_groups(
+            layer_purpose_aggregation['field_groups'])
+        expected_fields = [f for f in expected_fields if f['replace_null']]
         self.assertListEqual(fields, expected_fields)
 
         fields = get_fields('aggregation', replace_null=False)
-        expected_fields = [
-            f for f in aggregation_fields if not f['replace_null']]
+        expected_fields = deepcopy(aggregation_fields)
+        expected_fields += fields_in_field_groups(
+            layer_purpose_aggregation['field_groups'])
+        expected_fields = [f for f in expected_fields if not f['replace_null']]
         self.assertListEqual(fields, expected_fields)
 
     def test_get_allowed_geometries(self):
@@ -247,8 +268,6 @@ class TestDefinitionsUtilities(unittest.TestCase):
             layer_geometry_polygon,
             layer_geometry_raster
         ]
-        print[x['key'] for x in expected]
-        print[x['key'] for x in allowed_geometries]
         self.assertEqual(allowed_geometries, expected)
 
     def test_all_default_fields(self):
@@ -364,6 +383,33 @@ class TestDefinitionsUtilities(unittest.TestCase):
             for v in keys[duplicate_key]:
                 message += v['name'] + ' ' + v['description'] + '\n'
         self.assertEqual(len(duplicate_keys), 0, message)
+
+    def test_fields_in_field_groups(self):
+        """Test for fields_in_field_groups method."""
+        fields = fields_in_field_groups(exposure_field_groups)
+        expected = []
+        for field_group in exposure_field_groups:
+            expected += field_group['fields']
+        self.assertListEqual(fields, expected)
+
+    def test_get_field_groups(self):
+        """Test for get_field_groups method."""
+        field_groups = get_field_groups(layer_purpose_aggregation['key'])
+        expected = aggregation_field_groups
+        self.assertListEqual(field_groups, expected)
+
+        field_groups = get_field_groups(layer_purpose_exposure['key'])
+        expected = []
+        self.assertListEqual(field_groups, expected)
+
+        field_groups = get_field_groups(
+            layer_purpose_exposure['key'], exposure_population['key'])
+        expected = exposure_field_groups
+        self.assertListEqual(field_groups, expected)
+
+        field_groups = get_field_groups(layer_purpose_hazard['key'])
+        expected = []
+        self.assertListEqual(field_groups, expected)
 
 
 if __name__ == '__main__':

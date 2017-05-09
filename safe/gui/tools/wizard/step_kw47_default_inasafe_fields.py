@@ -92,7 +92,10 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
             subcategory_key = None
         # Get all fields with replace_null = True
         inasafe_fields = get_fields(
-            layer_purpose_key, subcategory_key, replace_null=True)
+            layer_purpose_key,
+            subcategory_key,
+            replace_null=True,
+            in_group=False)
         # remove compulsory field since it has been set in previous step
         try:
             inasafe_fields.remove(get_compulsory_fields(

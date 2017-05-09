@@ -4,6 +4,7 @@
 from safe.utilities.i18n import tr
 from safe import messaging as m
 from safe.messaging import styles
+from safe.utilities.resources import resources_path
 
 INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
 
@@ -54,6 +55,13 @@ def content():
     """
 
     message = m.Message()
+    paragraph = m.Paragraph(
+        m.Image(
+            'file:///%s/img/screenshots/'
+            'batch-calculator-screenshot.png' % resources_path()),
+        style_class='text-center'
+    )
+    message.add(paragraph)
 
     message.add(m.Paragraph(tr(
         'With this tool you can set up numerous scenarios and run them all in '

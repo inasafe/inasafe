@@ -27,7 +27,6 @@ class DefaultValueParameterWidget(GenericParameterWidget):
         super(DefaultValueParameterWidget, self).__init__(parameter, parent)
 
         self.radio_button_layout = QHBoxLayout()
-        self.radio_button_widget = QWidget()
 
         # Create radio button group
         self.input_button_group = QButtonGroup()

@@ -180,7 +180,11 @@ def generate_classified_legend(
             # The field might not exist if no feature impacted in this hazard
             # zone.
             value = 0
-        value = format_number(value, enable_rounding, coefficient)
+        value = format_number(
+            value,
+            enable_rounding,
+            exposure_definitions['use_population_rounding'],
+            coefficient)
 
         minimum = None
         maximum = None
@@ -209,6 +213,7 @@ def generate_classified_legend(
         classes[not_exposed_class['key']] = _add_not_exposed(
             analysis_row,
             enable_rounding,
+            exposure_definitions['use_population_rounding'],
             exposure_unit['abbreviation'],
             coefficient)
 
@@ -216,7 +221,11 @@ def generate_classified_legend(
 
 
 def _add_not_exposed(
-        analysis_row, enable_rounding, exposure_unit, coefficient):
+        analysis_row,
+        enable_rounding,
+        is_population,
+        exposure_unit,
+        coefficient):
     """Helper to add the `not exposed` item to the legend.
 
     :param analysis_row: The analysis row as a list.
@@ -224,6 +233,10 @@ def _add_not_exposed(
 
     :param enable_rounding: If we need to do a rounding.
     :type enable_rounding: bool
+
+    :param is_population: Flag if the number is population. It needs to be
+        used with enable_rounding.
+    :type is_population: bool
 
     :param exposure_unit: The exposure unit.
     :type exposure_unit: safe.definitions.units
@@ -242,7 +255,7 @@ def _add_not_exposed(
     except KeyError:
         # The field might not exist if there is not feature not exposed.
         value = 0
-    value = format_number(value, enable_rounding, coefficient)
+    value = format_number(value, enable_rounding, is_population, coefficient)
     label = _format_label(
         hazard_class=not_exposed_class['name'],
         value=value,

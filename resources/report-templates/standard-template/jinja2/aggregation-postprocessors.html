@@ -13,14 +13,31 @@
                     <thead>
                         <tr>
                             {% for column in value.columns %}
-                                {% if loop.first %}
-                                <th class="text-left">
-                                {% else %}
-                                <th class="text-right">
-                                {% endif %}
+                                {% if column is mapping %}
+                                    {% if column.start_group_header %}
+                                    <th class="text-center" colspan="{{ value.group_header_colspan }}">
+                                        {{ column.group_header|capitalize }}
+                                    </th>
+                                    {% endif %}
+                                {% elif loop.first %}
+                                <th class="text-left" rowspan="2">
                                     {{ column|capitalize }}
                                 </th>
+                                {% else %}
+                                <th class="text-right" rowspan="2">
+                                    {{ column|capitalize }}
+                                </th>
+                                {% endif %}
                             {% endfor %}
+                        </tr>
+                        <tr>
+                        {% for column in value.columns %}
+                            {% if column is mapping %}
+                            <th class="text-right">
+                                {{ column.name|capitalize }}
+                            </th>
+                            {% endif %}
+                        {% endfor %}
                         </tr>
                     </thead>
                     <tbody>
@@ -49,7 +66,11 @@
                     </tfoot>
                 </table>
                 <div>
-                    {{ value.notes }}
+                    <ul>
+                        {% for note in value.notes %}
+                        <li colspan="100%">{{ note }}</li>
+                        {% endfor %}
+                    </ul>
                 </div>
             {% endif %}
         {% endif %}

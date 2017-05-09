@@ -10,7 +10,10 @@ SUBSECTION_STYLE = styles.SUBSECTION_LEVEL_3_STYLE
 INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
 SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
 
-__author__ = 'ismailsunni'
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 
 def options_help():
@@ -56,6 +59,13 @@ def content():
     :rtype: safe.messaging.message.Message
     """
     message = m.Message()
+    paragraph = m.Paragraph(
+        m.Image(
+            'file:///%s/img/screenshots/'
+            'inasafe-options-screenshot.png' % resources_path()),
+        style_class='text-center'
+    )
+    message.add(paragraph)
     message.add(m.Paragraph(tr(
         'The InaSAFE options dialog is used to control various aspects of '
         'the InaSAFE analysis and reporting environment. Here are brief '

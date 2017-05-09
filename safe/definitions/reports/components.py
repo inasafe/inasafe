@@ -328,6 +328,9 @@ aggregation_postprocessors_component = {
             'gender': {
                 'header': tr('Detailed Gender Report')
             },
+            'vulnerability': {
+                'header': tr('Detailed Vulnerability Report')
+            },
             'minimum_needs': {
                 'header': tr('Detailed Minimum Needs Report')
             }
@@ -343,11 +346,14 @@ aggregation_postprocessors_component = {
                 'Analysis produced 0 displaced count. '
                 'No calculations produced.'),
             'no_gender_rate_message': tr(
-                'Gender ratio not exists. '
+                'Gender ratio not found. '
                 'No calculations produced.'),
             'no_age_rate_message': tr(
-                'Age ratio not exists. '
+                'Age ratio not found. '
                 'No calculations produced.'),
+            'no_vulnerability_rate_message': tr(
+                'Vulnerability ratio not exists. '
+                'No calculations produced.')
         }
     }
 }

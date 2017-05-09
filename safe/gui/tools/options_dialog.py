@@ -5,10 +5,11 @@ import logging
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
-# noinspection PyPackageRequirements
-from PyQt4 import QtGui, QtCore
-# noinspection PyPackageRequirements
-from PyQt4.QtCore import pyqtSignature, pyqtSlot, QVariant
+
+from PyQt4.QtCore import pyqtSignature, pyqtSlot, QVariant, QSettings
+from PyQt4.QtGui import (
+    QDialog, QFileDialog, QDialogButtonBox, QGroupBox, QVBoxLayout,
+    QScrollArea, QWidget)
 
 from safe_extras.parameters.qt_widgets.parameter_container import (
     ParameterContainer)
@@ -24,9 +25,12 @@ from safe.definitions.fields import (
     adult_ratio_field,
     elderly_ratio_field
 )
+from safe.definitions.field_groups import all_field_groups
 from safe.common.utilities import temp_dir
 from safe.defaults import supporters_logo_path, default_north_arrow_path
 from safe.definitions.earthquake import EARTHQUAKE_FUNCTIONS
+from safe.utilities.default_values import (
+    set_inasafe_default_value_qsetting, get_inasafe_default_value_qsetting)
 from safe.utilities.i18n import tr
 from safe.utilities.resources import get_ui_class, html_header, html_footer
 from safe.utilities.settings import setting, set_setting
@@ -34,9 +38,6 @@ from safe.common.version import get_version
 from safe.gui.tools.help.options_help import options_help
 from safe.utilities.qgis_utilities import display_warning_message_box
 
-from safe.utilities.settings import (
-    set_inasafe_default_value_qsetting,
-    get_inasafe_default_value_qsetting)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -47,7 +48,8 @@ LOGGER = logging.getLogger('InaSAFE')
 FORM_CLASS = get_ui_class('options_dialog_base.ui')
 
 
-class OptionsDialog(QtGui.QDialog, FORM_CLASS):
+class OptionsDialog(QDialog, FORM_CLASS):
+
     """Options dialog for the InaSAFE plugin."""
 
     def __init__(self, iface, dock=None, parent=None, qsetting=''):
@@ -67,8 +69,7 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             use empty string.
         :type qsetting: str
         """
-
-        QtGui.QDialog.__init__(self, parent)
+        QDialog.__init__(self, parent)
         self.setupUi(self)
 
         self.setWindowTitle(self.tr('InaSAFE %s Options' % get_version()))
@@ -77,13 +78,13 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         self.parent = parent
         self.dock = dock
         if qsetting:
-            self.settings = QtCore.QSettings(qsetting)
+            self.settings = QSettings(qsetting)
         else:
-            self.settings = QtCore.QSettings()
+            self.settings = QSettings()
 
         # InaSAFE default values
         self.default_value_parameters = []
-        self.default_value_parameter_container = None
+        self.default_value_parameter_containers = []
 
         # Flag for restore default values
         self.is_restore_default = False
@@ -113,7 +114,7 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         }
 
         # Set up things for context help
-        self.help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
+        self.help_button = self.button_box.button(QDialogButtonBox.Help)
         # Allow toggling the help button
         self.help_button.setCheckable(True)
         self.help_button.toggled.connect(self.help_toggled)
@@ -125,6 +126,16 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         # Hide not implemented group
         self.grpNotImplemented.hide()
         self.adjustSize()
+
+        # Demographic tab
+        self.scroll_area = QScrollArea()
+        self.scroll_area.setWidgetResizable(True)
+        self.widget_container = QWidget()
+        self.scroll_area.setWidget(self.widget_container)
+        self.container_layout = QVBoxLayout()
+        self.widget_container.setLayout(self.container_layout)
+        self.default_values_layout.addWidget(self.scroll_area)
+
         self.restore_state()
 
         # Hide checkbox if not developers
@@ -144,7 +155,7 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
 
         # Set up listener for restore defaults button
         self.restore_defaults = self.button_box_restore_defaults.button(
-            QtGui.QDialogButtonBox.RestoreDefaults)
+            QDialogButtonBox.RestoreDefaults)
         self.restore_defaults.setCheckable(True)
         self.restore_defaults.clicked.connect(
             self.restore_defaults_ratio)
@@ -193,7 +204,7 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         self.settings.setValue('inasafe/%s' % key, line_edit.text())
 
     def restore_text_setting(self, key, line_edit):
-        """Set line_edit text according to setting of key
+        """Set line_edit text according to setting of key.
 
         :param key: Key to retrieve setting value.
         :type key: str
@@ -309,14 +320,14 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
 
     def accept(self):
         """Method invoked when OK button is clicked."""
-        if not self.is_good_age_ratios():
-            display_warning_message_box(
-                self,
-                tr('Wrong Sum Age Ratio'),
-                tr('You have set age ratio whose sum is not equal to 1. '
-                   'Please fix it in the <b>Global Default</b> tab before you '
-                   'can save it.'))
-            return
+        # if not self.is_good_age_ratios():
+        #     display_warning_message_box(
+        #         self,
+        #         tr('Wrong Sum Age Ratio'),
+        #         tr('You have set age ratio whose sum is not equal to 1. '
+        #            'Please fix it in the <b>Global Default</b> tab before '
+        #            'you can save it.'))
+        #     return
         self.save_state()
         # FIXME: Option dialog should be independent from dock.
         if self.dock:
@@ -329,7 +340,7 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         """Auto-connect slot activated when cache file tool button is clicked.
         """
         # noinspection PyCallByClass,PyTypeChecker
-        file_name = QtGui.QFileDialog.getSaveFileName(
+        file_name = QFileDialog.getSaveFileName(
             self,
             self.tr('Set keyword cache file'),
             inasafe_default_settings['keywordCachePath'],
@@ -343,11 +354,11 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         clicked.
         """
         # noinspection PyCallByClass,PyTypeChecker
-        dir_name = QtGui.QFileDialog.getExistingDirectory(
+        dir_name = QFileDialog.getExistingDirectory(
             self,
             self.tr('Results directory'),
             '',
-            QtGui.QFileDialog.ShowDirsOnly)
+            QFileDialog.ShowDirsOnly)
         self.leUserDirectoryPath.setText(dir_name)
 
     # noinspection PyPep8Naming
@@ -356,7 +367,7 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         """Auto-connect slot activated when north arrow tool button is clicked.
         """
         # noinspection PyCallByClass,PyTypeChecker
-        file_name = QtGui.QFileDialog.getOpenFileName(
+        file_name = QFileDialog.getOpenFileName(
             self,
             self.tr('Set north arrow image file'),
             '',
@@ -374,7 +385,7 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         """Auto-connect slot activated when logo file tool button is clicked.
         """
         # noinspection PyCallByClass,PyTypeChecker
-        file_name = QtGui.QFileDialog.getOpenFileName(
+        file_name = QFileDialog.getOpenFileName(
             self,
             self.tr('Set organisation logo file'),
             '',
@@ -392,11 +403,11 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         """Auto-connect slot activated when report file tool button is clicked.
         """
         # noinspection PyCallByClass,PyTypeChecker
-        dir_name = QtGui.QFileDialog.getExistingDirectory(
+        dir_name = QFileDialog.getExistingDirectory(
             self,
             self.tr('Templates directory'),
             '',
-            QtGui.QFileDialog.ShowDirsOnly)
+            QFileDialog.ShowDirsOnly)
         self.leReportTemplatePath.setText(dir_name)
 
     def set_organisation_logo(self):
@@ -522,78 +533,61 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         # restore from changes.
         if self.default_value_parameters:
             self.default_value_parameters = []
-
-        unordered_parameters = []
+        if self.default_value_parameter_containers:
+            self.default_value_parameter_containers = []
 
         default_fields = all_default_fields()
+
+        for field_group in all_field_groups:
+            settable_fields = []
+            for field in field_group['fields']:
+                if field not in default_fields:
+                    continue
+                else:
+                    settable_fields.append(field)
+                    default_fields.remove(field)
+
+            if not settable_fields:
+                continue
+            # Create group box for each field group
+            group_box = QGroupBox(self)
+            group_box.setTitle(field_group['name'])
+            self.container_layout.addWidget(group_box)
+            parameters = []
+            for settable_field in settable_fields:
+                parameter = self.default_field_to_parameter(settable_field)
+                if parameter:
+                    parameters.append(parameter)
+            parameter_container = ParameterContainer(
+                parameters, description_text=field_group['description']
+            )
+            parameter_container.setup_ui(must_scroll=False)
+            group_box_inner_layout = QVBoxLayout()
+            group_box_inner_layout.addWidget(parameter_container)
+            group_box.setLayout(group_box_inner_layout)
+
+            # Add to attribute
+            self.default_value_parameter_containers.append(parameter_container)
+
         for default_field in default_fields:
-            if default_field.get('type') == QVariant.Double:
-                parameter = FloatParameter()
-            elif default_field.get('type') in qvariant_whole_numbers:
-                parameter = IntegerParameter()
-            else:
-                continue
-            default_value = default_field.get('default_value')
-            if not default_value:
-                message = (
-                    'InaSAFE default field %s does not have default value'
-                    % default_field.get('name'))
-                LOGGER.exception(message)
-                continue
-
-            parameter.guid = default_field.get('key')
-            parameter.name = default_value.get('name')
-            parameter.is_required = True
-            parameter.precision = default_field.get('precision')
-            parameter.minimum_allowed_value = default_value.get(
-                'min_value', 0)
-            parameter.maximum_allowed_value = default_value.get(
-                'max_value', 100000000)
-            parameter.help_text = default_value.get('help_text')
-            parameter.description = default_value.get('description')
-
-            # Check if user ask to restore to the most default value.
-            if self.is_restore_default:
-                parameter._value = default_value.get('default_value')
-            else:
-                # Current value
-                qsetting_default_value = get_inasafe_default_value_qsetting(
-                    self.settings, GLOBAL, default_field['key'])
-
-                # To avoid python error
-                if qsetting_default_value > parameter.maximum_allowed_value:
-                    qsetting_default_value = parameter.maximum_allowed_value
-                if qsetting_default_value < parameter.minimum_allowed_value:
-                    qsetting_default_value = parameter.minimum_allowed_value
-
-                parameter.value = qsetting_default_value
-
-            unordered_parameters.append(parameter)
-
-        preferred_order = [
-            youth_ratio_field,
-            adult_ratio_field,
-            elderly_ratio_field
-        ]
-
-        for order in preferred_order:
-            parameter_index = [
-                p.guid for p in unordered_parameters].index(order['key'])
-            if parameter_index > -1:
-                self.default_value_parameters.append(
-                    unordered_parameters[parameter_index])
-                unordered_parameters.pop(parameter_index)
-
-        self.default_value_parameters.extend(unordered_parameters)
+            parameter = self.default_field_to_parameter(default_field)
+            if parameter:
+                self.default_value_parameters.append(parameter)
 
         description_text = tr(
             'In this options you can change the global default values for '
             'these variables.')
-        self.default_value_parameter_container = ParameterContainer(
+        parameter_container = ParameterContainer(
             self.default_value_parameters, description_text=description_text)
-        self.default_value_parameter_container.setup_ui()
-        self.default_values_layout.addWidget(
-            self.default_value_parameter_container)
+        parameter_container.setup_ui(must_scroll=False)
+        self.other_group_box = QGroupBox(tr('Non-group fields'))
+        other_group_inner_layout = QVBoxLayout()
+        other_group_inner_layout.addWidget(parameter_container)
+        self.other_group_box.setLayout(other_group_inner_layout)
+        self.container_layout.addWidget(self.other_group_box)
+
+        # Add to attribute
+        self.default_value_parameter_containers.append(parameter_container)
 
     def age_ratios(self):
         """Helper to get list of age ratio from the options dialog.
@@ -601,7 +595,8 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         :returns: List of age ratio.
         :rtype: list
         """
-        parameter_container = self.default_value_parameter_container
+        # FIXME(IS) set a correct parameter container
+        parameter_container = None
 
         youth_ratio = parameter_container.get_parameter_by_guid(
             youth_ratio_field['key']).value
@@ -636,24 +631,76 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
 
     def save_default_values(self):
         """Save InaSAFE default values."""
-        parameters = self.default_value_parameter_container.get_parameters()
-        for parameter in parameters:
-            set_inasafe_default_value_qsetting(
-                self.settings,
-                GLOBAL,
-                parameter.guid,
-                parameter.value
-            )
+        for parameter_container in self.default_value_parameter_containers:
+            parameters = parameter_container.get_parameters()
+            for parameter in parameters:
+                set_inasafe_default_value_qsetting(
+                    self.settings,
+                    GLOBAL,
+                    parameter.guid,
+                    parameter.value
+                )
 
     def restore_defaults_ratio(self):
         """Restore InaSAFE default ratio."""
         # Set the flag to true because user ask to.
         self.is_restore_default = True
         # remove current default ratio
-        for i in reversed(range(self.default_values_layout.count())):
-            widget = self.default_values_layout.itemAt(i).widget()
+        for i in reversed(range(self.container_layout.count())):
+            widget = self.container_layout.itemAt(i).widget()
             if widget is not None:
                 widget.setParent(None)
 
         # reload default ratio
         self.restore_default_values_page()
+
+    def default_field_to_parameter(self, default_field):
+        """Obtain parameter from default field.
+
+        :param default_field: A default field definition.
+        :type default_field: dict
+
+        :returns: A parameter object.
+        :rtype: FloatParameter, IntegerParameter
+        """
+        if default_field.get('type') == QVariant.Double:
+            parameter = FloatParameter()
+        elif default_field.get('type') in qvariant_whole_numbers:
+            parameter = IntegerParameter()
+        else:
+            return
+        default_value = default_field.get('default_value')
+        if not default_value:
+            message = (
+                'InaSAFE default field %s does not have default value'
+                % default_field.get('name'))
+            LOGGER.exception(message)
+            return
+
+        parameter.guid = default_field.get('key')
+        parameter.name = default_value.get('name')
+        parameter.is_required = True
+        parameter.precision = default_field.get('precision')
+        parameter.minimum_allowed_value = default_value.get(
+            'min_value', 0)
+        parameter.maximum_allowed_value = default_value.get(
+            'max_value', 100000000)
+        parameter.help_text = default_value.get('help_text')
+        parameter.description = default_value.get('description')
+
+        # Check if user ask to restore to the most default value.
+        if self.is_restore_default:
+            parameter._value = default_value.get('default_value')
+        else:
+            # Current value
+            qsetting_default_value = get_inasafe_default_value_qsetting(
+                self.settings, GLOBAL, default_field['key'])
+
+            # To avoid python error
+            if qsetting_default_value > parameter.maximum_allowed_value:
+                qsetting_default_value = parameter.maximum_allowed_value
+            if qsetting_default_value < parameter.minimum_allowed_value:
+                qsetting_default_value = parameter.minimum_allowed_value
+
+            parameter.value = qsetting_default_value
+        return parameter

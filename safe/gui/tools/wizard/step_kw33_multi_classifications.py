@@ -153,7 +153,11 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
 
         # Check if it can go to inasafe default field step
         default_inasafe_fields = get_fields(
-            self.layer_purpose['key'], subcategory['key'], replace_null=True)
+            self.layer_purpose['key'],
+            subcategory['key'],
+            replace_null=True,
+            in_group=False
+        )
         if default_inasafe_fields:
             return self.parent.step_kw_default_inasafe_fields
 
@@ -163,7 +167,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
     def set_wizard_step_description(self):
         """Set the text for description."""
         subcategory = self.parent.step_kw_subcategory.selected_subcategory()
-        field = self.parent.step_kw_field.selected_field()
+        field = self.parent.step_kw_field.selected_fields()
         is_raster = is_raster_layer(self.parent.layer)
 
         if is_raster:
@@ -561,7 +565,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
                 statistics.minimumValue,
                 statistics.maximumValue)
         else:
-            field_name = self.parent.step_kw_field.selected_field()
+            field_name = self.parent.step_kw_field.selected_fields()
             field_index = self.parent.layer.fieldNameIndex(field_name)
             min_value_layer = self.parent.layer.minimumValue(field_index)
             max_value_layer = self.parent.layer.maximumValue(field_index)
@@ -783,7 +787,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             else:
                 unique_values = [int(i) for i in unique_values]
         else:
-            field = self.parent.step_kw_field.selected_field()
+            field = self.parent.step_kw_field.selected_fields()
             field_index = self.parent.layer.dataProvider().fields(). \
                 indexFromName(field)
             field_type = self.parent.layer.dataProvider(). \

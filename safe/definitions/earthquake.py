@@ -5,11 +5,32 @@
 import numpy
 
 from safe.utilities.i18n import tr
+from safe.utilities.settings import setting
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
+
+
+def earthquake_fatality_rate(hazard_level):
+    """Earthquake fatality ratio for a given hazard level.
+
+    :param hazard_level: The hazard level.
+    :type hazard_level: int
+
+    :return: The fatality rate.
+    :rtype: float
+    """
+    earthquake_function = setting(
+        'earthquake_function', EARTHQUAKE_FUNCTIONS[0]['key'], str)
+    fatality_rates = {}
+    for model in EARTHQUAKE_FUNCTIONS:
+        fatality_rates[model['key']] = model['fatality_rates']
+    ratio = fatality_rates[earthquake_function]().get(hazard_level)
+    if not ratio:
+        ratio = 0
+    return ratio
 
 
 def itb_fatality_rates():

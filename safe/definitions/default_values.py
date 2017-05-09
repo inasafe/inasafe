@@ -16,7 +16,20 @@ female_ratio_default_value = {
     'default_value': 0.5,
     'min_value': 0,
     'max_value': 1,
+    'increment': 0.001,
     'description': tr('Default value for female ratio')
+}
+
+male_ratio_default_value = {
+    'key': 'male_ratio_default_value',
+    'name': tr('Male Ratio Global Default'),
+    # https://www.cia.gov/library/publications/the-world-factbook/geos/xx.html
+    # total population: 1.01 male(s)/female (2011 est.)
+    'default_value': 0.5,
+    'min_value': 0,
+    'max_value': 1,
+    'increment': 0.001,
+    'description': tr('Default value for male ratio')
 }
 
 feature_rate_default_value = {
@@ -25,6 +38,7 @@ feature_rate_default_value = {
     'default_value': 1000000,
     'min_value': 0,
     'max_value': 1000000000,
+    'increment': 1000000,
     'description': tr(u'Default value for feature rate per m²')
 }
 
@@ -52,6 +66,27 @@ feature_rate_default_value = {
 
 # if CM can add up then youth 0.254; adult 0.659; elderly 0.087
 
+# TODO(IS): Please complete this
+infant_ratio_default_value = {
+    'key': 'infant_ratio_default_value',
+    'name': tr('Infant Ratio Global Default'),
+    'default_value': 0.0,  # FIXME:It's random number
+    'min_value': 0,
+    'max_value': 1,
+    'increment': 0.001,
+    'description': tr('Default value for infant ratio')
+}
+
+child_ratio_default_value = {
+    'key': 'child_ratio_default_value',
+    'name': tr('Child Ratio Global Default'),
+    'default_value': 0.0,  # FIXME:It's random number
+    'min_value': 0,
+    'max_value': 1,
+    'increment': 0.001,
+    'description': tr('Default value for child ratio')
+}
+
 youth_ratio_default_value = {
     'key': 'youth_ratio_default_value',
     'name': tr('Youth Ratio Global Default'),
@@ -59,6 +94,7 @@ youth_ratio_default_value = {
     'default_value': 0.254,
     'min_value': 0,
     'max_value': 1,
+    'increment': 0.001,
     'description': tr('Default value for youth ratio')
 }
 
@@ -68,6 +104,7 @@ adult_ratio_default_value = {
     'default_value': 0.659,
     'min_value': 0,
     'max_value': 1,
+    'increment': 0.001,
     'description': tr('Default value for adult ratio')
 }
 
@@ -78,5 +115,57 @@ elderly_ratio_default_value = {
     'default_value': 0.087,
     'min_value': 0,
     'max_value': 1,
+    'increment': 0.001,
     'description': tr('Default value for elderly ratio')
+}
+
+# Default values for vulnerabilities
+under_5_ratio_default_value = {
+    'key': 'under_5_ratio_default_value',
+    'name': tr('Under 5 Years Ratio Global Default'),
+    'default_value': 0.0,  # FIXME:It's random number
+    'min_value': 0,
+    'max_value': 1,
+    'increment': 0.001,
+    'description': tr('Default value for under 5 years old ratio')
+}
+
+over_60_ratio_default_value = {
+    'key': 'over_60_ratio_default_value',
+    'name': tr('Over 60 Years Ratio Global Default'),
+    'default_value': 0.0,  # FIXME:It's random number
+    'min_value': 0,
+    'max_value': 1,
+    'increment': 0.001,
+    'description': tr('Default value for over 60 years old ratio')
+}
+
+disabled_ratio_default_value = {
+    'key': 'disabled_ratio_default_value',
+    'name': tr('Disabled Ratio Global Default'),
+    'default_value': 0.0,  # FIXME:It's random number
+    'min_value': 0,
+    'max_value': 1,
+    'increment': 0.001,
+    'description': tr('Default value for disabled people ratio')
+}
+
+child_bearing_age_ratio_default_value = {
+    'key': 'child_bearing_age_ratio_default_value',
+    'name': tr('Child Bearing Age Ratio Global Default'),
+    'default_value': 0.0,  # FIXME:It's random number
+    'min_value': 0,
+    'max_value': 1,
+    'increment': 0.001,
+    'description': tr('Default value for child bearing age people ratio')
+}
+
+pregnant_lactating_ratio_default_value = {
+    'key': 'pregnant_lactating_ratio_default_value',
+    'name': tr('Pregnant or Lactating Ratio Global Default'),
+    'default_value': 0.0,  # FIXME:It's random number
+    'min_value': 0,
+    'max_value': 1,
+    'increment': 0.001,
+    'description': tr('Default value for pregnant or lactating people ratio')
 }

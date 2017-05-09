@@ -8,6 +8,8 @@ from safe.definitions.layer_geometry import (
     layer_geometry_point,
     layer_geometry_polygon
 )
+from safe.definitions.field_groups import (
+    aggregation_field_groups, exposure_field_groups)
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -26,6 +28,7 @@ layer_purpose_exposure = {
         layer_geometry_raster
     ],
     'citations': concepts['exposure']['citations'],
+    'field_groups': []  # Set in each exposure definition
 }
 
 layer_purpose_hazard = {
@@ -36,7 +39,8 @@ layer_purpose_hazard = {
         layer_geometry_polygon,
         layer_geometry_raster
     ],
-    'citations': concepts['hazard']['citations']
+    'citations': concepts['hazard']['citations'],
+    'field_groups': []  # Set in each exposure definition
 }
 
 layer_purpose_aggregation = {
@@ -53,7 +57,8 @@ layer_purpose_aggregation = {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    'field_groups': aggregation_field_groups
 }
 
 layer_purpose_exposure_summary = {

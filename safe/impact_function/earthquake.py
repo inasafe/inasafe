@@ -28,6 +28,7 @@ from safe.definitions.fields import (
     population_displaced_per_mmi,
     fatalities_per_mmi_field,
 )
+from safe.definitions.hazard_classifications import hazard_classes_all
 from safe.definitions.layer_purposes import (
     layer_purpose_aggregation_summary, layer_purpose_exposure_summary)
 from safe.definitions.processing_steps import earthquake_displaced
@@ -86,8 +87,29 @@ def displacement_rate(mmi_level, classification_key):
     return 0.0
 
 
+def fatality_rate(mmi_level, classification_key):
+    """From a MMI level, it gives the fatality rate given a classification.
+
+    :param mmi_level: The MMI level.
+    :type mmi_level: int
+
+    :param classification_key: The earthquake classification key.
+    :type classification_key: safe.definitions.hazard_classifications
+
+    :return: The fatality rate.
+    :rtype: float
+    """
+    classes = definition(classification_key)['classes']
+    for hazard_class in classes:
+        minimum = hazard_class['numeric_default_min']
+        maximum = hazard_class['numeric_default_max']
+        if minimum < mmi_level <= maximum:
+            return hazard_class['fatality_rate']
+    return 0.0
+
+
 @profile
-def exposed_people_stats(hazard, exposure, aggregation, fatality_rate):
+def exposed_people_stats(hazard, exposure, aggregation):
     """Calculate the number of exposed people per MMI level per aggregation.
 
     Calculate the number of exposed people per MMI level per aggregation zone
@@ -101,9 +123,6 @@ def exposed_people_stats(hazard, exposure, aggregation, fatality_rate):
 
     :param aggregation: The aggregation layer.
     :type aggregation: QgsVectorLayer
-
-    :param fatality_rate: The fatality rate to use.
-    :type fatality_rate: function
 
     :return: A tuble with the exposed per MMI level par aggregation
         and the exposed raster.
@@ -141,8 +160,9 @@ def exposed_people_stats(hazard, exposure, aggregation, fatality_rate):
 
         if hazard_mmi >= 2.0 and people_count >= 0.0:
             hazard_mmi = int(round(hazard_mmi))
-            mmi_fatalities = (
-                int(hazard_mmi * fatality_rate[hazard_mmi]))  # rounding down
+            mmi_fatality_rate = fatality_rate(hazard_mmi, classification_key)
+            mmi_fatalities = int(  # rounding down
+                hazard_mmi * mmi_fatality_rate)
             mmi_displaced = (
                 (people_count - mmi_fatalities) *
                 displacement_rate(hazard_mmi, classification_key))
@@ -186,7 +206,7 @@ def exposed_people_stats(hazard, exposure, aggregation, fatality_rate):
 
 
 @profile
-def make_summary_layer(exposed, aggregation, fatality_rate):
+def make_summary_layer(exposed, aggregation):
     """Add fields to the aggregation given the dictionary of affected people.
 
     The dictionary contains affected people counts per hazard and aggregation
@@ -198,9 +218,6 @@ def make_summary_layer(exposed, aggregation, fatality_rate):
 
     :param aggregation: The aggregation layer where we write statistics.
     :type aggregation: QgsVectorLayer
-
-    :param fatality_rate: The fatality rate to use.
-    :type fatality_rate: function
 
     :return: Tuple with the aggregation layer and a dictionary with totals.
     :rtype: tuple(QgsVectorLayer, dict)
@@ -274,8 +291,9 @@ def make_summary_layer(exposed, aggregation, fatality_rate):
             # See ticket : https://github.com/inasafe/inasafe/issues/3803
             continue
         for mmi, mmi_exposed in stats_aggregation.iteritems():
-            mmi_fatalities = (
-                int(mmi_exposed * fatality_rate[mmi]))  # rounding down
+            mmi_fatalities = int(  # rounding down
+                mmi_exposed * fatality_rate(
+                    mmi, classification_key))
             mmi_displaced = (
                 (mmi_exposed - mmi_fatalities) *
                 displacement_rate(mmi, classification_key))

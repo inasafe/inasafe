@@ -387,6 +387,20 @@ concepts['infant'] = {
         }
     ],
 }
+concepts['child'] = {
+    'group': tr('Demographics'),
+    'key': 'child',
+    'description': tr(
+        'A young human being below the age of puberty or below the legal age '
+        'of majority.'),
+    'citations': [
+        {
+            'text': tr(
+                'Oxford Dictionary.'),
+            'link': u'https://en.oxforddictionaries.com/definition/child'
+        }
+    ],
+}
 concepts['disabled'] = {
     'group': tr('Vulnerability'),
     'key': 'disabled',
@@ -545,6 +559,50 @@ concepts['rounding_methodology'] = {
     'citations': [
         {
             'text': '',
+            'link': u''
+        }
+    ],
+}
+concepts['under_5'] = {
+    'group': tr('Vulnerability'),
+    'key': 'under_5',
+    'description': tr(''),
+    'citations': [
+        {
+            'text': tr(''),
+            'link': u''
+        }
+    ],
+}
+concepts['over_60'] = {
+    'group': tr('Vulnerability'),
+    'key': 'over_60',
+    'description': tr(''),
+    'citations': [
+        {
+            'text': tr(''),
+            'link': u''
+        }
+    ],
+}
+concepts['child_bearing_age'] = {
+    'group': tr('Gender'),
+    'key': 'child_bearing_age',
+    'description': tr(''),
+    'citations': [
+        {
+            'text': tr(''),
+            'link': u''
+        }
+    ],
+}
+concepts['pregnant_lactating'] = {
+    'group': tr('Gender'),
+    'key': 'pregnant_lactating',
+    'description': tr(''),
+    'citations': [
+        {
+            'text': tr(''),
             'link': u''
         }
     ],

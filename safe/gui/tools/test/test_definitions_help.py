@@ -4,7 +4,6 @@
 
 import unittest
 import logging
-from safe.utilities.i18n import tr
 from safe.gui.tools.help import definitions_help
 from safe.test.utilities import get_control_text
 

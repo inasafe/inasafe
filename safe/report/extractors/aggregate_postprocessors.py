@@ -11,10 +11,16 @@ from safe.definitions.fields import (
     aggregation_name_field,
     displaced_field,
     male_displaced_count_field)
+from safe.definitions.field_groups import (
+    age_displaced_count_group,
+    gender_displaced_count_group,
+    vulnerability_displaced_count_group)
 from safe.definitions.minimum_needs import minimum_needs_fields
 from safe.definitions.post_processors import (
     age_postprocessors,
-    female_postprocessors)
+    female_postprocessors,
+    gender_postprocessors,
+    vulnerability_postprocessors)
 from safe.definitions.utilities import postprocessor_output_field
 from safe.report.extractors.util import (
     value_from_field_name,
@@ -86,12 +92,27 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
         context['header'] = resolve_from_dictionary(
             extra_args, 'header')
 
-    age_fields = [postprocessor_output_field(p) for p in age_postprocessors]
-    gender_fields = [male_displaced_count_field] + [
-        postprocessor_output_field(p) for p in female_postprocessors]
+    age_items = {
+        'group': age_displaced_count_group,
+        'group_header': u'Age breakdown (in affected area)',
+        'fields': [postprocessor_output_field(p) for p in age_postprocessors]
+    }
+    gender_items = {
+        'group': gender_displaced_count_group,
+        'group_header': u'Gender breakdown (in affected area)',
+        'fields': [
+            postprocessor_output_field(p) for p in gender_postprocessors]
+    }
+    vulnerability_items = {
+        'group': vulnerability_displaced_count_group,
+        'group_header': u'Vulnerability breakdown (in affected area)',
+        'fields': [
+            postprocessor_output_field(p) for p in (
+                vulnerability_postprocessors)]
+    }
 
     # check age_fields exists
-    for field in age_fields:
+    for field in age_items['fields']:
         if field['key'] in analysis_layer_fields:
             no_age_field = False
             break
@@ -99,12 +120,20 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
         no_age_field = True
 
     # check gender_fields exists
-    for field in gender_fields:
+    for field in gender_items['fields']:
         if field['key'] in analysis_layer_fields:
             no_gender_field = False
             break
     else:
         no_gender_field = True
+
+    # check vulnerability_fields exists
+    for field in vulnerability_items['fields']:
+        if field['key'] in analysis_layer_fields:
+            no_vulnerability_field = False
+            break
+    else:
+        no_vulnerability_field = True
 
     age_section_header = resolve_from_dictionary(
         extra_args, ['sections', 'age', 'header'])
@@ -126,7 +155,7 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
         context['sections']['age'] = create_section(
             aggregation_summary,
             analysis_layer,
-            age_fields,
+            age_items,
             age_section_header,
             use_aggregation=use_aggregation,
             debug_mode=debug_mode,
@@ -152,8 +181,34 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
         context['sections']['gender'] = create_section(
             aggregation_summary,
             analysis_layer,
-            gender_fields,
+            gender_items,
             gender_section_header,
+            use_aggregation=use_aggregation,
+            debug_mode=debug_mode,
+            extra_component_args=extra_args)
+
+    vulnerability_section_header = resolve_from_dictionary(
+        extra_args, ['sections', 'vulnerability', 'header'])
+    if zero_displaced:
+        context['sections']['vulnerability'] = {
+            'header': vulnerability_section_header,
+            'empty': True,
+            'message': resolve_from_dictionary(
+                extra_args, ['defaults', 'zero_displaced_message'])
+        }
+    elif no_vulnerability_field:
+        context['sections']['vulnerability'] = {
+            'header': vulnerability_section_header,
+            'empty': True,
+            'message': resolve_from_dictionary(
+                extra_args, ['defaults', 'no_vulnerability_rate_message'])
+        }
+    else:
+        context['sections']['vulnerability'] = create_section(
+            aggregation_summary,
+            analysis_layer,
+            vulnerability_items,
+            vulnerability_section_header,
             use_aggregation=use_aggregation,
             debug_mode=debug_mode,
             extra_component_args=extra_args)
@@ -172,8 +227,12 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
     elif use_aggregation:
         # minimum needs should provide unit for column headers
         units_label = []
+        minimum_needs_items = {
+            'group_header': u'Minimum needs breakdown (in affected area)',
+            'fields': minimum_needs_fields
+        }
 
-        for field in minimum_needs_fields:
+        for field in minimum_needs_items['fields']:
             need = field['need_parameter']
             if isinstance(need, ResourceParameter):
                 unit = None
@@ -187,7 +246,7 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
         context['sections']['minimum_needs'] = create_section(
             aggregation_summary,
             analysis_layer,
-            minimum_needs_fields,
+            minimum_needs_items,
             minimum_needs_section_header,
             units_label=units_label,
             debug_mode=debug_mode,
@@ -303,7 +362,13 @@ def create_section_with_aggregation(
 
     # retrieving postprocessor
     postprocessors_fields_found = []
-    for output_field in postprocessor_fields:
+
+    if type(postprocessor_fields) is dict:
+        output_fields = postprocessor_fields['fields']
+    else:
+        output_fields = postprocessor_fields
+
+    for output_field in output_fields:
         if output_field['key'] in aggregation_summary_fields:
             postprocessors_fields_found.append(output_field)
 
@@ -330,6 +395,8 @@ def create_section_with_aggregation(
     ]
     row_values = []
 
+    group_fields_found = []
+    start_group_header = True
     for idx, output_field in enumerate(postprocessors_fields_found):
         name = output_field['name']
         if units_label or output_field.get('unit'):
@@ -351,7 +418,26 @@ def create_section_with_aggregation(
             header_format = u'{name}'
             header = header_format.format(name=name)
 
-        columns.append(header)
+        if type(postprocessor_fields) is dict:
+            try:
+                group_header = postprocessor_fields['group_header']
+                group_fields = postprocessor_fields['group']['fields']
+                if output_field in group_fields:
+                    group_fields_found.append(output_field)
+                else:
+                    columns.append(header)
+                    continue
+            except KeyError:
+                group_fields_found.append(output_field)
+
+        header_dict = {
+            'name': header,
+            'group_header': group_header,
+            'start_group_header': start_group_header
+        }
+
+        start_group_header = False
+        columns.append(header_dict)
 
     """Generating values for rows"""
 
@@ -420,12 +506,22 @@ def create_section_with_aggregation(
 
     notes = resolve_from_dictionary(
         extra_component_args, ['defaults', 'notes'])
+
+    if type(notes) is not list:
+        notes = [notes]
+
+    try:
+        notes += postprocessor_fields['group']['notes']
+    except (TypeError, KeyError):
+        pass
+
     return {
         'notes': notes,
         'header': section_header,
         'columns': columns,
         'rows': row_values,
         'totals': totals,
+        'group_header_colspan': len(group_fields_found)
     }
 
 
@@ -470,7 +566,7 @@ def create_section_without_aggregation(
 
     # retrieving postprocessor
     postprocessors_fields_found = []
-    for output_field in postprocessor_fields:
+    for output_field in postprocessor_fields['fields']:
         if output_field['key'] in aggregation_summary_fields:
             postprocessors_fields_found.append(output_field)
 
