@@ -512,15 +512,15 @@ post_processor_additional_rice = {
         '"Displaced" is defined as: {displaced_concept}').format(
             displaced_concept=concepts['displaced_people']['description']),
     'input': {
-        'female_displaced':
+        'pregnant_lactating_displaced':
             {
-                'value': displaced_field,
+                'value': pregnant_lactating_displaced_count_field,
                 'type': field_input_type,
             },
         'additional_rice_ratio':
             {
                 'type': constant_input_type,
-                'value': (0.024 + 0.026) * 500 * 7 * 0.1 / 129,
+                'value': 500 * 7 * 0.1 / 129,
             }
     },
     'output': {
@@ -536,6 +536,10 @@ post_processor_additional_rice = {
         #   0.1 kg rice / 129 Kkal
         #
         # displaced_population * (0.024 + 0.026) * 550 * 7 * 0.1 / 129
+
+        # Update, 19 May 2017, Ismail Sunni
+        # Since we have pregnant and lactating displace field, we will use it
+        # to replace the hard coded value.
         'additional_rice': {
             'value': additional_rice_count_field,
             'type': function_process,
