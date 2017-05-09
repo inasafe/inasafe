@@ -132,6 +132,9 @@ class FieldMappingTab(QWidget, object):
         :param layer: A vector layer that has been already patched with
             metadata.
         :type layer: QgsVectorLayer
+
+        :param keywords: Custom keyword for the layer.
+        :type keywords: dict, None
         """
         self.layer = layer
         if keywords is not None:
