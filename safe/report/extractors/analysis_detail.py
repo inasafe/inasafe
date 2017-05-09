@@ -154,10 +154,10 @@ def analysis_detail_extractor(impact_report, component_metadata):
         headers.append(hazard_class_name)
 
     if affected_header_index:
-        not_affected_header_index = len(hazard_classification['classes']) + 1
+        not_affected_header_index = len(hazard_classification['classes']) + 2
     else:
         affected_header_index = len(hazard_classification['classes']) + 1
-        not_affected_header_index = affected_header_index + 1
+        not_affected_header_index = affected_header_index + 2
 
     headers.insert(affected_header_index, total_affected_field['name'])
     headers.insert(not_affected_header_index, total_not_affected_field['name'])
@@ -314,11 +314,14 @@ def analysis_detail_extractor(impact_report, component_metadata):
     # create total header
     footers = [total_field['name']]
     # total for hazard
+    save_total_affected_field = False
     for hazard_class in hazard_classification['classes']:
         # hazard_count_field is a dynamic field with hazard class
         # as parameter
         field_key_name = hazard_count_field['key'] % (
             hazard_class['key'],)
+        if not hazard_class.get('affected'):
+            save_total_affected_field = True
 
         group_key = None
         for key, group in header_hazard_group.iteritems():
@@ -343,7 +346,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
         if count_value == '0':
             # if total affected for hazard class is zero, delete entire
             # column
-            column_index = len(footers)
+            column_index = len(footers) + int(save_total_affected_field)
             # delete header column
             headers = headers[:column_index] + headers[column_index + 1:]
             for row_idx in range(0, len(details)):
