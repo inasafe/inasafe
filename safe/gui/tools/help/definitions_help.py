@@ -2,6 +2,7 @@
 """Help text for the dock widget."""
 
 from os.path import exists
+import copy
 import logging
 from PyQt4 import QtCore
 from safe.utilities.i18n import tr
@@ -42,6 +43,20 @@ DETAILS_SUBGROUP_STYLE = styles.GREY_LEVEL_6_STYLE  # h5 numbered
 # For images
 SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
 MEDIUM_ICON_STYLE = styles.MEDIUM_ICON_STYLE
+HEADING_LOOKUPS = {
+    1: SECTION_STYLE,
+    2: SUBSECTION_STYLE,
+    3: BLUE_CHAPTER_STYLE,
+    4: DETAILS_STYLE,
+    5: DETAILS_SUBGROUP_STYLE,
+}
+HEADING_COUNTS = {
+    1: 1,
+    2: 1,
+    3: 1,
+    4: 1,
+    5: 1,
+}
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -100,16 +115,25 @@ def content():
         message,
         table_of_contents,
         'overview',
-        tr('Overview'))
+        tr('Overview'),
+        heading_level=1)
     ##
     # Credits and disclaimers ...
     ##
-    header = m.Heading(tr('Disclaimer'), **BLUE_CHAPTER_STYLE)
-    message.add(header)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'disclaimer',
+        tr('Disclaimer'),
+        heading_level=2)
     message.add(m.Paragraph(definitions.messages.disclaimer()))
 
-    header = m.Heading(tr('Limitations and License'), **BLUE_CHAPTER_STYLE)
-    message.add(header)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'limitations',
+        tr('Limitations and License'),
+        heading_level=2)
     bullets = m.BulletedList()
     for item in definitions.limitations():
         bullets.add(item)
@@ -125,7 +149,8 @@ def content():
         message,
         table_of_contents,
         'glossary',
-        tr('Glossary of terms'))
+        tr('Glossary of terms'),
+        heading_level=1)
 
     last_group = None
     table = None
@@ -134,8 +159,12 @@ def content():
         if current_group != last_group:
             if last_group is not None:
                 message.add(table)
-            header = m.Heading(current_group, **SUBSECTION_STYLE)
-            message.add(header)
+            _create_section_header(
+                message,
+                table_of_contents,
+                current_group.replace(' ', '-'),
+                current_group,
+                heading_level=2)
             table = _start_glossary_table(current_group)
             last_group = current_group
         row = m.Row()
@@ -162,67 +191,117 @@ def content():
         message,
         table_of_contents,
         'core-functionality',
-        tr('Core functionality and tools'))
+        tr('Core functionality and tools'),
+        heading_level=1)
 
-    header = m.Heading(tr('The InaSAFE Dock'), **SUBSECTION_STYLE)
-    message.add(header)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'dock',
+        tr('The InaSAFE Dock'),
+        heading_level=2)
     message.add(dock_help())
 
-    header = m.Heading(tr('InaSAFE Reports'), **SUBSECTION_STYLE)
-    message.add(header)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'reports',
+        tr('InaSAFE Reports'),
+        heading_level=2)
     message.add(report_help())
 
-    header = m.Heading(tr(
-        'Managing analysis extents with the extents selector'),
-        **SUBSECTION_STYLE)
-    message.add(header)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'extents',
+        tr('Managing analysis extents with the extents selector'),
+        heading_level=2)
     message.add(extent_help())
 
-    header = m.Heading(tr('InaSAFE Options'), **SUBSECTION_STYLE)
-    message.add(header)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'options',
+        tr('InaSAFE Options'),
+        heading_level=2)
     message.add(options_help())
 
-    header = m.Heading(tr('The Batch Runner'), **SUBSECTION_STYLE)
-    message.add(header)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'batch-runner',
+        tr('The Batch Runner'),
+        heading_level=2)
     message.add(batch_help())
 
-    header = m.Heading(tr('The OpenStreetMap Downloader'), **SUBSECTION_STYLE)
-    message.add(header)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'osm-downloader',
+        tr('The OpenStreetmap Downloader'),
+        heading_level=2)
     message.add(osm_help())
 
-    header = m.Heading(tr('The PetaBencana Downloader'), **SUBSECTION_STYLE)
-    message.add(header)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'petabencana-downloader',
+        tr('The PetaBencana Downloader'),
+        heading_level=2)
     message.add(petabencana_help())
 
-    header = m.Heading(tr('The Shakemap Converter'), **SUBSECTION_STYLE)
-    message.add(header)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'shakemap-converter',
+        tr('The Shakemap Converter'),
+        heading_level=2)
     message.add(shakemap_help())
 
-    header = m.Heading(tr('The Multi Buffer Tool'), **SUBSECTION_STYLE)
-    message.add(header)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'multi-buffer-tool',
+        tr('The Multi Buffer Tool'),
+        heading_level=2)
     message.add(multi_buffer_help())
 
-    # Field mappint tool has a few added bits to enumerate the groups
-    header = m.Heading(tr('The Field Mapping Tool'), **SUBSECTION_STYLE)
-    message.add(header)
+    # Field mapping tool has a few added bits to enumerate the groups
+    _create_section_header(
+        message,
+        table_of_contents,
+        'field-mapping-tool',
+        tr('The Field MappingTool'),
+        heading_level=2)
     message.add(field_mapping_tool_help())
 
-    header = m.Heading(tr('Exposure Groups'), **BLUE_CHAPTER_STYLE)
-    message.add(header)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'exposure-groups',
+        tr('Exposure Groups'),
+        heading_level=3)
     message.add(m.Paragraph(
         'The following demographic groups apply only to vector population '
         'exposure layers:'
     ))
     for group in exposure_field_groups:
-        message.add(definition_to_message(group, DETAILS_STYLE))
+        definition_to_message(
+            group, message, table_of_contents, heading_level=4)
 
-    header = m.Heading(tr('Aggregation Groups'), **BLUE_CHAPTER_STYLE)
-    message.add(header)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'aggregation-groups',
+        tr('Aggregation Groups'),
+        heading_level=3)
     message.add(m.Paragraph(
         'The following demographic groups apply only to aggregation layers:'
     ))
     for group in aggregation_field_groups:
-        message.add(definition_to_message(group, DETAILS_STYLE))
+        definition_to_message(
+            group, message, table_of_contents, heading_level=4)
+
     # End of field mapping tool help
 
     # Keep this last in the tool section please as it has subsections
@@ -231,12 +310,21 @@ def content():
         message,
         table_of_contents,
         'minimum-needs',
-        tr('Minimum Needs'))
-    header = m.Heading(tr('The minimum needs tool'), **SUBSECTION_STYLE)
-    message.add(header)
+        tr('Minimum Needs'),
+        heading_level=2)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'minimum-needs-tool',
+        tr('The minimum needs tool'),
+        heading_level=3)
     message.add(needs_help())
-    header = m.Heading(tr('The minimum needs manager'), **SUBSECTION_STYLE)
-    message.add(header)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'minimum-manager',
+        tr('The minimum needs manager'),
+        heading_level=3)
     message.add(needs_manager_help())
 
     ##
@@ -247,19 +335,30 @@ def content():
         message,
         table_of_contents,
         'analysis-steps',
-        tr('Analysis steps'))
-    header = m.Heading(tr('Analysis internal process'), **SUBSECTION_STYLE)
-    message.add(header)
+        tr('Analysis steps'),
+        heading_level=1)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'analysis-internal-process',
+        tr('Analysis internal process'),
+        heading_level=2)
     analysis = definitions.concepts['analysis']
     message.add(analysis['description'])
     url = _definition_screenshot_url(analysis)
     if url:
         message.add(m.Paragraph(m.Image(url), style_class='text-center'))
-    header = m.Heading(tr('Progress reporting steps'), **SUBSECTION_STYLE)
-    message.add(header)
+
+    _create_section_header(
+        message,
+        table_of_contents,
+        'analysis-progress-reporting',
+        tr('Progress reporting steps'),
+        heading_level=2)
     steps = definitions.analysis_steps.values()
     for step in steps:
-        message.add(definition_to_message(step, BLUE_CHAPTER_STYLE))
+        definition_to_message(
+            step, message, table_of_contents, heading_level=3)
 
     ##
     #  Hazard definitions
@@ -269,15 +368,22 @@ def content():
         message,
         table_of_contents,
         'hazards',
-        tr('Hazard Concepts'))
+        tr('Hazard Concepts'),
+        heading_level=1)
 
     hazard_category = definitions.hazard_category
-    message.add(definition_to_message(
-        hazard_category, heading_style=SUBSECTION_STYLE))
+    definition_to_message(
+        hazard_category,
+        message,
+        table_of_contents,
+        heading_level=2)
 
     hazards = definitions.hazards
-    message.add(definition_to_message(
-        hazards, heading_style=SUBSECTION_STYLE))
+    definition_to_message(
+        hazards,
+        message,
+        table_of_contents,
+        heading_level=2)
 
     ##
     #  Exposure definitions
@@ -287,10 +393,15 @@ def content():
         message,
         table_of_contents,
         'exposures',
-        tr('Exposure Concepts'))
+        tr('Exposure Concepts'),
+        heading_level=1)
     exposures = definitions.exposures
-    message.add(
-        definition_to_message(exposures, heading_style=SUBSECTION_STYLE))
+
+    definition_to_message(
+        exposures,
+        message,
+        table_of_contents,
+        heading_level=2)
 
     ##
     #  Defaults
@@ -300,7 +411,8 @@ def content():
         message,
         table_of_contents,
         'defaults',
-        tr('InaSAFE Defaults'))
+        tr('InaSAFE Defaults'),
+        heading_level=1)
     table = m.Table(style_class='table table-condensed table-striped')
     row = m.Row()
     row.add(m.Cell(tr('Name')), header_flag=True)
@@ -334,41 +446,58 @@ def content():
         message,
         table_of_contents,
         'all-fields',
-        tr('Fields'))
-    header = m.Heading(tr('Input dataset fields'), **SUBSECTION_STYLE)
-    message.add(header)
+        tr('Fields'),
+        heading_level=1)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'input-fields',
+        tr('Input dataset fields'),
+        heading_level=2)
     _create_fields_section(
         message,
+        table_of_contents,
         tr('Exposure fields'),
         definitions.exposure_fields)
     _create_fields_section(
         message,
+        table_of_contents,
         tr('Hazard fields'),
         definitions.hazard_fields)
     _create_fields_section(
         message,
+        table_of_contents,
         tr('Aggregation fields'),
         definitions.aggregation_fields)
-    header = m.Heading(tr('Output dataset fields'), **SUBSECTION_STYLE)
-    message.add(header)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'output-fields',
+        tr('Output dataset fields'),
+        heading_level=2)
     _create_fields_section(
         message,
+        table_of_contents,
         tr('Impact fields'),
         definitions.impact_fields)
     _create_fields_section(
         message,
+        table_of_contents,
         tr('Aggregate hazard fields'),
         definitions.aggregate_hazard_fields)
     _create_fields_section(
         message,
+        table_of_contents,
         tr('Aggregation summary fields'),
         definitions.aggregation_summary_fields)
     _create_fields_section(
         message,
+        table_of_contents,
         tr('Exposure summary table fields'),
         definitions.exposure_summary_table_fields)
     _create_fields_section(
         message,
+        table_of_contents,
         tr('Analysis fields'),
         definitions.analysis_fields)
 
@@ -380,19 +509,40 @@ def content():
         message,
         table_of_contents,
         'geometries',
-        tr('Layer Geometry Types'))
-    header = m.Heading(tr('Vector'), **SUBSECTION_STYLE)
-    message.add(header)
-    message.add(definition_to_message(
-        definitions.layer_geometry_point, BLUE_CHAPTER_STYLE))
-    message.add(definition_to_message(
-        definitions.layer_geometry_line, BLUE_CHAPTER_STYLE))
-    message.add(definition_to_message(
-        definitions.layer_geometry_polygon, BLUE_CHAPTER_STYLE))
-    header = m.Heading(tr('Raster'), **SUBSECTION_STYLE)
-    message.add(header)
-    message.add(definition_to_message(
-        definitions.layer_geometry_raster, BLUE_CHAPTER_STYLE))
+        tr('Layer Geometry Types'),
+        heading_level=1)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'vector-geometries',
+        tr('Vector'),
+        heading_level=2)
+    definition_to_message(
+        definitions.layer_geometry_point,
+        message,
+        table_of_contents,
+        heading_level=3)
+    definition_to_message(
+        definitions.layer_geometry_line,
+        message,
+        table_of_contents,
+        heading_level=3)
+    definition_to_message(
+        definitions.layer_geometry_polygon,
+        message,
+        table_of_contents,
+        heading_level=3)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'raster-geometries',
+        tr('Raster'),
+        heading_level=2)
+    definition_to_message(
+        definitions.layer_geometry_raster,
+        message,
+        table_of_contents,
+        heading_level=3)
 
     ##
     #  Layer Modes
@@ -402,9 +552,13 @@ def content():
         message,
         table_of_contents,
         'layer-modes',
-        tr('Layer Modes'))
-    message.add(definition_to_message(
-        definitions.layer_mode, SUBSECTION_STYLE))
+        tr('Layer Modes'),
+        heading_level=1)
+    definition_to_message(
+        definitions.layer_mode,
+        message,
+        table_of_contents,
+        heading_level=2)
 
     ##
     #  Layer Purposes
@@ -414,24 +568,48 @@ def content():
         message,
         table_of_contents,
         'layer-purposes',
-        tr('Layer Purposes'))
-    message.add(definition_to_message(
-        definitions.layer_purpose_hazard, SUBSECTION_STYLE))
-    message.add(definition_to_message(
-        definitions.layer_purpose_exposure, SUBSECTION_STYLE))
-    message.add(definition_to_message(
-        definitions.layer_purpose_aggregation, SUBSECTION_STYLE))
-    message.add(definition_to_message(
-        definitions.layer_purpose_exposure_summary, SUBSECTION_STYLE))
-    message.add(definition_to_message(
+        tr('Layer Purposes'),
+        heading_level=1)
+    definition_to_message(
+        definitions.layer_purpose_hazard,
+        message,
+        table_of_contents,
+        heading_level=2)
+    definition_to_message(
+        definitions.layer_purpose_exposure,
+        message,
+        table_of_contents,
+        heading_level=2)
+    definition_to_message(
+        definitions.layer_purpose_aggregation,
+        message,
+        table_of_contents,
+        heading_level=2)
+    definition_to_message(
+        definitions.layer_purpose_exposure_summary,
+        message,
+        table_of_contents,
+        heading_level=2)
+    definition_to_message(
         definitions.layer_purpose_aggregate_hazard_impacted,
-        SUBSECTION_STYLE))
-    message.add(definition_to_message(
-        definitions.layer_purpose_aggregation_summary, SUBSECTION_STYLE))
-    message.add(definition_to_message(
-        definitions.layer_purpose_exposure_summary_table, SUBSECTION_STYLE))
-    message.add(definition_to_message(
-        definitions.layer_purpose_profiling, SUBSECTION_STYLE))
+        message,
+        table_of_contents,
+        heading_level=2)
+    definition_to_message(
+        definitions.layer_purpose_aggregation_summary,
+        message,
+        table_of_contents,
+        heading_level=2)
+    definition_to_message(
+        definitions.layer_purpose_exposure_summary_table,
+        message,
+        table_of_contents,
+        heading_level=2)
+    definition_to_message(
+        definitions.layer_purpose_profiling,
+        message,
+        table_of_contents,
+        heading_level=2)
 
     ##
     # All units
@@ -441,7 +619,8 @@ def content():
         message,
         table_of_contents,
         'all-units',
-        tr('All Units'))
+        tr('All Units'),
+        heading_level=1)
     table = m.Table(style_class='table table-condensed table-striped')
     row = m.Row()
     row.add(m.Cell(tr('Name')), header_flag=True)
@@ -466,30 +645,47 @@ def content():
         message,
         table_of_contents,
         'post-processors',
-        tr('Post Processors'))
-    header = m.Heading(tr('Post Processor Input Types'), **SUBSECTION_STYLE)
-    message.add(header)
+        tr('Post Processors'),
+        heading_level=1)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'post-processor-input-types',
+        tr('Post Processor Input Types'),
+        heading_level=2)
     table = _create_post_processor_subtable(
         definitions.post_processor_input_types
     )
     message.add(table)
 
-    header = m.Heading(tr('Post Processor Input Values'), **SUBSECTION_STYLE)
-    message.add(header)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'post-processor-input-values',
+        tr('Post Processor Input Values'),
+        heading_level=2)
     table = _create_post_processor_subtable(
         definitions.post_processor_input_values
     )
     message.add(table)
 
-    header = m.Heading(tr('Post Processor Process Types'), **SUBSECTION_STYLE)
-    message.add(header)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'post-processor-process-values',
+        tr('Post Processor Process Types'),
+        heading_level=2)
     table = _create_post_processor_subtable(
         definitions.post_processor_process_types
     )
     message.add(table)
 
-    header = m.Heading(tr('Post Processors'), **SUBSECTION_STYLE)
-    message.add(header)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'post-processors',
+        tr('Post Processors'),
+        heading_level=2)
     post_processors = definitions.post_processors
     table = m.Table(style_class='table table-condensed table-striped')
     row = m.Row()
@@ -552,14 +748,34 @@ def _start_glossary_table(group):
     return table
 
 
-def _create_section_header(message, table_of_contents, id, text):
+def _create_section_header(
+        message,
+        table_of_contents,
+        id,
+        text,
+        heading_level=1):
     # Warning a side effect here is that the SECTION_STYLE is updated
-    # when setting style as we don't have a deep copy
-    style = SECTION_STYLE
+    # when setting style as we modify the id so we have to make a deep copy
+    style = copy.deepcopy(HEADING_LOOKUPS[heading_level])
     style['element_id'] = id
+
+    HEADING_COUNTS[heading_level] += 1
+    # Reset the heading counts for headings below this level
+    # Also calculate the index of the TOC entry
+    index_number = ''
+    for key in HEADING_COUNTS.keys():
+        if key > heading_level:
+            HEADING_COUNTS[key] = 1
+        else:
+            index_number += str(HEADING_COUNTS[key]) + '.'
+
     header = m.Heading(text, **style)
-    link = m.Link('#%s' % id, text)
-    paragraph = m.Paragraph(link)
+    link = m.Link('#%s' % id, index_number + ' ' + text)
+    # See bootstrap docs for ml-1 explanation
+    # https://v4-alpha.getbootstrap.com/utilities/spacing/#examples
+    paragraph = m.Paragraph(
+        link,
+        style_class='ml-%i' % heading_level)
     table_of_contents.add(paragraph)
     message.add(header)
 
@@ -578,36 +794,58 @@ def _create_post_processor_subtable(item_list):
     return table
 
 
-def _create_fields_section(message, title, fields):
-    header = m.Heading(title, **BLUE_CHAPTER_STYLE)
-    message.add(header)
+def _create_fields_section(message, table_of_contents, title, fields):
+    _create_section_header(
+        message,
+        table_of_contents,
+        title.replace(' ', '-'),
+        title,
+        heading_level=3)
     table = _create_fields_table()
     for field in fields:
         _add_field_to_table(field, table)
     message.add(table)
 
 
-def definition_to_message(definition, heading_style=None):
+def definition_to_message(
+        definition, message=None, table_of_contents=None, heading_level=None):
     """Helper function to render a definition to a message.
 
     :param definition: A definition dictionary (see definitions package).
     :type definition: dict
 
-    :param heading_style: Optional style to apply to the definition
-        heading. See safe.messaging.styles
-    :type heading_style: dict
+    :param message: The message that the definition should be appended to.
+    :type message: safe_extras.parameters.message.Message
 
+    :param table_of_contents: Table of contents that the headings should be
+        included in.
+    :type message: safe_extras.parameters.message.Message
+
+    :param heading_level: Optional style to apply to the definition
+        heading. See HEADING_LOOKUPS
+    :type heading_level: int
 
     :returns: Message
     :rtype: str
     """
 
-    if heading_style:
-        header = m.Heading(definition['name'], **heading_style)
+    if message is None:
+        message = m.Message()
+
+    if table_of_contents is None:
+        table_of_contents = m.Message()
+
+    if heading_level:
+        _create_section_header(
+            message,
+            table_of_contents,
+            definition['name'].replace(' ', '-'),
+            definition['name'],
+            heading_level=heading_level)
     else:
         header = m.Paragraph(m.ImportantText(definition['name']))
-    message = m.Message()
-    message.add(header)
+        message.add(header)
+
     # If the definition has an icon, we put the icon and description side by
     # side in a table otherwise just show the description as a paragraph
     url = _definition_icon_url(definition)
@@ -649,8 +887,11 @@ def definition_to_message(definition, heading_style=None):
     # types contains e.g. hazard_all
     if 'types' in definition:
         for sub_definition in definition['types']:
-            message.add(definition_to_message(
-                sub_definition, RED_CHAPTER_STYLE))
+            definition_to_message(
+                sub_definition,
+                message,
+                table_of_contents,
+                heading_level=3)
 
     #
     # Notes section if available
@@ -785,9 +1026,11 @@ def definition_to_message(definition, heading_style=None):
         message.add(m.Paragraph(
             definitions.hazard_classification['description']))
         for inasafe_class in definition['classifications']:
-            message.add(definition_to_message(
+            definition_to_message(
                 inasafe_class,
-                DETAILS_SUBGROUP_STYLE))
+                message,
+                table_of_contents,
+                heading_level=3)
 
     if 'classes' in definition:
         message.add(m.Paragraph(m.ImportantText(tr('Classes:'))))
@@ -864,7 +1107,7 @@ def definition_to_message(definition, heading_style=None):
             # Description goes in its own row with spanning
             row = m.Row()
             row.add(m.Cell(''))
-            row.add(m.Cell(inasafe_class['description'], span=6))
+            row.add(m.Cell(inasafe_class['description'], span=7))
             table.add(row)
         # For hazard classes we also add the 'not affected' class manually:
         if definition['type'] == definitions.hazard_classification_type:
@@ -873,7 +1116,7 @@ def definition_to_message(definition, heading_style=None):
             row.add(m.Cell(
                 u'', attributes='style="background: %s;"' % colour))
             description = definitions.not_exposed_class['description']
-            row.add(m.Cell(description, span=6))
+            row.add(m.Cell(description, span=7))
             table.add(row)
 
         message.add(table)
@@ -966,7 +1209,7 @@ def _add_field_to_table(field, table):
     table.add(row)
     # Description goes in its own row with spanning
     row = m.Row()
-    row.add(m.Cell(field['description'], span=5))
+    row.add(m.Cell(field['description'], span=6))
     table.add(row)
 
 
