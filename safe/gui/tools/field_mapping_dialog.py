@@ -119,11 +119,14 @@ class FieldMappingDialog(QDialog, FORM_CLASS):
         self.cancel_button = self.button_box.button(QDialogButtonBox.Cancel)
         self.cancel_button.clicked.connect(self.reject)
 
-    def set_layer(self, layer=None):
+    def set_layer(self, layer=None, keywords=None):
         """Set layer and update UI accordingly.
 
         :param layer: A QgsVectorLayer.
         :type layer: QgsVectorLayer
+
+        :param keywords: Keywords for the layer.
+        :type keywords: dict, None
         """
         if self.field_mapping_widget is not None:
             self.field_mapping_widget.setParent(None)
@@ -141,22 +144,24 @@ class FieldMappingDialog(QDialog, FORM_CLASS):
         else:
             LOGGER.debug('A layer: %s' % self.layer.name())
 
-        # Always read from metadata file.
-        try:
-            self.metadata = self.keyword_io.read_keywords(self.layer)
-            self.layer.keywords = self.metadata
-        except (
-            NoKeywordsFoundError,
-            KeywordNotFoundError,
-            MetadataReadError) as e:
-            raise e
+        if keywords is not None:
+            self.metadata = keywords
+        else:
+            # Always read from metadata file.
+            try:
+                self.metadata = self.keyword_io.read_keywords(self.layer)
+            except (
+                NoKeywordsFoundError,
+                KeywordNotFoundError,
+                MetadataReadError) as e:
+                raise e
         if 'inasafe_default_values' not in self.metadata:
             self.metadata['inasafe_default_values'] = {}
         if 'inasafe_fields' not in self.metadata:
             self.metadata['inasafe_fields'] = {}
         self.field_mapping_widget = FieldMappingWidget(
             parent=self, iface=self.iface)
-        self.field_mapping_widget.set_layer(self.layer)
+        self.field_mapping_widget.set_layer(self.layer, self.metadata)
         self.field_mapping_widget.show()
         self.main_layout.addWidget(self.field_mapping_widget)
 

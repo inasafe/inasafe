@@ -32,23 +32,22 @@ class TestFieldMappingDialog(unittest.TestCase):
         layer = load_test_vector_layer(
             'gisv4', 'aggregation', 'small_grid_complex.geojson',
             with_keywords=False, clone_to_memory=True)
-        layer.keywords = {}
 
         field_mapping_dialog = FieldMappingDialog(parent=PARENT, iface=IFACE)
 
         # Raise exception when there is no keywords
         with self.assertRaises(KeywordNotFoundError):
-            field_mapping_dialog.set_layer(layer)
+            field_mapping_dialog.set_layer(layer, {})
 
         # Set layer with keywords
-        layer.keywords = {'layer_purpose': layer_purpose_aggregation['key']}
-        field_mapping_dialog.set_layer(layer)
+        keywords = {'layer_purpose': layer_purpose_aggregation['key']}
+        field_mapping_dialog.set_layer(layer, keywords)
 
         # Click OK
         field_mapping_dialog.accept()
         # Check the saved metadata
         self.assertDictEqual(
-            layer.keywords,
+            keywords,
             {
                 'layer_purpose': layer_purpose_aggregation['key'],
                 'inasafe_default_values': {},
@@ -57,17 +56,17 @@ class TestFieldMappingDialog(unittest.TestCase):
         )
 
         # Set layer with keywords
-        layer.keywords = {
+        keywords = {
             'layer_purpose': layer_purpose_aggregation['key'],
             'inasafe_default_values': {female_ratio_field['key']: 0.7},
         }
-        field_mapping_dialog.set_layer(layer)
+        field_mapping_dialog.set_layer(layer, keywords)
 
         # Click OK
         field_mapping_dialog.accept()
         # Check the saved metadata
         self.assertDictEqual(
-            layer.keywords,
+            keywords,
             {
                 'layer_purpose': layer_purpose_aggregation['key'],
                 'inasafe_default_values': {female_ratio_field['key']: 0.7},
