@@ -1,5 +1,5 @@
 # coding=utf-8
-"""List of custom validations for parameter container.."""
+"""List of custom validations for parameter container."""
 
 from safe.definitions.constants import STATIC, SINGLE_DYNAMIC
 import logging
