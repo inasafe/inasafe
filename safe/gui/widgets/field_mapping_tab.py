@@ -80,6 +80,7 @@ class FieldMappingTab(QWidget, object):
 
         # Header
         self.header_label = QLabel()
+        self.header_label.setWordWrap(True)
 
         # Content
         self.field_layout = QVBoxLayout()
@@ -269,8 +270,7 @@ class FieldMappingTab(QWidget, object):
         self.populate_field_list(excluded_fields=used_fields)
 
         # Set header
-        # TODO(IS): Set header text here
-        # header_text = tr('Pleas drag the field/s that represent')
+        self.header_label.setText(self.field_group['description'])
 
     def get_parameter_value(self):
         """Get parameter of the tab.
