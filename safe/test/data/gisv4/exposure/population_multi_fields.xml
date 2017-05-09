@@ -176,10 +176,10 @@
             <gco:CharacterString/>
           </classification>
           <inasafe_fields>
-            <gco:Dictionary>{&quot;exposure_id_field&quot;: &quot;exposure_id&quot;, &quot;population_count_field&quot;: [&quot;right_hand&quot;, &quot;left_hand&quot;], &quot;female_count_field&quot;: [&quot;F_0_4&quot;, &quot;F_5_9&quot;, &quot;F_9_15&quot;, &quot;F_15_30&quot;, &quot;F_30_60&quot;, &quot;F_60_100&quot;]}</gco:Dictionary>
+            <gco:Dictionary>{&quot;infant_count_field&quot;: [&quot;F_0_4&quot;, &quot;M_0_4&quot;], &quot;exposure_id_field&quot;: &quot;exposure_id&quot;, &quot;elderly_count_field&quot;: [&quot;M_60_100&quot;, &quot;F_60_100&quot;], &quot;population_count_field&quot;: [&quot;right_hand&quot;, &quot;left_hand&quot;], &quot;youth_count_field&quot;: [&quot;F_9_15&quot;, &quot;M_9_15&quot;]}</gco:Dictionary>
           </inasafe_fields>
           <inasafe_default_values>
-            <gco:Dictionary/>
+            <gco:Dictionary>{}</gco:Dictionary>
           </inasafe_default_values>
           <scale>
             <gco:CharacterString/>

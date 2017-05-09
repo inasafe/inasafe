@@ -30,13 +30,19 @@ from safe.definitions.constants import (
 )
 
 from safe_extras.parameters.qt_widgets.parameter_container import (
-    ParameterContainer)
+    ParameterContainer, InvalidValidationException)
 from safe.common.exceptions import KeywordNotFoundError
+
+# Note(IS): I need to use alias to make sure it throws the same exception class
+from safe_extras.parameters.parameter_exceptions import (
+    InvalidValidationException as OriginalValidationException)
+
 from safe.utilities.i18n import tr
 from safe.common.parameters.group_select_parameter import (
     GroupSelectParameter)
 from safe.common.parameters.group_select_parameter_widget import (
     GroupSelectParameterWidget)
+from safe.common.parameters.validators import validators
 from safe.utilities.default_values import get_inasafe_default_value_qsetting
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
@@ -208,7 +214,8 @@ class FieldMappingTab(QWidget, object):
                         selected_option = CUSTOM_VALUE
                 min_value = field['default_value'].get('min_value', 0)
                 max_value = field['default_value'].get('max_value', 100)
-                step = (max_value - min_value) / 1000.0
+                default_step = (max_value - min_value) / 100.0
+                step = field['default_value'].get('increment', default_step)
                 options[CUSTOM_VALUE] = {
                     'label': tr('Custom'),
                     'value': custom_value,
@@ -249,6 +256,14 @@ class FieldMappingTab(QWidget, object):
         )
         self.parameter_container.setup_ui()
 
+        constraints = self.field_group.get('constraints', {})
+
+        for key, value in constraints.items():
+            self.parameter_container.add_validator(
+                validators[key],
+                kwargs=value['kwargs'],
+                validation_message=value['message'])
+
         self.parameter_layout.addWidget(self.parameter_container)
 
         self.populate_field_list(excluded_fields=used_fields)
@@ -264,7 +279,10 @@ class FieldMappingTab(QWidget, object):
             {'fields': {}, 'values': {}}.
         :rtype: dict
         """
-        parameters = self.parameter_container.get_parameters(True)
+        try:
+            parameters = self.parameter_container.get_parameters(True)
+        except InvalidValidationException as e:
+            raise OriginalValidationException(e)
         field_parameters = {}
         value_parameters = {}
         for parameter in parameters:
