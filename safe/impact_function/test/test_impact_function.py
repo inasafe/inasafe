@@ -772,6 +772,20 @@ class TestImpactFunction(unittest.TestCase):
 
         self.assertDictEqual(expected_provenance, impact_function.provenance)
 
+        # Test to make sure the monkey patch is not updated #4128
+        self.assertDictEqual(
+            expected_provenance['aggregation_keywords'],
+            aggregation_layer.keywords
+        )
+        self.assertDictEqual(
+            expected_provenance['hazard_keywords'],
+            hazard_layer.keywords
+        )
+        self.assertDictEqual(
+            expected_provenance['exposure_keywords'],
+            exposure_layer.keywords
+        )
+
     def test_provenance_without_aggregation(self):
         """Test provenance of impact function without aggregation."""
         hazard_layer = load_test_vector_layer(
