@@ -269,21 +269,19 @@ class WizardDialog(QDialog, FORM_CLASS):
         :type layer: QgsMapLayer
         """
         self.layer = layer or self.iface.mapCanvas().currentLayer()
+
+        # Always read from metadata file.
         try:
-            # Check the keywords in the layer properties first
-            self.existing_keywords = self.layer.keywords
-        except AttributeError:
-            try:
-                self.existing_keywords = self.keyword_io.read_keywords(
-                    self.layer)
-            except (HashNotFoundError,
-                    OperationalError,
-                    NoKeywordsFoundError,
-                    KeywordNotFoundError,
-                    InvalidParameterError,
-                    UnsupportedProviderError,
-                    MetadataReadError):
-                self.existing_keywords = None
+            self.existing_keywords = self.keyword_io.read_keywords(
+                self.layer)
+        except (HashNotFoundError,
+                OperationalError,
+                NoKeywordsFoundError,
+                KeywordNotFoundError,
+                InvalidParameterError,
+                UnsupportedProviderError,
+                MetadataReadError):
+            self.existing_keywords = None
         self.set_mode_label_to_keywords_creation()
 
         step = self.step_kw_purpose

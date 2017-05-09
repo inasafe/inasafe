@@ -149,17 +149,16 @@ class FieldMappingDialog(QDialog, FORM_CLASS):
             return
         else:
             LOGGER.debug('A layer: %s' % self.layer.name())
+
+        # Always read from metadata file.
         try:
-            self.metadata = self.layer.keywords
-        except AttributeError:
-            try:
-                self.metadata = self.keyword_io.read_keywords(self.layer)
-                self.layer.keywords = self.metadata
-            except (
-                NoKeywordsFoundError,
-                KeywordNotFoundError,
-                MetadataReadError) as e:
-                raise e
+            self.metadata = self.keyword_io.read_keywords(self.layer)
+            self.layer.keywords = self.metadata
+        except (
+            NoKeywordsFoundError,
+            KeywordNotFoundError,
+            MetadataReadError) as e:
+            raise e
         if 'inasafe_default_values' not in self.metadata:
             self.metadata['inasafe_default_values'] = {}
         if 'inasafe_fields' not in self.metadata:
