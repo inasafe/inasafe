@@ -1327,9 +1327,9 @@ cyclone_au_bom_hazard_classes = {
         '<b>Tropical cyclone</b> intensity is classified using five classes '
         'according to the Australian Bureau of Meteorology. Tropical Cyclone '
         'intensity is defined as the maximum mean wind speed over open flat '
-        'land or water. This is sometimes referred to as the maximum '
-        'sustained wind and will be experienced around the eye-wall of the '
-        'cyclone.'),
+        'land or water, averaged over a 10-minute period. This is sometimes '
+        'referred to as the maximum sustained wind and will be experienced '
+        'around the eye-wall of the cyclone.'),
     'type': hazard_classification_type,
     'citations': [
         {
@@ -1361,16 +1361,14 @@ cyclone_au_bom_hazard_classes = {
                 'Extremely dangerous with widespread destruction. A Category '
                 '5 cyclone\'s strongest winds are VERY DESTRUCTIVE winds with '
                 'typical gusts over open flat land of more than 151 kt. '
-                'These winds correspond to the highest category on the '
-                'Beaufort scale, Beaufort 12 (Hurricane).'
             ),
             'fatality_rate': None,
             'displacement_rate': 1.0,
             'numeric_default_min': {
-                unit_knots['key']: 107,
-                unit_metres_per_second['key']: 55,
-                unit_miles_per_hour['key']: 123,
-                unit_kilometres_per_hour['key']: 198
+                unit_knots['key']: 153,
+                unit_metres_per_second['key']: 79,
+                unit_miles_per_hour['key']: 176,
+                unit_kilometres_per_hour['key']: 283
             },
             'numeric_default_max': big_number,
             'string_defaults': ['cat 5', 'category 5'],
@@ -1395,23 +1393,21 @@ cyclone_au_bom_hazard_classes = {
                 'caravans destroyed and blown away. Dangerous airborne debris '
                 '. Widespread power failures. A Category 4 cyclone\'s '
                 'strongest winds are VERY DESTRUCTIVE winds with typical '
-                'gusts over open flat land of 122 - 151 kt. These winds '
-                'correspond to the highest category on the Beaufort scale, '
-                'Beaufort 12 (Hurricane).'
+                'gusts over open flat land of 122 - 151 kt. '
             ),
             'fatality_rate': None,
             'displacement_rate': 0.97,
             'numeric_default_min': {
-                unit_knots['key']: 85,
-                unit_metres_per_second['key']: 44,
-                unit_miles_per_hour['key']: 98,
-                unit_kilometres_per_hour['key']: 157
+                unit_knots['key']: 121,
+                unit_metres_per_second['key']: 63,
+                unit_miles_per_hour['key']: 140,
+                unit_kilometres_per_hour['key']: 224
             },
             'numeric_default_max': {
-                unit_knots['key']: 107,
-                unit_metres_per_second['key']: 55,
-                unit_miles_per_hour['key']: 123,
-                unit_kilometres_per_hour['key']: 198
+                unit_knots['key']: 153,
+                unit_metres_per_second['key']: 79,
+                unit_miles_per_hour['key']: 176,
+                unit_kilometres_per_hour['key']: 283
             },
             'string_defaults': ['cat 4', 'category 4'],
             'citations': [
@@ -1434,22 +1430,21 @@ cyclone_au_bom_hazard_classes = {
                 'Some roof and structural damage. Some caravans destroyed.'
                 'Power failures likely. A Category 3 cyclone\'s strongest '
                 'winds are VERY DESTRUCTIVE winds with typical gusts over '
-                'open flat land of 90 - 121 kt. These winds correspond to the '
-                'highest category on the Beaufort scale, Beaufort 12 ('
-                'Hurricane).'),
+                'open flat land of 90 - 121 kt. '
+            ),
             'fatality_rate': None,
             'displacement_rate': 0.55,
             'numeric_default_min': {
-                unit_knots['key']: 63,
-                unit_metres_per_second['key']: 33,
-                unit_miles_per_hour['key']: 72,
-                unit_kilometres_per_hour['key']: 117
+                unit_knots['key']: 90,
+                unit_metres_per_second['key']: 47,
+                unit_miles_per_hour['key']: 103,
+                unit_kilometres_per_hour['key']: 167
             },
             'numeric_default_max': {
-                unit_knots['key']: 85,
-                unit_metres_per_second['key']: 44,
-                unit_miles_per_hour['key']: 98,
-                unit_kilometres_per_hour['key']: 157
+                unit_knots['key']: 121,
+                unit_metres_per_second['key']: 63,
+                unit_miles_per_hour['key']: 140,
+                unit_kilometres_per_hour['key']: 224
             },
             'string_defaults': ['cat 3', 'category 3'],
             'citations': [
@@ -1474,21 +1469,20 @@ cyclone_au_bom_hazard_classes = {
                 'power failure. Small craft may break moorings. A Category 2 '
                 'cyclone\'s strongest winds are DESTRUCTIVE winds with '
                 'typical gusts over open flat land of 68 - 89 kt. '
-                'These winds correspond to Beaufort 10 and 11 (Storm '
-                'and violent storm).'),
+            ),
             'fatality_rate': None,
             'displacement_rate': 0.06,
             'numeric_default_min': {
-                unit_knots['key']: 47,
-                unit_metres_per_second['key']: 24,
-                unit_miles_per_hour['key']: 54,
-                unit_kilometres_per_hour['key']: 88
+                unit_knots['key']: 67,
+                unit_metres_per_second['key']: 34,
+                unit_miles_per_hour['key']: 77,
+                unit_kilometres_per_hour['key']: 126
             },
             'numeric_default_max': {
-                unit_knots['key']: 63,
-                unit_metres_per_second['key']: 33,
-                unit_miles_per_hour['key']: 72,
-                unit_kilometres_per_hour['key']: 117
+                unit_knots['key']: 90,
+                unit_metres_per_second['key']: 47,
+                unit_miles_per_hour['key']: 103,
+                unit_kilometres_per_hour['key']: 167
             },
             'string_defaults': ['cat 2', 'category 2'],
             'citations': [
@@ -1511,21 +1505,21 @@ cyclone_au_bom_hazard_classes = {
                 'Negligible house damage. Damage to some crops, trees and '
                 'caravans. Craft may drag moorings. A Category 1 cyclone\'s '
                 'strongest winds are GALES with typical gusts over open '
-                'flat land of 49 - 67 kt. These winds correspond to Beaufort '
-                '8 and 9 (Gales and strong gales).'),
+                'flat land of 49 - 67 kt. '
+            ),
             'fatality_rate': None,
             'displacement_rate': 0.0,
             'numeric_default_min': {
-                unit_knots['key']: 34,
-                unit_metres_per_second['key']: 17,
-                unit_miles_per_hour['key']: 39,
-                unit_kilometres_per_hour['key']: 63
+                unit_knots['key']: 49,
+                unit_metres_per_second['key']: 24,
+                unit_miles_per_hour['key']: 56,
+                unit_kilometres_per_hour['key']: 90
             },
             'numeric_default_max': {
-                unit_knots['key']: 47,
-                unit_metres_per_second['key']: 24,
-                unit_miles_per_hour['key']: 54,
-                unit_kilometres_per_hour['key']: 88
+                unit_knots['key']: 67,
+                unit_metres_per_second['key']: 34,
+                unit_miles_per_hour['key']: 77,
+                unit_kilometres_per_hour['key']: 126
             },
             'string_defaults': ['cat 1', 'category 1'],
             'citations': [
@@ -1552,10 +1546,10 @@ cyclone_au_bom_hazard_classes = {
             'displacement_rate': 0.0,
             'numeric_default_min': 0,
             'numeric_default_max': {
-                unit_knots['key']: 34,
-                unit_metres_per_second['key']: 17,
-                unit_miles_per_hour['key']: 39,
-                unit_kilometres_per_hour['key']: 63
+                unit_knots['key']: 49,
+                unit_metres_per_second['key']: 24,
+                unit_miles_per_hour['key']: 56,
+                unit_kilometres_per_hour['key']: 90
             },
             'string_defaults': ['tropical depression', 'no', 'false'],
             'citations': [
@@ -1584,13 +1578,14 @@ cyclone_sshws_hazard_classes = {
     'name': tr('Hurricane classes (SSHWS)'),
     'description': tr(
         'The <b>Saffir-Simpson Hurricane Wind Scale</b> is a 1 to 5 rating '
-        'based on a hurricane\'s sustained wind speed. This scale '
-        'estimates potential property damage. Hurricanes reaching Category 3 '
-        'and higher are considered major hurricanes because of their '
-        'potential for significant loss of life and damage. Category 1 and 2 '
-        'storms are still dangerous, however, and require preventative '
-        'measures. In the western North Pacific, the term "super typhoon" is '
-        'used for tropical cyclones with sustained winds exceeding 150 mph.'),
+        'based on a hurricane\'s sustained wind speed, measured over a '
+        '1-minute period. This scale estimates potential property damage. '
+        'Hurricanes reaching Category 3 and higher are considered major '
+        'hurricanes because of their potential for significant loss of '
+        'life and damage. Category 1 and 2 storms are still dangerous, '
+        'however, and require preventative measures. In the western '
+        'North Pacific, the term "super typhoon" is used for tropical '
+        'cyclones with sustained winds exceeding 150 mph.'),
     'type': hazard_classification_type,
     'citations': [
         {
@@ -1623,10 +1618,10 @@ cyclone_sshws_hazard_classes = {
             'fatality_rate': None,
             'displacement_rate': 1.0,
             'numeric_default_min': {
-                unit_knots['key']: 137,
-                unit_metres_per_second['key']: 70,
-                unit_miles_per_hour['key']: 157,
-                unit_kilometres_per_hour['key']: 252
+                unit_knots['key']: 183,
+                unit_metres_per_second['key']: 94,
+                unit_miles_per_hour['key']: 210,
+                unit_kilometres_per_hour['key']: 337
             },
             'numeric_default_max': big_number,
             'string_defaults': ['cat 5', 'category 5'],
@@ -1656,18 +1651,18 @@ cyclone_sshws_hazard_classes = {
                 'area will be uninhabitable for weeks or months.'
             ),
             'fatality_rate': None,
-            'displacement_rate': 0.97,
+            'displacement_rate': 0.99,
             'numeric_default_min': {
-                unit_knots['key']: 113,
-                unit_metres_per_second['key']: 58,
-                unit_miles_per_hour['key']: 130,
-                unit_kilometres_per_hour['key']: 209
+                unit_knots['key']: 151,
+                unit_metres_per_second['key']: 77,
+                unit_miles_per_hour['key']: 174,
+                unit_kilometres_per_hour['key']: 279
             },
             'numeric_default_max': {
-                unit_knots['key']: 137,
-                unit_metres_per_second['key']: 70,
-                unit_miles_per_hour['key']: 157,
-                unit_kilometres_per_hour['key']: 252
+                unit_knots['key']: 183,
+                unit_metres_per_second['key']: 94,
+                unit_miles_per_hour['key']: 210,
+                unit_kilometres_per_hour['key']: 337
             },
             'string_defaults': ['cat 4', 'category 4'],
             'citations': [
@@ -1694,18 +1689,18 @@ cyclone_sshws_hazard_classes = {
                 'unavailable for several days to weeks after the storm '
                 'passes.'),
             'fatality_rate': None,
-            'displacement_rate': 0.55,
+            'displacement_rate': 0.9,
             'numeric_default_min': {
-                unit_knots['key']: 96,
-                unit_metres_per_second['key']: 49,
-                unit_miles_per_hour['key']: 111,
-                unit_kilometres_per_hour['key']: 178
+                unit_knots['key']: 128,
+                unit_metres_per_second['key']: 65,
+                unit_miles_per_hour['key']: 148,
+                unit_kilometres_per_hour['key']: 238
             },
             'numeric_default_max': {
-                unit_knots['key']: 113,
-                unit_metres_per_second['key']: 58,
-                unit_miles_per_hour['key']: 130,
-                unit_kilometres_per_hour['key']: 209
+                unit_knots['key']: 151,
+                unit_metres_per_second['key']: 77,
+                unit_miles_per_hour['key']: 174,
+                unit_kilometres_per_hour['key']: 279
             },
             'string_defaults': ['cat 3', 'category 3'],
             'citations': [
@@ -1732,18 +1727,18 @@ cyclone_sshws_hazard_classes = {
                 'power loss is expected with outages that could last from '
                 'several days to weeks.'),
             'fatality_rate': None,
-            'displacement_rate': 0.06,
+            'displacement_rate': 0.65,
             'numeric_default_min': {
-                unit_knots['key']: 83,
-                unit_metres_per_second['key']: 43,
-                unit_miles_per_hour['key']: 96,
-                unit_kilometres_per_hour['key']: 154
+                unit_knots['key']: 111,
+                unit_metres_per_second['key']: 57,
+                unit_miles_per_hour['key']: 128,
+                unit_kilometres_per_hour['key']: 206
             },
             'numeric_default_max': {
-                unit_knots['key']: 96,
-                unit_metres_per_second['key']: 49,
-                unit_miles_per_hour['key']: 111,
-                unit_kilometres_per_hour['key']: 178
+                unit_knots['key']: 128,
+                unit_metres_per_second['key']: 65,
+                unit_miles_per_hour['key']: 148,
+                unit_kilometres_per_hour['key']: 238
             },
             'string_defaults': ['cat 2', 'category 2'],
             'citations': [
@@ -1770,18 +1765,18 @@ cyclone_sshws_hazard_classes = {
                 'to power lines and poles likely will result in power outages '
                 'that could last a few to several days.'),
             'fatality_rate': None,
-            'displacement_rate': 0.0,
+            'displacement_rate': 0.15,
             'numeric_default_min': {
-                unit_knots['key']: 64,
-                unit_metres_per_second['key']: 33,
-                unit_miles_per_hour['key']: 74,
-                unit_kilometres_per_hour['key']: 120
+                unit_knots['key']: 85,
+                unit_metres_per_second['key']: 44,
+                unit_miles_per_hour['key']: 99,
+                unit_kilometres_per_hour['key']: 160
             },
             'numeric_default_max': {
-                unit_knots['key']: 83,
-                unit_metres_per_second['key']: 43,
-                unit_miles_per_hour['key']: 96,
-                unit_kilometres_per_hour['key']: 154
+                unit_knots['key']: 111,
+                unit_metres_per_second['key']: 57,
+                unit_miles_per_hour['key']: 128,
+                unit_kilometres_per_hour['key']: 238
             },
             'string_defaults': ['cat 1', 'category 1'],
             'citations': [
@@ -1805,10 +1800,10 @@ cyclone_sshws_hazard_classes = {
             'displacement_rate': 0.0,
             'numeric_default_min': 0,
             'numeric_default_max': {
-                unit_knots['key']: 64,
-                unit_metres_per_second['key']: 33,
-                unit_miles_per_hour['key']: 74,
-                unit_kilometres_per_hour['key']: 120
+                unit_knots['key']: 85,
+                unit_metres_per_second['key']: 44,
+                unit_miles_per_hour['key']: 199,
+                unit_kilometres_per_hour['key']: 160
             },
             'string_defaults': ['no', 'false'],
             'citations': [
