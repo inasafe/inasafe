@@ -133,7 +133,7 @@ class FieldMappingTab(QWidget, object):
         :type layer: QgsVectorLayer
         """
         self.layer = layer
-        if keywords:
+        if keywords is not None:
             self.metadata = keywords
         else:
             # Check if it has keywords

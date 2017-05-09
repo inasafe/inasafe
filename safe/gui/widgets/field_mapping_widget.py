@@ -9,6 +9,7 @@ from safe.common.exceptions import KeywordNotFoundError
 from safe.definitions.utilities import get_field_groups
 from safe.definitions.layer_purposes import (
     layer_purpose_exposure, layer_purpose_hazard)
+from safe.utilities.keyword_io import KeywordIO
 
 from safe.gui.widgets.field_mapping_tab import FieldMappingTab
 
@@ -37,6 +38,8 @@ class FieldMappingWidget(QTabWidget, object):
 
         self.tabs = []  # Store all tabs
 
+        self.keyword_io = KeywordIO()
+
     def set_layer(self, layer, keywords=None):
         """Set layer and update UI accordingly.
 
@@ -48,15 +51,10 @@ class FieldMappingWidget(QTabWidget, object):
         :type keywords: dict, None
         """
         self.layer = layer
-        if keywords:
+        if keywords is not None:
             self.metadata = keywords
         else:
-            # Check if it has keywords
-            if not hasattr(layer, 'keywords'):
-                message = 'Layer {layer_name} does not have keywords.'.format(
-                    layer_name=layer.name())
-                raise KeywordNotFoundError(message)
-            self.metadata = layer.keywords
+            self.metadata = self.keyword_io.read_keywords(self.layer)
         self.populate_tabs()
 
     def populate_tabs(self):
