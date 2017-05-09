@@ -772,19 +772,23 @@ class TestImpactFunction(unittest.TestCase):
 
         self.assertDictEqual(expected_provenance, impact_function.provenance)
 
+        # Future reference: I comment out these lines since the keywords
+        # properties are used in the report generation. Removing it will make
+        # the report generation fail. I will just make sure that the other
+        # tools will read from keywords file not from layer properties.
         # Test to make sure the monkey patch is not updated #4128
-        self.assertDictEqual(
-            expected_provenance['aggregation_keywords'],
-            aggregation_layer.keywords
-        )
-        self.assertDictEqual(
-            expected_provenance['hazard_keywords'],
-            hazard_layer.keywords
-        )
-        self.assertDictEqual(
-            expected_provenance['exposure_keywords'],
-            exposure_layer.keywords
-        )
+        # self.assertDictEqual(
+        #     expected_provenance['aggregation_keywords'],
+        #     aggregation_layer.keywords
+        # )
+        # self.assertDictEqual(
+        #     expected_provenance['hazard_keywords'],
+        #     hazard_layer.keywords
+        # )
+        # self.assertDictEqual(
+        #     expected_provenance['exposure_keywords'],
+        #     exposure_layer.keywords
+        # )
 
     def test_provenance_without_aggregation(self):
         """Test provenance of impact function without aggregation."""
