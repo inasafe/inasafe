@@ -8,11 +8,11 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 # InaSAFE Keyword Version compatibility.
-inasafe_keyword_version = '4.0'
+inasafe_keyword_version = '4.1'
 keyword_version_compatibilities = {
     # 'InaSAFE keyword version': 'List of supported InaSAFE keyword version'
     '3.3': ['3.2'],
     '3.4': ['3.2', '3.3'],
     '3.5': ['3.4', '3.3'],
-    # '4.0': ['3.5']
+    '4.1': ['4.0'],
 }

@@ -132,7 +132,9 @@ from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.metadata import (
     active_thresholds_value_maps, active_classification, copy_layer_keywords)
 from safe.utilities.utilities import (
-    replace_accentuated_characters, get_error_message)
+    replace_accentuated_characters,
+    get_error_message,
+    is_keyword_version_supported)
 from safe.utilities.profiling import (
     profile, clear_prof_data, profiling_log)
 from safe.utilities.settings import setting
@@ -718,7 +720,8 @@ class ImpactFunction(object):
             return PREPARE_FAILED_BAD_INPUT, message
 
         version = keywords.get(inasafe_keyword_version_key)
-        if version != inasafe_keyword_version:
+        supported = is_keyword_version_supported(version)
+        if not supported:
             parameters = {
                 'version': inasafe_keyword_version,
                 'source': layer.publicSource()
