@@ -47,7 +47,7 @@ class FieldMappingWidget(QTabWidget, object):
             metadata.
         :type layer: QgsVectorLayer
 
-        :param keywords: Custom keywor for the layer.
+        :param keywords: Custom keyword for the layer.
         :type keywords: dict, None
         """
         self.layer = layer
