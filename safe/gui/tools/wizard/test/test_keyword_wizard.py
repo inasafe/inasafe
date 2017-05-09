@@ -1016,12 +1016,10 @@ class TestKeywordWizard(unittest.TestCase):
             'layer_purpose': layer_purpose_aggregation['key'],
             'title': layer_title
         }
-        # Assigning dummy keyword
-        layer.keywords = expected_keyword
 
         # noinspection PyTypeChecker
         dialog = WizardDialog(iface=IFACE)
-        dialog.set_keywords_creation_mode(layer)
+        dialog.set_keywords_creation_mode(layer, expected_keyword)
 
         # Check if in select purpose step
         self.check_current_step(dialog.step_kw_purpose)
@@ -1236,11 +1234,10 @@ class TestKeywordWizard(unittest.TestCase):
             'layer_purpose': layer_purpose_exposure['key'],
             'layer_mode': layer_mode_continuous['key']
         }
-        layer.keywords = expected_keyword
 
         # noinspection PyTypeChecker
         dialog = WizardDialog(iface=IFACE)
-        dialog.set_keywords_creation_mode(layer)
+        dialog.set_keywords_creation_mode(layer, expected_keyword)
 
         # Check if in select purpose step
         self.check_current_step(dialog.step_kw_purpose)
@@ -1384,11 +1381,9 @@ class TestKeywordWizard(unittest.TestCase):
             'layer_purpose': layer_purpose_exposure['key'],
             'layer_mode': layer_mode_continuous['key']
         }
-        layer.keywords = expected_keyword
-
         # noinspection PyTypeChecker
         dialog = WizardDialog(iface=IFACE)
-        dialog.set_keywords_creation_mode(layer)
+        dialog.set_keywords_creation_mode(layer, expected_keyword)
 
         # Check if in select purpose step
         self.check_current_step(dialog.step_kw_purpose)
@@ -1644,11 +1639,9 @@ class TestKeywordWizard(unittest.TestCase):
             'layer_mode': layer_mode_classified['key']
         }
 
-        layer.keywords = expected_keyword
-
         # noinspection PyTypeChecker
         dialog = WizardDialog(iface=IFACE)
-        dialog.set_keywords_creation_mode(layer)
+        dialog.set_keywords_creation_mode(layer, expected_keyword)
 
         # Check if in select purpose step
         self.check_current_step(dialog.step_kw_purpose)
@@ -1918,11 +1911,9 @@ class TestKeywordWizard(unittest.TestCase):
             'title': layer_title,
             'url': source_url,
         }
-        layer.keywords = original_keywords
-
         # noinspection PyTypeChecker
         dialog = WizardDialog(iface=IFACE)
-        dialog.set_keywords_creation_mode(layer)
+        dialog.set_keywords_creation_mode(layer, original_keywords)
 
         # Check if in select purpose step
         self.check_current_step(dialog.step_kw_purpose)
