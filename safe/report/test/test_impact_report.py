@@ -343,12 +343,14 @@ class TestImpactReport(unittest.TestCase):
                      u'values are excluded from the tables.',
             'group_border_color': u'#36454f',
             'detail_header': {
-                'total_header_index': 3,
+                'total_header_index': 5,
                 'breakdown_header_index': 0,
                 'header_hazard_group': {
                     'not_affected': {
                         'header': u'Not affected',
-                        'hazards': []
+                        'hazards': [],
+                        'total': [u'Total Not Affected'],
+                        'start_index': 4
                     },
                     'affected': {
                         'header': u'Affected',
@@ -356,6 +358,7 @@ class TestImpactReport(unittest.TestCase):
                             u'High hazard zone',
                             u'Medium hazard zone',
                             u'Low hazard zone'],
+                        'total': [u'Total Affected'],
                         'start_index': 1
                     }
                 }
@@ -366,7 +369,7 @@ class TestImpactReport(unittest.TestCase):
                 'headers': [
                     u'Structure type',
                     {
-                        'start': True, 'colspan': 2,
+                        'start': True, 'colspan': 3,
                         'name': u'High hazard zone',
                         'header_group': 'affected'
                     },
@@ -375,8 +378,16 @@ class TestImpactReport(unittest.TestCase):
                         'name': u'Medium hazard zone',
                         'header_group': 'affected'
                     },
-                    u'Total Affected',
-                    u'Total Not Affected',
+                    {
+                        'start': False,
+                        'name': u'Total Affected',
+                        'header_group': 'affected'
+                    },
+                    {
+                        'start': True, 'colspan': 1,
+                        'name': u'Total Not Affected',
+                        'header_group': 'not_affected'
+                    },
                     u'Total Not Exposed', u'Total'
                 ],
                 'details': [
@@ -390,7 +401,15 @@ class TestImpactReport(unittest.TestCase):
                             'value': '0',
                             'header_group': 'affected'
                         },
-                        '10', '0', '10', '10'
+                        {
+                            'value': '10',
+                            'header_group': 'affected'
+                        },
+                        {
+                            'value': '0',
+                            'header_group': 'not_affected'
+                        },
+                        '10', '10'
                     ],
                     [
                         u'Health',
@@ -402,7 +421,15 @@ class TestImpactReport(unittest.TestCase):
                             'value': '0',
                             'header_group': 'affected'
                         },
-                        '10', '0', '0', '10'
+                        {
+                            'value': '10',
+                            'header_group': 'affected'
+                        },
+                        {
+                            'value': '0',
+                            'header_group': 'not_affected'
+                        },
+                        '0', '10'
                     ],
                     [
                         u'Government',
@@ -413,7 +440,16 @@ class TestImpactReport(unittest.TestCase):
                         {
                             'value': '10',
                             'header_group': 'affected'
-                        }, '10', '0', '0', '10'
+                        },
+                        {
+                            'value': '10',
+                            'header_group': 'affected'
+                        },
+                        {
+                            'value': '0',
+                            'header_group': 'not_affected'
+                        },
+                        '0', '10'
                     ],
                     [
                         u'Commercial',
@@ -425,7 +461,15 @@ class TestImpactReport(unittest.TestCase):
                             'value': '0',
                             'header_group': 'affected'
                         },
-                        '10', '0', '0', '10'
+                        {
+                            'value': '10',
+                            'header_group': 'affected'
+                        },
+                        {
+                            'value': '0',
+                            'header_group': 'not_affected'
+                        },
+                        '0', '10'
                     ],
                     [
                         u'Other',
@@ -437,7 +481,15 @@ class TestImpactReport(unittest.TestCase):
                             'value': '10',
                             'header_group': 'affected'
                         },
-                        '10', '0', '0', '10'
+                        {
+                            'value': '10',
+                            'header_group': 'affected'
+                        },
+                        {
+                            'value': '0',
+                            'header_group': 'not_affected'
+                        },
+                        '0', '10'
                     ],
                 ],
                 'footers': [
@@ -448,7 +500,16 @@ class TestImpactReport(unittest.TestCase):
                     {
                         'value': '10',
                         'header_group': 'affected'
-                    }, '10', '0', '10', '10'
+                    },
+                    {
+                        'value': '10',
+                        'header_group': 'affected'
+                    },
+                    {
+                        'value': '0',
+                        'header_group': 'not_affected'
+                    },
+                    '10', '10'
                 ]
             }
         }
