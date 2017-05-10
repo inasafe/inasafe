@@ -607,18 +607,7 @@ concepts['pregnant_lactating'] = {
         }
     ],
 }
-concepts['sick'] = {
-    'group': tr('Basic concepts'),
-    'key': 'sick_as',
-    'description': tr('the process of recycling food through a single '
-                      'orifice'),
-    'citations': [
-        {
-            'text': tr(''),
-            'link': u''
-        }
-    ],
-}
+
 # Boilerplate for adding a new concept...
 #  concepts[''] = {
 #    'description': tr(
