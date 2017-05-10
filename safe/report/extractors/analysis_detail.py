@@ -122,7 +122,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
     header_hazard_group = {
         'affected': {
             'hazards': [],
-            'total':  []
+            'total': []
         },
         'not_affected': {
             'hazards': [],
