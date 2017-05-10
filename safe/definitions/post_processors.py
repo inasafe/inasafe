@@ -500,6 +500,10 @@ post_processor_hygiene_packs = {
     }
 }
 
+EXTRA_CALORIES_NEEDED_PER_DAY = 500  # in KKal / day
+DAY_IN_A_WEEK = 7  # in day / week
+KG_RICE_PER_CALORIES = 0.1 / 129  # in KKal (100 gram gives 129 KKal calories)
+
 post_processor_additional_rice = {
     'key': 'post_processor_additional_rice',
     'name': tr(
@@ -520,7 +524,10 @@ post_processor_additional_rice = {
         'additional_rice_ratio':
             {
                 'type': constant_input_type,
-                'value': 500 * 7 * 0.1 / 129,
+                'value': (
+                    EXTRA_CALORIES_NEEDED_PER_DAY *
+                    DAY_IN_A_WEEK *
+                    KG_RICE_PER_CALORIES),
             }
     },
     'output': {
