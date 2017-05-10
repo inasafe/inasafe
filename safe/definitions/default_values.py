@@ -80,7 +80,7 @@ feature_rate_default_value = {
 infant_ratio_default_value = {
     'key': 'infant_ratio_default_value',
     'name': tr('Infant Ratio Global Default'),
-    'default_value': 0.093,
+    'default_value': 0.0925,
     # http://data.un.org/Data.aspx?d=PopDiv&f=variableID%3a30
     # UNSD World Data, 2010.
     'min_value': 0,
@@ -93,7 +93,7 @@ infant_ratio_default_value = {
 child_ratio_default_value = {
     'key': 'child_ratio_default_value',
     'name': tr('Child Ratio Global Default'),
-    'default_value': 0.174,
+    'default_value': 0.1735,
     # http://data.un.org/Data.aspx?d=PopDiv&f=variableID%3a31
     # UNSD World Data, 2010.
     'min_value': 0,
