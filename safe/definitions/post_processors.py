@@ -1002,8 +1002,7 @@ minimum_needs_post_processors = initialize_minimum_needs_post_processors()
 
 female_postprocessors = [
     post_processor_gender,
-    post_processor_hygiene_packs,
-    post_processor_additional_rice
+    post_processor_hygiene_packs
 ]
 
 age_postprocessors = [
@@ -1036,4 +1035,6 @@ post_processors = [
      age_postprocessors +
      minimum_needs_post_processors +
      vulnerability_postprocessors +
-     gender_postprocessors)
+     gender_postprocessors) + [
+    post_processor_additional_rice
+]
