@@ -322,3 +322,4 @@ for field_group in all_field_groups:
         tr('{group_name} group: {note}'.format(
             group_name=field_group['name'],
             note=field_group['description'])))
+    del field_group  # to prevent duplicate definition
