@@ -1,5 +1,5 @@
 # coding=utf-8
-"""Test for Impact Function."""
+"""Test for Post Processors."""
 
 import unittest
 
@@ -8,9 +8,7 @@ from safe.test.utilities import get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.definitions.exposure import exposure_population
-from safe.definitions.hazard_classifications import (
-    generic_hazard_classes,
-    flood_hazard_classes)
+from safe.definitions.hazard_classifications import generic_hazard_classes
 from safe.definitions.fields import (
     male_displaced_count_field,
     female_displaced_count_field,
