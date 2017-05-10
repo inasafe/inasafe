@@ -285,25 +285,25 @@ all_field_groups = [
 
 # Update notes for each group
 age_group_notes = [
-        tr('Infant: ' + concepts['infant']['description']),
-        tr('Child: ' + concepts['child']['description']),
-        tr('Youth: ' + concepts['youth']['description']),
-        tr('Adult: ' + concepts['adult']['description']),
-        tr('Elderly: ' + concepts['elderly']['description'])
+        tr('Infant: {note}'.format(note=concepts['infant']['description'])),
+        tr('Child: {note}'.format(note=concepts['child']['description'])),
+        tr('Youth: {note}'.format(note=concepts['youth']['description'])),
+        tr('Adult: {note}'.format(note=concepts['adult']['description'])),
+        tr('Elderly: {note}'.format(note=concepts['elderly']['description']))
     ]
 
 gender_group_notes = [
-        tr('Female: ' + concepts['female']['description']),
-        tr('Child bearing age: ' + (
-            concepts['child_bearing_age']['description'])),
-        tr('Pregnant lactating: ' + (
-            concepts['pregnant_lactating']['description']))
+        tr('Female: {note}'.format(note=concepts['female']['description'])),
+        tr('Child bearing age: {note}'.format(
+            note=concepts['child_bearing_age']['description'])),
+        tr('Pregnant lactating: {note}'.format(
+            note=concepts['pregnant_lactating']['description']))
     ]
 
 vulnerability_group_notes = [
-        tr('Under 5: ' + concepts['under_5']['description']),
-        tr('Over 60: ' + concepts['over_60']['description']),
-        tr('Disabled: ' + concepts['disabled']['description'])
+        tr('Under 5: {note}'.format(note=concepts['under_5']['description'])),
+        tr('Over 60: {note}'.format(note=concepts['over_60']['description'])),
+        tr('Disabled: {note}'.format(note=concepts['disabled']['description']))
     ]
 
 age_ratio_group['notes'] += age_group_notes
@@ -318,4 +318,7 @@ vulnerability_displaced_count_group['notes'] += vulnerability_group_notes
 
 for field_group in all_field_groups:
     field_group['notes'].insert(
-        0, tr(field_group['name'] + ' group: ' + field_group['description']))
+        0,
+        tr('{group_name} group: {note}'.format(
+            group_name=field_group['name'],
+            note=field_group['description'])))
