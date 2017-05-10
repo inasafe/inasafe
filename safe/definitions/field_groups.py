@@ -285,7 +285,6 @@ all_field_groups = [
 
 # Update notes for each group
 age_group_notes = [
-        tr('Age group: ' + age_displaced_count_group['description']),
         tr('Infant: ' + concepts['infant']['description']),
         tr('Child: ' + concepts['child']['description']),
         tr('Youth: ' + concepts['youth']['description']),
@@ -294,7 +293,6 @@ age_group_notes = [
     ]
 
 gender_group_notes = [
-        tr('Gender group: ' + gender_displaced_count_group['description']),
         tr('Female: ' + concepts['female']['description']),
         tr('Child bearing age: ' + (
             concepts['child_bearing_age']['description'])),
@@ -303,19 +301,21 @@ gender_group_notes = [
     ]
 
 vulnerability_group_notes = [
-        tr('Vulnerability group: ' + (
-            vulnerability_displaced_count_group['description'])),
         tr('Under 5: ' + concepts['under_5']['description']),
         tr('Over 60: ' + concepts['over_60']['description']),
         tr('Disabled: ' + concepts['disabled']['description'])
     ]
 
-age_ratio_group['notes'] = age_group_notes
-age_count_group['notes'] = age_group_notes
-age_displaced_count_group['notes'] = age_group_notes
-gender_ratio_group['notes'] = gender_group_notes
-gender_count_group['notes'] = gender_group_notes
-gender_displaced_count_group['notes'] = gender_group_notes
-vulnerability_ratio_group['notes'] = vulnerability_group_notes
-vulnerability_count_group['notes'] = vulnerability_group_notes
-vulnerability_displaced_count_group['notes'] = vulnerability_group_notes
+age_ratio_group['notes'] += age_group_notes
+age_count_group['notes'] += age_group_notes
+age_displaced_count_group['notes'] += age_group_notes
+gender_ratio_group['notes'] += gender_group_notes
+gender_count_group['notes'] += gender_group_notes
+gender_displaced_count_group['notes'] += gender_group_notes
+vulnerability_ratio_group['notes'] += vulnerability_group_notes
+vulnerability_count_group['notes'] += vulnerability_group_notes
+vulnerability_displaced_count_group['notes'] += vulnerability_group_notes
+
+for field_group in all_field_groups:
+    field_group['notes'].insert(
+        0, tr(field_group['name'] + ' group: ' + field_group['description']))
