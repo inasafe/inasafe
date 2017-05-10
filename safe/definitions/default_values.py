@@ -13,23 +13,27 @@ female_ratio_default_value = {
     'name': tr('Female Ratio Global Default'),
     # https://www.cia.gov/library/publications/the-world-factbook/geos/xx.html
     # total population: 1.01 male(s)/female (2011 est.)
-    'default_value': 0.5,
+    'default_value': 0.496,
+    # Updated for InaSAFE 4.1
+    # UNSD World Data, 2010.
     'min_value': 0,
     'max_value': 1,
     'increment': 0.001,
-    'description': tr('Default value for female ratio')
+    'description': tr('Default ratio of females per 100 people in the '
+                      'total population.')
 }
 
 male_ratio_default_value = {
     'key': 'male_ratio_default_value',
     'name': tr('Male Ratio Global Default'),
-    # https://www.cia.gov/library/publications/the-world-factbook/geos/xx.html
-    # total population: 1.01 male(s)/female (2011 est.)
-    'default_value': 0.5,
+    'default_value': 0.504,
+    # Updated for InaSAFE 4.1
+    # UNSD World Data, 2010.
     'min_value': 0,
     'max_value': 1,
     'increment': 0.001,
-    'description': tr('Default value for male ratio')
+    'description': tr('Default ratio of males per 100 people in the '
+                      'total populaiton.')
 }
 
 feature_rate_default_value = {
@@ -66,106 +70,175 @@ feature_rate_default_value = {
 
 # if CM can add up then youth 0.254; adult 0.659; elderly 0.087
 
-# TODO(IS): Please complete this
+# Default ratios for world population revised 9 May 2017.
+# update to address new concepts in 4.1 and to better align with humanitarian
+# analysis and reporting.
+# http://data.un.org/
+# Source:  United Nations Statistics Division. World Data 2010.
+
+
 infant_ratio_default_value = {
     'key': 'infant_ratio_default_value',
     'name': tr('Infant Ratio Global Default'),
-    'default_value': 0.0,  # FIXME:It's random number
+    'default_value': 0.093,
+    # http://data.un.org/Data.aspx?d=PopDiv&f=variableID%3a30
+    # UNSD World Data, 2010.
     'min_value': 0,
     'max_value': 1,
     'increment': 0.001,
-    'description': tr('Default value for infant ratio')
+    'description': tr('Default ratio of infants per 100 people in the '
+                      'total population.')
 }
 
 child_ratio_default_value = {
     'key': 'child_ratio_default_value',
     'name': tr('Child Ratio Global Default'),
-    'default_value': 0.0,  # FIXME:It's random number
+    'default_value': 0.174,
+    # http://data.un.org/Data.aspx?d=PopDiv&f=variableID%3a31
+    # UNSD World Data, 2010.
     'min_value': 0,
     'max_value': 1,
     'increment': 0.001,
-    'description': tr('Default value for child ratio')
+    'description': tr('Default ratio of children per 100 people in the '
+                      'total population.')
 }
 
 youth_ratio_default_value = {
     'key': 'youth_ratio_default_value',
     'name': tr('Youth Ratio Global Default'),
     # Updated from 0.263 to 0.254 in InaSAFE 4.0
-    'default_value': 0.254,
+    # Updated for InaSAFE 4.1
+    # http://data.un.org/Data.aspx?d=PopDiv&f=variableID%3a101
+    # UNSD World Data, 2010.
+    'default_value': 0.266,
     'min_value': 0,
     'max_value': 1,
     'increment': 0.001,
-    'description': tr('Default value for youth ratio')
+    'description': tr('Default ratio of youths per 100 people in the '
+                      'total population.')
 }
 
 adult_ratio_default_value = {
     'key': 'adult_ratio_default_value',
     'name': tr('Adult Ratio Global Default'),
-    'default_value': 0.659,
+    # Updated for InaSAFE 4.1
+    # http://data.un.org/Data.aspx?d=PopDiv&f=variableID%3a103
+    # UNSD World Data, 2010.
+    'default_value': 0.679,
     'min_value': 0,
     'max_value': 1,
     'increment': 0.001,
-    'description': tr('Default value for adult ratio')
+    'description': tr('Default ratio of adults per 100 people in the '
+                      'total population.')
 }
 
 elderly_ratio_default_value = {
     'key': 'elderly_ratio_default_value',
     'name': tr('Elderly Ratio Global Default'),
     # Updated from 0.078 to 0.087 in InaSAFE 4.0
-    'default_value': 0.087,
+    # Updated for InaSAFE 4.1
+    # http://data.un.org/Data.aspx?d=PopDiv&f=variableID%3a103
+    # UNSD World Data, 2010.
+    'default_value': 0.077,
     'min_value': 0,
     'max_value': 1,
     'increment': 0.001,
-    'description': tr('Default value for elderly ratio')
+    'description': tr('Default ratio of elderly people per 100 people in the '
+                      'total population.')
 }
 
 # Default values for vulnerabilities
 under_5_ratio_default_value = {
     'key': 'under_5_ratio_default_value',
     'name': tr('Under 5 Years Ratio Global Default'),
-    'default_value': 0.0,  # FIXME:It's random number
+    'default_value': 0.093,
+    # Updated for InaSAFE 4.1
+    # http://data.un.org/Data.aspx?d=PopDiv&f=variableID%3a30
+    # UNSD World Data, 2010.
     'min_value': 0,
     'max_value': 1,
     'increment': 0.001,
-    'description': tr('Default value for under 5 years old ratio')
+    'description': tr('Default ratio of under 5 year olds per 100 people in '
+                      'the total population.')
 }
 
 over_60_ratio_default_value = {
     'key': 'over_60_ratio_default_value',
     'name': tr('Over 60 Years Ratio Global Default'),
-    'default_value': 0.0,  # FIXME:It's random number
+    'default_value': 0.111,
+    # Updated for InaSAFE 4.1
+    # http://data.un.org/Data.aspx?d=PopDiv&f=variableID%3a103
+    # UNSD World Data, 2010.
     'min_value': 0,
     'max_value': 1,
     'increment': 0.001,
-    'description': tr('Default value for over 60 years old ratio')
+    'description': tr('Default ratio of over 60 year olds per 100 people in '
+                      'the total population.')
 }
 
 disabled_ratio_default_value = {
     'key': 'disabled_ratio_default_value',
     'name': tr('Disabled Ratio Global Default'),
-    'default_value': 0.0,  # FIXME:It's random number
+    'default_value': 0.15,
+    # Updated for InaSAFE 4.1
+    # http://www.who.int/disabilities/world_report/2011/report.pdf
     'min_value': 0,
     'max_value': 1,
     'increment': 0.001,
-    'description': tr('Default value for disabled people ratio')
+    'description': tr('Default ratio of disabled people per 100 people in '
+                      'the total population.')
 }
 
 child_bearing_age_ratio_default_value = {
     'key': 'child_bearing_age_ratio_default_value',
     'name': tr('Child Bearing Age Ratio Global Default'),
-    'default_value': 0.0,  # FIXME:It's random number
+    'default_value': 0.259,
+    # Updated for InaSAFE 4.1
+    # http://data.un.org/Data.aspx?d=PopDiv&f=variableID%3a36
+    # UNSD World Data, 2010.
     'min_value': 0,
     'max_value': 1,
     'increment': 0.001,
-    'description': tr('Default value for child bearing age people ratio')
+    'description': tr('Default ratio of people of child bearing age '
+                      'per 100 people in the total population.')
 }
 
 pregnant_lactating_ratio_default_value = {
     'key': 'pregnant_lactating_ratio_default_value',
     'name': tr('Pregnant or Lactating Ratio Global Default'),
-    'default_value': 0.0,  # FIXME:It's random number
+    'default_value': 0.05,
+    # Updated for InaSAFE 4.1
+    # http://www.spherehandbook.org/en/appendix-6/
+    # UNSD World Population Data, 2010.
     'min_value': 0,
     'max_value': 1,
     'increment': 0.001,
-    'description': tr('Default value for pregnant or lactating people ratio')
+    'description': tr('Default ratio of pregnant or lactating people '
+                      'per 100 people in the total population.')
+}
+pregnant_ratio_default_value = {
+    'key': 'pregnant_ratio_default_value',
+    'name': tr('Pregnant Ratio Global Default'),
+    'default_value': 0.024,
+    # Updated for InaSAFE 4.1
+    # http://www.spherehandbook.org/en/appendix-6/
+    # UNSD World Population Data, 2010.
+    'min_value': 0,
+    'max_value': 1,
+    'increment': 0.001,
+    'description': tr('Default ratio of pregnant people per 100 people in '
+                      'the total population.')
+}
+lactating_ratio_default_value = {
+    'key': 'lactating_ratio_default_value',
+    'name': tr('Lactating Ratio Global Default'),
+    'default_value': 0.026,
+    # Updated for InaSAFE 4.1
+    # http://www.spherehandbook.org/en/appendix-6/
+    # UNSD World Population Data, 2010.
+    'min_value': 0,
+    'max_value': 1,
+    'increment': 0.001,
+    'description': tr('Default ratio of lactating people per 100 people in '
+                      'the total population.')
 }
