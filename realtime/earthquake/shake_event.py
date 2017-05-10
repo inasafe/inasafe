@@ -1447,8 +1447,7 @@ class ShakeEvent(QObject):
         # its extents to the event.
         map_canvas = composition.getComposerItemById('main-map')
         if map_canvas is not None:
-            layer_list = [layer_id for layer_id in map_registry.mapLayers()]
-            layer_list.reverse()
+            layer_list = [l.id() for l in IFACE.mapCanvas().layers()]
             map_canvas.setKeepLayerSet(True)
             map_canvas.setLayerSet(layer_list)
             map_canvas.setNewExtent(self.extent_with_cities)
