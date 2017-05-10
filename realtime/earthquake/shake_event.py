@@ -67,9 +67,11 @@ from PyQt4.QtGui import (
     QImage)
 
 from safe.test.utilities import get_qgis_app
+
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe.impact_functions.impact_function_manager import ImpactFunctionManager
+from safe.impact_functions.impact_function_manager import \
+    ImpactFunctionManager
 from safe.storage.core import read_layer as safe_read_layer
 from safe.common.version import get_version
 from safe.common.utilities import romanise
@@ -96,7 +98,6 @@ from realtime.exceptions import (
     EmptyShakeDirectoryError,
     EventIdError)
 
-
 LOGGER = logging.getLogger(realtime_logger_name())
 
 
@@ -105,6 +106,7 @@ class ShakeEvent(QObject):
 
     Including epicenter, magnitude etc.
     """
+
     def __init__(self,
                  working_dir,
                  event_id=None,
@@ -413,7 +415,8 @@ class ShakeEvent(QObject):
         memory_layer.commitChanges()
 
         LOGGER.debug('Writing mem layer to shp: %s' % output_file)
-        # Explicitly giving all options, not really needed but nice for clarity
+        # Explicitly giving all options, not really needed but nice for
+        # clarity
         error_message = ''
         options = []
         layer_options = []
@@ -682,7 +685,8 @@ class ShakeEvent(QObject):
                 'Could not add new attributes to this layer.')
 
     def city_search_box_memory_layer(self, force_flag=False):
-        """Return the search boxes used to search for cities as a memory layer.
+        """Return the search boxes used to search for cities as a memory
+        layer.
 
         This is mainly useful for diagnostic purposes.
 
@@ -723,7 +727,8 @@ class ShakeEvent(QObject):
             LOGGER.exception(
                 'Unable to add features to city search boxes memory layer')
             raise CityMemoryLayerCreationError(
-                'Could not add any features to city search boxes memory layer')
+                'Could not add any features to city search boxes memory '
+                'layer')
 
         memory_layer.commitChanges()
         memory_layer.updateExtents()
@@ -735,7 +740,8 @@ class ShakeEvent(QObject):
         return memory_layer
 
     def sorted_impacted_cities(self, row_count=5):
-        """Return a data structure with place, mmi, pop sorted by mmi then pop.
+        """Return a data structure with place, mmi, pop sorted by mmi then
+        pop.
 
         :param row_count: optional limit to how many rows should be
                 returned. Defaults to 5 if not specified.
@@ -823,7 +829,8 @@ class ShakeEvent(QObject):
                 'roman': roman,
                 'dist_to': distance_to,
                 'dir_to': direction_to,
-                'dir_from': direction_from}
+                'dir_from': direction_from
+            }
             cities.append(city)
         LOGGER.debug('%s features added to sorted impacted cities list.')
         # LOGGER.exception(cities)
@@ -917,11 +924,13 @@ class ShakeEvent(QObject):
 
         .. note:: Population will be rounded pop / 1000
 
-        The icon img will be an image with an icon showing the relevant colour.
+        The icon img will be an image with an icon showing the relevant
+        colour.
 
         :returns:
             two tuple of:
-                A Table object (see :func:`safe.impact_functions.tables.Table`)
+                A Table object (see
+                :func:`safe.impact_functions.tables.Table`)
                 A file path to the html file saved to disk.
 
         :raise: Propagates any exceptions.
@@ -1050,15 +1059,18 @@ class ShakeEvent(QObject):
                 self.displaced_counts and self.affected_counts will be
                 populated.
                 self.*Counts are dicts containing fatality / displaced /
-                affected counts for the shake events. Keys for the dict will be
-                MMI classes (I-X) and values will be count type for that class.
-            str: Path to the html report showing a table of affected people per
+                affected counts for the shake events. Keys for the dict
+                will be
+                MMI classes (I-X) and values will be count type for that
+                class.
+            str: Path to the html report showing a table of affected people
+            per
                 mmi interval.
         """
         if (
-                population_raster_path is None or (
-                    not os.path.isfile(population_raster_path) and not
-                    os.path.islink(population_raster_path))):
+                        population_raster_path is None or (
+                            not os.path.isfile(population_raster_path) and not
+                        os.path.islink(population_raster_path))):
 
             exposure_path = self._get_population_path()
         else:
@@ -1427,7 +1439,8 @@ class ShakeEvent(QObject):
         LOGGER.debug(location_info)
         substitution_map = {
             'location-info': location_info,
-            'version': self.version()}
+            'version': self.version()
+        }
         substitution_map.update(self.event_dict())
         LOGGER.debug(substitution_map)
 
@@ -1634,13 +1647,14 @@ class ShakeEvent(QObject):
         """
         event_dict = self.event_dict()
         event_string = (
-            'M %(mmi)s %(date)s %(time)s '
-            '%(latitude-name)s: %(latitude-value)s '
-            '%(longitude-name)s: %(longitude-value)s '
-            '%(depth-name)s: %(depth-value)s%(depth-unit)s '
-            '%(located-label)s %(distance)s%(distance-unit)s '
-            '%(bearing-compass)s '
-            '%(direction-relation)s %(shake-grid-location)s') % event_dict
+                           'M %(mmi)s %(date)s %(time)s '
+                           '%(latitude-name)s: %(latitude-value)s '
+                           '%(longitude-name)s: %(longitude-value)s '
+                           '%(depth-name)s: %(depth-value)s%(depth-unit)s '
+                           '%(located-label)s %(distance)s%(distance-unit)s '
+                           '%(bearing-compass)s '
+                           '%(direction-relation)s %('
+                           'shake-grid-location)s') % event_dict
         return event_string
 
     def event_dict(self):
@@ -1672,9 +1686,10 @@ class ShakeEvent(QObject):
             'takes into account the population and cities affected by '
             'different levels of ground shaking. The estimate is based on '
             'ground shaking data from BMKG, population count data derived '
-            'by DMInnovation from worldpop.org.uk, place information data '
-            'provided by Indonesian Geospatial Portal at '
-            'http://portal.ina-sdi.or.id and software developed by BNPB. '
+            'by DMInnovation from worldpop.org.uk and BPS Census Data 2010, '
+            'place information data provided by Indonesian Geospatial '
+            'Portal at http://tanahair.indonesia.go.id and software '
+            'developed by BNPB. '
             'Limitations in the estimates of ground shaking, population and '
             'place names datasets may result in significant '
             'misrepresentation of the on-the-ground situation in the '
@@ -1890,7 +1905,8 @@ class ShakeEvent(QObject):
             'affected_counts': self.affected_counts,
             'extent_with_cities': extent_with_cities,
             'zoom_factor': self.zoom_factor,
-            'search_boxes': self.search_boxes}
+            'search_boxes': self.search_boxes
+        }
 
         event_string = (
             'latitude: %(latitude)s\n'
