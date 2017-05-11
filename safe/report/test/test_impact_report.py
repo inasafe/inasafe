@@ -17,6 +17,10 @@ from safe.definitions.fields import (
     total_affected_field,
     total_not_exposed_field,
     total_field)
+from safe.definitions.field_groups import (
+    age_displaced_count_group,
+    gender_displaced_count_group,
+    vulnerability_displaced_count_group)
 from safe.definitions.hazard_classifications import flood_hazard_classes
 from safe.impact_function.impact_function import ImpactFunction
 from safe.report.report_metadata import ReportMetadata
@@ -873,12 +877,14 @@ class TestImpactReport(unittest.TestCase):
             aggregation_postprocessors_component['key'])
         """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
 
+        actual_context = aggregation_postprocessors.context
         expected_context = {
             'sections': OrderedDict([
                 ('age', {
                     'header': u'Detailed Age Report',
                     'notes': [u'Columns and rows containing only 0 or "No '
-                              u'data" values are excluded from the tables.'],
+                              u'data" values are excluded from the '
+                              u'tables.'] + age_displaced_count_group['notes'],
                     'rows': [[u'B', '2,700', '660', '1,800', '240'],
                              [u'C', '6,500', '1,700', '4,300', '590'],
                              [u'F', '7,100', '1,800', '4,700', '640'],
@@ -909,7 +915,9 @@ class TestImpactReport(unittest.TestCase):
                 ('gender', {
                     'header': u'Detailed Gender Report',
                     'notes': [u'Columns and rows containing only 0 or "No '
-                              u'data" values are excluded from the tables.'],
+                              u'data" values are excluded from the '
+                              u'tables.'] + (
+                        gender_displaced_count_group['notes']),
                     'rows': [
                         [u'B', '2,700', '1,400'],
                         [u'C', '6,500', '3,300'],
@@ -990,7 +998,6 @@ class TestImpactReport(unittest.TestCase):
                         '1,300']})]),
             'use_aggregation': True
         }
-        actual_context = aggregation_postprocessors.context
 
         self.assertDictEqual(expected_context, actual_context)
         self.assertTrue(
@@ -1046,7 +1053,8 @@ class TestImpactReport(unittest.TestCase):
                 ('age', {
                     'header': u'Detailed Age Report',
                     'notes': [u'Columns and rows containing only 0 or "No '
-                              u'data" values are excluded from the tables.'],
+                              u'data" values are excluded from the '
+                              u'tables.'] + age_displaced_count_group['notes'],
                     'rows': [[u'B', '10', '0', '0', '0'],
                              [u'C', '10', '10', '10', '0'],
                              [u'F', '10', '0', '10', '0'],
@@ -1077,7 +1085,9 @@ class TestImpactReport(unittest.TestCase):
                 ('gender', {
                     'header': u'Detailed Gender Report',
                     'notes': [u'Columns and rows containing only 0 or "No '
-                              u'data" values are excluded from the tables.'],
+                              u'data" values are excluded from the '
+                              u'tables.'] + (
+                        gender_displaced_count_group['notes']),
                     'rows': [[u'B', '10', '0'],
                              [u'C', '10', '10'],
                              [u'F', '10', '10'],
