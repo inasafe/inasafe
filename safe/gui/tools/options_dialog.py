@@ -335,6 +335,29 @@ class OptionsDialog(QDialog, FORM_CLASS):
         self.close()
 
     # noinspection PyPep8Naming
+    @pyqtSignature('int')  # prevents actions being handled twice
+    def on_earthquake_function_currentIndexChanged(self, current_index):
+        """Auto-connect slot activated when earthquake model is changed.
+        """
+        model = EARTHQUAKE_FUNCTIONS[current_index]
+        notes = ''
+        for note in model['notes']:
+            notes += note + '\n\n'
+
+        citations = ''
+        for citation in model['citations']:
+            citations += citation['text'] + '\n\n'
+
+        text = tr('Description:\n\n%s\n\n'
+            'Notes:\n\n%s\n\n'
+            'Citations:\n\n%s') % (
+            model['description'],
+            notes,
+            citations)
+
+        self.earthquake_fatality_model_notes.setText(text)
+
+    # noinspection PyPep8Naming
     @pyqtSignature('')  # prevents actions being handled twice
     def on_toolKeywordCachePath_clicked(self):
         """Auto-connect slot activated when cache file tool button is clicked.
