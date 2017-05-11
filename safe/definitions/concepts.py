@@ -293,6 +293,35 @@ concepts['killed_people'] = {
         }
     ],
 }
+concepts['infant'] = {
+    'group': tr('Demographics'),
+    'key': 'infant',
+    'description': tr(
+        'A very young child or baby aged between 0 and 4 years.'),
+    'citations': [
+        {
+            'text': tr(
+                'World Population Dashboard. '
+                'ICPD Goals and Demographic Indicators 2016.'),
+            'link': u'http://www.unfpa.org/world-population-dashboard'
+        }
+    ],
+}
+concepts['child'] = {
+    'group': tr('Demographics'),
+    'key': 'child',
+    'description': tr(
+        'A young person aged between 5 and 14 years, usually below the legal '
+        'age of majority.'),
+    'citations': [
+        {
+            'text': tr(
+                'World Population Dashboard. '
+                'ICPD Goals and Demographic Indicators 2016.'),
+            'link': u'http://www.unfpa.org/world-population-dashboard'
+        }
+    ],
+}
 concepts['youth'] = {
     'group': tr('Demographics'),
     'key': 'youth',
@@ -301,9 +330,9 @@ concepts['youth'] = {
     'citations': [
         {
             'text': tr(
-                'CIA (2016)The World Factbook.'),
-            'link': u'https://www.cia.gov/library/publications/'
-                    u'resources/the-world-factbook/'
+                'World Population Dashboard. '
+                'ICPD Goals and Demographic Indicators 2016.'),
+            'link': u'http://www.unfpa.org/world-population-dashboard'
         }
     ],
 }
@@ -315,9 +344,9 @@ concepts['adult'] = {
     'citations': [
         {
             'text': tr(
-                'CIA (2016)The World Factbook.'),
-            'link': u'https://www.cia.gov/library/publications/'
-                    u'resources/the-world-factbook/'
+                'World Population Dashboard. '
+                'ICPD Goals and Demographic Indicators 2016.'),
+            'link': u'http://www.unfpa.org/world-population-dashboard'
         }
     ],
 }
@@ -325,13 +354,13 @@ concepts['elderly'] = {
     'group': tr('Demographics'),
     'key': 'elderly',
     'description': tr(
-        'Person aged 64 years and over.'),
+        'Persons aged 64 years and over.'),
     'citations': [
         {
             'text': tr(
-                'CIA (2016)The World Factbook.'),
-            'link': u'https://www.cia.gov/library/publications/'
-                    u'resources/the-world-factbook/'
+                'World Population Dashboard. '
+                'ICPD Goals and Demographic Indicators 2016.'),
+            'link': u'http://www.unfpa.org/world-population-dashboard'
         }
     ],
 }
@@ -371,33 +400,6 @@ concepts['male'] = {
             'text': tr(
                 'Oxford Dictionary.'),
             'link': u'https://en.oxforddictionaries.com/definition/male'
-        }
-    ],
-}
-concepts['infant'] = {
-    'group': tr('Demographics'),
-    'key': 'infant',
-    'description': tr(
-        'A very young child or baby.'),
-    'citations': [
-        {
-            'text': tr(
-                'Oxford Dictionary.'),
-            'link': u'https://en.oxforddictionaries.com/definition/infant'
-        }
-    ],
-}
-concepts['child'] = {
-    'group': tr('Demographics'),
-    'key': 'child',
-    'description': tr(
-        'A young human being below the age of puberty or below the legal age '
-        'of majority.'),
-    'citations': [
-        {
-            'text': tr(
-                'Oxford Dictionary.'),
-            'link': u'https://en.oxforddictionaries.com/definition/child'
         }
     ],
 }
