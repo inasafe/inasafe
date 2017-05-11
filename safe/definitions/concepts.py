@@ -293,12 +293,56 @@ concepts['killed_people'] = {
         }
     ],
 }
+concepts['people'] = {
+    'group': tr('Demographics'),
+    'key': 'people',
+    'description': tr(
+        'Human beings in general or considered collectively.'),
+    'citations': [
+        {
+            'text': tr(
+                'Oxford Dictionary.'),
+            'link': u'https://en.oxforddictionaries.com/definition/people'
+        }
+    ],
+}
+concepts['female'] = {
+    'group': tr('Demographics'),
+    'key': 'female',
+    'description': tr(
+        'Relating to the characteristics of women.'),
+    'citations': [
+        {
+            'text': tr(
+                'Oxford Dictionary.'),
+            'link': u'https://en.oxforddictionaries.com/definition/female'
+        }
+    ],
+}
+concepts['male'] = {
+    'group': tr('Demographics'),
+    'key': 'male',
+    'description': tr(
+        'Relating to the characteristics of men.'),
+    'citations': [
+        {
+            'text': tr(
+                'Oxford Dictionary.'),
+            'link': u'https://en.oxforddictionaries.com/definition/male'
+        }
+    ],
+}
 concepts['infant'] = {
     'group': tr('Demographics'),
     'key': 'infant',
     'description': tr(
         'A very young child or baby aged between 0 and 4 years.'),
     'citations': [
+        {
+            'text': tr(
+                'Oxford Dictionary.'),
+            'link': u'https://en.oxforddictionaries.com/definition/infant'
+        },
         {
             'text': tr(
                 'World Population Dashboard. '
@@ -311,9 +355,14 @@ concepts['child'] = {
     'group': tr('Demographics'),
     'key': 'child',
     'description': tr(
-        'A young person aged between 5 and 14 years, usually below the legal '
-        'age of majority.'),
+        'A young person aged between 5 and 14 years, usually below the '
+        'age of puberty.'),
     'citations': [
+        {
+            'text': tr(
+                'Oxford Dictionary.'),
+            'link': u'https://en.oxforddictionaries.com/definition/child'
+        },
         {
             'text': tr(
                 'World Population Dashboard. '
@@ -364,45 +413,6 @@ concepts['elderly'] = {
         }
     ],
 }
-concepts['people'] = {
-    'group': tr('Demographics'),
-    'key': 'people',
-    'description': tr(
-        'Human beings in general or considered collectively.'),
-    'citations': [
-        {
-            'text': tr(
-                'Oxford Dictionary.'),
-            'link': u'https://en.oxforddictionaries.com/definition/people'
-        }
-    ],
-}
-concepts['female'] = {
-    'group': tr('Demographics'),
-    'key': 'female',
-    'description': tr(
-        'Relating to the characteristics of women.'),
-    'citations': [
-        {
-            'text': tr(
-                'Oxford Dictionary.'),
-            'link': u'https://en.oxforddictionaries.com/definition/female'
-        }
-    ],
-}
-concepts['male'] = {
-    'group': tr('Demographics'),
-    'key': 'male',
-    'description': tr(
-        'Relating to the characteristics of men.'),
-    'citations': [
-        {
-            'text': tr(
-                'Oxford Dictionary.'),
-            'link': u'https://en.oxforddictionaries.com/definition/male'
-        }
-    ],
-}
 concepts['disabled'] = {
     'group': tr('Vulnerability'),
     'key': 'disabled',
@@ -415,6 +425,53 @@ concepts['disabled'] = {
                 'Oxford Dictionary.'),
             'link': u'https://en.oxforddictionaries.com/definition/'
                     u'disabled'
+        },
+        {
+            'text': tr(
+                'World Report on Disability.'),
+            'link': u'http://www.who.int/disabilities/world_report/2011/'
+                    u'report.pdf'
+        }
+    ],
+}
+concepts['under_5'] = {
+    'group': tr('Vulnerability'),
+    'key': 'under_5',
+    'description': tr(
+        'Persons aged under 5 years'),
+    'citations': [
+        {
+            'text': tr(
+                'World Population Dashboard. '
+                'ICPD Goals and Demographic Indicators 2016.'),
+            'link': u'http://www.unfpa.org/world-population-dashboard'
+        }
+    ],
+}
+concepts['over_60'] = {
+    'group': tr('Vulnerability'),
+    'key': 'over_60',
+    'description': tr('Persons aged 60 years and over'),
+    'citations': [
+        {
+            'text': tr('World Population Aging 2013'),
+            'link': u'http://www.un.org/en/development/desa/population/'
+                    u'publications/pdf/ageing/WorldPopulationAgeing2013.pdf'
+        }
+    ],
+}
+concepts['child_bearing_age'] = {
+    'group': tr('Gender'),
+    'key': 'child_bearing_age',
+    'description': tr('The span of ages (usually 15-49) at which individuals '
+                      'are capable of becoming parents. The phrase can be '
+                      'applied to men and women but most frequently refers '
+                      'to women.'),
+    'citations': [
+        {
+            'text': tr('UNFPA One Voice'),
+            'link': u'https://onevoice.unfpa.org/'
+                    u'index.unfpa?method=article&id=66'
         }
     ],
 }
@@ -429,6 +486,30 @@ concepts['pregnant'] = {
                 'Oxford Dictionary.'),
             'link': u'https://en.oxforddictionaries.com/definition/'
                     u'pregnant'
+        }
+    ],
+}
+concepts['lactating'] = {
+    'group': tr('Vulnerability'),
+    'key': 'lactating',
+    'description': tr(
+        'A female producing milk to feed a baby.'),
+    'citations': [
+        {
+            'text': tr(
+                'Oxford Dictionary.'),
+            'link': u'https://en.oxforddictionaries.com/definition/'
+                    u'lactate'
+        }
+    ],
+}concepts['pregnant_lactating'] = {
+    'group': tr('Gender'),
+    'key': 'pregnant_lactating',
+    'description': tr('A female who is either pregnant or feeding a baby.'),
+    'citations': [
+        {
+            'text': tr(''),
+            'link': u''
         }
     ],
 }
@@ -565,50 +646,8 @@ concepts['rounding_methodology'] = {
         }
     ],
 }
-concepts['under_5'] = {
-    'group': tr('Vulnerability'),
-    'key': 'under_5',
-    'description': tr(''),
-    'citations': [
-        {
-            'text': tr(''),
-            'link': u''
-        }
-    ],
-}
-concepts['over_60'] = {
-    'group': tr('Vulnerability'),
-    'key': 'over_60',
-    'description': tr(''),
-    'citations': [
-        {
-            'text': tr(''),
-            'link': u''
-        }
-    ],
-}
-concepts['child_bearing_age'] = {
-    'group': tr('Gender'),
-    'key': 'child_bearing_age',
-    'description': tr(''),
-    'citations': [
-        {
-            'text': tr(''),
-            'link': u''
-        }
-    ],
-}
-concepts['pregnant_lactating'] = {
-    'group': tr('Gender'),
-    'key': 'pregnant_lactating',
-    'description': tr(''),
-    'citations': [
-        {
-            'text': tr(''),
-            'link': u''
-        }
-    ],
-}
+
+
 
 # Boilerplate for adding a new concept...
 #  concepts[''] = {
