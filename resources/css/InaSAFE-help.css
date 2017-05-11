@@ -21,3 +21,7 @@ h2.nocount:before, h3.nocount:before, h4.nocount:before, h5.nocount:before, h6.n
     /* this affects the margin in the printer settings */
     margin: 25mm 25mm 25mm 25mm;
 }
+/* Try to prevent images wider than content. */
+img{
+    max-width: 100%;
+}

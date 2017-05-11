@@ -149,8 +149,39 @@ def content():
            'to use for storing these temporary files.')))
     message.add(bullets)
 
+    header = m.Heading(tr('Earthquake options tab'), **INFO_STYLE)
+    message.add(header)
+    paragraph = m.Paragraph(
+        m.Image(
+            'file:///%s/img/screenshots/'
+            'inasafe-options-template-options-screenshot.png' %
+            resources_path()),
+        style_class='text-center'
+    )
+    message.add(paragraph)
+    paragraph = m.Paragraph(tr(
+        'In this tab you can select which model to use when calculating '
+        'earthquake fatalities and displacements. This option is global - '
+        'it will affect all subsequent earthquake analyses carried out in '
+        'InaSAFE.'
+    ))
+    message.add(paragraph)
+    paragraph = m.Paragraph(tr(
+        'When selecting an earthquake analysis model, its details will be '
+        'shown below in the text box area.'
+    ))
+    message.add(paragraph)
+
     header = m.Heading(tr('Template options tab'), **INFO_STYLE)
     message.add(header)
+    paragraph = m.Paragraph(
+        m.Image(
+            'file:///%s/img/screenshots/'
+            'inasafe-options-template-options-screenshot.png' %
+            resources_path()),
+        style_class='text-center'
+    )
+    message.add(paragraph)
 
     message.add(m.Paragraph(tr(
         'This tab has options relating to the printing of reports and the '
@@ -204,6 +235,14 @@ def content():
 
     header = m.Heading(tr('ISO 19115 metadata tab'), **INFO_STYLE)
     message.add(header)
+    paragraph = m.Paragraph(
+        m.Image(
+            'file:///%s/img/screenshots/'
+            'inasafe-options-metadata-screenshot.png' %
+            resources_path()),
+        style_class='text-center'
+    )
+    message.add(paragraph)
 
     message.add(m.Paragraph(tr(
         'This tab is used to define various options related to the '
@@ -238,8 +277,47 @@ def content():
            'generated impact layer.')))
     message.add(bullets)
 
+    header = m.Heading(tr('Demographic Defaults tab'), **INFO_STYLE)
+    message.add(header)
+    paragraph = m.Paragraph(
+        m.Image(
+            'file:///%s/img/screenshots/'
+            'inasafe-options-demographic-screenshot.png' %
+            resources_path()),
+        style_class='text-center'
+    )
+    message.add(paragraph)
+    paragraph = m.Paragraph(tr(
+        'In this tab you will find options for setting the default ratios '
+        'for demographic groups. There is more detailed help on demographic '
+        'groups within the main help page for InaSAFE in the Field Mapping '
+        'Tool section. Essentially default ratios for demographic groups '
+        'determine what proportion of the population are within a each '
+        'population segment (e.g. infants versus children etc.). The options '
+        'defined in this tab be used in cases where you choose to use the '
+        'global default ratios while configuring the keywords for an '
+        'aggregation layer as shown below.'
+    ))
+    message.add(paragraph)
+    paragraph = m.Paragraph(
+        m.Image(
+            'file:///%s/img/screenshots/'
+            'field-mapping-tool-default-ratios-screenshot.png' %
+            resources_path()),
+        style_class='text-center'
+    )
+    message.add(paragraph)
+
     header = m.Heading(tr('Advanced tab'), **INFO_STYLE)
     message.add(header)
+    paragraph = m.Paragraph(
+        m.Image(
+            'file:///%s/img/screenshots/'
+            'inasafe-options-advanced-screenshot.png' %
+            resources_path()),
+        style_class='text-center'
+    )
+    message.add(paragraph)
 
     message.add(m.Paragraph(tr(
         'This tab contains options intended for advanced users only.'
