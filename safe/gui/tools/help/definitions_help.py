@@ -1209,7 +1209,7 @@ def _add_field_to_table(field, table):
     table.add(row)
     # Description goes in its own row with spanning
     row = m.Row()
-    row.add(m.Cell(field['description'], span=6))
+    row.add(m.Cell(field['description'] + ' ' + field['help_text'], span=6))
     table.add(row)
 
 
