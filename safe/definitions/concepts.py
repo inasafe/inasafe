@@ -502,7 +502,8 @@ concepts['lactating'] = {
                     u'lactate'
         }
     ],
-}concepts['pregnant_lactating'] = {
+}
+concepts['pregnant_lactating'] = {
     'group': tr('Gender'),
     'key': 'pregnant_lactating',
     'description': tr('A female who is either pregnant or feeding a baby.'),
