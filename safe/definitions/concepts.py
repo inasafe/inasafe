@@ -293,48 +293,6 @@ concepts['killed_people'] = {
         }
     ],
 }
-concepts['youth'] = {
-    'group': tr('Demographics'),
-    'key': 'youth',
-    'description': tr(
-        'A person aged between 0 and 14 years.'),
-    'citations': [
-        {
-            'text': tr(
-                'CIA (2016)The World Factbook.'),
-            'link': u'https://www.cia.gov/library/publications/'
-                    u'resources/the-world-factbook/'
-        }
-    ],
-}
-concepts['adult'] = {
-    'group': tr('Demographics'),
-    'key': 'adult',
-    'description': tr(
-        'Person aged between 15 and 64 years, usually of working age.'),
-    'citations': [
-        {
-            'text': tr(
-                'CIA (2016)The World Factbook.'),
-            'link': u'https://www.cia.gov/library/publications/'
-                    u'resources/the-world-factbook/'
-        }
-    ],
-}
-concepts['elderly'] = {
-    'group': tr('Demographics'),
-    'key': 'elderly',
-    'description': tr(
-        'Person aged 64 years and over.'),
-    'citations': [
-        {
-            'text': tr(
-                'CIA (2016)The World Factbook.'),
-            'link': u'https://www.cia.gov/library/publications/'
-                    u'resources/the-world-factbook/'
-        }
-    ],
-}
 concepts['people'] = {
     'group': tr('Demographics'),
     'key': 'people',
@@ -378,12 +336,18 @@ concepts['infant'] = {
     'group': tr('Demographics'),
     'key': 'infant',
     'description': tr(
-        'A very young child or baby.'),
+        'A very young child or baby aged between 0 and 4 years.'),
     'citations': [
         {
             'text': tr(
                 'Oxford Dictionary.'),
             'link': u'https://en.oxforddictionaries.com/definition/infant'
+        },
+        {
+            'text': tr(
+                'World Population Dashboard. '
+                'ICPD Goals and Demographic Indicators 2016.'),
+            'link': u'http://www.unfpa.org/world-population-dashboard'
         }
     ],
 }
@@ -391,13 +355,61 @@ concepts['child'] = {
     'group': tr('Demographics'),
     'key': 'child',
     'description': tr(
-        'A young human being below the age of puberty or below the legal age '
-        'of majority.'),
+        'A young person aged between 5 and 14 years, usually below the '
+        'age of puberty.'),
     'citations': [
         {
             'text': tr(
                 'Oxford Dictionary.'),
             'link': u'https://en.oxforddictionaries.com/definition/child'
+        },
+        {
+            'text': tr(
+                'World Population Dashboard. '
+                'ICPD Goals and Demographic Indicators 2016.'),
+            'link': u'http://www.unfpa.org/world-population-dashboard'
+        }
+    ],
+}
+concepts['youth'] = {
+    'group': tr('Demographics'),
+    'key': 'youth',
+    'description': tr(
+        'A person aged between 0 and 14 years.'),
+    'citations': [
+        {
+            'text': tr(
+                'World Population Dashboard. '
+                'ICPD Goals and Demographic Indicators 2016.'),
+            'link': u'http://www.unfpa.org/world-population-dashboard'
+        }
+    ],
+}
+concepts['adult'] = {
+    'group': tr('Demographics'),
+    'key': 'adult',
+    'description': tr(
+        'Person aged between 15 and 64 years, usually of working age.'),
+    'citations': [
+        {
+            'text': tr(
+                'World Population Dashboard. '
+                'ICPD Goals and Demographic Indicators 2016.'),
+            'link': u'http://www.unfpa.org/world-population-dashboard'
+        }
+    ],
+}
+concepts['elderly'] = {
+    'group': tr('Demographics'),
+    'key': 'elderly',
+    'description': tr(
+        'Persons aged 64 years and over.'),
+    'citations': [
+        {
+            'text': tr(
+                'World Population Dashboard. '
+                'ICPD Goals and Demographic Indicators 2016.'),
+            'link': u'http://www.unfpa.org/world-population-dashboard'
         }
     ],
 }
@@ -413,6 +425,54 @@ concepts['disabled'] = {
                 'Oxford Dictionary.'),
             'link': u'https://en.oxforddictionaries.com/definition/'
                     u'disabled'
+        },
+        {
+            'text': tr(
+                'World Report on Disability.'),
+            'link': u'http://www.who.int/disabilities/world_report/2011/'
+                    u'report.pdf'
+        }
+    ],
+}
+concepts['under_5'] = {
+    'group': tr('Vulnerability'),
+    'key': 'under_5',
+    'description': tr(
+        'Persons aged under 5 years'),
+    'citations': [
+        {
+            'text': tr(
+                'World Population Dashboard. '
+                'ICPD Goals and Demographic Indicators 2016.'),
+            'link': u'http://www.unfpa.org/world-population-dashboard'
+        }
+    ],
+}
+concepts['over_60'] = {
+    'group': tr('Vulnerability'),
+    'key': 'over_60',
+    'description': tr(
+        'Persons aged 60 years and over'),
+    'citations': [
+        {
+            'text': tr('World Population Aging 2013'),
+            'link': u'http://www.un.org/en/development/desa/population/'
+                    u'publications/pdf/ageing/WorldPopulationAgeing2013.pdf'
+        }
+    ],
+}
+concepts['child_bearing_age'] = {
+    'group': tr('Gender'),
+    'key': 'child_bearing_age',
+    'description': tr(
+        'The span of ages (usually 15-49) at which individuals are capable '
+        'of becoming parents. The phrase can be applied to men and women '
+        'but most frequently refers to women.'),
+    'citations': [
+        {
+            'text': tr('UNFPA One Voice'),
+            'link': u'https://onevoice.unfpa.org/'
+                    u'index.unfpa?method=article&id=66'
         }
     ],
 }
@@ -427,6 +487,32 @@ concepts['pregnant'] = {
                 'Oxford Dictionary.'),
             'link': u'https://en.oxforddictionaries.com/definition/'
                     u'pregnant'
+        }
+    ],
+}
+concepts['lactating'] = {
+    'group': tr('Vulnerability'),
+    'key': 'lactating',
+    'description': tr(
+        'A female producing milk to feed a baby.'),
+    'citations': [
+        {
+            'text': tr(
+                'Oxford Dictionary.'),
+            'link': u'https://en.oxforddictionaries.com/definition/'
+                    u'lactate'
+        }
+    ],
+}
+concepts['pregnant_lactating'] = {
+    'group': tr('Gender'),
+    'key': 'pregnant_lactating',
+    'description': tr(
+        'A female who is either pregnant or feeding a baby.'),
+    'citations': [
+        {
+            'text': tr(''),
+            'link': u''
         }
     ],
 }
@@ -559,50 +645,6 @@ concepts['rounding_methodology'] = {
     'citations': [
         {
             'text': '',
-            'link': u''
-        }
-    ],
-}
-concepts['under_5'] = {
-    'group': tr('Vulnerability'),
-    'key': 'under_5',
-    'description': tr(''),
-    'citations': [
-        {
-            'text': tr(''),
-            'link': u''
-        }
-    ],
-}
-concepts['over_60'] = {
-    'group': tr('Vulnerability'),
-    'key': 'over_60',
-    'description': tr(''),
-    'citations': [
-        {
-            'text': tr(''),
-            'link': u''
-        }
-    ],
-}
-concepts['child_bearing_age'] = {
-    'group': tr('Gender'),
-    'key': 'child_bearing_age',
-    'description': tr(''),
-    'citations': [
-        {
-            'text': tr(''),
-            'link': u''
-        }
-    ],
-}
-concepts['pregnant_lactating'] = {
-    'group': tr('Gender'),
-    'key': 'pregnant_lactating',
-    'description': tr(''),
-    'citations': [
-        {
-            'text': tr(''),
             'link': u''
         }
     ],

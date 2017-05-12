@@ -670,8 +670,11 @@ youth_count_field = {
     'description': tr(
         'The number of young people for each feature.'),
     'help_text': tr(
-        '"Youth" is defined as: {concept} In cases where population data is '
-        'available, InaSAFE will calculate the number of youths per exposure '
+        '"Youth" is defined as: {concept} This definition may not align well '
+        'with the definition of youth in the humanitarian sector. It should '
+        'be noted that this concept overlaps with the concepts of infant and '
+        'child in InaSAFE. In cases where population data is available, '
+        'InaSAFE will calculate the number of youths per exposure '
         'feature, aggregate hazard area, aggregation area and for the '
         'analysis area as a whole. The youth count is calculated based on '
         'standard ratios either provided as a global setting in InaSAFE, or '
