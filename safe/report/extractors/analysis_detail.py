@@ -121,21 +121,30 @@ def analysis_detail_extractor(impact_report, component_metadata):
     # definitions concept
     header_hazard_group = {
         'affected': {
-            'hazards': []
+            'hazards': [],
+            'total': []
         },
         'not_affected': {
-            'hazards': []
+            'hazards': [],
+            'total': []
         }
     }
     for key, group in header_hazard_group.iteritems():
         if key in hazard_class_header_mapping:
             header_hazard_group[key].update(hazard_class_header_mapping[key])
 
-    for hazard_class in hazard_classification['classes']:
+    affected_header_index = None
+    for index, hazard_class in enumerate(hazard_classification['classes']):
         # the tuple format would be:
         # (class name, is it affected, header background color
+
         hazard_class_name = hazard_class['name']
-        if hazard_class.get('affected'):
+        affected = hazard_class.get('affected')
+
+        if not affected and not affected_header_index:
+            affected_header_index = index + 1
+            affected_status = 'not_affected'
+        elif affected:
             affected_status = 'affected'
         else:
             affected_status = 'not_affected'
@@ -144,6 +153,20 @@ def analysis_detail_extractor(impact_report, component_metadata):
             hazard_class_name)
         headers.append(hazard_class_name)
 
+    if affected_header_index:
+        not_affected_header_index = len(hazard_classification['classes']) + 2
+    else:
+        affected_header_index = len(hazard_classification['classes']) + 1
+        not_affected_header_index = affected_header_index + 2
+
+    headers.insert(affected_header_index, total_affected_field['name'])
+    headers.insert(not_affected_header_index, total_not_affected_field['name'])
+
+    header_hazard_group['affected']['total'].append(
+        total_affected_field['name'])
+    header_hazard_group['not_affected']['total'].append(
+        total_not_affected_field['name'])
+
     # affected, not affected, not exposed, total header
     report_fields = [
         total_affected_field,
@@ -151,7 +174,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
         total_not_exposed_field,
         total_field
     ]
-    for report_field in report_fields:
+    for report_field in report_fields[2:]:
         headers.append(report_field['name'])
 
     """Create detail rows"""
@@ -207,6 +230,12 @@ def analysis_detail_extractor(impact_report, component_metadata):
         skip_row = False
 
         for field in report_fields:
+            group_key = None
+            for key, group in header_hazard_group.iteritems():
+                if field['name'] in group['total']:
+                    group_key = key
+                    break
+
             field_index = exposure_summary_table.fieldNameIndex(
                 field['field_name'])
             total_count = int(float(feat[field_index]))
@@ -217,7 +246,28 @@ def analysis_detail_extractor(impact_report, component_metadata):
                 skip_row = True
                 break
 
-            row.append(total_count)
+            if group_key:
+                if field == total_affected_field:
+                    row.insert(
+                        affected_header_index,
+                        {
+                            'value': total_count,
+                            'header_group': group_key
+                        })
+                elif field == total_not_affected_field:
+                    row.insert(
+                        not_affected_header_index,
+                        {
+                            'value': total_count,
+                            'header_group': group_key
+                        })
+                else:
+                    row.append({
+                        'value': total_count,
+                        'header_group': group_key
+                    })
+            else:
+                row.append(total_count)
 
         if skip_row:
             continue
@@ -264,11 +314,14 @@ def analysis_detail_extractor(impact_report, component_metadata):
     # create total header
     footers = [total_field['name']]
     # total for hazard
+    save_total_affected_field = False
     for hazard_class in hazard_classification['classes']:
         # hazard_count_field is a dynamic field with hazard class
         # as parameter
         field_key_name = hazard_count_field['key'] % (
             hazard_class['key'],)
+        if not hazard_class.get('affected'):
+            save_total_affected_field = True
 
         group_key = None
         for key, group in header_hazard_group.iteritems():
@@ -293,7 +346,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
         if count_value == '0':
             # if total affected for hazard class is zero, delete entire
             # column
-            column_index = len(footers)
+            column_index = len(footers) + int(save_total_affected_field)
             # delete header column
             headers = headers[:column_index] + headers[column_index + 1:]
             for row_idx in range(0, len(details)):
@@ -308,12 +361,40 @@ def analysis_detail_extractor(impact_report, component_metadata):
 
     # for footers
     for field in report_fields:
+
+        group_key = None
+        for key, group in header_hazard_group.iteritems():
+            if field['name'] in group['total']:
+                group_key = key
+                break
+
         total_count = value_from_field_name(
             field['field_name'], analysis_layer)
         total_count = format_number(
             total_count,
             enable_rounding=is_rounding)
-        footers.append(total_count)
+        if group_key:
+            if field == total_affected_field:
+                footers.insert(
+                    affected_header_index,
+                    {
+                        'value': total_count,
+                        'header_group': group_key
+                    })
+            elif field == total_not_affected_field:
+                footers.insert(
+                    not_affected_header_index,
+                    {
+                        'value': total_count,
+                        'header_group': group_key
+                    })
+            else:
+                footers.append({
+                    'value': total_count,
+                    'header_group': group_key
+                })
+        else:
+            footers.append(total_count)
 
     header = resolve_from_dictionary(
         extra_args, 'header')
@@ -326,7 +407,10 @@ def analysis_detail_extractor(impact_report, component_metadata):
     context['notes'] = notes
 
     breakdown_header_index = 0
-    total_header_index = len(headers) - len(report_fields)
+
+    # we want to include total affected and not affected as a group
+    # to its class so len(report_fields) - 2
+    total_header_index = len(headers) - (len(report_fields) - 2)
     context['detail_header'] = {
         'header_hazard_group': header_hazard_group,
         'breakdown_header_index': breakdown_header_index,
@@ -340,7 +424,8 @@ def analysis_detail_extractor(impact_report, component_metadata):
         hazard_class_name = headers[i]
         group_key = None
         for key, group in header_hazard_group.iteritems():
-            if hazard_class_name in group['hazards']:
+            if hazard_class_name in group['hazards'] or (
+                        hazard_class_name in group['total']):
                 group_key = key
                 break
 
