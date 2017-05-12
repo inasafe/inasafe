@@ -58,6 +58,8 @@ class GroupSelectParameterWidget(GenericParameterWidget):
         self.list_widget.setDragDropMode(QAbstractItemView.DragDrop)
         self.list_widget.setDefaultDropAction(Qt.MoveAction)
         self.list_widget.setEnabled(False)
+        self.list_widget.setSizePolicy(
+            QSizePolicy.Maximum, QSizePolicy.Expanding)
 
         for i, key in enumerate(self._parameter.options):
             value = self._parameter.options[key]
@@ -105,21 +107,29 @@ class GroupSelectParameterWidget(GenericParameterWidget):
             if self._parameter.selected == key:
                 radio_button.setChecked(True)
 
+        # Help text
+        self.help_label = QLabel(self._parameter.help_text)
+        self.help_label.setSizePolicy(
+            QSizePolicy.Maximum, QSizePolicy.Expanding)
+        self.help_label.setWordWrap(True)
+        self.help_label.setAlignment(Qt.AlignTop)
+
         self.inner_input_layout.addLayout(self.radio_button_layout)
         self.inner_input_layout.addWidget(self.list_widget)
 
         # Put elements into layouts
         self.input_layout.addWidget(self.label)
         self.input_layout.addLayout(self.inner_input_layout)
-        self.input_layout.setStretch(0, 1)
-        self.input_layout.setStretch(1, 0)
+
+        self.help_layout = QVBoxLayout()
+        self.help_layout.addWidget(self.help_label)
 
         self.main_layout.addLayout(self.input_layout)
-        self.main_layout.addSpacerItem(QSpacerItem(0, 0))
+        self.main_layout.addLayout(self.help_layout)
 
         self.setLayout(self.main_layout)
 
-        self.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
+        self.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Expanding)
 
         # Update list widget
         self.update_list_widget()
