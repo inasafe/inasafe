@@ -131,10 +131,15 @@ p {
   margin-top: 10px;
 }
 
-/* Prevent page text being cut off at the bottom when printing. */
+/* Try to prevent page text being cut off at the bottom when printing. */
 @page  {
     size: auto;   /* auto is the initial value */
 
     /* this affects the margin in the printer settings */
     margin: 25mm 25mm 25mm 25mm;
+}
+
+/* Try to prevent images wider than content. */
+img{
+    max-width: 100%;
 }
