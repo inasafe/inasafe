@@ -45,7 +45,9 @@ from safe.definitions.fields import (
 from safe.definitions.styles import charcoal_black
 from safe.report.extractors.action_notes import (
     action_checklist_extractor,
-    notes_assumptions_extractor)
+    notes_assumptions_extractor,
+    action_notes_extractor,
+    action_notes_pdf_extractor)
 from safe.report.extractors.aggregate_postprocessors import \
     aggregation_postprocessors_extractor
 from safe.report.extractors.aggregate_result import \
@@ -616,6 +618,30 @@ standard_impact_report_metadata_html = {
                         analysis_provenance_details_component)
                 }
             }
+        },
+        {
+            'key': 'action-notes-report',
+            'type': jinja2_component_type,
+            'processor': jinja2_renderer,
+            'extractor': action_notes_extractor,
+            'output_format': Jinja2ComponentsMetadata.OutputFormat.File,
+            'output_path': 'action-notes-output.html',
+            'template': 'standard-template/'
+                        'jinja2/'
+                        'action-notes-layout.html',
+            'tags': [
+                final_product_tag,
+                table_product_tag,
+                html_product_tag
+            ],
+            'extra_args': {
+                'components_list': {
+                    'action_checklist': action_checklist_component,
+                    'notes_assumptions': notes_assumptions_component,
+                    'analysis_provenance_details': (
+                        analysis_provenance_details_component)
+                }
+            }
         }
     ]
 }
@@ -634,6 +660,20 @@ standard_impact_report_metadata_pdf = {
             'extractor': impact_table_pdf_extractor,
             'output_format': QgisComposerComponentsMetadata.OutputFormat.PDF,
             'output_path': 'impact-report-output.pdf',
+            'tags': [
+                final_product_tag,
+                table_product_tag,
+                pdf_product_tag
+            ]
+        },
+        # Action Checklist and Notes Report PDF
+        {
+            'key': 'action-notes-pdf',
+            'type': qgis_composer_component_type,
+            'processor': qgis_composer_html_renderer,
+            'extractor': action_notes_pdf_extractor,
+            'output_format': QgisComposerComponentsMetadata.OutputFormat.PDF,
+            'output_path': 'action-notes-report-output.pdf',
             'tags': [
                 final_product_tag,
                 table_product_tag,
