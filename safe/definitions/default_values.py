@@ -19,8 +19,8 @@ female_ratio_default_value = {
     'min_value': 0,
     'max_value': 1,
     'increment': 0.001,
-    'description': tr('Default ratio of females per 100 people in the '
-                      'total population.')
+    'description': tr(
+        'Default ratio of females per 100 people in the total population.')
 }
 
 male_ratio_default_value = {
@@ -32,8 +32,8 @@ male_ratio_default_value = {
     'min_value': 0,
     'max_value': 1,
     'increment': 0.001,
-    'description': tr('Default ratio of males per 100 people in the '
-                      'total populaiton.')
+    'description': tr(
+        'Default ratio of males per 100 people in the total population.')
 }
 
 feature_rate_default_value = {
@@ -86,8 +86,8 @@ infant_ratio_default_value = {
     'min_value': 0,
     'max_value': 1,
     'increment': 0.001,
-    'description': tr('Default ratio of infants per 100 people in the '
-                      'total population.')
+    'description': tr(
+        'Default ratio of infants per 100 people in the total population.')
 }
 
 child_ratio_default_value = {
@@ -99,8 +99,8 @@ child_ratio_default_value = {
     'min_value': 0,
     'max_value': 1,
     'increment': 0.001,
-    'description': tr('Default ratio of children per 100 people in the '
-                      'total population.')
+    'description': tr(
+        'Default ratio of children per 100 people in the total population.')
 }
 
 youth_ratio_default_value = {
@@ -114,8 +114,8 @@ youth_ratio_default_value = {
     'min_value': 0,
     'max_value': 1,
     'increment': 0.001,
-    'description': tr('Default ratio of youths per 100 people in the '
-                      'total population.')
+    'description': tr(
+        'Default ratio of youths per 100 people in the total population.')
 }
 
 adult_ratio_default_value = {
@@ -128,8 +128,8 @@ adult_ratio_default_value = {
     'min_value': 0,
     'max_value': 1,
     'increment': 0.001,
-    'description': tr('Default ratio of adults per 100 people in the '
-                      'total population.')
+    'description': tr(
+        'Default ratio of adults per 100 people in the total population.')
 }
 
 elderly_ratio_default_value = {
@@ -158,8 +158,9 @@ under_5_ratio_default_value = {
     'min_value': 0,
     'max_value': 1,
     'increment': 0.001,
-    'description': tr('Default ratio of under 5 year olds per 100 people in '
-                      'the total population.')
+    'description': tr(
+        'Default ratio of under 5 year olds per 100 people in the total '
+        'population.')
 }
 
 over_60_ratio_default_value = {
@@ -172,8 +173,9 @@ over_60_ratio_default_value = {
     'min_value': 0,
     'max_value': 1,
     'increment': 0.001,
-    'description': tr('Default ratio of over 60 year olds per 100 people in '
-                      'the total population.')
+    'description': tr(
+        'Default ratio of over 60 year olds per 100 people in the total '
+        'population.')
 }
 
 disabled_ratio_default_value = {
@@ -185,8 +187,9 @@ disabled_ratio_default_value = {
     'min_value': 0,
     'max_value': 1,
     'increment': 0.001,
-    'description': tr('Default ratio of disabled people per 100 people in '
-                      'the total population.')
+    'description': tr(
+        'Default ratio of disabled people per 100 people in the total '
+        'population.')
 }
 
 child_bearing_age_ratio_default_value = {
@@ -199,8 +202,9 @@ child_bearing_age_ratio_default_value = {
     'min_value': 0,
     'max_value': 1,
     'increment': 0.001,
-    'description': tr('Default ratio of people of child bearing age '
-                      'per 100 people in the total population.')
+    'description': tr(
+        'Default ratio of people of child bearing age per 100 people in the '
+        'total population.')
 }
 
 pregnant_lactating_ratio_default_value = {
@@ -213,8 +217,9 @@ pregnant_lactating_ratio_default_value = {
     'min_value': 0,
     'max_value': 1,
     'increment': 0.001,
-    'description': tr('Default ratio of pregnant or lactating people '
-                      'per 100 people in the total population.')
+    'description': tr(
+        'Default ratio of pregnant or lactating people per 100 people in the '
+        'total population.')
 }
 pregnant_ratio_default_value = {
     'key': 'pregnant_ratio_default_value',
@@ -226,8 +231,9 @@ pregnant_ratio_default_value = {
     'min_value': 0,
     'max_value': 1,
     'increment': 0.001,
-    'description': tr('Default ratio of pregnant people per 100 people in '
-                      'the total population.')
+    'description': tr(
+        'Default ratio of pregnant people per 100 people in the total '
+        'population.')
 }
 lactating_ratio_default_value = {
     'key': 'lactating_ratio_default_value',
@@ -239,6 +245,7 @@ lactating_ratio_default_value = {
     'min_value': 0,
     'max_value': 1,
     'increment': 0.001,
-    'description': tr('Default ratio of lactating people per 100 people in '
-                      'the total population.')
+    'description': tr(
+        'Default ratio of lactating people per 100 people in the total '
+        'population.')
 }
