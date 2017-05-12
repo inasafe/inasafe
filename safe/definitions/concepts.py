@@ -451,7 +451,8 @@ concepts['under_5'] = {
 concepts['over_60'] = {
     'group': tr('Vulnerability'),
     'key': 'over_60',
-    'description': tr('Persons aged 60 years and over'),
+    'description': tr(
+        'Persons aged 60 years and over'),
     'citations': [
         {
             'text': tr('World Population Aging 2013'),
@@ -463,10 +464,10 @@ concepts['over_60'] = {
 concepts['child_bearing_age'] = {
     'group': tr('Gender'),
     'key': 'child_bearing_age',
-    'description': tr('The span of ages (usually 15-49) at which individuals '
-                      'are capable of becoming parents. The phrase can be '
-                      'applied to men and women but most frequently refers '
-                      'to women.'),
+    'description': tr(
+        'The span of ages (usually 15-49) at which individuals are capable '
+        'of becoming parents. The phrase can be applied to men and women '
+        'but most frequently refers to women.'),
     'citations': [
         {
             'text': tr('UNFPA One Voice'),
@@ -506,7 +507,8 @@ concepts['lactating'] = {
 concepts['pregnant_lactating'] = {
     'group': tr('Gender'),
     'key': 'pregnant_lactating',
-    'description': tr('A female who is either pregnant or feeding a baby.'),
+    'description': tr(
+        'A female who is either pregnant or feeding a baby.'),
     'citations': [
         {
             'text': tr(''),
