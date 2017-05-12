@@ -484,7 +484,7 @@ class TestImpactFunction(unittest.TestCase):
         index = analysis.fieldNameIndex(
             displaced_field['field_name'])
         displaced_population = analysis.uniqueValues(index)[0]
-        self.assertEqual(
+        int(
             displaced_population * female_ratio, female_displaced)
 
         # Check that we have more than 0 youth displaced in the analysis layer
