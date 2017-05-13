@@ -20,6 +20,24 @@
     <IP_info>http://inasafe.org</IP_info>
   </iconfile>
 
+# Age concepts
+
+  <iconfile>
+    <filename>infant.svg</filename>
+    <publishable>Yes</publishable>
+    <source>UNOCHA</source>
+    <IP_owner>UNOCHA</IP_owner>
+    <IP_info>http://thenounproject.com/ochaavmu/collection/ocha-humanitarian-icons/?i=4287</IP_info>
+  </iconfile>
+
+  <iconfile>
+    <filename>child.svg</filename>
+    <publishable>Yes</publishable>
+    <source>UNOCHA</source>
+    <IP_owner>UNOCHA</IP_owner>
+    <IP_info>http://thenounproject.com/ochaavmu/collection/ocha-humanitarian-icons/?i=4283</IP_info>
+  </iconfile>
+
   <iconfile>
     <filename>adult.svg</filename>
     <publishable>Yes</publishable>
@@ -44,6 +62,7 @@
     <IP_info>http://thenounproject.com/ochaavmu/collection/ocha-humanitarian-icons/?i=4286</IP_info>
   </iconfile>
 
+# Gender concepts
   <iconfile>
     <filename>female.svg</filename>
     <publishable>Yes</publishable>
@@ -52,7 +71,7 @@
     <IP_info>http://thenounproject.com/ochaavmu/collection/ocha-humanitarian-icons/?i=4296</IP_info>
   </iconfile>
 
-   <iconfile>
+  <iconfile>
     <filename>male.svg</filename>
     <publishable>Yes</publishable>
     <source>UNOCHA</source>
@@ -60,13 +79,7 @@
     <IP_info>http://thenounproject.com/ochaavmu/collection/ocha-humanitarian-icons/?i=4289</IP_info>
   </iconfile>
 
-  <iconfile>
-    <filename>infant.svg</filename>
-    <publishable>Yes</publishable>
-    <source>UNOCHA</source>
-    <IP_owner>UNOCHA</IP_owner>
-    <IP_info>http://thenounproject.com/ochaavmu/collection/ocha-humanitarian-icons/?i=4287</IP_info>
-  </iconfile>
+# Vulnerability
 
   <iconfile>
     <filename>disabled.svg</filename>
@@ -77,11 +90,43 @@
   </iconfile>
 
   <iconfile>
-    <filename>pregnant.svg</filename>
+    <filename>Under5.svg</filename>
+    <publishable>Yes</publishable>
+    <source>UNOCHA</source>
+    <IP_owner>UNOCHA</IP_owner>
+    <IP_info>http://thenounproject.com/ochaavmu/collection/ocha-humanitarian-icons/?i=4283</IP_info>
+  </iconfile>
+
+  <iconfile>
+    <filename>Over60.svg</filename>
+    <publishable>Yes</publishable>
+    <source>UNOCHA</source>
+    <IP_owner>UNOCHA</IP_owner>
+    <IP_info>http://thenounproject.com/ochaavmu/collection/ocha-humanitarian-icons/?i=4286</IP_info>
+  </iconfile>
+
+  <iconfile>
+    <filename>displaced.svg</filename>
+    <publishable>Yes</publishable>
+    <source>UNOCHA</source>
+    <IP_owner>UNOCHA</IP_owner>
+    <IP_info>http://thenounproject.com/ochaavmu/collection/ocha-humanitarian-icons/?i=4244</IP_info>
+  </iconfile>
+
+  <iconfile>
+    <filename>pregnant_lactating.svg</filename>
     <publishable>Yes</publishable>
     <source>UNOCHA</source>
     <IP_owner>UNOCHA</IP_owner>
     <IP_info>http://thenounproject.com/ochaavmu/collection/ocha-humanitarian-icons/?i=4294</IP_info>
+  </iconfile>
+
+  <iconfile>
+    <filename>child_bearing.svg</filename>
+    <publishable>Yes</publishable>
+    <source>UNOCHA</source>
+    <IP_owner>UNOCHA</IP_owner>
+    <IP_info>http://thenounproject.com/ochaavmu/collection/ocha-humanitarian-icons/?i=4289</IP_info>
   </iconfile>
 
    <iconfile>

@@ -81,7 +81,11 @@
                     {% set header_colspan = header.colspan %}
                     {% set group_name = detail_header.header_hazard_group[header_group].header %}
                     <th class="text-right {{ header_group }}">
+                        {% if header_name.isupper() %}
+                            {{ header_name }}
+                        {% else %}
                             {{ header_name|capitalize }}
+                        {% endif %}
                     </th>
                 {% endif %}
             {% endfor %}

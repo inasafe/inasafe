@@ -250,6 +250,8 @@ class FieldMappingTab(QWidget, object):
             parameter.name = field['name']
             parameter.options = options
             parameter.selected = selected_option
+            parameter.help_text = field['help_text']
+            parameter.description = field['description']
 
             self.parameters.append(parameter)
 
@@ -301,6 +303,10 @@ class FieldMappingTab(QWidget, object):
     def update_footer(self):
         """Update footer when the field list change."""
         field_item = self.field_list.currentItem()
+
+        if not field_item:
+            self.footer_label.setText('')
+            return
 
         field_name = field_item.data(Qt.UserRole)
         field = self.layer.fields().field(field_name)
