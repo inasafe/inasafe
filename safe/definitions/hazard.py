@@ -89,7 +89,7 @@ hazard_generic = {
     'notes': [
         {
             'item_category': 'generic_hazard_general',
-            'item_header':  tr('generic hazard general notes'),
+            'item_header': tr('generic hazard general notes'),
             'item_list': [
                 # additional generic notes for generic
                 caveat_simulation,

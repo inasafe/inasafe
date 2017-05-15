@@ -44,18 +44,19 @@ exposure_population = {
             'item_list': [
                 # these are additional generic notes for people
                 caveat_incomplete_data,
-                tr('Exposed population varies by the time (day or night, weekends, '
-                   'holidays etc.). Such variations are not included in the analysis.'
+                tr('Exposed population varies by the time (day or night, '
+                   'weekends, holidays etc.). Such variations are not '
+                   'included in the analysis.'
                 ),
-                tr('Numbers reported for population counts have been rounded to the '
-                   'nearest 10 people if the total is less than 1,000; nearest 100 '
-                   'people if more than 1,000 and less than 100,000; and nearest '
-                   '1000 if more than 100,000.'),
-                tr('Rounding is applied to all population values, which may cause '
-                   'discrepancies between subtotals and totals. '),
+                tr('Numbers reported for population counts have been rounded '
+                   'to the nearest 10 people if the total is less than 1,000; '
+                   'nearest 100 people if more than 1,000 and less than '
+                   '100,000; and nearest 1000 if more than 100,000.'),
+                tr('Rounding is applied to all population values, which may '
+                   'cause discrepancies between subtotals and totals. '),
                 concepts['rounding_methodology']['description'],
-                tr('If displacement counts are 0, no minimum needs and displaced '
-                   'related postprocessors will be shown.')
+                tr('If displacement counts are 0, no minimum needs and '
+                   'displaced related postprocessors will be shown.')
             ]
         }
     ],
@@ -187,16 +188,17 @@ exposure_road = {
             'item_list': [
                 # these are additional generic notes for roads
                 caveat_incomplete_data,
-                tr('Numbers for road lengths have been rounded to the nearest 10 '
-                   'metres if the total is less than 1,000; nearest 100 metres if '
-                   'more than 1,000 and less than 100,000; and nearest 1000 metres if '
-                   'more than 100,000.'),
+                tr('Numbers for road lengths have been rounded to the '
+                   'nearest 10 metres if the total is less than 1,000; '
+                   'nearest 100 metres if more than 1,000 and less than '
+                   '100,000; and nearest 1000 metres if more than 100,000.'),
                 tr('Rounding is applied to all road lengths, which may cause '
                    'discrepancies between subtotals and totals.'),
                 concepts['rounding_methodology']['description'],
-                tr('Roads marked as not affected may still be unusable due to network '
-                   'isolation. Roads marked as affected may still be usable if they '
-                   'are elevated above the local landscape.'),
+                tr('Roads marked as not affected may still be unusable due '
+                   'to network isolation. Roads marked as affected may '
+                   'still be usable if they are elevated above '
+                   'the local landscape.'),
                 # only flood and tsunami are used with road
                 # currently to it is safe to use inundated here ...
                 tr('Roads are closed if they are affected.'),
@@ -263,15 +265,15 @@ exposure_structure = {
             'item_list': [
                 # additional generic notes for structures
                 caveat_incomplete_data,
-                tr('Structures overlapping the analysis extent may be assigned a '
-                   'hazard status lower than that to which they are exposed outside '
-                   'the analysis area.'),
-                tr('Numbers reported for structures have been rounded to the nearest '
-                   '10 if the total is less than 1,000; nearest 100 if more than '
-                   '1,000 and less than 100,000; and nearest 1000 if more than '
-                   '100,000.'),
-                tr('Rounding is applied to all structure counts, which may cause '
-                   'discrepancies between subtotals and totals.'),
+                tr('Structures overlapping the analysis extent may be '
+                   'assigned a hazard status lower than that to which they '
+                   'are exposed outside the analysis area.'),
+                tr('Numbers reported for structures have been rounded '
+                   'to the nearest 10 if the total is less than 1,000; '
+                   'nearest 100 if more than 1,000 and less than 100,000; '
+                   'and nearest 1000 if more than 100,000.'),
+                tr('Rounding is applied to all structure counts, which may '
+                   'cause discrepancies between subtotals and totals.'),
                 concepts['rounding_methodology']['description'],
             ]
         }
@@ -337,9 +339,10 @@ exposure_place = {
             'item_list': [
                 # additional generic notes for places
                 caveat_incomplete_data,
-                tr('Where places are represented as a single point, the effect of the '
-                   'hazard over the entire place may differ from the point at which '
-                   'the place is represented on the map.'),
+                tr('Where places are represented as a single point, '
+                   'the effect of the hazard over the entire place may '
+                   'differ from the point at which the place is represented '
+                   'on the map.'),
             ]
         }
     ],
@@ -389,8 +392,8 @@ exposure_land_cover = {
                    'the nearest 10 hectares if the total is less than 1,000; '
                    'nearest 100 hectares if more than 1,000 and less than '
                    '100,000; and nearest 1000 hectares if more than 100,000.'),
-                tr('Rounding is applied to all land cover areas, which may cause '
-                   'discrepancies between subtotals and totals.'),
+                tr('Rounding is applied to all land cover areas, which may '
+                   'cause discrepancies between subtotals and totals.'),
                 concepts['rounding_methodology']['description']
             ]
         }
