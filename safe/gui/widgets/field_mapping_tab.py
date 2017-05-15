@@ -272,10 +272,26 @@ class FieldMappingTab(QWidget, object):
 
         self.parameter_layout.addWidget(self.parameter_container)
 
-        self.populate_field_list(excluded_fields=used_fields)
-
         # Set header
         self.header_label.setText(self.field_group['description'])
+
+        # Set move or copy
+        if self.field_group.get('exclusive', False):
+            # If exclusive, do not add used field.
+            self.populate_field_list(excluded_fields=used_fields)
+            # Use move action since it's exclusive
+            self.field_list.setDefaultDropAction(Qt.MoveAction)
+            # Just make sure that the signal is disconnected
+            try:
+                self.field_list.itemChanged.disconnect(self.drop_remove())
+            except TypeError:
+                pass
+        else:
+            # If not exclusive, add all field.
+            self.populate_field_list()
+            # Use copy action since it's not exclusive
+            self.field_list.setDefaultDropAction(Qt.CopyAction)
+            self.field_list.itemChanged.connect(self.drop_remove)
 
     def get_parameter_value(self):
         """Get parameter of the tab.
@@ -318,3 +334,12 @@ class FieldMappingTab(QWidget, object):
         footer_text = tr('Field type: {0}\n').format(field.typeName())
         footer_text += tr('Unique values: {0}').format(pretty_unique_values)
         self.footer_label.setText(footer_text)
+
+    def drop_remove(self, dropped_item):
+        """Action when we need to remove dropped item.
+
+        :param dropped_item: The item that been dropped to field_list.
+        :type dropped_item: QListWidgetItem
+        """
+        # Notes(IS): For some reason, removeItemWidget is not working.
+        self.field_list.takeItem(self.field_list.row(dropped_item))
