@@ -180,6 +180,11 @@ def content():
                     m.Link(citation['link'], citation['text'])))
         row.add(m.Cell(term))
         row.add(m.Cell(description))
+        url = _definition_icon_url(value)
+        if url:
+            row.add(m.Cell(m.Image(url, **MEDIUM_ICON_STYLE)))
+        else:
+            row.add(m.Cell(''))
         table.add(row)
     # ensure the last group's table is added
     message.add(table)
@@ -742,8 +747,10 @@ def content():
 def _start_glossary_table(group):
     table = m.Table(style_class='table table-condensed table-striped')
     row = m.Row()
+    # first col for icons if present
     row.add(m.Cell(tr('Term'), header=True))
     row.add(m.Cell(tr('Description'), header=True))
+    row.add(m.Cell(tr(''), header=True))
     table.add(row)
     return table
 
@@ -1142,6 +1149,8 @@ def definition_to_message(
 
 
 def _definition_icon_url(definition):
+    if 'key' not in definition:
+        return None
     svg_image_path = resources_path(
         'img', 'definitions', definition['key'] + '.svg')
     png_image_path = resources_path(
