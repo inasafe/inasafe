@@ -196,10 +196,10 @@ def action_notes_pdf_extractor(impact_report, component_metadata):
     # we only have html elements for this
     html_frame_elements = [
         {
-            'id': 'action-notes-report',
+            'id': 'action-checklist-report',
             'mode': 'text',
             'text': jinja2_output_as_string(
-                impact_report, 'action-notes-report'),
+                impact_report, 'action-checklist-report'),
             'margin_left': 10,
             'margin_top': 10,
         }

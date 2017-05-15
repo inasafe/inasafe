@@ -620,15 +620,15 @@ standard_impact_report_metadata_html = {
             }
         },
         {
-            'key': 'action-notes-report',
+            'key': 'action-checklist-report',
             'type': jinja2_component_type,
             'processor': jinja2_renderer,
             'extractor': action_notes_extractor,
             'output_format': Jinja2ComponentsMetadata.OutputFormat.File,
-            'output_path': 'action-notes-output.html',
+            'output_path': 'action-checklist-output.html',
             'template': 'standard-template/'
                         'jinja2/'
-                        'action-notes-layout.html',
+                        'action-checklist-layout.html',
             'tags': [
                 final_product_tag,
                 table_product_tag,
@@ -637,7 +637,6 @@ standard_impact_report_metadata_html = {
             'extra_args': {
                 'components_list': {
                     'action_checklist': action_checklist_component,
-                    'notes_assumptions': notes_assumptions_component,
                     'analysis_provenance_details': (
                         analysis_provenance_details_component)
                 }
@@ -668,12 +667,12 @@ standard_impact_report_metadata_pdf = {
         },
         # Action Checklist and Notes Report PDF
         {
-            'key': 'action-notes-pdf',
+            'key': 'action-checklist-pdf',
             'type': qgis_composer_component_type,
             'processor': qgis_composer_html_renderer,
             'extractor': action_notes_pdf_extractor,
             'output_format': QgisComposerComponentsMetadata.OutputFormat.PDF,
-            'output_path': 'action-notes-report-output.pdf',
+            'output_path': 'action-checklist-output.pdf',
             'tags': [
                 final_product_tag,
                 table_product_tag,
