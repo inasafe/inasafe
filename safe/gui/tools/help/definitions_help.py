@@ -415,11 +415,11 @@ def content():
         heading_level=1)
     table = m.Table(style_class='table table-condensed table-striped')
     row = m.Row()
-    row.add(m.Cell(tr('Name')), header_flag=True)
-    row.add(m.Cell(tr('Default value')), header_flag=True)
-    row.add(m.Cell(tr('Default min')), header_flag=True)
-    row.add(m.Cell(tr('Default max')), header_flag=True)
-    row.add(m.Cell(tr('Description')), header_flag=True)
+    row.add(m.Cell(tr('Name'), header=True))
+    row.add(m.Cell(tr('Default value'), header=True))
+    row.add(m.Cell(tr('Default min'), header=True))
+    row.add(m.Cell(tr('Default max'), header=True))
+    row.add(m.Cell(tr('Description'), header=True))
     table.add(row)
     defaults = [
         definitions.youth_ratio_default_value,
@@ -623,10 +623,10 @@ def content():
         heading_level=1)
     table = m.Table(style_class='table table-condensed table-striped')
     row = m.Row()
-    row.add(m.Cell(tr('Name')), header_flag=True)
-    row.add(m.Cell(tr('Plural')), header_flag=True)
-    row.add(m.Cell(tr('Abbreviation')), header_flag=True)
-    row.add(m.Cell(tr('Details')), header_flag=True)
+    row.add(m.Cell(tr('Name'), header=True))
+    row.add(m.Cell(tr('Plural'), header=True))
+    row.add(m.Cell(tr('Abbreviation'), header=True))
+    row.add(m.Cell(tr('Details'), header=True))
     table.add(row)
     for unit in definitions.units_all:
         row = m.Row()
@@ -689,9 +689,9 @@ def content():
     post_processors = definitions.post_processors
     table = m.Table(style_class='table table-condensed table-striped')
     row = m.Row()
-    row.add(m.Cell(tr('Name')), header_flag=True)
-    row.add(m.Cell(tr('Input Fields')), header_flag=True)
-    row.add(m.Cell(tr('Output Fields')), header_flag=True)
+    row.add(m.Cell(tr('Name'), header=True))
+    row.add(m.Cell(tr('Input Fields'), header=True))
+    row.add(m.Cell(tr('Output Fields'), header=True))
     table.add(row)
     for post_processor in post_processors:
         row = m.Row()
@@ -742,8 +742,8 @@ def content():
 def _start_glossary_table(group):
     table = m.Table(style_class='table table-condensed table-striped')
     row = m.Row()
-    row.add(m.Cell(tr('Term')), header_flag=True)
-    row.add(m.Cell(tr('Description')), header_flag=True)
+    row.add(m.Cell(tr('Term'), header=True))
+    row.add(m.Cell(tr('Description'), header=True))
     table.add(row)
     return table
 
@@ -783,8 +783,8 @@ def _create_section_header(
 def _create_post_processor_subtable(item_list):
     table = m.Table(style_class='table table-condensed table-striped')
     row = m.Row()
-    row.add(m.Cell(tr('Name')), header_flag=True)
-    row.add(m.Cell(tr('Description')), header_flag=True)
+    row.add(m.Cell(tr('Name'), header=True))
+    row.add(m.Cell(tr('Description'), header=True))
     table.add(row)
     for item in item_list:
         row = m.Row()
@@ -992,10 +992,10 @@ def definition_to_message(
         message.add(m.Paragraph(m.ImportantText(tr('Units:'))))
         table = m.Table(style_class='table table-condensed table-striped')
         row = m.Row()
-        row.add(m.Cell(tr('Name')), header_flag=True)
-        row.add(m.Cell(tr('Plural')), header_flag=True)
-        row.add(m.Cell(tr('Abbreviation')), header_flag=True)
-        row.add(m.Cell(tr('Details')), header_flag=True)
+        row.add(m.Cell(tr('Name'), header=True))
+        row.add(m.Cell(tr('Plural'), header=True))
+        row.add(m.Cell(tr('Abbreviation'), header=True))
+        row.add(m.Cell(tr('Details'), header=True))
         table.add(row)
         for unit in definition['continuous_hazard_units']:
             row = m.Row()
@@ -1172,11 +1172,11 @@ def _definition_screenshot_url(definition):
 def _create_fields_table():
     table = m.Table(style_class='table table-condensed table-striped')
     row = m.Row()
-    row.add(m.Cell(tr('Name')), header_flag=True)
-    row.add(m.Cell(tr('Field Name')), header_flag=True)
-    row.add(m.Cell(tr('Type')), header_flag=True)
-    row.add(m.Cell(tr('Length')), header_flag=True)
-    row.add(m.Cell(tr('Precision')), header_flag=True)
+    row.add(m.Cell(tr('Name'), header=True))
+    row.add(m.Cell(tr('Field Name'), header=True))
+    row.add(m.Cell(tr('Type'), header=True))
+    row.add(m.Cell(tr('Length'), header=True))
+    row.add(m.Cell(tr('Precision'), header=True))
     table.add(row)
     return table
 
@@ -1238,13 +1238,13 @@ def _make_defaults_table():
     row = m.Row()
     # first row is for colour - we dont use a header here as some tables
     # do not have colour...
-    row.add(m.Cell(tr('')), header_flag=True)
-    row.add(m.Cell(tr('Name')), header_flag=True)
-    row.add(m.Cell(tr('Affected')), header_flag=True)
-    row.add(m.Cell(tr('Fatality rate')), header_flag=True)
-    row.add(m.Cell(tr('Displacement rate')), header_flag=True)
-    row.add(m.Cell(tr('Default values')), header_flag=True)
-    row.add(m.Cell(tr('Default min')), header_flag=True)
-    row.add(m.Cell(tr('Default max')), header_flag=True)
+    row.add(m.Cell(tr(''), header=True))
+    row.add(m.Cell(tr('Name'), header=True))
+    row.add(m.Cell(tr('Affected'), header=True))
+    row.add(m.Cell(tr('Fatality rate'), header=True))
+    row.add(m.Cell(tr('Displacement rate'), header=True))
+    row.add(m.Cell(tr('Default values'), header=True))
+    row.add(m.Cell(tr('Default min'), header=True))
+    row.add(m.Cell(tr('Default max'), header=True))
     table.add(row)
     return table
