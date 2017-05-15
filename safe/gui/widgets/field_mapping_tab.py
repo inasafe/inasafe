@@ -272,9 +272,6 @@ class FieldMappingTab(QWidget, object):
 
         self.parameter_layout.addWidget(self.parameter_container)
 
-        # Set header
-        self.header_label.setText(self.field_group['description'])
-
         # Set move or copy
         if self.field_group.get('exclusive', False):
             # If exclusive, do not add used field.
@@ -286,12 +283,22 @@ class FieldMappingTab(QWidget, object):
                 self.field_list.itemChanged.disconnect(self.drop_remove())
             except TypeError:
                 pass
+            # Set header
+            header_text = self.field_group['description']
+            header_text += '\n\n' + tr(
+                'You can only map one field to one concept.')
         else:
             # If not exclusive, add all field.
             self.populate_field_list()
             # Use copy action since it's not exclusive
             self.field_list.setDefaultDropAction(Qt.CopyAction)
             self.field_list.itemChanged.connect(self.drop_remove)
+            # Set header
+            header_text = self.field_group['description']
+            header_text += '\n\n' + tr(
+                'You can map one field to more than one concepts.')
+
+        self.header_label.setText(header_text)
 
     def get_parameter_value(self):
         """Get parameter of the tab.
