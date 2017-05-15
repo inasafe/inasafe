@@ -1,32 +1,36 @@
 <h5 class="info">
     <i class="icon-info-sign icon-white"></i> {{ header|capitalize }}
 </h5>
-<div class="container row">
-    <h5>
-        {{ table_header|capitalize }}
-    </h5>
-    {% for section in summary %}
-    <div class="col-md-6 col-xs-12 col-sm-6">
-        <table class="table table-striped condensed">
-            <thead>
-                <tr>
-                    <th colspan="1">{{ section.header_label }}</th>
-                    <th class="text-right" colspan="1">{{ section.value_label }}</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in section.rows %}
-                <tr>
-                    {% if item.as_header %}
-                        <th colspan="1">{{ item.name }}</th>
-                    {% else %}
-                        <td colspan="1">{{ item.name }}</td>
-                    {% endif %}
-                    <td class="text-right" colspan=1>{{ item.value }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+<div class="container">
+    <div class="row">
+        <h5>
+            {{ table_header|capitalize }}
+        </h5>
     </div>
-    {% endfor %}
+    <div class="row">
+        {% for section in summary %}
+        <div class="col-md-6 col-xs-12 col-sm-6">
+            <table class="table table-striped condensed">
+                <thead>
+                    <tr>
+                        <th colspan="1">{{ section.header_label }}</th>
+                        <th class="text-right" colspan="1">{{ section.value_label }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in section.rows %}
+                    <tr>
+                        {% if item.as_header %}
+                            <th colspan="1">{{ item.name }}</th>
+                        {% else %}
+                            <td colspan="1">{{ item.name }}</td>
+                        {% endif %}
+                        <td class="text-right" colspan=1>{{ item.value }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endfor %}
+    </div>
 </div>

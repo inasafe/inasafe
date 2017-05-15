@@ -17,6 +17,10 @@ from safe.definitions.fields import (
     total_affected_field,
     total_not_exposed_field,
     total_field)
+from safe.definitions.field_groups import (
+    age_displaced_count_group,
+    gender_displaced_count_group,
+    vulnerability_displaced_count_group)
 from safe.definitions.hazard_classifications import flood_hazard_classes
 from safe.impact_function.impact_function import ImpactFunction
 from safe.report.report_metadata import ReportMetadata
@@ -339,12 +343,14 @@ class TestImpactReport(unittest.TestCase):
                      u'values are excluded from the tables.',
             'group_border_color': u'#36454f',
             'detail_header': {
-                'total_header_index': 3,
+                'total_header_index': 5,
                 'breakdown_header_index': 0,
                 'header_hazard_group': {
                     'not_affected': {
                         'header': u'Not affected',
-                        'hazards': []
+                        'hazards': [],
+                        'total': [u'Total Not Affected'],
+                        'start_index': 4
                     },
                     'affected': {
                         'header': u'Affected',
@@ -352,6 +358,7 @@ class TestImpactReport(unittest.TestCase):
                             u'High hazard zone',
                             u'Medium hazard zone',
                             u'Low hazard zone'],
+                        'total': [u'Total Affected'],
                         'start_index': 1
                     }
                 }
@@ -362,7 +369,7 @@ class TestImpactReport(unittest.TestCase):
                 'headers': [
                     u'Structure type',
                     {
-                        'start': True, 'colspan': 2,
+                        'start': True, 'colspan': 3,
                         'name': u'High hazard zone',
                         'header_group': 'affected'
                     },
@@ -371,8 +378,16 @@ class TestImpactReport(unittest.TestCase):
                         'name': u'Medium hazard zone',
                         'header_group': 'affected'
                     },
-                    u'Total Affected',
-                    u'Total Not Affected',
+                    {
+                        'start': False,
+                        'name': u'Total Affected',
+                        'header_group': 'affected'
+                    },
+                    {
+                        'start': True, 'colspan': 1,
+                        'name': u'Total Not Affected',
+                        'header_group': 'not_affected'
+                    },
                     u'Total Not Exposed', u'Total'
                 ],
                 'details': [
@@ -386,7 +401,15 @@ class TestImpactReport(unittest.TestCase):
                             'value': '0',
                             'header_group': 'affected'
                         },
-                        '10', '0', '10', '10'
+                        {
+                            'value': '10',
+                            'header_group': 'affected'
+                        },
+                        {
+                            'value': '0',
+                            'header_group': 'not_affected'
+                        },
+                        '10', '10'
                     ],
                     [
                         u'Health',
@@ -398,7 +421,15 @@ class TestImpactReport(unittest.TestCase):
                             'value': '0',
                             'header_group': 'affected'
                         },
-                        '10', '0', '0', '10'
+                        {
+                            'value': '10',
+                            'header_group': 'affected'
+                        },
+                        {
+                            'value': '0',
+                            'header_group': 'not_affected'
+                        },
+                        '0', '10'
                     ],
                     [
                         u'Government',
@@ -409,7 +440,16 @@ class TestImpactReport(unittest.TestCase):
                         {
                             'value': '10',
                             'header_group': 'affected'
-                        }, '10', '0', '0', '10'
+                        },
+                        {
+                            'value': '10',
+                            'header_group': 'affected'
+                        },
+                        {
+                            'value': '0',
+                            'header_group': 'not_affected'
+                        },
+                        '0', '10'
                     ],
                     [
                         u'Commercial',
@@ -421,7 +461,15 @@ class TestImpactReport(unittest.TestCase):
                             'value': '0',
                             'header_group': 'affected'
                         },
-                        '10', '0', '0', '10'
+                        {
+                            'value': '10',
+                            'header_group': 'affected'
+                        },
+                        {
+                            'value': '0',
+                            'header_group': 'not_affected'
+                        },
+                        '0', '10'
                     ],
                     [
                         u'Other',
@@ -433,7 +481,15 @@ class TestImpactReport(unittest.TestCase):
                             'value': '10',
                             'header_group': 'affected'
                         },
-                        '10', '0', '0', '10'
+                        {
+                            'value': '10',
+                            'header_group': 'affected'
+                        },
+                        {
+                            'value': '0',
+                            'header_group': 'not_affected'
+                        },
+                        '0', '10'
                     ],
                 ],
                 'footers': [
@@ -444,7 +500,16 @@ class TestImpactReport(unittest.TestCase):
                     {
                         'value': '10',
                         'header_group': 'affected'
-                    }, '10', '0', '10', '10'
+                    },
+                    {
+                        'value': '10',
+                        'header_group': 'affected'
+                    },
+                    {
+                        'value': '0',
+                        'header_group': 'not_affected'
+                    },
+                    '10', '10'
                 ]
             }
         }
@@ -873,12 +938,14 @@ class TestImpactReport(unittest.TestCase):
             aggregation_postprocessors_component['key'])
         """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
 
+        actual_context = aggregation_postprocessors.context
         expected_context = {
             'sections': OrderedDict([
                 ('age', {
                     'header': u'Detailed Age Report',
                     'notes': [u'Columns and rows containing only 0 or "No '
-                              u'data" values are excluded from the tables.'],
+                              u'data" values are excluded from the '
+                              u'tables.'] + age_displaced_count_group['notes'],
                     'rows': [[u'B', '2,700', '660', '1,800', '240'],
                              [u'C', '6,500', '1,700', '4,300', '590'],
                              [u'F', '7,100', '1,800', '4,700', '640'],
@@ -909,7 +976,9 @@ class TestImpactReport(unittest.TestCase):
                 ('gender', {
                     'header': u'Detailed Gender Report',
                     'notes': [u'Columns and rows containing only 0 or "No '
-                              u'data" values are excluded from the tables.'],
+                              u'data" values are excluded from the '
+                              u'tables.'] + (
+                        gender_displaced_count_group['notes']),
                     'rows': [
                         [u'B', '2,700', '1,400'],
                         [u'C', '6,500', '3,300'],
@@ -990,7 +1059,6 @@ class TestImpactReport(unittest.TestCase):
                         '1,300']})]),
             'use_aggregation': True
         }
-        actual_context = aggregation_postprocessors.context
 
         self.assertDictEqual(expected_context, actual_context)
         self.assertTrue(
@@ -1046,7 +1114,8 @@ class TestImpactReport(unittest.TestCase):
                 ('age', {
                     'header': u'Detailed Age Report',
                     'notes': [u'Columns and rows containing only 0 or "No '
-                              u'data" values are excluded from the tables.'],
+                              u'data" values are excluded from the '
+                              u'tables.'] + age_displaced_count_group['notes'],
                     'rows': [[u'B', '10', '0', '0', '0'],
                              [u'C', '10', '10', '10', '0'],
                              [u'F', '10', '0', '10', '0'],
@@ -1077,7 +1146,9 @@ class TestImpactReport(unittest.TestCase):
                 ('gender', {
                     'header': u'Detailed Gender Report',
                     'notes': [u'Columns and rows containing only 0 or "No '
-                              u'data" values are excluded from the tables.'],
+                              u'data" values are excluded from the '
+                              u'tables.'] + (
+                        gender_displaced_count_group['notes']),
                     'rows': [[u'B', '10', '0'],
                              [u'C', '10', '10'],
                              [u'F', '10', '10'],

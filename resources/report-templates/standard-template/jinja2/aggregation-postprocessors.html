@@ -68,7 +68,14 @@
                 <div>
                     <ul>
                         {% for note in value.notes %}
-                        <li colspan="100%">{{ note }}</li>
+                            {% if ':' in note %}
+                                {% set concept = note.split(':')[0] %}
+                                {% set note = note.split(':')[1:] %}
+                                {% set note = ':'.join(note) %}
+                                <li colspan="100%"><b>{{ concept|capitalize }}</b>:{{ note }}</li>
+                            {% else %}
+                                <li colspan="100%">{{ note }}</li>
+                            {% endif %}
                         {% endfor %}
                     </ul>
                 </div>
