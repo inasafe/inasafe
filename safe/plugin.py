@@ -951,23 +951,28 @@ class Plugin(object):
 
         try:
             if layer:
-                keywords = KeywordIO().read_keywords(layer)
-                layer_purpose = keywords.get('layer_purpose')
-                if not layer_purpose:
-                    self.action_field_mapping.setEnabled(False)
-                if layer_purpose == layer_purpose_exposure['key']:
-                    layer_subcategory = keywords.get('exposure')
-                elif layer_purpose == layer_purpose_hazard['key']:
-                    layer_subcategory = keywords.get('hazard')
-                else:
-                    layer_subcategory = None
-                field_groups = get_field_groups(layer_purpose,
-                                                layer_subcategory)
-                if len(field_groups) == 0:
-                    # No field group, disable field mapping tool.
+                if is_raster_layer(layer):
                     enable_field_mapping_tool = False
                 else:
-                    enable_field_mapping_tool = True
+                    keywords = KeywordIO().read_keywords(layer)
+                    layer_purpose = keywords.get('layer_purpose')
+
+                    if not layer_purpose:
+                        enable_field_mapping_tool = False
+
+                    if layer_purpose == layer_purpose_exposure['key']:
+                        layer_subcategory = keywords.get('exposure')
+                    elif layer_purpose == layer_purpose_hazard['key']:
+                        layer_subcategory = keywords.get('hazard')
+                    else:
+                        layer_subcategory = None
+                    field_groups = get_field_groups(
+                        layer_purpose, layer_subcategory)
+                    if len(field_groups) == 0:
+                        # No field group, disable field mapping tool.
+                        enable_field_mapping_tool = False
+                    else:
+                        enable_field_mapping_tool = True
             else:
                 enable_field_mapping_tool = False
         except (KeywordNotFoundError, NoKeywordsFoundError):
