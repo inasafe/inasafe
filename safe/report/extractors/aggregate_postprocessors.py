@@ -18,9 +18,9 @@ from safe.definitions.field_groups import (
 from safe.definitions.minimum_needs import minimum_needs_fields
 from safe.definitions.post_processors import (
     age_postprocessors,
-    female_postprocessors,
     gender_postprocessors,
-    vulnerability_postprocessors)
+    vulnerability_gender_postprocessors,
+    vulnerability_age_postprocessors)
 from safe.definitions.utilities import postprocessor_output_field
 from safe.report.extractors.util import (
     value_from_field_name,
@@ -101,14 +101,15 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
         'group': gender_displaced_count_group,
         'group_header': u'Gender breakdown (in affected area)',
         'fields': [
-            postprocessor_output_field(p) for p in gender_postprocessors]
+            postprocessor_output_field(p) for p in
+            vulnerability_gender_postprocessors]
     }
     vulnerability_items = {
         'group': vulnerability_displaced_count_group,
         'group_header': u'Vulnerability breakdown (in affected area)',
         'fields': [
             postprocessor_output_field(p) for p in (
-                vulnerability_postprocessors)]
+                vulnerability_age_postprocessors)]
     }
 
     # check age_fields exists

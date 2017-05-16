@@ -23,7 +23,7 @@ from safe.definitions.fields import (
     hygiene_packs_count_field,
     additional_rice_count_field)
 from safe.definitions.post_processors import (
-    post_processor_gender,
+    post_processor_female,
     post_processor_youth,
     post_processor_adult,
     post_processor_elderly,
@@ -58,8 +58,8 @@ class TestPostProcessors(unittest.TestCase):
 
         pass
 
-    def test_gender_post_processor(self):
-        """Test gender post processor."""
+    def test_female_post_processor(self):
+        """Test female post processor."""
         impact_layer = load_test_vector_layer(
             'impact',
             'indivisible_polygon_impact.geojson',
@@ -68,15 +68,13 @@ class TestPostProcessors(unittest.TestCase):
 
         result, message = run_single_post_processor(
             impact_layer,
-            post_processor_gender)
+            post_processor_female)
         self.assertTrue(result, message)
 
         # Check if new field is added
         impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
         self.assertIn(
             female_displaced_count_field['field_name'], impact_fields)
-        self.assertIn(
-            male_displaced_count_field['field_name'], impact_fields)
 
     def test_youth_post_processor(self):
         """Test youth post processor."""
@@ -138,10 +136,10 @@ class TestPostProcessors(unittest.TestCase):
             clone_to_memory=True)
         self.assertIsNotNone(impact_layer)
 
-        # Need to run gender post processor first
+        # Need to run female post processor first
         result, message = run_single_post_processor(
             impact_layer,
-            post_processor_gender)
+            post_processor_female)
         self.assertTrue(result, message)
 
         # run female hygiene post processor
@@ -162,10 +160,10 @@ class TestPostProcessors(unittest.TestCase):
             clone_to_memory=True)
         self.assertIsNotNone(impact_layer)
 
-        # Need to run gender post processor first
+        # Need to run female post processor first
         result, message = run_single_post_processor(
             impact_layer,
-            post_processor_gender)
+            post_processor_female)
         self.assertTrue(result, message)
 
         # run female hygiene post processor
@@ -246,7 +244,7 @@ class TestPostProcessors(unittest.TestCase):
             }
         }
         # noinspection PyTypeChecker
-        result = enough_input(layer, post_processor_gender['input'])
+        result = enough_input(layer, post_processor_female['input'])
         self.assertFalse(result[0])
 
         # Gender postprocessor with female ratio presents.
@@ -257,7 +255,7 @@ class TestPostProcessors(unittest.TestCase):
             }
         }
         # noinspection PyTypeChecker
-        result = enough_input(layer, post_processor_gender['input'])
+        result = enough_input(layer, post_processor_female['input'])
         self.assertTrue(result[0])
 
         # # # Test postprocessor with alternative source for a given input
