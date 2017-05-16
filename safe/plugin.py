@@ -776,8 +776,8 @@ class Plugin(object):
         from safe.gui.tools.options_dialog import OptionsDialog
 
         dialog = OptionsDialog(
-            self.iface,
-            self.iface.mainWindow())
+            iface=self.iface,
+            parent=self.iface.mainWindow())
         if dialog.exec_():  # modal
             self.dock_widget.read_settings()
 
