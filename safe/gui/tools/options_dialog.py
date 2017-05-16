@@ -72,7 +72,6 @@ class OptionsDialog(QDialog, FORM_CLASS):
         # Save reference to the QGIS interface and parent
         self.iface = iface
         self.parent = parent
-        self.dock = dock
         if qsetting:
             self.settings = QSettings(qsetting)
         else:
