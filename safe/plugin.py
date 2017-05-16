@@ -777,9 +777,9 @@ class Plugin(object):
 
         dialog = OptionsDialog(
             self.iface,
-            self.dock_widget,
             self.iface.mainWindow())
-        dialog.exec_()  # modal
+        if dialog.exec_():  # modal
+            self.dock_widget.read_settings()
 
     def show_keywords_wizard(self):
         """Show the keywords creation wizard."""
