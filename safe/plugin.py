@@ -894,16 +894,6 @@ class Plugin(object):
         else:
             LOGGER.debug('Show field mapping not accepted')
 
-    def show_keyword_value_mapping(self):
-        """Show Keyword value mapping tool."""
-        from safe.gui.tools.batch.batch_dialog import BatchDialog
-
-        dialog = BatchDialog(
-            parent=self.iface.mainWindow(),
-            iface=self.iface,
-            dock=self.dock_widget)
-        dialog.exec_()  # modal
-
     def add_petabencana_layer(self):
         """Add petabencana layer to the map.
 
@@ -939,9 +929,6 @@ class Plugin(object):
         :param layer: The layer that is now active.
         :type layer: QgsMapLayer
         """
-        enable_keyword_wizard = True
-        enable_field_mapping_tool = True
-
         if not layer:
             enable_keyword_wizard = False
         elif not hasattr(layer, 'providerType'):
