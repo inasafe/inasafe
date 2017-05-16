@@ -417,6 +417,8 @@ def get_field_groups(layer_purpose, layer_subcategory=None):
     :rtype: list
     """
     layer_purpose_dict = definition(layer_purpose)
+    if not layer_purpose_dict:
+        return []
     field_groups = deepcopy(layer_purpose_dict.get('field_groups', []))
     if layer_purpose in [
         layer_purpose_exposure['key'], layer_purpose_hazard['key']]:
