@@ -5,6 +5,7 @@ from __future__ import absolute_import
 from collections import OrderedDict
 
 from safe.report.extractors.util import resolve_from_dictionary
+from safe.utilities.keyword_io import KeywordIO
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -39,51 +40,74 @@ def analysis_provenance_details_extractor(impact_report, component_metadata):
     provenance_format_args = resolve_from_dictionary(
         extra_args, 'provenance_format')
 
-    hazard_keywords = impact_report.impact_function.provenance[
-        'hazard_keywords']
+    # we define dict here to create a different object of keyword
+    hazard_keywords = dict(impact_report.impact_function.provenance[
+        'hazard_keywords'])
     header = resolve_from_dictionary(
         provenance_format_args, 'hazard_header')
     provenance_format = resolve_from_dictionary(
         provenance_format_args, 'hazard_format')
     hazard_provenance = {
         'header': header,
-        'provenance': provenance_format.format(
-            layer_name=hazard_keywords.get('title'),
-            source=hazard_keywords.get('source') or default_source)
+        'provenances': headerize(hazard_keywords)
     }
 
-    exposure_keywords = impact_report.impact_function.provenance[
-        'exposure_keywords']
+    # convert value
+
+    # we define dict here to create a different object of keyword
+    exposure_keywords = dict(impact_report.impact_function.provenance[
+        'exposure_keywords'])
     header = resolve_from_dictionary(
         provenance_format_args, 'exposure_header')
     provenance_format = resolve_from_dictionary(
         provenance_format_args, 'exposure_format')
     exposure_provenance = {
         'header': header,
-        'provenance': provenance_format.format(
-            layer_name=exposure_keywords.get('title'),
-            source=exposure_keywords.get('source') or default_source)
+        'provenances': headerize(exposure_keywords)
     }
 
+    # aggregation keywords could be None so we don't define dict here
     aggregation_keywords = impact_report.impact_function.provenance[
         'aggregation_keywords']
     header = resolve_from_dictionary(
         provenance_format_args, 'aggregation_header')
     provenance_format = resolve_from_dictionary(
         provenance_format_args, 'aggregation_format')
-    # only if aggregation layer used
-    if aggregation_keywords:
-        provenance_string = provenance_format.format(
-            layer_name=aggregation_keywords.get('title'),
-            source=aggregation_keywords.get('source') or default_source)
-    else:
-        aggregation_not_used = resolve_from_dictionary(
-            extra_args, ['defaults', 'aggregation_not_used'])
-        provenance_string = aggregation_not_used
 
     aggregation_provenance = {
         'header': header,
-        'provenance': provenance_string
+        'provenances': None
+    }
+
+    # only if aggregation layer used
+    if aggregation_keywords:
+        # we define dict here to create a different object of keyword
+        aggregation_keywords = dict(aggregation_keywords)
+        aggregation_provenance['provenances'] = headerize(aggregation_keywords)
+    else:
+        aggregation_not_used = resolve_from_dictionary(
+            extra_args, ['defaults', 'aggregation_not_used'])
+        aggregation_provenance['provenances'] = aggregation_not_used
+
+    header = resolve_from_dictionary(
+        provenance_format_args, 'analysis_environment_header')
+    analysis_environment_provenance_items = {}
+    analysis_environment_provenance_keys = [
+        'os',
+        'inasafe_version',
+        'qgis_version',
+        'qt_version',
+        'gdal_version',
+        'pyqt_version']
+
+    for item in analysis_environment_provenance_keys:
+        analysis_environment_provenance_items.update({
+            item: impact_report.impact_function.provenance[item]
+        })
+
+    analysis_environment_provenance = {
+        'header': header,
+        'provenances': headerize(analysis_environment_provenance_items)
     }
 
     impact_function_name = impact_report.impact_function.name
@@ -93,16 +117,15 @@ def analysis_provenance_details_extractor(impact_report, component_metadata):
         provenance_format_args, 'impact_function_format')
     impact_function_provenance = {
         'header': header,
-        'provenance': provenance_format.format(
-            impact_function_name=impact_function_name,
-            reference=default_reference)
+        'provenances': impact_function_name
     }
 
     provenance_detail = OrderedDict()
+    provenance_detail['impact_function'] = impact_function_provenance
     provenance_detail['hazard'] = hazard_provenance
     provenance_detail['exposure'] = exposure_provenance
     provenance_detail['aggregation'] = aggregation_provenance
-    provenance_detail['impact_function'] = impact_function_provenance
+    provenance_detail['analysis_environment'] = analysis_environment_provenance
 
     analysis_details_header = resolve_from_dictionary(
         extra_args, ['header', 'analysis_detail'])
@@ -113,3 +136,21 @@ def analysis_provenance_details_extractor(impact_report, component_metadata):
     })
 
     return context
+
+
+def headerize(provenances):
+
+    for key, value in provenances.iteritems():
+        if '_' in key:
+            header = key.replace('_', ' ')
+        else:
+            header = key
+        provenances.update(
+            {
+                key: {
+                    'header': '{header} '.format(header=header),
+                    'content': value
+                }
+            })
+
+    return provenances

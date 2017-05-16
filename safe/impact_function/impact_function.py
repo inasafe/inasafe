@@ -215,9 +215,18 @@ class ImpactFunction(object):
             'gdal_version': gdal.__version__,
             'qt_version': QT_VERSION_STR,
             'pyqt_version': PYQT_VERSION_STR,
-            'os': platform.version(),
+            'os': platform.system(),
             'inasafe_version': get_version(),
         }
+
+        # Readable OS information
+        if self._provenance['os'] == 'Linux':
+            self._provenance['os'] = ' '.join(platform.dist())
+        elif self._provenance['os'] == 'Darwin':
+            self._provenance['os'] += ' {version}'.format(
+                version=platform.mac_ver()[0])
+        elif self._provenance['os'] == 'Windows':
+            self._provenance['os'] = platform.platform()
 
         # Earthquake function
         value = setting(
