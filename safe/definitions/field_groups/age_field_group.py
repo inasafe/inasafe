@@ -42,6 +42,9 @@ age_ratio_group = {
         adult_ratio_field,
         elderly_ratio_field
     ],
+    # Exclusive = False: able to put same layer's field to some fields
+    # Exclusive = True: only able to put a layer's field to a field
+    'exclusive': False,
     'notes': [],
     'constraints': {
         'sum': {
@@ -69,6 +72,9 @@ age_count_group = {
         adult_count_field,
         elderly_count_field
     ],
+    # Exclusive = False: able to put same layer's field to some fields
+    # Exclusive = True: only able to put a layer's field to a field
+    'exclusive': False,
     'notes': []
 }
 age_displaced_count_group = {
@@ -85,5 +91,8 @@ age_displaced_count_group = {
         adult_displaced_count_field,
         elderly_displaced_count_field
     ],
+    # Exclusive = False: able to put same layer's field to some fields
+    # Exclusive = True: only able to put a layer's field to a field
+    'exclusive': False,
     'notes': []
 }

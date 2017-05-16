@@ -131,6 +131,15 @@ p {
   margin-top: 10px;
 }
 
+.category {
+  color: #3DB2DD;
+  background-color: #fff;
+  line-height: 2;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-right: 25px;
+}
+
 /* Try to prevent page text being cut off at the bottom when printing. */
 @page  {
     size: auto;   /* auto is the initial value */

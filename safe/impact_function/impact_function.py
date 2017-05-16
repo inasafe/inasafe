@@ -2160,9 +2160,9 @@ class ImpactFunction(object):
         return fields
 
     def action_checklist(self):
-        """Return the action check list.
+        """Return the list of action check list dictionary.
 
-        :return: The action check list.
+        :return: The list of action check list dictionary.
         :rtype: list
         """
         actions = []

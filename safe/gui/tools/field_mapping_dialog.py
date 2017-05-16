@@ -148,10 +148,7 @@ class FieldMappingDialog(QDialog, FORM_CLASS):
         else:
             self.layer = self.layer_combo_box.currentLayer()
         if not self.layer:
-            LOGGER.debug('No layer')
             return
-        else:
-            LOGGER.debug('A layer: %s' % self.layer.name())
 
         if keywords is not None:
             self.metadata = keywords
@@ -237,7 +234,6 @@ class FieldMappingDialog(QDialog, FORM_CLASS):
 
     def save_metadata(self):
         """Save metadata based on the field mapping state."""
-        LOGGER.debug('Save metadata')
         metadata = self.field_mapping_widget.get_field_mapping()
         for key, value in metadata['fields'].items():
             # Delete the key if it's set to None
@@ -281,11 +277,10 @@ class FieldMappingDialog(QDialog, FORM_CLASS):
 
     def accept(self):
         """Method invoked when OK button is clicked."""
-        LOGGER.debug('Accepted.')
         try:
             self.save_metadata()
         except InvalidValidationException as e:
             display_warning_message_box(
                 self, tr('Invalid Field Mapping'), get_string(e.message))
             return
-        self.close()
+        super(FieldMappingDialog, self).accept()

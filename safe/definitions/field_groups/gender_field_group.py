@@ -39,6 +39,9 @@ gender_ratio_group = {
         pregnant_ratio_field,
         lactating_ratio_field
     ],
+    # Exclusive = False: able to put same layer's field to some fields
+    # Exclusive = True: only able to put a layer's field to a field
+    'exclusive': True,
     'notes': []
 }
 gender_count_group = {
@@ -54,6 +57,9 @@ gender_count_group = {
         child_bearing_age_count_field,
         pregnant_lactating_count_field
     ],
+    # Exclusive = False: able to put same layer's field to some fields
+    # Exclusive = True: only able to put a layer's field to a field
+    'exclusive': True,
     'notes': []
 }
 gender_displaced_count_group = {
@@ -69,5 +75,8 @@ gender_displaced_count_group = {
         child_bearing_age_displaced_count_field,
         pregnant_lactating_displaced_count_field
     ],
+    # Exclusive = False: able to put same layer's field to some fields
+    # Exclusive = True: only able to put a layer's field to a field
+    'exclusive': True,
     'notes': []
 }

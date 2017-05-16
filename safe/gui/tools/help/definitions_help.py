@@ -905,7 +905,10 @@ def definition_to_message(
             tr('General notes:'), **DETAILS_SUBGROUP_STYLE))
         bullets = m.BulletedList()
         for note in definition['notes']:
-            bullets.add(m.Text(note))
+            if type(note) is dict:
+                bullets = _add_dict_to_bullets(bullets, note)
+            elif note:
+                bullets.add(m.Text(note))
         message.add(bullets)
 
     # This only for EQ
@@ -925,7 +928,10 @@ def definition_to_message(
             message.add(m.Heading(title, **DETAILS_SUBGROUP_STYLE))
             bullets = m.BulletedList()
             for note in extra_exposure_notes:
-                bullets.add(m.Text(note))
+                if type(note) is dict:
+                    bullets = _add_dict_to_bullets(bullets, note)
+                elif note:
+                    bullets.add(m.Text(note))
             message.add(bullets)
 
     if 'continuous_notes' in definition:
@@ -974,7 +980,10 @@ def definition_to_message(
         message.add(m.Paragraph(m.ImportantText(tr('Actions:'))))
         bullets = m.BulletedList()
         for note in definition['actions']:
-            bullets.add(m.Text(note))
+            if type(note) is dict:
+                bullets = _add_dict_to_bullets(bullets, note)
+            elif note:
+                bullets.add(m.Text(note))
         message.add(bullets)
 
     for exposure in exposure_all:
@@ -985,7 +994,10 @@ def definition_to_message(
             message.add(m.Heading(title, **DETAILS_SUBGROUP_STYLE))
             bullets = m.BulletedList()
             for note in extra_exposure_actions:
-                bullets.add(m.Text(note))
+                if type(note) is dict:
+                    bullets = _add_dict_to_bullets(bullets, note)
+                elif note:
+                    bullets.add(m.Text(note))
             message.add(bullets)
 
     if 'continuous_hazard_units' in definition:
@@ -1248,3 +1260,29 @@ def _make_defaults_table():
     row.add(m.Cell(tr('Default max')), header_flag=True)
     table.add(row)
     return table
+
+
+def _add_dict_to_bullets(target, value):
+    """Add notes and actions in dictionary to the bullets
+
+    :param target: Target bullets
+    :type target: Bullets
+
+    :param value: Dictionary that contains actions or notes
+    :type value: dict
+
+    :return: Updated bullets
+    :rtype: Bullets
+    """
+    actions = value.get('action_list')
+    notes = value.get('item_list')
+    items_tobe_added = []
+    if actions:
+        items_tobe_added = actions
+    elif notes:
+        items_tobe_added = notes
+
+    if items_tobe_added:
+        for item in items_tobe_added:
+            target.add(m.Text(item))
+    return target
