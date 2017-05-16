@@ -572,6 +572,7 @@ class Plugin(object):
         self._create_keywords_wizard_action()
         self._create_analysis_wizard_action()
         self._add_spacer_to_menu()
+        self._create_field_mapping_action()
         self._create_osm_downloader_action()
         self._create_add_osm_layer_action()
         self._create_add_petabencana_layer_action()
@@ -585,7 +586,6 @@ class Plugin(object):
         self._create_save_scenario_action()
         self._add_spacer_to_menu()
         self._create_show_definitions_action()
-        self._create_field_mapping_action()
 
         # Hook up a slot for when the dock is hidden using its close button
         # or  view-panels
