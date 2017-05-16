@@ -78,5 +78,6 @@ notifications:
     - ismail@kartoza.com
     - rizky@kartoza.com
     - etienne@kartoza.com
+    - rohmat@kartoza.com
 
 sudo: false
