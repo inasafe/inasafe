@@ -888,7 +888,11 @@ class Plugin(object):
         dialog = FieldMappingDialog(
             parent=self.iface.mainWindow(),
             iface=self.iface,)
-        dialog.exec_()  # modal
+        if dialog.exec_():  # modal
+            LOGGER.debug('Show field mapping accepted')
+            self.dock_widget.layer_changed(self.iface.activeLayer())
+        else:
+            LOGGER.debug('Show field mapping not accepted')
 
     def show_keyword_value_mapping(self):
         """Show Keyword value mapping tool."""
