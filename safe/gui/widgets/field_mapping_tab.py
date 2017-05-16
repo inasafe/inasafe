@@ -15,6 +15,7 @@ from PyQt4.QtCore import Qt, QSettings
 
 from collections import OrderedDict
 import logging
+from functools import partial
 
 from safe.definitions.constants import (
     DO_NOT_USE,
@@ -95,6 +96,7 @@ class FieldMappingTab(QWidget, object):
 
         self.field_list.setSizePolicy(
             QSizePolicy.Maximum, QSizePolicy.Expanding)
+        # noinspection PyUnresolvedReferences
         self.field_list.itemSelectionChanged.connect(self.update_footer)
 
         # Footer
@@ -280,7 +282,8 @@ class FieldMappingTab(QWidget, object):
             self.field_list.setDefaultDropAction(Qt.MoveAction)
             # Just make sure that the signal is disconnected
             try:
-                self.field_list.itemChanged.disconnect(self.drop_remove())
+                # noinspection PyUnresolvedReferences
+                self.field_list.itemChanged.disconnect(self.drop_remove)
             except TypeError:
                 pass
             # Set header
@@ -292,7 +295,10 @@ class FieldMappingTab(QWidget, object):
             self.populate_field_list()
             # Use copy action since it's not exclusive
             self.field_list.setDefaultDropAction(Qt.CopyAction)
-            self.field_list.itemChanged.connect(self.drop_remove)
+            # noinspection PyUnresolvedReferences
+            self.field_list.itemChanged.connect(
+                partial(self.drop_remove, field_list=self.field_list))
+            self.connect_drop_remove_parameter()
             # Set header
             header_text = self.field_group['description']
             header_text += '\n\n' + tr(
@@ -342,11 +348,29 @@ class FieldMappingTab(QWidget, object):
         footer_text += tr('Unique values: {0}').format(pretty_unique_values)
         self.footer_label.setText(footer_text)
 
-    def drop_remove(self, dropped_item):
+    def connect_drop_remove_parameter(self):
+        parameter_widgets = self.parameter_container.get_parameter_widgets()
+        for parameter_widget in parameter_widgets:
+            field_list = parameter_widget.widget().list_widget
+            field_list.itemChanged.connect(
+                partial(self.drop_remove, field_list=field_list))
+
+    @staticmethod
+    def drop_remove(*args, **kwargs):
         """Action when we need to remove dropped item.
 
-        :param dropped_item: The item that been dropped to field_list.
-        :type dropped_item: QListWidgetItem
+        :param args: Position arguments.
+        :type args: list
+
+        :param kwargs: Keywords arguments.
+        :type kwargs: dict
         """
-        # Notes(IS): For some reason, removeItemWidget is not working.
-        self.field_list.takeItem(self.field_list.row(dropped_item))
+        dropped_item = args[0]
+        field_list = kwargs['field_list']
+        num_duplicate = 0
+        for i in range(field_list.count()):
+            if dropped_item.text() == field_list.item(i).text():
+                num_duplicate += 1
+        if num_duplicate > 1:
+            # Notes(IS): For some reason, removeItemWidget is not working.
+            field_list.takeItem(field_list.row(dropped_item))
