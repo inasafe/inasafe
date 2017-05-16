@@ -585,6 +585,10 @@ standard_impact_report_metadata_html = {
             'extractor': impact_table_extractor,
             'output_format': Jinja2ComponentsMetadata.OutputFormat.File,
             'output_path': 'impact-report-output.html',
+            'resources': [
+                safe_dir(sub_dir='../resources/css'),
+                safe_dir(sub_dir='../resources/js'),
+                safe_dir(sub_dir='../resources/img')],
             'template': 'standard-template/'
                         'jinja2/'
                         'impact-report-layout.html',

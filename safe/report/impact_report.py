@@ -9,6 +9,7 @@ Easily customize map report or document based report.
 import imp
 import logging
 import os
+import shutil
 
 from qgis.core import (
     QgsComposition,
@@ -760,6 +761,22 @@ class ImpactReport(object):
             if component.context:
                 try:
                     output = _renderer(self, component)
+                    output_path = self.component_absolute_output_path(
+                        component.key)
+                    if isinstance(output_path, dict):
+                        try:
+                            dirname = os.path.dirname(output_path.get('doc'))
+                        except:
+                            dirname = os.path.dirname(output_path.get('map'))
+                    else:
+                        dirname = os.path.dirname(output_path)
+                    if component.resources:
+                        for resource in component.resources:
+                            target_resource = os.path.basename(resource)
+                            target_dir = os.path.join(
+                                dirname, 'resources', target_resource)
+                            # copy here
+                            shutil.copytree(resource, target_dir)
                     component.output = output
                 except Exception as e:  # pylint: disable=broad-except
                     generation_error_code = self.REPORT_GENERATION_FAILED
