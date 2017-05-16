@@ -154,7 +154,7 @@ gender_count_group = {
         'Demographic breakdown produced for displaced population based on '
         'gender groups (female, pregnant, etc.). These demographic concepts '
         'provide a detailed break down of the number of people displaced '
-        'in each age group.'),
+        'in each gender group.'),
     'fields': [
         female_count_field,
         child_bearing_age_count_field,

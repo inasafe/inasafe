@@ -240,9 +240,9 @@ class ImpactFunction(object):
         message = m.Message()
         table = m.Table(style_class='table table-condensed table-striped')
         row = m.Row()
-        row.add(m.Cell(tr('Function')), header_flag=True)
-        row.add(m.Cell(tr('Time')), header_flag=True)
-        row.add(m.Cell(tr('Memory')), header_flag=True)
+        row.add(m.Cell(tr('Function'), header=True))
+        row.add(m.Cell(tr('Time'), header=True))
+        row.add(m.Cell(tr('Memory'), header=True))
         table.add(row)
 
         if self.performance_log is None:
