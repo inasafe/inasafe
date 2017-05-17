@@ -585,6 +585,11 @@ class TestImpactReport(unittest.TestCase):
 
         shutil.rmtree(output_folder, ignore_errors=True)
 
+    # we skip this test because we got new provenance details,
+    # we might use this test if we want to show the old provenance detail in
+    # the main report and separate the new provenance detail to its own report
+    @unittest.expectedFailure
+    @unittest.skip
     def test_analysis_provenance_details(self):
         """Test generate analysis provenance details section.
 
@@ -637,6 +642,283 @@ class TestImpactReport(unittest.TestCase):
                                       u'Polygon On '
                                       u'Structure Point'})
                 ])
+        }
+
+        actual_context = impact_table.context
+
+        self.assertDictEqual(
+            expected_context, actual_context)
+        self.assertTrue(
+            impact_table.output, empty_component_output_message)
+
+        """Check output generated"""
+
+        output_path = impact_report.component_absolute_output_path(
+            'impact-report')
+
+        # for now, test that output exists
+        self.assertTrue(os.path.exists(output_path))
+
+        shutil.rmtree(output_folder, ignore_errors=True)
+
+    def test_analysis_provenance_tree_details(self):
+        """Test generate analysis provenance tree details section.
+
+        .. versionadded: 4.1
+        """
+        output_folder = self.fixtures_dir('../output/general_report')
+
+        # Classified vector with building-points
+        hazard_layer = load_test_vector_layer(
+            'gisv4', 'hazard', 'classified_vector.geojson')
+        exposure_layer = load_test_vector_layer(
+            'gisv4', 'exposure', 'building-points.geojson')
+        aggregation_layer = load_test_vector_layer(
+            'gisv4', 'aggregation', 'small_grid.geojson')
+
+        impact_report = self.run_impact_report_scenario(
+            output_folder,
+            standard_impact_report_metadata_html,
+            hazard_layer, exposure_layer,
+            aggregation_layer=aggregation_layer)
+
+        """Checking generated context"""
+        empty_component_output_message = 'Empty component output'
+
+        impact_table = impact_report.metadata.component_by_key(
+            analysis_provenance_details_component['key'])
+
+        expected_context = {
+            'header': u'Analysis details',
+            'details': OrderedDict(
+                [
+                    ('impact_function', {
+                        'header': u'Impact Function',
+                        'provenances': u'Hazard_Generic Polygon On '
+                                       u'Structure Point'
+                    }),
+                    ('hazard', {
+                        'header': u'Hazard',
+                        'provenances': {
+                            'hazard_category': {
+                                'content': u'single_event',
+                                'header': 'Hazard Category '
+                            },
+                            'keyword_version': {
+                                'content': u'4.0',
+                                'header': 'Keyword Version '
+                            },
+                            'title': {
+                                'content': u'classified_vector',
+                                'header': 'Title '
+                            },
+                            'value_maps': {
+                                'content': u'<table class="table '
+                                           u'table-condensed table-striped">'
+                                           u'\n<tbody>\n<tr>\n<td colspan=1>'
+                                           u'<strong>Exposure</strong></td>'
+                                           u'\n<td colspan=1>Structures</td>'
+                                           u'\n</tr>\n<tr>\n<td colspan=1>'
+                                           u'<strong>Classification</strong>'
+                                           u'</td>\n<td colspan=1>Generic '
+                                           u'classes</td>\n</tr>\n<tr>\n'
+                                           u'<td colspan=1>Class name</td>\n'
+                                           u'<td colspan=1>Values</td>\n</tr>'
+                                           u'\n<tr>\n<td colspan=1>Low hazard '
+                                           u'zone</td>\n<td colspan=1>low'
+                                           u'</td>\n</tr>\n<tr>\n'
+                                           u'<td colspan=1>Medium hazard zone'
+                                           u'</td>\n<td colspan=1>medium</td>'
+                                           u'\n</tr>\n<tr>\n<td colspan=1>'
+                                           u'High hazard zone</td>\n'
+                                           u'<td colspan=1>high</td>\n</tr>\n'
+                                           u'</tbody>\n</table>\n',
+                                'header': 'Value Maps '
+                            },
+                            'hazard': {
+                                'content': u'hazard_generic',
+                                'header': 'Hazard '
+                            },
+                            'source': {
+                                'content': u'InaSAFE v4 GeoJSON test layer',
+                                'header': 'Source '
+                            },
+                            'layer_purpose': {
+                                'content': u'hazard',
+                                'header': 'Layer Purpose '
+                            },
+                            'layer_geometry': {
+                                'content': u'polygon',
+                                'header': 'Layer Geometry '
+                            },
+                            'inasafe_fields': {
+                                'content': u'<table class="table '
+                                           u'table-condensed">\n<tbody>\n<tr>'
+                                           u'\n<td colspan=1><strong>'
+                                           u'Hazard Value</strong></td>\n'
+                                           u'<td colspan=1>hazard_value</td>'
+                                           u'\n</tr>\n<tr>\n<td colspan=1>'
+                                           u'<strong>Hazard ID</strong></td>'
+                                           u'\n<td colspan=1>hazard_id</td>'
+                                           u'\n</tr>\n</tbody>\n</table>\n',
+                                'header': 'InaSAFE Fields '
+                            },
+                            'layer_mode': {
+                                'content': u'classified',
+                                'header': 'Layer Mode '
+                            }
+                        }
+                    }),
+                    ('exposure', {
+                        'header': u'Exposure',
+                        'provenances': {
+                            'classification': {
+                                'content': u'generic_structure_classes',
+                                'header': 'Classification '
+                            },
+                            'keyword_version': {
+                                'content': u'4.0',
+                                'header': 'Keyword Version '
+                            },
+                            'title': {
+                                'content': u'building-points',
+                                'header': 'Title '
+                            },
+                            'source': {
+                                'content': u'InaSAFE v4 GeoJSON test layer',
+                                'header': 'Source '
+                            },
+                            'value_map': {
+                                'content': u'<table class="table '
+                                           u'table-condensed">\n<tbody>\n<tr>'
+                                           u'\n<td colspan=1><strong>'
+                                           u'Residential</strong></td>\n'
+                                           u'<td colspan=1>house</td>\n</tr>'
+                                           u'\n<tr>\n<td colspan=1><strong>'
+                                           u'Commercial</strong></td>\n'
+                                           u'<td colspan=1>shop</td>\n</tr>\n'
+                                           u'<tr>\n<td colspan=1><strong>'
+                                           u'Education</strong></td>\n'
+                                           u'<td colspan=1>school</td>\n</tr>'
+                                           u'\n<tr>\n<td colspan=1><strong>'
+                                           u'Health</strong></td>\n'
+                                           u'<td colspan=1>hospital</td>\n'
+                                           u'</tr>\n<tr>\n<td colspan=1>'
+                                           u'<strong>Government</strong></td>'
+                                           u'\n<td colspan=1>ministry</td>\n'
+                                           u'</tr>\n</tbody>\n</table>\n',
+                                'header': 'Value Map '
+                            },
+                            'layer_purpose': {
+                                'content': u'exposure',
+                                'header': 'Layer Purpose '
+                            },
+                            'layer_geometry': {
+                                'content': u'point',
+                                'header': 'Layer Geometry '
+                            },
+                            'inasafe_fields': {
+                                'content': u'<table class="table '
+                                           u'table-condensed">\n<tbody>\n'
+                                           u'<tr>\n<td colspan=1><strong>'
+                                           u'Exposure ID</strong></td>\n'
+                                           u'<td colspan=1>exposure_id</td>\n'
+                                           u'</tr>\n<tr>\n<td colspan=1>'
+                                           u'<strong>Exposure Type</strong>'
+                                           u'</td>\n<td colspan=1>'
+                                           u'exposure_type</td>\n</tr>\n'
+                                           u'</tbody>\n</table>\n',
+                                'header': 'InaSAFE Fields '
+                            },
+                            'layer_mode': {
+                                'content': u'classified',
+                                'header': 'Layer Mode '
+                            },
+                            'exposure': {
+                                'content': u'structure',
+                                'header': 'Exposure '
+                            }
+                        }
+                    }),
+                    ('aggregation', {
+                        'header': u'Aggregation',
+                        'provenances': {
+                            'source': {
+                                'content': u'InaSAFE v4 GeoJSON test layer',
+                                'header': 'Source '
+                            },
+                            'title': {
+                                'content': u'small grid',
+                                'header': 'Title '
+                            },
+                            'layer_geometry': {
+                                'content': u'polygon',
+                                'header': 'Layer Geometry '
+                            },
+                            'inasafe_fields': {
+                                'content': u'<table class="table '
+                                           u'table-condensed">\n<tbody>\n<tr>'
+                                           u'\n<td colspan=1><strong>'
+                                           u'Aggregation Name</strong></td>\n'
+                                           u'<td colspan=1>area_name</td>\n'
+                                           u'</tr>\n<tr>\n<td colspan=1>'
+                                           u'<strong>Female Ratio</strong>'
+                                           u'</td>\n<td colspan=1>ratio_female'
+                                           u'</td>\n</tr>\n<tr>\n'
+                                           u'<td colspan=1><strong>'
+                                           u'Aggregation ID</strong></td>\n'
+                                           u'<td colspan=1>area_id</td>\n'
+                                           u'</tr>\n</tbody>\n</table>\n',
+                                'header': 'InaSAFE Fields '
+                            },
+                            'layer_purpose': {
+                                'content': u'aggregation',
+                                'header': 'Layer Purpose '
+                            },
+                            'keyword_version': {
+                                'content': u'4.1',
+                                'header': 'Keyword Version '
+                            },
+                            'inasafe_default_values': {
+                                'content': u'<table class="table '
+                                           u'table-condensed">\n<tbody>\n<tr>'
+                                           u'\n<td colspan=1><strong>Pregnant '
+                                           u'Lactating Ratio</strong></td>\n'
+                                           u'<td colspan=1>0.05</td>\n</tr>\n'
+                                           u'</tbody>\n</table>\n',
+                                'header': 'InaSAFE Default Values '
+                            }
+                        }
+                    }),
+                    ('analysis_environment', {
+                        'header': u'Analysis Environment',
+                        'provenances': {
+                            'inasafe_version': {
+                                'content': '4.1.0b0',
+                                'header': 'InaSAFE Version '
+                            },
+                            'qgis_version': {
+                                'content': '2.14.14-Essen',
+                                'header': 'QGIS Version '
+                            },
+                            'pyqt_version': {
+                                'content': '4.11.4',
+                                'header': 'PyQt Version '
+                            },
+                            'os': {
+                                'content': 'Ubuntu 16.04 xenial',
+                                'header': 'OS '
+                            },
+                            'qt_version': {
+                                'content': '4.8.7',
+                                'header': 'Qt Version '
+                            },
+                            'gdal_version': {
+                                'content': '2.1.3',
+                                'header': 'GDAL Version '
+                            }
+                        }
+                    })])
         }
 
         actual_context = impact_table.context

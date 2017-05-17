@@ -159,6 +159,14 @@ def analysis_provenance_details_extractor(impact_report, component_metadata):
 
 
 def headerize(provenances):
+    """Create a header for each keyword.
+
+    :param provenances: The keywords.
+    :type provenances: dict
+
+    :return: New keywords with header for every keyword.
+    :rtype: dict
+    """
 
     special_case = {
         'Inasafe': 'InaSAFE',
@@ -198,6 +206,14 @@ def headerize(provenances):
 
 
 def resolve_dict_keywords(keywords):
+    """Replace dictionary content with html.
+
+    :param keywords: The keywords.
+    :type keywords: dict
+
+    :return: New keywords with updated content.
+    :rtype: dict
+    """
 
     for keyword in ['value_map', 'inasafe_fields', 'inasafe_default_values']:
         value = keywords.get(keyword)
