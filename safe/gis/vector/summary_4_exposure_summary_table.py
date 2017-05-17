@@ -33,6 +33,7 @@ from safe.gis.vector.tools import (
 from safe.gis.sanity_check import check_layer
 from safe.gis.vector.summary_tools import (
     check_inputs, create_absolute_values_structure)
+from safe.utilities.gis import qgis_version
 from safe.utilities.profiling import profile
 from safe.utilities.pivot_table import FlatTable
 
@@ -226,7 +227,10 @@ def exposure_summary_table(aggregate_hazard, callback=None):
     tabular.commitChanges()
 
     tabular.keywords['title'] = layer_purpose_exposure_summary_table['name']
-    tabular.setLayerName(tabular.keywords['title'])
+    if qgis_version() >= 21800:
+        tabular.setName(tabular.keywords['title'])
+    else:
+        tabular.setLayerName(tabular.keywords['title'])
     tabular.keywords['layer_purpose'] = layer_purpose_exposure_summary_table[
         'key']
 

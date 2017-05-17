@@ -9,6 +9,7 @@ from qgis.core import (
     QgsField,
     QgsFeatureRequest,
     QGis,
+    QgsExpressionContext,
     QgsExpression
 )
 

@@ -23,6 +23,7 @@ from safe.gis.vector.tools import read_dynamic_inasafe_field
 from safe.gis.vector.summary_tools import (
     check_inputs, create_absolute_values_structure, add_fields)
 from safe.gis.sanity_check import check_layer
+from safe.utilities.gis import qgis_version
 from safe.utilities.profiling import profile
 from safe.utilities.pivot_table import FlatTable
 from safe.utilities.i18n import tr
@@ -165,7 +166,10 @@ def aggregation_summary(aggregate_hazard, aggregation, callback=None):
     aggregation.commitChanges()
 
     aggregation.keywords['title'] = layer_purpose_aggregation_summary['name']
-    aggregation.setLayerName(aggregation.keywords['title'])
+    if qgis_version() >= 21800:
+        aggregation.setName(aggregation.keywords['title'])
+    else:
+        aggregation.setLayerName(aggregation.keywords['title'])
     aggregation.keywords['layer_purpose'] = (
         layer_purpose_aggregation_summary['key'])
 
