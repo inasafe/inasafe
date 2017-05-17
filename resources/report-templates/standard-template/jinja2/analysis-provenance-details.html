@@ -7,10 +7,11 @@
     <ul>
         {% for key, value in details.iteritems() %}
             <li>
-                <b>{{ value.header|capitalize }}</b>
+                <b>{{ value.header }}</b>
                 {% if value.provenances is mapping %}
                     <ul>
                         {% for key, item in value.provenances.iteritems() %}
+                            {% if item %}
                             <li>
 
                                 <div class="row">
@@ -33,6 +34,7 @@
                                     </div>
                                 </div>
                             </li>
+                            {% endif %}
                         {% endfor %}
                     </ul>
                 {% else %}

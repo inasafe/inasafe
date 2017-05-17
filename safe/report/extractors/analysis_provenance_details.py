@@ -43,12 +43,21 @@ def analysis_provenance_details_extractor(impact_report, component_metadata):
     # we define dict here to create a different object of keyword
     hazard_keywords = dict(impact_report.impact_function.provenance[
         'hazard_keywords'])
+
+    for keyword in ['value_maps', 'thresholds']:
+        if hazard_keywords.get(keyword):
+            temp_keyword = dict(hazard_keywords[keyword])
+            for key in temp_keyword:
+                if key not in impact_report.impact_function.provenance[
+                        'exposure_keywords']['exposure']:
+                    del hazard_keywords[keyword][key]
+
     header = resolve_from_dictionary(
         provenance_format_args, 'hazard_header')
     provenance_format = resolve_from_dictionary(
         provenance_format_args, 'hazard_format')
     hazard_provenance = {
-        'header': header,
+        'header': header.title(),
         'provenances': headerize(hazard_keywords)
     }
 
@@ -64,7 +73,7 @@ def analysis_provenance_details_extractor(impact_report, component_metadata):
     provenance_format = resolve_from_dictionary(
         provenance_format_args, 'exposure_format')
     exposure_provenance = {
-        'header': header,
+        'header': header.title(),
         'provenances': headerize(exposure_keywords)
     }
 
@@ -81,7 +90,7 @@ def analysis_provenance_details_extractor(impact_report, component_metadata):
         provenance_format_args, 'aggregation_format')
 
     aggregation_provenance = {
-        'header': header,
+        'header': header.title(),
         'provenances': None
     }
 
@@ -117,7 +126,7 @@ def analysis_provenance_details_extractor(impact_report, component_metadata):
         })
 
     analysis_environment_provenance = {
-        'header': header,
+        'header': header.title(),
         'provenances': headerize(analysis_environment_provenance_items)
     }
 
@@ -127,7 +136,7 @@ def analysis_provenance_details_extractor(impact_report, component_metadata):
     provenance_format = resolve_from_dictionary(
         provenance_format_args, 'impact_function_format')
     impact_function_provenance = {
-        'header': header,
+        'header': header.title(),
         'provenances': impact_function_name
     }
 
@@ -151,11 +160,32 @@ def analysis_provenance_details_extractor(impact_report, component_metadata):
 
 def headerize(provenances):
 
+    special_case = {
+        'Inasafe': 'InaSAFE',
+        'Qgis': 'QGIS',
+        'Pyqt': 'PyQt',
+        'Os': 'OS',
+        'Gdal': 'GDAL'
+    }
     for key, value in provenances.iteritems():
         if '_' in key:
-            header = key.replace('_', ' ')
+            header = key.replace('_', ' ').title()
         else:
-            header = key
+            header = key.title()
+
+        header_list = header.split(' ')
+        proper_word = None
+        proper_word_index = None
+        for index, word in enumerate(header_list):
+            if word in special_case.keys():
+                proper_word = special_case[word]
+                proper_word_index = index
+
+        if proper_word:
+            header_list[proper_word_index] = proper_word
+
+        header = ' '.join(header_list)
+
         provenances.update(
             {
                 key: {
@@ -169,9 +199,7 @@ def headerize(provenances):
 
 def resolve_dict_keywords(keywords):
 
-    dict_to_row_keywords = [
-        'value_map', 'inasafe_fields', 'inasafe_default_fields']
-    for keyword in dict_to_row_keywords:
+    for keyword in ['value_map', 'inasafe_fields', 'inasafe_default_values']:
         value = keywords.get(keyword)
         if value:
             value = value.get('content')
@@ -194,7 +222,3 @@ def resolve_dict_keywords(keywords):
         keywords['thresholds']['content'] = thresholds
 
     return keywords
-
-
-def keywords_to_html_table(keywords):
-    """Turn value maps and thresholds keywords to html table"""
