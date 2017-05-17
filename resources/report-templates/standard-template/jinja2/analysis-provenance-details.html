@@ -2,7 +2,7 @@
     <i class="icon-info-sign icon-white"></i> {{ header }}
 </h5>
 
-<!--static tree-->
+<!--static tree starts here. ps: it would be great if we can make it dynamic (recursive tree)-->
 <div class="tree">
     <ul>
         {% for key, value in details.iteritems() %}
@@ -12,7 +12,26 @@
                     <ul>
                         {% for key, item in value.provenances.iteritems() %}
                             <li>
-                                <b>{{ item.header }}</b>{{ item.content }}
+
+                                <div class="row">
+                                    <div class="col-sm-2">
+                                        <b>{{ item.header }}</b>
+                                    </div>
+                                    <div class="col-sm-10">
+                                        {% if item.content is mapping %}
+                                            <ul>
+                                            {% for key, html_item in item.content.iteritems() %}
+                                                <li>
+                                                    <b>{{ key }}</b>
+                                                    <div>{{ html_item }}</div>
+                                                </li>
+                                            {% endfor %}
+                                            </ul>
+                                        {% else %}
+                                            {{ item.content }}
+                                        {% endif %}
+                                    </div>
+                                </div>
                             </li>
                         {% endfor %}
                     </ul>

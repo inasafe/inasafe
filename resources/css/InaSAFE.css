@@ -193,3 +193,19 @@ img{
 .tree ul > li:last-child::after {
     height: 8px;
 }
+
+table li, table li::after, table li::before {
+  list-style: circle inside;
+  border-left: None !important;
+  border-top: None !important;
+}
+
+table ul {
+  padding-left: 0px !important;
+}
+
+.tree table {
+  margin-bottom: 0px;
+  margin-top: 0.75rem;
+}
+

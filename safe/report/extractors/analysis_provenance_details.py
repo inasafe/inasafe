@@ -52,7 +52,9 @@ def analysis_provenance_details_extractor(impact_report, component_metadata):
         'provenances': headerize(hazard_keywords)
     }
 
-    # convert value
+    # convert value if there is dict_keywords
+    provenances = hazard_provenance['provenances']
+    hazard_provenance['provenances'] = resolve_dict_keywords(provenances)
 
     # we define dict here to create a different object of keyword
     exposure_keywords = dict(impact_report.impact_function.provenance[
@@ -65,6 +67,10 @@ def analysis_provenance_details_extractor(impact_report, component_metadata):
         'header': header,
         'provenances': headerize(exposure_keywords)
     }
+
+    # convert value if there is dict_keywords
+    provenances = exposure_provenance['provenances']
+    exposure_provenance['provenances'] = resolve_dict_keywords(provenances)
 
     # aggregation keywords could be None so we don't define dict here
     aggregation_keywords = impact_report.impact_function.provenance[
@@ -84,6 +90,11 @@ def analysis_provenance_details_extractor(impact_report, component_metadata):
         # we define dict here to create a different object of keyword
         aggregation_keywords = dict(aggregation_keywords)
         aggregation_provenance['provenances'] = headerize(aggregation_keywords)
+
+        # convert value if there is dict_keywords
+        provenances = aggregation_provenance['provenances']
+        aggregation_provenance['provenances'] = resolve_dict_keywords(provenances)
+
     else:
         aggregation_not_used = resolve_from_dictionary(
             extra_args, ['defaults', 'aggregation_not_used'])
@@ -154,3 +165,36 @@ def headerize(provenances):
             })
 
     return provenances
+
+
+def resolve_dict_keywords(keywords):
+
+    dict_to_row_keywords = [
+        'value_map', 'inasafe_fields', 'inasafe_default_fields']
+    for keyword in dict_to_row_keywords:
+        value = keywords.get(keyword)
+        if value:
+            value = value.get('content')
+            value = KeywordIO._dict_to_row(value).to_html()
+            keywords[keyword]['content'] = value
+
+    value_maps = keywords.get('value_maps')
+    thresholds = keywords.get('thresholds')
+    if value_maps:
+        value_maps = value_maps.get('content')
+        value_maps = KeywordIO._value_maps_row(value_maps).to_html()
+        # for key, value in value_maps.iteritems():
+        #     value_maps[key] = KeywordIO._dict_to_row(value).to_html()
+        keywords['value_maps']['content'] = value_maps
+    if thresholds:
+        thresholds = thresholds.get('content')
+        thresholds = KeywordIO._threshold_to_row(thresholds).to_html()
+        # for key, value in thresholds.iteritems():
+        #     thresholds[key] = KeywordIO._dict_to_row(value)
+        keywords['thresholds']['content'] = thresholds
+
+    return keywords
+
+
+def keywords_to_html_table(keywords):
+    """Turn value maps and thresholds keywords to html table"""
