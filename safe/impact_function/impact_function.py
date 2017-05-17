@@ -20,7 +20,7 @@ from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsRectangle,
     QgsVectorLayer,
-    QGis,
+    QGis
 )
 
 import logging
@@ -243,7 +243,8 @@ class ImpactFunction(object):
         row = m.Row()
         row.add(m.Cell(tr('Function'), header=True))
         row.add(m.Cell(tr('Time'), header=True))
-        row.add(m.Cell(tr('Memory'), header=True))
+        if setting(key='memory_profile', expected_type=bool):
+            row.add(m.Cell(tr('Memory'), header=True))
         table.add(row)
 
         if self.performance_log is None:
@@ -268,7 +269,8 @@ class ImpactFunction(object):
 
             new_row.add(m.Cell(text))
             new_row.add(m.Cell(tree.elapsed_time))
-            new_row.add(m.Cell(tree.memory_used))
+            if setting(key='memory_profile', expected_type=bool):
+                new_row.add(m.Cell(tree.memory_used))
             table.add(new_row)
             if tree.children:
                 for child in tree.children:
