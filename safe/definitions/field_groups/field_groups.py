@@ -146,3 +146,11 @@ for field_group in all_field_groups:
             group_name=field_group['name'],
             note=field_group['description'])))
     del field_group  # to prevent duplicate definition
+
+displaced_field_groups = [
+    age_displaced_count_group,
+    gender_displaced_count_group,
+    age_vulnerability_displaced_count_group
+    gender_vulnerability_displaced_count_group
+    disability_vulnerability_displaced_count_group
+]

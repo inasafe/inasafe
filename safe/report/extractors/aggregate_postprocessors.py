@@ -2,6 +2,7 @@
 """Module used to generate context for aggregation postprocessors sections.
 """
 
+# noinspection PyUnresolvedReferences
 from PyQt4.QtCore import QPyNullVariant
 from collections import OrderedDict
 
@@ -9,18 +10,16 @@ from safe.common.parameters.resource_parameter import ResourceParameter
 from safe.definitions.exposure import exposure_population
 from safe.definitions.fields import (
     aggregation_name_field,
-    displaced_field,
-    male_displaced_count_field)
+    displaced_field)
 from safe.definitions.field_groups import (
     age_displaced_count_group,
-    gender_displaced_count_group,
-    gender_vulnerability_displaced_count_group,
-    age_vulnerability_displaced_count_group,
-    disability_vulnerability_displaced_count_group)
+    gender_displaced_count_group)
 from safe.definitions.minimum_needs import minimum_needs_fields
-from safe.definitions.post_processors.population_post_processors import \
-    female_postprocessors, age_postprocessors, gender_postprocessors, \
-    vulnerability_postprocessors
+from safe.definitions.post_processors.population_post_processors import (
+    age_postprocessors,
+    gender_postprocessors,
+    vulnerability_postprocessors,
+    age_vulnerability_postprocessors)
 from safe.definitions.utilities import postprocessor_output_field
 from safe.report.extractors.util import (
     value_from_field_name,
@@ -92,6 +91,9 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
         context['header'] = resolve_from_dictionary(
             extra_args, 'header')
 
+    from safe.definitions.field_groups import displaced_groups
+    for group in displaced_groups:
+
     age_items = {
         'group': age_displaced_count_group,
         'group_header': u'Age breakdown (in affected area)',
@@ -102,6 +104,20 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
         'group_header': u'Gender breakdown (in affected area)',
         'fields': [
             postprocessor_output_field(p) for p in gender_postprocessors]
+    }
+    vulnerability_items = {
+        'group': vulnerability_displaced_count_group,
+        'group_header': u'Vulnerability breakdown (in affected area)',
+        'fields': [
+            postprocessor_output_field(p) for p in (
+                vulnerability_postprocessors)]
+    }
+    vulnerability_items = {
+        'group': vulnerability_displaced_count_group,
+        'group_header': u'Vulnerability breakdown (in affected area)',
+        'fields': [
+            postprocessor_output_field(p) for p in (
+                vulnerability_postprocessors)]
     }
     vulnerability_items = {
         'group': vulnerability_displaced_count_group,

@@ -78,6 +78,7 @@ age_count_group = {
 age_displaced_count_group = {
     'key': 'age_displaced_count_group',
     'name': tr('Age Displaced Count'),
+    'group_header': tr('Age breakdown (in affected area)'),
     'description': tr(
         'Demographic breakdown produced for displaced population based on age '
         'groups. These demographic concepts provide a detailed break '
@@ -92,5 +93,8 @@ age_displaced_count_group = {
     # Exclusive = False: able to put same layer's field to some fields
     # Exclusive = True: only able to put a layer's field to a field
     'exclusive': False,
-    'notes': []
+    'notes': [],
+    'section_unavailable_note:': tr(
+        'No age ratios provided, no demographic breakdown for age carried out.'
+    )
 }

@@ -5,24 +5,11 @@ from post_processor_functions import (
     post_processor_population_displacement_function,
 )
 from safe.definitions.concepts import concepts
+# Ratio fields
 from safe.definitions.fields import (
-    displaced_field,
-    child_bearing_age_displaced_count_field,
+    population_displacement_ratio_field,
     child_bearing_age_ratio_field,
     pregnant_lactating_ratio_field,
-    pregnant_lactating_displaced_count_field,
-    female_displaced_count_field,
-    hazard_class_field,
-    population_count_field,
-    exposure_count_field,
-    male_displaced_count_field,
-    hygiene_packs_count_field,
-    infant_displaced_count_field,
-    child_displaced_count_field,
-    youth_displaced_count_field,
-    adult_displaced_count_field,
-    elderly_displaced_count_field,
-    under_5_displaced_count_field,
     female_ratio_field,
     infant_ratio_field,
     child_ratio_field,
@@ -31,16 +18,43 @@ from safe.definitions.fields import (
     elderly_ratio_field,
     under_5_ratio_field,
     over_60_ratio_field,
-    disabled_ratio_field,
+    disabled_ratio_field)
+# Count fields
+from safe.definitions.fields import (
+    displaced_field,
+    female_displaced_count_field,
+    population_count_field,
+    exposure_count_field,
+    male_displaced_count_field,
+    hygiene_packs_count_field)
+# Displaced field
+from safe.definitions.fields import (
+    child_bearing_age_displaced_count_field,
+    pregnant_lactating_displaced_count_field,
+    infant_displaced_count_field,
+    child_displaced_count_field,
+    youth_displaced_count_field,
+    adult_displaced_count_field,
+    elderly_displaced_count_field,
+    under_5_displaced_count_field,
     over_60_displaced_count_field,
     disabled_displaced_count_field)
+# Other fields
+from safe.definitions.fields import (
+    hazard_class_field,
+    male_ratio_field,
 
-from safe.definitions.post_processors.post_processors import (
+)
+from safe.definitions.post_processors.post_processor_inputs import (
     field_input_type,
-    keyword_input_type,
+    dynamic_field_input_type,
+
+)
+from safe.definitions.post_processors.post_processors import (
     function_process,
-    formula_process,
-    constant_input_type)
+    formula_process)
+from safe.definitions.post_processors.post_processor_inputs import \
+    constant_input_type, field_input_type, keyword_input_type
 from safe.utilities.i18n import tr
 
 # A postprocessor can be defined with a formula or with a python function.
@@ -198,18 +212,16 @@ post_processor_pregnant_lactating = {
         }
     }
 }
-post_processor_gender = {
-    'key': 'post_processor_gender',
-    'name': tr('Gender Post Processor'),
+post_processor_pregnant = {
+    'key': 'post_processor_pregnant',
+    'name': tr('Pregnant Post Processor'),
     'description': tr(
-        'A post processor to calculate the number of displaced females '
-        'and males. '
-        '"Female" is defined as: {female_concept} "Male" is defined as: '
-        '{male_concept} "Displaced" is defined as: '
-        '{displaced_concept}').format(
-            female_concept=concepts['female']['description'],
-            male_concept=concepts['male']['description'],
-            displaced_concept=concepts['displaced_people']['description']),
+        'A post processor to calculate the number of displaced pregnant '
+        'women. "Pregnant" is defined as: {pregnant_concept} "Displaced" is '
+        'defined as: {displaced_concept}').format(
+        pregnant_concept=concepts[
+            'pregnant_lactating']['description'],
+        displaced_concept=concepts['displaced_people']['description']),
     'input': {
         'population_displaced': {
             'value': displaced_field,
@@ -217,10 +229,122 @@ post_processor_gender = {
         },
         # input as a list means, try to get the input from the
         # listed source. Pick the first available
-        'gender_ratio': [{
-                'value': female_ratio_field,
-                'type': field_input_type
-            },
+        'pregnant_ratio': [{
+            'value': pregnant_ratio_field,
+            'type': field_input_type
+        },
+            {
+                'type': keyword_input_type,
+                'value': [
+                    'inasafe_default_values',
+                    pregnant_ratio_field['key'],
+                ],
+            }]
+    },
+    'output': {
+        'pregnant_displaced': {
+            'value': pregnant_displaced_count_field,
+            'type': function_process,
+            'function': multiply
+        }
+    }
+}
+post_processor_lactating = {
+    'key': 'post_processor_lactating',
+    'name': tr('Lactating Women Post Processor'),
+    'description': tr(
+        'A post processor to calculate the number of displaced lactating '
+        'women. "Lactating" is defined as: {lactating_concept} "Displaced" is '
+        'defined as: {displaced_concept}').format(
+        lactating_concept=concepts[
+            'lactating']['description'],
+        displaced_concept=concepts['displaced_people']['description']),
+    'input': {
+        'population_displaced': {
+            'value': displaced_field,
+            'type': field_input_type,
+        },
+        # input as a list means, try to get the input from the
+        # listed source. Pick the first available
+        'lactating_lactating_ratio': [{
+            'value': lactating_ratio_field,
+            'type': field_input_type
+        },
+            {
+                'type': keyword_input_type,
+                'value': [
+                    'inasafe_default_values',
+                    lactating_ratio_field['key'],
+                ],
+            }]
+    },
+    'output': {
+        'lactating_displaced': {
+            'value': lactating_displaced_count_field,
+            'type': function_process,
+            'function': multiply
+        }
+    }
+}
+
+post_processor_male = {
+    'key': 'post_processor_male',
+    'name': tr('Male Post Processor'),
+    'description': tr(
+        'A post processor to calculate the number of displaced males.'
+        '"Male" is defined as: {male_concept}. "Displaced" is defined as: '
+        '{displaced_concept}').format(
+        male_concept=concepts['male']['description'],
+        displaced_concept=concepts['displaced_people']['description']),
+    'input': {
+        'population_displaced': {
+            'value': displaced_field,
+            'type': field_input_type,
+        },
+        # input as a list means, try to get the input from the
+        # listed source. Pick the first available
+        'male_ratio': [{
+            'value': male_ratio_field,
+            'type': field_input_type
+        },
+            {
+                'type': keyword_input_type,
+                'value': [
+                    'inasafe_default_values',
+                    male_ratio_field['key'],
+                ],
+            }]
+    },
+    # output is described as ordered dict because the order is important
+    # and the postprocessor produce two fields.
+    'output': OrderedDict([
+        ('males_displaced', {
+            'value': male_displaced_count_field,
+            'type': formula_process,
+            'formula': 'population_displaced * male_ratio'
+        })
+    ])
+}
+post_processor_female = {
+    'key': 'post_processor_female',
+    'name': tr('Female Post Processor'),
+    'description': tr(
+        'A post processor to calculate the number of displaced females.'
+        '"Female" is defined as: {female_concept}. "Displaced" is defined as: '
+        '{displaced_concept}').format(
+        female_concept=concepts['female']['description'],
+        displaced_concept=concepts['displaced_people']['description']),
+    'input': {
+        'population_displaced': {
+            'value': displaced_field,
+            'type': field_input_type,
+        },
+        # input as a list means, try to get the input from the
+        # listed source. Pick the first available
+        'female_ratio': [{
+            'value': female_ratio_field,
+            'type': field_input_type
+        },
             {
                 'type': keyword_input_type,
                 'value': [
@@ -235,12 +359,7 @@ post_processor_gender = {
         ('female_displaced', {
             'value': female_displaced_count_field,
             'type': formula_process,
-            'formula': 'population_displaced * gender_ratio'
-        }),
-        ('male_displaced', {
-            'value': male_displaced_count_field,
-            'type': formula_process,
-            'formula': 'population_displaced * (1 - gender_ratio)'
+            'formula': 'population_displaced * female_ratio'
         })
     ])
 }
@@ -567,7 +686,6 @@ post_processor_disability_vulnerability = {
 
 
 female_postprocessors = [
-    post_processor_gender,
     post_processor_hygiene_packs
 ]
 age_postprocessors = [
@@ -578,12 +696,19 @@ age_postprocessors = [
     post_processor_elderly,
 ]
 gender_postprocessors = [
-    post_processor_gender,
-    post_processor_child_bearing_age,
-    post_processor_pregnant_lactating
+    post_processor_male,
+    post_processor_female
 ]
-vulnerability_postprocessors = [
+age_vulnerability_postprocessors = [
     post_processor_under_5,
     post_processor_over_60,
+]
+gender_vulnerability_postprocessors = [
+    post_processor_child_bearing_age,
+    post_processor_pregnant_lactating,
+    post_processor_pregnant,
+    post_processor_lactating
+]
+disabled_vulnerability_postprocessors = [
     post_processor_disability_vulnerability
 ]

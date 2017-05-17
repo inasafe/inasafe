@@ -8,13 +8,11 @@ from qgis.core import QgsFeatureRequest
 from safe.definitions.minimum_needs import minimum_needs_parameter
 from safe.definitions.post_processors import (
     field_input_type,
-    dynamic_field_input_type,
-    geometry_property_input_type,
-    keyword_input_type,
-    needs_profile_input_type,
-    layer_property_input_type,
-    layer_crs_input_value,
-    size_calculator_input_value, constant_input_type)
+    keyword_input_type)
+from safe.definitions.post_processors.post_processor_inputs import \
+    dynamic_field_input_type, needs_profile_input_type, layer_crs_input_value
+from safe.definitions import constant_input_type, geometry_property_input_type, \
+    layer_property_input_type, size_calculator_input_value
 from safe.gis.vector.tools import (
     create_field_from_definition, SizeCalculator)
 from safe.utilities.i18n import tr

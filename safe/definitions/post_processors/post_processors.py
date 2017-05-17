@@ -7,31 +7,23 @@
 
 import logging
 
-
-from safe.definitions import concepts
-from safe.definitions.exposure import exposure_population
+from post_processor_functions import (
+    multiply,
+    size,
+    post_processor_affected_function)
+from safe.definitions import keyword_input_type
 from safe.definitions.fields import (
-    population_displacement_ratio_field,
-    displaced_field,
-    population_count_field,
-    pregnant_lactating_displaced_count_field,
     feature_rate_field,
     feature_value_field,
     size_field,
     hazard_class_field,
-    affected_field,
-    exposure_count_field,
-    additional_rice_count_field,
-)
-from safe.definitions.hazard_classifications import hazard_classes_all
-from post_processor_functions import (
-    multiply,
-    size,
-    post_processor_affected_function,
-    post_processor_population_displacement_function,
-)
+    affected_field)
 from safe.definitions.hazard_classifications import not_exposed_class
-from safe.definitions.minimum_needs import minimum_needs_fields
+from safe.definitions.post_processors import field_input_type
+from safe.definitions.post_processors.post_processor_inputs import (
+    geometry_property_input_type,
+    layer_property_input_type,
+    size_calculator_input_value)
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -42,95 +34,6 @@ __revision__ = '$Format:%H$'
 LOGGER = logging.getLogger('InaSAFE')
 
 
-# # #
-# Post processors related definitions
-# # #
-
-# # #
-# Input
-# # #
-constant_input_type = {
-    'key': 'constant',
-    'description': tr('This type of input takes a constant value.')
-}
-
-field_input_type = {
-    'key': 'field',
-    'description': tr('This type of input takes a value from a field.')
-}
-
-dynamic_field_input_type = {
-    'key': 'dynamic_field',
-    'description': tr(
-        'This type of input takes value from a dynamic field. '
-        'It will require some additional parameter details.')
-}
-
-keyword_input_type = {
-    'key': 'keyword',
-    'description': tr(
-        'This type of input takes value from a keyword for the layer '
-        'being handled.')
-}
-
-needs_profile_input_type = {
-    'key': 'needs_profile',
-    'description': tr(
-        'This type of input takes a value from current InaSAFE minimum needs '
-        'profile.')
-}
-
-geometry_property_input_type = {
-    'key': 'geometry_property',
-    'description': tr(
-        'This type of input takes a value from the geometry property.')
-}
-
-layer_property_input_type = {
-    'key': 'layer_property',
-    'description': tr(
-        'This type of input takes it\'s value from a layer property. For '
-        'example the layer Coordinate Reference System of the layer.')
-}
-
-
-post_processor_input_types = [
-    constant_input_type,
-    field_input_type,
-    dynamic_field_input_type,
-    keyword_input_type,
-    needs_profile_input_type,
-    geometry_property_input_type,
-    layer_property_input_type
-]
-
-# Input values
-
-size_calculator_input_value = {
-    'key': 'size_calculator',
-    'description': tr(
-        'This is a value for the layer_property input type. It retrieves Size '
-        'Calculator of the layer CRS')
-}
-
-layer_crs_input_value = {
-    'key': 'layer_crs',
-    'description': tr(
-        'This is a value for layer_property input type. It retrieves the '
-        'layer Coordinate Reference System (CRS).')
-}
-
-layer_property_input_values = [
-    size_calculator_input_value,
-    layer_crs_input_value
-]
-
-post_processor_input_values = [
-    size_calculator_input_value,
-    layer_crs_input_value,
-    layer_property_input_type]
-
-# # # Process
 formula_process = {
     'key': 'formula',
     'description': tr(
@@ -233,51 +136,5 @@ post_processor_affected = {
     }
 }
 
-# # #
-# Minimum Needs.
-#
-# Minimum needs is a kind of post processor which can be defined by user.
-# # #
 
-
-def initialize_minimum_needs_post_processors():
-    """Generate definitions for minimum needs post processors."""
-    processors = []
-
-    for field in minimum_needs_fields:
-        field_key = field['key']
-        field_name = field['name']
-        field_description = field['description']
-        need_parameter = field['need_parameter']
-        """:type: safe.common.parameters.resource_parameter.ResourceParameter
-        """
-
-        processor = {
-            'key': 'post_processor_{key}'.format(key=field_key),
-            'name': '{field_name} Post Processor'.format(
-                field_name=field_name),
-            'description': field_description,
-            'input': {
-                'population': {
-                    'value': displaced_field,
-                    'type': field_input_type,
-                },
-                'amount': {
-                    'type': needs_profile_input_type,
-                    'value': need_parameter.name,
-                }
-            },
-            'output': {
-                'needs': {
-                    'value': field,
-                    'type': function_process,
-                    'function': multiply
-                }
-            }
-        }
-        processors.append(processor)
-    return processors
-
-
-minimum_needs_post_processors = initialize_minimum_needs_post_processors()
 

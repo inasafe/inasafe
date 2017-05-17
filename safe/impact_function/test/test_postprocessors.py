@@ -27,9 +27,9 @@ from safe.definitions.post_processors import (
     post_processor_size,
     post_processor_affected,
     field_input_type,
-    dynamic_field_input_type,
-    needs_profile_input_type,
     post_processor_additional_rice)
+from safe.definitions.post_processors.post_processor_inputs import \
+    dynamic_field_input_type, needs_profile_input_type
 from safe.definitions.post_processors.population_post_processors import \
     post_processor_gender, post_processor_hygiene_packs, post_processor_youth, \
     post_processor_adult, post_processor_elderly

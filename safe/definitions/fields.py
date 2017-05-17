@@ -39,7 +39,6 @@ default_ratio_field_precision = 2
 # Exposure
 # # # # # # # # # #
 
-# Exposure ID
 exposure_id_field = {
     'key': 'exposure_id_field',
     'name': tr('Exposure ID'),
@@ -1447,6 +1446,28 @@ population_displacement_ratio_field = {
     # Null value can be replaced by default or not
     'replace_null': False,
     'default_value': None
+}
+
+male_displaced_count_field = {
+    'key': 'male_displaced_count_field',
+    'name': tr('Male Displaced Count'),
+    'field_name': 'male_displaced',
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'description': tr(
+        'The number of displaced males for each feature.'),
+    'help_text': tr(
+        'The number of displaced males for each feature.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
 }
 
 female_displaced_count_field = {

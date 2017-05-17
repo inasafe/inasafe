@@ -30,7 +30,6 @@ from safe.definitions.fields import (
     total_affected_field,
     total_not_affected_field,
     total_not_exposed_field,
-    total_field,
     population_exposed_per_mmi_field,
     population_displaced_per_mmi,
     fatalities_per_mmi_field,
