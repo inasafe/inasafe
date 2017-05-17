@@ -6,7 +6,6 @@ import logging
 from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsVectorLayer,
-    QgsFeatureRequest,
     QgsFeature,
     QGis,
 )
@@ -32,6 +31,7 @@ from safe.gis.vector.tools import (
 from safe.utilities.gis import qgis_version
 from safe.utilities.profiling import profile
 from safe.utilities.i18n import tr
+from safe.utilities.settings import setting
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -142,9 +142,10 @@ def create_profile_layer(profiling):
     """
     fields = [
         create_field_from_definition(profiling_function_field),
-        create_field_from_definition(profiling_time_field),
-        create_field_from_definition(profiling_memory_field)
+        create_field_from_definition(profiling_time_field)
     ]
+    if setting(key='memory_profile', expected_type=bool):
+        fields.append(create_field_from_definition(profiling_memory_field))
     tabular = create_memory_layer('profiling', QGis.NoGeometry, fields=fields)
 
     # Generate profiling keywords
@@ -159,9 +160,11 @@ def create_profile_layer(profiling):
             profiling_function_field['field_name'],
         profiling_time_field['key']:
             profiling_time_field['field_name'],
-        profiling_memory_field['key']:
-            profiling_memory_field['field_name']
     }
+    if setting(key='memory_profile', expected_type=bool):
+        tabular.keywords['inasafe_fields'][
+            profiling_memory_field['key']] = profiling_memory_field[
+            'field_name']
     tabular.keywords[inasafe_keyword_version_key] = (
         inasafe_keyword_version)
 
@@ -172,8 +175,11 @@ def create_profile_layer(profiling):
         feature = QgsFeature()
         items = line.split(', ')
         time = items[1].replace('-', '')
-        memory = items[2].replace('-', '')
-        feature.setAttributes([items[0], time, memory])
+        if setting(key='memory_profile', expected_type=bool):
+            memory = items[2].replace('-', '')
+            feature.setAttributes([items[0], time, memory])
+        else:
+            feature.setAttributes([items[0], time])
         tabular.addFeature(feature)
 
     tabular.commitChanges()
