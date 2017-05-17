@@ -37,7 +37,7 @@ aggregation_field_groups = [
     disability_vulnerability_ratio_group
 ]
 
-exposure_field_groups = [
+population_field_groups = [
     age_count_group,
     gender_count_group,
     age_vulnerability_count_group,

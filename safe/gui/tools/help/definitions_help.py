@@ -13,7 +13,7 @@ from safe.definitions.exposure import exposure_all
 from safe.definitions.hazard_exposure_specifications import (
     specific_notes, specific_actions)
 from safe.definitions.field_groups import (
-    exposure_field_groups, aggregation_field_groups)
+    population_field_groups, aggregation_field_groups)
 from safe.gui.tools.help.dock_help import content as dock_help
 from safe.gui.tools.help.extent_selector_help import content as extent_help
 from safe.gui.tools.help.impact_report_help import content as report_help
@@ -285,7 +285,7 @@ def content():
         'The following demographic groups apply only to vector population '
         'exposure layers:'
     ))
-    for group in exposure_field_groups:
+    for group in population_field_groups:
         definition_to_message(
             group, message, table_of_contents, heading_level=4)
 
