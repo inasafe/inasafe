@@ -5,6 +5,8 @@ from os.path import exists
 import copy
 import logging
 from PyQt4 import QtCore
+
+import safe.definitions.post_processors
 from safe.utilities.i18n import tr
 from safe import messaging as m
 from safe.messaging import styles
@@ -686,7 +688,7 @@ def content():
         'post-processors',
         tr('Post Processors'),
         heading_level=2)
-    post_processors = definitions.post_processors
+    post_processors = safe.definitions.post_processors.post_processors
     table = m.Table(style_class='table table-condensed table-striped')
     row = m.Row()
     row.add(m.Cell(tr('Name')), header_flag=True)

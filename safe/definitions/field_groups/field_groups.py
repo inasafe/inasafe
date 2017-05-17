@@ -14,10 +14,11 @@ from safe.definitions.field_groups.gender_vulnerability_field_group import (
     gender_vulnerability_ratio_group,
     gender_vulnerability_count_group,
     gender_vulnerability_displaced_count_group)
-from safe.definitions.field_groups.disability_vulnerability_field_group import (
-    disability_vulnerability_ratio_group,
-    disability_vulnerability_count_group,
-    disability_vulnerability_displaced_count_group)
+from safe.definitions.field_groups.\
+    disability_vulnerability_field_group import (
+        disability_vulnerability_ratio_group,
+        disability_vulnerability_count_group,
+        disability_vulnerability_displaced_count_group)
 from safe.definitions.field_groups.gender_field_group import (
     gender_ratio_group,
     gender_count_group,
@@ -123,13 +124,20 @@ gender_count_group['notes'] += gender_group_notes
 gender_displaced_count_group['notes'] += gender_group_notes
 age_vulnerability_ratio_group['notes'] += age_vulnerability_group_notes
 age_vulnerability_count_group['notes'] += age_vulnerability_group_notes
-age_vulnerability_displaced_count_group['notes'] += age_vulnerability_group_notes
-gender_vulnerability_ratio_group['notes'] += gender_vulnerability_group_notes
-gender_vulnerability_count_group['notes'] += gender_vulnerability_group_notes
-gender_vulnerability_displaced_count_group['notes'] += gender_vulnerability_group_notes
-disability_vulnerability_ratio_group['notes'] += disability_vulnerability_group_notes
-disability_vulnerability_count_group['notes'] += disability_vulnerability_group_notes
-disability_vulnerability_displaced_count_group['notes'] += disability_vulnerability_group_notes
+age_vulnerability_displaced_count_group['notes'] += \
+    age_vulnerability_group_notes
+gender_vulnerability_ratio_group['notes'] += \
+    gender_vulnerability_group_notes
+gender_vulnerability_count_group['notes'] += \
+    gender_vulnerability_group_notes
+gender_vulnerability_displaced_count_group['notes'] += \
+    gender_vulnerability_group_notes
+disability_vulnerability_ratio_group['notes'] += \
+    disability_vulnerability_group_notes
+disability_vulnerability_count_group['notes'] += \
+    disability_vulnerability_group_notes
+disability_vulnerability_displaced_count_group['notes'] += \
+    disability_vulnerability_group_notes
 
 for field_group in all_field_groups:
     field_group['notes'].insert(

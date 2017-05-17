@@ -1,0 +1,71 @@
+# coding=utf-8
+from safe.utilities.i18n import tr
+from safe.definitions.concepts import concepts
+from safe.definitions.fields import pregnant_lactating_displaced_count_field
+from safe.definitions.post_processors.population_post_processors import (
+    field_input_type,
+    constant_input_type)
+from safe.definitions.post_processors.post_processors import (
+    multiply,
+    additional_rice_count_field,
+    function_process)
+
+__copyright__ = "Copyright 2017, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
+
+EXTRA_CALORIES_NEEDED_PER_DAY = 500  # in KKal / day
+DAY_IN_A_WEEK = 7  # in day / week
+KG_RICE_PER_CALORIES = 0.1 / 129  # in KKal (100 gram gives 129 KKal calories)
+
+post_processor_additional_rice = {
+    'key': 'post_processor_additional_rice',
+    'name': tr(
+        'Additional Weekly Rice kg for Pregnant and Lactating Women Post '
+        'Processor'
+    ),
+    'description': tr(
+        'A post processor to calculate additional rice for pregnant and '
+        'lactating women who are displaced. '
+        '"Displaced" is defined as: {displaced_concept}').format(
+        displaced_concept=concepts['displaced_people']['description']),
+    'input': {
+        'pregnant_lactating_displaced':
+            {
+                'value': pregnant_lactating_displaced_count_field,
+                'type': field_input_type,
+            },
+        'additional_rice_ratio':
+            {
+                'type': constant_input_type,
+                'value': (
+                    EXTRA_CALORIES_NEEDED_PER_DAY *
+                    DAY_IN_A_WEEK *
+                    KG_RICE_PER_CALORIES),
+            }
+    },
+    'output': {
+        # The formula:
+        # See: https://github.com/inasafe/inasafe/issues/3607
+        # for reference
+        #
+        # displaced_population * (pregnant_rate + breastfeeding_rate) *
+        #   extra_calories_needed_per_day * day_in_week * kg_rice_per_calories
+        #
+        # The number:
+        # displaced_population * (0.024 + 0.026) * 550 Kkal/day * 7 day/week *
+        #   0.1 kg rice / 129 Kkal
+        #
+        # displaced_population * (0.024 + 0.026) * 550 * 7 * 0.1 / 129
+
+        # Update, 19 May 2017, Ismail Sunni
+        # Since we have pregnant and lactating displace field, we will use it
+        # to replace the hard coded value.
+        'additional_rice': {
+            'value': additional_rice_count_field,
+            'type': function_process,
+            'function': multiply
+        },
+    }
+}

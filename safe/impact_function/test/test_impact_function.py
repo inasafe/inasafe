@@ -61,12 +61,11 @@ from osgeo import gdal
 from PyQt4.QtCore import QT_VERSION_STR
 from PyQt4.Qt import PYQT_VERSION_STR
 from safe.definitions.post_processors import (
-    post_processor_gender,
-    post_processor_youth,
-    post_processor_adult,
-    post_processor_elderly,
     post_processor_size
 )
+from safe.definitions.post_processors.population_post_processors import \
+    post_processor_gender, post_processor_youth, post_processor_adult, \
+    post_processor_elderly
 from safe.definitions.constants import (
     PREPARE_SUCCESS,
     ANALYSIS_SUCCESS,

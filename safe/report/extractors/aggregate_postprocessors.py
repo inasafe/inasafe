@@ -14,13 +14,13 @@ from safe.definitions.fields import (
 from safe.definitions.field_groups import (
     age_displaced_count_group,
     gender_displaced_count_group,
-    vulnerability_displaced_count_group)
+    gender_vulnerability_displaced_count_group,
+    age_vulnerability_displaced_count_group,
+    disability_vulnerability_displaced_count_group)
 from safe.definitions.minimum_needs import minimum_needs_fields
-from safe.definitions.post_processors import (
-    age_postprocessors,
-    female_postprocessors,
-    gender_postprocessors,
-    vulnerability_postprocessors)
+from safe.definitions.post_processors.population_post_processors import \
+    female_postprocessors, age_postprocessors, gender_postprocessors, \
+    vulnerability_postprocessors
 from safe.definitions.utilities import postprocessor_output_field
 from safe.report.extractors.util import (
     value_from_field_name,
