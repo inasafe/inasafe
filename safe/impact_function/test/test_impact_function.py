@@ -75,6 +75,7 @@ from safe.definitions.constants import (
 from safe.gis.sanity_check import check_inasafe_fields
 from safe.utilities.unicode import byteify
 from safe.utilities.gis import wkt_to_rectangle
+from safe.utilities.utilities import readable_os_version
 from safe.impact_function.impact_function import ImpactFunction
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -732,7 +733,7 @@ class TestImpactFunction(unittest.TestCase):
             'map_title': get_map_title(hazard, exposure, hazard_category),
             'map_legend_title': exposure['layer_legend_title'],
             'user': getpass.getuser(),
-            'os': platform.version(),
+            'os': readable_os_version(),
             'pyqt_version': PYQT_VERSION_STR,
             'qgis_version': QGis.QGIS_VERSION,
             'qt_version': QT_VERSION_STR,
@@ -815,7 +816,7 @@ class TestImpactFunction(unittest.TestCase):
             'qgis_version': QGis.QGIS_VERSION,
             'qt_version': QT_VERSION_STR,
             'user': getpass.getuser(),
-            'os': platform.version(),
+            'os': readable_os_version(),
             'aggregation_layer': None,
             'aggregation_layer_id': None,
             'exposure_layer': exposure_layer.source(),
