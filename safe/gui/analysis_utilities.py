@@ -15,7 +15,7 @@ from safe.definitions.reports.components import (
 from safe.impact_function.style import hazard_class_style
 from safe.report.report_metadata import ReportMetadata
 from safe.report.impact_report import ImpactReport
-from safe.utilities.gis import is_raster_layer
+from safe.utilities.gis import is_raster_layer, qgis_version
 from safe.utilities.settings import setting
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -129,7 +129,10 @@ def add_impact_layers_to_canvas(impact_function, iface):
         # set layer title if any
         try:
             title = layer.keywords['title']
-            layer.setLayerName(title)
+            if qgis_version() >= 21800:
+                layer.setName(title)
+            else:
+                layer.setLayerName(title)
         except KeyError:
             pass
 

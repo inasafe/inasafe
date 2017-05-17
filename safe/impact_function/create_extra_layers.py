@@ -29,6 +29,7 @@ from safe.definitions.layer_purposes import (
 )
 from safe.gis.vector.tools import (
     create_memory_layer, create_field_from_definition, copy_layer)
+from safe.utilities.gis import qgis_version
 from safe.utilities.profiling import profile
 from safe.utilities.i18n import tr
 
@@ -149,7 +150,10 @@ def create_profile_layer(profiling):
     # Generate profiling keywords
     tabular.keywords['layer_purpose'] = layer_purpose_profiling['key']
     tabular.keywords['title'] = layer_purpose_profiling['name']
-    tabular.setLayerName(tabular.keywords['title'])
+    if qgis_version() >= 21800:
+        tabular.setName(tabular.keywords['title'])
+    else:
+        tabular.setLayerName(tabular.keywords['title'])
     tabular.keywords['inasafe_fields'] = {
         profiling_function_field['key']:
             profiling_function_field['field_name'],
