@@ -150,7 +150,7 @@ for field_group in all_field_groups:
 displaced_field_groups = [
     age_displaced_count_group,
     gender_displaced_count_group,
-    age_vulnerability_displaced_count_group
-    gender_vulnerability_displaced_count_group
+    age_vulnerability_displaced_count_group,
+    gender_vulnerability_displaced_count_group,
     disability_vulnerability_displaced_count_group
 ]

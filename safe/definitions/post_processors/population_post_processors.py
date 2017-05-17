@@ -4,12 +4,15 @@ from post_processor_functions import (
     multiply,
     post_processor_population_displacement_function,
 )
+from safe.definitions.exposure import exposure_population
 from safe.definitions.concepts import concepts
 # Ratio fields
 from safe.definitions.fields import (
     population_displacement_ratio_field,
     child_bearing_age_ratio_field,
     pregnant_lactating_ratio_field,
+    lactating_ratio_field,
+    pregnant_ratio_field,
     female_ratio_field,
     infant_ratio_field,
     child_ratio_field,
@@ -31,6 +34,8 @@ from safe.definitions.fields import (
 from safe.definitions.fields import (
     child_bearing_age_displaced_count_field,
     pregnant_lactating_displaced_count_field,
+    pregnant_displaced_count_field,
+    lactating_displaced_count_field,
     infant_displaced_count_field,
     child_displaced_count_field,
     youth_displaced_count_field,
@@ -46,10 +51,7 @@ from safe.definitions.fields import (
 
 )
 from safe.definitions.post_processors.post_processor_inputs import (
-    field_input_type,
-    dynamic_field_input_type,
-
-)
+    dynamic_field_input_type)
 from safe.definitions.post_processors.post_processors import (
     function_process,
     formula_process)
@@ -682,9 +684,6 @@ post_processor_disability_vulnerability = {
         }
     }
 }
-
-
-
 female_postprocessors = [
     post_processor_hygiene_packs
 ]

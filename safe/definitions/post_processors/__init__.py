@@ -1,6 +1,9 @@
 # coding=utf-8
 from population_post_processors import *
 from post_processors import *
+from minimum_needs_post_processors import *
+from post_processor_inputs import *
+from post_processor_functions import *
 # Postprocessor tree
 # # Root : impact layer
 # |--- size
@@ -31,7 +34,8 @@ post_processors = [
 ] + (female_postprocessors +
      age_postprocessors +
      minimum_needs_post_processors +
-     vulnerability_postprocessors +
+     age_vulnerability_postprocessors +
+     disabled_vulnerability_postprocessors +
      gender_postprocessors) + [
     post_processor_additional_rice
 ]

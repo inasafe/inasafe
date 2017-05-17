@@ -1,16 +1,15 @@
 # coding=utf-8
-from safe.definitions import minimum_needs_fields, displaced_field, \
-    function_process, multiply
+from safe.definitions import minimum_needs_fields, displaced_field
 from safe.utilities.i18n import tr
 from safe.definitions.concepts import concepts
 from safe.definitions.fields import pregnant_lactating_displaced_count_field
-from safe.definitions.post_processors.population_post_processors import (
-    field_input_type)
-from safe.definitions.post_processors.post_processor_inputs import \
-    constant_input_type, field_input_type, needs_profile_input_type
+from safe.definitions.fields import additional_rice_count_field
+from safe.definitions.post_processors.post_processor_inputs import (
+    constant_input_type,
+    field_input_type,
+    needs_profile_input_type)
 from safe.definitions.post_processors.post_processors import (
     multiply,
-    additional_rice_count_field,
     function_process)
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"

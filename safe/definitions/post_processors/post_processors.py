@@ -11,7 +11,9 @@ from post_processor_functions import (
     multiply,
     size,
     post_processor_affected_function)
-from safe.definitions import keyword_input_type
+from safe.definitions.post_processors.post_processor_inputs import (
+    keyword_input_type,
+    field_input_type)
 from safe.definitions.fields import (
     feature_rate_field,
     feature_value_field,
@@ -19,7 +21,6 @@ from safe.definitions.fields import (
     hazard_class_field,
     affected_field)
 from safe.definitions.hazard_classifications import not_exposed_class
-from safe.definitions.post_processors import field_input_type
 from safe.definitions.post_processors.post_processor_inputs import (
     geometry_property_input_type,
     layer_property_input_type,
