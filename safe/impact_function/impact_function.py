@@ -1283,6 +1283,8 @@ class ImpactFunction(object):
         if self.aggregate_hazard_impacted:
             self.aggregate_hazard_impacted.keywords[
                 'provenance_data'] = self.provenance
+            self.append_ISO19115_keywords(
+                self.aggregate_hazard_impacted.keywords)
             result, name = self.datastore.add_layer(
                 self._aggregate_hazard_impacted,
                 layer_purpose_aggregate_hazard_impacted['key'])
@@ -1298,6 +1300,8 @@ class ImpactFunction(object):
         if self._exposure.keywords.get('classification'):
             self._exposure_summary_table.keywords[
                 'provenance_data'] = self.provenance
+            self.append_ISO19115_keywords(
+                self._exposure_summary_table.keywords)
             result, name = self.datastore.add_layer(
                 self._exposure_summary_table,
                 layer_purpose_exposure_summary_table['key'])
@@ -1311,6 +1315,7 @@ class ImpactFunction(object):
 
         # Aggregation summary
         self.aggregation_summary.keywords['provenance_data'] = self.provenance
+        self.append_ISO19115_keywords(self.aggregation_summary.keywords)
         result, name = self.datastore.add_layer(
             self._aggregation_summary,
             layer_purpose_aggregation_summary['key'])
@@ -1323,6 +1328,7 @@ class ImpactFunction(object):
 
         # Analysis impacted
         self.analysis_impacted.keywords['provenance_data'] = self.provenance
+        self.append_ISO19115_keywords(self.analysis_impacted.keywords)
         result, name = self.datastore.add_layer(
             self._analysis_impacted, layer_purpose_analysis_impacted['key'])
         if not result:
@@ -2174,3 +2180,25 @@ class ImpactFunction(object):
 
         actions.extend(specific_actions(hazard, exposure))
         return actions
+
+    # noinspection PyPep8Naming
+    @staticmethod
+    def append_ISO19115_keywords(keywords):
+        """Append ISO19115 from setting to keywords.
+
+        :param keywords: The keywords destination.
+        :type keywords: dict
+        """
+        # Map setting's key and metadata key
+        ISO19115_mapping = {
+            'ISO19115_ORGANIZATION': 'organisation',
+            'ISO19115_URL': 'url',
+            'ISO19115_EMAIL': 'email',
+            'ISO19115_TITLE': 'title',
+            'ISO19115_LICENSE': 'license'
+        }
+        ISO19115_keywords = {}
+        # Getting value from setting.
+        for key, value in ISO19115_mapping.items():
+            ISO19115_keywords[value] = setting(key, expected_type=str)
+        keywords.update(ISO19115_keywords)
