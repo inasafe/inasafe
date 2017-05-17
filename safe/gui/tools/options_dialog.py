@@ -137,7 +137,6 @@ class OptionsDialog(QDialog, FORM_CLASS):
         # Hide checkbox if not developers
         if not self.cbxDevMode.isChecked():
             self.checkbox_generate_reports.hide()
-            self.check_box_memory.hide()
 
         # Set up listener for various UI
         self.custom_org_logo_checkbox.toggled.connect(
