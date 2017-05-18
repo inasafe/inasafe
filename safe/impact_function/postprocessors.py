@@ -172,7 +172,6 @@ def run_single_post_processor(layer, post_processor):
 
                 # for keyword
                 elif is_keyword_input:
-
                     # See http://stackoverflow.com/questions/14692690/
                     # access-python-nested-dictionary-items-via-a-list-of-keys
                     value = reduce(
