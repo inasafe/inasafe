@@ -613,6 +613,7 @@ class TestImpactFunction(unittest.TestCase):
         """
         scenarios = {
             'earthquake_raster_on_raster_population': False,
+            'earthquake_raster_on_vector_population': False,
             'polygon_classified_on_line': False,
             'polygon_classified_on_point': False,
             'polygon_classified_on_vector_population': False,

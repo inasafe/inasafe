@@ -1302,6 +1302,36 @@ affected_field = {
     'replace_null': False
 }
 
+# Fatality ratio
+population_fatality_ratio_field = {
+    'key': 'fatality_ratio_field',
+    'name': tr('Fatality Ratio'),
+    'field_name': 'fatality_ratio',
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': 10,  # I think we need some precision for this field.
+    'absolute': False,
+    'description': tr(
+        'The population fatality ratio for a given hazard class.'),
+    'help_text': tr(
+        '"Killed" is defined as: {concept} In cases where population data '
+        'is available and the hazard is an earthquake, InaSAFE will calculate '
+        'the estimated number of killed people per exposure feature, '
+        'aggregate hazard area, aggregation area and for the analysis area '
+        'as a whole. The population displaced ratio is calculated based on '
+        'definitions for each hazard class.').format(
+            concept=concepts['killed_people']['description']),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False,
+    'default_value': None
+}
+
 # Displacement ratio
 population_displacement_ratio_field = {
     'key': 'population_displacement_ratio_field',
