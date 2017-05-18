@@ -19,7 +19,7 @@ __revision__ = '$Format:%H$'
 def field_mapping_help():
     """Help message for field mapping Dialog.
 
-    .. versionadded:: 3.2.1
+    .. versionadded:: 4.1.0
 
     :returns: A message object containing helpful information.
     :rtype: messaging.message.Message
@@ -37,7 +37,7 @@ def heading():
     This method was added so that the text could be reused in the
     other contexts.
 
-    .. versionadded:: 3.2.2
+    .. versionadded:: 4.1.0
 
     :returns: A heading object.
     :rtype: safe.messaging.heading.Heading
@@ -52,7 +52,7 @@ def content():
     This method was added so that the text could be reused in the
     dock_help module.
 
-    .. versionadded:: 3.2.2
+    .. versionadded:: 4.1.0
 
     :returns: A message object without brand element.
     :rtype: safe.messaging.message.Message
@@ -184,5 +184,54 @@ def content():
             'analysis is carried out.')
     )
     message.add(paragraph)
+    paragraph = m.Paragraph(
+        tr(
+            'The interplay between default ratios, aggregation layer '
+            'provided ratios and population exposure layers is illustrated'
+            'in the table below.')
+    )
+    message.add(paragraph)
+
+    table = m.Table(style_class='table table-condensed table-striped')
+    row = m.Row()
+    row.add(m.Cell(tr('Aggregation'), header=True))
+    row.add(m.Cell(tr('Raster'), header=True))
+    row.add(m.Cell(tr('Vector, no counts'), header=True))
+    row.add(m.Cell(tr('Vector with counts'), header=True))
+    row.add(m.Cell(tr('Notes'), header=True))
+    table.add(row)
+    row = m.Row([
+        tr('No aggregation'),
+        tr('Use global default ratio'),
+        tr('Use global default ratio'),
+        tr('Use count to determine ratio'),
+        tr(''),
+    ])
+    table.add(row)
+    row = m.Row([
+        tr('Aggregation, ratio not set'),
+        tr('Use global default ratio'),
+        tr('Do nothing'),
+        tr('Use count to determine ratio'),
+        tr(''),
+    ])
+    table.add(row)
+    row = m.Row([
+        tr('Aggregation, ratio value set'),
+        tr('Use aggregation layer ratio'),
+        tr('Use aggregation layer ratio'),
+        tr('Use count to determine ratio'),
+        tr(''),
+    ])
+    table.add(row)
+    row = m.Row([
+        tr('Aggregation, ratio field mapping set'),
+        tr('Use aggregation layer ratio'),
+        tr('Use aggregation layer ratio'),
+        tr('Use count to determine ratio'),
+        tr(''),
+    ])
+    table.add(row)
+    message.add(table)
 
     return message

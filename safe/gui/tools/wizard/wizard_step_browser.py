@@ -38,6 +38,7 @@ from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_strings import (
     create_postGIS_connection_first)
 from safe.gui.tools.wizard.wizard_utils import layer_description_html
+from safe.utilities.gis import qgis_version
 from safe.utilities.utilities import is_keyword_version_supported
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -390,7 +391,10 @@ class WizardStepBrowser(WizardStep):
 
         # set the layer name for further use in the step_fc_summary
         if keywords:
-            layer.setLayerName(keywords.get('title'))
+            if qgis_version() >= 21800:
+                layer.setName(keywords.get('title'))
+            else:
+                layer.setLayerName(keywords.get('title'))
 
         if not self.parent.is_layer_compatible(layer, category, keywords):
             label_text = '%s<br/>%s' % (

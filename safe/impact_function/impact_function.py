@@ -20,7 +20,7 @@ from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsRectangle,
     QgsVectorLayer,
-    QGis,
+    QGis
 )
 
 import logging
@@ -136,6 +136,7 @@ from safe.utilities.utilities import (
     is_keyword_version_supported)
 from safe.utilities.profiling import (
     profile, clear_prof_data, profiling_log)
+from safe.utilities.gis import qgis_version
 from safe.utilities.settings import setting
 from safe import messaging as m
 from safe.messaging import styles
@@ -239,9 +240,10 @@ class ImpactFunction(object):
         message = m.Message()
         table = m.Table(style_class='table table-condensed table-striped')
         row = m.Row()
-        row.add(m.Cell(tr('Function')), header_flag=True)
-        row.add(m.Cell(tr('Time')), header_flag=True)
-        row.add(m.Cell(tr('Memory')), header_flag=True)
+        row.add(m.Cell(tr('Function'), header=True))
+        row.add(m.Cell(tr('Time'), header=True))
+        if setting(key='memory_profile', expected_type=bool):
+            row.add(m.Cell(tr('Memory'), header=True))
         table.add(row)
 
         if self.performance_log is None:
@@ -266,7 +268,8 @@ class ImpactFunction(object):
 
             new_row.add(m.Cell(text))
             new_row.add(m.Cell(tree.elapsed_time))
-            new_row.add(m.Cell(tree.memory_used))
+            if setting(key='memory_profile', expected_type=bool):
+                new_row.add(m.Cell(tree.memory_used))
             table.add(new_row)
             if tree.children:
                 for child in tree.children:
@@ -1282,6 +1285,8 @@ class ImpactFunction(object):
         if self.aggregate_hazard_impacted:
             self.aggregate_hazard_impacted.keywords[
                 'provenance_data'] = self.provenance
+            self.append_ISO19115_keywords(
+                self.aggregate_hazard_impacted.keywords)
             result, name = self.datastore.add_layer(
                 self._aggregate_hazard_impacted,
                 layer_purpose_aggregate_hazard_impacted['key'])
@@ -1297,6 +1302,8 @@ class ImpactFunction(object):
         if self._exposure.keywords.get('classification'):
             self._exposure_summary_table.keywords[
                 'provenance_data'] = self.provenance
+            self.append_ISO19115_keywords(
+                self._exposure_summary_table.keywords)
             result, name = self.datastore.add_layer(
                 self._exposure_summary_table,
                 layer_purpose_exposure_summary_table['key'])
@@ -1310,6 +1317,7 @@ class ImpactFunction(object):
 
         # Aggregation summary
         self.aggregation_summary.keywords['provenance_data'] = self.provenance
+        self.append_ISO19115_keywords(self.aggregation_summary.keywords)
         result, name = self.datastore.add_layer(
             self._aggregation_summary,
             layer_purpose_aggregation_summary['key'])
@@ -1322,6 +1330,7 @@ class ImpactFunction(object):
 
         # Analysis impacted
         self.analysis_impacted.keywords['provenance_data'] = self.provenance
+        self.append_ISO19115_keywords(self.analysis_impacted.keywords)
         result, name = self.datastore.add_layer(
             self._analysis_impacted, layer_purpose_analysis_impacted['key'])
         if not result:
@@ -1878,8 +1887,12 @@ class ImpactFunction(object):
                 # set this as fallback.
                 self._exposure_summary.keywords['title'] = (
                     layer_purpose_exposure_summary['name'])
-                self._exposure_summary.setLayerName(
-                    self._exposure_summary.keywords['title'])
+                if qgis_version() >= 21800:
+                    self._exposure_summary.setName(
+                        self._exposure_summary.keywords['title'])
+                else:
+                    self._exposure_summary.setLayerName(
+                        self._exposure_summary.keywords['title'])
 
     @profile
     def post_process(self, layer):
@@ -2173,3 +2186,25 @@ class ImpactFunction(object):
 
         actions.extend(specific_actions(hazard, exposure))
         return actions
+
+    # noinspection PyPep8Naming
+    @staticmethod
+    def append_ISO19115_keywords(keywords):
+        """Append ISO19115 from setting to keywords.
+
+        :param keywords: The keywords destination.
+        :type keywords: dict
+        """
+        # Map setting's key and metadata key
+        ISO19115_mapping = {
+            'ISO19115_ORGANIZATION': 'organisation',
+            'ISO19115_URL': 'url',
+            'ISO19115_EMAIL': 'email',
+            'ISO19115_TITLE': 'title',
+            'ISO19115_LICENSE': 'license'
+        }
+        ISO19115_keywords = {}
+        # Getting value from setting.
+        for key, value in ISO19115_mapping.items():
+            ISO19115_keywords[value] = setting(key, expected_type=str)
+        keywords.update(ISO19115_keywords)
