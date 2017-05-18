@@ -7,7 +7,9 @@ import logging
 from PyQt4 import QtCore
 
 import safe.definitions.post_processors
-import safe.definitions.post_processors.post_processor_inputs
+from safe.definitions.post_processors.post_processor_inputs import (
+    post_processor_input_types,
+    post_processor_input_values)
 from safe.utilities.i18n import tr
 from safe import messaging as m
 from safe.messaging import styles
@@ -662,7 +664,7 @@ def content():
         tr('Post Processor Input Types'),
         heading_level=2)
     table = _create_post_processor_subtable(
-        safe.definitions.post_processors.post_processor_inputs.post_processor_input_types
+        post_processor_input_types
     )
     message.add(table)
 
@@ -673,7 +675,7 @@ def content():
         tr('Post Processor Input Values'),
         heading_level=2)
     table = _create_post_processor_subtable(
-        safe.definitions.post_processors.post_processor_inputs.post_processor_input_values
+        post_processor_input_values
     )
     message.add(table)
 
@@ -694,7 +696,7 @@ def content():
         'post-processors',
         tr('Post Processors'),
         heading_level=2)
-    post_processors = safe.definitions.post_processors.post_processors
+    post_processors = safe.definitions.post_processors
     table = m.Table(style_class='table table-condensed table-striped')
     row = m.Row()
     row.add(m.Cell(tr('Name'), header=True))

@@ -19,8 +19,7 @@ from safe.definitions.fields import (
     total_field)
 from safe.definitions.field_groups import (
     age_displaced_count_group,
-    gender_displaced_count_group,
-    vulnerability_displaced_count_group)
+    gender_displaced_count_group)
 from safe.definitions.hazard_classifications import flood_hazard_classes
 from safe.impact_function.impact_function import ImpactFunction
 from safe.report.report_metadata import ReportMetadata
@@ -1005,12 +1004,6 @@ class TestImpactReport(unittest.TestCase):
                     'group_header_colspan': 1,
                     'totals': [
                         u'Total', '25,700', '12,900']}),
-                ('vulnerability', {
-                    'header': u'Detailed Vulnerability Report',
-                    'message': u'Vulnerability ratio not exists. '
-                               u'No calculations produced.',
-                    'empty': True
-                }),
                 ('minimum_needs', {
                     'header': u'Detailed Minimum Needs Report',
                     'notes': [u'Columns and rows containing only 0 or "No '
@@ -1174,12 +1167,6 @@ class TestImpactReport(unittest.TestCase):
                         }],
                     'group_header_colspan': 1,
                     'totals': [u'Total', '20', '10']}),
-                ('vulnerability', {
-                    'header': u'Detailed Vulnerability Report',
-                    'message': u'Vulnerability ratio not exists. '
-                               u'No calculations produced.',
-                    'empty': True
-                }),
                 ('minimum_needs', {
                     'header': u'Detailed Minimum Needs Report',
                     'notes': [u'Columns and rows containing only 0 or "No '

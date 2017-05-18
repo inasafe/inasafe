@@ -9,7 +9,7 @@
 # Assume brew installed deps
 export PATH=$PATH:/usr/local/bin/
 
-SITES=`find /usr/local/ -name site-packages`
+SITES=`find /usr/local/ -name site-packages | grep python2`
 for SITE in $SITES
 do
 	PYTHONPATH=$PYTHONPATH:$SITE
