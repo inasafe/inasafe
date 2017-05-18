@@ -112,4 +112,5 @@ def initialize_minimum_needs_post_processors():
     return processors
 
 
-minimum_needs_post_processors = initialize_minimum_needs_post_processors()
+minimum_needs_post_processors = \
+    initialize_minimum_needs_post_processors()

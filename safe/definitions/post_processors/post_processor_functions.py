@@ -56,7 +56,7 @@ def post_processor_affected_function(**kwargs):
     """Private function used in the affected postprocessor.
 
     The following are expected in kwargs:
-    
+
     * classification: The hazard classification to use.
     * hazard_class: The hazard class to check.
 

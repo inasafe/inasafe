@@ -101,27 +101,27 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
             postprocessor_output_field(p) for p in gender_postprocessors]
     }
     # TODO: Rohmat softcode the groups
-    #vulnerability_items = {
+    # vulnerability_items = {
     #    'group': vulnerability_displaced_count_group,
     #    'group_header': u'Vulnerability breakdown (in affected area)',
     #    'fields': [
     #        postprocessor_output_field(p) for p in (
     #            vulnerability_postprocessors)]
-    #}
-    #vulnerability_items = {
+    # }
+    # vulnerability_items = {
     #    'group': vulnerability_displaced_count_group,
     #    'group_header': u'Vulnerability breakdown (in affected area)',
     #    'fields': [
     #        postprocessor_output_field(p) for p in (
     #            vulnerability_postprocessors)]
-    #}
-    #vulnerability_items = {
+    # }
+    # vulnerability_items = {
     #    'group': vulnerability_displaced_count_group,
     #    'group_header': u'Vulnerability breakdown (in affected area)',
     #    'fields': [
     #        postprocessor_output_field(p) for p in (
     #            vulnerability_postprocessors)]
-    #}
+    # }
 
     # check age_fields exists
     for field in age_items['fields']:
@@ -143,11 +143,11 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
 
     # TODO: Rohmat softcode
 
-    #for field in vulnerability_items['fields']:
+    # for field in vulnerability_items['fields']:
     #    if field['key'] in analysis_layer_fields:
     #        no_vulnerability_field = False
     #        break
-    #else:
+    # else:
     #    no_vulnerability_field = True
 
     age_section_header = resolve_from_dictionary(
@@ -212,14 +212,14 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
                 extra_args, ['defaults', 'zero_displaced_message'])
         }
     # TODO: Rohmat soft code
-    #elif no_vulnerability_field:
+    # elif no_vulnerability_field:
     #    context['sections']['vulnerability'] = {
     #        'header': vulnerability_section_header,
     #        'empty': True,
     #        'message': resolve_from_dictionary(
     #            extra_args, ['defaults', 'no_vulnerability_rate_message'])
     #    }
-    #else:
+    # else:
     #    context['sections']['vulnerability'] = create_section(
     #        aggregation_summary,
     #        analysis_layer,

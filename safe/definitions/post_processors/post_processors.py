@@ -136,6 +136,3 @@ post_processor_affected = {
         }
     }
 }
-
-
-
