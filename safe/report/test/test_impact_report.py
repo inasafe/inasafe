@@ -6,6 +6,8 @@ import os
 import shutil
 import unittest
 from collections import OrderedDict
+from osgeo import gdal
+from qgis.core import QGis
 
 from copy import deepcopy
 from jinja2.environment import Template
@@ -898,7 +900,7 @@ class TestImpactReport(unittest.TestCase):
                                 'header': 'InaSAFE Version '
                             },
                             'qgis_version': {
-                                'content': '2.14.14-Essen',
+                                'content': QGis.QGIS_VERSION,
                                 'header': 'QGIS Version '
                             },
                             'pyqt_version': {
@@ -914,7 +916,7 @@ class TestImpactReport(unittest.TestCase):
                                 'header': 'Qt Version '
                             },
                             'gdal_version': {
-                                'content': '2.1.3',
+                                'content': gdal.__version__,
                                 'header': 'GDAL Version '
                             }
                         }

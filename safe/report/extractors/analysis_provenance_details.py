@@ -102,7 +102,8 @@ def analysis_provenance_details_extractor(impact_report, component_metadata):
 
         # convert value if there is dict_keywords
         provenances = aggregation_provenance['provenances']
-        aggregation_provenance['provenances'] = resolve_dict_keywords(provenances)
+        aggregation_provenance['provenances'] = resolve_dict_keywords(
+            provenances)
 
     else:
         aggregation_not_used = resolve_from_dictionary(
