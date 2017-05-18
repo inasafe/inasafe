@@ -64,7 +64,8 @@ class PeopleInfographicElement(object):
         """Number to be displayed for the element."""
         value = format_number(
             self._number,
-            enable_rounding=True)
+            enable_rounding=True,
+            is_population=True)
         return value
 
 
@@ -286,7 +287,8 @@ def population_infographic_extractor(impact_report, component_metadata):
 
     total_displaced_rounded = format_number(
         total_displaced,
-        enable_rounding=True)
+        enable_rounding=True,
+        is_population=True)
 
     sections['vulnerability'] = {
         'header': vulnerability_section_header,
