@@ -3,7 +3,7 @@
 """Postprocessors."""
 
 # noinspection PyUnresolvedReferences
-from PyQt4.QtCore import QPyNullGVariant
+from PyQt4.QtCore import QPyNullVariant
 from qgis.core import QgsFeatureRequest
 
 from safe.definitions.minimum_needs import minimum_needs_parameter
