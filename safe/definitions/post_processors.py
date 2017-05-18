@@ -10,12 +10,15 @@ from collections import OrderedDict
 
 from PyQt4.QtCore import QPyNullVariant
 
+from safe.definitions.hazard import hazard_earthquake
 from safe.definitions.hazard_classifications import not_exposed_class
 from safe.definitions.exposure import exposure_population
 from safe.definitions.minimum_needs import minimum_needs_fields
 from safe.utilities.i18n import tr
 from safe.definitions.fields import (
     population_displacement_ratio_field,
+    population_fatality_ratio_field,
+    fatalities_field,
     displaced_field,
     female_ratio_field,
     child_bearing_age_ratio_field,
@@ -157,6 +160,38 @@ def post_processor_population_displacement_function(
 
     return 0
 
+
+def post_processor_population_fatality_function(
+        classification=None, hazard_class=None, population=None):
+    """Private function used in the fatality postprocessor.
+
+    :param classification: The hazard classification to use.
+    :type classification: str
+
+    :param hazard_class: The hazard class of the feature.
+    :type hazard_class: str
+
+    :param population: We don't use this value here. It's only used for
+        condition for the postprocessor to run.
+    :type population: float, int
+
+    :return: The displacement ratio for a given hazard class.
+    :rtype: float
+    """
+    _ = population
+    for hazard in hazard_classes_all:
+        if hazard['key'] == classification:
+            classification = hazard['classes']
+            break
+
+    for hazard_class_def in classification:
+        if hazard_class_def['key'] == hazard_class:
+            displaced_ratio = hazard_class_def.get('fatality_rate', 0.0)
+            # We need to cast it to float to make it works.
+            return float(displaced_ratio)
+
+    return 0.0
+
 # # #
 # Post processors related definitions
 # # #
@@ -186,6 +221,13 @@ keyword_input_type = {
     'description': tr(
         'This type of input takes value from a keyword for the layer '
         'being handled.')
+}
+
+keyword_value_expected = {
+    'key': 'keyword_value',
+    'description': tr(
+        'This type of parameter checks the value of a specific keyword in '
+        'order to run for the layer being handled.')
 }
 
 needs_profile_input_type = {
@@ -272,6 +314,81 @@ post_processor_process_types = [
 
 # A postprocessor can be defined with a formula or with a python function.
 
+post_processor_fatality_ratio = {
+    'key': 'post_processor_fatality_ratio',
+    'name': tr('Population Fatality Ratio Post Processor'),
+    'description': tr(
+        'A post processor to add the population fatality ratio according '
+        'to the hazard class'),
+    'input': {
+        # Taking hazard classification
+        'classification': {
+            'type': keyword_input_type,
+            'value': ['hazard_keywords', 'classification']
+        },
+        'hazard_class': {
+            'type': field_input_type,
+            'value': hazard_class_field,
+        },
+        'population': [
+            # No one of these fields are used in this postprocessor.
+            # But we put them as a condition for the postprocessor to run.
+            {
+                'value': population_count_field,
+                'type': field_input_type,
+            },
+            {
+                'value': exposure_count_field,
+                'field_param': exposure_population['key'],
+                'type': dynamic_field_input_type,
+            }],
+        'earthquake_hazard': {
+            'type': keyword_value_expected,
+            'value': ['hazard_keywords', 'hazard'],
+            'expected_value': hazard_earthquake['key']
+        },
+    },
+    'output': {
+        'fatality_ratio': {
+            'value': population_fatality_ratio_field,
+            'type': function_process,
+            'function': post_processor_population_fatality_function
+        }
+    }
+}
+
+post_processor_fatalities = {
+    'key': 'post_processor_fatalities',
+    'name': tr('Fatalities Post Processor'),
+    'description': tr(
+        'A post processor to calculate the number of fatalities. '),
+    'input': {
+        # input as a list means, try to get the input from the
+        # listed source. Pick the first available
+        'population': [
+            {
+                'value': population_count_field,
+                'type': field_input_type,
+            },
+            {
+                'value': exposure_count_field,
+                'field_param': exposure_population['key'],
+                'type': dynamic_field_input_type,
+            }],
+        'fatality_ratio': {
+            'type': field_input_type,
+            'value': population_fatality_ratio_field
+        },
+    },
+    'output': {
+        'fatalities': {
+            'value': fatalities_field,
+            'type': formula_process,
+            'formula': 'population * fatality_ratio'
+        }
+    }
+}
+
 post_processor_displaced_ratio = {
     'key': 'post_processor_displacement_ratio',
     'name': tr('Population Displacement Ratio Post Processor'),
@@ -333,13 +450,23 @@ post_processor_displaced = {
         'displacement_ratio': {
             'type': field_input_type,
             'value': population_displacement_ratio_field
-        }
+        },
+        'fatalities': [
+            {
+                'type': field_input_type,
+                'value': fatalities_field,
+            },
+            {
+                'type': constant_input_type,
+                'value': 0,  # If no fatality field, we take 0 for the formula.
+            }
+        ]
     },
     'output': {
         'displaced': {
             'value': displaced_field,
             'type': formula_process,
-            'formula': 'population * displacement_ratio'
+            'formula': '(population - fatalities) * displacement_ratio'
         }
     }
 }
@@ -991,14 +1118,16 @@ minimum_needs_post_processors = initialize_minimum_needs_post_processors()
 # |   `--- size rate  disabled in V4.0, ET 13/02/17
 # |--- affected
 # |--- displaced ratio
-# |   |--- displaced count
-# |      |--- gender
-# |      |   |--- hygiene packs
-# |      |--- additional rice
-# |      |--- youth
-# |      |--- adult
-# |      |--- elderly
-# |      `--- minimum needs
+# |--- fatality ratio
+# |   `--- fatality count
+# |       `--- displaced count (from fatality count or 0 if no fatalities)
+# |          |--- gender
+# |          |   |--- hygiene packs
+# |          |--- additional rice
+# |          |--- youth
+# |          |--- adult
+# |          |--- elderly
+# |          `--- minimum needs
 
 female_postprocessors = [
     post_processor_gender,
@@ -1029,6 +1158,8 @@ post_processors = [
     post_processor_size,
     # post_processor_size_rate, disabled in V4.0, ET 13/02/17
     post_processor_affected,
+    post_processor_fatality_ratio,
+    post_processor_fatalities,
     post_processor_displaced_ratio,
     post_processor_displaced,
 ] + (female_postprocessors +
