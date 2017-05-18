@@ -357,7 +357,8 @@ class TestImpactReport(unittest.TestCase):
                 'header_hazard_group': {
                     'not_affected': {
                         'header': u'Not affected',
-                        'hazards': [],
+                        'hazards': [
+                            u'Low hazard zone'],
                         'total': [u'Total Not Affected'],
                         'start_index': 4
                     },
@@ -365,8 +366,7 @@ class TestImpactReport(unittest.TestCase):
                         'header': u'Affected',
                         'hazards': [
                             u'High hazard zone',
-                            u'Medium hazard zone',
-                            u'Low hazard zone'],
+                            u'Medium hazard zone'],
                         'total': [u'Total Affected'],
                         'start_index': 1
                     }
