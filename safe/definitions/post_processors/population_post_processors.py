@@ -305,10 +305,11 @@ post_processor_male = {
         },
         # input as a list means, try to get the input from the
         # listed source. Pick the first available
-        'male_ratio': [{
-            'value': male_ratio_field,
-            'type': field_input_type
-        },
+        'male_ratio': [
+            {
+                'value': male_ratio_field,
+                'type': field_input_type
+            },
             {
                 'type': keyword_input_type,
                 'value': [
@@ -343,10 +344,11 @@ post_processor_female = {
         },
         # input as a list means, try to get the input from the
         # listed source. Pick the first available
-        'female_ratio': [{
-            'value': female_ratio_field,
-            'type': field_input_type
-        },
+        'female_ratio': [
+            {
+                'value': female_ratio_field,
+                'type': field_input_type
+            },
             {
                 'type': keyword_input_type,
                 'value': [

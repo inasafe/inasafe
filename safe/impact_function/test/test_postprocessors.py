@@ -69,10 +69,10 @@ class TestPostProcessors(unittest.TestCase):
             clone_to_memory=True)
         self.assertIsNotNone(impact_layer)
 
-        #result, message = run_single_post_processor(
-        #    impact_layer,
-        #    post_processor_male)
-        #self.assertTrue(result, message)
+        result, message = run_single_post_processor(
+            impact_layer,
+            post_processor_male)
+        self.assertTrue(result, message)
 
         result, message = run_single_post_processor(
             impact_layer,
@@ -83,8 +83,8 @@ class TestPostProcessors(unittest.TestCase):
         impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
         self.assertIn(
             female_displaced_count_field['field_name'], impact_fields)
-        #self.assertIn(
-        #    male_displaced_count_field['field_name'], impact_fields)
+        self.assertIn(
+            male_displaced_count_field['field_name'], impact_fields)
 
     def test_youth_post_processor(self):
         """Test youth post processor."""

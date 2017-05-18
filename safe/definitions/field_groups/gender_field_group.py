@@ -3,16 +3,11 @@
 
 from safe.definitions.fields import (
     female_ratio_field,
-    child_bearing_age_ratio_field,
-    pregnant_lactating_ratio_field,
-    pregnant_ratio_field,
-    lactating_ratio_field,
+    male_ratio_field,
     female_count_field,
-    child_bearing_age_count_field,
-    pregnant_lactating_count_field,
-    female_displaced_count_field,
-    child_bearing_age_displaced_count_field,
-    pregnant_lactating_displaced_count_field)
+    male_count_field,
+    male_displaced_count_field,
+    female_displaced_count_field)
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
@@ -34,10 +29,8 @@ gender_ratio_group = {
         'Gender specific info can include criteria like the number of '
         'females, the number of females of child bearing age, and so on.'),
     'fields': [
+        male_ratio_field,
         female_ratio_field,
-        pregnant_lactating_ratio_field,
-        pregnant_ratio_field,
-        lactating_ratio_field
     ],
     # Exclusive = False: able to put same layer's field to some fields
     # Exclusive = True: only able to put a layer's field to a field
@@ -53,9 +46,8 @@ gender_count_group = {
         'provide a detailed break down of the number of people displaced '
         'in each age group.'),
     'fields': [
+        male_count_field,
         female_count_field,
-        child_bearing_age_count_field,
-        pregnant_lactating_count_field
     ],
     # Exclusive = False: able to put same layer's field to some fields
     # Exclusive = True: only able to put a layer's field to a field
@@ -71,9 +63,8 @@ gender_displaced_count_group = {
         'concepts provide a detailed break down of the number of people '
         'displaced in each gender specific group.'),
     'fields': [
+        male_displaced_count_field,
         female_displaced_count_field,
-        child_bearing_age_displaced_count_field,
-        pregnant_lactating_displaced_count_field
     ],
     # Exclusive = False: able to put same layer's field to some fields
     # Exclusive = True: only able to put a layer's field to a field
