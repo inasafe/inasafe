@@ -45,7 +45,9 @@ class Tree(object):
     def ended(self):
         """We call this method when the function is finished."""
         self._end_time = time.time()
-        self._end_memory = get_free_memory()
+
+        if setting(key='memory_profile', expected_type=bool):
+            self._end_memory = get_free_memory()
 
     @property
     def elapsed_time(self):

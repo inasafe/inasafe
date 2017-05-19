@@ -268,7 +268,10 @@ class ImpactFunction(object):
             text += tree.__str__()
 
             new_row.add(m.Cell(text))
-            new_row.add(m.Cell(tree.elapsed_time))
+            time = tree.elapsed_time
+            if time is None:
+                time = tr('Busy')
+            new_row.add(m.Cell(time))
             if setting(key='memory_profile', expected_type=bool):
                 new_row.add(m.Cell(tree.memory_used))
             table.add(new_row)
