@@ -1923,6 +1923,11 @@ class ImpactFunction(object):
                 if valid:
                     self.set_state_process('post_processor', name)
                     message = u'{name} : Running'.format(name=name)
+                else:
+                    LOGGER.error(
+                        'Error while running the postprocessor {name}'.format(
+                            name=post_processor['name']))
+                    LOGGER.error(message)
 
             else:
                 message = u'{name} : Could not run : {reason}'.format(
