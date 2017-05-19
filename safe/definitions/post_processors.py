@@ -18,6 +18,7 @@ from safe.definitions.fields import (
     population_displacement_ratio_field,
     displaced_field,
     female_ratio_field,
+    male_ratio_field,
     child_bearing_age_ratio_field,
     pregnant_lactating_ratio_field,
     population_count_field,
@@ -422,17 +423,14 @@ post_processor_pregnant_lactating = {
     }
 }
 
-post_processor_gender = {
-    'key': 'post_processor_gender',
-    'name': tr('Gender Post Processor'),
+post_processor_female = {
+    'key': 'post_processor_female',
+    'name': tr('Female Post Processor'),
     'description': tr(
         'A post processor to calculate the number of displaced females '
-        'and males. '
-        '"Female" is defined as: {female_concept} "Male" is defined as: '
-        '{male_concept} "Displaced" is defined as: '
+        '"Female" is defined as: {female_concept} "Displaced" is defined as: '
         '{displaced_concept}').format(
             female_concept=concepts['female']['description'],
-            male_concept=concepts['male']['description'],
             displaced_concept=concepts['displaced_people']['description']),
     'input': {
         'population_displaced': {
@@ -441,7 +439,7 @@ post_processor_gender = {
         },
         # input as a list means, try to get the input from the
         # listed source. Pick the first available
-        'gender_ratio': [{
+        'female_ratio': [{
                 'value': female_ratio_field,
                 'type': field_input_type
             },
@@ -458,13 +456,47 @@ post_processor_gender = {
     'output': OrderedDict([
         ('female_displaced', {
             'value': female_displaced_count_field,
-            'type': formula_process,
-            'formula': 'population_displaced * gender_ratio'
-        }),
+            'type': function_process,
+            'function': multiply
+        })
+    ])
+}
+
+post_processor_male = {
+    'key': 'post_processor_male',
+    'name': tr('Male Post Processor'),
+    'description': tr(
+        'A post processor to calculate the number of displaced males. '
+        '"Male" is defined as: {male_concept} "Displaced" is defined as: '
+        '{displaced_concept}').format(
+            male_concept=concepts['male']['description'],
+            displaced_concept=concepts['displaced_people']['description']),
+    'input': {
+        'population_displaced': {
+            'value': displaced_field,
+            'type': field_input_type,
+        },
+        # input as a list means, try to get the input from the
+        # listed source. Pick the first available
+        'male_ratio': [{
+                'value': male_ratio_field,
+                'type': field_input_type
+            },
+            {
+                'type': keyword_input_type,
+                'value': [
+                    'inasafe_default_values',
+                    male_ratio_field['key'],
+                ],
+            }]
+    },
+    # output is described as ordered dict because the order is important
+    # and the postprocessor produce two fields.
+    'output': OrderedDict([
         ('male_displaced', {
             'value': male_displaced_count_field,
-            'type': formula_process,
-            'formula': 'population_displaced * (1 - gender_ratio)'
+            'type': function_process,
+            'function': multiply
         })
     ])
 }
@@ -983,7 +1015,7 @@ minimum_needs_post_processors = initialize_minimum_needs_post_processors()
 
 # This is the order of execution, so the order is important.
 # For instance, the size post processor must run before size_rate.
-# and hygiene packs post processor must run after gender post processor
+# and hygiene packs post processor must run after female post processor
 
 # Postprocessor tree
 # # Root : impact layer
@@ -1000,8 +1032,9 @@ minimum_needs_post_processors = initialize_minimum_needs_post_processors()
 # |      |--- elderly
 # |      `--- minimum needs
 
-female_postprocessors = [
-    post_processor_gender,
+gender_postprocessors = [
+    post_processor_female,
+    post_processor_male,
     post_processor_hygiene_packs
 ]
 
@@ -1013,15 +1046,17 @@ age_postprocessors = [
     post_processor_elderly,
 ]
 
-gender_postprocessors = [
-    post_processor_gender,
+vulnerability_gender_postprocessors = [
     post_processor_child_bearing_age,
     post_processor_pregnant_lactating
 ]
 
-vulnerability_postprocessors = [
+vulnerability_age_postprocessors = [
     post_processor_under_5,
-    post_processor_over_60,
+    post_processor_over_60
+]
+
+vulnerability_disability_postprocessors = [
     post_processor_disabled
 ]
 
@@ -1031,10 +1066,11 @@ post_processors = [
     post_processor_affected,
     post_processor_displaced_ratio,
     post_processor_displaced,
-] + (female_postprocessors +
+] + (gender_postprocessors +
      age_postprocessors +
      minimum_needs_post_processors +
-     vulnerability_postprocessors +
-     gender_postprocessors) + [
+     vulnerability_age_postprocessors +
+     vulnerability_gender_postprocessors +
+     vulnerability_disability_postprocessors) + [
     post_processor_additional_rice
 ]
