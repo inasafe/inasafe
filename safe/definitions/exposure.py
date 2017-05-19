@@ -15,7 +15,7 @@ from safe.definitions.fields import (
     exposure_name_field,
     population_count_field,
     exposure_type_field)
-from safe.definitions.field_groups import exposure_field_groups
+from safe.definitions.field_groups import population_field_groups
 from safe.definitions.layer_modes import (
     layer_mode_continuous, layer_mode_classified)
 from safe.definitions.exposure_classifications import (
@@ -167,7 +167,7 @@ exposure_population = {
     'compulsory_fields': [population_count_field],
     'fields': exposure_fields,
     'extra_fields': [exposure_name_field],
-    'field_groups': exposure_field_groups,
+    'field_groups': population_field_groups,
     'layer_modes': [layer_mode_continuous],
     'display_not_exposed': False,
     'use_population_rounding': True,
@@ -367,7 +367,7 @@ exposure_place = {
     'compulsory_fields': [exposure_type_field],
     'fields': exposure_fields,
     'extra_fields': [exposure_name_field],
-    'field_groups': exposure_field_groups,
+    'field_groups': population_field_groups,
     'layer_modes': [layer_mode_classified],
     'display_not_exposed': True,
     'use_population_rounding': False,

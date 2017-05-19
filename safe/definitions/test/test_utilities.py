@@ -37,7 +37,7 @@ from safe.definitions import (
     layer_geometry_polygon,
     cyclone_au_bom_hazard_classes,
     unit_knots,
-    exposure_field_groups,
+    population_field_groups,
     aggregation_field_groups
 )
 
@@ -386,9 +386,9 @@ class TestDefinitionsUtilities(unittest.TestCase):
 
     def test_fields_in_field_groups(self):
         """Test for fields_in_field_groups method."""
-        fields = fields_in_field_groups(exposure_field_groups)
+        fields = fields_in_field_groups(population_field_groups)
         expected = []
-        for field_group in exposure_field_groups:
+        for field_group in population_field_groups:
             expected += field_group['fields']
         self.assertListEqual(fields, expected)
 
@@ -404,7 +404,7 @@ class TestDefinitionsUtilities(unittest.TestCase):
 
         field_groups = get_field_groups(
             layer_purpose_exposure['key'], exposure_population['key'])
-        expected = exposure_field_groups
+        expected = population_field_groups
         self.assertListEqual(field_groups, expected)
 
         field_groups = get_field_groups(layer_purpose_hazard['key'])

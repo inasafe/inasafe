@@ -9,7 +9,7 @@ from safe.definitions.layer_geometry import (
     layer_geometry_polygon
 )
 from safe.definitions.field_groups import (
-    aggregation_field_groups, exposure_field_groups)
+    aggregation_field_groups, population_field_groups)
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
