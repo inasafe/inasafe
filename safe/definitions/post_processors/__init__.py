@@ -31,11 +31,11 @@ post_processors = [
     post_processor_affected,
     post_processor_displaced_ratio,
     post_processor_displaced,
-] + (female_postprocessors +
+] + (gender_postprocessors +
+     female_postprocessors +
      age_postprocessors +
      minimum_needs_post_processors +
      age_vulnerability_postprocessors +
-     disabled_vulnerability_postprocessors +
-     gender_postprocessors) + [
+     disabled_vulnerability_postprocessors) + [
     post_processor_additional_rice
 ]
