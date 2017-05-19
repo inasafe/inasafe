@@ -1,6 +1,6 @@
 # coding=utf-8
 """Module used to generate context for analysis detail section."""
-from safe.definitions.exposure import exposure_all
+from safe.definitions.exposure import exposure_all, exposure_population
 from safe.definitions.fields import (
     exposure_type_field,
     exposure_class_field,
@@ -65,6 +65,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
     # Only round the number when it is population exposure and it is not
     # in debug mode
     is_rounding = not debug_mode
+    is_population = exposure_type is exposure_population
 
     # Analysis detail only applicable for breakable exposure types:
     itemizable_exposures_all = [
@@ -214,7 +215,8 @@ def analysis_detail_extractor(impact_report, component_metadata):
                 count_value = int(float(feat[field_index]))
                 count_value = format_number(
                     count_value,
-                    enable_rounding=is_rounding)
+                    enable_rounding=is_rounding,
+                    is_population=is_population)
                 row.append({
                     'value': count_value,
                     'header_group': group_key
@@ -241,7 +243,8 @@ def analysis_detail_extractor(impact_report, component_metadata):
             total_count = int(float(feat[field_index]))
             total_count = format_number(
                 total_count,
-                enable_rounding=is_rounding)
+                enable_rounding=is_rounding,
+                is_population=is_population)
             if total_count == '0' and field == total_affected_field:
                 skip_row = True
                 break
@@ -337,7 +340,8 @@ def analysis_detail_extractor(impact_report, component_metadata):
             field_index = analysis_layer.fieldNameIndex(field_name)
             count_value = format_number(
                 analysis_feature[field_index],
-                enable_rounding=is_rounding)
+                enable_rounding=is_rounding,
+                is_population=is_population)
         except KeyError:
             # in case the field was not found
             # assume value 0
@@ -372,7 +376,8 @@ def analysis_detail_extractor(impact_report, component_metadata):
             field['field_name'], analysis_layer)
         total_count = format_number(
             total_count,
-            enable_rounding=is_rounding)
+            enable_rounding=is_rounding,
+            is_population=is_population)
         if group_key:
             if field == total_affected_field:
                 footers.insert(

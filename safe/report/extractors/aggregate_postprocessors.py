@@ -459,7 +459,8 @@ def create_section_with_aggregation(
 
         total_displaced = format_number(
             feature[displaced_field_index],
-            enable_rounding=enable_rounding)
+            enable_rounding=enable_rounding,
+            is_population=True)
 
         row = [
             aggregation_name,
@@ -476,7 +477,8 @@ def create_section_with_aggregation(
 
             value = format_number(
                 value,
-                enable_rounding=enable_rounding)
+                enable_rounding=enable_rounding,
+                is_population=True)
             row.append(value)
 
         row_values.append(row)
@@ -489,7 +491,8 @@ def create_section_with_aggregation(
         total_displaced_field_name, analysis_layer)
     value = format_number(
         value,
-        enable_rounding=enable_rounding)
+        enable_rounding=enable_rounding,
+        is_population=True)
     total_header = resolve_from_dictionary(
         extra_component_args, ['defaults', 'total_header'])
     totals = [
@@ -501,7 +504,8 @@ def create_section_with_aggregation(
         value = value_from_field_name(field_name, analysis_layer)
         value = format_number(
             value,
-            enable_rounding=enable_rounding)
+            enable_rounding=enable_rounding,
+            is_population=True)
         totals.append(value)
 
     notes = resolve_from_dictionary(
@@ -628,7 +632,8 @@ def create_section_without_aggregation(
             analysis_layer)
         value = format_number(
             value,
-            enable_rounding=enable_rounding)
+            enable_rounding=enable_rounding,
+            is_population=True)
         row.append(value)
 
         row_values.append(row)
