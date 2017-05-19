@@ -20,7 +20,7 @@ from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsRectangle,
     QgsVectorLayer,
-    QGis,
+    QGis
 )
 
 import logging
@@ -137,6 +137,7 @@ from safe.utilities.utilities import (
     is_keyword_version_supported)
 from safe.utilities.profiling import (
     profile, clear_prof_data, profiling_log)
+from safe.utilities.gis import qgis_version
 from safe.utilities.settings import setting
 from safe import messaging as m
 from safe.messaging import styles
@@ -242,7 +243,8 @@ class ImpactFunction(object):
         row = m.Row()
         row.add(m.Cell(tr('Function'), header=True))
         row.add(m.Cell(tr('Time'), header=True))
-        row.add(m.Cell(tr('Memory'), header=True))
+        if setting(key='memory_profile', expected_type=bool):
+            row.add(m.Cell(tr('Memory'), header=True))
         table.add(row)
 
         if self.performance_log is None:
@@ -267,7 +269,8 @@ class ImpactFunction(object):
 
             new_row.add(m.Cell(text))
             new_row.add(m.Cell(tree.elapsed_time))
-            new_row.add(m.Cell(tree.memory_used))
+            if setting(key='memory_profile', expected_type=bool):
+                new_row.add(m.Cell(tree.memory_used))
             table.add(new_row)
             if tree.children:
                 for child in tree.children:
@@ -1885,8 +1888,12 @@ class ImpactFunction(object):
                 # set this as fallback.
                 self._exposure_summary.keywords['title'] = (
                     layer_purpose_exposure_summary['name'])
-                self._exposure_summary.setLayerName(
-                    self._exposure_summary.keywords['title'])
+                if qgis_version() >= 21800:
+                    self._exposure_summary.setName(
+                        self._exposure_summary.keywords['title'])
+                else:
+                    self._exposure_summary.setLayerName(
+                        self._exposure_summary.keywords['title'])
 
     @profile
     def post_process(self, layer):

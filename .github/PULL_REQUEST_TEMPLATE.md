@@ -1,4 +1,4 @@
-### What does it fix ?
-* Ticket : #
-* Funded by : 
-* Description : 
+### What does it fix?
+* Ticket: #
+* Funded by: 
+* Description: 
