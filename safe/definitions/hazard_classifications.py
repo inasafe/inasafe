@@ -82,7 +82,7 @@ generic_hazard_classes = {
             'description': tr('The area with the highest hazard.'),
             'string_defaults': ['high'],
             'fatality_rate': None,
-            'displacement_rate': 0.0,
+            'displacement_rate': 1.0,
             'numeric_default_min': 3,
             'numeric_default_max': 4,
             'citations': [
@@ -101,7 +101,7 @@ generic_hazard_classes = {
             'description': tr('The area with the medium hazard.'),
             'string_defaults': ['medium'],
             'fatality_rate': None,
-            'displacement_rate': 0.0,
+            'displacement_rate': 1.0,
             'numeric_default_min': 2,
             'numeric_default_max': 3,
             'citations': [
@@ -116,7 +116,7 @@ generic_hazard_classes = {
             'value': 1,
             'color': yellow,
             'name': tr('Low hazard zone'),
-            'affected': True,
+            'affected': False,
             'description': tr(
                 'The area with the lowest hazard.'),
             'string_defaults': ['low'],
@@ -426,7 +426,7 @@ volcano_hazard_classes = {
             'description': tr('The highest hazard class.'),
             'string_defaults': ['Kawasan Rawan Bencana III', 'high'],
             'fatality_rate': None,
-            'displacement_rate': 0.0,
+            'displacement_rate': 1.0,
             'numeric_default_min': 0,
             'numeric_default_max': 3,
             'citations': [
@@ -445,7 +445,7 @@ volcano_hazard_classes = {
             'description': tr('The medium hazard class.'),
             'string_defaults': ['Kawasan Rawan Bencana II', 'medium'],
             'fatality_rate': None,
-            'displacement_rate': 0.0,
+            'displacement_rate': 1.0,
             'numeric_default_min': 3,
             'numeric_default_max': 5,
             'citations': [
@@ -460,7 +460,7 @@ volcano_hazard_classes = {
             'value': 1,
             'color': yellow,
             'name': tr('Low hazard zone'),
-            'affected': True,
+            'affected': False,
             'description': tr('The lowest hazard class.'),
             'string_defaults': ['Kawasan Rawan Bencana I', 'low'],
             'fatality_rate': None,
