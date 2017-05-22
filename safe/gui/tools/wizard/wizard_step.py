@@ -7,6 +7,7 @@ import os
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QWidget
 
+from safe.gui.tools.wizard import STEP_KW, STEP_FC
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.resources import get_ui_class
 from safe import messaging as m
@@ -87,9 +88,9 @@ class WizardStep(QWidget):
     def step_type(self):
         """Whether it's a IFCW step or Keyword Wizard Step."""
         if 'stepfc' in self.__class__.__name__.lower():
-            return 'step_fc'
+            return STEP_FC
         if 'stepkw' in self.__class__.__name__.lower():
-            return 'step_kw'
+            return STEP_KW
 
     @property
     def step_name(self):
