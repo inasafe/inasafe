@@ -57,10 +57,10 @@ HEADING_LOOKUPS = {
 }
 HEADING_COUNTS = {
     1: 1,
-    2: 1,
-    3: 1,
-    4: 1,
-    5: 1,
+    2: 0,
+    3: 0,
+    4: 0,
+    5: 0,
 }
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -281,7 +281,7 @@ def content():
         message,
         table_of_contents,
         'field-mapping-tool',
-        tr('The Field MappingTool'),
+        tr('The Field Mapping Tool'),
         heading_level=2)
     message.add(field_mapping_tool_help())
 
@@ -763,13 +763,13 @@ def _start_glossary_table(group):
 def _create_section_header(
         message,
         table_of_contents,
-        id,
+        element_id,
         text,
         heading_level=1):
     # Warning a side effect here is that the SECTION_STYLE is updated
     # when setting style as we modify the id so we have to make a deep copy
     style = copy.deepcopy(HEADING_LOOKUPS[heading_level])
-    style['element_id'] = id
+    style['element_id'] = element_id
 
     HEADING_COUNTS[heading_level] += 1
     # Reset the heading counts for headings below this level
@@ -777,12 +777,12 @@ def _create_section_header(
     index_number = ''
     for key in HEADING_COUNTS.keys():
         if key > heading_level:
-            HEADING_COUNTS[key] = 1
+            HEADING_COUNTS[key] = 0
         else:
             index_number += str(HEADING_COUNTS[key]) + '.'
 
     header = m.Heading(text, **style)
-    link = m.Link('#%s' % id, index_number + ' ' + text)
+    link = m.Link('#%s' % element_id, index_number + ' ' + text)
     # See bootstrap docs for ml-1 explanation
     # https://v4-alpha.getbootstrap.com/utilities/spacing/#examples
     paragraph = m.Paragraph(
