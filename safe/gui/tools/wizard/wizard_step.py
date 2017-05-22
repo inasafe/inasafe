@@ -12,6 +12,8 @@ from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.resources import get_ui_class
 from safe import messaging as m
 from safe.utilities.i18n import tr
+from safe.messaging import styles
+SUBSECTION_STYLE = styles.SUBSECTION_LEVEL_3_STYLE
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -102,12 +104,36 @@ class WizardStep(QWidget):
         return self.__class__.__name__
 
     def help(self):
-        """Return help message for the step wizard.
+        """Return full help message for the step wizard.
 
         :returns: A message object contains help text.
         :rtype: m.Message
         """
         message = m.Message()
-        message.add(m.Text(tr('Help for {step_name}').format(
-            step_name=self.step_name)))
+        message.add(m.Brand())
+        message.add(self.help_heading())
+        message.add(self.help_content())
         return message
+
+    def help_heading(self):
+        """Helper method that returns just the header.
+
+        :returns: A heading object.
+        :rtype: safe.messaging.heading.Heading
+        """
+        message = m.Heading(
+            tr('Help for {step_name}').format(step_name=self.step_name),
+            **SUBSECTION_STYLE)
+        return message
+
+    def help_content(self):
+        """Return the content of help for this step wizard.
+
+            We only needs to re-implement this method in each wizard step.
+
+        :returns: A message object contains help.
+        :rtype: m.Message
+        """
+        help_message = m.Message()
+        help_message.add(m.Text(tr('No help text for this wizard step, yet.')))
+        return help_message
