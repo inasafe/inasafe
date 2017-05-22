@@ -119,11 +119,6 @@ def analysis_provenance_details_extractor(impact_report, component_metadata):
     aggregation_keywords = impact_report.impact_function.provenance[
         'aggregation_keywords']
 
-    # aggregation_keywords doesn't have aggregation_layer path information
-    aggregation_layer = impact_report.impact_function.provenance.get(
-        'aggregation_layer')
-    aggregation_keywords['aggregation_layer'] = aggregation_layer
-
     header = resolve_from_dictionary(
         provenance_format_args, 'aggregation_header')
     provenance_format = resolve_from_dictionary(
@@ -138,6 +133,12 @@ def analysis_provenance_details_extractor(impact_report, component_metadata):
     if aggregation_keywords:
         # we define dict here to create a different object of keyword
         aggregation_keywords = dict(aggregation_keywords)
+
+        # aggregation_keywords doesn't have aggregation_layer path information
+        aggregation_layer = impact_report.impact_function.provenance.get(
+            'aggregation_layer')
+        aggregation_keywords['aggregation_layer'] = aggregation_layer
+
         aggregation_provenance['provenances'] = headerize(
             sorted_keywords_by_order(aggregation_keywords, keywords_order))
 
@@ -291,6 +292,11 @@ def sorted_keywords_by_order(keywords, order):
     :return: Ordered dictionary based on order list.
     :rtype: OrderedDict
     """
+
+    # we need to delete item with no value
+    for key, value in keywords.iteritems():
+        if value is None:
+            del keywords[key]
 
     ordered_keywords = OrderedDict()
     for key in order:
