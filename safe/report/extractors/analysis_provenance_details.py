@@ -40,10 +40,34 @@ def analysis_provenance_details_extractor(impact_report, component_metadata):
     provenance_format_args = resolve_from_dictionary(
         extra_args, 'provenance_format')
 
+    keywords_order = [
+        'title',
+        'source',
+        'layer_purpose',
+        'layer_geometry',
+        'hazard',
+        'exposure',
+        'hazard_category',
+        'exposure_unit',
+        'value_map',
+        'value_maps',
+        'inasafe_fields',
+        'inasafe_default_values',
+        'layer_mode',
+        'hazard_layer',
+        'exposure_layer',
+        'aggregation_layer',
+        'keywords_version']
+
     # we define dict here to create a different object of keyword
     hazard_keywords = dict(impact_report.impact_function.provenance[
         'hazard_keywords'])
 
+    # hazard_keywords doesn't have hazard_layer path information
+    hazard_layer = impact_report.impact_function.provenance.get('hazard_layer')
+    hazard_keywords['hazard_layer'] = hazard_layer
+
+    # keep only value maps with IF exposure
     for keyword in ['value_maps', 'thresholds']:
         if hazard_keywords.get(keyword):
             temp_keyword = dict(hazard_keywords[keyword])
@@ -58,7 +82,8 @@ def analysis_provenance_details_extractor(impact_report, component_metadata):
         provenance_format_args, 'hazard_format')
     hazard_provenance = {
         'header': header.title(),
-        'provenances': headerize(hazard_keywords)
+        'provenances': headerize(
+            sorted_keywords_by_order(hazard_keywords, keywords_order))
     }
 
     # convert value if there is dict_keywords
@@ -68,13 +93,20 @@ def analysis_provenance_details_extractor(impact_report, component_metadata):
     # we define dict here to create a different object of keyword
     exposure_keywords = dict(impact_report.impact_function.provenance[
         'exposure_keywords'])
+
+    # exposure_keywords doesn't have exposure_layer path information
+    exposure_layer = impact_report.impact_function.provenance.get(
+        'exposure_layer')
+    exposure_keywords['exposure_layer'] = exposure_layer
+
     header = resolve_from_dictionary(
         provenance_format_args, 'exposure_header')
     provenance_format = resolve_from_dictionary(
         provenance_format_args, 'exposure_format')
     exposure_provenance = {
         'header': header.title(),
-        'provenances': headerize(exposure_keywords)
+        'provenances': headerize(
+            sorted_keywords_by_order(exposure_keywords, keywords_order))
     }
 
     # convert value if there is dict_keywords
@@ -84,6 +116,12 @@ def analysis_provenance_details_extractor(impact_report, component_metadata):
     # aggregation keywords could be None so we don't define dict here
     aggregation_keywords = impact_report.impact_function.provenance[
         'aggregation_keywords']
+
+    # aggregation_keywords doesn't have aggregation_layer path information
+    aggregation_layer = impact_report.impact_function.provenance.get(
+        'aggregation_layer')
+    aggregation_keywords['aggregation_layer'] = aggregation_layer
+
     header = resolve_from_dictionary(
         provenance_format_args, 'aggregation_header')
     provenance_format = resolve_from_dictionary(
@@ -98,7 +136,8 @@ def analysis_provenance_details_extractor(impact_report, component_metadata):
     if aggregation_keywords:
         # we define dict here to create a different object of keyword
         aggregation_keywords = dict(aggregation_keywords)
-        aggregation_provenance['provenances'] = headerize(aggregation_keywords)
+        aggregation_provenance['provenances'] = headerize(
+            sorted_keywords_by_order(aggregation_keywords, keywords_order))
 
         # convert value if there is dict_keywords
         provenances = aggregation_provenance['provenances']
@@ -174,7 +213,8 @@ def headerize(provenances):
         'Qgis': 'QGIS',
         'Pyqt': 'PyQt',
         'Os': 'OS',
-        'Gdal': 'GDAL'
+        'Gdal': 'GDAL',
+        'Maps': 'Map'
     }
     for key, value in provenances.iteritems():
         if '_' in key:
@@ -228,14 +268,35 @@ def resolve_dict_keywords(keywords):
     if value_maps:
         value_maps = value_maps.get('content')
         value_maps = KeywordIO._value_maps_row(value_maps).to_html()
-        # for key, value in value_maps.iteritems():
-        #     value_maps[key] = KeywordIO._dict_to_row(value).to_html()
         keywords['value_maps']['content'] = value_maps
     if thresholds:
         thresholds = thresholds.get('content')
         thresholds = KeywordIO._threshold_to_row(thresholds).to_html()
-        # for key, value in thresholds.iteritems():
-        #     thresholds[key] = KeywordIO._dict_to_row(value)
         keywords['thresholds']['content'] = thresholds
 
     return keywords
+
+
+def sorted_keywords_by_order(keywords, order):
+    """Sort keywords based on defined order.
+
+    :param keywords: Keyword to be sorted.
+    :type keywords: dict
+
+    :param order: Ordered list of key.
+    :type order: list
+
+    :return: Ordered dictionary based on order list.
+    :rtype: OrderedDict
+    """
+
+    ordered_keywords = OrderedDict()
+    for key in order:
+        if key in keywords.keys():
+            ordered_keywords[key] = keywords.get(key)
+
+    for keyword in keywords:
+        if keyword not in order:
+            ordered_keywords[keyword] = keywords.get(keyword)
+
+    return ordered_keywords
