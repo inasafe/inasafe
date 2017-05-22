@@ -65,7 +65,7 @@ def content():
     message.add(paragraph)
     body = tr(
         'This tool will convert an earthquake \'shakemap\' that is in '
-        'grid xml format to a GeoTIFF file. The imported file can be used '
+        'grid xml format into a GeoTIFF file. The imported file can be used '
         'in InaSAFE as an input for impact functions that require an '
         'earthquake layer.  To use this tool effectively:')
     message.add(body)

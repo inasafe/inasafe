@@ -34,6 +34,7 @@ from safe.gui.tools.help.peta_bencana_help import content as petabencana_help
 from safe.gui.tools.help.shakemap_converter_help \
     import content as shakemap_help
 from safe.gui.tools.help.multi_buffer_help import content as multi_buffer_help
+from developer_help import content as developer_help
 from safe.utilities.resources import resource_url, resources_path
 LOGGER = logging.getLogger('InaSAFE')
 # For chapter sections
@@ -736,6 +737,18 @@ def content():
         row.add(m.Cell(post_processor['description'], span=2))
         table.add(row)
     message.add(table)
+
+    ##
+    # Developer documentation
+    ##
+
+    _create_section_header(
+        message,
+        table_of_contents,
+        'developer-guide',
+        tr('Developer Guide'),
+        heading_level=1)
+    message.add(developer_help())
 
     # Finally we add the table of contents at the top
     full_message = m.Message()
