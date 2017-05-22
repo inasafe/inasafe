@@ -9,6 +9,8 @@ from PyQt4.QtGui import QWidget
 
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.resources import get_ui_class
+from safe import messaging as m
+from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -88,3 +90,23 @@ class WizardStep(QWidget):
             return 'step_fc'
         if 'stepkw' in self.__class__.__name__.lower():
             return 'step_kw'
+
+    @property
+    def step_name(self):
+        """Get the human friendly name for the wizard step.
+
+        :returns: The name of the wizard step.
+        :rtype: str
+        """
+        return self.__class__.__name__
+
+    def help(self):
+        """Return help message for the step wizard.
+
+        :returns: A message object contains help text.
+        :rtype: m.Message
+        """
+        message = m.Message()
+        message.add(m.Text(tr('Help for {step_name}').format(
+            step_name=self.step_name)))
+        return message

@@ -91,7 +91,10 @@ from step_kw49_inasafe_raster_default_values import (
 from step_kw55_source import StepKwSource
 from step_kw60_title import StepKwTitle
 from step_kw65_summary import StepKwSummary
-from.step_fc90_analysis import StepFcAnalysis
+from step_fc90_analysis import StepFcAnalysis
+
+from safe.gui.tools.wizard.wizard_help import WizardHelp
+
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -176,6 +179,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.step_kw_source = StepKwSource(self)
         self.step_kw_title = StepKwTitle(self)
         self.step_kw_summary = StepKwSummary(self)
+
         self.step_fc_functions1 = StepFcFunctions1(self)
         self.step_fc_functions2 = StepFcFunctions2(self)
         self.step_fc_function = StepFcFunction(self)
@@ -195,6 +199,9 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.step_fc_params = StepFcParams(self)
         self.step_fc_summary = StepFcSummary(self)
         self.step_fc_analysis = StepFcAnalysis(self)
+
+        self.wizard_help = WizardHelp(self)
+
         self.stackedWidget.addWidget(self.step_kw_purpose)
         self.stackedWidget.addWidget(self.step_kw_subcategory)
         self.stackedWidget.addWidget(self.step_kw_hazard_category)
@@ -233,12 +240,15 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.stackedWidget.addWidget(self.step_fc_summary)
         self.stackedWidget.addWidget(self.step_fc_analysis)
 
+        self.stackedWidget.addWidget(self.wizard_help)
+
         # QSetting
         self.setting = QSettings()
 
         # Wizard Steps
         self.impact_function_steps = []
         self.keyword_steps = []
+        self.on_help = False
 
     def set_mode_label_to_keywords_creation(self):
         """Set the mode label to the Keywords Creation/Update mode."""
@@ -718,6 +728,21 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.pbnNext.setText(self.tr('Next'))
         self.pbnNext.setEnabled(True)
         self.go_to_step(new_step)
+
+    # prevents actions being handled twice
+    # noinspection PyPep8Naming
+    @pyqtSignature('')
+    def on_pbnHelp_released(self):
+        if self.on_help:
+            self.pbnHelp.setText(tr('Show help'))
+            self.wizard_help.restore_button_state()
+            self.stackedWidget.setCurrentWidget(self.wizard_help.wizard_step)
+        else:
+            self.pbnHelp.setText(tr('Hide help'))
+            self.wizard_help.show_help(self.get_current_step())
+            self.stackedWidget.setCurrentWidget(self.wizard_help)
+
+        self.on_help = not self.on_help
 
     def get_current_step(self):
         """Return current step of the wizard.

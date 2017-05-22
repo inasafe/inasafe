@@ -33,10 +33,19 @@
    <string notr="true"/>
   </property>
   <layout class="QGridLayout" name="gridLayout_13">
-   <property name="verticalSpacing">
+   <property name="leftMargin">
     <number>0</number>
    </property>
-   <property name="margin">
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <property name="verticalSpacing">
     <number>0</number>
    </property>
    <item row="0" column="0">
@@ -54,10 +63,19 @@
       <bool>true</bool>
      </property>
      <layout class="QGridLayout" name="gridLayout_27">
-      <property name="verticalSpacing">
+      <property name="leftMargin">
        <number>0</number>
       </property>
-      <property name="margin">
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <property name="verticalSpacing">
        <number>0</number>
       </property>
       <item row="0" column="0">
@@ -177,7 +195,7 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>1014</width>
+        <width>1018</width>
         <height>400</height>
        </rect>
       </property>
@@ -194,7 +212,16 @@
        </size>
       </property>
       <layout class="QGridLayout" name="gridLayout_26">
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item row="0" column="0">
@@ -235,13 +262,32 @@
    </item>
    <item row="5" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <property name="margin">
+     <property name="leftMargin">
+      <number>12</number>
+     </property>
+     <property name="topMargin">
+      <number>12</number>
+     </property>
+     <property name="rightMargin">
+      <number>12</number>
+     </property>
+     <property name="bottomMargin">
       <number>12</number>
      </property>
      <item>
       <widget class="QPushButton" name="pbnCancel">
        <property name="text">
         <string>Cancel</string>
+       </property>
+       <property name="autoDefault">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pbnHelp">
+       <property name="text">
+        <string>Show Help</string>
        </property>
        <property name="autoDefault">
         <bool>false</bool>
