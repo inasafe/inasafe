@@ -57,7 +57,6 @@ from safe.utilities.qgis_utilities import display_warning_message_box
 
 from step_fc00_functions1 import StepFcFunctions1
 from step_fc05_functions2 import StepFcFunctions2
-from step_fc10_function import StepFcFunction
 from step_fc15_hazlayer_origin import StepFcHazLayerOrigin
 from step_fc20_hazlayer_from_canvas import StepFcHazLayerFromCanvas
 from step_fc25_hazlayer_from_browser import StepFcHazLayerFromBrowser
@@ -184,7 +183,6 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         self.step_fc_functions1 = StepFcFunctions1(self)
         self.step_fc_functions2 = StepFcFunctions2(self)
-        self.step_fc_function = StepFcFunction(self)
         self.step_fc_hazlayer_origin = StepFcHazLayerOrigin(self)
         self.step_fc_hazlayer_from_canvas = StepFcHazLayerFromCanvas(self)
         self.step_fc_hazlayer_from_browser = StepFcHazLayerFromBrowser(self)
@@ -224,7 +222,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.stackedWidget.addWidget(self.step_kw_summary)
         self.stackedWidget.addWidget(self.step_fc_functions1)
         self.stackedWidget.addWidget(self.step_fc_functions2)
-        self.stackedWidget.addWidget(self.step_fc_function)
         self.stackedWidget.addWidget(self.step_fc_hazlayer_origin)
         self.stackedWidget.addWidget(self.step_fc_hazlayer_from_canvas)
         self.stackedWidget.addWidget(self.step_fc_hazlayer_from_browser)

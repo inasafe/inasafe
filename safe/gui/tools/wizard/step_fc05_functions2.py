@@ -22,6 +22,8 @@ from safe.gui.tools.wizard.wizard_utils import (
     RoleExposure,
     RoleHazardConstraint,
     RoleExposureConstraint)
+from safe.utilities.i18n import tr
+from safe import messaging as m
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -196,3 +198,31 @@ class StepFcFunctions2(WizardStep, FORM_CLASS):
             active_items[0].setSelected(True)
             # set focus, as the inactive selection style is gray
             self.tblFunctions2.setFocus()
+
+    @property
+    def step_name(self):
+        """Get the human friendly name for the wizard step.
+
+        :returns: The name of the wizard step.
+        :rtype: str
+        """
+        return tr('Impact Function Filter by Layer Geometry Step')
+
+    def help_content(self):
+        """Return the content of help for this step wizard.
+
+            We only needs to re-implement this method in each wizard step.
+
+        :returns: A message object contains help.
+        :rtype: m.Message
+        """
+        message = m.Message()
+        message.add(m.Paragraph(tr(
+            'In this wizard step: {step_name}, there is a grid that shows all '
+            'possible combination for all geometry types for both hazard and '
+            'exposure. This grid has been filtered out by using constraint in '
+            'the previous step. You can select a grid cell which a cross '
+            'between your intended geometry type of exposure and '
+            'hazard.').format(step_name=self.step_name)
+        ))
+        return message
