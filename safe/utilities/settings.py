@@ -3,6 +3,7 @@
 
 from PyQt4.QtCore import QSettings
 from safe.utilities.i18n import tr
+from safe.definitions.default_settings import inasafe_default_settings
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -30,6 +31,8 @@ def setting(key, default=None, expected_type=None, qsettings=None):
     :type qsettings: qgis.PyQt.QtCore.QSettings
     """
     key = '%s/%s' % (APPLICATION_NAME, key)
+    if default is None:
+        default = inasafe_default_settings.get(key, None)
     return general_setting(key, default, expected_type, qsettings)
 
 

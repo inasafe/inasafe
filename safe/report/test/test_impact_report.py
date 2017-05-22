@@ -19,8 +19,7 @@ from safe.definitions.fields import (
     total_field)
 from safe.definitions.field_groups import (
     age_displaced_count_group,
-    gender_displaced_count_group,
-    vulnerability_displaced_count_group)
+    gender_displaced_count_group)
 from safe.definitions.hazard_classifications import flood_hazard_classes
 from safe.impact_function.impact_function import ImpactFunction
 from safe.report.report_metadata import ReportMetadata
@@ -187,12 +186,12 @@ class TestImpactReport(unittest.TestCase):
                     'header_label': u'Hazard Zone',
                     'rows': [
                         {
-                            'value': '10',
+                            'value': '4',
                             'name': u'High hazard zone',
                             'key': 'high'
                         },
                         {
-                            'value': '10',
+                            'value': '1',
                             'name': u'Medium hazard zone',
                             'key': 'medium'
                         },
@@ -202,7 +201,7 @@ class TestImpactReport(unittest.TestCase):
                             'key': 'low'
                         },
                         {
-                            'value': '10',
+                            'value': '9',
                             'name': u'Total',
                             'as_header': True,
                             'key': total_field['key']
@@ -214,7 +213,7 @@ class TestImpactReport(unittest.TestCase):
                     'header_label': u'Structures',
                     'rows': [
                         {
-                            'value': '10',
+                            'value': '5',
                             'name': u'Affected',
                             'key': total_affected_field['key']
                         },
@@ -224,7 +223,7 @@ class TestImpactReport(unittest.TestCase):
                             'key': total_not_affected_field['key']
                         },
                         {
-                            'value': '10',
+                            'value': '4',
                             'name': u'Not Exposed',
                             'key': total_not_exposed_field['key']
                         }
@@ -246,15 +245,23 @@ class TestImpactReport(unittest.TestCase):
         expected_context = {
             'header': u'Action Checklist',
             'items': [
-                u'Which structures have warning capacity (e.g. sirens or '
-                u'speakers)?',
-                u'Are the water and electricity services still operating?',
-                u'Are the schools and hospitals still active?',
-                u'Are the health centres still open?',
-                u'Are the other public services accessible?',
-                u'Which buildings will be evacuation centres?',
-                u'Where will we locate the operations centre?',
-                u'Where will we locate warehouse and/or distribution centres?'
+                {
+                    'item_category': 'general',
+                    'item_header': 'general checklist',
+                    'item_list': [
+                        'Which structures have warning capacity '
+                        '(e.g. sirens or speakers)?',
+                        'Are the water and electricity services '
+                        'still operating?',
+                        'Are the schools and hospitals still active?',
+                        'Are the health centres still open?',
+                        'Are the other public services accessible?',
+                        'Which buildings will be evacuation centres?',
+                        'Where will we locate the operations centre?',
+                        'Where will we locate warehouse and/or '
+                        'distribution centres?'
+                    ]
+                }
             ]
         }
         actual_context = action_notes.context
@@ -287,8 +294,9 @@ class TestImpactReport(unittest.TestCase):
             # Iterate to see if expected_item is in at least one of the
             # actual content items ...
             for actual_item in actual_context['items']:
-                if expected_item in actual_item:
-                    current_flag = True
+                for item in actual_item['item_list']:
+                    if expected_item in item:
+                        current_flag = True
             # It was not found in any item :-(
             self.assertTrue(
                 current_flag,
@@ -348,7 +356,8 @@ class TestImpactReport(unittest.TestCase):
                 'header_hazard_group': {
                     'not_affected': {
                         'header': u'Not affected',
-                        'hazards': [],
+                        'hazards': [
+                            u'Low hazard zone'],
                         'total': [u'Total Not Affected'],
                         'start_index': 4
                     },
@@ -356,8 +365,7 @@ class TestImpactReport(unittest.TestCase):
                         'header': u'Affected',
                         'hazards': [
                             u'High hazard zone',
-                            u'Medium hazard zone',
-                            u'Low hazard zone'],
+                            u'Medium hazard zone'],
                         'total': [u'Total Affected'],
                         'start_index': 1
                     }
@@ -394,7 +402,7 @@ class TestImpactReport(unittest.TestCase):
                     [
                         u'Education',
                         {
-                            'value': '10',
+                            'value': '2',
                             'header_group': 'affected'
                         },
                         {
@@ -402,19 +410,19 @@ class TestImpactReport(unittest.TestCase):
                             'header_group': 'affected'
                         },
                         {
-                            'value': '10',
+                            'value': '2',
                             'header_group': 'affected'
                         },
                         {
                             'value': '0',
                             'header_group': 'not_affected'
                         },
-                        '10', '10'
+                        '3', '5'
                     ],
                     [
                         u'Health',
                         {
-                            'value': '10',
+                            'value': '1',
                             'header_group': 'affected'
                         },
                         {
@@ -422,14 +430,14 @@ class TestImpactReport(unittest.TestCase):
                             'header_group': 'affected'
                         },
                         {
-                            'value': '10',
+                            'value': '1',
                             'header_group': 'affected'
                         },
                         {
                             'value': '0',
                             'header_group': 'not_affected'
                         },
-                        '0', '10'
+                        '0', '1'
                     ],
                     [
                         u'Government',
@@ -438,23 +446,23 @@ class TestImpactReport(unittest.TestCase):
                             'header_group': 'affected'
                         },
                         {
-                            'value': '10',
+                            'value': '1',
                             'header_group': 'affected'
                         },
                         {
-                            'value': '10',
+                            'value': '1',
                             'header_group': 'affected'
                         },
                         {
                             'value': '0',
                             'header_group': 'not_affected'
                         },
-                        '0', '10'
+                        '0', '1'
                     ],
                     [
                         u'Commercial',
                         {
-                            'value': '10',
+                            'value': '1',
                             'header_group': 'affected'
                         },
                         {
@@ -462,14 +470,14 @@ class TestImpactReport(unittest.TestCase):
                             'header_group': 'affected'
                         },
                         {
-                            'value': '10',
+                            'value': '1',
                             'header_group': 'affected'
                         },
                         {
                             'value': '0',
                             'header_group': 'not_affected'
                         },
-                        '0', '10'
+                        '0', '1'
                     ],
                     [
                         u'Other',
@@ -478,38 +486,38 @@ class TestImpactReport(unittest.TestCase):
                             'header_group': 'affected'
                         },
                         {
-                            'value': '10',
+                            'value': '1',
                             'header_group': 'affected'
                         },
                         {
-                            'value': '10',
+                            'value': '1',
                             'header_group': 'affected'
                         },
                         {
                             'value': '0',
                             'header_group': 'not_affected'
                         },
-                        '0', '10'
+                        '0', '1'
                     ],
                 ],
                 'footers': [
                     u'Total', {
-                        'value': '10',
+                        'value': '4',
                         'header_group': 'affected'
                     },
                     {
-                        'value': '10',
+                        'value': '2',
                         'header_group': 'affected'
                     },
                     {
-                        'value': '10',
+                        'value': '6',
                         'header_group': 'affected'
                     },
                     {
                         'value': '0',
                         'header_group': 'not_affected'
                     },
-                    '10', '10'
+                    '3', '9'
                 ]
             }
         }
@@ -533,18 +541,18 @@ class TestImpactReport(unittest.TestCase):
                 'header_label': u'Aggregation area',
                 'rows': [
                     {
-                        'type_values': ['10', '0', '0', '10', '10'],
-                        'total': '10',
+                        'type_values': ['1', '0', '0', '1', '1'],
+                        'total': '3',
                         'name': u'area 1'
                     },
                     {
-                        'type_values': ['0', '0', '10', '0', '0'],
-                        'total': '10',
+                        'type_values': ['0', '0', '1', '0', '0'],
+                        'total': '1',
                         'name': u'area 2'
                     },
                     {
-                        'type_values': ['10', '10', '0', '0', '0'],
-                        'total': '10',
+                        'type_values': ['1', '1', '0', '0', '0'],
+                        'total': '2',
                         'name': u'area 3'
                     }
                 ],
@@ -555,9 +563,9 @@ class TestImpactReport(unittest.TestCase):
                     u'Commercial',
                     u'Other',
                 ],
-                'type_total_values': ['10', '10', '10', '10', '10'],
+                'type_total_values': ['2', '1', '1', '1', '1'],
                 'total_label': u'Total',
-                'total_all': '10',
+                'total_all': '6',
                 'total_in_aggregation_area_label': u'Total'},
             'header': u'Aggregation Result'}
         actual_context = aggregate_result.context
@@ -724,7 +732,7 @@ class TestImpactReport(unittest.TestCase):
         expected_context = (
             'For this analysis, the following displacement rates were used: '
             'Wet - 90.00%, Dry - 0.00%')
-        actual_context = notes_assumptions.context['items'][-1]
+        actual_context = notes_assumptions.context['items'][-1]['item_list'][0]
         self.assertEqual(expected_context.strip(), actual_context.strip())
 
         """Check generated report"""
@@ -774,8 +782,8 @@ class TestImpactReport(unittest.TestCase):
                 'header_label': u'Aggregation area',
                 'rows': [
                     {
-                        'type_values': ['30', '10', '10', '10', '10', '10'],
-                        'total': '40',
+                        'type_values': ['21', '2', '1', '4', '4', '1'],
+                        'total': '33',
                         'name': u'Entire Area'
                     }
                 ],
@@ -789,8 +797,8 @@ class TestImpactReport(unittest.TestCase):
                 ],
                 'total_in_aggregation_area_label': u'Total',
                 'total_label': u'Total',
-                'total_all': '40',
-                'type_total_values': ['30', '10', '10', '10', '10', '10']
+                'total_all': '33',
+                'type_total_values': ['21', '2', '1', '4', '4', '1']
             },
             'header': u'Aggregation Result',
             'notes': u'Columns and rows containing only 0 or "No data" '
@@ -852,23 +860,23 @@ class TestImpactReport(unittest.TestCase):
                 'header_label': u'Aggregation area',
                 'rows': [
                     {
-                        'type_values': ['0', '10', '0', '10', '10', '0'],
-                        'total': '10',
+                        'type_values': ['0', '1', '0', '1', '3', '0'],
+                        'total': '5',
                         'name': u'B'
                     },
                     {
-                        'type_values': ['10', '0', '0', '0', '0', '0'],
-                        'total': '10',
+                        'type_values': ['2', '0', '0', '0', '0', '0'],
+                        'total': '2',
                         'name': u'C'
                     },
                     {
-                        'type_values': ['10', '10', '0', '10', '10', '0'],
-                        'total': '20',
+                        'type_values': ['6', '1', '0', '3', '1', '0'],
+                        'total': '11',
                         'name': u'F'
                     },
                     {
-                        'type_values': ['20', '0', '10', '0', '0', '10'],
-                        'total': '20',
+                        'type_values': ['13', '0', '1', '0', '0', '1'],
+                        'total': '15',
                         'name': u'G'
                     }
                 ],
@@ -882,8 +890,8 @@ class TestImpactReport(unittest.TestCase):
                 ],
                 'total_in_aggregation_area_label': u'Total',
                 'total_label': u'Total',
-                'total_all': '40',
-                'type_total_values': ['30', '10', '10', '10', '10', '10']
+                'total_all': '33',
+                'type_total_values': ['21', '2', '1', '4', '4', '1']
             },
             'header': u'Aggregation Result',
             'notes': u'Columns and rows containing only 0 or "No data" '
@@ -996,12 +1004,6 @@ class TestImpactReport(unittest.TestCase):
                     'group_header_colspan': 1,
                     'totals': [
                         u'Total', '25,700', '12,900']}),
-                ('vulnerability', {
-                    'header': u'Detailed Vulnerability Report',
-                    'message': u'Vulnerability ratio not exists. '
-                               u'No calculations produced.',
-                    'empty': True
-                }),
                 ('minimum_needs', {
                     'header': u'Detailed Minimum Needs Report',
                     'notes': [u'Columns and rows containing only 0 or "No '
@@ -1165,12 +1167,6 @@ class TestImpactReport(unittest.TestCase):
                         }],
                     'group_header_colspan': 1,
                     'totals': [u'Total', '20', '10']}),
-                ('vulnerability', {
-                    'header': u'Detailed Vulnerability Report',
-                    'message': u'Vulnerability ratio not exists. '
-                               u'No calculations produced.',
-                    'empty': True
-                }),
                 ('minimum_needs', {
                     'header': u'Detailed Minimum Needs Report',
                     'notes': [u'Columns and rows containing only 0 or "No '

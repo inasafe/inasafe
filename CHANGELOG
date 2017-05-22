@@ -1,3 +1,134 @@
+Changelog for version 4.1.0
+================================
+
+407b26f07 (HEAD -> changelog) Updated metadata.txt with changelog
+af6bb1a14 (develop) Merge remote-tracking branch 'upstream/develop' into develop
+a2612eb8c (upstream/develop) Add help text to the FMT.
+2a2426748 Fix bug when no field left in the field list.
+cb398e79b Fix typo and tidy up code.
+0b05805f9 Partfix 4092 (#4144)
+8f15ff28a Reporting column order (#4142)
+bef9d2f17 Partial fix for #4151 - show help_text in field definitions (#4152)
+f495f6f6e (origin/develop, origin/HEAD) Partial fix for #4151 - show help_text in field definitions
+d91882d11 Options help (#4150)
+2fb03ca32 add notes based on concepts (#4131)
+42a4dde80 Merge pull request #4147 from myarjunar/reporting-general-report
+626d9aec4 Merge pull request #4149 from timlinux/inasafe-4130
+611a66f69 (origin/inasafe-4130, inasafe-4130) Fix #4130 Earthquake help text - set default options
+dc0a33d88 fix general report floats to right when open report in largest size
+902326f9f Reorder post processor
+fb3dea27e Update test data to fix unit test.
+5ec857815 Use variable for magic number.
+523a807b5 Use value from field to calculate additional rice. Fix #4136
+0227aeaa5 Fix 4137 add field group description (#4139)
+0903ba498 Set keyword version to 4.1 (#4135)
+3454050f6 Windspeed  (#4133)
+8c0aef255 Help text (#4123)
+944f286aa Fix unit test in test keyword wizard.
+2a38bd82b Fix unit test in field mapping dialog.
+7ef8fd74f Disable unit test for #4128.
+4523632fe Make Keyword Wizard and FMT always read from metadata file.
+618973172 Add regression test for #4128
+441c655ed Address review from @gustry and @myarjunar.
+9fa797f7b Update test data.
+0bb4d7ad6 Make Landscape happier.
+2bdd3ccfe Only enable FMT when the selected layer has field group.
+286ab0bb4 Add better format of the parameter validation.
+325185662 Catch Keywords Not Found Error on Field Mapping Tool.
+0b25f971c Better invalid field group validation message.
+721fca19c Add field mapping validation in keyword wizard.
+d9c145855 Fix set decimal precision on group parameter.
+89f47b8fd Update parameter package.
+22b1528d0 Add dynamic validator for field ratio.
+7e5c9eca4 Add simple validation for ratio.
+137aee164 [WIP] Add simple validator for field group.
+a648d16cc Fix failed test in develop.
+73c8738cd Make uniform naming.
+9dd049cfe Reporting global default (#4122)
+0cc94c27e fix issue about using global default set by user in the IF
+925b57758 Polish scroll bar in demographic group option.
+e4fbf7323 Change 'Global Default' to 'Demographic Default'
+e146d90ac Fix failed unit test.
+5f3c5827b Add gender_postprocessors to the list.
+53c564949 Fix wrong variable in post processor output.
+77fb29ef7 Fix bug on kw field and better field description.
+b4ea113ef Add unit test for multi fields layer in keywords wizard.
+e79d1e96a Tidy up code.
+ff99ea062 Fix failed test.
+1c85179d8 Add field mapping tool to keyword dialog.
+4533d430e Update keywords wizard diagram.
+7c4a85034 Fix failed unit test.
+879878bde Better field description for field stef in keyword wizard.
+6121bfd17 Add more case for unit test.
+d1a03e218 Fix unit test.
+dfa6eb92d Make field step in keyword wizard able to select more than 1 field.
+be071be83 Update test data for population.
+5f1456a1b Make field in the wizard step extended selection.
+ba4ae9212 Fix failed unit test.
+66e1077f4 Filter out layer that doesn't have layer groups.
+9af33a7d2 Make field groups exposure specific.
+bf6306e3f Only show exposure and aggregation layers in FMT.
+26e7f1013 Add new scenario for testing.
+ec6137742 Address Etienne's comment.
+0a9258b02 Fix failed unit test.
+73c0a451f Tidy up code.
+b1f3ceb17 Fix failed unit test.
+5cde7c096 Add prepare layer method to handle summing fields
+c38f3ab7d Add method to sum fields.
+15f950f12 Update test data and add unit test for multi fields.
+5903eedd5 Fix bug when item is replaced in QListField.
+f2aad33bc Automatically select active layer in field mapping dialog.
+12b492823 Add test data for multi fields exposure.
+6dd49ab14 Added icons for help and mapping tool. Working on help for mapping tool. (#4110)
+6319af576 Profile memory (#4108)
+044d99ba5 Metadata update 4069 (#4111)
+6536a2e2e Able to store the global default value.
+38985e064 Separater field groups in group boxes.
+1ddb44664 (help_test) Updated metadata (#4107)
+1ac8e3f9d Add unit test for field mapping dialog.
+fd42056d0 Add unit test for field mapping tab.
+f2a8c16dd Make sure multiple inasafe fields shown properly in Dock.
+1ff4a753f Fix error when select non exposure/aggregation layer.
+376e5a600 Use iteration to create count ratio mapping.
+ceefe5527 Remove field group from inasafe field and default field step.
+e25822634 Do not use extra fields directly.
+9f3d68cba Fix import error after merging to develop.
+1091efec0 Remove fields from aggregation and exposure.
+6581f51f0 Attempt to fix code standard.
+176b7ddda Add more gender fields.
+f08b3591d Add vulnerability fields, default value, count/ratio
+a9610b6c1 Add youth and infant ratio and count.
+fad1b907d Add header to the field mapping tool.
+5d652e72d PEP8 and fix failed unit test in travis.
+753f66ae9 Show unique values in the footer of dialog.
+2d1131459 Filter out non number fields.
+a749ccd21 Show only unused fields in the field list.
+25ebd28c9 Update from parameter repository.
+0cf77293b Save metadata from field mapping widget.
+728d12fbd Add selected option type method.
+7a809dd9d Add help page in field mapping tool.
+403f52b79 Rename field mapping tab.
+b8cc9dd6c Make drag and drop in field mapping works.
+95e6d3049 Use variable for key and type in the group select parameter.
+84fa9254a Enable field mapping for Exposure.
+bcd5b73a1 Read field mapping from keywords.
+d2eaeb610 Add field mapping tool to InaSAFE toolbar.
+70a6972de Add field mapping widget for #4069.
+4ffd5de5c Add toolbar for value mapping.
+0e877edbe Add group select parameter widget.
+963111f45 Add Group Select Parameter.
+de6116e9e for not population, display real value if <1000
+9855cd168 remove earthquake function setter from IF and use QSettings
+ccb3263bd avoid using definition function into definition package
+09dc68e63 add classification unit to hazard classification definition for general report title (#4064)
+f6e803ef9 Added webhook for travis to inasafe-notices matrix room, updating @timlinux PR. (#4081)
+d15649bb7 Address comment from Etienne and Tim.
+b202c8e05 Add field_groups.py
+68c0c1b04 Add unit test that current metadata able to support multiple field in one inasafe field.
+994d38a8c Merge keyword wizard flow to one omnigrafle file.
+f012e0ace Little fix on PR Template.
+2dde5dae4 Make the output of tag-release prettier.
+
 Changelog for version 4.0.0
 ================================
 

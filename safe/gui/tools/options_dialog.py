@@ -52,7 +52,7 @@ class OptionsDialog(QDialog, FORM_CLASS):
 
     """Options dialog for the InaSAFE plugin."""
 
-    def __init__(self, iface, dock=None, parent=None, qsetting=''):
+    def __init__(self, iface, parent=None, qsetting=''):
         """Constructor for the dialog.
 
         :param iface: A Quantum GIS QGisAppInterface instance.
@@ -60,10 +60,6 @@ class OptionsDialog(QDialog, FORM_CLASS):
 
         :param parent: Parent widget of this dialog
         :type parent: QWidget
-
-        :param dock: Optional dock widget instance that we can notify of
-            changes to the keywords.
-        :type dock: Dock
 
         :param qsetting: String to specify the QSettings. By default,
             use empty string.
@@ -76,7 +72,6 @@ class OptionsDialog(QDialog, FORM_CLASS):
         # Save reference to the QGIS interface and parent
         self.iface = iface
         self.parent = parent
-        self.dock = dock
         if qsetting:
             self.settings = QSettings(qsetting)
         else:
@@ -103,6 +98,7 @@ class OptionsDialog(QDialog, FORM_CLASS):
                 self.organisation_on_dock_checkbox,
             'developer_mode': self.cbxDevMode,
             'generate_report': self.checkbox_generate_reports,
+            'memory_profile': self.check_box_memory
         }
         self.text_settings = {
             'keywordCachePath': self.leKeywordCachePath,
@@ -320,19 +316,8 @@ class OptionsDialog(QDialog, FORM_CLASS):
 
     def accept(self):
         """Method invoked when OK button is clicked."""
-        # if not self.is_good_age_ratios():
-        #     display_warning_message_box(
-        #         self,
-        #         tr('Wrong Sum Age Ratio'),
-        #         tr('You have set age ratio whose sum is not equal to 1. '
-        #            'Please fix it in the <b>Global Default</b> tab before '
-        #            'you can save it.'))
-        #     return
         self.save_state()
-        # FIXME: Option dialog should be independent from dock.
-        if self.dock:
-            self.dock.read_settings()
-        self.close()
+        super(OptionsDialog, self).accept()
 
     # noinspection PyPep8Naming
     @pyqtSignature('int')  # prevents actions being handled twice

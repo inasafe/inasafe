@@ -32,6 +32,7 @@ from qgis.core import (
     QgsField,
     QgsExpression,
     QgsFeature,
+    QgsExpressionContext,
     QgsNetworkAccessManager)
 # pylint: enable=unused-import
 
@@ -60,6 +61,7 @@ from safe.utilities.qgis_utilities import (
     display_warning_message_box,
     display_warning_message_bar)
 from safe.utilities.settings import setting
+from safe.utilities.qt import disable_busy_cursor
 
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -74,6 +76,7 @@ __copyright__ = ('Copyright 2015, Australia Indonesia Facility for '
 
 
 class PetaBencanaDialog(QDialog, FORM_CLASS):
+
     """Downloader for PetaBencana data.
 
     .. versionadded: 3.3
@@ -84,10 +87,10 @@ class PetaBencanaDialog(QDialog, FORM_CLASS):
 
         .. versionadded: 3.3
 
-        :param parent: Optional widget to use as parent
+        :param parent: Optional widget to use as parent.
         :type parent: QWidget
 
-        :param iface: An instance of QGisInterface
+        :param iface: An instance of QGisInterface.
         :type iface: QGisInterface
         """
         QDialog.__init__(self, parent)
@@ -181,7 +184,7 @@ class PetaBencanaDialog(QDialog, FORM_CLASS):
         self.help_web_view.setHtml(string)
 
     def restore_state(self):
-        """ Read last state of GUI from configuration file.
+        """Read last state of GUI from configuration file.
 
         .. versionadded: 3.3
         """
@@ -193,7 +196,7 @@ class PetaBencanaDialog(QDialog, FORM_CLASS):
         self.output_directory.setText(last_path)
 
     def save_state(self):
-        """ Store current state of GUI to configuration file.
+        """Store current state of GUI to configuration file.
 
         .. versionadded: 3.3
         """
@@ -247,7 +250,7 @@ class PetaBencanaDialog(QDialog, FORM_CLASS):
             layer = QgsVectorLayer(
                 output_base_file_path, 'flood', 'ogr', False)
         except Exception as e:
-            self.disable_busy_cursor()
+            disable_busy_cursor()
             QMessageBox.critical(self, title, str(e))
             return
 
@@ -280,12 +283,12 @@ class PetaBencanaDialog(QDialog, FORM_CLASS):
                 self,
                 self.tr('No data'),
                 message)
-            self.disable_busy_cursor()
+            disable_busy_cursor()
         else:
             # add the layer to the map
             registry = QgsMapLayerRegistry.instance()
             registry.addMapLayer(layer)
-            self.disable_busy_cursor()
+            disable_busy_cursor()
             self.done(QDialog.Accepted)
 
     def add_flooded_field(self, shapefile_path):
@@ -380,16 +383,6 @@ class PetaBencanaDialog(QDialog, FORM_CLASS):
         output_qml_path = shapefile_path.replace('shp', 'qml')
         LOGGER.info('Copying qml to: %s' % output_qml_path)
         copy(source_qml_path, output_qml_path)
-
-    @staticmethod
-    def disable_busy_cursor():
-        """Disable the hourglass cursor.
-
-        TODO: this is duplicated from dock.py
-        """
-        while QtGui.qApp.overrideCursor() is not None and \
-                QtGui.qApp.overrideCursor().shape() == QtCore.Qt.WaitCursor:
-            QtGui.qApp.restoreOverrideCursor()
 
     def get_output_base_path(
             self,

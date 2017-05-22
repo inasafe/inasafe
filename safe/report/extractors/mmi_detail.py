@@ -100,7 +100,8 @@ def mmi_detail_extractor(impact_report, component_metadata):
                 count = 0
             count = format_number(
                 count,
-                enable_rounding=enable_rounding)
+                enable_rounding=enable_rounding,
+                is_population=True)
             columns.append(count)
 
         rows.append(columns)
@@ -121,7 +122,8 @@ def mmi_detail_extractor(impact_report, component_metadata):
             total = 0
         total = format_number(
             total,
-            enable_rounding=enable_rounding)
+            enable_rounding=enable_rounding,
+            is_population=True)
         total_footer.append(total)
 
     context['mmi'] = {

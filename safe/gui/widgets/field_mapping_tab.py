@@ -15,6 +15,7 @@ from PyQt4.QtCore import Qt, QSettings
 
 from collections import OrderedDict
 import logging
+from functools import partial
 
 from safe.definitions.constants import (
     DO_NOT_USE,
@@ -95,6 +96,7 @@ class FieldMappingTab(QWidget, object):
 
         self.field_list.setSizePolicy(
             QSizePolicy.Maximum, QSizePolicy.Expanding)
+        # noinspection PyUnresolvedReferences
         self.field_list.itemSelectionChanged.connect(self.update_footer)
 
         # Footer
@@ -272,10 +274,37 @@ class FieldMappingTab(QWidget, object):
 
         self.parameter_layout.addWidget(self.parameter_container)
 
-        self.populate_field_list(excluded_fields=used_fields)
+        # Set move or copy
+        if self.field_group.get('exclusive', False):
+            # If exclusive, do not add used field.
+            self.populate_field_list(excluded_fields=used_fields)
+            # Use move action since it's exclusive
+            self.field_list.setDefaultDropAction(Qt.MoveAction)
+            # Just make sure that the signal is disconnected
+            try:
+                # noinspection PyUnresolvedReferences
+                self.field_list.itemChanged.disconnect(self.drop_remove)
+            except TypeError:
+                pass
+            # Set header
+            header_text = self.field_group['description']
+            header_text += '\n\n' + tr(
+                'You can only map one field to one concept.')
+        else:
+            # If not exclusive, add all field.
+            self.populate_field_list()
+            # Use copy action since it's not exclusive
+            self.field_list.setDefaultDropAction(Qt.CopyAction)
+            # noinspection PyUnresolvedReferences
+            self.field_list.itemChanged.connect(
+                partial(self.drop_remove, field_list=self.field_list))
+            self.connect_drop_remove_parameter()
+            # Set header
+            header_text = self.field_group['description']
+            header_text += '\n\n' + tr(
+                'You can map one field to more than one concepts.')
 
-        # Set header
-        self.header_label.setText(self.field_group['description'])
+        self.header_label.setText(header_text)
 
     def get_parameter_value(self):
         """Get parameter of the tab.
@@ -318,3 +347,30 @@ class FieldMappingTab(QWidget, object):
         footer_text = tr('Field type: {0}\n').format(field.typeName())
         footer_text += tr('Unique values: {0}').format(pretty_unique_values)
         self.footer_label.setText(footer_text)
+
+    def connect_drop_remove_parameter(self):
+        parameter_widgets = self.parameter_container.get_parameter_widgets()
+        for parameter_widget in parameter_widgets:
+            field_list = parameter_widget.widget().list_widget
+            field_list.itemChanged.connect(
+                partial(self.drop_remove, field_list=field_list))
+
+    @staticmethod
+    def drop_remove(*args, **kwargs):
+        """Action when we need to remove dropped item.
+
+        :param args: Position arguments.
+        :type args: list
+
+        :param kwargs: Keywords arguments.
+        :type kwargs: dict
+        """
+        dropped_item = args[0]
+        field_list = kwargs['field_list']
+        num_duplicate = 0
+        for i in range(field_list.count()):
+            if dropped_item.text() == field_list.item(i).text():
+                num_duplicate += 1
+        if num_duplicate > 1:
+            # Notes(IS): For some reason, removeItemWidget is not working.
+            field_list.takeItem(field_list.row(dropped_item))

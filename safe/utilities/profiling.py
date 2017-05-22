@@ -10,6 +10,8 @@ import time
 import inspect
 from functools import wraps
 from safe.utilities.memory_checker import get_free_memory
+from safe.utilities.settings import setting
+
 
 __copyright__ = "Vadim Shender (original poster in stack overflow), InaSAFE"
 __license__ = "Creative Commons"
@@ -30,11 +32,12 @@ class Tree(object):
         # Time at the end.
         self._end_time = None
 
-        # memory at creation
-        self._start_memory = get_free_memory()
+        if setting(key='memory_profile', expected_type=bool):
+            # memory at creation
+            self._start_memory = get_free_memory()
 
-        # memory at termination
-        self._end_memory = None
+            # memory at termination
+            self._end_memory = None
 
         # Children
         self.children = []
@@ -42,7 +45,9 @@ class Tree(object):
     def ended(self):
         """We call this method when the function is finished."""
         self._end_time = time.time()
-        self._end_memory = get_free_memory()
+
+        if setting(key='memory_profile', expected_type=bool):
+            self._end_memory = get_free_memory()
 
     @property
     def elapsed_time(self):

@@ -5,6 +5,11 @@ from os.path import exists
 import copy
 import logging
 from PyQt4 import QtCore
+
+import safe.definitions.post_processors
+from safe.definitions.post_processors.post_processor_inputs import (
+    post_processor_input_types,
+    post_processor_input_values)
 from safe.utilities.i18n import tr
 from safe import messaging as m
 from safe.messaging import styles
@@ -13,7 +18,7 @@ from safe.definitions.exposure import exposure_all
 from safe.definitions.hazard_exposure_specifications import (
     specific_notes, specific_actions)
 from safe.definitions.field_groups import (
-    exposure_field_groups, aggregation_field_groups)
+    population_field_groups, aggregation_field_groups)
 from safe.gui.tools.help.dock_help import content as dock_help
 from safe.gui.tools.help.extent_selector_help import content as extent_help
 from safe.gui.tools.help.impact_report_help import content as report_help
@@ -180,6 +185,11 @@ def content():
                     m.Link(citation['link'], citation['text'])))
         row.add(m.Cell(term))
         row.add(m.Cell(description))
+        url = _definition_icon_url(value)
+        if url:
+            row.add(m.Cell(m.Image(url, **MEDIUM_ICON_STYLE)))
+        else:
+            row.add(m.Cell(''))
         table.add(row)
     # ensure the last group's table is added
     message.add(table)
@@ -285,7 +295,7 @@ def content():
         'The following demographic groups apply only to vector population '
         'exposure layers:'
     ))
-    for group in exposure_field_groups:
+    for group in population_field_groups:
         definition_to_message(
             group, message, table_of_contents, heading_level=4)
 
@@ -415,11 +425,11 @@ def content():
         heading_level=1)
     table = m.Table(style_class='table table-condensed table-striped')
     row = m.Row()
-    row.add(m.Cell(tr('Name')), header_flag=True)
-    row.add(m.Cell(tr('Default value')), header_flag=True)
-    row.add(m.Cell(tr('Default min')), header_flag=True)
-    row.add(m.Cell(tr('Default max')), header_flag=True)
-    row.add(m.Cell(tr('Description')), header_flag=True)
+    row.add(m.Cell(tr('Name'), header=True))
+    row.add(m.Cell(tr('Default value'), header=True))
+    row.add(m.Cell(tr('Default min'), header=True))
+    row.add(m.Cell(tr('Default max'), header=True))
+    row.add(m.Cell(tr('Description'), header=True))
     table.add(row)
     defaults = [
         definitions.youth_ratio_default_value,
@@ -623,10 +633,10 @@ def content():
         heading_level=1)
     table = m.Table(style_class='table table-condensed table-striped')
     row = m.Row()
-    row.add(m.Cell(tr('Name')), header_flag=True)
-    row.add(m.Cell(tr('Plural')), header_flag=True)
-    row.add(m.Cell(tr('Abbreviation')), header_flag=True)
-    row.add(m.Cell(tr('Details')), header_flag=True)
+    row.add(m.Cell(tr('Name'), header=True))
+    row.add(m.Cell(tr('Plural'), header=True))
+    row.add(m.Cell(tr('Abbreviation'), header=True))
+    row.add(m.Cell(tr('Details'), header=True))
     table.add(row)
     for unit in definitions.units_all:
         row = m.Row()
@@ -654,7 +664,7 @@ def content():
         tr('Post Processor Input Types'),
         heading_level=2)
     table = _create_post_processor_subtable(
-        definitions.post_processor_input_types
+        post_processor_input_types
     )
     message.add(table)
 
@@ -665,7 +675,7 @@ def content():
         tr('Post Processor Input Values'),
         heading_level=2)
     table = _create_post_processor_subtable(
-        definitions.post_processor_input_values
+        post_processor_input_values
     )
     message.add(table)
 
@@ -686,12 +696,12 @@ def content():
         'post-processors',
         tr('Post Processors'),
         heading_level=2)
-    post_processors = definitions.post_processors
+    post_processors = safe.definitions.post_processors
     table = m.Table(style_class='table table-condensed table-striped')
     row = m.Row()
-    row.add(m.Cell(tr('Name')), header_flag=True)
-    row.add(m.Cell(tr('Input Fields')), header_flag=True)
-    row.add(m.Cell(tr('Output Fields')), header_flag=True)
+    row.add(m.Cell(tr('Name'), header=True))
+    row.add(m.Cell(tr('Input Fields'), header=True))
+    row.add(m.Cell(tr('Output Fields'), header=True))
     table.add(row)
     for post_processor in post_processors:
         row = m.Row()
@@ -742,8 +752,10 @@ def content():
 def _start_glossary_table(group):
     table = m.Table(style_class='table table-condensed table-striped')
     row = m.Row()
-    row.add(m.Cell(tr('Term')), header_flag=True)
-    row.add(m.Cell(tr('Description')), header_flag=True)
+    # first col for icons if present
+    row.add(m.Cell(tr('Term'), header=True))
+    row.add(m.Cell(tr('Description'), header=True))
+    row.add(m.Cell(tr(''), header=True))
     table.add(row)
     return table
 
@@ -783,8 +795,8 @@ def _create_section_header(
 def _create_post_processor_subtable(item_list):
     table = m.Table(style_class='table table-condensed table-striped')
     row = m.Row()
-    row.add(m.Cell(tr('Name')), header_flag=True)
-    row.add(m.Cell(tr('Description')), header_flag=True)
+    row.add(m.Cell(tr('Name'), header=True))
+    row.add(m.Cell(tr('Description'), header=True))
     table.add(row)
     for item in item_list:
         row = m.Row()
@@ -905,7 +917,10 @@ def definition_to_message(
             tr('General notes:'), **DETAILS_SUBGROUP_STYLE))
         bullets = m.BulletedList()
         for note in definition['notes']:
-            bullets.add(m.Text(note))
+            if type(note) is dict:
+                bullets = _add_dict_to_bullets(bullets, note)
+            elif note:
+                bullets.add(m.Text(note))
         message.add(bullets)
 
     # This only for EQ
@@ -925,7 +940,10 @@ def definition_to_message(
             message.add(m.Heading(title, **DETAILS_SUBGROUP_STYLE))
             bullets = m.BulletedList()
             for note in extra_exposure_notes:
-                bullets.add(m.Text(note))
+                if type(note) is dict:
+                    bullets = _add_dict_to_bullets(bullets, note)
+                elif note:
+                    bullets.add(m.Text(note))
             message.add(bullets)
 
     if 'continuous_notes' in definition:
@@ -974,7 +992,10 @@ def definition_to_message(
         message.add(m.Paragraph(m.ImportantText(tr('Actions:'))))
         bullets = m.BulletedList()
         for note in definition['actions']:
-            bullets.add(m.Text(note))
+            if type(note) is dict:
+                bullets = _add_dict_to_bullets(bullets, note)
+            elif note:
+                bullets.add(m.Text(note))
         message.add(bullets)
 
     for exposure in exposure_all:
@@ -985,17 +1006,20 @@ def definition_to_message(
             message.add(m.Heading(title, **DETAILS_SUBGROUP_STYLE))
             bullets = m.BulletedList()
             for note in extra_exposure_actions:
-                bullets.add(m.Text(note))
+                if type(note) is dict:
+                    bullets = _add_dict_to_bullets(bullets, note)
+                elif note:
+                    bullets.add(m.Text(note))
             message.add(bullets)
 
     if 'continuous_hazard_units' in definition:
         message.add(m.Paragraph(m.ImportantText(tr('Units:'))))
         table = m.Table(style_class='table table-condensed table-striped')
         row = m.Row()
-        row.add(m.Cell(tr('Name')), header_flag=True)
-        row.add(m.Cell(tr('Plural')), header_flag=True)
-        row.add(m.Cell(tr('Abbreviation')), header_flag=True)
-        row.add(m.Cell(tr('Details')), header_flag=True)
+        row.add(m.Cell(tr('Name'), header=True))
+        row.add(m.Cell(tr('Plural'), header=True))
+        row.add(m.Cell(tr('Abbreviation'), header=True))
+        row.add(m.Cell(tr('Details'), header=True))
         table.add(row)
         for unit in definition['continuous_hazard_units']:
             row = m.Row()
@@ -1142,6 +1166,8 @@ def definition_to_message(
 
 
 def _definition_icon_url(definition):
+    if 'key' not in definition:
+        return None
     svg_image_path = resources_path(
         'img', 'definitions', definition['key'] + '.svg')
     png_image_path = resources_path(
@@ -1172,11 +1198,11 @@ def _definition_screenshot_url(definition):
 def _create_fields_table():
     table = m.Table(style_class='table table-condensed table-striped')
     row = m.Row()
-    row.add(m.Cell(tr('Name')), header_flag=True)
-    row.add(m.Cell(tr('Field Name')), header_flag=True)
-    row.add(m.Cell(tr('Type')), header_flag=True)
-    row.add(m.Cell(tr('Length')), header_flag=True)
-    row.add(m.Cell(tr('Precision')), header_flag=True)
+    row.add(m.Cell(tr('Name'), header=True))
+    row.add(m.Cell(tr('Field Name'), header=True))
+    row.add(m.Cell(tr('Type'), header=True))
+    row.add(m.Cell(tr('Length'), header=True))
+    row.add(m.Cell(tr('Precision'), header=True))
     table.add(row)
     return table
 
@@ -1238,13 +1264,39 @@ def _make_defaults_table():
     row = m.Row()
     # first row is for colour - we dont use a header here as some tables
     # do not have colour...
-    row.add(m.Cell(tr('')), header_flag=True)
-    row.add(m.Cell(tr('Name')), header_flag=True)
-    row.add(m.Cell(tr('Affected')), header_flag=True)
-    row.add(m.Cell(tr('Fatality rate')), header_flag=True)
-    row.add(m.Cell(tr('Displacement rate')), header_flag=True)
-    row.add(m.Cell(tr('Default values')), header_flag=True)
-    row.add(m.Cell(tr('Default min')), header_flag=True)
-    row.add(m.Cell(tr('Default max')), header_flag=True)
+    row.add(m.Cell(tr(''), header=True))
+    row.add(m.Cell(tr('Name'), header=True))
+    row.add(m.Cell(tr('Affected'), header=True))
+    row.add(m.Cell(tr('Fatality rate'), header=True))
+    row.add(m.Cell(tr('Displacement rate'), header=True))
+    row.add(m.Cell(tr('Default values'), header=True))
+    row.add(m.Cell(tr('Default min'), header=True))
+    row.add(m.Cell(tr('Default max'), header=True))
     table.add(row)
     return table
+
+
+def _add_dict_to_bullets(target, value):
+    """Add notes and actions in dictionary to the bullets
+
+    :param target: Target bullets
+    :type target: Bullets
+
+    :param value: Dictionary that contains actions or notes
+    :type value: dict
+
+    :return: Updated bullets
+    :rtype: Bullets
+    """
+    actions = value.get('action_list')
+    notes = value.get('item_list')
+    items_tobe_added = []
+    if actions:
+        items_tobe_added = actions
+    elif notes:
+        items_tobe_added = notes
+
+    if items_tobe_added:
+        for item in items_tobe_added:
+            target.add(m.Text(item))
+    return target

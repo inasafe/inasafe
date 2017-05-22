@@ -307,7 +307,7 @@ concepts['people'] = {
     ],
 }
 concepts['female'] = {
-    'group': tr('Demographics'),
+    'group': tr('Gender'),
     'key': 'female',
     'description': tr(
         'Relating to the characteristics of women.'),
@@ -320,7 +320,7 @@ concepts['female'] = {
     ],
 }
 concepts['male'] = {
-    'group': tr('Demographics'),
+    'group': tr('Gender'),
     'key': 'male',
     'description': tr(
         'Relating to the characteristics of men.'),
@@ -462,7 +462,7 @@ concepts['over_60'] = {
     ],
 }
 concepts['child_bearing_age'] = {
-    'group': tr('Gender'),
+    'group': tr('Vulnerability'),
     'key': 'child_bearing_age',
     'description': tr(
         'The span of ages (usually 15-49) at which individuals are capable '
@@ -505,7 +505,7 @@ concepts['lactating'] = {
     ],
 }
 concepts['pregnant_lactating'] = {
-    'group': tr('Gender'),
+    'group': tr('Vulnerability'),
     'key': 'pregnant_lactating',
     'description': tr(
         'A female who is either pregnant or feeding a baby.'),

@@ -572,6 +572,7 @@ class Plugin(object):
         self._create_keywords_wizard_action()
         self._create_analysis_wizard_action()
         self._add_spacer_to_menu()
+        self._create_field_mapping_action()
         self._create_osm_downloader_action()
         self._create_add_osm_layer_action()
         self._create_add_petabencana_layer_action()
@@ -585,7 +586,6 @@ class Plugin(object):
         self._create_save_scenario_action()
         self._add_spacer_to_menu()
         self._create_show_definitions_action()
-        self._create_field_mapping_action()
 
         # Hook up a slot for when the dock is hidden using its close button
         # or  view-panels
@@ -776,10 +776,10 @@ class Plugin(object):
         from safe.gui.tools.options_dialog import OptionsDialog
 
         dialog = OptionsDialog(
-            self.iface,
-            self.dock_widget,
-            self.iface.mainWindow())
-        dialog.exec_()  # modal
+            iface=self.iface,
+            parent=self.iface.mainWindow())
+        if dialog.exec_():  # modal
+            self.dock_widget.read_settings()
 
     def show_keywords_wizard(self):
         """Show the keywords creation wizard."""
@@ -888,17 +888,11 @@ class Plugin(object):
         dialog = FieldMappingDialog(
             parent=self.iface.mainWindow(),
             iface=self.iface,)
-        dialog.exec_()  # modal
-
-    def show_keyword_value_mapping(self):
-        """Show Keyword value mapping tool."""
-        from safe.gui.tools.batch.batch_dialog import BatchDialog
-
-        dialog = BatchDialog(
-            parent=self.iface.mainWindow(),
-            iface=self.iface,
-            dock=self.dock_widget)
-        dialog.exec_()  # modal
+        if dialog.exec_():  # modal
+            LOGGER.debug('Show field mapping accepted')
+            self.dock_widget.layer_changed(self.iface.activeLayer())
+        else:
+            LOGGER.debug('Show field mapping not accepted')
 
     def add_petabencana_layer(self):
         """Add petabencana layer to the map.
@@ -935,9 +929,6 @@ class Plugin(object):
         :param layer: The layer that is now active.
         :type layer: QgsMapLayer
         """
-        enable_keyword_wizard = True
-        enable_field_mapping_tool = True
-
         if not layer:
             enable_keyword_wizard = False
         elif not hasattr(layer, 'providerType'):
@@ -951,23 +942,28 @@ class Plugin(object):
 
         try:
             if layer:
-                keywords = KeywordIO().read_keywords(layer)
-                layer_purpose = keywords.get('layer_purpose')
-                if not layer_purpose:
-                    self.action_field_mapping.setEnabled(False)
-                if layer_purpose == layer_purpose_exposure['key']:
-                    layer_subcategory = keywords.get('exposure')
-                elif layer_purpose == layer_purpose_hazard['key']:
-                    layer_subcategory = keywords.get('hazard')
-                else:
-                    layer_subcategory = None
-                field_groups = get_field_groups(layer_purpose,
-                                                layer_subcategory)
-                if len(field_groups) == 0:
-                    # No field group, disable field mapping tool.
+                if is_raster_layer(layer):
                     enable_field_mapping_tool = False
                 else:
-                    enable_field_mapping_tool = True
+                    keywords = KeywordIO().read_keywords(layer)
+                    layer_purpose = keywords.get('layer_purpose')
+
+                    if not layer_purpose:
+                        enable_field_mapping_tool = False
+
+                    if layer_purpose == layer_purpose_exposure['key']:
+                        layer_subcategory = keywords.get('exposure')
+                    elif layer_purpose == layer_purpose_hazard['key']:
+                        layer_subcategory = keywords.get('hazard')
+                    else:
+                        layer_subcategory = None
+                    field_groups = get_field_groups(
+                        layer_purpose, layer_subcategory)
+                    if len(field_groups) == 0:
+                        # No field group, disable field mapping tool.
+                        enable_field_mapping_tool = False
+                    else:
+                        enable_field_mapping_tool = True
             else:
                 enable_field_mapping_tool = False
         except (KeywordNotFoundError, NoKeywordsFoundError):

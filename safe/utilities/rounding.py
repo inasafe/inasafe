@@ -14,7 +14,7 @@ __revision__ = '$Format:%H$'
 
 
 def format_number(
-        x, enable_rounding=True, is_population=True, coefficient=1):
+        x, enable_rounding=True, is_population=False, coefficient=1):
     """Format a number according to the standards.
 
     :param x: A number to be formatted in a locale friendly way.

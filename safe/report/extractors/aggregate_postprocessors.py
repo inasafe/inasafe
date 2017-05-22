@@ -2,6 +2,7 @@
 """Module used to generate context for aggregation postprocessors sections.
 """
 
+# noinspection PyUnresolvedReferences
 from PyQt4.QtCore import QPyNullVariant
 from collections import OrderedDict
 
@@ -9,18 +10,14 @@ from safe.common.parameters.resource_parameter import ResourceParameter
 from safe.definitions.exposure import exposure_population
 from safe.definitions.fields import (
     aggregation_name_field,
-    displaced_field,
-    male_displaced_count_field)
+    displaced_field)
 from safe.definitions.field_groups import (
     age_displaced_count_group,
-    gender_displaced_count_group,
-    vulnerability_displaced_count_group)
+    gender_displaced_count_group)
 from safe.definitions.minimum_needs import minimum_needs_fields
-from safe.definitions.post_processors import (
+from safe.definitions.post_processors.population_post_processors import (
     age_postprocessors,
-    female_postprocessors,
-    gender_postprocessors,
-    vulnerability_postprocessors)
+    gender_postprocessors)
 from safe.definitions.utilities import postprocessor_output_field
 from safe.report.extractors.util import (
     value_from_field_name,
@@ -103,13 +100,28 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
         'fields': [
             postprocessor_output_field(p) for p in gender_postprocessors]
     }
-    vulnerability_items = {
-        'group': vulnerability_displaced_count_group,
-        'group_header': u'Vulnerability breakdown (in affected area)',
-        'fields': [
-            postprocessor_output_field(p) for p in (
-                vulnerability_postprocessors)]
-    }
+    # TODO: Rohmat softcode the groups
+    # vulnerability_items = {
+    #    'group': vulnerability_displaced_count_group,
+    #    'group_header': u'Vulnerability breakdown (in affected area)',
+    #    'fields': [
+    #        postprocessor_output_field(p) for p in (
+    #            vulnerability_postprocessors)]
+    # }
+    # vulnerability_items = {
+    #    'group': vulnerability_displaced_count_group,
+    #    'group_header': u'Vulnerability breakdown (in affected area)',
+    #    'fields': [
+    #        postprocessor_output_field(p) for p in (
+    #            vulnerability_postprocessors)]
+    # }
+    # vulnerability_items = {
+    #    'group': vulnerability_displaced_count_group,
+    #    'group_header': u'Vulnerability breakdown (in affected area)',
+    #    'fields': [
+    #        postprocessor_output_field(p) for p in (
+    #            vulnerability_postprocessors)]
+    # }
 
     # check age_fields exists
     for field in age_items['fields']:
@@ -128,12 +140,15 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
         no_gender_field = True
 
     # check vulnerability_fields exists
-    for field in vulnerability_items['fields']:
-        if field['key'] in analysis_layer_fields:
-            no_vulnerability_field = False
-            break
-    else:
-        no_vulnerability_field = True
+
+    # TODO: Rohmat softcode
+
+    # for field in vulnerability_items['fields']:
+    #    if field['key'] in analysis_layer_fields:
+    #        no_vulnerability_field = False
+    #        break
+    # else:
+    #    no_vulnerability_field = True
 
     age_section_header = resolve_from_dictionary(
         extra_args, ['sections', 'age', 'header'])
@@ -196,22 +211,23 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
             'message': resolve_from_dictionary(
                 extra_args, ['defaults', 'zero_displaced_message'])
         }
-    elif no_vulnerability_field:
-        context['sections']['vulnerability'] = {
-            'header': vulnerability_section_header,
-            'empty': True,
-            'message': resolve_from_dictionary(
-                extra_args, ['defaults', 'no_vulnerability_rate_message'])
-        }
-    else:
-        context['sections']['vulnerability'] = create_section(
-            aggregation_summary,
-            analysis_layer,
-            vulnerability_items,
-            vulnerability_section_header,
-            use_aggregation=use_aggregation,
-            debug_mode=debug_mode,
-            extra_component_args=extra_args)
+    # TODO: Rohmat soft code
+    # elif no_vulnerability_field:
+    #    context['sections']['vulnerability'] = {
+    #        'header': vulnerability_section_header,
+    #        'empty': True,
+    #        'message': resolve_from_dictionary(
+    #            extra_args, ['defaults', 'no_vulnerability_rate_message'])
+    #    }
+    # else:
+    #    context['sections']['vulnerability'] = create_section(
+    #        aggregation_summary,
+    #        analysis_layer,
+    #        vulnerability_items,
+    #        vulnerability_section_header,
+    #        use_aggregation=use_aggregation,
+    #        debug_mode=debug_mode,
+    #        extra_component_args=extra_args)
 
     minimum_needs_section_header = resolve_from_dictionary(
         extra_args, ['sections', 'minimum_needs', 'header'])
@@ -459,7 +475,8 @@ def create_section_with_aggregation(
 
         total_displaced = format_number(
             feature[displaced_field_index],
-            enable_rounding=enable_rounding)
+            enable_rounding=enable_rounding,
+            is_population=True)
 
         row = [
             aggregation_name,
@@ -476,7 +493,8 @@ def create_section_with_aggregation(
 
             value = format_number(
                 value,
-                enable_rounding=enable_rounding)
+                enable_rounding=enable_rounding,
+                is_population=True)
             row.append(value)
 
         row_values.append(row)
@@ -489,7 +507,8 @@ def create_section_with_aggregation(
         total_displaced_field_name, analysis_layer)
     value = format_number(
         value,
-        enable_rounding=enable_rounding)
+        enable_rounding=enable_rounding,
+        is_population=True)
     total_header = resolve_from_dictionary(
         extra_component_args, ['defaults', 'total_header'])
     totals = [
@@ -501,7 +520,8 @@ def create_section_with_aggregation(
         value = value_from_field_name(field_name, analysis_layer)
         value = format_number(
             value,
-            enable_rounding=enable_rounding)
+            enable_rounding=enable_rounding,
+            is_population=True)
         totals.append(value)
 
     notes = resolve_from_dictionary(
@@ -628,7 +648,8 @@ def create_section_without_aggregation(
             analysis_layer)
         value = format_number(
             value,
-            enable_rounding=enable_rounding)
+            enable_rounding=enable_rounding,
+            is_population=True)
         row.append(value)
 
         row_values.append(row)
