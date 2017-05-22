@@ -162,7 +162,7 @@ def exposed_people_stats(hazard, exposure, aggregation):
             hazard_mmi = int(round(hazard_mmi))
             mmi_fatality_rate = fatality_rate(hazard_mmi, classification_key)
             mmi_fatalities = int(  # rounding down
-                hazard_mmi * mmi_fatality_rate)
+                people_count * mmi_fatality_rate)
             mmi_displaced = (
                 (people_count - mmi_fatalities) *
                 displacement_rate(hazard_mmi, classification_key))

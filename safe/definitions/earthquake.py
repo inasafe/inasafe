@@ -15,21 +15,20 @@ __revision__ = '$Format:%H$'
 
 def earthquake_fatality_rate(hazard_level):
     """Earthquake fatality ratio for a given hazard level.
-
+    It reads the QGIS QSettings to know what is the default earthquake
+    function.
     :param hazard_level: The hazard level.
     :type hazard_level: int
-
     :return: The fatality rate.
     :rtype: float
     """
     earthquake_function = setting(
         'earthquake_function', EARTHQUAKE_FUNCTIONS[0]['key'], str)
-    fatality_rates = {}
+    ratio = 0
     for model in EARTHQUAKE_FUNCTIONS:
-        fatality_rates[model['key']] = model['fatality_rates']
-    ratio = fatality_rates[earthquake_function]().get(hazard_level)
-    if not ratio:
-        ratio = 0
+        if model['key'] == earthquake_function:
+            eq_function = model['fatality_rates']
+            ratio = eq_function().get(hazard_level)
     return ratio
 
 
