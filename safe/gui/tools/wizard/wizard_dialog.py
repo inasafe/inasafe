@@ -94,6 +94,7 @@ from step_kw65_summary import StepKwSummary
 from step_fc90_analysis import StepFcAnalysis
 
 from safe.gui.tools.wizard.wizard_help import WizardHelp
+from safe.gui.tools.wizard import STEP_KW, STEP_FC
 
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -131,8 +132,9 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.setupUi(self)
         self.setWindowTitle('InaSAFE')
         # Constants
-        self.keyword_creation_wizard_name = 'InaSAFE Keywords Creation Wizard'
-        self.ifcw_name = 'InaSAFE Impact Function Centric Wizard'
+        self.keyword_creation_wizard_name = tr(
+            'InaSAFE Keywords Creation Wizard')
+        self.ifcw_name = tr('InaSAFE Impact Function Centric Wizard')
         # Note the keys should remain untranslated as we need to write
         # english to the keywords file.
         # Save reference to the QGIS interface and parent
@@ -254,19 +256,19 @@ class WizardDialog(QDialog, FORM_CLASS):
         """Set the mode label to the Keywords Creation/Update mode."""
         self.setWindowTitle(self.keyword_creation_wizard_name)
         if self.get_existing_keyword('layer_purpose'):
-            mode_name = (self.tr(
-                'Keywords update wizard for layer <b>%s</b>'
-            ) % self.layer.name())
+            mode_name = tr(
+                'Keywords update wizard for layer <b>{layer_name}</b>').format(
+                layer_name=self.layer.name())
         else:
-            mode_name = (self.tr(
-                'Keywords creation wizard for layer <b>%s</b>'
-            ) % self.layer.name())
+            mode_name = tr(
+                'Keywords creation wizard for layer <b>%s</b>').format(
+                layer_name=self.layer.name())
         self.lblSubtitle.setText(mode_name)
 
     def set_mode_label_to_ifcw(self):
         """Set the mode label to the IFCW."""
         self.setWindowTitle(self.ifcw_name)
-        self.lblSubtitle.setText(self.tr(
+        self.lblSubtitle.setText(tr(
             'Use this wizard to run a guided impact assessment'))
 
     def set_keywords_creation_mode(self, layer=None, keywords=None):
@@ -562,9 +564,9 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         # set the current layer (e.g. for the keyword creation sub-thread)
         self.layer = layer
-        if purpose == 'hazard':
+        if purpose == layer_purpose_hazard['key']:
             self.hazard_layer = layer
-        elif purpose == 'exposure':
+        elif purpose == layer_purpose_exposure['key']:
             self.exposure_layer = layer
         else:
             self.aggregation_layer = layer
@@ -577,8 +579,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         else:
             self.is_selected_layer_keywordless = True
 
-        desc = layer_description_html(layer, keywords)
-        return desc
+        description = layer_description_html(layer, keywords)
+        return description
 
     # ===========================
     # NAVIGATION
@@ -590,7 +592,7 @@ class WizardDialog(QDialog, FORM_CLASS):
            entering the new step.
 
         :param step: The step widget to be moved to.
-        :type step: QWidget
+        :type step: WizardStep
         """
         self.stackedWidget.setCurrentWidget(step)
 
@@ -605,11 +607,11 @@ class WizardDialog(QDialog, FORM_CLASS):
         # Set Next button label
         if (step in [self.step_kw_summary, self.step_fc_analysis] and
                 self.parent_step is None):
-            self.pbnNext.setText(self.tr('Finish'))
+            self.pbnNext.setText(tr('Finish'))
         elif step == self.step_fc_summary:
-            self.pbnNext.setText(self.tr('Run'))
+            self.pbnNext.setText(tr('Run'))
         else:
-            self.pbnNext.setText(self.tr('Next'))
+            self.pbnNext.setText(tr('Next'))
 
         # Run analysis after switching to the new step
         if step == self.step_fc_analysis:
@@ -638,14 +640,6 @@ class WizardDialog(QDialog, FORM_CLASS):
            executed when the Next button is released.
         """
         current_step = self.get_current_step()
-        # For checking age sum == 1
-        if current_step == self.step_kw_default_inasafe_fields:
-            good_ratios = self.step_kw_default_inasafe_fields.\
-                is_good_age_ratios()
-            self.step_kw_default_inasafe_fields.toggle_age_ratio_sum_message(
-                    good_ratios)
-            if not good_ratios:
-                return
 
         if current_step == self.step_kw_fields_mapping:
             try:
@@ -655,9 +649,9 @@ class WizardDialog(QDialog, FORM_CLASS):
                     self, tr('Invalid Field Mapping'), get_string(e.message))
                 return
 
-        if current_step.step_type == 'step_fc':
+        if current_step.step_type == STEP_FC:
             self.impact_function_steps.append(current_step)
-        elif current_step.step_type == 'step_kw':
+        elif current_step.step_type == STEP_KW:
             self.keyword_steps.append(current_step)
         else:
             LOGGER.debug(current_step.step_type)
@@ -706,9 +700,9 @@ class WizardDialog(QDialog, FORM_CLASS):
            executed when the Back button is released.
         """
         current_step = self.get_current_step()
-        if current_step.step_type == 'step_fc':
+        if current_step.step_type == STEP_FC:
             new_step = self.impact_function_steps.pop()
-        elif current_step.step_type == 'step_kw':
+        elif current_step.step_type == STEP_KW:
             try:
                 new_step = self.keyword_steps.pop()
             except IndexError:
@@ -725,7 +719,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         if new_step == self.step_fc_extent:
             self.step_fc_extent.set_widgets()
         # Set Next button label
-        self.pbnNext.setText(self.tr('Next'))
+        self.pbnNext.setText(tr('Next'))
         self.pbnNext.setEnabled(True)
         self.go_to_step(new_step)
 
@@ -870,17 +864,18 @@ class WizardDialog(QDialog, FORM_CLASS):
             error_message = get_error_message(e)
             # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
             QtGui.QMessageBox.warning(
-                self, self.tr('InaSAFE'),
-                ((self.tr(
-                    'An error was encountered when saving the following '
-                    'keywords:\n %s') % error_message.to_html())))
+                self,
+                tr('InaSAFE'),
+                tr('An error was encountered when saving the following '
+                   'keywords:\n {error_message}').format(
+                    error_message=error_message.to_html()))
         if self.dock is not None:
             # noinspection PyUnresolvedReferences
             self.dock.get_layers()
 
         # Save default value to QSetting
         if current_keywords.get('inasafe_default_values'):
-            for key, value in \
-                    current_keywords['inasafe_default_values'].items():
+            for key, value in (
+                    current_keywords['inasafe_default_values'].items()):
                 set_inasafe_default_value_qsetting(
                     self.setting, RECENT, key, value)
