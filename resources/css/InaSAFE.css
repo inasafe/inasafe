@@ -1,8 +1,12 @@
 body {
   font-family: 'Ubuntu', 'Lucida Grande', 'Segoe UI', 'Arial', sans-serif;
+  font-size: 14px;
 }
 th {text-align: left;}
 table {font-size: 12px ;!important;}
+.table th, .table td {
+  padding: 8px;
+}
 th.button-cell{
   padding: 4px 10px 4px;
   margin-bottom: 0;
@@ -42,6 +46,9 @@ h1, h2, h3, h4, h5, h6 {
   padding-left: 20px;
   padding-bottom: 0px;
   padding-top: 0px;
+}
+h5, .h5 {
+  font-size: 14px;
 }
 .warning {
   color: #fff;
