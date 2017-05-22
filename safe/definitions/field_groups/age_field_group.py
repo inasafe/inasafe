@@ -44,14 +44,7 @@ age_ratio_group = {
     # Exclusive = True: only able to put a layer's field to a field
     'exclusive': False,
     'notes': [],
-    'constraints': {
-        'sum': {
-            'kwargs': {
-                'max': 1
-            },
-            'message': tr('The sum of age ratios should not more than 1.')
-        }
-    }
+    'constraints': {}
 }
 age_count_group = {
     'key': 'age_count_group',
