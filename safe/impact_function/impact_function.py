@@ -58,7 +58,6 @@ from safe.gis.raster.polygonize import polygonize
 from safe.gis.raster.zonal_statistics import zonal_stats
 from safe.gis.raster.align import align_rasters
 from safe.gis.raster.rasterize import rasterize_vector_layer
-from safe.definitions.post_processors import post_processors
 from safe.definitions.analysis_steps import analysis_steps
 from safe.definitions.utilities import definition, get_non_compulsory_fields
 from safe.definitions.exposure import indivisible_exposure
@@ -67,7 +66,7 @@ from safe.definitions.fields import (
     exposure_class_field,
     hazard_class_field,
 )
-from safe.definitions import count_ratio_mapping
+from safe.definitions import count_ratio_mapping, post_processors
 from safe.definitions.layer_purposes import (
     layer_purpose_exposure,
     layer_purpose_exposure_summary,
@@ -268,7 +267,10 @@ class ImpactFunction(object):
             text += tree.__str__()
 
             new_row.add(m.Cell(text))
-            new_row.add(m.Cell(tree.elapsed_time))
+            time = tree.elapsed_time
+            if time is None:
+                time = tr('Busy')
+            new_row.add(m.Cell(time))
             if setting(key='memory_profile', expected_type=bool):
                 new_row.add(m.Cell(tree.memory_used))
             table.add(new_row)

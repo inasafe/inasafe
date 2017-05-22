@@ -171,7 +171,6 @@ def create_profile_layer(profiling):
     table = profiling.to_text().splitlines()[3:]
     tabular.startEditing()
     for line in table:
-        LOGGER.info(line)
         feature = QgsFeature()
         items = line.split(', ')
         time = items[1].replace('-', '')

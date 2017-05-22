@@ -2,7 +2,7 @@
 
 """Module used to generate context for aggregation result section."""
 
-from safe.definitions.exposure import exposure_all
+from safe.definitions.exposure import exposure_all, exposure_population
 from safe.definitions.fields import (
     affected_exposure_count_field,
     aggregation_name_field,
@@ -66,6 +66,7 @@ def aggregation_result_extractor(impact_report, component_metadata):
     # Only round the number when it is population exposure and it is not
     # in debug mode
     is_rounded = not debug_mode
+    is_population = exposure_type is exposure_population
 
     # For now aggregation report only applicable for breakable exposure types:
     itemizable_exposures_all = [
@@ -128,7 +129,8 @@ def aggregation_result_extractor(impact_report, component_metadata):
     for feat in aggregation_summary.getFeatures():
         total_affected_value = format_number(
             feat[total_field_index],
-            enable_rounding=is_rounded)
+            enable_rounding=is_rounded,
+            is_population=is_population)
         if total_affected_value == '0':
             # skip aggregation type if the total affected is zero
             continue
@@ -181,7 +183,8 @@ def aggregation_result_extractor(impact_report, component_metadata):
         affected_value = int(float(feat[affected_field_index]))
         affected_value = format_number(
             affected_value,
-            enable_rounding=is_rounded)
+            enable_rounding=is_rounded,
+            is_population=is_population)
         value_dict[feat[breakdown_field_index]] = affected_value
 
     if value_dict:

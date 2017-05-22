@@ -1,5 +1,6 @@
 # coding=utf-8
 """Module used to extract context for general summary."""
+from safe.definitions.exposure import exposure_population
 from safe.definitions.fields import (
     hazard_count_field,
     total_field,
@@ -45,7 +46,10 @@ def general_report_extractor(impact_report, component_metadata):
     debug_mode = impact_report.impact_function.debug_mode
 
     exposure_type = layer_definition_type(exposure_layer)
+    # Only round the number when it is population exposure and it is not
+    # in debug mode
     is_rounded = not debug_mode
+    is_population = exposure_type is exposure_population
 
     # find hazard class
     summary = []
@@ -85,7 +89,8 @@ def general_report_extractor(impact_report, component_metadata):
 
                 hazard_value = format_number(
                     analysis_feature[field_index],
-                    enable_rounding=is_rounded)
+                    enable_rounding=is_rounded,
+                    is_population=is_population)
                 stats = {
                     'key': hazard_class['key'],
                     'name': hazard_label,
@@ -106,7 +111,8 @@ def general_report_extractor(impact_report, component_metadata):
         try:
             field_name = analysis_inasafe_fields[total_field['key']]
             total = value_from_field_name(field_name, analysis_layer)
-            total = format_number(total, enable_rounding=is_rounded)
+            total = format_number(
+                total, enable_rounding=is_rounded, is_population=is_population)
             stats = {
                 'key': total_field['key'],
                 'name': total_field['name'],
@@ -141,7 +147,8 @@ def general_report_extractor(impact_report, component_metadata):
             else:
                 row_value = format_number(
                     analysis_feature[field_index],
-                    enable_rounding=is_rounded)
+                    enable_rounding=is_rounded,
+                    is_population=is_population)
             row_stats = {
                 'key': field['key'],
                 'name': header,

@@ -60,13 +60,13 @@ from qgis.core import (
 from osgeo import gdal
 from PyQt4.QtCore import QT_VERSION_STR
 from PyQt4.Qt import PYQT_VERSION_STR
-from safe.definitions.post_processors import (
-    post_processor_gender,
+from safe.definitions.post_processors import post_processor_size
+from safe.definitions.post_processors.population_post_processors import (
+    post_processor_female,
+    post_processor_male,
     post_processor_youth,
     post_processor_adult,
-    post_processor_elderly,
-    post_processor_size
-)
+    post_processor_elderly)
 from safe.definitions.constants import (
     PREPARE_SUCCESS,
     ANALYSIS_SUCCESS,
@@ -694,7 +694,8 @@ class TestImpactFunction(unittest.TestCase):
 
         used_post_processors = [
             post_processor_size,
-            post_processor_gender,
+            post_processor_male,
+            post_processor_female,
             post_processor_youth,
             post_processor_adult,
             post_processor_elderly,

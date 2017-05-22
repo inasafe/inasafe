@@ -5,6 +5,11 @@ from os.path import exists
 import copy
 import logging
 from PyQt4 import QtCore
+
+import safe.definitions.post_processors
+from safe.definitions.post_processors.post_processor_inputs import (
+    post_processor_input_types,
+    post_processor_input_values)
 from safe.utilities.i18n import tr
 from safe import messaging as m
 from safe.messaging import styles
@@ -13,7 +18,7 @@ from safe.definitions.exposure import exposure_all
 from safe.definitions.hazard_exposure_specifications import (
     specific_notes, specific_actions)
 from safe.definitions.field_groups import (
-    exposure_field_groups, aggregation_field_groups)
+    population_field_groups, aggregation_field_groups)
 from safe.gui.tools.help.dock_help import content as dock_help
 from safe.gui.tools.help.extent_selector_help import content as extent_help
 from safe.gui.tools.help.impact_report_help import content as report_help
@@ -290,7 +295,7 @@ def content():
         'The following demographic groups apply only to vector population '
         'exposure layers:'
     ))
-    for group in exposure_field_groups:
+    for group in population_field_groups:
         definition_to_message(
             group, message, table_of_contents, heading_level=4)
 
@@ -659,7 +664,7 @@ def content():
         tr('Post Processor Input Types'),
         heading_level=2)
     table = _create_post_processor_subtable(
-        definitions.post_processor_input_types
+        post_processor_input_types
     )
     message.add(table)
 
@@ -670,7 +675,7 @@ def content():
         tr('Post Processor Input Values'),
         heading_level=2)
     table = _create_post_processor_subtable(
-        definitions.post_processor_input_values
+        post_processor_input_values
     )
     message.add(table)
 
@@ -691,7 +696,7 @@ def content():
         'post-processors',
         tr('Post Processors'),
         heading_level=2)
-    post_processors = definitions.post_processors
+    post_processors = safe.definitions.post_processors
     table = m.Table(style_class='table table-condensed table-striped')
     row = m.Row()
     row.add(m.Cell(tr('Name'), header=True))

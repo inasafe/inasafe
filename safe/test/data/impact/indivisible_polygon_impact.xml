@@ -185,6 +185,7 @@
               &quot;adult_ratio_field&quot;:&quot;adult_r&quot;,
               &quot;population_count_field&quot;:&quot;population&quot;,
               &quot;female_ratio_field&quot;:&quot;female_r&quot;,
+              &quot;male_ratio_field&quot;:&quot;male_r&quot;,
               &quot;displaced_field&quot;:&quot;displaced&quot;,
               &quot;pregnant_lactating_displaced_count_field&quot;:&quot;pregnant_lactating_displaced&quot;
               }
