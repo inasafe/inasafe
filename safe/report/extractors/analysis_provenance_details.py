@@ -59,6 +59,8 @@ def analysis_provenance_details_extractor(impact_report, component_metadata):
         'aggregation_layer',
         'keywords_version']
 
+    debug_mode = impact_report.impact_function.debug_mode
+
     # we define dict here to create a different object of keyword
     hazard_keywords = dict(impact_report.impact_function.provenance[
         'hazard_keywords'])
