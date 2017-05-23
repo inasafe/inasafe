@@ -188,8 +188,10 @@ class StepFcFunctions1(WizardStep, FORM_CLASS):
         message.add(m.Paragraph(tr(
             'In this wizard step: {step_name}, there is a grid that shows all '
             'possible combination for hazard and exposure that can be run in '
-            'InaSAFE. You can select a grid cell which a cross between your '
-            'intended exposure and hazard.').format(
-            step_name=self.step_name)
-        ))
+            'InaSAFE. You can select a grid cell where your intended exposure '
+            'and hazard intersect. This will help you to choose the '
+            'layer that is suitable for the analysis. You can only '
+            'select the green grid cell. The grey color indicates that the '
+            'combination is not supported by InaSAFE.'
+            '').format(step_name=self.step_name)))
         return message

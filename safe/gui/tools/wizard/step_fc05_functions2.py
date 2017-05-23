@@ -219,10 +219,11 @@ class StepFcFunctions2(WizardStep, FORM_CLASS):
         message = m.Message()
         message.add(m.Paragraph(tr(
             'In this wizard step: {step_name}, there is a grid that shows all '
-            'possible combination for all geometry types for both hazard and '
-            'exposure. This grid has been filtered out by using constraint in '
-            'the previous step. You can select a grid cell which a cross '
-            'between your intended geometry type of exposure and '
-            'hazard.').format(step_name=self.step_name)
-        ))
+            'possible combination for hazard and exposure based on the layer '
+            'geometry that can be run in InaSAFE. You can select a grid cell '
+            'where your intended exposure and hazard intersect. This will '
+            'help you to choose the layer that is suitable for the analysis. '
+            'You can only select the green grid cell. The grey color '
+            'indicates that the combination is not supported by InaSAFE.'
+        ).format(step_name=self.step_name)))
         return message
