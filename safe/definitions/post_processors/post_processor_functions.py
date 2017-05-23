@@ -108,3 +108,35 @@ def post_processor_population_displacement_function(
             return displaced_ratio
 
     return 0
+
+
+def post_processor_population_fatality_function(
+        classification=None, hazard_class=None, population=None):
+    """Private function used in the fatality postprocessor.
+
+    :param classification: The hazard classification to use.
+    :type classification: str
+
+    :param hazard_class: The hazard class of the feature.
+    :type hazard_class: str
+
+    :param population: We don't use this value here. It's only used for
+        condition for the postprocessor to run.
+    :type population: float, int
+
+    :return: The displacement ratio for a given hazard class.
+    :rtype: float
+    """
+    _ = population
+    for hazard in hazard_classes_all:
+        if hazard['key'] == classification:
+            classification = hazard['classes']
+            break
+
+    for hazard_class_def in classification:
+        if hazard_class_def['key'] == hazard_class:
+            displaced_ratio = hazard_class_def.get('fatality_rate', 0.0)
+            # We need to cast it to float to make it works.
+            return float(displaced_ratio)
+
+    return 0.0

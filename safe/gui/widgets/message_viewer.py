@@ -374,7 +374,18 @@ class MessageViewer(QtWebKit.QWebView):
         printer.setOutputFormat(QtGui.QPrinter.PdfFormat)
         report_path = unique_filename(suffix='.pdf')
         printer.setOutputFileName(report_path)
-        self.print_(printer)
+
+        # We implement this to make sure the layout is just as good as
+        # in the browser.
+        html_content = html_header()
+        html_content += self.page_to_html()
+        html_content += html_footer()
+        # temporary QWebView
+        printer_web_view = QtWebKit.QWebView()
+        printer_web_view.setHtml(html_content)
+        printer_web_view.adjustSize()
+        printer_web_view.print_(printer)
+
         url = QtCore.QUrl.fromLocalFile(report_path)
         # noinspection PyTypeChecker,PyCallByClass,PyArgumentList
         QtGui.QDesktopServices.openUrl(url)

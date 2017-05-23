@@ -1,9 +1,10 @@
 {
   "scenario": {
     "enable": true,
-    "hazard": "flood_multipart_polygons.shp",
-    "exposure": "gisv4/exposure/population_multi_fields.geojson",
+    "hazard": "gisv4/hazard/earthquake.asc",
+    "exposure": "gisv4/exposure/population.geojson",
     "aggregation": null
+
   },
 
   "expected_outputs":{
@@ -25,6 +26,8 @@
       "info": {},
       "process":[
         "Affected Post Processor",
+        "Population Fatality Ratio Post Processor",
+        "Fatalities Post Processor",
         "Population Displacement Ratio Post Processor",
         "Displaced Post Processor",
         "Male Post Processor",
@@ -65,6 +68,9 @@
         "use_same_projection":true
       },
       "process":[
+        "Clip raster by analysis bounding box",
+        "Classify continuous raster hazard",
+        "Polygonize classified raster hazard",
         "Clip and mask hazard polygons with the analysis layer",
         "Cleaning the vector hazard attribute table",
         "Assign classes based on value map",
