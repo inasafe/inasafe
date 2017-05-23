@@ -71,7 +71,7 @@ age_count_group = {
 age_displaced_count_group = {
     'key': 'age_displaced_count_group',
     'name': tr('Age Displaced Count'),
-    'group_header': tr('Age breakdown (in affected area)'),
+    'group_header': tr('Age breakdown'),
     'description': tr(
         'Demographic breakdown produced for displaced population based on age '
         'groups. These demographic concepts provide a detailed break '
