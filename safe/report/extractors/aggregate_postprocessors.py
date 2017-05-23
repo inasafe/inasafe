@@ -91,12 +91,12 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
 
     age_items = {
         'group': age_displaced_count_group,
-        'group_header': u'Age breakdown (in affected area)',
+        'group_header': age_displaced_count_group['group_header'],
         'fields': [postprocessor_output_field(p) for p in age_postprocessors]
     }
     gender_items = {
         'group': gender_displaced_count_group,
-        'group_header': u'Gender breakdown (in affected area)',
+        'group_header': gender_displaced_count_group['group_header'],
         'fields': [
             postprocessor_output_field(p) for p in gender_postprocessors]
     }
@@ -244,7 +244,7 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
         # minimum needs should provide unit for column headers
         units_label = []
         minimum_needs_items = {
-            'group_header': u'Minimum needs breakdown (in affected area)',
+            'group_header': u'Minimum needs breakdown',
             'fields': minimum_needs_fields
         }
 
@@ -414,7 +414,18 @@ def create_section_with_aggregation(
     group_fields_found = []
     start_group_header = True
     for idx, output_field in enumerate(postprocessors_fields_found):
-        name = output_field['name']
+        name = output_field['name'].lower()
+
+        # we want to remove any words that we don't want to show from name,
+        # for example: infant displaced count & infant ratio -> infant,
+        words = name.split(' ')
+        for prohibited_word in resolve_from_dictionary(
+                extra_component_args, ['defaults', 'prohibited_words']):
+            if prohibited_word in words:
+                words.remove(prohibited_word)
+
+        name = ' '.join(words)
+
         if units_label or output_field.get('unit'):
             unit = None
             if units_label:
@@ -618,7 +629,17 @@ def create_section_without_aggregation(
     row_values = []
 
     for idx, output_field in enumerate(postprocessors_fields_found):
-        name = output_field['name']
+        name = output_field['name'].lower()
+
+        # we want to remove any words that we don't want to show from name,
+        # for example: infant displaced count & infant ratio -> infant,
+        words = name.split(' ')
+        for prohibited_word in resolve_from_dictionary(
+                extra_component_args, ['defaults', 'prohibited_words']):
+            if prohibited_word in words:
+                words.remove(prohibited_word)
+
+        name = ' '.join(words)
         row = []
         if units_label or output_field.get('unit'):
             unit = None
