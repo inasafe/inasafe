@@ -91,7 +91,7 @@ class TestEarthquakeReport(unittest.TestCase):
             report_metadata,
             impact_function=impact_function)
         impact_report.output_folder = output_folder
-        return_code, message = impact_report.process_component()
+        return_code, message = impact_report.process_components()
 
         self.assertEqual(
             return_code, ImpactReport.REPORT_GENERATION_SUCCESS, message)

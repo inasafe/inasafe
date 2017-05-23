@@ -27,7 +27,9 @@ from safe.definitions.field_groups import (
     age_displaced_count_group,
     gender_displaced_count_group)
 from safe.definitions.hazard_classifications import flood_hazard_classes
+from safe.definitions.reports import jinja2_component_type
 from safe.impact_function.impact_function import ImpactFunction
+from safe.report.processors.default import jinja2_renderer
 from safe.report.report_metadata import ReportMetadata
 from safe.test.utilities import (
     get_qgis_app,
@@ -148,7 +150,7 @@ class TestImpactReport(unittest.TestCase):
             report_metadata,
             impact_function=impact_function)
         impact_report.output_folder = output_folder
-        return_code, message = impact_report.process_component()
+        return_code, message = impact_report.process_components()
 
         self.assertEqual(
             return_code, ImpactReport.REPORT_GENERATION_SUCCESS, message)
@@ -1761,7 +1763,7 @@ class TestImpactReport(unittest.TestCase):
         impact_report.qgis_composition_context.extent = \
             rendered_layer.extent()
 
-        return_code, message = impact_report.process_component()
+        return_code, message = impact_report.process_components()
 
         self.assertEqual(
             return_code, ImpactReport.REPORT_GENERATION_SUCCESS, message)
