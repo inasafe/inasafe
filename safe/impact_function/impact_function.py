@@ -98,6 +98,7 @@ from safe.definitions.versions import inasafe_keyword_version
 from safe.common.exceptions import (
     InaSAFEError,
     InvalidExtentError,
+    InvalidLayerError,
     WrongEarthquakeFunction,
     NoKeywordsFoundError,
     NoFeaturesInExtentError,
@@ -695,12 +696,13 @@ class ImpactFunction(object):
         :rtype: (int, m.Message)
         """
         if not layer.isValid():
+            title = tr(
+                'The {purpose} layer is invalid').format(purpose=purpose)
+            content = tr(
+                'The impact function needs a {exposure} layer to run. '
+                'You must provide a valid %s layer.').format(purpose=purpose)
             message = generate_input_error_message(
-                tr('The %s layer is invalid' % purpose),
-                m.Paragraph(tr(
-                    'The impact function needs a %s layer to run. '
-                    'You must provide a valid %s layer.' % (purpose, purpose)))
-            )
+                title, m.Paragraph(content))
             return PREPARE_FAILED_BAD_INPUT, message
 
         # We should read it using KeywordIO for the very beginning. To avoid
@@ -708,20 +710,24 @@ class ImpactFunction(object):
         try:
             keywords = KeywordIO().read_keywords(layer)
         except NoKeywordsFoundError:
+
+            title = tr(
+                'The {purpose} layer does not have keywords.').format(
+                purpose=purpose)
+            content = tr(
+                'The {purpose} layer does not have keywords. Use the wizard '
+                'to assign keywords to the layer.').format(purpose=purpose)
             message = generate_input_error_message(
-                tr('The %s layer do not have keywords.' % purpose),
-                m.Paragraph(tr(
-                    'The %s layer do not have keywords. Use the wizard to '
-                    'assign keywords to the layer.' % purpose))
-            )
+                title, m.Paragraph(content))
             return PREPARE_FAILED_BAD_INPUT, message
 
         if keywords.get('layer_purpose') != purpose:
+            title = tr('The expected {purpose} layer is not an {purpose}.')\
+                .format(purpose=purpose)
+            content = tr('The expected {purpose} layer is not an {purpose}.')\
+                .format(purpose=purpose)
             message = generate_input_error_message(
-                tr('The %s layer is not an %s.' % (purpose, purpose)),
-                m.Paragraph(tr(
-                    'The %s layer is not an %s.' % (purpose, purpose)))
-            )
+                title, m.Paragraph(content))
             return PREPARE_FAILED_BAD_INPUT, message
 
         version = keywords.get(inasafe_keyword_version_key)
@@ -731,14 +737,33 @@ class ImpactFunction(object):
                 'version': inasafe_keyword_version,
                 'source': layer.publicSource()
             }
+            title = tr('The {purpose} layer is not up to date.').format(
+                purpose=purpose)
+            content = tr(
+                'The layer {source} must be updated to {version}.').format(
+                    **parameters)
             message = generate_input_error_message(
-                tr('The %s layer is not up to date.' % purpose),
-                m.Paragraph(
-                    tr('The layer {source} must be updated to {version}.'
-                        .format(**parameters))))
+                title, m.Paragraph(content))
             return PREPARE_FAILED_BAD_INPUT, message
 
         layer.keywords = keywords
+
+        if is_vector_layer(layer):
+            try:
+                check_inasafe_fields(layer, keywords_only=True)
+            except InvalidLayerError:
+                title = tr('The {purpose} layer is not up to date.').format(
+                    purpose=purpose)
+                content = tr(
+                    'The layer {source} must be updated with the keyword '
+                    'wizard. Your fields which have been set in the keywords '
+                    'previously are not matching your layer.').format(
+                    source=layer.publicSource())
+                message = generate_input_error_message(
+                    title, m.Paragraph(content))
+                del layer.keywords
+                return PREPARE_FAILED_BAD_INPUT, message
+
         return PREPARE_SUCCESS, None
 
     def prepare(self):

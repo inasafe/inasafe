@@ -664,6 +664,37 @@ class TestImpactFunction(unittest.TestCase):
                 count += 1
         self.assertEqual(len(json_files), count)
 
+    def test_old_fields_keywords(self):
+        """The IF is not ready with we have some wrong inasafe_fields."""
+        hazard_layer = load_test_vector_layer(
+            'gisv4', 'hazard', 'classified_vector.geojson')
+        exposure_layer = load_test_vector_layer(
+            'gisv4', 'exposure', 'building-points.geojson',
+            clone=True)
+        aggregation_layer = load_test_vector_layer(
+            'gisv4', 'aggregation', 'small_grid.geojson')
+
+        impact_function = ImpactFunction()
+        impact_function.aggregation = aggregation_layer
+        impact_function.exposure = exposure_layer
+        impact_function.hazard = hazard_layer
+        status, message = impact_function.prepare()
+
+        # The layer should be fine.
+        self.assertEqual(PREPARE_SUCCESS, status, message)
+
+        # Now, we remove one field
+        exposure_layer.startEditing()
+        field = exposure_layer.keywords['inasafe_fields'].values()[0]
+        index = exposure_layer.fieldNameIndex(field)
+        exposure_layer.deleteAttribute(index)
+        exposure_layer.commitChanges()
+
+        # It shouldn't be fine as we removed one field which
+        # was in inasafe_fields
+        status, message = impact_function.prepare()
+        self.assertNotEqual(PREPARE_SUCCESS, status, message)
+
     def test_post_processor(self):
         """Test for running post processor."""
         impact_layer = load_test_vector_layer(
