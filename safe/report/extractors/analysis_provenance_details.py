@@ -152,21 +152,29 @@ def analysis_provenance_details_extractor(impact_report, component_metadata):
             extra_args, ['defaults', 'aggregation_not_used'])
         aggregation_provenance['provenances'] = aggregation_not_used
 
+    all_provenance_keywords = dict(impact_report.impact_function.provenance)
+
+    # we add debug mode information to the provenance
+    if debug_mode:
+        all_provenance_keywords['debug_mode'] = 'On'
+    else:
+        all_provenance_keywords['debug_mode'] = 'Off'
+
     header = resolve_from_dictionary(
         provenance_format_args, 'analysis_environment_header')
-    analysis_environment_provenance_items = {}
+    analysis_environment_provenance_items = OrderedDict()
     analysis_environment_provenance_keys = [
         'os',
         'inasafe_version',
+        'debug_mode',
         'qgis_version',
         'qt_version',
         'gdal_version',
         'pyqt_version']
 
     for item in analysis_environment_provenance_keys:
-        analysis_environment_provenance_items.update({
-            item: impact_report.impact_function.provenance[item]
-        })
+        analysis_environment_provenance_items[item] = (
+            all_provenance_keywords[item])
 
     analysis_environment_provenance = {
         'header': header.title(),

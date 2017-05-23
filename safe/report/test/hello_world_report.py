@@ -22,7 +22,7 @@ from safe.utilities.i18n import tr
 
 # first step
 def hello_world_extractor(impact_report, component):
-    print 'component key: ' + component.key
+    print 'Component key: {component_key}'.format(component_key=component.key)
     context = dict()
     context['hello_world'] = "Hello World!"
     return context

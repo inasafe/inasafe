@@ -27,9 +27,7 @@ from safe.definitions.field_groups import (
     age_displaced_count_group,
     gender_displaced_count_group)
 from safe.definitions.hazard_classifications import flood_hazard_classes
-from safe.definitions.reports import jinja2_component_type
 from safe.impact_function.impact_function import ImpactFunction
-from safe.report.processors.default import jinja2_renderer
 from safe.report.report_metadata import ReportMetadata
 from safe.test.utilities import (
     get_qgis_app,
@@ -853,32 +851,28 @@ class TestImpactReport(unittest.TestCase):
                 })])
             }), ('analysis_environment', {
                 'header': u'Analysis Environment',
-                'provenances': {
-                    'inasafe_version': {
-                        'content': get_version(),
-                        'header': 'InaSAFE Version '
-                    },
-                    'qgis_version': {
-                        'content': QGis.QGIS_VERSION,
-                        'header': 'QGIS Version '
-                    },
-                    'pyqt_version': {
-                        'content': PYQT_VERSION_STR,
-                        'header': 'PyQt Version '
-                    },
-                    'os': {
-                        'content': readable_os_version(),
-                        'header': 'OS '
-                    },
-                    'qt_version': {
-                        'content': QT_VERSION_STR,
-                        'header': 'Qt Version '
-                    },
-                    'gdal_version': {
-                        'content': gdal.__version__,
-                        'header': 'GDAL Version '
-                    }
-                }
+                'provenances': OrderedDict([('os', {
+                    'content': readable_os_version(),
+                    'header': 'OS '
+                }), ('inasafe_version', {
+                    'content': get_version(),
+                    'header': 'InaSAFE Version '
+                }), ('debug_mode', {
+                    'content': 'Off',
+                    'header': 'Debug Mode '
+                }), ('qgis_version', {
+                    'content': QGis.QGIS_VERSION,
+                    'header': 'QGIS Version '
+                }), ('qt_version', {
+                    'content': QT_VERSION_STR,
+                    'header': 'Qt Version '
+                }), ('gdal_version', {
+                    'content': gdal.__version__,
+                    'header': 'GDAL Version '
+                }), ('pyqt_version', {
+                    'content': PYQT_VERSION_STR,
+                    'header': 'PyQt Version '
+                })])
             })])
         }
 
@@ -897,7 +891,7 @@ class TestImpactReport(unittest.TestCase):
         # for now, test that output exists
         self.assertTrue(os.path.exists(output_path))
 
-        shutil.rmtree(output_folder, ignore_errors=True)
+        # shutil.rmtree(output_folder, ignore_errors=True)
 
     def test_minimum_needs_outputs(self):
         """Test generate minimum needs section.
