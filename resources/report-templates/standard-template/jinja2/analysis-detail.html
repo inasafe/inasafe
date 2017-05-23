@@ -139,6 +139,8 @@
     </tfoot>
 </table>
 <div>
-    {{ notes }}
+    {% for note in notes %}
+        <li colspan="100%">{{ note }}</li>
+    {% endfor %}
 </div>
 {% endif %}

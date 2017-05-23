@@ -224,9 +224,7 @@ analysis_detail_component = {
         'header': tr('Analysis Detail'),
         'table_header_format': tr(
             'Estimated {title} {unit} by {exposure} type'),
-        'notes': tr(
-            'Columns and rows containing only 0 or "No data" values are '
-            'excluded from the tables.')
+        'notes': []
     }
 }
 
@@ -316,9 +314,7 @@ aggregation_result_component = {
                 'aggregation-result.html',
     'extra_args': {
         'header': tr('Aggregation Result'),
-        'notes': tr(
-            'Columns and rows containing only 0 or "No data" values are '
-            'excluded from the tables.'),
+        'notes': [],
         'table_header_format': tr(
             'Estimated {title} {unit} by aggregation area'),
         'aggregation_area_default_header': tr('Aggregation area'),
