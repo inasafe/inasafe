@@ -679,6 +679,7 @@ standard_impact_report_metadata_html = {
             ],
             'extra_args': {
                 'components_list': {
+                    'analysis_question': analysis_question_component,
                     'action_checklist': action_checklist_component,
                     'analysis_provenance_details': (
                         analysis_provenance_details_simplified_component)
