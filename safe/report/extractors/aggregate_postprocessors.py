@@ -524,15 +524,16 @@ def create_section_with_aggregation(
             is_population=True)
         totals.append(value)
 
-    notes = resolve_from_dictionary(
+    default_notes = resolve_from_dictionary(
         extra_component_args, ['defaults', 'notes'])
 
-    if type(notes) is not list:
-        notes = [notes]
+    if type(default_notes) is not list:
+        default_notes = [default_notes]
 
     try:
-        notes += postprocessor_fields['group']['notes']
+        notes = default_notes + postprocessor_fields['group']['notes']
     except (TypeError, KeyError):
+        notes = default_notes
         pass
 
     return {

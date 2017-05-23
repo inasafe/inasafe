@@ -70,8 +70,11 @@ def notes_assumptions_extractor(impact_report, component_metadata):
     extra_args = component_metadata.extra_args
     exposure_type = layer_definition_type(exposure_layer)
 
+    analysis_note_dict = resolve_from_dictionary(extra_args, 'analysis_notes')
+    context['items'] = [analysis_note_dict]
+
     context['header'] = resolve_from_dictionary(extra_args, 'header')
-    context['items'] = provenance['notes']
+    context['items'] += provenance['notes']
 
     # Get hazard classification
     hazard_classification = layer_hazard_classification(hazard_layer)

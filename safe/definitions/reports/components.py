@@ -257,6 +257,13 @@ notes_assumptions_component = {
                 'action-note-categorized.html',
     'extra_args': {
         'header': tr('Notes and assumptions'),
+        'analysis_notes': {
+            'item_header': tr('analysis notes'),
+            'item_list': [
+                tr('Columns and rows containing only 0 or "No data" values '
+                   'are excluded from the tables.')
+            ]
+        },
         'affected_note_format': {
             'item_header': tr('affected notes'),
             'item_list': [
@@ -350,9 +357,7 @@ aggregation_postprocessors_component = {
             'aggregation_header': tr('Aggregation area'),
             'total_population_header': tr('Total Displaced Population'),
             'total_header': tr('Total'),
-            'notes': tr(
-                'Columns and rows containing only 0 or "No data" values are '
-                'excluded from the tables.'),
+            'notes': [],
             'zero_displaced_message': tr(
                 'Analysis produced 0 displaced count. '
                 'No calculations produced.'),

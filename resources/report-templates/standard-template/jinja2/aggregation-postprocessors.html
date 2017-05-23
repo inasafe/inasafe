@@ -21,7 +21,7 @@
                                     {% endif %}
                                 {% elif loop.first %}
                                 <th class="text-left" rowspan="2">
-                                    {{ column|capitalize }}
+                                    {{ column|title }}
                                 </th>
                                 {% else %}
                                 <th class="text-right" rowspan="2">
@@ -45,7 +45,7 @@
                         <tr>
                             {% for column in row %}
                                 {% if loop.first %}
-                                <th class="text-left">{{ column|capitalize }}</th>
+                                <th class="text-left">{{ column|title }}</th>
                                 {% else %}
                                 <td class="text-right">{{ column }}</td>
                                 {% endif %}
