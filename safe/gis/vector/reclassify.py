@@ -122,7 +122,6 @@ def reclassify(layer, exposure_key=None, callback=None):
     return layer
 
 
-@profile
 def _classified_value(value, ranges):
     """This function will return the classified value.
 

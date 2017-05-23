@@ -357,7 +357,7 @@ class TestImpactFunction(unittest.TestCase):
             female_ratio_field['field_name'])
         self.assertNotEqual(-1, field)
         unique_ratio = impact.uniqueValues(field)
-        self.assertEqual(1, len(unique_ratio))
+        self.assertEqual(1, len(unique_ratio), unique_ratio)
         self.assertEqual(
             unique_ratio[0], female_ratio_default_value['default_value'])
 
@@ -392,18 +392,19 @@ class TestImpactFunction(unittest.TestCase):
             female_ratio_field['field_name'])
         self.assertNotEqual(-1, field)
         unique_ratio = impact.uniqueValues(field)
-        self.assertEqual(3, len(unique_ratio))
+        self.assertEqual(3, len(unique_ratio), unique_ratio)
 
         # We check the field exist after the IF with only one value.
         field = impact.fieldNameIndex(
             elderly_ratio_field['field_name'])
         self.assertNotEqual(-1, field)
         unique_ratio = impact.uniqueValues(field)
-        self.assertEqual(1, len(unique_ratio))
+        self.assertEqual(1, len(unique_ratio), unique_ratio)
         self.assertEqual(expected_ratio, unique_ratio[0])
 
         # Third test, if we provide an aggregation with a ratio and the
-        # exposure has a count.
+        # exposure has a count, we should a have a ratio from the exposure
+        # count.
         hazard_layer = load_test_vector_layer(
             'gisv4', 'hazard', 'classified_vector.geojson')
         exposure_layer = load_test_vector_layer(
@@ -423,13 +424,14 @@ class TestImpactFunction(unittest.TestCase):
 
         impact = impact_function.impact
 
-        # Check that we have only one unique value since the ratio for all
-        # female is the same
+        # Check that we have don't have only one unique value since the ratio
+        # depends on the "population / female count" and we should have at
+        # least different ratios.
         field = impact.fieldNameIndex(
             female_ratio_field['field_name'])
         self.assertNotEqual(-1, field)
         unique_ratio = impact.uniqueValues(field)
-        self.assertEqual(1, len(unique_ratio))
+        self.assertNotEqual(1, len(unique_ratio), unique_ratio)
 
     def test_ratios_with_raster_exposure(self):
         """Test if we can add defaults to a raster exposure.
@@ -613,6 +615,7 @@ class TestImpactFunction(unittest.TestCase):
         """
         scenarios = {
             'earthquake_raster_on_raster_population': False,
+            'earthquake_raster_on_vector_population': False,
             'polygon_classified_on_line': False,
             'polygon_classified_on_point': False,
             'polygon_classified_on_vector_population': False,
@@ -880,11 +883,11 @@ class TestImpactFunction(unittest.TestCase):
         expected_value = {
             u'population': 69,
             u'total': 9.0,
-            u'minimum_needs__rice': 239,
-            u'minimum_needs__clean_water': 5733,
-            u'minimum_needs__toilets': 4,
-            u'minimum_needs__drinking_water': 1497,
-            u'minimum_needs__family_kits': 17,
+            u'minimum_needs__rice': 491,
+            u'minimum_needs__clean_water': 11763,
+            u'minimum_needs__toilets': 8,
+            u'minimum_needs__drinking_water': 3072,
+            u'minimum_needs__family_kits': 35,
             u'male': 34,
             u'female': 34,
             u'youth': 17,

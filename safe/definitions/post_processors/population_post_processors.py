@@ -3,17 +3,21 @@ from collections import OrderedDict
 from post_processor_functions import (
     multiply,
     post_processor_population_displacement_function,
+    post_processor_population_fatality_function,
 )
 from safe.definitions.exposure import exposure_population
 from safe.definitions.concepts import concepts
+from safe.definitions.hazard import hazard_earthquake
 # Ratio fields
 from safe.definitions.fields import (
     population_displacement_ratio_field,
+    population_fatality_ratio_field,
     child_bearing_age_ratio_field,
     pregnant_lactating_ratio_field,
     lactating_ratio_field,
     pregnant_ratio_field,
     female_ratio_field,
+    male_ratio_field,
     infant_ratio_field,
     child_ratio_field,
     youth_ratio_field,
@@ -25,6 +29,7 @@ from safe.definitions.fields import (
 # Count fields
 from safe.definitions.fields import (
     displaced_field,
+    fatalities_field,
     female_displaced_count_field,
     population_count_field,
     exposure_count_field,
@@ -47,11 +52,9 @@ from safe.definitions.fields import (
 # Other fields
 from safe.definitions.fields import (
     hazard_class_field,
-    male_ratio_field,
-
 )
 from safe.definitions.post_processors.post_processor_inputs import (
-    dynamic_field_input_type)
+    dynamic_field_input_type, keyword_value_expected)
 from safe.definitions.post_processors.post_processors import (
     function_process,
     formula_process)
@@ -119,6 +122,16 @@ post_processor_displaced = {
                 'field_param': exposure_population['key'],
                 'type': dynamic_field_input_type,
             }],
+        'fatalities': [
+            {
+                'type': field_input_type,
+                'value': fatalities_field,
+            },
+            {
+                'type': constant_input_type,
+                'value': 0,  # If no fatality field, we take 0 for the formula.
+            }
+        ],
         'displacement_ratio': {
             'type': field_input_type,
             'value': population_displacement_ratio_field
@@ -128,11 +141,86 @@ post_processor_displaced = {
         'displaced': {
             'value': displaced_field,
             'type': formula_process,
-            'formula': 'population * displacement_ratio'
+            'formula': '(population - fatalities) * displacement_ratio'
         }
     }
 }
 
+
+post_processor_fatality_ratio = {
+    'key': 'post_processor_fatality_ratio',
+    'name': tr('Population Fatality Ratio Post Processor'),
+    'description': tr(
+        'A post processor to add the population fatality ratio according '
+        'to the hazard class'),
+    'input': {
+        # Taking hazard classification
+        'classification': {
+            'type': keyword_input_type,
+            'value': ['hazard_keywords', 'classification']
+        },
+        'hazard_class': {
+            'type': field_input_type,
+            'value': hazard_class_field,
+        },
+        'population': [
+            # No one of these fields are used in this postprocessor.
+            # But we put them as a condition for the postprocessor to run.
+            {
+                'value': population_count_field,
+                'type': field_input_type,
+            },
+            {
+                'value': exposure_count_field,
+                'field_param': exposure_population['key'],
+                'type': dynamic_field_input_type,
+            }],
+        'earthquake_hazard': {
+            'type': keyword_value_expected,
+            'value': ['hazard_keywords', 'hazard'],
+            'expected_value': hazard_earthquake['key']
+        },
+    },
+    'output': {
+        'fatality_ratio': {
+            'value': population_fatality_ratio_field,
+            'type': function_process,
+            'function': post_processor_population_fatality_function
+        }
+    }
+}
+
+post_processor_fatalities = {
+    'key': 'post_processor_fatalities',
+    'name': tr('Fatalities Post Processor'),
+    'description': tr(
+        'A post processor to calculate the number of fatalities. '),
+    'input': {
+        # input as a list means, try to get the input from the
+        # listed source. Pick the first available
+        'population': [
+            {
+                'value': population_count_field,
+                'type': field_input_type,
+            },
+            {
+                'value': exposure_count_field,
+                'field_param': exposure_population['key'],
+                'type': dynamic_field_input_type,
+            }],
+        'fatality_ratio': {
+            'type': field_input_type,
+            'value': population_fatality_ratio_field
+        },
+    },
+    'output': {
+        'fatalities': {
+            'value': fatalities_field,
+            'type': formula_process,
+            'formula': 'population * fatality_ratio'
+        }
+    }
+}
 
 #
 # Demographics post processors

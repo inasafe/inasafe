@@ -7,10 +7,10 @@ from PyQt4.QtCore import QPyNullVariant
 from qgis.core import QgsFeatureRequest
 
 from safe.definitions.minimum_needs import minimum_needs_parameter
-from safe.definitions.post_processors import (
-    field_input_type,
-    keyword_input_type)
 from safe.definitions.post_processors.post_processor_inputs import (
+    field_input_type,
+    keyword_input_type,
+    keyword_value_expected,
     dynamic_field_input_type,
     needs_profile_input_type,
     layer_crs_input_value)
@@ -43,11 +43,12 @@ def evaluate_formula(formula, variables):
     :rtype: float, int
     """
     for key, value in variables.items():
-        if isinstance(value, QPyNullVariant) or not value:
+        if isinstance(value, QPyNullVariant) or value is None:
             # If one value is null, we return null.
             return value
         formula = formula.replace(key, str(value))
-    return eval(formula)
+    result = eval(formula)
+    return result
 
 
 @profile
@@ -74,7 +75,7 @@ def run_single_post_processor(layer, post_processor):
             return False, msg
 
     # Calculate based on formula
-    # Iterate all possible output
+    # Iterate all possible output and create the correct field.
     for output_key, output_value in post_processor['output'].items():
 
         # Get output attribute name
@@ -120,6 +121,7 @@ def run_single_post_processor(layer, post_processor):
 
         msg = None
 
+        # Iterate over every inputs.
         for key, values in post_processor['input'].items():
             values = values if isinstance(values, list) else [values]
             for value in values:
@@ -136,6 +138,8 @@ def run_single_post_processor(layer, post_processor):
                     value['type'] == needs_profile_input_type)
                 is_layer_property_input = (
                     value['type'] == layer_property_input_type)
+                if value['type'] == keyword_value_expected:
+                    break
                 if is_constant_input:
                     default_parameters[key] = value['value']
                     break
@@ -289,6 +293,7 @@ def enough_input(layer, post_processor_input):
             is_needs_input = input_value['type'] == needs_profile_input_type
             is_keyword_input = input_value['type'] == keyword_input_type
             is_layer_input = input_value['type'] == layer_property_input_type
+            is_keyword_value = input_value['type'] == keyword_value_expected
             is_geometry_input = (
                 input_value['type'] == geometry_property_input_type)
             if is_constant_input:
@@ -331,6 +336,21 @@ def enough_input(layer, post_processor_input):
             elif is_layer_input or is_geometry_input:
                 # will be taken from the layer itself, so always true
                 break
+            elif is_keyword_value:
+                try:
+                    value = reduce(
+                        lambda d, k:
+                        d[k], input_value[
+                            'value'], layer.keywords)
+                    if value == input_value['expected_value']:
+                        break
+                    else:
+                        msg = 'Value %s is not expected in keyword: %s' % (
+                            input_key,
+                            input_value['value'])
+                except KeyError:
+                    msg = 'Value %s is missing in keyword: %s' % (
+                        input_key, input_value['value'])
 
         else:
             return False, msg

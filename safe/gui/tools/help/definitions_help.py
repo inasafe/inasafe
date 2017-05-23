@@ -1090,7 +1090,7 @@ def definition_to_message(
 
             if inasafe_class.get('fatality_rate') >= 0:
                 rate = inasafe_class['fatality_rate'] * 100
-                rate = u'%s%%' % rate
+                rate = u'%s%%' % format(rate, 'f')
                 row.add(m.Cell(rate))
             else:
                 row.add(m.Cell(tr('unspecified')))

@@ -29,6 +29,12 @@ keyword_input_type = {
         'This type of input takes value from a keyword for the layer '
         'being handled.')
 }
+keyword_value_expected = {
+    'key': 'keyword_value',
+    'description': tr(
+        'This type of parameter checks the value of a specific keyword in '
+        'order to run for the layer being handled.')
+}
 needs_profile_input_type = {
     'key': 'needs_profile',
     'description': tr(
