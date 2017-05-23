@@ -7,6 +7,9 @@ import StringIO
 from safe import messaging as m
 from safe.messaging import styles
 from safe.definitions.units import unit_kilometres_per_hour
+from safe.definitions.hazard import hazard_cyclone, hazard_all
+from safe.definitions.hazard_classifications import\
+    cyclone_au_bom_hazard_classes
 from safe.utilities.i18n import tr
 LOGGER = logging.getLogger('InaSAFE')
 # For chapter sections
@@ -135,6 +138,9 @@ def content():
             'type.'
     ))
     message.add(paragraph)
+
+    # Setting up units
+
     message.add(
         m.Heading(tr('safe/definitions/units.py'), **BLUE_CHAPTER_STYLE))
     paragraph = m.Paragraph(
@@ -142,26 +148,98 @@ def content():
         'to InaSafe, you need to define them in units.py'
     )
     message.add(paragraph)
-    value = unit_kilometres_per_hour
-    _definition_to_string(message, value)
+    _definition_to_string(
+        message, unit_kilometres_per_hour=unit_kilometres_per_hour)
+
+    # Setting up style
 
     message.add(
-        m.Heading(tr('safe/definitions/units.py'), **BLUE_CHAPTER_STYLE))
+        m.Heading(tr('safe/definitions/colors.py'), **BLUE_CHAPTER_STYLE))
     paragraph = m.Paragraph(
-        ''
+        'If you are adding an hazard that has more classes than any other '
+        'hazards you’ll need to add additional colors for the additional '
+        'classes in colors.py. You might also define other colors if you '
+        'don\'t want to use the standard colors. For the sake of homogeneous '
+        'map reports, this addition should not be taken lightly.'
     )
     message.add(paragraph)
-    value = unit_kilometres_per_hour
-    _definition_to_string(message, value)
+    # Don't translate this
+    paragraph = m.PreformattedText('very_dark_red = Qcolor(\'#710017\')')
+    message.add(paragraph)
+
+    # Setting up hazard classification
+
+    message.add(
+        m.Heading(
+            tr('safe/definitions/hazard_classifications.py'),
+            **BLUE_CHAPTER_STYLE))
+    paragraph = m.Paragraph(
+        'Add the classifications you want to make available for your new '
+        'hazard type. You can add as many classes as you want in the '
+        'classes list.')
+    message.add(paragraph)
+    paragraph = m.Paragraph(
+        'Also, a classification can support multiple units so you don\'t '
+        'have to define different classifications just to have the same '
+        'classification in two or more different units. These are defined '
+        'in the multiple_units attribute of the classification.'
+    )
+    message.add(paragraph)
+    _definition_to_string(
+        message, cyclone_au_bom_hazard_classes=cyclone_au_bom_hazard_classes)
+
+    # Setting up wizard questions
+
+    message.add(
+        m.Heading(
+            tr('safe/gui/tools/wizard/wizard_strings.py'),
+            **BLUE_CHAPTER_STYLE))
+    paragraph = m.Paragraph(
+        'Define the questions for the wizard:'
+    )
+    message.add(paragraph)
+    # don not translate
+    message.add(m.PreformattedText(
+        'cyclone_kilometres_per_hour_question = tr(\'wind speed in km/h\')'))
+    message.add(m.PreformattedText(
+        'cyclone_miles_per_hour_question = tr(\'wind speed in mph\')'))
+    message.add(m.PreformattedText(
+        'cyclone_knots_question = tr(\'wind speed in kn\')'))
+
+    # Setting up
+
+    message.add(
+        m.Heading(tr('safe/definitions/hazard.py'), **BLUE_CHAPTER_STYLE))
+    paragraph = m.Paragraph(
+        'Finally define new hazard and add it to the hazard_all list:'
+    )
+    message.add(paragraph)
+    _definition_to_string(message, hazard_cyclone=hazard_cyclone)
+    _definition_to_string(message, hazard_all=hazard_all)
+
     return message
 
 
-def _definition_to_string(message, value):
-    # use pprint for dict example
-    output = StringIO.StringIO()
-    pprint(value, stream=output)
-    paragraph = m.PreformattedText(output.getvalue())
-    output.close()
-    message.add(paragraph)
+def _definition_to_string(message, **kwargs):
+    """Use pprint for dict and list examples.
+    
+    The argument name will be prepended to the pretty printed text of the 
+    argument content e.g.:
+    
+    foo = { 'bar': 'baz' }
+    _definition_to_string(message, foo=foo)
+     
+    will print this in the message as a preformatted paragraph:
+    
+        foo = { 'bar': 'baz' }
+    """
+
+    for key, value in kwargs.iteritems():
+        output = StringIO.StringIO()
+        output.write(key + ' = ')
+        pprint(value, stream=output)
+        paragraph = m.PreformattedText(output.getvalue())
+        output.close()
+        message.add(paragraph)
 
 
