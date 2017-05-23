@@ -121,7 +121,6 @@ def content():
     message.add(paragraph)
     message.add(
         m.Heading(tr('Adding a new hazard'), **BLUE_CHAPTER_STYLE))
-    message.add(paragraph)
     link = m.Link(
         'https://github.com/inasafe/inasafe/pull/3539/files',
         'Pull Request #3539')
@@ -136,11 +135,33 @@ def content():
             'type.'
     ))
     message.add(paragraph)
+    message.add(
+        m.Heading(tr('safe/definitions/units.py'), **BLUE_CHAPTER_STYLE))
+    paragraph = m.Paragraph(
+        'If you are adding an hazard that uses units that are not yet known '
+        'to InaSafe, you need to define them in units.py'
+    )
+    message.add(paragraph)
+    value = unit_kilometres_per_hour
+    _definition_to_string(message, value)
+
+    message.add(
+        m.Heading(tr('safe/definitions/units.py'), **BLUE_CHAPTER_STYLE))
+    paragraph = m.Paragraph(
+        ''
+    )
+    message.add(paragraph)
+    value = unit_kilometres_per_hour
+    _definition_to_string(message, value)
+    return message
+
+
+def _definition_to_string(message, value):
+    # use pprint for dict example
     output = StringIO.StringIO()
-    pprint(unit_kilometres_per_hour, stream=output)
+    pprint(value, stream=output)
     paragraph = m.PreformattedText(output.getvalue())
     output.close()
     message.add(paragraph)
-    return message
 
 
