@@ -79,7 +79,13 @@ all_field_groups = [
     gender_displaced_count_group,
     disability_vulnerability_ratio_group,
     disability_vulnerability_count_group,
-    disability_vulnerability_displaced_count_group
+    disability_vulnerability_displaced_count_group,
+    gender_vulnerability_ratio_group,
+    gender_vulnerability_count_group,
+    gender_vulnerability_displaced_count_group,
+    age_vulnerability_ratio_group,
+    age_vulnerability_count_group,
+    age_vulnerability_displaced_count_group
 ]
 
 # Update notes for each group
