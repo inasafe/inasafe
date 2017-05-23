@@ -36,7 +36,6 @@ from safe.utilities.resources import get_ui_class, html_header, html_footer
 from safe.utilities.settings import setting, set_setting
 from safe.common.version import get_version
 from safe.gui.tools.help.options_help import options_help
-from safe.utilities.qgis_utilities import display_warning_message_box
 
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -322,8 +321,8 @@ class OptionsDialog(QDialog, FORM_CLASS):
     # noinspection PyPep8Naming
     @pyqtSignature('int')  # prevents actions being handled twice
     def on_earthquake_function_currentIndexChanged(self, current_index):
-        """Auto-connect slot activated when earthquake model is changed.
-        """
+        """Auto-connect slot activated when earthquake model is changed."""
+        self.label_earthquake_model()
         model = EARTHQUAKE_FUNCTIONS[current_index]
         notes = ''
         for note in model['notes']:
@@ -341,6 +340,13 @@ class OptionsDialog(QDialog, FORM_CLASS):
             citations)
 
         self.earthquake_fatality_model_notes.setText(text)
+
+    def label_earthquake_model(self):
+        model = self.earthquake_function.currentText()
+        help_text = tr(
+            'Please select your preferred earthquake fatality model. The '
+            'default fatality model is the {model}.').format(model=model)
+        self.label_default_earthquake.setText(help_text)
 
     # noinspection PyPep8Naming
     @pyqtSignature('')  # prevents actions being handled twice
