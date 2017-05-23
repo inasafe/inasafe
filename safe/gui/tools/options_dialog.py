@@ -577,25 +577,28 @@ class OptionsDialog(QDialog, FORM_CLASS):
             # Add to attribute
             self.default_value_parameter_containers.append(parameter_container)
 
-        for default_field in default_fields:
-            parameter = self.default_field_to_parameter(default_field)
-            if parameter:
-                self.default_value_parameters.append(parameter)
+        # Only show non-groups default fields if there is one
+        if len(default_fields) > 0:
+            for default_field in default_fields:
+                parameter = self.default_field_to_parameter(default_field)
+                if parameter:
+                    self.default_value_parameters.append(parameter)
 
-        description_text = tr(
-            'In this options you can change the global default values for '
-            'these variables.')
-        parameter_container = ParameterContainer(
-            self.default_value_parameters, description_text=description_text)
-        parameter_container.setup_ui(must_scroll=False)
-        self.other_group_box = QGroupBox(tr('Non-group fields'))
-        other_group_inner_layout = QVBoxLayout()
-        other_group_inner_layout.addWidget(parameter_container)
-        self.other_group_box.setLayout(other_group_inner_layout)
-        self.container_layout.addWidget(self.other_group_box)
+            description_text = tr(
+                'In this options you can change the global default values for '
+                'these variables.')
+            parameter_container = ParameterContainer(
+                self.default_value_parameters,
+                description_text=description_text)
+            parameter_container.setup_ui(must_scroll=False)
+            self.other_group_box = QGroupBox(tr('Non-group fields'))
+            other_group_inner_layout = QVBoxLayout()
+            other_group_inner_layout.addWidget(parameter_container)
+            self.other_group_box.setLayout(other_group_inner_layout)
+            self.container_layout.addWidget(self.other_group_box)
 
-        # Add to attribute
-        self.default_value_parameter_containers.append(parameter_container)
+            # Add to attribute
+            self.default_value_parameter_containers.append(parameter_container)
 
     def age_ratios(self):
         """Helper to get list of age ratio from the options dialog.
