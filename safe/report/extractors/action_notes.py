@@ -3,7 +3,6 @@
 """
 from safe.common.utilities import safe_dir
 from safe.definitions.exposure import exposure_population
-from safe.definitions.hazard import earthquake_mmi_scale, hazard_earthquake
 from safe.report.extractors.composer import QGISComposerContext
 from safe.report.extractors.util import (
     resolve_from_dictionary,
