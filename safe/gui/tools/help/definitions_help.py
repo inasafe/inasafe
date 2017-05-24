@@ -878,14 +878,7 @@ def definition_to_message(
         LOGGER.info('No URL for definition icon')
         message.add(m.Paragraph(definition['description']))
         if 'citations' in definition:
-            for citation in definition['citations']:
-                if citation['text'] in [None, '']:
-                    continue
-                if citation['link'] in [None, '']:
-                    message.add(m.Paragraph(citation['text']))
-                else:
-                    message.add(m.Paragraph(
-                        m.Link(citation['link'], citation['text'])))
+            _citations_to_message(message, definition)
     else:
         LOGGER.info('Creating mini table for definition description: ' + url)
         table = m.Table(style_class='table table-condensed')
@@ -935,15 +928,20 @@ def definition_to_message(
             elif note:
                 bullets.add(m.Text(note))
         message.add(bullets)
+        if 'citations' in definition:
+            _citations_to_message(message, definition)
 
     # This only for EQ
     if 'earthquake_fatality_models' in definition:
         for model in definition['earthquake_fatality_models']:
             message.add(m.Heading(model['name'], **DETAILS_SUBGROUP_STYLE))
-            bullets = m.BulletedList()
+            if 'description' in model:
+                paragraph = m.Paragraph(model['description'])
+                message.add(paragraph)
             for note in model['notes']:
-                bullets.add(m.Text(note))
-                message.add(bullets)
+                paragraph = m.Paragraph(note)
+                message.add(paragraph)
+            _citations_to_message(message, model)
 
     for exposure in exposure_all:
         extra_exposure_notes = specific_notes(definition, exposure)
@@ -1176,6 +1174,17 @@ def definition_to_message(
                 'This class IS required in the hazard keywords.')))
 
     return message
+
+
+def _citations_to_message(message, model):
+    for citation in model['citations']:
+        if citation['text'] in [None, '']:
+            continue
+        if citation['link'] in [None, '']:
+            message.add(m.Paragraph(citation['text']))
+        else:
+            message.add(m.Paragraph(
+                m.Link(citation['link'], citation['text'])))
 
 
 def _definition_icon_url(definition):

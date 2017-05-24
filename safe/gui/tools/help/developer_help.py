@@ -215,7 +215,8 @@ def content():
     )
     message.add(paragraph)
     _definition_to_string(message, hazard_cyclone=hazard_cyclone)
-    _definition_to_string(message, hazard_all=hazard_all)
+    # Be careful, pretty print unpacks lists so this will turn into a 50 pager
+    # zoom_definition_to_string(message, hazard_all=hazard_all)
 
     return message
 
