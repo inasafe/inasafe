@@ -424,7 +424,7 @@ def create_section_with_aggregation(
             if prohibited_word in words:
                 words.remove(prohibited_word)
 
-        name = ' '.join(words)
+        name = ' '.join(words).title()
 
         if units_label or output_field.get('unit'):
             unit = None
