@@ -5,17 +5,11 @@
 import logging
 
 from osgeo import gdal, gdalconst
+# noinspection PyUnresolvedReferences
 from qgis.core import (
     QGis,
-    QgsCoordinateReferenceSystem,
-    QgsCoordinateTransform,
-    QgsFeature,
-    QgsField,
-    QgsFields,
-    QgsGeometry,
     QgsRasterLayer,
     QgsVectorLayer,
-    QgsVectorFileWriter,
 )
 
 from safe.definitions.utilities import definition
@@ -28,7 +22,6 @@ from safe.definitions.fields import (
     population_displaced_per_mmi,
     fatalities_per_mmi_field,
 )
-from safe.definitions.hazard_classifications import hazard_classes_all
 from safe.definitions.layer_purposes import (
     layer_purpose_aggregation_summary, layer_purpose_exposure_summary)
 from safe.definitions.processing_steps import earthquake_displaced
