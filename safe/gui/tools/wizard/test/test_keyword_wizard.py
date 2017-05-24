@@ -1458,7 +1458,6 @@ class TestKeywordWizard(unittest.TestCase):
                     }
                 }
             },
-            'date': source_date,
             'layer_geometry': layer_geometry_polygon['key'],
             'layer_purpose': layer_purpose_hazard['key'],
             'layer_mode': layer_mode_classified['key']

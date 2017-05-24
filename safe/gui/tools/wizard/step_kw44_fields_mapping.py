@@ -125,3 +125,7 @@ class StepKwFieldsMapping(WizardStep, FORM_CLASS):
             if not v:
                 field_mapping['values'].pop(k)
         return field_mapping
+
+    def clear(self):
+        """Helper to clear the state of the step."""
+        self.field_mapping_widget.delete_tabs()
