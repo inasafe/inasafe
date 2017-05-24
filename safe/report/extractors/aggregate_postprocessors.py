@@ -414,17 +414,10 @@ def create_section_with_aggregation(
     group_fields_found = []
     start_group_header = True
     for idx, output_field in enumerate(postprocessors_fields_found):
-        name = output_field['name'].lower()
 
-        # we want to remove any words that we don't want to show from name,
-        # for example: infant displaced count & infant ratio -> infant,
-        words = name.split(' ')
-        for prohibited_word in resolve_from_dictionary(
-                extra_component_args, ['defaults', 'prohibited_words']):
-            if prohibited_word in words:
-                words.remove(prohibited_word)
-
-        name = ' '.join(words).title()
+        name = output_field.get('header_name')
+        if not name:
+            name = output_field.get('name')
 
         if units_label or output_field.get('unit'):
             unit = None
@@ -629,17 +622,11 @@ def create_section_without_aggregation(
     row_values = []
 
     for idx, output_field in enumerate(postprocessors_fields_found):
-        name = output_field['name'].lower()
 
-        # we want to remove any words that we don't want to show from name,
-        # for example: infant displaced count & infant ratio -> infant,
-        words = name.split(' ')
-        for prohibited_word in resolve_from_dictionary(
-                extra_component_args, ['defaults', 'prohibited_words']):
-            if prohibited_word in words:
-                words.remove(prohibited_word)
+        name = output_field.get('header_name')
+        if not name:
+            name = output_field.get('name')
 
-        name = ' '.join(words)
         row = []
         if units_label or output_field.get('unit'):
             unit = None
