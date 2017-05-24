@@ -169,7 +169,7 @@ def itb_bayesian_fatality_rates():
 EARTHQUAKE_FUNCTIONS = (
     {
         'key': 'itb_bayesian_fatality_rates',
-        'name': tr('ITB bayesian fatality rates'),
+        'name': tr('ITB bayesian fatality model'),
         'description': tr(
             'ITB fatality model based on a Bayesian approach. This model was '
             'developed by Institut Teknologi Bandung (ITB) and implemented by '
@@ -195,7 +195,7 @@ EARTHQUAKE_FUNCTIONS = (
         'fatality_rates': itb_bayesian_fatality_rates
     }, {
         'key': 'itb_fatality_rates',
-        'name': tr('ITB fatality rates'),
+        'name': tr('ITB fatality model'),
         'description': tr(
             'ITB fatality model is modified from the USGS Pager model. This '
             'model was developed by Institut Teknologi Bandung (ITB) and '
@@ -220,7 +220,7 @@ EARTHQUAKE_FUNCTIONS = (
         'fatality_rates': itb_fatality_rates
     }, {
         'key': 'pager_fatality_rates',
-        'name': tr('Pager fatality rates'),
+        'name': tr('Pager fatality model'),
         'description': tr(
             'USGS Pager fatality estimation model. This model was developed '
             'by Institut Teknologi Bandung (ITB) and implemented by Dr. Hyeuk '
