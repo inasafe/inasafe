@@ -1177,6 +1177,10 @@ def definition_to_message(
 
 
 def _citations_to_message(message, model):
+    if 'citations' in model and len(model['citations']) > 0:
+        message.add(m.Paragraph(m.ImportantText(
+            tr('Citations:')
+        )))
     for citation in model['citations']:
         if citation['text'] in [None, '']:
             continue
