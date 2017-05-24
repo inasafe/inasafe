@@ -37,6 +37,7 @@ from safe.gui.tools.help.shakemap_converter_help \
 from safe.messaging import styles
 from safe.utilities.i18n import tr
 from safe.utilities.resources import resource_url, resources_path
+from safe.utilities.utilities import html_scientific_notation_rate
 
 LOGGER = logging.getLogger('InaSAFE')
 # For chapter sections
@@ -1098,16 +1099,20 @@ def definition_to_message(
             else:
                 row.add(m.Cell(tr('unspecified')))
 
-            if inasafe_class.get('fatality_rate') >= 0:
-                rate = inasafe_class['fatality_rate'] * 100
-                rate = u'%s%%' % format(rate, 'f')
+            if inasafe_class.get('fatality_rate') > 0:
+                # we want to show the rate as a scientific notation
+                rate = html_scientific_notation_rate(
+                    inasafe_class['fatality_rate'])
+                rate = u'%s%%' % rate
                 row.add(m.Cell(rate))
+            elif inasafe_class.get('fatality_rate') == 0:
+                row.add(m.Cell('0%'))
             else:
                 row.add(m.Cell(tr('unspecified')))
 
             if 'displacement_rate' in inasafe_class:
                 rate = inasafe_class['displacement_rate'] * 100
-                rate = u'%s%%' % rate
+                rate = u'%.0f%%' % rate
                 row.add(m.Cell(rate))
             else:
                 row.add(m.Cell(tr('unspecified')))

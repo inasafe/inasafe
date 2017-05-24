@@ -272,7 +272,7 @@ notes_assumptions_component = {
             ]
         },
         'hazard_displacement_rates_note_format': tr(
-            '{name} - {displacement_rate:.2%}'),
+            '{name} - {displacement_rate:.0%}'),
         'fatality_rates_note_format': {
             'item_header': tr('fatality rates notes'),
             'item_list': [
@@ -281,7 +281,7 @@ notes_assumptions_component = {
             ]
         },
         'hazard_fatality_rates_note_format': tr(
-            '{name} - {fatality_rate:.6%}')
+            '{name} - {fatality_rate}%')
     }
 }
 

@@ -13,6 +13,7 @@ import unicodedata
 import webbrowser
 
 from PyQt4.QtCore import QPyNullVariant
+from decimal import Decimal
 
 from safe.common.exceptions import NoKeywordsFoundError, MetadataReadError
 from safe.definitions.versions import (
@@ -411,3 +412,23 @@ def readable_os_version():
         return ' {version}'.format(version=platform.mac_ver()[0])
     elif platform.system() == 'Windows':
         return platform.platform()
+
+
+def html_scientific_notation_rate(rate):
+    """Helper for convert decimal rate to scientific notation. For example
+    we want to show the very detail value of fatality rate because it might be
+    a very small number.
+
+    :param rate: Rate value
+    :type rate: float
+
+    :return: Rate value with html tag to show the exponent
+    :rtype: str
+    """
+    rate = '%.2E' % Decimal(rate)
+    html_rate = rate.split('E')
+    # we use html tag to show exponent
+    html_rate[1] = '10<sup>{exponent}</sup>'.format(
+        exponent=html_rate[1])
+    html_rate.insert(1, 'x')
+    return ''.join(html_rate)

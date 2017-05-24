@@ -12,6 +12,7 @@ from safe.report.extractors.util import (
 from safe.utilities.resources import (
     resource_url,
     resources_path)
+from safe.utilities.utilities import html_scientific_notation_rate
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -148,15 +149,23 @@ def notes_assumptions_extractor(impact_report, component_metadata):
             extra_args, 'hazard_fatality_rates_note_format')
         fatality_rates_note = []
         for hazard_class in hazard_classification['classes']:
-            if not hazard_class['fatality_rate'] >= 0:
-                hazard_class['fatality_rate'] = 0
+            # we make a copy here because we don't want to
+            # change the real value.
+            copy_of_hazard_class = dict(hazard_class)
+            if not copy_of_hazard_class['fatality_rate'] > 0:
+                copy_of_hazard_class['fatality_rate'] = 0
+            else:
+                # we want to show the rate as a scientific notation
+                copy_of_hazard_class['fatality_rate'] = (
+                    html_scientific_notation_rate(
+                        copy_of_hazard_class['fatality_rate']))
+
             fatality_rates_note.append(
-                fatality_rates_note_format.format(**hazard_class))
+                fatality_rates_note_format.format(**copy_of_hazard_class))
 
         rate_description = ', '.join(fatality_rates_note)
 
-        for index, fatality_note in enumerate(
-                fatality_note_dict['item_list']):
+        for index, fatality_note in enumerate(fatality_note_dict['item_list']):
             fatality_note_dict['item_list'][index] = (
                 fatality_note.format(rate_description=rate_description)
             )
