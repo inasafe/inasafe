@@ -37,7 +37,7 @@ from safe.gui.tools.help.shakemap_converter_help \
 from safe.messaging import styles
 from safe.utilities.i18n import tr
 from safe.utilities.resources import resource_url, resources_path
-from safe.utilities.utilities import html_scientific_notation_rate
+from safe.utilities.rounding import html_scientific_notation_rate
 
 LOGGER = logging.getLogger('InaSAFE')
 # For chapter sections

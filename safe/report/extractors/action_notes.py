@@ -12,7 +12,7 @@ from safe.report.extractors.util import (
 from safe.utilities.resources import (
     resource_url,
     resources_path)
-from safe.utilities.utilities import html_scientific_notation_rate
+from safe.utilities.rounding import html_scientific_notation_rate
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
