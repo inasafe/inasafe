@@ -39,20 +39,12 @@ post_processor_additional_rice = {
             {
                 'value': pregnant_displaced_count_field,
                 'type': field_input_type,
-            },
-            {
-                'type': constant_input_type,
-                'value': 0,
             }
         ],
         'lactating_displaced':[
             {
                 'value': lactating_displaced_count_field,
                 'type': field_input_type,
-            },
-            {
-                'type': constant_input_type,
-                'value': 0,
             }
         ],
         'additional_rice_ratio':
