@@ -821,7 +821,6 @@ class TestImpactReport(unittest.TestCase):
                 }), ('layer_geometry', {
                     'content': u'polygon',
                     'header': 'Layer Geometry '
-                    # <td colspan=1><strong>Lactating Ratio</strong></td>\n<td colspan=1>0.03</td>\n</tr>\n<tr>\n<td colspan=1><strong>Pregnant Ratio</strong></td>\n<td colspan=1>0.02</td>
                 }), ('inasafe_fields', {
                     'content': u'<table class="table table-condensed">\n'
                                u'<tbody>\n<tr>\n<td colspan=1><strong>Female '
