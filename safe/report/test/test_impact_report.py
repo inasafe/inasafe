@@ -45,7 +45,9 @@ from safe.definitions.reports.components import (
     aggregation_result_component,
     minimum_needs_component,
     aggregation_postprocessors_component,
-    population_infographic_component, analysis_provenance_details_component)
+    population_infographic_component,
+    analysis_provenance_details_component,
+    analysis_provenance_details_simplified_component)
 from safe.report.impact_report import ImpactReport
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -592,12 +594,7 @@ class TestImpactReport(unittest.TestCase):
 
         shutil.rmtree(output_folder, ignore_errors=True)
 
-    # we skip this test because we got new provenance details,
-    # we might use this test if we want to show the old provenance detail in
-    # the main report and separate the new provenance detail to its own report
-    @unittest.expectedFailure
-    @unittest.skip
-    def test_analysis_provenance_details(self):
+    def test_analysis_provenance_details_simplified(self):
         """Test generate analysis provenance details section.
 
         .. versionadded: 4.0
@@ -622,7 +619,7 @@ class TestImpactReport(unittest.TestCase):
         empty_component_output_message = 'Empty component output'
 
         impact_table = impact_report.metadata.component_by_key(
-            analysis_provenance_details_component['key'])
+            analysis_provenance_details_simplified_component['key'])
 
         expected_context = {
             'header': u'Analysis details',
@@ -1469,6 +1466,8 @@ class TestImpactReport(unittest.TestCase):
 
         shutil.rmtree(output_folder, ignore_errors=True)
 
+    # we disable infographic for now until infographic with qpt template ready
+    @unittest.expectedFailure
     def test_population_infographic(self):
         """Test population infographic generation.
 

@@ -132,23 +132,23 @@ def notes_assumptions_extractor(impact_report, component_metadata):
     return context
 
 
-def action_notes_extractor(impact_report, component_metadata):
-    """Extracting action checklist and notes of the impact layer.
+def action_checklist_report_extractor(impact_report, component_metadata):
+    """Extracting action checklist of the impact layer to its own report.
 
-        :param impact_report: the impact report that acts as a proxy to fetch
-            all the data that extractor needed
-        :type impact_report: safe.report.impact_report.ImpactReport
+    :param impact_report: the impact report that acts as a proxy to fetch
+        all the data that extractor needed
+    :type impact_report: safe.report.impact_report.ImpactReport
 
-        :param component_metadata: the component metadata. Used to obtain
-            information about the component we want to render
-        :type component_metadata: safe.report.report_metadata.
-            ReportComponentsMetadata
+    :param component_metadata: the component metadata. Used to obtain
+        information about the component we want to render
+    :type component_metadata: safe.report.report_metadata.
+        ReportComponentsMetadata
 
-        :return: context for rendering phase
-        :rtype: dict
+    :return: context for rendering phase
+    :rtype: dict
 
-        .. versionadded:: 4.1
-        """
+    .. versionadded:: 4.1
+    """
     context = {}
     extra_args = component_metadata.extra_args
 
@@ -167,8 +167,8 @@ def action_notes_extractor(impact_report, component_metadata):
     return context
 
 
-def action_notes_pdf_extractor(impact_report, component_metadata):
-    """Extracting action checklist and notes of the impact layer.
+def action_checklist_report_pdf_extractor(impact_report, component_metadata):
+    """Extracting action checklist of the impact layer to its own report.
 
     For PDF generations
 
