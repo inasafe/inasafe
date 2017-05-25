@@ -512,6 +512,53 @@ class TestKeywordWizard(unittest.TestCase):
         """Test existing keyword for hazard volcano polygon."""
         layer = load_test_vector_layer(
             'hazard', 'volcano_krb.shp', clone=True)
+
+        default_classes = {
+                            u'high': [u'Kawasan Rawan Bencana III'],
+                            u'low': [u'Kawasan Rawan Bencana I'],
+                            u'medium': [u'Kawasan Rawan Bencana II']
+                        }
+        keywords = {
+            'hazard': hazard_volcano['key'],
+            'hazard_category': hazard_category_multiple_event['key'],
+            'inasafe_fields': {
+                hazard_name_field['key']: u'volcano',
+                hazard_value_field['key']: u'KRB'
+            },
+            'layer_geometry': layer_geometry_polygon['key'],
+            'layer_mode': layer_mode_classified['key'],
+            'layer_purpose': layer_purpose_hazard['key'],
+            'title': u'Volcano KRB',
+            'value_maps': {
+                exposure_land_cover['key']: {
+                    volcano_hazard_classes['key']: {
+                        u'active': True,
+                        u'classes': default_classes
+                    }
+                },
+                u'population': {
+                    u'volcano_hazard_classes': {
+                        u'active': True,
+                        u'classes': default_classes
+                    }
+                },
+                u'road': {
+                    u'volcano_hazard_classes': {
+                        u'active': True,
+                        u'classes': default_classes
+                    }
+                },
+                u'structure': {
+                    u'volcano_hazard_classes': {
+                        u'active': True,
+                        u'classes': default_classes
+                    }
+                }
+            }
+        }
+
+        layer.keywords = keywords
+
         # noinspection PyTypeChecker
         dialog = WizardDialog(iface=IFACE)
         dialog.set_keywords_creation_mode(layer)
@@ -632,7 +679,7 @@ class TestKeywordWizard(unittest.TestCase):
         dialog.pbnNext.click()
 
         self.assertDictEqual(
-            layer.keywords['value_maps'], dialog.get_keywords()['value_maps'])
+            keywords['value_maps'], dialog.get_keywords()['value_maps'])
 
     def test_exposure_structure_polygon_keyword(self):
         """Test keyword wizard for exposure structure polygon."""
