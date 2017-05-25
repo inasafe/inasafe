@@ -2,14 +2,11 @@
 """Help text for the dock widget."""
 
 import logging
-from pprint import pprint
-import StringIO
 from safe import messaging as m
 from safe.messaging import styles
-from safe.definitions.units import unit_kilometres_per_hour
-from safe.definitions.hazard import hazard_cyclone
-from safe.definitions.hazard_classifications import\
-    cyclone_au_bom_hazard_classes
+from safe.definitions import units
+from safe.definitions import hazard_classifications
+from safe.definitions import hazard
 from safe.utilities.i18n import tr
 LOGGER = logging.getLogger('InaSAFE')
 # For chapter sections
@@ -149,7 +146,6 @@ def content():
         'to InaSafe, you need to define them in units.py'
     )
     message.add(paragraph)
-    from safe.definitions import units
     paragraph = m.PreformattedText(
         _get_definition_from_module(units, 'cyclone_au_bom_hazard_classes')
     )
@@ -190,7 +186,6 @@ def content():
     )
     message.add(paragraph)
 
-    from safe.definitions import hazard_classifications
     paragraph = m.PreformattedText(
         _get_definition_from_module(
             hazard_classifications,
@@ -224,7 +219,6 @@ def content():
         'Finally define new hazard and add it to the hazard_all list:'
     )
     message.add(paragraph)
-    from safe.definitions import hazard
     paragraph = m.PreformattedText(
         _get_definition_from_module(hazard, 'hazard_cyclone')
     )
@@ -240,9 +234,9 @@ def content():
     return message
 
 
-def _get_definition_from_module(module, symbol):
+def _get_definition_from_module(definitions_module, symbol):
     """Given a python module fetch the declaration of a variable."""
-    path = module.__file__
+    path = definitions_module.__file__
     path = path.replace('.pyc', '.py')
     source = file(path).readlines()
     text = None
@@ -257,4 +251,3 @@ def _get_definition_from_module(module, symbol):
             text += line
     # Symbol could not be found
     return None
-
