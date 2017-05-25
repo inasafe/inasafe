@@ -149,8 +149,11 @@ def content():
         'to InaSafe, you need to define them in units.py'
     )
     message.add(paragraph)
-    _definition_to_string(
-        message, unit_kilometres_per_hour=unit_kilometres_per_hour)
+    from safe.definitions import units
+    paragraph = m.PreformattedText(
+        _get_definition_from_module(units, 'cyclone_au_bom_hazard_classes')
+    )
+    message.add(paragraph)
 
     # Setting up style
 
@@ -186,8 +189,14 @@ def content():
         'in the multiple_units attribute of the classification.'
     )
     message.add(paragraph)
-    _definition_to_string(
-        message, cyclone_au_bom_hazard_classes=cyclone_au_bom_hazard_classes)
+
+    from safe.definitions import hazard_classifications
+    paragraph = m.PreformattedText(
+        _get_definition_from_module(
+            hazard_classifications,
+            'cyclone_au_bom_hazard_classes')
+    )
+    message.add(paragraph)
 
     # Setting up wizard questions
 
@@ -215,31 +224,37 @@ def content():
         'Finally define new hazard and add it to the hazard_all list:'
     )
     message.add(paragraph)
-    _definition_to_string(message, hazard_cyclone=hazard_cyclone)
-    # Be careful, pretty print unpacks lists so this will turn into a 50 pager
-    # zoom_definition_to_string(message, hazard_all=hazard_all)
-
+    from safe.definitions import hazard
+    paragraph = m.PreformattedText(
+        _get_definition_from_module(hazard, 'hazard_cyclone')
+    )
+    message.add(paragraph)
+    paragraph = m.Paragraph(
+        'Finally define new hazard and add it to the hazard_all list:'
+    )
+    message.add(paragraph)
+    paragraph = m.PreformattedText(
+        _get_definition_from_module(hazard, 'hazard_all')
+    )
+    message.add(paragraph)
     return message
 
 
-def _definition_to_string(message, **kwargs):
-    """Use pprint for dict and list examples.
+def _get_definition_from_module(module, symbol):
+    """Given a python module fetch the declaration of a variable."""
+    path = module.__file__
+    path = path.replace('.pyc', '.py')
+    source = file(path).readlines()
+    text = None
+    for line in source:
+        if symbol == line.partition(' ')[0]:
+            text = line
+            continue
+        if text is not None and (line == '' or '=' in line):
+            # We found the end of the declaration
+            return text
+        if text is not None:
+            text += line
+    # Symbol could not be found
+    return None
 
-    The argument name will be prepended to the pretty printed text of the
-    argument content e.g.:
-
-    foo = { 'bar': 'baz' }
-    _definition_to_string(message, foo=foo)
-
-    will print this in the message as a preformatted paragraph:
-
-        foo = { 'bar': 'baz' }
-    """
-
-    for key, value in kwargs.iteritems():
-        output = StringIO.StringIO()
-        output.write(key + ' = ')
-        pprint(value, stream=output)
-        paragraph = m.PreformattedText(output.getvalue())
-        output.close()
-        message.add(paragraph)
