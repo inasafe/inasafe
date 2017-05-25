@@ -23,7 +23,6 @@ from safe.definitions.utilities import postprocessor_output_field
 from safe.report.extractors.util import (
     value_from_field_name,
     resolve_from_dictionary, layer_definition_type)
-from safe.utilities.i18n import tr
 from safe.utilities.rounding import format_number
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
