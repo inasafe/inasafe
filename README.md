@@ -88,6 +88,7 @@ History
 * Version 2.0 of InaSAFE was released in January, 2014.
 * Version 3.0 was released in March 2015 which added support
   for using the QGIS API within impact functions.
+* Version 4.0 was released in March 2017.
 
 Disclaimer
 ==========
