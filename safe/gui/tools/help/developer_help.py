@@ -7,7 +7,7 @@ import StringIO
 from safe import messaging as m
 from safe.messaging import styles
 from safe.definitions.units import unit_kilometres_per_hour
-from safe.definitions.hazard import hazard_cyclone, hazard_all
+from safe.definitions.hazard import hazard_cyclone
 from safe.definitions.hazard_classifications import\
     cyclone_au_bom_hazard_classes
 from safe.utilities.i18n import tr
@@ -60,6 +60,7 @@ def heading():
     """
     message = m.Heading(tr('InaSAFE developer help'), **TITLE_STYLE)
     return message
+
 
 def content():
     """Helper method that returns just the content.
@@ -223,15 +224,15 @@ def content():
 
 def _definition_to_string(message, **kwargs):
     """Use pprint for dict and list examples.
-    
-    The argument name will be prepended to the pretty printed text of the 
+
+    The argument name will be prepended to the pretty printed text of the
     argument content e.g.:
-    
+
     foo = { 'bar': 'baz' }
     _definition_to_string(message, foo=foo)
-     
+
     will print this in the message as a preformatted paragraph:
-    
+
         foo = { 'bar': 'baz' }
     """
 
@@ -242,5 +243,3 @@ def _definition_to_string(message, **kwargs):
         paragraph = m.PreformattedText(output.getvalue())
         output.close()
         message.add(paragraph)
-
-
