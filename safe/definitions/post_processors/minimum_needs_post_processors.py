@@ -41,7 +41,7 @@ post_processor_additional_rice = {
                 'type': field_input_type,
             }
         ],
-        'lactating_displaced':[
+        'lactating_displaced': [
             {
                 'value': lactating_displaced_count_field,
                 'type': field_input_type,
