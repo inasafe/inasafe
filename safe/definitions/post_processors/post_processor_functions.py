@@ -136,6 +136,8 @@ def post_processor_population_fatality_function(
     for hazard_class_def in classification:
         if hazard_class_def['key'] == hazard_class:
             displaced_ratio = hazard_class_def.get('fatality_rate', 0.0)
+            if displaced_ratio is None:
+                displaced_ratio = 0.0
             # We need to cast it to float to make it works.
             return float(displaced_ratio)
 

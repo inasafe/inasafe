@@ -512,6 +512,53 @@ class TestKeywordWizard(unittest.TestCase):
         """Test existing keyword for hazard volcano polygon."""
         layer = load_test_vector_layer(
             'hazard', 'volcano_krb.shp', clone=True)
+
+        default_classes = {
+                            u'high': [u'Kawasan Rawan Bencana III'],
+                            u'low': [u'Kawasan Rawan Bencana I'],
+                            u'medium': [u'Kawasan Rawan Bencana II']
+                        }
+        keywords = {
+            'hazard': hazard_volcano['key'],
+            'hazard_category': hazard_category_multiple_event['key'],
+            'inasafe_fields': {
+                hazard_name_field['key']: u'volcano',
+                hazard_value_field['key']: u'KRB'
+            },
+            'layer_geometry': layer_geometry_polygon['key'],
+            'layer_mode': layer_mode_classified['key'],
+            'layer_purpose': layer_purpose_hazard['key'],
+            'title': u'Volcano KRB',
+            'value_maps': {
+                exposure_land_cover['key']: {
+                    volcano_hazard_classes['key']: {
+                        u'active': True,
+                        u'classes': default_classes
+                    }
+                },
+                u'population': {
+                    u'volcano_hazard_classes': {
+                        u'active': True,
+                        u'classes': default_classes
+                    }
+                },
+                u'road': {
+                    u'volcano_hazard_classes': {
+                        u'active': True,
+                        u'classes': default_classes
+                    }
+                },
+                u'structure': {
+                    u'volcano_hazard_classes': {
+                        u'active': True,
+                        u'classes': default_classes
+                    }
+                }
+            }
+        }
+
+        layer.keywords = keywords
+
         # noinspection PyTypeChecker
         dialog = WizardDialog(iface=IFACE)
         dialog.set_keywords_creation_mode(layer)
@@ -632,7 +679,7 @@ class TestKeywordWizard(unittest.TestCase):
         dialog.pbnNext.click()
 
         self.assertDictEqual(
-            layer.keywords['value_maps'], dialog.get_keywords()['value_maps'])
+            keywords['value_maps'], dialog.get_keywords()['value_maps'])
 
     def test_exposure_structure_polygon_keyword(self):
         """Test keyword wizard for exposure structure polygon."""
@@ -1342,6 +1389,166 @@ class TestKeywordWizard(unittest.TestCase):
         real_keywords = dialog.get_keywords()
 
         self.assertDictEqual(real_keywords, expected_keyword)
+
+    def test_clean_keyword_wizard(self):
+        """Test for having the clean state when we run keyword wizard."""
+        layer = load_test_vector_layer(
+            'gisv4',
+            'exposure',
+            'population_multi_fields.geojson',
+            clone_to_memory=True)
+        self.assertIsNotNone(layer)
+        expected_keyword = {
+            'scale': source_scale,
+            'license': source_license,
+            'source': source,
+            'url': source_url,
+            'title': layer_title,
+            'exposure': exposure_population['key'],
+            'exposure_unit': count_exposure_unit['key'],
+            'inasafe_fields':
+                {
+                    # Dummy, select more than fields to show we can do it.
+                    population_count_field['key']: [
+                        'right_hand',
+                        'left_hand'
+                    ],
+                    female_count_field['key']: [
+                        'F_0_4',
+                        'F_5_9',
+                        'F_9_15',
+                        'F_15_30',
+                        'F_30_60',
+                        'F_60_100'
+                    ]
+
+                },
+            'date': source_date,
+            'layer_geometry': layer_geometry_polygon['key'],
+            'layer_purpose': layer_purpose_exposure['key'],
+            'layer_mode': layer_mode_continuous['key']
+        }
+        # noinspection PyTypeChecker
+        dialog = WizardDialog(iface=IFACE)
+        dialog.set_keywords_creation_mode(layer, expected_keyword)
+
+        # Check if in select purpose step
+        self.check_current_step(dialog.step_kw_purpose)
+
+        # Click next to select exposure
+        dialog.pbnNext.click()
+
+        # Click next to select population
+        dialog.pbnNext.click()
+
+        # Click next to select continuous
+        dialog.pbnNext.click()
+
+        # Click next to select count
+        dialog.pbnNext.click()
+
+        # Click next to select population
+        dialog.pbnNext.click()
+
+        # Click next to continue
+        dialog.pbnNext.click()
+
+        # Click next to finish inasafe fields step and go to source step
+        # field step
+        dialog.pbnNext.click()
+
+        # Click next to finish source step and go to title step
+        dialog.pbnNext.click()
+
+        # Click next to finish title step and go to kw summary step
+        dialog.pbnNext.click()
+
+        # Check if in summary step
+        self.check_current_step(dialog.step_kw_summary)
+
+        # Click finish
+        dialog.pbnNext.click()
+
+        # Checking Keyword Created
+        real_keywords = dialog.get_keywords()
+
+        self.assertDictEqual(byteify(real_keywords), byteify(expected_keyword))
+
+        # Now we try to use the same dialog object for assigning another layer.
+        # This is replication of #4200
+
+        hazard_layer = load_test_vector_layer(
+            'hazard', 'volcano_krb.shp', clone=True)
+
+        hazard_expected_keyword = {
+            'scale': source_scale,
+            'hazard_category': hazard_category_multiple_event['key'],
+            'license': source_license,
+            'source': source,
+            'url': source_url,
+            'title': layer_title,
+            'hazard': hazard_volcano['key'],
+            'inasafe_fields':
+                {
+                    hazard_value_field['key']: u'KRB',
+                    hazard_name_field['key']: u'volcano',
+                },
+            'value_maps': {
+                exposure_land_cover['key']: {
+                    volcano_hazard_classes['key']: {
+                        'active': True,
+                        'classes': {
+                            u'high': [u'Kawasan Rawan Bencana III'],
+                            u'low': [u'Kawasan Rawan Bencana I'],
+                            u'medium': [u'Kawasan Rawan Bencana II']
+                        }
+                    }
+                }
+            },
+            'layer_geometry': layer_geometry_polygon['key'],
+            'layer_purpose': layer_purpose_hazard['key'],
+            'layer_mode': layer_mode_classified['key']
+        }
+
+        # noinspection PyTypeChecker
+        dialog.set_keywords_creation_mode(
+            hazard_layer, hazard_expected_keyword)
+
+        # Click next to select hazard
+        dialog.pbnNext.click()
+
+        # Click next to select volcano
+        dialog.pbnNext.click()
+
+        # Click next to select multiple event
+        dialog.pbnNext.click()
+
+        # Click next to select classified
+        dialog.pbnNext.click()
+
+        # Click next to select KRB
+        dialog.pbnNext.click()
+
+        # Click next to finish multi classifications step
+        dialog.pbnNext.click()
+
+        # Click next to finish InaSAFE Field step and go to source step
+        dialog.pbnNext.click()
+
+        # Click next to finish source step and go to title step
+        dialog.pbnNext.click()
+
+        # Click next to finish title step and go to kw summary step
+        dialog.pbnNext.click()
+
+        # Check if in summary step
+        self.check_current_step(dialog.step_kw_summary)
+
+        # Click finish
+        dialog.pbnNext.click()
+
+        real_keywords = dialog.get_keywords()
+        self.assertDictEqual(hazard_expected_keyword, real_keywords)
 
     def test_exposure_multi_fields_existing_keyword(self):
         """Test for exposure layer with multiple fields."""
@@ -2437,6 +2644,150 @@ class TestKeywordWizard(unittest.TestCase):
 
         real_keywords = dialog.get_keywords()
         self.assertDictEqual(real_keywords, expected_keyword)
+
+    def test_earthquake_raster_dirty_keywords(self):
+        """Test for Earthquake raster keyword wizard."""
+        path = standard_data_path('hazard', 'earthquake.tif')
+        message = "Path %s is not found" % path
+        self.assertTrue(os.path.exists(path), message)
+        layer = clone_raster_layer(
+            name='earthquake',
+            extension='.tif',
+            include_keywords=False,
+            source_directory=standard_data_path('hazard'))
+        self.assertIsNotNone(layer)
+
+        expected_keyword = {
+            'continuous_hazard_unit': unit_mmi['key'],
+            'scale': source_scale,
+            'hazard_category': hazard_category_multiple_event['key'],
+            'license': source_license,
+            'source': source,
+            'url': source_url,
+            'title': layer_title,
+            'hazard': hazard_earthquake['key'],
+            'date': source_date,
+            'layer_geometry': layer_geometry_raster['key'],
+            'layer_purpose': layer_purpose_hazard['key'],
+            'layer_mode': layer_mode_continuous['key'],
+            'thresholds': {
+                exposure_population['key']: {
+                    earthquake_mmi_scale['key']: {
+                        'active': True,
+                        'classes': default_classification_thresholds(
+                            earthquake_mmi_scale)
+                    }
+                },
+                exposure_land_cover['key']: {
+                    earthquake_mmi_scale['key']: {
+                        'active': True,
+                        'classes': default_classification_thresholds(
+                            earthquake_mmi_scale)
+                    }
+                }
+            }
+        }
+
+        layer.keywords = expected_keyword
+
+        # noinspection PyTypeChecker
+        dialog = WizardDialog(iface=IFACE)
+        dialog.set_keywords_creation_mode(layer)
+
+        # Check if in select purpose step
+        self.check_current_step(dialog.step_kw_purpose)
+
+        # Select hazard
+        self.select_from_list_widget(
+            layer_purpose_hazard['name'], dialog.step_kw_purpose.lstCategories)
+
+        # Click next to select hazard
+        dialog.pbnNext.click()
+
+        # Check if in select hazard step
+        self.check_current_step(dialog.step_kw_subcategory)
+
+        # select EQ
+        self.select_from_list_widget(
+            hazard_earthquake['name'],
+            dialog.step_kw_subcategory.lstSubcategories)
+
+        # Click next to select EQ
+        dialog.pbnNext.click()
+
+        # Check if in select hazard category step
+        self.check_current_step(dialog.step_kw_hazard_category)
+
+        # select multiple_event
+        self.select_from_list_widget(
+            hazard_category_multiple_event['name'],
+            dialog.step_kw_hazard_category.lstHazardCategories)
+
+        # Click next to select multiple event
+        dialog.pbnNext.click()
+
+        # Check if in select layer mode step
+        self.check_current_step(dialog.step_kw_layermode)
+
+        # select continuous mode
+        self.select_from_list_widget(
+            layer_mode_continuous['name'],
+            dialog.step_kw_layermode.lstLayerModes)
+
+        # Click next to select continuous
+        dialog.pbnNext.click()
+
+        # Check if in unit step
+        self.check_current_step(dialog.step_kw_unit)
+
+        # select MMI
+        self.select_from_list_widget(
+            unit_mmi['name'],
+            dialog.step_kw_unit.lstUnits)
+
+        # Click next to select MMI
+        dialog.pbnNext.click()
+
+        # Check if in multi classification step
+        self.check_current_step(dialog.step_kw_multi_classifications)
+
+        # Click next to finish multi classifications step
+        dialog.pbnNext.click()
+
+        # Check if in source step
+        self.check_current_step(dialog.step_kw_source)
+
+        dialog.step_kw_source.leSource.setText(source)
+        dialog.step_kw_source.leSource_scale.setText(source_scale)
+        dialog.step_kw_source.leSource_url.setText(source_url)
+        dialog.step_kw_source.ckbSource_date.setChecked(True)
+        dialog.step_kw_source.dtSource_date.setDateTime(source_date)
+        dialog.step_kw_source.leSource_license.setText(source_license)
+
+        # Click next to finish source step and go to title step
+        dialog.pbnNext.click()
+
+        # Check if in title step
+        self.check_current_step(dialog.step_kw_title)
+
+        dialog.step_kw_title.leTitle.setText(layer_title)
+
+        # Click next to finish title step and go to kw summary step
+        dialog.pbnNext.click()
+
+        # Check if in title step
+        self.check_current_step(dialog.step_kw_summary)
+
+        # Click finish
+        dialog.pbnNext.click()
+
+        # Checking Keyword Created
+        real_keywords = dialog.get_keywords()
+        # Check if classification for land cover is not exist anymore #4214
+        self.assertNotIn(
+            exposure_land_cover['key'],
+            real_keywords['thresholds'].keys()
+        )
 
     def test_cyclone_raster(self):
         """Test for cyclone raster keyword wizard when we have many units."""

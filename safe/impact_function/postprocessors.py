@@ -346,7 +346,7 @@ def enough_input(layer, post_processor_input):
                         break
                     else:
                         msg = 'Value %s is not expected in keyword: %s' % (
-                            input_key,
+                            input_value['expected_value'],
                             input_value['value'])
                 except KeyError:
                     msg = 'Value %s is missing in keyword: %s' % (

@@ -75,6 +75,7 @@ from safe.definitions.constants import (
 from safe.gis.sanity_check import check_inasafe_fields
 from safe.utilities.unicode import byteify
 from safe.utilities.gis import wkt_to_rectangle
+from safe.utilities.utilities import readable_os_version
 from safe.impact_function.impact_function import ImpactFunction
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -664,6 +665,37 @@ class TestImpactFunction(unittest.TestCase):
                 count += 1
         self.assertEqual(len(json_files), count)
 
+    def test_old_fields_keywords(self):
+        """The IF is not ready with we have some wrong inasafe_fields."""
+        hazard_layer = load_test_vector_layer(
+            'gisv4', 'hazard', 'classified_vector.geojson')
+        exposure_layer = load_test_vector_layer(
+            'gisv4', 'exposure', 'building-points.geojson',
+            clone=True)
+        aggregation_layer = load_test_vector_layer(
+            'gisv4', 'aggregation', 'small_grid.geojson')
+
+        impact_function = ImpactFunction()
+        impact_function.aggregation = aggregation_layer
+        impact_function.exposure = exposure_layer
+        impact_function.hazard = hazard_layer
+        status, message = impact_function.prepare()
+
+        # The layer should be fine.
+        self.assertEqual(PREPARE_SUCCESS, status, message)
+
+        # Now, we remove one field
+        exposure_layer.startEditing()
+        field = exposure_layer.keywords['inasafe_fields'].values()[0]
+        index = exposure_layer.fieldNameIndex(field)
+        exposure_layer.deleteAttribute(index)
+        exposure_layer.commitChanges()
+
+        # It shouldn't be fine as we removed one field which
+        # was in inasafe_fields
+        status, message = impact_function.prepare()
+        self.assertNotEqual(PREPARE_SUCCESS, status, message)
+
     def test_post_processor(self):
         """Test for running post processor."""
         impact_layer = load_test_vector_layer(
@@ -732,7 +764,7 @@ class TestImpactFunction(unittest.TestCase):
             'map_title': get_map_title(hazard, exposure, hazard_category),
             'map_legend_title': exposure['layer_legend_title'],
             'user': getpass.getuser(),
-            'os': platform.version(),
+            'os': readable_os_version(),
             'pyqt_version': PYQT_VERSION_STR,
             'qgis_version': QGis.QGIS_VERSION,
             'qt_version': QT_VERSION_STR,
@@ -815,7 +847,7 @@ class TestImpactFunction(unittest.TestCase):
             'qgis_version': QGis.QGIS_VERSION,
             'qt_version': QT_VERSION_STR,
             'user': getpass.getuser(),
-            'os': platform.version(),
+            'os': readable_os_version(),
             'aggregation_layer': None,
             'aggregation_layer_id': None,
             'exposure_layer': exposure_layer.source(),

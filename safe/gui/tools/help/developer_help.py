@@ -147,7 +147,7 @@ def content():
     )
     message.add(paragraph)
     paragraph = m.PreformattedText(
-        _get_definition_from_module(units, 'cyclone_au_bom_hazard_classes')
+        _get_definition_from_module(units, 'unit_kilometres_per_hour')
     )
     message.add(paragraph)
 

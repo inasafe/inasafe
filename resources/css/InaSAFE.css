@@ -160,6 +160,57 @@ img{
     max-width: 100%;
 }
 
+/* Tree view styling */
+.tree, .tree ul, .tree li {
+     position: relative;
+}
+
+.tree ul {
+    list-style: none;
+    padding-left: 32px;
+}
+
+.tree li::before, .tree li::after {
+    content: "";
+    position: absolute;
+    left: -12px;
+}
+
+.tree li::before {
+    border-top: 2px solid #3DB2DD;
+    top: 9px;
+    width: 8px;
+    height: 0;
+}
+
+.tree li::after {
+    border-left: 2px solid #3DB2DD;
+    height: 100%;
+    width: 0px;
+    top: 2px;
+}
+
+.tree ul > li:last-child::after {
+    height: 8px;
+}
+
+table li, table li::after, table li::before {
+  list-style: circle inside;
+  border-left: None !important;
+  border-top: None !important;
+}
+
+table ul {
+  padding-left: 0px !important;
+}
+
+.tree table {
+  margin-bottom: 0px;
+  margin-top: 0.75rem;
+}
+
+
+
 /* Make preformatted text look nice */
 code, samp, kbd {
 	font-family: "Courier New", Courier, monospace, sans-serif;

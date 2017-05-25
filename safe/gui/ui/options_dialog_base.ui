@@ -21,25 +21,16 @@
    <item row="0" column="0">
     <widget class="QStackedWidget" name="main_stacked_widget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QGridLayout" name="gridLayout">
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
+       <property name="margin">
         <number>0</number>
        </property>
        <item row="0" column="0">
-        <widget class="QWebView" name="help_web_view" native="true">
-         <property name="url" stdset="0">
+        <widget class="QWebView" name="help_web_view">
+         <property name="url">
           <url>
            <string>about:blank</string>
           </url>
@@ -50,38 +41,20 @@
      </widget>
      <widget class="QWidget" name="page_1">
       <layout class="QGridLayout" name="gridLayout_5">
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
+       <property name="margin">
         <number>0</number>
        </property>
        <item row="0" column="0">
         <widget class="QTabWidget" name="tabWidget">
          <property name="currentIndex">
-          <number>5</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="tab_basic">
           <attribute name="title">
            <string>Basic Options</string>
           </attribute>
           <layout class="QGridLayout" name="gridLayout_4">
-           <property name="leftMargin">
-            <number>0</number>
-           </property>
-           <property name="topMargin">
-            <number>0</number>
-           </property>
-           <property name="rightMargin">
-            <number>0</number>
-           </property>
-           <property name="bottomMargin">
+           <property name="margin">
             <number>0</number>
            </property>
            <item row="0" column="0">
@@ -290,9 +263,9 @@
           </attribute>
           <layout class="QGridLayout" name="gridLayout_7">
            <item row="0" column="0">
-            <widget class="QLabel" name="label">
+            <widget class="QLabel" name="label_default_earthquake">
              <property name="text">
-              <string>Default earthquake fatality model</string>
+              <string notr="true">HELP TEXT SET IN PYTHON CODE</string>
              </property>
             </widget>
            </item>

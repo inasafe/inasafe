@@ -55,7 +55,7 @@ def generate_impact_report(impact_function, iface):
     # We will generate it on the fly without storing it after datastore
     # supports
     impact_report.output_folder = os.path.join(layer_dir, 'output')
-    return impact_report.process_component()
+    return impact_report.process_components()
 
 
 def generate_impact_map_report(impact_function, iface):
@@ -102,7 +102,7 @@ def generate_impact_map_report(impact_function, iface):
     # We will generate it on the fly without storing it after datastore
     # supports
     impact_report.output_folder = os.path.join(layer_dir, 'output')
-    return impact_report.process_component()
+    return impact_report.process_components()
 
 
 def add_impact_layers_to_canvas(impact_function, iface):

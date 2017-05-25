@@ -698,7 +698,7 @@ class BatchDialog(QDialog, FORM_CLASS):
             table_report_metadata,
             impact_function=impact_function)
         impact_table_report.output_folder = file_path
-        impact_table_report.process_component()
+        impact_table_report.process_components()
 
         # create impact map report instance
         map_report_metadata = ReportMetadata(
@@ -713,7 +713,7 @@ class BatchDialog(QDialog, FORM_CLASS):
         impact_map_report.qgis_composition_context.extent = \
             impact_function.impact.extent()
         impact_map_report.output_folder = file_path
-        impact_map_report.process_component()
+        impact_map_report.process_components()
 
     def show_report(self, report_path):
         """Show batch report file in batchReportFileName using an external app.

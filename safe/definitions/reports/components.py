@@ -386,17 +386,11 @@ analysis_provenance_details_component = {
             'analysis_detail': tr('Analysis details')
         },
         'provenance_format': {
-            'hazard_header': tr('Hazard source'),
-            'hazard_format': u'{layer_name} - {source} - ',
-
-            'exposure_header': tr('Exposure source'),
-            'exposure_format': u'{layer_name} - {source} - ',
-
-            'aggregation_header': tr('Aggregation source'),
-            'aggregation_format': u'{layer_name} - {source} - ',
-
             'impact_function_header': tr('Impact Function'),
-            'impact_function_format': u'{impact_function_name}',
+            'hazard_header': tr('Hazard'),
+            'exposure_header': tr('Exposure'),
+            'aggregation_header': tr('Aggregation'),
+            'analysis_environment_header': tr('Analysis Environment')
         }
     }
 }
