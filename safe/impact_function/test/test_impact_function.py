@@ -625,7 +625,7 @@ class TestImpactFunction(unittest.TestCase):
             'raster_classified_on_classified_raster': False,
             'raster_classified_on_indivisible_polygons_with_grid': False,
             'raster_classified_on_line_with_grid': False,
-            'raster_classified_on_vector_population_multi_fields': False,
+            'raster_classified_on_vector_population_multi_fields': True,
             'raster_continuous_on_divisible_polygons_with_grid': False,
             'raster_continuous_on_line': False,
             'raster_continuous_on_raster_population': False,

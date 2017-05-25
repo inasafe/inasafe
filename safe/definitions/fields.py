@@ -20,7 +20,6 @@ from safe.definitions.default_values import (
     over_60_ratio_default_value,
     disabled_ratio_default_value,
     child_bearing_age_ratio_default_value,
-    pregnant_lactating_ratio_default_value,
     pregnant_ratio_default_value,
     lactating_ratio_default_value
 )
@@ -571,35 +570,6 @@ child_bearing_age_count_field = {
     'replace_null': False
 }
 
-# Pregnant or Lactating Count
-pregnant_lactating_count_field = {
-    'key': 'pregnant_lactating_count_field',
-    'name': tr('Pregnant or Lactating Count'),
-    'field_name': 'pregnant_lactating',
-    'type': qvariant_numbers,
-    'length': default_field_length,
-    'precision': 0,
-    'absolute': True,
-    'description': tr(
-        'The number of pregnant or lactating for each feature.'),
-    'help_text': tr(
-        '"Pregnant or Lactating" is defined as: {concept} In cases where '
-        'population data is available, InaSAFE will calculate the number of '
-        'pregnant or lactating people per exposure feature, aggregate hazard '
-        'area, aggregation area and for the analysis area as a whole. The '
-        'pregnant or lactating count is calculated based on standard ratios '
-        'either provided as a global setting in InaSAFE, or (if available) '
-        'ratios in the input analysis data.').format(
-            concept=concepts['pregnant_lactating']['description']),
-    'citations': [
-        {
-            'text': None,
-            'link': None
-        }
-    ],
-    # Null value can be replaced by default or not
-    'replace_null': False
-}
 # Pregnant Count
 pregnant_count_field = {
     'key': 'pregnant_count_field',
@@ -1062,36 +1032,6 @@ child_bearing_age_ratio_field = {
     'default_value': child_bearing_age_ratio_default_value
 }
 
-# Pregnant Ratio Ratio
-pregnant_lactating_ratio_field = {
-    'key': 'pregnant_lactating_ratio_field',
-    'name': tr('Pregnant Lactating Ratio'),
-    'field_name': 'pregnant_lactating_ratio',
-    'type': QVariant.Double,
-    'length': default_field_length,
-    'precision': default_ratio_field_precision,
-    'absolute': False,
-    'description': tr(
-        'The proportion of pregnant or lactating women for each feature.'),
-    'help_text': tr(
-        '"Pregnant or Lactating" is defined as: {concept} In cases where '
-        'population data is available, InaSAFE will calculate the number of '
-        'pregnant or lactating women per exposure feature, aggregate hazard '
-        'area, aggregation area and for the analysis area as a whole. The '
-        'pregnant or lactating count is calculated based on standard ratios '
-        'either provided as a global setting in InaSAFE, or (if available) '
-        'ratios in the input analysis data.').format(
-        concept=concepts['pregnant_lactating']['description']),
-    'citations': [
-        {
-            'text': None,
-            'link': None
-        }
-    ],
-    # Null value can be replaced by default or not
-    'replace_null': True,
-    'default_value': pregnant_lactating_ratio_default_value
-}
 pregnant_ratio_field = {
     'key': 'pregnant_ratio_field',
     'name': tr('Pregnant Ratio'),
@@ -1544,27 +1484,6 @@ child_bearing_age_displaced_count_field = {
     'replace_null': False
 }
 
-pregnant_lactating_displaced_count_field = {
-    'key': 'pregnant_lactating_displaced_count_field',
-    'name': tr('Pregnant or Lactating Displaced Count'),
-    'field_name': 'pregnant_lactating_displaced',
-    'type': qvariant_numbers,
-    'length': default_field_length,
-    'precision': 0,
-    'absolute': True,
-    'description': tr(
-        'The number of displaced pregnant or lactating for each feature.'),
-    'help_text': tr(
-        'The number of displaced pregnant or lactating for each feature.'),
-    'citations': [
-        {
-            'text': None,
-            'link': None
-        }
-    ],
-    # Null value can be replaced by default or not
-    'replace_null': False
-}
 pregnant_displaced_count_field = {
     'key': 'pregnant_displaced_count_field',
     'name': tr('Lactating Displaced Count'),
@@ -2256,7 +2175,6 @@ count_fields = [
     # Gender count fields
     female_count_field,
     child_bearing_age_count_field,
-    pregnant_lactating_count_field,
     male_count_field,
     # Additional needs count fields
     hygiene_packs_count_field,
@@ -2275,7 +2193,6 @@ count_fields = [
     # Gender displaced count fields
     female_displaced_count_field,
     child_bearing_age_displaced_count_field,
-    pregnant_lactating_displaced_count_field,
     male_displaced_count_field,
     # Age count fields
     infant_displaced_count_field,

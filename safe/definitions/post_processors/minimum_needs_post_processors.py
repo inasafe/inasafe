@@ -74,8 +74,9 @@ post_processor_additional_rice = {
         'additional_rice': {
             'value': additional_rice_count_field,
             'type': formula_process,
-            'formula': '(pregnant_displaced + lactating_displaced) * '
-                        'additional_rice_ratio'
+            'formula': (
+                '(pregnant_displaced + lactating_displaced) * '
+                'additional_rice_ratio')
         },
     }
 }
