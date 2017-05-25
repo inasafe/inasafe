@@ -73,8 +73,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>834</width>
-                <height>536</height>
+                <width>401</width>
+                <height>365</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -262,6 +262,13 @@
            <string>Earthquake</string>
           </attribute>
           <layout class="QGridLayout" name="gridLayout_7">
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_6">
+             <property name="text">
+              <string>Selected model notes</string>
+             </property>
+            </widget>
+           </item>
            <item row="0" column="0">
             <widget class="QLabel" name="label_default_earthquake">
              <property name="text">
@@ -269,7 +276,7 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="0">
+           <item row="2" column="0">
             <widget class="QComboBox" name="earthquake_function">
              <property name="sizePolicy">
               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
@@ -279,15 +286,15 @@
              </property>
             </widget>
            </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="label_6">
+           <item row="4" column="0">
+            <widget class="QTextBrowser" name="earthquake_fatality_model_notes"/>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label">
              <property name="text">
-              <string>Selected model notes</string>
+              <string>Be careful, you need to restart QGIS if you change the earthquake model.</string>
              </property>
             </widget>
-           </item>
-           <item row="3" column="0">
-            <widget class="QTextBrowser" name="earthquake_fatality_model_notes"/>
            </item>
           </layout>
          </widget>
