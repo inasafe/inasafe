@@ -336,18 +336,6 @@ aggregation_postprocessors_component = {
     'extra_args': {
         'header': tr('Detailed demographic breakdown'),
         'sections': {
-            'age': {
-                'header': tr('Estimated number of people displaced by age '
-                             'per aggregation area')
-            },
-            'gender': {
-                'header': tr('Estimated number of people displaced by gender '
-                             'per aggregation area')
-            },
-            'vulnerability': {
-                'header': tr('Estimated number of people displaced by '
-                             'vulnerability per aggregation area')
-            },
             'minimum_needs': {
                 'header': tr('Estimated number of minimum needs per week')
             }
@@ -357,7 +345,10 @@ aggregation_postprocessors_component = {
             'total_population_header': tr('Total Displaced Population'),
             'total_header': tr('Total'),
             'notes': [],
-            'prohibited_words': ['displaced', 'count', 'ratio'],
+            'section_header_format': tr(
+                'Estimated number of people displaced by {header_name} '
+                'per aggregation area'),
+            'group_header_format': tr('{header_name} breakdown'),
             'zero_displaced_message': tr(
                 'Analysis produced 0 displaced count. '
                 'No calculations produced.'),
