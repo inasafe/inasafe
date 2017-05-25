@@ -468,7 +468,8 @@ class KeywordIO(QObject):
         row.add(m.Cell(value, wrap_slash=wrap_slash))
         return row
 
-    def _threshold_to_row(self, thresholds_keyword):
+    @staticmethod
+    def _threshold_to_row(thresholds_keyword):
         """Helper to make a message row from a threshold
 
         We are expecting something like this:

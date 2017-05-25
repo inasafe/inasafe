@@ -649,7 +649,7 @@ class ImpactReport(object):
                 pass
         return legend_attribute_dict
 
-    def process_component(self):
+    def process_components(self):
         """Process context for each component and a given template.
 
         :returns: Tuple of error code and message
