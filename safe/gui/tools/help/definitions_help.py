@@ -1176,19 +1176,23 @@ def definition_to_message(
     return message
 
 
-def _citations_to_message(message, model):
-    if 'citations' in model and len(model['citations']) > 0:
-        message.add(m.Paragraph(m.ImportantText(
-            tr('Citations:')
-        )))
-    for citation in model['citations']:
+def _citations_to_message(message, definition):
+    citations = m.Message()
+    bullets = m.BulletedList()
+    for citation in definition['citations']:
         if citation['text'] in [None, '']:
             continue
         if citation['link'] in [None, '']:
-            message.add(m.Paragraph(citation['text']))
+            bullets.add(m.Paragraph(citation['text']))
         else:
-            message.add(m.Paragraph(
+            bullets.add(m.Paragraph(
                 m.Link(citation['link'], citation['text'])))
+    if not bullets.is_empty():
+        citations.add(m.Paragraph(m.ImportantText(
+            tr('Citations:')
+        )))
+        citations.add(bullets)
+        message.add(citations)
 
 
 def _definition_icon_url(definition):
