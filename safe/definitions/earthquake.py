@@ -15,13 +15,13 @@ __revision__ = '$Format:%H$'
 
 def earthquake_fatality_rate(hazard_level):
     """Earthquake fatality ratio for a given hazard level.
-    
+
     It reads the QGIS QSettings to know what is the default earthquake
     function.
-    
+
     :param hazard_level: The hazard level.
     :type hazard_level: int
-    
+
     :return: The fatality rate.
     :rtype: float
     """
