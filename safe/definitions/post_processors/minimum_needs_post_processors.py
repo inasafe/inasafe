@@ -35,16 +35,26 @@ post_processor_additional_rice = {
         '"Displaced" is defined as: {displaced_concept}').format(
         displaced_concept=concepts['displaced_people']['description']),
     'input': {
-        'pregnant_displaced':
+        'pregnant_displaced': [
             {
                 'value': pregnant_displaced_count_field,
                 'type': field_input_type,
             },
-        'lactating_displaced':
+            {
+                'type': constant_input_type,
+                'value': 0,
+            }
+        ],
+        'lactating_displaced':[
             {
                 'value': lactating_displaced_count_field,
                 'type': field_input_type,
             },
+            {
+                'type': constant_input_type,
+                'value': 0,
+            }
+        ],
         'additional_rice_ratio':
             {
                 'type': constant_input_type,

@@ -187,7 +187,7 @@
               &quot;female_ratio_field&quot;:&quot;female_r&quot;,
               &quot;male_ratio_field&quot;:&quot;male_r&quot;,
               &quot;displaced_field&quot;:&quot;displaced&quot;,
-              &quot;pregnant_lactating_displaced_count_field&quot;:&quot;pregnant_lactating_displaced&quot;
+              &quot;pregnant_displaced_count_field&quot;:&quot;pregnant_displaced&quot;
               }
             </gco:Dictionary>
           </inasafe_fields>
