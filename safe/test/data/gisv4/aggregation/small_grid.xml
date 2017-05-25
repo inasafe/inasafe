@@ -197,10 +197,10 @@
             <gco:CharacterString>aggregation</gco:CharacterString>
           </layer_purpose>
           <inasafe_fields>
-            <gco:Dictionary>{&quot;aggregation_name_field&quot;: &quot;area_name&quot;, &quot;female_ratio_field&quot;: [&quot;ratio_female&quot;], &quot;aggregation_id_field&quot;: &quot;area_id&quot;}</gco:Dictionary>
+            <gco:Dictionary>{&quot;female_ratio_field&quot;: [&quot;ratio_female&quot;], &quot;aggregation_id_field&quot;: &quot;area_id&quot;, &quot;aggregation_name_field&quot;: &quot;area_name&quot;}</gco:Dictionary>
           </inasafe_fields>
           <inasafe_default_values>
-            <gco:Dictionary>{&quot;pregnant_lactating_ratio_field&quot;: 0.05}</gco:Dictionary>
+            <gco:Dictionary>{&quot;lactating_ratio_field&quot;: 0.03, &quot;pregnant_ratio_field&quot;: 0.02}</gco:Dictionary>
           </inasafe_default_values>
           <resolution>
             <gco:FloatTuple/>

@@ -821,23 +821,26 @@ class TestImpactReport(unittest.TestCase):
                 }), ('layer_geometry', {
                     'content': u'polygon',
                     'header': 'Layer Geometry '
+                    # <td colspan=1><strong>Lactating Ratio</strong></td>\n<td colspan=1>0.03</td>\n</tr>\n<tr>\n<td colspan=1><strong>Pregnant Ratio</strong></td>\n<td colspan=1>0.02</td>
                 }), ('inasafe_fields', {
                     'content': u'<table class="table table-condensed">\n'
-                               u'<tbody>\n<tr>\n<td colspan=1><strong>'
-                               u'Aggregation Name</strong></td>\n'
-                               u'<td colspan=1>area_name</td>\n</tr>\n<tr>\n'
-                               u'<td colspan=1><strong>Female Ratio</strong>'
-                               u'</td>\n<td colspan=1>ratio_female</td>\n'
-                               u'</tr>\n<tr>\n<td colspan=1><strong>'
-                               u'Aggregation ID</strong></td>\n<td colspan=1>'
-                               u'area_id</td>\n</tr>\n</tbody>\n</table>\n',
+                               u'<tbody>\n<tr>\n<td colspan=1><strong>Female '
+                               u'Ratio</strong></td>\n<td colspan=1>'
+                               u'ratio_female</td>\n</tr>\n<tr>\n'
+                               u'<td colspan=1><strong>Aggregation ID</strong>'
+                               u'</td>\n<td colspan=1>area_id</td>\n</tr>\n'
+                               u'<tr>\n<td colspan=1><strong>Aggregation Name'
+                               u'</strong></td>\n<td colspan=1>area_name</td>'
+                               u'\n</tr>\n</tbody>\n</table>\n',
                     'header': 'InaSAFE Fields '
                 }), ('inasafe_default_values', {
                     'content': u'<table class="table table-condensed">\n'
                                u'<tbody>\n<tr>\n<td colspan=1><strong>'
-                               u'Pregnant Lactating Ratio</strong></td>\n'
-                               u'<td colspan=1>0.05</td>\n</tr>\n</tbody>\n'
-                               u'</table>\n',
+                               u'Lactating Ratio</strong></td>\n'
+                               u'<td colspan=1>0.03</td>\n</tr>\n<tr>\n'
+                               u'<td colspan=1><strong>Pregnant Ratio</strong>'
+                               u'</td>\n<td colspan=1>0.02</td>\n</tr>\n'
+                               u'</tbody>\n</table>\n',
                     'header': 'InaSAFE Default Values '
                 }), ('aggregation_layer', {
                     'content': aggregation_layer.source(),
@@ -875,6 +878,9 @@ class TestImpactReport(unittest.TestCase):
 
         actual_context = impact_table.context
 
+        # TODO: Make it easier to fix the test:
+        # 1. Use smaller dict comparison
+        # 2. Just check the content, exclude the html
         self.assertDictEqual(
             expected_context, actual_context)
         self.assertTrue(
