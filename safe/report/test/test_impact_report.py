@@ -1371,8 +1371,8 @@ class TestImpactReport(unittest.TestCase):
             'sections': OrderedDict([
                 ('age', [
                     {
-                        'header': u'Estimated number of people displaced by Age '
-                                  u'per aggregation area',
+                        'header': u'Estimated number of people displaced by '
+                                  u'Age per aggregation area',
                         'notes': age_displaced_count_group['notes'],
                         'rows': [[u'B', '10', '0', '0', '0'],
                                  [u'C', '10', '10', '10', '0'],
@@ -1424,24 +1424,32 @@ class TestImpactReport(unittest.TestCase):
                 ]),
                 ('vulnerability', [
                     {
-                        'header': u'Estimated number of people displaced by Age Vulnerability per aggregation area',
-                        'message': u'Vulnerability ratio not exists. No calculations produced.',
+                        'header': u'Estimated number of people displaced by '
+                                  u'Age Vulnerability per aggregation area',
+                        'message': u'Vulnerability ratio not exists. '
+                                   u'No calculations produced.',
                         'empty': True
                     },
                     {
-                        'header': u'Estimated number of people displaced by Gender Vulnerability per aggregation area',
-                        'message': u'Vulnerability ratio not exists. No calculations produced.',
+                        'header': u'Estimated number of people displaced by '
+                                  u'Gender Vulnerability per aggregation area',
+                        'message': u'Vulnerability ratio not exists. '
+                                   u'No calculations produced.',
                         'empty': True
                     },
                     {
-                        'header': u'Estimated number of people displaced by Disability Vulnerability per aggregation area',
-                        'message': u'Vulnerability ratio not exists. No calculations produced.',
+                        'header': u'Estimated number of people displaced by '
+                                  u'Disability Vulnerability per '
+                                  u'aggregation area',
+                        'message': u'Vulnerability ratio not exists. '
+                                   u'No calculations produced.',
                         'empty': True
                     }
                 ]),
                 ('minimum_needs', [
                     {
-                        'header': u'Estimated number of minimum needs per week',
+                        'header': u'Estimated number of minimum needs '
+                                  u'per week',
                         'notes': [],
                         'rows': [
                             [u'B', '10', '10', '20', '80', '0', '0'],
