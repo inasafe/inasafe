@@ -31,6 +31,7 @@ changelog=
     - Updated help documentation including better table of contents and nicer formatting
     - Added basic support for saving any html content (dock, help etc.) as pdf via right click context menu
     - Updated to bootstrap 4
+    - Added detailed provenance reporting for each analysis result
    
 
 
