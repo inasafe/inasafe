@@ -204,9 +204,9 @@ class ImpactFunction(object):
         self.reset_state()
         self._is_ready = False
         self._provenance_ready = False
-        self._datetime = None
         self._start_datetime = None
         self._end_datetime = None
+        self._duration = 0
         self._provenance = {
             # Environment
             'host_name': gethostname(),
@@ -556,19 +556,10 @@ class ImpactFunction(object):
         return self._title
 
     @property
-    def datetime(self):
-        """The timestamp of the impact function executions.
-
-        :return: The timestamp.
-        :rtype: datetime
-        """
-        return self._datetime
-
-    @property
     def start_datetime(self):
         """The timestamp when the impact function start to run.
 
-        :return: The timestamp.
+        :return: The start timestamp.
         :rtype: datetime
         """
         return self._start_datetime
@@ -577,10 +568,23 @@ class ImpactFunction(object):
     def end_datetime(self):
         """The timestamp when the impact function finish the run process.
 
-        :return: The timestamp.
+        :return: The start timestamp.
         :rtype: datetime
         """
         return self._end_datetime
+
+    @property
+    def duration(self):
+        """The duration of running the impact function in seconds.
+
+        Return 0 if the start or end datetime is None.
+
+        :return: The duration.
+        :rtype: float
+        """
+        if self.end_datetime is None or self.start_datetime is None:
+            return 0
+        return (self.end_datetime - self.start_datetime).total_seconds()
 
     @property
     def earthquake_function(self):
@@ -1310,13 +1314,9 @@ class ImpactFunction(object):
         self.summary_calculation()
 
         self._end_datetime = datetime.now()
-
-        self._datetime = datetime.now()
-        self._provenance['datetime'] = self.datetime
         self._provenance['start_datetime'] = self.start_datetime
         self._provenance['end_datetime'] = self.end_datetime
-        duration = (self.end_datetime - self.start_datetime).total_seconds()
-        self._provenance['duration'] = duration
+        self._provenance['duration'] = self.duration
         self._generate_provenance()
 
         # End of the impact function, we can add layers to the datastore.

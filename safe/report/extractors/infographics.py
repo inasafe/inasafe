@@ -413,9 +413,9 @@ def infographic_layout_extractor(impact_report, component_metadata):
     context['inasafe_resources_base_dir'] = resources_dir
     context['infographic_content'] = infographic_result
     version = provenance['inasafe_version']
-    date_time = provenance['datetime']
-    date = date_time.strftime('%Y-%m-%d')
-    time = date_time.strftime('%H:%M')
+    start_datetime = provenance['start_datetime']
+    date = start_datetime.strftime('%Y-%m-%d')
+    time = start_datetime.strftime('%H:%M')
     footer_format = resolve_from_dictionary(extra_args, 'footer_format')
     context['footer'] = footer_format.format(
         version=version, analysis_date=date, analysis_time=time)

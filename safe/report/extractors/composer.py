@@ -302,13 +302,13 @@ def qgis_composer_extractor(impact_report, component_metadata):
     context.map_legends = map_legends
 
     # process substitution map
-    date_time = provenance['datetime']
+    start_datetime = provenance['start_datetime']
     """:type: datetime.datetime"""
     date_format = resolve_from_dictionary(extra_args, 'date-format')
     time_format = resolve_from_dictionary(extra_args, 'time-format')
-    if isinstance(date_time, datetime.datetime):
-        date = date_time.strftime(date_format)
-        time = date_time.strftime(time_format)
+    if isinstance(start_datetime, datetime.datetime):
+        date = start_datetime.strftime(date_format)
+        time = start_datetime.strftime(time_format)
     else:
         date = ''
         time = ''

@@ -803,7 +803,9 @@ class TestImpactFunction(unittest.TestCase):
             'notes': impact_function.notes(),
             'requested_extent': impact_function.requested_extent,
             'data_store_uri': impact_function.datastore.uri_path,
-            'datetime': impact_function.datetime,
+            'start_datetime': impact_function.start_datetime,
+            'end_datetime': impact_function.end_datetime,
+            'duration': impact_function.duration
         })
 
         self.assertDictEqual(expected_provenance, impact_function.provenance)
@@ -879,7 +881,9 @@ class TestImpactFunction(unittest.TestCase):
             'notes': impact_function.notes(),
             'requested_extent': impact_function.requested_extent,
             'data_store_uri': impact_function.datastore.uri_path,
-            'datetime': impact_function.datetime,
+            'start_datetime': impact_function.start_datetime,
+            'end_datetime': impact_function.end_datetime,
+            'duration': impact_function.duration
         })
 
         self.assertDictEqual(expected_provenance, impact_function.provenance)
