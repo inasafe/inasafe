@@ -12,6 +12,7 @@ from safe.report.extractors.util import (
 from safe.utilities.resources import (
     resource_url,
     resources_path)
+from safe.utilities.rounding import html_scientific_notation_rate
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -116,13 +117,14 @@ def notes_assumptions_extractor(impact_report, component_metadata):
             extra_args, 'displacement_rates_note_format')
 
         # generate rate description
-        hazard_note_format = resolve_from_dictionary(
+        displacement_rates_note_format = resolve_from_dictionary(
             extra_args, 'hazard_displacement_rates_note_format')
-        hazard_note = []
+        displacement_rates_note = []
         for hazard_class in hazard_classification['classes']:
-            hazard_note.append(hazard_note_format.format(**hazard_class))
+            displacement_rates_note.append(
+                displacement_rates_note_format.format(**hazard_class))
 
-        rate_description = ', '.join(hazard_note)
+        rate_description = ', '.join(displacement_rates_note)
 
         for index, displacement_note in enumerate(
                 displacement_note_dict['item_list']):
@@ -131,6 +133,47 @@ def notes_assumptions_extractor(impact_report, component_metadata):
             )
 
         context['items'].append(displacement_note_dict)
+
+    # Check hazard have displacement rate
+    for hazard_class in hazard_classification['classes']:
+        if hazard_class.get('fatality_rate', 0) > 0:
+            have_fatality_rate = True
+            break
+    else:
+        have_fatality_rate = False
+
+    if have_fatality_rate and exposure_type == exposure_population:
+        # add notes for fatality rate used
+        fatality_note_dict = resolve_from_dictionary(
+            extra_args, 'fatality_rates_note_format')
+
+        # generate rate description
+        fatality_rates_note_format = resolve_from_dictionary(
+            extra_args, 'hazard_fatality_rates_note_format')
+        fatality_rates_note = []
+        for hazard_class in hazard_classification['classes']:
+            # we make a copy here because we don't want to
+            # change the real value.
+            copy_of_hazard_class = dict(hazard_class)
+            if not copy_of_hazard_class['fatality_rate'] > 0:
+                copy_of_hazard_class['fatality_rate'] = 0
+            else:
+                # we want to show the rate as a scientific notation
+                copy_of_hazard_class['fatality_rate'] = (
+                    html_scientific_notation_rate(
+                        copy_of_hazard_class['fatality_rate']))
+
+            fatality_rates_note.append(
+                fatality_rates_note_format.format(**copy_of_hazard_class))
+
+        rate_description = ', '.join(fatality_rates_note)
+
+        for index, fatality_note in enumerate(fatality_note_dict['item_list']):
+            fatality_note_dict['item_list'][index] = (
+                fatality_note.format(rate_description=rate_description)
+            )
+
+        context['items'].append(fatality_note_dict)
 
     return context
 

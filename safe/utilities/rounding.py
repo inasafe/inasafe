@@ -1,7 +1,6 @@
 # coding=utf-8
 """Rounding and number formatting."""
-
-
+from decimal import Decimal
 from math import ceil
 
 from safe.definitions.units import unit_mapping
@@ -253,3 +252,35 @@ def fatalities_range(number):
             return range_format.format(
                 min_range=add_separators(min_range),
                 max_range=add_separators(max_range))
+
+
+def html_scientific_notation_rate(rate):
+    """Helper for convert decimal rate using scientific notation.
+
+    For example we want to show the very detail value of fatality rate
+    because it might be a very small number.
+
+    :param rate: Rate value
+    :type rate: float
+
+    :return: Rate value with html tag to show the exponent
+    :rtype: str
+    """
+    precision = '%.3f'
+    if rate * 100 > 0:
+        decimal_rate = Decimal(precision % (rate * 100))
+        if decimal_rate == Decimal((precision % 0)):
+            decimal_rate = Decimal(str(rate * 100))
+    else:
+        decimal_rate = Decimal(str(rate * 100))
+    if decimal_rate.as_tuple().exponent >= -3:
+        rate_percentage = str(decimal_rate)
+    else:
+        rate = '%.2E' % decimal_rate
+        html_rate = rate.split('E')
+        # we use html tag to show exponent
+        html_rate[1] = '10<sup>{exponent}</sup>'.format(
+            exponent=html_rate[1])
+        html_rate.insert(1, 'x')
+        rate_percentage = ''.join(html_rate)
+    return rate_percentage
