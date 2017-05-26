@@ -206,6 +206,13 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             special_case = False
             # Filter out unsupported exposure for the hazard
             if exposure in hazard['disabled_exposures']:
+                # Remove from the storage if the exposure is disabled
+                if self.layer_mode == layer_mode_continuous:
+                    if exposure['key'] in self.thresholds:
+                        self.thresholds.pop(exposure['key'])
+                else:
+                    if exposure['key'] in self.value_maps:
+                        self.value_maps.pop(exposure['key'])
                 continue
             # Trick for EQ raster for population #3853
             if exposure == exposure_population and hazard == hazard_earthquake:

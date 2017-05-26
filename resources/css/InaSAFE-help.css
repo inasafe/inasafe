@@ -25,3 +25,35 @@ h2.nocount:before, h3.nocount:before, h4.nocount:before, h5.nocount:before, h6.n
 img{
     max-width: 100%;
 }
+
+
+/* Make preformatted text look nice */
+code, samp, kbd {
+	font-family: "Courier New", Courier, monospace, sans-serif;
+	text-align: left;
+	color: #555;
+	}
+pre code {
+	line-height: 1.6em;
+	font-size: 11px;
+	}
+pre {
+	padding: 0.1em 0.5em 0.3em 0.7em;
+	border-left: 11px solid #ccc;
+	margin: 1.7em 0 1.7em 0.3em;
+	overflow: auto;
+	width: 93%;
+    background: #ECECEC;
+	}
+/* target IE7 and IE6 */
+*:first-child+html pre {
+	padding-bottom: 2em;
+	overflow-y: hidden;
+	overflow: visible;
+	overflow-x: auto;
+	}
+* html pre {
+	padding-bottom: 2em;
+	overflow: visible;
+	overflow-x: auto;
+}

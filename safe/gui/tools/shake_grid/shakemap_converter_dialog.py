@@ -1,22 +1,4 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool developed by AusAid -
-**Converter Dialog.**
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
-__author__ = 'ismail@kartoza.com'
-__revision__ = '$Format:%H$'
-__date__ = '08/5/2014'
-__license__ = "GPL"
-__copyright__ = 'Copyright 2013, Australia Indonesia Facility for '
-__copyright__ += 'Disaster Reduction'
 
 import logging
 import os
@@ -48,8 +30,16 @@ LOGGER = logging.getLogger('InaSAFE')
 FORM_CLASS = get_ui_class('shakemap_importer_dialog_base.ui')
 
 
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
+
+
 class ShakemapConverterDialog(QDialog, FORM_CLASS):
+
     """Importer for shakemap grid.xml files."""
+
     def __init__(self, parent=None, iface=None, dock_widget=None):
         """Constructor for the dialog.
 
@@ -63,7 +53,6 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
 
         :param dock_widget: Dock widget instance.
         :type dock_widget: Dock
-
         """
         QDialog.__init__(self, parent)
         self.parent = parent
@@ -94,29 +83,28 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         self.help_button.setCheckable(True)
         self.help_button.toggled.connect(self.help_toggled)
         self.main_stacked_widget.setCurrentIndex(1)
+        self.update_warning()
 
     # noinspection PyPep8Naming
     def on_output_path_textChanged(self):
-        """Action when output file name is changed.
-        """
+        """Action when output file name is changed."""
         output_path = self.output_path.text()
         output_not_xml_msg = self.tr('output file is not .tif')
-        if not output_path.endswith('.tif'):
+        if output_path and not output_path.endswith('.tif'):
             self.warning_text.add(output_not_xml_msg)
-        elif output_not_xml_msg in self.warning_text:
+        elif output_path and output_not_xml_msg in self.warning_text:
             self.warning_text.remove(output_not_xml_msg)
         self.update_warning()
 
     # noinspection PyPep8Naming
     def on_input_path_textChanged(self):
-        """Action when input file name is changed.
-        """
+        """Action when input file name is changed."""
         input_path = self.input_path.text()
         input_not_grid_msg = self.tr('input file is not .xml')
 
-        if not input_path.endswith('.xml'):
+        if input_path and not input_path.endswith('.xml'):
             self.warning_text.add(input_not_grid_msg)
-        elif input_not_grid_msg in self.warning_text:
+        elif input_path and input_not_grid_msg in self.warning_text:
             self.warning_text.remove(input_not_grid_msg)
 
         if self.use_output_default.isChecked():
@@ -127,14 +115,14 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         """Update warning message and enable/disable Ok button."""
         if len(self.warning_text) == 0:
             self.button_box.button(QDialogButtonBox.Ok).setEnabled(True)
-            return
+        else:
+            self.button_box.button(QDialogButtonBox.Ok).setEnabled(False)
 
         header = html_header()
         footer = html_footer()
         string = header
         heading = m.Heading(self.tr('Shakemap Grid Importer'), **INFO_STYLE)
         tips = m.BulletedList()
-        self.button_box.button(QDialogButtonBox.Ok).setEnabled(False)
         message = m.Message()
         message.add(heading)
         for warning in self.warning_text:
@@ -146,8 +134,7 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         self.info_web_view.setHtml(string)
 
     def get_output_from_input(self):
-        """Create default output location based on input location.
-        """
+        """Create default output location based on input location."""
         input_path = self.input_path.text()
         if input_path.endswith('.xml'):
             output_path = input_path[:-3] + 'tif'
@@ -162,8 +149,7 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         self.output_path.setText(output_path)
 
     def accept(self):
-        """Handler for when OK is clicked.
-        """
+        """Handler for when OK is clicked."""
         input_path = self.input_path.text()
         input_title = self.line_edit_title.text()
         input_source = self.line_edit_source.text()
@@ -254,10 +240,7 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
     def load_result_toggled(self):
         """Function that perform action when load_result checkbox is clicked.
         """
-        if self.load_result.isChecked():
-            self.keyword_wizard_checkbox.setEnabled(True)
-        else:
-            self.keyword_wizard_checkbox.setEnabled(False)
+        self.keyword_wizard_checkbox.setEnabled(self.load_result.isChecked())
 
     @pyqtSlot()
     @pyqtSignature('bool')  # prevents actions being handled twice
@@ -306,9 +289,7 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
             return
 
         # launch wizard dialog
-        self.keyword_wizard = WizardDialog(
-            self.iface.mainWindow(),
-            self.iface,
-            self.dock_widget)
-        self.keyword_wizard.set_keywords_creation_mode(self.output_layer)
-        self.keyword_wizard.exec_()  # modal
+        keyword_wizard = WizardDialog(
+            self.iface.mainWindow(), self.iface, self.dock_widget)
+        keyword_wizard.set_keywords_creation_mode(self.output_layer)
+        keyword_wizard.exec_()  # modal

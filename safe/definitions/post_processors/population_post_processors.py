@@ -7,7 +7,7 @@ from post_processor_functions import (
 )
 from safe.definitions.exposure import exposure_population
 from safe.definitions.concepts import concepts
-from safe.definitions.hazard import hazard_earthquake
+from safe.definitions.hazard_classifications import earthquake_mmi_scale
 # Ratio fields
 from safe.definitions.fields import (
     population_displacement_ratio_field,
@@ -152,7 +152,8 @@ post_processor_fatality_ratio = {
     'name': tr('Population Fatality Ratio Post Processor'),
     'description': tr(
         'A post processor to add the population fatality ratio according '
-        'to the hazard class'),
+        'to the hazard class. Only the MMI classification has a fatality '
+        'model.'),
     'input': {
         # Taking hazard classification
         'classification': {
@@ -177,8 +178,8 @@ post_processor_fatality_ratio = {
             }],
         'earthquake_hazard': {
             'type': keyword_value_expected,
-            'value': ['hazard_keywords', 'hazard'],
-            'expected_value': hazard_earthquake['key']
+            'value': ['hazard_keywords', 'classification'],
+            'expected_value': earthquake_mmi_scale['key']
         },
     },
     'output': {
