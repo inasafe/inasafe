@@ -353,13 +353,13 @@ aggregation_postprocessors_component = {
                 'Analysis produced 0 displaced count. '
                 'No calculations produced.'),
             'no_gender_rate_message': tr(
-                'Gender ratio not found. '
+                'Gender ratio is not found. '
                 'No calculations produced.'),
             'no_age_rate_message': tr(
-                'Age ratio not found. '
+                'Age ratio is not found. '
                 'No calculations produced.'),
             'no_vulnerability_rate_message': tr(
-                'Vulnerability ratio not found. '
+                'Vulnerability ratio is not found. '
                 'No calculations produced.')
         }
     }
