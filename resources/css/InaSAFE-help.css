@@ -1,4 +1,8 @@
-/** This section is for heading counters . See http://philarcher.org/diary/2013/headingnumbers/ **/
+/** This section is for heading counters . See http://philarcher.org/diary/2013/headingnumbers/
+
+It overrides the styles in InaSAFE.css so that headers are numbered
+
+**/
 body {counter-reset: h2}
 h2.section {counter-reset: h3}
 h3.subsection {counter-reset: h4}
@@ -13,47 +17,3 @@ h6:before {counter-increment: h6; content: counter(h2) "." counter(h3) "." count
 h2.nocount:before, h3.nocount:before, h4.nocount:before, h5.nocount:before, h6.nocount:before { content: ""; counter-increment: none }
 /** End counters section **/
 
-
-/* Prevent page text being cut off at the bottom when printing. */
-@page  {
-    size: auto;   /* auto is the initial value */
-
-    /* this affects the margin in the printer settings */
-    margin: 25mm 25mm 25mm 25mm;
-}
-/* Try to prevent images wider than content. */
-img{
-    max-width: 100%;
-}
-
-
-/* Make preformatted text look nice */
-code, samp, kbd {
-	font-family: "Courier New", Courier, monospace, sans-serif;
-	text-align: left;
-	color: #555;
-	}
-pre code {
-	line-height: 1.6em;
-	font-size: 11px;
-	}
-pre {
-	padding: 0.1em 0.5em 0.3em 0.7em;
-	border-left: 11px solid #ccc;
-	margin: 1.7em 0 1.7em 0.3em;
-	overflow: auto;
-	width: 93%;
-    background: #ECECEC;
-	}
-/* target IE7 and IE6 */
-*:first-child+html pre {
-	padding-bottom: 2em;
-	overflow-y: hidden;
-	overflow: visible;
-	overflow-x: auto;
-	}
-* html pre {
-	padding-bottom: 2em;
-	overflow: visible;
-	overflow-x: auto;
-}

@@ -147,18 +147,6 @@ p {
   margin-right: 25px;
 }
 
-/* Try to prevent page text being cut off at the bottom when printing. */
-@page  {
-    size: auto;   /* auto is the initial value */
-
-    /* this affects the margin in the printer settings */
-    margin: 25mm 25mm 25mm 25mm;
-}
-
-/* Try to prevent images wider than content. */
-img{
-    max-width: 100%;
-}
 
 /* Tree view styling */
 .tree, .tree ul, .tree li {
@@ -211,33 +199,67 @@ table ul {
 
 
 
+/* Try to prevent images wider than content. */
+img{
+  max-width: 100%;
+}
+
+
 /* Make preformatted text look nice */
 code, samp, kbd {
-	font-family: "Courier New", Courier, monospace, sans-serif;
-	text-align: left;
-	color: #555;
-	}
+  font-family: "Courier New", Courier, monospace, sans-serif;
+  text-align: left;
+  color: #555;
+}
 pre code {
-	line-height: 1.6em;
-	font-size: 11px;
-	}
+  line-height: 1.6em;
+  font-size: 11px;
+}
 pre {
-	padding: 0.1em 0.5em 0.3em 0.7em;
-	border-left: 11px solid #ccc;
-	margin: 1.7em 0 1.7em 0.3em;
-	overflow: auto;
-	width: 93%;
-    background: #ECECEC;
-	}
+  padding: 0.1em 0.5em 0.3em 0.7em;
+  border-left: 11px solid #ccc;
+  margin: 1.7em 0 1.7em 0.3em;
+  overflow: auto;
+  width: 93%;
+  background: #ECECEC;
+}
 /* target IE7 and IE6 */
 *:first-child+html pre {
-	padding-bottom: 2em;
-	overflow-y: hidden;
-	overflow: visible;
-	overflow-x: auto;
-	}
+  padding-bottom: 2em;
+  overflow-y: hidden;
+  overflow: visible;
+  overflow-x: auto;
+}
 * html pre {
-	padding-bottom: 2em;
-	overflow: visible;
-	overflow-x: auto;
-	}
+  padding-bottom: 2em;
+  overflow: visible;
+  overflow-x: auto;
+}
+
+/* Rules for print layout see
+
+https://stackoverflow.com/questions/16649943/css-to-set-a4-paper-size
+
+ */
+
+
+@page {
+    size: A4;
+    margin: 0;
+}
+@media print {
+    html, body {
+        width: 210mm;
+        height: 297mm;
+    }
+    .page {
+        margin: 0;
+        border: initial;
+        border-radius: initial;
+        width: initial;
+        min-height: initial;
+        box-shadow: initial;
+        background: initial;
+        page-break-after: always;
+    }
+}

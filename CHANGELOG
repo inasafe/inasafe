@@ -1,15 +1,109 @@
 Changelog for version 4.1.0
 ================================
 
-407b26f07 (HEAD -> changelog) Updated metadata.txt with changelog
-af6bb1a14 (develop) Merge remote-tracking branch 'upstream/develop' into develop
-a2612eb8c (upstream/develop) Add help text to the FMT.
+9e320eb5d (HEAD -> develop, origin/develop, origin/HEAD) Updated note about active fatality model to include comment from Charlotte
+b61f9e461 Resolved merge conflicts
+f1ae7f420 Show eq fatality model also in mmi scale in help
+0407574df (upstream/develop) use definitions to create demographics fields
+0cb121afe Remove IF.datetime with IF.starttime to avoid confusion.
+4591db6e7 Add duration to impact function.
+224d04955 Small changelog update (#4225)
+d930ed4f2 Updated definitions help to show which EQ function is active
+8e3863f6a Updates to the changelog
+7aa06cee9 smalle formatting fix (#4226)
+e9ca0fe6a Small string fix for vulnerability not found
+1312ea320 Update scenario and PEP8.
+002b20793 Update additional rice post processor.
+44409d79c Remove pregnant_and_lactating post processor.
+a9149b833 Update unit test.
+8753adbf6 Remove pregnant_and_lactating concept.
+a130258f1 Use pregnant + lactating to calculate additional rice.
+fd4c82dee Merge remote-tracking branch 'upstream/develop' into develop
+d4e57eb60 Reporting separate provenance tree (#4224)
+3a1300441 Merge remote-tracking branch 'origin/develop' into develop
+fa21b424d Metadata update
+905ffcbfd Help system improvements (#4219)
+641366849 make a recursive call to serialize a dict
+2147f9423 fix some small issues in the shakemap converter
+5c75004ed small updates aifdr and v4
+8109a08e1 add warning about QGIS needs to restart if you change the EQ model
+6e2d0b620 show busy in the memory profiling
+7d707ea0e Update unit test for #4218.
+ff966a312 Remove invalid or non existing classification. Fix #4214
+2133c191f Add unit test to replicate #4200.
+2ef4463d5 remove fatalitities from EQ generic classification
+1e5ff940b PEP8
+db29e5695 Added citations title in docs
+93bc63706 Show eq model descriptions in help
+044064841 Set up developer doc system using Marco's cyclone guide as an example. See #4179
+8d471ceee Updates to developer documentation to use pretty print for dicts
+cea62da30 Started developer section in help docs
+0320c12d1 Fix heading numbering in help
+b5617f9ff add tree view analysis provenance details (#4170)
+1ae31e614 skip qgis expression if we made a copy
+c7822cdd8 check if layers have some inasafe_fields are up to date
+eebd6e9bd Improve the EQ selection in settings
+65c5b2e98 Add clean step for field mapping step in keyword wizard Fix #4200.
+fa671d898 Add unit test to replicate #4200.
+b90d8738d Fix #4195, add missing field group options.
+b4b7ba175 add the pregnant.svg (#4198)
+ea59013cb fix  #4165 (#4196)
+4d6627853 Update test scenario to fix unit test.
+fc92d9148 Add gender_vulnerability_postprocessors.
+ab1cb30e3 add fatality vector to EQ on pop vector
+c9183606d override bootstrap 4 style (font-size and table padding) (#4177)
+a53f127c9 Remove sum age ratio validation.
+e0061928e fix unboundlocalerror
+abcdcbe9e Merge pull request #4169 from timlinux/inasafe-4163
+4db26e957 Report rounding (#4182)
+967c3d540 improve the profiling table
+cf1f2fbc9 part fix #4165 (#4184)
+2e214b92f part fix #3847 (#4176)
+1581e6ce3 (origin/inasafe-4163, inasafe-4163) Fix last scenario failed test.
+f5700c8c0 Update test scenario and reorder post processor.
+54e16a2c6 Fix failed unit test in test_gender_post_processor.
+5eb8da079 Test fixes
+7ddd7a150 PEP8
+7380da67c Fix failing tests for #4163
+0dcd7b6fa Fix failing tests for #4163
+d53b29b6c Fix failing tests for #4163
+3d5a35d48 Resolved merge conflicts
+37c40d461 Show option to show memory for all user.
+8f707b529 Skip memory profile if disabled.
+94abc228d Add show memory profile in the setting.
+7004a8be3 In progress updates for #4163
+cfee9f017 In progress updates for refactored demographic groups
+255ca4032 remove old QGIS api calls
+0e1a2f958 In progress refactoring of post processors into its own package and sorting out demographic groups
+8ccddbb0a Fix #3878. Use ISO 19115 keywords from setting on analysis result.
+781183a91 small formatting fixes based on review feedback from @ismailsunni for #4169
+a11b6e04a Help text (#4159)
+e6f5c8544 Resolve merge conflicts
+a1eafb7d2 First pass to split demographic groups as per #4163
+77a62bd95 Reporting - action list (#4088)
+ff49bf2a2 make the report relocatable (#4160)
+3d36442fa Fix failed unit test.
+31c001e86 Remove unused code.
+31f8cae74 Update dock after closing FMT.
+e9b9d0b47 Remove dock from option dialog.
+94e9ddee8 Remove random failed test.
+2d5341603 Add notes for exclusive in field groups.
+9f1ee26bf Make moving between field list also non duplicate.
+e62e646f5 Add description that user can the same field.
+40113c003 Fix #4157 Add exclusive for FMT.
+0a4852e71 Add @myarjunar's email to travis.
+7a3969221 Put FMT menu in proper location.
+54fa6d6de Handle empty definition.
+3a8b90c30 Disable FMT for raster.
+e62ecbc29 Changelog (#4155)
+e6049c325 moved realtime and geosafe canvases out to their own graffle docs and into their repos (#4156)
+a2612eb8c Add help text to the FMT.
 2a2426748 Fix bug when no field left in the field list.
 cb398e79b Fix typo and tidy up code.
 0b05805f9 Partfix 4092 (#4144)
 8f15ff28a Reporting column order (#4142)
 bef9d2f17 Partial fix for #4151 - show help_text in field definitions (#4152)
-f495f6f6e (origin/develop, origin/HEAD) Partial fix for #4151 - show help_text in field definitions
+f495f6f6e Partial fix for #4151 - show help_text in field definitions
 d91882d11 Options help (#4150)
 2fb03ca32 add notes based on concepts (#4131)
 42a4dde80 Merge pull request #4147 from myarjunar/reporting-general-report
