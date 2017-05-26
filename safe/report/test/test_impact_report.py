@@ -1242,14 +1242,14 @@ class TestImpactReport(unittest.TestCase):
                     {
                         'header': u'Estimated number of people displaced by '
                                   u'Age Vulnerability per aggregation area',
-                        'message': u'Vulnerability ratio not exists. '
+                        'message': u'Vulnerability ratio is not found. '
                                    u'No calculations produced.',
                         'empty': True
                     },
                     {
                         'header': u'Estimated number of people displaced by '
                                   u'Gender Vulnerability per aggregation area',
-                        'message': u'Vulnerability ratio not exists. '
+                        'message': u'Vulnerability ratio is not found. '
                                    u'No calculations produced.',
                         'empty': True
                     },
@@ -1257,7 +1257,7 @@ class TestImpactReport(unittest.TestCase):
                         'header': u'Estimated number of people displaced by '
                                   u'Disability Vulnerability per '
                                   u'aggregation area',
-                        'message': u'Vulnerability ratio not exists. '
+                        'message': u'Vulnerability ratio is not found. '
                                    u'No calculations produced.',
                         'empty': True
                     }
@@ -1426,14 +1426,14 @@ class TestImpactReport(unittest.TestCase):
                     {
                         'header': u'Estimated number of people displaced by '
                                   u'Age Vulnerability per aggregation area',
-                        'message': u'Vulnerability ratio not exists. '
+                        'message': u'Vulnerability ratio is not found. '
                                    u'No calculations produced.',
                         'empty': True
                     },
                     {
                         'header': u'Estimated number of people displaced by '
                                   u'Gender Vulnerability per aggregation area',
-                        'message': u'Vulnerability ratio not exists. '
+                        'message': u'Vulnerability ratio is not found. '
                                    u'No calculations produced.',
                         'empty': True
                     },
@@ -1441,7 +1441,7 @@ class TestImpactReport(unittest.TestCase):
                         'header': u'Estimated number of people displaced by '
                                   u'Disability Vulnerability per '
                                   u'aggregation area',
-                        'message': u'Vulnerability ratio not exists. '
+                        'message': u'Vulnerability ratio is not found. '
                                    u'No calculations produced.',
                         'empty': True
                     }
