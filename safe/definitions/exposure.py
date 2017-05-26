@@ -51,7 +51,7 @@ exposure_population = {
                 tr('Numbers reported for population counts have been rounded '
                    'to the nearest 10 people if the total is less than 1,000; '
                    'nearest 100 people if more than 1,000 and less than '
-                   '100,000; and nearest 1000 if more than 100,000.'),
+                   '100,000; and nearest 1,000 if more than 100,000.'),
                 tr('Rounding is applied to all population values, which may '
                    'cause discrepancies between subtotals and totals. '),
                 concepts['rounding_methodology']['description'],
