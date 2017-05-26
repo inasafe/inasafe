@@ -504,18 +504,7 @@ concepts['lactating'] = {
         }
     ],
 }
-concepts['pregnant_lactating'] = {
-    'group': tr('Vulnerability'),
-    'key': 'pregnant_lactating',
-    'description': tr(
-        'A female who is either pregnant or feeding a baby.'),
-    'citations': [
-        {
-            'text': tr(''),
-            'link': u''
-        }
-    ],
-}
+
 concepts['rice'] = {
     'group': tr('Minimum needs'),
     'key': 'rice',

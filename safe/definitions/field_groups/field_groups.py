@@ -110,8 +110,6 @@ age_vulnerability_group_notes = [
 gender_vulnerability_group_notes = [
     tr('Child bearing age: {note}'.format(
         note=concepts['child_bearing_age']['description'])),
-    tr('Pregnant lactating: {note}'.format(
-        note=concepts['pregnant_lactating']['description'])),
     tr('Pregnant: {note}'.format(
         note=concepts['pregnant']['description'])),
     tr('Lactating: {note}'.format(

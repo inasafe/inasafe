@@ -178,8 +178,10 @@ class TestPrepareLayer(unittest.TestCase):
         """Test sum_fields method."""
         layer = load_test_vector_layer(
             'gisv4', 'exposure', 'population_multi_fields.geojson', clone=True)
-        sum_fields(layer, 'exposure_id', ['F_0_4', 'F_5_9', 'F_9_15'])
-        exposure_id__idx = layer.fieldNameIndex('exposure_id')
+        sum_fields(
+            layer, exposure_id_field['key'], ['F_0_4', 'F_5_9', 'F_9_15'])
+        exposure_id__idx = layer.fieldNameIndex(
+            exposure_id_field['field_name'])
         F_0_4__idx = layer.fieldNameIndex('F_0_4')
         F_5_9__idx = layer.fieldNameIndex('F_5_9')
         F_9_15__idx = layer.fieldNameIndex('F_9_15')
@@ -189,11 +191,11 @@ class TestPrepareLayer(unittest.TestCase):
                     F_9_15__idx])
             self.assertEqual(feature[exposure_id__idx], sum_value)
 
-        new_field__idx = layer.fieldNameIndex('new_field')
+        new_field__idx = layer.fieldNameIndex(female_count_field['field_name'])
         # Check if the new field doesn't exist
         self.assertEqual(new_field__idx, -1)
-        sum_fields(layer, 'new_field', ['F_0_4', 'F_5_9'])
-        new_field__idx = layer.fieldNameIndex('new_field')
+        sum_fields(layer, female_count_field['key'], ['F_0_4', 'F_5_9'])
+        new_field__idx = layer.fieldNameIndex(female_count_field['field_name'])
         for feature in layer.getFeatures():
             sum_value = (feature[F_0_4__idx] + feature[F_5_9__idx])
             self.assertEqual(feature[new_field__idx], sum_value)

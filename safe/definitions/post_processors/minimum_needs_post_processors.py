@@ -2,13 +2,15 @@
 from safe.definitions import minimum_needs_fields, displaced_field
 from safe.utilities.i18n import tr
 from safe.definitions.concepts import concepts
-from safe.definitions.fields import pregnant_lactating_displaced_count_field
+from safe.definitions.fields import (
+    pregnant_displaced_count_field, lactating_displaced_count_field)
 from safe.definitions.fields import additional_rice_count_field
 from safe.definitions.post_processors.post_processor_inputs import (
     constant_input_type,
     field_input_type,
     needs_profile_input_type)
 from safe.definitions.post_processors.post_processors import (
+    formula_process,
     multiply,
     function_process)
 
@@ -33,11 +35,18 @@ post_processor_additional_rice = {
         '"Displaced" is defined as: {displaced_concept}').format(
         displaced_concept=concepts['displaced_people']['description']),
     'input': {
-        'pregnant_lactating_displaced':
+        'pregnant_displaced': [
             {
-                'value': pregnant_lactating_displaced_count_field,
+                'value': pregnant_displaced_count_field,
                 'type': field_input_type,
-            },
+            }
+        ],
+        'lactating_displaced': [
+            {
+                'value': lactating_displaced_count_field,
+                'type': field_input_type,
+            }
+        ],
         'additional_rice_ratio':
             {
                 'type': constant_input_type,
@@ -66,8 +75,10 @@ post_processor_additional_rice = {
         # to replace the hard coded value.
         'additional_rice': {
             'value': additional_rice_count_field,
-            'type': function_process,
-            'function': multiply
+            'type': formula_process,
+            'formula': (
+                '(pregnant_displaced + lactating_displaced) * '
+                'additional_rice_ratio')
         },
     }
 }

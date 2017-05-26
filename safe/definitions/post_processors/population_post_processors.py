@@ -13,7 +13,6 @@ from safe.definitions.fields import (
     population_displacement_ratio_field,
     population_fatality_ratio_field,
     child_bearing_age_ratio_field,
-    pregnant_lactating_ratio_field,
     lactating_ratio_field,
     pregnant_ratio_field,
     female_ratio_field,
@@ -38,7 +37,6 @@ from safe.definitions.fields import (
 # Displaced field
 from safe.definitions.fields import (
     child_bearing_age_displaced_count_field,
-    pregnant_lactating_displaced_count_field,
     pregnant_displaced_count_field,
     lactating_displaced_count_field,
     infant_displaced_count_field,
@@ -265,44 +263,7 @@ post_processor_child_bearing_age = {
         }
     }
 }
-post_processor_pregnant_lactating = {
-    'key': 'post_processor_pregnant_lactating',
-    'name': tr('Pregnant and Lactating Post Processor'),
-    'description': tr(
-        'A post processor to calculate the number of displaced pregnant and '
-        'lactating women. "Pregnant or Lacatating" is defined as: {'
-        'pregnant_lactating_concept} "Displaced" is defined as: '
-        '{displaced_concept}').format(
-        pregnant_lactating_concept=concepts[
-                'pregnant_lactating']['description'],
-        displaced_concept=concepts['displaced_people']['description']),
-    'input': {
-        'population_displaced': {
-            'value': displaced_field,
-            'type': field_input_type,
-        },
-        # input as a list means, try to get the input from the
-        # listed source. Pick the first available
-        'pregnant_lactating_ratio': [{
-                'value': pregnant_lactating_ratio_field,
-                'type': field_input_type
-            },
-            {
-                'type': keyword_input_type,
-                'value': [
-                    'inasafe_default_values',
-                    pregnant_lactating_ratio_field['key'],
-                ],
-            }]
-    },
-    'output': {
-        'pregnant_lactating_displaced': {
-            'value': pregnant_lactating_displaced_count_field,
-            'type': function_process,
-            'function': multiply
-        }
-    }
-}
+
 post_processor_pregnant = {
     'key': 'post_processor_pregnant',
     'name': tr('Pregnant Post Processor'),
@@ -311,7 +272,7 @@ post_processor_pregnant = {
         'women. "Pregnant" is defined as: {pregnant_concept} "Displaced" is '
         'defined as: {displaced_concept}').format(
         pregnant_concept=concepts[
-            'pregnant_lactating']['description'],
+            'pregnant']['description'],
         displaced_concept=concepts['displaced_people']['description']),
     'input': {
         'population_displaced': {
@@ -795,7 +756,6 @@ age_vulnerability_postprocessors = [
 ]
 gender_vulnerability_postprocessors = [
     post_processor_child_bearing_age,
-    post_processor_pregnant_lactating,
     post_processor_pregnant,
     post_processor_lactating
 ]
