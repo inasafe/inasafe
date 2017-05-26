@@ -146,7 +146,7 @@
       <widgetv2config IsMultiline="0" fieldEditable="1" UseHtml="0" labelOnTop="0"/>
     </edittype>
   </edittypes>
-  <renderer-v2 attr="Pop_Total" forceraster="0" symbollevels="0" type="graduatedSymbol" graduatedMethod="GraduatedColor" enableorderby="0">
+  <renderer-v2 attr="Pop_affect" forceraster="0" symbollevels="0" type="graduatedSymbol" graduatedMethod="GraduatedColor" enableorderby="0">
     <ranges>
       <range render="true" symbol="0" lower="[marker-min-range-0]" upper="[marker-max-range-0]" label="[marker-label-0]"/>
       <range render="true" symbol="1" lower="[marker-min-range-1]" upper="[marker-max-range-1]" label="[marker-label-1]"/>
