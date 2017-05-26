@@ -351,3 +351,18 @@ def erf(z):
         return ans[0]
     else:
         return ans
+
+
+def current_earthquake_model_name():
+    """Human friendly name for the currently active earthquake fatality model.
+
+    :returns: Name of the current EQ fatality model as defined in users
+        settings.
+    """
+    default_earthquake_function = setting(
+        'earthquake_function', expected_type=str)
+    current_function = None
+    for model in EARTHQUAKE_FUNCTIONS:
+        if model['key'] == default_earthquake_function:
+            current_function = model['name']
+    return current_function
