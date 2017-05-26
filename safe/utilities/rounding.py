@@ -266,10 +266,21 @@ def html_scientific_notation_rate(rate):
     :return: Rate value with html tag to show the exponent
     :rtype: str
     """
-    rate = '%.2E' % Decimal(rate)
-    html_rate = rate.split('E')
-    # we use html tag to show exponent
-    html_rate[1] = '10<sup>{exponent}</sup>'.format(
-        exponent=html_rate[1])
-    html_rate.insert(1, 'x')
-    return ''.join(html_rate)
+    precision = '%.3f'
+    if rate * 100 > 0:
+        decimal_rate = Decimal(precision % (rate * 100))
+        if decimal_rate == Decimal((precision % 0)):
+            decimal_rate = Decimal(str(rate * 100))
+    else:
+        decimal_rate = Decimal(str(rate * 100))
+    if decimal_rate.as_tuple().exponent >= -3:
+        rate_percentage = str(decimal_rate)
+    else:
+        rate = '%.2E' % decimal_rate
+        html_rate = rate.split('E')
+        # we use html tag to show exponent
+        html_rate[1] = '10<sup>{exponent}</sup>'.format(
+            exponent=html_rate[1])
+        html_rate.insert(1, 'x')
+        rate_percentage = ''.join(html_rate)
+    return rate_percentage

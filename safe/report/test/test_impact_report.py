@@ -970,7 +970,7 @@ class TestImpactReport(unittest.TestCase):
 
         expected_context = (
             'For this analysis, the following displacement rates were used: '
-            'Wet - 90.00%, Dry - 0.00%')
+            'Wet - 90%, Dry - 0%')
         actual_context = notes_assumptions.context['items'][-1]['item_list'][0]
         self.assertEqual(expected_context.strip(), actual_context.strip())
 
