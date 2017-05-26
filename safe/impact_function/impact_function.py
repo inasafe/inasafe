@@ -3,7 +3,6 @@
 """Impact Function."""
 
 import getpass
-import platform
 from datetime import datetime
 from os.path import join, exists
 from os import makedirs
@@ -77,9 +76,8 @@ from safe.definitions.layer_purposes import (
     layer_purpose_profiling,
 )
 from safe.impact_function.provenance_utilities import (
-    get_map_title,
-    get_analysis_question
-)
+    get_map_title, get_analysis_question)
+
 from safe.definitions.constants import (
     inasafe_keyword_version_key,
     GLOBAL,
@@ -106,9 +104,7 @@ from safe.common.exceptions import (
 )
 from safe.definitions.earthquake import EARTHQUAKE_FUNCTIONS
 from safe.impact_function.earthquake import (
-    exposed_people_stats,
-    make_summary_layer,
-)
+    exposed_people_stats, make_summary_layer)
 from safe.impact_function.postprocessors import (
     run_single_post_processor, enough_input)
 from safe.impact_function.create_extra_layers import (
@@ -209,6 +205,8 @@ class ImpactFunction(object):
         self._is_ready = False
         self._provenance_ready = False
         self._datetime = None
+        self._start_datetime = None
+        self._end_datetime = None
         self._provenance = {
             # Environment
             'host_name': gethostname(),
@@ -565,6 +563,24 @@ class ImpactFunction(object):
         :rtype: datetime
         """
         return self._datetime
+
+    @property
+    def start_datetime(self):
+        """The timestamp when the impact function start to run.
+
+        :return: The timestamp.
+        :rtype: datetime
+        """
+        return self._start_datetime
+
+    @property
+    def end_datetime(self):
+        """The timestamp when the impact function finish the run process.
+
+        :return: The timestamp.
+        :rtype: datetime
+        """
+        return self._end_datetime
 
     @property
     def earthquake_function(self):
@@ -1103,6 +1119,7 @@ class ImpactFunction(object):
                 from the code.
         :rtype: (int, m.Message)
         """
+        self._start_datetime = datetime.now()
         if not self._is_ready:
             message = tr('You need to run `prepare` first.')
             return ANALYSIS_FAILED_BAD_INPUT, message
@@ -1292,8 +1309,14 @@ class ImpactFunction(object):
         self.callback(8, step_count, analysis_steps['summary_calculation'])
         self.summary_calculation()
 
+        self._end_datetime = datetime.now()
+
         self._datetime = datetime.now()
         self._provenance['datetime'] = self.datetime
+        self._provenance['start_datetime'] = self.start_datetime
+        self._provenance['end_datetime'] = self.end_datetime
+        duration = (self.end_datetime - self.start_datetime).total_seconds()
+        self._provenance['duration'] = duration
         self._generate_provenance()
 
         # End of the impact function, we can add layers to the datastore.
