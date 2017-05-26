@@ -6,6 +6,7 @@ import re
 import codecs
 import json
 import logging
+import platform
 import sys
 import traceback
 import unicodedata
@@ -396,3 +397,17 @@ def monkey_patch_keywords(layer):
         layer.keywords['inasafe_fields']
     except KeyError:
         layer.keywords['inasafe_fields'] = {}
+
+
+def readable_os_version():
+    """Give a proper name for OS version
+
+    :return: Proper OS version
+    :rtype: str
+    """
+    if platform.system() == 'Linux':
+        return ' '.join(platform.dist())
+    elif platform.system() == 'Darwin':
+        return ' {version}'.format(version=platform.mac_ver()[0])
+    elif platform.system() == 'Windows':
+        return platform.platform()

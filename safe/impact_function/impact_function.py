@@ -134,7 +134,8 @@ from safe.utilities.metadata import (
 from safe.utilities.utilities import (
     replace_accentuated_characters,
     get_error_message,
-    is_keyword_version_supported)
+    is_keyword_version_supported,
+    readable_os_version)
 from safe.utilities.profiling import (
     profile, clear_prof_data, profiling_log)
 from safe.utilities.gis import qgis_version
@@ -216,7 +217,7 @@ class ImpactFunction(object):
             'gdal_version': gdal.__version__,
             'qt_version': QT_VERSION_STR,
             'pyqt_version': PYQT_VERSION_STR,
-            'os': platform.version(),
+            'os': readable_os_version(),
             'inasafe_version': get_version(),
         }
 

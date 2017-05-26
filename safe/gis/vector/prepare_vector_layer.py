@@ -462,25 +462,26 @@ def sum_fields(layer, output_field_name, input_fields):
         # Name is same, do nothing
         else:
             return
-    # Creating expression
-    string_expression = ' + '.join(input_fields)
-    sum_expression = QgsExpression(string_expression)
-    sum_expression.prepare(layer.pendingFields())
+    else:
+        # Creating expression
+        string_expression = ' + '.join(input_fields)
+        sum_expression = QgsExpression(string_expression)
+        sum_expression.prepare(layer.pendingFields())
 
-    # Get the output field index
-    output_idx = layer.fieldNameIndex(output_field_name)
-    # Output index is not found
-    if output_idx == -1:
-        output_field = QgsField(output_field_name, QVariant.Double)
-        layer.startEditing()
-        layer.dataProvider().addAttributes([output_field])
-        layer.commitChanges()
+        # Get the output field index
         output_idx = layer.fieldNameIndex(output_field_name)
+        # Output index is not found
+        if output_idx == -1:
+            output_field = QgsField(output_field_name, QVariant.Double)
+            layer.startEditing()
+            layer.dataProvider().addAttributes([output_field])
+            layer.commitChanges()
+            output_idx = layer.fieldNameIndex(output_field_name)
 
-    layer.startEditing()
-    # Iterate to all features
-    for feature in layer.getFeatures():
-        feature[output_idx] = sum_expression.evaluate(feature)
-        layer.updateFeature(feature)
+        layer.startEditing()
+        # Iterate to all features
+        for feature in layer.getFeatures():
+            feature[output_idx] = sum_expression.evaluate(feature)
+            layer.updateFeature(feature)
 
-    layer.commitChanges()
+        layer.commitChanges()

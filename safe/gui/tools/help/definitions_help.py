@@ -34,6 +34,7 @@ from safe.gui.tools.help.peta_bencana_help import content as petabencana_help
 from safe.gui.tools.help.shakemap_converter_help \
     import content as shakemap_help
 from safe.gui.tools.help.multi_buffer_help import content as multi_buffer_help
+from developer_help import content as developer_help
 from safe.utilities.resources import resource_url, resources_path
 LOGGER = logging.getLogger('InaSAFE')
 # For chapter sections
@@ -57,10 +58,10 @@ HEADING_LOOKUPS = {
 }
 HEADING_COUNTS = {
     1: 1,
-    2: 1,
-    3: 1,
-    4: 1,
-    5: 1,
+    2: 0,
+    3: 0,
+    4: 0,
+    5: 0,
 }
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -281,7 +282,7 @@ def content():
         message,
         table_of_contents,
         'field-mapping-tool',
-        tr('The Field MappingTool'),
+        tr('The Field Mapping Tool'),
         heading_level=2)
     message.add(field_mapping_tool_help())
 
@@ -737,6 +738,18 @@ def content():
         table.add(row)
     message.add(table)
 
+    ##
+    # Developer documentation
+    ##
+
+    _create_section_header(
+        message,
+        table_of_contents,
+        'developer-guide',
+        tr('Developer Guide'),
+        heading_level=1)
+    message.add(developer_help())
+
     # Finally we add the table of contents at the top
     full_message = m.Message()
     # Contents is not a link so reset style
@@ -763,13 +776,13 @@ def _start_glossary_table(group):
 def _create_section_header(
         message,
         table_of_contents,
-        id,
+        element_id,
         text,
         heading_level=1):
     # Warning a side effect here is that the SECTION_STYLE is updated
     # when setting style as we modify the id so we have to make a deep copy
     style = copy.deepcopy(HEADING_LOOKUPS[heading_level])
-    style['element_id'] = id
+    style['element_id'] = element_id
 
     HEADING_COUNTS[heading_level] += 1
     # Reset the heading counts for headings below this level
@@ -777,12 +790,12 @@ def _create_section_header(
     index_number = ''
     for key in HEADING_COUNTS.keys():
         if key > heading_level:
-            HEADING_COUNTS[key] = 1
+            HEADING_COUNTS[key] = 0
         else:
             index_number += str(HEADING_COUNTS[key]) + '.'
 
     header = m.Heading(text, **style)
-    link = m.Link('#%s' % id, index_number + ' ' + text)
+    link = m.Link('#%s' % element_id, index_number + ' ' + text)
     # See bootstrap docs for ml-1 explanation
     # https://v4-alpha.getbootstrap.com/utilities/spacing/#examples
     paragraph = m.Paragraph(
@@ -865,14 +878,7 @@ def definition_to_message(
         LOGGER.info('No URL for definition icon')
         message.add(m.Paragraph(definition['description']))
         if 'citations' in definition:
-            for citation in definition['citations']:
-                if citation['text'] in [None, '']:
-                    continue
-                if citation['link'] in [None, '']:
-                    message.add(m.Paragraph(citation['text']))
-                else:
-                    message.add(m.Paragraph(
-                        m.Link(citation['link'], citation['text'])))
+            _citations_to_message(message, definition)
     else:
         LOGGER.info('Creating mini table for definition description: ' + url)
         table = m.Table(style_class='table table-condensed')
@@ -922,15 +928,20 @@ def definition_to_message(
             elif note:
                 bullets.add(m.Text(note))
         message.add(bullets)
+        if 'citations' in definition:
+            _citations_to_message(message, definition)
 
     # This only for EQ
     if 'earthquake_fatality_models' in definition:
         for model in definition['earthquake_fatality_models']:
             message.add(m.Heading(model['name'], **DETAILS_SUBGROUP_STYLE))
-            bullets = m.BulletedList()
+            if 'description' in model:
+                paragraph = m.Paragraph(model['description'])
+                message.add(paragraph)
             for note in model['notes']:
-                bullets.add(m.Text(note))
-                message.add(bullets)
+                paragraph = m.Paragraph(note)
+                message.add(paragraph)
+            _citations_to_message(message, model)
 
     for exposure in exposure_all:
         extra_exposure_notes = specific_notes(definition, exposure)
@@ -1163,6 +1174,21 @@ def definition_to_message(
                 'This class IS required in the hazard keywords.')))
 
     return message
+
+
+def _citations_to_message(message, model):
+    if 'citations' in model and len(model['citations']) > 0:
+        message.add(m.Paragraph(m.ImportantText(
+            tr('Citations:')
+        )))
+    for citation in model['citations']:
+        if citation['text'] in [None, '']:
+            continue
+        if citation['link'] in [None, '']:
+            message.add(m.Paragraph(citation['text']))
+        else:
+            message.add(m.Paragraph(
+                m.Link(citation['link'], citation['text'])))
 
 
 def _definition_icon_url(definition):
