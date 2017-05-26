@@ -383,6 +383,7 @@ class MessageViewer(QtWebKit.QWebView):
         # temporary QWebView
         printer_web_view = QtWebKit.QWebView()
         printer_web_view.setHtml(html_content)
+        printer_web_view.page().setViewportSize(QtCore.QSize(1280, 720))
         printer_web_view.adjustSize()
         printer_web_view.print_(printer)
 

@@ -158,3 +158,9 @@ displaced_field_groups = [
     gender_vulnerability_displaced_count_group,
     disability_vulnerability_displaced_count_group
 ]
+
+vulnerability_displaced_count_groups = [
+    age_vulnerability_displaced_count_group,
+    gender_vulnerability_displaced_count_group,
+    disability_vulnerability_displaced_count_group
+]

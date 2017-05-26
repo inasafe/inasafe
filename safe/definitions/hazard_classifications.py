@@ -78,7 +78,7 @@ generic_hazard_classes = {
             'key': 'high',
             'color': red,
             'value': 3,
-            'name': tr('High hazard zone'),
+            'name': tr('High'),
             'affected': True,
             'description': tr('The area with the highest hazard.'),
             'string_defaults': ['high'],
@@ -97,7 +97,7 @@ generic_hazard_classes = {
             'key': 'medium',
             'color': orange,
             'value': 2,
-            'name': tr('Medium hazard zone'),
+            'name': tr('Medium'),
             'affected': True,
             'description': tr('The area with the medium hazard.'),
             'string_defaults': ['medium'],
@@ -116,7 +116,7 @@ generic_hazard_classes = {
             'key': 'low',
             'value': 1,
             'color': yellow,
-            'name': tr('Low hazard zone'),
+            'name': tr('Low'),
             'affected': False,
             'description': tr(
                 'The area with the lowest hazard.'),
@@ -425,7 +425,7 @@ volcano_hazard_classes = {
             'key': 'high',
             'value': 3,
             'color': red,
-            'name': tr('High hazard zone'),
+            'name': tr('High'),
             'affected': True,
             'description': tr('The highest hazard class.'),
             'string_defaults': ['Kawasan Rawan Bencana III', 'high'],
@@ -443,7 +443,7 @@ volcano_hazard_classes = {
             'key': 'medium',
             'value': 2,
             'color': orange,
-            'name': tr('Medium hazard zone'),
+            'name': tr('Medium'),
             'affected': True,
             'description': tr('The medium hazard class.'),
             'string_defaults': ['Kawasan Rawan Bencana II', 'medium'],
@@ -461,7 +461,7 @@ volcano_hazard_classes = {
             'key': 'low',
             'value': 1,
             'color': yellow,
-            'name': tr('Low hazard zone'),
+            'name': tr('Low'),
             'affected': False,
             'description': tr('The lowest hazard class.'),
             'string_defaults': ['Kawasan Rawan Bencana I', 'low'],
@@ -824,7 +824,7 @@ tsunami_hazard_classes = {
             'key': 'high',
             'value': 4,
             'color': red,
-            'name': tr('High hazard zone'),
+            'name': tr('High'),
             'affected': True,
             'description': tr(
                 'The area is potentially hit by a tsunami wave with an '
@@ -852,7 +852,7 @@ tsunami_hazard_classes = {
             'key': 'medium',
             'value': 3,
             'color': orange,
-            'name': tr('Medium hazard zone'),
+            'name': tr('Medium'),
             'affected': True,
             'description': tr(
                 'Water above 1.1m and less than 3.0m. The area is potentially '
@@ -878,7 +878,7 @@ tsunami_hazard_classes = {
             'key': 'low',
             'value': 2,
             'color': yellow,
-            'name': tr('Low hazard zone'),
+            'name': tr('Low'),
             'affected': False,
             'description': tr(
                 'Water above ground height and less than 1.0m. The area is '
@@ -956,7 +956,7 @@ tsunami_hazard_population_classes = {
             'key': 'high',
             'value': 4,
             'color': red,
-            'name': tr('High hazard zone'),
+            'name': tr('High'),
             'affected': True,
             'description': tr(
                 'The area is potentially hit by a tsunami wave with an '
@@ -984,7 +984,7 @@ tsunami_hazard_population_classes = {
             'key': 'medium',
             'value': 3,
             'color': orange,
-            'name': tr('Medium hazard zone'),
+            'name': tr('Medium'),
             'affected': True,
             'description': tr(
                 'Water above 0.7m and less than 3.0m. The area is potentially '
@@ -1010,7 +1010,7 @@ tsunami_hazard_population_classes = {
             'key': 'low',
             'value': 2,
             'color': yellow,
-            'name': tr('Low hazard zone'),
+            'name': tr('Low'),
             'affected': True,
             'description': tr(
                 'Water above ground height and less than 1.0m. The area is '
@@ -1064,7 +1064,7 @@ tsunami_hazard_classes_ITB = {
             'key': 'very high',
             'value': 5,
             'color': dark_red,
-            'name': tr('Very high hazard zone'),
+            'name': tr('Very high'),
             'affected': True,
             'description': tr('Water above 8.0m.'),
             'string_defaults': ['very high'],
@@ -1083,7 +1083,7 @@ tsunami_hazard_classes_ITB = {
             'key': 'high',
             'value': 4,
             'color': red,
-            'name': tr('High hazard zone'),
+            'name': tr('High'),
             'affected': True,
             'description': tr(
                 'Water above 3.1m and less than 8.0m. The area is '
@@ -1112,7 +1112,7 @@ tsunami_hazard_classes_ITB = {
             'key': 'medium',
             'value': 3,
             'color': orange,
-            'name': tr('Medium hazard zone'),
+            'name': tr('Medium'),
             'affected': True,
             'description': tr(
                 'Water above 1.1m and less than 3.0m. The area is potentially '
@@ -1138,7 +1138,7 @@ tsunami_hazard_classes_ITB = {
             'key': 'low',
             'value': 2,
             'color': yellow,
-            'name': tr('Low hazard zone'),
+            'name': tr('Low'),
             'affected': False,
             'description': tr(
                 'Water above ground height and less than 1.0m. The area is '
@@ -1215,7 +1215,7 @@ tsunami_hazard_population_classes_ITB = {
             'key': 'very high',
             'value': 5,
             'color': dark_red,
-            'name': tr('Very high hazard zone'),
+            'name': tr('Very high'),
             'affected': True,
             'description': tr('Water above 8.0m.'),
             'string_defaults': ['very high'],
@@ -1234,7 +1234,7 @@ tsunami_hazard_population_classes_ITB = {
             'key': 'high',
             'value': 4,
             'color': red,
-            'name': tr('High hazard zone'),
+            'name': tr('High'),
             'affected': True,
             'description': tr(
                 'Water above 3.1m and less than 8.0m. The area is '
@@ -1263,7 +1263,7 @@ tsunami_hazard_population_classes_ITB = {
             'key': 'medium',
             'value': 3,
             'color': orange,
-            'name': tr('Medium hazard zone'),
+            'name': tr('Medium'),
             'affected': True,
             'description': tr(
                 'Water above 1.1m and less than 3.0m. The area is potentially '
@@ -1289,7 +1289,7 @@ tsunami_hazard_population_classes_ITB = {
             'key': 'low',
             'value': 2,
             'color': yellow,
-            'name': tr('Low hazard zone'),
+            'name': tr('Low'),
             'affected': True,
             'description': tr(
                 'Water above ground height and less than 1.0m. The area is '

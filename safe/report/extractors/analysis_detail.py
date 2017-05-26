@@ -245,9 +245,13 @@ def analysis_detail_extractor(impact_report, component_metadata):
                 total_count,
                 enable_rounding=is_rounding,
                 is_population=is_population)
-            if total_count == '0' and field == total_affected_field:
-                skip_row = True
-                break
+
+            # we comment below code because now we want to show all rows,
+            # we can uncomment if we want to remove the rows with zero total
+
+            # if total_count == '0' and field == total_affected_field:
+            #     skip_row = True
+            #     break
 
             if group_key:
                 if field == total_affected_field:

@@ -224,9 +224,7 @@ analysis_detail_component = {
         'header': tr('Analysis Detail'),
         'table_header_format': tr(
             'Estimated {title} {unit} by {exposure} type'),
-        'notes': tr(
-            'Columns and rows containing only 0 or "No data" values are '
-            'excluded from the tables.')
+        'notes': []
     }
 }
 
@@ -257,6 +255,13 @@ notes_assumptions_component = {
                 'action-note-categorized.html',
     'extra_args': {
         'header': tr('Notes and assumptions'),
+        'analysis_notes': {
+            'item_header': tr('analysis notes'),
+            'item_list': [
+                tr('Columns and rows containing only 0 or "No data" values '
+                   'are excluded from the tables.')
+            ]
+        },
         'affected_note_format': {
             'item_header': tr('affected notes'),
             'item_list': [
@@ -309,9 +314,7 @@ aggregation_result_component = {
                 'aggregation-result.html',
     'extra_args': {
         'header': tr('Aggregation Result'),
-        'notes': tr(
-            'Columns and rows containing only 0 or "No data" values are '
-            'excluded from the tables.'),
+        'notes': [],
         'table_header_format': tr(
             'Estimated {title} {unit} by aggregation area'),
         'aggregation_area_default_header': tr('Aggregation area'),
@@ -333,37 +336,30 @@ aggregation_postprocessors_component = {
     'extra_args': {
         'header': tr('Detailed demographic breakdown'),
         'sections': {
-            'age': {
-                'header': tr('Detailed Age Report')
-            },
-            'gender': {
-                'header': tr('Detailed Gender Report')
-            },
-            'vulnerability': {
-                'header': tr('Detailed Vulnerability Report')
-            },
             'minimum_needs': {
-                'header': tr('Detailed Minimum Needs Report')
+                'header': tr('Estimated number of minimum needs per week')
             }
         },
         'defaults': {
             'aggregation_header': tr('Aggregation area'),
             'total_population_header': tr('Total Displaced Population'),
             'total_header': tr('Total'),
-            'notes': tr(
-                'Columns and rows containing only 0 or "No data" values are '
-                'excluded from the tables.'),
+            'notes': [],
+            'section_header_format': tr(
+                'Estimated number of people displaced by {header_name} '
+                'per aggregation area'),
+            'group_header_format': tr('{header_name} breakdown'),
             'zero_displaced_message': tr(
                 'Analysis produced 0 displaced count. '
                 'No calculations produced.'),
             'no_gender_rate_message': tr(
-                'Gender ratio not found. '
+                'Gender ratio is not found. '
                 'No calculations produced.'),
             'no_age_rate_message': tr(
-                'Age ratio not found. '
+                'Age ratio is not found. '
                 'No calculations produced.'),
             'no_vulnerability_rate_message': tr(
-                'Vulnerability ratio not found. '
+                'Vulnerability ratio is not found. '
                 'No calculations produced.')
         }
     }
@@ -674,6 +670,7 @@ standard_impact_report_metadata_html = {
             ],
             'extra_args': {
                 'components_list': {
+                    'analysis_question': analysis_question_component,
                     'action_checklist': action_checklist_component,
                     'analysis_provenance_details': (
                         analysis_provenance_details_simplified_component)
