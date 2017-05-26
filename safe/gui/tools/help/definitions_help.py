@@ -8,6 +8,7 @@ from os.path import exists
 
 import safe.definitions as definitions
 import safe.definitions.post_processors
+from safe.definitions.hazard_classifications import hazard_classification_type
 from developer_help import content as developer_help
 from safe import messaging as m
 from safe.definitions.earthquake import current_earthquake_model_name
@@ -81,7 +82,6 @@ def definitions_help():
     :returns: A message object containing helpful information.
     :rtype: messaging.message.Message
     """
-
     message = m.Message()
     message.add(m.Brand())
     message.add(heading())
@@ -878,7 +878,6 @@ def definition_to_message(
     # side in a table otherwise just show the description as a paragraph
     url = _definition_icon_url(definition)
     if url is None:
-        LOGGER.info('No URL for definition icon')
         message.add(m.Paragraph(definition['description']))
         if 'citations' in definition:
             _citations_to_message(message, definition)
@@ -1082,40 +1081,50 @@ def definition_to_message(
 
     if 'classes' in definition:
         message.add(m.Paragraph(m.ImportantText(tr('Classes:'))))
-        table = _make_defaults_table()
+        is_hazard = definition['type'] == hazard_classification_type
+        if is_hazard:
+            table = _make_defaults_hazard_table()
+        else:
+            table = _make_defaults_exposure_table()
+
         for inasafe_class in definition['classes']:
             row = m.Row()
-            # name() on QColor returns its hex code
-            if 'color' in inasafe_class:
-                colour = inasafe_class['color'].name()
-                row.add(m.Cell(
-                    u'', attributes='style="background: %s;"' % colour))
-            else:
-                row.add(m.Cell(u' '))
+            if is_hazard:
+                # name() on QColor returns its hex code
+                if 'color' in inasafe_class:
+                    colour = inasafe_class['color'].name()
+                    row.add(m.Cell(
+                        u'', attributes='style="background: %s;"' % colour))
+                else:
+                    row.add(m.Cell(u' '))
 
             row.add(m.Cell(inasafe_class['name']))
-            if 'affected' in inasafe_class:
-                row.add(m.Cell(tr(inasafe_class['affected'])))
-            else:
-                row.add(m.Cell(tr('unspecified')))
 
-            if inasafe_class.get('fatality_rate') > 0:
-                # we want to show the rate as a scientific notation
-                rate = html_scientific_notation_rate(
-                    inasafe_class['fatality_rate'])
-                rate = u'%s%%' % rate
-                row.add(m.Cell(rate))
-            elif inasafe_class.get('fatality_rate') == 0:
-                row.add(m.Cell('0%'))
-            else:
-                row.add(m.Cell(tr('unspecified')))
+            if is_hazard:
+                if 'affected' in inasafe_class:
+                    row.add(m.Cell(tr(inasafe_class['affected'])))
+                else:
+                    row.add(m.Cell(tr('unspecified')))
 
-            if 'displacement_rate' in inasafe_class:
-                rate = inasafe_class['displacement_rate'] * 100
-                rate = u'%.0f%%' % rate
-                row.add(m.Cell(rate))
-            else:
-                row.add(m.Cell(tr('unspecified')))
+            if is_hazard:
+                if inasafe_class.get('fatality_rate') > 0:
+                    # we want to show the rate as a scientific notation
+                    rate = html_scientific_notation_rate(
+                        inasafe_class['fatality_rate'])
+                    rate = u'%s%%' % rate
+                    row.add(m.Cell(rate))
+                elif inasafe_class.get('fatality_rate') == 0:
+                    row.add(m.Cell('0%'))
+                else:
+                    row.add(m.Cell(tr('unspecified')))
+
+            if is_hazard:
+                if 'displacement_rate' in inasafe_class:
+                    rate = inasafe_class['displacement_rate'] * 100
+                    rate = u'%.0f%%' % rate
+                    row.add(m.Cell(rate))
+                else:
+                    row.add(m.Cell(tr('unspecified')))
 
             if 'string_defaults' in inasafe_class:
                 defaults = None
@@ -1127,33 +1136,36 @@ def definition_to_message(
                 row.add(m.Cell(defaults))
             else:
                 row.add(m.Cell(tr('unspecified')))
-            # Min may be a single value or a dict of values so we need
-            # to check type and deal with it accordingly
-            if 'numeric_default_min' in inasafe_class:
-                if isinstance(inasafe_class['numeric_default_min'], dict):
-                    bullets = m.BulletedList()
-                    minima = inasafe_class['numeric_default_min']
-                    for key, value in minima.iteritems():
-                        bullets.add(u'%s : %s' % (key, value))
-                    row.add(m.Cell(bullets))
-                else:
-                    row.add(m.Cell(inasafe_class['numeric_default_min']))
-            else:
-                row.add(m.Cell(tr('unspecified')))
 
-            # Max may be a single value or a dict of values so we need
-            # to check type and deal with it accordingly
-            if 'numeric_default_max' in inasafe_class:
-                if isinstance(inasafe_class['numeric_default_max'], dict):
-                    bullets = m.BulletedList()
-                    maxima = inasafe_class['numeric_default_max']
-                    for key, value in maxima.iteritems():
-                        bullets.add(u'%s : %s' % (key, value))
-                    row.add(m.Cell(bullets))
+            if is_hazard:
+                # Min may be a single value or a dict of values so we need
+                # to check type and deal with it accordingly
+                if 'numeric_default_min' in inasafe_class:
+                    if isinstance(inasafe_class['numeric_default_min'], dict):
+                        bullets = m.BulletedList()
+                        minima = inasafe_class['numeric_default_min']
+                        for key, value in minima.iteritems():
+                            bullets.add(u'%s : %s' % (key, value))
+                        row.add(m.Cell(bullets))
+                    else:
+                        row.add(m.Cell(inasafe_class['numeric_default_min']))
                 else:
-                    row.add(m.Cell(inasafe_class['numeric_default_max']))
-            else:
-                row.add(m.Cell(tr('unspecified')))
+                    row.add(m.Cell(tr('unspecified')))
+
+            if is_hazard:
+                # Max may be a single value or a dict of values so we need
+                # to check type and deal with it accordingly
+                if 'numeric_default_max' in inasafe_class:
+                    if isinstance(inasafe_class['numeric_default_max'], dict):
+                        bullets = m.BulletedList()
+                        maxima = inasafe_class['numeric_default_max']
+                        for key, value in maxima.iteritems():
+                            bullets.add(u'%s : %s' % (key, value))
+                        row.add(m.Cell(bullets))
+                    else:
+                        row.add(m.Cell(inasafe_class['numeric_default_max']))
+                else:
+                    row.add(m.Cell(tr('unspecified')))
 
             table.add(row)
             # Description goes in its own row with spanning
@@ -1161,6 +1173,7 @@ def definition_to_message(
             row.add(m.Cell(''))
             row.add(m.Cell(inasafe_class['description'], span=7))
             table.add(row)
+
         # For hazard classes we also add the 'not affected' class manually:
         if definition['type'] == definitions.hazard_classification_type:
             row = m.Row()
@@ -1301,8 +1314,8 @@ def _type_to_string(value):
     return type_map[value]
 
 
-def _make_defaults_table():
-    """Build headers for a table related to classes.
+def _make_defaults_hazard_table():
+    """Build headers for a table related to hazard classes.
 
     :return: A table with headers.
     :rtype: m.Table
@@ -1319,6 +1332,20 @@ def _make_defaults_table():
     row.add(m.Cell(tr('Default values'), header=True))
     row.add(m.Cell(tr('Default min'), header=True))
     row.add(m.Cell(tr('Default max'), header=True))
+    table.add(row)
+    return table
+
+
+def _make_defaults_exposure_table():
+    """Build headers for a table related to exposure classes.
+
+    :return: A table with headers.
+    :rtype: m.Table
+    """
+    table = m.Table(style_class='table table-condensed table-striped')
+    row = m.Row()
+    row.add(m.Cell(tr('Name'), header=True))
+    row.add(m.Cell(tr('Default values'), header=True))
     table.add(row)
     return table
 
