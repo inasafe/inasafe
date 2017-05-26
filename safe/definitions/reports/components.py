@@ -363,7 +363,7 @@ aggregation_postprocessors_component = {
                 'Age ratio not found. '
                 'No calculations produced.'),
             'no_vulnerability_rate_message': tr(
-                'Vulnerability ratio not exists. '
+                'Vulnerability ratio not found. '
                 'No calculations produced.')
         }
     }
