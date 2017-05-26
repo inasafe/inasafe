@@ -607,7 +607,7 @@ standard_impact_report_metadata_html = {
         #     'extra_args': {
         #         'infographics': [population_infographic_component['key']],
         #         'footer_format': tr(
-        #             'InaSAFE {version} | {analysis_date} | {analysis_time} | '
+        #             'InaSAFE {version} | {analysis_date} | {analysis_time} |'
         #             'info@inasafe.org | Icons source: OCHA | '
         #             'Indonesian Government-'
         #             'Australian Government-World Bank-GFDRR')
