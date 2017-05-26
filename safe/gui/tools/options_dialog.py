@@ -104,7 +104,6 @@ class OptionsDialog(QDialog, FORM_CLASS):
             'ISO19115_ORGANIZATION': self.iso19115_organization_le,
             'ISO19115_URL': self.iso19115_url_le,
             'ISO19115_EMAIL': self.iso19115_email_le,
-            'ISO19115_TITLE': self.iso19115_title_le,
             'ISO19115_LICENSE': self.iso19115_license_le,
         }
 

@@ -1326,7 +1326,8 @@ class ImpactFunction(object):
         if self._exposure_summary:
             self._exposure_summary.keywords[
                 'provenance_data'] = self.provenance
-
+            self.append_ISO19115_keywords(
+                self._exposure_summary.keywords)
             result, name = self.datastore.add_layer(
                 self._exposure_summary,
                 layer_purpose_exposure_summary['key'])
@@ -2256,7 +2257,6 @@ class ImpactFunction(object):
             'ISO19115_ORGANIZATION': 'organisation',
             'ISO19115_URL': 'url',
             'ISO19115_EMAIL': 'email',
-            'ISO19115_TITLE': 'title',
             'ISO19115_LICENSE': 'license'
         }
         ISO19115_keywords = {}
