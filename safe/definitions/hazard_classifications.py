@@ -152,8 +152,9 @@ earthquake_mmi_scale = {
         'designated by Roman numerals. It does not have a mathematical '
         'basis; instead it is an arbitrary ranking based on observed '
         'effects. Note that fatality rates listed here are based on the '
-        'active earthquake fatality model (currently set to %s).' %
-        current_earthquake_model_name()),
+        'active earthquake fatality model (currently set to %s). Users '
+        'can select the active earthquake fatality model in InaSAFE '
+        'Options.' % current_earthquake_model_name()),
     'type': hazard_classification_type,
     'citations': [
         {
