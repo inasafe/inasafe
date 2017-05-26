@@ -469,7 +469,9 @@ def sum_fields(layer, output_field_key, input_fields):
         # Creating expression
         string_expression = ' + '.join(input_fields)
         sum_expression = QgsExpression(string_expression)
-        sum_expression.prepare(layer.pendingFields())
+        context = QgsExpressionContext()
+        context.setFields(layer.pendingFields())
+        sum_expression.prepare(context)
 
         # Get the output field index
         output_idx = layer.fieldNameIndex(output_field_name)
@@ -477,14 +479,15 @@ def sum_fields(layer, output_field_key, input_fields):
         if output_idx == -1:
             output_field = create_field_from_definition(field_definition)
             layer.startEditing()
-            layer.dataProvider().addAttributes([output_field])
+            layer.addAttribute(output_field)
             layer.commitChanges()
             output_idx = layer.fieldNameIndex(output_field_name)
 
         layer.startEditing()
         # Iterate to all features
         for feature in layer.getFeatures():
-            result = sum_expression.evaluate(feature)
+            context.setFeature(feature)
+            result = sum_expression.evaluate(context)
             feature[output_idx] = result
             layer.updateFeature(feature)
 

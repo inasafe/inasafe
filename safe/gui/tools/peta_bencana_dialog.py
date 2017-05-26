@@ -323,7 +323,9 @@ class PetaBencanaDialog(QDialog, FORM_CLASS):
         layer.startEditing()
         flood_class_idx = layer.fieldNameIndex('floodclass')
         flood_class_expression = QgsExpression('to_int(state)')
-        flood_class_expression.prepare(layer.pendingFields())
+        context = QgsExpressionContext()
+        context.setFields(layer.pendingFields())
+        flood_class_expression.prepare(context)
 
         # Add field with boolean flag to say if the area is flooded
         # This is used by the impact function
@@ -333,10 +335,11 @@ class PetaBencanaDialog(QDialog, FORM_CLASS):
         layer.startEditing()
         flooded_idx = layer.fieldNameIndex('flooded')
         flood_flag_expression = QgsExpression('state > 0')
-        flood_flag_expression.prepare(layer.pendingFields())
+        flood_flag_expression.prepare(context)
         for feature in layer.getFeatures():
-            feature[flood_class_idx] = flood_class_expression.evaluate(feature)
-            feature[flooded_idx] = flood_flag_expression.evaluate(feature)
+            context.setFeature(feature)
+            feature[flood_class_idx] = flood_class_expression.evaluate(context)
+            feature[flooded_idx] = flood_flag_expression.evaluate(context)
             layer.updateFeature(feature)
         layer.commitChanges()
         return layer
