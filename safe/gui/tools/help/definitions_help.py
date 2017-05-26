@@ -13,6 +13,7 @@ from safe.definitions.post_processors.post_processor_inputs import (
 from safe.utilities.i18n import tr
 from safe import messaging as m
 from safe.messaging import styles
+from safe.utilities.settings import setting
 import safe.definitions as definitions
 from safe.definitions.exposure import exposure_all
 from safe.definitions.hazard_exposure_specifications import (
@@ -933,7 +934,22 @@ def definition_to_message(
 
     # This only for EQ
     if 'earthquake_fatality_models' in definition:
-        for model in definition['earthquake_fatality_models']:
+        models_definition = definition['earthquake_fatality_models']
+        default_earthquake_function = setting(
+            'earthquake_function', expected_type=str)
+        current_function = None
+        for model in models_definition:
+            if model['key'] == default_earthquake_function:
+                current_function = model['name']
+        paragraph = m.Paragraph(
+            'The following earthquake fatality models are available in '
+            'InaSAFE. Note that you need to set one of these as the '
+            'active model in InaSAFE Options. The currently active model is: ',
+            m.ImportantText(current_function)
+        )
+        message.add(paragraph)
+
+        for model in models_definition:
             message.add(m.Heading(model['name'], **DETAILS_SUBGROUP_STYLE))
             if 'description' in model:
                 paragraph = m.Paragraph(model['description'])

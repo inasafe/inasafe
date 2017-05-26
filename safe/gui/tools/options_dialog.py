@@ -248,7 +248,8 @@ class OptionsDialog(QDialog, FORM_CLASS):
             self.earthquake_function.addItem(model['name'], model['key'])
 
         # Then make selected the default one.
-        default_earthquake_function = setting('earthquake_function', str)
+        default_earthquake_function = setting(
+            'earthquake_function', expected_type=str)
         keys = [model['key'] for model in EARTHQUAKE_FUNCTIONS]
         if default_earthquake_function not in keys:
             default_earthquake_function = EARTHQUAKE_FUNCTIONS[0]['key']
