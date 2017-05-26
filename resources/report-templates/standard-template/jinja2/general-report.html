@@ -7,30 +7,30 @@
             {{ table_header|capitalize }}
         </h5>
     </div>
-    <div class="row">
-        {% for section in summary %}
-        <div class="col-sm-6">
-            <table class="table table-striped condensed">
-                <thead>
-                    <tr>
-                        <th colspan="1">{{ section.header_label }}</th>
-                        <th class="text-right" colspan="1">{{ section.value_label }}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for item in section.rows %}
-                    <tr>
-                        {% if item.as_header %}
-                            <th colspan="1">{{ item.name }}</th>
-                        {% else %}
-                            <td colspan="1">{{ item.name }}</td>
-                        {% endif %}
-                        <td class="text-right" colspan=1>{{ item.value }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+    {% for section in summary %}
+        <div class="row">
+            <div class="col-sm-12">
+                <table class="table table-striped condensed">
+                    <thead>
+                        <tr>
+                            <th colspan="1">{{ section.header_label }}</th>
+                            <th class="text-right" colspan="1">{{ section.value_label }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in section.rows %}
+                        <tr>
+                            {% if item.as_header %}
+                                <th colspan="1">{{ item.name }}</th>
+                            {% else %}
+                                <td colspan="1">{{ item.name }}</td>
+                            {% endif %}
+                            <td class="text-right" colspan=1>{{ item.value }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
-        {% endfor %}
-    </div>
+    {% endfor %}
 </div>
