@@ -45,15 +45,18 @@ from safe.definitions.styles import charcoal_black
 from safe.report.extractors.action_notes import (
     action_checklist_extractor,
     notes_assumptions_extractor,
-    action_notes_extractor,
-    action_notes_pdf_extractor)
+    action_checklist_report_extractor,
+    action_checklist_report_pdf_extractor)
 from safe.report.extractors.aggregate_postprocessors import \
     aggregation_postprocessors_extractor
 from safe.report.extractors.aggregate_result import \
     aggregation_result_extractor
 from safe.report.extractors.analysis_detail import analysis_detail_extractor
 from safe.report.extractors.analysis_provenance_details import \
-    analysis_provenance_details_extractor
+    analysis_provenance_details_extractor, \
+    analysis_provenance_details_simplified_extractor, \
+    analysis_provenance_details_report_extractor, \
+    analysis_provenance_details_pdf_extractor
 from safe.report.extractors.analysis_question import \
     analysis_question_extractor
 from safe.report.extractors.general_report import general_report_extractor
@@ -395,6 +398,41 @@ analysis_provenance_details_component = {
     }
 }
 
+analysis_provenance_details_simplified_component = {
+    'key': 'analysis-provenance-details-simplified',
+    'type': jinja2_component_type,
+    'processor': jinja2_renderer,
+    'extractor': analysis_provenance_details_simplified_extractor,
+    'output_format': Jinja2ComponentsMetadata.OutputFormat.String,
+    'output_path': 'analysis-provenance-details-simplified-output.html',
+    'template': 'standard-template/'
+                'jinja2/'
+                'analysis-provenance-details-simplified.html',
+    'extra_args': {
+        'defaults': {
+            'source': tr('source not available'),
+            'reference': tr('reference unspecified'),
+            'aggregation_not_used': tr('not used')
+        },
+        'header': {
+            'analysis_detail': tr('Analysis details')
+        },
+        'provenance_format': {
+            'hazard_header': tr('Hazard source'),
+            'hazard_format': u'{layer_name} - {source} - ',
+
+            'exposure_header': tr('Exposure source'),
+            'exposure_format': u'{layer_name} - {source} - ',
+
+            'aggregation_header': tr('Aggregation source'),
+            'aggregation_format': u'{layer_name} - {source} - ',
+
+            'impact_function_header': tr('Impact Function'),
+            'impact_function_format': u'{impact_function_name}',
+        }
+    }
+}
+
 population_chart_svg_component = {
     'key': 'population-chart',
     'type': jinja2_component_type,
@@ -543,6 +581,7 @@ impact_report_component_metadata = [
     minimum_needs_component,
     aggregation_result_component,
     aggregation_postprocessors_component,
+    analysis_provenance_details_simplified_component,
     analysis_provenance_details_component
 ]
 
@@ -555,31 +594,33 @@ standard_impact_report_metadata_html = {
         population_chart_svg_component,
         population_chart_png_component,
         population_infographic_component,
+        # TODO: Make a beautiful infographic using qpt template
+        # We need to disable infographic for now :(
         # Infographic Layout HTML
-        {
-            'key': 'infographic-layout',
-            'type': jinja2_component_type,
-            'processor': jinja2_renderer,
-            'extractor': infographic_layout_extractor,
-            'output_format': Jinja2ComponentsMetadata.OutputFormat.File,
-            'output_path': 'infographic.html',
-            'extra_args': {
-                'infographics': [population_infographic_component['key']],
-                'footer_format': tr(
-                    'InaSAFE {version} | {analysis_date} | {analysis_time} | '
-                    'info@inasafe.org | Icons source: OCHA | '
-                    'Indonesian Government-'
-                    'Australian Government-World Bank-GFDRR')
-            },
-            'template': 'standard-template/'
-                        'jinja2/'
-                        'infographic-layout.html',
-            'tags': [
-                final_product_tag,
-                infographic_product_tag,
-                html_product_tag
-            ]
-        },
+        # {
+        #     'key': 'infographic-layout',
+        #     'type': jinja2_component_type,
+        #     'processor': jinja2_renderer,
+        #     'extractor': infographic_layout_extractor,
+        #     'output_format': Jinja2ComponentsMetadata.OutputFormat.File,
+        #     'output_path': 'infographic.html',
+        #     'extra_args': {
+        #         'infographics': [population_infographic_component['key']],
+        #         'footer_format': tr(
+        #             'InaSAFE {version} | {analysis_date} | {analysis_time} |'
+        #             'info@inasafe.org | Icons source: OCHA | '
+        #             'Indonesian Government-'
+        #             'Australian Government-World Bank-GFDRR')
+        #     },
+        #     'template': 'standard-template/'
+        #                 'jinja2/'
+        #                 'infographic-layout.html',
+        #     'tags': [
+        #         final_product_tag,
+        #         infographic_product_tag,
+        #         html_product_tag
+        #     ]
+        # },
         {
             'key': 'impact-report',
             'type': jinja2_component_type,
@@ -611,8 +652,8 @@ standard_impact_report_metadata_html = {
                     'aggregation_result': aggregation_result_component,
                     'aggregation_postprocessors': (
                         aggregation_postprocessors_component),
-                    'analysis_provenance_details': (
-                        analysis_provenance_details_component)
+                    'analysis_provenance_details_simplified': (
+                        analysis_provenance_details_simplified_component)
                 }
             }
         },
@@ -620,7 +661,7 @@ standard_impact_report_metadata_html = {
             'key': 'action-checklist-report',
             'type': jinja2_component_type,
             'processor': jinja2_renderer,
-            'extractor': action_notes_extractor,
+            'extractor': action_checklist_report_extractor,
             'output_format': Jinja2ComponentsMetadata.OutputFormat.File,
             'output_path': 'action-checklist-output.html',
             'template': 'standard-template/'
@@ -634,6 +675,29 @@ standard_impact_report_metadata_html = {
             'extra_args': {
                 'components_list': {
                     'action_checklist': action_checklist_component,
+                    'analysis_provenance_details': (
+                        analysis_provenance_details_simplified_component)
+                }
+            }
+        },
+        {
+            'key': 'analysis-provenance-details-report',
+            'type': jinja2_component_type,
+            'processor': jinja2_renderer,
+            'extractor': analysis_provenance_details_report_extractor,
+            'output_format': Jinja2ComponentsMetadata.OutputFormat.File,
+            'output_path': 'analysis-provenance-details-report-output.html',
+            'template': 'standard-template/'
+                        'jinja2/'
+                        'analysis-provenance-details-layout.html',
+            'tags': [
+                final_product_tag,
+                table_product_tag,
+                html_product_tag
+            ],
+            'extra_args': {
+                'components_list': {
+                    'analysis_question': analysis_question_component,
                     'analysis_provenance_details': (
                         analysis_provenance_details_component)
                 }
@@ -662,12 +726,12 @@ standard_impact_report_metadata_pdf = {
                 pdf_product_tag
             ]
         },
-        # Action Checklist and Notes Report PDF
+        # Action Checklist Report PDF
         {
             'key': 'action-checklist-pdf',
             'type': qgis_composer_component_type,
             'processor': qgis_composer_html_renderer,
-            'extractor': action_notes_pdf_extractor,
+            'extractor': action_checklist_report_pdf_extractor,
             'output_format': QgisComposerComponentsMetadata.OutputFormat.PDF,
             'output_path': 'action-checklist-output.pdf',
             'tags': [
@@ -676,32 +740,48 @@ standard_impact_report_metadata_pdf = {
                 pdf_product_tag
             ]
         },
-        # Infographic Layout PDF
+        # Analysis Provenance Details Report PDF
         {
-            'key': 'infographic-pdf',
+            'key': 'analysis-provenance-details-report-pdf',
             'type': qgis_composer_component_type,
             'processor': qgis_composer_html_renderer,
-            'extractor': infographic_pdf_extractor,
-            'output_format': {
-                'doc': QgisComposerComponentsMetadata.OutputFormat.PDF,
-                'template': QgisComposerComponentsMetadata.OutputFormat.QPT
-            },
-            'output_path': {
-                'doc': 'infographic.pdf',
-                'template': 'infographic.qpt'
-            },
-            'page_dpi': 300,
-            'page_width': 297,
-            'page_height': 210,
+            'extractor': analysis_provenance_details_pdf_extractor,
+            'output_format': QgisComposerComponentsMetadata.OutputFormat.PDF,
+            'output_path': 'analysis-provenance-details-report-output.pdf',
             'tags': [
-                # untag this from final product until donut png were
-                # rendered correctly by qgis
                 final_product_tag,
-                infographic_product_tag,
-                pdf_product_tag,
-                qpt_product_tag
+                table_product_tag,
+                pdf_product_tag
             ]
-        }
+        },
+        # TODO: Make a beautiful infographic using qpt template
+        # We need to disable infographic for now :(
+        # Infographic Layout PDF
+        # {
+        #     'key': 'infographic-pdf',
+        #     'type': qgis_composer_component_type,
+        #     'processor': qgis_composer_html_renderer,
+        #     'extractor': infographic_pdf_extractor,
+        #     'output_format': {
+        #         'doc': QgisComposerComponentsMetadata.OutputFormat.PDF,
+        #         'template': QgisComposerComponentsMetadata.OutputFormat.QPT
+        #     },
+        #     'output_path': {
+        #         'doc': 'infographic.pdf',
+        #         'template': 'infographic.qpt'
+        #     },
+        #     'page_dpi': 300,
+        #     'page_width': 297,
+        #     'page_height': 210,
+        #     'tags': [
+        #         # untag this from final product until donut png were
+        #         # rendered correctly by qgis
+        #         final_product_tag,
+        #         infographic_product_tag,
+        #         pdf_product_tag,
+        #         qpt_product_tag
+        #     ]
+        # }
     ]
 }
 
