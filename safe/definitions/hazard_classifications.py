@@ -10,7 +10,8 @@ Mathematical expression:
 minimum_value < x <= maximum_value
 """
 from safe.definitions.constants import big_number
-from safe.definitions.earthquake import earthquake_fatality_rate
+from safe.definitions.earthquake import (
+    earthquake_fatality_rate, current_earthquake_model_name)
 from safe.definitions import concepts
 from safe.utilities.i18n import tr
 from safe.definitions.units import (
@@ -150,7 +151,10 @@ earthquake_mmi_scale = {
         'from imperceptible shaking to catastrophic destruction, is '
         'designated by Roman numerals. It does not have a mathematical '
         'basis; instead it is an arbitrary ranking based on observed '
-        'effects.'),
+        'effects. Note that fatality rates listed here are based on the '
+        'active earthquake fatality model (currently set to %s). Users '
+        'can select the active earthquake fatality model in InaSAFE '
+        'Options.' % current_earthquake_model_name()),
     'type': hazard_classification_type,
     'citations': [
         {

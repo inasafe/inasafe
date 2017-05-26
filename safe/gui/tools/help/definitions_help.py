@@ -1,42 +1,43 @@
 # coding=utf-8
 """Help text for the dock widget."""
 
-from os.path import exists
 import copy
 import logging
 from PyQt4 import QtCore
+from os.path import exists
 
+import safe.definitions as definitions
 import safe.definitions.post_processors
+from developer_help import content as developer_help
+from safe import messaging as m
+from safe.definitions.earthquake import current_earthquake_model_name
+from safe.definitions.exposure import exposure_all
+from safe.definitions.field_groups import (
+    population_field_groups, aggregation_field_groups)
+from safe.definitions.hazard_exposure_specifications import (
+    specific_notes, specific_actions)
 from safe.definitions.post_processors.post_processor_inputs import (
     post_processor_input_types,
     post_processor_input_values)
-from safe.utilities.i18n import tr
-from safe import messaging as m
-from safe.messaging import styles
-from safe.utilities.settings import setting
-import safe.definitions as definitions
-from safe.definitions.exposure import exposure_all
-from safe.definitions.hazard_exposure_specifications import (
-    specific_notes, specific_actions)
-from safe.definitions.field_groups import (
-    population_field_groups, aggregation_field_groups)
+from safe.gui.tools.help.batch_help import content as batch_help
 from safe.gui.tools.help.dock_help import content as dock_help
 from safe.gui.tools.help.extent_selector_help import content as extent_help
+from safe.gui.tools.help.field_mapping_help import content as \
+    field_mapping_tool_help
 from safe.gui.tools.help.impact_report_help import content as report_help
+from safe.gui.tools.help.multi_buffer_help import content as multi_buffer_help
 from safe.gui.tools.help.needs_calculator_help import content as needs_help
-from safe.gui.tools.help.batch_help import content as batch_help
 from safe.gui.tools.help.needs_manager_help import content as \
     needs_manager_help
 from safe.gui.tools.help.options_help import content as options_help
-from safe.gui.tools.help.field_mapping_help import content as \
-    field_mapping_tool_help
 from safe.gui.tools.help.osm_downloader_help import content as osm_help
 from safe.gui.tools.help.peta_bencana_help import content as petabencana_help
 from safe.gui.tools.help.shakemap_converter_help \
     import content as shakemap_help
-from safe.gui.tools.help.multi_buffer_help import content as multi_buffer_help
-from developer_help import content as developer_help
+from safe.messaging import styles
+from safe.utilities.i18n import tr
 from safe.utilities.resources import resource_url, resources_path
+
 LOGGER = logging.getLogger('InaSAFE')
 # For chapter sections
 # Items marked as numbered below will show section numbering in HTML render
@@ -934,13 +935,7 @@ def definition_to_message(
 
     # This only for EQ
     if 'earthquake_fatality_models' in definition:
-        models_definition = definition['earthquake_fatality_models']
-        default_earthquake_function = setting(
-            'earthquake_function', expected_type=str)
-        current_function = None
-        for model in models_definition:
-            if model['key'] == default_earthquake_function:
-                current_function = model['name']
+        current_function = current_earthquake_model_name()
         paragraph = m.Paragraph(
             'The following earthquake fatality models are available in '
             'InaSAFE. Note that you need to set one of these as the '
@@ -949,6 +944,7 @@ def definition_to_message(
         )
         message.add(paragraph)
 
+        models_definition = definition['earthquake_fatality_models']
         for model in models_definition:
             message.add(m.Heading(model['name'], **DETAILS_SUBGROUP_STYLE))
             if 'description' in model:
