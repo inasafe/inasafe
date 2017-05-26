@@ -26,16 +26,18 @@ status=final
 
 changelog=
     Version 4.1.0
-    - Added field mapping tool to support vulnerability breakdowns
-    - Updated help documentation including better table of contents and nicer formatting
-    - Added basic support for saving any html content (dock, help etc.) as pdf via right click context menu
-    - Updated to bootstrap 4
-    - Added detailed provenance reporting for each analysis result
-    - Added support for calculating fatality rates when doing earthquake on vector population
-    - Disabled infographic report pending a fix for some issues that are encountered rendering the infographics
-
-   
-
+    - Reporting : Improved action and checklist reporting
+    - Reporting : Quick save as pdf
+    - Reporting : Detailed demographic breakdowns
+    - Reporting : Inclusion of concept definitions under tables
+    - Reporting : New provenance report
+    - Impact Functions : Standardised Tropical Cyclone wind speed averaging time periods
+    - Impact Functions : Improvements to earthquake options panel
+    - Impact Functions : Options for demographic breakdowns
+    - Impact Functions : Fatalities calculations in earthquake on vector population
+    - Tools : Help system improvements
+    - Documentation : Developer guide for adding a new hazard
+    - Issues : Bug fixes and improvements
 
 # tags are comma separated with spaces allowed
 tags=contingency planning, impact assessments, disaster scenarios, natural hazards
