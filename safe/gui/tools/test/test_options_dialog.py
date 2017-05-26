@@ -90,9 +90,6 @@ class TestOptionsDialog(unittest.TestCase):
             dialog.iso19115_email_le.text(),
             inasafe_default_settings['ISO19115_EMAIL'])
         self.assertEqual(
-            dialog.iso19115_title_le.text(),
-            inasafe_default_settings['ISO19115_TITLE'])
-        self.assertEqual(
             dialog.iso19115_license_le.text(),
             inasafe_default_settings['ISO19115_LICENSE'])
 
