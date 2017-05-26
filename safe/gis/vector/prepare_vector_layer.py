@@ -227,7 +227,7 @@ def clean_inasafe_fields(layer):
         if key in expected_fields:
             if isinstance(val, basestring):
                 val = [val]
-            sum_fields(layer, expected_fields[key], val)
+            sum_fields(layer, key, val)
             new_keywords[key] = expected_fields[key]
 
     # Houra, InaSAFE keywords match our concepts !
@@ -442,23 +442,26 @@ def _add_default_exposure_class(layer):
 
 
 @profile
-def sum_fields(layer, output_field_name, input_fields):
+def sum_fields(layer, output_field_key, input_fields):
     """Sum the value of input_fields and put it as output_field.
 
     :param layer: The vector layer.
     :type layer: QgsVectorLayer
 
-    :param output_field_name: The output field name.
-    :type output_field_name: str
+    :param output_field_key: The output field definition key.
+    :type output_field_key: safe.definitions.fields
 
     :param input_fields: List of input fields' name.
     :type input_fields: list
     """
+    field_definition = definition(output_field_key)
+    output_field_name = field_definition['field_name']
     # If the fields only has one element
     if len(input_fields) == 1:
         # Name is different, copy it
         if input_fields[0] != output_field_name:
-            copy_fields(layer, {input_fields[0]: output_field_name})
+            copy_fields(layer, {
+                input_fields[0]: output_field_name})
         # Name is same, do nothing
         else:
             return
@@ -472,7 +475,7 @@ def sum_fields(layer, output_field_name, input_fields):
         output_idx = layer.fieldNameIndex(output_field_name)
         # Output index is not found
         if output_idx == -1:
-            output_field = QgsField(output_field_name, QVariant.Double)
+            output_field = create_field_from_definition(field_definition)
             layer.startEditing()
             layer.dataProvider().addAttributes([output_field])
             layer.commitChanges()
@@ -481,7 +484,8 @@ def sum_fields(layer, output_field_name, input_fields):
         layer.startEditing()
         # Iterate to all features
         for feature in layer.getFeatures():
-            feature[output_idx] = sum_expression.evaluate(feature)
+            result = sum_expression.evaluate(feature)
+            feature[output_idx] = result
             layer.updateFeature(feature)
 
         layer.commitChanges()
