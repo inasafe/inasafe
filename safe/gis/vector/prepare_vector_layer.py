@@ -3,12 +3,14 @@
 """Prepare layers for InaSAFE."""
 
 import logging
-from PyQt4.QtCore import QPyNullVariant
+from PyQt4.QtCore import QPyNullVariant, QVariant
 from qgis.core import (
     QgsVectorLayer,
     QgsField,
     QgsFeatureRequest,
     QGis,
+    QgsExpressionContext,
+    QgsExpression
 )
 
 from safe.common.exceptions import (
@@ -109,7 +111,7 @@ def prepare_vector_layer(layer, callback=None):
         raise NoFeaturesInExtentError
 
     _add_id_column(cleaned)
-    rename_remove_inasafe_fields(cleaned)
+    clean_inasafe_fields(cleaned)
 
     if _size_is_needed(cleaned):
         LOGGER.info(
@@ -183,8 +185,12 @@ def _check_value_mapping(layer, exposure_key=None):
 
 
 @profile
-def rename_remove_inasafe_fields(layer):
-    """Loop over fields and rename fields which are used in InaSAFE.
+def clean_inasafe_fields(layer):
+    """Clean inasafe_fields based on keywords.
+
+    1. Must use standard field names.
+    2. Sum up list of fields' value and put in the standard field name.
+    3. Remove un-used fields.
 
     :param layer: The layer
     :type layer: QgsVectorLayer
@@ -215,32 +221,23 @@ def rename_remove_inasafe_fields(layer):
 
     expected_fields = {field['key']: field['field_name'] for field in fields}
 
-    # Rename fields
-    to_rename = {}
+    # Convert the field name and sum up if needed
     new_keywords = {}
     for key, val in layer.keywords.get('inasafe_fields').iteritems():
         if key in expected_fields:
-            if expected_fields[key] != val:
-                to_rename[val] = expected_fields[key]
-                new_keywords[key] = expected_fields[key]
-
-    copy_fields(layer, to_rename)
-    to_remove = to_rename.keys()
-
-    LOGGER.debug(
-        'Fields which have been renamed from %s :' % (
-            layer.keywords['layer_purpose']))
-    for old_name, new_name in to_rename.iteritems():
-        LOGGER.debug('%s -> %s' % (old_name, new_name))
+            if isinstance(val, basestring):
+                val = [val]
+            sum_fields(layer, key, val)
+            new_keywords[key] = expected_fields[key]
 
     # Houra, InaSAFE keywords match our concepts !
     layer.keywords['inasafe_fields'].update(new_keywords)
 
-    # Remove unnecessary fields
+    to_remove = []
+    # Remove unnecessary fields (the one that is not in the inasafe_fields)
     for field in layer.fields().toList():
-        if field.name() not in expected_fields.values():
-            if field.name() not in to_remove:
-                to_remove.append(field.name())
+        if field.name() not in layer.keywords['inasafe_fields'].values():
+            to_remove.append(field.name())
     remove_fields(layer, to_remove)
     LOGGER.debug(
         'Fields which have been removed from %s : %s'
@@ -300,64 +297,69 @@ def _remove_features(layer):
     compulsory_field = get_compulsory_fields(layer_purpose, layer_subcategory)
 
     inasafe_fields = layer.keywords['inasafe_fields']
-    field_name = inasafe_fields.get(compulsory_field['key'])
-    if not field_name:
-        msg = 'Keyword %s is missing from %s' % (
-            compulsory_field['key'], layer_purpose)
-        raise InvalidKeywordsForProcessingAlgorithm(msg)
-    index = layer.fieldNameIndex(field_name)
+    # Compulsory fields can be list of field name or single field name.
+    # We need to iterate through all of them
+    field_names = inasafe_fields.get(compulsory_field['key'])
+    if not isinstance(field_names, list):
+        field_names = [field_names]
+    for field_name in field_names:
+        if not field_name:
+            message = 'Keyword %s is missing from %s' % (
+                compulsory_field['key'], layer_purpose)
+            raise InvalidKeywordsForProcessingAlgorithm(message)
+        index = layer.fieldNameIndex(field_name)
 
-    request = QgsFeatureRequest()
-    request.setSubsetOfAttributes([field_name], layer.pendingFields())
-    layer.startEditing()
-    i = 0
-    for feature in layer.getFeatures(request):
-        if isinstance(feature.attributes()[index], QPyNullVariant):
-            if layer_purpose == 'hazard':
-                # Remove the feature if the hazard is null.
+        request = QgsFeatureRequest()
+        request.setSubsetOfAttributes([field_name], layer.pendingFields())
+        layer.startEditing()
+        i = 0
+        for feature in layer.getFeatures(request):
+            if isinstance(feature.attributes()[index], QPyNullVariant):
+                if layer_purpose == 'hazard':
+                    # Remove the feature if the hazard is null.
+                    layer.deleteFeature(feature.id())
+                    i += 1
+                elif layer_purpose == 'aggregation':
+                    # Put the ID if the value is null.
+                    layer.changeAttributeValue(
+                        feature.id(), index, str(feature.id()))
+                elif layer_purpose == 'exposure':
+                    # Put an empty value, the value mapping will take care of
+                    # it in the 'other' group.
+                    layer.changeAttributeValue(
+                        feature.id(), index, '')
+
+            # Check if there is en empty geometry.
+            geometry = feature.geometry()
+            if not geometry:
                 layer.deleteFeature(feature.id())
                 i += 1
-            elif layer_purpose == 'aggregation':
-                # Put the ID if the value is null.
-                layer.changeAttributeValue(
-                    feature.id(), index, str(feature.id()))
-            elif layer_purpose == 'exposure':
-                # Put an empty value, the value mapping will take care of it
-                # in the 'other' group.
-                layer.changeAttributeValue(
-                    feature.id(), index, '')
+                continue
 
-        # Check if there is en empty geometry.
-        geometry = feature.geometry()
-        if not geometry:
-            layer.deleteFeature(feature.id())
-            i += 1
-            continue
+            # Check if the geometry is empty.
+            if geometry.isGeosEmpty():
+                layer.deleteFeature(feature.id())
+                i += 1
+                continue
 
-        # Check if the geometry is empty.
-        if geometry.isGeosEmpty():
-            layer.deleteFeature(feature.id())
-            i += 1
-            continue
+            # Check if the geometry is valid.
+            if not geometry.isGeosValid():
+                # polygonize can produce some invalid geometries
+                # For instance a polygon like this, sharing a same point :
+                #      _______
+                #      |  ___|__
+                #      |  |__|  |
+                #      |________|
+                # layer.deleteFeature(feature.id())
+                # i += 1
+                pass
 
-        # Check if the geometry is valid.
-        if not geometry.isGeosValid():
-            # polygonize can produce some invalid geometries
-            # For instance a polygon like this, sharing a same point :
-            #      _______
-            #      |  ___|__
-            #      |  |__|  |
-            #      |________|
-            # layer.deleteFeature(feature.id())
-            # i += 1
-            pass
-
-        # TODO We need to add more tests
-        # like checking if the value is in the value_mapping.
-    layer.commitChanges()
-    LOGGER.debug(tr(
-        'Features which have been removed from %s : %s'
-        % (layer.keywords['layer_purpose'], i)))
+            # TODO We need to add more tests
+            # like checking if the value is in the value_mapping.
+        layer.commitChanges()
+        LOGGER.debug(tr(
+            'Features which have been removed from %s : %s'
+            % (layer.keywords['layer_purpose'], i)))
 
 
 @profile
@@ -437,3 +439,56 @@ def _add_default_exposure_class(layer):
 
     layer.commitChanges()
     return
+
+
+@profile
+def sum_fields(layer, output_field_key, input_fields):
+    """Sum the value of input_fields and put it as output_field.
+
+    :param layer: The vector layer.
+    :type layer: QgsVectorLayer
+
+    :param output_field_key: The output field definition key.
+    :type output_field_key: safe.definitions.fields
+
+    :param input_fields: List of input fields' name.
+    :type input_fields: list
+    """
+    field_definition = definition(output_field_key)
+    output_field_name = field_definition['field_name']
+    # If the fields only has one element
+    if len(input_fields) == 1:
+        # Name is different, copy it
+        if input_fields[0] != output_field_name:
+            copy_fields(layer, {
+                input_fields[0]: output_field_name})
+        # Name is same, do nothing
+        else:
+            return
+    else:
+        # Creating expression
+        string_expression = ' + '.join(input_fields)
+        sum_expression = QgsExpression(string_expression)
+        context = QgsExpressionContext()
+        context.setFields(layer.pendingFields())
+        sum_expression.prepare(context)
+
+        # Get the output field index
+        output_idx = layer.fieldNameIndex(output_field_name)
+        # Output index is not found
+        if output_idx == -1:
+            output_field = create_field_from_definition(field_definition)
+            layer.startEditing()
+            layer.addAttribute(output_field)
+            layer.commitChanges()
+            output_idx = layer.fieldNameIndex(output_field_name)
+
+        layer.startEditing()
+        # Iterate to all features
+        for feature in layer.getFeatures():
+            context.setFeature(feature)
+            result = sum_expression.evaluate(context)
+            feature[output_idx] = result
+            layer.updateFeature(feature)
+
+        layer.commitChanges()

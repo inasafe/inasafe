@@ -1,7 +1,6 @@
 # coding=utf-8
 """Rounding and number formatting."""
-
-
+from decimal import Decimal
 from math import ceil
 
 from safe.definitions.units import unit_mapping
@@ -13,14 +12,19 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
-def format_number(x, enable_rounding=True, coefficient=1):
+def format_number(
+        x, enable_rounding=True, is_population=False, coefficient=1):
     """Format a number according to the standards.
 
     :param x: A number to be formatted in a locale friendly way.
     :type x: int
 
-    :param enable_rounding: Flag to enable a population rounding.
+    :param enable_rounding: Flag to enable a rounding.
     :type enable_rounding: bool
+
+    :param is_population: Flag if the number is population. It needs to be
+        used with enable_rounding.
+    :type is_population: bool
 
     :param coefficient: Divide the result after the rounding.
     :type coefficient:float
@@ -31,7 +35,7 @@ def format_number(x, enable_rounding=True, coefficient=1):
     :rtype: basestring
     """
     if enable_rounding:
-        x = population_rounding(x)
+        x = rounding(x, is_population)
 
     x /= coefficient
 
@@ -49,7 +53,6 @@ def add_separators(x):
         representing the original x. If a ValueError exception occurs,
         x is simply returned.
     :rtype: basestring
-
 
     From http://
     stackoverflow.com/questions/5513615/add-thousands-separators-to-a-number
@@ -127,42 +130,50 @@ def round_affected_number(
     rounded_number = int(ceil(decimal_number))
     if enable_rounding and use_population_rounding:
         # if uses population rounding
-        return population_rounding(rounded_number)
+        return rounding(rounded_number, use_population_rounding)
     elif enable_rounding:
         return rounded_number
 
     return decimal_number
 
 
-def population_rounding_full(number):
-    """This function performs a rigorous population rounding.
+def rounding_full(number, is_population=False):
+    """This function performs a rigorous rounding.
 
-    :param number: The amount of people as calculated.
+    :param number: The amount to round.
     :type number: int, float
+
+    :param is_population: If we should use the population rounding rule, #4062.
+    :type is_population: bool
 
     :returns: result and rounding bracket.
     :rtype: (int, int)
     """
-    if number < 1000:
-        rounding = 10
+    if number < 1000 and not is_population:
+        rounding_number = 1  # See ticket #4062
+    elif number < 1000 and is_population:
+        rounding_number = 10
     elif number < 100000:
-        rounding = 100
+        rounding_number = 100
     else:
-        rounding = 1000
-    number = int(rounding * ceil(1.0 * number / rounding))
-    return number, rounding
+        rounding_number = 1000
+    number = int(rounding_number * ceil(1.0 * number / rounding_number))
+    return number, rounding_number
 
 
-def population_rounding(number):
-    """A shorthand for population_rounding_full(number)[0].
+def rounding(number, is_population=False):
+    """A shorthand for rounding_full(number)[0].
 
-    :param number: The amount of people as calculated.
+    :param number: The amount to round.
     :type number: int, float
+
+    :param is_population: If we should use the population rounding rule, #4062.
+    :type is_population: bool
 
     :returns: result and rounding bracket.
     :rtype: int
     """
-    return population_rounding_full(number)[0]
+    return rounding_full(number, is_population)[0]
 
 
 def convert_unit(number, input_unit, expected_unit):
@@ -241,3 +252,35 @@ def fatalities_range(number):
             return range_format.format(
                 min_range=add_separators(min_range),
                 max_range=add_separators(max_range))
+
+
+def html_scientific_notation_rate(rate):
+    """Helper for convert decimal rate using scientific notation.
+
+    For example we want to show the very detail value of fatality rate
+    because it might be a very small number.
+
+    :param rate: Rate value
+    :type rate: float
+
+    :return: Rate value with html tag to show the exponent
+    :rtype: str
+    """
+    precision = '%.3f'
+    if rate * 100 > 0:
+        decimal_rate = Decimal(precision % (rate * 100))
+        if decimal_rate == Decimal((precision % 0)):
+            decimal_rate = Decimal(str(rate * 100))
+    else:
+        decimal_rate = Decimal(str(rate * 100))
+    if decimal_rate.as_tuple().exponent >= -3:
+        rate_percentage = str(decimal_rate)
+    else:
+        rate = '%.2E' % decimal_rate
+        html_rate = rate.split('E')
+        # we use html tag to show exponent
+        html_rate[1] = '10<sup>{exponent}</sup>'.format(
+            exponent=html_rate[1])
+        html_rate.insert(1, 'x')
+        rate_percentage = ''.join(html_rate)
+    return rate_percentage

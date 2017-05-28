@@ -15,11 +15,11 @@ inasafe_default_settings = {
     'showOrganisationLogoInDockFlag': False,
     'developer_mode': False,
     'generate_report': True,
+    'memory_profile': False,
 
     'ISO19115_ORGANIZATION': 'InaSAFE.org',
     'ISO19115_URL': 'http://inasafe.org',
     'ISO19115_EMAIL': 'info@inasafe.org',
-    'ISO19115_TITLE': 'InaSAFE analysis result',
     'ISO19115_LICENSE': 'Free use with accreditation',
 
     'keywordCachePath': abspath(join(

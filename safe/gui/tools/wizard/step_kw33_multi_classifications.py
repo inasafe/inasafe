@@ -153,7 +153,11 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
 
         # Check if it can go to inasafe default field step
         default_inasafe_fields = get_fields(
-            self.layer_purpose['key'], subcategory['key'], replace_null=True)
+            self.layer_purpose['key'],
+            subcategory['key'],
+            replace_null=True,
+            in_group=False
+        )
         if default_inasafe_fields:
             return self.parent.step_kw_default_inasafe_fields
 
@@ -163,7 +167,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
     def set_wizard_step_description(self):
         """Set the text for description."""
         subcategory = self.parent.step_kw_subcategory.selected_subcategory()
-        field = self.parent.step_kw_field.selected_field()
+        field = self.parent.step_kw_field.selected_fields()
         is_raster = is_raster_layer(self.parent.layer)
 
         if is_raster:
@@ -202,6 +206,13 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             special_case = False
             # Filter out unsupported exposure for the hazard
             if exposure in hazard['disabled_exposures']:
+                # Remove from the storage if the exposure is disabled
+                if self.layer_mode == layer_mode_continuous:
+                    if exposure['key'] in self.thresholds:
+                        self.thresholds.pop(exposure['key'])
+                else:
+                    if exposure['key'] in self.value_maps:
+                        self.value_maps.pop(exposure['key'])
                 continue
             # Trick for EQ raster for population #3853
             if exposure == exposure_population and hazard == hazard_earthquake:
@@ -561,7 +572,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
                 statistics.minimumValue,
                 statistics.maximumValue)
         else:
-            field_name = self.parent.step_kw_field.selected_field()
+            field_name = self.parent.step_kw_field.selected_fields()
             field_index = self.parent.layer.fieldNameIndex(field_name)
             min_value_layer = self.parent.layer.minimumValue(field_index)
             max_value_layer = self.parent.layer.maximumValue(field_index)
@@ -783,7 +794,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             else:
                 unique_values = [int(i) for i in unique_values]
         else:
-            field = self.parent.step_kw_field.selected_field()
+            field = self.parent.step_kw_field.selected_fields()
             field_index = self.parent.layer.dataProvider().fields(). \
                 indexFromName(field)
             field_type = self.parent.layer.dataProvider(). \

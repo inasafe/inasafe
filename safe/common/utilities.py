@@ -187,8 +187,11 @@ def unique_filename(**kwargs):
 
 def get_free_memory():
     """Return current free memory on the machine.
-    Currently supported for Windows, Linux
-    Return in MB unit
+
+    Currently supported for Windows, Linux, MacOS.
+
+    :returns: Free memory in MB unit
+    :rtype: int
     """
     if 'win32' in sys.platform:
         # windows

@@ -78,7 +78,11 @@ class StepKwThreshold(WizardStep, FORM_CLASS):
 
         # Check if it can go to inasafe default field step
         default_inasafe_fields = get_fields(
-            layer_purpose['key'], subcategory['key'], replace_null=True)
+            layer_purpose['key'],
+            subcategory['key'],
+            replace_null=True,
+            in_group=False
+        )
         if default_inasafe_fields:
             return self.parent.step_kw_default_inasafe_fields
 
@@ -106,7 +110,7 @@ class StepKwThreshold(WizardStep, FORM_CLASS):
                 statistics.minimumValue,
                 statistics.maximumValue)
         else:
-            field_name = self.parent.step_kw_field.selected_field()
+            field_name = self.parent.step_kw_field.selected_fields()
             field_index = self.parent.layer.fieldNameIndex(field_name)
             min_value_layer = self.parent.layer.minimumValue(field_index)
             max_value_layer = self.parent.layer.maximumValue(field_index)

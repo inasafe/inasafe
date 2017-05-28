@@ -33,14 +33,7 @@ class AbstractList(MessageElement):
         Strings can be passed and are automatically converted in to
         item.Text()
 
-        Args:
-            Text message, an element to add to the message
-
-        Returns:
-            None
-
-        Raises:
-            Errors are propagated
+        :param: Text message, an element to add to the message
 
         We pass the kwargs on to the base class so an exception is raised
         if invalid keywords were passed. See:
@@ -61,14 +54,8 @@ class AbstractList(MessageElement):
         Strings can be passed and are automatically converted in to
         item.Text()
 
-        Args:
-            Text text, an element to add to the text
+        :param item: Text text, an element to add to the text
 
-        Returns:
-            None
-
-        Raises:
-            Errors are propagated
         """
         if self._is_stringable(item) or self._is_qstring(item):
             self.items.append(PlainText(item))
@@ -80,30 +67,24 @@ class AbstractList(MessageElement):
         else:
             raise InvalidMessageItemError(item, item.__class__)
 
+    def is_empty(self):
+        """Helper to see if this message is empty."""
+        if not len(self.items):
+            return True
+        else:
+            return False
+
     def to_html(self):
         """Render a Text MessageElement as html
 
-        Args:
-            None
-
-        Returns:
-            Str the html representation of the Text MessageElement
-
-        Raises:
-            Errors are propagated
+        :returns: The html representation of the Text MessageElement.
         """
         raise NotImplementedError('Please don\'t use this class directly')
 
     def to_text(self):
         """Render a Text MessageElement as plain text
 
-        Args:
-            None
+        :returns: plain text representation of the Text MessageElement
 
-        Returns:
-            Str the plain text representation of the Text MessageElement
-
-        Raises:
-            Errors are propagated
         """
         raise NotImplementedError('Please don\'t use this class directly')

@@ -3,10 +3,12 @@
 """From counts to ratio."""
 
 import logging
-from safe.definitions.utilities import definition
-from safe.definitions.fields import count_ratio_mapping, population_count_field
+from safe.definitions.utilities import definition, get_non_compulsory_fields
+from safe.definitions.fields import population_count_field
+from safe.definitions import count_ratio_mapping
 from safe.definitions.processing_steps import (
     recompute_counts_steps)
+from safe.definitions.layer_purposes import layer_purpose_exposure
 from safe.utilities.profiling import profile
 from safe.gis.vector.tools import create_field_from_definition
 from safe.gis.sanity_check import check_layer
@@ -59,7 +61,9 @@ def from_counts_to_ratios(layer, callback=None):
     layer.startEditing()
 
     mapping = {}
-    for count_field in exposure['extra_fields']:
+    non_compulsory_fields = get_non_compulsory_fields(
+        layer_purpose_exposure['key'], exposure['key'])
+    for count_field in non_compulsory_fields:
         exists = count_field['key'] in inasafe_fields
         if count_field['key'] in count_ratio_mapping.keys() and exists:
             ratio_field = definition(count_ratio_mapping[count_field['key']])

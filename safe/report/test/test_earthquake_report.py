@@ -91,7 +91,7 @@ class TestEarthquakeReport(unittest.TestCase):
             report_metadata,
             impact_function=impact_function)
         impact_report.output_folder = output_folder
-        return_code, message = impact_report.process_component()
+        return_code, message = impact_report.process_components()
 
         self.assertEqual(
             return_code, ImpactReport.REPORT_GENERATION_SUCCESS, message)
@@ -105,7 +105,8 @@ class TestEarthquakeReport(unittest.TestCase):
         """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
 
         expected_context = {
-            'table_header': u'Estimated Number of people',
+            'table_header': (
+                u'Estimated Number of people affected per MMI intensity'),
             'header': u'General Report',
             'summary': [
                 {

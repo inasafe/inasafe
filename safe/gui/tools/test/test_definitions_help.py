@@ -4,8 +4,8 @@
 
 import unittest
 import logging
-from safe.utilities.i18n import tr
 from safe.gui.tools.help import definitions_help
+import safe.messaging as m
 from safe.test.utilities import get_control_text
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -83,8 +83,14 @@ class TestDefinitionsHelp(unittest.TestCase):
 
     def test_definition_to_message(self):
         """Test definitions to message renderer."""
-        help_text = definitions_help.definition_to_message(
-            self.test_definition).to_text()
+        message = m.Message()
+        table_of_contents = m.Message()
+        definitions_help.definition_to_message(
+            self.test_definition,
+            message=message,
+            table_of_contents=table_of_contents
+        )
+        help_text = message.to_text()
         expected_result = get_control_text(
             'test-definition-to-message-response.txt')
 

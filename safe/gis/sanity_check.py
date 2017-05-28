@@ -15,11 +15,15 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
-def check_inasafe_fields(layer):
+def check_inasafe_fields(layer, keywords_only=False):
     """Helper to check inasafe_fields.
 
     :param layer: The layer to check.
     :type layer: QgsVectorLayer
+
+    :param keywords_only: If we should check from the keywords only. False by
+        default, we will check also from the layer.
+    :type keywords_only: bool
 
     :return: Return True if the layer is valid.
     :rtype: bool
@@ -30,14 +34,26 @@ def check_inasafe_fields(layer):
 
     real_fields = [field.name() for field in layer.fields().toList()]
 
-    difference = set(inasafe_fields.values()).difference(real_fields)
+    inasafe_fields_flat = []
+    for value in inasafe_fields.values():
+        if isinstance(value, list):
+            inasafe_fields_flat.extend(value)
+        else:
+            inasafe_fields_flat.append(value)
+
+    difference = set(inasafe_fields_flat).difference(real_fields)
     if len(difference):
         message = tr(
             'inasafe_fields has more fields than the layer %s itself : %s'
             % (layer.keywords['layer_purpose'], difference))
         raise InvalidLayerError(message)
 
-    difference = set(real_fields).difference(inasafe_fields.values())
+    if keywords_only:
+        # We don't check if it's valid from the layer. The layer may have more
+        # fields than inasafe_fields.
+        return True
+
+    difference = set(real_fields).difference(inasafe_fields_flat)
     if len(difference):
         message = tr(
             'The layer %s has more fields than inasafe_fields : %s'

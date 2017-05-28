@@ -7,8 +7,8 @@ import unittest
 from safe.definitions.units import (
     unit_millimetres, unit_metres, unit_kilometres, unit_knots)
 from safe.utilities.rounding import (
-    population_rounding_full,
-    population_rounding,
+    rounding_full,
+    rounding,
     add_separators,
     convert_unit,
     fatalities_range,
@@ -25,29 +25,21 @@ LOGGER = logging.getLogger('InaSAFE')
 
 class TestCore(unittest.TestCase):
 
-    def test_population_rounding(self):
-        """Test for population_rounding_full function."""
-        # rounding up
-        for _ in range(100):
-            # After choosing some random numbers the sum of the randomly
-            # selected and one greater than that should be less than the
-            # population rounded versions of these.
-            n = random.randint(1, 1000000)
-            n_pop, dummy = population_rounding_full(n)
-            n1 = n + 1
-            n1_pop, dummy = population_rounding_full(n1)
-            self.assertGreater(n_pop + n1_pop, n + n1)
+    """Tests for rounding."""
 
-        self.assertEqual(population_rounding_full(989)[0], 990)
-        self.assertEqual(population_rounding_full(991)[0], 1000)
-        self.assertEqual(population_rounding_full(8888)[0], 8900)
-        self.assertEqual(population_rounding_full(9888888)[0], 9889000)
+    def test_rounding_population(self):
+        """Test for rounding population function."""
+        self.assertEqual(rounding_full(989, True)[0], 990)
+        self.assertEqual(rounding_full(991, True)[0], 1000)
+        self.assertEqual(rounding_full(8888, True)[0], 8900)
+        self.assertEqual(rounding_full(9888888, True)[0], 9889000)
 
-        for _ in range(100):
-            n = random.randint(1, 1000000)
-            self.assertEqual(
-                population_rounding(n),
-                population_rounding_full(n)[0])
+    def test_rounding_not_population(self):
+        """Test for rounding not population numbers function."""
+        self.assertEqual(rounding_full(989, False)[0], 989)
+        self.assertEqual(rounding_full(991, False)[0], 991)
+        self.assertEqual(rounding_full(8888, False)[0], 8900)
+        self.assertEqual(rounding_full(9888888, False)[0], 9889000)
 
     def test_format_int(self):
         """Test formatting integer"""

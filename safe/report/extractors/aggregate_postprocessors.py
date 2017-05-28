@@ -2,6 +2,7 @@
 """Module used to generate context for aggregation postprocessors sections.
 """
 
+# noinspection PyUnresolvedReferences
 from PyQt4.QtCore import QPyNullVariant
 from collections import OrderedDict
 
@@ -9,12 +10,15 @@ from safe.common.parameters.resource_parameter import ResourceParameter
 from safe.definitions.exposure import exposure_population
 from safe.definitions.fields import (
     aggregation_name_field,
-    displaced_field,
-    male_displaced_count_field)
+    displaced_field)
+from safe.definitions.field_groups import (
+    age_displaced_count_group,
+    gender_displaced_count_group,
+    vulnerability_displaced_count_groups)
 from safe.definitions.minimum_needs import minimum_needs_fields
-from safe.definitions.post_processors import (
+from safe.definitions.post_processors.population_post_processors import (
     age_postprocessors,
-    female_postprocessors)
+    gender_postprocessors)
 from safe.definitions.utilities import postprocessor_output_field
 from safe.report.extractors.util import (
     value_from_field_name,
@@ -86,94 +90,185 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
         context['header'] = resolve_from_dictionary(
             extra_args, 'header')
 
-    age_fields = [postprocessor_output_field(p) for p in age_postprocessors]
-    gender_fields = [male_displaced_count_field] + [
-        postprocessor_output_field(p) for p in female_postprocessors]
+    group_header_format = resolve_from_dictionary(
+        extra_args, ['defaults', 'group_header_format'])
+    section_header_format = resolve_from_dictionary(
+        extra_args, ['defaults', 'section_header_format'])
+
+    """Age Groups"""
+    age_items = {
+        'group': age_displaced_count_group,
+        'group_header': group_header_format.format(
+            header_name=age_displaced_count_group['header_name']),
+        'fields': [postprocessor_output_field(p) for p in age_postprocessors]
+    }
 
     # check age_fields exists
-    for field in age_fields:
+    for field in age_items['fields']:
         if field['key'] in analysis_layer_fields:
             no_age_field = False
             break
     else:
         no_age_field = True
 
+    context['sections']['age'] = []
+    age_section_header = section_header_format.format(
+        header_name=age_displaced_count_group['header_name'])
+    if zero_displaced:
+        context['sections']['age'].append(
+            {
+                'header': age_section_header,
+                'empty': True,
+                'message': resolve_from_dictionary(
+                    extra_args, ['defaults', 'zero_displaced_message'])
+            }
+        )
+    elif no_age_field:
+        context['sections']['age'].append(
+            {
+                'header': age_section_header,
+                'empty': True,
+                'message': resolve_from_dictionary(
+                    extra_args, ['defaults', 'no_age_rate_message'])
+            }
+        )
+    else:
+        context['sections']['age'].append(
+            create_section(
+                aggregation_summary,
+                analysis_layer,
+                age_items,
+                age_section_header,
+                use_aggregation=use_aggregation,
+                debug_mode=debug_mode,
+                extra_component_args=extra_args)
+        )
+
+    """Gender Groups"""
+    gender_items = {
+        'group': gender_displaced_count_group,
+        'group_header': group_header_format.format(
+            header_name=gender_displaced_count_group['header_name']),
+        'fields': [
+            postprocessor_output_field(p) for p in gender_postprocessors]
+    }
+
     # check gender_fields exists
-    for field in gender_fields:
+    for field in gender_items['fields']:
         if field['key'] in analysis_layer_fields:
             no_gender_field = False
             break
     else:
         no_gender_field = True
 
-    age_section_header = resolve_from_dictionary(
-        extra_args, ['sections', 'age', 'header'])
+    context['sections']['gender'] = []
+    gender_section_header = section_header_format.format(
+        header_name=gender_displaced_count_group['header_name'])
     if zero_displaced:
-        context['sections']['age'] = {
-            'header': age_section_header,
-            'empty': True,
-            'message': resolve_from_dictionary(
-                extra_args, ['defaults', 'zero_displaced_message'])
-        }
-    elif no_age_field:
-        context['sections']['age'] = {
-            'header': age_section_header,
-            'empty': True,
-            'message': resolve_from_dictionary(
-                extra_args, ['defaults', 'no_age_rate_message'])
-        }
-    else:
-        context['sections']['age'] = create_section(
-            aggregation_summary,
-            analysis_layer,
-            age_fields,
-            age_section_header,
-            use_aggregation=use_aggregation,
-            debug_mode=debug_mode,
-            extra_component_args=extra_args)
-
-    gender_section_header = resolve_from_dictionary(
-        extra_args, ['sections', 'gender', 'header'])
-    if zero_displaced:
-        context['sections']['gender'] = {
-            'header': gender_section_header,
-            'empty': True,
-            'message': resolve_from_dictionary(
-                extra_args, ['defaults', 'zero_displaced_message'])
-        }
+        context['sections']['gender'].append(
+            {
+                'header': gender_section_header,
+                'empty': True,
+                'message': resolve_from_dictionary(
+                    extra_args, ['defaults', 'zero_displaced_message'])
+            }
+        )
     elif no_gender_field:
-        context['sections']['gender'] = {
-            'header': gender_section_header,
-            'empty': True,
-            'message': resolve_from_dictionary(
-                extra_args, ['defaults', 'no_gender_rate_message'])
-        }
+        context['sections']['gender'].append(
+            {
+                'header': gender_section_header,
+                'empty': True,
+                'message': resolve_from_dictionary(
+                    extra_args, ['defaults', 'no_gender_rate_message'])
+            }
+        )
     else:
-        context['sections']['gender'] = create_section(
-            aggregation_summary,
-            analysis_layer,
-            gender_fields,
-            gender_section_header,
-            use_aggregation=use_aggregation,
-            debug_mode=debug_mode,
-            extra_component_args=extra_args)
+        context['sections']['gender'].append(
+            create_section(
+                aggregation_summary,
+                analysis_layer,
+                gender_items,
+                gender_section_header,
+                use_aggregation=use_aggregation,
+                debug_mode=debug_mode,
+                extra_component_args=extra_args)
+        )
 
+    """Vulnerability Groups"""
+    context['sections']['vulnerability'] = []
+    for vulnerability_group in vulnerability_displaced_count_groups:
+        vulnerability_items = {
+            'group': vulnerability_group,
+            'group_header': group_header_format.format(
+                header_name=vulnerability_group['header_name']),
+            'fields': [field for field in vulnerability_group['fields']]
+        }
+
+        # check vulnerability_fields exists
+        for field in vulnerability_items['fields']:
+            if field['key'] in analysis_layer_fields:
+                no_vulnerability_field = False
+                break
+        else:
+            no_vulnerability_field = True
+
+        vulnerability_section_header = section_header_format.format(
+            header_name=vulnerability_group['header_name'])
+        if zero_displaced:
+            context['sections']['vulnerability'].append(
+                {
+                    'header': vulnerability_section_header,
+                    'empty': True,
+                    'message': resolve_from_dictionary(
+                        extra_args, ['defaults', 'zero_displaced_message'])
+                }
+            )
+        elif no_vulnerability_field:
+            context['sections']['vulnerability'].append(
+                {
+                    'header': vulnerability_section_header,
+                    'empty': True,
+                    'message': resolve_from_dictionary(
+                        extra_args,
+                        ['defaults', 'no_vulnerability_rate_message'])
+                }
+            )
+        else:
+            context['sections']['vulnerability'].append(
+                create_section(
+                    aggregation_summary,
+                    analysis_layer,
+                    vulnerability_items,
+                    vulnerability_section_header,
+                    use_aggregation=use_aggregation,
+                    debug_mode=debug_mode,
+                    extra_component_args=extra_args)
+            )
+
+    """Minimum Needs"""
+    context['sections']['minimum_needs'] = []
     minimum_needs_section_header = resolve_from_dictionary(
         extra_args, ['sections', 'minimum_needs', 'header'])
     # Don't show minimum needs if there is no displaced
     if zero_displaced:
-        context['sections']['minimum_needs'] = {
-            'header': minimum_needs_section_header,
-            'empty': True,
-            'message': resolve_from_dictionary(
-                extra_args, ['defaults', 'zero_displaced_message'])
-        }
+        context['sections']['minimum_needs'].append(
+            {
+                'header': minimum_needs_section_header,
+                'empty': True,
+                'message': resolve_from_dictionary(
+                    extra_args, ['defaults', 'zero_displaced_message'])
+            }
+        )
     # Only provides minimum needs breakdown if there is aggregation layer
     elif use_aggregation:
         # minimum needs should provide unit for column headers
         units_label = []
+        minimum_needs_items = {
+            'group_header': u'Minimum needs breakdown',
+            'fields': minimum_needs_fields
+        }
 
-        for field in minimum_needs_fields:
+        for field in minimum_needs_items['fields']:
             need = field['need_parameter']
             if isinstance(need, ResourceParameter):
                 unit = None
@@ -184,21 +279,24 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
                         unit=unit_abbreviation)
                 units_label.append(unit)
 
-        context['sections']['minimum_needs'] = create_section(
-            aggregation_summary,
-            analysis_layer,
-            minimum_needs_fields,
-            minimum_needs_section_header,
-            units_label=units_label,
-            debug_mode=debug_mode,
-            extra_component_args=extra_args)
+        context['sections']['minimum_needs'].append(
+            create_section(
+                aggregation_summary,
+                analysis_layer,
+                minimum_needs_items,
+                minimum_needs_section_header,
+                units_label=units_label,
+                debug_mode=debug_mode,
+                extra_component_args=extra_args)
+        )
     else:
         sections_not_empty = True
-        for _, value in context['sections'].iteritems():
-            if value.get('rows'):
-                break
-        else:
-            sections_not_empty = False
+        for _, values in context['sections'].iteritems():
+            for value in values:
+                if value.get('rows'):
+                    break
+                else:
+                    sections_not_empty = False
 
         context['sections_not_empty'] = sections_not_empty
 
@@ -303,7 +401,13 @@ def create_section_with_aggregation(
 
     # retrieving postprocessor
     postprocessors_fields_found = []
-    for output_field in postprocessor_fields:
+
+    if type(postprocessor_fields) is dict:
+        output_fields = postprocessor_fields['fields']
+    else:
+        output_fields = postprocessor_fields
+
+    for output_field in output_fields:
         if output_field['key'] in aggregation_summary_fields:
             postprocessors_fields_found.append(output_field)
 
@@ -330,8 +434,14 @@ def create_section_with_aggregation(
     ]
     row_values = []
 
+    group_fields_found = []
+    start_group_header = True
     for idx, output_field in enumerate(postprocessors_fields_found):
-        name = output_field['name']
+
+        name = output_field.get('header_name')
+        if not name:
+            name = output_field.get('name')
+
         if units_label or output_field.get('unit'):
             unit = None
             if units_label:
@@ -351,7 +461,26 @@ def create_section_with_aggregation(
             header_format = u'{name}'
             header = header_format.format(name=name)
 
-        columns.append(header)
+        if type(postprocessor_fields) is dict:
+            try:
+                group_header = postprocessor_fields['group_header']
+                group_fields = postprocessor_fields['group']['fields']
+                if output_field in group_fields:
+                    group_fields_found.append(output_field)
+                else:
+                    columns.append(header)
+                    continue
+            except KeyError:
+                group_fields_found.append(output_field)
+
+        header_dict = {
+            'name': header,
+            'group_header': group_header,
+            'start_group_header': start_group_header
+        }
+
+        start_group_header = False
+        columns.append(header_dict)
 
     """Generating values for rows"""
 
@@ -373,7 +502,8 @@ def create_section_with_aggregation(
 
         total_displaced = format_number(
             feature[displaced_field_index],
-            enable_rounding=enable_rounding)
+            enable_rounding=enable_rounding,
+            is_population=True)
 
         row = [
             aggregation_name,
@@ -390,7 +520,8 @@ def create_section_with_aggregation(
 
             value = format_number(
                 value,
-                enable_rounding=enable_rounding)
+                enable_rounding=enable_rounding,
+                is_population=True)
             row.append(value)
 
         row_values.append(row)
@@ -403,7 +534,8 @@ def create_section_with_aggregation(
         total_displaced_field_name, analysis_layer)
     value = format_number(
         value,
-        enable_rounding=enable_rounding)
+        enable_rounding=enable_rounding,
+        is_population=True)
     total_header = resolve_from_dictionary(
         extra_component_args, ['defaults', 'total_header'])
     totals = [
@@ -415,17 +547,29 @@ def create_section_with_aggregation(
         value = value_from_field_name(field_name, analysis_layer)
         value = format_number(
             value,
-            enable_rounding=enable_rounding)
+            enable_rounding=enable_rounding,
+            is_population=True)
         totals.append(value)
 
-    notes = resolve_from_dictionary(
+    default_notes = resolve_from_dictionary(
         extra_component_args, ['defaults', 'notes'])
+
+    if type(default_notes) is not list:
+        default_notes = [default_notes]
+
+    try:
+        notes = default_notes + postprocessor_fields['group']['notes']
+    except (TypeError, KeyError):
+        notes = default_notes
+        pass
+
     return {
         'notes': notes,
         'header': section_header,
         'columns': columns,
         'rows': row_values,
         'totals': totals,
+        'group_header_colspan': len(group_fields_found)
     }
 
 
@@ -470,7 +614,7 @@ def create_section_without_aggregation(
 
     # retrieving postprocessor
     postprocessors_fields_found = []
-    for output_field in postprocessor_fields:
+    for output_field in postprocessor_fields['fields']:
         if output_field['key'] in aggregation_summary_fields:
             postprocessors_fields_found.append(output_field)
 
@@ -501,7 +645,11 @@ def create_section_without_aggregation(
     row_values = []
 
     for idx, output_field in enumerate(postprocessors_fields_found):
-        name = output_field['name']
+
+        name = output_field.get('header_name')
+        if not name:
+            name = output_field.get('name')
+
         row = []
         if units_label or output_field.get('unit'):
             unit = None
@@ -532,7 +680,8 @@ def create_section_without_aggregation(
             analysis_layer)
         value = format_number(
             value,
-            enable_rounding=enable_rounding)
+            enable_rounding=enable_rounding,
+            is_population=True)
         row.append(value)
 
         row_values.append(row)

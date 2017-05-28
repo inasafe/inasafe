@@ -56,6 +56,14 @@ def content():
     :rtype: safe.messaging.message.Message
     """
     message = m.Message()
+    paragraph = m.Paragraph(
+        m.Image(
+            'file:///%s/img/screenshots/'
+            'analysis-area-screenshot.png' % resources_path()),
+        style_class='text-center'
+    )
+    message.add(paragraph)
+
     paragraph = m.Paragraph(tr(
         'This tool allows you to specify which geographical region should be '
         'used for your analysis. If you want to check what area will be '

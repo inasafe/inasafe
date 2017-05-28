@@ -24,7 +24,7 @@ class ReportComponentsMetadata(object):
 
     def __init__(
             self, key, processor, extractor,
-            output_format, template, output_path,
+            output_format, template, output_path, resources=None,
             tags=None, context=None, extra_args=None, **kwargs):
         """Base class for component metadata.
 
@@ -74,6 +74,7 @@ class ReportComponentsMetadata(object):
         self._extractor = extractor
         self._output_format = output_format
         self._output_path = output_path
+        self._resources = resources
         self._template = template
         self._tags = tags or []
         self._output = None
@@ -137,6 +138,14 @@ class ReportComponentsMetadata(object):
         :rtype: str, dict, list
         """
         return self._output_path
+
+    @property
+    def resources(self):
+        """Resources that used by the component.
+
+        :rtype: list
+        """
+        return self._resources
 
     @property
     def tags(self):

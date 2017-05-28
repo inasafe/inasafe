@@ -4,17 +4,26 @@
 
 from PyQt4.QtCore import QVariant
 
-from safe.utilities.i18n import tr
+from safe.definitions import concepts
 from safe.definitions.constants import (
     qvariant_whole_numbers, qvariant_numbers)
 from safe.definitions.default_values import (
     female_ratio_default_value,
+    male_ratio_default_value,
     feature_rate_default_value,
     youth_ratio_default_value,
     adult_ratio_default_value,
-    elderly_ratio_default_value
+    elderly_ratio_default_value,
+    infant_ratio_default_value,
+    child_ratio_default_value,
+    under_5_ratio_default_value,
+    over_60_ratio_default_value,
+    disabled_ratio_default_value,
+    child_bearing_age_ratio_default_value,
+    pregnant_ratio_default_value,
+    lactating_ratio_default_value
 )
-from safe.definitions import concepts
+from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -29,7 +38,6 @@ default_ratio_field_precision = 2
 # Exposure
 # # # # # # # # # #
 
-# Exposure ID
 exposure_id_field = {
     'key': 'exposure_id_field',
     'name': tr('Exposure ID'),
@@ -376,12 +384,37 @@ profiling_time_field = {
     'help_text': tr(
         'The total elapsed time spent in the function being measured.'),
     'description': tr(
-        'The profiling system in InaSAFE provide metrics about which '
+        'The profiling system in InaSAFE provides metrics about which '
         'python functions were called during the analysis workflow and '
         'how long was spent in each function. These data are assembled into '
         'a table and shown in QGIS as part of the analysis layer group. '
         'Using the profiling time field we are able to refer back '
         'to a how long was spent in each specific python function when '
+        'doing performance optimisation.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+
+profiling_memory_field = {
+    'key': 'profiling_memory_field',
+    'name': tr('Profiling memory'),
+    'field_name': 'memory_mb',
+    'type': QVariant.Int,
+    'length': default_field_length,
+    'precision': default_field_precision,
+    'help_text': tr(
+        'The total used memory (in mb) in the function being measured.'),
+    'description': tr(
+        'The profiling system in InaSAFE provides metrics about which '
+        'python functions were called during the analysis workflow and '
+        'how much memory is used in each function. These data are assembled '
+        'into a table and shown in QGIS as part of the analysis layer group. '
+        'Using the profiling memory field we are able to refer back '
+        'to a how much memory was used in each specific python function when '
         'doing performance optimisation.'),
     'citations': [
         {
@@ -453,6 +486,7 @@ female_count_field = {
     'key': 'female_count_field',
     'name': tr('Female Count'),
     'field_name': 'female',
+    'header_name': tr('Female'),
     'type': qvariant_numbers,
     'length': default_field_length,
     'precision': 0,
@@ -483,6 +517,7 @@ male_count_field = {
     'key': 'male_count_field',
     'name': tr('Male Count'),
     'field_name': 'male',
+    'header_name': tr('Male'),
     'type': qvariant_numbers,
     'length': default_field_length,
     'precision': 0,
@@ -507,11 +542,164 @@ male_count_field = {
     'replace_null': False
 }
 
+# Child Bearing Age Count
+child_bearing_age_count_field = {
+    'key': 'child_bearing_age_count_field',
+    'name': tr('Child Bearing Age Count'),
+    'field_name': 'child_bearing_age',
+    'header_name': tr('Child Bearing Age'),
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'description': tr(
+        'The number of child bearing age for each feature.'),
+    'help_text': tr(
+        '"Child Bearing Age" is defined as: {concept} In cases where '
+        'population data is available, InaSAFE will calculate the number of '
+        'child bearing age per exposure feature, aggregate hazard area, '
+        'aggregation area and for the analysis area as a whole. The child '
+        'bearing age count is calculated based on standard ratios either '
+        'provided as a global setting in InaSAFE, or (if available) ratios in '
+        'the input analysis data.').format(
+            concept=concepts['child_bearing_age']['description']),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+# Pregnant Count
+pregnant_count_field = {
+    'key': 'pregnant_count_field',
+    'name': tr('Pregnant Women Count'),
+    'field_name': 'pregnant',
+    'header_name': tr('Pregnant'),
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'description': tr(
+        'The number of pregnant women for each feature.'),
+    'help_text': tr(
+        '"Pregnant" is defined as: {concept} In cases where '
+        'population data is available, InaSAFE will calculate the number of '
+        'pregnant women per exposure feature, aggregate hazard '
+        'area, aggregation area and for the analysis area as a whole. The '
+        'pregnant women count is calculated based on standard ratios '
+        'either provided as a global setting in InaSAFE, or (if available) '
+        'ratios in the input analysis data.').format(
+        concept=concepts['pregnant']['description']),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+# Lactating Count
+lactating_count_field = {
+    'key': 'lactating_count_field',
+    'name': tr('Lactating Count'),
+    'field_name': 'lactating',
+    'header_name': tr('Lactating'),
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'description': tr(
+        'The number of lactating women for each feature.'),
+    'help_text': tr(
+        '"Lactating" is defined as: {concept} In cases where '
+        'population data is available, InaSAFE will calculate the number of '
+        'lactating women per exposure feature, aggregate hazard '
+        'area, aggregation area and for the analysis area as a whole. The '
+        'lactating count is calculated based on standard ratios '
+        'either provided as a global setting in InaSAFE, or (if available) '
+        'ratios in the input analysis data.').format(
+        concept=concepts['lactating']['description']),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+# Infant Count
+infant_count_field = {
+    'key': 'infant_count_field',
+    'name': tr('Infant Count'),
+    'field_name': 'infant',
+    'header_name': tr('Infant'),
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'description': tr(
+        'The number of infant people for each feature.'),
+    'help_text': tr(
+        '"Infant" is defined as: {concept} In cases where population data is '
+        'available, InaSAFE will calculate the number of infants per exposure '
+        'feature, aggregate hazard area, aggregation area and for the '
+        'analysis area as a whole. The infant count is calculated based on '
+        'standard ratios either provided as a global setting in InaSAFE, or '
+        '(if available) counts or ratios in the input analysis data.').format(
+            concept=concepts['infant']['description']),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+# Child Count
+child_count_field = {
+    'key': 'child_count_field',
+    'name': tr('Child Count'),
+    'field_name': 'child',
+    'header_name': tr('Child'),
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'description': tr(
+        'The number of child people for each feature.'),
+    'help_text': tr(
+        '"Child" is defined as: {concept} In cases where population data is '
+        'available, InaSAFE will calculate the number of child per exposure '
+        'feature, aggregate hazard area, aggregation area and for the '
+        'analysis area as a whole. The child count is calculated based on '
+        'standard ratios either provided as a global setting in InaSAFE, or '
+        '(if available) counts or ratios in the input analysis data.').format(
+            concept=concepts['child']['description']),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
 # Youth Count
 youth_count_field = {
     'key': 'youth_count_field',
     'name': tr('Youth Count'),
     'field_name': 'youth',
+    'header_name': tr('Youth'),
     'type': qvariant_numbers,
     'length': default_field_length,
     'precision': 0,
@@ -519,8 +707,11 @@ youth_count_field = {
     'description': tr(
         'The number of young people for each feature.'),
     'help_text': tr(
-        '"Youth" is defined as: {concept} In cases where population data is '
-        'available, InaSAFE will calculate the number of youths per exposure '
+        '"Youth" is defined as: {concept} This definition may not align well '
+        'with the definition of youth in the humanitarian sector. It should '
+        'be noted that this concept overlaps with the concepts of infant and '
+        'child in InaSAFE. In cases where population data is available, '
+        'InaSAFE will calculate the number of youths per exposure '
         'feature, aggregate hazard area, aggregation area and for the '
         'analysis area as a whole. The youth count is calculated based on '
         'standard ratios either provided as a global setting in InaSAFE, or '
@@ -541,6 +732,7 @@ adult_count_field = {
     'key': 'adult_count_field',
     'name': tr('Adult Count'),
     'field_name': 'adult',
+    'header_name': tr('Adult'),
     'type': qvariant_numbers,
     'length': default_field_length,
     'precision': 0,
@@ -570,6 +762,7 @@ elderly_count_field = {
     'key': 'elderly_count_field',
     'name': tr('Elderly Count'),
     'field_name': 'elderly',
+    'header_name': tr('Elderly'),
     'type': qvariant_numbers,
     'length': default_field_length,
     'precision': 0,
@@ -584,6 +777,96 @@ elderly_count_field = {
         'standard ratios either provided as a global setting in InaSAFE, or '
         '(if available) counts or ratios in the input analysis data.').format(
             concept=concepts['elderly']['description']),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+# Under 5 Count
+under_5_count_field = {
+    'key': 'under_5_count_field',
+    'name': tr('Under 5 Count'),
+    'field_name': 'under_5',
+    'header_name': tr('Under 5'),
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'description': tr(
+        'The number of under 5 years old for each feature.'),
+    'help_text': tr(
+        '"Under 5" is defined as: {concept} In cases where population data is '
+        'available, InaSAFE will calculate the number of people under 5 years '
+        'old per exposure feature, aggregate hazard area, aggregation area '
+        'and for the analysis area as a whole. The under 5 years count is '
+        'calculated based on standard ratios either provided as a global '
+        'setting in InaSAFE, or (if available) ratios in the input analysis '
+        'data.').format(concept=concepts['under_5']['description']),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+# Over 60 Count
+over_60_count_field = {
+    'key': 'over_60_count_field',
+    'name': tr('Over 60 Count'),
+    'field_name': 'over_60',
+    'header_name': tr('Over 60'),
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'description': tr(
+        'The number of over 60 years old for each feature.'),
+    'help_text': tr(
+        '"Over 60" is defined as: {concept} In cases where population data is '
+        'available, InaSAFE will calculate the number of people over 60 years '
+        'old per exposure feature, aggregate hazard area, aggregation area '
+        'and for the analysis area as a whole. The over 60 years count is '
+        'calculated based on standard ratios either provided as a global '
+        'setting in InaSAFE, or (if available) ratios in the input analysis '
+        'data.').format(concept=concepts['over_60']['description']),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+# Disabled Count
+disabled_count_field = {
+    'key': 'disabled_count_field',
+    'name': tr('Disabled Count'),
+    'field_name': 'disabled',
+    'header_name': tr('Disabled'),
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'description': tr(
+        'The proportion of disabled people for each feature.'),
+    'help_text': tr(
+        '"Disabled" is defined as: {concept} In cases where population data '
+        'is available, InaSAFE will calculate the number of disabled people '
+        'per exposure feature, aggregate hazard area, aggregation area '
+        'and for the analysis area as a whole. The disabled count is '
+        'calculated based on standard ratios either provided as a global '
+        'setting in InaSAFE, or (if available) ratios in the input analysis '
+        'data.').format(concept=concepts['disabled']['description']),
     'citations': [
         {
             'text': None,
@@ -676,6 +959,7 @@ female_ratio_field = {
     'key': 'female_ratio_field',
     'name': tr('Female Ratio'),
     'field_name': 'female_ratio',
+    'header_name': tr('Female'),
     'type': QVariant.Double,
     'length': default_field_length,
     'precision': default_ratio_field_precision,
@@ -701,11 +985,198 @@ female_ratio_field = {
     'default_value': female_ratio_default_value
 }
 
+# Male Ratio
+male_ratio_field = {
+    'key': 'male_ratio_field',
+    'name': tr('Male Ratio'),
+    'field_name': 'male_ratio',
+    'header_name': tr('Male'),
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': default_ratio_field_precision,
+    'absolute': False,
+    'description': tr(
+        'The proportion of male for each feature.'),
+    'help_text': tr(
+        '"Male" is defined as: {concept} In cases where population data is '
+        'available, InaSAFE will calculate the number of males per exposure '
+        'feature, aggregate hazard area, aggregation area and for the '
+        'analysis area as a whole. The male count is calculated based on '
+        'standard ratios either provided as a global setting in InaSAFE, or '
+        '(if available) ratios in the input analysis data.').format(
+            concept=concepts['male']['description']),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': True,
+    'default_value': male_ratio_default_value
+}
+
+# Child Bearing Age Ratio
+child_bearing_age_ratio_field = {
+    'key': 'child_bearing_age_ratio_field',
+    'name': tr('Child Bearing Age Ratio'),
+    'field_name': 'child_bearing_age_ratio',
+    'header_name': tr('Child Bearing Age'),
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': default_ratio_field_precision,
+    'absolute': False,
+    'description': tr(
+        'The proportion of child bearing age for each feature.'),
+    'help_text': tr(
+        '"Child Bearing Age" is defined as: {concept} In cases where '
+        'population data is available, InaSAFE will calculate the number of '
+        'child bearing age per exposure feature, aggregate hazard area, '
+        'aggregation area and for the analysis area as a whole. The child '
+        'bearing age count is calculated based on standard ratios either '
+        'provided as a global setting in InaSAFE, or (if available) ratios in '
+        'the input analysis data.').format(
+            concept=concepts['child_bearing_age']['description']),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': True,
+    'default_value': child_bearing_age_ratio_default_value
+}
+
+pregnant_ratio_field = {
+    'key': 'pregnant_ratio_field',
+    'name': tr('Pregnant Ratio'),
+    'field_name': 'pregnant_ratio',
+    'header_name': tr('Pregnant'),
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': default_ratio_field_precision,
+    'absolute': False,
+    'description': tr(
+        'The proportion of pregnant women for each feature.'),
+    'help_text': tr(
+        '"Pregnant or Lactating" is defined as: {concept} In cases where '
+        'population data is available, InaSAFE will calculate the number of '
+        'pregnant women per exposure feature, aggregate hazard '
+        'area, aggregation area and for the analysis area as a whole. The '
+        'pregnant count is calculated based on standard ratios '
+        'either provided as a global setting in InaSAFE, or (if available) '
+        'ratios in the input analysis data.').format(
+        concept=concepts['pregnant']['description']),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': True,
+    'default_value': pregnant_ratio_default_value
+}
+lactating_ratio_field = {
+    'key': 'lactating_ratio_field',
+    'name': tr('Lactating Ratio'),
+    'field_name': 'lactating_ratio',
+    'header_name': tr('Lactating'),
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': default_ratio_field_precision,
+    'absolute': False,
+    'description': tr(
+        'The proportion of lactating women for each feature.'),
+    'help_text': tr(
+        '"Lactating" is defined as: {concept} In cases where '
+        'population data is available, InaSAFE will calculate the number of '
+        'lactating people per exposure feature, aggregate hazard '
+        'area, aggregation area and for the analysis area as a whole. The '
+        'lactating count is calculated based on standard ratios '
+        'either provided as a global setting in InaSAFE, or (if available) '
+        'ratios in the input analysis data.').format(
+            concept=concepts['lactating']['description']),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': True,
+    'default_value': lactating_ratio_default_value
+}
+
+# Infant Ratio
+infant_ratio_field = {
+    'key': 'infant_ratio_field',
+    'name': tr('Infant Ratio'),
+    'field_name': 'infant_ratio',
+    'header_name': tr('Infant'),
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': default_ratio_field_precision,
+    'absolute': False,
+    'description': tr(
+        'The proportion of infant people for each feature.'),
+    'help_text': tr(
+        '"Infant" is defined as: {concept} In cases where population data is '
+        'available, InaSAFE will calculate the number of infants per exposure '
+        'feature, aggregate hazard area, aggregation area and for the '
+        'analysis area as a whole. The infant count is calculated based on '
+        'standard ratios either provided as a global setting in InaSAFE, or '
+        '(if available) ratios in the input analysis data.').format(
+            concept=concepts['infant']['description']),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': True,
+    'default_value': infant_ratio_default_value
+}
+
+# Child Ratio
+child_ratio_field = {
+    'key': 'child_ratio_field',
+    'name': tr('Child Ratio'),
+    'field_name': 'child_ratio',
+    'header_name': tr('Child'),
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': default_ratio_field_precision,
+    'absolute': False,
+    'description': tr(
+        'The proportion of child people for each feature.'),
+    'help_text': tr(
+        '"Child" is defined as: {concept} In cases where population data is '
+        'available, InaSAFE will calculate the number of child per exposure '
+        'feature, aggregate hazard area, aggregation area and for the '
+        'analysis area as a whole. The child count is calculated based on '
+        'standard ratios either provided as a global setting in InaSAFE, or '
+        '(if available) ratios in the input analysis data.').format(
+            concept=concepts['child']['description']),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': True,
+    'default_value': child_ratio_default_value
+}
+
 # Youth Ratio
 youth_ratio_field = {
     'key': 'youth_ratio_field',
     'name': tr('Youth Ratio'),
     'field_name': 'youth_ratio',
+    'header_name': tr('Youth'),
     'type': QVariant.Double,
     'length': default_field_length,
     'precision': default_ratio_field_precision,
@@ -736,6 +1207,7 @@ adult_ratio_field = {
     'key': 'adult_ratio_field',
     'name': tr('Adult Ratio'),
     'field_name': 'adult_ratio',
+    'header_name': tr('Adult'),
     'type': QVariant.Double,
     'length': default_field_length,
     'precision': default_ratio_field_precision,
@@ -766,6 +1238,7 @@ elderly_ratio_field = {
     'key': 'elderly_ratio_field',
     'name': tr('Elderly Ratio'),
     'field_name': 'elderly_ratio',
+    'header_name': tr('Elderly'),
     'type': QVariant.Double,
     'length': default_field_length,
     'precision': default_ratio_field_precision,
@@ -789,6 +1262,99 @@ elderly_ratio_field = {
     # Null value can be replaced by default or not
     'replace_null': True,
     'default_value': elderly_ratio_default_value
+}
+
+# Under 5 years ratio
+under_5_ratio_field = {
+    'key': 'under_5_ratio_field',
+    'name': tr('Under 5 Years Ratio'),
+    'field_name': 'under_5_ratio',
+    'header_name': tr('Under 5'),
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': default_ratio_field_precision,
+    'absolute': False,
+    'description': tr(
+        'The proportion of under 5 years old for each feature.'),
+    'help_text': tr(
+        '"Under 5" is defined as: {concept} In cases where population data is '
+        'available, InaSAFE will calculate the number of people under 5 years '
+        'old per exposure feature, aggregate hazard area, aggregation area '
+        'and for the analysis area as a whole. The under 5 years count is '
+        'calculated based on standard ratios either provided as a global '
+        'setting in InaSAFE, or (if available) ratios in the input analysis '
+        'data.').format(concept=concepts['under_5']['description']),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': True,
+    'default_value': under_5_ratio_default_value
+}
+
+# Over 60 years ratio
+over_60_ratio_field = {
+    'key': 'over_60_ratio_field',
+    'name': tr('Over 60 Years Ratio'),
+    'field_name': 'over_60_ratio',
+    'header_name': tr('Over 60'),
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': default_ratio_field_precision,
+    'absolute': False,
+    'description': tr(
+        'The proportion of over 60 years old for each feature.'),
+    'help_text': tr(
+        '"Over 60" is defined as: {concept} In cases where population data is '
+        'available, InaSAFE will calculate the number of people over 60 years '
+        'old per exposure feature, aggregate hazard area, aggregation area '
+        'and for the analysis area as a whole. The over 60 years count is '
+        'calculated based on standard ratios either provided as a global '
+        'setting in InaSAFE, or (if available) ratios in the input analysis '
+        'data.').format(concept=concepts['over_60']['description']),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': True,
+    'default_value': over_60_ratio_default_value
+}
+
+# Over 60 years ratio
+disabled_ratio_field = {
+    'key': 'disabled_ratio_field',
+    'name': tr('Disabled Ratio'),
+    'field_name': 'disabled_ratio',
+    'header_name': tr('Disabled'),
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': default_ratio_field_precision,
+    'absolute': False,
+    'description': tr(
+        'The proportion of disabled people for each feature.'),
+    'help_text': tr(
+        '"Disabled" is defined as: {concept} In cases where population data '
+        'is available, InaSAFE will calculate the number of disabled people '
+        'per exposure feature, aggregate hazard area, aggregation area '
+        'and for the analysis area as a whole. The disabled count is '
+        'calculated based on standard ratios either provided as a global '
+        'setting in InaSAFE, or (if available) ratios in the input analysis '
+        'data.').format(concept=concepts['disabled']['description']),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': True,
+    'default_value': disabled_ratio_default_value
 }
 
 # # # # # # # # # #
@@ -848,10 +1414,64 @@ population_displacement_ratio_field = {
     'default_value': None
 }
 
+# Fatality ratio
+population_fatality_ratio_field = {
+    'key': 'fatality_ratio_field',
+    'name': tr('Fatality Ratio'),
+    'field_name': 'fatality_ratio',
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': 10,  # I think we need some precision for this field.
+    'absolute': False,
+    'description': tr(
+        'The population fatality ratio for a given hazard class.'),
+    'help_text': tr(
+        '"Fatalities" is defined as: {concept} In cases where population data '
+        'is available and the hazard is an earthquake, InaSAFE will calculate '
+        'the estimated number of killed people per exposure feature, '
+        'aggregate hazard area, aggregation area and for the analysis area '
+        'as a whole. The population displaced ratio is calculated based on '
+        'definitions for each hazard class.').format(
+            concept=concepts['killed_people']['description']),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False,
+    'default_value': None
+}
+
+male_displaced_count_field = {
+    'key': 'male_displaced_count_field',
+    'name': tr('Male Displaced Count'),
+    'field_name': 'male_displaced',
+    'header_name': tr('Male'),
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'description': tr(
+        'The number of displaced males for each feature.'),
+    'help_text': tr(
+        'The number of displaced males for each feature.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
 female_displaced_count_field = {
     'key': 'female_displaced_count_field',
     'name': tr('Female Displaced Count'),
     'field_name': 'female_displaced',
+    'header_name': tr('Female'),
     'type': qvariant_numbers,
     'length': default_field_length,
     'precision': 0,
@@ -870,10 +1490,80 @@ female_displaced_count_field = {
     'replace_null': False
 }
 
+child_bearing_age_displaced_count_field = {
+    'key': 'child_bearing_age_displaced_count_field',
+    'name': tr('Child Bearing Age Displaced Count'),
+    'field_name': 'child_bearing_age_displaced',
+    'header_name': tr('Child Bearing Age'),
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'description': tr(
+        'The number of displaced child bearing age for each feature.'),
+    'help_text': tr(
+        'The number of displaced child bearing age for each feature.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+pregnant_displaced_count_field = {
+    'key': 'pregnant_displaced_count_field',
+    'name': tr('Lactating Displaced Count'),
+    'field_name': 'pregnant_displaced',
+    'header_name': tr('Pregnant'),
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'description': tr(
+        'The number of displaced pregnant women for each feature.'),
+    'help_text': tr(
+        'The number of displaced pregnant women for each feature.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+lactating_displaced_count_field = {
+    'key': 'lactating_displaced_count_field',
+    'name': tr('Pregnant Displaced Count'),
+    'field_name': 'lactating_displaced',
+    'header_name': tr('Lactating'),
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'description': tr(
+        'The number of displaced pregnant women for each feature.'),
+    'help_text': tr(
+        'The number of displaced pregnant women for each feature.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+
 male_displaced_count_field = {
     'key': 'male_displaced_count_field',
     'name': tr('Male Displaced Count'),
     'field_name': 'male_displaced',
+    'header_name': tr('Male'),
     'type': qvariant_numbers,
     'length': default_field_length,
     'precision': 0,
@@ -890,10 +1580,57 @@ male_displaced_count_field = {
     'replace_null': False
 }
 
+infant_displaced_count_field = {
+    'key': 'infant_displaced_count_field',
+    'name': tr('Infant Displaced Count'),
+    'field_name': 'infant_displaced',
+    'header_name': tr('Infant'),
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'description': tr(
+        'The number of infant displaced for each feature.'),
+    'help_text': tr(
+        'The number of infant displaced for each feature.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+child_displaced_count_field = {
+    'key': 'child_displaced_count_field',
+    'name': tr('Child Displaced Count'),
+    'field_name': 'child_displaced',
+    'header_name': tr('Child'),
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'description': tr(
+        'The number of child displaced for each feature.'),
+    'help_text': tr(
+        'The number of child displaced for each feature.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
 youth_displaced_count_field = {
     'key': 'youth_displaced_count_field',
     'name': tr('Youth Displaced Count'),
     'field_name': 'youth_displaced',
+    'header_name': tr('Youth'),
     'type': qvariant_numbers,
     'length': default_field_length,
     'precision': 0,
@@ -916,6 +1653,7 @@ adult_displaced_count_field = {
     'key': 'adult_displaced_count_field',
     'name': tr('Adult Displaced Count'),
     'field_name': 'adult_displaced',
+    'header_name': tr('Adult'),
     'type': qvariant_numbers,
     'length': default_field_length,
     'precision': 0,
@@ -938,6 +1676,7 @@ elderly_displaced_count_field = {
     'key': 'elderly_displaced_count_field',
     'name': tr('Elderly Displaced Count'),
     'field_name': 'elderly_displaced',
+    'header_name': tr('Elderly'),
     'type': qvariant_numbers,
     'length': default_field_length,
     'precision': 0,
@@ -946,6 +1685,75 @@ elderly_displaced_count_field = {
         'The number of elderly people displaced for each feature.'),
     'help_text': tr(
         'The number of elderly people displaced for each feature.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+under_5_displaced_count_field = {
+    'key': 'under_5_displaced_count_field',
+    'name': tr('Under 5 Displaced Count'),
+    'field_name': 'under_5_displaced',
+    'header_name': tr('Under 5'),
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'description': tr(
+        'The number of under 5 years old displaced for each feature.'),
+    'help_text': tr(
+        'The number of under 5 years old displaced for each feature.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+over_60_displaced_count_field = {
+    'key': 'over_60_displaced_count_field',
+    'name': tr('Over 60 Years Displaced Count'),
+    'field_name': 'over_60_displaced',
+    'header_name': tr('Over 60'),
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'description': tr(
+        'The number of over 60 years old displaced for each feature.'),
+    'help_text': tr(
+        'The number of over 60 years old displaced for each feature.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+disabled_displaced_count_field = {
+    'key': 'disabled_displaced_count_field',
+    'name': tr('Disabled Displaced Count'),
+    'field_name': 'disabled_displaced',
+    'header_name': tr('Disabled'),
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'description': tr(
+        'The number of disabled people displaced for each feature.'),
+    'help_text': tr(
+        'The number of disabled people displaced for each feature.'),
     'citations': [
         {
             'text': None,
@@ -1332,11 +2140,7 @@ hazard_fields = [
 
 aggregation_fields = [
     aggregation_id_field,
-    aggregation_name_field,
-    female_ratio_field,
-    youth_ratio_field,
-    adult_ratio_field,
-    elderly_ratio_field
+    aggregation_name_field
 ]
 
 # Outputs
@@ -1408,33 +2212,36 @@ count_fields = [
     population_count_field,
     displaced_field,
     fatalities_field,
+    # Gender count fields
     female_count_field,
+    child_bearing_age_count_field,
     male_count_field,
+    # Additional needs count fields
     hygiene_packs_count_field,
     additional_rice_count_field,
+    # Age count fields
+    infant_count_field,
+    child_count_field,
     youth_count_field,
     adult_count_field,
     elderly_count_field,
+    # Vulnerability fields
+    under_5_count_field,
+    over_60_count_field,
+    disabled_count_field,
+    # Displaced
+    # Gender displaced count fields
     female_displaced_count_field,
+    child_bearing_age_displaced_count_field,
     male_displaced_count_field,
+    # Age count fields
+    infant_displaced_count_field,
+    child_displaced_count_field,
     youth_displaced_count_field,
     adult_displaced_count_field,
     elderly_displaced_count_field,
+    # Vulnerability fields
+    under_5_displaced_count_field,
+    over_60_displaced_count_field,
+    disabled_displaced_count_field
 ] + minimum_needs_fields
-
-ratio_fields = [
-    feature_rate_field,
-    female_ratio_field,
-    youth_ratio_field,
-    adult_ratio_field,
-    elderly_ratio_field,
-]
-
-# This table is useful when we need to match between counts and ratios.
-count_ratio_mapping = {
-    female_count_field['key']: female_ratio_field['key'],
-    youth_count_field['key']: youth_ratio_field['key'],
-    adult_count_field['key']: adult_ratio_field['key'],
-    elderly_count_field['key']: elderly_ratio_field['key'],
-    # feature_value_field['key']: feature_rate_field['key'], disabled V4.0 ET
-}

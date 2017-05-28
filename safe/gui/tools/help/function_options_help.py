@@ -9,7 +9,10 @@ from safe.utilities.resources import resources_path
 INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
 SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
 
-__author__ = 'ismailsunni'
+__copyright__ = "Copyright 2017, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 
 def function_options_help():
@@ -55,6 +58,13 @@ def content():
     :rtype: safe.messaging.message.Message
     """
     message = m.Message()
+    paragraph = m.Paragraph(
+        m.Image(
+            'file:///%s/img/screenshots/'
+            'batch-calculator-screenshot.png' % resources_path()),
+        style_class='text-center'
+    )
+    message.add(paragraph)
     message.add(m.Paragraph(tr(
         'Depending on which Impact Function you have chosen you have '
         'different options available for adjusting the parameters of the '
