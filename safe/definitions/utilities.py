@@ -146,7 +146,9 @@ def get_classifications(subcategory_key):
     return sorted(classifications, key=lambda k: k['key'])
 
 
-def get_fields(layer_purpose, layer_subcategory=None, replace_null=None):
+def get_fields(
+        layer_purpose, layer_subcategory=None, replace_null=None,
+        in_group=True):
     """Get all field based on the layer purpose.
 
     :param layer_purpose: The layer purpose.
@@ -183,6 +185,10 @@ def get_fields(layer_purpose, layer_subcategory=None, replace_null=None):
         fields_for_purpose = deepcopy(aggregation_fields)
     elif layer_purpose == layer_purpose_exposure_summary['key']:
         fields_for_purpose = deepcopy(impact_fields)
+
+    if in_group:
+        field_groups = get_field_groups(layer_purpose, layer_subcategory)
+        fields_for_purpose += fields_in_field_groups(field_groups)
 
     if isinstance(replace_null, bool):
         fields_for_purpose = [
@@ -381,3 +387,42 @@ def default_classification_value_maps(classification):
             'string_defaults', [])
 
     return value_maps
+
+
+def fields_in_field_groups(field_groups):
+    """Obtain list of fields from a list of field groups
+
+    :param layer_purpose: List of field group.
+    :type field_groups: list
+
+    :returns: List of fields.
+    :rtype: list
+    """
+    fields = []
+    for field_group in field_groups:
+        fields += field_group['fields']
+    return fields
+
+
+def get_field_groups(layer_purpose, layer_subcategory=None):
+    """Obtain list of field groups from layer purpose and subcategory.
+
+    :param layer_purpose: The layer purpose.
+    :type layer_purpose: str
+
+    :param layer_subcategory: Exposure or hazard value.
+    :type layer_subcategory: str
+
+    :returns: List of layer groups.
+    :rtype: list
+    """
+    layer_purpose_dict = definition(layer_purpose)
+    if not layer_purpose_dict:
+        return []
+    field_groups = deepcopy(layer_purpose_dict.get('field_groups', []))
+    if layer_purpose in [
+        layer_purpose_exposure['key'], layer_purpose_hazard['key']]:
+        if layer_subcategory:
+            subcategory = definition(layer_subcategory)
+            field_groups += deepcopy(subcategory['field_groups'])
+    return field_groups

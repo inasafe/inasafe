@@ -1,21 +1,5 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
-- **Import Dialog Test Cases.**
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
-
-__date__ = '05/02/2013'
-__copyright__ = ('Copyright 2013, Australia Indonesia Facility for '
-                 'Disaster Reduction')
-__author__ = 'timlinux'
+"""Test Message Viewer."""
 
 import os
 import unittest
@@ -28,7 +12,6 @@ from safe.common.signals import (
     STATIC_MESSAGE_SIGNAL,
     ERROR_MESSAGE_SIGNAL)
 from safe.utilities.utilities import get_error_message
-from safe.test.utilities import standard_data_path
 
 from safe.test.utilities import get_qgis_app
 
@@ -36,8 +19,14 @@ from safe.test.utilities import get_qgis_app
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
+__copyright__ = "Copyright 2013, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
+
 
 class MessageViewerTest(unittest.TestCase):
+
     """Test cases for message viewer module."""
 
     def setUp(self):
@@ -79,7 +68,8 @@ class MessageViewerTest(unittest.TestCase):
         self.assertEqual(text, 'Hi\n')
 
     def fake_error(self):
-        """Make a fake error (helper for other tests)
+        """Make a fake error (helper for other tests).
+
         :returns: Contents of the message viewer as string and with newlines
             stripped off.
         :rtype : str

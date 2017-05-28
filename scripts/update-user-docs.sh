@@ -7,7 +7,7 @@ then
   # check the repo out since it does not exist
   pushd .
   cd ..
-  git clone --depth 1 git://github.com/AIFDR/inasafe-doc.git inasafe-doc
+  git clone --depth 1 git://github.com/inasafe/inasafe-doc.git inasafe-doc
   cd inasafe-doc
   scripts/post_translate_application_docs.sh
   popd

@@ -23,7 +23,10 @@ __revision__ = '$Format:%H$'
 
 
 class TestMetadataUtilities(unittest.TestCase):
+
     """Test for Metadata Utilities module."""
+
+    maxDiff = None
 
     def test_write_iso19115_metadata(self):
         """Test for write_iso19115_metadata."""
@@ -34,7 +37,7 @@ class TestMetadataUtilities(unittest.TestCase):
         keywords = {
             'date': '26-03-2015 14:03',
             'exposure': 'structure',
-            'keyword_version': '3.2',
+            'keyword_version': inasafe_keyword_version,
             'layer_geometry': 'polygon',
             'layer_mode': 'classified',
             'layer_purpose': 'exposure',
@@ -80,19 +83,27 @@ class TestMetadataUtilities(unittest.TestCase):
         keywords = {
             # 'date': '26-03-2015 14:03',
             'exposure': 'structure',
-            'keyword_version': '3.2',
+            'keyword_version': inasafe_keyword_version,
             'layer_geometry': 'polygon',
             'layer_mode': 'classified',
             'layer_purpose': 'exposure',
             'license': 'Open Data Commons Open Database License (ODbL)',
             'source': 'OpenStreetMap - www.openstreetmap.org',
-            'title': 'Buildings'
+            'title': 'Buildings',
+            'inasafe_fields': {
+                'youth_count_field': [
+                    'POP_F_0-4', 'POP_F_5-6', 'POP_F_7-12',
+                ]
+            }
         }
         layer = clone_shp_layer(
             name='buildings',
             include_keywords=False,
             source_directory=standard_data_path('exposure'))
         write_iso19115_metadata(layer.source(), keywords)
+
+        read_metadata = read_iso19115_metadata(layer.source())
+        self.assertDictEqual(keywords, read_metadata)
 
     def test_active_classification_thresholds_value_maps(self):
         """Test for active_classification and thresholds value maps method."""

@@ -6,12 +6,12 @@ from safe.test.utilities import get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from PyQt4.QtCore import QSettings
 from safe.definitions.constants import zero_default_value, RECENT
+from safe.utilities.default_values import (
+    set_inasafe_default_value_qsetting, get_inasafe_default_value_qsetting)
 from safe.definitions.default_settings import inasafe_default_settings
 from safe.utilities.settings import (
     setting,
     set_setting,
-    set_inasafe_default_value_qsetting,
-    get_inasafe_default_value_qsetting,
 )
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

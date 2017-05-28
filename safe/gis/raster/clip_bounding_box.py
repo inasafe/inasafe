@@ -45,6 +45,7 @@ def clip_by_extent(layer, extent, callback=None):
 
     .. versionadded:: 4.0
     """
+    parameters = dict()
     # noinspection PyBroadException
     try:
         output_layer_name = quick_clip_steps['output_layer_name']
@@ -81,7 +82,6 @@ def clip_by_extent(layer, extent, callback=None):
         # https://github.com/qgis/QGIS/blob/master/python/plugins/processing/
         # algs/gdal/ClipByExtent.py
         # Please read the file to know these parameters.
-        parameters = dict()
         parameters['INPUT'] = layer.source()
         parameters['NO_DATA'] = ''
         parameters['PROJWIN'] = ','.join(bbox)

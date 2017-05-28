@@ -60,13 +60,13 @@ from qgis.core import (
 from osgeo import gdal
 from PyQt4.QtCore import QT_VERSION_STR
 from PyQt4.Qt import PYQT_VERSION_STR
-from safe.definitions.post_processors import (
-    post_processor_gender,
+from safe.definitions.post_processors import post_processor_size
+from safe.definitions.post_processors.population_post_processors import (
+    post_processor_female,
+    post_processor_male,
     post_processor_youth,
     post_processor_adult,
-    post_processor_elderly,
-    post_processor_size
-)
+    post_processor_elderly)
 from safe.definitions.constants import (
     PREPARE_SUCCESS,
     ANALYSIS_SUCCESS,
@@ -75,6 +75,7 @@ from safe.definitions.constants import (
 from safe.gis.sanity_check import check_inasafe_fields
 from safe.utilities.unicode import byteify
 from safe.utilities.gis import wkt_to_rectangle
+from safe.utilities.utilities import readable_os_version
 from safe.impact_function.impact_function import ImpactFunction
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -357,7 +358,7 @@ class TestImpactFunction(unittest.TestCase):
             female_ratio_field['field_name'])
         self.assertNotEqual(-1, field)
         unique_ratio = impact.uniqueValues(field)
-        self.assertEqual(1, len(unique_ratio))
+        self.assertEqual(1, len(unique_ratio), unique_ratio)
         self.assertEqual(
             unique_ratio[0], female_ratio_default_value['default_value'])
 
@@ -392,18 +393,19 @@ class TestImpactFunction(unittest.TestCase):
             female_ratio_field['field_name'])
         self.assertNotEqual(-1, field)
         unique_ratio = impact.uniqueValues(field)
-        self.assertEqual(3, len(unique_ratio))
+        self.assertEqual(3, len(unique_ratio), unique_ratio)
 
         # We check the field exist after the IF with only one value.
         field = impact.fieldNameIndex(
             elderly_ratio_field['field_name'])
         self.assertNotEqual(-1, field)
         unique_ratio = impact.uniqueValues(field)
-        self.assertEqual(1, len(unique_ratio))
+        self.assertEqual(1, len(unique_ratio), unique_ratio)
         self.assertEqual(expected_ratio, unique_ratio[0])
 
         # Third test, if we provide an aggregation with a ratio and the
-        # exposure has a count.
+        # exposure has a count, we should a have a ratio from the exposure
+        # count.
         hazard_layer = load_test_vector_layer(
             'gisv4', 'hazard', 'classified_vector.geojson')
         exposure_layer = load_test_vector_layer(
@@ -423,13 +425,14 @@ class TestImpactFunction(unittest.TestCase):
 
         impact = impact_function.impact
 
-        # Check that we have only one unique value since the ratio for all
-        # female is the same
+        # Check that we have don't have only one unique value since the ratio
+        # depends on the "population / female count" and we should have at
+        # least different ratios.
         field = impact.fieldNameIndex(
             female_ratio_field['field_name'])
         self.assertNotEqual(-1, field)
         unique_ratio = impact.uniqueValues(field)
-        self.assertEqual(1, len(unique_ratio))
+        self.assertNotEqual(1, len(unique_ratio), unique_ratio)
 
     def test_ratios_with_raster_exposure(self):
         """Test if we can add defaults to a raster exposure.
@@ -485,7 +488,7 @@ class TestImpactFunction(unittest.TestCase):
             displaced_field['field_name'])
         displaced_population = analysis.uniqueValues(index)[0]
         self.assertEqual(
-            displaced_population * female_ratio, female_displaced)
+            int(displaced_population * female_ratio), female_displaced)
 
         # Check that we have more than 0 youth displaced in the analysis layer
         index = analysis.fieldNameIndex(
@@ -593,7 +596,7 @@ class TestImpactFunction(unittest.TestCase):
         self.assertEqual(0, status, steps)
         # self.assertDictEqual(expected_steps, steps, scenario_path)
         try:
-            self.assertDictEqual(expected_steps, steps)
+            self.assertDictEqual(byteify(expected_steps), byteify(steps))
         except AssertionError as e:
             raise AssertionError(e.message + '\nThe file is ' + scenario_path)
         # - 1 because I added the profiling table, and this table is not
@@ -613,13 +616,16 @@ class TestImpactFunction(unittest.TestCase):
         """
         scenarios = {
             'earthquake_raster_on_raster_population': False,
+            'earthquake_raster_on_vector_population': False,
             'polygon_classified_on_line': False,
             'polygon_classified_on_point': False,
             'polygon_classified_on_vector_population': False,
+            'polygon_classified_on_vector_population_multi_fields': False,
             'polygon_continuous_on_line': False,
             'raster_classified_on_classified_raster': False,
             'raster_classified_on_indivisible_polygons_with_grid': False,
             'raster_classified_on_line_with_grid': False,
+            'raster_classified_on_vector_population_multi_fields': False,
             'raster_continuous_on_divisible_polygons_with_grid': False,
             'raster_continuous_on_line': False,
             'raster_continuous_on_raster_population': False,
@@ -659,6 +665,37 @@ class TestImpactFunction(unittest.TestCase):
                 count += 1
         self.assertEqual(len(json_files), count)
 
+    def test_old_fields_keywords(self):
+        """The IF is not ready with we have some wrong inasafe_fields."""
+        hazard_layer = load_test_vector_layer(
+            'gisv4', 'hazard', 'classified_vector.geojson')
+        exposure_layer = load_test_vector_layer(
+            'gisv4', 'exposure', 'building-points.geojson',
+            clone=True)
+        aggregation_layer = load_test_vector_layer(
+            'gisv4', 'aggregation', 'small_grid.geojson')
+
+        impact_function = ImpactFunction()
+        impact_function.aggregation = aggregation_layer
+        impact_function.exposure = exposure_layer
+        impact_function.hazard = hazard_layer
+        status, message = impact_function.prepare()
+
+        # The layer should be fine.
+        self.assertEqual(PREPARE_SUCCESS, status, message)
+
+        # Now, we remove one field
+        exposure_layer.startEditing()
+        field = exposure_layer.keywords['inasafe_fields'].values()[0]
+        index = exposure_layer.fieldNameIndex(field)
+        exposure_layer.deleteAttribute(index)
+        exposure_layer.commitChanges()
+
+        # It shouldn't be fine as we removed one field which
+        # was in inasafe_fields
+        status, message = impact_function.prepare()
+        self.assertNotEqual(PREPARE_SUCCESS, status, message)
+
     def test_post_processor(self):
         """Test for running post processor."""
         impact_layer = load_test_vector_layer(
@@ -692,7 +729,8 @@ class TestImpactFunction(unittest.TestCase):
 
         used_post_processors = [
             post_processor_size,
-            post_processor_gender,
+            post_processor_male,
+            post_processor_female,
             post_processor_youth,
             post_processor_adult,
             post_processor_elderly,
@@ -726,7 +764,7 @@ class TestImpactFunction(unittest.TestCase):
             'map_title': get_map_title(hazard, exposure, hazard_category),
             'map_legend_title': exposure['layer_legend_title'],
             'user': getpass.getuser(),
-            'os': platform.version(),
+            'os': readable_os_version(),
             'pyqt_version': PYQT_VERSION_STR,
             'qgis_version': QGis.QGIS_VERSION,
             'qt_version': QT_VERSION_STR,
@@ -765,10 +803,30 @@ class TestImpactFunction(unittest.TestCase):
             'notes': impact_function.notes(),
             'requested_extent': impact_function.requested_extent,
             'data_store_uri': impact_function.datastore.uri_path,
-            'datetime': impact_function.datetime,
+            'start_datetime': impact_function.start_datetime,
+            'end_datetime': impact_function.end_datetime,
+            'duration': impact_function.duration
         })
 
         self.assertDictEqual(expected_provenance, impact_function.provenance)
+
+        # Future reference: I comment out these lines since the keywords
+        # properties are used in the report generation. Removing it will make
+        # the report generation fail. I will just make sure that the other
+        # tools will read from keywords file not from layer properties.
+        # Test to make sure the monkey patch is not updated #4128
+        # self.assertDictEqual(
+        #     expected_provenance['aggregation_keywords'],
+        #     aggregation_layer.keywords
+        # )
+        # self.assertDictEqual(
+        #     expected_provenance['hazard_keywords'],
+        #     hazard_layer.keywords
+        # )
+        # self.assertDictEqual(
+        #     expected_provenance['exposure_keywords'],
+        #     exposure_layer.keywords
+        # )
 
     def test_provenance_without_aggregation(self):
         """Test provenance of impact function without aggregation."""
@@ -791,7 +849,7 @@ class TestImpactFunction(unittest.TestCase):
             'qgis_version': QGis.QGIS_VERSION,
             'qt_version': QT_VERSION_STR,
             'user': getpass.getuser(),
-            'os': platform.version(),
+            'os': readable_os_version(),
             'aggregation_layer': None,
             'aggregation_layer_id': None,
             'exposure_layer': exposure_layer.source(),
@@ -823,7 +881,9 @@ class TestImpactFunction(unittest.TestCase):
             'notes': impact_function.notes(),
             'requested_extent': impact_function.requested_extent,
             'data_store_uri': impact_function.datastore.uri_path,
-            'datetime': impact_function.datetime,
+            'start_datetime': impact_function.start_datetime,
+            'end_datetime': impact_function.end_datetime,
+            'duration': impact_function.duration
         })
 
         self.assertDictEqual(expected_provenance, impact_function.provenance)
@@ -859,11 +919,11 @@ class TestImpactFunction(unittest.TestCase):
         expected_value = {
             u'population': 69,
             u'total': 9.0,
-            u'minimum_needs__rice': 239,
-            u'minimum_needs__clean_water': 5733,
-            u'minimum_needs__toilets': 4,
-            u'minimum_needs__drinking_water': 1497,
-            u'minimum_needs__family_kits': 17,
+            u'minimum_needs__rice': 491,
+            u'minimum_needs__clean_water': 11763,
+            u'minimum_needs__toilets': 8,
+            u'minimum_needs__drinking_water': 3072,
+            u'minimum_needs__family_kits': 35,
             u'male': 34,
             u'female': 34,
             u'youth': 17,

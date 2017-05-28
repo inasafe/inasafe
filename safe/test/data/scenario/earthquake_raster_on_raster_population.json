@@ -21,14 +21,16 @@
       "info": {},
       "process":[
         "Size Value Post Processor",
-        "Gender Post Processor",
+        "Female Post Processor",
         "Weekly Hygiene Packs Post Processor",
-        "Additional Weekly Rice kg for Pregnant and Lactating Women Post Processor",
         "Rice Post Processor",
         "Drinking Water Post Processor",
         "Clean Water Post Processor",
         "Family Kits Post Processor",
-        "Toilets Post Processor"
+        "Toilets Post Processor",
+        "Pregnant Post Processor",
+        "Lactating Women Post Processor",
+        "Additional Weekly Rice kg for Pregnant and Lactating Women Post Processor"
       ]
     },
     "aggregation":{

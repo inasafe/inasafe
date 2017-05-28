@@ -17,6 +17,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import logging
+from collections import deque
 from item.message_element import MessageElement
 from item.exceptions import InvalidMessageItemError
 from . import Text
@@ -49,13 +50,15 @@ class Message(MessageElement):
         """
         self.in_div_flag = kwargs.pop('in_div_flag', False)
         super(Message, self).__init__(**kwargs)
-        self.message = []
+        # we use a deque (double ended queue) so that we can support
+        # prepending as well as appending items.
+        self.message = deque()
 
         for m in args:
             self.add(m)
 
     def add(self, message):
-        """add a MessageElement to the queue
+        """Add a MessageElement to the end of the queue.
 
         Strings can be passed and are automatically converted in to
         item.Text()
@@ -73,10 +76,36 @@ class Message(MessageElement):
         else:
             raise InvalidMessageItemError(message, message.__class__)
 
+    def prepend(self, message):
+        """Prepend a MessageElement to the beginning of the queue.
+
+        Strings can be passed and are automatically converted in to
+        item.Text()
+
+        :param message: An element to add to the message queue.
+        :type message: safe.messaging.Message, MessageElement, str
+
+        """
+        if self._is_stringable(message) or self._is_qstring(message):
+            self.message.appendleft(Text(message))
+        elif isinstance(message, MessageElement):
+            self.message.appendleft(message)
+        elif isinstance(message, Message):
+            self.message.extendleft(message.message)
+        else:
+            raise InvalidMessageItemError(message, message.__class__)
+
     def clear(self):
         """clear MessageElement queue
         """
-        self.message = []
+        self.message = deque()
+
+    def is_empty(self):
+        """Helper to see if this message is empty."""
+        if not len(self.message):
+            return True
+        else:
+            return False
 
     def to_text(self):
         """Render a MessageElement queue as plain text.

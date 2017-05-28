@@ -23,6 +23,7 @@ __revision__ = '$Format:%H$'
 
 
 class TestOptionsDialog(unittest.TestCase):
+
     """Test Options Dialog"""
 
     def setUp(self):
@@ -89,9 +90,6 @@ class TestOptionsDialog(unittest.TestCase):
             dialog.iso19115_email_le.text(),
             inasafe_default_settings['ISO19115_EMAIL'])
         self.assertEqual(
-            dialog.iso19115_title_le.text(),
-            inasafe_default_settings['ISO19115_TITLE'])
-        self.assertEqual(
             dialog.iso19115_license_le.text(),
             inasafe_default_settings['ISO19115_LICENSE'])
 
@@ -126,7 +124,8 @@ class TestOptionsDialog(unittest.TestCase):
             self.qsetting.value('inasafe/ISO19115_ORGANIZATION'))
 
         # Open the options dialog
-        dialog = OptionsDialog(PARENT, IFACE, qsetting='InaSAFETest')
+        dialog = OptionsDialog(
+            iface=IFACE, parent=PARENT, qsetting='InaSAFETest')
 
         # Check the state of the dialog after save the settings
         self.assertEqual(new_state, dialog.cbxVisibleLayersOnly.isChecked())

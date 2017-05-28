@@ -1,0 +1,87 @@
+{
+  "scenario": {
+    "enable": true,
+    "hazard": "classified_flood_20_20.asc",
+    "exposure": "gisv4/exposure/population_multi_fields.geojson",
+    "aggregation": null
+  },
+
+  "expected_outputs":{
+    "count": 4
+  },
+  "expected_steps":{
+    "impact function":{
+      "info": {},
+      "process":[
+        "Make aggregate hazard layer valid",
+        "Intersect divisible features with the aggregate hazard",
+        "Recompute counts",
+        "Aggregate the impact summary",
+        "Aggregate the aggregation summary",
+        "Aggregate the analysis summary"
+      ]
+    },
+    "post_processor":{
+      "info": {},
+      "process":[
+        "Affected Post Processor",
+        "Population Displacement Ratio Post Processor",
+        "Displaced Post Processor",
+        "Male Post Processor",
+        "Female Post Processor",
+        "Weekly Hygiene Packs Post Processor",
+        "Infant Post Processor",
+        "Child Post Processor",
+        "Youth Post Processor",
+        "Adult Post Processor",
+        "Elderly Post Processor",
+        "Rice Post Processor",
+        "Drinking Water Post Processor",
+        "Clean Water Post Processor",
+        "Family Kits Post Processor",
+        "Toilets Post Processor",
+        "Under 5 Years Old Post Processor",
+        "Over 60 Years Old Post Processor",
+        "Disability Vulnerability Post Processor",
+        "Child Bearing Age Post Processor",
+        "Pregnant Post Processor",
+        "Lactating Women Post Processor",
+        "Additional Weekly Rice kg for Pregnant and Lactating Women Post Processor"
+      ]
+    },
+    "aggregation":{
+      "info": {
+        "provided":false
+      },
+      "process":[
+        "Convert bbox aggregation to polygon layer with keywords",
+        "Convert the aggregation layer to the analysis layer",
+        "Union hazard polygons with aggregation areas and assign hazard class"
+      ]
+    },
+    "hazard":{
+      "info": {
+        "use_same_projection":true
+      },
+      "process":[
+        "Clip raster by analysis bounding box",
+        "Polygonize classified raster hazard",
+        "Clip and mask hazard polygons with the analysis layer",
+        "Cleaning the vector hazard attribute table",
+        "Assign classes based on value map",
+        "Make hazard layer valid"
+      ]
+    },
+    "exposure":{
+      "info": {},
+      "process":[
+        "Smart clip",
+        "Cleaning the vector exposure attribute table",
+        "Compute ratios from counts",
+        "Clip the exposure layer with the analysis layer",
+        "Add default values",
+        "Make exposure layer valid"
+      ]
+    }
+  }
+}

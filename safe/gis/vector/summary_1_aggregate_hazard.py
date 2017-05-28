@@ -28,6 +28,7 @@ from safe.definitions.hazard_classifications import not_exposed_class
 from safe.gis.vector.summary_tools import (
     check_inputs, create_absolute_values_structure, add_fields)
 from safe.gis.sanity_check import check_layer
+from safe.utilities.gis import qgis_version
 from safe.utilities.profiling import profile
 from safe.utilities.pivot_table import FlatTable
 from safe.utilities.i18n import tr
@@ -201,7 +202,10 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
 
     aggregate_hazard.keywords['title'] = (
         layer_purpose_aggregate_hazard_impacted['name'])
-    aggregate_hazard.setLayerName(aggregate_hazard.keywords['title'])
+    if qgis_version() >= 21800:
+        aggregate_hazard.setName(aggregate_hazard.keywords['title'])
+    else:
+        aggregate_hazard.setLayerName(aggregate_hazard.keywords['title'])
     aggregate_hazard.keywords['layer_purpose'] = (
         layer_purpose_aggregate_hazard_impacted['key'])
 

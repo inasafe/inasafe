@@ -9,6 +9,10 @@ from PyQt4.QtCore import pyqtSignature, QSettings
 from PyQt4.QtGui import QDialog, QPixmap
 from qgis.core import QgsMapLayerRegistry
 
+from safe_extras.parameters.parameter_exceptions import (
+    InvalidValidationException)
+
+from safe.utilities.i18n import tr
 from safe.definitions.layer_purposes import (
     layer_purpose_exposure, layer_purpose_aggregation, layer_purpose_hazard)
 from safe.definitions.layer_geometry import (
@@ -39,16 +43,17 @@ from safe.gui.tools.wizard.wizard_strings import (
     category_question_aggregation)
 from safe.gui.tools.wizard.wizard_utils import layer_description_html
 
-from safe.utilities.settings import set_inasafe_default_value_qsetting
+from safe.utilities.default_values import set_inasafe_default_value_qsetting
 from safe.utilities.gis import (
     is_raster_layer,
     is_point_layer,
     is_polygon_layer)
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.resources import get_ui_class, resources_path
-from safe.utilities.unicode import get_unicode
+from safe.utilities.unicode import get_unicode, get_string
 from safe.utilities.utilities import (
     get_error_message, is_keyword_version_supported)
+from safe.utilities.qgis_utilities import display_warning_message_box
 
 from step_fc00_functions1 import StepFcFunctions1
 from step_fc05_functions2 import StepFcFunctions2
@@ -79,6 +84,7 @@ from step_kw33_multi_classifications import StepKwMultiClassifications
 from step_kw35_resample import StepKwResample
 from step_kw40_classify import StepKwClassify
 from step_kw43_threshold import StepKwThreshold
+from step_kw44_fields_mapping import StepKwFieldsMapping
 from step_kw45_inasafe_fields import StepKwInaSAFEFields
 from step_kw47_default_inasafe_fields import StepKwDefaultInaSAFEFields
 from step_kw49_inasafe_raster_default_values import (
@@ -164,6 +170,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.step_kw_resample = StepKwResample(self)
         self.step_kw_classify = StepKwClassify(self)
         self.step_kw_threshold = StepKwThreshold(self)
+        self.step_kw_fields_mapping = StepKwFieldsMapping(self)
         self.step_kw_inasafe_fields = StepKwInaSAFEFields(self)
         self.step_kw_default_inasafe_fields = StepKwDefaultInaSAFEFields(self)
         self.step_kw_inasafe_raster_default_values = \
@@ -201,6 +208,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.stackedWidget.addWidget(self.step_kw_resample)
         self.stackedWidget.addWidget(self.step_kw_classify)
         self.stackedWidget.addWidget(self.step_kw_threshold)
+        self.stackedWidget.addWidget(self.step_kw_fields_mapping)
         self.stackedWidget.addWidget(self.step_kw_inasafe_fields)
         self.stackedWidget.addWidget(self.step_kw_default_inasafe_fields)
         self.stackedWidget.addWidget(
@@ -254,17 +262,21 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.lblSubtitle.setText(self.tr(
             'Use this wizard to run a guided impact assessment'))
 
-    def set_keywords_creation_mode(self, layer=None):
+    def set_keywords_creation_mode(self, layer=None, keywords=None):
         """Set the Wizard to the Keywords Creation mode.
 
         :param layer: Layer to set the keywords for
         :type layer: QgsMapLayer
+
+        :param keywords: Keywords for the layer.
+        :type keywords: dict, None
         """
         self.layer = layer or self.iface.mapCanvas().currentLayer()
-        try:
-            # Check the keywords in the layer properties first
-            self.existing_keywords = self.layer.keywords
-        except AttributeError:
+
+        if keywords is not None:
+            self.existing_keywords = keywords
+        else:
+            # Always read from metadata file.
             try:
                 self.existing_keywords = self.keyword_io.read_keywords(
                     self.layer)
@@ -628,6 +640,14 @@ class WizardDialog(QDialog, FORM_CLASS):
             if not good_ratios:
                 return
 
+        if current_step == self.step_kw_fields_mapping:
+            try:
+                self.step_kw_fields_mapping.get_field_mapping()
+            except InvalidValidationException as e:
+                display_warning_message_box(
+                    self, tr('Invalid Field Mapping'), get_string(e.message))
+                return
+
         if current_step.step_type == 'step_fc':
             self.impact_function_steps.append(current_step)
         elif current_step.step_type == 'step_kw':
@@ -744,10 +764,9 @@ class WizardDialog(QDialog, FORM_CLASS):
             keywords['allow_resampling'] = (
                 self.step_kw_resample.selected_allow_resampling() and
                 'true' or 'false')
-        if self.step_kw_field.lstFields.currentItem():
+        if self.step_kw_field.selected_fields():
             field_key = self.field_keyword_for_the_layer()
-            inasafe_fields[field_key] = self.step_kw_field.\
-                lstFields.currentItem().text()
+            inasafe_fields[field_key] = self.step_kw_field.selected_fields()
         if self.step_kw_classification.selected_classification():
             keywords['classification'] = self.step_kw_classification.\
                 selected_classification()['key']
@@ -793,6 +812,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         inasafe_fields.update(self.step_kw_inasafe_fields.get_inasafe_fields())
         inasafe_fields.update(
             self.step_kw_default_inasafe_fields.get_inasafe_fields())
+        inasafe_fields.update(
+            self.step_kw_fields_mapping.get_field_mapping()['fields'])
 
         if inasafe_fields:
             keywords['inasafe_fields'] = inasafe_fields
@@ -806,8 +827,11 @@ class WizardDialog(QDialog, FORM_CLASS):
             #     step_kw_inasafe_raster_default_values.\
             #     get_inasafe_default_values()
         else:
-            inasafe_default_values = self.step_kw_default_inasafe_fields.\
-                get_inasafe_default_values()
+            inasafe_default_values.update(
+                self.step_kw_default_inasafe_fields.get_inasafe_default_values(
+                ))
+            inasafe_default_values.update(
+                self.step_kw_fields_mapping.get_field_mapping()['values'])
 
         if inasafe_default_values:
             keywords['inasafe_default_values'] = inasafe_default_values
@@ -841,4 +865,4 @@ class WizardDialog(QDialog, FORM_CLASS):
             for key, value in \
                     current_keywords['inasafe_default_values'].items():
                 set_inasafe_default_value_qsetting(
-                    self.setting, key, RECENT, value)
+                    self.setting, RECENT, key, value)

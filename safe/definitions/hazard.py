@@ -86,10 +86,17 @@ hazard_generic = {
         'You can use the generic hazard functionality in InaSAFE to carry '
         'out an assessment for hazard data that are not explicitly supported '
         'yet in InaSAFE.'),
-    'notes': [  # additional generic notes for generic
-        caveat_simulation,
-        caveat_local_conditions,
-        caveat_analysis_extent,
+    'notes': [
+        {
+            'item_category': 'generic_hazard_general',
+            'item_header': tr('generic hazard general notes'),
+            'item_list': [
+                # additional generic notes for generic
+                caveat_simulation,
+                caveat_local_conditions,
+                caveat_analysis_extent,
+            ]
+        }
     ],
     'continuous_notes': [  # notes specific to continuous data
     ],
@@ -117,6 +124,7 @@ hazard_generic = {
     'compulsory_fields': [hazard_value_field],
     'fields': hazard_fields,
     'extra_fields': [],
+    'field_groups': [],
     'layer_modes': [layer_mode_classified],
     'disabled_exposures': [exposure_place]
 }
@@ -127,10 +135,17 @@ hazard_earthquake = {
         'An <b>earthquake</b> describes the sudden violent shaking of the '
         'ground that occurs as a result of volcanic activity or movement '
         'in the earth\'s crust.'),
-    'notes': [  # additional generic notes for earthquake
-        caveat_simulation,
-        caveat_local_conditions,
-        caveat_analysis_extent,
+    'notes': [
+        {
+            'item_category': 'earthquake_general',
+            'item_header': tr('earthquake general notes'),
+            'item_list': [
+                # additional generic notes for earthquake
+                caveat_simulation,
+                caveat_local_conditions,
+                caveat_analysis_extent,
+            ]
+        }
     ],
     'continuous_notes': [  # notes specific to continuous data
     ],
@@ -158,6 +173,7 @@ hazard_earthquake = {
     'compulsory_fields': [hazard_value_field],
     'fields': hazard_fields,
     'extra_fields': [],
+    'field_groups': [],
     'layer_modes': [layer_mode_classified, layer_mode_continuous],
     'disabled_exposures': [
         exposure_place,
@@ -173,10 +189,17 @@ hazard_flood = {
         'after heavy rainfall, when a river overflows its banks or when a '
         'dam breaks. The effect of a <b>flood</b> is for land that is '
         'normally dry to become wet.'),
-    'notes': [  # additional generic notes for flood
-        caveat_simulation,
-        caveat_local_conditions,
-        caveat_analysis_extent,
+    'notes': [
+        {
+            'item_category': 'flood_general',
+            'item_header': tr('flood general notes'),
+            'item_list': [
+                # additional generic notes for flood
+                caveat_simulation,
+                caveat_local_conditions,
+                caveat_analysis_extent,
+            ]
+        }
     ],
     'continuous_notes': [  # notes specific to continuous data
     ],
@@ -207,6 +230,7 @@ hazard_flood = {
     'compulsory_fields': [hazard_value_field],
     'fields': hazard_fields,
     'extra_fields': [],
+    'field_groups': [],
     'layer_modes': [layer_mode_classified, layer_mode_continuous],
     'disabled_exposures': [exposure_place]
 }
@@ -215,19 +239,35 @@ hazard_cyclone = {
     'key': 'cyclone',
     'name': tr('Cyclone'),
     'description': tr(
-        'A <b>Cyclone</b> is a rapidly rotating storm system characterised '
-        'by a low-pressure centre, a closed low-level atmospheric '
-        'circulation, strong winds, and a spiral arrangement of thunderstorms '
-        'that produce heavy rain. It is also referred to as <b>hurricane</b> '
-        'or <b>typhoon</b>.'),
-    'notes': [  # additional generic notes for cyclone
-        caveat_simulation,
-        caveat_local_conditions,
-        caveat_analysis_extent,
+        'A <b>Tropical Cyclone</b> is a rapidly rotating storm system '
+        'characterised by a low-pressure centre, a closed low-level '
+        'atmospheric circulation, strong winds, and a spiral arrangement '
+        'of thunderstorms that produce heavy rain. It is also referred '
+        'to as <b>hurricane</b> in the Atlantic Ocean or <b>typhoon</b> '
+        'in the North West Pacific Ocean.'),
+    'notes': [
+        {
+            'item_category': 'cyclone_general',
+            'item_header': tr('cyclone general notes'),
+            'item_list': [  # additional generic notes for flood - IF has more
+                tr('The analysis performed here only considers the impact '
+                   'of <b>severe winds</b> from tropical cyclones. The impact '
+                   'of other associated hazards (storm surge inundation, '
+                   'flood) must be analysed separately.'),
+                caveat_simulation,
+                caveat_local_conditions,
+                caveat_analysis_extent,
+            ]
+        }
     ],
     'continuous_notes': [  # notes specific to continuous data
+        tr(
+       'Continuous data are normally used to represent the gust wind speed '
+       'of the cyclone, representing the 10-m above ground wind speed.'
+        )
     ],
     'classified_notes': [  # notes specific to classified data
+        tr('Classified cyclone hazard data is not presently supported.')
     ],
     'single_event_notes': [  # notes specific to single event data
     ],
@@ -260,6 +300,7 @@ hazard_cyclone = {
     'compulsory_fields': [hazard_value_field],
     'fields': hazard_fields,
     'extra_fields': [],
+    'field_groups': [],
     'layer_modes': [layer_mode_classified, layer_mode_continuous],
     'disabled_exposures': [
         exposure_place,
@@ -276,10 +317,17 @@ hazard_volcanic_ash = {
         '<b>Volcanic ash</b> describes fragments of pulverized rock, minerals '
         'and volcanic glass, ejected into the atmosphere during volcanic '
         'eruptions.'),
-    'notes': [  # additional generic notes for volcanic ash
-        caveat_simulation,
-        caveat_local_conditions,
-        caveat_analysis_extent,
+    'notes': [
+        {
+            'item_category': 'volcanic_ash_general',
+            'item_header': tr('volcanic ash general notes'),
+            'item_list': [
+                # additional generic notes for volcanic ash
+                caveat_simulation,
+                caveat_local_conditions,
+                caveat_analysis_extent,
+            ]
+        }
     ],
     'continuous_notes': [  # notes specific to continuous data
     ],
@@ -291,9 +339,16 @@ hazard_volcanic_ash = {
     ],
     'multi_event_notes': [  # notes specific to multi event data
     ],
-    'actions': [  # these are additional volcanic ash actions
-        tr('What action can be taken to secure water supplies and protect '
-           'crops?')
+    'actions': [
+        {
+            'item_category': 'additional_volcanic_ash',
+            'item_header': tr('volcanic ash specific'),
+            'item_list': [
+                # these are additional volcanic ash actions
+                tr('What action can be taken to secure water supplies and '
+                   'protect crops?')
+            ]
+        }
     ],
     'citations': [
         {
@@ -310,6 +365,7 @@ hazard_volcanic_ash = {
     'compulsory_fields': [hazard_value_field],
     'fields': hazard_fields,
     'extra_fields': [],
+    'field_groups': [],
     'layer_modes': [layer_mode_classified, layer_mode_continuous],
     'disabled_exposures': []
 }
@@ -322,10 +378,17 @@ hazard_tsunami = {
         'A <b>tsunami</b> at sea may go unnoticed but a <b>tsunami</b> '
         'wave that strikes land may cause massive destruction and '
         'flooding.'),
-    'notes': [  # additional generic notes for tsunami
-        caveat_simulation,
-        caveat_local_conditions,
-        caveat_analysis_extent,
+    'notes': [
+        {
+            'item_category': 'tsunami_general',
+            'item_header': tr('tsunami general notes'),
+            'item_list': [
+                # additional generic notes for tsunami
+                caveat_simulation,
+                caveat_local_conditions,
+                caveat_analysis_extent,
+            ]
+        }
     ],
     'continuous_notes': [  # notes specific to continuous data
     ],
@@ -360,6 +423,7 @@ hazard_tsunami = {
     'compulsory_fields': [hazard_value_field],
     'fields': hazard_fields,
     'extra_fields': [],
+    'field_groups': [],
     'layer_modes': [layer_mode_classified, layer_mode_continuous],
     'disabled_exposures': [exposure_place]
 }
@@ -371,10 +435,17 @@ hazard_volcano = {
         'which rock fragments, ash, lava, steam and gases can be ejected '
         'from below the earth\'s surface. The type of material ejected '
         'depends on the type of <b>volcano</b>.'),
-    'notes': [  # additional generic notes for volcano
-        caveat_simulation,
-        caveat_local_conditions,
-        caveat_analysis_extent,
+    'notes': [
+        {
+            'item_category': 'volcano_general',
+            'item_header': tr('volcano general notes'),
+            'item_list': [
+                # additional generic notes for volcano
+                caveat_simulation,
+                caveat_local_conditions,
+                caveat_analysis_extent,
+            ]
+        }
     ],
     'actions': [  # these are additional volcano actions
 
@@ -402,6 +473,7 @@ hazard_volcano = {
     'compulsory_fields': [hazard_value_field],
     'fields': hazard_fields,
     'extra_fields': [hazard_name_field],
+    'field_groups': [],
     'layer_modes': [layer_mode_classified],
     'disabled_exposures': [exposure_place]
 }

@@ -104,7 +104,8 @@ def minimum_needs_extractor(impact_report, component_metadata):
                 continue
             value = format_number(
                 analysis_feature[field_idx],
-                enable_rounding=is_rounding)
+                enable_rounding=is_rounding,
+                is_population=True)
 
             need_parameter = field['need_parameter']
             """:type: ResourceParameter"""

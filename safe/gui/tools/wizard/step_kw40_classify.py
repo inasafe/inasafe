@@ -68,7 +68,11 @@ class StepKwClassify(WizardStep, FORM_CLASS):
 
         # Get all fields with replace_null = False
         inasafe_fields = get_fields(
-            layer_purpose['key'], subcategory['key'], replace_null=False)
+            layer_purpose['key'],
+            subcategory['key'],
+            replace_null=False,
+            in_group=False
+        )
         # remove compulsory field since it has been set in previous step
         try:
             inasafe_fields.remove(get_compulsory_fields(
@@ -79,7 +83,11 @@ class StepKwClassify(WizardStep, FORM_CLASS):
         # Check if possible to skip inasafe field step
         if skip_inasafe_field(self.parent.layer, inasafe_fields):
             default_inasafe_fields = get_fields(
-                layer_purpose['key'], subcategory['key'], replace_null=True)
+                layer_purpose['key'],
+                subcategory['key'],
+                replace_null=True,
+                in_group=False
+            )
             # Check if it can go to inasafe default step
             if default_inasafe_fields:
                 return self.parent.step_kw_default_inasafe_fields
@@ -151,7 +159,7 @@ class StepKwClassify(WizardStep, FORM_CLASS):
             else:
                 unique_values = [int(i) for i in unique_values]
         else:
-            field = self.parent.step_kw_field.selected_field()
+            field = self.parent.step_kw_field.selected_fields()
             field_index = self.parent.layer.dataProvider().fields().\
                 indexFromName(field)
             field_type = self.parent.layer.dataProvider().\
@@ -211,7 +219,7 @@ class StepKwClassify(WizardStep, FORM_CLASS):
         field = self.parent.get_existing_keyword('inasafe_fields').get(
             field_keyword)
         if (not is_raster_layer(self.parent.layer) and
-                field != self.parent.step_kw_field.selected_field()):
+                field != self.parent.step_kw_field.selected_fields()):
             return
 
         unassigned_values = list()

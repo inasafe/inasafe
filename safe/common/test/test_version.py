@@ -58,8 +58,9 @@ class TestVersion(unittest.TestCase):
     def test_get_current_hash(self):
         """Test for get_current_hash."""
         git_hash = current_git_hash()
-        if 'win32' in sys.platform:
+        if sys.platform in ['win32', 'darwin']:
             # On windows we get 9 chars of the git hash back
+            # On MacOS also (IS - 27 Apr 2017)
             self.assertEqual(len(git_hash), 9)
         else:
             self.assertEqual(len(git_hash), 7)
