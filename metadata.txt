@@ -25,7 +25,7 @@ status=final
 # Optional items:
 
 changelog=
-    Version 4.1.0
+    Version 4.2.0
     - Reporting : Improved action and checklist reporting
     - Reporting : Quick save as pdf
     - Reporting : Detailed demographic breakdowns
@@ -40,11 +40,11 @@ changelog=
     - Issues : Bug fixes and improvements
 
 # tags are comma separated with spaces allowed
-tags=contingency planning, impact assessments, disaster scenarios, natural hazards
+tags=contingency planning, impact assessments, disaster scenarios, natural hazards,risk
 
 homepage=http://www.inasafe.org/
-tracker=https://github.com/AIFDR/inasafe/issues
-repository=https://github.com/AIFDR/inasafe
+tracker=https://github.com/inasafe/inasafe/issues
+repository=https://github.com/inasafe/inasafe
 icon=resources/img/icons/icon.png
 # experimental flag
 experimental=False
