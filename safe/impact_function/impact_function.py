@@ -725,7 +725,8 @@ class ImpactFunction(object):
                 'The {purpose} layer is invalid').format(purpose=purpose)
             content = tr(
                 'The impact function needs a {exposure} layer to run. '
-                'You must provide a valid %s layer.').format(purpose=purpose)
+                'You must provide a valid {exposure} layer.').format(
+                purpose=purpose)
             message = generate_input_error_message(
                 title, m.Paragraph(content))
             return PREPARE_FAILED_BAD_INPUT, message
