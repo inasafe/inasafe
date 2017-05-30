@@ -158,7 +158,7 @@ EARTHQUAKE_FUNCTIONS = (
                 'that is minimised during the optimisation is the same as '
                 'the one used by Jaiswal et al. (2010).'),
             tr(
-                'The coefficients used in the indonesian model are'
+                'The coefficients used in the indonesian model are '
                 'x=0.62275231, y=8.03314466, zeta=2.15'),
             tr(
                 'Caveats and limitations:'),
@@ -208,7 +208,7 @@ EARTHQUAKE_FUNCTIONS = (
                     'Allen, T. I., Wald, D. J., Earle, P. S., Marano, K. D., '
                     'Hotovec, A. J., Lin, K., and Hearne, M., 2009. An Atlas '
                     'of ShakeMaps and population exposure catalog for '
-                    'earthquake loss modeling, Bull. Earthq. Eng. 7, 701-718.'
+                    'earthquake loss modeling, Bull. Earthq. Eng. 7, 701-718. '
                     'Jaiswal, K., and Wald, D., 2010. An empirical model for '
                     'global earthquake fatality estimation, Earthq. Spectra '
                     '26, 1017-1037.'),
