@@ -729,8 +729,8 @@ badan_geologi_landcover_classes = {
         },
         {
             'key': 'water_supply',
-            'name': tr('Water Supply'),
-            'description': tr('Water Supply'),
+            'name': tr('Water'),
+            'description': tr('Water bodies'),
             'osm_downloader': [],
             'string_defaults': [
                 'Air Danau / Situ',
