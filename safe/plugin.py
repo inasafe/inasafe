@@ -4,6 +4,7 @@
 import sys
 import os
 import logging
+from inspect import getmembers, isfunction
 
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
@@ -14,6 +15,7 @@ from qgis.core import (
     QgsRasterLayer,
     QgsMapLayerRegistry,
     QgsMapLayer,
+    QgsExpression,
     QgsProject)
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import (
@@ -32,6 +34,7 @@ from PyQt4.QtGui import (
     QLineEdit,
     QInputDialog)
 
+from safe.gis import expressions
 from safe.common.version import release_status
 from safe.common.exceptions import (
     TranslationLoadError,
@@ -658,6 +661,13 @@ class Plugin(object):
         self.dock_widget.setVisible(False)
         self.dock_widget.destroy()
         self.iface.currentLayerChanged.disconnect(self.layer_changed)
+
+        # Unload QGIS expressions loaded by the plugin.
+        qgis_expressions = [
+            fct[0] for fct in getmembers(expressions) if isfunction(fct[1])]
+        for qgis_expression in qgis_expressions:
+            if qgis_expression != 'qgsfunction':
+                QgsExpression.unregisterFunction(qgis_expression)
 
     def toggle_inasafe_action(self, checked):
         """Check or un-check the toggle inaSAFE toolbar button.
