@@ -203,7 +203,7 @@ child_bearing_age_ratio_default_value = {
     'max_value': 1,
     'increment': 0.001,
     'description': tr(
-        'Default ratio of people of child bearing age per 100 people in the '
+        'Default ratio of child bearing age per 100 people in the '
         'total population.')
 }
 
