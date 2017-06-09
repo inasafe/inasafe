@@ -588,7 +588,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1320"/>
+        <location filename="definitions_help.py" line="1333"/>
         <source>Displacement rate</source>
         <translation type="unfinished"></translation>
     </message>
@@ -783,7 +783,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard.py" line="433"/>
+        <location filename="hazard.py" line="434"/>
         <source>A &lt;b&gt;volcano&lt;/b&gt; describes a mountain which has a vent through which rock fragments, ash, lava, steam and gases can be ejected from below the earth&apos;s surface. The type of material ejected depends on the type of &lt;b&gt;volcano&lt;/b&gt;.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1183,12 +1183,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard.py" line="374"/>
+        <location filename="hazard.py" line="375"/>
         <source>Tsunami</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard.py" line="432"/>
+        <location filename="hazard.py" line="433"/>
         <source>Volcano</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1444,7 +1444,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard.py" line="491"/>
+        <location filename="hazard.py" line="492"/>
         <source>Hazards</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1494,7 +1494,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard.py" line="315"/>
+        <location filename="hazard.py" line="316"/>
         <source>Volcanic ash</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2459,7 +2459,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard.py" line="375"/>
+        <location filename="hazard.py" line="376"/>
         <source>A &lt;b&gt;tsunami&lt;/b&gt; describes a large ocean wave or series or waves usually caused by an underwater earthquake or volcano. A &lt;b&gt;tsunami&lt;/b&gt; at sea may go unnoticed but a &lt;b&gt;tsunami&lt;/b&gt; wave that strikes land may cause massive destruction and flooding.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2764,7 +2764,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1318"/>
+        <location filename="definitions_help.py" line="1331"/>
         <source>Affected</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3183,7 +3183,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1253"/>
+        <location filename="definitions_help.py" line="1266"/>
         <source>Length</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3748,7 +3748,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="exposure_classifications.py" line="649"/>
+        <location filename="exposure_classifications.py" line="732"/>
         <source>Water</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4583,7 +4583,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="prepare_vector_layer.py" line="360"/>
+        <location filename="prepare_vector_layer.py" line="361"/>
         <source>Features which have been removed from %s : %s</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4678,7 +4678,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1317"/>
+        <location filename="definitions_help.py" line="1349"/>
         <source>Name</source>
         <translation type="unfinished">Name</translation>
     </message>
@@ -4688,12 +4688,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1322"/>
+        <location filename="definitions_help.py" line="1335"/>
         <source>Default min</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1323"/>
+        <location filename="definitions_help.py" line="1336"/>
         <source>Default max</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4773,12 +4773,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1046"/>
+        <location filename="definitions_help.py" line="1045"/>
         <source>Plural</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1047"/>
+        <location filename="definitions_help.py" line="1046"/>
         <source>Abbreviation</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4818,102 +4818,102 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="927"/>
+        <location filename="definitions_help.py" line="926"/>
         <source>General notes:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="976"/>
+        <location filename="definitions_help.py" line="975"/>
         <source>Notes for continuous datasets:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="985"/>
+        <location filename="definitions_help.py" line="984"/>
         <source>Notes for classified datasets:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="994"/>
+        <location filename="definitions_help.py" line="993"/>
         <source>Notes for single events</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1005"/>
+        <location filename="definitions_help.py" line="1004"/>
         <source>Notes for multi events / scenarios:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1018"/>
+        <location filename="definitions_help.py" line="1017"/>
         <source>Actions:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1042"/>
+        <location filename="definitions_help.py" line="1041"/>
         <source>Units:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1073"/>
+        <location filename="definitions_help.py" line="1072"/>
         <source>Hazard classifications</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1158"/>
+        <location filename="definitions_help.py" line="1170"/>
         <source>unspecified</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1180"/>
+        <location filename="definitions_help.py" line="1193"/>
         <source>Exposure entities in this class ARE considered affected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1183"/>
+        <location filename="definitions_help.py" line="1196"/>
         <source>Exposure entities in this class are NOT considered affected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1189"/>
+        <location filename="definitions_help.py" line="1202"/>
         <source>This class is NOT required in the hazard keywords.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1192"/>
+        <location filename="definitions_help.py" line="1205"/>
         <source>This class IS required in the hazard keywords.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1251"/>
+        <location filename="definitions_help.py" line="1264"/>
         <source>Field Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1252"/>
+        <location filename="definitions_help.py" line="1265"/>
         <source>Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1254"/>
+        <location filename="definitions_help.py" line="1267"/>
         <source>Precision</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1299"/>
+        <location filename="definitions_help.py" line="1312"/>
         <source>Decimal number</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1300"/>
+        <location filename="definitions_help.py" line="1313"/>
         <source>Text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1301"/>
+        <location filename="definitions_help.py" line="1314"/>
         <source>Whole number</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1321"/>
+        <location filename="definitions_help.py" line="1350"/>
         <source>Default values</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5218,102 +5218,102 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="767"/>
+        <location filename="impact_function.py" line="768"/>
         <source>The layer {source} must be updated to {version}.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="816"/>
+        <location filename="impact_function.py" line="817"/>
         <source>The exposure layer is compulsory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="816"/>
+        <location filename="impact_function.py" line="817"/>
         <source>The impact function needs an exposure layer to run. You must provide it.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="830"/>
+        <location filename="impact_function.py" line="831"/>
         <source>The hazard layer is compulsory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="830"/>
+        <location filename="impact_function.py" line="831"/>
         <source>The impact function needs a hazard layer to run. You must provide it.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="874"/>
+        <location filename="impact_function.py" line="875"/>
         <source>Error with the requested extent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="845"/>
+        <location filename="impact_function.py" line="846"/>
         <source>Requested Extent must be null when an aggregation is provided.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="854"/>
+        <location filename="impact_function.py" line="855"/>
         <source>Requested Extent CRS must be null when an aggregation is provided.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="874"/>
+        <location filename="impact_function.py" line="875"/>
         <source>Requested Extent CRS must be set when requested is not null.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="926"/>
+        <location filename="impact_function.py" line="927"/>
         <source>need evacuation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="928"/>
+        <location filename="impact_function.py" line="929"/>
         <source>be affected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="987"/>
+        <location filename="impact_function.py" line="988"/>
         <source>Layers need to overlap.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="987"/>
+        <location filename="impact_function.py" line="988"/>
         <source>The exposure and the hazard layer need to overlap.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1006"/>
+        <location filename="impact_function.py" line="1007"/>
         <source>The bounding box need to overlap layers.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1006"/>
+        <location filename="impact_function.py" line="1007"/>
         <source>The requested analysis extent is not overlaping the exposure and the hazard.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1128"/>
+        <location filename="impact_function.py" line="1129"/>
         <source>You need to run `prepare` first.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1157"/>
+        <location filename="impact_function.py" line="1158"/>
         <source>No features in the extent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1163"/>
+        <location filename="impact_function.py" line="1164"/>
         <source>Try zooming in to a bigger area or check your features (geometry and attribute table). For instance, an empty geometry or an hazard without value are removed during the process.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1177"/>
+        <location filename="impact_function.py" line="1178"/>
         <source>Configuration issue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1179"/>
+        <location filename="impact_function.py" line="1180"/>
         <source>There is a problem with the Processing plugin.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5778,27 +5778,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="925"/>
+        <location filename="definitions_help.py" line="924"/>
         <source>Notes:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="997"/>
+        <location filename="definitions_help.py" line="996"/>
         <source>No single event notes defined.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1010"/>
+        <location filename="definitions_help.py" line="1009"/>
         <source>No multi-event notes defined.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1060"/>
+        <location filename="definitions_help.py" line="1059"/>
         <source>Fields:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1086"/>
+        <location filename="definitions_help.py" line="1085"/>
         <source>Classes:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5913,7 +5913,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1047"/>
+        <location filename="impact_function.py" line="1048"/>
         <source>There is a problem with the aggregation layer.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6048,22 +6048,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="886"/>
+        <location filename="impact_function.py" line="887"/>
         <source>Incompatible exposure/hazard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="888"/>
+        <location filename="impact_function.py" line="889"/>
         <source>The hazard layer is not set up for this kind of exposure. In InaSAFE, you need to define keywords in the hazard layer for each exposure type that you want to use with the hazard.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="895"/>
+        <location filename="impact_function.py" line="896"/>
         <source>Please select the hazard layer in the legend and then run the keyword wizard to define the needed keywords for {exposure_type} exposure.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1183"/>
+        <location filename="impact_function.py" line="1184"/>
         <source>InaSAFE depends on the QGIS Processing plugin. This is a core plugin that ships with QGIS. It used to be possible to install the processing plugin from the QGIS Plugin Manager, however we advise you not to use these version since the Plugin Manager version may be incompatible with the version needed by InaSAFE. To resolve this issue, check in your .qgis2/python/plugins directory if you have a processing folder. If you do, remove the processing folder and then restart QGIS. If this issue persists, please report the problem to the InaSAFE team.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6118,7 +6118,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1159"/>
+        <location filename="impact_function.py" line="1160"/>
         <source>There are no features in the analysis extent.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6208,12 +6208,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard.py" line="337"/>
+        <location filename="hazard.py" line="338"/>
         <source>Volcanic ash is modelled hazard data estimating the thickness of ash on the ground following a volcanic eruption.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard.py" line="348"/>
+        <location filename="hazard.py" line="349"/>
         <source>What action can be taken to secure water supplies and protect crops?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6743,12 +6743,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1047"/>
+        <location filename="impact_function.py" line="1048"/>
         <source>The aggregation layer seems to have a problem. Some features might be invalid. You should check the validity of this layer or use a selection within this layer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1394"/>
+        <location filename="impact_function.py" line="1395"/>
         <source>Something went wrong with the datastore : {error_message}</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7098,12 +7098,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard.py" line="316"/>
+        <location filename="hazard.py" line="317"/>
         <source>&lt;b&gt;Volcanic ash&lt;/b&gt; describes fragments of pulverized rock, minerals and volcanic glass, ejected into the atmosphere during volcanic eruptions.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard.py" line="398"/>
+        <location filename="hazard.py" line="399"/>
         <source>Tsunami hazard scenarios estimate the maximum extent of tsunami waves on land.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7283,11 +7283,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="exposure_classifications.py" line="733"/>
-        <source>Water Supply</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="exposure_classifications.py" line="760"/>
         <source>Forest</source>
         <translation type="unfinished"></translation>
@@ -7368,12 +7363,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="964"/>
+        <location filename="definitions_help.py" line="963"/>
         <source>Notes for exposure : {exposure_name}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1030"/>
+        <location filename="definitions_help.py" line="1029"/>
         <source>Actions for exposure : {exposure_name}</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7393,7 +7388,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="913"/>
+        <location filename="impact_function.py" line="914"/>
         <source>{hazard_type} {hazard_geometry} On {exposure_type} {exposure_geometry}</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7818,7 +7813,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1319"/>
+        <location filename="definitions_help.py" line="1332"/>
         <source>Fatality rate</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8078,11 +8073,6 @@ You can select more than 1 field. InaSAFE will sum up the value of the fields th
     <message>
         <location filename="default_values.py" line="190"/>
         <source>Default ratio of disabled people per 100 people in the total population.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="default_values.py" line="205"/>
-        <source>Default ratio of people of child bearing age per 100 people in the total population.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8486,27 +8476,27 @@ You can select more than 1 field. InaSAFE will sum up the value of the fields th
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard.py" line="270"/>
+        <location filename="hazard.py" line="271"/>
         <source>Classified cyclone hazard data is not presently supported.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard.py" line="323"/>
+        <location filename="hazard.py" line="324"/>
         <source>volcanic ash general notes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard.py" line="345"/>
+        <location filename="hazard.py" line="346"/>
         <source>volcanic ash specific</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard.py" line="384"/>
+        <location filename="hazard.py" line="385"/>
         <source>tsunami general notes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard.py" line="441"/>
+        <location filename="hazard.py" line="442"/>
         <source>volcano general notes</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8623,11 +8613,6 @@ You can select more than 1 field. InaSAFE will sum up the value of the fields th
     <message>
         <location filename="definitions_help.py" line="251"/>
         <source>The OpenStreetmap Downloader</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="field_mapping_help.py" line="187"/>
-        <source>The interplay between default ratios, aggregation layer provided ratios and population exposure layers is illustratedin the table below.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8832,11 +8817,6 @@ Citations:
     </message>
     <message>
         <location filename="earthquake.py" line="116"/>
-        <source>The coefficients used in the indonesian model arex=0.62275231, y=8.03314466, zeta=2.15</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="earthquake.py" line="116"/>
         <source>Caveats and limitations:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8887,11 +8867,6 @@ Citations:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="earthquake.py" line="116"/>
-        <source>Allen, T. I., Wald, D. J., Earle, P. S., Marano, K. D., Hotovec, A. J., Lin, K., and Hearne, M., 2009. An Atlas of ShakeMaps and population exposure catalog for earthquake loss modeling, Bull. Earthq. Eng. 7, 701-718.Jaiswal, K., and Wald, D., 2010. An empirical model for global earthquake fatality estimation, Earthq. Spectra 26, 1017-1037.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="components.py" line="401"/>
         <source>Analysis Environment</source>
         <translation type="unfinished"></translation>
@@ -8907,7 +8882,7 @@ Citations:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1210"/>
+        <location filename="definitions_help.py" line="1223"/>
         <source>Citations:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9002,32 +8977,27 @@ Citations:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="726"/>
-        <source>The impact function needs a {exposure} layer to run. You must provide a valid %s layer.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="739"/>
+        <location filename="impact_function.py" line="740"/>
         <source>The {purpose} layer does not have keywords.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="742"/>
+        <location filename="impact_function.py" line="743"/>
         <source>The {purpose} layer does not have keywords. Use the wizard to assign keywords to the layer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="752"/>
+        <location filename="impact_function.py" line="753"/>
         <source>The expected {purpose} layer is not an {purpose}.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="780"/>
+        <location filename="impact_function.py" line="781"/>
         <source>The {purpose} layer is not up to date.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="782"/>
+        <location filename="impact_function.py" line="783"/>
         <source>The layer {source} must be updated with the keyword wizard. Your fields which have been set in the keywords previously are not matching your layer.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9179,6 +9149,36 @@ Citations:
     <message>
         <location filename="components.py" line="370"/>
         <source>Vulnerability ratio is not found. No calculations produced.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="earthquake.py" line="116"/>
+        <source>The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, zeta=2.15</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="earthquake.py" line="116"/>
+        <source>Allen, T. I., Wald, D. J., Earle, P. S., Marano, K. D., Hotovec, A. J., Lin, K., and Hearne, M., 2009. An Atlas of ShakeMaps and population exposure catalog for earthquake loss modeling, Bull. Earthq. Eng. 7, 701-718. Jaiswal, K., and Wald, D., 2010. An empirical model for global earthquake fatality estimation, Earthq. Spectra 26, 1017-1037.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="exposure_classifications.py" line="733"/>
+        <source>Water bodies</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="field_mapping_help.py" line="187"/>
+        <source>The interplay between default ratios, aggregation layer provided ratios and population exposure layers is illustrated in the table below.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="726"/>
+        <source>The impact function needs a {exposure} layer to run. You must provide a valid {exposure} layer.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="default_values.py" line="205"/>
+        <source>Default ratio of child bearing age per 100 people in the total population.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

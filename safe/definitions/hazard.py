@@ -262,8 +262,9 @@ hazard_cyclone = {
     ],
     'continuous_notes': [  # notes specific to continuous data
         tr(
-       'Continuous data are normally used to represent the gust wind speed '
-       'of the cyclone, representing the 10-m above ground wind speed.'
+            'Continuous data are normally used to represent the gust wind '
+            'speed of the cyclone, representing the 10-m above ground wind '
+            'speed.'
         )
     ],
     'classified_notes': [  # notes specific to classified data
