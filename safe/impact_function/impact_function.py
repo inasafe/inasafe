@@ -45,8 +45,6 @@ from safe.gis.vector.summary_1_aggregate_hazard import (
     aggregate_hazard_summary)
 from safe.gis.vector.summary_2_aggregation import aggregation_summary
 from safe.gis.vector.summary_3_analysis import analysis_summary
-from safe.gis.vector.summary_33_eq_raster_analysis import (
-    analysis_eartquake_summary)
 from safe.gis.vector.summary_4_exposure_summary_table import (
     exposure_summary_table)
 from safe.gis.vector.recompute_counts import recompute_counts
@@ -55,8 +53,6 @@ from safe.gis.raster.clip_bounding_box import clip_by_extent
 from safe.gis.raster.reclassify import reclassify as reclassify_raster
 from safe.gis.raster.polygonize import polygonize
 from safe.gis.raster.zonal_statistics import zonal_stats
-from safe.gis.raster.align import align_rasters
-from safe.gis.raster.rasterize import rasterize_vector_layer
 from safe.definitions.analysis_steps import analysis_steps
 from safe.definitions.utilities import definition, get_non_compulsory_fields
 from safe.definitions.exposure import indivisible_exposure
@@ -103,8 +99,6 @@ from safe.common.exceptions import (
     ProcessingInstallationError,
 )
 from safe.definitions.earthquake import EARTHQUAKE_FUNCTIONS
-from safe.impact_function.earthquake import (
-    exposed_people_stats, make_summary_layer)
 from safe.impact_function.postprocessors import (
     run_single_post_processor, enough_input)
 from safe.impact_function.create_extra_layers import (
@@ -118,7 +112,6 @@ from safe.impact_function.style import (
     generate_classified_legend,
     hazard_class_style,
     simple_polygon_without_brush,
-    displaced_people_style,
 )
 from safe.utilities.gis import is_vector_layer, is_raster_layer
 from safe.utilities.i18n import tr
@@ -126,7 +119,7 @@ from safe.utilities.default_values import get_inasafe_default_value_qsetting
 from safe.utilities.unicode import get_unicode
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.metadata import (
-    active_thresholds_value_maps, active_classification, copy_layer_keywords)
+    active_thresholds_value_maps, copy_layer_keywords)
 from safe.utilities.utilities import (
     replace_accentuated_characters,
     get_error_message,
@@ -1282,18 +1275,37 @@ class ImpactFunction(object):
         self.callback(2, step_count, analysis_steps['aggregation_preparation'])
         self.aggregation_preparation()
 
-        # Special case for Raster Earthquake hazard on Raster population.
-        damage_curve = False
-        if is_raster_layer(self.hazard):
-            if self.hazard.keywords.get('hazard') == 'earthquake':
-                if is_raster_layer(self.exposure):
-                    if self.exposure.keywords.get('exposure') == 'population':
-                        damage_curve = True
+        # Special case for earthquake hazard on population. We need to remove
+        # the fatality model.
+        earthquake_on_population = False
+        if self.hazard.keywords.get('hazard') == 'earthquake':
+            if self.exposure.keywords.get('exposure') == 'population':
+                earthquake_on_population = True
+        if not earthquake_on_population:
+            self._earthquake_function = None
 
-        if damage_curve:
-            self.damage_curve_analysis()
-        else:
-            self.gis_overlay_analysis()
+        LOGGER.info('Starting a GIS overlay analysis')
+        # This is not a EQ raster on raster population. We need to set it to
+        # None as we don't want notes specific to EQ raster on population.
+        self._earthquake_function = None
+        step_count = len(analysis_steps)
+
+        self._performance_log = profiling_log()
+        self.callback(3, step_count, analysis_steps['hazard_preparation'])
+        self.hazard_preparation()
+
+        self._performance_log = profiling_log()
+        self.callback(
+            4, step_count, analysis_steps['aggregate_hazard_preparation'])
+        self.aggregate_hazard_preparation()
+
+        self._performance_log = profiling_log()
+        self.callback(5, step_count, analysis_steps['exposure_preparation'])
+        self.exposure_preparation()
+
+        self._performance_log = profiling_log()
+        self.callback(6, step_count, analysis_steps['combine_hazard_exposure'])
+        self.intersect_exposure_and_aggregate_hazard()
 
         self._performance_log = profiling_log()
         self.callback(7, step_count, analysis_steps['post_processing'])
@@ -1301,14 +1313,9 @@ class ImpactFunction(object):
             # We post process the exposure summary
             self.post_process(self._exposure_summary)
         else:
-            if is_vector_layer(self._aggregate_hazard_impacted):
-                # We post process the aggregate hazard.
-                # Raster continuous exposure.
-                self.post_process(self._aggregate_hazard_impacted)
-            else:
-                # We post process the aggregation.
-                # Earthquake raster on population raster.
-                self.post_process(self._aggregation_summary)
+            # We post process the aggregate hazard.
+            # Raster continuous exposure.
+            self.post_process(self._aggregate_hazard_impacted)
 
         self._performance_log = profiling_log()
         self.callback(8, step_count, analysis_steps['summary_calculation'])
@@ -1397,87 +1404,6 @@ class ImpactFunction(object):
                    '{error_message}').format(error_message=name))
         self._analysis_impacted = self.datastore.layer(name)
         self.debug_layer(self._analysis_impacted, add_to_datastore=False)
-
-    @profile
-    def gis_overlay_analysis(self):
-        """Perform an overlay analysis between the exposure and the hazard."""
-        LOGGER.info('Starting a GIS overlay analysis')
-        # This is not a EQ raster on raster population. We need to set it to
-        # None as we don't want notes specific to EQ raster on population.
-        self._earthquake_function = None
-        step_count = len(analysis_steps)
-
-        self._performance_log = profiling_log()
-        self.callback(3, step_count, analysis_steps['hazard_preparation'])
-        self.hazard_preparation()
-
-        self._performance_log = profiling_log()
-        self.callback(
-            4, step_count, analysis_steps['aggregate_hazard_preparation'])
-        self.aggregate_hazard_preparation()
-
-        self._performance_log = profiling_log()
-        self.callback(5, step_count, analysis_steps['exposure_preparation'])
-        self.exposure_preparation()
-
-        self._performance_log = profiling_log()
-        self.callback(6, step_count, analysis_steps['combine_hazard_exposure'])
-        self.intersect_exposure_and_aggregate_hazard()
-
-    @profile
-    def damage_curve_analysis(self):
-        """Perform a damage curve analysis."""
-        # For now we support only the earthquake raster on population raster.
-        self.earthquake_raster_population_raster()
-
-    @profile
-    def earthquake_raster_population_raster(self):
-        """Perform a damage curve analysis with EQ raster on population raster.
-        """
-        LOGGER.info('ANALYSIS : Starting a EQ raster on population raster')
-
-        classification_key = active_classification(
-            self.hazard.keywords, 'population')
-        thresholds = active_thresholds_value_maps(
-            self.hazard.keywords, 'population')
-        self.hazard.keywords['classification'] = classification_key
-        self.hazard.keywords['thresholds'] = thresholds
-        self.aggregation.keywords['hazard_keywords'] = dict(
-            self.hazard.keywords)
-
-        self.set_state_process(
-            'hazard', 'Align the hazard layer with the exposure')
-        self.set_state_process(
-            'exposure', 'Align the exposure layer with the hazard')
-        self.hazard, self.exposure = align_rasters(
-            self.hazard, self.exposure, self.analysis_impacted.extent())
-        self.debug_layer(self.hazard)
-        self.debug_layer(self.exposure)
-
-        self.set_state_process(
-            'aggregation', 'Rasterize the aggregation layer')
-        aggregation_aligned = rasterize_vector_layer(
-            self.aggregation,
-            self.hazard.dataProvider().xSize(),
-            self.hazard.dataProvider().ySize(),
-            self.hazard.extent())
-        self.debug_layer(aggregation_aligned)
-
-        self.set_state_process('exposure', 'Compute exposed people')
-        exposed, self._exposure_summary = exposed_people_stats(
-            self.hazard,
-            self.exposure,
-            aggregation_aligned)
-        self.debug_layer(self._exposure_summary)
-
-        self.set_state_process('impact function', 'Set summaries')
-        self._aggregation_summary = make_summary_layer(
-            exposed, self.aggregation)
-        self._aggregation_summary.keywords['exposure_keywords'] = dict(
-            self.exposure_summary.keywords)
-        self._aggregation_summary.keywords['hazard_keywords'] = dict(
-            self.hazard.keywords)
-        self.debug_layer(self._aggregation_summary)
 
     @profile
     def aggregation_preparation(self):
@@ -1943,18 +1869,17 @@ class ImpactFunction(object):
                     self._exposure, self._aggregate_hazard_impacted)
                 self.debug_layer(self._exposure_summary)
 
-            if self._exposure_summary:
-                # set title using definition
-                # the title will be overwritten anyway by standard title
-                # set this as fallback.
-                self._exposure_summary.keywords['title'] = (
-                    layer_purpose_exposure_summary['name'])
-                if qgis_version() >= 21800:
-                    self._exposure_summary.setName(
-                        self._exposure_summary.keywords['title'])
-                else:
-                    self._exposure_summary.setLayerName(
-                        self._exposure_summary.keywords['title'])
+            # set title using definition
+            # the title will be overwritten anyway by standard title
+            # set this as fallback.
+            self._exposure_summary.keywords['title'] = (
+                layer_purpose_exposure_summary['name'])
+            if qgis_version() >= 21800:
+                self._exposure_summary.setName(
+                    self._exposure_summary.keywords['title'])
+            else:
+                self._exposure_summary.setLayerName(
+                    self._exposure_summary.keywords['title'])
 
     @profile
     def post_process(self, layer):
@@ -1998,7 +1923,7 @@ class ImpactFunction(object):
         """
         LOGGER.info('ANALYSIS : Summary calculation')
         if is_vector_layer(self._exposure_summary):
-            # The exposure summary might be a raster if it's an EQ if.
+            # With continuous exposure, we don't have an exposure summary layer
             self.set_state_process(
                 'impact function',
                 'Aggregate the impact summary')
@@ -2006,38 +1931,26 @@ class ImpactFunction(object):
                 self.exposure_summary, self._aggregate_hazard_impacted)
             self.debug_layer(self._exposure_summary, add_to_datastore=False)
 
-        if self._aggregate_hazard_impacted:
+        self.set_state_process(
+            'impact function', 'Aggregate the aggregation summary')
+        self._aggregation_summary = aggregation_summary(
+            self._aggregate_hazard_impacted, self.aggregation)
+        self.debug_layer(
+            self._aggregation_summary, add_to_datastore=False)
+
+        self.set_state_process(
+            'impact function', 'Aggregate the analysis summary')
+        self._analysis_impacted = analysis_summary(
+            self._aggregate_hazard_impacted, self._analysis_impacted)
+        self.debug_layer(self._analysis_impacted)
+
+        if self._exposure.keywords.get('classification'):
             self.set_state_process(
-                'impact function',
-                'Aggregate the aggregation summary')
-            self._aggregation_summary = aggregation_summary(
-                self._aggregate_hazard_impacted, self.aggregation)
+                'impact function', 'Build the exposure summary table')
+            self._exposure_summary_table = exposure_summary_table(
+                self._aggregate_hazard_impacted)
             self.debug_layer(
-                self._aggregation_summary, add_to_datastore=False)
-
-            self.set_state_process(
-                'impact function',
-                'Aggregate the analysis summary')
-            self._analysis_impacted = analysis_summary(
-                self._aggregate_hazard_impacted, self._analysis_impacted)
-            self.debug_layer(self._analysis_impacted)
-
-            if self._exposure.keywords.get('classification'):
-                self.set_state_process(
-                    'impact function',
-                    'Build the exposure summary table')
-                self._exposure_summary_table = exposure_summary_table(
-                    self._aggregate_hazard_impacted)
-                self.debug_layer(
-                    self._exposure_summary_table, add_to_datastore=False)
-        else:
-            # We are running EQ raster on population raster.
-            self.set_state_process(
-                'impact function',
-                'Aggregate the earthquake analysis summary')
-            self._analysis_impacted = analysis_eartquake_summary(
-                self.aggregation_summary, self.analysis_impacted)
-            self.debug_layer(self._analysis_impacted, add_to_datastore=False)
+                self._exposure_summary_table, add_to_datastore=False)
 
     def style(self):
         """Function to apply some styles to the layers."""
@@ -2051,18 +1964,14 @@ class ImpactFunction(object):
         # Let's style layers which have a geometry and have hazard_class
         hazard_class = hazard_class_field['key']
         for layer in self.outputs:
-            if is_vector_layer(layer):
-                without_geometries = [QGis.NoGeometry, QGis.UnknownGeometry]
-                if layer.geometryType() not in without_geometries:
-                    display_not_exposed = False
-                    if layer == self.impact or self.debug_mode:
-                        display_not_exposed = True
+            without_geometries = [QGis.NoGeometry, QGis.UnknownGeometry]
+            if layer.geometryType() not in without_geometries:
+                display_not_exposed = False
+                if layer == self.impact or self.debug_mode:
+                    display_not_exposed = True
 
-                    if layer.keywords['inasafe_fields'].get(hazard_class):
-                        hazard_class_style(layer, classes, display_not_exposed)
-
-            else:
-                displaced_people_style(layer)
+                if layer.keywords['inasafe_fields'].get(hazard_class):
+                    hazard_class_style(layer, classes, display_not_exposed)
 
         # Let's style the aggregation and analysis layer.
         simple_polygon_without_brush(self.aggregation_summary)

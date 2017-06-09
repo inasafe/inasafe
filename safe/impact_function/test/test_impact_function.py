@@ -615,7 +615,7 @@ class TestImpactFunction(unittest.TestCase):
         Let's keep booleans to False by default.
         """
         scenarios = {
-            'earthquake_raster_on_raster_population': False,
+            'earthquake_raster_on_raster_population': True,
             'earthquake_raster_on_vector_population': False,
             'polygon_classified_on_line': False,
             'polygon_classified_on_point': False,
