@@ -3,17 +3,14 @@
 import unittest
 
 from safe.test.utilities import (
-    load_test_vector_layer, load_test_raster_layer, qgis_iface)
+    load_test_vector_layer, qgis_iface)
 
-from safe.definitions.utilities import definition
 from safe.definitions.fields import (
     total_field,
     exposure_class_field,
     hazard_class_field,
-    hazard_count_field,
     exposure_count_field
 )
-from safe.definitions.constants import PREPARE_SUCCESS, ANALYSIS_SUCCESS
 from safe.gis.vector.tools import read_dynamic_inasafe_field
 from safe.gis.vector.summary_1_aggregate_hazard import (
     aggregate_hazard_summary)
@@ -21,7 +18,6 @@ from safe.gis.vector.summary_2_aggregation import aggregation_summary
 from safe.gis.vector.summary_3_analysis import analysis_summary
 from safe.gis.vector.summary_4_exposure_summary_table import (
     exposure_summary_table)
-from safe.impact_function.impact_function import ImpactFunction
 from safe.gis.sanity_check import check_inasafe_fields
 
 qgis_iface()
@@ -183,31 +179,3 @@ class TestAggregateSummary(unittest.TestCase):
         # one for total not exposed
         # one for total
         self.assertEqual(layer.fields().count(), len(unique_hazard) + 5)
-
-    def test_analysis_earthquake_summary(self):
-        """Test we can compute summary after an EQ on population."""
-        hazard = load_test_raster_layer('gisv4', 'hazard', 'earthquake.asc')
-        exposure = load_test_raster_layer(
-            'gisv4', 'exposure', 'raster', 'population.asc')
-        aggregation = load_test_vector_layer(
-            'gisv4', 'aggregation', 'small_grid.geojson')
-
-        impact_function = ImpactFunction()
-        impact_function.hazard = hazard
-        impact_function.exposure = exposure
-        impact_function.aggregation = aggregation
-        status, message = impact_function.prepare()
-        self.assertEqual(PREPARE_SUCCESS, status, message)
-        status, message = impact_function.run()
-        self.assertEqual(ANALYSIS_SUCCESS, status, message)
-
-        layer = impact_function.analysis_impacted
-        classification = hazard.keywords['classification']
-        classes = definition(classification)['classes']
-        for hazard_class in classes:
-            field_name = hazard_count_field['field_name'] % hazard_class['key']
-            message = '%s is not found in the EQ summary layer.' % field_name
-            self.assertNotEqual(-1, layer.fieldNameIndex(field_name), message)
-
-        check_inasafe_fields(impact_function.analysis_impacted)
-        check_inasafe_fields(impact_function.aggregation_summary)
