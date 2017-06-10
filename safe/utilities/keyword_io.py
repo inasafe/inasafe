@@ -5,10 +5,9 @@ import logging
 import os
 from ast import literal_eval
 from datetime import datetime
-from os.path import expanduser
 from sqlite3 import OperationalError
 
-from PyQt4.QtCore import QObject, QSettings
+from PyQt4.QtCore import QObject
 from PyQt4.QtCore import QUrl, QDateTime
 
 from qgis.core import QgsMapLayer
@@ -57,8 +56,6 @@ class KeywordIO(QObject):
         """
         QObject.__init__(self)
         # path to sqlite db path
-        self.keyword_db_path = None
-        self.setup_keyword_db_path()
         self.connection = None
         self.layer = layer
 
@@ -249,37 +246,6 @@ class KeywordIO(QObject):
         return
 
     # methods below here should be considered private
-
-    @staticmethod
-    def default_keyword_db_path():
-        """Helper to get the default path for the keywords file.
-
-        :returns: The path to where the default location of the keywords
-            database is. Maps to which is ~/.inasafe/keywords.db
-        :rtype: str
-        """
-
-        home = expanduser("~")
-        home = os.path.abspath(os.path.join(home, '.inasafe', 'keywords.db'))
-
-        return home
-
-    def setup_keyword_db_path(self):
-        """Helper to set the active path for the keywords.
-
-        Called at init time, you can override this path by calling
-        set_keyword_db_path.setKeywordDbPath.
-
-        :returns: The path to where the keywords file is. If the user has
-            never specified what this path is, the defaultKeywordDbPath is
-            returned.
-        :rtype: str
-        """
-        settings = QSettings()
-        path = settings.value(
-            'inasafe/keywordCachePath',
-            self.default_keyword_db_path(), type=str)
-        self.keyword_db_path = str(path)
 
     def to_message(self, keywords=None, show_header=True):
         """Format keywords as a message object.
