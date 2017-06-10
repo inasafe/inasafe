@@ -12,7 +12,7 @@ from headless.tasks.utilities import download_layer, archive_layer, \
     generate_styles, download_file
 from bin.inasafe import CommandLineArguments, get_impact_function_list, \
     run_impact_function, build_report, get_layer
-from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.metadata import read_iso19115_metadata
 
 __author__ = 'Rizky Maulana Nugraha <lana.pcfre@gmail.com>'
 __date__ = '1/19/16'
@@ -123,8 +123,7 @@ def read_keywords_iso_metadata(metadata_url, keyword=None):
     # add xml extension
     new_filename = filename + '.xml'
     shutil.move(filename, new_filename)
-    keyword_io = KeywordIO()
-    keywords = keyword_io.read_keywords_file(new_filename)
+    keywords = read_iso19115_metadata(new_filename)
     if keyword:
         if isinstance(keyword, tuple) or isinstance(keyword, list):
             ret_val = {}
