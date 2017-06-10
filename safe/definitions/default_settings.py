@@ -23,7 +23,7 @@ inasafe_default_settings = {
     'ISO19115_LICENSE': 'Free use with accreditation',
 
     'keywordCachePath': abspath(join(
-        expanduser('~'), '.inasafe', 'keywords.db')),
+        expanduser('~'), 'inasafe', 'metadata.db')),
 
     # Make sure first to not have cyclic import
     # 'organisation_logo_path': resources_path(
