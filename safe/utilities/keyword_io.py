@@ -2,10 +2,8 @@
 """Keyword IO implementation."""
 
 import logging
-import os
 from ast import literal_eval
 from datetime import datetime
-from sqlite3 import OperationalError
 
 from PyQt4.QtCore import QObject
 from PyQt4.QtCore import QUrl, QDateTime
@@ -14,33 +12,23 @@ from qgis.core import QgsMapLayer
 
 from safe.definitions.utilities import definition
 from safe import messaging as m
-from safe.common.exceptions import (
-    HashNotFoundError,
-    KeywordNotFoundError,
-    KeywordDbError,
-    InvalidParameterError,
-    NoKeywordsFoundError,
-    MetadataReadError
-)
-from safe.common.utilities import verify
+
 from safe.messaging import styles
 from safe.utilities.i18n import tr
 from safe.utilities.metadata import (
-    write_iso19115_metadata,
-    read_iso19115_metadata,
-)
+    write_iso19115_metadata, read_iso19115_metadata)
 from safe.utilities.unicode import get_string
 
-__author__ = 'tim@kartoza.com'
+__copyright__ = "Copyright 2011, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
-__date__ = '29/01/2011'
-__license__ = "GPL"
-__copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
-__copyright__ += 'Disaster Reduction'
 
 LOGGER = logging.getLogger('InaSAFE')
 
 
+# Notes(IS): This class can be replaced by safe.utilities.metadata
+# Some methods for viewing the keywords should be put in the other class
 class KeywordIO(QObject):
     """Class for doing keyword read/write operations.
 
@@ -55,56 +43,7 @@ class KeywordIO(QObject):
 
         """
         QObject.__init__(self)
-        # path to sqlite db path
-        self.connection = None
         self.layer = layer
-
-    # TODO(IS) can be removed
-    @classmethod
-    def read_keywords_file(cls, filename, keyword=None):
-        """Read keywords from a keywords file and return as dictionary
-
-        This serves as a wrapper function that should be provided by Keyword
-        IO. Use this if you are sure that the filename is a keyword file.
-
-        :param filename: The filename of the keyword, typically with .xml or
-            .keywords extension. If not, will raise exceptions
-        :type filename: str
-
-        :param keyword: If set, will extract only the specified keyword
-              from the keywords dict.
-        :type keyword: str
-
-        :returns: A dict if keyword is omitted, otherwise the value for the
-            given key if it is present.
-        :rtype: dict, str
-
-        :raises: KeywordNotFoundError, InvalidParameterError
-        """
-
-        # Try to read from ISO metadata first.
-        _, ext = os.path.splitext(filename)
-
-        dictionary = {}
-        if ext == '.xml':
-            try:
-                dictionary = read_iso19115_metadata(filename)
-            except (MetadataReadError, NoKeywordsFoundError):
-                pass
-        else:
-            raise InvalidParameterError(
-                'Keywords file have .xml or extension')
-
-        # if no keyword was supplied, just return the dict
-        if keyword is None:
-            return dictionary
-        if keyword not in dictionary:
-            message = tr(
-                'No value was found in file {filename} for keyword {keyword}'
-                .format(filename=filename, keyword=keyword))
-            raise KeywordNotFoundError(message)
-
-        return dictionary[keyword]
 
     @staticmethod
     def read_keywords(layer, keyword=None):
@@ -166,85 +105,6 @@ class KeywordIO(QObject):
         source = layer.source()
         write_iso19115_metadata(source, keywords)
 
-    def update_keywords(self, layer, keywords):
-        """Update keywords for a datasource.
-
-        :param layer: A QGIS QgsMapLayer instance.
-        :type layer: qgis.core.QgsMapLayer
-
-        :param keywords: A dict containing all the keywords to be updated
-              for the layer.
-        :type keywords: dict
-        """
-        try:
-            existing_keywords = self.read_keywords(layer)
-        except (HashNotFoundError, OperationalError, InvalidParameterError):
-            existing_keywords = {}
-        existing_keywords.update(keywords)
-        try:
-            self.write_keywords(layer, existing_keywords)
-        except OperationalError as e:
-            message = tr(
-                'Keyword database path: {keyword_db_path}').format(
-                    keyword_db_path=self.keyword_db_path)
-            raise KeywordDbError(str(e) + '\n' + message)
-
-    def copy_keywords(
-            self,
-            source_layer,
-            destination_file,
-            extra_keywords=None):
-        """Helper to copy the keywords file from a source to a target dataset.
-
-        e.g.::
-
-            copyKeywords('foo.shp', 'bar.shp')
-
-        Will result in the foo.keywords file being copied to bar.keyword.
-
-        Optional argument extraKeywords is a dictionary with additional
-        keywords that will be added to the destination file e.g::
-
-            copyKeywords('foo.shp', 'bar.shp', {'resolution': 0.01})
-
-        :param source_layer: A QGIS QgsMapLayer instance.
-        :type source_layer: qgis.core.QgsMapLayer
-
-        :param destination_file: The output filename that should be used
-            to store the keywords in. It's a path to a layer file.
-        :type destination_file: str
-
-        :param extra_keywords: A dict containing all the extra keywords
-            to be written for the layer. The written keywords will consist of
-            any original keywords from the source layer's keywords file and
-            and the extra keywords (which will replace the source layers
-            keywords if the key is identical).
-        :type extra_keywords: dict
-
-        """
-        keywords = self.read_keywords(source_layer)
-        if extra_keywords is None:
-            extra_keywords = {}
-        message = self.tr(
-            'Expected extra keywords to be a dictionary. Got '
-            '%s' % str(type(extra_keywords))[1:-1])
-        verify(isinstance(extra_keywords, dict), message)
-        # compute the output keywords file name
-        destination_base = os.path.splitext(destination_file)[0]
-        new_destination = destination_base + '.xml'
-        # write the extra keywords into the source dict
-        try:
-            for key in extra_keywords:
-                keywords[key] = extra_keywords[key]
-            write_iso19115_metadata(destination_file, keywords)
-            # write_keywords_to_file(new_destination, keywords)
-        except Exception as e:
-            message = self.tr(
-                'Failed to copy keywords file from : \n%s\nto\n%s: %s' % (
-                    source_layer.source(), new_destination, str(e)))
-            raise Exception(message)
-        return
-
     # methods below here should be considered private
 
     def to_message(self, keywords=None, show_header=True):
@@ -299,9 +159,9 @@ class KeywordIO(QObject):
         if show_header:
             logo_element = m.Brand()
             report.add(logo_element)
-            report.add(m.Heading(self.tr(
+            report.add(m.Heading(tr(
                 'Layer keywords:'), **styles.BLUE_LEVEL_4_STYLE))
-            report.add(m.Text(self.tr(
+            report.add(m.Text(tr(
                 'The following keywords are defined for the active layer:')))
 
         table = m.Table(style_class='table table-condensed table-striped')
@@ -324,12 +184,12 @@ class KeywordIO(QObject):
         # but that is still useful to see...
         if self.layer:
             # First the CRS
-            keyword = self.tr('Reference system')
+            keyword = tr('Reference system')
             value = self.layer.crs().authid()
             row = self._keyword_to_row(keyword, value)
             table.add(row)
             # Next the data source
-            keyword = self.tr('Layer source')
+            keyword = tr('Layer source')
             value = self.layer.source()
             row = self._keyword_to_row(keyword, value, wrap_slash=True)
             table.add(row)
@@ -364,7 +224,7 @@ class KeywordIO(QObject):
         row = m.Row()
         # Translate titles explicitly if possible
         if keyword == 'title':
-            value = self.tr(value)
+            value = tr(value)
         # # See #2569
         if keyword == 'url':
             if isinstance(value, QUrl):
