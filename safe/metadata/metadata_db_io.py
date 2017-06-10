@@ -74,7 +74,7 @@ class MetadataDbIO(QObject):
         :rtype: str
         """
         self.metadata_db_path = str(
-            setting('metadataCachePath', expected_type=str))
+            setting('keywordCachePath', expected_type=str))
 
     def open_connection(self):
         """Open an sqlite connection to the metadata database.
