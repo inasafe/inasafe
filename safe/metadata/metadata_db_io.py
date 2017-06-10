@@ -1,27 +1,22 @@
 # coding=utf-8
-"""**metadata DB IO implementation.**
-
-"""
-__author__ = 'marco@opengis.ch'
-__revision__ = '$Format:%H$'
-__date__ = '29/06/2015'
-__license__ = "GPL"
-__copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
-__copyright__ += 'Disaster Reduction'
+"""Metadata DB IO implementation"""
 
 import os
-from os.path import expanduser
 import logging
 import sqlite3 as sqlite
 from sqlite3 import OperationalError
 
-from qgis.core import QgsApplication
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import QObject, QSettings
+from PyQt4.QtCore import QObject
 from safe.common.exceptions import (
-    HashNotFoundError,
-    UnsupportedProviderError)
+    HashNotFoundError, UnsupportedProviderError)
+from safe.definitions.default_settings import inasafe_default_settings
+from safe.utilities.settings import setting
 
+__copyright__ = "Copyright 2015, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -62,15 +57,10 @@ class MetadataDbIO(QObject):
         """Helper to get the default path for the metadata file.
 
         :returns: The path to where the default location of the metadata
-            database is. Maps to which is ~/.qgis2/inasafe/metadata.db
+            database is. It get from the default setting
         :rtype: str
         """
-
-        database_path = os.path.join(
-            QgsApplication.qgisSettingsDirPath(),
-            'inasafe',
-            'metadata.db')
-        return database_path
+        return inasafe_default_settings['keywordCachePath']
 
     def setup_metadata_db_path(self):
         """Helper to set the active path for the metadata.
@@ -83,11 +73,8 @@ class MetadataDbIO(QObject):
             returned.
         :rtype: str
         """
-        settings = QSettings()
-        path = settings.value(
-            'inasafe/metadataCachePath',
-            self.default_metadata_db_path(), type=str)
-        self.metadata_db_path = str(path)
+        self.metadata_db_path = str(
+            setting('metadataCachePath', expected_type=str))
 
     def open_connection(self):
         """Open an sqlite connection to the metadata database.
