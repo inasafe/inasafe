@@ -1,3 +1,22 @@
+Changelog for version 4.1.1
+================================
+
+835bb9b05 (HEAD -> develop, upstream/develop, origin/develop, origin/HEAD) Use QGIS user directory for metadata.db
+d493337de Fix failed unit test.
+bc6da7d21 Remove unused method in KeywordIO.
+bc9a13b6f Fix #3751. Set to use default db path from definition.
+74ea18b28 Rename metadata for output layer. Add other output explicitly to metadata mapping.
+9c03d75d5 Remove unused code in metadata utilities.
+9eaf61650 Update translation.
+69d6a70bd update translations
+d89e5efde Fix #3857. Ignore filter in path.
+75741ab65 Fix #4248. Expression.
+db20d143e Update for Badan Geologi landcover classification
+e9a01d79c update metadata
+ba172848e update French Translations
+4214562c1 fix some strings in Python
+fe39d1614 add pregnant and lactating displaced to the count fields (#4244)
+
 Changelog for version 4.1.0
 ================================
 
