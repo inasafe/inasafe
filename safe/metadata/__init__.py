@@ -5,8 +5,8 @@
 # pylint: disable=unused-import
 from safe.metadata.base_metadata import BaseMetadata
 from safe.metadata.generic_layer_metadata import GenericLayerMetadata
-from safe.metadata.exposure_summary_layer_metadata import (
-    ExposureSummaryLayerMetadata)
+from safe.metadata.output_layer_metadata import (
+    OutputLayerMetadata)
 from safe.metadata.exposure_layer_metadata import ExposureLayerMetadata
 from safe.metadata.hazard_layer_metadata import HazardLayerMetadata
 from safe.metadata.aggregation_layer_metadata import AggregationLayerMetadata

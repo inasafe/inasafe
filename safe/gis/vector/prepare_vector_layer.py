@@ -195,6 +195,7 @@ def clean_inasafe_fields(layer):
     :param layer: The layer
     :type layer: QgsVectorLayer
     """
+    fields = []
     # Exposure
     if layer.keywords['layer_purpose'] == layer_purpose_exposure['key']:
         fields = get_fields(
@@ -449,7 +450,7 @@ def sum_fields(layer, output_field_key, input_fields):
     :type layer: QgsVectorLayer
 
     :param output_field_key: The output field definition key.
-    :type output_field_key: safe.definitions.fields
+    :type output_field_key: basestring
 
     :param input_fields: List of input fields' name.
     :type input_fields: list
@@ -467,6 +468,8 @@ def sum_fields(layer, output_field_key, input_fields):
             return
     else:
         # Creating expression
+        # Put field name in a double quote. See #4248
+        input_fields = ['"%s"' % f for f in input_fields]
         string_expression = ' + '.join(input_fields)
         sum_expression = QgsExpression(string_expression)
         context = QgsExpressionContext()

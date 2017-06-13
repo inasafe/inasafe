@@ -2215,6 +2215,8 @@ count_fields = [
     # Gender count fields
     female_count_field,
     child_bearing_age_count_field,
+    pregnant_count_field,
+    lactating_count_field,
     male_count_field,
     # Additional needs count fields
     hygiene_packs_count_field,
@@ -2233,6 +2235,8 @@ count_fields = [
     # Gender displaced count fields
     female_displaced_count_field,
     child_bearing_age_displaced_count_field,
+    pregnant_displaced_count_field,
+    lactating_displaced_count_field,
     male_displaced_count_field,
     # Age count fields
     infant_displaced_count_field,

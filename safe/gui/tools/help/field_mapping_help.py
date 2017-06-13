@@ -187,7 +187,7 @@ def content():
     paragraph = m.Paragraph(
         tr(
             'The interplay between default ratios, aggregation layer '
-            'provided ratios and population exposure layers is illustrated'
+            'provided ratios and population exposure layers is illustrated '
             'in the table below.')
     )
     message.add(paragraph)
