@@ -1,6 +1,7 @@
 # coding=utf-8
 """Definitions relating to default setting of fresh InaSAFE."""
-from os.path import expanduser, abspath, join
+from os.path import join
+from qgis.core import QgsApplication
 # from safe.utilities.resources import resources_path
 
 inasafe_default_settings = {
@@ -22,8 +23,8 @@ inasafe_default_settings = {
     'ISO19115_EMAIL': 'info@inasafe.org',
     'ISO19115_LICENSE': 'Free use with accreditation',
 
-    'keywordCachePath': abspath(join(
-        expanduser('~'), 'inasafe', 'metadata.db')),
+    'keywordCachePath': join(
+        QgsApplication.qgisSettingsDirPath(), 'inasafe', 'metadata.db')
 
     # Make sure first to not have cyclic import
     # 'organisation_logo_path': resources_path(
