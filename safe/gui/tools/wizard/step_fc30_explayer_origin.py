@@ -139,7 +139,7 @@ class StepFcExpLayerOrigin(WizardStep, FORM_CLASS):
         message = m.Message()
         message.add(m.Paragraph(tr(
             'In this wizard step: {step_name}, you can choose where your '
-            'exposure layer come from. The option for choosing hazard layer '
+            'exposure layer come from. The option for choosing exposure layer '
             'from QGIS can not be chosen if there is no exposure layer in '
             'QGIS.').format(step_name=self.step_name)))
         return message
