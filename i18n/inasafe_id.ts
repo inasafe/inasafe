@@ -863,12 +863,12 @@
         <translation>Mengambil %s</translation>
     </message>
     <message>
-        <location filename="base_metadata.py" line="372"/>
+        <location filename="base_metadata.py" line="376"/>
         <source>the file %s does not appear to be valid JSON</source>
         <translation>berkas %s kelihatannya bukan JSON yang valid</translation>
     </message>
     <message>
-        <location filename="base_metadata.py" line="392"/>
+        <location filename="base_metadata.py" line="396"/>
         <source>the file DB entry for %s does not appear to be valid JSON</source>
         <translation>Entri berkas database untuk %s kelihatannya bukan JSON yang valid</translation>
     </message>
@@ -9174,32 +9174,32 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
     <message>
         <location filename="earthquake.py" line="116"/>
         <source>The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, zeta=2.15</source>
-        <translation type="unfinished"></translation>
+        <translation>Koefisien yang digunakan di model Indonesia adalah x=0,62275231, y=8,03314466, zeta=2,15</translation>
     </message>
     <message>
         <location filename="earthquake.py" line="116"/>
         <source>Allen, T. I., Wald, D. J., Earle, P. S., Marano, K. D., Hotovec, A. J., Lin, K., and Hearne, M., 2009. An Atlas of ShakeMaps and population exposure catalog for earthquake loss modeling, Bull. Earthq. Eng. 7, 701-718. Jaiswal, K., and Wald, D., 2010. An empirical model for global earthquake fatality estimation, Earthq. Spectra 26, 1017-1037.</source>
-        <translation type="unfinished"></translation>
+        <translation>Allen, T. I., Wald, D. J., Earle, P. S., Marano, K. D., Hotovec, A. J., Lin, K., and Hearne, M., 2009. An Atlas of ShakeMaps and population exposure catalog for earthquake loss modeling, Bull. Earthq. Eng. 7, 701-718.Jaiswal, K., and Wald, D., 2010. An empirical model for global earthquake fatality estimation, Earthq. Spectra 26, 1017-1037.</translation>
     </message>
     <message>
         <location filename="exposure_classifications.py" line="733"/>
         <source>Water bodies</source>
-        <translation type="unfinished"></translation>
+        <translation>Badan air</translation>
     </message>
     <message>
         <location filename="field_mapping_help.py" line="187"/>
         <source>The interplay between default ratios, aggregation layer provided ratios and population exposure layers is illustrated in the table below.</source>
-        <translation type="unfinished"></translation>
+        <translation>Interplay antara rasio default, lapisan agregasi yang disediakan rasio dan lapisan penduduk terpapar diilustrasikan pada tabel di bawah ini.</translation>
     </message>
     <message>
         <location filename="impact_function.py" line="726"/>
         <source>The impact function needs a {exposure} layer to run. You must provide a valid {exposure} layer.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fungsi dampak membutuhkan lapisan {exposure} untuk dijalankan. Anda harus menyediakan lapisan {exposure} yang valid.</translation>
     </message>
     <message>
         <location filename="default_values.py" line="205"/>
         <source>Default ratio of child bearing age per 100 people in the total population.</source>
-        <translation type="unfinished"></translation>
+        <translation>Rasio default untuk usia subur per 100 orang dari total populasi.</translation>
     </message>
 </context>
 <context>
