@@ -361,6 +361,12 @@ def analysis_detail_extractor(impact_report, component_metadata):
                 row = details[row_idx]
                 row = row[:column_index] + row[column_index + 1:]
                 details[row_idx] = row
+            # reduce total affected and not affected column index by 1
+            # since we are removing a column
+            if group_key == 'affected':
+                affected_header_index -= 1
+            else:
+                not_affected_header_index -= 1
             continue
         footers.append({
             'value': count_value,
