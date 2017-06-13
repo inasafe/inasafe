@@ -863,12 +863,12 @@
         <translation>Recolectando %s</translation>
     </message>
     <message>
-        <location filename="base_metadata.py" line="372"/>
+        <location filename="base_metadata.py" line="376"/>
         <source>the file %s does not appear to be valid JSON</source>
         <translation>el archivo %s no parece ser JSON válido</translation>
     </message>
     <message>
-        <location filename="base_metadata.py" line="392"/>
+        <location filename="base_metadata.py" line="396"/>
         <source>the file DB entry for %s does not appear to be valid JSON</source>
         <translation>el archivo de entrada DB para %s no parece ser un archivo JSON válido</translation>
     </message>
