@@ -232,12 +232,16 @@ class BaseMetadata(object):
         """
         # private members
         self._layer_uri = layer_uri
-        # TODO (MB): maybe use MetadataDbIO.are_metadata_file_based instead
-        self._layer_is_file_based = os.path.isfile(layer_uri)
+        if '|' in layer_uri:
+            clean_uri = layer_uri.split('|')[0]
+        else:
+            clean_uri = layer_uri
+
+        self._layer_is_file_based = os.path.exists(clean_uri)
 
         instantiate_metadata_db = False
 
-        path = os.path.splitext(layer_uri)[0]
+        path = os.path.splitext(clean_uri)[0]
 
         if xml_uri is None:
             if self.layer_is_file_based:
