@@ -15,7 +15,10 @@ from safe.definitions.layer_purposes import (
     layer_purpose_hazard,
     layer_purpose_exposure,
     layer_purpose_aggregation,
-    layer_purpose_exposure_summary
+    layer_purpose_exposure_summary,
+    layer_purpose_aggregate_hazard_impacted,
+    layer_purpose_analysis_impacted,
+    layer_purpose_exposure_summary_table
 )
 from safe.definitions.layer_modes import layer_mode_continuous
 from safe.definitions.versions import inasafe_keyword_version
@@ -23,7 +26,7 @@ from safe.metadata import (
     ExposureLayerMetadata,
     HazardLayerMetadata,
     AggregationLayerMetadata,
-    ExposureSummaryLayerMetadata,
+    OutputLayerMetadata,
     GenericLayerMetadata)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -37,7 +40,10 @@ METADATA_CLASSES = {
     layer_purpose_exposure['key']: ExposureLayerMetadata,
     layer_purpose_hazard['key']: HazardLayerMetadata,
     layer_purpose_aggregation['key']: AggregationLayerMetadata,
-    layer_purpose_exposure_summary['key']: ExposureSummaryLayerMetadata
+    layer_purpose_exposure_summary['key']: OutputLayerMetadata,
+    layer_purpose_exposure_summary_table['key']: OutputLayerMetadata,
+    layer_purpose_analysis_impacted['key']: OutputLayerMetadata,
+    layer_purpose_aggregate_hazard_impacted['key']: OutputLayerMetadata
 }
 
 
@@ -122,7 +128,7 @@ def read_iso19115_metadata(layer_uri, keyword=None):
             message += 'Layer path: %s' % layer_uri
             raise KeywordNotFoundError(message)
 
-    if isinstance(metadata, ExposureSummaryLayerMetadata):
+    if isinstance(metadata, OutputLayerMetadata):
         keywords['if_provenance'] = metadata.provenance
     return keywords
 
