@@ -1,33 +1,22 @@
-# -*- coding: utf-8 -*-
-"""
-InaSAFE Disaster risk assessment tool developed by AusAid -
-**metadata module.**
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-"""
-
-__author__ = 'marco@opengis.ch'
-__revision__ = '$Format:%H$'
-__date__ = '27/05/2015'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
+# coding=utf-8
+"""Metadata for Output Layer."""
 
 import json
 from xml.etree import ElementTree
 from safe.metadata import BaseMetadata
+
 from safe.metadata.provenance import Provenance
 from safe.metadata.utils import reading_ancillary_files, XML_NS, prettify_xml
 from safe.metadata.utils import merge_dictionaries
-
 from safe.metadata.encoder import MetadataEncoder
 
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
-class ExposureSummaryLayerMetadata(BaseMetadata):
+
+class OutputLayerMetadata(BaseMetadata):
     """
     Metadata class for exposure summary layers
 
@@ -114,7 +103,7 @@ class ExposureSummaryLayerMetadata(BaseMetadata):
 
         # initialize base class
         super(
-            ExposureSummaryLayerMetadata, self).__init__(
+            OutputLayerMetadata, self).__init__(
             layer_uri, xml_uri, json_uri)
 
     @property
@@ -125,7 +114,7 @@ class ExposureSummaryLayerMetadata(BaseMetadata):
         :return: dictionary representation of the metadata
         :rtype: dict
         """
-        metadata = super(ExposureSummaryLayerMetadata, self).dict
+        metadata = super(OutputLayerMetadata, self).dict
 
         metadata['provenance'] = self.provenance
         metadata['summary_data'] = self.summary_data
@@ -158,7 +147,7 @@ class ExposureSummaryLayerMetadata(BaseMetadata):
         :rtype: dict
         """
         with reading_ancillary_files(self):
-            metadata = super(ExposureSummaryLayerMetadata, self).read_json()
+            metadata = super(OutputLayerMetadata, self).read_json()
             if 'provenance' in metadata:
                 for provenance_step in metadata['provenance']:
                     try:
@@ -194,7 +183,7 @@ class ExposureSummaryLayerMetadata(BaseMetadata):
         :rtype: ElementTree.Element
         """
 
-        root = super(ExposureSummaryLayerMetadata, self).xml
+        root = super(OutputLayerMetadata, self).xml
         provenance_path = self._special_properties['provenance']
         provenance_element = root.find(provenance_path, XML_NS)
 
@@ -222,7 +211,7 @@ class ExposureSummaryLayerMetadata(BaseMetadata):
         """
 
         with reading_ancillary_files(self):
-            root = super(ExposureSummaryLayerMetadata, self).read_xml()
+            root = super(OutputLayerMetadata, self).read_xml()
             if root is not None:
                 self._read_provenance_from_xml(root)
         return root
@@ -313,7 +302,7 @@ class ExposureSummaryLayerMetadata(BaseMetadata):
         :param keywords:
         :return:
         """
-        super(ExposureSummaryLayerMetadata, self).update_from_dict(keywords)
+        super(OutputLayerMetadata, self).update_from_dict(keywords)
 
         if 'if_provenance' in keywords.keys():
             if_provenance = keywords['if_provenance']

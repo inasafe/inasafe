@@ -68,7 +68,17 @@ class TestGenericMetadata(TestCase):
         # print xml_filename
 
     def test_json_read(self):
+        """Test read json metadata."""
         metadata = GenericLayerMetadata(EXISTING_GENERIC_FILE)
+        with open(EXISTING_GENERIC_JSON) as f:
+            expected_metadata = f.read()
+
+        self.assertEquals(expected_metadata, metadata.json)
+
+        # With filtering
+        FILTERED_PATH = (
+            EXISTING_GENERIC_FILE + '|layerid=0|subset="population" > 100')
+        metadata = GenericLayerMetadata(FILTERED_PATH)
         with open(EXISTING_GENERIC_JSON) as f:
             expected_metadata = f.read()
 

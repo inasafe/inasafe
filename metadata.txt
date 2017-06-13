@@ -15,7 +15,7 @@ qgisMaximumVersion=2.18.99
 description=InaSAFE is free software that allows disaster managers to study realistic natural hazard impact scenarios for better planning, preparedness and response activities.
 about=Developed for the Indonesian Government - BNPB, Australian Government - AIFDR and DMInnovation and, and World Bank - GFDRR
 
-version=4.1.0
+version=4.1.1
 # alpha, beta, rc or final
 status=final
 
@@ -25,6 +25,19 @@ status=final
 # Optional items:
 
 changelog=
+    Version 4.1.1
+    - Fix failed unit test.
+    - Remove unused method in KeywordIO.
+    - Fix #3751. Set to use default db path from definition.
+    - Rename metadata for output layer. Add other output explicitly to metadata mapping.
+    - Remove unused code in metadata utilities.
+    - Update translations
+    - Fix #3857. Ignore filter in path.
+    - Fix #4248. Expression.
+    - Update for Badan Geologi landcover classification
+    - Update French Translations
+    - Fix some strings in Python
+    - Add pregnant and lactating displaced to the count fields (#4244)
     Version 4.1.0
     - Reporting : Improved action and checklist reporting
     - Reporting : Quick save as pdf
@@ -40,11 +53,11 @@ changelog=
     - Issues : Bug fixes and improvements
 
 # tags are comma separated with spaces allowed
-tags=contingency planning, impact assessments, disaster scenarios, natural hazards
+tags=contingency planning, impact assessments, disaster scenarios, natural hazards,risk
 
 homepage=http://www.inasafe.org/
-tracker=https://github.com/AIFDR/inasafe/issues
-repository=https://github.com/AIFDR/inasafe
+tracker=https://github.com/inasafe/inasafe/issues
+repository=https://github.com/inasafe/inasafe
 icon=resources/img/icons/icon.png
 # experimental flag
 experimental=False

@@ -1,4 +1,5 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="fr" sourcelanguage="" version="2.0">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS><TS version="2.0" language="fr" sourcelanguage="">
 <context>
     <name>@default</name>
     <message>
@@ -587,7 +588,7 @@
         <translation>Proportion de personnes âgées</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1320"/>
+        <location filename="definitions_help.py" line="1333"/>
         <source>Displacement rate</source>
         <translation>Taux de d&apos;évacuation</translation>
     </message>
@@ -782,7 +783,7 @@
         <translation>Une &lt;b&gt;inondation&lt;/b&gt; désigne le recouvrement de parties de terre ferme par un volume d&apos;eau important. Par exemple, une &lt;b&gt;inondation&lt;/b&gt;  peut survenir après de fortes pluies, lorsque un cours d&apos;eau sort de ses berges ou lorsqu&apos;un barrage cède. Les effets d&apos;une &lt;b&gt;inondation&lt;/b&gt;  pour une partie de terre ferme sont qu&apos;elle devient humide. </translation>
     </message>
     <message>
-        <location filename="hazard.py" line="433"/>
+        <location filename="hazard.py" line="434"/>
         <source>A &lt;b&gt;volcano&lt;/b&gt; describes a mountain which has a vent through which rock fragments, ash, lava, steam and gases can be ejected from below the earth&apos;s surface. The type of material ejected depends on the type of &lt;b&gt;volcano&lt;/b&gt;.</source>
         <translation>Un &lt;b&gt;volcan&lt;/b&gt; désigne un édifice géologique qui résulte de la montée d&apos;un magma puis de l&apos;éruption d&apos;une partie de ce magma, et par lequel des blocs de roche, des cendres, de la lave, de la vapeur et des gaz peuvent être éjectés. Les types de matériaux éjectés dépendent du type de &lt;b&gt;volcan&lt;/b&gt;.</translation>
     </message>
@@ -862,12 +863,12 @@
         <translation>Téléchargement</translation>
     </message>
     <message>
-        <location filename="base_metadata.py" line="372"/>
+        <location filename="base_metadata.py" line="376"/>
         <source>the file %s does not appear to be valid JSON</source>
         <translation>Le fichier %s ne semble pas être compatible JSON</translation>
     </message>
     <message>
-        <location filename="base_metadata.py" line="392"/>
+        <location filename="base_metadata.py" line="396"/>
         <source>the file DB entry for %s does not appear to be valid JSON</source>
         <translation>Le fichier d&apos;entrée DB pour %s ne semble pas être compatible JSON</translation>
     </message>
@@ -1187,12 +1188,12 @@
         <translation>Inondation</translation>
     </message>
     <message>
-        <location filename="hazard.py" line="374"/>
+        <location filename="hazard.py" line="375"/>
         <source>Tsunami</source>
         <translation>Tsunami</translation>
     </message>
     <message>
-        <location filename="hazard.py" line="432"/>
+        <location filename="hazard.py" line="433"/>
         <source>Volcano</source>
         <translation>Volcan</translation>
     </message>
@@ -1450,7 +1451,7 @@ Vous devez tout d&apos;abord définir la catégorie à laquelle appartient votre
         <translation>Vous avez sélectionné une couche pour laquelle il est nécessaire de définir ou mettre à jour les mots-clés InaSAFE. Dans les prochaines étapes, vous pourrez attribuer des mot-clés à cette couche. Vous devez d&apos;abord confirmer qu&apos;il s&apos;agit bien d&apos;une couche d&apos;&lt;b&gt;agrégation&lt;/b&gt;. </translation>
     </message>
     <message>
-        <location filename="hazard.py" line="491"/>
+        <location filename="hazard.py" line="492"/>
         <source>Hazards</source>
         <translation>Aléas</translation>
     </message>
@@ -1500,7 +1501,7 @@ Vous devez tout d&apos;abord définir la catégorie à laquelle appartient votre
         <translation>Ceci désigne le type de scénario d&apos;aléas qui est représenté par la couche. Il y a deux valeurs possibles pour cet attribut, événement simple ou événements multiples.</translation>
     </message>
     <message>
-        <location filename="hazard.py" line="315"/>
+        <location filename="hazard.py" line="316"/>
         <source>Volcanic ash</source>
         <translation>Nuée ardente</translation>
     </message>
@@ -2466,7 +2467,7 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
         <translation>Des &lt;b&gt;événements uniques&lt;/b&gt; d&apos;aléas peuvent être basés sur des observations historiques telles qu&apos;une carte d&apos;aléas de tous les dépôts volcaniques autour d&apos;un volcan.&lt;p&gt;Ce type d&apos;aléas montre les zones qui peuvent être impactées par une éruption volcanique dans le futur. Un autre exemple peut⁻être un modèle d&apos;analyse probabiliste des aléas qui montrerait la probabilité d&apos;un séisme de magnitude 7 dans les 50 prochaines années.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="hazard.py" line="375"/>
+        <location filename="hazard.py" line="376"/>
         <source>A &lt;b&gt;tsunami&lt;/b&gt; describes a large ocean wave or series or waves usually caused by an underwater earthquake or volcano. A &lt;b&gt;tsunami&lt;/b&gt; at sea may go unnoticed but a &lt;b&gt;tsunami&lt;/b&gt; wave that strikes land may cause massive destruction and flooding.</source>
         <translation>Un &lt;b&gt;tsunami&lt;/b&gt; désigne une grande vague ou une série de vagues marines ou océaniques, généralement provoqués par un séisme sous-marin ou un volcan. Un &lt;b&gt;tsunami&lt;/b&gt; en mer peut ne pas se remarquer mais une vague d&apos;un &lt;b&gt;tsunami&lt;/b&gt; qui atteint la côte peut causer des destructions conséquentes et des inondations.</translation>
     </message>
@@ -2771,7 +2772,7 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
         <translation>Lors de la prochaine étape, vous pourrez attribuer des mots-clés à cette couche. </translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1318"/>
+        <location filename="definitions_help.py" line="1331"/>
         <source>Affected</source>
         <translation>Affecté</translation>
     </message>
@@ -3129,7 +3130,10 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
         <location filename="needs_manager_dialog.py" line="536"/>
         <source>A displaced person should be provided with %(default value)s %(unit)s/%(units)s/%(unit abbreviation)s of %(resource name)s. Though no less than %(minimum allowed)s and no more than %(maximum allowed)s. This should be provided %(frequency)s.default value{{ Default }}</source>
         <comment>unit{{ Unit }}</comment>
-        <translation><numerusform>Une personne déplacée doit être fourni avec %(default)s %(unit)s/%(units)s/ de %(unit abbreviation)s %(resource name)s. Cependant, pas moins que %(minimum allowed)s et pas plus que %(maximum allowed)s. Cela doit être fourni %(frequency)s.default{{ Default }}</numerusform><numerusform>Une personne déplacée doit être fourni avec %(default)s %(unit)s/%(units)s/ de %(unit abbreviation)s %(resource name)s. Cependant, pas moins que %(minimum allowed)s et pas plus que %(maximum allowed)s. Cela doit être fourni %(frequency)s.default{{ Default }}</numerusform></translation>
+        <translation>
+            <numerusform>Une personne déplacée doit être fourni avec %(default)s %(unit)s/%(units)s/ de %(unit abbreviation)s %(resource name)s. Cependant, pas moins que %(minimum allowed)s et pas plus que %(maximum allowed)s. Cela doit être fourni %(frequency)s.default{{ Default }}</numerusform>
+            <numerusform>Une personne déplacée doit être fourni avec %(default)s %(unit)s/%(units)s/ de %(unit abbreviation)s %(resource name)s. Cependant, pas moins que %(minimum allowed)s et pas plus que %(maximum allowed)s. Cela doit être fourni %(frequency)s.default{{ Default }}</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="shake_grid.py" line="617"/>
@@ -3187,7 +3191,7 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
         <translation>Réseau routier</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1253"/>
+        <location filename="definitions_help.py" line="1266"/>
         <source>Length</source>
         <translation>Longueur</translation>
     </message>
@@ -3752,7 +3756,7 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
         <translation>Un terrain agricole utilisé pour la labour et le bétail (animaux, céréales, fleurs, fruits, légumes).</translation>
     </message>
     <message>
-        <location filename="exposure_classifications.py" line="649"/>
+        <location filename="exposure_classifications.py" line="732"/>
         <source>Water</source>
         <translation>Eau</translation>
     </message>
@@ -3869,7 +3873,7 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
     <message>
         <location filename="fields.py" line="205"/>
         <source>The value attribute for a layer describes the intensity of a hazardover the area described by the geometry of the feature. For example a flood polygon may have a hazard value of &quot;1&quot; indicating that the flood depth over that whole polygon is 1m. The hazard value is the basis for carrying out an impact assessment. InaSAFE will always classify the values in the value field into thresholds. For example, values greater than or equal to zero meters and less than 0.5m might be a reclassified into a threshold used to define a &quot;Low&quot; flood class).</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="fields.py" line="228"/>
@@ -4354,12 +4358,12 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
     <message>
         <location filename="layer_geometry.py" line="45"/>
         <source>A layer composed of polygon features that represent areas of hazard or exposure. For example areas of flood represented as polygons (for a hazard) or building footprints represented as polygons (for an exposure). The polygon layer will often need the presence of specific layer attributes too - these will vary depending on whether the layer represents a hazard, exposure or aggregation layer . Polygon layers can also be used for aggregation - where impact analysis results per boundary such as village or district boundaries.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="layer_modes.py" line="40"/>
         <source>&lt;b&gt;Classified&lt;/b&gt; data can be used for either hazard or exposure data and can be used for both raster and vector layer types where the attribute values represent a classified or coded value.&lt;p&gt;For example, classified values in a flood raster data set might represent discrete classes where a value of 1 might represent the low inundation class, a value of 2 might represent the medium inundation class and a value of 3 might represent the high inundation class.&lt;/p&gt;&lt;p&gt;Classified values in a vector (polygon) volcano data set might represent discrete classes where a value of I might represent low volcanic hazard, a value of II might represent medium volcanic hazard and a value of III  might represent a high volcanic hazard.&lt;/p&gt;&lt;p&gt;Classified values in a vector exposure data set might include building type or road type.&lt;/p&gt;</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="layer_purposes.py" line="85"/>
@@ -4389,7 +4393,7 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
     <message>
         <location filename="post_processor_inputs.py" line="28"/>
         <source>This type of input takes value from a keyword for the layer being handled.</source>
-        <translation>The type d&apos;entrée nécessite une valeur dans les mots-clés de la couche.</translation>
+        <translation>Ce type d&apos;entrée nécessite une valeur dans les mots-clés de la couche.</translation>
     </message>
     <message>
         <location filename="post_processor_inputs.py" line="51"/>
@@ -4587,7 +4591,7 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
         <translation>Erreur de géométrie: une ou plusieurs entités sont ignorées du aux géométries invalides.</translation>
     </message>
     <message>
-        <location filename="prepare_vector_layer.py" line="360"/>
+        <location filename="prepare_vector_layer.py" line="361"/>
         <source>Features which have been removed from %s : %s</source>
         <translation>Entités qui ont été supprimés de %s : %s</translation>
     </message>
@@ -4682,7 +4686,7 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
         <translation>Défauts InaSAFE</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1317"/>
+        <location filename="definitions_help.py" line="1349"/>
         <source>Name</source>
         <translation>Nom </translation>
     </message>
@@ -4692,12 +4696,12 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
         <translation>Valeur par défaut</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1322"/>
+        <location filename="definitions_help.py" line="1335"/>
         <source>Default min</source>
         <translation>Défaut min</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1323"/>
+        <location filename="definitions_help.py" line="1336"/>
         <source>Default max</source>
         <translation>Défaut max</translation>
     </message>
@@ -4777,12 +4781,12 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
         <translation>Toutes Unités</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1046"/>
+        <location filename="definitions_help.py" line="1045"/>
         <source>Plural</source>
         <translation>Pluriel</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1047"/>
+        <location filename="definitions_help.py" line="1046"/>
         <source>Abbreviation</source>
         <translation>Abréviation</translation>
     </message>
@@ -4822,102 +4826,102 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
         <translation>Contenu</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="927"/>
+        <location filename="definitions_help.py" line="926"/>
         <source>General notes:</source>
         <translation>Notes générales:</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="976"/>
+        <location filename="definitions_help.py" line="975"/>
         <source>Notes for continuous datasets:</source>
         <translation>Notes pour les jeux de données continus:</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="985"/>
+        <location filename="definitions_help.py" line="984"/>
         <source>Notes for classified datasets:</source>
         <translation>Notes pour les jeux de données classifiés:</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="994"/>
+        <location filename="definitions_help.py" line="993"/>
         <source>Notes for single events</source>
         <translation>Notes pour les événements uniques</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1005"/>
+        <location filename="definitions_help.py" line="1004"/>
         <source>Notes for multi events / scenarios:</source>
         <translation>Notes pour les événements multiples / scénarios:</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1018"/>
+        <location filename="definitions_help.py" line="1017"/>
         <source>Actions:</source>
         <translation>Actions:</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1042"/>
+        <location filename="definitions_help.py" line="1041"/>
         <source>Units:</source>
         <translation>Unités:</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1073"/>
+        <location filename="definitions_help.py" line="1072"/>
         <source>Hazard classifications</source>
         <translation>Classification de l&apos;aléa</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1158"/>
+        <location filename="definitions_help.py" line="1170"/>
         <source>unspecified</source>
         <translation>non spécifié(e)</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1180"/>
+        <location filename="definitions_help.py" line="1193"/>
         <source>Exposure entities in this class ARE considered affected</source>
         <translation>Les entités de l&apos;enjeu dans cette classe SONT considérées affectées.</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1183"/>
+        <location filename="definitions_help.py" line="1196"/>
         <source>Exposure entities in this class are NOT considered affected</source>
         <translation>Les entités de l&apos;enjeu dans cette classe NE sont PAS considérées affectées.</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1189"/>
+        <location filename="definitions_help.py" line="1202"/>
         <source>This class is NOT required in the hazard keywords.</source>
         <translation>Cette classe N&apos;EST PAS requise dans les mots-clés de l&apos;aléa.</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1192"/>
+        <location filename="definitions_help.py" line="1205"/>
         <source>This class IS required in the hazard keywords.</source>
         <translation>Cette classe EST requise dans les mots-clés de l&apos;aléa.</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1251"/>
+        <location filename="definitions_help.py" line="1264"/>
         <source>Field Name</source>
         <translation>Nom du champ</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1252"/>
+        <location filename="definitions_help.py" line="1265"/>
         <source>Type</source>
         <translation>Type</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1254"/>
+        <location filename="definitions_help.py" line="1267"/>
         <source>Precision</source>
         <translation>Précision</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1299"/>
+        <location filename="definitions_help.py" line="1312"/>
         <source>Decimal number</source>
         <translation>Nombre décimal</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1300"/>
+        <location filename="definitions_help.py" line="1313"/>
         <source>Text</source>
         <translation>Texte</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1301"/>
+        <location filename="definitions_help.py" line="1314"/>
         <source>Whole number</source>
         <translation>Nombre entier</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1321"/>
+        <location filename="definitions_help.py" line="1350"/>
         <source>Default values</source>
         <translation>Valeurs par défaut</translation>
     </message>
@@ -4934,7 +4938,7 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
     <message>
         <location filename="dock_help.py" line="161"/>
         <source>Aggregation is the process whereby we group the analysis results by district so that you can see how many people, roads or buildings were affected in each area. This will help you to understand where the most critical needs are.  Aggregation is optional in InaSAFE - if you do not use aggregation, the entire analysis area will be used for the data summaries. Typically aggregation layers in InaSAFE have the name of the district or reporting area as attributes. It is also possible to use extended attributes to indicate the ratio of men and women; youth, adults and elderly living in each area. Where these are provided and the exposure layer is population, InaSAFE will provide a demographic breakdown per aggregation area indicating how many men, women, etc. were probably affected in that area.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="dock_help.py" line="199"/>
@@ -5223,102 +5227,102 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>Fonction</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="767"/>
+        <location filename="impact_function.py" line="768"/>
         <source>The layer {source} must be updated to {version}.</source>
         <translation>La couche {source} doit être mise à jour vers {version}.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="816"/>
+        <location filename="impact_function.py" line="817"/>
         <source>The exposure layer is compulsory</source>
         <translation>La couche d&apos;enjeux être obligatoire</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="816"/>
+        <location filename="impact_function.py" line="817"/>
         <source>The impact function needs an exposure layer to run. You must provide it.</source>
         <translation>La fonction d&apos;impact a besoin d&apos;une couche d&apos;enjeux pour se lancer. Vous devez vous en fournir une.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="830"/>
+        <location filename="impact_function.py" line="831"/>
         <source>The hazard layer is compulsory</source>
         <translation>La couche d&apos;aléa est obligatoire</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="830"/>
+        <location filename="impact_function.py" line="831"/>
         <source>The impact function needs a hazard layer to run. You must provide it.</source>
         <translation>La fonction d&apos;impact a besoin d&apos;une couche d&apos;aléa pour s&apos;exécuter. Vous devez la fournir.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="874"/>
+        <location filename="impact_function.py" line="875"/>
         <source>Error with the requested extent</source>
         <translation>Erreur avec l&apos;emprise demandée</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="845"/>
+        <location filename="impact_function.py" line="846"/>
         <source>Requested Extent must be null when an aggregation is provided.</source>
         <translation>L&apos;Emprise Demandée doit être nulle quand une agrégation est fournie.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="854"/>
+        <location filename="impact_function.py" line="855"/>
         <source>Requested Extent CRS must be null when an aggregation is provided.</source>
         <translation>Le CRS de l&apos;Emprise Demandée doit être nul quand une agrégation est fournie.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="874"/>
+        <location filename="impact_function.py" line="875"/>
         <source>Requested Extent CRS must be set when requested is not null.</source>
         <translation>Le CRS de l&apos;Emprise Demandée doit être défini.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="926"/>
+        <location filename="impact_function.py" line="927"/>
         <source>need evacuation</source>
         <translation>ont besoin d&apos;évacuation</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="928"/>
+        <location filename="impact_function.py" line="929"/>
         <source>be affected</source>
         <translation>sont affectées</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="987"/>
+        <location filename="impact_function.py" line="988"/>
         <source>Layers need to overlap.</source>
         <translation>Les couches doivent se superposer.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="987"/>
+        <location filename="impact_function.py" line="988"/>
         <source>The exposure and the hazard layer need to overlap.</source>
         <translation>L&apos;enjeu et l&apos;aléa doivent se recouvrir.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1006"/>
+        <location filename="impact_function.py" line="1007"/>
         <source>The bounding box need to overlap layers.</source>
         <translation>L&apos;emprise doit recouvrir les couches.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1006"/>
+        <location filename="impact_function.py" line="1007"/>
         <source>The requested analysis extent is not overlaping the exposure and the hazard.</source>
         <translation>L&apos;Emprise Demandée d&apos;Analyse ne recouvre pas l&apos;enjeu et l&apos;aléa.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1128"/>
+        <location filename="impact_function.py" line="1129"/>
         <source>You need to run `prepare` first.</source>
         <translation>Vous devez utiliser `prepare` avant.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1157"/>
+        <location filename="impact_function.py" line="1158"/>
         <source>No features in the extent</source>
         <translation>Pas d&apos;entité dans l&apos;emprise</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1163"/>
+        <location filename="impact_function.py" line="1164"/>
         <source>Try zooming in to a bigger area or check your features (geometry and attribute table). For instance, an empty geometry or an hazard without value are removed during the process.</source>
         <translation>Essayez de dézoomer sur une zone plus grande ou vérifiez vos entités (géométrie et table attributaire). Par exemple, une géométrie nulle ou un aléa sans valeur sont supprimés pendant le traitement.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1177"/>
+        <location filename="impact_function.py" line="1178"/>
         <source>Configuration issue</source>
         <translation>Problème de configuration</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1179"/>
+        <location filename="impact_function.py" line="1180"/>
         <source>There is a problem with the Processing plugin.</source>
         <translation>Il y a un problème avec le plugin Processing.</translation>
     </message>
@@ -5515,7 +5519,7 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
     <message>
         <location filename="concepts.py" line="21"/>
         <source>&lt;p&gt;An &lt;b&gt;analysis&lt;/b&gt; from the point of view of using InaSAFE is the process whereby a hazard layer, an exposure layer and an optional aggregation layer are used to determine the potential impact of the hazard data on the exposure. The analysis results are grouped by region (as defined in the aggregation layer).&lt;/p&gt; &lt;p&gt;In InaSAFE the analysis process commences with a preparation phase where each input layer is pre-processed to ensure that it is in a consistent state. The hazard and aggregation are reprojected to the same coordinate reference system of the exposure dataset. Any data that is not within the selected aggregation areas is removed. Note that any modifications made are done on copies of the original data - the original data are not modified in any way.&lt;/p&gt;&lt;p&gt;Any continuous datasets are reclassified into classfied (also sometimes referred to as categorical) datasets.&lt;/p&gt;&lt;p&gt;The aggregation layer and the hazard are combined using a GIS union operation and then each exposure within these areas is counted to arrive at a total number, length or area of exposure features per aggregation area. These processes are defined in more detail below. After the primary GIS processing has been carried out, one or more post-processors are applied to the resulting datasets in order to compute statistics like the breakdown of buildings or the area of each land use type in the affected areas.&lt;/p&gt;&lt;p&gt;The final part of the analysis process is report generation whereby InaSAFE generates various tables and cartographic products to represent the result summaries. InaSAFE will also create a number of spatial and non-spatial products which you can use to generate your own reports - for example by importing the data into a spreadsheet and further analysing it there.&lt;/p&gt;</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="concepts.py" line="136"/>
@@ -5559,7 +5563,7 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
     </message>
     <message>
         <location filename="default_values.py" line="46"/>
-        <source>Default value for feature rate per mÂ²</source>
+        <source>Default value for feature rate per m&#xc2;&#xb2;</source>
         <translation>Valeur par défaut pour le taux d&apos;une entité par m²</translation>
     </message>
     <message>
@@ -5759,7 +5763,7 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
     </message>
     <message>
         <location filename="units.py" line="180"/>
-        <source>mÂ²</source>
+        <source>m&#xc2;&#xb2;</source>
         <translation>m²</translation>
     </message>
     <message>
@@ -5783,27 +5787,27 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>L&apos;outil Multi-Tampon</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="925"/>
+        <location filename="definitions_help.py" line="924"/>
         <source>Notes:</source>
         <translation>Notes:</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="997"/>
+        <location filename="definitions_help.py" line="996"/>
         <source>No single event notes defined.</source>
         <translation>Pas de note pour un événement unique défini</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1010"/>
+        <location filename="definitions_help.py" line="1009"/>
         <source>No multi-event notes defined.</source>
         <translation>Pas de note pour un événement multiple défini</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1060"/>
+        <location filename="definitions_help.py" line="1059"/>
         <source>Fields:</source>
         <translation>Champs:</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1086"/>
+        <location filename="definitions_help.py" line="1085"/>
         <source>Classes:</source>
         <translation>Classes:</translation>
     </message>
@@ -5918,7 +5922,7 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>L&apos;emprise demandée ne se superpose pas aux couches.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1047"/>
+        <location filename="impact_function.py" line="1048"/>
         <source>There is a problem with the aggregation layer.</source>
         <translation>Il y a un problème avec la couche d&apos;agrégation.</translation>
     </message>
@@ -6053,22 +6057,22 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>Un post processeur pour déterminer si une entité est affectée ou pas (selon la classification de l&apos;aléa). Cela peut-être &quot;{not_exposed_value}&quot;.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="886"/>
+        <location filename="impact_function.py" line="887"/>
         <source>Incompatible exposure/hazard</source>
         <translation>Incompatibilité enjeu/aléa</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="888"/>
+        <location filename="impact_function.py" line="889"/>
         <source>The hazard layer is not set up for this kind of exposure. In InaSAFE, you need to define keywords in the hazard layer for each exposure type that you want to use with the hazard.</source>
         <translation>La couche d&apos;aléa n&apos;est pas définie pour ce type d&apos;enjeu. Dans InaSAFE, vous devez définir les mots-clés dans la couche d&apos;aléa pour chaque type d&apos;enjeu que vous souhaiteriez utiliser avec l&apos;aléa.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="895"/>
+        <location filename="impact_function.py" line="896"/>
         <source>Please select the hazard layer in the legend and then run the keyword wizard to define the needed keywords for {exposure_type} exposure.</source>
         <translation>Veuillez sélectionner la couche d&apos;aléa dans la légende et relancez l&apos;assistant des mots-clés pour définir les mots-clés nécessaires pour l&apos;enjeu {exposure_type}.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1183"/>
+        <location filename="impact_function.py" line="1184"/>
         <source>InaSAFE depends on the QGIS Processing plugin. This is a core plugin that ships with QGIS. It used to be possible to install the processing plugin from the QGIS Plugin Manager, however we advise you not to use these version since the Plugin Manager version may be incompatible with the version needed by InaSAFE. To resolve this issue, check in your .qgis2/python/plugins directory if you have a processing folder. If you do, remove the processing folder and then restart QGIS. If this issue persists, please report the problem to the InaSAFE team.</source>
         <translation>InaSAFE dépend sur le plugin QGIS Processing. C&apos;est un plugin core livré avec QGIS. Il a été possible d&apos;installer le plugin Processing depuis le gestionnaire d&apos;extension de QGIS, cependant nous recommandons de plus utiliser cette version car elle peut-être incompatible avec la version souhaitée par InaSAFE. Pour résoudre ce problème, vérifiez dans votre répertoire .qgis2/python/plugins si vous avez un dossier processing. Si c&apos;est le cas, supprimez ce dossier et redémarrer QGIS. Si le problème persiste, rapportez le problème à l&apos;équipe InaSAFE.</translation>
     </message>
@@ -6123,7 +6127,7 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>La fonction d&apos;impact n&apos;a pas été capable de se préparer à cause d&apos;un bug.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1159"/>
+        <location filename="impact_function.py" line="1160"/>
         <source>There are no features in the analysis extent.</source>
         <translation>Il n&apos;y a pas d&apos;entité dans l&apos;emprise d&apos;analyse.</translation>
     </message>
@@ -6213,12 +6217,12 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>Il convient de prendre en compte que lors de l&apos;application d&apos;un modèle empirique de mortalité pour les séismes, celui-ci n&apos;a pas été calibré selon les mêmes paramètres.</translation>
     </message>
     <message>
-        <location filename="hazard.py" line="337"/>
+        <location filename="hazard.py" line="338"/>
         <source>Volcanic ash is modelled hazard data estimating the thickness of ash on the ground following a volcanic eruption.</source>
         <translation>Les nuées ardentes volcaniques concernent des données sur l&apos;épaisseur des cendres au sol précédent une éruption volcanique.</translation>
     </message>
     <message>
-        <location filename="hazard.py" line="348"/>
+        <location filename="hazard.py" line="349"/>
         <source>What action can be taken to secure water supplies and protect crops?</source>
         <translation>Quelles mesures peuvent être prises pour sécuriser l&apos;eau et protéger les champs ?</translation>
     </message>
@@ -6748,12 +6752,12 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>Vous avez sélectionné &lt;b&gt;%s %s&lt;/b&gt; comme une couche &lt;b&gt;continue&lt;/b&gt; avec &lt;b&gt;%s&lt;/b&gt;. La valeur minimale sera exclue de l&apos;intervalle, alors que la valeur maximale sera inclue. Veuillez indiquer les valeurs minimale et maximale pour chaque classe ci-dessous. La valeur minimale de la couche est &lt;b&gt;%s&lt;/b&gt; et la valeur maximale est &lt;b&gt;%s&lt;/b&gt;.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1047"/>
+        <location filename="impact_function.py" line="1048"/>
         <source>The aggregation layer seems to have a problem. Some features might be invalid. You should check the validity of this layer or use a selection within this layer.</source>
         <translation>La couche d&apos;agrégation semble avoir des problèmes. Quelques entités peuvent être invalides. Vous devez vérifier la validité de votre couche ou utiliser une sélection au sein de cette couche.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1394"/>
+        <location filename="impact_function.py" line="1395"/>
         <source>Something went wrong with the datastore : {error_message}</source>
         <translation>Une erreur est survenu avec le entrepôt : {error_message}</translation>
     </message>
@@ -6924,7 +6928,7 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
     </message>
     <message>
         <location filename="post_processors.py" line="85"/>
-        <source>A post processor to calculate the value of a feature based on its size. If a feature is a polygon the size is calculated as the area in mÂ². If the feature is a line we use length in metres.</source>
+        <source>A post processor to calculate the value of a feature based on its size. If a feature is a polygon the size is calculated as the area in m&#xc2;&#xb2;. If the feature is a line we use length in metres.</source>
         <translation>Un post processor pour calculer la valeur de l&apos;entité basée sur sa taille. Si l&apos;entité est un polygone, le résultat est la surface en m². Si l&apos;entité est une ligne, nous utilisons la longueur en mètre.</translation>
     </message>
     <message>
@@ -7103,12 +7107,12 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>&quot;Déplacée&quot; est défini comme: {concept} Dans le cas ou des données populations sont disponibles, InaSAFE calculera le nombre de personnes déplacées par entité d&apos;enjeu, par agrégation et pour l&apos;analyse. La ratio de d&apos;évacuation est calculé grâce aux définitions pour chaque classe d&apos;aléa.</translation>
     </message>
     <message>
-        <location filename="hazard.py" line="316"/>
+        <location filename="hazard.py" line="317"/>
         <source>&lt;b&gt;Volcanic ash&lt;/b&gt; describes fragments of pulverized rock, minerals and volcanic glass, ejected into the atmosphere during volcanic eruptions.</source>
         <translation>&lt;b&gt;Les nuées ardentes&lt;/b&gt; décrivent des fines particules de roches et de minéraux qui sont éjectées d&apos;un volcan dans l&apos;atmosphère. </translation>
     </message>
     <message>
-        <location filename="hazard.py" line="398"/>
+        <location filename="hazard.py" line="399"/>
         <source>Tsunami hazard scenarios estimate the maximum extent of tsunami waves on land.</source>
         <translation>Les scénarios d&apos;un aléa tsunami estiment l&apos;emprise maximum d&apos;un tsunami sur les terres.</translation>
     </message>
@@ -7139,7 +7143,7 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
     </message>
     <message>
         <location filename="units.py" line="164"/>
-        <source>&lt;b&gt;Hectare&lt;/b&gt; is an SI accepted metric system unit of area equal to 100 ares (10,000 mÂ²) and primarily used in the measurement of land</source>
+        <source>&lt;b&gt;Hectare&lt;/b&gt; is an SI accepted metric system unit of area equal to 100 ares (10,000 m&#xc2;&#xb2;) and primarily used in the measurement of land</source>
         <translation>&lt;b&gt;Hectare&lt;/b&gt; est une unité métrique du SI pour mesurer des surfaces. Un hectare est égal à 100 ares (10 000 mÂ²) et est utilisé principalement dans la mesure de l&apos;occupation du sol.</translation>
     </message>
     <message>
@@ -7165,7 +7169,7 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
     <message>
         <location filename="layer_purposes.py" line="86"/>
         <source>An &lt;b&gt;aggregate hazard impacted&lt;/b&gt; layer is created during an InaSAFE analysis. This layer is a cross product between the hazard layer, the aggregate layer and the exposure summary layer. The layer geometries are firstly a union between the hazard layer and the aggregation layer. If the exposure is indivisible (e.g. building polygons) or point based (e.g. places, building points), the the aggregate hazard impacted layer will include a count of the number of features per intersected aggregate hazard polygon and, if applicable, either the length or the area of the exposure features contained within each polygon. If the exposure data is divisible (e.g. landcover polygons), those polygons will again be unioned with the output from the aggregation layer / hazard layer intersection process. As well as simple metrics of area or distance, additional columns will be writen to the aggregate hazard layer breaking down features by their classes and providing other similar metrics.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="layer_purposes.py" line="117"/>
@@ -7180,7 +7184,7 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
     <message>
         <location filename="layer_purposes.py" line="136"/>
         <source>An &lt;b&gt;analysis impacted&lt;/b&gt; layer is the result from InaSAFE analysis. It contains only one geometry polygon. This geometry is created by computing the outer bounding polygon of all of the aggregation layer features that were used for the analysis. Whereas the aggregation summary layer provides summaries by the classes of exposure feature types, the analysis impacted layer provides summaries by &lt;b&gt;hazard zone&lt;/b&gt;. For example, when carrying out an impact assessment of flood on roads, the analysis impacted layer will contain columns with &quot;wet&quot; and &quot;dry&quot; counts for roads.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="layer_purposes.py" line="157"/>
@@ -7288,11 +7292,6 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>Plantation</translation>
     </message>
     <message>
-        <location filename="exposure_classifications.py" line="733"/>
-        <source>Water Supply</source>
-        <translation>Approvisionnement en Eau</translation>
-    </message>
-    <message>
         <location filename="exposure_classifications.py" line="760"/>
         <source>Forest</source>
         <translation>Forêt</translation>
@@ -7360,7 +7359,7 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
     <message>
         <location filename="concepts.py" line="228"/>
         <source>Evacuated people are people who, for different reasons and circumstances because of risk conditions or disaster, move temporarily to safer places before, during or after the occurrence of a hazardous event. Evacuation can occur from places of residence, workplaces, schools and hospitals to other places. Evacuation is usually a planned and organised mobilisation of persons, animals and goods for eventual return. In InaSAFE, demographic and minimum needs reports are based on displaced / evacuated people.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="hazard_classifications.py" line="1834"/>
@@ -7373,12 +7372,12 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>Non Déplacées</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="964"/>
+        <location filename="definitions_help.py" line="963"/>
         <source>Notes for exposure : {exposure_name}</source>
         <translation>Notes pour l&apos;enjeu : {exposure_name}</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1030"/>
+        <location filename="definitions_help.py" line="1029"/>
         <source>Actions for exposure : {exposure_name}</source>
         <translation>Actions pour l&apos;enjeu : {exposure_name}</translation>
     </message>
@@ -7398,7 +7397,7 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>La version {layer_version} des mots-clés de votre couche ne fonctionne pas avec votre version d&apos;InaSAFE ({inasafe_version}). Si vous souhaitez utiliser cette couche en tant que couche d&apos;aléas, enjeux ou agrégation dans une analyse InaSAFE, veuillez mettre à jour les mots-clés en utilisant l&apos;assistant de création de mots-clés. Vous pouvez l&apos;ouvrir en cliquant sur </translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="913"/>
+        <location filename="impact_function.py" line="914"/>
         <source>{hazard_type} {hazard_geometry} On {exposure_type} {exposure_geometry}</source>
         <translation>{hazard_type} {hazard_geometry} Sur {exposure_type} {exposure_geometry}</translation>
     </message>
@@ -7410,67 +7409,67 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
     <message>
         <location filename="default_values.py" line="82"/>
         <source>Infant Ratio Global Default</source>
-        <translation type="unfinished"/>
+        <translation>Ratio Nourrisson par Défaut Global</translation>
     </message>
     <message>
         <location filename="default_values.py" line="95"/>
         <source>Child Ratio Global Default</source>
-        <translation type="unfinished"/>
+        <translation>Ratio Enfant par Défaut Global</translation>
     </message>
     <message>
         <location filename="default_values.py" line="153"/>
         <source>Under 5 Years Ratio Global Default</source>
-        <translation type="unfinished"/>
+        <translation>Ratio Moins de 5 Ans par Défaut Global</translation>
     </message>
     <message>
         <location filename="default_values.py" line="168"/>
         <source>Over 60 Years Ratio Global Default</source>
-        <translation type="unfinished"/>
+        <translation>Ratio Plus de 60 Ans par Défaut Global</translation>
     </message>
     <message>
         <location filename="default_values.py" line="183"/>
         <source>Disabled Ratio Global Default</source>
-        <translation type="unfinished"/>
+        <translation>Ratio Handicapé par Défaut Global</translation>
     </message>
     <message>
         <location filename="default_values.py" line="197"/>
         <source>Child Bearing Age Ratio Global Default</source>
-        <translation type="unfinished"/>
+        <translation>Ratio En Âge de Procréer par Défaut</translation>
     </message>
     <message>
         <location filename="age_field_group.py" line="27"/>
         <source>Age Ratio</source>
-        <translation type="unfinished"/>
+        <translation>Ratio Âge</translation>
     </message>
     <message>
         <location filename="age_field_group.py" line="51"/>
         <source>Age Count</source>
-        <translation type="unfinished"/>
+        <translation>Effectif Âge</translation>
     </message>
     <message>
         <location filename="age_field_group.py" line="73"/>
         <source>Age Displaced Count</source>
-        <translation type="unfinished"/>
+        <translation>Effectif Âge Déplacé</translation>
     </message>
     <message>
         <location filename="gender_field_group.py" line="20"/>
         <source>Gender Ratio</source>
-        <translation type="unfinished"/>
+        <translation>Ratio Genre</translation>
     </message>
     <message>
         <location filename="gender_field_group.py" line="42"/>
         <source>Gender Count</source>
-        <translation type="unfinished"/>
+        <translation>Effectif Genre</translation>
     </message>
     <message>
         <location filename="gender_field_group.py" line="59"/>
         <source>Gender Displaced Count</source>
-        <translation type="unfinished"/>
+        <translation>Effectif Genre Déplacé</translation>
     </message>
     <message>
         <location filename="fields.py" line="386"/>
         <source>The profiling system in InaSAFE provides metrics about which python functions were called during the analysis workflow and how long was spent in each function. These data are assembled into a table and shown in QGIS as part of the analysis layer group. Using the profiling time field we are able to refer back to a how long was spent in each specific python function when doing performance optimisation.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="fields.py" line="404"/>
@@ -7485,97 +7484,97 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
     <message>
         <location filename="fields.py" line="411"/>
         <source>The profiling system in InaSAFE provides metrics about which python functions were called during the analysis workflow and how much memory is used in each function. These data are assembled into a table and shown in QGIS as part of the analysis layer group. Using the profiling memory field we are able to refer back to a how much memory was used in each specific python function when doing performance optimisation.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="fields.py" line="548"/>
         <source>Child Bearing Age Count</source>
-        <translation type="unfinished"/>
+        <translation>Effectif Âge de Procréation</translation>
     </message>
     <message>
         <location filename="fields.py" line="555"/>
         <source>The number of child bearing age for each feature.</source>
-        <translation type="unfinished"/>
+        <translation>Le nombre de nourrissons pour chaque entité.</translation>
     </message>
     <message>
         <location filename="fields.py" line="1031"/>
         <source>&quot;Child Bearing Age&quot; is defined as: {concept} In cases where population data is available, InaSAFE will calculate the number of child bearing age per exposure feature, aggregate hazard area, aggregation area and for the analysis area as a whole. The child bearing age count is calculated based on standard ratios either provided as a global setting in InaSAFE, or (if available) ratios in the input analysis data.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="fields.py" line="640"/>
         <source>Infant Count</source>
-        <translation type="unfinished"/>
+        <translation>Effectif Nourrisson</translation>
     </message>
     <message>
         <location filename="fields.py" line="647"/>
         <source>The number of infant people for each feature.</source>
-        <translation type="unfinished"/>
+        <translation>Le nombre d&apos;enfants pour chaque entité.</translation>
     </message>
     <message>
         <location filename="fields.py" line="649"/>
         <source>&quot;Infant&quot; is defined as: {concept} In cases where population data is available, InaSAFE will calculate the number of infants per exposure feature, aggregate hazard area, aggregation area and for the analysis area as a whole. The infant count is calculated based on standard ratios either provided as a global setting in InaSAFE, or (if available) counts or ratios in the input analysis data.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="fields.py" line="670"/>
         <source>Child Count</source>
-        <translation type="unfinished"/>
+        <translation>Effectif Enfant</translation>
     </message>
     <message>
         <location filename="fields.py" line="677"/>
         <source>The number of child people for each feature.</source>
-        <translation type="unfinished"/>
+        <translation>Le nombre d&apos;enfant pour chaque entité.</translation>
     </message>
     <message>
         <location filename="fields.py" line="679"/>
         <source>&quot;Child&quot; is defined as: {concept} In cases where population data is available, InaSAFE will calculate the number of child per exposure feature, aggregate hazard area, aggregation area and for the analysis area as a whole. The child count is calculated based on standard ratios either provided as a global setting in InaSAFE, or (if available) counts or ratios in the input analysis data.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="fields.py" line="793"/>
         <source>Under 5 Count</source>
-        <translation type="unfinished"/>
+        <translation>Effectif Moins de 5 Ans</translation>
     </message>
     <message>
         <location filename="fields.py" line="800"/>
         <source>The number of under 5 years old for each feature.</source>
-        <translation type="unfinished"/>
+        <translation>Le nombre de moins de 5 ans pour chaque entité.</translation>
     </message>
     <message>
         <location filename="fields.py" line="1279"/>
         <source>&quot;Under 5&quot; is defined as: {concept} In cases where population data is available, InaSAFE will calculate the number of people under 5 years old per exposure feature, aggregate hazard area, aggregation area and for the analysis area as a whole. The under 5 years count is calculated based on standard ratios either provided as a global setting in InaSAFE, or (if available) ratios in the input analysis data.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="fields.py" line="823"/>
         <source>Over 60 Count</source>
-        <translation type="unfinished"/>
+        <translation>Effectif Plus de 60 Ans</translation>
     </message>
     <message>
         <location filename="fields.py" line="830"/>
         <source>The number of over 60 years old for each feature.</source>
-        <translation type="unfinished"/>
+        <translation>Le nombre de Plus de 60 Ans pour chaque entité.</translation>
     </message>
     <message>
         <location filename="fields.py" line="1310"/>
         <source>&quot;Over 60&quot; is defined as: {concept} In cases where population data is available, InaSAFE will calculate the number of people over 60 years old per exposure feature, aggregate hazard area, aggregation area and for the analysis area as a whole. The over 60 years count is calculated based on standard ratios either provided as a global setting in InaSAFE, or (if available) ratios in the input analysis data.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="fields.py" line="853"/>
         <source>Disabled Count</source>
-        <translation type="unfinished"/>
+        <translation>Effectif Handicapé</translation>
     </message>
     <message>
         <location filename="fields.py" line="1339"/>
         <source>The proportion of disabled people for each feature.</source>
-        <translation type="unfinished"/>
+        <translation>La proportion des personnes handicapés pour chaque entité</translation>
     </message>
     <message>
         <location filename="fields.py" line="1341"/>
         <source>&quot;Disabled&quot; is defined as: {concept} In cases where population data is available, InaSAFE will calculate the number of disabled people per exposure feature, aggregate hazard area, aggregation area and for the analysis area as a whole. The disabled count is calculated based on standard ratios either provided as a global setting in InaSAFE, or (if available) ratios in the input analysis data.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="fields.py" line="991"/>
@@ -7585,142 +7584,142 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
     <message>
         <location filename="fields.py" line="998"/>
         <source>The proportion of male for each feature.</source>
-        <translation type="unfinished"/>
+        <translation>La proportion des hommes dans chaque entité.</translation>
     </message>
     <message>
         <location filename="fields.py" line="1000"/>
         <source>&quot;Male&quot; is defined as: {concept} In cases where population data is available, InaSAFE will calculate the number of males per exposure feature, aggregate hazard area, aggregation area and for the analysis area as a whole. The male count is calculated based on standard ratios either provided as a global setting in InaSAFE, or (if available) ratios in the input analysis data.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="fields.py" line="1022"/>
         <source>Child Bearing Age Ratio</source>
-        <translation type="unfinished"/>
+        <translation>Ratio En Âge de Procréer</translation>
     </message>
     <message>
         <location filename="fields.py" line="1029"/>
         <source>The proportion of child bearing age for each feature.</source>
-        <translation type="unfinished"/>
+        <translation>Le nombre de en âge de procréer pour chaque entité.</translation>
     </message>
     <message>
         <location filename="fields.py" line="1115"/>
         <source>Infant Ratio</source>
-        <translation type="unfinished"/>
+        <translation>Ratio Nourrisson</translation>
     </message>
     <message>
         <location filename="fields.py" line="1122"/>
         <source>The proportion of infant people for each feature.</source>
-        <translation type="unfinished"/>
+        <translation>La proportion de nourrisson pour chaque entité.</translation>
     </message>
     <message>
         <location filename="fields.py" line="1124"/>
         <source>&quot;Infant&quot; is defined as: {concept} In cases where population data is available, InaSAFE will calculate the number of infants per exposure feature, aggregate hazard area, aggregation area and for the analysis area as a whole. The infant count is calculated based on standard ratios either provided as a global setting in InaSAFE, or (if available) ratios in the input analysis data.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="fields.py" line="1146"/>
         <source>Child Ratio</source>
-        <translation type="unfinished"/>
+        <translation>Ratio Enfant</translation>
     </message>
     <message>
         <location filename="fields.py" line="1153"/>
         <source>The proportion of child people for each feature.</source>
-        <translation type="unfinished"/>
+        <translation>La proportion d&apos;enfants pour chaque entité.</translation>
     </message>
     <message>
         <location filename="fields.py" line="1155"/>
         <source>&quot;Child&quot; is defined as: {concept} In cases where population data is available, InaSAFE will calculate the number of child per exposure feature, aggregate hazard area, aggregation area and for the analysis area as a whole. The child count is calculated based on standard ratios either provided as a global setting in InaSAFE, or (if available) ratios in the input analysis data.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="fields.py" line="1270"/>
         <source>Under 5 Years Ratio</source>
-        <translation type="unfinished"/>
+        <translation>Ratio Moins de 5 Ans</translation>
     </message>
     <message>
         <location filename="fields.py" line="1277"/>
         <source>The proportion of under 5 years old for each feature.</source>
-        <translation type="unfinished"/>
+        <translation>La proportion de moins de 5 ans pour chaque entité.</translation>
     </message>
     <message>
         <location filename="fields.py" line="1301"/>
         <source>Over 60 Years Ratio</source>
-        <translation type="unfinished"/>
+        <translation>Ratio Plus de 60 Ans</translation>
     </message>
     <message>
         <location filename="fields.py" line="1308"/>
         <source>The proportion of over 60 years old for each feature.</source>
-        <translation type="unfinished"/>
+        <translation>La proportion des plus de 60 ans pour chaque entité.</translation>
     </message>
     <message>
         <location filename="fields.py" line="1332"/>
         <source>Disabled Ratio</source>
-        <translation type="unfinished"/>
+        <translation>Ratio Handicapé</translation>
     </message>
     <message>
         <location filename="fields.py" line="1495"/>
         <source>Child Bearing Age Displaced Count</source>
-        <translation type="unfinished"/>
+        <translation>Effectif En Âge de Procréer Déplacées</translation>
     </message>
     <message>
         <location filename="fields.py" line="1504"/>
         <source>The number of displaced child bearing age for each feature.</source>
-        <translation type="unfinished"/>
+        <translation>Le nombre de en âge de procréer déplacées pour chaque entité.</translation>
     </message>
     <message>
         <location filename="fields.py" line="1585"/>
         <source>Infant Displaced Count</source>
-        <translation type="unfinished"/>
+        <translation>Effectif Nourrisson Déplacés</translation>
     </message>
     <message>
         <location filename="fields.py" line="1594"/>
         <source>The number of infant displaced for each feature.</source>
-        <translation type="unfinished"/>
+        <translation>Le nombre de nourrissons déplacés pour chaque entité.</translation>
     </message>
     <message>
         <location filename="fields.py" line="1608"/>
         <source>Child Displaced Count</source>
-        <translation type="unfinished"/>
+        <translation>Effectif Enfants Déplacés</translation>
     </message>
     <message>
         <location filename="fields.py" line="1617"/>
         <source>The number of child displaced for each feature.</source>
-        <translation type="unfinished"/>
+        <translation>Le nombre d&apos;enfants déplacés pour chaque entité.</translation>
     </message>
     <message>
         <location filename="fields.py" line="1700"/>
         <source>Under 5 Displaced Count</source>
-        <translation type="unfinished"/>
+        <translation>Effectif Moins de 5 Ans Déplacés</translation>
     </message>
     <message>
         <location filename="fields.py" line="1709"/>
         <source>The number of under 5 years old displaced for each feature.</source>
-        <translation type="unfinished"/>
+        <translation>Le nombre de moins de 5 ans déplacés pour chaque entité.</translation>
     </message>
     <message>
         <location filename="fields.py" line="1723"/>
         <source>Over 60 Years Displaced Count</source>
-        <translation type="unfinished"/>
+        <translation>Effectif Plus de 60 Ans Déplacés</translation>
     </message>
     <message>
         <location filename="fields.py" line="1732"/>
         <source>The number of over 60 years old displaced for each feature.</source>
-        <translation type="unfinished"/>
+        <translation>Le nombre de plus de 60 ans déplacés pour chaque entité.</translation>
     </message>
     <message>
         <location filename="fields.py" line="1746"/>
         <source>Disabled Displaced Count</source>
-        <translation type="unfinished"/>
+        <translation>Effectif des Handicapés Déplacés</translation>
     </message>
     <message>
         <location filename="fields.py" line="1755"/>
         <source>The number of disabled people displaced for each feature.</source>
-        <translation type="unfinished"/>
+        <translation>Le nombre de personnes handicapées déplacées pour chaque entité.</translation>
     </message>
     <message>
         <location filename="hazard_classifications.py" line="1321"/>
         <source>hazard zone</source>
-        <translation type="unfinished"/>
+        <translation>zone d&apos;aléa</translation>
     </message>
     <message>
         <location filename="hazard_classifications.py" line="407"/>
@@ -7735,57 +7734,57 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
     <message>
         <location filename="population_post_processors.py" line="230"/>
         <source>Child Bearing Age Post Processor</source>
-        <translation type="unfinished"/>
+        <translation>Post Processeur en Âge de Procréer</translation>
     </message>
     <message>
         <location filename="population_post_processors.py" line="231"/>
         <source>A post processor to calculate the number of displaced child bearing age. &quot;Child Bearing Age&quot; is defined as: {child_bearing_age_concept} &quot;Displaced&quot; is defined as: {displaced_concept}</source>
-        <translation type="unfinished"/>
+        <translation>Un post processeur pour calculer le nombre de femmes en âge de procréer déplacées. &quot;En âge de procréer&quot; est défini comme: {child_bearing_age_concept} &quot;Déplacé&quot; est défini comme: {displaced_concept}</translation>
     </message>
     <message>
         <location filename="population_post_processors.py" line="452"/>
         <source>Infant Post Processor</source>
-        <translation type="unfinished"/>
+        <translation>Post Processeur Nourrisson</translation>
     </message>
     <message>
         <location filename="population_post_processors.py" line="453"/>
         <source>A post processor to calculate the number of displaced infant. &quot;Infant&quot; is defined as: {infant_concept} &quot;Displaced&quot; is defined as: {displaced_concept}</source>
-        <translation type="unfinished"/>
+        <translation>Un post processeur pour calculer le nombre de nourrissons déplacées. &quot;Nourrisson&quot; est défini comme: {infant_concept} &quot;Déplacé&quot; est défini comme: {displaced_concept}</translation>
     </message>
     <message>
         <location filename="population_post_processors.py" line="488"/>
         <source>Child Post Processor</source>
-        <translation type="unfinished"/>
+        <translation>Post Processeur Enfant</translation>
     </message>
     <message>
         <location filename="population_post_processors.py" line="489"/>
         <source>A post processor to calculate the number of displaced child. &quot;Child&quot; is defined as: {child_concept} &quot;Displaced&quot; is defined as: {displaced_concept}</source>
-        <translation type="unfinished"/>
+        <translation>Un post processeur pour calculer le nombre d&apos;enfants déplacés. &quot;Enfant&quot; est défini comme: {child_concept} &quot;Déplacé&quot; est défini comme: {displaced_concept}</translation>
     </message>
     <message>
         <location filename="population_post_processors.py" line="632"/>
         <source>Under 5 Years Old Post Processor</source>
-        <translation type="unfinished"/>
+        <translation>Post Processeur Moins de 5 Ans</translation>
     </message>
     <message>
         <location filename="population_post_processors.py" line="633"/>
         <source>A post processor to calculate the number of displaced under 5 years old. &quot;Under 5 Years Old&quot; is defined as: {under_5_concept}. &quot;Displaced&quot; is defined as: {displaced_concept}</source>
-        <translation type="unfinished"/>
+        <translation>Un post processeur pour calculer le nombre de moins de 5 ans déplacées. &quot;Moins de 5 ans&quot; est définie comme: {under_5_concept} &quot;Déplacé&quot; est défini comme: {displaced_concept}</translation>
     </message>
     <message>
         <location filename="population_post_processors.py" line="668"/>
         <source>Over 60 Years Old Post Processor</source>
-        <translation type="unfinished"/>
+        <translation>Post Processeur Plus de 60 Ans</translation>
     </message>
     <message>
         <location filename="population_post_processors.py" line="669"/>
         <source>A post processor to calculate the number of displaced over 60 years old. &quot;Over 60 Years Old&quot; is defined as: {over_60_concept}. &quot;Displaced&quot; is defined as: {displaced_concept}</source>
-        <translation type="unfinished"/>
+        <translation>Un post processeur pour calculer le nombre de plus de 60 ans déplacés. &quot;Plus de 60 ans&quot; est défini comme: {over_60_concept} &quot;Déplacé&quot; est défini comme: {displaced_concept}</translation>
     </message>
     <message>
         <location filename="components.py" line="121"/>
         <source>Estimated {title} affected per {unit}</source>
-        <translation type="unfinished"/>
+        <translation>Estimation {title} affecté par {unit}</translation>
     </message>
     <message>
         <location filename="field_mapping_dialog.py" line="61"/>
@@ -7795,7 +7794,7 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
     <message>
         <location filename="field_mapping_dialog.py" line="178"/>
         <source>There is no field group for this layer. Please select another layer.</source>
-        <translation type="unfinished"/>
+        <translation>Il n&apos;y a pas de groupe de champs pour cette couche. Veuillez seléctionner une autre couche.</translation>
     </message>
     <message>
         <location filename="field_mapping_dialog.py" line="186"/>
@@ -7810,42 +7809,42 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
     <message>
         <location filename="field_mapping_dialog.py" line="190"/>
         <source>Please fill the information for every tab to determine the attribute for {0} group.</source>
-        <translation type="unfinished"/>
+        <translation>Veuillez remplir les informations pour tous les onglets afin de déterminer l&apos;attribut pour le groupe {0}.</translation>
     </message>
     <message>
         <location filename="definitions_help.py" line="292"/>
         <source>Exposure Groups</source>
-        <translation type="unfinished"/>
+        <translation>Groupe d&apos;enjeu</translation>
     </message>
     <message>
         <location filename="definitions_help.py" line="306"/>
         <source>Aggregation Groups</source>
-        <translation type="unfinished"/>
+        <translation>Groupe d&apos;agrégation</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1319"/>
+        <location filename="definitions_help.py" line="1332"/>
         <source>Fatality rate</source>
-        <translation type="unfinished"/>
+        <translation>Ratio de fatalité</translation>
     </message>
     <message>
         <location filename="field_mapping_help.py" line="45"/>
         <source>Field Mapping Tool Help</source>
-        <translation type="unfinished"/>
+        <translation>Aide sur l&apos;Outil de Mappage des Valeurs</translation>
     </message>
     <message>
         <location filename="field_mapping_help.py" line="69"/>
         <source>This tool allows you to define field mappings to use for demographic breakdowns of your analysis results. You can activate the tool on the InaSAFE toolbar:</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="field_mapping_help.py" line="80"/>
         <source>Field mapping describes the process of matching one or more fields in an attribute table to a concept in InaSAFE. The field mappings tool InaSAFE allows you to match concepts such as &quot;elderly&quot;, &quot;disabled people&quot;, &quot;pregnant&quot; and so on to their counterpart fields in either an aggregation layer or an exposure population vector layer.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="field_mapping_help.py" line="104"/>
         <source>The illustration above shows the principle behind InaSAFE&apos;s demographic breakdown reporting system. The idea here is to support the production of a detailed demographic breakdown when carrying out an analysis with a population exposure vector dataset. So for example instead of simply reporting on the total number of people exposed to a hazard, we want to break down the affected population into distinct demographic groups. In InaSAFE by default we consider three groups:</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="field_mapping_help.py" line="117"/>
@@ -7855,7 +7854,7 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
     <message>
         <location filename="field_mapping_help.py" line="117"/>
         <source>The gender group reports on gender specific demographics including things like the number of women of child bearing age, number of pregnant women, number of lactating women and so on.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="field_mapping_help.py" line="125"/>
@@ -7865,52 +7864,52 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
     <message>
         <location filename="field_mapping_help.py" line="125"/>
         <source>The age group reports on age specific demographics including things like the number of infants, children, young adults, adults elderly people and so on.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="field_mapping_help.py" line="133"/>
         <source>Vulnerable people: </source>
-        <translation type="unfinished"/>
+        <translation>Personnes vulnérables:</translation>
     </message>
     <message>
         <location filename="field_mapping_help.py" line="133"/>
         <source>The vulnerable people group reports on specific demographics relating to vulnerability including things like the number of infants, elderly people, disabled peopled and so on.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="field_mapping_help.py" line="142"/>
         <source>In the diagram above, you can see that we have an &quot;age&quot; group (column on the right) which, for purposes of illustration, has two age classes: &quot;infant&quot; and &quot;child&quot; (center column). These age classes are defined in InaSAFE metadata and there are actually five classes in a default installation. In the left hand column you can see a number of columns listed from the attribute table. In this example our population data contains columns for different age ranges (0-1, 1-2, 2-4, 4-6). The field mapping tool can be used in order to combine the data in the &quot;0 - 1&quot; and &quot;1 - 2&quot; columns into a new column called &quot;infant&quot;. In the next section of this document we enumerate the different groups and concepts that InaSAFE supports when generating demographic breakdowns.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="field_mapping_help.py" line="156"/>
         <source>When the tool is used, it will write additional data to the exposure or aggregation layer keywords so that your preferred concept mappings will be used when reports are generated after the analysis is carried out. You should note the following special characteristics of the field mapping tool when used for aggregation datasets versus when used for vector population exposure datasets:</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="field_mapping_help.py" line="165"/>
         <source>Aggregation datasets: </source>
-        <translation type="unfinished"/>
+        <translation>Jeu de données agrégation:</translation>
     </message>
     <message>
         <location filename="field_mapping_help.py" line="165"/>
         <source>For aggregation datasets, the field mapping tool uses global defaults (see the InaSAFE Options Dialog documentation for more details) or dataset level defaults to determine which ratios should be used to calculate concept values. For example, in the age group the aggregation dataset may specify that infants should by calculated as a ratio of 0.1% of the total population. Note that for aggregation datasets you can only use ratios, not counts.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="field_mapping_help.py" line="178"/>
         <source>Vector population exposure datasets: </source>
-        <translation type="unfinished"/>
+        <translation>Jeu de données Enjeu Population Vecteur:</translation>
     </message>
     <message>
         <location filename="field_mapping_help.py" line="178"/>
         <source>For exposure datasets, ratios are not supported, only counts. The field mappings carried out here will be used to generate new columns during a pre-processing step before the actual analysis is carried out.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="options_dialog.py" line="603"/>
         <source>Non-group fields</source>
-        <translation type="unfinished"/>
+        <translation>Champs  non-groupés</translation>
     </message>
     <message>
         <location filename="field_mapping_tab.py" line="90"/>
@@ -7920,12 +7919,12 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
     <message>
         <location filename="field_mapping_tab.py" line="198"/>
         <source>Count fields</source>
-        <translation type="unfinished"/>
+        <translation>Champs effectifs</translation>
     </message>
     <message>
         <location filename="field_mapping_tab.py" line="201"/>
         <source>Ratio fields</source>
-        <translation type="unfinished"/>
+        <translation>Champs ratios</translation>
     </message>
     <message>
         <location filename="field_mapping_tab.py" line="205"/>
@@ -7936,17 +7935,18 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <location filename="field_mapping_tab.py" line="347"/>
         <source>Field type: {0}
 </source>
-        <translation type="unfinished"/>
+        <translation>Type de champs: {0}
+</translation>
     </message>
     <message>
         <location filename="field_mapping_tab.py" line="348"/>
         <source>Unique values: {0}</source>
-        <translation type="unfinished"/>
+        <translation>Valeurs uniques: {0}</translation>
     </message>
     <message>
         <location filename="field_mapping_widget.py" line="65"/>
         <source>Key layer_purpose is not found in the layer {layer_name}</source>
-        <translation type="unfinished"/>
+        <translation>La clé layer_purpose n&apos;a pas été trouvée dans la couche {layer_name}</translation>
     </message>
     <message>
         <location filename="impact_function.py" line="246"/>
@@ -7956,74 +7956,76 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
     <message>
         <location filename="step_kw30_field.py" line="142"/>
         <source>&lt;b&gt;Field name&lt;/b&gt;: {field_name}</source>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt;Nom Champ&lt;/b&gt;: {field_name}</translation>
     </message>
     <message>
         <location filename="step_kw30_field.py" line="144"/>
         <source>&lt;br&gt;&lt;b&gt;Field type&lt;/b&gt;: {field_type}</source>
-        <translation type="unfinished"/>
+        <translation>&lt;br&gt;&lt;b&gt;Type champ&lt;/b&gt;: {field_type}</translation>
     </message>
     <message>
         <location filename="step_kw30_field.py" line="147"/>
         <source>&lt;br&gt;&lt;b&gt;Unique values&lt;/b&gt;: {unique_values_str}&lt;br&gt;&lt;br&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;br&gt;&lt;b&gt;Valeurs uniques&lt;/b&gt;: {unique_values_str}&lt;br&gt;&lt;br&gt;</translation>
     </message>
     <message>
         <location filename="step_kw30_field.py" line="209"/>
         <source>
 You can select 1 field only.</source>
-        <translation type="unfinished"/>
+        <translation>
+Vous ne pouvez séléctionner que un seul champ à la fois.</translation>
     </message>
     <message>
         <location filename="step_kw30_field.py" line="212"/>
         <source>
 You can select more than 1 field. InaSAFE will sum up the value of the fields that you choose.</source>
-        <translation type="unfinished"/>
+        <translation>
+Vous pouvez sélectionner plus d&apos;un champ. InaSAFE va additionner les valeurs des champs que vous choississez.</translation>
     </message>
     <message>
         <location filename="concepts.py" line="340"/>
         <source>A very young child or baby aged between 0 and 4 years.</source>
-        <translation type="unfinished"/>
+        <translation>Un très jeune enfant ou bébé agé entre 0 et 4 ans.</translation>
     </message>
     <message>
         <location filename="concepts.py" line="446"/>
         <source>World Population Dashboard. ICPD Goals and Demographic Indicators 2016.</source>
-        <translation type="unfinished"/>
+        <translation>World Population Dashboard. ICPD Goals and Demographic Indicators 2016.</translation>
     </message>
     <message>
         <location filename="concepts.py" line="359"/>
         <source>A young person aged between 5 and 14 years, usually below the age of puberty.</source>
-        <translation type="unfinished"/>
+        <translation>Une personne jeune agée entre 5 et 14 ans, généralement avant l&apos;âge de la puberté.</translation>
     </message>
     <message>
         <location filename="concepts.py" line="407"/>
         <source>Persons aged 64 years and over.</source>
-        <translation type="unfinished"/>
+        <translation>Personnnes âgées de 64 ans et plus.</translation>
     </message>
     <message>
         <location filename="concepts.py" line="432"/>
         <source>World Report on Disability.</source>
-        <translation type="unfinished"/>
+        <translation>World Report on Disability.</translation>
     </message>
     <message>
         <location filename="concepts.py" line="442"/>
         <source>Persons aged under 5 years</source>
-        <translation type="unfinished"/>
+        <translation>Personnes agées de moins 5 ans.</translation>
     </message>
     <message>
         <location filename="concepts.py" line="456"/>
         <source>Persons aged 60 years and over</source>
-        <translation type="unfinished"/>
+        <translation>Personnes agées de 60 ans et plus</translation>
     </message>
     <message>
         <location filename="concepts.py" line="460"/>
         <source>World Population Aging 2013</source>
-        <translation type="unfinished"/>
+        <translation>World Population Aging 2013</translation>
     </message>
     <message>
         <location filename="concepts.py" line="469"/>
         <source>The span of ages (usually 15-49) at which individuals are capable of becoming parents. The phrase can be applied to men and women but most frequently refers to women.</source>
-        <translation type="unfinished"/>
+        <translation>La classe d&apos;âge (généralement 15-49) dont les personnes sont capables de devenir des parents. Cela peut concerner les hommes et les femmes, mais cela s&apos;applique plus généralement aux femmes.</translation>
     </message>
     <message>
         <location filename="concepts.py" line="475"/>
@@ -8033,597 +8035,592 @@ You can select more than 1 field. InaSAFE will sum up the value of the fields th
     <message>
         <location filename="concepts.py" line="498"/>
         <source>A female producing milk to feed a baby.</source>
-        <translation type="unfinished"/>
+        <translation>Une femme produisant du lait afin de nourrir un enfant.</translation>
     </message>
     <message>
         <location filename="default_values.py" line="22"/>
         <source>Default ratio of females per 100 people in the total population.</source>
-        <translation type="unfinished"/>
+        <translation>Ratio par défaut des femmes pour 100 personnes dans la population totale.</translation>
     </message>
     <message>
         <location filename="default_values.py" line="35"/>
         <source>Default ratio of males per 100 people in the total population.</source>
-        <translation type="unfinished"/>
+        <translation>Ratio par défaut des hommes pour 100 personnes dans la population totale.</translation>
     </message>
     <message>
         <location filename="default_values.py" line="89"/>
         <source>Default ratio of infants per 100 people in the total population.</source>
-        <translation type="unfinished"/>
+        <translation>Ratio par défaut des nourrissons pour 100 personnes dans la population totale.</translation>
     </message>
     <message>
         <location filename="default_values.py" line="102"/>
         <source>Default ratio of children per 100 people in the total population.</source>
-        <translation type="unfinished"/>
+        <translation>Ratio par défaut des enfants pour 100 personnes dans la population totale.</translation>
     </message>
     <message>
         <location filename="default_values.py" line="117"/>
         <source>Default ratio of youths per 100 people in the total population.</source>
-        <translation type="unfinished"/>
+        <translation>Ratio par défaut des jeunes pour 100 personnes dans la population totale.</translation>
     </message>
     <message>
         <location filename="default_values.py" line="131"/>
         <source>Default ratio of adults per 100 people in the total population.</source>
-        <translation type="unfinished"/>
+        <translation>Ratio par défaut des adultes pour 100 personnes dans la population totale.</translation>
     </message>
     <message>
         <location filename="default_values.py" line="146"/>
         <source>Default ratio of elderly people per 100 people in the total population.</source>
-        <translation type="unfinished"/>
+        <translation>Ratio par défaut des personnes âgées pour 100 personnes dans la population totale.</translation>
     </message>
     <message>
         <location filename="default_values.py" line="161"/>
         <source>Default ratio of under 5 year olds per 100 people in the total population.</source>
-        <translation type="unfinished"/>
+        <translation>Ratio par défaut des moins de 5 ans pour 100 personnes dans la population totale.</translation>
     </message>
     <message>
         <location filename="default_values.py" line="176"/>
         <source>Default ratio of over 60 year olds per 100 people in the total population.</source>
-        <translation type="unfinished"/>
+        <translation>Ratio par défaut des plus de 60 ans pour 100 personnes dans la population totale.</translation>
     </message>
     <message>
         <location filename="default_values.py" line="190"/>
         <source>Default ratio of disabled people per 100 people in the total population.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="default_values.py" line="205"/>
-        <source>Default ratio of people of child bearing age per 100 people in the total population.</source>
-        <translation type="unfinished"/>
+        <translation>Ratio par défaut des handicapés pour 100 personnes dans la population totale.</translation>
     </message>
     <message>
         <location filename="default_values.py" line="212"/>
         <source>Pregnant Ratio Global Default</source>
-        <translation type="unfinished"/>
+        <translation>Ratio Enceinte par Défaut Global</translation>
     </message>
     <message>
         <location filename="default_values.py" line="220"/>
         <source>Default ratio of pregnant people per 100 people in the total population.</source>
-        <translation type="unfinished"/>
+        <translation>Ratio par défaut des femmes enceintes pour 100 personnes dans la population totale.</translation>
     </message>
     <message>
         <location filename="default_values.py" line="226"/>
         <source>Lactating Ratio Global Default</source>
-        <translation type="unfinished"/>
+        <translation>Ratio Allaitante par Défaut Global</translation>
     </message>
     <message>
         <location filename="default_values.py" line="234"/>
         <source>Default ratio of lactating people per 100 people in the total population.</source>
-        <translation type="unfinished"/>
+        <translation>Ratio par défaut des femmes allaitantes pour 100 personnes dans la population totale.</translation>
     </message>
     <message>
         <location filename="exposure.py" line="43"/>
         <source>population exposure general notes</source>
-        <translation type="unfinished"/>
+        <translation>notes enjeu population</translation>
     </message>
     <message>
         <location filename="exposure.py" line="408"/>
         <source>general checklist</source>
-        <translation type="unfinished"/>
+        <translation>liste de contrôle général</translation>
     </message>
     <message>
         <location filename="exposure.py" line="86"/>
         <source>shelter, settlement, and non-food item</source>
-        <translation type="unfinished"/>
+        <translation>abris, habitations, et non-alimentaire</translation>
     </message>
     <message>
         <location filename="exposure.py" line="110"/>
         <source>food security and nutrition</source>
-        <translation type="unfinished"/>
+        <translation>protection alimentaire et nutrition</translation>
     </message>
     <message>
         <location filename="exposure.py" line="121"/>
         <source>sanitation and clean water</source>
-        <translation type="unfinished"/>
+        <translation>mesure sanitaire</translation>
     </message>
     <message>
         <location filename="exposure.py" line="142"/>
         <source>health facilities</source>
-        <translation type="unfinished"/>
+        <translation>Accès à la santé</translation>
     </message>
     <message>
         <location filename="exposure.py" line="187"/>
         <source>road exposure general notes</source>
-        <translation type="unfinished"/>
+        <translation>notes enjeu routier</translation>
     </message>
     <message>
         <location filename="exposure.py" line="264"/>
         <source>structure exposure general notes</source>
-        <translation type="unfinished"/>
+        <translation>notes enjeu structure</translation>
     </message>
     <message>
         <location filename="exposure.py" line="338"/>
         <source>place exposure general notes</source>
-        <translation type="unfinished"/>
+        <translation>notes enjeu lieu</translation>
     </message>
     <message>
         <location filename="exposure.py" line="387"/>
         <source>land cover exposure general notes</source>
-        <translation type="unfinished"/>
+        <translation>notes enjeu occupation du sol</translation>
     </message>
     <message>
         <location filename="age_field_group.py" line="28"/>
         <source>Demographic breakdown to use for displaced population based on age groups. Age ratio groupings are used when there is a vector aggregation layer that contains detailed demographic information ( as ratios) about the population living in each administrative or census area. These ratios are then applied to the count of displaced population per aggregation area to provide a more detailed break down of the number of people displaced in each age group.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="age_vulnerability_field_group.py" line="49"/>
         <source>The sum of age ratios should not more than 1.</source>
-        <translation type="unfinished"/>
+        <translation>La somme des ratios concernant les âges ne doit pas être supérieur à 1.</translation>
     </message>
     <message>
         <location filename="age_field_group.py" line="52"/>
         <source>Demographic breakdown to use for displaced population based on age groups. Age count groupings are used when there is a vector population dataset that contains detailed demographic information (as counts) about the population living in each administrative or census area.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="age_field_group.py" line="75"/>
         <source>Demographic breakdown produced for displaced population based on age groups. These demographic concepts provide a detailed break down of the number of people displaced in each age group.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="age_field_group.py" line="90"/>
         <source>No age ratios provided, no demographic breakdown for age carried out.</source>
-        <translation type="unfinished"/>
+        <translation>Pas de ratio d&apos;âge fourni, donc pas de décomposition démographique pour l&apos;âge.</translation>
     </message>
     <message>
         <location filename="age_vulnerability_field_group.py" line="24"/>
         <source>Age Vulnerability Ratio</source>
-        <translation type="unfinished"/>
+        <translation>Ratio de la Vulnérabilité sur l&apos;Âge</translation>
     </message>
     <message>
         <location filename="age_vulnerability_field_group.py" line="25"/>
         <source>Demographic breakdown to use for displaced population based on age. Vulnerability ratio groupings are used when there is a vector aggregation layer that contains detailed demographic information (as ratios) about the population living in each administrative or census area. These ratios are then applied to the count of displaced population per aggregation area to provide a more detailed break down of the number of people displaced in each age profile. Vulnerable segments of the population can include criteria like the number of infants, the number of elderly, the number of disabled people, and so on.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="age_vulnerability_field_group.py" line="56"/>
         <source>Age Vulnerability Count</source>
-        <translation type="unfinished"/>
+        <translation>Effectif de la Vulnérabilité sur l&apos;Âge</translation>
     </message>
     <message>
         <location filename="age_vulnerability_field_group.py" line="57"/>
         <source>Demographic breakdown to use for displaced population based on age. Vulnerability count groupings are used when there is a vector exposure layer that contains detailed demographic information (as counts) about the population living in each area. These counts are then used to calculate the ratio of vulnerable population sectors for each aggregation area. These are then used to produce a detailed break down of the number of displaced people in each age profile. Vulnerable segments of the population can include criteria like the number of infants, the number of elderly, the number of disabled people, and so on.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="age_vulnerability_field_group.py" line="79"/>
         <source>Age Vulnerability Displaced Count</source>
-        <translation type="unfinished"/>
+        <translation>Effectif de la Vulnérabilité sur l&apos;Âge Déplacée</translation>
     </message>
     <message>
         <location filename="age_vulnerability_field_group.py" line="81"/>
         <source>Demographic breakdown to use for displaced population based on age. These data are presented in the report as the number of displaced people in each vulnerable age group. Age based vulnerable segments of the population can include criteria like the number of infants, the number of elderly people and so on.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="disability_vulnerability_field_group.py" line="19"/>
         <source>Disability Vulnerability Ratio</source>
-        <translation type="unfinished"/>
+        <translation>Ratio de la Vulnérabilité sur le Handicap</translation>
     </message>
     <message>
         <location filename="disability_vulnerability_field_group.py" line="20"/>
         <source>Demographic breakdown to use for displaced population based on disability vulnerability. Disability vulnerability ratio groupings are used when there is a vector aggregation layer that contains detailed demographic information (as ratios) about the disabled population living in each administrative or census area. These ratios are then applied to the count of displaced population per aggregation area to provide a more detailed break down of the number of disabled people displaced in each area.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="disability_vulnerability_field_group.py" line="41"/>
         <source>The sum of vulnerability ratios should not more than 1.</source>
-        <translation type="unfinished"/>
+        <translation>La somme des ratios vulnérabilités ne doit pas être plus de 1.</translation>
     </message>
     <message>
         <location filename="disability_vulnerability_field_group.py" line="48"/>
         <source>Disabled Vulnerability Count</source>
-        <translation type="unfinished"/>
+        <translation>Effectif de la Vulnérabilité Déplacée</translation>
     </message>
     <message>
         <location filename="disability_vulnerability_field_group.py" line="49"/>
         <source>Demographic breakdown to use for displaced population based on displacement vulnerability. Disabled count groupings are used when there is a vector exposure layer that contains detailed demographic information (as counts) about the population living in each area. These counts are then used to calculate the ratio of disabled people to the total population for each aggregation area. These are then used to produce a detailed break down of the number of displaced people in each area.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="disability_vulnerability_field_group.py" line="68"/>
         <source>Disability Vulnerability Displaced Count</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="disability_vulnerability_field_group.py" line="70"/>
         <source>Demographic breakdown to use for displaced population based on disability. These data are presented in the report as the number of displaced disabled people.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="field_groups.py" line="93"/>
         <source>Infant: {note}</source>
-        <translation type="unfinished"/>
+        <translation>Nourrisson: {note}</translation>
     </message>
     <message>
         <location filename="field_groups.py" line="94"/>
         <source>Child: {note}</source>
-        <translation type="unfinished"/>
+        <translation>Enfant: {note}</translation>
     </message>
     <message>
         <location filename="field_groups.py" line="95"/>
         <source>Youth: {note}</source>
-        <translation type="unfinished"/>
+        <translation>Jeune: {note}</translation>
     </message>
     <message>
         <location filename="field_groups.py" line="96"/>
         <source>Adult: {note}</source>
-        <translation type="unfinished"/>
+        <translation>Adulte: {note}</translation>
     </message>
     <message>
         <location filename="field_groups.py" line="97"/>
         <source>Elderly: {note}</source>
-        <translation type="unfinished"/>
+        <translation>Personne âgée: {note}</translation>
     </message>
     <message>
         <location filename="field_groups.py" line="101"/>
         <source>Male: {note}</source>
-        <translation type="unfinished"/>
+        <translation>Homme: {note}</translation>
     </message>
     <message>
         <location filename="field_groups.py" line="102"/>
         <source>Female: {note}</source>
-        <translation type="unfinished"/>
+        <translation>Femme: {note}</translation>
     </message>
     <message>
         <location filename="field_groups.py" line="106"/>
         <source>Under 5: {note}</source>
-        <translation type="unfinished"/>
+        <translation>Moins de 5 ans: {note}</translation>
     </message>
     <message>
         <location filename="field_groups.py" line="107"/>
         <source>Over 60: {note}</source>
-        <translation type="unfinished"/>
+        <translation>Plus de 60 ans: {note}</translation>
     </message>
     <message>
         <location filename="field_groups.py" line="111"/>
         <source>Child bearing age: {note}</source>
-        <translation type="unfinished"/>
+        <translation>En âge de procréer: {note}</translation>
     </message>
     <message>
         <location filename="field_groups.py" line="113"/>
         <source>Pregnant: {note}</source>
-        <translation type="unfinished"/>
+        <translation>Enceinte: {note}</translation>
     </message>
     <message>
         <location filename="field_groups.py" line="115"/>
         <source>Lactating: {note}</source>
-        <translation type="unfinished"/>
+        <translation>Allaitante: {note}</translation>
     </message>
     <message>
         <location filename="field_groups.py" line="120"/>
         <source>Disabled: {note}</source>
-        <translation type="unfinished"/>
+        <translation>Handicapé: {note}</translation>
     </message>
     <message>
         <location filename="field_groups.py" line="147"/>
         <source>{group_name} group: {note}</source>
-        <translation type="unfinished"/>
+        <translation>Groupe {group_name}: {note}</translation>
     </message>
     <message>
         <location filename="gender_field_group.py" line="21"/>
         <source>Demographic breakdown to use for displaced population based on gender. Gender ratio groupings are used when there is a vector aggregation layer that contains detailed demographic information ( as ratios) about the population living in each administrative or census area. These ratios are then applied to the count of displaced population per aggregation area to provide a more detailed break down of the number of people displaced in each gender profile. Gender specific info can include criteria like the number of females, the number of females of child bearing age, and so on.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="gender_field_group.py" line="43"/>
         <source>Demographic breakdown produced for displaced population based on gender groups (female, pregnant, etc.). These demographic concepts provide a detailed break down of the number of people displaced in each age group.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="gender_field_group.py" line="61"/>
         <source>Demographic breakdown produced for displaced population based ongender specific groups (pregnant, lactating etc.). These demographic concepts provide a detailed break down of the number of people displaced in each gender specific group.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="gender_vulnerability_field_group.py" line="30"/>
         <source>Gender Vulnerability Ratio</source>
-        <translation type="unfinished"/>
+        <translation>Ratio de la Vulnérabilité sur le Genre</translation>
     </message>
     <message>
         <location filename="gender_vulnerability_field_group.py" line="31"/>
         <source>Demographic breakdown to use for displaced population based on gender. Vulnerability ratio groupings are used when there is a vector aggregation layer that contains detailed demographic information (as ratios) about the population living in each administrative or census area. These ratios are then applied to the count of displaced population per aggregation area to provide a more detailed break down of the number of people displaced in each gender profile. Vulnerable segments of the population can include criteria like the number of infants, the number of elderly, the number of disabled people, and so on.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="gender_vulnerability_field_group.py" line="56"/>
         <source>The sum of gender ratios should not be more than 1.</source>
-        <translation type="unfinished"/>
+        <translation>La somme des ratios concernant les genres ne doit pas être supérieur à 1.</translation>
     </message>
     <message>
         <location filename="gender_vulnerability_field_group.py" line="64"/>
         <source>Gender Vulnerability Count</source>
-        <translation type="unfinished"/>
+        <translation>Effectif de la Vulnérabilité sur le Genre</translation>
     </message>
     <message>
         <location filename="gender_vulnerability_field_group.py" line="65"/>
         <source>Demographic breakdown to use for displaced population based on gender. Vulnerability count groupings are used when there is a vector exposure layer that contains detailed demographic information (as counts) about the population living in each area. These counts are then used to calculate the ratio of vulnerable population sectors for each aggregation area. These are then used to produce a detailed break down of the number of displaced people in each gender profile. Vulnerable segments of the population can include criteria like the number of infants, the number of pregnant women, lactating women and so on.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="gender_vulnerability_field_group.py" line="89"/>
         <source>Gender Vulnerability Displaced Count</source>
-        <translation type="unfinished"/>
+        <translation>Effectif de la Vulnérabilité sur le Genre Déplacé</translation>
     </message>
     <message>
         <location filename="gender_vulnerability_field_group.py" line="91"/>
         <source>Demographic breakdown to use for displaced population based on gender. These data are presented in the report as the number of displaced people in each vulnerable gender group. Gender based vulnerable segments of the population can include criteria like the number of pregnant women, lactating women and so on.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="fields.py" line="579"/>
         <source>Pregnant Women Count</source>
-        <translation type="unfinished"/>
+        <translation>Effectif Femme Enceinte</translation>
     </message>
     <message>
         <location filename="fields.py" line="586"/>
         <source>The number of pregnant women for each feature.</source>
-        <translation type="unfinished"/>
+        <translation>Le nombre de femmes enceintes pour chaque entité.</translation>
     </message>
     <message>
         <location filename="fields.py" line="588"/>
         <source>&quot;Pregnant&quot; is defined as: {concept} In cases where population data is available, InaSAFE will calculate the number of pregnant women per exposure feature, aggregate hazard area, aggregation area and for the analysis area as a whole. The pregnant women count is calculated based on standard ratios either provided as a global setting in InaSAFE, or (if available) ratios in the input analysis data.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="fields.py" line="609"/>
         <source>Lactating Count</source>
-        <translation type="unfinished"/>
+        <translation>Effectif Allaitante</translation>
     </message>
     <message>
         <location filename="fields.py" line="616"/>
         <source>The number of lactating women for each feature.</source>
-        <translation type="unfinished"/>
+        <translation>Le nombre de femmes allaittantes pour chaque entité.</translation>
     </message>
     <message>
         <location filename="fields.py" line="618"/>
         <source>&quot;Lactating&quot; is defined as: {concept} In cases where population data is available, InaSAFE will calculate the number of lactating women per exposure feature, aggregate hazard area, aggregation area and for the analysis area as a whole. The lactating count is calculated based on standard ratios either provided as a global setting in InaSAFE, or (if available) ratios in the input analysis data.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="fields.py" line="709"/>
         <source>&quot;Youth&quot; is defined as: {concept} This definition may not align well with the definition of youth in the humanitarian sector. It should be noted that this concept overlaps with the concepts of infant and child in InaSAFE. In cases where population data is available, InaSAFE will calculate the number of youths per exposure feature, aggregate hazard area, aggregation area and for the analysis area as a whole. The youth count is calculated based on standard ratios either provided as a global setting in InaSAFE, or (if available) counts or ratios in the input analysis data.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="fields.py" line="1053"/>
         <source>Pregnant Ratio</source>
-        <translation type="unfinished"/>
+        <translation>Ratio Enceinte</translation>
     </message>
     <message>
         <location filename="fields.py" line="1060"/>
         <source>The proportion of pregnant women for each feature.</source>
-        <translation type="unfinished"/>
+        <translation>Le nombre de femmes enceintes pour chaque entité.</translation>
     </message>
     <message>
         <location filename="fields.py" line="1062"/>
         <source>&quot;Pregnant or Lactating&quot; is defined as: {concept} In cases where population data is available, InaSAFE will calculate the number of pregnant women per exposure feature, aggregate hazard area, aggregation area and for the analysis area as a whole. The pregnant count is calculated based on standard ratios either provided as a global setting in InaSAFE, or (if available) ratios in the input analysis data.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="fields.py" line="1083"/>
         <source>Lactating Ratio</source>
-        <translation type="unfinished"/>
+        <translation>Ratio Allaitante</translation>
     </message>
     <message>
         <location filename="fields.py" line="1090"/>
         <source>The proportion of lactating women for each feature.</source>
-        <translation type="unfinished"/>
+        <translation>Le nombre de femmes allaitantes pour chaque entité.</translation>
     </message>
     <message>
         <location filename="fields.py" line="1092"/>
         <source>&quot;Lactating&quot; is defined as: {concept} In cases where population data is available, InaSAFE will calculate the number of lactating people per exposure feature, aggregate hazard area, aggregation area and for the analysis area as a whole. The lactating count is calculated based on standard ratios either provided as a global setting in InaSAFE, or (if available) ratios in the input analysis data.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="fields.py" line="1458"/>
         <source>The number of displaced males for each feature.</source>
-        <translation type="unfinished"/>
+        <translation>Le nombre d&apos;hommes déplacés pour chaque entité.</translation>
     </message>
     <message>
         <location filename="fields.py" line="1518"/>
         <source>Lactating Displaced Count</source>
-        <translation type="unfinished"/>
+        <translation>Effectif Femmes Allaitantes Déplacées</translation>
     </message>
     <message>
         <location filename="fields.py" line="1549"/>
         <source>The number of displaced pregnant women for each feature.</source>
-        <translation type="unfinished"/>
+        <translation>Le nombre de femmes enceintes déplacées pour chaque entité.</translation>
     </message>
     <message>
         <location filename="fields.py" line="1540"/>
         <source>Pregnant Displaced Count</source>
-        <translation type="unfinished"/>
+        <translation>Effectif Femmes Enceintes Déplacées</translation>
     </message>
     <message>
         <location filename="hazard.py" line="92"/>
         <source>generic hazard general notes</source>
-        <translation type="unfinished"/>
+        <translation>notes générales aléa générique</translation>
     </message>
     <message>
         <location filename="hazard.py" line="141"/>
         <source>earthquake general notes</source>
-        <translation type="unfinished"/>
+        <translation>notes générales séisme</translation>
     </message>
     <message>
         <location filename="hazard.py" line="195"/>
         <source>flood general notes</source>
-        <translation type="unfinished"/>
+        <translation>notes générales inondation</translation>
     </message>
     <message>
         <location filename="hazard.py" line="241"/>
         <source>A &lt;b&gt;Tropical Cyclone&lt;/b&gt; is a rapidly rotating storm system characterised by a low-pressure centre, a closed low-level atmospheric circulation, strong winds, and a spiral arrangement of thunderstorms that produce heavy rain. It is also referred to as &lt;b&gt;hurricane&lt;/b&gt; in the Atlantic Ocean or &lt;b&gt;typhoon&lt;/b&gt; in the North West Pacific Ocean.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="hazard.py" line="251"/>
         <source>cyclone general notes</source>
-        <translation type="unfinished"/>
+        <translation>notes générales cyclone</translation>
     </message>
     <message>
         <location filename="hazard.py" line="253"/>
         <source>The analysis performed here only considers the impact of &lt;b&gt;severe winds&lt;/b&gt; from tropical cyclones. The impact of other associated hazards (storm surge inundation, flood) must be analysed separately.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="hazard.py" line="264"/>
         <source>Continuous data are normally used to represent the gust wind speed of the cyclone, representing the 10-m above ground wind speed.</source>
-        <translation type="unfinished"/>
+        <translation>Les données continues sont normallement utilisées pour représenter la vitesse des rafales du cyclone, ce qui représente la vitesse du vent à 10 m du sol.</translation>
     </message>
     <message>
-        <location filename="hazard.py" line="270"/>
+        <location filename="hazard.py" line="271"/>
         <source>Classified cyclone hazard data is not presently supported.</source>
-        <translation type="unfinished"/>
+        <translation>Les données cycloniques classifiées ne sont pas supportées.</translation>
     </message>
     <message>
-        <location filename="hazard.py" line="323"/>
+        <location filename="hazard.py" line="324"/>
         <source>volcanic ash general notes</source>
-        <translation type="unfinished"/>
+        <translation>notes générales nuée ardente</translation>
     </message>
     <message>
-        <location filename="hazard.py" line="345"/>
+        <location filename="hazard.py" line="346"/>
         <source>volcanic ash specific</source>
-        <translation type="unfinished"/>
+        <translation>nuée ardente spécifiques</translation>
     </message>
     <message>
-        <location filename="hazard.py" line="384"/>
+        <location filename="hazard.py" line="385"/>
         <source>tsunami general notes</source>
-        <translation type="unfinished"/>
+        <translation>notes générales tsunami</translation>
     </message>
     <message>
-        <location filename="hazard.py" line="441"/>
+        <location filename="hazard.py" line="442"/>
         <source>volcano general notes</source>
-        <translation type="unfinished"/>
+        <translation>notes générales volcanisme</translation>
     </message>
     <message>
         <location filename="hazard_classifications.py" line="1327"/>
         <source>&lt;b&gt;Tropical cyclone&lt;/b&gt; intensity is classified using five classes according to the Australian Bureau of Meteorology. Tropical Cyclone intensity is defined as the maximum mean wind speed over open flat land or water, averaged over a 10-minute period. This is sometimes referred to as the maximum sustained wind and will be experienced around the eye-wall of the cyclone.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="hazard_classifications.py" line="1361"/>
         <source>Extremely dangerous with widespread destruction. A Category 5 cyclone&apos;s strongest winds are VERY DESTRUCTIVE winds with typical gusts over open flat land of more than 151 kt. </source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="hazard_classifications.py" line="1392"/>
         <source>Significant roofing loss and structural damage. Many caravans destroyed and blown away. Dangerous airborne debris . Widespread power failures. A Category 4 cyclone&apos;s strongest winds are VERY DESTRUCTIVE winds with typical gusts over open flat land of 122 - 151 kt. </source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="hazard_classifications.py" line="1430"/>
         <source>Some roof and structural damage. Some caravans destroyed.Power failures likely. A Category 3 cyclone&apos;s strongest winds are VERY DESTRUCTIVE winds with typical gusts over open flat land of 90 - 121 kt. </source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="hazard_classifications.py" line="1467"/>
         <source>Minor house damage. Significant damage to signs, trees and caravans. Heavy damage to some crops. Risk of power failure. Small craft may break moorings. A Category 2 cyclone&apos;s strongest winds are DESTRUCTIVE winds with typical gusts over open flat land of 68 - 89 kt. </source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="hazard_classifications.py" line="1505"/>
         <source>Negligible house damage. Damage to some crops, trees and caravans. Craft may drag moorings. A Category 1 cyclone&apos;s strongest winds are GALES with typical gusts over open flat land of 49 - 67 kt. </source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="hazard_classifications.py" line="1580"/>
         <source>The &lt;b&gt;Saffir-Simpson Hurricane Wind Scale&lt;/b&gt; is a 1 to 5 rating based on a hurricane&apos;s sustained wind speed, measured over a 1-minute period. This scale estimates potential property damage. Hurricanes reaching Category 3 and higher are considered major hurricanes because of their potential for significant loss of life and damage. Category 1 and 2 storms are still dangerous, however, and require preventative measures. In the western North Pacific, the term &quot;super typhoon&quot; is used for tropical cyclones with sustained winds exceeding 150 mph.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="hazard_exposure_specifications.py" line="20"/>
         <source>volcanic ash on population specific</source>
-        <translation type="unfinished"/>
+        <translation>spécifique nuée ardente sur la population</translation>
     </message>
     <message>
         <location filename="hazard_exposure_specifications.py" line="20"/>
         <source>earthquake on population specific notes</source>
-        <translation type="unfinished"/>
+        <translation>notes spécifiques sismiques sur la population</translation>
     </message>
     <message>
         <location filename="population_post_processors.py" line="269"/>
         <source>Pregnant Post Processor</source>
-        <translation type="unfinished"/>
+        <translation>Post Processeur Enceinte</translation>
     </message>
     <message>
         <location filename="population_post_processors.py" line="270"/>
         <source>A post processor to calculate the number of displaced pregnant women. &quot;Pregnant&quot; is defined as: {pregnant_concept} &quot;Displaced&quot; is defined as: {displaced_concept}</source>
-        <translation type="unfinished"/>
+        <translation>Un post processeur pour calculer le nombre de femmes enceintes déplacées. &quot;Enceinte&quot; est défini comme: {pregnant_concept} &quot;Déplacé&quot; est défini comme: {displaced_concept}</translation>
     </message>
     <message>
         <location filename="population_post_processors.py" line="306"/>
         <source>Lactating Women Post Processor</source>
-        <translation type="unfinished"/>
+        <translation>Post Processeur Femme Allaitante</translation>
     </message>
     <message>
         <location filename="population_post_processors.py" line="307"/>
         <source>A post processor to calculate the number of displaced lactating women. &quot;Lactating&quot; is defined as: {lactating_concept} &quot;Displaced&quot; is defined as: {displaced_concept}</source>
-        <translation type="unfinished"/>
+        <translation>Un post processeur pour calculer le nombre de femmes allaitantes déplacées. &quot;Allaitante&quot; est défini comme: {lactating_concept} &quot;Déplacé&quot; est défini comme: {displaced_concept}</translation>
     </message>
     <message>
         <location filename="population_post_processors.py" line="344"/>
         <source>Male Post Processor</source>
-        <translation type="unfinished"/>
+        <translation>Post Processeur Homme</translation>
     </message>
     <message>
         <location filename="population_post_processors.py" line="345"/>
         <source>A post processor to calculate the number of displaced males.&quot;Male&quot; is defined as: {male_concept}. &quot;Displaced&quot; is defined as: {displaced_concept}</source>
-        <translation type="unfinished"/>
+        <translation>Un post processeur pour calculer le nombre d&apos;hommes déplacés. &quot;Homme&quot; est défini comme: {male_concept} &quot;Déplacé&quot; est défini comme: {displaced_concept}</translation>
     </message>
     <message>
         <location filename="population_post_processors.py" line="383"/>
         <source>Female Post Processor</source>
-        <translation type="unfinished"/>
+        <translation>Post Processeur Femme</translation>
     </message>
     <message>
         <location filename="population_post_processors.py" line="384"/>
         <source>A post processor to calculate the number of displaced females.&quot;Female&quot; is defined as: {female_concept}. &quot;Displaced&quot; is defined as: {displaced_concept}</source>
-        <translation type="unfinished"/>
+        <translation>Un post processeur pour calculer le nombre de femmes déplacées. &quot;Femme&quot; est défini comme: {female_concept} &quot;Déplacé&quot; est défini comme: {displaced_concept}</translation>
     </message>
     <message>
         <location filename="population_post_processors.py" line="704"/>
         <source>Disability Vulnerability Post Processor</source>
-        <translation type="unfinished"/>
+        <translation>Post Processeur Vulnérabilité Handicap</translation>
     </message>
     <message>
         <location filename="population_post_processors.py" line="705"/>
         <source>A post processor to calculate the number of displaced people who are especially vulnerable because they have disabilities. &quot;Disabled&quot; is defined as: {disabled_concept}. &quot;Displaced&quot; is defined as: {displaced_concept}</source>
-        <translation type="unfinished"/>
+        <translation>Un post processeur pour calculer le nombre de personnes déplacées qui sont vulnérables car elles ont un handicap. &quot;Handicap&quot; est défini comme: {disabled_concept} &quot;Déplacé&quot; est défini comme: {displaced_concept}</translation>
     </message>
     <message>
         <location filename="components.py" line="266"/>
         <source>affected notes</source>
-        <translation type="unfinished"/>
+        <translation>notes affectés</translation>
     </message>
     <message>
         <location filename="components.py" line="273"/>
         <source>displacement rates notes</source>
-        <translation type="unfinished"/>
+        <translation>notes ratios d&apos;évacuation</translation>
     </message>
     <message>
         <location filename="wizard_dialog.py" line="648"/>
         <source>Invalid Field Mapping</source>
-        <translation type="unfinished"/>
+        <translation>Mappage des Champs Invalide</translation>
     </message>
     <message>
         <location filename="definitions_help.py" line="251"/>
@@ -8631,19 +8628,14 @@ You can select more than 1 field. InaSAFE will sum up the value of the fields th
         <translation>Le Téléchargeur OpenStreetMap</translation>
     </message>
     <message>
-        <location filename="field_mapping_help.py" line="187"/>
-        <source>The interplay between default ratios, aggregation layer provided ratios and population exposure layers is illustratedin the table below.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="field_mapping_help.py" line="199"/>
         <source>Vector, no counts</source>
-        <translation type="unfinished"/>
+        <translation>Vecteur, pas d&apos;effectif</translation>
     </message>
     <message>
         <location filename="field_mapping_help.py" line="200"/>
         <source>Vector with counts</source>
-        <translation type="unfinished"/>
+        <translation>Vecteur, avec effectifs</translation>
     </message>
     <message>
         <location filename="field_mapping_help.py" line="201"/>
@@ -8653,42 +8645,42 @@ You can select more than 1 field. InaSAFE will sum up the value of the fields th
     <message>
         <location filename="field_mapping_help.py" line="203"/>
         <source>No aggregation</source>
-        <translation type="unfinished"/>
+        <translation>Pas d&apos;agrégation</translation>
     </message>
     <message>
         <location filename="field_mapping_help.py" line="211"/>
         <source>Use global default ratio</source>
-        <translation type="unfinished"/>
+        <translation>Utiliser le ratio global par défaut</translation>
     </message>
     <message>
         <location filename="field_mapping_help.py" line="227"/>
         <source>Use count to determine ratio</source>
-        <translation type="unfinished"/>
+        <translation>Utiliser un effectif pour déterminer le ratio</translation>
     </message>
     <message>
         <location filename="field_mapping_help.py" line="211"/>
         <source>Aggregation, ratio not set</source>
-        <translation type="unfinished"/>
+        <translation>Agrégation, ratio non défini</translation>
     </message>
     <message>
         <location filename="field_mapping_help.py" line="211"/>
         <source>Do nothing</source>
-        <translation type="unfinished"/>
+        <translation>Ne rien faire</translation>
     </message>
     <message>
         <location filename="field_mapping_help.py" line="219"/>
         <source>Aggregation, ratio value set</source>
-        <translation type="unfinished"/>
+        <translation>Agrégation, ratio défini</translation>
     </message>
     <message>
         <location filename="field_mapping_help.py" line="227"/>
         <source>Use aggregation layer ratio</source>
-        <translation type="unfinished"/>
+        <translation>Utiliser ratio de la couche d&apos;agrégation</translation>
     </message>
     <message>
         <location filename="field_mapping_help.py" line="227"/>
         <source>Aggregation, ratio field mapping set</source>
-        <translation type="unfinished"/>
+        <translation>Agrégation, mappage des champs ratio défini</translation>
     </message>
     <message>
         <location filename="options_help.py" line="117"/>
@@ -8698,7 +8690,7 @@ You can select more than 1 field. InaSAFE will sum up the value of the fields th
     <message>
         <location filename="options_help.py" line="117"/>
         <source>When this option is enabled, the map report created after an analysis completes will not show any other layers in your current project except for the impact layer. </source>
-        <translation type="unfinished"/>
+        <translation>Quand cette option est activée, le rapport cartographique crée après l&apos;analyse ne montrera pas les autres couches de votre projet, excepté la couche d&apos;impact.</translation>
     </message>
     <message>
         <location filename="options_help.py" line="123"/>
@@ -8708,37 +8700,37 @@ You can select more than 1 field. InaSAFE will sum up the value of the fields th
     <message>
         <location filename="options_help.py" line="123"/>
         <source>If enabled, running an analysis with some features of the aggregation layer selected will constrain the analysis to only those selected aggregation areas, all others will be ignored.</source>
-        <translation type="unfinished"/>
+        <translation>Si activée et si l&apos;agrégation contient des entités sélectionnées, cela forcera l&apos;analyse a n&apos;utiliser que les entités sélectionnées et ignorer les autres dans la couche d&apos;agrégation.</translation>
     </message>
     <message>
         <location filename="options_help.py" line="138"/>
         <source>Earthquake options tab</source>
-        <translation type="unfinished"/>
+        <translation>Onglet des options sismiques</translation>
     </message>
     <message>
         <location filename="options_help.py" line="148"/>
         <source>In this tab you can select which model to use when calculating earthquake fatalities and displacements. This option is global - it will affect all subsequent earthquake analyses carried out in InaSAFE.</source>
-        <translation type="unfinished"/>
+        <translation>Dans cet onglet, vous pouvez sélectionner le modèle à utiliser pour calculer les fatalités lors d&apos;un séisme. Cette option est globale, cela affectera toutes les analyses sismiques dans InaSAFE.</translation>
     </message>
     <message>
         <location filename="options_help.py" line="155"/>
         <source>When selecting an earthquake analysis model, its details will be shown below in the text box area.</source>
-        <translation type="unfinished"/>
+        <translation>Lors de la sélection d&apos;un modèle d&apos;analyse sismique, ses détails seront affichés dans la zone de texte ci-aprés.</translation>
     </message>
     <message>
         <location filename="options_help.py" line="258"/>
         <source>Demographic Defaults tab</source>
-        <translation type="unfinished"/>
+        <translation>Onglet Défaut Démographique</translation>
     </message>
     <message>
         <location filename="options_help.py" line="268"/>
         <source>In this tab you will find options for setting the default ratios for demographic groups. There is more detailed help on demographic groups within the main help page for InaSAFE in the Field Mapping Tool section. Essentially default ratios for demographic groups determine what proportion of the population are within a each population segment (e.g. infants versus children etc.). The options defined in this tab be used in cases where you choose to use the global default ratios while configuring the keywords for an aggregation layer as shown below.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="options_help.py" line="280"/>
         <source>Note that the contents of this tab may changed depending on what groups have been defined for demographic breakdowns.</source>
-        <translation type="unfinished"/>
+        <translation>Notoms que le contenu de cet onglet peut changer suivant les groupes qui ont été définis pour la décomposition démographique.</translation>
     </message>
     <message>
         <location filename="options_dialog.py" line="339"/>
@@ -8753,17 +8745,27 @@ Notes:
 Citations:
 
 %s</source>
-        <translation type="unfinished"/>
+        <translation>Description:
+
+%s
+
+Notes:
+
+%s
+
+Citations:
+
+%s</translation>
     </message>
     <message>
         <location filename="field_mapping_tab.py" line="291"/>
         <source>You can only map one field to one concept.</source>
-        <translation type="unfinished"/>
+        <translation>Vous ne pouvez mapper que un seul champ dans un seul concept.</translation>
     </message>
     <message>
         <location filename="field_mapping_tab.py" line="304"/>
         <source>You can map one field to more than one concepts.</source>
-        <translation type="unfinished"/>
+        <translation>Vous pouvez mapper un champ à plusieurs concepts.</translation>
     </message>
     <message>
         <location filename="impact_function.py" line="269"/>
@@ -8773,283 +8775,268 @@ Citations:
     <message>
         <location filename="earthquake.py" line="116"/>
         <source>ITB bayesian fatality model</source>
-        <translation type="unfinished"/>
+        <translation>Modèle de fatalité ITB bayésien</translation>
     </message>
     <message>
         <location filename="earthquake.py" line="116"/>
         <source>ITB fatality model</source>
-        <translation type="unfinished"/>
+        <translation>Modèle de fatalité ITB</translation>
     </message>
     <message>
         <location filename="earthquake.py" line="116"/>
         <source>Pager fatality model</source>
-        <translation type="unfinished"/>
+        <translation>Modèle de fatalité Pager</translation>
     </message>
     <message>
         <location filename="fields.py" line="1420"/>
         <source>Fatality Ratio</source>
-        <translation type="unfinished"/>
+        <translation>Ratio de Fatalité</translation>
     </message>
     <message>
         <location filename="fields.py" line="1426"/>
         <source>The population fatality ratio for a given hazard class.</source>
-        <translation type="unfinished"/>
+        <translation>Le ratio de fatalité de la population pour une classe d&apos;aléa donnée.</translation>
     </message>
     <message>
         <location filename="fields.py" line="1428"/>
         <source>&quot;Fatalities&quot; is defined as: {concept} In cases where population data is available and the hazard is an earthquake, InaSAFE will calculate the estimated number of killed people per exposure feature, aggregate hazard area, aggregation area and for the analysis area as a whole. The population displaced ratio is calculated based on definitions for each hazard class.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="population_post_processors.py" line="150"/>
         <source>Population Fatality Ratio Post Processor</source>
-        <translation type="unfinished"/>
+        <translation>Post-Processeur Ratio de Fatalité de la Population </translation>
     </message>
     <message>
         <location filename="population_post_processors.py" line="194"/>
         <source>Fatalities Post Processor</source>
-        <translation type="unfinished"/>
+        <translation>Post Processeur Fatalité</translation>
     </message>
     <message>
         <location filename="population_post_processors.py" line="195"/>
         <source>A post processor to calculate the number of fatalities. </source>
-        <translation type="unfinished"/>
+        <translation>Un post processeur pour calculer le nombre de fatalités.</translation>
     </message>
     <message>
         <location filename="post_processor_inputs.py" line="34"/>
         <source>This type of parameter checks the value of a specific keyword in order to run for the layer being handled.</source>
-        <translation type="unfinished"/>
+        <translation>Ce type de paramètre vérifie la valeur pour un mot-clé spécifique afin s&apos;éxécuter.</translation>
     </message>
     <message>
         <location filename="options_dialog.py" line="348"/>
         <source>Please select your preferred earthquake fatality model. The default fatality model is the {model}.</source>
-        <translation type="unfinished"/>
+        <translation>Veuillez sélectionner le modèle de fatalité à utiliser. Actuellement, le modèle de fatalité par défaut est {model}.</translation>
     </message>
     <message>
         <location filename="earthquake.py" line="116"/>
         <source>Algorithm:</source>
-        <translation type="unfinished"/>
+        <translation>Protocole:</translation>
     </message>
     <message>
         <location filename="earthquake.py" line="116"/>
         <source>In this study, the same functional form as Allen (2009) is adopted to express fatality rate as a function of intensity (see Eq. 10 in the report). The Matlab built-in function (fminsearch) for  Nelder-Mead algorithm was used to estimate the model parameters. The objective function (L2G norm) that is minimised during the optimisation is the same as the one used by Jaiswal et al. (2010).</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="earthquake.py" line="116"/>
-        <source>The coefficients used in the indonesian model arex=0.62275231, y=8.03314466, zeta=2.15</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="earthquake.py" line="116"/>
         <source>Caveats and limitations:</source>
-        <translation type="unfinished"/>
+        <translation>Avertissements et limitations:</translation>
     </message>
     <message>
         <location filename="earthquake.py" line="116"/>
         <source>The current model is the result of the above mentioned workshop and reflects the best available information. However, the current model has a number of issues listed below and is expected to evolve further over time.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="earthquake.py" line="116"/>
         <source>1 - The model is based on limited number of observed fatality rates during 4 past fatal events.</source>
-        <translation type="unfinished"/>
+        <translation>1 - Ce modèle est basé sur un nombre limité d&apos;observations des taux de fatalité durant les quatre événements précédents</translation>
     </message>
     <message>
         <location filename="earthquake.py" line="116"/>
         <source>2 - The model clearly over-predicts the fatality rates at intensities higher than VIII.</source>
-        <translation type="unfinished"/>
+        <translation>2- Le modèle surestime clairement le taux de fatalité pour des intensités supérieur à VIII.</translation>
     </message>
     <message>
         <location filename="earthquake.py" line="116"/>
         <source>3 - The model only estimates the expected fatality rate for a given intensity level; however the associated uncertainty for the proposed model is not addressed.</source>
-        <translation type="unfinished"/>
+        <translation>3- Le modèle estime uniquement le taux de fatalité attendu pour un niveau d’intensité donné. L’incertitude associée au modèle proposé n&apos;est pas abordée.</translation>
     </message>
     <message>
         <location filename="earthquake.py" line="116"/>
         <source>4 - There are few known mistakes in developing the current model:</source>
-        <translation type="unfinished"/>
+        <translation>4 - Il existe quelques erreurs connues lors du développement de ce modèle:</translation>
     </message>
     <message>
         <location filename="earthquake.py" line="116"/>
         <source>- rounding MMI values to the nearest 0.5,</source>
-        <translation type="unfinished"/>
+        <translation>- valeurs MMI arrondies à 0,5 près,</translation>
     </message>
     <message>
         <location filename="earthquake.py" line="116"/>
         <source>- Implementing Finite-Fault models of candidate events, and</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="earthquake.py" line="116"/>
         <source>- consistency between selected GMPEs with those in use by </source>
         <comment>BMKG. These issues will be addressed by ITB team in the final report.</comment>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="earthquake.py" line="116"/>
         <source>Note: Because of these caveats, decisions should not be made solely on the information presented here and should always be verified by ground truthing and other reliable information sources.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="earthquake.py" line="116"/>
-        <source>Allen, T. I., Wald, D. J., Earle, P. S., Marano, K. D., Hotovec, A. J., Lin, K., and Hearne, M., 2009. An Atlas of ShakeMaps and population exposure catalog for earthquake loss modeling, Bull. Earthq. Eng. 7, 701-718.Jaiswal, K., and Wald, D., 2010. An empirical model for global earthquake fatality estimation, Earthq. Spectra 26, 1017-1037.</source>
-        <translation type="unfinished"/>
+        <translation>Note: À cause de ces avertissements, les décisions ne doivent pas être prisent seulement sur les informations présentées ici mais doivent toujours être vérifiées sur le terrain avec l&apos;aide d&apos;autres sources d&apos;informations.</translation>
     </message>
     <message>
         <location filename="components.py" line="401"/>
         <source>Analysis Environment</source>
-        <translation type="unfinished"/>
+        <translation>Environnement de l&apos;Analyse</translation>
     </message>
     <message>
         <location filename="definitions_help.py" line="284"/>
         <source>The Field Mapping Tool</source>
-        <translation type="unfinished"/>
+        <translation>Outil de Mappage des Valeurs</translation>
     </message>
     <message>
         <location filename="definitions_help.py" line="748"/>
         <source>Developer Guide</source>
-        <translation type="unfinished"/>
+        <translation>Guide pour les développeurs</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1210"/>
+        <location filename="definitions_help.py" line="1223"/>
         <source>Citations:</source>
-        <translation type="unfinished"/>
+        <translation>Citations:</translation>
     </message>
     <message>
         <location filename="developer_help.py" line="58"/>
         <source>InaSAFE developer help</source>
-        <translation type="unfinished"/>
+        <translation>Aide pour les développeurs InaSAFE</translation>
     </message>
     <message>
         <location filename="developer_help.py" line="74"/>
         <source>This section of the help documentation is intended for advanced users who want to modify the internals of InaSAFE. It assumes that you have basic coding skills. All examples are in python unless otherwise stated.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="developer_help.py" line="80"/>
         <source>Defining a new hazard type</source>
-        <translation type="unfinished"/>
+        <translation>Définition d&apos;un nouveau type d&apos;aléa</translation>
     </message>
     <message>
         <location filename="developer_help.py" line="82"/>
         <source>Background</source>
-        <translation type="unfinished"/>
+        <translation>Arrière-plan</translation>
     </message>
     <message>
         <location filename="developer_help.py" line="84"/>
         <source>In the previous versions of InaSAFE, we spent a lot of effort building one impact function per hazard/exposure combination (and sometimes multiple impact functions per combination). In our new architecture, we try to deal with everything in the same way - by following a standardized process of converting the hazard dataset into a classified polygon layer and then calculating the impacted and affected areas using a standard work-flow. A simplified version of this work-flow is described in illustration 1.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="developer_help.py" line="94"/>
         <source>Because of this change, you will no longer see an impact function selector in the dock widget and there are no longer any &apos;impact function options&apos; as we had in previous versions of InaSAFE. In the new system, almost all configuration is managed through metadata (created using the keywords wizard).</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="developer_help.py" line="102"/>
         <source>Also, in all versions prior to Version 4.0, we made heavy use of interpolation in order to determine whether buildings or other exposure layers are impacted. Whist this is a commonly used technique in GIS, it often leads to non - intuitive looking reports. Under our new architecture, we always use geometric overlay operations to make a determination whether an exposure feature is affected or not. The implication of this is that we produce intuitive and easily verifiable impact layers. You can see an example in Illustration 2.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="developer_help.py" line="114"/>
         <source>Stepping away from the two previously mentioned paradigms allows us to simply add new hazard types to the metadata driven impact function by adding new metadata types to the InaSafe sources. In the next chapter we show you how this was achieved and how it can be repeated for further hazards using the example of tropical cyclones.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="developer_help.py" line="123"/>
         <source>Adding a new hazard</source>
-        <translation type="unfinished"/>
+        <translation>Ajout d&apos;un nouveau aléa</translation>
     </message>
     <message>
         <location filename="developer_help.py" line="128"/>
         <source>The whole work needed can be looked at in </source>
-        <translation type="unfinished"/>
+        <translation>L&apos;ensemble du travail peut-être vu dans à</translation>
     </message>
     <message>
         <location filename="developer_help.py" line="128"/>
         <source>. Please bear in mind that the paths of the files are now safe/definitions/xxx.py and not safe/definitionsv4/xxx.py since v4 is the default codebase. In the next sections we will show each file that needs to be extended in order to add a new hazard type.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="developer_help.py" line="142"/>
         <source>safe/definitions/units.py</source>
-        <translation type="unfinished"/>
+        <translation>safe/definitions/units.py</translation>
     </message>
     <message>
         <location filename="developer_help.py" line="156"/>
         <source>safe/definitions/colors.py</source>
-        <translation type="unfinished"/>
+        <translation>safe/definitions/colors.py</translation>
     </message>
     <message>
         <location filename="developer_help.py" line="172"/>
         <source>safe/definitions/hazard_classifications.py</source>
-        <translation type="unfinished"/>
+        <translation>safe/definitions/hazard_classifications.py</translation>
     </message>
     <message>
         <location filename="developer_help.py" line="198"/>
         <source>safe/gui/tools/wizard/wizard_strings.py</source>
-        <translation type="unfinished"/>
+        <translation>safe/gui/tools/wizard/wizard_strings.py</translation>
     </message>
     <message>
         <location filename="developer_help.py" line="216"/>
         <source>safe/definitions/hazard.py</source>
-        <translation type="unfinished"/>
+        <translation>safe/definitions/hazard.py</translation>
     </message>
     <message>
         <location filename="shakemap_converter_help.py" line="66"/>
         <source>This tool will convert an earthquake &apos;shakemap&apos; that is in grid xml format into a GeoTIFF file. The imported file can be used in InaSAFE as an input for impact functions that require an earthquake layer.  To use this tool effectively:</source>
-        <translation type="unfinished"/>
+        <translation>Cet outil va convertir un séisme &apos;shakemap&apos; format grille XML en fichier GeoTIFF. Le fichier importé peut-être utilisé dans InaSAFE comme couche d&apos;aléa. Afin d&apos;utiliser cet outil:</translation>
     </message>
     <message>
         <location filename="impact_function.py" line="724"/>
         <source>The {purpose} layer is invalid</source>
-        <translation type="unfinished"/>
+        <translation>La couche {purpose} est invalide.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="726"/>
-        <source>The impact function needs a {exposure} layer to run. You must provide a valid %s layer.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="739"/>
+        <location filename="impact_function.py" line="740"/>
         <source>The {purpose} layer does not have keywords.</source>
-        <translation type="unfinished"/>
+        <translation>La couche {purpose} n&apos;a pas de mots-clés.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="742"/>
+        <location filename="impact_function.py" line="743"/>
         <source>The {purpose} layer does not have keywords. Use the wizard to assign keywords to the layer.</source>
-        <translation type="unfinished"/>
+        <translation>La couche {purpose} n&apos;a pas de mots-clés. Utilisez l&apos;assistant pour attribuer des mots-clés à la couche.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="752"/>
+        <location filename="impact_function.py" line="753"/>
         <source>The expected {purpose} layer is not an {purpose}.</source>
-        <translation type="unfinished"/>
+        <translation>La couche {purpose} attendue n&apos;est pas un {purpose}.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="780"/>
+        <location filename="impact_function.py" line="781"/>
         <source>The {purpose} layer is not up to date.</source>
-        <translation type="unfinished"/>
+        <translation>La couche {purpose} n&apos;est pas à jour.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="782"/>
+        <location filename="impact_function.py" line="783"/>
         <source>The layer {source} must be updated with the keyword wizard. Your fields which have been set in the keywords previously are not matching your layer.</source>
-        <translation type="unfinished"/>
+        <translation>La couche {source} doit être mise-à-jour avec l&apos;assistant des mots-clés. Vos champs qui ont été configurés dans les mots-clés ne correspondent plus à votre couche.</translation>
     </message>
     <message>
         <location filename="hello_world_report.py" line="45"/>
         <source>Hello World!</source>
-        <translation type="unfinished"/>
+        <translation>Hello World!</translation>
     </message>
     <message>
         <location filename="exposure.py" line="51"/>
         <source>Numbers reported for population counts have been rounded to the nearest 10 people if the total is less than 1,000; nearest 100 people if more than 1,000 and less than 100,000; and nearest 1,000 if more than 100,000.</source>
-        <translation type="unfinished"/>
+        <translation>Le nombre de population reporté a été arrondi à 10 personnes près si le total est moins que 1 000, à 100 personnes si plus que 1 000 et moins que 100 000,  à 1 000 personnes si le total est supérieur à 100 000.</translation>
     </message>
     <message>
         <location filename="population_post_processors.py" line="151"/>
         <source>A post processor to add the population fatality ratio according to the hazard class. Only the MMI classification has a fatality model.</source>
-        <translation type="unfinished"/>
+        <translation>Un post processeur pour ajouter le ratio de fatalité de la population selon une classe d&apos;aléa. Seule la classification MMI possède un modèle de fatalité.</translation>
     </message>
     <message>
         <location filename="components.py" line="426"/>
@@ -9069,62 +9056,62 @@ Citations:
     <message>
         <location filename="hazard_classifications.py" line="149"/>
         <source>This scale, composed of increasing levels of intensity that range from imperceptible shaking to catastrophic destruction, is designated by Roman numerals. It does not have a mathematical basis; instead it is an arbitrary ranking based on observed effects. Note that fatality rates listed here are based on the active earthquake fatality model (currently set to %s). Users can select the active earthquake fatality model in InaSAFE Options.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="age_vulnerability_field_group.py" line="80"/>
         <source>Age Vulnerability</source>
-        <translation type="unfinished"/>
+        <translation>Vulnérabilité liée à l&apos;âge</translation>
     </message>
     <message>
         <location filename="disability_vulnerability_field_group.py" line="69"/>
         <source>Disability Vulnerability</source>
-        <translation type="unfinished"/>
+        <translation>Vulnérabilité liée à l&apos;accessibilité</translation>
     </message>
     <message>
         <location filename="gender_vulnerability_field_group.py" line="90"/>
         <source>Gender Vulnerability</source>
-        <translation type="unfinished"/>
+        <translation>Vulnérabilité liée au genre</translation>
     </message>
     <message>
         <location filename="fields.py" line="1566"/>
         <source>Male</source>
-        <translation type="unfinished"/>
+        <translation>Homme</translation>
     </message>
     <message>
         <location filename="fields.py" line="1497"/>
         <source>Child Bearing Age</source>
-        <translation type="unfinished"/>
+        <translation>En âge de procréer</translation>
     </message>
     <message>
         <location filename="fields.py" line="1520"/>
         <source>Pregnant</source>
-        <translation type="unfinished"/>
+        <translation>Enceinte</translation>
     </message>
     <message>
         <location filename="fields.py" line="1542"/>
         <source>Lactating</source>
-        <translation type="unfinished"/>
+        <translation>Allaitante</translation>
     </message>
     <message>
         <location filename="fields.py" line="1587"/>
         <source>Infant</source>
-        <translation type="unfinished"/>
+        <translation>Nourrisson</translation>
     </message>
     <message>
         <location filename="fields.py" line="1610"/>
         <source>Child</source>
-        <translation type="unfinished"/>
+        <translation>Enfant</translation>
     </message>
     <message>
         <location filename="fields.py" line="1702"/>
         <source>Under 5</source>
-        <translation type="unfinished"/>
+        <translation>Moins de 5</translation>
     </message>
     <message>
         <location filename="fields.py" line="1725"/>
         <source>Over 60</source>
-        <translation type="unfinished"/>
+        <translation>Plus de 60</translation>
     </message>
     <message>
         <location filename="fields.py" line="1748"/>
@@ -9134,57 +9121,87 @@ Citations:
     <message>
         <location filename="components.py" line="259"/>
         <source>analysis notes</source>
-        <translation type="unfinished"/>
+        <translation>Notes de l&apos;analyse</translation>
     </message>
     <message>
         <location filename="components.py" line="279"/>
         <source>{name} - {displacement_rate:.0%}</source>
-        <translation type="unfinished"/>
+        <translation>{name} - {displacement_rate:.0%}</translation>
     </message>
     <message>
         <location filename="components.py" line="282"/>
         <source>fatality rates notes</source>
-        <translation type="unfinished"/>
+        <translation>notes taux de mortalité</translation>
     </message>
     <message>
         <location filename="components.py" line="284"/>
         <source>For this analysis, the following fatality rates were used: {rate_description}</source>
-        <translation type="unfinished"/>
+        <translation>Pour cette analyse, les taux de mortalité suivant ont été utilisés: {rate_description}</translation>
     </message>
     <message>
         <location filename="components.py" line="288"/>
         <source>{name} - {fatality_rate}%</source>
-        <translation type="unfinished"/>
+        <translation>{name} - {fatality_rate}%</translation>
     </message>
     <message>
         <location filename="components.py" line="349"/>
         <source>Estimated number of minimum needs per week</source>
-        <translation type="unfinished"/>
+        <translation>Nombre des besoins minimaux estimés par semaine</translation>
     </message>
     <message>
         <location filename="components.py" line="357"/>
         <source>Estimated number of people displaced by {header_name} per aggregation area</source>
-        <translation type="unfinished"/>
+        <translation>Nombre des personnes déplacées par {header_name} par unité d&apos;agrégation</translation>
     </message>
     <message>
         <location filename="components.py" line="360"/>
         <source>{header_name} breakdown</source>
-        <translation type="unfinished"/>
+        <translation>Décomposition {header_name}</translation>
     </message>
     <message>
         <location filename="components.py" line="364"/>
         <source>Gender ratio is not found. No calculations produced.</source>
-        <translation type="unfinished"/>
+        <translation>Le ratio genre n&apos;existe pas. Pas de calcul effectué.</translation>
     </message>
     <message>
         <location filename="components.py" line="367"/>
         <source>Age ratio is not found. No calculations produced.</source>
-        <translation type="unfinished"/>
+        <translation>Le ratio âge n&apos;existe pas. Pas de calcul effectué.</translation>
     </message>
     <message>
         <location filename="components.py" line="370"/>
         <source>Vulnerability ratio is not found. No calculations produced.</source>
-        <translation type="unfinished"/>
+        <translation>Le ratio vulnérabilité n&apos;existe pas. Pas de calcul effectué.</translation>
+    </message>
+    <message>
+        <location filename="earthquake.py" line="116"/>
+        <source>The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, zeta=2.15</source>
+        <translation>Les coefficients utilisés dans le modèle Indonésien sont x=0,62275231, y=8,03314466, zeta=2,15.</translation>
+    </message>
+    <message>
+        <location filename="earthquake.py" line="116"/>
+        <source>Allen, T. I., Wald, D. J., Earle, P. S., Marano, K. D., Hotovec, A. J., Lin, K., and Hearne, M., 2009. An Atlas of ShakeMaps and population exposure catalog for earthquake loss modeling, Bull. Earthq. Eng. 7, 701-718. Jaiswal, K., and Wald, D., 2010. An empirical model for global earthquake fatality estimation, Earthq. Spectra 26, 1017-1037.</source>
+        <translation>Allen, T. I., Wald, D. J., Earle, P. S., Marano, K. D., Hotovec, A. J., Lin, K., and Hearne, M., 2009. An Atlas of ShakeMaps and population exposure catalog for earthquake loss modeling, Bull. Earthq. Eng. 7, 701-718. Jaiswal, K., and Wald, D., 2010. An empirical model for global earthquake fatality estimation, Earthq. Spectra 26, 1017-1037.</translation>
+    </message>
+    <message>
+        <location filename="exposure_classifications.py" line="733"/>
+        <source>Water bodies</source>
+        <translation>Plans d&apos;eau</translation>
+    </message>
+    <message>
+        <location filename="field_mapping_help.py" line="187"/>
+        <source>The interplay between default ratios, aggregation layer provided ratios and population exposure layers is illustrated in the table below.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="726"/>
+        <source>The impact function needs a {exposure} layer to run. You must provide a valid {exposure} layer.</source>
+        <translation>La fonction de calcul d&apos;impact a besoin d&apos;une couche {exposure} pour s&apos;exécuter. Vous devez fournir une couche valide {exposure}.</translation>
+    </message>
+    <message>
+        <location filename="default_values.py" line="205"/>
+        <source>Default ratio of child bearing age per 100 people in the total population.</source>
+        <translation>Ratio par défaut des personnes en âge de procréer pour 100 personnes dans la population totale.</translation>
     </message>
 </context>
 <context>
@@ -9196,7 +9213,7 @@ Citations:
     </message>
     <message>
         <location filename="about_dialog.py" line="75"/>
-        <source>Edit by Hugo GarduÃ±o from The Noun Project</source>
+        <source>Edit by Hugo Gardu&#xc3;&#xb1;o from The Noun Project</source>
         <translation>Édité par Hugo Garduño de The Noun Project</translation>
     </message>
     <message>
@@ -9237,8 +9254,8 @@ Citations:
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Helvetica Neue,Helvetica,Segoe UI,Arial,freesans,sans-serif'; font-size:14px; color:#333333; background-color:#ffffff;&quot;&gt;InaSAFE is free software that provides a simple but rigorous way to combine data from communities, local governments and scientists to help assess the possible impact of future disaster events on communities, assets and infrastructure. It uses innovative science and crowd sourcing techniques (OpenStreetMap, OSM) to create realistic disaster scenarios for better planning, preparedness and response activities. It is in demand by disaster managers across Indonesia and around the world. &lt;/span&gt;&lt;/p&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Helvetica Neue,Helvetica,Segoe UI,Arial,freesans,sans-serif&apos;; font-size:14px; color:#333333; background-color:#ffffff;&quot;&gt;InaSAFE is free software that provides a simple but rigorous way to combine data from communities, local governments and scientists to help assess the possible impact of future disaster events on communities, assets and infrastructure. It uses innovative science and crowd sourcing techniques (OpenStreetMap, OSM) to create realistic disaster scenarios for better planning, preparedness and response activities. It is in demand by disaster managers across Indonesia and around the world. &lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Helvetica Neue,Helvetica,Segoe UI,Arial,freesans,sans-serif&apos;; font-size:14px; color:#333333; background-color:#ffffff;&quot;&gt;InaSAFE was developed jointly by the Indonesia&apos;s National Disaster Management Agency (BNPB), the Australian Government and the World Bank - Global Facility for Disaster Reduction and Recovery (World Bank-GFDRR).&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -9257,12 +9274,12 @@ p, li { white-space: pre-wrap; }
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;These are the minimum steps you need to follow in order to use InaSAFE:&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Cantarell'; font-size:11pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;1. Add at least one hazard layer (e.g. earthquake MMI) to QGIS.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;2. Add at least one exposure layer (e.g. structures) to QGIS.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;3. Make sure you have defined keywords for your hazard and exposure layers. You can do this using the keywords icon in the InaSAFE toolbar.&lt;/span&gt;&lt;/p&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;These are the minimum steps you need to follow in order to use InaSAFE:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;1. Add at least one hazard layer (e.g. earthquake MMI) to QGIS.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;2. Add at least one exposure layer (e.g. structures) to QGIS.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;3. Make sure you have defined keywords for your hazard and exposure layers. You can do this using the keywords icon in the InaSAFE toolbar.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;4. Click on the Run button in the InaSAFE panel.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -9285,7 +9302,7 @@ p, li { white-space: pre-wrap; }
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Sans&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -9303,7 +9320,7 @@ p, li { white-space: pre-wrap; }
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Sans&apos;; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -9321,7 +9338,7 @@ p, li { white-space: pre-wrap; }
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://www.bnpb.go.id/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Indonesia’s National Disaster Management Agency (BNPB)&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://dfat.gov.au/geo/indonesia/development-assistance/Pages/disaster-risk-management-in-indonesia.aspx&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Australian Government – Disaster Risk Management in Indonesia&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://www.gfdrr.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;World Bank - Global Facility for Disaster Reductions and Recovery&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
@@ -9763,7 +9780,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="field_mapping_dialog.py" line="48"/>
         <source>InaSAFE Field Mapping Tool</source>
-        <translation type="unfinished"/>
+        <translation>Outil de mappage des champs InaSAFE</translation>
     </message>
     <message>
         <location filename="field_mapping_dialog.py" line="206"/>
@@ -10360,7 +10377,7 @@ to
     <message>
         <location filename="needs_manager_dialog_base.ui" line="336"/>
         <source>Be careful, you need to restart QGIS if you change the current profile.</source>
-        <translation type="unfinished"/>
+        <translation>Attention, vous devez redémarrer QGIS si vous changez de profil.</translation>
     </message>
 </context>
 <context>
@@ -10568,7 +10585,7 @@ to
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'.SF NS Text'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;.SF NS Text&apos;; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:12pt; font-weight:600; color:#f50000;&quot;&gt;Note:&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:12pt;&quot;&gt; The above setting requires a QGIS restart to disable / enable. Error messages and diagnostic information will be posted to http://sentry.linfiniti.com/inasafe-desktop/. Some institutions may not allow you to enable this feature - check with your network administrator if unsure. Although the data is submitted anonymously, the information contained in tracebacks may contain file system paths which reveal your identity or other information from your system.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -10599,12 +10616,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="options_dialog_base.ui" line="268"/>
         <source>Selected model notes</source>
-        <translation type="unfinished"/>
+        <translation>Notes sur le modèle sélectionné</translation>
     </message>
     <message>
         <location filename="options_dialog_base.ui" line="509"/>
         <source>Demographic Defaults</source>
-        <translation type="unfinished"/>
+        <translation>Valeurs démographiques par défaut</translation>
     </message>
     <message>
         <location filename="options_dialog_base.ui" line="620"/>
@@ -10614,7 +10631,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="options_dialog_base.ui" line="295"/>
         <source>Be careful, you need to restart QGIS if you change the earthquake model.</source>
-        <translation type="unfinished"/>
+        <translation>Attention, vous devez redémarrer QGIS si vous changez de modèle sismique.</translation>
     </message>
 </context>
 <context>
@@ -11194,17 +11211,17 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="plugin.py" line="399"/>
         <source>InaSAFE Field Mapping Tool</source>
-        <translation type="unfinished"/>
+        <translation>Outil de mappage des champs InaSAFE</translation>
     </message>
     <message>
         <location filename="plugin.py" line="403"/>
         <source>Assign field mapping to layer.</source>
-        <translation type="unfinished"/>
+        <translation>Assigner un mappage des champs pour la couche.</translation>
     </message>
     <message>
         <location filename="plugin.py" line="405"/>
         <source>Use this tool to assign field mapping in layer.</source>
-        <translation type="unfinished"/>
+        <translation>Utiliser cet outil pour assigner un mappage des champs pour la couche.</translation>
     </message>
 </context>
 <context>
@@ -11649,7 +11666,7 @@ p, li { white-space: pre-wrap; }
     <name>pgFcAggLayerDisjoint</name>
     <message>
         <location filename="step_fc65_agglayer_disjoint.ui" line="65"/>
-        <source>The aggregation layer and hazard layer don't intersect, i.e. they cover disjoint areas.
+        <source>The aggregation layer and hazard layer don&apos;t intersect, i.e. they cover disjoint areas.
  Please step back and select another layer.</source>
         <translation>La couche d&apos;agrégation et la couche d&apos;aléas ne se chevauchent pas, c&apos;est-à-dire qu&apos;elles couvrent des zones disjointes.
 Veuillez revenir en arrière et choisir une autre couche. </translation>
@@ -11790,7 +11807,7 @@ Veuillez revenir en arrière et choisir une autre couche. </translation>
     <name>pgFcDisJointLayers</name>
     <message>
         <location filename="step_fc45_disjoint_layers.ui" line="65"/>
-        <source>The hazard layer and exposure layer don't intersect, i.e. they cover disjoint areas.
+        <source>The hazard layer and exposure layer don&apos;t intersect, i.e. they cover disjoint areas.
  Please step back and select another layer.</source>
         <translation>Les couches d&apos;aléa et d&apos;enjeu ne s&apos;intersectent pas, par exemple elles couvrent des espaces disjoints.
 Veuillez revenir en arrière et sélectionner une autre couche.</translation>
@@ -11853,7 +11870,7 @@ Veuillez revenir en arrière et sélectionner une autre couche.</translation>
     <name>pgFcExtentDisjoint</name>
     <message>
         <location filename="step_fc75_extent_disjoint.ui" line="68"/>
-        <source>The selected extent doesn't intersect input layers.
+        <source>The selected extent doesn&apos;t intersect input layers.
  Please step back and select another layer.</source>
         <translation>L&apos;étendue sélectionnée n&apos;intersecte pas les couches de travail. 
 Revenez en arrière et sélectionnez une autre couche.</translation>

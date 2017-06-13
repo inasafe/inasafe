@@ -32,7 +32,7 @@ from PyQt4.QtCore import QDate, QUrl
 from safe.common.exceptions import MetadataReadError
 from safe.common.utilities import unique_filename
 
-from safe.metadata import ExposureSummaryLayerMetadata
+from safe.metadata import OutputLayerMetadata
 from safe.metadata.provenance import Provenance
 from safe.metadata.test import (
     TEMP_DIR,
@@ -52,7 +52,7 @@ class TestImpactMetadata(TestCase):
         self.assertEqual(metadata.provenance.last.title, 'IF Provenance')
 
     def test_metadata_date(self):
-        metadata = ExposureSummaryLayerMetadata('random_layer_id')
+        metadata = OutputLayerMetadata('random_layer_id')
         path = TEST_XML_BASEPATH + 'gco:Date'
 
         # using QDate
@@ -76,7 +76,7 @@ class TestImpactMetadata(TestCase):
             metadata.update('ISO19115_TEST', test_value)
 
     def test_metadata_url(self):
-        metadata = ExposureSummaryLayerMetadata('random_layer_id')
+        metadata = OutputLayerMetadata('random_layer_id')
         path = TEST_XML_BASEPATH + 'gmd:URL'
 
         # using QUrl
@@ -95,7 +95,7 @@ class TestImpactMetadata(TestCase):
             metadata.set('ISO19115_TEST', test_value, path)
 
     def test_metadata_str(self):
-        metadata = ExposureSummaryLayerMetadata('random_layer_id')
+        metadata = OutputLayerMetadata('random_layer_id')
         path = TEST_XML_BASEPATH + 'gco:CharacterString'
 
         # using str
@@ -132,7 +132,7 @@ class TestImpactMetadata(TestCase):
         self.assertEquals(expected_json, written_json)
 
     def test_json_read(self):
-        metadata = ExposureSummaryLayerMetadata(EXISTING_IMPACT_FILE)
+        metadata = OutputLayerMetadata(EXISTING_IMPACT_FILE)
         with open(EXISTING_IMPACT_JSON) as f:
             expected_metadata = f.read()
 
@@ -140,24 +140,24 @@ class TestImpactMetadata(TestCase):
 
     def test_invalid_json_read(self):
         with self.assertRaises(MetadataReadError):
-            ExposureSummaryLayerMetadata(
+            OutputLayerMetadata(
                 EXISTING_IMPACT_FILE,
                 json_uri=INVALID_IMPACT_JSON)
 
     def test_incomplete_json_read(self):
-        ExposureSummaryLayerMetadata(
+        OutputLayerMetadata(
             EXISTING_IMPACT_FILE,
             json_uri=INCOMPLETE_IMPACT_JSON)
 
     def test_xml_read(self):
-        generated_metadata = ExposureSummaryLayerMetadata(
+        generated_metadata = OutputLayerMetadata(
             EXISTING_IMPACT_FILE, xml_uri=EXISTING_IMPACT_XML)
 
         # TODO (MB): add more checks
         self.assertEquals(generated_metadata.get_xml_value('license'), 'GPLv2')
 
     def test_xml_to_json_to_xml(self):
-        generated_metadata = ExposureSummaryLayerMetadata(
+        generated_metadata = OutputLayerMetadata(
             EXISTING_IMPACT_FILE, xml_uri=EXISTING_IMPACT_XML
         )
         with open(EXISTING_IMPACT_XML) as f:
@@ -165,7 +165,7 @@ class TestImpactMetadata(TestCase):
 
         json_tmp_file = unique_filename(suffix='.json', dir=TEMP_DIR)
         generated_metadata.write_to_file(json_tmp_file)
-        read_tmp_metadata = ExposureSummaryLayerMetadata(
+        read_tmp_metadata = OutputLayerMetadata(
             EXISTING_IMPACT_FILE, json_uri=json_tmp_file
         )
         self.assertEquals(expected_metadata, read_tmp_metadata.xml)
@@ -196,7 +196,7 @@ class TestImpactMetadata(TestCase):
             'requested_extent_crs': 'EPSG: 4326',
             'parameter': {},
         }
-        metadata = ExposureSummaryLayerMetadata('random_layer_id')
+        metadata = OutputLayerMetadata('random_layer_id')
         path = TEST_XML_BASEPATH + 'gco:CharacterString'
         # using str
         test_value = 'Random string'
@@ -254,7 +254,7 @@ class TestImpactMetadata(TestCase):
             'parameter': {},
         }
 
-        metadata = ExposureSummaryLayerMetadata('random_layer_id')
+        metadata = OutputLayerMetadata('random_layer_id')
         provenance = Provenance()
         provenance.append_step(
             'Title 1', 'Description of step 1', '2015-06-25T13:14:24.508974')

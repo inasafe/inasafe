@@ -15,7 +15,10 @@ from safe.definitions.layer_purposes import (
     layer_purpose_hazard,
     layer_purpose_exposure,
     layer_purpose_aggregation,
-    layer_purpose_exposure_summary
+    layer_purpose_exposure_summary,
+    layer_purpose_aggregate_hazard_impacted,
+    layer_purpose_analysis_impacted,
+    layer_purpose_exposure_summary_table
 )
 from safe.definitions.layer_modes import layer_mode_continuous
 from safe.definitions.versions import inasafe_keyword_version
@@ -23,7 +26,7 @@ from safe.metadata import (
     ExposureLayerMetadata,
     HazardLayerMetadata,
     AggregationLayerMetadata,
-    ExposureSummaryLayerMetadata,
+    OutputLayerMetadata,
     GenericLayerMetadata)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -33,27 +36,30 @@ __revision__ = '$Format:%H$'
 
 LOGGER = logging.getLogger('InaSAFE')
 
+METADATA_CLASSES = {
+    layer_purpose_exposure['key']: ExposureLayerMetadata,
+    layer_purpose_hazard['key']: HazardLayerMetadata,
+    layer_purpose_aggregation['key']: AggregationLayerMetadata,
+    layer_purpose_exposure_summary['key']: OutputLayerMetadata,
+    layer_purpose_exposure_summary_table['key']: OutputLayerMetadata,
+    layer_purpose_analysis_impacted['key']: OutputLayerMetadata,
+    layer_purpose_aggregate_hazard_impacted['key']: OutputLayerMetadata
+}
+
 
 def write_iso19115_metadata(layer_uri, keywords):
     """Create metadata  object from a layer path and keywords dictionary.
 
     :param layer_uri: Uri to layer.
-    :type layer_uri: str
+    :type layer_uri: basestring
 
     :param keywords: Dictionary of keywords.
     :type keywords: dict
     """
 
-    if 'layer_purpose' in keywords.keys():
-        if keywords['layer_purpose'] == layer_purpose_exposure['key']:
-            metadata = ExposureLayerMetadata(layer_uri)
-        elif keywords['layer_purpose'] == layer_purpose_hazard['key']:
-            metadata = HazardLayerMetadata(layer_uri)
-        elif keywords['layer_purpose'] == layer_purpose_aggregation['key']:
-            metadata = AggregationLayerMetadata(layer_uri)
-        elif keywords['layer_purpose'] == \
-                layer_purpose_exposure_summary['key']:
-            metadata = ExposureSummaryLayerMetadata(layer_uri)
+    if 'layer_purpose' in keywords:
+        if keywords['layer_purpose'] in METADATA_CLASSES:
+            metadata = METADATA_CLASSES[keywords['layer_purpose']](layer_uri)
         else:
             metadata = GenericLayerMetadata(layer_uri)
     else:
@@ -74,9 +80,15 @@ def write_iso19115_metadata(layer_uri, keywords):
 
 def read_iso19115_metadata(layer_uri, keyword=None):
     """Retrieve keywords from a metadata object
-    :param layer_uri:
-    :param keyword:
-    :return:
+
+    :param layer_uri: Uri to layer.
+    :type layer_uri: basestring
+
+    :param keyword: The key of keyword that want to be read. If None, return
+        all keywords in dictionary.
+
+    :returns: Dictionary of keywords or value of key as string.
+    :rtype: dict, basestring
     """
     xml_uri = os.path.splitext(layer_uri)[0] + '.xml'
     if not os.path.exists(xml_uri):
@@ -86,14 +98,8 @@ def read_iso19115_metadata(layer_uri, keyword=None):
         message += 'Layer path: %s.' % layer_uri
         raise NoKeywordsFoundError(message)
     metadata = GenericLayerMetadata(layer_uri, xml_uri)
-    if metadata.layer_purpose == layer_purpose_exposure['key']:
-        metadata = ExposureLayerMetadata(layer_uri, xml_uri)
-    elif metadata.layer_purpose == layer_purpose_hazard['key']:
-        metadata = HazardLayerMetadata(layer_uri, xml_uri)
-    elif metadata.layer_purpose == layer_purpose_aggregation['key']:
-        metadata = AggregationLayerMetadata(layer_uri, xml_uri)
-    elif metadata.layer_purpose == layer_purpose_exposure_summary['key']:
-        metadata = ExposureSummaryLayerMetadata(layer_uri, xml_uri)
+    if metadata.layer_purpose in METADATA_CLASSES:
+        metadata = METADATA_CLASSES[metadata.layer_purpose](layer_uri, xml_uri)
 
     # dictionary comprehension
     keywords = {
@@ -108,32 +114,21 @@ def read_iso19115_metadata(layer_uri, keyword=None):
         for k, v in keywords.iteritems():
             message += '%s: %s\n' % (k, v)
         raise MetadataReadError(message)
-    keywords = {}
-    temp_keywords = {
-        x[0]: x[1]['value'] for x in metadata.dict['properties'].iteritems()}
-    included = [
-        'aggregation attribute',
-        'female ratio attribute',
-        'youth ratio attribute',
-        'adult ratio attribute',
-        'elderly ratio attribute',
-    ]
-    for key in temp_keywords.iterkeys():
-        if key in included:
-            keywords[key] = temp_keywords[key]
-        else:
-            if temp_keywords[key] is not None:
-                keywords[key] = temp_keywords[key]
+
+    # Get dictionary keywords that has value != None
+    keywords = {
+        x[0]: x[1]['value'] for x in metadata.dict['properties'].iteritems()
+        if x[1]['value'] is not None}
 
     if keyword:
         try:
             return keywords[keyword]
         except KeyError:
-            message = 'Keyword with key %s is not found' % keyword
+            message = 'Keyword with key %s is not found. ' % keyword
             message += 'Layer path: %s' % layer_uri
             raise KeywordNotFoundError(message)
 
-    if isinstance(metadata, ExposureSummaryLayerMetadata):
+    if isinstance(metadata, OutputLayerMetadata):
         keywords['if_provenance'] = metadata.provenance
     return keywords
 

@@ -30,10 +30,10 @@ def setting(key, default=None, expected_type=None, qsettings=None):
         use the default one.
     :type qsettings: qgis.PyQt.QtCore.QSettings
     """
-    key = '%s/%s' % (APPLICATION_NAME, key)
     if default is None:
         default = inasafe_default_settings.get(key, None)
-    return general_setting(key, default, expected_type, qsettings)
+    full_key = '%s/%s' % (APPLICATION_NAME, key)
+    return general_setting(full_key, default, expected_type, qsettings)
 
 
 def general_setting(key, default=None, expected_type=None, qsettings=None):
