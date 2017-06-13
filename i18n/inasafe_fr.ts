@@ -863,12 +863,12 @@
         <translation>Téléchargement</translation>
     </message>
     <message>
-        <location filename="base_metadata.py" line="372"/>
+        <location filename="base_metadata.py" line="376"/>
         <source>the file %s does not appear to be valid JSON</source>
         <translation>Le fichier %s ne semble pas être compatible JSON</translation>
     </message>
     <message>
-        <location filename="base_metadata.py" line="392"/>
+        <location filename="base_metadata.py" line="396"/>
         <source>the file DB entry for %s does not appear to be valid JSON</source>
         <translation>Le fichier d&apos;entrée DB pour %s ne semble pas être compatible JSON</translation>
     </message>
@@ -4393,7 +4393,7 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
     <message>
         <location filename="post_processor_inputs.py" line="28"/>
         <source>This type of input takes value from a keyword for the layer being handled.</source>
-        <translation>The type d&apos;entrée nécessite une valeur dans les mots-clés de la couche.</translation>
+        <translation>Ce type d&apos;entrée nécessite une valeur dans les mots-clés de la couche.</translation>
     </message>
     <message>
         <location filename="post_processor_inputs.py" line="51"/>
@@ -7664,7 +7664,7 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
     <message>
         <location filename="fields.py" line="1504"/>
         <source>The number of displaced child bearing age for each feature.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le nombre de en âge de procréer déplacées pour chaque entité.</translation>
     </message>
     <message>
         <location filename="fields.py" line="1585"/>
@@ -7684,7 +7684,7 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
     <message>
         <location filename="fields.py" line="1617"/>
         <source>The number of child displaced for each feature.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le nombre d&apos;enfants déplacés pour chaque entité.</translation>
     </message>
     <message>
         <location filename="fields.py" line="1700"/>
@@ -7946,7 +7946,7 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
     <message>
         <location filename="field_mapping_widget.py" line="65"/>
         <source>Key layer_purpose is not found in the layer {layer_name}</source>
-        <translation type="unfinished"></translation>
+        <translation>La clé layer_purpose n&apos;a pas été trouvée dans la couche {layer_name}</translation>
     </message>
     <message>
         <location filename="impact_function.py" line="246"/>
@@ -7979,7 +7979,8 @@ Vous ne pouvez séléctionner que un seul champ à la fois.</translation>
         <location filename="step_kw30_field.py" line="212"/>
         <source>
 You can select more than 1 field. InaSAFE will sum up the value of the fields that you choose.</source>
-        <translation type="unfinished"></translation>
+        <translation>
+Vous pouvez sélectionner plus d&apos;un champ. InaSAFE va additionner les valeurs des champs que vous choississez.</translation>
     </message>
     <message>
         <location filename="concepts.py" line="340"/>
@@ -7989,12 +7990,12 @@ You can select more than 1 field. InaSAFE will sum up the value of the fields th
     <message>
         <location filename="concepts.py" line="446"/>
         <source>World Population Dashboard. ICPD Goals and Demographic Indicators 2016.</source>
-        <translation type="unfinished"></translation>
+        <translation>World Population Dashboard. ICPD Goals and Demographic Indicators 2016.</translation>
     </message>
     <message>
         <location filename="concepts.py" line="359"/>
         <source>A young person aged between 5 and 14 years, usually below the age of puberty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Une personne jeune agée entre 5 et 14 ans, généralement avant l&apos;âge de la puberté.</translation>
     </message>
     <message>
         <location filename="concepts.py" line="407"/>
@@ -8004,7 +8005,7 @@ You can select more than 1 field. InaSAFE will sum up the value of the fields th
     <message>
         <location filename="concepts.py" line="432"/>
         <source>World Report on Disability.</source>
-        <translation type="unfinished"></translation>
+        <translation>World Report on Disability.</translation>
     </message>
     <message>
         <location filename="concepts.py" line="442"/>
@@ -8024,7 +8025,7 @@ You can select more than 1 field. InaSAFE will sum up the value of the fields th
     <message>
         <location filename="concepts.py" line="469"/>
         <source>The span of ages (usually 15-49) at which individuals are capable of becoming parents. The phrase can be applied to men and women but most frequently refers to women.</source>
-        <translation type="unfinished"></translation>
+        <translation>La classe d&apos;âge (généralement 15-49) dont les personnes sont capables de devenir des parents. Cela peut concerner les hommes et les femmes, mais cela s&apos;applique plus généralement aux femmes.</translation>
     </message>
     <message>
         <location filename="concepts.py" line="475"/>
@@ -8039,52 +8040,52 @@ You can select more than 1 field. InaSAFE will sum up the value of the fields th
     <message>
         <location filename="default_values.py" line="22"/>
         <source>Default ratio of females per 100 people in the total population.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ratio par défaut des femmes pour 100 personnes dans la population totale.</translation>
     </message>
     <message>
         <location filename="default_values.py" line="35"/>
         <source>Default ratio of males per 100 people in the total population.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ratio par défaut des hommes pour 100 personnes dans la population totale.</translation>
     </message>
     <message>
         <location filename="default_values.py" line="89"/>
         <source>Default ratio of infants per 100 people in the total population.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ratio par défaut des nourrissons pour 100 personnes dans la population totale.</translation>
     </message>
     <message>
         <location filename="default_values.py" line="102"/>
         <source>Default ratio of children per 100 people in the total population.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ratio par défaut des enfants pour 100 personnes dans la population totale.</translation>
     </message>
     <message>
         <location filename="default_values.py" line="117"/>
         <source>Default ratio of youths per 100 people in the total population.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ratio par défaut des jeunes pour 100 personnes dans la population totale.</translation>
     </message>
     <message>
         <location filename="default_values.py" line="131"/>
         <source>Default ratio of adults per 100 people in the total population.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ratio par défaut des adultes pour 100 personnes dans la population totale.</translation>
     </message>
     <message>
         <location filename="default_values.py" line="146"/>
         <source>Default ratio of elderly people per 100 people in the total population.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ratio par défaut des personnes âgées pour 100 personnes dans la population totale.</translation>
     </message>
     <message>
         <location filename="default_values.py" line="161"/>
         <source>Default ratio of under 5 year olds per 100 people in the total population.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ratio par défaut des moins de 5 ans pour 100 personnes dans la population totale.</translation>
     </message>
     <message>
         <location filename="default_values.py" line="176"/>
         <source>Default ratio of over 60 year olds per 100 people in the total population.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ratio par défaut des plus de 60 ans pour 100 personnes dans la population totale.</translation>
     </message>
     <message>
         <location filename="default_values.py" line="190"/>
         <source>Default ratio of disabled people per 100 people in the total population.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ratio par défaut des handicapés pour 100 personnes dans la population totale.</translation>
     </message>
     <message>
         <location filename="default_values.py" line="212"/>
@@ -8094,7 +8095,7 @@ You can select more than 1 field. InaSAFE will sum up the value of the fields th
     <message>
         <location filename="default_values.py" line="220"/>
         <source>Default ratio of pregnant people per 100 people in the total population.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ratio par défaut des femmes enceintes pour 100 personnes dans la population totale.</translation>
     </message>
     <message>
         <location filename="default_values.py" line="226"/>
@@ -8104,7 +8105,7 @@ You can select more than 1 field. InaSAFE will sum up the value of the fields th
     <message>
         <location filename="default_values.py" line="234"/>
         <source>Default ratio of lactating people per 100 people in the total population.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ratio par défaut des femmes allaitantes pour 100 personnes dans la population totale.</translation>
     </message>
     <message>
         <location filename="exposure.py" line="43"/>
@@ -8179,12 +8180,12 @@ You can select more than 1 field. InaSAFE will sum up the value of the fields th
     <message>
         <location filename="age_field_group.py" line="90"/>
         <source>No age ratios provided, no demographic breakdown for age carried out.</source>
-        <translation type="unfinished"></translation>
+        <translation>Pas de ratio d&apos;âge fourni, donc pas de décomposition démographique pour l&apos;âge.</translation>
     </message>
     <message>
         <location filename="age_vulnerability_field_group.py" line="24"/>
         <source>Age Vulnerability Ratio</source>
-        <translation type="unfinished"></translation>
+        <translation>Ratio de la Vulnérabilité sur l&apos;Âge</translation>
     </message>
     <message>
         <location filename="age_vulnerability_field_group.py" line="25"/>
@@ -8194,7 +8195,7 @@ You can select more than 1 field. InaSAFE will sum up the value of the fields th
     <message>
         <location filename="age_vulnerability_field_group.py" line="56"/>
         <source>Age Vulnerability Count</source>
-        <translation type="unfinished"></translation>
+        <translation>Effectif de la Vulnérabilité sur l&apos;Âge</translation>
     </message>
     <message>
         <location filename="age_vulnerability_field_group.py" line="57"/>
@@ -8204,7 +8205,7 @@ You can select more than 1 field. InaSAFE will sum up the value of the fields th
     <message>
         <location filename="age_vulnerability_field_group.py" line="79"/>
         <source>Age Vulnerability Displaced Count</source>
-        <translation type="unfinished"></translation>
+        <translation>Effectif de la Vulnérabilité sur l&apos;Âge Déplacée</translation>
     </message>
     <message>
         <location filename="age_vulnerability_field_group.py" line="81"/>
@@ -8214,7 +8215,7 @@ You can select more than 1 field. InaSAFE will sum up the value of the fields th
     <message>
         <location filename="disability_vulnerability_field_group.py" line="19"/>
         <source>Disability Vulnerability Ratio</source>
-        <translation type="unfinished"></translation>
+        <translation>Ratio de la Vulnérabilité sur le Handicap</translation>
     </message>
     <message>
         <location filename="disability_vulnerability_field_group.py" line="20"/>
@@ -8224,12 +8225,12 @@ You can select more than 1 field. InaSAFE will sum up the value of the fields th
     <message>
         <location filename="disability_vulnerability_field_group.py" line="41"/>
         <source>The sum of vulnerability ratios should not more than 1.</source>
-        <translation type="unfinished"></translation>
+        <translation>La somme des ratios vulnérabilités ne doit pas être plus de 1.</translation>
     </message>
     <message>
         <location filename="disability_vulnerability_field_group.py" line="48"/>
         <source>Disabled Vulnerability Count</source>
-        <translation type="unfinished"></translation>
+        <translation>Effectif de la Vulnérabilité Déplacée</translation>
     </message>
     <message>
         <location filename="disability_vulnerability_field_group.py" line="49"/>
@@ -8314,7 +8315,7 @@ You can select more than 1 field. InaSAFE will sum up the value of the fields th
     <message>
         <location filename="field_groups.py" line="147"/>
         <source>{group_name} group: {note}</source>
-        <translation type="unfinished"></translation>
+        <translation>Groupe {group_name}: {note}</translation>
     </message>
     <message>
         <location filename="gender_field_group.py" line="21"/>
@@ -8334,7 +8335,7 @@ You can select more than 1 field. InaSAFE will sum up the value of the fields th
     <message>
         <location filename="gender_vulnerability_field_group.py" line="30"/>
         <source>Gender Vulnerability Ratio</source>
-        <translation type="unfinished"></translation>
+        <translation>Ratio de la Vulnérabilité sur le Genre</translation>
     </message>
     <message>
         <location filename="gender_vulnerability_field_group.py" line="31"/>
@@ -8344,12 +8345,12 @@ You can select more than 1 field. InaSAFE will sum up the value of the fields th
     <message>
         <location filename="gender_vulnerability_field_group.py" line="56"/>
         <source>The sum of gender ratios should not be more than 1.</source>
-        <translation type="unfinished"></translation>
+        <translation>La somme des ratios concernant les genres ne doit pas être supérieur à 1.</translation>
     </message>
     <message>
         <location filename="gender_vulnerability_field_group.py" line="64"/>
         <source>Gender Vulnerability Count</source>
-        <translation type="unfinished"></translation>
+        <translation>Effectif de la Vulnérabilité sur le Genre</translation>
     </message>
     <message>
         <location filename="gender_vulnerability_field_group.py" line="65"/>
@@ -8359,7 +8360,7 @@ You can select more than 1 field. InaSAFE will sum up the value of the fields th
     <message>
         <location filename="gender_vulnerability_field_group.py" line="89"/>
         <source>Gender Vulnerability Displaced Count</source>
-        <translation type="unfinished"></translation>
+        <translation>Effectif de la Vulnérabilité sur le Genre Déplacé</translation>
     </message>
     <message>
         <location filename="gender_vulnerability_field_group.py" line="91"/>
@@ -8484,7 +8485,7 @@ You can select more than 1 field. InaSAFE will sum up the value of the fields th
     <message>
         <location filename="hazard.py" line="264"/>
         <source>Continuous data are normally used to represent the gust wind speed of the cyclone, representing the 10-m above ground wind speed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Les données continues sont normallement utilisées pour représenter la vitesse des rafales du cyclone, ce qui représente la vitesse du vent à 10 m du sol.</translation>
     </message>
     <message>
         <location filename="hazard.py" line="271"/>
@@ -8599,12 +8600,12 @@ You can select more than 1 field. InaSAFE will sum up the value of the fields th
     <message>
         <location filename="population_post_processors.py" line="704"/>
         <source>Disability Vulnerability Post Processor</source>
-        <translation type="unfinished"></translation>
+        <translation>Post Processeur Vulnérabilité Handicap</translation>
     </message>
     <message>
         <location filename="population_post_processors.py" line="705"/>
         <source>A post processor to calculate the number of displaced people who are especially vulnerable because they have disabilities. &quot;Disabled&quot; is defined as: {disabled_concept}. &quot;Displaced&quot; is defined as: {displaced_concept}</source>
-        <translation type="unfinished"></translation>
+        <translation>Un post processeur pour calculer le nombre de personnes déplacées qui sont vulnérables car elles ont un handicap. &quot;Handicap&quot; est défini comme: {disabled_concept} &quot;Déplacé&quot; est défini comme: {displaced_concept}</translation>
     </message>
     <message>
         <location filename="components.py" line="266"/>
@@ -8689,7 +8690,7 @@ You can select more than 1 field. InaSAFE will sum up the value of the fields th
     <message>
         <location filename="options_help.py" line="117"/>
         <source>When this option is enabled, the map report created after an analysis completes will not show any other layers in your current project except for the impact layer. </source>
-        <translation type="unfinished"></translation>
+        <translation>Quand cette option est activée, le rapport cartographique crée après l&apos;analyse ne montrera pas les autres couches de votre projet, excepté la couche d&apos;impact.</translation>
     </message>
     <message>
         <location filename="options_help.py" line="123"/>
@@ -8699,7 +8700,7 @@ You can select more than 1 field. InaSAFE will sum up the value of the fields th
     <message>
         <location filename="options_help.py" line="123"/>
         <source>If enabled, running an analysis with some features of the aggregation layer selected will constrain the analysis to only those selected aggregation areas, all others will be ignored.</source>
-        <translation type="unfinished"></translation>
+        <translation>Si activée et si l&apos;agrégation contient des entités sélectionnées, cela forcera l&apos;analyse a n&apos;utiliser que les entités sélectionnées et ignorer les autres dans la couche d&apos;agrégation.</translation>
     </message>
     <message>
         <location filename="options_help.py" line="138"/>
@@ -8709,7 +8710,7 @@ You can select more than 1 field. InaSAFE will sum up the value of the fields th
     <message>
         <location filename="options_help.py" line="148"/>
         <source>In this tab you can select which model to use when calculating earthquake fatalities and displacements. This option is global - it will affect all subsequent earthquake analyses carried out in InaSAFE.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dans cet onglet, vous pouvez sélectionner le modèle à utiliser pour calculer les fatalités lors d&apos;un séisme. Cette option est globale, cela affectera toutes les analyses sismiques dans InaSAFE.</translation>
     </message>
     <message>
         <location filename="options_help.py" line="155"/>
@@ -8819,7 +8820,7 @@ Citations:
     <message>
         <location filename="post_processor_inputs.py" line="34"/>
         <source>This type of parameter checks the value of a specific keyword in order to run for the layer being handled.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ce type de paramètre vérifie la valeur pour un mot-clé spécifique afin s&apos;éxécuter.</translation>
     </message>
     <message>
         <location filename="options_dialog.py" line="348"/>
@@ -8849,22 +8850,22 @@ Citations:
     <message>
         <location filename="earthquake.py" line="116"/>
         <source>1 - The model is based on limited number of observed fatality rates during 4 past fatal events.</source>
-        <translation type="unfinished"></translation>
+        <translation>1 - Ce modèle est basé sur un nombre limité d&apos;observations des taux de fatalité durant les quatre événements précédents</translation>
     </message>
     <message>
         <location filename="earthquake.py" line="116"/>
         <source>2 - The model clearly over-predicts the fatality rates at intensities higher than VIII.</source>
-        <translation type="unfinished"></translation>
+        <translation>2- Le modèle surestime clairement le taux de fatalité pour des intensités supérieur à VIII.</translation>
     </message>
     <message>
         <location filename="earthquake.py" line="116"/>
         <source>3 - The model only estimates the expected fatality rate for a given intensity level; however the associated uncertainty for the proposed model is not addressed.</source>
-        <translation type="unfinished"></translation>
+        <translation>3- Le modèle estime uniquement le taux de fatalité attendu pour un niveau d’intensité donné. L’incertitude associée au modèle proposé n&apos;est pas abordée.</translation>
     </message>
     <message>
         <location filename="earthquake.py" line="116"/>
         <source>4 - There are few known mistakes in developing the current model:</source>
-        <translation type="unfinished"></translation>
+        <translation>4 - Il existe quelques erreurs connues lors du développement de ce modèle:</translation>
     </message>
     <message>
         <location filename="earthquake.py" line="116"/>
@@ -8885,7 +8886,7 @@ Citations:
     <message>
         <location filename="earthquake.py" line="116"/>
         <source>Note: Because of these caveats, decisions should not be made solely on the information presented here and should always be verified by ground truthing and other reliable information sources.</source>
-        <translation type="unfinished"></translation>
+        <translation>Note: À cause de ces avertissements, les décisions ne doivent pas être prisent seulement sur les informations présentées ici mais doivent toujours être vérifiées sur le terrain avec l&apos;aide d&apos;autres sources d&apos;informations.</translation>
     </message>
     <message>
         <location filename="components.py" line="401"/>
@@ -8990,7 +8991,7 @@ Citations:
     <message>
         <location filename="shakemap_converter_help.py" line="66"/>
         <source>This tool will convert an earthquake &apos;shakemap&apos; that is in grid xml format into a GeoTIFF file. The imported file can be used in InaSAFE as an input for impact functions that require an earthquake layer.  To use this tool effectively:</source>
-        <translation type="unfinished"></translation>
+        <translation>Cet outil va convertir un séisme &apos;shakemap&apos; format grille XML en fichier GeoTIFF. Le fichier importé peut-être utilisé dans InaSAFE comme couche d&apos;aléa. Afin d&apos;utiliser cet outil:</translation>
     </message>
     <message>
         <location filename="impact_function.py" line="724"/>
@@ -9030,7 +9031,7 @@ Citations:
     <message>
         <location filename="exposure.py" line="51"/>
         <source>Numbers reported for population counts have been rounded to the nearest 10 people if the total is less than 1,000; nearest 100 people if more than 1,000 and less than 100,000; and nearest 1,000 if more than 100,000.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le nombre de population reporté a été arrondi à 10 personnes près si le total est moins que 1 000, à 100 personnes si plus que 1 000 et moins que 100 000,  à 1 000 personnes si le total est supérieur à 100 000.</translation>
     </message>
     <message>
         <location filename="population_post_processors.py" line="151"/>
@@ -9175,17 +9176,17 @@ Citations:
     <message>
         <location filename="earthquake.py" line="116"/>
         <source>The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, zeta=2.15</source>
-        <translation type="unfinished"></translation>
+        <translation>Les coefficients utilisés dans le modèle Indonésien sont x=0,62275231, y=8,03314466, zeta=2,15.</translation>
     </message>
     <message>
         <location filename="earthquake.py" line="116"/>
         <source>Allen, T. I., Wald, D. J., Earle, P. S., Marano, K. D., Hotovec, A. J., Lin, K., and Hearne, M., 2009. An Atlas of ShakeMaps and population exposure catalog for earthquake loss modeling, Bull. Earthq. Eng. 7, 701-718. Jaiswal, K., and Wald, D., 2010. An empirical model for global earthquake fatality estimation, Earthq. Spectra 26, 1017-1037.</source>
-        <translation type="unfinished"></translation>
+        <translation>Allen, T. I., Wald, D. J., Earle, P. S., Marano, K. D., Hotovec, A. J., Lin, K., and Hearne, M., 2009. An Atlas of ShakeMaps and population exposure catalog for earthquake loss modeling, Bull. Earthq. Eng. 7, 701-718. Jaiswal, K., and Wald, D., 2010. An empirical model for global earthquake fatality estimation, Earthq. Spectra 26, 1017-1037.</translation>
     </message>
     <message>
         <location filename="exposure_classifications.py" line="733"/>
         <source>Water bodies</source>
-        <translation type="unfinished"></translation>
+        <translation>Plans d&apos;eau</translation>
     </message>
     <message>
         <location filename="field_mapping_help.py" line="187"/>
@@ -9195,12 +9196,12 @@ Citations:
     <message>
         <location filename="impact_function.py" line="726"/>
         <source>The impact function needs a {exposure} layer to run. You must provide a valid {exposure} layer.</source>
-        <translation type="unfinished"></translation>
+        <translation>La fonction de calcul d&apos;impact a besoin d&apos;une couche {exposure} pour s&apos;exécuter. Vous devez fournir une couche valide {exposure}.</translation>
     </message>
     <message>
         <location filename="default_values.py" line="205"/>
         <source>Default ratio of child bearing age per 100 people in the total population.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ratio par défaut des personnes en âge de procréer pour 100 personnes dans la population totale.</translation>
     </message>
 </context>
 <context>
