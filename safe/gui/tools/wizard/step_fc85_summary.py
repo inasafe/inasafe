@@ -1,6 +1,9 @@
 # coding=utf-8
 """InaSAFE Wizard Analysis Summary step."""
 
+from safe import messaging as m
+from safe.utilities.i18n import tr
+
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 
@@ -13,7 +16,7 @@ FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
 class StepFcSummary(WizardStep, FORM_CLASS):
-    """Function Centric Wizard Step: Summary"""
+    """InaSAFE Wizard Analysis Summary step."""
 
     if_params = None
 
@@ -66,3 +69,29 @@ class StepFcSummary(WizardStep, FORM_CLASS):
                          ' ', '&nbsp;'), aggr))
 
         self.lblSummary.setText(html)
+
+    @property
+    def step_name(self):
+        """Get the human friendly name for the wizard step.
+
+        :returns: The name of the wizard step.
+        :rtype: str
+        """
+        # noinspection SqlDialectInspection,SqlNoDataSourceInspection
+        return tr('Analysis Summary')
+
+    def help_content(self):
+        """Return the content of help for this step wizard.
+
+            We only needs to re-implement this method in each wizard step.
+
+        :returns: A message object contains help.
+        :rtype: m.Message
+        """
+        message = m.Message()
+        message.add(m.Paragraph(tr(
+            'In this wizard step: {step_name}, you will see the summary of '
+            'the analysis that you have set up from the previous steps. You '
+            'can click run button to run the analysis.'
+        ).format(step_name=self.step_name)))
+        return message

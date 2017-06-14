@@ -1,22 +1,15 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
+"""InaSAFE Wizard Step Extent Selection."""
 
-This module provides: Function Centric Wizard Step: Extent
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
 import logging
+
+from safe import messaging as m
+from safe.utilities.i18n import tr
 
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.extent_selector_dialog import ExtentSelectorDialog
 from safe.gui.tools.wizard.wizard_step import WizardStep
+from safe.gui.tools.help.extent_selector_help import extent_mode_content
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -29,7 +22,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 class StepFcExtent(WizardStep, FORM_CLASS):
-    """Function Centric Wizard Step: Extent"""
+    """InaSAFE Wizard Step Extent Selection."""
 
     def __init__(self, parent=None):
         """Constructor for the tab.
@@ -115,7 +108,7 @@ class StepFcExtent(WizardStep, FORM_CLASS):
         self.extent_dialog.tool.rectangle_created.connect(
             self.stop_capture_coordinates)
 
-        self.extent_dialog.label.setText(self.tr(
+        self.extent_dialog.label.setText(tr(
             'Please specify extent of your analysis:'))
 
         if self.swExtent:
@@ -123,3 +116,31 @@ class StepFcExtent(WizardStep, FORM_CLASS):
 
         self.swExtent = self.extent_dialog.main_stacked_widget
         self.layoutAnalysisExtent.addWidget(self.swExtent)
+
+    @property
+    def step_name(self):
+        """Get the human friendly name for the wizard step.
+
+        :returns: The name of the wizard step.
+        :rtype: str
+        """
+        # noinspection SqlDialectInspection,SqlNoDataSourceInspection
+        return tr('Extent Selection')
+
+    def help_content(self):
+        """Return the content of help for this step wizard.
+
+            We only needs to re-implement this method in each wizard step.
+
+        :returns: A message object contains help.
+        :rtype: m.Message
+        """
+        message = m.Message()
+        message.add(m.Paragraph(tr(
+            'In this wizard step: {step_name} you will be allowed to specify '
+            'which geographical region should be used for your analysis. '
+            'There are a number of different modes that can be used which are '
+            'described below:'
+        ).format(step_name=self.step_name)))
+        message.add(extent_mode_content())
+        return message
