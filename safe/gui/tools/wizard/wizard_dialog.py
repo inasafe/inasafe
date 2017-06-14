@@ -70,7 +70,6 @@ from step_fc60_agglayer_from_browser import StepFcAggLayerFromBrowser
 from step_fc65_agglayer_disjoint import StepFcAggLayerDisjoint
 from step_fc70_extent import StepFcExtent
 from step_fc75_extent_disjoint import StepFcExtentDisjoint
-from step_fc80_params import StepFcParams
 from step_fc85_summary import StepFcSummary
 from step_kw00_purpose import StepKwPurpose
 from step_kw05_subcategory import StepKwSubcategory
@@ -196,7 +195,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.step_fc_agglayer_disjoint = StepFcAggLayerDisjoint(self)
         self.step_fc_extent = StepFcExtent(self)
         self.step_fc_extent_disjoint = StepFcExtentDisjoint(self)
-        self.step_fc_params = StepFcParams(self)
         self.step_fc_summary = StepFcSummary(self)
         self.step_fc_analysis = StepFcAnalysis(self)
 
@@ -235,7 +233,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.stackedWidget.addWidget(self.step_fc_agglayer_disjoint)
         self.stackedWidget.addWidget(self.step_fc_extent)
         self.stackedWidget.addWidget(self.step_fc_extent_disjoint)
-        self.stackedWidget.addWidget(self.step_fc_params)
         self.stackedWidget.addWidget(self.step_fc_summary)
         self.stackedWidget.addWidget(self.step_fc_analysis)
 
