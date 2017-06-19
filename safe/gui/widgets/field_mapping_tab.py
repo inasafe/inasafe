@@ -31,7 +31,7 @@ from safe.definitions.constants import (
 )
 
 from safe_extras.parameters.qt_widgets.parameter_container import (
-    ParameterContainer, InvalidValidationException)
+    ParameterContainer)
 from safe.common.exceptions import KeywordNotFoundError
 
 # Note(IS): I need to use alias to make sure it throws the same exception class
