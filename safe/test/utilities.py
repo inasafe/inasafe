@@ -265,7 +265,7 @@ def load_test_vector_layer(*args, **kwargs):
     See documentation of load_path_vector_layer
 
     :param args: List of path e.g. ['exposure', 'buildings.shp'].
-    :type args: list[str]
+    :type args: list
 
     :param kwargs: It can be :
         clone=True if you want to copy the layer first to a temporary file.

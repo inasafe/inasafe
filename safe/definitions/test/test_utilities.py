@@ -42,7 +42,8 @@ from safe.definitions import (
     cyclone_au_bom_hazard_classes,
     unit_knots,
     population_field_groups,
-    aggregation_field_groups
+    aggregation_field_groups,
+    productivity_rate_field
 )
 from safe.definitions.reports.components import report_a4_blue
 
@@ -251,6 +252,13 @@ class TestDefinitionsUtilities(unittest.TestCase):
         expected_fields += fields_in_field_groups(
             layer_purpose_aggregation['field_groups'])
         expected_fields = [f for f in expected_fields if f['replace_null']]
+        self.assertListEqual(fields, expected_fields)
+
+        fields = get_fields(
+            layer_purpose_exposure['key'],
+            exposure_land_cover['key'],
+            replace_null=True)
+        expected_fields = [productivity_rate_field]
         self.assertListEqual(fields, expected_fields)
 
         fields = get_fields('aggregation', replace_null=False)
