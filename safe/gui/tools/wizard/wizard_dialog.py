@@ -81,7 +81,6 @@ from step_kw20_unit import StepKwUnit
 from step_kw25_classification import StepKwClassification
 from step_kw30_field import StepKwField
 from step_kw33_multi_classifications import StepKwMultiClassifications
-from step_kw35_resample import StepKwResample
 from step_kw40_classify import StepKwClassify
 from step_kw43_threshold import StepKwThreshold
 from step_kw44_fields_mapping import StepKwFieldsMapping
@@ -167,7 +166,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.step_kw_classification = StepKwClassification(self)
         self.step_kw_field = StepKwField(self)
         self.step_kw_multi_classifications = StepKwMultiClassifications(self)
-        self.step_kw_resample = StepKwResample(self)
         self.step_kw_classify = StepKwClassify(self)
         self.step_kw_threshold = StepKwThreshold(self)
         self.step_kw_fields_mapping = StepKwFieldsMapping(self)
@@ -205,7 +203,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.stackedWidget.addWidget(self.step_kw_classification)
         self.stackedWidget.addWidget(self.step_kw_field)
         self.stackedWidget.addWidget(self.step_kw_multi_classifications)
-        self.stackedWidget.addWidget(self.step_kw_resample)
         self.stackedWidget.addWidget(self.step_kw_classify)
         self.stackedWidget.addWidget(self.step_kw_threshold)
         self.stackedWidget.addWidget(self.step_kw_fields_mapping)
@@ -760,10 +757,6 @@ class WizardDialog(QDialog, FORM_CLASS):
             else:
                 key = exposure_unit['key']
             keywords[key] = self.step_kw_unit.selected_unit()['key']
-        if self.step_kw_resample.selected_allow_resampling() is not None:
-            keywords['allow_resampling'] = (
-                self.step_kw_resample.selected_allow_resampling() and
-                'true' or 'false')
         if self.step_kw_field.selected_fields():
             field_key = self.field_keyword_for_the_layer()
             inasafe_fields[field_key] = self.step_kw_field.selected_fields()
