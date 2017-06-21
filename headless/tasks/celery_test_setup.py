@@ -1,6 +1,7 @@
 # coding=utf-8
 import logging
 import os
+from distutils.util import strtobool
 
 __author__ = 'Rizky Maulana Nugraha <lana.pcfre@gmail.com>'
 __date__ = '2/11/16'
@@ -19,8 +20,8 @@ def update_celery_configuration(app):
     :type app: celery.Celery
     :return:
     """
-    celery_always_eager = os.environ.get(
-        'CELERY_ALWAYS_EAGER', 'False') == 'True'
+    celery_always_eager = strtobool(os.environ.get(
+        'CELERY_ALWAYS_EAGER', 'False'))
     app.conf.update(
         CELERY_ALWAYS_EAGER=celery_always_eager
     )

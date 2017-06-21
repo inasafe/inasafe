@@ -2,16 +2,15 @@
 import datetime
 import logging
 import os
-import shutil
 import tempfile
 import urlparse
 
+from bin.inasafe import CommandLineArguments, get_impact_function_list, \
+    run_impact_function, build_report, get_layer
 from headless.celery_app import app
 from headless.celeryconfig import DEPLOY_OUTPUT_DIR, DEPLOY_OUTPUT_URL
 from headless.tasks.utilities import download_layer, archive_layer, \
     generate_styles, download_file
-from bin.inasafe import CommandLineArguments, get_impact_function_list, \
-    run_impact_function, build_report, get_layer
 from safe.utilities.keyword_io import KeywordIO
 
 __author__ = 'Rizky Maulana Nugraha <lana.pcfre@gmail.com>'
@@ -54,7 +53,7 @@ def filter_impact_function(hazard=None, exposure=None):
     return result
 
 
-@app.task(queue='inasafe-headless')
+@app.task(queue='inasafe-headless-analysis')
 def run_analysis(hazard, exposure, function, aggregation=None,
                  generate_report=False):
     """Run analysis"""
@@ -119,12 +118,9 @@ def read_keywords_iso_metadata(metadata_url, keyword=None):
 
     :return: the keywords, or a dictionary with key-value pair
     """
-    filename = download_file(metadata_url)
-    # add xml extension
-    new_filename = filename + '.xml'
-    shutil.move(filename, new_filename)
+    filename = download_file(metadata_url, direct_access=True)
     keyword_io = KeywordIO()
-    keywords = keyword_io.read_keywords_file(new_filename)
+    keywords = keyword_io.read_keywords_file(filename)
     if keyword:
         if isinstance(keyword, tuple) or isinstance(keyword, list):
             ret_val = {}

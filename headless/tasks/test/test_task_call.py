@@ -6,12 +6,15 @@ import tempfile
 import unittest
 import urlparse
 
+import headless
 from headless.celery_app import app
 from headless.celeryconfig import DEPLOY_OUTPUT_DIR, DEPLOY_OUTPUT_URL
-from headless.tasks.inasafe_wrapper import filter_impact_function, \
-    run_analysis, read_keywords_iso_metadata
 from headless.tasks.celery_test_setup import \
     update_celery_configuration
+from headless.tasks.inasafe_wrapper import (
+    filter_impact_function,
+    run_analysis,
+    read_keywords_iso_metadata)
 from headless.tasks.utilities import archive_layer
 
 __author__ = 'Rizky Maulana Nugraha <lana.pcfre@gmail.com>'
@@ -22,13 +25,24 @@ LOGGER = logging.getLogger('InaSAFE')
 LOGGER.setLevel(logging.DEBUG)
 
 
-class TestTaskCall(unittest.TestCase):
+class TestTaskCallFilesystem(unittest.TestCase):
+
+    def __init__(self, *args, **kwargs):
+        super(TestTaskCallFilesystem, self).__init__(*args, **kwargs)
+
+        default_work_dir = os.path.dirname(headless.__file__)
+        default_work_dir = os.path.abspath(
+            os.path.join(default_work_dir, '../'))
+        self.inasafe_work_dir = os.environ.get(
+            'InaSAFEQGIS', default_work_dir)
+
+    def convert_path(self, path):
+        return path
 
     def setUp(self):
         # Modify test behavior of celery based on environment settings
         update_celery_configuration(app)
 
-        self.inasafe_work_dir = os.environ['InaSAFEQGIS']
         # generate tempfile
         hazard = os.path.join(
             self.inasafe_work_dir,
@@ -46,10 +60,6 @@ class TestTaskCall(unittest.TestCase):
         test_deploy_dir = os.path.join(DEPLOY_OUTPUT_DIR, 'test_deploy')
         self.test_deploy_dir = test_deploy_dir
 
-        def convert_dir_to_url(deploy_dir):
-            tail_name = deploy_dir.replace(DEPLOY_OUTPUT_DIR, '')
-            return urlparse.urljoin(DEPLOY_OUTPUT_URL, tail_name)
-
         if not os.path.exists(test_deploy_dir):
             os.makedirs(test_deploy_dir)
 
@@ -59,9 +69,9 @@ class TestTaskCall(unittest.TestCase):
         shutil.move(hazard, hazard_temp)
         shutil.move(exposure, exposure_temp)
         shutil.move(aggregation, aggregation_temp)
-        self.hazard_temp = convert_dir_to_url(hazard_temp)
-        self.exposure_temp = convert_dir_to_url(exposure_temp)
-        self.aggregation_temp = convert_dir_to_url(aggregation_temp)
+        self.hazard_temp = self.convert_path(hazard_temp)
+        self.exposure_temp = self.convert_path(exposure_temp)
+        self.aggregation_temp = self.convert_path(aggregation_temp)
 
         self.keywords_file = os.path.join(
             self.inasafe_work_dir,
@@ -121,7 +131,7 @@ class TestTaskCall(unittest.TestCase):
         result = read_keywords_iso_metadata.delay(self.keywords_file)
         expected = {
             'hazard_category': u'single_event',
-            'keyword_version': u'3.3',
+            'keyword_version': u'3.5',
             'title': u'Continuous Flood',
             'hazard': u'flood',
             'continuous_hazard_unit': u'metres',
@@ -132,6 +142,16 @@ class TestTaskCall(unittest.TestCase):
         }
         actual = result.get()
         self.assertDictEqual(actual, expected)
+
+
+class TestTaskCallUrl(TestTaskCallFilesystem):
+
+    def __init__(self, *args, **kwargs):
+        super(TestTaskCallUrl, self).__init__(*args, **kwargs)
+
+    def convert_path(self, path):
+        tail_name = path.replace(DEPLOY_OUTPUT_DIR, '')
+        return urlparse.urljoin(DEPLOY_OUTPUT_URL, tail_name)
 
 
 if __name__ == '__main__':

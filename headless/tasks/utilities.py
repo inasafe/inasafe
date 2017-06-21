@@ -1,20 +1,41 @@
 # coding=utf-8
 import os
+import re
+import shutil
 import tempfile
+import urllib
 import urlparse
 from zipfile import ZipFile
 
 import requests
-import shutil
 
-from safe.utilities.styling import set_vector_categorized_style, \
-    set_vector_graduated_style, setRasterStyle
+from safe.utilities.styling import (
+    set_vector_categorized_style,
+    set_vector_graduated_style,
+    setRasterStyle)
 
 __author__ = 'Rizky Maulana Nugraha <lana.pcfre@gmail.com>'
 __date__ = '1/27/16'
 
 
-def download_file(url):
+def download_file(url, direct_access=False, user=None, password=None):
+    """Download file using http or file scheme.
+
+    :param url: URL param, can be file url
+    :type url: str
+
+    :param user: User credentials for Http basic auth
+    :type user: str
+
+    :param password: Password credentials for Http basic auth
+    :type password: str
+
+    :param direct_access: directly pass the file uri if True,
+        if not then copy to temporary file
+    :type direct_access: bool
+
+    :return: downloaded file location
+    """
     parsed_uri = urlparse.urlparse(url)
     if parsed_uri.scheme == 'http' or parsed_uri.scheme == 'https':
         tmpfile = tempfile.mktemp()
@@ -24,16 +45,37 @@ def download_file(url):
             'User-Agent': 'Mozilla/5.0 (X11; U; Linux i686) '
                           'Gecko/20071127 Firefox/2.0.0.11'
         }
-        r = requests.get(url, headers=headers, stream=True)
+        if user:
+            r = requests.get(
+                url, headers=headers, stream=True, auth=(user, password))
+        else:
+            r = requests.get(url, headers=headers, stream=True)
         with open(tmpfile, 'wb') as f:
             for chunk in r.iter_content(chunk_size=1024):
                 if chunk:
                     f.write(chunk)
+
+        # get extension
+        content_disposition = r.headers['content-disposition']
+        fname = re.findall("filename=[\'\"]?(.+)[\'\"]", content_disposition)
+        _, ext = os.path.splitext(fname[0])
+        shutil.move(tmpfile, '%s%s' % (tmpfile, ext))
+        tmpfile = '%s%s' % (tmpfile, ext)
         return tmpfile
-    elif parsed_uri.scheme == 'file' or not parsed_uri.scheme:
-        tmpfile = tempfile.mktemp()
-        shutil.copy(parsed_uri.path, tmpfile)
-        return tmpfile
+    elif parsed_uri.scheme == 'file':
+        file_path = urllib.unquote_plus(parsed_uri.path).decode('utf-8')
+    elif not parsed_uri.scheme:
+        file_path = parsed_uri.path
+    else:
+        raise Exception(
+            'URI scheme not recognized %s' % url)
+
+    if direct_access:
+        return file_path
+
+    tmpfile = tempfile.mktemp()
+    shutil.copy(file_path, tmpfile)
+    return tmpfile
 
 
 def download_layer(url):
@@ -45,9 +87,22 @@ def download_layer(url):
     :return: The file path of extracted layer
     :rtype: str
     """
-    # download archive file
-    filename = download_file(url)
-    base_name, _ = os.path.splitext(filename)
+    parsed_uri = urlparse.urlparse(url)
+    # check uri scheme
+    if parsed_uri.scheme == 'http' or parsed_uri.scheme == 'https':
+        # download archive file
+        filename = download_file(url)
+    elif parsed_uri.scheme == 'file' or not parsed_uri.scheme:
+        filename = parsed_uri.path
+    else:
+        raise Exception('URI Scheme not supported.')
+
+    # if it is a zip file, we need to extract it
+    base_name, ext = os.path.splitext(filename)
+    if not ext == '.zip':
+        # if it is not a zip file, directly return it
+        return filename
+
     dir_name = os.path.dirname(filename)
     layer_base_name = None
     with ZipFile(filename) as zipf:
