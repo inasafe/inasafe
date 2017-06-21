@@ -1,22 +1,13 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
-
-This module provides: Keyword Wizard Step: Hazard Category
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
+"""InaSAFE Wizard Step Hazard Category."""
 
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore
 from PyQt4.QtCore import pyqtSignature
 from PyQt4.QtGui import QListWidgetItem
+
+from safe.utilities.i18n import tr
+from safe import messaging as m
 
 from safe.definitions.layer_purposes import layer_purpose_hazard
 from safe.gui.tools.wizard.wizard_step import WizardStep
@@ -34,7 +25,8 @@ FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
 class StepKwHazardCategory(WizardStep, FORM_CLASS):
-    """Keyword Wizard Step: Hazard Category"""
+
+    """InaSAFE Wizard Step Hazard Category."""
 
     def is_ready_to_next_step(self):
         """Check if the step is complete. If so, there is
@@ -139,3 +131,28 @@ class StepKwHazardCategory(WizardStep, FORM_CLASS):
                     categories.index(category_keyword))
 
         self.auto_select_one_item(self.lstHazardCategories)
+
+    @property
+    def step_name(self):
+        """Get the human friendly name for the wizard step.
+
+        :returns: The name of the wizard step.
+        :rtype: str
+        """
+        return tr('Hazard Category Step')
+
+    def help_content(self):
+        """Return the content of help for this step wizard.
+
+            We only needs to re-implement this method in each wizard step.
+
+        :returns: A message object contains help.
+        :rtype: m.Message
+        """
+        message = m.Message()
+        message.add(m.Paragraph(tr(
+            'In this wizard step: {step_name}, you will be able to set the '
+            'category of the hazard layer that is being assigned in this '
+            'wizard.'
+        ).format(step_name=self.step_name)))
+        return message

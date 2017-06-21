@@ -1,5 +1,5 @@
 # coding=utf-8
-"""InaSAFE Keyword Wizard Field Step."""
+"""InaSAFE Wizard Step Field."""
 
 import re
 import logging
@@ -8,6 +8,8 @@ from PyQt4 import QtCore
 from PyQt4.QtGui import QListWidgetItem, QAbstractItemView
 
 from safe.utilities.i18n import tr
+from safe import messaging as m
+
 from safe.definitions.layer_purposes import (
     layer_purpose_aggregation, layer_purpose_hazard, layer_purpose_exposure)
 from safe.definitions.layer_modes import layer_mode_continuous
@@ -38,7 +40,7 @@ MULTI_MODE = 'multi'
 
 class StepKwField(WizardStep, FORM_CLASS):
 
-    """InaSAFE Keyword Wizard Field Step."""
+    """InaSAFE Wizard Step Field."""
 
     def __init__(self, parent=None):
         """Constructor for the tab.
@@ -261,3 +263,27 @@ class StepKwField(WizardStep, FORM_CLASS):
             self.parent.pbnNext.setEnabled(True)
         else:
             self.parent.pbnNext.setEnabled(False)
+
+    @property
+    def step_name(self):
+        """Get the human friendly name for the wizard step.
+
+        :returns: The name of the wizard step.
+        :rtype: str
+        """
+        return tr('Field Step')
+
+    def help_content(self):
+        """Return the content of help for this step wizard.
+
+            We only needs to re-implement this method in each wizard step.
+
+        :returns: A message object contains help.
+        :rtype: m.Message
+        """
+        message = m.Message()
+        message.add(m.Paragraph(tr(
+            'In this wizard step: {step_name}, you will be able to set the '
+            'field that will be used to apply the classification.'
+        ).format(step_name=self.step_name)))
+        return message

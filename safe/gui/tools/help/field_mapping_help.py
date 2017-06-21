@@ -77,6 +77,20 @@ def content():
 
     )
     message.add(paragraph)
+    message.add(field_mapping_help_content())
+    return message
+
+
+def field_mapping_help_content():
+    """Helper method that returns just the content in extent mode.
+
+    This method was added so that the text could be reused in the
+    wizard.
+
+    :returns: A message object without brand element.
+    :rtype: safe.messaging.message.Message
+    """
+    message = m.Message()
     paragraph = m.Paragraph(tr(
         'Field mapping describes the process of matching one or more fields '
         'in an attribute table to a concept in InaSAFE. The field mappings '
