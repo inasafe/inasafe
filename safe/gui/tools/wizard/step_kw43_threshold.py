@@ -1,6 +1,5 @@
 # coding=utf-8
-
-"""Keyword Wizard Step for Threshold."""
+"""InaSAFE Wizard Step Threshold."""
 
 from collections import OrderedDict
 from functools import partial
@@ -9,6 +8,8 @@ from PyQt4.QtGui import QDoubleSpinBox, QHBoxLayout, QLabel
 from qgis.core import QgsRasterBandStats
 
 from safe.utilities.i18n import tr
+from safe import messaging as m
+
 from safe.definitions.layer_purposes import layer_purpose_aggregation
 from safe.definitions.layer_geometry import layer_geometry_raster
 from safe.definitions.utilities import get_fields, get_non_compulsory_fields
@@ -31,7 +32,7 @@ FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 class StepKwThreshold(WizardStep, FORM_CLASS):
 
-    """Keyword Wizard Step: Threshold."""
+    """InaSAFE Wizard Step Threshold."""
 
     def __init__(self, parent=None):
         """Constructor for the tab.
@@ -229,3 +230,27 @@ class StepKwThreshold(WizardStep, FORM_CLASS):
                 value[1].value(),
             ]
         return value_map
+
+    @property
+    def step_name(self):
+        """Get the human friendly name for the wizard step.
+
+        :returns: The name of the wizard step.
+        :rtype: str
+        """
+        return tr('Threshold Step')
+
+    def help_content(self):
+        """Return the content of help for this step wizard.
+
+            We only needs to re-implement this method in each wizard step.
+
+        :returns: A message object contains help.
+        :rtype: m.Message
+        """
+        message = m.Message()
+        message.add(m.Paragraph(tr(
+            'In this wizard step: {step_name}, you will be able to set the '
+            'threshold of each class in the classification that use choose in '
+            'the previous step.').format(step_name=self.step_name)))
+        return message
