@@ -21,13 +21,15 @@ from safe.definitions.fields import (
     exposure_count_field,
     displaced_field,
     hygiene_packs_count_field,
-    additional_rice_count_field)
+    additional_rice_count_field,
+    productivity_field)
 from safe.definitions.post_processors import (
     post_processor_size_rate,
     post_processor_size,
     post_processor_affected,
     field_input_type,
-    post_processor_additional_rice)
+    post_processor_additional_rice,
+    post_processor_productivity)
 from safe.definitions.post_processors.post_processor_inputs import (
     dynamic_field_input_type,
     needs_profile_input_type)
@@ -188,7 +190,7 @@ class TestPostProcessors(unittest.TestCase):
             additional_rice_count_field['field_name'], impact_fields)
 
     def test_size_post_processor(self):
-        """Test size  post processor."""
+        """Test size, size rate, productivity post processor."""
         impact_layer = load_test_vector_layer(
             'impact',
             'indivisible_polygon_impact.geojson',
@@ -217,6 +219,16 @@ class TestPostProcessors(unittest.TestCase):
         # Check if new field is added
         impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
         self.assertIn(feature_value_field['field_name'], impact_fields)
+
+        # Test for productivity rate
+        result, message = run_single_post_processor(
+            impact_layer,
+            post_processor_productivity)
+        self.assertTrue(result, message)
+
+        # Check if new field is added
+        impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
+        self.assertIn(productivity_field['field_name'], impact_fields)
 
     def test_affected_post_processor(self):
         """Test affected  post processor."""
