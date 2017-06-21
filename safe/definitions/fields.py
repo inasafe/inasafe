@@ -2274,3 +2274,100 @@ productivity_field = {
     # Null value can be replaced by default or not
     'replace_null': False,
 }
+
+# Productivity cost field
+productivity_cost_rate_field = {
+    'key': 'productivity_cost_rate_field',
+    'name': tr('Productivity Cost Rate'),
+    'field_name': 'productivity_cost_rate',
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'help_text': tr(
+        'The rate of productivity cost of a crop in Currency/Ha unit.'),
+    'description': tr(
+        'For a land cover, productivity cost rate is the rate of product '
+        'cost per area. It is the cost to build the area.'
+    ),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False,
+}
+
+productivity_cost_field = {
+    'key': 'productivity_field',
+    'name': tr('Productivity Cost'),
+    'field_name': 'productivity_cost',
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'help_text': tr(
+        'The rate of productivity cost of a crop in Currency unit.'),
+    'description': tr(
+        'For a land cover, productivity cost is the cost to build the area.'
+    ),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False,
+}
+
+
+# Productivity value field
+productivity_value_rate_field = {
+    'key': 'productivity_value_rate_field',
+    'name': tr('Productivity Value Rate'),
+    'field_name': 'productivity_value_rate',
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'help_text': tr(
+        'The rate of productivity value of a crop in Currency/Ha unit.'),
+    'description': tr(
+        'For a land cover, productivity cost rate is the rate of product '
+        'cost per area. It is the value of the area.'
+    ),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False,
+}
+
+productivity_value_field = {
+    'key': 'productivity_value_field',
+    'name': tr('Productivity Value'),
+    'field_name': 'productivity_value',
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'help_text': tr(
+        'The rate of productivity value of a crop in Currency unit.'),
+    'description': tr(
+        'For a land cover, productivity cost is the value of the area.'
+    ),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False,
+}

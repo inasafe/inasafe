@@ -189,7 +189,9 @@
               &quot;displaced_field&quot;:&quot;displaced&quot;,
               &quot;pregnant_displaced_count_field&quot;:&quot;pregnant_displaced&quot;,
               &quot;lactating_displaced_count_field&quot;:&quot;lactating_displaced&quot;,
-              &quot;productivity_rate_field&quot;:&quot;productivity_rate&quot;
+              &quot;productivity_rate_field&quot;:&quot;productivity_rate&quot;,
+              &quot;productivity_cost_rate_field&quot;:&quot;productivity_cost_rate&quot;,
+              &quot;productivity_value_rate_field&quot;:&quot;productivity_value_rate&quot;
               }
             </gco:Dictionary>
           </inasafe_fields>
