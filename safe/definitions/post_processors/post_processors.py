@@ -11,23 +11,21 @@ from post_processor_functions import (
     multiply,
     size,
     post_processor_affected_function)
-from safe.definitions.post_processors.post_processor_inputs import (
-    keyword_input_type,
-    field_input_type)
 from safe.definitions.fields import (
     feature_rate_field,
     feature_value_field,
     size_field,
     hazard_class_field,
-    affected_field,
-    productivity_field,
-    productivity_rate_field
+    affected_field
 )
 from safe.definitions.hazard_classifications import not_exposed_class
 from safe.definitions.post_processors.post_processor_inputs import (
     geometry_property_input_type,
     layer_property_input_type,
     size_calculator_input_value)
+from safe.definitions.post_processors.post_processor_inputs import (
+    keyword_input_type,
+    field_input_type)
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -136,32 +134,6 @@ post_processor_affected = {
             'value': affected_field,
             'type': function_process,
             'function': post_processor_affected_function
-        }
-    }
-}
-
-post_processor_productivity = {
-    'key': 'post_processor_productivity',
-    'name': tr('Productivity Post Processor'),
-    'description': tr(
-        'A post processor to calculate the productivity for each feature'
-    ),
-    'input': {
-        'productivity_rate': {
-            'value': productivity_rate_field,
-            'type': field_input_type,
-        },
-        # In meter square
-        'size': {
-            'value': size_field,
-            'type': field_input_type,
-        },
-    },
-    'output': {
-        'affected': {
-            'value': productivity_field,
-            'type': formula_process,
-            'formula': 'productivity_rate * size / 10000'
         }
     }
 }

@@ -1,9 +1,11 @@
 # coding=utf-8
-from population_post_processors import *
-from post_processors import *
+from definitions.post_processors.productivity_post_processors import \
+    productivity_post_processors
 from minimum_needs_post_processors import *
-from post_processor_inputs import *
+from population_post_processors import *
 from post_processor_functions import *
+from post_processor_inputs import *
+from post_processors import *
 from safe.definitions.post_processors.minimum_needs_post_processors import \
     minimum_needs_post_processors
 
@@ -42,7 +44,7 @@ post_processors = [
      minimum_needs_post_processors +
      age_vulnerability_postprocessors +
      disabled_vulnerability_postprocessors +
-     gender_vulnerability_postprocessors) + [
+     gender_vulnerability_postprocessors +
+     productivity_post_processors) + [
     post_processor_additional_rice,
-    post_processor_productivity
 ]
