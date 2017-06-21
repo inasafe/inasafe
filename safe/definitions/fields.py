@@ -21,8 +21,7 @@ from safe.definitions.default_values import (
     disabled_ratio_default_value,
     child_bearing_age_ratio_default_value,
     pregnant_ratio_default_value,
-    lactating_ratio_default_value,
-    productivity_default_value
+    lactating_ratio_default_value
 )
 from safe.utilities.i18n import tr
 
@@ -2251,8 +2250,7 @@ productivity_rate_field = {
         }
     ],
     # Null value can be replaced by default or not
-    'replace_null': True,
-    'default_value': productivity_default_value
+    'replace_null': False,
 }
 
 productivity_field = {
@@ -2274,6 +2272,5 @@ productivity_field = {
         }
     ],
     # Null value can be replaced by default or not
-    'replace_null': True,
-    'default_value': productivity_default_value
+    'replace_null': False,
 }
