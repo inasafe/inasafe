@@ -43,5 +43,6 @@ post_processors = [
      age_vulnerability_postprocessors +
      disabled_vulnerability_postprocessors +
      gender_vulnerability_postprocessors) + [
-    post_processor_additional_rice
+    post_processor_additional_rice,
+    post_processor_productivity
 ]

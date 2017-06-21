@@ -21,7 +21,8 @@ from safe.definitions.default_values import (
     disabled_ratio_default_value,
     child_bearing_age_ratio_default_value,
     pregnant_ratio_default_value,
-    lactating_ratio_default_value
+    lactating_ratio_default_value,
+    productivity_default_value
 )
 from safe.utilities.i18n import tr
 
@@ -1558,28 +1559,6 @@ lactating_displaced_count_field = {
     'replace_null': False
 }
 
-
-male_displaced_count_field = {
-    'key': 'male_displaced_count_field',
-    'name': tr('Male Displaced Count'),
-    'field_name': 'male_displaced',
-    'header_name': tr('Male'),
-    'type': qvariant_numbers,
-    'length': default_field_length,
-    'precision': 0,
-    'absolute': True,
-    'description': tr(
-        'Attribute where the number of displaced males for each feature.'),
-    'citations': [
-        {
-            'text': None,
-            'link': None
-        }
-    ],
-    # Null value can be replaced by default or not
-    'replace_null': False
-}
-
 infant_displaced_count_field = {
     'key': 'infant_displaced_count_field',
     'name': tr('Infant Displaced Count'),
@@ -2249,3 +2228,52 @@ count_fields = [
     over_60_displaced_count_field,
     disabled_displaced_count_field
 ] + minimum_needs_fields
+
+
+# Productivity field
+productivity_rate_field = {
+    'key': 'productivity_rate_field',
+    'name': tr('Productivity Rate'),
+    'field_name': 'productivity_rate',
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'help_text': tr('The rate of productivity of a crop in Kwt/Ha unit.'),
+    'description': tr(
+        'For a land cover, productivity is the rate of product weight per '
+        'area.'
+    ),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': True,
+    'default_value': productivity_default_value
+}
+
+productivity_field = {
+    'key': 'productivity_field',
+    'name': tr('Productivity'),
+    'field_name': 'productivity',
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'help_text': tr('The productivity of a crop in Kwt unit.'),
+    'description': tr(
+        'For a land cover, productivity is the weight of product.'
+    ),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': True,
+    'default_value': productivity_default_value
+}

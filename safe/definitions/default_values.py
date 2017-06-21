@@ -235,3 +235,15 @@ lactating_ratio_default_value = {
         'Default ratio of lactating people per 100 people in the total '
         'population.')
 }
+
+
+productivity_default_value = {
+    'key': 'productivity_default_value',
+    'name': tr('Productivity Global Default'),
+    'default_value': 0.0,
+    'min_value': 0,
+    'max_value': 1000000,
+    'increment': 10,
+    'description': tr(
+        'Default value of productivity for land cover.')
+}
