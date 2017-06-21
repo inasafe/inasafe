@@ -1,17 +1,8 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
+"""InaSAFE Wizard Step Source."""
 
-This module provides: Keyword Wizard Step: Source
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
+from safe import messaging as m
+from safe.utilities.i18n import tr
 
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
@@ -26,7 +17,8 @@ FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
 class StepKwSource(WizardStep, FORM_CLASS):
-    """Keyword Wizard Step: Source"""
+
+    """InaSAFE Wizard Step Source."""
 
     def __init__(self, parent=None):
         """Constructor for the tab.
@@ -124,3 +116,27 @@ class StepKwSource(WizardStep, FORM_CLASS):
             self.leSource_license.setText(get_unicode(source_license))
         else:
             self.leSource_license.clear()
+
+    @property
+    def step_name(self):
+        """Get the human friendly name for the wizard step.
+
+        :returns: The name of the wizard step.
+        :rtype: str
+        """
+        return tr('InaSAFE Source Step')
+
+    def help_content(self):
+        """Return the content of help for this step wizard.
+
+            We only needs to re-implement this method in each wizard step.
+
+        :returns: A message object contains help.
+        :rtype: m.Message
+        """
+        message = m.Message()
+        message.add(m.Paragraph(tr(
+            'In this wizard step: {step_name}, you will be able to '
+            'set the source, url, scale, date, and license of this '
+            'layer.').format(step_name=self.step_name)))
+        return message

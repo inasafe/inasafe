@@ -1,5 +1,5 @@
 # coding=utf-8
-"""Default InaSAFE Fields Step."""
+"""InaSAFE Wizard Step InaSAFE Default Fields."""
 
 # noinspection PyPackageRequirements
 import logging
@@ -12,18 +12,17 @@ from safe.common.parameters.default_select_parameter_widget import (
 from safe_extras.parameters.qt_widgets.parameter_container import (
     ParameterContainer)
 
+from safe import messaging as m
+from safe.utilities.i18n import tr
+
 from safe.definitions.layer_purposes import (layer_purpose_aggregation)
 from safe.definitions.utilities import get_fields, get_compulsory_fields
 from safe.definitions.layer_geometry import layer_geometry_raster
 from safe.definitions.constants import no_field
 from safe.gui.tools.wizard.wizard_utils import get_inasafe_default_value_fields
 
-from safe.definitions.fields import (
-    youth_ratio_field, adult_ratio_field, elderly_ratio_field)
-
 from safe.gui.tools.wizard.wizard_step import (
     WizardStep, get_wizard_step_ui_class)
-from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -35,7 +34,8 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
-    """Keyword Wizard Step: Default InaSAFE Fields"""
+
+    """InaSAFE Wizard Step InaSAFE Default Fields."""
 
     def __init__(self, parent=None):
         """Constructor for the tab.
@@ -231,3 +231,29 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
             self.kwExtraKeywordsGridLayout.itemAt(i).widget().setParent(None)
         self.parameters = []
         self.parameter_container = ParameterContainer()
+
+    @property
+    def step_name(self):
+        """Get the human friendly name for the wizard step.
+
+        :returns: The name of the wizard step.
+        :rtype: str
+        """
+        return tr('InaSAFE Default Field Step')
+
+    def help_content(self):
+        """Return the content of help for this step wizard.
+
+            We only needs to re-implement this method in each wizard step.
+
+        :returns: A message object contains help.
+        :rtype: m.Message
+        """
+        message = m.Message()
+        message.add(m.Paragraph(tr(
+            'In this wizard step: {step_name}, you will be able to '
+            'set a field that corresponded with a InaSAFE field '
+            'concept. It also allows you to set a default value for all '
+            'feature if you do not want to use any field').format(
+            step_name=self.step_name)))
+        return message
