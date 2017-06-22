@@ -359,8 +359,8 @@ class FieldMappingTab(QWidget, object):
     def drop_remove(*args, **kwargs):
         """Action when we need to remove dropped item.
 
-        :param args: Position arguments.
-        :type args: list
+        :param *args: Position arguments.
+        :type *args: list
 
         :param kwargs: Keywords arguments.
         :type kwargs: dict

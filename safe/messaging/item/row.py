@@ -30,9 +30,9 @@ class Row(MessageElement):
     def __init__(self, *args, **kwargs):
         """Creates a row object
 
-        :param args: args can be list or Cell of values to prepopulate the
+        :param *args: args can be list or Cell of values to prepopulate the
             row cells with.
-        :type args: list, Cell
+        :type *args: list, Cell
 
         :param header: A flag to indicate if the cell should be treated as
             a header cell. Depending on the ouput format cells may be rendered
