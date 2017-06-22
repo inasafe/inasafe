@@ -2301,7 +2301,7 @@ productivity_cost_rate_field = {
 }
 
 productivity_cost_field = {
-    'key': 'productivity_field',
+    'key': 'productivity_cost_field',
     'name': tr('Productivity Cost'),
     'field_name': 'productivity_cost',
     'type': qvariant_numbers,

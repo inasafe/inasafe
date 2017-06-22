@@ -14,7 +14,7 @@ from safe.definitions.fields import (
 from safe.definitions.post_processors.post_processor_inputs import (
     field_input_type)
 from safe.definitions.post_processors.post_processors import formula_process
-from utilities.i18n import tr
+from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -39,7 +39,7 @@ post_processor_productivity = {
         },
     },
     'output': {
-        'affected': {
+        'productivity': {
             'value': productivity_field,
             'type': formula_process,
             'formula': 'productivity_rate * size / 10000'
@@ -64,7 +64,7 @@ post_processor_productivity_cost = {
         },
     },
     'output': {
-        'affected': {
+        'productivity_cost': {
             'value': productivity_cost_field,
             'type': formula_process,
             'formula': 'productivity_cost_rate * size / 10000'
@@ -89,7 +89,7 @@ post_processor_productivity_value = {
         },
     },
     'output': {
-        'affected': {
+        'productivity_value': {
             'value': productivity_value_field,
             'type': formula_process,
             'formula': 'productivity_value_rate * size / 10000'
