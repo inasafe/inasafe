@@ -1,6 +1,7 @@
 # coding=utf-8
 
 """Definitions relating to group of fields."""
+
 from safe.definitions.concepts import concepts
 from safe.definitions.field_groups.age_field_group import (
     age_ratio_group,
@@ -90,34 +91,34 @@ all_field_groups = [
 
 # Update notes for each group
 age_group_notes = [
-    tr('Infant: {note}'.format(note=concepts['infant']['description'])),
-    tr('Child: {note}'.format(note=concepts['child']['description'])),
-    tr('Youth: {note}'.format(note=concepts['youth']['description'])),
-    tr('Adult: {note}'.format(note=concepts['adult']['description'])),
-    tr('Elderly: {note}'.format(note=concepts['elderly']['description']))
+    tr('Infant: {note}').format(note=concepts['infant']['description']),
+    tr('Child: {note}').format(note=concepts['child']['description']),
+    tr('Youth: {note}').format(note=concepts['youth']['description']),
+    tr('Adult: {note}').format(note=concepts['adult']['description']),
+    tr('Elderly: {note}').format(note=concepts['elderly']['description'])
 ]
 
 gender_group_notes = [
-    tr('Male: {note}'.format(note=concepts['male']['description'])),
-    tr('Female: {note}'.format(note=concepts['female']['description'])),
+    tr('Male: {note}').format(note=concepts['male']['description']),
+    tr('Female: {note}').format(note=concepts['female']['description']),
 ]
 
 age_vulnerability_group_notes = [
-    tr('Under 5: {note}'.format(note=concepts['under_5']['description'])),
-    tr('Over 60: {note}'.format(note=concepts['over_60']['description'])),
+    tr('Under 5: {note}').format(note=concepts['under_5']['description']),
+    tr('Over 60: {note}').format(note=concepts['over_60']['description']),
 ]
 
 gender_vulnerability_group_notes = [
-    tr('Child bearing age: {note}'.format(
-        note=concepts['child_bearing_age']['description'])),
-    tr('Pregnant: {note}'.format(
-        note=concepts['pregnant']['description'])),
-    tr('Lactating: {note}'.format(
-        note=concepts['lactating']['description']))
+    tr('Child bearing age: {note}').format(
+        note=concepts['child_bearing_age']['description']),
+    tr('Pregnant: {note}').format(
+        note=concepts['pregnant']['description']),
+    tr('Lactating: {note}').format(
+        note=concepts['lactating']['description'])
 ]
 
 disability_vulnerability_group_notes = [
-    tr('Disabled: {note}'.format(note=concepts['disabled']['description']))
+    tr('Disabled: {note}').format(note=concepts['disabled']['description'])
 ]
 
 age_ratio_group['notes'] += age_group_notes
@@ -146,9 +147,9 @@ disability_vulnerability_displaced_count_group['notes'] += \
 for field_group in all_field_groups:
     field_group['notes'].insert(
         0,
-        tr('{group_name} group: {note}'.format(
+        tr('{group_name} group: {note}').format(
             group_name=field_group['name'],
-            note=field_group['description'])))
+            note=field_group['description']))
     del field_group  # to prevent duplicate definition
 
 displaced_field_groups = [
