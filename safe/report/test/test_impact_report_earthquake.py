@@ -30,6 +30,10 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
+# TODO: find out why this test makes test_minimum_needs_outputs failing
+# if this test runs in travis before test_minimum_needs_outputs. We change
+# the filename at the moment so it will run after test_minimum_needs_outputs.
+
 class TestEarthquakeReport(unittest.TestCase):
 
     """Test Earthquake Report.
