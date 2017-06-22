@@ -53,6 +53,7 @@ __revision__ = '$Format:%H$'
 
 
 class Plugin(object):
+
     """The QGIS interface implementation for the InaSAFE plugin.
 
     This class acts as the 'glue' between QGIS and our custom logic.
@@ -108,41 +109,6 @@ class Plugin(object):
         # print self.tr('InaSAFE')
         # For enable/disable the keyword editor icon
         self.iface.currentLayerChanged.connect(self.layer_changed)
-
-    # noinspection PyArgumentList
-    def change_i18n(self, new_locale):
-        """Change internationalisation for the plugin.
-
-        Override the system locale  and then see if we can get a valid
-        translation file for whatever locale is effectively being used.
-
-        :param new_locale: The new locale i.e. 'id', 'af', etc.
-        :type new_locale: str
-
-        :raises: TranslationLoadException
-        """
-
-        os.environ['INASAFE_LANG'] = str(new_locale)
-
-        LOGGER.debug('%s %s %s' % (
-            new_locale, QLocale.system().name(), os.environ['INASAFE_LANG']))
-
-        root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-        translation_path = os.path.join(
-            root, 'safe_qgis', 'i18n',
-            'inasafe_' + str(new_locale) + '.qm')
-
-        if os.path.exists(translation_path):
-            self.translator = QTranslator()
-            result = self.translator.load(translation_path)
-            if not result:
-                message = 'Failed to load translation for %s' % new_locale
-                raise TranslationLoadError(message)
-            # noinspection PyTypeChecker,PyCallByClass
-            QCoreApplication.installTranslator(self.translator)
-
-        LOGGER.debug('%s %s' % (
-            translation_path, os.path.exists(translation_path)))
 
     # noinspection PyMethodMayBeStatic
     def tr(self, message):
@@ -394,7 +360,7 @@ class Plugin(object):
             add_to_toolbar=True)
 
     def _create_field_mapping_action(self):
-        """Create action for showing field mapping dialog.."""
+        """Create action for showing field mapping dialog."""
         icon = resources_path('img', 'icons', 'show-mapping-tool.svg')
         self.action_field_mapping = QAction(
             QIcon(icon),
@@ -668,7 +634,6 @@ class Plugin(object):
         :param checked: True if the dock should be shown, otherwise False.
         :type checked: bool
         """
-
         self.action_dock.setChecked(checked)
 
     # Run method that performs all the real work
@@ -832,6 +797,7 @@ class Plugin(object):
         dialog.exec_()  # modal
 
     def show_multi_buffer(self):
+        """Show the multi buffer tool."""
         from safe.gui.tools.multi_buffer_dialog import (
             MultiBufferDialog)
 
@@ -872,8 +838,7 @@ class Plugin(object):
         QgsMapLayerRegistry.instance().addMapLayer(layer)
 
     def show_definitions(self):
-        """Show InaSAFE Definitions (a report showing all key metadata).
-        """
+        """Show InaSAFE Definitions (a report showing all key metadata)."""
         from safe.gui.tools.help_dialog import HelpDialog
         from safe.gui.tools.help import definitions_help
         dialog = HelpDialog(
@@ -882,8 +847,7 @@ class Plugin(object):
         dialog.show()  # non modal
 
     def show_field_mapping(self):
-        """Show InaSAFE Field Mapping.
-        """
+        """Show InaSAFE Field Mapping."""
         from safe.gui.tools.field_mapping_dialog import FieldMappingDialog
         dialog = FieldMappingDialog(
             parent=self.iface.mainWindow(),
