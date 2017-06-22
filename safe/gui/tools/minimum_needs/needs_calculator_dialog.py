@@ -22,7 +22,7 @@ from qgis.gui import QgsMapLayerProxyModel, QgsFieldProxyModel
 from PyQt4 import QtGui
 from PyQt4.QtCore import pyqtSignature, pyqtSlot, QSettings
 
-from safe.common.utilities import temp_dir
+from safe.common.utilities import temp_dir, unique_filename
 from safe.common.version import get_version
 from safe.datastore.folder import Folder
 from safe.definitions.fields import displaced_field, aggregation_name_field
@@ -149,10 +149,11 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         """
         # create memory layer
         output_layer_name = os.path.splitext(input_layer.name())[0]
-        output_layer = (
-            '%s_minimum_needs' % output_layer_name)
+        output_layer_name = unique_filename(
+            prefix=('%s_minimum_needs_' % output_layer_name),
+            dir='minimum_needs_calculator')
         output_layer = create_memory_layer(
-            output_layer,
+            output_layer_name,
             input_layer.geometryType(),
             input_layer.crs(),
             input_layer.fields())
@@ -214,18 +215,19 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
             'inasafe/defaultUserDirectory', defaultValue='')
 
         if default_user_directory:
-            path = os.path.join(
-                default_user_directory, self.result_layer.name())
-            if not os.path.exists(path):
-                os.makedirs(path)
-            data_store = Folder(path)
+            output_directory = os.path.join(
+                default_user_directory, 'minimum_needs_calculator')
+            if not os.path.exists(output_directory):
+                os.makedirs(output_directory)
         else:
-            data_store = Folder(temp_dir(sub_dir=self.result_layer.name()))
+            output_directory = temp_dir(sub_dir='minimum_needs_calculator')
 
+        output_layer_name = os.path.split(self.result_layer.name())[1]
+        data_store = Folder(output_directory)
         data_store.default_vector_format = 'geojson'
-        data_store.add_layer(self.result_layer, self.result_layer.name())
+        data_store.add_layer(self.result_layer, output_layer_name)
 
-        self.result_layer = data_store.layer(self.result_layer.name())
+        self.result_layer = data_store.layer(output_layer_name)
 
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayers(
