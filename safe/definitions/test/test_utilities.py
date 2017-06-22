@@ -43,7 +43,9 @@ from safe.definitions import (
     unit_knots,
     population_field_groups,
     aggregation_field_groups,
-    productivity_rate_field
+    productivity_rate_field,
+    productivity_cost_rate_field,
+    productivity_value_rate_field
 )
 from safe.definitions.reports.components import report_a4_blue
 
@@ -257,8 +259,14 @@ class TestDefinitionsUtilities(unittest.TestCase):
         fields = get_fields(
             layer_purpose_exposure['key'],
             exposure_land_cover['key'],
-            replace_null=True)
-        expected_fields = [productivity_rate_field]
+            replace_null=False)
+        expected_fields = deepcopy(exposure_land_cover['compulsory_fields'])
+        expected_fields += deepcopy(exposure_fields)
+        expected_fields += [
+            productivity_rate_field,
+            productivity_cost_rate_field,
+            productivity_value_rate_field
+        ]
         self.assertListEqual(fields, expected_fields)
 
         fields = get_fields('aggregation', replace_null=False)

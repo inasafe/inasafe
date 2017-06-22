@@ -584,10 +584,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         Only **polygon vector** layers will be added to the aggregate list.
 
-        :param args: Arguments that may have been passed to this slot.
+        :param *args: Arguments that may have been passed to this slot.
             Typically a list of layers, but depends on which slot or function
             called this function.
-        :type args: list
+        :type *args: list
 
         ..note:: \*args is only used for debugging purposes.
         """

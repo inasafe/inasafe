@@ -214,10 +214,10 @@ def standard_data_path(*args):
 
     .. versionadded:: 3.0
 
-    :param args: List of path e.g. ['control', 'files',
+    :param *args: List of path e.g. ['control', 'files',
         'test-error-message.txt'] or ['control', 'scenarios'] to get the path
         to scenarios dir.
-    :type args: str
+    :type *args: str
 
     :return: Absolute path to the test data or dir path.
     :rtype: str
@@ -387,16 +387,16 @@ def load_test_raster_layer(*args, **kwargs):
 
     See documentation of load_path_raster_layer
 
-    :param args: List of path e.g. ['exposure', 'population.asc]'.
-    :type args: list[str]
+    :param *args: List of path e.g. ['exposure', 'population.asc]'.
+    :type *args: list[str]
 
-    :param kwargs: It can be :
+    :param *kwargs: It can be :
         clone=True if you want to copy the layer first to a temporary file.
 
         with_keywords=False if you do not want keywords. "clone" is
             required.
 
-    :type kwargs: dict
+    :type *kwargs: dict
 
     :return: The raster layer.
     :rtype: QgsRasterLayer
