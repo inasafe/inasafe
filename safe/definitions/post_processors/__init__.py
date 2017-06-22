@@ -1,5 +1,5 @@
 # coding=utf-8
-from definitions.post_processors.productivity_post_processors import \
+from safe.definitions.post_processors.productivity_post_processors import \
     productivity_post_processors
 from minimum_needs_post_processors import *
 from population_post_processors import *
