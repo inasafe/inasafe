@@ -23,7 +23,7 @@ from safe.definitions.exposure_classifications import (
     generic_road_classes,
     generic_structure_classes,
     generic_landcover_classes,
-    badan_geologi_landcover_classes)
+    badan_geologi_landcover_classes, data_driven_classes)
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -437,7 +437,7 @@ exposure_land_cover = {
     'size_unit': unit_hectares,
     'units': [unit_hectares],
     'classifications': [
-        generic_landcover_classes, badan_geologi_landcover_classes],
+        generic_landcover_classes, badan_geologi_landcover_classes, data_driven_classes],
     'compulsory_fields': [exposure_type_field],
     'fields': exposure_fields,
     'extra_fields': [

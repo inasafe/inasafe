@@ -784,10 +784,27 @@ badan_geologi_landcover_classes = {
     ]
 }
 
+data_driven_classes = {
+    'key': 'data_driven_classes',
+    'name': tr('Generic Data-driven Classification'),
+    'description': tr(
+        'Classification of based on the content of the exposure dataset.'
+    ),
+    'type': exposure_classification_type,
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    'classes': []
+}
+
 exposure_classifications = [
     generic_structure_classes,
     generic_road_classes,
     generic_place_classes,
     generic_landcover_classes,
-    badan_geologi_landcover_classes
+    badan_geologi_landcover_classes,
+    data_driven_classes
 ]
