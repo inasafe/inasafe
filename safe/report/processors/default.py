@@ -25,7 +25,10 @@ from qgis.core import (
     QgsComposerHtml,
     QgsRectangle,
     QgsLegendRenderer,
-    QgsComposerLegendStyle)
+    QgsComposerLegendStyle,
+    QgsComposerMap,
+    QgsComposerLegend
+    )
 
 from safe.common.exceptions import TemplateLoadingError
 from safe.common.utilities import temp_dir
@@ -399,7 +402,7 @@ def qgis_composer_renderer(impact_report, component):
         map_extent_option = map_el.get('extent')
         composer_map = composition.getComposerItemById(item_id)
         """:type: qgis.core.QgsComposerMap"""
-        if composer_map:
+        if isinstance(composer_map, QgsComposerMap):
             composer_map.setKeepLayerSet(True)
             layer_set = [l.id() for l in layers if isinstance(l, QgsMapLayer)]
             composer_map.setLayerSet(layer_set)
@@ -452,7 +455,7 @@ def qgis_composer_renderer(impact_report, component):
 
         legend = composition.getComposerItemById(item_id)
         """:type: qgis.core.QgsComposerLegend"""
-        if legend:
+        if isinstance(legend, QgsComposerLegend):
             # set column count
             if column_count:
                 legend.setColumnCount(column_count)
