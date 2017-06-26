@@ -184,7 +184,9 @@ class StepKwClassify(WizardStep, FORM_CLASS):
                 default_class = {'key': unique_value,
                                  # 'name': tr('Settlement'),
                                  # 'description': tr('Settlement'),
-                                 'string_defaults': [unicode(unique_value).upper().replace('_', ' ')]}
+                                 'string_defaults':
+                    [unicode(unique_value).upper().replace('_', ' ')]
+                }
 
                 default_classes.append(default_class)
 
@@ -277,7 +279,6 @@ class StepKwClassify(WizardStep, FORM_CLASS):
         :param default_classes: Default classes from unit.
         :type default_classes: list
         """
-
         # Populate the unique values list
         self.lstUniqueValues.clear()
         self.lstUniqueValues.setSelectionMode(

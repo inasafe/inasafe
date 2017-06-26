@@ -167,9 +167,8 @@ def _check_value_mapping(layer, exposure_key=None):
 
     exposure_classification = definition(classification)
 
-    if exposure_classification['key'] == 'data_driven_classes':
-        other = 'other'
-    else:
+    other = None
+    if exposure_classification['key'] != 'data_driven_classes':
         other = exposure_classification['classes'][-1]['key']
 
     exposure_mapped = []
