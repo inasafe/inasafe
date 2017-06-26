@@ -166,7 +166,11 @@ def _check_value_mapping(layer, exposure_key=None):
         classification = layer.keywords['classification']
 
     exposure_classification = definition(classification)
-    other = exposure_classification['classes'][-1]['key']
+
+    if exposure_classification['key'] == 'data_driven_classes':
+        other = 'other'
+    else:
+        other = exposure_classification['classes'][-1]['key']
 
     exposure_mapped = []
     for group in value_map.itervalues():

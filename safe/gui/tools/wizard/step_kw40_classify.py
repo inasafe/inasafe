@@ -143,7 +143,6 @@ class StepKwClassify(WizardStep, FORM_CLASS):
 
         classification = self.parent.step_kw_classification.\
             selected_classification()
-        default_classes = classification['classes']
         classification_name = classification['name']
 
         if is_raster_layer(self.parent.layer):
@@ -169,16 +168,33 @@ class StepKwClassify(WizardStep, FORM_CLASS):
                     classification_name, field.upper()))
             unique_values = self.parent.layer.uniqueValues(field_index)
 
-        # Assign unique values to classes (according to default)
-        unassigned_values = list()
-        assigned_values = dict()
-        for default_class in default_classes:
-            assigned_values[default_class['key']] = list()
+        clean_unique_values = []
         for unique_value in unique_values:
             if unique_value is None or isinstance(
                     unique_value, QPyNullVariant):
                 # Don't classify features with NULL value
                 continue
+            clean_unique_values.append(unique_value)
+
+        # get default classes
+        default_classes = classification['classes']
+        if classification['key'] == 'data_driven_classes':
+            default_classes = []
+            for unique_value in clean_unique_values:
+                default_class = {'key': unique_value,
+                                 # 'name': tr('Settlement'),
+                                 # 'description': tr('Settlement'),
+                                 'string_defaults': [unicode(unique_value).upper().replace('_', ' ')]}
+
+                default_classes.append(default_class)
+
+        # Assign unique values to classes (according to default)
+        unassigned_values = list()
+        assigned_values = dict()
+
+        for default_class in default_classes:
+            assigned_values[default_class['key']] = list()
+        for unique_value in clean_unique_values:
             # Capitalization of the value and removing '_' (raw OSM data).
             value_as_string = unicode(unique_value).upper().replace('_', ' ')
             assigned = False
@@ -200,9 +216,11 @@ class StepKwClassify(WizardStep, FORM_CLASS):
                 if condition_1 or condition_2:
                     assigned_values[default_class['key']] += [unique_value]
                     assigned = True
+
             if not assigned:
                 # add to unassigned values list otherwise
                 unassigned_values += [unique_value]
+
         self.populate_classified_values(
             unassigned_values, assigned_values, default_classes)
 
@@ -231,11 +249,7 @@ class StepKwClassify(WizardStep, FORM_CLASS):
                 value_map = json.loads(value_map)
             except ValueError:
                 return
-        for unique_value in unique_values:
-            if unique_value is None or isinstance(
-                    unique_value, QPyNullVariant):
-                # Don't classify features with NULL value
-                continue
+        for unique_value in clean_unique_values:
             # check in value map
             assigned = False
             for key, value_list in value_map.iteritems():
@@ -245,7 +259,7 @@ class StepKwClassify(WizardStep, FORM_CLASS):
             if not assigned:
                 unassigned_values += [unique_value]
         self.populate_classified_values(
-            unassigned_values, assigned_values, default_classes)
+           unassigned_values, assigned_values, default_classes)
 
     def populate_classified_values(
             self, unassigned_values, assigned_values, default_classes):
@@ -263,6 +277,7 @@ class StepKwClassify(WizardStep, FORM_CLASS):
         :param default_classes: Default classes from unit.
         :type default_classes: list
         """
+
         # Populate the unique values list
         self.lstUniqueValues.clear()
         self.lstUniqueValues.setSelectionMode(

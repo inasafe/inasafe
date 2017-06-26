@@ -784,6 +784,7 @@ badan_geologi_landcover_classes = {
     ]
 }
 
+
 data_driven_classes = {
     'key': 'data_driven_classes',
     'name': tr('Generic Data-driven Classification'),
