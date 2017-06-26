@@ -789,7 +789,7 @@ data_driven_classes = {
     'key': 'data_driven_classes',
     'name': tr('Generic Data-driven Classification'),
     'description': tr(
-        'Classification of based on the content of the exposure dataset.'
+        'Classification based on the content of the exposure dataset.'
     ),
     'type': exposure_classification_type,
     'citations': [
