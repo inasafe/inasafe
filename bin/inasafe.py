@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid -
@@ -74,7 +74,17 @@ class CommandLineArguments(object):
         self.report_template = arguments_['--report-template']
         # optional arguments
         if not arguments_['--extent'] is None:
-            self.extent = arguments_['--extent'].replace(',', '.').split(':')
+            # Extent is in the format: xmin,ymin,xmax,ymax
+            # example: -10.01,10.01,-9.01,11.01
+            try:
+                self.extent = arguments_['--extent'].split(',')
+                # convert to float
+                self.extent = [float(n) for n in self.extent]
+                if len(self.extent) != 4:
+                    raise ValueError()
+            except ValueError as e:
+                e.message = 'Improperly formatted Extent option'
+                raise
         else:
             LOGGER.debug('no extent specified')
         if arguments_['--download']:
@@ -288,8 +298,9 @@ def impact_function_setup(
     impact_function.map_canvas = CANVAS
     # QSetting context
     settings = QSettings()
-    crs = settings.value('inasafe/analysis_extent_crs', '', type=str)
-    impact_function.requested_extent_crs = QgsCoordinateReferenceSystem(crs)
+    # Default extent CRS is EPSG:4326
+    impact_function.requested_extent_crs = QgsCoordinateReferenceSystem(
+        'EPSG:4326')
     try:
         impact_function.requested_extent = QgsRectangle(
             float(command_line_arguments.extent[0]),
@@ -297,6 +308,10 @@ def impact_function_setup(
             float(command_line_arguments.extent[2]),
             float(command_line_arguments.extent[3])
         )
+        # Use HazardExposureBoundingBox settings
+        settings.setValue(
+            'inasafe/analysis_extents_mode',
+            'HazardExposureBoundingBox')
     except AttributeError:
         print "No extents"
         pass
@@ -349,12 +364,16 @@ def build_report(cli_arguments):
         extra_layers = [hazard_layer]
         layer_registry.addMapLayer(impact_layer)
         layer_registry.addMapLayers(extra_layers)
-        CANVAS.setExtent(impact_layer.extent())
+        if cli_arguments.extent:
+            report_extent = QgsRectangle(*cli_arguments.extent)
+        else:
+            report_extent = impact_layer.extent()
+        CANVAS.setExtent(report_extent)
         CANVAS.refresh()
         report = ImpactReport(
             IFACE, cli_arguments.report_template, impact_layer,
             extra_layers=extra_layers)
-        report.extent = CANVAS.fullExtent()
+        report.extent = report_extent
         LOGGER.debug(os.path.splitext(cli_arguments.output_file)[0] + '.pdf')
         map_path = report.print_map_to_pdf(
             os.path.splitext(cli_arguments.output_file)[0] + '.pdf')

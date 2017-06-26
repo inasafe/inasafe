@@ -55,8 +55,37 @@ def filter_impact_function(hazard=None, exposure=None):
 
 @app.task(queue='inasafe-headless-analysis')
 def run_analysis(hazard, exposure, function, aggregation=None,
-                 generate_report=False):
-    """Run analysis"""
+                 generate_report=False,
+                 requested_extent=None):
+
+    """Run analysis with a given combination
+
+    Proxy tasks for celery broker. It is not actually implemented here.
+    It is implemented in InaSAFE headless.tasks package
+
+    :param hazard: hazard layer url
+    :type hazard: str
+
+    :param exposure: exposure layer url
+    :type exposure: str
+
+    :param function: Impact Function ID of valid combination of
+        hazard and exposure
+    :type function: str
+
+    :param aggregation: aggregation layer url
+    :type aggregation: str
+
+    :param generate_report: set True to generate pdf report
+    :type generate_report: bool
+
+    :param requested_extent: An extent of BBOX format list to denote the area
+        of analysis. In CRS EPSG:4326
+    :type requested_extent: list(float)
+
+    :return: Impact layer url
+    :rtype: str
+    """
     hazard_file = download_layer(hazard)
     exposure_file = download_layer(exposure)
     aggregation_file = None
@@ -67,6 +96,8 @@ def run_analysis(hazard, exposure, function, aggregation=None,
     arguments.exposure = exposure_file
     arguments.aggregation = aggregation_file
     arguments.impact_function = function
+    if requested_extent:
+        arguments.extent = requested_extent
 
     # generate names for impact results
     # create date timestamp
