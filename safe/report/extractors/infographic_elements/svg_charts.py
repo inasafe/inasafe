@@ -396,7 +396,7 @@ class DonutChartContext(SVGChartContext):
         :param hole: The radius of inner hole circle
         :type hole: float
 
-        :return: The dictionary of slice context for svg renderer or None 
+        :return: The dictionary of slice context for svg renderer or None
             if there is any issue
         :rtype: dict, None
         """
