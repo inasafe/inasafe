@@ -179,13 +179,12 @@ class StepKwClassify(WizardStep, FORM_CLASS):
         # get default classes
         default_classes = classification['classes']
         if classification['key'] == 'data_driven_classes':
-            default_classes = []
             for unique_value in clean_unique_values:
+                name = unicode(unique_value).upper().replace('_', ' ')
                 default_class = {'key': unique_value,
-                                 # 'name': tr('Settlement'),
+                                 'name': name,
                                  # 'description': tr('Settlement'),
-                                 'string_defaults':
-                    [unicode(unique_value).upper().replace('_', ' ')]
+                                 'string_defaults': [name]
                 }
 
                 default_classes.append(default_class)
