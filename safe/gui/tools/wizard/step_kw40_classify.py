@@ -231,8 +231,8 @@ class StepKwClassify(WizardStep, FORM_CLASS):
         value_map_classification_name = self.parent.get_existing_keyword(
             'classification')
         # Do not continue if there is no value_map in existing keywords
-        if (value_map is None
-                or value_map_classification_name != classification['key']):
+        if (value_map is None or
+                value_map_classification_name != classification['key']):
             return
 
         # Do not continue if user selected different field
