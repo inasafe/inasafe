@@ -184,8 +184,7 @@ class StepKwClassify(WizardStep, FORM_CLASS):
                 default_class = {'key': unique_value,
                                  'name': name,
                                  # 'description': tr('Settlement'),
-                                 'string_defaults': [name]
-                }
+                                 'string_defaults': [name]}
 
                 default_classes.append(default_class)
 
@@ -229,8 +228,11 @@ class StepKwClassify(WizardStep, FORM_CLASS):
         # Note the default_classes and unique_values are already loaded!
 
         value_map = self.parent.get_existing_keyword('value_map')
+        value_map_classification_name = self.parent.get_existing_keyword(
+            'classification')
         # Do not continue if there is no value_map in existing keywords
-        if value_map is None:
+        if (value_map is None
+                or value_map_classification_name != classification['key']):
             return
 
         # Do not continue if user selected different field
@@ -250,6 +252,7 @@ class StepKwClassify(WizardStep, FORM_CLASS):
                 value_map = json.loads(value_map)
             except ValueError:
                 return
+
         for unique_value in clean_unique_values:
             # check in value map
             assigned = False
