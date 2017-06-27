@@ -26,9 +26,9 @@ status=final
 
 changelog=
     Version 4.1.2
+    - Fix for cases where a pie chart slice calculation has a divide by zero error (#4289)
     - Fix issue where Keywords Wizard is not enabled if old keywords exist (#4284)
     - Fix python exception when using InaSAFE in French
-
 
 # tags are comma separated with spaces allowed
 tags=contingency planning, impact assessments, disaster scenarios, natural hazards,risk
@@ -37,7 +37,7 @@ homepage=http://www.inasafe.org/
 tracker=https://github.com/inasafe/inasafe/issues
 repository=https://github.com/inasafe/inasafe
 icon=resources/img/icons/icon.png
-# experimental flag
+# experimenal flag
 experimental=False
 
 # deprecated flag (applies to the whole plugin, not just a single version
