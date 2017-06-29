@@ -34,9 +34,9 @@ from PyQt4.QtGui import (
 
 from safe.common.version import release_status
 from safe.common.exceptions import (
-    TranslationLoadError,
     KeywordNotFoundError,
-    NoKeywordsFoundError)
+    NoKeywordsFoundError,
+    MetadataReadError)
 from safe.utilities.resources import resources_path
 from safe.utilities.gis import is_raster_layer
 from safe.definitions.layer_purposes import (
@@ -930,7 +930,7 @@ class Plugin(object):
                         enable_field_mapping_tool = True
             else:
                 enable_field_mapping_tool = False
-        except (KeywordNotFoundError, NoKeywordsFoundError):
+        except (KeywordNotFoundError, NoKeywordsFoundError, MetadataReadError):
             # No keywords, disable field mapping tool.
             enable_field_mapping_tool = False
 
