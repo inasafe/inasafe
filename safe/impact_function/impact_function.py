@@ -1770,18 +1770,22 @@ class ImpactFunction(object):
         self.debug_layer(self.hazard)
 
         if self.hazard.keywords.get('layer_mode') == 'continuous':
+            # If the layer is continuous, we update the original data to the
+            # inasafe hazard class.
             self.set_state_process(
                 'hazard',
                 'Classify continuous hazard and assign class names')
             self.hazard = reclassify_vector(
                 self.hazard, self.exposure.keywords['exposure'])
             self.debug_layer(self.hazard)
-
-        self.set_state_process(
-            'hazard', 'Assign classes based on value map')
-        self.hazard = update_value_map(
-            self.hazard, self.exposure.keywords['exposure'])
-        self.debug_layer(self.hazard)
+        else:
+            # However, if it's a classified dataset, we only transpose the
+            # value map using inasafe hazard classes.
+            self.set_state_process(
+                'hazard', 'Assign classes based on value map')
+            self.hazard = update_value_map(
+                self.hazard, self.exposure.keywords['exposure'])
+            self.debug_layer(self.hazard)
 
     @profile
     def aggregate_hazard_preparation(self):
