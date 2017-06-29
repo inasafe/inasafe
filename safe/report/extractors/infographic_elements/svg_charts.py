@@ -300,6 +300,9 @@ class DonutChartContext(SVGChartContext):
                     center_point,
                     hole)
 
+                if half_slice is None:
+                    continue
+
                 # modify the result
                 half_slice['value'] = total_values
                 half_slice['percentage'] = 100
@@ -393,10 +396,14 @@ class DonutChartContext(SVGChartContext):
         :param hole: The radius of inner hole circle
         :type hole: float
 
-        :return: The dictionary of slice context for svg renderer
-        :rtype: dict
+        :return: The dictionary of slice context for svg renderer or None
+            if there is any issue
+        :rtype: dict, None
         """
-        step_angle = 1.0 * slice_value / total_values * 2 * math.pi
+        try:
+            step_angle = 1.0 * slice_value / total_values * 2 * math.pi
+        except ZeroDivisionError:
+            return None
         # move marker
         d = ''
         d += 'M{position_x:f},{position_y:f}'.format(

@@ -63,7 +63,7 @@ homepage=http://www.inasafe.org/
 tracker=https://github.com/inasafe/inasafe/issues
 repository=https://github.com/inasafe/inasafe
 icon=resources/img/icons/icon.png
-# experimental flag
+# experimenal flag
 experimental=False
 
 # deprecated flag (applies to the whole plugin, not just a single version
