@@ -169,6 +169,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.setup_button_connectors()
 
         self.iface.layerSavedAs.connect(self.save_auxiliary_files)
+        self.iface.mapCanvas().extentsChanged.connect(self.extents_changed)
 
         canvas = self.iface.mapCanvas()
 
@@ -406,9 +407,18 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.iface.mapCanvas().layersChanged.connect(self.get_layers)
         self.iface.currentLayerChanged.connect(self.layer_changed)
 
+    def extents_changed(self):
+        """Helper to know if we need to refresh the IF when we pan/zoom.
+
+        This function is always connected to the extentsChanged signal from
+        the map canvas. According to the aggregation layer, we refresh or not.
+
+        We got a problem by trying to connect/disconnect before every time.
+        """
         if not self._aggregation:
-            self.iface.mapCanvas().extentsChanged.connect(
-                self.validate_impact_function)
+            self.validate_impact_function()
+        else:
+            pass
 
     # pylint: disable=W0702
     def disconnect_layer_listener(self):
@@ -423,10 +433,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         self.iface.mapCanvas().layersChanged.disconnect(self.get_layers)
         self.iface.currentLayerChanged.disconnect(self.layer_changed)
-
-        if not self._aggregation:
-            self.iface.mapCanvas().extentsChanged.disconnect(
-                self.validate_impact_function)
 
     @pyqtSlot(QgsMapLayer, str)
     def save_auxiliary_files(self, layer, destination):
