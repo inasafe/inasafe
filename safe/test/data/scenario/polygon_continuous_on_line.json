@@ -47,7 +47,6 @@
         "Clip and mask hazard polygons with the analysis layer",
         "Cleaning the vector hazard attribute table",
         "Classify continuous hazard and assign class names",
-        "Assign classes based on value map",
         "Make hazard layer valid"
       ]
     },
