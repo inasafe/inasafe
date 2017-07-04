@@ -223,6 +223,13 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
             output_directory = temp_dir(sub_dir='minimum_needs_calculator')
 
         output_layer_name = os.path.split(self.result_layer.name())[1]
+
+        # If normal filename doesn't exist, then use normal filename
+        random_string_length = len(output_layer_name.split('_')[-1])
+        normal_filename = output_layer_name[:-(random_string_length + 1)]
+        if not os.path.exists(os.path.join(output_directory, normal_filename)):
+            output_layer_name = normal_filename
+
         data_store = Folder(output_directory)
         data_store.default_vector_format = 'geojson'
         data_store.add_layer(self.result_layer, output_layer_name)
