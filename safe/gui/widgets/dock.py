@@ -37,6 +37,7 @@ from safe.definitions.constants import (
     PREPARE_FAILED_BAD_LAYER,
     PREPARE_SUCCESS,
 )
+from safe.definitions.utilities import map_report_component
 from safe.defaults import supporters_logo_path
 from safe.definitions.reports import (
     final_product_tag,
@@ -999,7 +1000,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         standard_impact_report_metadata = ReportMetadata(
             metadata_dict=standard_impact_report_metadata_pdf)
         standard_map_report_metadata = ReportMetadata(
-            metadata_dict=report_a4_blue)
+            metadata_dict=map_report_component(report_a4_blue))
 
         standard_report_metadata = [
             standard_impact_report_metadata,

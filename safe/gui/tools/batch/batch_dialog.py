@@ -53,6 +53,7 @@ from safe.definitions.layer_purposes import (
     layer_purpose_hazard,
     layer_purpose_exposure,
     layer_purpose_aggregation)
+from safe.definitions.utilities import map_report_component
 from safe.definitions.reports.components import (
     standard_impact_report_metadata_pdf,
     report_a4_blue)
@@ -702,7 +703,7 @@ class BatchDialog(QDialog, FORM_CLASS):
 
         # create impact map report instance
         map_report_metadata = ReportMetadata(
-            metadata_dict=report_a4_blue)
+            metadata_dict=map_report_component(report_a4_blue))
         impact_map_report = ImpactReport(
             iface,
             map_report_metadata,
