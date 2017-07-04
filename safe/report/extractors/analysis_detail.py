@@ -7,7 +7,7 @@ from safe.definitions.fields import (
     hazard_count_field,
     total_affected_field,
     total_not_affected_field,
-    total_field, total_not_exposed_field)
+    total_field, total_not_exposed_field, affected_field)
 from safe.report.extractors.util import (
     layer_definition_type,
     resolve_from_dictionary,
@@ -363,7 +363,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
                 details[row_idx] = row
             # reduce total affected and not affected column index by 1
             # since we are removing a column
-            if group_key == 'affected':
+            if group_key == affected_field['field_name']:
                 affected_header_index -= 1
             else:
                 not_affected_header_index -= 1
