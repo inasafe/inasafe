@@ -16,7 +16,8 @@ from safe.definitions.post_processors.minimum_needs_post_processors import \
 # Postprocessor tree
 # # Root : impact layer
 # |--- size
-# |   `--- size rate  disabled in V4.0, ET 13/02/17
+# |   |--- size rate  disabled in V4.0, ET 13/02/17
+# |   `--- productivity
 # |--- affected
 # |--- displaced ratio
 # |--- fatality ratio
@@ -28,7 +29,9 @@ from safe.definitions.post_processors.minimum_needs_post_processors import \
 # |          |--- youth
 # |          |--- adult
 # |          |--- elderly
-# |          `--- minimum needs
+# |          |--- minimum needs
+# |          |--- disabled
+# |          `--- gender_vulnerability
 
 post_processors = [
     post_processor_size,

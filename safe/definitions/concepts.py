@@ -638,6 +638,43 @@ concepts['rounding_methodology'] = {
         }
     ],
 }
+concepts['productivity'] = {
+    'group': tr('Productivity'),
+    'key': 'productivity',
+    'description': tr(
+        'The number of crop in weight unit (e.g. quintals, tons) per '
+        'area unit (m^2, hectare) that can be produced in a land cover.'
+        'unit.'),
+    'citations': [
+        {
+            'text': '',
+            'link': u''
+        }
+    ],
+}
+concepts['productivity_cost'] = {
+    'group': tr('Productivity Cost'),
+    'key': 'productivity_cost',
+    'description': tr(
+        'How much money needed to re-build a crop in an area.'),
+    'citations': [
+        {
+            'text': '',
+            'link': u''
+        }
+    ],
+}
+concepts['productivity_value'] = {
+    'group': tr('Productivity Value'),
+    'key': 'productivity_value',
+    'description': tr('The value of a crop in an area.'),
+    'citations': [
+        {
+            'text': '',
+            'link': u''
+        }
+    ],
+}
 # Boilerplate for adding a new concept...
 #  concepts[''] = {
 #    'description': tr(

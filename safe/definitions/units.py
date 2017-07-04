@@ -172,6 +172,24 @@ unit_hectares = {
         }
     ],
 }
+unit_quintal = {
+    'key': 'quintal',
+    'name': tr('Quintal'),
+    'base_unit': False,
+    'plural_name': tr('quintals'),
+    'measure': tr('Weight'),
+    'abbreviation': 'quintal',
+    'description': tr(
+        u'<b>Quintal</b> is a unit of weight equal to 100 kilograms (about '
+        u'220 pounds)'),
+    'citations': [
+        {
+            'text': 'Merriam-Webster',
+            'link': 'https://www.merriam-webster.com/dictionary/quintal'
+        }
+    ],
+}
+
 unit_square_metres = {
     'key': 'square_metres',
     'name': tr('Square Metres'),
