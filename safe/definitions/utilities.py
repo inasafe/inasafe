@@ -1,6 +1,8 @@
 # coding=utf-8
 """Utilities module for helping definitions retrieval."""
 
+from os.path import join, exists
+from qgis.core import QgsApplication
 from copy import deepcopy
 
 from safe import definitions
@@ -426,3 +428,29 @@ def get_field_groups(layer_purpose, layer_subcategory=None):
             subcategory = definition(layer_subcategory)
             field_groups += deepcopy(subcategory['field_groups'])
     return field_groups
+
+
+def map_report_component(component, custom_template_dir=None):
+    """Get a map report component based on custom qpt if exists
+
+    :param component: Component as dictionary.
+    :type component: dict
+
+    :param custom_template_dir: The directory where the custom template stored.
+    :type custom_template_dir: basestring
+
+    :returns: Map report component.
+    :rtype: dict
+    """
+    copy_component = deepcopy(component)
+    if not custom_template_dir:
+        custom_template_dir = join(
+            QgsApplication.qgisSettingsDirPath(), 'inasafe')
+
+    for component in copy_component['components']:
+        qpt_file_name = component['template'].split('/')[-1]
+        custom_qpt_path = join(custom_template_dir, qpt_file_name)
+        if exists(custom_qpt_path):
+            component['template'] = custom_qpt_path
+
+    return copy_component
