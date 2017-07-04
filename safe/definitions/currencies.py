@@ -43,9 +43,9 @@ zar = {
 }
 
 currencies = [
-    idr,
     aud,
-    usd,
     eur,
+    idr,
+    usd,
     zar
 ]

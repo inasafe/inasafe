@@ -25,12 +25,21 @@
      </property>
      <widget class="QWidget" name="page">
       <layout class="QGridLayout" name="gridLayout">
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item row="0" column="0">
-        <widget class="QWebView" name="help_web_view">
-         <property name="url">
+        <widget class="QWebView" name="help_web_view" native="true">
+         <property name="url" stdset="0">
           <url>
            <string>about:blank</string>
           </url>
@@ -41,20 +50,38 @@
      </widget>
      <widget class="QWidget" name="page_1">
       <layout class="QGridLayout" name="gridLayout_5">
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item row="0" column="0">
         <widget class="QTabWidget" name="tabWidget">
          <property name="currentIndex">
-          <number>3</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="tab_basic">
           <attribute name="title">
            <string>Basic Options</string>
           </attribute>
           <layout class="QGridLayout" name="gridLayout_4">
-           <property name="margin">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
             <number>0</number>
            </property>
            <item row="0" column="0">
@@ -73,26 +100,26 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>401</width>
-                <height>365</height>
+                <width>834</width>
+                <height>536</height>
                </rect>
               </property>
-              <layout class="QVBoxLayout" name="verticalLayout_4">
-               <item>
+              <layout class="QGridLayout" name="gridLayout_8">
+               <item row="0" column="0">
                 <widget class="QCheckBox" name="organisation_on_dock_checkbox">
                  <property name="text">
                   <string>Show organisation logo in the InaSAFE dock</string>
                  </property>
                 </widget>
                </item>
-               <item>
+               <item row="1" column="0" colspan="2">
                 <widget class="QCheckBox" name="cbxVisibleLayersOnly">
                  <property name="text">
                   <string>Only show visible layers in the InaSAFE dock and in the wizard</string>
                  </property>
                 </widget>
                </item>
-               <item>
+               <item row="2" column="0">
                 <widget class="QCheckBox" name="cbxSetLayerNameFromTitle">
                  <property name="enabled">
                   <bool>true</bool>
@@ -102,7 +129,7 @@
                  </property>
                 </widget>
                </item>
-               <item>
+               <item row="3" column="0">
                 <widget class="QCheckBox" name="cbxZoomToImpact">
                  <property name="enabled">
                   <bool>true</bool>
@@ -112,7 +139,7 @@
                  </property>
                 </widget>
                </item>
-               <item>
+               <item row="4" column="0">
                 <widget class="QCheckBox" name="cbxHideExposure">
                  <property name="enabled">
                   <bool>true</bool>
@@ -122,28 +149,28 @@
                  </property>
                 </widget>
                </item>
-               <item>
+               <item row="5" column="0">
                 <widget class="QCheckBox" name="cbx_show_only_impact">
                  <property name="text">
                   <string>Show only impact layer on report map</string>
                  </property>
                 </widget>
                </item>
-               <item>
+               <item row="6" column="0">
                 <widget class="QCheckBox" name="cbxUseSelectedFeaturesOnly">
                  <property name="text">
                   <string>Use selected features only with the aggregation layer</string>
                  </property>
                 </widget>
                </item>
-               <item>
+               <item row="7" column="0">
                 <widget class="QCheckBox" name="custom_UseUserDirectory_checkbox">
                  <property name="text">
                   <string>Location for results</string>
                  </property>
                 </widget>
                </item>
-               <item>
+               <item row="8" column="0">
                 <layout class="QHBoxLayout" name="horizontalLayout_2">
                  <item>
                   <widget class="QSplitter" name="splitter_user_directory">
@@ -167,7 +194,21 @@
                  </item>
                 </layout>
                </item>
-               <item>
+               <item row="9" column="0">
+                <layout class="QHBoxLayout" name="horizontalLayout">
+                 <item>
+                  <widget class="QLabel" name="currency_label">
+                   <property name="text">
+                    <string>Currency</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QComboBox" name="currency_combo_box"/>
+                 </item>
+                </layout>
+               </item>
+               <item row="10" column="0">
                 <widget class="QGroupBox" name="grpNotImplemented">
                  <property name="title">
                   <string>Not yet implemented</string>
@@ -180,6 +221,16 @@
                     </property>
                     <property name="text">
                      <string>Bubble exposure and hazard layers to top when selected</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="7" column="0">
+                   <widget class="QLabel" name="label_4">
+                    <property name="enabled">
+                     <bool>true</bool>
+                    </property>
+                    <property name="text">
+                     <string>Organisation name (for maps, reports etc.)</string>
                     </property>
                    </widget>
                   </item>
@@ -225,20 +276,10 @@
                     </item>
                    </layout>
                   </item>
-                  <item row="7" column="0">
-                   <widget class="QLabel" name="label_4">
-                    <property name="enabled">
-                     <bool>true</bool>
-                    </property>
-                    <property name="text">
-                     <string>Organisation name (for maps, reports etc.)</string>
-                    </property>
-                   </widget>
-                  </item>
                  </layout>
                 </widget>
                </item>
-               <item>
+               <item row="11" column="1">
                 <spacer name="verticalSpacer">
                  <property name="orientation">
                   <enum>Qt::Vertical</enum>
