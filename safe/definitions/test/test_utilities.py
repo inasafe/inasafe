@@ -2,6 +2,10 @@
 """Test for utilities module."""
 import unittest
 from copy import deepcopy
+from tempfile import mkdtemp
+from os.path import join, exists, splitext, split
+import shutil
+
 from safe import definitions
 
 from safe.definitions import (
@@ -40,6 +44,7 @@ from safe.definitions import (
     population_field_groups,
     aggregation_field_groups
 )
+from safe.definitions.reports.components import report_a4_blue
 
 from safe.definitions.utilities import (
     definition,
@@ -58,8 +63,11 @@ from safe.definitions.utilities import (
     default_classification_thresholds,
     default_classification_value_maps,
     fields_in_field_groups,
-    get_field_groups
+    get_field_groups,
+    map_report_component
 )
+
+from safe.common.utilities import safe_dir
 
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -71,6 +79,8 @@ __revision__ = '$Format:%H$'
 class TestDefinitionsUtilities(unittest.TestCase):
 
     """Test Utilities Class for Definitions."""
+
+    maxDiff = None
 
     def test_definition(self):
         """Test we can get definitions for keywords.
@@ -410,6 +420,26 @@ class TestDefinitionsUtilities(unittest.TestCase):
         field_groups = get_field_groups(layer_purpose_hazard['key'])
         expected = []
         self.assertListEqual(field_groups, expected)
+
+    def test_map_report_component(self):
+        """Test for map report component."""
+        # Default qpt
+        component = map_report_component(report_a4_blue, '.')
+        self.assertDictEqual(component, report_a4_blue)
+
+        # Custom qpt
+        target_directory = mkdtemp()
+        default_qpt = join(
+            safe_dir('..'),
+            'resources',
+            'qgis-composer-templates',
+            'a4-portrait-blue.qpt')
+        if exists(default_qpt):
+            target_path = join(target_directory, split(default_qpt)[1])
+            shutil.copy2(default_qpt, target_path)
+
+        component = map_report_component(report_a4_blue, target_directory)
+        self.assertTrue(component != report_a4_blue)
 
 
 if __name__ == '__main__':
