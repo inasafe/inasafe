@@ -2238,7 +2238,9 @@ productivity_rate_field = {
     'length': default_field_length,
     'precision': 0,
     'absolute': True,
-    'help_text': tr('The rate of productivity of a crop in Kwt/Ha unit.'),
+    'help_text': tr(
+        'The rate of productivity of a crop in Quintal (hundred '
+        'kilograms)/Hectare unit.'),
     'description': tr(
         'For a land cover, productivity is the rate of product weight per '
         'area.'
