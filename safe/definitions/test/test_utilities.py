@@ -3,7 +3,7 @@
 import unittest
 from copy import deepcopy
 from tempfile import mkdtemp
-from os.path import join, exists, splitext, split
+from os.path import join, exists, split
 import shutil
 
 from safe import definitions
