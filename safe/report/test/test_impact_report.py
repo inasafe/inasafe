@@ -48,6 +48,7 @@ from safe.definitions.reports.components import (
     population_infographic_component,
     analysis_provenance_details_component,
     analysis_provenance_details_simplified_component)
+from safe.definitions.utilities import map_report_component
 from safe.report.impact_report import ImpactReport
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -1790,7 +1791,7 @@ class TestImpactReport(unittest.TestCase):
 
         # Create impact report
         report_metadata = ReportMetadata(
-            metadata_dict=report_a4_blue)
+            metadata_dict=map_report_component(report_a4_blue))
 
         impact_report = ImpactReport(
             IFACE,
