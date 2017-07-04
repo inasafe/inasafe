@@ -29,6 +29,7 @@ from safe.definitions.field_groups import all_field_groups
 from safe.common.utilities import temp_dir
 from safe.defaults import supporters_logo_path, default_north_arrow_path
 from safe.definitions.earthquake import EARTHQUAKE_FUNCTIONS
+from safe.definitions.currencies import currencies
 from safe.utilities.default_values import (
     set_inasafe_default_value_qsetting, get_inasafe_default_value_qsetting)
 from safe.utilities.i18n import tr
@@ -241,6 +242,19 @@ class OptionsDialog(QDialog, FORM_CLASS):
         self.splitter_user_directory.setEnabled(custom_user_directory_flag)
         self.leUserDirectoryPath.setText(user_directory_path)
 
+        # Currency
+        # Populate the currency list
+        for currency in currencies:
+            self.currency_combo_box.addItem(currency['name'], currency['key'])
+
+        # Then make selected the default one.
+        default_currency = setting('currency', expected_type=str)
+        keys = [currency['key'] for currency in currencies]
+        if default_currency not in keys:
+            default_earthquake_function = currencies[0]['key']
+        index = self.currency_combo_box.findData(default_currency)
+        self.currency_combo_box.setCurrentIndex(index)
+
         # Earthquake function.
         # Populate the combobox first.
         for model in EARTHQUAKE_FUNCTIONS:
@@ -308,7 +322,11 @@ class OptionsDialog(QDialog, FORM_CLASS):
             self.leUserDirectoryPath.text())
         index = self.earthquake_function.currentIndex()
         value = self.earthquake_function.itemData(index)
-        set_setting('earthquake_function', value)
+        set_setting('earthquake_function', value, qsettings=self.settings)
+
+        currency_index = self.currency_combo_box.currentIndex()
+        currency_key = self.currency_combo_box.itemData(currency_index)
+        set_setting('currency', currency_key, qsettings=self.settings)
 
         # Save InaSAFE default values
         self.save_default_values()
