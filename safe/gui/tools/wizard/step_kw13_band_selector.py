@@ -8,17 +8,8 @@ from PyQt4.QtGui import QListWidgetItem
 from qgis.core import QgsRasterBandStats
 
 from safe.utilities.i18n import tr
-from safe.common.exceptions import InvalidWizardStep
 from safe.gui.tools.wizard.wizard_step import (
     get_wizard_step_ui_class, WizardStep)
-from safe.gui.tools.wizard.wizard_strings import (
-    layer_mode_raster_question,
-    layer_mode_vector_question,
-    layer_mode_vector_classified_confirm,
-    layer_mode_vector_continuous_confirm)
-from safe.utilities.gis import is_raster_layer
-from safe.definitions.utilities import definition, get_layer_modes
-from safe.definitions.layer_modes import layer_mode_continuous
 import logging
 
 LOGGER = logging.getLogger('InaSAFE')
