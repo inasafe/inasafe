@@ -74,6 +74,7 @@ from step_fc85_summary import StepFcSummary
 from step_kw00_purpose import StepKwPurpose
 from step_kw05_subcategory import StepKwSubcategory
 from step_kw10_hazard_category import StepKwHazardCategory
+from step_kw13_band_selector import StepKwBandSelector
 from step_kw15_layermode import StepKwLayerMode
 from step_kw20_unit import StepKwUnit
 from step_kw25_classification import StepKwClassification
@@ -164,6 +165,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.step_kw_purpose = StepKwPurpose(self)
         self.step_kw_subcategory = StepKwSubcategory(self)
         self.step_kw_hazard_category = StepKwHazardCategory(self)
+        self.step_kw_band_selector = StepKwBandSelector(self)
         self.step_kw_layermode = StepKwLayerMode(self)
         self.step_kw_unit = StepKwUnit(self)
         self.step_kw_classification = StepKwClassification(self)
@@ -203,6 +205,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.stackedWidget.addWidget(self.step_kw_purpose)
         self.stackedWidget.addWidget(self.step_kw_subcategory)
         self.stackedWidget.addWidget(self.step_kw_hazard_category)
+        self.stackedWidget.addWidget(self.step_kw_band_selector)
         self.stackedWidget.addWidget(self.step_kw_layermode)
         self.stackedWidget.addWidget(self.step_kw_unit)
         self.stackedWidget.addWidget(self.step_kw_classification)
@@ -756,6 +759,9 @@ class WizardDialog(QDialog, FORM_CLASS):
             key = self.step_kw_purpose.selected_purpose()['key']
             keywords[key] = self.step_kw_subcategory.\
                 selected_subcategory()['key']
+        if self.step_kw_band_selector.selected_band():
+            keywords['active_band'] = self.step_kw_band_selector.\
+                selected_band()
         if keywords['layer_purpose'] == layer_purpose_hazard['key']:
             if self.step_kw_hazard_category.selected_hazard_category():
                 keywords['hazard_category'] \

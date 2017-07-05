@@ -10,6 +10,7 @@ from safe.utilities.i18n import tr
 from safe import messaging as m
 
 from safe.definitions.layer_purposes import layer_purpose_hazard
+from safe.utilities.gis import is_raster_layer
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_strings import hazard_category_question
@@ -43,7 +44,10 @@ class StepKwHazardCategory(WizardStep, FORM_CLASS):
         :returns: The step to be switched to
         :rtype: WizardStep instance or None
         """
-        new_step = self.parent.step_kw_layermode
+        if is_raster_layer(self.parent.layer):
+            new_step = self.parent.step_kw_band_selector
+        else:
+            new_step = self.parent.step_kw_layermode
         return new_step
 
     def hazard_categories_for_layer(self):
