@@ -54,11 +54,8 @@ class StepKwUnit(WizardStep, FORM_CLASS):
         # Raster and has classifications
         elif has_classifications:
             return self.parent.step_kw_multi_classifications
-        # If population, must go to resample step first
-        elif subcategory == exposure_population:
-            return self.parent.step_kw_resample
-        else:
-            return self.parent.step_kw_source
+        # else go to source
+        return self.parent.step_kw_source
 
     # noinspection PyPep8Naming
     def on_lstUnits_itemSelectionChanged(self):
