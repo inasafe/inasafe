@@ -759,9 +759,10 @@ class WizardDialog(QDialog, FORM_CLASS):
             key = self.step_kw_purpose.selected_purpose()['key']
             keywords[key] = self.step_kw_subcategory.\
                 selected_subcategory()['key']
-        if self.step_kw_band_selector.selected_band():
-            keywords['active_band'] = self.step_kw_band_selector.\
-                selected_band()
+        if self.get_layer_geometry_key() == layer_geometry_raster['key']:
+            if self.step_kw_band_selector.selected_band():
+                keywords['active_band'] = self.step_kw_band_selector.\
+                    selected_band()
         if keywords['layer_purpose'] == layer_purpose_hazard['key']:
             if self.step_kw_hazard_category.selected_hazard_category():
                 keywords['hazard_category'] \
