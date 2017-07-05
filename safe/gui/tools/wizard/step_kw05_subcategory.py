@@ -20,6 +20,7 @@ from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_utils import get_question_text
 from safe.utilities.resources import resources_path
+from safe.utilities.gis import is_raster_layer
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -52,7 +53,10 @@ class StepKwSubcategory(WizardStep, FORM_CLASS):
                 selected_purpose() == layer_purpose_hazard:
             new_step = self.parent.step_kw_hazard_category
         else:
-            new_step = self.parent.step_kw_layermode
+            if is_raster_layer(self.parent.layer):
+                new_step = self.parent.step_kw_band_selector
+            else:
+                new_step = self.parent.step_kw_layermode
         return new_step
 
     def subcategories_for_layer(self):

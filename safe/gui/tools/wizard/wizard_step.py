@@ -37,7 +37,7 @@ class WizardStep(QWidget):
         """Constructor
 
         :param parent: parent - widget to use as parent.
-        :type parent: QWidget
+        :type parent: safe.gui.tools.wizard.wizard_dialog.WizardDialog
         """
         QWidget.__init__(self, parent)
         self.parent = parent
