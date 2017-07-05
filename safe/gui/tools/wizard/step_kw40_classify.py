@@ -153,8 +153,9 @@ class StepKwClassify(WizardStep, FORM_CLASS):
             self.lblClassify.setText(classify_raster_question % (
                 subcategory['name'], purpose['name'], classification_name))
             dataset = gdal.Open(self.parent.layer.source(), GA_ReadOnly)
+            active_band = self.parent.step_kw_band_selector.selected_band()
             unique_values = numpy.unique(numpy.array(
-                dataset.GetRasterBand(1).ReadAsArray()))
+                dataset.GetRasterBand(active_band).ReadAsArray()))
             field_type = 0
             # Convert datatype to a json serializable type
             if numpy.issubdtype(unique_values.dtype, float):
