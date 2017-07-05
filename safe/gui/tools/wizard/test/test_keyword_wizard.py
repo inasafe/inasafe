@@ -1430,7 +1430,7 @@ class TestKeywordWizard(unittest.TestCase):
         # Click next to select population
         dialog.pbnNext.click()
 
-        # Check if in select hazard category step
+        # Check if in select band step
         self.check_current_step(dialog.step_kw_band_selector)
 
         # Click next to select Band 1 (default)
@@ -1835,6 +1835,12 @@ class TestKeywordWizard(unittest.TestCase):
         # Click next to select multiple event
         dialog.pbnNext.click()
 
+        # Check if in select band step
+        self.check_current_step(dialog.step_kw_band_selector)
+
+        # Click next to select Band 1 (default)
+        dialog.pbnNext.click()
+
         # Check if in select layer mode step
         self.check_current_step(dialog.step_kw_layermode)
 
@@ -1888,6 +1894,7 @@ class TestKeywordWizard(unittest.TestCase):
 
         # Checking Keyword Created
         expected_keyword = {
+            'active_band': 1,
             'scale': source_scale,
             'hazard_category': hazard_category_multiple_event['key'],
             'license': source_license,
@@ -1922,6 +1929,7 @@ class TestKeywordWizard(unittest.TestCase):
         self.assertIsNotNone(layer)
 
         expected_keyword = {
+            'active_band': 1,
             'scale': source_scale,
             'hazard_category': hazard_category_multiple_event['key'],
             'license': source_license,
@@ -1970,6 +1978,12 @@ class TestKeywordWizard(unittest.TestCase):
             dialog.step_kw_hazard_category.lstHazardCategories)
 
         # Click next to select multiple event
+        dialog.pbnNext.click()
+
+        # Check if in select band step
+        self.check_current_step(dialog.step_kw_band_selector)
+
+        # Click next to select Band 1 (default)
         dialog.pbnNext.click()
 
         # Check if in select layer mode step
@@ -2080,6 +2094,12 @@ class TestKeywordWizard(unittest.TestCase):
         # Click next to select multiple event
         dialog.pbnNext.click()
 
+        # Check if in select band step
+        self.check_current_step(dialog.step_kw_band_selector)
+
+        # Click next to select Band 1 (default)
+        dialog.pbnNext.click()
+
         # Check if in select layer mode step
         self.check_current_step(dialog.step_kw_layermode)
 
@@ -2144,6 +2164,7 @@ class TestKeywordWizard(unittest.TestCase):
 
         # Checking Keyword Created
         expected_keyword = {
+            'active_band': 1,
             'continuous_hazard_unit': 'metres',
             'date': source_date,
             'hazard': hazard_flood['key'],
@@ -2184,6 +2205,7 @@ class TestKeywordWizard(unittest.TestCase):
             source_directory=standard_data_path('hazard'))
         self.assertIsNotNone(layer)
         original_keywords = {
+            'active_band': 1,
             'continuous_hazard_unit': 'metres',
             'date': source_date,
             'hazard': hazard_flood['key'],
@@ -2242,6 +2264,12 @@ class TestKeywordWizard(unittest.TestCase):
             dialog.step_kw_hazard_category.lstHazardCategories)
 
         # Click next to select multiple event
+        dialog.pbnNext.click()
+
+        # Check if in select band step
+        self.check_current_step(dialog.step_kw_band_selector)
+
+        # Click next to select Band 1 (default)
         dialog.pbnNext.click()
 
         # Check if in select layer mode step
@@ -2517,6 +2545,12 @@ class TestKeywordWizard(unittest.TestCase):
         # Click next to select multiple event
         dialog.pbnNext.click()
 
+        # Check if in select band step
+        self.check_current_step(dialog.step_kw_band_selector)
+
+        # Click next to select Band 1 (default)
+        dialog.pbnNext.click()
+
         # Check if in select layer mode step
         self.check_current_step(dialog.step_kw_layermode)
 
@@ -2574,6 +2608,7 @@ class TestKeywordWizard(unittest.TestCase):
 
         # Checking Keyword Created
         expected_keyword = {
+            'active_band': 1,
             'continuous_hazard_unit': unit_mmi['key'],
             'scale': source_scale,
             'hazard_category': hazard_category_multiple_event['key'],
@@ -2679,6 +2714,12 @@ class TestKeywordWizard(unittest.TestCase):
             dialog.step_kw_hazard_category.lstHazardCategories)
 
         # Click next to select multiple event
+        dialog.pbnNext.click()
+
+        # Check if in select band step
+        self.check_current_step(dialog.step_kw_band_selector)
+
+        # Click next to select Band 1 (default)
         dialog.pbnNext.click()
 
         # Check if in select layer mode step
@@ -2793,6 +2834,12 @@ class TestKeywordWizard(unittest.TestCase):
         # Click next to select multiple event
         dialog.pbnNext.click()
 
+        # Check if in select band step
+        self.check_current_step(dialog.step_kw_band_selector)
+
+        # Click next to select Band 1 (default)
+        dialog.pbnNext.click()
+
         # Check if in select layer mode step
         self.check_current_step(dialog.step_kw_layermode)
 
@@ -2857,6 +2904,7 @@ class TestKeywordWizard(unittest.TestCase):
 
         # Checking Keyword Created
         expected_keyword = {
+            'active_band': 1,
             'continuous_hazard_unit': unit_kilometres_per_hour['key'],
             'scale': source_scale,
             'hazard_category': hazard_category_multiple_event['key'],
@@ -2943,6 +2991,12 @@ class TestKeywordWizard(unittest.TestCase):
         # Click next to select multiple event
         dialog.pbnNext.click()
 
+        # Check if in select band step
+        self.check_current_step(dialog.step_kw_band_selector)
+
+        # Click next to select Band 1 (default)
+        dialog.pbnNext.click()
+
         # Check if in select layer mode step
         self.check_current_step(dialog.step_kw_layermode)
 
@@ -3000,6 +3054,7 @@ class TestKeywordWizard(unittest.TestCase):
 
         # Checking Keyword Created
         expected_keyword = {
+            'active_band': 1,
             'continuous_hazard_unit': unit_mmi['key'],
             'scale': source_scale,
             'hazard_category': hazard_category_multiple_event['key'],
