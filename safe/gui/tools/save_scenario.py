@@ -31,6 +31,8 @@ from PyQt4.QtCore import QSettings
 from PyQt4.QtGui import QDialog, QFileDialog
 from safe.utilities.gis import extent_to_array, viewport_geo_array
 from safe.utilities.keyword_io import KeywordIO
+from safe.impact_function.impact_function import ImpactFunction
+from safe.definitions.constants import PREPARE_SUCCESS
 
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -128,11 +130,25 @@ class SaveScenarioDialog(QDialog):
 
         exposure_path = self.exposure_layer.publicSource()
         hazard_path = self.hazard_layer.publicSource()
-        title = self.keyword_io.read_keywords(self.hazard_layer, 'title')
-        title = self.tr(title)
+        # Finally, we need to check if an IF can run.
+        impact_function = ImpactFunction()
+        impact_function.hazard = self.dock.get_hazard_layer()
+        impact_function.exposure = self.dock.get_exposure_layer()
+        impact_function.aggregation = self.dock.get_aggregation_layer()
+        result, message = impact_function.prepare()
+        if result is not PREPARE_SUCCESS:
+            warning_message = self.tr(
+                'The layers loaded in QGIS do not represent a valid scenario. '
+            )
+            warning_message += message
+            # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
+            QtGui.QMessageBox.warning(self, warning_title, warning_message)
+            return
+
+        title = impact_function.name
         default_filename = title.replace(
             ' ', '_').replace('(', '').replace(')', '')
-
+        del impact_function
         # Popup a dialog to request the filename if scenario_file_path = None
         dialog_title = self.tr('Save Scenario')
         if scenario_file_path is None:
