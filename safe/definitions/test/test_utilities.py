@@ -433,7 +433,7 @@ class TestDefinitionsUtilities(unittest.TestCase):
             safe_dir('..'),
             'resources',
             'qgis-composer-templates',
-            'a4-portrait-blue.qpt')
+            'inasafe-portrait-template.qpt')
         if exists(default_qpt):
             target_path = join(target_directory, split(default_qpt)[1])
             shutil.copy2(default_qpt, target_path)

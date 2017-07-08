@@ -39,7 +39,7 @@ class TestInasafeCommandLine(unittest.TestCase):
             '--output-file': '/tmp/inasafe/flood_on_buildings.shp',
             '--report-template': '../inasafe/resources/'
                                  'qgis-composer-templates/'
-                                 'a4-portrait-blue.qpt',
+                                 'inasafe-portrait-template.qpt',
             '--version': False,
             'LAYER_NAME': []})
 

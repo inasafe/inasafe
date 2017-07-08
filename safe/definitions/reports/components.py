@@ -833,7 +833,7 @@ report_a4_blue = {
                 'template': QgisComposerComponentsMetadata.OutputFormat.QPT
             },
             'template': '../qgis-composer-templates/'
-                        'a4-portrait-blue.qpt',
+                        'inasafe-portrait-template.qpt',
             'tags': [
                 final_product_tag,
                 map_product_tag,
@@ -843,7 +843,7 @@ report_a4_blue = {
             ],
             'output_path': {
                 'map': 'a4-portrait-blue.pdf',
-                'template': 'a4-portrait-blue.qpt'
+                'template': 'inasafe-portrait-template.qpt'
             },
             'extra_args': map_report_extra_args
         },
@@ -857,7 +857,7 @@ report_a4_blue = {
                 'template': QgisComposerComponentsMetadata.OutputFormat.QPT
             },
             'template': '../qgis-composer-templates/'
-                        'a4-landscape-blue.qpt',
+                        'inasafe-landscape-template.qpt',
             'tags': [
                 final_product_tag,
                 map_product_tag,
@@ -867,7 +867,7 @@ report_a4_blue = {
             ],
             'output_path': {
                 'map': 'a4-landscape-blue.pdf',
-                'template': 'a4-landscape-blue.qpt'
+                'template': 'inasafe-landscape-template.qpt'
             },
             'orientation': 'landscape',
             'page_dpi': 300,
