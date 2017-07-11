@@ -2238,10 +2238,10 @@ productivity_rate_field = {
     'length': default_field_length,
     'precision': 0,
     'absolute': True,
-    'help_text': tr(
+    'description': tr(
         'The rate of productivity of a crop in Quintal (hundred '
         'kilograms)/Hectare unit.'),
-    'description': tr(
+    'help_text': tr(
         'For a land cover, productivity is the rate of product weight per '
         'area.'
     ),
@@ -2263,8 +2263,9 @@ productivity_field = {
     'length': default_field_length,
     'precision': 0,
     'absolute': True,
-    'help_text': tr('The productivity of a crop in Kwt unit.'),
-    'description': tr(
+    'description': tr('The productivity of a crop in Quintal (hundred '
+        'kilograms unit.'),
+    'help_text': tr(
         'For a land cover, productivity is the weight of product.'
     ),
     'citations': [
@@ -2286,9 +2287,9 @@ productivity_cost_rate_field = {
     'length': default_field_length,
     'precision': 0,
     'absolute': True,
-    'help_text': tr(
-        'The rate of productivity cost of a crop in Currency/Ha unit.'),
     'description': tr(
+        'The rate of productivity cost of a crop in Currency/Hectare unit.'),
+    'help_text': tr(
         'For a land cover, productivity cost rate is the rate of product '
         'cost per area. It is the cost to build the area.'
     ),
@@ -2310,9 +2311,9 @@ productivity_cost_field = {
     'length': default_field_length,
     'precision': 0,
     'absolute': True,
-    'help_text': tr(
-        'The rate of productivity cost of a crop in Currency unit.'),
     'description': tr(
+        'The rate of productivity cost of a crop in Currency unit.'),
+    'help_text': tr(
         'For a land cover, productivity cost is the cost to build the area.'
     ),
     'citations': [
@@ -2335,9 +2336,9 @@ productivity_value_rate_field = {
     'length': default_field_length,
     'precision': 0,
     'absolute': True,
-    'help_text': tr(
-        'The rate of productivity value of a crop in Currency/Ha unit.'),
     'description': tr(
+        'The rate of productivity value of a crop in Currency/Hectare unit.'),
+    'help_text': tr(
         'For a land cover, productivity cost rate is the rate of product '
         'cost per area. It is the value of the area.'
     ),
@@ -2359,9 +2360,9 @@ productivity_value_field = {
     'length': default_field_length,
     'precision': 0,
     'absolute': True,
-    'help_text': tr(
-        'The rate of productivity value of a crop in Currency unit.'),
     'description': tr(
+        'The rate of productivity value of a crop in Currency unit.'),
+    'help_text': tr(
         'For a land cover, productivity cost is the value of the area.'
     ),
     'citations': [
