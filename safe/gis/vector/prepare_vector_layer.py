@@ -384,7 +384,7 @@ def _add_id_column(layer):
     for layer_type, field in mapping.iteritems():
         if layer_purpose == layer_type:
             safe_id = field
-            if layer.keywords.get(field['key']):
+            if layer.keywords['inasafe_fields'].get(field['key']):
                 has_id_column = True
             break
 
