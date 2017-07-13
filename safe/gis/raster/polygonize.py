@@ -74,7 +74,8 @@ def polygonize(layer, callback=None):
     fd = ogr.FieldDefn(field_name, ogr.OFTInteger)
     output_layer.CreateField(fd)
 
-    input_band = input_raster.GetRasterBand(1)
+    active_band = layer.keywords.get('active_band', 1)
+    input_band = input_raster.GetRasterBand(active_band)
     # Fixme : add our own callback to Polygonize
     gdal.Polygonize(input_band, None, output_layer, 0, [], callback=None)
     destination.Destroy()

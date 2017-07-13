@@ -49,10 +49,9 @@ class StepKwBandSelector(WizardStep, FORM_CLASS):
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.
 
-        :returns: The step to be switched to
+        :returns: The step to be switched to.
         :rtype: WizardStep instance or None
         """
-
         return self.parent.step_kw_layermode
 
     def update_band_description(self):
@@ -74,6 +73,7 @@ class StepKwBandSelector(WizardStep, FORM_CLASS):
 
     def selected_band(self):
         """Obtain the layer mode selected by user.
+
         :returns: selected layer mode.
         :rtype: string, None
         """
@@ -81,8 +81,7 @@ class StepKwBandSelector(WizardStep, FORM_CLASS):
         return item.data(QtCore.Qt.UserRole)
 
     def clear_further_steps(self):
-        """ Clear all further steps
-            in order to properly calculate the prev step
+        """Clear all further steps in order to properly calculate the prev step
         """
         self.parent.step_kw_unit.lstUnits.clear()
         self.parent.step_kw_field.lstFields.clear()
@@ -99,7 +98,7 @@ class StepKwBandSelector(WizardStep, FORM_CLASS):
         band_num = self.parent.layer.bandCount()
         for i in range(band_num):
             item = QListWidgetItem(
-                self.parent.layer.dataProvider().generateBandName(i + 1),
+                self.parent.layer.bandName(i + 1),
                 self.lstBands)
             item.setData(QtCore.Qt.UserRole, i + 1)
             self.lstBands.addItem(item)
