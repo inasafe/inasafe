@@ -125,7 +125,6 @@ class DataStore(object):
                 u'Layer saved {layer_name}'.format(layer_name=result[1]))
 
         try:
-            layer.keywords
             real_layer = self.layer(result[1])
             if isinstance(real_layer, bool):
                 message = ('{name} was not found in the datastore or the '
