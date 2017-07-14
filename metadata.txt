@@ -25,6 +25,8 @@ status=beta
 # Optional items:
 
 changelog=
+    Version 4.2
+    - Add Wizard help (#4178)
     Version 4.1.2
     - Avoid recomputing analysis extent when we pan/zoom with an aggregation layer
     - Fix issue when using a continuous hazard dataset (#4289)

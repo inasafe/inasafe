@@ -31,7 +31,6 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
-LOGGER = logging.getLogger('InaSAFE')
 
 # Mode
 SINGLE_MODE = 'single'
@@ -180,7 +179,6 @@ class StepKwField(WizardStep, FORM_CLASS):
 
         # Set mode
         # Notes(IS) I hard coded this one, need to fix it after it's working.
-        LOGGER.debug(self.parent.field_keyword_for_the_layer())
         if (self.parent.field_keyword_for_the_layer() ==
                 population_count_field['key']):
             self.mode = MULTI_MODE
