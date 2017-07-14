@@ -146,8 +146,8 @@ class SaveScenarioTest(unittest.TestCase):
         fake_dir = standard_data_path()
         scenario_file = unique_filename(
             prefix='scenarioTest', suffix='.txt', dir=fake_dir)
-        exposure_layer = str(self.DOCK.get_exposure_layer().publicSource())
-        hazard_layer = str(self.DOCK.get_hazard_layer().publicSource())
+        exposure_layer = self.DOCK.get_exposure_layer().publicSource()
+        hazard_layer = self.DOCK.get_hazard_layer().publicSource()
 
         relative_exposure = self.save_scenario_dialog.relative_path(
             scenario_file, exposure_layer)

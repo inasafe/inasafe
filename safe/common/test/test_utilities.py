@@ -93,8 +93,7 @@ class TestUtilities(unittest.TestCase):
                              ('1', '5,754'),
                              ('5,754', '11,507')]
         # print_class(my_array, my_result_class, my_expected_class)
-        my_msg = 'got: ' + str(my_result_class)
-        my_msg += ' expect: ' + str(my_expected_class)
+        my_msg = 'got: %s expect: %s' % (my_result_class, my_expected_class)
         assert my_result_class == my_expected_class, my_msg
 
     def test_humanize_class3(self):
@@ -107,8 +106,7 @@ class TestUtilities(unittest.TestCase):
         my_expected_class = [('0', '0.1'),
                              ('0.1', '0.5'),
                              ('0.5', '0.9')]
-        my_msg = 'got: ' + str(my_result_class)
-        my_msg += ' expect: ' + str(my_expected_class)
+        my_msg = 'got: %s expect: %s' % (my_result_class, my_expected_class)
         # print_class(my_array, my_result_class, my_expected_class)
         assert my_result_class == my_expected_class, my_msg
 
@@ -122,8 +120,7 @@ class TestUtilities(unittest.TestCase):
         my_expected_class = [('0', '7.1'),
                              ('7.1', '7.5'),
                              ('7.5', '7.9')]
-        my_msg = 'got: ' + str(my_result_class)
-        my_msg += ' expect: ' + str(my_expected_class)
+        my_msg = 'got: %s expect: %s' % (my_result_class, my_expected_class)
         # print_class(my_array, my_result_class, my_expected_class)
         assert my_result_class == my_expected_class, my_msg
 
@@ -140,8 +137,7 @@ class TestUtilities(unittest.TestCase):
                              ('8', '9'),
                              ('9', '11')]
         # print_class(my_array, my_result_class, my_expected_class)
-        my_msg = 'got: ' + str(my_result_class)
-        my_msg += ' expect: ' + str(my_expected_class)
+        my_msg = 'got: %s expect: %s' % (my_result_class, my_expected_class)
         assert my_result_class == my_expected_class, my_msg
 
     def test_humanize_class6(self):
@@ -157,8 +153,7 @@ class TestUtilities(unittest.TestCase):
                              ('8', '9'),
                              ('9', '11')]
         # print_class(my_array, my_result_class, my_expected_class)
-        my_msg = 'got: ' + str(my_result_class)
-        my_msg += ' expect: ' + str(my_expected_class)
+        my_msg = 'got: %s expect: %s' % (my_result_class, my_expected_class)
         assert my_result_class == my_expected_class, my_msg
 
     def test_get_significant_decimal(self):
