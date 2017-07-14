@@ -122,10 +122,7 @@ class NeedsProfile(MinimumNeeds):
         :type profile: basestring, str
         """
         profile_path = os.path.join(
-            str(self.root_directory),
-            'minimum_needs',
-            profile + '.json'
-        )
+            self.root_directory, 'minimum_needs', profile + '.json')
         self.read_from_file(profile_path)
 
     def save_profile(self, profile):
@@ -136,7 +133,7 @@ class NeedsProfile(MinimumNeeds):
         """
         profile = profile.replace('.json', '')
         profile_path = os.path.join(
-            str(self.root_directory),
+            self.root_directory,
             'minimum_needs',
             profile + '.json'
         )
@@ -195,7 +192,7 @@ class NeedsProfile(MinimumNeeds):
 
         else:
             locale_minimum_needs_dir = os.path.join(
-                str(self.root_directory), 'minimum_needs')
+                self.root_directory, 'minimum_needs')
             path_name = resources_path('minimum_needs')
             if not os.path.exists(locale_minimum_needs_dir):
                 os.makedirs(locale_minimum_needs_dir)
@@ -342,7 +339,7 @@ class NeedsProfile(MinimumNeeds):
         """
         self.remove_file(
             os.path.join(
-                str(self.root_directory), 'minimum_needs', profile + '.json')
+                self.root_directory, 'minimum_needs', profile + '.json')
         )
 
     def move_old_profile(self, locale_minimum_needs_dir):
