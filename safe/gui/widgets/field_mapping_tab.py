@@ -18,7 +18,7 @@ import logging
 from functools import partial
 
 from safe.definitions.constants import (
-    DO_NOT_USE,
+    DO_NOT_REPORT,
     CUSTOM_VALUE,
     GLOBAL_DEFAULT,
     FIELDS,
@@ -181,11 +181,11 @@ class FieldMappingTab(QWidget, object):
         used_fields = []
         self.parameters = []
         for field in self.field_group.get('fields', []):
-            selected_option = DO_NOT_USE
+            selected_option = DO_NOT_REPORT
             options = OrderedDict([
-                (DO_NOT_USE,
+                (DO_NOT_REPORT,
                  {
-                     'label': tr('Do not use'),
+                     'label': tr('Do not report'),
                      'value': None,
                      'type': STATIC,
                      'constraint': {}

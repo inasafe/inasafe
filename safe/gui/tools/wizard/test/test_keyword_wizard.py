@@ -3092,11 +3092,11 @@ class TestKeywordWizard(unittest.TestCase):
         for parameter_widget in parameter_container:
             parameter_widget = parameter_widget.widget()
 
-            # Locate the 'Do not use' radio button.
+            # Locate the 'Do not report' radio button.
             dont_use_button = (
                 parameter_widget.default_input_button_group.button(
                     len(parameter_widget._parameter.default_values) - 2))
-            # 'Do not use' button should be selected since the default
+            # 'Do not report' button should be selected since the default
             # selected input is 'No Field'.
             self.assertTrue(dont_use_button.isChecked())
             # Select ratio field on input.

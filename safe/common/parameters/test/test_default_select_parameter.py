@@ -15,7 +15,7 @@ __revision__ = '$Format:%H$'
 
 selected = 'one'
 options = ['one', 'two', 'three', 'four', 'five']
-default_labels = ['Setting', 'Do not use', 'Custom']
+default_labels = ['Setting', 'Do not report', 'Custom']
 default_values = [0.1, None]
 
 

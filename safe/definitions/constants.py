@@ -56,7 +56,7 @@ GLOBAL = 'global'
 RECENT = 'recent'
 
 # Options keys in the field mapping
-DO_NOT_USE = 'do not use'
+DO_NOT_REPORT = 'do not report'
 CUSTOM_VALUE = 'custom value'
 GLOBAL_DEFAULT = 'global default'
 FIELDS = 'fields'
