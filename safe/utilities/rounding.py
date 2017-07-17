@@ -157,7 +157,7 @@ def rounding_full(number, is_population=False):
         rounding_number = 100
     else:
         rounding_number = 1000
-    number = int(rounding_number * ceil(1.0 * number / rounding_number))
+    number = int(rounding_number * ceil(float(number) / rounding_number))
     return number, rounding_number
 
 
