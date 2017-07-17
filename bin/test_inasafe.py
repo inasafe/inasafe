@@ -12,8 +12,6 @@ import os
 from tempfile import mkdtemp
 
 from inasafe import (
-    get_exposure,
-    get_hazard,
     run_impact_function,
     build_report,
     CommandLineArguments,
@@ -47,22 +45,9 @@ class TestInasafeCommandLine(unittest.TestCase):
         # Let's assume that for this test, the output dir is:
         self.args.output_dir = os.path.join(
             QDir(mkdtemp()).absolutePath(), self.args.output_dir)
-        try:
-            original_umask = os.umask(0)
-            os.makedirs(self.args.output_dir, 0777)
-        finally:
-            os.umask(original_umask)
-
-    def test_get_exposure(self):
-        """Test building an exposure layer from file."""
-        exposure = get_exposure(self.args)
-        self.assertEqual(
-            exposure.isValid(), True, 'Exposure layer is not valid')
-
-    def test_get_hazard(self):
-        """Test building a hazard layer from file."""
-        hazard = get_hazard(self.args)
-        self.assertEqual(hazard.isValid(), True, 'Hazard layer is not valid')
+        # self.args.output_dir = os.path.join(
+        #     '/home/akbar/dev/data/test', self.args.output_dir)
+        os.makedirs(self.args.output_dir, 0777)
 
     def test_run_impact_function(self):
         """Test whether we can run impact function."""
@@ -90,4 +75,6 @@ class TestInasafeCommandLine(unittest.TestCase):
     def tearDown(self):
         # remove output dir
         if os.path.exists(self.args.output_dir):
-            shutil.rmtree(self.args.output_dir, ignore_errors=True)
+            shutil.rmtree(
+                os.path.join(self.args.output_dir, os.pardir),
+                ignore_errors=True)

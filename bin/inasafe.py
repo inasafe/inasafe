@@ -15,7 +15,6 @@ Contact : jannes@kartoza.com
         cli: command line interface
     .. versionadded:: 3.2
 """
-import shutil
 import logging
 import os
 import tempfile
@@ -189,54 +188,6 @@ def get_layer(layer_path, layer_base=None):
         print exception.__doc__
 
 
-def get_hazard(arguments):
-    """Get hazard layer.
-
-    .. versionadded:: 3.2
-
-    :param arguments: User inputs.
-    :type arguments: CommandLineArguments
-
-    :returns: Vector or Raster layer depending on input arguments.
-    :rtype: QgsVectorLayer, QgsRasterLayer
-
-    :raises: Exception
-    """
-    return get_layer(arguments.hazard, 'Hazard Layer')
-
-
-def get_exposure(arguments):
-    """Get exposure layer.
-
-    .. versionadded:: 3.2
-
-    :param arguments: User inputs.
-    :type arguments: CommandLineArguments
-
-    :returns: Vector or Raster layer depending on input arguments.
-    :rtype: QgsVectorLayer, QgsRasterLayer
-
-    :raises: Exception
-    """
-    return get_layer(arguments.exposure, 'Exposure Layer')
-
-
-def get_aggregation(arguments):
-    """Get aggregation layer.
-
-    .. versionadded:: 4.xx
-
-    :param arguments: User inputs.
-    :type arguments: CommandLineArguments
-
-    :returns: Vector or Raster layer depending on input arguments.
-    :rtype: QgsVectorLayer, QgsRasterLayer
-
-    :raises: Exception
-    """
-    return get_layer(arguments.aggregation, 'Aggregation Layer')
-
-
 def run_impact_function(command_line_arguments):
     """Runs an analysis and delegates producing pdf and .shp results.
 
@@ -249,8 +200,8 @@ def run_impact_function(command_line_arguments):
     :param command_line_arguments: User inputs.
     :type command_line_arguments: CommandLineArguments
     """
-    hazard = get_hazard(command_line_arguments)
-    exposure = get_exposure(command_line_arguments)
+    hazard = get_layer(command_line_arguments.hazard, 'Hazard Layer')
+    exposure = get_layer(command_line_arguments.exposure, 'Exposure Layer')
     aggregation = None
     if command_line_arguments.aggregation:
         aggregation = get_layer(command_line_arguments.aggregation)
@@ -307,7 +258,7 @@ def generate_impact_map_report(cli_arguments, impact_function, iface):
         cli_arguments.aggregation, 'Aggregation Layer')
     layer_registry = QgsMapLayerRegistry.instance()
     layer_registry.addMapLayers(impact_function.outputs)
-    layer_registry.addMapLayer(hazard_layer)
+    layer_registry.addMapLayers([hazard_layer, aggregation_layer])
 
     # create impact report instance
     report_metadata = ReportMetadata(
@@ -360,88 +311,18 @@ def build_report(cli_arguments, impact_function):
 
     :raises: Exception
     """
-    try:
-        LOGGER.info('Building a report')
-        # impact_layer = get_layer(cli_arguments.output_file, 'Impact Layer')
-        # hazard_layer = get_layer(cli_arguments.hazard, 'Hazard Layer')
-        # aggregation_layer = get_layer(
-        #     cli_arguments.aggregation, 'Aggregation Layer')
-        # layer_registry = QgsMapLayerRegistry.instance()
-        # layer_registry.removeAllMapLayers()
-        # extra_layers = [hazard_layer]
-        # layer_registry.addMapLayer(impact_layer)
-        # layer_registry.addMapLayers(extra_layers)
-        # CANVAS.setExtent(impact_layer.extent())
-        # CANVAS.refresh()
-        # # FIXME : To make it work with InaSAFE V4.
+    LOGGER.info('Building a report')
+    status, message = generate_impact_map_report(
+        cli_arguments, impact_function, IFACE)
+    if status != ImpactReport.REPORT_GENERATION_SUCCESS:
+        raise Exception(message.to_text())
 
-        status, message = generate_impact_map_report(
-            cli_arguments, impact_function, IFACE)
-        if status != ImpactReport.REPORT_GENERATION_SUCCESS:
-            raise Exception(message)
+    status, message = generate_impact_report(
+        cli_arguments, impact_function, IFACE)
+    if status != ImpactReport.REPORT_GENERATION_SUCCESS:
+        raise Exception(message.to_text())
 
-        status, message = generate_impact_report(
-            cli_arguments, impact_function, IFACE)
-        if status != ImpactReport.REPORT_GENERATION_SUCCESS:
-            raise Exception(message)
-
-        return status, message
-        # LOGGER.debug(os.path.splitext(cli_arguments.output_file)[0] + '.pdf')
-        # map_path = report.print_map_to_pdf(
-        #     os.path.splitext(cli_arguments.output_file)[0] + '.pdf')
-        # print "Impact Map : " + map_path
-        # table_path = report.print_impact_table(
-        #     os.path.splitext(cli_arguments.output_file)[0] + '_table.pdf')
-        # print "Impact Summary Table : " + table_path
-        # layer_registry.removeAllMapLayers()
-
-    except Exception as exception:
-        print exception.message
-        print exception.__doc__
-        raise RuntimeError
-
-
-# def write_results(cli_arguments, impact_layer):
-#     """Write the impact_layer in shapefile format.
-#
-#     .. versionadded:: 3.2
-#
-#     :param cli_arguments: User inputs.
-#     :type cli_arguments: CommandLineArguments
-#
-#     :param impact_layer: Analysis result used to produce file.
-#     :type impact_layer: Vector
-#
-#     :raises: Exception
-#     """
-#     try:
-#         # RMN: check output filename.
-#         # Is it conforming the standard?
-#         abs_path = join_if_relative(cli_arguments.output_file)
-#         basename, ext = os.path.splitext(abs_path)
-#         if not ext:
-#             # Extension is empty. Append extension
-#             if impact_layer.is_raster:
-#                 ext = '.tif'
-#             else:
-#                 ext = '.shp'
-#             abs_path += ext
-#
-#         # RMN: copy impact data json
-#         # new feature in InaSAFE 3.4
-#         source_base_name, _ = os.path.splitext(impact_layer.name)
-#         impact_data_json_source = '%s.json' % source_base_name
-#         if os.path.exists(impact_data_json_source):
-#             shutil.copy(
-#                 impact_data_json_source,
-#                 '%s.json' % basename)
-#
-#         impact_layer.write_to_file(abs_path)
-#
-#     except Exception as exception:
-#         print exception.message
-#         raise RuntimeError(exception.message)
-
+    return status, message
 
 if __name__ == '__main__':
     print "inasafe"
