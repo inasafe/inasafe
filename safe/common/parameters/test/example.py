@@ -32,7 +32,7 @@ def main():
     default_value_parameter.help_text = 'Help text'
     default_value_parameter.description = 'Description'
     default_value_parameter.labels = [
-        'Setting', 'Do not use', 'Custom']
+        'Setting', 'Do not report', 'Custom']
     default_value_parameter.options = [0, 1, None]
 
     parameters = [

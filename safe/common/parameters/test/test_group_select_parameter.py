@@ -7,7 +7,12 @@ from collections import OrderedDict
 from safe.common.parameters.group_select_parameter import (
     GroupSelectParameter)
 from safe.definitions.constants import (
-    DO_NOT_USE, CUSTOM_VALUE, GLOBAL_DEFAULT, FIELDS, STATIC, SINGLE_DYNAMIC,
+    DO_NOT_REPORT,
+    CUSTOM_VALUE,
+    GLOBAL_DEFAULT,
+    FIELDS,
+    STATIC,
+    SINGLE_DYNAMIC,
     MULTIPLE_DYNAMIC)
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
@@ -23,9 +28,9 @@ class TestGroupSelectParameter(unittest.TestCase):
     def test_setup(self):
         """Test setup for group select parameter."""
         options = OrderedDict([
-            (DO_NOT_USE,
+            (DO_NOT_REPORT,
              {
-                 'label': 'Do not use',
+                 'label': 'Do not report',
                  'value': None,
                  'type': STATIC,
                  'constraint': {}

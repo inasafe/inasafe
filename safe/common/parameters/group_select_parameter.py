@@ -29,9 +29,9 @@ class GroupSelectParameter(GenericParameter):
         # Store options, with label, type, and value
         # Example:
         # Options = {
-        #     'do not use':
+        #     'do not report':
         #         {
-        #             'label': 'Do not use',
+        #             'label': 'Do not report',
         #             'value': None,
         #             'type': 'static',
         #             'constraint': {}

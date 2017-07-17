@@ -168,7 +168,7 @@ def get_inasafe_default_value_fields(qsetting, field_key):
     """Obtain default value for a field with default value.
 
     By default it will return label list and default value list
-    label: [Setting, Do not use, Custom]
+    label: [Setting, Do not report, Custom]
     values: [Value from setting, None, Value from QSetting (if exist)]
 
     :param qsetting: QSetting object
@@ -179,7 +179,7 @@ def get_inasafe_default_value_fields(qsetting, field_key):
 
     :returns: Tuple of list. List of labels and list of values.
     """
-    labels = [tr('Global (%s)'), tr('Do not use'), tr('Custom')]
+    labels = [tr('Global (%s)'), tr('Do not report'), tr('Custom')]
     values = [
         get_inasafe_default_value_qsetting(qsetting, GLOBAL, field_key),
         None,
