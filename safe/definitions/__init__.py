@@ -19,6 +19,7 @@ from safe.definitions.field_groups import *
 from safe.definitions.hazard import *
 from safe.definitions.hazard_category import *
 from safe.definitions.hazard_classifications import *
+from safe.definitions.keyword_properties import *
 from safe.definitions.layer_geometry import *
 from safe.definitions.layer_modes import *
 from safe.definitions.layer_purposes import *

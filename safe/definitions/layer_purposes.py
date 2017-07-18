@@ -10,6 +10,7 @@ from safe.definitions.layer_geometry import (
 )
 from safe.definitions.field_groups import (
     aggregation_field_groups, population_field_groups)
+from safe.definitions.keyword_properties import property_layer_purpose
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -191,9 +192,7 @@ layer_purpose_profiling = {
 layer_purpose = {
     'key': 'layer_purpose',
     'name': tr('Purpose'),
-    'description': tr(
-        'The purpose of the layer can be hazard layer, exposure layer, or '
-        'aggregation layer'),
+    'description': property_layer_purpose['description'],
     'types': [
         layer_purpose_hazard,
         layer_purpose_exposure,
