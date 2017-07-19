@@ -1,23 +1,13 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
-
-This module provides: Keyword Wizard Step: Layer Subcategory
-  (Hazard or Exposure)
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
+"""InaSAFE Wizard Step Layer Purpose Type."""
 
 import os
 
 from PyQt4 import QtCore
 from PyQt4.QtGui import QListWidgetItem, QPixmap
+
+from safe.utilities.i18n import tr
+from safe import messaging as m
 
 from safe.definitions.layer_purposes import (
     layer_purpose_exposure, layer_purpose_hazard)
@@ -30,6 +20,7 @@ from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_utils import get_question_text
 from safe.utilities.resources import resources_path
+from safe.utilities.gis import is_raster_layer
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -40,7 +31,8 @@ FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
 class StepKwSubcategory(WizardStep, FORM_CLASS):
-    """Keyword Wizard Step: Layer Subcategory (Hazard or Exposure)"""
+
+    """InaSAFE Wizard Step Layer Purpose Type."""
 
     def is_ready_to_next_step(self):
         """Check if the step is complete. If so, there is
@@ -61,7 +53,10 @@ class StepKwSubcategory(WizardStep, FORM_CLASS):
                 selected_purpose() == layer_purpose_hazard:
             new_step = self.parent.step_kw_hazard_category
         else:
-            new_step = self.parent.step_kw_layermode
+            if is_raster_layer(self.parent.layer):
+                new_step = self.parent.step_kw_band_selector
+            else:
+                new_step = self.parent.step_kw_layermode
         return new_step
 
     def subcategories_for_layer(self):
@@ -164,3 +159,30 @@ class StepKwSubcategory(WizardStep, FORM_CLASS):
                     subcategories.index(keyword))
 
         self.auto_select_one_item(self.lstSubcategories)
+
+    @property
+    def step_name(self):
+        """Get the human friendly name for the wizard step.
+
+        :returns: The name of the wizard step.
+        :rtype: str
+        """
+        return tr('Layer Purpose Type Step')
+
+    def help_content(self):
+        """Return the content of help for this step wizard.
+
+            We only needs to re-implement this method in each wizard step.
+
+        :returns: A message object contains help.
+        :rtype: m.Message
+        """
+        message = m.Message()
+        message.add(m.Paragraph(tr(
+            'In this wizard step: {step_name}, you will be able to set the '
+            'type of your layer based on the purpose that you have set in the '
+            'previous step (if you choose hazard or exposure purpose). In '
+            'this step, there is list of exposure / hazard type that you can '
+            'select to specify your layer purpose type.'
+        ).format(step_name=self.step_name)))
+        return message

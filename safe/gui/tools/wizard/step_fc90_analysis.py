@@ -1,11 +1,10 @@
 # coding=utf-8
-
-"""InaSAFE Function Centric Wizard Analysis Step."""
+"""InaSAFE Wizard Step Analysis"""
 
 import logging
 import os
 from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import pyqtSignature, QSettings
+from PyQt4.QtCore import pyqtSignature
 
 from qgis.core import (
     QgsGeometry,
@@ -58,7 +57,7 @@ FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 class StepFcAnalysis(WizardStep, FORM_CLASS):
 
-    """Function Centric Wizard Step: Analysis."""
+    """InaSAFE Wizard Step Analysis"""
 
     def __init__(self, parent):
         """Init method."""
@@ -228,7 +227,7 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         self.pbnReportWeb.hide()
         self.pbnReportPDF.hide()
         self.pbnReportComposer.hide()
-        self.lblAnalysisStatus.setText(self.tr('Running analysis...'))
+        self.lblAnalysisStatus.setText(tr('Running analysis...'))
 
     def read_settings(self):
         """Set the IF state from QSettings."""
@@ -337,7 +336,7 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         report = m.Message()
         report.add(LOGO_ELEMENT)
         report.add(m.Heading(
-            self.tr('Analysis status'), **INFO_STYLE))
+            tr('Analysis status'), **INFO_STYLE))
         if message is not None:
             report.add(m.ImportantText(message['name']))
             report.add(m.Paragraph(message['description']))
@@ -356,7 +355,7 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
             QtGui.QMessageBox.warning(
                 self,
                 'InaSAFE',
-                self.tr('Please select a valid impact layer before '
+                tr('Please select a valid impact layer before '
                         'trying to print.'))
             return
 
@@ -382,8 +381,8 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
 
         # create message to user
         status = m.Message(
-            m.Heading(self.tr('Map Creator'), **INFO_STYLE),
-            m.Paragraph(self.tr(
+            m.Heading(tr('Map Creator'), **INFO_STYLE),
+            m.Paragraph(tr(
                 'Your PDF was created....opening using the default PDF '
                 'viewer on your system. The generated pdfs were saved '
                 'as:')))
@@ -397,3 +396,31 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
             # noinspection PyCallByClass,PyTypeChecker,PyTypeChecker
             QtGui.QDesktopServices.openUrl(
                 QtCore.QUrl.fromLocalFile(path))
+
+    @property
+    def step_name(self):
+        """Get the human friendly name for the wizard step.
+
+        :returns: The name of the wizard step.
+        :rtype: str
+        """
+        # noinspection SqlDialectInspection,SqlNoDataSourceInspection
+        return tr('Analysis')
+
+    def help_content(self):
+        """Return the content of help for this step wizard.
+
+            We only needs to re-implement this method in each wizard step.
+
+        :returns: A message object contains help.
+        :rtype: m.Message
+        """
+        message = m.Message()
+        message.add(m.Paragraph(tr(
+            'In this wizard step: {step_name}, you will see the summary of '
+            'the analysis that you have run. You can get your PDF report or '
+            'show the report in the web browser by clicking the <b>Generate '
+            'PDF</b> and <b>Open in web browser</b> respectively. You can '
+            'also click the <b>Finish</b> button to end the wizard session.'
+        ).format(step_name=self.step_name)))
+        return message

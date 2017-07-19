@@ -83,13 +83,11 @@ def get_version(version=None):
         version = tuple(version_list + [status] + ['0'])
 
     if len(version) != 5:
-        msg = ('Version must be a tuple of length 5. '
-               'I got %s' % str(version))
+        msg = 'Version must be a tuple of length 5. I got %s' % (version,)
         raise RuntimeError(msg)
 
     if version[3] not in ('alpha', 'beta', 'rc', 'final'):
-        msg = ('Version tuple not as expected. '
-               'I got %s' % str(version))
+        msg = 'Version tuple not as expected. I got %s' % (version,)
         raise RuntimeError(msg)
 
     # Now build the two parts of the version number:

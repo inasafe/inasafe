@@ -899,8 +899,6 @@ class Plugin(object):
             enable_keyword_wizard = False
         elif layer.providerType() == 'wms':
             enable_keyword_wizard = False
-        elif is_raster_layer(layer) and layer.bandCount() > 1:
-            enable_keyword_wizard = False
         else:
             enable_keyword_wizard = True
 

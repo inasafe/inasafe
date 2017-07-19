@@ -1,5 +1,5 @@
 # coding=utf-8
-"""Keyword Wizard Step: Classify (Value Mapping)."""
+"""InaSAFE Wizard Step Value Mapping."""
 
 import json
 
@@ -8,6 +8,9 @@ from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import QPyNullVariant
 from osgeo import gdal
 from osgeo.gdalconst import GA_ReadOnly
+
+from safe.utilities.i18n import tr
+from safe import messaging as m
 
 from safe.definitions.layer_purposes import layer_purpose_aggregation
 from safe.definitions.layer_geometry import layer_geometry_raster
@@ -28,7 +31,8 @@ FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
 class StepKwClassify(WizardStep, FORM_CLASS):
-    """Keyword Wizard Step: Classify (Value Mapping)."""
+
+    """InaSAFE Wizard Step Value Mapping."""
 
     def __init__(self, parent=None):
         """Constructor for the tab.
@@ -149,8 +153,9 @@ class StepKwClassify(WizardStep, FORM_CLASS):
             self.lblClassify.setText(classify_raster_question % (
                 subcategory['name'], purpose['name'], classification_name))
             dataset = gdal.Open(self.parent.layer.source(), GA_ReadOnly)
+            active_band = self.parent.step_kw_band_selector.selected_band()
             unique_values = numpy.unique(numpy.array(
-                dataset.GetRasterBand(1).ReadAsArray()))
+                dataset.GetRasterBand(active_band).ReadAsArray()))
             field_type = 0
             # Convert datatype to a json serializable type
             if numpy.issubdtype(unique_values.dtype, float):
@@ -328,3 +333,28 @@ class StepKwClassify(WizardStep, FORM_CLASS):
                     QtCore.Qt.ItemIsDragEnabled)
                 tree_leaf.setData(0, QtCore.Qt.UserRole, value)
                 tree_leaf.setText(0, string_value)
+
+    @property
+    def step_name(self):
+        """Get the human friendly name for the wizard step.
+
+        :returns: The name of the wizard step.
+        :rtype: str
+        """
+        return tr('Value Mapping Step')
+
+    def help_content(self):
+        """Return the content of help for this step wizard.
+
+            We only needs to re-implement this method in each wizard step.
+
+        :returns: A message object contains help.
+        :rtype: m.Message
+        """
+        message = m.Message()
+        message.add(m.Paragraph(tr(
+            'In this wizard step: {step_name}, you will be able to map the '
+            'value in the field (in the left panel) to a group in the right '
+            'panel. You can do this by drag the value and drop it to the '
+            'preferred group.').format(step_name=self.step_name)))
+        return message

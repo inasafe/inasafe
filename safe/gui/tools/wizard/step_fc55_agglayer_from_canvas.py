@@ -1,18 +1,5 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
-
-This module provides:
-  Function Centric Wizard Step: Aggregation Layer From Canvas
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
+"""InaSAFE Wizard Step Aggregation Layer Canvas."""
 
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore, QtGui
@@ -22,6 +9,9 @@ from PyQt4.QtCore import pyqtSignature
 from PyQt4.QtGui import QListWidgetItem, QPixmap
 
 from qgis.core import QgsMapLayerRegistry
+
+from safe import messaging as m
+from safe.utilities.i18n import tr
 
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step import WizardStep
@@ -137,3 +127,29 @@ class StepFcAggLayerFromCanvas(WizardStep, FORM_CLASS):
                 self.lstCanvasAggLayers.setCurrentRow(layers.index(last_layer))
         # Set icon
         self.lblIconIFCWAggregationFromCanvas.setPixmap(QPixmap(None))
+
+    @property
+    def step_name(self):
+        """Get the human friendly name for the wizard step.
+
+        :returns: The name of the wizard step.
+        :rtype: str
+        """
+        # noinspection SqlDialectInspection,SqlNoDataSourceInspection
+        return tr('Select Aggregation from Canvas Step')
+
+    def help_content(self):
+        """Return the content of help for this step wizard.
+
+            We only needs to re-implement this method in each wizard step.
+
+        :returns: A message object contains help.
+        :rtype: m.Message
+        """
+        message = m.Message()
+        message.add(m.Paragraph(tr(
+            'In this wizard step: {step_name}, You can choose a aggregation '
+            'layer from the list of layers that have been loaded to QGIS and '
+            'that matches with the geometry and aggregation type you set in '
+            'the previous step').format(step_name=self.step_name)))
+        return message

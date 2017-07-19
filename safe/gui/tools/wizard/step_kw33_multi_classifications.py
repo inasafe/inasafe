@@ -1,5 +1,5 @@
 # coding=utf-8
-"""InaSAFE Keyword Wizard Step for Multi Classifications."""
+"""InaSAFE Wizard Step Multi Classifications."""
 
 import logging
 from functools import partial
@@ -19,8 +19,8 @@ from qgis.core import QgsRasterBandStats
 
 import safe.messaging as m
 from safe.messaging import styles
-
 from safe.utilities.i18n import tr
+
 from safe.definitions.exposure import exposure_all, exposure_population
 from safe.definitions.hazard import hazard_earthquake
 from safe.definitions.font import big_font
@@ -72,7 +72,7 @@ MAX_VALUE_MODE = 1
 
 class StepKwMultiClassifications(WizardStep, FORM_CLASS):
 
-    """Keyword Wizard Step: Multi Classification."""
+    """InaSAFE Wizard Step Multi Classifications."""
 
     def __init__(self, parent=None):
         """Constructor for the tab.
@@ -785,8 +785,9 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
                 classification['name'])
 
             dataset = gdal.Open(self.parent.layer.source(), GA_ReadOnly)
+            active_band = self.parent.step_kw_band_selector.selected_band()
             unique_values = numpy.unique(numpy.array(
-                dataset.GetRasterBand(1).ReadAsArray()))
+                dataset.GetRasterBand(active_band).ReadAsArray()))
             field_type = 0
             # Convert datatype to a json serializable type
             if numpy.issubdtype(unique_values.dtype, float):
@@ -1182,3 +1183,28 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
                 value['active'] = True
             else:
                 value['active'] = False
+
+    @property
+    def step_name(self):
+        """Get the human friendly name for the wizard step.
+
+        :returns: The name of the wizard step.
+        :rtype: str
+        """
+        return tr('Multi Classification Step')
+
+    def help_content(self):
+        """Return the content of help for this step wizard.
+
+            We only needs to re-implement this method in each wizard step.
+
+        :returns: A message object contains help.
+        :rtype: m.Message
+        """
+        message = m.Message()
+        message.add(m.Paragraph(tr(
+            'In this wizard step: {step_name}, you will be able to set the '
+            'classification that you will use per exposure type. You can also '
+            'set the threshold or value map for each classification.'
+        ).format(step_name=self.step_name)))
+        return message

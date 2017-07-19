@@ -174,6 +174,33 @@ class TestPrepareLayer(unittest.TestCase):
         layer = _check_value_mapping(layer)
         self.assertDictEqual(expected_value_map, layer.keywords['value_map'])
 
+    def test_own_id_column(self):
+        """Test if we can re-use the column ID from the user."""
+        layer = load_test_vector_layer(
+            'gisv4', 'exposure', 'buildings.geojson', clone=True)
+        # This layer is set to use custom ID column. We should have the values
+        # after preparing the vector layer.
+        field = layer.fieldNameIndex(exposure_id_field['field_name'])
+        self.assertNotEqual(-1, field)
+        unique_values_before = layer.uniqueValues(field)
+        self.assertEqual(
+            unique_values_before,
+            [10, 11, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110])
+        _add_id_column(layer)
+        field = layer.fieldNameIndex(exposure_id_field['field_name'])
+        self.assertNotEqual(-1, field)
+        unique_values_after = layer.uniqueValues(field)
+        self.assertEqual(unique_values_after, unique_values_before)
+
+        # Let's remove the keyword now to use the auto-increment ID
+        del layer.keywords['inasafe_fields'][exposure_id_field['key']]
+        _add_id_column(layer)
+        field = layer.fieldNameIndex(exposure_id_field['field_name'])
+        self.assertNotEqual(-1, field)
+        unique_values_automatic = layer.uniqueValues(field)
+        self.assertNotEqual(unique_values_automatic, unique_values_before)
+        self.assertEqual(unique_values_automatic, range(layer.featureCount()))
+
     def test_sum_fields(self):
         """Test sum_fields method."""
         layer = load_test_vector_layer(

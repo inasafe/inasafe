@@ -7,8 +7,13 @@ import os
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QWidget
 
+from safe.gui.tools.wizard import STEP_KW, STEP_FC
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.resources import get_ui_class
+from safe import messaging as m
+from safe.utilities.i18n import tr
+from safe.messaging import styles
+SUBSECTION_STYLE = styles.SUBSECTION_LEVEL_3_STYLE
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -32,7 +37,7 @@ class WizardStep(QWidget):
         """Constructor
 
         :param parent: parent - widget to use as parent.
-        :type parent: QWidget
+        :type parent: safe.gui.tools.wizard.wizard_dialog.WizardDialog
         """
         QWidget.__init__(self, parent)
         self.parent = parent
@@ -85,6 +90,50 @@ class WizardStep(QWidget):
     def step_type(self):
         """Whether it's a IFCW step or Keyword Wizard Step."""
         if 'stepfc' in self.__class__.__name__.lower():
-            return 'step_fc'
+            return STEP_FC
         if 'stepkw' in self.__class__.__name__.lower():
-            return 'step_kw'
+            return STEP_KW
+
+    @property
+    def step_name(self):
+        """Get the human friendly name for the wizard step.
+
+        :returns: The name of the wizard step.
+        :rtype: str
+        """
+        return self.__class__.__name__
+
+    def help(self):
+        """Return full help message for the step wizard.
+
+        :returns: A message object contains help text.
+        :rtype: m.Message
+        """
+        message = m.Message()
+        message.add(m.Brand())
+        message.add(self.help_heading())
+        message.add(self.help_content())
+        return message
+
+    def help_heading(self):
+        """Helper method that returns just the header.
+
+        :returns: A heading object.
+        :rtype: safe.messaging.heading.Heading
+        """
+        message = m.Heading(
+            tr('Help for {step_name}').format(step_name=self.step_name),
+            **SUBSECTION_STYLE)
+        return message
+
+    def help_content(self):
+        """Return the content of help for this step wizard.
+
+            We only needs to re-implement this method in each wizard step.
+
+        :returns: A message object contains help.
+        :rtype: m.Message
+        """
+        help_message = m.Message()
+        help_message.add(m.Text(tr('No help text for this wizard step, yet.')))
+        return help_message

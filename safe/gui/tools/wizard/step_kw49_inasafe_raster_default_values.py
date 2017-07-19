@@ -1,8 +1,11 @@
 # coding=utf-8
-"""InaSAFE Wizard Step for Assigning Default Values for Raster."""
+"""InaSAFE Wizard Step InaSAFE Raster Default Fields."""
 
 # noinspection PyPackageRequirements
 import logging
+
+from safe import messaging as m
+from safe.utilities.i18n import tr
 
 from safe.common.parameters.default_value_parameter import (
     DefaultValueParameter)
@@ -29,7 +32,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 class StepKwInaSAFERasterDefaultValues(WizardStep, FORM_CLASS):
 
-    """Keyword Wizard Step: InaSAFE Raster Default Values."""
+    """InaSAFE Wizard Step InaSAFE Raster Default Fields."""
 
     def __init__(self, parent=None):
         """Constructor for the tab.
@@ -170,3 +173,18 @@ class StepKwInaSAFERasterDefaultValues(WizardStep, FORM_CLASS):
             self.default_values_grid.itemAt(i).widget().setParent(None)
         self.parameters = []
         self.parameter_container = ParameterContainer()
+
+    def help_content(self):
+        """Return the content of help for this step wizard.
+
+            We only needs to re-implement this method in each wizard step.
+
+        :returns: A message object contains help.
+        :rtype: m.Message
+        """
+        message = m.Message()
+        message.add(m.Paragraph(tr(
+            'In this wizard step: {step_name}, you will be able to '
+            'set a value that corresponded with a InaSAFE field '
+            'concept as default value.').format(step_name=self.step_name)))
+        return message

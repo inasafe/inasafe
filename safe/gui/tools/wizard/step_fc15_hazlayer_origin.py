@@ -1,17 +1,5 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
-
-This module provides: Function Centric Wizard Step: Hazard Layer Origin
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
+"""InaSAFE Wizard Step Hazard Layer Origin."""
 
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QPixmap
@@ -25,6 +13,7 @@ from safe.gui.tools.wizard.wizard_strings import (
     select_hazlayer_from_browser_question)
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step import WizardStep
+from safe import messaging as m
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -35,7 +24,7 @@ FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
 class StepFcHazLayerOrigin(WizardStep, FORM_CLASS):
-    """Function Centric Wizard Step: Hazard Layer Origin"""
+    """InaSAFE Wizard Step Hazard Layer Origin."""
 
     def is_ready_to_next_step(self):
         """Check if the step is complete. If so, there is
@@ -87,10 +76,11 @@ class StepFcHazLayerOrigin(WizardStep, FORM_CLASS):
             list_compatible_canvas_layers()
         lst_wdg = self.parent.step_fc_hazlayer_from_canvas.lstCanvasHazLayers
         if lst_wdg.count():
+            wizard_name = self.parent.keyword_creation_wizard_name
             self.rbHazLayerFromCanvas.setText(tr(
                 'I would like to use a hazard layer already loaded in QGIS\n'
-                '(launches the %s for hazard if needed)'
-            ) % self.parent.keyword_creation_wizard_name)
+                '(launches the {wizard_name} for hazard if needed)'
+            ).format(wizard_name=wizard_name))
             self.rbHazLayerFromCanvas.setEnabled(True)
             self.rbHazLayerFromCanvas.click()
         else:
@@ -125,3 +115,28 @@ class StepFcHazLayerOrigin(WizardStep, FORM_CLASS):
             'img', 'wizard', 'keyword-subcategory-%s.svg' % (
                 hazard['key'] or 'notset'))
         self.lblIconIFCWHazardOrigin.setPixmap(QPixmap(icon_path))
+
+    @property
+    def step_name(self):
+        """Get the human friendly name for the wizard step.
+
+        :returns: The name of the wizard step.
+        :rtype: str
+        """
+        return tr('Hazard Layer Origin')
+
+    def help_content(self):
+        """Return the content of help for this step wizard.
+
+            We only needs to re-implement this method in each wizard step.
+
+        :returns: A message object contains help.
+        :rtype: m.Message
+        """
+        message = m.Message()
+        message.add(m.Paragraph(tr(
+            'In this wizard step: {step_name}, you can choose where your '
+            'hazard layer come from. The option for choosing hazard layer '
+            'from QGIS can not be chosen if there is no hazard layer in QGIS.'
+        ).format(step_name=self.step_name)))
+        return message

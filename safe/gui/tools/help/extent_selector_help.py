@@ -81,6 +81,22 @@ def content():
         'There are a number of different modes that can be used which are '
         'described below:'))
     message.add(paragraph)
+
+    message.add(extent_mode_content())
+
+    return message
+
+
+def extent_mode_content():
+    """Helper method that returns just the content in extent mode.
+
+    This method was added so that the text could be reused in the
+    wizard.
+
+    :returns: A message object without brand element.
+    :rtype: safe.messaging.message.Message
+    """
+    message = m.Message()
     header = m.Heading(tr(
         'Use intersection of hazard and exposure layers'), **INFO_STYLE)
     message.add(header)
