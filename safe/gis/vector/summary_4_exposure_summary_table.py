@@ -176,7 +176,10 @@ def exposure_summary_table(
     tabular.keywords['inasafe_fields'][total_field['key']] = (
         total_field['field_name'])
 
-    summarization_dicts = summarize_result(exposure_summary, callback)
+    summarization_dicts = {}
+    if exposure_summary:
+        summarization_dicts = summarize_result(exposure_summary, callback)
+
     sorted_keys = sorted(summarization_dicts.keys())
 
     for key in sorted_keys:
