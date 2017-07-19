@@ -188,7 +188,7 @@ class TestAggregateSummary(unittest.TestCase):
         aggregate_hazard = load_test_vector_layer(
             'gisv4',
             'intermediate',
-            'productivity',
+            'summaries',
             'aggregate_hazard_impacted.geojson')
 
         aggregate_hazard.keywords['hazard_keywords'] = {
@@ -198,7 +198,7 @@ class TestAggregateSummary(unittest.TestCase):
         exposure_summary = load_test_vector_layer(
             'gisv4',
             'intermediate',
-            'productivity',
+            'summaries',
             'exposure_summary.geojson'
         )
 
@@ -236,7 +236,7 @@ class TestAggregateSummary(unittest.TestCase):
         exposure_summary = load_test_vector_layer(
             'gisv4',
             'intermediate',
-            'productivity',
+            'summaries',
             'exposure_summary.geojson'
         )
 
