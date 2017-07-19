@@ -189,7 +189,7 @@ class TestAggregateSummary(unittest.TestCase):
             'gisv4',
             'intermediate',
             'summaries',
-            'aggregate_hazard_impacted.geojson')
+            'land_cover_aggregate_hazard_impacted.geojson')
 
         aggregate_hazard.keywords['hazard_keywords'] = {
             'classification': 'generic_hazard_classes'
@@ -199,7 +199,7 @@ class TestAggregateSummary(unittest.TestCase):
             'gisv4',
             'intermediate',
             'summaries',
-            'exposure_summary.geojson'
+            'land_cover_exposure_summary.geojson'
         )
 
         # I need the number of unique exposure
@@ -237,7 +237,7 @@ class TestAggregateSummary(unittest.TestCase):
             'gisv4',
             'intermediate',
             'summaries',
-            'exposure_summary.geojson'
+            'land_cover_exposure_summary.geojson'
         )
 
         summarizer_dicts = summarize_result(exposure_summary)
