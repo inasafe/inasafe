@@ -1947,8 +1947,12 @@ class ImpactFunction(object):
         if self._exposure.keywords.get('classification'):
             self.set_state_process(
                 'impact function', 'Build the exposure summary table')
-            self._exposure_summary_table = exposure_summary_table(
-                self._aggregate_hazard_impacted)
+            if self.exposure.keywords['exposure'] == 'land_cover':
+                self._exposure_summary_table = exposure_summary_table(
+                    self._aggregate_hazard_impacted, self._exposure_summary)
+            else:
+                self._exposure_summary_table = exposure_summary_table(
+                    self._aggregate_hazard_impacted)
             self.debug_layer(
                 self._exposure_summary_table, add_to_datastore=False)
 

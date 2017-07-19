@@ -179,3 +179,51 @@ class TestAggregateSummary(unittest.TestCase):
         # one for total not exposed
         # one for total
         self.assertEqual(layer.fields().count(), len(unique_hazard) + 5)
+
+    def test_exposure_summary_table_productivity(self):
+        """Test we can produce the breakdown for the exposure type."""
+        aggregate_hazard = load_test_vector_layer(
+            'gisv4',
+            'intermediate',
+            'productivity',
+            'aggregate_hazard_impacted.geojson')
+
+        aggregate_hazard.keywords['hazard_keywords'] = {
+            'classification': 'generic_hazard_classes'
+        }
+
+        exposure_summary = load_test_vector_layer(
+            'gisv4',
+            'intermediate',
+            'productivity',
+            'exposure_summary.geojson'
+        )
+
+        # I need the number of unique exposure
+        unique_exposure = read_dynamic_inasafe_field(
+            aggregate_hazard.keywords['inasafe_fields'],
+            exposure_count_field)
+
+        # I need the number of unique hazard
+        fields = aggregate_hazard.keywords['inasafe_fields']
+        hazard_class = fields[hazard_class_field['key']]
+        hazard_class_index = aggregate_hazard.fieldNameIndex(hazard_class)
+        unique_hazard = aggregate_hazard.uniqueValues(hazard_class_index)
+
+        layer = exposure_summary_table(aggregate_hazard, exposure_summary)
+
+        check_inasafe_fields(layer)
+
+        self.assertEqual(len(unique_exposure), layer.featureCount())
+
+        # We should have
+        # one column per hazard
+        # one for the exposure
+        # one for total affected
+        # one for total not affected
+        # one for total not exposed
+        # one for total
+        # one for affected productivity
+        # one for affected cost productivity
+        # one for affected value productivity
+        self.assertEqual(layer.fields().count(), len(unique_hazard) + 8)

@@ -2278,6 +2278,31 @@ productivity_field = {
     'replace_null': False,
 }
 
+affected_productivity_field = {
+    'key': 'affected_productivity_field',
+    'name': tr('Affected Productivity'),
+    'field_name': 'affected_productivity',
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': default_field_precision,
+    'absolute': True,
+    'description': tr(
+        'The affected productivity of a crop in Quintal (hundred kilograms '
+        'unit.'),
+    'help_text': tr(
+        'For a land cover, affected productivity is the weight of product '
+        'that is affected by the hazard.'
+    ),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False,
+}
+
 # Productivity cost field
 productivity_cost_rate_field = {
     'key': 'productivity_cost_rate_field',
@@ -2312,9 +2337,33 @@ productivity_cost_field = {
     'precision': default_field_precision,
     'absolute': True,
     'description': tr(
-        'The rate of productivity cost of a crop in Currency unit.'),
+        'The productivity cost of a crop in Currency unit.'),
     'help_text': tr(
         'For a land cover, productivity cost is the cost to build the area.'
+    ),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False,
+}
+
+affected_productivity_cost_field = {
+    'key': 'affected_productivity_cost_field',
+    'name': tr('Affected Productivity Cost'),
+    'field_name': 'affected_productivity_cost',
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': default_field_precision,
+    'absolute': True,
+    'description': tr(
+        'The affected productivity cost of a crop in Currency unit.'),
+    'help_text': tr(
+        'For a land cover, affected productivity cost is the cost to build the '
+        'area that is affected by a hazard..'
     ),
     'citations': [
         {
@@ -2361,7 +2410,7 @@ productivity_value_field = {
     'precision': default_field_precision,
     'absolute': True,
     'description': tr(
-        'The rate of productivity value of a crop in Currency unit.'),
+        'The productivity value of a crop in Currency unit.'),
     'help_text': tr(
         'For a land cover, productivity cost is the value of the area.'
     ),
@@ -2374,3 +2423,28 @@ productivity_value_field = {
     # Null value can be replaced by default or not
     'replace_null': False,
 }
+
+affected_productivity_value_field = {
+    'key': 'affected_productivity_value_field',
+    'name': tr('Affected Productivity Value'),
+    'field_name': 'affected_productivity_value',
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': default_field_precision,
+    'absolute': True,
+    'description': tr(
+        'The affected productivity value of a crop in Currency unit.'),
+    'help_text': tr(
+        'For a land cover, affected productivity cost is the value of the '
+        'area that is affected by a hazard.'
+    ),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False,
+}
+
