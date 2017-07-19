@@ -2259,12 +2259,12 @@ productivity_field = {
     'key': 'productivity_field',
     'name': tr('Productivity'),
     'field_name': 'productivity',
-    'type': qvariant_numbers,
+    'type': QVariant.Double,
     'length': default_field_length,
-    'precision': 0,
+    'precision': default_field_precision,
     'absolute': True,
-    'description': tr('The productivity of a crop in Quintal (hundred '
-        'kilograms unit.'),
+    'description': tr(
+        'The productivity of a crop in Quintal (hundred kilograms unit.'),
     'help_text': tr(
         'For a land cover, productivity is the weight of product.'
     ),
@@ -2307,9 +2307,9 @@ productivity_cost_field = {
     'key': 'productivity_cost_field',
     'name': tr('Productivity Cost'),
     'field_name': 'productivity_cost',
-    'type': qvariant_numbers,
+    'type': QVariant.Double,
     'length': default_field_length,
-    'precision': 0,
+    'precision': default_field_precision,
     'absolute': True,
     'description': tr(
         'The rate of productivity cost of a crop in Currency unit.'),
@@ -2356,9 +2356,9 @@ productivity_value_field = {
     'key': 'productivity_value_field',
     'name': tr('Productivity Value'),
     'field_name': 'productivity_value',
-    'type': qvariant_numbers,
+    'type': QVariant.Double,
     'length': default_field_length,
-    'precision': 0,
+    'precision': default_field_precision,
     'absolute': True,
     'description': tr(
         'The rate of productivity value of a crop in Currency unit.'),
