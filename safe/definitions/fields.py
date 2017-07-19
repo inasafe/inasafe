@@ -2107,127 +2107,6 @@ population_displaced_per_mmi = {
     'replace_null': False
 }
 
-# Inputs
-exposure_fields = [
-    exposure_id_field,
-]
-
-hazard_fields = [
-    hazard_id_field,
-]
-
-aggregation_fields = [
-    aggregation_id_field,
-    aggregation_name_field
-]
-
-# Outputs
-impact_fields = [
-    exposure_id_field,
-    exposure_class_field,
-    hazard_id_field,
-    hazard_class_field,
-    aggregation_id_field,
-    aggregation_name_field,
-    feature_value_field,
-    feature_rate_field,
-    female_ratio_field,
-    youth_ratio_field,
-    adult_ratio_field,
-    elderly_ratio_field,
-    population_count_field,
-    female_count_field,
-    male_count_field,
-    youth_count_field,
-    adult_count_field,
-    elderly_count_field,
-    size_field,
-    affected_field,
-    exposure_count_field,
-    total_field,
-]
-
-aggregate_hazard_fields = [
-    aggregation_id_field,
-    aggregation_name_field,
-    hazard_id_field,
-    hazard_class_field,
-    exposure_count_field,
-    affected_field,
-    total_field,
-]
-
-aggregation_summary_fields = [
-    aggregation_id_field,
-    aggregation_name_field,
-    affected_exposure_count_field,
-    total_affected_field,
-]
-
-exposure_summary_table_fields = [
-    exposure_class_field,
-    hazard_count_field,
-    total_affected_field,
-    total_not_affected_field,
-    total_not_exposed_field,
-    total_field,
-]
-
-analysis_fields = [
-    analysis_id_field,
-    analysis_name_field,
-    hazard_count_field,
-    total_affected_field,
-    total_not_affected_field,
-    total_not_exposed_field,
-    total_field
-]
-
-# Add also minimum needs fields
-from safe.definitions.minimum_needs import minimum_needs_fields  # noqa
-count_fields = [
-    feature_value_field,
-    population_count_field,
-    displaced_field,
-    fatalities_field,
-    # Gender count fields
-    female_count_field,
-    child_bearing_age_count_field,
-    pregnant_count_field,
-    lactating_count_field,
-    male_count_field,
-    # Additional needs count fields
-    hygiene_packs_count_field,
-    additional_rice_count_field,
-    # Age count fields
-    infant_count_field,
-    child_count_field,
-    youth_count_field,
-    adult_count_field,
-    elderly_count_field,
-    # Vulnerability fields
-    under_5_count_field,
-    over_60_count_field,
-    disabled_count_field,
-    # Displaced
-    # Gender displaced count fields
-    female_displaced_count_field,
-    child_bearing_age_displaced_count_field,
-    pregnant_displaced_count_field,
-    lactating_displaced_count_field,
-    male_displaced_count_field,
-    # Age count fields
-    infant_displaced_count_field,
-    child_displaced_count_field,
-    youth_displaced_count_field,
-    adult_displaced_count_field,
-    elderly_displaced_count_field,
-    # Vulnerability fields
-    under_5_displaced_count_field,
-    over_60_displaced_count_field,
-    disabled_displaced_count_field
-] + minimum_needs_fields
-
 
 # Productivity field
 productivity_rate_field = {
@@ -2362,8 +2241,8 @@ affected_productivity_cost_field = {
     'description': tr(
         'The affected productivity cost of a crop in Currency unit.'),
     'help_text': tr(
-        'For a land cover, affected productivity cost is the cost to build the '
-        'area that is affected by a hazard..'
+        'For a land cover, affected productivity cost is the cost to build '
+        'the area that is affected by a hazard..'
     ),
     'citations': [
         {
@@ -2448,3 +2327,139 @@ affected_productivity_value_field = {
     'replace_null': False,
 }
 
+# Inputs
+exposure_fields = [
+    exposure_id_field,
+]
+
+hazard_fields = [
+    hazard_id_field,
+]
+
+aggregation_fields = [
+    aggregation_id_field,
+    aggregation_name_field
+]
+
+# Outputs
+impact_fields = [
+    exposure_id_field,
+    exposure_class_field,
+    hazard_id_field,
+    hazard_class_field,
+    aggregation_id_field,
+    aggregation_name_field,
+    feature_value_field,
+    feature_rate_field,
+    female_ratio_field,
+    youth_ratio_field,
+    adult_ratio_field,
+    elderly_ratio_field,
+    population_count_field,
+    female_count_field,
+    male_count_field,
+    youth_count_field,
+    adult_count_field,
+    elderly_count_field,
+    size_field,
+    affected_field,
+    exposure_count_field,
+    total_field,
+]
+
+aggregate_hazard_fields = [
+    aggregation_id_field,
+    aggregation_name_field,
+    hazard_id_field,
+    hazard_class_field,
+    exposure_count_field,
+    affected_field,
+    total_field,
+]
+
+aggregation_summary_fields = [
+    aggregation_id_field,
+    aggregation_name_field,
+    affected_exposure_count_field,
+    total_affected_field,
+]
+
+exposure_summary_table_fields = [
+    exposure_class_field,
+    hazard_count_field,
+    total_affected_field,
+    total_not_affected_field,
+    total_not_exposed_field,
+    total_field,
+]
+
+analysis_fields = [
+    analysis_id_field,
+    analysis_name_field,
+    hazard_count_field,
+    total_affected_field,
+    total_not_affected_field,
+    total_not_exposed_field,
+    total_field
+]
+
+# Field that can be used to summarize / aggregate the result in exposure
+# summary table
+summarizer_fields = [
+    productivity_field,
+    productivity_cost_field,
+    productivity_value_field
+]
+
+# Mapping between summarizer field and its affected fields in the exposure
+# summary table
+affected_summarizer_fields = {
+    productivity_field['key']: affected_productivity_field,
+    productivity_cost_field['key']: affected_productivity_cost_field,
+    productivity_value_field['key']: affected_productivity_value_field,
+}
+
+# Add also minimum needs fields
+from safe.definitions.minimum_needs import minimum_needs_fields  # noqa
+count_fields = [
+    feature_value_field,
+    population_count_field,
+    displaced_field,
+    fatalities_field,
+    # Gender count fields
+    female_count_field,
+    child_bearing_age_count_field,
+    pregnant_count_field,
+    lactating_count_field,
+    male_count_field,
+    # Additional needs count fields
+    hygiene_packs_count_field,
+    additional_rice_count_field,
+    # Age count fields
+    infant_count_field,
+    child_count_field,
+    youth_count_field,
+    adult_count_field,
+    elderly_count_field,
+    # Vulnerability fields
+    under_5_count_field,
+    over_60_count_field,
+    disabled_count_field,
+    # Displaced
+    # Gender displaced count fields
+    female_displaced_count_field,
+    child_bearing_age_displaced_count_field,
+    pregnant_displaced_count_field,
+    lactating_displaced_count_field,
+    male_displaced_count_field,
+    # Age count fields
+    infant_displaced_count_field,
+    child_displaced_count_field,
+    youth_displaced_count_field,
+    adult_displaced_count_field,
+    elderly_displaced_count_field,
+    # Vulnerability fields
+    under_5_displaced_count_field,
+    over_60_displaced_count_field,
+    disabled_displaced_count_field
+] + minimum_needs_fields
