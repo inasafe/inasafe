@@ -19,6 +19,13 @@ from safe.definitions.fields import (
     affected_field,
     hazard_count_field,
     exposure_count_field,
+    productivity_cost_field,
+    productivity_value_field,
+    productivity_field,
+    exposure_class_field,
+    affected_productivity_field,
+    affected_productivity_cost_field,
+    affected_productivity_value_field
 )
 from safe.definitions.processing_steps import (
     summary_4_exposure_summary_table_steps)
@@ -44,7 +51,8 @@ __revision__ = '$Format:%H$'
 
 
 @profile
-def exposure_summary_table(aggregate_hazard, callback=None):
+def exposure_summary_table(
+        aggregate_hazard, exposure_summary=None, callback=None):
     """Compute the summary from the aggregate hazard to analysis.
 
     Source layer :
@@ -55,6 +63,9 @@ def exposure_summary_table(aggregate_hazard, callback=None):
 
     :param aggregate_hazard: The layer to aggregate vector layer.
     :type aggregate_hazard: QgsVectorLayer
+
+    :param exposure_summary: The layer impact layer.
+    :type exposure_summary: QgsVectorLayer
 
     :param callback: A function to all to indicate progress. The function
         should accept params 'current' (int), 'maximum' (int) and 'step' (str).
@@ -169,6 +180,23 @@ def exposure_summary_table(aggregate_hazard, callback=None):
     tabular.keywords['inasafe_fields'][total_field['key']] = (
         total_field['field_name'])
 
+    field = create_field_from_definition(affected_productivity_field)
+    tabular.addAttribute(field)
+    tabular.keywords['inasafe_fields'][affected_productivity_field['key']] = (
+        affected_productivity_field['field_name'])
+
+    field = create_field_from_definition(affected_productivity_cost_field)
+    tabular.addAttribute(field)
+    tabular.keywords['inasafe_fields'][
+        affected_productivity_cost_field['key']] = (
+        affected_productivity_cost_field['field_name'])
+
+    field = create_field_from_definition(affected_productivity_value_field)
+    tabular.addAttribute(field)
+    tabular.keywords['inasafe_fields'][
+        affected_productivity_value_field['key']] = (
+        affected_productivity_value_field['field_name'])
+
     # For each absolute values
     for absolute_field in absolute_values.iterkeys():
         field_definition = definition(absolute_values[absolute_field][1])
@@ -177,6 +205,46 @@ def exposure_summary_table(aggregate_hazard, callback=None):
         key = field_definition['key']
         value = field_definition['field_name']
         tabular.keywords['inasafe_fields'][key] = value
+
+    # Special for productivity. We should move it to more general workflow
+    if exposure_summary:
+        productivity_flag = False
+        productivity_value_flag = False
+        productivity_cost_flag = False
+        if exposure_summary.fieldNameIndex(
+                productivity_field['field_name']) > -1:
+            productivity_flag = True
+        if exposure_summary.fieldNameIndex(
+                productivity_value_field['field_name']) > -1:
+            productivity_value_flag = True
+        if exposure_summary.fieldNameIndex(
+                productivity_cost_field['field_name']) > -1:
+            productivity_cost_flag = True
+
+        productivity_dictionary = {}
+        productivity_cost_dictionary = {}
+        productivity_value_dictionary = {}
+        for feature in exposure_summary.getFeatures():
+            is_affected = feature[affected_field['field_name']]
+            if is_affected:
+                exposure_class_name = feature[exposure_class_field[
+                    'field_name']]
+                if exposure_class_name not in productivity_dictionary:
+                    productivity_dictionary[exposure_class_name] = 0
+                if exposure_class_name not in productivity_cost_dictionary:
+                    productivity_cost_dictionary[exposure_class_name] = 0
+                if exposure_class_name not in productivity_value_dictionary:
+                    productivity_value_dictionary[exposure_class_name] = 0
+
+                if productivity_flag:
+                    productivity_dictionary[exposure_class_name] += feature[
+                        productivity_field['field_name']]
+                if productivity_cost_flag:
+                    productivity_cost_dictionary[exposure_class_name] += \
+                        feature[productivity_cost_field['field_name']]
+                if productivity_value_flag:
+                    productivity_value_dictionary[exposure_class_name] += \
+                        feature[productivity_value_field['field_name']]
 
     for exposure_type in unique_exposure:
         feature = QgsFeature()
@@ -207,6 +275,14 @@ def exposure_summary_table(aggregate_hazard, callback=None):
         attributes.append(total_not_affected)
         attributes.append(total_not_exposed)
         attributes.append(total)
+
+        if exposure_summary:
+            attributes.append(productivity_dictionary.get(
+                exposure_type, 0))
+            attributes.append(productivity_value_dictionary.get(
+                exposure_type, 0))
+            attributes.append(productivity_cost_dictionary.get(
+                exposure_type, 0))
 
         for i, field in enumerate(absolute_values.itervalues()):
             value = field[0].get_value(
