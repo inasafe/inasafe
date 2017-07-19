@@ -12,6 +12,7 @@ import os
 from tempfile import mkdtemp
 
 from inasafe import (
+    download_exposure,
     run_impact_function,
     build_report,
     CommandLineArguments,
@@ -32,14 +33,11 @@ class TestInasafeCommandLine(unittest.TestCase):
                 '../safe/test/data/gisv4/hazard/tsunami_vector.geojson',
             '--exposure':
                 '../safe/test/data/gisv4/exposure/raster/population.asc',
-            '--extent': '106,8525945:-6,2085970:106,7999364:-6,1676174',
+            '--extent': '106,7999364:-6,2085970:106,8525945:-6,1676174',
             '--aggregation': None,
             '--layers': None,
             '--list-functions': False,
             '--output-dir': 'test_cli',
-            '--report-template': '../resources/'
-                                 'qgis-composer-templates/'
-                                 'a4-portrait-blue.qpt',
             '--version': False,
             'LAYER_NAME': []})
         # Let's assume that for this test, the output dir is:
@@ -48,6 +46,30 @@ class TestInasafeCommandLine(unittest.TestCase):
         # self.args.output_dir = os.path.join(
         #     '/home/akbar/dev/data/test', self.args.output_dir)
         os.makedirs(self.args.output_dir, 0777)
+
+    def test_download(self):
+        """Test download using CLI"""
+        args = CommandLineArguments({
+            '--aggregation': None,
+            '--download': True,
+            '--exposure': None,
+            '--extent': '106,85:-6,2085970:106,8525945:-6,20',
+            '--hazard': None,
+            '--help': False,
+            '--feature-type': 'buildings',
+            '--output-dir': 'test_cli',
+            '--version': False,
+            'LAYER_NAME': []})
+        args.output_dir = os.path.join(
+            QDir(mkdtemp()).absolutePath(), args.output_dir)
+        download_exposure(args)
+        self.assertTrue(os.path.exists(args.exposure))
+
+        # Remove
+        if os.path.exists(args.output_dir):
+            shutil.rmtree(
+                os.path.join(self.args.output_dir, os.pardir),
+                ignore_errors=True)
 
     def test_run_impact_function(self):
         """Test whether we can run impact function."""
@@ -66,11 +88,6 @@ class TestInasafeCommandLine(unittest.TestCase):
 
         status, message = build_report(self.args, impact_function)
         self.assertEqual(status, ImpactReport.REPORT_GENERATION_SUCCESS)
-
-        # output_name = os.path.splitext(self.args.output_file)[0]
-        # build_report(self.args)
-        # self.assertEqual(os.path.isfile(output_name + '.pdf'), True)
-        # self.assertEqual(os.path.isfile(output_name + '_table.pdf'), True)
 
     def tearDown(self):
         # remove output dir

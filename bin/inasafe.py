@@ -32,6 +32,7 @@ from safe.test.utilities import get_qgis_app
 # make sure this line executes first
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
+from safe.common.version import get_version
 from safe.utilities.gis import qgis_version, validate_geo_array
 from safe.utilities.osm_downloader import download
 from safe.impact_function.impact_function import ImpactFunction
@@ -51,7 +52,12 @@ __revision__ = '$Format:%H$'
 
 current_dir = os.path.abspath(
     os.path.realpath(os.getcwd()))
-usage_dir = os.path.dirname(os.path.abspath(__file__))
+
+if 'InaSAFEQGIS' in os.environ:
+    usage_dir = os.environ['InaSAFEQGIS'] + '/bin'
+else:
+    usage_dir = os.path.dirname(os.path.abspath(__file__))
+
 usage = r""
 usage_file = file(os.path.join(usage_dir, 'usage.txt'))
 for delta in usage_file:
@@ -67,34 +73,39 @@ class CommandLineArguments(object):
         LOGGER.debug('CommandLineArguments')
         if not arguments_:
             return
-        self.output_dir = arguments_['--output-dir']
+
         self.hazard = arguments_['--hazard']
         self.exposure = arguments_['--exposure']
+        self.output_dir = arguments_['--output-dir']
         self.version = arguments_['--version']
-        self.report_template = arguments_['--report-template']
+
         # optional arguments
         if arguments_['--aggregation']:
             self.aggregation = arguments_['--aggregation']
         else:
             self.aggregation = None
-            LOGGER.debug('no aggregation layer specified')
+            msg = 'No aggregation layer specified..'
+            print msg
+            LOGGER.debug(msg)
 
         if arguments_['--extent'] is not None:
             self.extent = arguments_['--extent'].replace(',', '.').split(':')
         else:
-            LOGGER.debug('no extent specified')
+            self.extent = None
+            msg = 'No extent specified....'
+            print msg
+            LOGGER.debug(msg)
 
         if arguments_['--download']:
             self.download = arguments_['--download']
-            self.exposure_layers = arguments_['--layers']
-            print self.exposure_layers
+            self.exposure_type = arguments_['--feature-type']
         else:
             self.download = False
-            self.exposure_layers = None
+            self.exposure_type = None
             LOGGER.debug('no download specified')
 
 
-def download_exposure(command_line_arguments):
+def download_exposure(cli_arguments):
     """Download OSM resources.
 
         Download layers from OSM within the download extent.
@@ -102,32 +113,34 @@ def download_exposure(command_line_arguments):
         This function might generate a popup.
         .. versionadded:: 3.2
 
-    :param command_line_arguments:  User inputs.
-    :type command_line_arguments: CommandLineArguments
+    :param cli_arguments:  User inputs.
+    :type cli_arguments: CommandLineArguments
     """
     extent = [
-        float(command_line_arguments.extent[0]),
-        float(command_line_arguments.extent[1]),
-        float(command_line_arguments.extent[2]),
-        float(command_line_arguments.extent[3])
+        float(cli_arguments.extent[0]),
+        float(cli_arguments.extent[1]),
+        float(cli_arguments.extent[2]),
+        float(cli_arguments.extent[3])
         ]
 
-    # make a temporary directory for exposure download
-    command_line_arguments.exposure = tempfile.mkdtemp() + '/exposure'
-    print 'temp directory: ' + command_line_arguments.exposure
+    if not os.path.exists(cli_arguments.output_dir):
+        os.makedirs(cli_arguments.output_dir, 0777)
+
+    cli_arguments.exposure = os.path.join(
+        cli_arguments.output_dir, cli_arguments.exposure_type)
     if validate_geo_array(extent):
         print "Exposure download extent is valid"
+        download(
+            cli_arguments.exposure_type,
+            cli_arguments.exposure,
+            extent)
+        if os.path.exists(cli_arguments.exposure + '.shp'):
+            cli_arguments.exposure += '.shp'
+            print "download successful"
+            print 'Output: ' + cli_arguments.exposure
     else:
-        print "Exposure is invalid"
+        print "Exposure download extent is invalid"
         print str(extent)
-
-    download(
-        command_line_arguments.exposure_layers,
-        command_line_arguments.exposure,
-        extent)
-    if os.path.exists(command_line_arguments.exposure + '.shp'):
-        print "download successful"
-        command_line_arguments.exposure += '.shp'
 
 
 # all paths are made to be absolute
@@ -188,7 +201,7 @@ def get_layer(layer_path, layer_base=None):
         print exception.__doc__
 
 
-def run_impact_function(command_line_arguments):
+def run_impact_function(cli_arguments):
     """Runs an analysis and delegates producing pdf and .shp results.
 
         An impact layer object is created and used to write a shapefile.
@@ -197,14 +210,14 @@ def run_impact_function(command_line_arguments):
 
     .. versionadded:: 3.2
 
-    :param command_line_arguments: User inputs.
-    :type command_line_arguments: CommandLineArguments
+    :param cli_arguments: User inputs.
+    :type cli_arguments: CommandLineArguments
     """
-    hazard = get_layer(command_line_arguments.hazard, 'Hazard Layer')
-    exposure = get_layer(command_line_arguments.exposure, 'Exposure Layer')
+    hazard = get_layer(cli_arguments.hazard, 'Hazard Layer')
+    exposure = get_layer(cli_arguments.exposure, 'Exposure Layer')
     aggregation = None
-    if command_line_arguments.aggregation:
-        aggregation = get_layer(command_line_arguments.aggregation)
+    if cli_arguments.aggregation:
+        aggregation = get_layer(cli_arguments.aggregation)
 
     # Set up impact function
     impact_function = ImpactFunction()
@@ -213,22 +226,25 @@ def run_impact_function(command_line_arguments):
     impact_function.aggregation = aggregation
     impact_function.map_canvas = CANVAS
     # Set the datastore
-    impact_function.datastore = Folder(command_line_arguments.output_dir)
+    impact_function.datastore = Folder(cli_arguments.output_dir)
     impact_function.datastore.default_vector_format = 'geojson'
-    # QSetting context
-    settings = QSettings()
-    crs = settings.value('inasafe/user_extent_crs', '', type=str)
-    impact_function.requested_extent_crs = QgsCoordinateReferenceSystem(crs)
-    try:
-        impact_function.requested_extent = QgsRectangle(
-            float(command_line_arguments.extent[0]),
-            float(command_line_arguments.extent[1]),
-            float(command_line_arguments.extent[2]),
-            float(command_line_arguments.extent[3])
-        )
-    except AttributeError:
-        print "No extents"
-        pass
+
+    # Set the extent
+    if cli_arguments.extent:
+        # QSetting context
+        settings = QSettings()
+        crs = settings.value('inasafe/user_extent_crs', '', type=str)
+        impact_function.requested_extent_crs = QgsCoordinateReferenceSystem(crs)
+        try:
+            impact_function.requested_extent = QgsRectangle(
+                float(cli_arguments.extent[0]),
+                float(cli_arguments.extent[1]),
+                float(cli_arguments.extent[2]),
+                float(cli_arguments.extent[3])
+            )
+        except AttributeError:
+            print "Extent is not valid..."
+            pass
 
     # Prepare impact function
     status, message = impact_function.prepare()
@@ -247,11 +263,16 @@ def run_impact_function(command_line_arguments):
 def generate_impact_map_report(cli_arguments, impact_function, iface):
     """Generate impact map pdf from impact function.
 
+    :param cli_arguments: User inputs.
+    :type cli_arguments: CommandLineArguments
+
     :param impact_function: The impact function used.
     :type impact_function: ImpactFunction
 
     :param iface: QGIS QGisAppInterface instance.
     :type iface: QGisAppInterface
+
+    .. versionadded:: 4.0
     """
     hazard_layer = get_layer(cli_arguments.hazard, 'Hazard Layer')
     aggregation_layer = get_layer(
@@ -279,11 +300,16 @@ def generate_impact_map_report(cli_arguments, impact_function, iface):
 def generate_impact_report(cli_arguments, impact_function, iface):
     """Generate the impact report from an impact function.
 
+    :param cli_arguments: User inputs.
+    :type cli_arguments: CommandLineArguments
+
     :param impact_function: The impact function used.
     :type impact_function: ImpactFunction
 
     :param iface: QGIS QGisAppInterface instance.
     :type iface: QGisAppInterface
+
+    .. versionadded:: 4.0
 
     """
     # create impact report instance
@@ -308,6 +334,9 @@ def build_report(cli_arguments, impact_function):
 
     :param cli_arguments: User inputs.
     :type cli_arguments: CommandLineArguments
+
+    :param impact_function: The impact function used.
+    :type impact_function: ImpactFunction
 
     :raises: Exception
     """
@@ -336,29 +365,39 @@ if __name__ == '__main__':
         print exc.message
 
     try:
-        arguments = CommandLineArguments(shell_arguments)
-
+        args = CommandLineArguments(shell_arguments)
         LOGGER.debug(shell_arguments)
-        if arguments.version is True:
+        if args.version is True:
             print "QGIS VERSION: " + str(qgis_version()).replace('0', '.')
+            print "InaSAFE VERSION: " + get_version()
+
         # user is only interested in doing a download
-        elif arguments.download and not arguments.exposure and not \
-                arguments.hazard:
-            print "downloading ..."
-            download_exposure(arguments)
+        elif args.download and not args.hazard:
+            print "Downloading ..."
+            download_exposure(args)
 
-        elif arguments.hazard and arguments.output_file:
-            # first do download if necessary
-            if not arguments.exposure and arguments.download:
-                download_exposure(arguments)
+        elif args.hazard and args.output_dir:
+            # first do download if user asks to
+            if args.download and not args.exposure:
+                if args.extent:
+                    download_exposure(args)
+                else:
+                    print 'Extent must be set when --download specified...'
 
-            if arguments.exposure is not None:
-                run_impact_function(arguments)
+            if args.exposure is not None:
+                status, msg, impact_function = run_impact_function(args)
+                if status != ANALYSIS_SUCCESS:
+                    print 'Failed running impact function...'
+                    print msg
+                else:
+                    print 'Running impact function is succesfull...'
+                    print 'Building reports...'
+                    status, msg = build_report(args, impact_function)
+                    if status != ImpactReport.REPORT_GENERATION_SUCCESS:
+                        print 'Failed building reports...'
+                        print msg
             else:
                 print "Download unsuccessful"
-        elif arguments.report_template and arguments.output_file:
-            print "Generating report"
-            build_report(arguments)
         else:
             print "Argument combination not recognised"
     except Exception as excp:
@@ -369,5 +408,12 @@ if __name__ == '__main__':
 print " "
 
 # INSTALL on Ubuntu with:
-# chmod ug+x inasafe
-# sudo ln -s `pwd`/inasafe  /usr/bin
+# 1. Adding InaSAFE path to environment e.g:
+#    export InaSAFEQGIS=/home/akbar/dev/python/inasafe-dev/
+# 2. Adding QGIS to environment, or simply by updating run-env-linux.sh as
+#    necessary and run:
+#    source run-env-linux.sh
+# 3. Making inasafe CLI executable:
+#    chmod ug+x inasafe
+# 4. Soft-linking executable inasafe CLI to bin:
+#    sudo ln -s `pwd`/inasafe  /usr/bin
