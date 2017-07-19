@@ -281,7 +281,6 @@ def summarize_result(exposure_summary, callback=None):
 
     .. versionadded:: 4.2
     """
-
     summarization_dicts = {}
     summarizer_flags = {}
 
