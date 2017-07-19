@@ -43,9 +43,7 @@ class TestInasafeCommandLine(unittest.TestCase):
         # Let's assume that for this test, the output dir is:
         self.args.output_dir = os.path.join(
             QDir(mkdtemp()).absolutePath(), self.args.output_dir)
-        # self.args.output_dir = os.path.join(
-        #     '/home/akbar/dev/data/test', self.args.output_dir)
-        os.makedirs(self.args.output_dir, 0777)
+        os.makedirs(self.args.output_dir)
 
     def test_download(self):
         """Test download using CLI"""
