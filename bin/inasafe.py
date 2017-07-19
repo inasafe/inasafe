@@ -17,7 +17,6 @@ Contact : jannes@kartoza.com
 """
 import logging
 import os
-import tempfile
 
 from qgis.core import (
     QgsRasterLayer,
@@ -28,6 +27,7 @@ from qgis.core import (
 from PyQt4.QtCore import QSettings
 
 from docopt import docopt, DocoptExit
+
 from safe.test.utilities import get_qgis_app
 # make sure this line executes first
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -35,6 +35,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from safe.common.version import get_version
 from safe.utilities.gis import qgis_version, validate_geo_array
 from safe.utilities.osm_downloader import download
+from safe.utilities.settings import setting
 from safe.impact_function.impact_function import ImpactFunction
 from safe.datastore.folder import Folder
 from safe.definitions.constants import PREPARE_SUCCESS, ANALYSIS_SUCCESS
@@ -54,7 +55,7 @@ current_dir = os.path.abspath(
     os.path.realpath(os.getcwd()))
 
 if 'InaSAFEQGIS' in os.environ:
-    usage_dir = os.environ['InaSAFEQGIS'] + '/bin'
+    usage_dir = os.path.join(os.environ['InaSAFEQGIS'], 'bin')
 else:
     usage_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -85,7 +86,6 @@ class CommandLineArguments(object):
         else:
             self.aggregation = None
             msg = 'No aggregation layer specified..'
-            print msg
             LOGGER.debug(msg)
 
         if arguments_['--extent'] is not None:
@@ -93,7 +93,6 @@ class CommandLineArguments(object):
         else:
             self.extent = None
             msg = 'No extent specified....'
-            print msg
             LOGGER.debug(msg)
 
         if arguments_['--download']:
@@ -124,22 +123,22 @@ def download_exposure(cli_arguments):
         ]
 
     if not os.path.exists(cli_arguments.output_dir):
-        os.makedirs(cli_arguments.output_dir, 0777)
+        os.makedirs(cli_arguments.output_dir)
 
     cli_arguments.exposure = os.path.join(
         cli_arguments.output_dir, cli_arguments.exposure_type)
     if validate_geo_array(extent):
-        print "Exposure download extent is valid"
+        print 'Exposure download extent is valid'
         download(
             cli_arguments.exposure_type,
             cli_arguments.exposure,
             extent)
         if os.path.exists(cli_arguments.exposure + '.shp'):
             cli_arguments.exposure += '.shp'
-            print "download successful"
+            print 'Download successful'
             print 'Output: ' + cli_arguments.exposure
     else:
-        print "Exposure download extent is invalid"
+        print 'Exposure download extent is invalid'
         print str(extent)
 
 
@@ -184,7 +183,7 @@ def get_layer(layer_path, layer_base=None):
         basename, ext = os.path.splitext(os.path.basename(layer_path))
         if not layer_base:
             layer_base = basename
-        if ext in ['.shp', '.geojson', 'gpkg']:
+        if ext in ['.shp', '.geojson', '.gpkg']:
             layer = QgsVectorLayer(layer_path, layer_base, 'ogr')
         elif ext in ['.asc', '.tif', '.tiff']:
             layer = QgsRasterLayer(layer_path, layer_base)
@@ -202,11 +201,7 @@ def get_layer(layer_path, layer_base=None):
 
 
 def run_impact_function(cli_arguments):
-    """Runs an analysis and delegates producing pdf and .shp results.
-
-        An impact layer object is created and used to write a shapefile.
-        The shapefile path is given by user and used by build_report
-        function to read from.
+    """Runs an analysis and delegates producing pdf and .geojson output layers.
 
     .. versionadded:: 3.2
 
@@ -224,17 +219,16 @@ def run_impact_function(cli_arguments):
     impact_function.hazard = hazard
     impact_function.exposure = exposure
     impact_function.aggregation = aggregation
-    impact_function.map_canvas = CANVAS
     # Set the datastore
     impact_function.datastore = Folder(cli_arguments.output_dir)
     impact_function.datastore.default_vector_format = 'geojson'
 
     # Set the extent
     if cli_arguments.extent:
-        # QSetting context
-        settings = QSettings()
-        crs = settings.value('inasafe/user_extent_crs', '', type=str)
-        impact_function.requested_extent_crs = QgsCoordinateReferenceSystem(crs)
+        crs = setting('user_extent_crs', None, str)
+        if crs:
+            impact_function.requested_extent_crs = \
+                QgsCoordinateReferenceSystem(crs)
         try:
             impact_function.requested_extent = QgsRectangle(
                 float(cli_arguments.extent[0]),
@@ -406,14 +400,3 @@ if __name__ == '__main__':
 
 
 print " "
-
-# INSTALL on Ubuntu with:
-# 1. Adding InaSAFE path to environment e.g:
-#    export InaSAFEQGIS=/home/akbar/dev/python/inasafe-dev/
-# 2. Adding QGIS to environment, or simply by updating run-env-linux.sh as
-#    necessary and run:
-#    source run-env-linux.sh
-# 3. Making inasafe CLI executable:
-#    chmod ug+x inasafe
-# 4. Soft-linking executable inasafe CLI to bin:
-#    sudo ln -s `pwd`/inasafe  /usr/bin

@@ -76,7 +76,7 @@ class TestInasafeCommandLine(unittest.TestCase):
         status, message, impact_function = run_impact_function(self.args)
         self.assertEqual(status, ANALYSIS_SUCCESS)
         self.assertEqual(
-            2*len(impact_function.datastore.layers()),
+            2 * len(impact_function.datastore.layers()),
             len(os.listdir(self.args.output_dir)))
 
     def test_build_report(self):
