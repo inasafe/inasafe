@@ -19,13 +19,9 @@ from safe.definitions.fields import (
     affected_field,
     hazard_count_field,
     exposure_count_field,
-    productivity_cost_field,
-    productivity_value_field,
-    productivity_field,
     exposure_class_field,
-    affected_productivity_field,
-    affected_productivity_cost_field,
-    affected_productivity_value_field
+    summarizer_fields,
+    affected_summarizer_fields
 )
 from safe.definitions.processing_steps import (
     summary_4_exposure_summary_table_steps)
@@ -180,22 +176,16 @@ def exposure_summary_table(
     tabular.keywords['inasafe_fields'][total_field['key']] = (
         total_field['field_name'])
 
-    field = create_field_from_definition(affected_productivity_field)
-    tabular.addAttribute(field)
-    tabular.keywords['inasafe_fields'][affected_productivity_field['key']] = (
-        affected_productivity_field['field_name'])
+    summarization_dicts = summarize_result(exposure_summary, callback)
+    sorted_keys = sorted(summarization_dicts.keys())
 
-    field = create_field_from_definition(affected_productivity_cost_field)
-    tabular.addAttribute(field)
-    tabular.keywords['inasafe_fields'][
-        affected_productivity_cost_field['key']] = (
-        affected_productivity_cost_field['field_name'])
-
-    field = create_field_from_definition(affected_productivity_value_field)
-    tabular.addAttribute(field)
-    tabular.keywords['inasafe_fields'][
-        affected_productivity_value_field['key']] = (
-        affected_productivity_value_field['field_name'])
+    for key in sorted_keys:
+        affected_summarizer_field = affected_summarizer_fields[key]
+        field = create_field_from_definition(affected_summarizer_field)
+        tabular.addAttribute(field)
+        tabular.keywords['inasafe_fields'][
+            affected_summarizer_field['key']] = (
+            affected_summarizer_field['field_name'])
 
     # For each absolute values
     for absolute_field in absolute_values.iterkeys():
@@ -205,46 +195,6 @@ def exposure_summary_table(
         key = field_definition['key']
         value = field_definition['field_name']
         tabular.keywords['inasafe_fields'][key] = value
-
-    # Special for productivity. We should move it to more general workflow
-    if exposure_summary:
-        productivity_flag = False
-        productivity_value_flag = False
-        productivity_cost_flag = False
-        if exposure_summary.fieldNameIndex(
-                productivity_field['field_name']) > -1:
-            productivity_flag = True
-        if exposure_summary.fieldNameIndex(
-                productivity_value_field['field_name']) > -1:
-            productivity_value_flag = True
-        if exposure_summary.fieldNameIndex(
-                productivity_cost_field['field_name']) > -1:
-            productivity_cost_flag = True
-
-        productivity_dictionary = {}
-        productivity_cost_dictionary = {}
-        productivity_value_dictionary = {}
-        for feature in exposure_summary.getFeatures():
-            is_affected = feature[affected_field['field_name']]
-            if is_affected:
-                exposure_class_name = feature[exposure_class_field[
-                    'field_name']]
-                if exposure_class_name not in productivity_dictionary:
-                    productivity_dictionary[exposure_class_name] = 0
-                if exposure_class_name not in productivity_cost_dictionary:
-                    productivity_cost_dictionary[exposure_class_name] = 0
-                if exposure_class_name not in productivity_value_dictionary:
-                    productivity_value_dictionary[exposure_class_name] = 0
-
-                if productivity_flag:
-                    productivity_dictionary[exposure_class_name] += feature[
-                        productivity_field['field_name']]
-                if productivity_cost_flag:
-                    productivity_cost_dictionary[exposure_class_name] += \
-                        feature[productivity_cost_field['field_name']]
-                if productivity_value_flag:
-                    productivity_value_dictionary[exposure_class_name] += \
-                        feature[productivity_value_field['field_name']]
 
     for exposure_type in unique_exposure:
         feature = QgsFeature()
@@ -276,13 +226,10 @@ def exposure_summary_table(
         attributes.append(total_not_exposed)
         attributes.append(total)
 
-        if exposure_summary:
-            attributes.append(productivity_dictionary.get(
-                exposure_type, 0))
-            attributes.append(productivity_value_dictionary.get(
-                exposure_type, 0))
-            attributes.append(productivity_cost_dictionary.get(
-                exposure_type, 0))
+        if summarization_dicts:
+            for key in sorted_keys:
+                attributes.append(summarization_dicts[key].get(
+                    exposure_type, 0))
 
         for i, field in enumerate(absolute_values.itervalues()):
             value = field[0].get_value(
@@ -312,3 +259,52 @@ def exposure_summary_table(
 
     check_layer(tabular, has_geometry=False)
     return tabular
+
+
+@profile
+def summarize_result(exposure_summary, callback=None):
+    """Extract result based on summarizer field value and sum by exposure type.
+
+    :param exposure_summary: The layer impact layer.
+    :type exposure_summary: QgsVectorLayer
+
+    :param callback: A function to all to indicate progress. The function
+        should accept params 'current' (int), 'maximum' (int) and 'step' (str).
+        Defaults to None.
+    :type callback: function
+
+    :return: Dictionary of attributes per exposure per summarizer field.
+    :rtype: dict
+
+    .. versionadded:: 4.2
+    """
+
+    summarization_dicts = {}
+    summarizer_flags = {}
+
+    for summarizer_field in summarizer_fields:
+        if exposure_summary.fieldNameIndex(
+                summarizer_field['field_name']) == -1:
+            summarizer_flags[summarizer_field['key']] = False
+        else:
+            summarizer_flags[summarizer_field['key']] = True
+            summarization_dicts[summarizer_field['key']] = {}
+
+    for feature in exposure_summary.getFeatures():
+        is_affected = feature[affected_field['field_name']]
+        exposure_class_name = feature[exposure_class_field['field_name']]
+        for summarizer_field in summarizer_fields:
+            flag = summarizer_flags[summarizer_field['key']]
+            if not flag:
+                continue
+            if is_affected:
+                if exposure_class_name not in summarization_dicts[
+                    summarizer_field['key']]:
+                    summarization_dicts[summarizer_field['key']][
+                        exposure_class_name] = 0
+
+                summarization_dicts[summarizer_field['key']][
+                    exposure_class_name] += feature[
+                    summarizer_field['field_name']]
+
+    return summarization_dicts

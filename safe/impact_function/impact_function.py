@@ -138,7 +138,6 @@ WARNING_STYLE = styles.RED_LEVEL_4_STYLE
 
 LOGGER = logging.getLogger('InaSAFE')
 
-
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
@@ -1947,12 +1946,8 @@ class ImpactFunction(object):
         if self._exposure.keywords.get('classification'):
             self.set_state_process(
                 'impact function', 'Build the exposure summary table')
-            if self.exposure.keywords['exposure'] == 'land_cover':
-                self._exposure_summary_table = exposure_summary_table(
-                    self._aggregate_hazard_impacted, self._exposure_summary)
-            else:
-                self._exposure_summary_table = exposure_summary_table(
-                    self._aggregate_hazard_impacted)
+            self._exposure_summary_table = exposure_summary_table(
+                self._aggregate_hazard_impacted, self._exposure_summary)
             self.debug_layer(
                 self._exposure_summary_table, add_to_datastore=False)
 
