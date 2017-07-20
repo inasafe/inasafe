@@ -8,7 +8,8 @@ from zipfile import ZipFile
 
 import pytz
 import shutil
-from PyQt4.QtCore import QObject, QFileInfo, QUrl
+
+from PyQt4.QtCore import QCoreApplication, QObject, QFileInfo, QUrl, QTranslator
 from PyQt4.QtXml import QDomDocument
 from qgis.core import (
     QgsProject,
@@ -22,7 +23,10 @@ from jinja2 import Template
 from headless.tasks.utilities import download_file
 from realtime.exceptions import MapComposerError
 from realtime.utilities import realtime_logger_name
-from safe.common.exceptions import ZeroImpactException, KeywordNotFoundError
+from safe.common.exceptions import (
+    ZeroImpactException,
+    KeywordNotFoundError,
+    TranslationLoadError)
 from safe.common.utilities import format_int
 from safe.impact_functions.core import population_rounding
 from safe.impact_functions.impact_function_manager import \
@@ -107,6 +111,8 @@ class AshEvent(QObject):
         if not self.locale:
             self.locale = 'en'
 
+        self.setup_i18n()
+
         if not working_dir:
             raise Exception("Working directory can't be empty")
         self.working_dir = working_dir
@@ -135,7 +141,6 @@ class AshEvent(QObject):
         self.project_path = self.working_dir_path('project.qgs')
         self.impact_exists = None
         self.impact_zip_path = self.working_dir_path('impact.zip')
-        self.locale = 'en'
 
         self.population_path = population_path
         self.cities_path = cities_path
@@ -847,3 +852,40 @@ class AshEvent(QObject):
         map_renderer.setDestinationCrs(default_crs)
         map_renderer.setProjectionsEnabled(False)
         LOGGER.info('Report generation completed.')
+
+    def setup_i18n(self):
+        """Setup internationalisation for the reports.
+
+        Args:
+           None
+        Returns:
+           None.
+        Raises:
+           TranslationLoadException
+        """
+        locale_name = self.locale
+
+        root = os.path.abspath(
+            os.path.join(
+                os.path.dirname(__file__),
+                os.pardir,
+                os.pardir))
+        translation_path = os.path.join(
+            root,
+            'realtime',
+            'i18n',
+            'inasafe_realtime_' + str(locale_name) + '.qm')
+        if os.path.exists(translation_path):
+            self.translator = QTranslator()
+            result = self.translator.load(translation_path)
+            LOGGER.debug('Switched locale to %s' % translation_path)
+            if not result:
+                message = 'Failed to load translation for %s' % locale_name
+                LOGGER.exception(message)
+                raise TranslationLoadError(message)
+            # noinspection PyTypeChecker, PyCallByClass, PyArgumentList
+            QCoreApplication.installTranslator(self.translator)
+        else:
+            if locale_name != 'en':
+                message = 'No translation exists for %s' % locale_name
+                LOGGER.exception(message)

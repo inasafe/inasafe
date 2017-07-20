@@ -1962,8 +1962,9 @@ class ShakeEvent(QObject):
                 os.pardir))
         translation_path = os.path.join(
             root,
+            'realtime',
             'i18n',
-            'inasafe_' + str(locale_name) + '.qm')
+            'inasafe_realtime_' + str(locale_name) + '.qm')
         if os.path.exists(translation_path):
             self.translator = QTranslator()
             result = self.translator.load(translation_path)

@@ -22,6 +22,8 @@ import logging
 import unittest
 import datetime
 
+
+from PyQt4.QtCore import QObject, QCoreApplication
 from safe.common.utilities import log_file_path
 from realtime.utilities import (
     base_data_dir,

@@ -7,3 +7,9 @@ source_file = i18n/inasafe_en.ts
 source_lang = en
 type = QT
 
+[inasafe-code.inasafe-realtime]
+file_filter = realtime/i18n/inasafe_realtime_<lang>.ts
+source_file = realtime/i18n/inasafe_realtime_en.ts
+source_lang = en
+type = QT
+

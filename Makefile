@@ -34,10 +34,22 @@ update-translation-strings:
 	@echo "Checking current translation."
 	@scripts/update-strings.sh $(LOCALES)
 
+update-realtime-translation-strings:
+        #update application strings
+	@echo "Checking current translation."
+	@realtime/scripts/update-strings.sh $(LOCALES)
+
 #Qt .qm file updates - run to create binary representation of translated strings for translation in safe_qgis
 compile-translation-strings:
 	@#Compile qt messages binary
 	@scripts/create_pro_file.sh
+	@lrelease-qt4 inasafe.pro
+	@rm inasafe.pro
+
+#Qt .qm file updates - run to create binary representation of translated strings for translation in safe_qgis
+compile-realtime-translation-strings:
+	@#Compile qt messages binary
+	@realtime/scripts/create_pro_file.sh
 	@lrelease-qt4 inasafe.pro
 	@rm inasafe.pro
 
@@ -349,6 +361,25 @@ docker-test: testdata clean
 		--verbose \
 		--cover-package=safe safe
 
+docker-update-translation-strings:
+	@echo "Update translation using docker"
+	@docker run -t -i -v $(PWD):/home kartoza/qt-translation make update-translation-strings
+
+docker-update-realtime-translation-strings:
+	@echo "Update translation using docker"
+	@docker run -t -i -v $(PWD):/home kartoza/qt-translation make update-realtime-translation-strings
+
+docker-compile-translation-strings:
+	@echo "Update translation using docker"
+	@docker run -t -i -v $(PWD):/home kartoza/qt-translation make compile-translation-strings
+
+docker-compile-realtime-translation-strings:
+	@echo "Update translation using docker"
+	@docker run -t -i -v $(PWD):/home kartoza/qt-translation make compile-realtime-translation-strings
+
+docker-test-translation:
+	@echo "Update translation using docker"
+	@docker run -t -i -v $(PWD):/home kartoza/qt-translation make test-translations
 
 ##########################################################
 #
