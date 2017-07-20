@@ -10,7 +10,6 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 inasafe_keyword_version_key = 'keyword_version'
-multipart_polygon_key = 'multipart_polygon'
 no_field = tr('No Field')
 no_data_value = 200
 zero_default_value = 0.0
