@@ -67,3 +67,11 @@ last_analysis_width = 5
 # Availability options color in wizard
 available_option_color = QColor(120, 255, 120)
 unavailable_option_color = QColor(220, 220, 220)
+
+# Aggregation layer
+aggregation_width = '0.35'
+aggregation_color = QColor(255, 125, 125)
+
+# Analysis layer
+analysis_width = '0.50'
+analysis_color = QColor(255, 0, 0)

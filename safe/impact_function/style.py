@@ -3,6 +3,7 @@
 """Styles."""
 
 from collections import OrderedDict
+from PyQt4.QtGui import QColor
 from qgis.core import (
     QgsSymbolV2,
     QgsRendererCategoryV2,
@@ -329,11 +330,17 @@ def _format_label(
     return label
 
 
-def simple_polygon_without_brush(layer):
+def simple_polygon_without_brush(layer, width='0.26', color=QColor('black')):
     """Simple style to apply a border line only to a polygon layer.
 
     :param layer: The layer to style.
     :type layer: QgsVectorLayer
+
+    :param color: Color to use for the line. Default to black.
+    :type color: QColor
+
+    :param width: Width to use for the line. Default to '0.26'.
+    :type width: str
     """
     registry = QgsSymbolLayerV2Registry.instance()
     line_metadata = registry.symbolLayerMetadata("SimpleLine")
@@ -342,8 +349,8 @@ def simple_polygon_without_brush(layer):
     # Line layer
     line_layer = line_metadata.createSymbolLayer(
         {
-            'width': '0.26',
-            'color': '0,0,0',
+            'width': width,
+            'color': color.name(),
             'offset': '0',
             'penstyle': 'solid',
             'use_custom_dash': '0',
