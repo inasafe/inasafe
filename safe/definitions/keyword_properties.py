@@ -96,7 +96,7 @@ property_scale = {
 property_source = {
     'key': 'property_source',
     'name': tr('Source'),
-    'description': tr('The location of where does the layer come from.')
+    'description': tr('The location of where does the layer comes from.')
 }
 
 property_inasafe_fields = {
@@ -285,7 +285,7 @@ property_exposure_keywords = {
     'key': 'property_exposure_keywords',
     'name': tr('Exposure Keywords'),
     'description': tr(
-        'A copy of original exposure keywords of the output\'s analysis.'
+        'A copy of original exposure keywords in the output\'s analysis.'
     )
 }
 
@@ -293,7 +293,7 @@ property_hazard_keywords = {
     'key': 'property_hazard_keywords',
     'name': tr('Hazard Keywords'),
     'description': tr(
-        'A copy of original hazard keywords of the output\'s analysis.'
+        'A copy of original hazard keywords in the output\'s analysis.'
     )
 }
 
@@ -301,7 +301,7 @@ property_aggregation_keywords = {
     'key': 'property_aggregation_keywords',
     'name': tr('Aggregation Keywords'),
     'description': tr(
-        'A copy of original aggregation keywords of the output\'s analysis.'
+        'A copy of original aggregation keywords in the output\'s analysis.'
     )
 }
 
