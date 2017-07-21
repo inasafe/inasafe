@@ -1,27 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""
-extent_selector_dialog.py
--------------------------
-Based on original code from:
-Date                 : December 2010
-Copyright            : (C) 2010 by Giuseppe Sucameli
-Email                : brush dot tyler at gmail dot com
-Refactored and improved in Oct 2014 by Tim Sutton for InaSAFE.
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-.. versionadded:: 2.2.0
-"""
-
-__author__ = 'Giuseppe Sucameli & Tim Sutton'
-__date__ = 'December 2010'
-__copyright__ = '(C) 2010, Giuseppe Sucameli'
-# This will get replaced with a git SHA1 when you do a git archive
-__revision__ = '$Format:%H$'
+"""Extent selector dialog."""
 
 import logging
 import sqlite3
@@ -29,7 +8,7 @@ import sqlite3
 # pylint: disable=unused-import
 from qgis.core import QGis  # force sip2 api
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import pyqtSignal, pyqtSlot, pyqtSignature, QSettings
+from PyQt4.QtCore import pyqtSignal, pyqtSlot, pyqtSignature
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui
 # noinspection PyPackageRequirements
@@ -44,16 +23,23 @@ from qgis.core import (
     QgsCsException)
 
 from safe.definitions.constants import (
+    EXPOSURE,
     HAZARD_EXPOSURE,
     HAZARD_EXPOSURE_VIEW,
     HAZARD_EXPOSURE_BOOKMARK,
     HAZARD_EXPOSURE_BOUNDINGBOX)
 from safe.utilities.resources import html_header, html_footer, get_ui_class
 from safe.utilities.gis import wkt_to_rectangle
+from safe.utilities.settings import setting, set_setting
 
 from safe.gui.tools.rectangle_map_tool import RectangleMapTool
 from safe.messaging import styles
 from safe.gui.tools.help.extent_selector_help import extent_selector_help
+
+__copyright__ = "Copyright 2017, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
 LOGGER = logging.getLogger('InaSAFE')
@@ -61,8 +47,8 @@ FORM_CLASS = get_ui_class('extent_selector_dialog_base.ui')
 
 
 class ExtentSelectorDialog(QDialog, FORM_CLASS):
-    """Dialog for letting user determine analysis extents.
-    """
+
+    """Dialog for letting user determine analysis extents."""
 
     extent_defined = pyqtSignal(QgsRectangle, QgsCoordinateReferenceSystem)
     clear_extent = pyqtSignal()
@@ -74,14 +60,13 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
         :param iface: A Quantum GIS QGisAppInterface instance.
         :type iface: QGisAppInterface
 
-        :param parent: Parent widget of this dialog
+        :param parent: Parent widget of this dialog.
         :type parent: QWidget
 
         :param extent: Extent of the user's preferred analysis area.
         :type extent: QgsRectangle
 
-        :param crs: Coordinate reference system for user defined analysis
-            extent.
+        :param crs: CRS for user defined analysis extent.
         :type crs: QgsCoordinateReferenceSystem
         """
         QDialog.__init__(self, parent)
@@ -149,12 +134,12 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
             self.bookmarks_index_changed)
 
         # Reinstate the last used radio button
-        settings = QSettings()
-        mode = settings.value(
-            'inasafe/analysis_extents_mode', HAZARD_EXPOSURE_VIEW)
+        mode = setting('analysis_extents_mode', HAZARD_EXPOSURE_VIEW)
 
         if mode == HAZARD_EXPOSURE_VIEW:
             self.hazard_exposure_view_extent.setChecked(True)
+        elif mode == EXPOSURE:
+            self.exposure_only.setChecked(True)
         elif mode == HAZARD_EXPOSURE:
             self.hazard_exposure_only.setChecked(True)
         elif mode == HAZARD_EXPOSURE_BOOKMARK:
@@ -162,19 +147,10 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
         elif mode == HAZARD_EXPOSURE_BOUNDINGBOX:
             self.hazard_exposure_user_extent.setChecked(True)
 
-        show_warnings = settings.value(
-            'inasafe/show_extent_warnings', True, type=bool)
-        if show_warnings:
-            self.show_warnings.setChecked(True)
-        else:
-            self.show_warnings.setChecked(False)
-
-        show_confirmations = settings.value(
-            'inasafe/show_extent_confirmations', True, type=bool)
-        if show_confirmations:
-            self.show_confirmations.setChecked(True)
-        else:
-            self.show_confirmations.setChecked(False)
+        self.show_warnings.setChecked(
+            setting('show_extent_warnings', True, bool))
+        self.show_confirmations.setChecked(
+            setting('show_extent_confirmations', True, bool))
 
     @pyqtSlot()
     @pyqtSignature('bool')  # prevents actions being handled twice
@@ -251,6 +227,8 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
         mode = None
         if self.hazard_exposure_view_extent.isChecked():
             mode = HAZARD_EXPOSURE_VIEW
+        elif self.exposure_only.isChecked():
+            mode = EXPOSURE
         elif self.hazard_exposure_only.isChecked():
             mode = HAZARD_EXPOSURE
         elif self.hazard_exposure_bookmark.isChecked():
@@ -258,8 +236,7 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
         elif self.hazard_exposure_user_extent.isChecked():
             mode = HAZARD_EXPOSURE_BOUNDINGBOX
 
-        settings = QSettings()
-        settings.setValue('inasafe/analysis_extents_mode', mode)
+        set_setting('analysis_extents_mode', mode)
 
         self.canvas.unsetMapTool(self.tool)
         if self.previous_map_tool != self.tool:
@@ -276,12 +253,9 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
             self.clear_extent.emit()
 
         # State handlers for showing warning message bars
-        settings.setValue(
-            'inasafe/show_extent_warnings',
-            self.show_warnings.isChecked())
-        settings.setValue(
-            'inasafe/show_extent_confirmations',
-            self.show_confirmations.isChecked())
+        set_setting('show_extent_warnings', self.show_warnings.isChecked())
+        set_setting(
+            'show_extent_confirmations', self.show_confirmations.isChecked())
 
         self.tool.reset()
         self.extent_selector_closed.emit()

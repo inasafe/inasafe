@@ -20,11 +20,13 @@ FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
 class StepFcExtentDisjoint(WizardStep, FORM_CLASS):
+
     """Function Centric Wizard Step: Extent Disjoints"""
 
     def is_ready_to_next_step(self):
-        """Check if the step is complete. If so, there is
-            no reason to block the Next button.
+        """Check if the step is complete.
+
+        If so, there is no reason to block the Next button.
 
         :returns: True if new step may be enabled.
         :rtype: bool
@@ -35,13 +37,13 @@ class StepFcExtentDisjoint(WizardStep, FORM_CLASS):
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.
 
-        :returns: The step to be switched to
+        :returns: The step to be switched to.
         :rtype: WizardStep instance or None
         """
         return None
 
     def set_widgets(self):
-        """Set widgets on the Extent Disjoint tab"""
+        """Set widgets on the Extent Disjoint tab."""
         self.lblIconDisjoint_3.setPixmap(
             QPixmap(resources_path('img', 'wizard', 'icon-stop.svg')))
 
@@ -58,7 +60,7 @@ class StepFcExtentDisjoint(WizardStep, FORM_CLASS):
     def help_content(self):
         """Return the content of help for this step wizard.
 
-            We only needs to re-implement this method in each wizard step.
+        We only needs to re-implement this method in each wizard step.
 
         :returns: A message object contains help.
         :rtype: m.Message

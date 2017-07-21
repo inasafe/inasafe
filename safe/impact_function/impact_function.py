@@ -180,6 +180,8 @@ class ImpactFunction(object):
         self._requested_extent = None
         # Requested extent's CRS
         self._requested_extent_crs = None
+        # Use exposure view only
+        self.use_exposure_view_only = False
 
         # The current extent defined by the impact function. Read-only.
         # The CRS is the exposure CRS.
@@ -858,6 +860,15 @@ class ImpactFunction(object):
                     )
                     return PREPARE_FAILED_BAD_INPUT, message
 
+                if self.use_exposure_view_only:
+                    message = generate_input_error_message(
+                        tr('Error with the requested extent'),
+                        m.Paragraph(tr(
+                            'Use exposure view only can not be set to True if '
+                            'you use an aggregation layer.'))
+                    )
+                    return PREPARE_FAILED_BAD_INPUT, message
+
                 status, message = self._check_layer(
                     self.aggregation, 'aggregation')
                 aggregation_source = self.aggregation.publicSource()
@@ -875,6 +886,15 @@ class ImpactFunction(object):
                         m.Paragraph(tr(
                             'Requested Extent CRS must be set when requested '
                             'is not null.'))
+                    )
+                    return PREPARE_FAILED_BAD_INPUT, message
+
+                if self.requested_extent and self.use_exposure_view_only:
+                    message = generate_input_error_message(
+                        tr('Error with the requested extent'),
+                        m.Paragraph(tr(
+                            'Requested Extent must be null when you use the '
+                            'exposure view only.'))
                     )
                     return PREPARE_FAILED_BAD_INPUT, message
 
@@ -1014,6 +1034,10 @@ class ImpactFunction(object):
                 else:
                     self._analysis_extent = hazard_exposure.intersection(
                         user_bounding_box)
+
+            elif self.use_exposure_view_only:
+                self._analysis_extent = exposure_extent
+
             else:
                 self._analysis_extent = hazard_exposure
 
