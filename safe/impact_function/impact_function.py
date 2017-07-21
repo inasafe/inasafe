@@ -71,6 +71,12 @@ from safe.definitions.layer_purposes import (
     layer_purpose_exposure_summary_table,
     layer_purpose_profiling,
 )
+from safe.definitions.styles import (
+    aggregation_color,
+    aggregation_width,
+    analysis_color,
+    analysis_width,
+)
 from safe.impact_function.provenance_utilities import (
     get_map_title, get_analysis_question)
 
@@ -1973,8 +1979,10 @@ class ImpactFunction(object):
                     hazard_class_style(layer, classes, display_not_exposed)
 
         # Let's style the aggregation and analysis layer.
-        simple_polygon_without_brush(self.aggregation_summary)
-        simple_polygon_without_brush(self.analysis_impacted)
+        simple_polygon_without_brush(
+            self.aggregation_summary, aggregation_width, aggregation_color)
+        simple_polygon_without_brush(
+            self.analysis_impacted, analysis_width, analysis_color)
 
     @property
     def provenance(self):
