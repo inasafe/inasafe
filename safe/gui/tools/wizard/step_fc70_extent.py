@@ -22,22 +22,23 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 class StepFcExtent(WizardStep, FORM_CLASS):
+
     """InaSAFE Wizard Step Extent Selection."""
 
     def __init__(self, parent=None):
         """Constructor for the tab.
 
-        :param parent: parent - widget to use as parent (Wizad Dialog).
+        :param parent: parent - widget to use as parent (Wizard Dialog).
         :type parent: QWidget
-
         """
         WizardStep.__init__(self, parent)
         self.swExtent = None
         self.extent_dialog = None
 
     def is_ready_to_next_step(self):
-        """Check if the step is complete. If so, there is
-            no reason to block the Next button.
+        """Check if the step is complete.
+
+        If so, there is no reason to block the Next button.
 
         :returns: True if new step may be enabled.
         :rtype: bool
@@ -47,7 +48,7 @@ class StepFcExtent(WizardStep, FORM_CLASS):
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.
 
-        :returns: The step to be switched to
+        :returns: The step to be switched to.
         :rtype: WizardStep instance or None
         """
         if self.validate_extent():
@@ -59,26 +60,25 @@ class StepFcExtent(WizardStep, FORM_CLASS):
     def validate_extent(self):
         """Check if the selected extent intersects source data.
 
-        :returns: true if extent intersects both layers, false if is disjoint
+        :returns: true if extent intersects both layers, false if is disjoint.
         :rtype: boolean
         """
         # TODO: Until we define have good extent behavior, always return True
         return True
 
     def start_capture_coordinates(self):
-        """Enter the coordinate capture mode"""
+        """Enter the coordinate capture mode."""
         self.parent.hide()
 
     def stop_capture_coordinates(self):
-        """Exit the coordinate capture mode"""
+        """Exit the coordinate capture mode."""
         self.extent_dialog._populate_coordinates()
         self.extent_dialog.canvas.setMapTool(
             self.extent_dialog.previous_map_tool)
         self.parent.show()
 
     def write_extent(self):
-        """ After the extent selection,
-            save the extent and disconnect signals
+        """After the extent selection, save the extent and disconnect signals.
         """
         self.extent_dialog.accept()
         self.extent_dialog.clear_extent.disconnect(
@@ -91,7 +91,7 @@ class StepFcExtent(WizardStep, FORM_CLASS):
             self.stop_capture_coordinates)
 
     def set_widgets(self):
-        """Set widgets on the Extent tab"""
+        """Set widgets on the Extent tab."""
         self.extent_dialog = ExtentSelectorDialog(
             self.parent.iface,
             self.parent.iface.mainWindow(),
@@ -130,7 +130,7 @@ class StepFcExtent(WizardStep, FORM_CLASS):
     def help_content(self):
         """Return the content of help for this step wizard.
 
-            We only needs to re-implement this method in each wizard step.
+        We only needs to re-implement this method in each wizard step.
 
         :returns: A message object contains help.
         :rtype: m.Message

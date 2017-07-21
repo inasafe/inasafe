@@ -26,6 +26,7 @@ from safe.definitions.layer_purposes import (
 )
 from safe.definitions.constants import (
     inasafe_keyword_version_key,
+    EXPOSURE,
     HAZARD_EXPOSURE_VIEW,
     HAZARD_EXPOSURE_BOUNDINGBOX,
     ANALYSIS_FAILED_BAD_INPUT,
@@ -333,7 +334,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         if self.organisation_logo_path:
             dock_width = float(self.width())
 
-            # Dont let the image be more tha 100px hight
+            # Dont let the image be more than 100px height
             maximum_height = 100.0  # px
             pixmap = QtGui.QPixmap(self.organisation_logo_path)
             # it will throw Overflow Error if pixmap.height() == 0
@@ -622,7 +623,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     (layer not in canvas_layers)):
                 continue
 
-            # .. todo:: check raster is single band
             #    store uuid in user property of list widget for layers
 
             name = layer.name()
@@ -701,7 +701,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         :returns: The currently selected map layer in the hazard combo.
         :rtype: QgsMapLayer
-
         """
         index = self.hazard_layer_combo.currentIndex()
         if index < 0:
@@ -871,9 +870,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         If the active layer is changed and it has keywords and a report,
         show the report.
 
-        :param layer: QgsMapLayer instance that is now active
+        :param layer: QgsMapLayer instance that is now active.
         :type layer: QgsMapLayer, QgsRasterLayer, QgsVectorLayer
-
         """
         # Don't handle this event if we are already handling another layer
         # addition or removal event.
@@ -1289,6 +1287,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 wkt = self.extent.user_extent.exportToWkt()
                 impact_function.requested_extent = wkt_to_rectangle(wkt)
                 impact_function.requested_extent_crs = self.extent.crs
+
+            elif mode == EXPOSURE:
+                impact_function.use_exposure_view_only = True
 
             elif mode == HAZARD_EXPOSURE_VIEW:
                 impact_function.requested_extent = (

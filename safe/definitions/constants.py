@@ -29,6 +29,7 @@ qvariant_numbers = qvariant_whole_numbers + [
 ]
 
 # Extent selector
+EXPOSURE = 'Exposure'
 HAZARD_EXPOSURE = 'HazardExposure'
 HAZARD_EXPOSURE_VIEW = 'HazardExposureView'
 HAZARD_EXPOSURE_BOOKMARK = 'HazardExposureBookmark'
