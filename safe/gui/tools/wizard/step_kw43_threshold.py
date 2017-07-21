@@ -251,6 +251,6 @@ class StepKwThreshold(WizardStep, FORM_CLASS):
         message = m.Message()
         message.add(m.Paragraph(tr(
             'In this wizard step: {step_name}, you will be able to set the '
-            'threshold of each class in the classification that use choose in '
-            'the previous step.').format(step_name=self.step_name)))
+            'threshold of each class in the classification that you choosed '
+            'in the previous step.').format(step_name=self.step_name)))
         return message
