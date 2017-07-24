@@ -17,11 +17,8 @@ from qgis.core import (
     QgsMapLayer,
     QgsMapLayerRegistry,
     QgsCoordinateReferenceSystem,
-    QgsProject,
-    QGis,
-    QgsExpressionContextUtils,
-    QgsExpressionContext,
-    QgsExpressionContextScope)
+    QgsExpressionContextUtils
+)
 
 from safe.definitions.layer_purposes import (
     layer_purpose_exposure_summary,
@@ -44,6 +41,7 @@ from safe.definitions.constants import (
     PREPARE_FAILED_BAD_LAYER,
     PREPARE_SUCCESS,
 )
+from safe.definitions.provenances import provenance_list
 from safe.definitions.utilities import map_report_component
 from safe.defaults import supporters_logo_path
 from safe.definitions.reports import (
@@ -1415,7 +1413,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         :param provenances: Keys and values from provenances.
         :type provenances: dict
         """
-        # QgsExpressionContextUtils.setProjectVariable(provenances)
+        # Remove old provenance data first
+        self.remove_provenance_project_variables()
         for key, value in provenances.items():
             if isinstance(value, (str, unicode, Number)):
                 QgsExpressionContextUtils.setProjectVariable(key, value)
@@ -1426,7 +1425,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     key, value.isoformat())
             elif isinstance(value, dict):
                 QgsExpressionContextUtils.setProjectVariable(
-                    key, serialize_dictionary(value))
+                    key, json.dumps(serialize_dictionary(value)))
             elif isinstance(value, (list, tuple, set)):
                 QgsExpressionContextUtils.setProjectVariable(
                     key, json.dumps(value))
@@ -1434,3 +1433,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 LOGGER.warning('Not handled provenance')
                 LOGGER.warning('Key: %s, Type: %s, Value: %s' % (
                     key, type(value), value))
+
+    def remove_provenance_project_variables(self):
+        """Removing variables from provenance data."""
+        project_context_scope = QgsExpressionContextUtils.projectScope()
+        for the_provenance in provenance_list:
+            project_context_scope.removeVariable(
+                the_provenance['provenance_key'])
