@@ -1,7 +1,6 @@
 # coding=utf-8
 """Module used to generate context for analysis detail section."""
-from safe.definitions.exposure import exposure_all, exposure_population, \
-    exposure_land_cover
+from safe.definitions.exposure import exposure_all, exposure_population
 from safe.definitions.fields import (
     exposure_type_field,
     exposure_class_field,
