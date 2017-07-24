@@ -15,7 +15,7 @@ from safe.definitions.layer_geometry import layer_geometry_raster
 from safe.definitions.utilities import get_fields, get_non_compulsory_fields
 from safe.gui.tools.wizard.wizard_step import (
     WizardStep, get_wizard_step_ui_class)
-from safe.gui.tools.wizard.wizard_utils import clear_layout, skip_inasafe_field
+from safe.gui.tools.wizard.utilities import clear_layout, skip_inasafe_field
 from safe.gui.tools.wizard.wizard_strings import (
     continuous_raster_question, continuous_vector_question)
 from safe.utilities.gis import is_raster_layer

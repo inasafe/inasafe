@@ -12,7 +12,7 @@ from safe.definitions.styles import (
 from safe.definitions.font import big_font
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
-from safe.gui.tools.wizard.wizard_utils import RoleHazard, RoleExposure
+from safe.gui.tools.wizard.utilities import RoleHazard, RoleExposure
 from safe.definitions.layer_purposes import (
     layer_purpose_exposure, layer_purpose_hazard)
 from safe.utilities.resources import resources_path

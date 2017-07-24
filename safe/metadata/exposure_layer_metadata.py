@@ -18,7 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 from safe.metadata.generic_layer_metadata import GenericLayerMetadata
-from safe.metadata.utils import merge_dictionaries
+from safe.metadata.utilities import merge_dictionaries
 
 
 class ExposureLayerMetadata(GenericLayerMetadata):

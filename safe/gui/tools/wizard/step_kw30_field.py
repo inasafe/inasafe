@@ -19,7 +19,7 @@ from safe.gui.tools.wizard.wizard_strings import (
     field_question_subcategory_unit,
     field_question_subcategory_classified,
     field_question_aggregation)
-from safe.gui.tools.wizard.wizard_utils import (
+from safe.gui.tools.wizard.utilities import (
     get_question_text, skip_inasafe_field)
 from safe.definitions.utilities import (
     get_fields, get_non_compulsory_fields, get_field_groups)

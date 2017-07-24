@@ -16,7 +16,7 @@ from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_strings import (
     select_function_constraints2_question)
-from safe.gui.tools.wizard.wizard_utils import (
+from safe.gui.tools.wizard.utilities import (
     RoleFunctions,
     RoleHazard,
     RoleExposure,

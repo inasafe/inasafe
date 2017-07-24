@@ -41,7 +41,7 @@ from safe.gui.tools.wizard.wizard_strings import (
     category_question_hazard,
     category_question_exposure,
     category_question_aggregation)
-from safe.gui.tools.wizard.wizard_utils import layer_description_html
+from safe.gui.tools.wizard.utilities import layer_description_html
 
 from safe.utilities.default_values import set_inasafe_default_value_qsetting
 from safe.utilities.gis import (
