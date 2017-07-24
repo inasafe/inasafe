@@ -13,7 +13,7 @@ from safe.definitions.layer_purposes import (
     layer_purpose_aggregation, layer_purpose_hazard, layer_purpose_exposure)
 from safe.gui.tools.wizard.wizard_step import (
     WizardStep, get_wizard_step_ui_class)
-from safe.gui.tools.wizard.wizard_utils import skip_inasafe_field
+from safe.gui.tools.wizard.utilities import skip_inasafe_field
 from safe.definitions.utilities import get_fields, get_non_compulsory_fields
 from safe.gui.widgets.field_mapping_widget import FieldMappingWidget
 from safe.gui.tools.help.field_mapping_help import field_mapping_help_content

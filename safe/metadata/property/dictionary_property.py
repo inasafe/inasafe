@@ -8,7 +8,7 @@ from datetime import datetime
 
 from safe.common.exceptions import MetadataCastError
 from safe.metadata.property import BaseProperty
-from safe.metadata.utils import serialize_dictionary
+from safe.metadata.utilities import serialize_dictionary
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

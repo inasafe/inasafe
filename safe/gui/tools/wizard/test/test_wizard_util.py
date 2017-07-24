@@ -5,7 +5,7 @@ import unittest
 from safe.test.utilities import get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe.gui.tools.wizard.wizard_utils import get_question_text
+from safe.gui.tools.wizard.utilities import get_question_text
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

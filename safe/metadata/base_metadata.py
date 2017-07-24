@@ -14,14 +14,14 @@ from xml.etree import ElementTree
 
 from safe.common.exceptions import MetadataReadError, HashNotFoundError
 from safe.metadata.metadata_db_io import MetadataDbIO
-from safe.metadata.utils import (
+from safe.metadata.utilities import (
     insert_xml_element,
     read_property_from_xml,
     reading_ancillary_files
 )
 from safe.metadata.constants import (
     TYPE_CONVERSIONS, METADATA_XML_TEMPLATE)
-from safe.metadata.utils import XML_NS
+from safe.metadata.utilities import XML_NS
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

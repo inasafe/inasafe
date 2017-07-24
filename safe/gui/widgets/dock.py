@@ -64,7 +64,7 @@ from safe.utilities.utilities import (
     add_ordered_combo_item,
     is_keyword_version_supported,
 )
-from safe.metadata.utils import serialize_dictionary
+from safe.metadata.utilities import serialize_dictionary
 from safe.utilities.settings import setting, set_setting
 from safe.utilities.resources import get_ui_class
 from safe.utilities.qgis_utilities import (

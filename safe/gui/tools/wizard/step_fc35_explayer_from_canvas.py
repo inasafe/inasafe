@@ -15,7 +15,7 @@ from safe.utilities.resources import resources_path
 
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step import WizardStep
-from safe.gui.tools.wizard.wizard_utils import layers_intersect
+from safe.gui.tools.wizard.utilities import layers_intersect
 
 from safe import messaging as m
 from safe.utilities.i18n import tr

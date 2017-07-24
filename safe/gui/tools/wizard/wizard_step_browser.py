@@ -37,7 +37,7 @@ from safe.gui.tools.wizard.layer_browser_proxy_model import (
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_strings import (
     create_postGIS_connection_first)
-from safe.gui.tools.wizard.wizard_utils import layer_description_html
+from safe.gui.tools.wizard.utilities import layer_description_html
 from safe.utilities.gis import qgis_version
 from safe.utilities.utilities import is_keyword_version_supported
 
