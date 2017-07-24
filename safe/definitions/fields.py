@@ -7,6 +7,7 @@ from PyQt4.QtCore import QVariant
 from safe.definitions import concepts
 from safe.definitions.constants import (
     qvariant_whole_numbers, qvariant_numbers)
+from safe.definitions.currencies import currencies
 from safe.definitions.default_values import (
     female_ratio_default_value,
     male_ratio_default_value,
@@ -23,6 +24,7 @@ from safe.definitions.default_values import (
     pregnant_ratio_default_value,
     lactating_ratio_default_value
 )
+from safe.definitions.units import unit_quintal
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -2161,6 +2163,7 @@ affected_productivity_field = {
     'key': 'affected_productivity_field',
     'name': tr('Affected Productivity'),
     'field_name': 'affected_productivity',
+    'header_name': tr('Productivity'),
     'type': QVariant.Double,
     'length': default_field_length,
     'precision': default_field_precision,
@@ -2180,6 +2183,7 @@ affected_productivity_field = {
     ],
     # Null value can be replaced by default or not
     'replace_null': False,
+    'units': [unit_quintal]
 }
 
 # Productivity cost field
@@ -2234,6 +2238,7 @@ affected_productivity_cost_field = {
     'key': 'affected_productivity_cost_field',
     'name': tr('Affected Productivity Cost'),
     'field_name': 'affected_productivity_cost',
+    'header_name': tr('Production Cost'),
     'type': QVariant.Double,
     'length': default_field_length,
     'precision': default_field_precision,
@@ -2252,6 +2257,7 @@ affected_productivity_cost_field = {
     ],
     # Null value can be replaced by default or not
     'replace_null': False,
+    'units': currencies,
 }
 
 
@@ -2307,6 +2313,7 @@ affected_productivity_value_field = {
     'key': 'affected_productivity_value_field',
     'name': tr('Affected Productivity Value'),
     'field_name': 'affected_productivity_value',
+    'header_name': tr('Production Value'),
     'type': QVariant.Double,
     'length': default_field_length,
     'precision': default_field_precision,
@@ -2325,6 +2332,7 @@ affected_productivity_value_field = {
     ],
     # Null value can be replaced by default or not
     'replace_null': False,
+    'units': currencies,
 }
 
 # Inputs

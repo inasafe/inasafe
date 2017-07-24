@@ -40,7 +40,10 @@ from safe.definitions.fields import (
     youth_displaced_count_field,
     adult_displaced_count_field,
     elderly_displaced_count_field,
-    exposure_count_field)
+    exposure_count_field,
+    affected_productivity_field,
+    affected_productivity_cost_field,
+    affected_productivity_value_field)
 from safe.definitions.styles import charcoal_black
 from safe.report.extractors.action_notes import (
     action_checklist_extractor,
@@ -224,7 +227,16 @@ analysis_detail_component = {
         'header': tr('Analysis Detail'),
         'table_header_format': tr(
             'Estimated {title} {unit} by {exposure} type'),
-        'notes': []
+        'notes': [],
+        'extra_table_header_format': tr(
+            'Estimated loss by affected {exposure} type'),
+        'exposure_extra_fields': {
+            exposure_land_cover['key']: [
+                affected_productivity_field,
+                affected_productivity_cost_field,
+                affected_productivity_value_field,
+            ],
+        },
     }
 }
 
