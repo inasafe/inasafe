@@ -1,12 +1,14 @@
-# -*- coding: utf-8 -*-
+# coding=utf-8
+
+"""Dictionary property"""
 
 import json
 from types import NoneType
-from PyQt4.QtCore import QUrl, QDate, QDateTime, Qt
-from datetime import datetime, date
+from datetime import datetime
 
 from safe.common.exceptions import MetadataCastError
 from safe.metadata.property import BaseProperty
+from safe.metadata.utils import serialize_dictionary
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -59,37 +61,12 @@ class DictionaryProperty(BaseProperty):
             try:
                 return json.dumps(self.value)
             except (TypeError, ValueError):
-                string_value = self.serialize_dictionary(self.value)
+                string_value = serialize_dictionary(self.value)
                 return json.dumps(string_value)
 
         elif self.python_type is NoneType:
             return ''
         else:
-            raise RuntimeError('self._allowed_python_types and self.xml_value'
-                               'are out of sync. This should never happen')
-
-    def serialize_dictionary(self, dictionary):
-        """Function to stringify a dictionary recursively.
-
-        :param dictionary: The dictionary.
-        :type dictionary: dict
-
-        :return: The string.
-        :rtype: basestring
-        """
-        string_value = {}
-        for k, v in dictionary.items():
-            if isinstance(v, QUrl):
-                string_value[k] = v.toString()
-            elif isinstance(v, (QDate, QDateTime)):
-                string_value[k] = v.toString(Qt.ISODate)
-            elif isinstance(v, datetime):
-                string_value[k] = v.isoformat()
-            elif isinstance(v, date):
-                string_value[k] = v.isoformat()
-            elif isinstance(v, dict):
-                # Recursive call
-                string_value[k] = self.serialize_dictionary(v)
-            else:
-                string_value[k] = v
-        return string_value
+            raise RuntimeError(
+                'self._allowed_python_types and self.xml_value are out of '
+                'sync. This should never happen')

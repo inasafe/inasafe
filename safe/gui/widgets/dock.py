@@ -5,6 +5,9 @@ import os
 import shutil
 import logging
 import codecs
+import json
+from datetime import datetime
+from numbers import Number
 
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import Qt, pyqtSlot
@@ -15,7 +18,10 @@ from qgis.core import (
     QgsMapLayerRegistry,
     QgsCoordinateReferenceSystem,
     QgsProject,
-    QGis)
+    QGis,
+    QgsExpressionContextUtils,
+    QgsExpressionContext,
+    QgsExpressionContextScope)
 
 from safe.definitions.layer_purposes import (
     layer_purpose_exposure_summary,
@@ -58,6 +64,7 @@ from safe.utilities.utilities import (
     add_ordered_combo_item,
     is_keyword_version_supported,
 )
+from safe.metadata.utils import serialize_dictionary
 from safe.utilities.settings import setting, set_setting
 from safe.utilities.resources import get_ui_class
 from safe.utilities.qgis_utilities import (
@@ -895,6 +902,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 layer_purpose_exposure_summary_table['key'],
             ]
 
+            provenances = keywords.get('provenance_data', {})
+            LOGGER.debug('Set Keywords')
+            self.set_provenance_to_project_variables(provenances)
+
             show_keywords = True
             if keywords.get('layer_purpose') in impacted_layer:
                 report_path = os.path.dirname(layer.source())
@@ -1041,7 +1052,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         pdf_output_paths = retrieve_paths(pdf_products, '.pdf')
 
         html_products = retrieve_components(
-                [final_product_tag, html_product_tag])
+            [final_product_tag, html_product_tag])
         html_output_paths = retrieve_paths(html_products, '.html')
 
         qpt_products = retrieve_components(
@@ -1397,3 +1408,29 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             return False, message
         else:
             return True, None
+
+    def set_provenance_to_project_variables(self, provenances):
+        """Helper method to update / create provenance in project variables.
+
+        :param provenances: Keys and values from provenances.
+        :type provenances: dict
+        """
+        # QgsExpressionContextUtils.setProjectVariable(provenances)
+        for key, value in provenances.items():
+            if isinstance(value, (str, unicode, Number)):
+                QgsExpressionContextUtils.setProjectVariable(key, value)
+            elif isinstance(value, type(None)):
+                QgsExpressionContextUtils.setProjectVariable(key, '')
+            elif isinstance(value, datetime):
+                QgsExpressionContextUtils.setProjectVariable(
+                    key, value.isoformat())
+            elif isinstance(value, dict):
+                QgsExpressionContextUtils.setProjectVariable(
+                    key, serialize_dictionary(value))
+            elif isinstance(value, (list, tuple, set)):
+                QgsExpressionContextUtils.setProjectVariable(
+                    key, json.dumps(value))
+            else:
+                LOGGER.warning('Not handled provenance')
+                LOGGER.warning('Key: %s, Type: %s, Value: %s' % (
+                    key, type(value), value))
