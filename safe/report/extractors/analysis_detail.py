@@ -1,6 +1,7 @@
 # coding=utf-8
 """Module used to generate context for analysis detail section."""
-from safe.definitions.exposure import exposure_all, exposure_population
+from safe.definitions.exposure import exposure_all, exposure_population, \
+    exposure_land_cover
 from safe.definitions.fields import (
     exposure_type_field,
     exposure_class_field,
@@ -16,6 +17,7 @@ from safe.report.extractors.util import (
     retrieve_exposure_classes_lists)
 from safe.utilities.i18n import tr
 from safe.utilities.rounding import format_number
+from safe.utilities.settings import setting
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -490,5 +492,71 @@ def analysis_detail_extractor(impact_report, component_metadata):
         'details': details,
         'footers': footers,
     }
+
+    context['extra_table'] = {}
+
+    # extra table for specific exposure if exist
+    extra_fields = resolve_from_dictionary(extra_args, 'exposure_extra_fields')
+    if exposure_type['key'] in extra_fields.keys():
+
+        # create header for the extra table
+        extra_table_header_format = resolve_from_dictionary(
+            extra_args, 'extra_table_header_format')
+        extra_table_header = extra_table_header_format.format(
+            exposure=exposure_header)
+
+        # headers
+        headers = []
+        headers.append(
+            breakdown_header_template.format(exposure=exposure_header))
+
+        current_unit = None
+        currency_unit = setting('currency', expected_type=str)
+        for field in extra_fields[exposure_type['key']]:
+            units = field.get('units')
+            if units:
+                for unit in units:
+                    if currency_unit == unit['key']:
+                        current_unit = currency_unit
+                        break
+                if not current_unit:
+                    current_unit = units[0]['key']
+
+            header_format = '{header} ({unit})'
+            headers.append(header_format.format(
+                header=field['header_name'], unit=current_unit))
+
+        # rows
+        details = []
+        for feat in exposure_summary_table.getFeatures():
+            row = []
+
+            # Get breakdown name
+            exposure_summary_table_field_name = breakdown_field['field_name']
+            field_index = exposure_summary_table.fieldNameIndex(
+                exposure_summary_table_field_name)
+            class_key = feat[field_index]
+
+            row.append(class_key)
+
+            for field in extra_fields[exposure_type['key']]:
+                field_index = exposure_summary_table.fieldNameIndex(
+                    field['field_name'])
+                total_count = int(float(feat[field_index]))
+                total_count = format_number(
+                    total_count,
+                    enable_rounding=is_rounding,
+                    is_population=is_population)
+                row.append(total_count)
+
+            details.append(row)
+
+        details = sorted(details, key=sort_classes)
+
+        context['extra_table'] = {
+            'table_header': extra_table_header,
+            'headers': headers,
+            'details': details,
+        }
 
     return context
