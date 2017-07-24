@@ -6,7 +6,8 @@ from xml.etree import ElementTree
 from safe.metadata import BaseMetadata
 
 from safe.metadata.provenance import Provenance
-from safe.metadata.utils import reading_ancillary_files, XML_NS, prettify_xml
+from safe.metadata.utils import reading_ancillary_files, prettify_xml
+from safe.metadata.utils import XML_NS
 from safe.metadata.utils import merge_dictionaries
 from safe.metadata.encoder import MetadataEncoder
 
