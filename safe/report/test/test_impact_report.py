@@ -641,9 +641,9 @@ class TestImpactReport(unittest.TestCase):
                                       u'InaSAFE v4 GeoJSON test layer - '}),
                     ('impact_function', {
                         'header': u'Impact Function',
-                        'provenance': u'Hazard_Generic '
+                        'provenance': u'Generic Hazard '
                                       u'Polygon On '
-                                      u'Structure Point'})
+                                      u'Structures Point'})
                 ])
         }
 
@@ -695,7 +695,7 @@ class TestImpactReport(unittest.TestCase):
             'header': u'Analysis details',
             'details': OrderedDict([('impact_function', {
                 'header': u'Impact Function',
-                'provenances': u'Hazard_Generic Polygon On Structure Point'
+                'provenances': u'Generic Hazard Polygon On Structures Point'
             }), ('hazard', {
                 'header': u'Hazard',
                 'provenances': OrderedDict([('title', {

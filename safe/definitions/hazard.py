@@ -78,7 +78,7 @@ continuous_hazard_unit = {
 continuous_hazard_unit_all = continuous_hazard_unit['types']
 hazard_generic = {
     'key': 'hazard_generic',
-    'name': tr('Generic'),
+    'name': tr('Generic Hazard'),
     'description': tr(
         'A <b>generic hazard</b> can be used for any type of hazard where the '
         'data have been classified or generalised. For example: earthquake, '

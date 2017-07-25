@@ -216,7 +216,7 @@ class TestImpactFunction(unittest.TestCase):
         impact_function.exposure = exposure_layer
         impact_function.hazard = hazard_layer
         impact_function.prepare()
-        self.assertEqual(impact_function.name, 'Flood Polygon On Road Line')
+        self.assertEqual(impact_function.name, 'Flood Polygon On Roads Line')
         self.assertEqual(impact_function.title, 'be affected')
 
     def test_minimum_extent(self):
