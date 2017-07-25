@@ -54,7 +54,11 @@ from safe.gis.raster.reclassify import reclassify as reclassify_raster
 from safe.gis.raster.polygonize import polygonize
 from safe.gis.raster.zonal_statistics import zonal_stats
 from safe.definitions.analysis_steps import analysis_steps
-from safe.definitions.utilities import definition, get_non_compulsory_fields
+from safe.definitions.utilities import (
+    definition,
+    get_non_compulsory_fields,
+    get_name
+)
 from safe.definitions.exposure import indivisible_exposure
 from safe.definitions.fields import (
     size_field,
@@ -929,14 +933,12 @@ class ImpactFunction(object):
                 return status, message
 
             # Set the name
-            hazard_name = definition(
-                self.hazard.keywords.get('hazard'))['name']
-            exposure_name = definition(
-                self.exposure.keywords.get('exposure'))['name']
-            hazard_geometry_name = definition(
-                self.hazard.keywords.get('layer_geometry'))['name']
-            exposure_geometry_name = definition(
-                self.exposure.keywords.get('layer_geometry'))['name']
+            hazard_name = get_name(self.hazard.keywords.get('hazard'))
+            exposure_name = get_name(self.exposure.keywords.get('exposure'))
+            hazard_geometry_name = get_name(
+                self.hazard.keywords.get('layer_geometry'))
+            exposure_geometry_name = get_name(
+                self.exposure.keywords.get('layer_geometry'))
             self._name = tr(
                 '{hazard_type} {hazard_geometry} On {exposure_type} '
                 '{exposure_geometry}').format(
@@ -944,7 +946,7 @@ class ImpactFunction(object):
                 hazard_geometry=hazard_geometry_name,
                 exposure_type=exposure_name,
                 exposure_geometry=exposure_geometry_name
-            )
+            ).title()
 
             # Set the title
             if self.exposure.keywords.get('exposure') == 'population':

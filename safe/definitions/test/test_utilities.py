@@ -67,7 +67,8 @@ from safe.definitions.utilities import (
     default_classification_value_maps,
     fields_in_field_groups,
     get_field_groups,
-    map_report_component
+    map_report_component,
+    get_name
 )
 
 from safe.common.utilities import safe_dir
@@ -94,6 +95,15 @@ class TestDefinitionsUtilities(unittest.TestCase):
         keyword = 'hazards'
         keyword_definition = definition(keyword)
         self.assertTrue('description' in keyword_definition)
+
+    def test_get_name(self):
+        """Test get_name method."""
+        flood_name = get_name(hazard_flood['key'])
+        self.assertEqual(flood_name, hazard_flood['name'])
+
+        not_exist_key = 'Mega flux capacitor'
+        not_found_name = get_name(not_exist_key)
+        self.assertEqual(not_exist_key, not_found_name)
 
     def test_layer_purpose_for_layer(self):
         """Test for purpose_for_layer method."""
