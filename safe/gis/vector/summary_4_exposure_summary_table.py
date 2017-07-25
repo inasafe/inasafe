@@ -2,6 +2,8 @@
 
 """Aggregate the aggregate hazard to the analysis layer."""
 
+from numbers import Number
+
 from PyQt4.QtCore import QPyNullVariant
 from qgis.core import QGis, QgsFeatureRequest, QgsFeature
 
@@ -304,9 +306,9 @@ def summarize_result(exposure_summary, callback=None):
                     summarizer_field['key']]:
                     summarization_dicts[summarizer_field['key']][
                         exposure_class_name] = 0
-
-                summarization_dicts[summarizer_field['key']][
-                    exposure_class_name] += feature[
-                    summarizer_field['field_name']]
+                value = feature[summarizer_field['field_name']]
+                if isinstance(value, Number):
+                    summarization_dicts[summarizer_field['key']][
+                        exposure_class_name] += value
 
     return summarization_dicts
