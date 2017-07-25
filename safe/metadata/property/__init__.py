@@ -1,4 +1,5 @@
 # coding=utf-8
+
 """Property init file."""
 
 # expose for nicer imports
@@ -13,8 +14,6 @@ from safe.metadata.property.integer_property import IntegerProperty
 from safe.metadata.property.boolean_property import BooleanProperty
 from safe.metadata.property.float_property import FloatProperty
 from safe.metadata.property.list_property import ListProperty
-from safe.metadata.property.tuple_property import TupleProperty
-from safe.metadata.property.float_tuple_property import FloatTupleProperty
 # pylint: enable=unused-import
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

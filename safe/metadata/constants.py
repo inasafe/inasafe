@@ -13,8 +13,6 @@ from safe.metadata.property import (
     BooleanProperty,
     FloatProperty,
     ListProperty,
-    TupleProperty,
-    FloatTupleProperty
 )
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
@@ -33,8 +31,6 @@ TYPE_CONVERSIONS = {
     'gco:Boolean': BooleanProperty,
     'gco:Float': FloatProperty,
     'gco:List': ListProperty,
-    'gco:Tuple': TupleProperty,
-    'gco:FloatTuple': FloatTupleProperty,
 }
 # XML Namespaces
 METADATA_XML_TEMPLATE = os.path.join(
