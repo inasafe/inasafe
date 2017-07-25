@@ -1437,6 +1437,12 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
     def remove_provenance_project_variables(self):
         """Removing variables from provenance data."""
         project_context_scope = QgsExpressionContextUtils.projectScope()
+        existing_variable_names = project_context_scope.variableNames()
+        existing_variables = {}
+        for existing_variable_name in existing_variable_names:
+            existing_variables[existing_variable_name] = \
+                project_context_scope.variable(existing_variable_name)
         for the_provenance in provenance_list:
-            project_context_scope.removeVariable(
-                the_provenance['provenance_key'])
+            if the_provenance['provenance_key'] in existing_variables:
+                existing_variables.pop(the_provenance['provenance_key'])
+        QgsExpressionContextUtils.setProjectVariables(existing_variables)
