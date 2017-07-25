@@ -1452,6 +1452,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # Remove old provenance data first
         self.remove_provenance_project_variables()
         for key, value in provenances.items():
+            if QgsExpressionContextUtils.globalScope().hasVariable(key):
+                continue
             write_project_variable(key, value)
 
     def remove_provenance_project_variables(self):
