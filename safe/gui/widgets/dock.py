@@ -5,7 +5,6 @@ import os
 import shutil
 import logging
 import codecs
-import json
 from datetime import datetime
 from numbers import Number
 
@@ -1413,26 +1412,48 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         :param provenances: Keys and values from provenances.
         :type provenances: dict
         """
-        # Remove old provenance data first
-        self.remove_provenance_project_variables()
-        for key, value in provenances.items():
-            if isinstance(value, (str, unicode, Number)):
+        def write_project_variable(key, value):
+            """Helper to write project variable for base_key and value.
+
+            The key will be:
+            - base_key__KEY: value for dictionary.
+            - base_key__INDEX: value for list, tuple, set.
+            - date will be converted to ISO.
+            - None will be converted to ''.
+
+            :param key: The key.
+            :type key: basestring
+
+            :param value: A list of dictionary.
+            :type value: dict, list, tuple, set
+            """
+            if isinstance(value, (list, tuple, set)):
+                for element_index, element_value in enumerate(value):
+                    write_project_variable(
+                        '%s__%s' % (key, element_index), element_value)
+            elif isinstance(value, dict):
+                for dict_key, dict_value in value.items():
+                    write_project_variable(
+                        '%s__%s' % (key, dict_key), dict_value)
+            elif isinstance(value, (bool, str, unicode, Number)):
                 QgsExpressionContextUtils.setProjectVariable(key, value)
             elif isinstance(value, type(None)):
                 QgsExpressionContextUtils.setProjectVariable(key, '')
             elif isinstance(value, datetime):
                 QgsExpressionContextUtils.setProjectVariable(
                     key, value.isoformat())
-            elif isinstance(value, dict):
+            elif isinstance(value, QtCore.QUrl):
                 QgsExpressionContextUtils.setProjectVariable(
-                    key, json.dumps(serialize_dictionary(value)))
-            elif isinstance(value, (list, tuple, set)):
-                QgsExpressionContextUtils.setProjectVariable(
-                    key, json.dumps(value))
+                    key, value.toString())
             else:
                 LOGGER.warning('Not handled provenance')
                 LOGGER.warning('Key: %s, Type: %s, Value: %s' % (
                     key, type(value), value))
+
+        # Remove old provenance data first
+        self.remove_provenance_project_variables()
+        for key, value in provenances.items():
+            write_project_variable(key, value)
 
     def remove_provenance_project_variables(self):
         """Removing variables from provenance data."""
