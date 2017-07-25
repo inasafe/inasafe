@@ -34,4 +34,7 @@ TYPE_CONVERSIONS = {
 }
 # XML Namespaces
 METADATA_XML_TEMPLATE = os.path.join(
-    os.path.dirname(__file__), 'iso_19115_template.xml')
+    os.path.dirname(__file__),
+    '..',
+    'metadata',
+    'iso_19115_template.xml')

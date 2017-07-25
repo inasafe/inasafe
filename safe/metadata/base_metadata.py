@@ -1,28 +1,26 @@
 # coding=utf-8
 """This module base metadata implementation."""
 
-from safe.metadata.encoder import MetadataEncoder
-
-# using this approach:
-# http://eli.thegreenplace.net/2009/02/06/getters-and-setters-in-python
-
 import abc
-from datetime import datetime
 import json
 import os
+from datetime import datetime
 from xml.etree import ElementTree
 
+from safe.definitions.metadata import TYPE_CONVERSIONS, METADATA_XML_TEMPLATE
 from safe.common.exceptions import MetadataReadError, HashNotFoundError
+from safe.metadata.encoder import MetadataEncoder
 from safe.metadata.metadata_db_io import MetadataDbIO
 from safe.metadata.utilities import (
+    XML_NS,
     insert_xml_element,
     read_property_from_xml,
     reading_ancillary_files
 )
-from safe.metadata.constants import (
-    TYPE_CONVERSIONS, METADATA_XML_TEMPLATE)
-from safe.metadata.utilities import XML_NS
 from safe.utilities.i18n import tr
+
+# using this approach:
+# http://eli.thegreenplace.net/2009/02/06/getters-and-setters-in-python
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

@@ -40,7 +40,7 @@ from safe.definitions.constants import (
     PREPARE_FAILED_BAD_LAYER,
     PREPARE_SUCCESS,
 )
-from safe.definitions.provenances import provenance_list
+from safe.definitions.provenance import provenance_list
 from safe.definitions.utilities import map_report_component
 from safe.defaults import supporters_logo_path
 from safe.definitions.reports import (
