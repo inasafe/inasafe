@@ -57,7 +57,8 @@ from safe.definitions.analysis_steps import analysis_steps
 from safe.definitions.utilities import (
     definition,
     get_non_compulsory_fields,
-    get_name
+    get_name,
+    set_provenance
 )
 from safe.definitions.exposure import indivisible_exposure
 from safe.definitions.fields import (
@@ -79,7 +80,39 @@ from safe.definitions.styles import (
     aggregation_color,
     aggregation_width,
     analysis_color,
-    analysis_width,
+    analysis_width)
+
+from safe.definitions.provenance import (
+    provenance_action_checklist,
+    provenance_aggregation_keywords,
+    provenance_aggregation_layer,
+    provenance_aggregation_layer_id,
+    provenance_analysis_extent,
+    provenance_analysis_question,
+    provenance_data_store_uri,
+    provenance_duration,
+    provenance_end_datetime,
+    provenance_exposure_keywords,
+    provenance_exposure_layer,
+    provenance_exposure_layer_id,
+    provenance_gdal_version,
+    provenance_hazard_keywords,
+    provenance_hazard_layer,
+    provenance_hazard_layer_id,
+    provenance_host_name,
+    provenance_impact_function_name,
+    provenance_impact_function_title,
+    provenance_inasafe_version,
+    provenance_map_legend_title,
+    provenance_map_title,
+    provenance_notes,
+    provenance_os,
+    provenance_pyqt_version,
+    provenance_qgis_version,
+    provenance_qt_version,
+    provenance_requested_extent,
+    provenance_start_datetime,
+    provenance_user,
 )
 from safe.impact_function.provenance_utilities import (
     get_map_title, get_analysis_question)
@@ -211,17 +244,21 @@ class ImpactFunction(object):
         self._start_datetime = None
         self._end_datetime = None
         self._duration = 0
-        self._provenance = {
-            # Environment
-            'host_name': gethostname(),
-            'user': getpass.getuser(),
-            'qgis_version': QGis.QGIS_VERSION,
-            'gdal_version': gdal.__version__,
-            'qt_version': QT_VERSION_STR,
-            'pyqt_version': PYQT_VERSION_STR,
-            'os': readable_os_version(),
-            'inasafe_version': get_version(),
-        }
+        self._provenance = {}
+        # Environment
+        set_provenance(self._provenance, provenance_host_name, gethostname())
+        set_provenance(self._provenance, provenance_user, getpass.getuser())
+        set_provenance(
+            self._provenance, provenance_qgis_version, QGis.QGIS_VERSION)
+        set_provenance(
+            self._provenance, provenance_gdal_version, gdal.__version__)
+        set_provenance(self._provenance, provenance_qt_version, QT_VERSION_STR)
+        set_provenance(
+            self._provenance, provenance_pyqt_version, PYQT_VERSION_STR)
+        set_provenance(
+            self._provenance, provenance_os, readable_os_version())
+        set_provenance(
+            self._provenance, provenance_inasafe_version, get_version())
 
         # Earthquake function
         value = setting(
@@ -965,24 +1002,51 @@ class ImpactFunction(object):
         else:
             # Everything was fine.
             self._is_ready = True
-            self._provenance['exposure_layer'] = self.exposure.publicSource()
+            set_provenance(
+                self._provenance,
+                provenance_exposure_layer,
+                self.exposure.publicSource())
             # reference to original layer being used
-            self._provenance['exposure_layer_id'] = original_exposure.id()
-            self._provenance['exposure_keywords'] = copy_layer_keywords(
-                self.exposure.keywords)
-            self._provenance['hazard_layer'] = self.hazard.publicSource()
+            set_provenance(
+                self._provenance,
+                provenance_exposure_layer_id,
+                original_exposure.id())
+            set_provenance(
+                self._provenance,
+                provenance_exposure_keywords,
+                copy_layer_keywords(self.exposure.keywords))
+            set_provenance(
+                self._provenance,
+                provenance_hazard_layer,
+                self.hazard.publicSource())
             # reference to original layer being used
-            self._provenance['hazard_layer_id'] = original_hazard.id()
-            self._provenance['hazard_keywords'] = copy_layer_keywords(
-                self.hazard.keywords)
+            set_provenance(
+                self._provenance,
+                provenance_hazard_layer_id,
+                original_hazard.id())
+            set_provenance(
+                self._provenance,
+                provenance_hazard_keywords,
+                copy_layer_keywords(self.hazard.keywords))
             # reference to original layer being used
             if original_aggregation:
-                self._provenance['aggregation_layer_id'] = (
+                set_provenance(
+                    self._provenance,
+                    provenance_aggregation_layer_id,
                     original_aggregation.id())
             else:
-                self._provenance['aggregation_layer_id'] = None
-            self._provenance['aggregation_layer'] = aggregation_source
-            self._provenance['aggregation_keywords'] = aggregation_keywords
+                set_provenance(
+                    self._provenance,
+                    provenance_aggregation_layer_id,
+                    None)
+            set_provenance(
+                self._provenance,
+                provenance_aggregation_layer,
+                aggregation_source)
+            set_provenance(
+                self._provenance,
+                provenance_aggregation_keywords,
+                aggregation_keywords)
 
             return PREPARE_SUCCESS, None
 
@@ -1359,9 +1423,12 @@ class ImpactFunction(object):
         self.summary_calculation()
 
         self._end_datetime = datetime.now()
-        self._provenance['start_datetime'] = self.start_datetime
-        self._provenance['end_datetime'] = self.end_datetime
-        self._provenance['duration'] = self.duration
+        set_provenance(
+            self._provenance, provenance_start_datetime, self.start_datetime)
+        set_provenance(
+            self._provenance, provenance_end_datetime, self.end_datetime)
+        set_provenance(
+            self._provenance, provenance_duration, self.duration)
         self._generate_provenance()
 
         # End of the impact function, we can add layers to the datastore.
@@ -2065,31 +2132,53 @@ class ImpactFunction(object):
             'hazard_category'])
 
         # InaSAFE
-        self._provenance['impact_function_name'] = self.name
-        self._provenance['impact_function_title'] = self.title
+        set_provenance(
+            self._provenance, provenance_impact_function_name, self.name)
+        set_provenance(
+            self._provenance, provenance_impact_function_title, self.title)
 
         # Map title
-        self._provenance['map_title'] = get_map_title(
-            hazard, exposure, hazard_category)
-        self._provenance['map_legend_title'] = exposure['layer_legend_title']
+        set_provenance(
+            self._provenance,
+            provenance_map_title,
+            get_map_title(hazard, exposure, hazard_category))
 
-        self._provenance['analysis_question'] = get_analysis_question(
-            hazard, exposure)
+        set_provenance(
+            self._provenance,
+            provenance_map_legend_title,
+            exposure['layer_legend_title'])
+
+        set_provenance(
+            self._provenance,
+            provenance_analysis_question,
+            get_analysis_question(hazard, exposure))
 
         if self.requested_extent:
-            self._provenance['requested_extent'] = (
-                self.requested_extent.asWktCoordinates()
-            )
+            set_provenance(
+                self._provenance,
+                provenance_requested_extent,
+                self.requested_extent.asWktCoordinates())
         else:
-            self._provenance['requested_extent'] = None
-        self._provenance['analysis_extent'] = (
-            self.analysis_extent.exportToWkt()
-        )
-        self._provenance['data_store_uri'] = self.datastore.uri_path
+            set_provenance(
+                self._provenance,
+                provenance_requested_extent,
+                None)
+        set_provenance(
+            self._provenance,
+            provenance_analysis_extent,
+            self.analysis_extent.exportToWkt())
+
+        set_provenance(
+            self._provenance,
+            provenance_data_store_uri,
+            self.datastore.uri_path)
 
         # Notes and Action
-        self._provenance['notes'] = self.notes()
-        self._provenance['action_checklist'] = self.action_checklist()
+        set_provenance(self._provenance, provenance_notes, self.notes())
+        set_provenance(
+            self._provenance,
+            provenance_action_checklist,
+            self.action_checklist())
 
         self._provenance_ready = True
 

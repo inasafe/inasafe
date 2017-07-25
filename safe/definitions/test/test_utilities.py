@@ -45,7 +45,9 @@ from safe.definitions import (
     aggregation_field_groups,
     productivity_rate_field,
     productivity_cost_rate_field,
-    productivity_value_rate_field
+    productivity_value_rate_field,
+    provenance_host_name,
+    provenance_user
 )
 from safe.definitions.reports.components import report_a4_blue
 
@@ -68,7 +70,8 @@ from safe.definitions.utilities import (
     fields_in_field_groups,
     get_field_groups,
     map_report_component,
-    get_name
+    get_name,
+    set_provenance
 )
 
 from safe.common.utilities import safe_dir
@@ -466,6 +469,30 @@ class TestDefinitionsUtilities(unittest.TestCase):
 
         component = map_report_component(report_a4_blue, target_directory)
         self.assertTrue(component != report_a4_blue)
+
+    def test_set_provenance(self):
+        """Test for set_provenance."""
+        provenance_collection = {}
+        host_name_value = 'host_name'
+        set_provenance(
+            provenance_collection, provenance_host_name, host_name_value)
+        expected = {provenance_host_name['provenance_key']: host_name_value}
+        self.assertDictEqual(provenance_collection, expected)
+
+        host_name_value = 'new_host_name'
+        set_provenance(
+            provenance_collection, provenance_host_name, host_name_value)
+        expected = {provenance_host_name['provenance_key']: host_name_value}
+        self.assertDictEqual(provenance_collection, expected)
+
+        user_value = 'user'
+        set_provenance(
+            provenance_collection, provenance_user, user_value)
+        expected = {
+            provenance_host_name['provenance_key']: host_name_value,
+            provenance_user['provenance_key']: user_value,
+        }
+        self.assertDictEqual(provenance_collection, expected)
 
 
 if __name__ == '__main__':
