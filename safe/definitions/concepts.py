@@ -293,19 +293,7 @@ concepts['killed_people'] = {
         }
     ],
 }
-concepts['people'] = {
-    'group': tr('Demographics'),
-    'key': 'people',
-    'description': tr(
-        'Human beings in general or considered collectively.'),
-    'citations': [
-        {
-            'text': tr(
-                'Oxford Dictionary.'),
-            'link': u'https://en.oxforddictionaries.com/definition/people'
-        }
-    ],
-}
+
 concepts['female'] = {
     'group': tr('Gender'),
     'key': 'female',
@@ -329,6 +317,19 @@ concepts['male'] = {
             'text': tr(
                 'Oxford Dictionary.'),
             'link': u'https://en.oxforddictionaries.com/definition/male'
+        }
+    ],
+}
+concepts['people'] = {
+    'group': tr('Demographics'),
+    'key': 'people',
+    'description': tr(
+        'Human beings in general or considered collectively.'),
+    'citations': [
+        {
+            'text': tr(
+                'Oxford Dictionary.'),
+            'link': u'https://en.oxforddictionaries.com/definition/people'
         }
     ],
 }
