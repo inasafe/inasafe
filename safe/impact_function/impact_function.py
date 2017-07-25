@@ -929,16 +929,22 @@ class ImpactFunction(object):
                 return status, message
 
             # Set the name
+            hazard_name = definition(
+                self.hazard.keywords.get('hazard'))['name']
+            exposure_name = definition(
+                self.exposure.keywords.get('exposure'))['name']
+            hazard_geometry_name = definition(
+                self.hazard.keywords.get('layer_geometry'))['name']
+            exposure_geometry_name = definition(
+                self.exposure.keywords.get('layer_geometry'))['name']
             self._name = tr(
                 '{hazard_type} {hazard_geometry} On {exposure_type} '
                 '{exposure_geometry}').format(
-                hazard_type=tr(self.hazard.keywords.get('hazard').title()),
-                hazard_geometry=tr(
-                    self.hazard.keywords.get('layer_geometry').title()),
-                exposure_type=tr(
-                    self.exposure.keywords.get('exposure').title()),
-                exposure_geometry=tr(
-                    self.exposure.keywords.get('layer_geometry').title()))
+                hazard_type=hazard_name,
+                hazard_geometry=hazard_geometry_name,
+                exposure_type=exposure_name,
+                exposure_geometry=exposure_geometry_name
+            )
 
             # Set the title
             if self.exposure.keywords.get('exposure') == 'population':
