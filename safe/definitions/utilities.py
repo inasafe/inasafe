@@ -280,6 +280,32 @@ def definition(keyword):
     return None
 
 
+def get_name(keyword):
+    """Given a keyword, try to get the name of it.
+
+    .. versionadded:: 4.2
+
+    Definition dicts are defined in keywords.py. We try to return
+    the name if present, otherwise we return none.
+
+    keyword = 'layer_purpose'
+    kio = safe.utilities.keyword_io.Keyword_IO()
+    name = kio.get_name(keyword)
+    print name
+
+    :param keyword: A keyword key.
+    :type keyword: str
+
+    :returns: The name of the keyword
+    :rtype: str
+    """
+    definition_dict = definition(keyword)
+    if definition_dict:
+        return definition_dict.get('name', keyword)
+    # Else, return the keyword
+    return keyword
+
+
 def get_allowed_geometries(layer_purpose_key):
     """Helper function to get all possible geometry
 

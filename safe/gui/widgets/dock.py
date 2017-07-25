@@ -41,7 +41,7 @@ from safe.definitions.constants import (
     PREPARE_SUCCESS,
 )
 from safe.definitions.provenance import provenance_list
-from safe.definitions.utilities import map_report_component
+from safe.definitions.utilities import map_report_component, get_name
 from safe.defaults import supporters_logo_path
 from safe.definitions.reports import (
     final_product_tag,
@@ -1435,7 +1435,13 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     write_project_variable(
                         '%s__%s' % (key, dict_key), dict_value)
             elif isinstance(value, (bool, str, unicode, Number)):
-                QgsExpressionContextUtils.setProjectVariable(key, value)
+                # Don't use get_name for field
+                if 'field' in key:
+                    pretty_value = get_name(value)
+                    QgsExpressionContextUtils.setProjectVariable(
+                        key, pretty_value)
+                else:
+                    QgsExpressionContextUtils.setProjectVariable(key, value)
             elif isinstance(value, type(None)):
                 QgsExpressionContextUtils.setProjectVariable(key, '')
             elif isinstance(value, datetime):
