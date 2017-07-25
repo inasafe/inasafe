@@ -480,3 +480,19 @@ def map_report_component(component, custom_template_dir=None):
             component['template'] = custom_qpt_path
 
     return copy_component
+
+
+def set_provenance(provenance_collection, provenance_dict, value):
+    """Helper to set provenance_dict to provenance_collection.
+
+    :param provenance_collection: The target of dictionary of provenance to
+        be updated.
+    :type provenance_collection: dict
+
+    :param provenance_dict: The provenance dictionary to be the key.
+    :type provenance_dict: dict
+
+    :param value: The value that will be set.
+    :type value: object
+    """
+    provenance_collection[provenance_dict['provenance_key']] = value
