@@ -1,5 +1,6 @@
 # coding=utf-8
 """Provenance Keys."""
+
 from safe.utilities.i18n import tr
 
 provenance_action_checklist = {
@@ -19,7 +20,7 @@ provenance_aggregation_layer = {
 }
 provenance_aggregation_layer_id = {
     'key': 'provenance_aggregation_layer_id',
-    'name': tr('Aggregation Layer Id'),
+    'name': tr('Aggregation Layer ID'),
     'provenance_key': 'aggregation_layer_id'
 }
 provenance_analysis_extent = {
@@ -34,7 +35,7 @@ provenance_analysis_question = {
 }
 provenance_data_store_uri = {
     'key': 'provenance_data_store_uri',
-    'name': tr('Data Store Uri'),
+    'name': tr('Data Store URI'),
     'provenance_key': 'data_store_uri'
 }
 provenance_duration = {
@@ -64,7 +65,7 @@ provenance_exposure_layer_id = {
 }
 provenance_gdal_version = {
     'key': 'provenance_gdal_version',
-    'name': tr('Gdal Version'),
+    'name': tr('GDAL Version'),
     'provenance_key': 'gdal_version'
 }
 provenance_hazard_keywords = {
@@ -79,7 +80,7 @@ provenance_hazard_layer = {
 }
 provenance_hazard_layer_id = {
     'key': 'provenance_hazard_layer_id',
-    'name': tr('Hazard Layer Id'),
+    'name': tr('Hazard Layer ID'),
     'provenance_key': 'hazard_layer_id'
 }
 provenance_host_name = {
@@ -99,7 +100,7 @@ provenance_impact_function_title = {
 }
 provenance_inasafe_version = {
     'key': 'provenance_inasafe_version',
-    'name': tr('Inasafe Version'),
+    'name': tr('InaSAFE Version'),
     'provenance_key': 'inasafe_version'
 }
 provenance_map_legend_title = {
@@ -119,22 +120,22 @@ provenance_notes = {
 }
 provenance_os = {
     'key': 'provenance_os',
-    'name': tr('Os'),
+    'name': tr('OS'),
     'provenance_key': 'os'
 }
 provenance_pyqt_version = {
     'key': 'provenance_pyqt_version',
-    'name': tr('Pyqt Version'),
+    'name': tr('PyQT Version'),
     'provenance_key': 'pyqt_version'
 }
 provenance_qgis_version = {
     'key': 'provenance_qgis_version',
-    'name': tr('Qgis Version'),
+    'name': tr('QGIS Version'),
     'provenance_key': 'qgis_version'
 }
 provenance_qt_version = {
     'key': 'provenance_qt_version',
-    'name': tr('Qt Version'),
+    'name': tr('QT Version'),
     'provenance_key': 'qt_version'
 }
 provenance_requested_extent = {

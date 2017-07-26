@@ -1,6 +1,6 @@
 # coding=utf-8
 
-"""Dictionary property"""
+"""Dictionary property."""
 
 import json
 from types import NoneType
