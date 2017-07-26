@@ -124,7 +124,7 @@ adult_ratio_default_value = {
     # Updated for InaSAFE 4.1
     # http://data.un.org/Data.aspx?d=PopDiv&f=variableID%3a103
     # UNSD World Data, 2010.
-    'default_value': 0.679,
+    'default_value': 0.657,
     'min_value': 0,
     'max_value': 1,
     'increment': 0.001,
