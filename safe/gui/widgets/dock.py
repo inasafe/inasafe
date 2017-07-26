@@ -896,6 +896,13 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 layer_purpose_aggregation_summary['key'],
                 layer_purpose_analysis_impacted['key'],
                 layer_purpose_exposure_summary_table['key'],
+                # Legacy from InaSAFE < 4.2. We still want to open old
+                # analysis made with 4.0 an 4.1.
+                # We should remove them later.
+                'exposure_summary',
+                'aggregate_hazard_impacted',
+                'aggregation_summary',
+                'analysis_impacted'
             ]
 
             provenances = keywords.get('provenance_data', {})

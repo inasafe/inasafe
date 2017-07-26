@@ -63,7 +63,7 @@ layer_purpose_aggregation = {
 }
 
 layer_purpose_exposure_summary = {
-    'key': 'exposure_summary',
+    'key': 'impact_analysis',
     'name': tr('Impact Analysis'),
     'description': tr(
         'This <b>Impact Analysis</b> contains all the '
@@ -82,7 +82,7 @@ layer_purpose_exposure_summary = {
 }
 
 layer_purpose_aggregate_hazard_impacted = {
-    'key': 'aggregate_hazard_impacted',
+    'key': 'hazard_aggregation_summary',
     'name': tr('Hazard Aggregation Summary'),
     'description': tr(
         'An <b>hazard aggregation summary</b> is created during an '
@@ -132,7 +132,7 @@ layer_purpose_aggregation_summary = {
 }
 
 layer_purpose_analysis_impacted = {
-    'key': 'analysis_impacted',
+    'key': 'analysis_summary',
     'name': tr('Analysis Summary'),
     'description': tr(
         'An <b>analysis summary</b> layer is the result from InaSAFE '
@@ -172,7 +172,7 @@ layer_purpose_exposure_summary_table = {
 }
 
 layer_purpose_profiling = {
-    'key': 'profiling',
+    'key': 'analysis_log',
     'name': tr('Analysis Log'),
     'description': tr(
         'The <b>analysis log</b> contains information intended for '
