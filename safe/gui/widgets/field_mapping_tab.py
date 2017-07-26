@@ -274,6 +274,11 @@ class FieldMappingTab(QWidget, object):
 
         self.parameter_layout.addWidget(self.parameter_container)
 
+        default_ratio_help_text = tr(
+            'By default, InaSAFE will calculate the default ratio '
+            'however users have the option to include this in the '
+            'analysis report. If you do not want to see the default '
+            'results in the report choose "do not report".')
         # Set move or copy
         if self.field_group.get('exclusive', False):
             # If exclusive, do not add used field.
@@ -288,6 +293,7 @@ class FieldMappingTab(QWidget, object):
                 pass
             # Set header
             header_text = self.field_group['description']
+            header_text += '\n\n' + default_ratio_help_text
             header_text += '\n\n' + tr(
                 'You can only map one field to one concept.')
         else:
@@ -301,6 +307,7 @@ class FieldMappingTab(QWidget, object):
             self.connect_drop_remove_parameter()
             # Set header
             header_text = self.field_group['description']
+            header_text += '\n\n' + default_ratio_help_text
             header_text += '\n\n' + tr(
                 'You can map one field to more than one concepts.')
 
