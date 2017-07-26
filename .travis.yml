@@ -38,6 +38,7 @@ branches:
     - master
     - develop
     - experimental
+    - geosafe4
 
 addons:
   apt:
