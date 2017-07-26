@@ -951,6 +951,15 @@ class TestImpactReport(unittest.TestCase):
                         {
                             'header': u'Family Kits',
                             'value': '10'
+                        },
+                        {
+                            'header': u'Hygiene Packs',
+                            'value': '10'
+                        },
+                        {
+                            'header': u'Additional Rice for Pregnant and '
+                                      u'Lactating Women [kg]',
+                            'value': '10'
                         }],
                     'total_header': u'Total'
                 }
@@ -1273,13 +1282,13 @@ class TestImpactReport(unittest.TestCase):
                         'notes': [],
                         'rows': [
                             [u'B', '2,700', '7,400', '45,800', '176,000',
-                             '530', '130'],
+                             '530', '130', '1,100'],
                             [u'C', '6,500', '18,200', '114,000', '434,000',
-                             '1,300', '330'],
+                             '1,300', '330', '2,600'],
                             [u'F', '7,100', '19,800', '124,000', '473,000',
-                             '1,500', '360'],
+                             '1,500', '360', '2,800'],
                             [u'G', '9,500', '26,500', '166,000', '634,000',
-                             '1,900', '480']],
+                             '1,900', '480', '3,800']],
                         'columns': [
                             u'Aggregation area',
                             u'Total Displaced Population',
@@ -1307,8 +1316,13 @@ class TestImpactReport(unittest.TestCase):
                                 'start_group_header': False,
                                 'name': u'Toilets',
                                 'group_header': u'Minimum needs breakdown'
+                            },
+                            {
+                                'start_group_header': False,
+                                'name': u'Hygiene Packs',
+                                'group_header': u'Minimum needs breakdown'
                             }],
-                        'group_header_colspan': 5,
+                        'group_header_colspan': 6,
                         'totals': [
                             u'Total',
                             '25,700',
@@ -1316,7 +1330,8 @@ class TestImpactReport(unittest.TestCase):
                             '449,000',
                             '1,716,000',
                             '5,200',
-                            '1,300']
+                            '1,300',
+                            '10,200']
                     }
                 ])
             ]),
@@ -1456,11 +1471,11 @@ class TestImpactReport(unittest.TestCase):
                                   u'per week',
                         'notes': [],
                         'rows': [
-                            [u'B', '10', '10', '20', '80', '0', '0'],
-                            [u'C', '10', '20', '90', '340', '0', '0'],
-                            [u'F', '10', '10', '70', '260', '0', '0'],
-                            [u'G', '10', '20', '110', '410', '10', '0'],
-                            [u'K', '10', '10', '40', '130', '0', '0']],
+                            [u'B', '10', '10', '20', '80', '0', '0', '0'],
+                            [u'C', '10', '20', '90', '340', '0', '0', '10'],
+                            [u'F', '10', '10', '70', '260', '0', '0', '10'],
+                            [u'G', '10', '20', '110', '410', '10', '0', '10'],
+                            [u'K', '10', '10', '40', '130', '0', '0', '0']],
                         'columns': [
                             u'Aggregation area',
                             u'Total Displaced Population',
@@ -1488,10 +1503,22 @@ class TestImpactReport(unittest.TestCase):
                                 'start_group_header': False,
                                 'name': u'Toilets',
                                 'group_header': u'Minimum needs breakdown'
+                            },
+                            {
+                                'start_group_header': False,
+                                'name': u'Hygiene Packs',
+                                'group_header': u'Minimum needs breakdown'
                             }],
-                        'group_header_colspan': 5,
+                        'group_header_colspan': 6,
                         'totals': [
-                            u'Total', '20', '60', '350', '1,400', '10', '0']
+                            u'Total',
+                            '20',
+                            '60',
+                            '350',
+                            '1,400',
+                            '10',
+                            '0',
+                            '10']
                     }
                 ])
             ]),
