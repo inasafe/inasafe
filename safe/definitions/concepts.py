@@ -644,7 +644,7 @@ concepts['productivity'] = {
     'key': 'productivity',
     'description': tr(
         'The number of crop in weight unit (e.g. quintals, tons) per '
-        'area unit (m^2, hectare) that can be produced in a land cover.'
+        'area unit (m^2, hectare) that can be produced in a land cover '
         'unit.'),
     'citations': [
         {

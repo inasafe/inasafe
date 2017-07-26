@@ -20,6 +20,7 @@ FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
 class StepFcAggLayerFromBrowser(WizardStepBrowser, FORM_CLASS):
+
     """InaSAFE Wizard Step Aggregation Layer Browser."""
 
     def __init__(self, parent=None):
@@ -35,8 +36,9 @@ class StepFcAggLayerFromBrowser(WizardStepBrowser, FORM_CLASS):
             self.tvBrowserAggregation_selection_changed)
 
     def is_ready_to_next_step(self):
-        """Check if the step is complete. If so, there is
-            no reason to block the Next button.
+        """Check if the step is complete.
+
+        If so, there is no reason to block the Next button.
 
         :returns: True if new step may be enabled.
         :rtype: bool
@@ -65,14 +67,14 @@ class StepFcAggLayerFromBrowser(WizardStepBrowser, FORM_CLASS):
 
     # noinspection PyPep8Naming
     def tvBrowserAggregation_selection_changed(self):
-        """Update layer description label"""
+        """Update layer description label."""
         (is_compatible, desc) = self.get_layer_description_from_browser(
             'aggregation')
         self.lblDescribeBrowserAggLayer.setText(desc)
         self.parent.pbnNext.setEnabled(is_compatible)
 
     def set_widgets(self):
-        """Set widgets on the Aggregation Layer From Browser tab"""
+        """Set widgets on the Aggregation Layer From Browser tab."""
         self.tvBrowserAggregation_selection_changed()
 
         # Set icon
@@ -91,7 +93,7 @@ class StepFcAggLayerFromBrowser(WizardStepBrowser, FORM_CLASS):
     def help_content(self):
         """Return the content of help for this step wizard.
 
-            We only needs to re-implement this method in each wizard step.
+        We only needs to re-implement this method in each wizard step.
 
         :returns: A message object contains help.
         :rtype: m.Message
@@ -100,6 +102,5 @@ class StepFcAggLayerFromBrowser(WizardStepBrowser, FORM_CLASS):
         message.add(m.Paragraph(tr(
             'In this wizard step: {step_name}, You can choose a aggregation '
             'layer from the list of layers from local disk or postgres '
-            'database that matches with the geometry and exposure type you '
-            'set in the previous step').format(step_name=self.step_name)))
+            'database.').format(step_name=self.step_name)))
         return message
