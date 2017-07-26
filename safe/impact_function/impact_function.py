@@ -113,6 +113,12 @@ from safe.definitions.provenance import (
     provenance_requested_extent,
     provenance_start_datetime,
     provenance_user,
+    provenance_layer_exposure_summary,
+    provenance_layer_aggregate_hazard_impacted,
+    provenance_layer_aggregation_summary,
+    provenance_layer_analysis_impacted,
+    provenance_layer_exposure_summary_table,
+    provenance_layer_profiling
 )
 from safe.impact_function.provenance_utilities import (
     get_map_title, get_analysis_question)
@@ -162,7 +168,7 @@ from safe.utilities.default_values import get_inasafe_default_value_qsetting
 from safe.utilities.unicode import get_unicode
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.metadata import (
-    active_thresholds_value_maps, copy_layer_keywords)
+    active_thresholds_value_maps, copy_layer_keywords, write_iso19115_metadata)
 from safe.utilities.utilities import (
     replace_accentuated_characters,
     get_error_message,
@@ -1431,6 +1437,20 @@ class ImpactFunction(object):
             self._provenance, provenance_duration, self.duration)
         self._generate_provenance()
 
+        # Update provenance with output layer path
+        output_layer_provenance = {
+            provenance_layer_exposure_summary[
+                'provenance_key']: None,
+            provenance_layer_aggregate_hazard_impacted[
+                'provenance_key']: None,
+            provenance_layer_aggregation_summary[
+                'provenance_key']: None,
+            provenance_layer_analysis_impacted[
+                'provenance_key']: None,
+            provenance_layer_exposure_summary_table[
+                'provenance_key']: None,
+        }
+
         # End of the impact function, we can add layers to the datastore.
         # We replace memory layers by the real layer from the datastore.
 
@@ -1450,6 +1470,9 @@ class ImpactFunction(object):
             self._exposure_summary = self.datastore.layer(name)
             self.debug_layer(self._exposure_summary, add_to_datastore=False)
 
+            output_layer_provenance[provenance_layer_exposure_summary[
+                'provenance_key']] = self._exposure_summary.publicSource()
+
         # Aggregate hazard impacted
         if self.aggregate_hazard_impacted:
             self.aggregate_hazard_impacted.keywords[
@@ -1466,6 +1489,10 @@ class ImpactFunction(object):
             self._aggregate_hazard_impacted = self.datastore.layer(name)
             self.debug_layer(
                 self._aggregate_hazard_impacted, add_to_datastore=False)
+
+            output_layer_provenance[
+                provenance_layer_aggregate_hazard_impacted['provenance_key']
+            ] = self.aggregate_hazard_impacted.publicSource()
 
         # Exposure summary table
         if self._exposure.keywords.get('classification'):
@@ -1484,6 +1511,10 @@ class ImpactFunction(object):
             self.debug_layer(
                 self._exposure_summary_table, add_to_datastore=False)
 
+            output_layer_provenance[
+                provenance_layer_exposure_summary_table['provenance_key']
+            ] = self._exposure_summary_table.publicSource()
+
         # Aggregation summary
         self.aggregation_summary.keywords['provenance_data'] = self.provenance
         self.append_ISO19115_keywords(self.aggregation_summary.keywords)
@@ -1497,6 +1528,9 @@ class ImpactFunction(object):
         self._aggregation_summary = self.datastore.layer(name)
         self.debug_layer(self._aggregation_summary, add_to_datastore=False)
 
+        output_layer_provenance[provenance_layer_aggregation_summary[
+            'provenance_key']] = self._aggregation_summary.publicSource()
+
         # Analysis impacted
         self.analysis_impacted.keywords['provenance_data'] = self.provenance
         self.append_ISO19115_keywords(self.analysis_impacted.keywords)
@@ -1508,6 +1542,39 @@ class ImpactFunction(object):
                    '{error_message}').format(error_message=name))
         self._analysis_impacted = self.datastore.layer(name)
         self.debug_layer(self._analysis_impacted, add_to_datastore=False)
+        output_layer_provenance[provenance_layer_analysis_impacted[
+            'provenance_key']] = self._analysis_impacted.publicSource()
+
+        # Update provenance data with output layers URI
+        self._provenance.update(output_layer_provenance)
+        if self._exposure_summary:
+            self._exposure_summary.keywords[
+                'provenance_data'] = self.provenance
+            write_iso19115_metadata(
+                self._exposure_summary.publicSource(),
+                self._exposure_summary.keywords)
+        if self._aggregate_hazard_impacted:
+            self._aggregate_hazard_impacted.keywords[
+                'provenance_data'] = self.provenance
+            write_iso19115_metadata(
+                self._aggregate_hazard_impacted.publicSource(),
+                self._aggregate_hazard_impacted.keywords)
+        if self._exposure_summary_table:
+            self._exposure_summary_table.keywords[
+                'provenance_data'] = self.provenance
+            write_iso19115_metadata(
+                self._exposure_summary_table.publicSource(),
+                self._exposure_summary_table.keywords)
+
+        self.aggregation_summary.keywords['provenance_data'] = self.provenance
+        write_iso19115_metadata(
+            self.aggregation_summary.publicSource(),
+            self.aggregation_summary.keywords)
+
+        self.analysis_impacted.keywords['provenance_data'] = self.provenance
+        write_iso19115_metadata(
+            self.analysis_impacted.publicSource(),
+            self.analysis_impacted.keywords)
 
     @profile
     def aggregation_preparation(self):
@@ -2093,23 +2160,7 @@ class ImpactFunction(object):
 
         The impact function will call generate_provenance at the end of the IF.
 
-        List of keys (for quick lookup):
-
-        [
-            'exposure_keywords',
-            'hazard_keywords',
-            'impact_function_name',
-            'impact_function_title',
-            'map_title',
-            'map_legend_title',
-            'analysis_question',
-            'report_question',
-            'requested_extent',
-            'analysis_extent',
-            'data_store_uri',
-            'notes',
-            'action_checklist',
-        ]
+        List of keys (for quick lookup): safe/definitions/provenance.py
 
         :returns: Dictionary that contains all provenance.
         :rtype: dict

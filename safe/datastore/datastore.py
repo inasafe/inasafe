@@ -232,7 +232,7 @@ class DataStore(object):
         """Add a raster layer to the database.
 
         :param raster_layer: The layer to add.
-        :type raster_layer: QgsVectorLayer
+        :type raster_layer: QgsRasterLayer
 
         :param layer_name: The name of the layer in the datastore.
         :type layer_name: str
