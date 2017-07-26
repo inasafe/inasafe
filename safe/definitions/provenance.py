@@ -1,6 +1,15 @@
 # coding=utf-8
 """Provenance Keys."""
 
+from safe.definitions.layer_purposes import (
+    layer_purpose_exposure_summary,
+    layer_purpose_aggregate_hazard_impacted,
+    layer_purpose_aggregation_summary,
+    layer_purpose_analysis_impacted,
+    layer_purpose_exposure_summary_table,
+    layer_purpose_profiling
+)
+
 from safe.utilities.i18n import tr
 
 provenance_action_checklist = {
@@ -153,6 +162,39 @@ provenance_user = {
     'name': tr('User'),
     'provenance_key': 'user'
 }
+
+# Output layer path
+provenance_layer_exposure_summary = {
+    'key': 'provenance_layer_exposure_summary',
+    'name': layer_purpose_exposure_summary['name'],
+    'provenance_key': layer_purpose_exposure_summary['key']
+}
+provenance_layer_aggregate_hazard_impacted = {
+    'key': 'provenance_layer_aggregate_hazard_impacted',
+    'name': layer_purpose_aggregate_hazard_impacted['name'],
+    'provenance_key': layer_purpose_aggregate_hazard_impacted['key']
+}
+provenance_layer_aggregation_summary = {
+    'key': 'provenance_layer_aggregation_summary',
+    'name': layer_purpose_aggregation_summary['name'],
+    'provenance_key': layer_purpose_aggregation_summary['key']
+}
+provenance_layer_analysis_impacted = {
+    'key': 'provenance_layer_analysis_impacted',
+    'name': layer_purpose_analysis_impacted['name'],
+    'provenance_key': layer_purpose_analysis_impacted['key']
+}
+provenance_layer_exposure_summary_table = {
+    'key': 'provenance_layer_exposure_summary_table',
+    'name': layer_purpose_exposure_summary_table['name'],
+    'provenance_key': layer_purpose_exposure_summary_table['key']
+}
+provenance_layer_profiling = {
+    'key': 'provenance_layer_profiling',
+    'name': layer_purpose_profiling['name'],
+    'provenance_key': layer_purpose_profiling['key']
+}
+
 provenance_list = [
     provenance_action_checklist,
     provenance_aggregation_keywords,
@@ -184,4 +226,11 @@ provenance_list = [
     provenance_requested_extent,
     provenance_start_datetime,
     provenance_user,
+    # Output layer path
+    provenance_layer_exposure_summary,
+    provenance_layer_aggregate_hazard_impacted,
+    provenance_layer_aggregation_summary,
+    provenance_layer_analysis_impacted,
+    provenance_layer_exposure_summary_table,
+    provenance_layer_profiling
 ]
