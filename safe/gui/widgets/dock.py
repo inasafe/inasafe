@@ -899,7 +899,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             ]
 
             provenances = keywords.get('provenance_data', {})
-            LOGGER.debug('Set Keywords')
             self.set_provenance_to_project_variables(provenances)
 
             show_keywords = True
@@ -915,7 +914,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             if show_keywords:
                 if inasafe_keyword_version_key not in keywords.keys():
                     show_keyword_version_message(
-                        self, 'No Version', self.inasafe_version)
+                        self, tr('No Version'), self.inasafe_version)
                     self.print_button.setEnabled(False)
                 else:
                     keyword_version = str(keywords.get(
