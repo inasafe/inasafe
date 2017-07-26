@@ -2010,12 +2010,13 @@ class ImpactFunction(object):
                 if valid:
                     self.set_state_process('post_processor', name)
                     message = u'{name} : Running'.format(name=name)
+                    LOGGER.info(message)
 
             else:
-                message = u'{name} : Could not run : {reason}'.format(
-                    name=name, reason=message)
-
-            LOGGER.info(message)
+                # message = u'{name} : Could not run : {reason}'.format(
+                #     name=name, reason=message)
+                # LOGGER.info(message)
+                pass
 
         self.debug_layer(layer, add_to_datastore=False)
 
