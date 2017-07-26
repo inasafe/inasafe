@@ -11,7 +11,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='safe',
-    packages=['safe'],
+    packages=find_packages(include=['safe']),
     license='GPL',
     author='InaSAFE Team',
     author_email='info@inasafe.org',
