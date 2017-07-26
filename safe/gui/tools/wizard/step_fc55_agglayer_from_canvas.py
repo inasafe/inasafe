@@ -26,11 +26,13 @@ FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
 class StepFcAggLayerFromCanvas(WizardStep, FORM_CLASS):
-    """Function Centric Wizard Step: Aggregation Layer From Canvas"""
+
+    """Function Centric Wizard Step: Aggregation Layer From Canvas."""
 
     def is_ready_to_next_step(self):
-        """Check if the step is complete. If so, there is
-            no reason to block the Next button.
+        """Check if the step is complete.
+
+        If so, there is no reason to block the Next button.
 
         :returns: True if new step may be enabled.
         :rtype: bool
@@ -40,7 +42,7 @@ class StepFcAggLayerFromCanvas(WizardStep, FORM_CLASS):
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.
 
-        :returns: The step to be switched to
+        :returns: The step to be switched to.
         :rtype: WizardStep instance or None
         """
         if self.parent.is_selected_layer_keywordless:
@@ -61,7 +63,7 @@ class StepFcAggLayerFromCanvas(WizardStep, FORM_CLASS):
     # noinspection PyPep8Naming
     @pyqtSignature('')
     def on_lstCanvasAggLayers_itemSelectionChanged(self):
-        """Update layer description label
+        """Update layer description label.
 
         .. note:: This is an automatic Qt slot
            executed when the category selection changes.
@@ -149,7 +151,6 @@ class StepFcAggLayerFromCanvas(WizardStep, FORM_CLASS):
         message = m.Message()
         message.add(m.Paragraph(tr(
             'In this wizard step: {step_name}, You can choose a aggregation '
-            'layer from the list of layers that have been loaded to QGIS and '
-            'that matches with the geometry and aggregation type you set in '
-            'the previous step').format(step_name=self.step_name)))
+            'layer from the list of layers that have been loaded to '
+            'QGIS.').format(step_name=self.step_name)))
         return message

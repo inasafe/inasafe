@@ -2143,7 +2143,7 @@ productivity_field = {
     'precision': default_field_precision,
     'absolute': True,
     'description': tr(
-        'The productivity of a crop in Quintal (hundred kilograms unit.'),
+        'The productivity of a crop in Quintal (hundred kilograms unit.)'),
     'help_text': tr(
         'For a land cover, productivity is the weight of product.'
     ),
@@ -2167,7 +2167,7 @@ affected_productivity_field = {
     'absolute': True,
     'description': tr(
         'The affected productivity of a crop in Quintal (hundred kilograms '
-        'unit.'),
+        'unit.)'),
     'help_text': tr(
         'For a land cover, affected productivity is the weight of product '
         'that is affected by the hazard.'
@@ -2242,7 +2242,7 @@ affected_productivity_cost_field = {
         'The affected productivity cost of a crop in Currency unit.'),
     'help_text': tr(
         'For a land cover, affected productivity cost is the cost to build '
-        'the area that is affected by a hazard..'
+        'the area that is affected by a hazard.'
     ),
     'citations': [
         {

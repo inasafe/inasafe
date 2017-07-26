@@ -101,7 +101,7 @@ class StepFcHazLayerFromBrowser(WizardStepBrowser, FORM_CLASS):
         message = m.Message()
         message.add(m.Paragraph(tr(
             'In this wizard step: {step_name}, You can choose a hazard layer '
-            'from the list of layers from local disk or postgres database that'
-            'matches with the geometry and hazard type you set in the '
+            'from the list of layers from local disk or postgres database '
+            'that matches with the geometry and hazard type you set in the '
             'previous step').format(step_name=self.step_name)))
         return message
