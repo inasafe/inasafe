@@ -251,7 +251,7 @@
             <gco:CharacterString/>
           </host_name>
           <layer_purpose>
-            <gco:CharacterString>exposure_summary</gco:CharacterString>
+            <gco:CharacterString>impact_analysis</gco:CharacterString>
           </layer_purpose>
           <provenance_data>
             <gco:Dictionary>{}</gco:Dictionary>
