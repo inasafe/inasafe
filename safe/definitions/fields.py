@@ -1823,8 +1823,10 @@ hygiene_packs_count_field = {
     'key': 'hygiene_packs_field',
     'name': tr('Weekly Hygiene Packs'),
     'field_name': 'hygiene_packs',
+    'header_name': tr('Hygiene Packs'),
     'type': QVariant.Int,
     'length': default_field_length,
+    'frequency': tr('weekly'),
     'precision': 0,
     'absolute': True,
     'description': tr('Number of Hygiene Packs Weekly for Women.'),
@@ -1844,12 +1846,14 @@ additional_rice_count_field = {
     'key': 'additional_rice_field',
     'name': tr('Additional Weekly Rice kg for Pregnant and Lactating Women'),
     'field_name': 'additional_rice',
+    'header_name': tr('Additional Rice for Pregnant and Lactating Women'),
     'type': QVariant.Int,
     'length': default_field_length,
     'unit': {
         'name': 'Kilogram',
         'abbreviation': 'kg'
     },
+    'frequency': tr('weekly'),
     'precision': 0,
     'absolute': True,
     'help_text': tr(
@@ -2471,3 +2475,9 @@ count_fields = [
     over_60_displaced_count_field,
     disabled_displaced_count_field
 ] + minimum_needs_fields
+
+# And also additional minimum needs
+additional_minimum_needs = [
+    hygiene_packs_count_field,
+    additional_rice_count_field
+]
