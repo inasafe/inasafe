@@ -304,10 +304,7 @@ hazard_cyclone = {
     'field_groups': [],
     'layer_modes': [layer_mode_classified, layer_mode_continuous],
     'disabled_exposures': [
-        exposure_place,
-        exposure_land_cover,
-        exposure_road,
-        exposure_population
+        exposure_road
     ]
 }
 
