@@ -126,7 +126,7 @@ class KeywordIO(QObject):
         :type show_header: bool
 
         :returns: A safe message object containing a table.
-        :rtype: safe.messaging.message
+        :rtype: safe.messaging.Message
         """
         if keywords is None and self.layer is not None:
             keywords = self.read_keywords(self.layer)

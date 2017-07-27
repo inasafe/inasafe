@@ -19,7 +19,7 @@ from safe.definitions.layer_purposes import (layer_purpose_aggregation)
 from safe.definitions.utilities import get_fields, get_compulsory_fields
 from safe.definitions.layer_geometry import layer_geometry_raster
 from safe.definitions.constants import no_field
-from safe.gui.tools.wizard.wizard_utils import get_inasafe_default_value_fields
+from safe.gui.tools.wizard.utilities import get_inasafe_default_value_fields
 
 from safe.gui.tools.wizard.wizard_step import (
     WizardStep, get_wizard_step_ui_class)
@@ -184,7 +184,7 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
         for parameter_widget in self.parameter_container.\
                 get_parameter_widgets():
             parameter_widget.widget().set_default(None)
-            # Set selected radio button to 'Do not use'
+            # Set selected radio button to 'Do not report'
             parameter_widget.widget().set_selected_radio_button()
         # Set default value from existing keywords
         if existing_inasafe_default_values:
@@ -193,7 +193,7 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
                     get_parameter_widget_by_guid(guid)
                 if isinstance(parameter_widget, DefaultSelectParameterWidget):
                     parameter_widget.set_default(default)
-                    # Set selected radio button to 'Do not use'
+                    # Set selected radio button to 'Do not report'
                     parameter_widget.set_selected_radio_button()
 
     def get_inasafe_fields(self):

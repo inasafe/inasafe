@@ -183,7 +183,7 @@ class DefaultSelectParameterWidget(SelectParameterWidget):
             self.enable_radio_button()
 
     def set_selected_radio_button(self):
-        """Set selected radio button to 'Do not use'."""
+        """Set selected radio button to 'Do not report'."""
         dont_use_button = self.default_input_button_group.button(
             len(self._parameter.default_values) - 2)
         dont_use_button.setChecked(True)
@@ -201,7 +201,7 @@ class DefaultSelectParameterWidget(SelectParameterWidget):
 
     def enable_radio_button(self):
         """Enable radio button and custom value input area then set selected
-           radio button to 'Do not use'.
+           radio button to 'Do not report'.
         """
         for button in self.default_input_button_group.buttons():
             button.setEnabled(True)

@@ -351,6 +351,19 @@ docker-test: testdata clean
 		--cover-package=safe safe
 
 
+docker-update-translation-strings:
+	@echo "Update translation using docker"
+	@docker run -t -i -v $(DIR):/home kartoza/qt-translation make update-translation-strings
+
+docker-compile-translation-strings:
+	@echo "Update translation using docker"
+	@docker run -t -i -v $(DIR):/home kartoza/qt-translation make compile-translation-strings
+
+docker-test-translation:
+	@echo "Update translation using docker"
+	@docker run -t -i -v $(DIR):/home kartoza/qt-translation make test-translations
+
+
 ##########################################################
 #
 # Make targets specific to Jenkins go below this point
@@ -437,15 +450,3 @@ apidocs:
 	@cd docs && $(MAKE) html
 	@echo "HTML API docs has been builded."
 	@echo "You can look it under docs/_build directory.."
-
-docker-update-translation-strings:
-	@echo "Update translation using docker"
-	@docker run -t -i -v $(DIR):/home ismailsunni/docker-translation make update-translation-strings
-
-docker-compile-translation-strings:
-	@echo "Update translation using docker"
-	@docker run -t -i -v $(DIR):/home ismailsunni/docker-translation make compile-translation-strings
-
-docker-test-translation:
-	@echo "Update translation using docker"
-	@docker run -t -i -v $(DIR):/home ismailsunni/docker-translation make test-translations

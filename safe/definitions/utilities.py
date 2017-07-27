@@ -280,6 +280,32 @@ def definition(keyword):
     return None
 
 
+def get_name(keyword):
+    """Given a keyword, try to get the name of it.
+
+    .. versionadded:: 4.2
+
+    Definition dicts are defined in keywords.py. We try to return
+    the name if present, otherwise we return none.
+
+    keyword = 'layer_purpose'
+    kio = safe.utilities.keyword_io.Keyword_IO()
+    name = kio.get_name(keyword)
+    print name
+
+    :param keyword: A keyword key.
+    :type keyword: str
+
+    :returns: The name of the keyword
+    :rtype: str
+    """
+    definition_dict = definition(keyword)
+    if definition_dict:
+        return definition_dict.get('name', keyword)
+    # Else, return the keyword
+    return keyword
+
+
 def get_allowed_geometries(layer_purpose_key):
     """Helper function to get all possible geometry
 
@@ -454,3 +480,19 @@ def map_report_component(component, custom_template_dir=None):
             component['template'] = custom_qpt_path
 
     return copy_component
+
+
+def set_provenance(provenance_collection, provenance_dict, value):
+    """Helper to set provenance_dict to provenance_collection.
+
+    :param provenance_collection: The target of dictionary of provenance to
+        be updated.
+    :type provenance_collection: dict
+
+    :param provenance_dict: The provenance dictionary to be the key.
+    :type provenance_dict: dict
+
+    :param value: The value that will be set.
+    :type value: object
+    """
+    provenance_collection[provenance_dict['provenance_key']] = value

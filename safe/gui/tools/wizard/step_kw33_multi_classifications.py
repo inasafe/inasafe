@@ -43,7 +43,7 @@ from safe.gui.tools.wizard.wizard_strings import (
     multiple_continuous_hazard_classifications_vector,
     multiple_classified_hazard_classifications_raster,
     multiple_continuous_hazard_classifications_raster)
-from safe.gui.tools.wizard.wizard_utils import clear_layout, skip_inasafe_field
+from safe.gui.tools.wizard.utilities import clear_layout, skip_inasafe_field
 from safe.utilities.resources import html_footer, html_header
 from safe.gui.tools.wizard.wizard_strings import (
     continuous_raster_question,

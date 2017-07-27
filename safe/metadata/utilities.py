@@ -1,66 +1,25 @@
-# -*- coding: utf-8 -*-
-"""
-InaSAFE Disaster risk assessment tool developed by AusAid -
-**metadata module.**
+# coding=utf-8
 
-Contact : ole.moller.nielsen@gmail.com
+"""Metadata utilities."""
 
-.. versionadded:: 3.2
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-"""
-
-__author__ = 'marco@opengis.ch'
-__revision__ = '$Format:%H$'
-__date__ = '27/05/2015'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
-
-import os
 from contextlib import contextmanager
+from datetime import datetime, date
 from xml.dom.minidom import parseString
 from xml.etree import ElementTree
-from safe.metadata.property import (
-    CharacterStringProperty,
-    DateProperty,
-    UrlProperty,
-    DictionaryProperty,
-    IntegerProperty,
-    BooleanProperty,
-    FloatProperty,
-    ListProperty,
-    TupleProperty,
-    FloatTupleProperty
-)
 
-# XML to python types conversions
-TYPE_CONVERSIONS = {
-    'gco:CharacterString': CharacterStringProperty,
-    'gco:Date': DateProperty,
-    'gmd:URL': UrlProperty,
-    'gco:Dictionary': DictionaryProperty,
-    'gco:Integer': IntegerProperty,
-    'gco:Boolean': BooleanProperty,
-    'gco:Float': FloatProperty,
-    'gco:List': ListProperty,
-    'gco:Tuple': TupleProperty,
-    'gco:FloatTuple': FloatTupleProperty,
-}
+from PyQt4.QtCore import QUrl, QDate, QDateTime, Qt
 
-# XML Namespaces
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
+
 XML_NS = {
     'gmi': 'http://www.isotc211.org/2005/gmi',
     'gco': 'http://www.isotc211.org/2005/gco',
     'gmd': 'http://www.isotc211.org/2005/gmd',
     'xsi': 'http://www.w3.org/2001/XMLSchema-instance',
 }
-
-METADATA_XML_TEMPLATE = os.path.join(
-    os.path.dirname(__file__), 'iso_19115_template.xml')
-
 ElementTree.register_namespace('gmi', XML_NS['gmi'])
 ElementTree.register_namespace('gco', XML_NS['gco'])
 ElementTree.register_namespace('gmd', XML_NS['gmd'])
@@ -162,3 +121,30 @@ def prettify_xml(xml_str):
     if not pretty_xml.endswith('\n'):
         pretty_xml += '\n'
     return pretty_xml
+
+
+def serialize_dictionary(dictionary):
+    """Function to stringify a dictionary recursively.
+
+    :param dictionary: The dictionary.
+    :type dictionary: dict
+
+    :return: The string.
+    :rtype: basestring
+    """
+    string_value = {}
+    for k, v in dictionary.items():
+        if isinstance(v, QUrl):
+            string_value[k] = v.toString()
+        elif isinstance(v, (QDate, QDateTime)):
+            string_value[k] = v.toString(Qt.ISODate)
+        elif isinstance(v, datetime):
+            string_value[k] = v.isoformat()
+        elif isinstance(v, date):
+            string_value[k] = v.isoformat()
+        elif isinstance(v, dict):
+            # Recursive call
+            string_value[k] = serialize_dictionary(v)
+        else:
+            string_value[k] = v
+    return string_value

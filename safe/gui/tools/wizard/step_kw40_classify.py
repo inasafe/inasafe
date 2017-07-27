@@ -19,7 +19,7 @@ from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_strings import (
     classify_raster_question, classify_vector_question)
-from safe.gui.tools.wizard.wizard_utils import skip_inasafe_field
+from safe.gui.tools.wizard.utilities import skip_inasafe_field
 from safe.utilities.gis import is_raster_layer
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

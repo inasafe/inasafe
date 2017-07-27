@@ -18,7 +18,7 @@ from safe.definitions.utilities import (
 
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
-from safe.gui.tools.wizard.wizard_utils import get_question_text
+from safe.gui.tools.wizard.utilities import get_question_text
 from safe.utilities.resources import resources_path
 from safe.utilities.gis import is_raster_layer
 

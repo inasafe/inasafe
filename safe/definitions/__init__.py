@@ -19,12 +19,14 @@ from safe.definitions.field_groups import *
 from safe.definitions.hazard import *
 from safe.definitions.hazard_category import *
 from safe.definitions.hazard_classifications import *
+from safe.definitions.keyword_properties import *
 from safe.definitions.layer_geometry import *
 from safe.definitions.layer_modes import *
 from safe.definitions.layer_purposes import *
 from safe.definitions.messages import *
 from safe.definitions.minimum_needs import *
 from safe.definitions.post_processors import *
+from safe.definitions.provenance import *
 from safe.definitions.units import *
 from safe.definitions.versions import *
 from safe.definitions.reports import *

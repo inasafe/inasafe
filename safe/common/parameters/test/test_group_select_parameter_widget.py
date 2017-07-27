@@ -10,7 +10,12 @@ from safe.common.parameters.group_select_parameter_widget import (
     GroupSelectParameterWidget)
 
 from safe.definitions.constants import (
-    DO_NOT_USE, CUSTOM_VALUE, GLOBAL_DEFAULT, FIELDS, STATIC, SINGLE_DYNAMIC,
+    DO_NOT_REPORT,
+    CUSTOM_VALUE,
+    GLOBAL_DEFAULT,
+    FIELDS,
+    STATIC,
+    SINGLE_DYNAMIC,
     MULTIPLE_DYNAMIC)
 
 from safe.test.utilities import get_qgis_app
@@ -30,9 +35,9 @@ class TestGroupSelectParameterWidget(unittest.TestCase):
     def test_init(self):
         """Test init."""
         options = OrderedDict([
-            (DO_NOT_USE,
+            (DO_NOT_REPORT,
              {
-                 'label': 'Do not use',
+                 'label': 'Do not report',
                  'value': None,
                  'type': STATIC,
                  'constraint': {}
@@ -86,7 +91,7 @@ class TestGroupSelectParameterWidget(unittest.TestCase):
         self.assertEqual(
             self.widget.get_parameter().selected_option_type(), STATIC)
 
-        self.widget.select_radio_button(DO_NOT_USE)
+        self.widget.select_radio_button(DO_NOT_REPORT)
         self.assertEqual(self.widget.get_parameter().value, None)
         self.assertEqual(
             self.widget.get_parameter().selected_option_type(), STATIC)

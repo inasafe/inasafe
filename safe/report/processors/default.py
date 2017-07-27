@@ -27,7 +27,8 @@ from qgis.core import (
     QgsLegendRenderer,
     QgsComposerLegendStyle,
     QgsComposerMap,
-    QgsComposerLegend
+    QgsComposerLegend,
+    QgsCoordinateTransform
     )
 
 from safe.common.exceptions import TemplateLoadingError
@@ -394,6 +395,10 @@ def qgis_composer_renderer(impact_report, component):
                 qurl = QUrl.fromLocalFile(url)
                 html_element.setUrl(qurl)
 
+    original_crs = impact_report.impact_function.impact.crs()
+    destination_crs = qgis_composition_context.map_settings.destinationCrs()
+    coord_transform = QgsCoordinateTransform(original_crs, destination_crs)
+
     # resize map extent
     for map_el in context.map_elements:
         item_id = map_el.get('id')
@@ -409,7 +414,7 @@ def qgis_composer_renderer(impact_report, component):
             if map_extent_option and isinstance(
                     map_extent_option, QgsRectangle):
                 # use provided map extent
-                extent = map_extent_option
+                extent = coord_transform.transform(map_extent_option)
             else:
                 # if map extent not provided, try to calculate extent
                 # from list of given layers. Combine it so all layers were
@@ -418,7 +423,8 @@ def qgis_composer_renderer(impact_report, component):
                 extent.setMinimal()
                 for l in layers:
                     # combine extent if different layer is provided.
-                    extent.combineExtentWith(l.extent())
+                    layer_extent = coord_transform.transform(l.extent())
+                    extent.combineExtentWith(layer_extent)
 
             width = extent.width()
             height = extent.height()

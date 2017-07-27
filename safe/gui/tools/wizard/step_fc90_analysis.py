@@ -19,6 +19,7 @@ from safe.definitions.constants import (
     ANALYSIS_SUCCESS,
     PREPARE_FAILED_BAD_INPUT,
     PREPARE_FAILED_BAD_CODE,
+    EXPOSURE,
     HAZARD_EXPOSURE_VIEW,
     HAZARD_EXPOSURE_BOUNDINGBOX
 )
@@ -285,6 +286,9 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
                 impact_function.requested_extent = (
                     self.iface.mapCanvas().extent())
                 impact_function.requested_extent_crs = self.extent.crs
+
+            elif mode == EXPOSURE:
+                impact_function.use_exposure_view_only = True
 
         # We don't have any checkbox in the wizard for the debug mode.
         impact_function.debug_mode = False
