@@ -2918,7 +2918,7 @@ class TestKeywordWizard(unittest.TestCase):
             'layer_purpose': layer_purpose_hazard['key'],
             'layer_mode': layer_mode_continuous['key'],
             'thresholds': {
-                exposure_structure['key']: {
+                exposure_land_cover['key']: {
                     cyclone_au_bom_hazard_classes['key']: {
                         'active': True,
                         'classes': default_classification_thresholds(
