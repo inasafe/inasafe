@@ -117,8 +117,7 @@ from safe.definitions.provenance import (
     provenance_layer_aggregate_hazard_impacted,
     provenance_layer_aggregation_summary,
     provenance_layer_analysis_impacted,
-    provenance_layer_exposure_summary_table,
-    provenance_layer_profiling
+    provenance_layer_exposure_summary_table
 )
 from safe.impact_function.provenance_utilities import (
     get_map_title, get_analysis_question)
