@@ -9,7 +9,7 @@ from datetime import datetime
 from numbers import Number
 
 from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import Qt, pyqtSlot
+from PyQt4.QtCore import Qt, pyqtSlot, QPyNullVariant
 from qgis.core import (
     QgsRectangle,
     QgsGeometry,
@@ -1465,6 +1465,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         """Removing variables from provenance data."""
         project_context_scope = QgsExpressionContextUtils.projectScope()
         existing_variable_names = project_context_scope.variableNames()
+
+        # Save the existing variables that's not provenance variable.
         existing_variables = {}
         for existing_variable_name in existing_variable_names:
             existing_variables[existing_variable_name] = \
@@ -1472,4 +1474,16 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         for the_provenance in provenance_list:
             if the_provenance['provenance_key'] in existing_variables:
                 existing_variables.pop(the_provenance['provenance_key'])
-        QgsExpressionContextUtils.setProjectVariables(existing_variables)
+
+        # Need to change QPyNullVariant to None, to be able to store it back.
+        non_null_existing_variables = {}
+        for k, v in existing_variables.items():
+            if not isinstance(v, QPyNullVariant):
+                non_null_existing_variables[k] = v
+            else:
+                non_null_existing_variables[k] = None
+
+        # This method will set non_null_existing_variables, and remove the
+        # other variable
+        QgsExpressionContextUtils.setProjectVariables(
+            non_null_existing_variables)
