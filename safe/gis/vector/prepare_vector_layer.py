@@ -119,7 +119,7 @@ def prepare_vector_layer(layer, callback=None):
             'geometries, we compute the original size for each feature.')
         run_single_post_processor(cleaned, post_processor_size)
 
-    if cleaned.keywords['layer_purpose'] == 'exposure':
+    if cleaned.keywords['layer_purpose'] == layer_purpose_exposure['key']:
         fields = cleaned.keywords['inasafe_fields']
         if exposure_type_field['key'] not in fields:
             _add_default_exposure_class(cleaned)
@@ -319,15 +319,15 @@ def _remove_features(layer):
         i = 0
         for feature in layer.getFeatures(request):
             if isinstance(feature.attributes()[index], QPyNullVariant):
-                if layer_purpose == 'hazard':
+                if layer_purpose == layer_purpose_hazard['key']:
                     # Remove the feature if the hazard is null.
                     layer.deleteFeature(feature.id())
                     i += 1
-                elif layer_purpose == 'aggregation':
+                elif layer_purpose == layer_purpose_aggregation['key']:
                     # Put the ID if the value is null.
                     layer.changeAttributeValue(
                         feature.id(), index, str(feature.id()))
-                elif layer_purpose == 'exposure':
+                elif layer_purpose == layer_purpose_exposure['key']:
                     # Put an empty value, the value mapping will take care of
                     # it in the 'other' group.
                     layer.changeAttributeValue(
@@ -357,6 +357,16 @@ def _remove_features(layer):
                 # layer.deleteFeature(feature.id())
                 # i += 1
                 pass
+
+            # If there is exposure that mapped to do not report class
+            if layer_purpose == layer_purpose_exposure['key']:
+                is_do_not_report = layer.keywords['value_map'].get(
+                    'do_not_report')
+                if is_do_not_report:
+                    if feature[field_name] in layer.keywords['value_map'][
+                        'do_not_report']:
+                        layer.deleteFeature(feature.id())
+                        i += 1
 
             # TODO We need to add more tests
             # like checking if the value is in the value_mapping.
