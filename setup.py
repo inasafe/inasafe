@@ -6,14 +6,58 @@ try:
 except ImportError:
     pass
 
+import os
 from setuptools import setup, find_packages
 
-safe = __import__('safe')
+
+def get_version(version=None):
+    """Returns a PEP 386-compliant version number from VERSION.
+
+    :param version: A tuple that represent a version.
+    :type version: tuple
+
+    :returns: a PEP 386-compliant version number.
+    :rtype: str
+
+    """
+    if version is None:
+        # Get location of application wide version info
+        root_dir = os.path.abspath(os.path.join(
+            os.path.dirname(__file__)))
+        fid = open(os.path.join(root_dir, 'metadata.txt'))
+        version_list = []
+        status = ''
+        for line in fid.readlines():
+            if line.startswith('version'):
+                version_string = line.strip().split('=')[1]
+                version_list = version_string.split('.')
+
+            if line.startswith('status'):
+                status = line.strip().split('=')[1]
+        fid.close()
+        version = tuple(version_list + [status] + ['0'])
+
+    if len(version) != 5:
+        msg = 'Version must be a tuple of length 5. I got %s' % (version,)
+        raise RuntimeError(msg)
+
+    if version[3] not in ('alpha', 'beta', 'rc', 'final'):
+        msg = 'Version tuple not as expected. I got %s' % (version,)
+        raise RuntimeError(msg)
+
+    # Now build the two parts of the version number:
+    # main = X.Y[.Z]
+    # sub = .devN - for pre-alpha releases
+    #     | {a|b|c}N - for alpha, beta and rc releases
+    parts = 2 if version[2] == 0 else 3
+    main = '.'.join(str(x) for x in version[:parts])
+
+    return main
 
 
 setup(
     name='safe',
-    version=safe.common.version.get_version(),
+    version=get_version(),
     packages=find_packages(include=['safe']),
     license='GPL',
     author='InaSAFE Team',
