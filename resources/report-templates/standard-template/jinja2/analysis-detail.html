@@ -138,6 +138,55 @@
         </tr>
     </tfoot>
 </table>
+
+<!--extra table starts here-->
+{% if extra_table %}
+    <p>
+        <h5>
+            {{ extra_table.table_header|capitalize }}
+        </h5>
+    </p>
+    <div class="row">
+        <div class="col-sm-12">
+            <table class="table table-striped condensed">
+                <thead>
+                    <tr>
+                        {% for header in extra_table.headers %}
+                            {% if loop.first %}
+                                <th class="text-left" rowspan="2">
+                                    {{ header|capitalize }}
+                                </th>
+                            {% else %}
+                                <th class="text-right" rowspan="2">
+                                    {{ header|capitalize }}
+                                </th>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in extra_table.details %}
+                        <tr>
+                            {% for column in row %}
+                                {% if loop.first %}
+                                    <th class="text-left">
+                                        {{ column|capitalize }}
+                                    </th>
+                                {% else %}
+                                    <td class="text-right">
+                                        {{ column }}
+                                    </td>
+                                {% endif %}
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endif %}
+<!--extra table ends here-->
+
 <div>
     {% for note in notes %}
         <li colspan="100%">{{ note }}</li>

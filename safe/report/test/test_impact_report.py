@@ -359,6 +359,7 @@ class TestImpactReport(unittest.TestCase):
             'header': u'Analysis Detail',
             'notes': [],
             'group_border_color': u'#36454f',
+            'extra_table': {},
             'detail_header': {
                 'total_header_index': 5,
                 'breakdown_header_index': 0,
