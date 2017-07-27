@@ -466,7 +466,7 @@ class KeywordIO(QObject):
             if definition(key):
                 name = definition(key)['name']
             else:
-                name = tr(key.capitalize())
+                name = tr(key.capitalize().replace('_', ' '))
             row.add(m.Cell(m.ImportantText(name)))
             # Then the value. If it contains more than one element we
             # present it as a bullet list, otherwise just as simple text

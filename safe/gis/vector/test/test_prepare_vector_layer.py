@@ -74,9 +74,14 @@ class TestPrepareLayer(unittest.TestCase):
         'GDAL 2.1 is required to edit GeoJSON.')
     def test_remove_rows(self):
         """Test we can remove rows."""
-
         layer = load_test_vector_layer(
             'gisv4', 'hazard', 'classified_vector.geojson', clone=True)
+        feature_count = layer.featureCount()
+        _remove_features(layer)
+        self.assertEqual(layer.featureCount(), feature_count - 1)
+
+        layer = load_test_vector_layer(
+            'exposure', 'landcover.geojson', clone=True)
         feature_count = layer.featureCount()
         _remove_features(layer)
         self.assertEqual(layer.featureCount(), feature_count - 1)
@@ -201,6 +206,7 @@ class TestPrepareLayer(unittest.TestCase):
         self.assertNotEqual(unique_values_automatic, unique_values_before)
         self.assertEqual(unique_values_automatic, range(layer.featureCount()))
 
+    # noinspection PyPep8Naming
     def test_sum_fields(self):
         """Test sum_fields method."""
         layer = load_test_vector_layer(

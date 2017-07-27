@@ -3,6 +3,7 @@
 """Definitions relating to exposure classifications."""
 
 from safe.utilities.i18n import tr
+from safe.definitions.constants import DO_NOT_REPORT
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -28,6 +29,21 @@ exposure_classification_type = tr('Exposure Classification'),
 # The osm_downloader is not used in InaSAFE itself. It is used in OSM-Reporter
 # to generate the value_mapping. Please do not remove it.
 # See https://github.com/kartoza/osm-reporter/wiki how to use this key.
+
+do_not_report_class = {
+    'key': DO_NOT_REPORT,
+    'name': tr('Do Not Report'),
+    'description': tr(
+        'Land use types that will be excluded in the analysis.'),
+    'osm_downloader': [],
+    'string_defaults': [],
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
 
 generic_structure_classes = {
     'key': 'generic_structure_classes',
@@ -658,6 +674,8 @@ generic_landcover_classes = {
                 }
             ]
         },
+        do_not_report_class,
+        # Need to put other class in the end
         {
             'key': 'other',
             'name': tr('Other'),
@@ -767,6 +785,8 @@ badan_geologi_landcover_classes = {
                 }
             ]
         },
+        do_not_report_class,
+        # Need to put other class in the end
         {
             'key': 'other',
             'name': tr('Other'),
