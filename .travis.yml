@@ -38,7 +38,6 @@ branches:
     - master
     - develop
     - experimental
-    - geosafe4
 
 addons:
   apt:
@@ -57,8 +56,7 @@ install:
   - docker exec -it qgis-testing-environment sh -c "qgis_setup.sh inasafe"
 
 script:
-  - docker exec -it qgis-testing-environment sh -c "qgis_testrunner.sh test_suite.test_package"
-  - docker exec -it qgis-testing-environment sh -c "qgis_testrunner.sh test_suite.test_package 'bin'"
+  - docker exec -it qgis-testing-environment sh -c "qgis_testrunner.sh test_suite"
   - make pep8
 
 notifications:

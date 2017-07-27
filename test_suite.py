@@ -74,3 +74,4 @@ def test_manually():
 
 if __name__ == '__main__':
     test_package()
+    test_package('bin')
