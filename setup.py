@@ -8,9 +8,12 @@ except ImportError:
 
 from setuptools import setup, find_packages
 
+safe = __import__('safe')
+
 
 setup(
     name='safe',
+    version=safe.common.version.get_version(),
     packages=find_packages(include=['safe']),
     license='GPL',
     author='InaSAFE Team',
