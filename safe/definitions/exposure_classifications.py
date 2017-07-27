@@ -671,6 +671,20 @@ generic_landcover_classes = {
                     'link': None
                 }
             ]
+        },
+        {
+            'key': 'do_not_report',
+            'name': tr('Do Not Report'),
+            'description': tr(
+                'Land use types that will be excluded in the analysis.'),
+            'osm_downloader': [],
+            'string_defaults': [],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
         }
     ]
 }
