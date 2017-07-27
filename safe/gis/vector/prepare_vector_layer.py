@@ -24,6 +24,7 @@ from safe.gis.vector.tools import (
 )
 from safe.gis.sanity_check import check_layer
 from safe.definitions.processing_steps import prepare_vector_steps
+from safe.definitions.constants import DO_NOT_REPORT
 from safe.definitions.fields import (
     exposure_id_field,
     hazard_id_field,
@@ -360,11 +361,11 @@ def _remove_features(layer):
 
             # If there is exposure that mapped to do not report class
             if layer_purpose == layer_purpose_exposure['key']:
-                is_do_not_report = layer.keywords.get('value_map', {}).get(
-                    'do_not_report')
+                is_do_not_report = layer.keywords.get(
+                    'value_map', {}).get(DO_NOT_REPORT)
                 if is_do_not_report:
                     if feature[field_name] in layer.keywords['value_map'][
-                            'do_not_report']:
+                            DO_NOT_REPORT]:
                         layer.deleteFeature(feature.id())
                         i += 1
 
