@@ -360,11 +360,11 @@ def _remove_features(layer):
 
             # If there is exposure that mapped to do not report class
             if layer_purpose == layer_purpose_exposure['key']:
-                is_do_not_report = layer.keywords['value_map'].get(
+                is_do_not_report = layer.keywords.get('value_map', {}).get(
                     'do_not_report')
                 if is_do_not_report:
                     if feature[field_name] in layer.keywords['value_map'][
-                        'do_not_report']:
+                            'do_not_report']:
                         layer.deleteFeature(feature.id())
                         i += 1
 
