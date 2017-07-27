@@ -56,7 +56,7 @@ install:
   - docker exec -it qgis-testing-environment sh -c "qgis_setup.sh inasafe"
 
 script:
-  - docker exec -it qgis-testing-environment sh -c "qgis_testrunner.sh test_suite"
+  - docker exec -it qgis-testing-environment sh -c "qgis_testrunner.sh test_suite.run_all_tests"
   - make pep8
 
 notifications:

@@ -24,14 +24,10 @@ from qgis.core import (
     QgsRectangle,
     QgsMapLayerRegistry,
     QgsCoordinateReferenceSystem)
-from PyQt4.QtCore import QSettings
 
 from docopt import docopt, DocoptExit
 
 from safe.test.utilities import get_qgis_app
-# make sure this line executes first
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-
 from safe.common.version import get_version
 from safe.utilities.gis import qgis_version, validate_geo_array
 from safe.utilities.osm_downloader import download
@@ -46,6 +42,7 @@ from safe.definitions.reports.components import (
 from safe.report.impact_report import ImpactReport
 from safe.report.report_metadata import ReportMetadata
 
+
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
@@ -53,6 +50,8 @@ __revision__ = '$Format:%H$'
 
 current_dir = os.path.abspath(
     os.path.realpath(os.getcwd()))
+
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 if 'InaSAFEQGIS' in os.environ:
     usage_dir = os.path.join(os.environ['InaSAFEQGIS'], 'bin')
