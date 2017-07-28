@@ -316,6 +316,8 @@ minimum_needs_component = {
         'header': tr('Minimum needs'),
         'header_frequency_format': tr(
             'Relief items to be provided {frequency}'),
+        'header_additional_needs_format': tr(
+            'Additional items to be provided {frequency}'),
         'total_header': tr('Total'),
         'need_header_format': tr('{name} [{unit_abbreviation}]'),
         'zero_displaced_message': tr(
