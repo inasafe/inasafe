@@ -23,8 +23,8 @@ from safe.definitions.fields import (
     hygiene_packs_count_field,
     additional_rice_count_field,
     productivity_field,
-    productivity_cost_field,
-    productivity_value_field
+    production_cost_field,
+    production_value_field
 )
 from safe.definitions.post_processors import (
     post_processor_size_rate,
@@ -44,8 +44,8 @@ from safe.definitions.post_processors.population_post_processors import (
     post_processor_elderly)
 from safe.definitions.post_processors.productivity_post_processors import (
     post_processor_productivity,
-    post_processor_productivity_cost,
-    post_processor_productivity_value
+    post_processor_production_cost,
+    post_processor_production_value
 )
 from safe.test.utilities import load_test_vector_layer
 from safe.impact_function.postprocessors import (
@@ -258,25 +258,25 @@ class TestPostProcessors(unittest.TestCase):
         impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
         self.assertIn(productivity_field['field_name'], impact_fields)
 
-        # Test for productivity cost rate
+        # Test for production cost rate
         result, message = run_single_post_processor(
             impact_layer,
-            post_processor_productivity_cost)
+            post_processor_production_cost)
         self.assertTrue(result, message)
 
         # Check if new field is added
         impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
-        self.assertIn(productivity_cost_field['field_name'], impact_fields)
+        self.assertIn(production_cost_field['field_name'], impact_fields)
 
-        # Test for productivity value rate
+        # Test for production value rate
         result, message = run_single_post_processor(
             impact_layer,
-            post_processor_productivity_value)
+            post_processor_production_value)
         self.assertTrue(result, message)
 
         # Check if new field is added
         impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
-        self.assertIn(productivity_value_field['field_name'], impact_fields)
+        self.assertIn(production_value_field['field_name'], impact_fields)
 
     def test_affected_post_processor(self):
         """Test affected  post processor."""

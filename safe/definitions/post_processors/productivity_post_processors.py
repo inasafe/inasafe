@@ -5,11 +5,11 @@
 from safe.definitions.fields import (
     size_field,
     productivity_rate_field,
-    productivity_cost_rate_field,
-    productivity_value_rate_field,
+    production_cost_rate_field,
+    production_value_rate_field,
     productivity_field,
-    productivity_cost_field,
-    productivity_value_field
+    production_cost_field,
+    production_value_field
 )
 from safe.definitions.post_processors.post_processor_inputs import (
     field_input_type)
@@ -46,15 +46,14 @@ post_processor_productivity = {
         }
     }
 }
-post_processor_productivity_cost = {
-    'key': 'post_processor_productivity_cost',
-    'name': tr('Productivity Cost Post Processor'),
+post_processor_production_cost = {
+    'key': 'post_processor_production_cost',
+    'name': tr('Production Cost Post Processor'),
     'description': tr(
-        'A post processor to calculate the productivity cost for each feature'
-    ),
+        'A post processor to calculate the production cost for each feature'),
     'input': {
-        'productivity_cost_rate': {
-            'value': productivity_cost_rate_field,
+        'production_cost_rate': {
+            'value': production_cost_rate_field,
             'type': field_input_type,
         },
         # In meter square
@@ -64,22 +63,21 @@ post_processor_productivity_cost = {
         },
     },
     'output': {
-        'productivity_cost': {
-            'value': productivity_cost_field,
+        'production_cost': {
+            'value': production_cost_field,
             'type': formula_process,
-            'formula': 'productivity_cost_rate * size / 10000'
+            'formula': 'production_cost_rate * size / 10000'
         }
     }
 }
-post_processor_productivity_value = {
-    'key': 'post_processor_productivity_value',
-    'name': tr('Productivity Value Post Processor'),
+post_processor_production_value = {
+    'key': 'post_processor_production_value',
+    'name': tr('Production Value Post Processor'),
     'description': tr(
-        'A post processor to calculate the productivity value for each feature'
-    ),
+        'A post processor to calculate the production value for each feature'),
     'input': {
-        'productivity_value_rate': {
-            'value': productivity_value_rate_field,
+        'production_value_rate': {
+            'value': production_value_rate_field,
             'type': field_input_type,
         },
         # In meter square
@@ -89,16 +87,16 @@ post_processor_productivity_value = {
         },
     },
     'output': {
-        'productivity_value': {
-            'value': productivity_value_field,
+        'production_value': {
+            'value': production_value_field,
             'type': formula_process,
-            'formula': 'productivity_value_rate * size / 10000'
+            'formula': 'production_value_rate * size / 10000'
         }
     }
 }
 
 productivity_post_processors = [
     post_processor_productivity,
-    post_processor_productivity_cost,
-    post_processor_productivity_value
+    post_processor_production_cost,
+    post_processor_production_value
 ]

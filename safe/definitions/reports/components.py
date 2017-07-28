@@ -42,8 +42,8 @@ from safe.definitions.fields import (
     elderly_displaced_count_field,
     exposure_count_field,
     affected_productivity_field,
-    affected_productivity_cost_field,
-    affected_productivity_value_field)
+    affected_production_cost_field,
+    affected_production_value_field)
 from safe.definitions.styles import charcoal_black
 from safe.report.extractors.action_notes import (
     action_checklist_extractor,
@@ -233,8 +233,8 @@ analysis_detail_component = {
         'exposure_extra_fields': {
             exposure_land_cover['key']: [
                 affected_productivity_field,
-                affected_productivity_cost_field,
-                affected_productivity_value_field,
+                affected_production_cost_field,
+                affected_production_value_field,
             ],
         },
     }

@@ -16,8 +16,8 @@ from safe.definitions.fields import (
     population_count_field,
     exposure_type_field,
     productivity_rate_field,
-    productivity_cost_rate_field,
-    productivity_value_rate_field)
+    production_cost_rate_field,
+    production_value_rate_field)
 from safe.definitions.field_groups import population_field_groups
 from safe.definitions.layer_modes import (
     layer_mode_continuous, layer_mode_classified)
@@ -450,8 +450,8 @@ exposure_land_cover = {
         # feature_value_field, disabled in V4.0, ET 13/02/17
         # feature_rate_field disabled in V4.0, ET 13/02/17
         productivity_rate_field,
-        productivity_cost_rate_field,
-        productivity_value_rate_field
+        production_cost_rate_field,
+        production_value_rate_field
     ],
     'field_groups': [],
     'layer_modes': [layer_mode_classified],

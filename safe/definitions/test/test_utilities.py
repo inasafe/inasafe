@@ -44,8 +44,8 @@ from safe.definitions import (
     population_field_groups,
     aggregation_field_groups,
     productivity_rate_field,
-    productivity_cost_rate_field,
-    productivity_value_rate_field,
+    production_cost_rate_field,
+    production_value_rate_field,
     provenance_host_name,
     provenance_user
 )
@@ -277,8 +277,8 @@ class TestDefinitionsUtilities(unittest.TestCase):
         expected_fields += deepcopy(exposure_fields)
         expected_fields += [
             productivity_rate_field,
-            productivity_cost_rate_field,
-            productivity_value_rate_field
+            production_cost_rate_field,
+            production_value_rate_field
         ]
         self.assertListEqual(fields, expected_fields)
 
