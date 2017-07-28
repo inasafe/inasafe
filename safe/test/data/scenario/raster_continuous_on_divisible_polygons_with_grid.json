@@ -27,8 +27,8 @@
         "Size Value Post Processor",
         "Affected Post Processor",
         "Productivity Post Processor",
-        "Productivity Cost Post Processor",
-        "Productivity Value Post Processor"
+        "Production Cost Post Processor",
+        "Production Value Post Processor"
       ]
     },
     "aggregation":{
