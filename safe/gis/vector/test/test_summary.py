@@ -11,8 +11,8 @@ from safe.definitions.fields import (
     hazard_class_field,
     exposure_count_field,
     productivity_field,
-    productivity_cost_field,
-    productivity_value_field
+    production_cost_field,
+    production_value_field
 )
 from safe.gis.vector.tools import read_dynamic_inasafe_field
 from safe.gis.vector.summary_1_aggregate_hazard import (
@@ -227,8 +227,8 @@ class TestAggregateSummary(unittest.TestCase):
         # one for total not exposed
         # one for total
         # one for affected productivity
-        # one for affected cost productivity
-        # one for affected value productivity
+        # one for affected production cost
+        # one for affected production value
         self.assertEqual(layer.fields().count(), len(unique_hazard) + 8)
 
     def test_summarize_result(self):
@@ -243,11 +243,11 @@ class TestAggregateSummary(unittest.TestCase):
         summarizer_dicts = summarize_result(exposure_summary)
 
         productivity_summary = summarizer_dicts.get(productivity_field['key'])
-        productivity_cost_summary = summarizer_dicts.get(
-            productivity_cost_field['key'])
-        productivity_value_summary = summarizer_dicts.get(
-            productivity_value_field['key'])
+        production_cost_summary = summarizer_dicts.get(
+            production_cost_field['key'])
+        production_value_summary = summarizer_dicts.get(
+            production_value_field['key'])
 
         self.assertIsNotNone(productivity_summary)
-        self.assertIsNotNone(productivity_cost_summary)
-        self.assertIsNotNone(productivity_value_summary)
+        self.assertIsNotNone(production_cost_summary)
+        self.assertIsNotNone(production_value_summary)

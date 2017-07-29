@@ -653,9 +653,9 @@ concepts['productivity'] = {
         }
     ],
 }
-concepts['productivity_cost'] = {
-    'group': tr('Productivity Cost'),
-    'key': 'productivity_cost',
+concepts['production_cost'] = {
+    'group': tr('Production Cost'),
+    'key': 'production_cost',
     'description': tr(
         'How much money needed to re-build a crop in an area.'),
     'citations': [
@@ -665,9 +665,9 @@ concepts['productivity_cost'] = {
         }
     ],
 }
-concepts['productivity_value'] = {
-    'group': tr('Productivity Value'),
-    'key': 'productivity_value',
+concepts['production_value'] = {
+    'group': tr('Production Value'),
+    'key': 'production_value',
     'description': tr('The value of a crop in an area.'),
     'citations': [
         {
