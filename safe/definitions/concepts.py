@@ -113,6 +113,7 @@ concepts['exposure'] = {
 concepts['affected'] = {
     'group': tr('Basic concepts'),
     'key': 'affected',
+    'name': tr('Affected'),
     'description': tr(
         'An exposure element (e.g. people, roads, buildings, land '
         'cover) that experiences a hazard (e.g. tsunami, flood, '
@@ -639,13 +640,43 @@ concepts['rounding_methodology'] = {
         }
     ],
 }
+concepts['productivity_rate'] = {
+    'group': tr('Productivity'),
+    'key': 'productivity_rate',
+    'name': tr('Productivity Rate'),
+    'description': tr(
+        'The weight of a crop from land cover can produce per area unit. The '
+        'unit is weight per area unit (e.g. tons/hectare, quintal('
+        '100kg)/hectare).'),
+    'citations': [
+        {
+            'text': '',
+            'link': u''
+        }
+    ],
+}
 concepts['productivity'] = {
     'group': tr('Productivity'),
     'key': 'productivity',
+    'name': tr('Productivity'),
     'description': tr(
-        'The number of crop in weight unit (e.g. quintals, tons) per '
-        'area unit (m^2, hectare) that can be produced in a land cover '
-        'unit.'),
+        'The number of crop in weight unit (e.g. quintals, tons) that can be '
+        'produced in a land cover area.'),
+    'citations': [
+        {
+            'text': '',
+            'link': u''
+        }
+    ],
+}
+concepts['production_cost_rate'] = {
+    'group': tr('Productivity'),
+    'key': 'production_cost_rate',
+    'name': tr('Production Cost Rate'),
+    'description': tr(
+        'The amount of money that is needed to build a crop land cover per '
+        'area unit. The default unit is currency per area unit (e.g. '
+        'IDR/hectare, USD/hectare).'),
     'citations': [
         {
             'text': '',
@@ -654,10 +685,26 @@ concepts['productivity'] = {
     ],
 }
 concepts['production_cost'] = {
-    'group': tr('Production Cost'),
+    'group': tr('Productivity'),
     'key': 'production_cost',
+    'name': tr('Production Cost'),
     'description': tr(
-        'How much money needed to re-build a crop in an area.'),
+        'The amount of money that is needed to build a crop land cover area. '
+        'The unit is a currency unit (e.g. IDR, USD, Euro).'),
+    'citations': [
+        {
+            'text': '',
+            'link': u''
+        }
+    ],
+}
+concepts['production_value_rate'] = {
+    'group': tr('Productivity'),
+    'key': 'production_value_rate',
+    'name': tr('Production Value Rate'),
+    'description': tr(
+        'The price of a crop per area unit. The default unit is currency per '
+        'area unit. (e.g. IDR/hectare, USD/hectare).'),
     'citations': [
         {
             'text': '',
@@ -666,9 +713,12 @@ concepts['production_cost'] = {
     ],
 }
 concepts['production_value'] = {
-    'group': tr('Production Value'),
+    'group': tr('Productivity'),
     'key': 'production_value',
-    'description': tr('The value of a crop in an area.'),
+    'name': tr('Production Value'),
+    'description': tr(
+        'The price of a crop in a land cover area. The unit is a currency '
+        'unit (e.g. IDR, USD, Euro).'),
     'citations': [
         {
             'text': '',
