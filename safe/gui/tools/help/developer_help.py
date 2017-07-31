@@ -102,7 +102,7 @@ def content():
     paragraph = m.Paragraph(tr(
         'Also, in all versions prior to Version 4.0, we made heavy use of '
         'interpolation in order to determine whether buildings or other '
-        'exposure layers are impacted. Whist this is a commonly used '
+        'exposure layers are impacted. While this is a commonly used '
         'technique in GIS, it often leads to non - intuitive looking '
         'reports. Under our new architecture, we always use geometric '
         'overlay operations to make a determination whether an exposure '
@@ -114,7 +114,7 @@ def content():
     paragraph = m.Paragraph(tr(
         'Stepping away from the two previously mentioned paradigms allows '
         'us to simply add new hazard types to the metadata driven impact '
-        'function by adding new metadata types to the InaSafe sources. '
+        'function by adding new metadata types to the InaSAFE sources. '
         'In the next chapter we show you how this was achieved and how '
         'it can be repeated for further hazards using the example of '
         'tropical cyclones.'
@@ -124,7 +124,7 @@ def content():
         m.Heading(tr('Adding a new hazard'), **BLUE_CHAPTER_STYLE))
     link = m.Link(
         'https://github.com/inasafe/inasafe/pull/3539/files',
-        'Pull Request #3539')
+        tr('Pull Request #3539'))
     paragraph = m.Paragraph(
         tr('The whole work needed can be looked at in '),
         link,
@@ -141,9 +141,9 @@ def content():
 
     message.add(
         m.Heading(tr('safe/definitions/units.py'), **BLUE_CHAPTER_STYLE))
-    paragraph = m.Paragraph(
+    paragraph = m.Paragraph(tr(
         'If you are adding an hazard that uses units that are not yet known '
-        'to InaSafe, you need to define them in units.py'
+        'to InaSAFE, you need to define them in units.py')
     )
     message.add(paragraph)
     paragraph = m.PreformattedText(
@@ -154,7 +154,7 @@ def content():
     # Setting up style
 
     message.add(
-        m.Heading(tr('safe/definitions/colors.py'), **BLUE_CHAPTER_STYLE))
+        m.Heading('safe/definitions/colors.py', **BLUE_CHAPTER_STYLE))
     paragraph = m.Paragraph(
         'If you are adding an hazard that has more classes than any other '
         'hazards you’ll need to add additional colors for the additional '
@@ -171,19 +171,19 @@ def content():
 
     message.add(
         m.Heading(
-            tr('safe/definitions/hazard_classifications.py'),
+            'safe/definitions/hazard_classifications.py',
             **BLUE_CHAPTER_STYLE))
-    paragraph = m.Paragraph(
+    paragraph = m.Paragraph(tr(
         'Add the classifications you want to make available for your new '
         'hazard type. You can add as many classes as you want in the '
-        'classes list.')
+        'classes list.'))
     message.add(paragraph)
-    paragraph = m.Paragraph(
+    paragraph = m.Paragraph(tr(
         'Also, a classification can support multiple units so you don\'t '
         'have to define different classifications just to have the same '
         'classification in two or more different units. These are defined '
         'in the multiple_units attribute of the classification.'
-    )
+    ))
     message.add(paragraph)
 
     paragraph = m.PreformattedText(
@@ -197,10 +197,10 @@ def content():
 
     message.add(
         m.Heading(
-            tr('safe/gui/tools/wizard/wizard_strings.py'),
+            'safe/gui/tools/wizard/wizard_strings.py',
             **BLUE_CHAPTER_STYLE))
     paragraph = m.Paragraph(
-        'Define the questions for the wizard:'
+        tr('Define the questions for the wizard:')
     )
     message.add(paragraph)
     # don not translate
@@ -214,9 +214,9 @@ def content():
     # Setting up
 
     message.add(
-        m.Heading(tr('safe/definitions/hazard.py'), **BLUE_CHAPTER_STYLE))
+        m.Heading('safe/definitions/hazard.py', **BLUE_CHAPTER_STYLE))
     paragraph = m.Paragraph(
-        'Finally define new hazard and add it to the hazard_all list:'
+        tr('Finally define new hazard and add it to the hazard_all list:')
     )
     message.add(paragraph)
     paragraph = m.PreformattedText(
@@ -224,7 +224,7 @@ def content():
     )
     message.add(paragraph)
     paragraph = m.Paragraph(
-        'Finally define new hazard and add it to the hazard_all list:'
+        tr('Finally define new hazard and add it to the hazard_all list:')
     )
     message.add(paragraph)
     paragraph = m.PreformattedText(
