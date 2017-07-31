@@ -149,7 +149,7 @@ def field_mapping_help_content():
         tr(
             'The vulnerable people group reports on specific demographics '
             'relating to vulnerability including things like the number of '
-            'infants, elderly people, disabled peopled and so on.'
+            'infants, elderly people, disabled people and so on.'
         )
     ))
     message.add(bullets)

@@ -205,7 +205,7 @@ hazard_value_field = {
     'help_text': tr(
         'A VALUE attribute for the hazard.'),
     'description': tr(
-        'The value attribute for a layer describes the intensity of a hazard'
+        'The value attribute for a layer describes the intensity of a hazard '
         'over the area described by the geometry of the feature. For example '
         'a flood polygon may have a hazard value of "1" indicating that the '
         'flood depth over that whole polygon is 1m. The hazard value is the '
@@ -213,7 +213,7 @@ hazard_value_field = {
         'classify the values in the value field into thresholds. For example, '
         'values greater than or equal to zero meters and less than 0.5m '
         'might be a reclassified into a threshold used to define a "Low" '
-        'flood class).'),
+        'flood class.'),
     'citations': [
         {
             'text': None,
