@@ -2124,11 +2124,16 @@ productivity_rate_field = {
     'precision': 0,
     'absolute': True,
     'description': tr(
-        'The weight of a crop from land cover can produce per area unit. The '
-        'unit is in Quintal (100 kilograms) / Hectare.'),
+        'The rate of productivity of crop land cover for each feature / '
+        'area.'),
     'help_text': tr(
-        'For a land cover, productivity is the rate of product weight per '
-        'area.'
+        '"{name}" is defined as: {description}. In case where land cover data '
+        'is available, InaSAFE will calculate the productivity for each '
+        'land cover area (exposure feature). The productivity is calculated '
+        'based on the productivity rate multiplied by the area of the land '
+        'cover.').format(
+        name=concepts['productivity_rate']['name'],
+        description=concepts['productivity_rate']['description']
     ),
     'citations': [
         {
@@ -2149,10 +2154,15 @@ productivity_field = {
     'precision': default_field_precision,
     'absolute': True,
     'description': tr(
-        'The total weight of a crop that can be produced from the land cover '
-        'area. The unit is in Quintal (hundred kilograms).'),
+        'The total weight of a crop that can be produced for each feature.'),
     'help_text': tr(
-        'For a land cover, productivity is the weight of product.'
+        '"{name}" is defined as: {description}. In case where land cover data '
+        'is available, InaSAFE will calculate the productivity for each '
+        'land cover area (exposure feature). The productivity is calculated '
+        'based on the productivity rate multiplied by the area of the land '
+        'cover.').format(
+        name=concepts['productivity_rate']['name'],
+        description=concepts['productivity_rate']['description']
     ),
     'citations': [
         {
@@ -2174,11 +2184,13 @@ affected_productivity_field = {
     'precision': default_field_precision,
     'absolute': True,
     'description': tr(
-        'The affected productivity of a crop in Quintal (hundred kilograms).'),
+        'The total weight of a crop that is affected for each feature.'),
     'help_text': tr(
-        'For a land cover, affected productivity is the weight of product '
-        'that is affected by the hazard.'
-    ),
+        '"{affected_name}" is defined as: {affected_description}. This field '
+        'contains the productivity that is affected by the hazard.'
+        '').format(
+        affected_name=concepts['affected']['name'],
+        affected_description=concepts['affected']['description']),
     'citations': [
         {
             'text': None,
@@ -2200,10 +2212,16 @@ production_cost_rate_field = {
     'precision': 0,
     'absolute': True,
     'description': tr(
-        'The rate of production cost of a crop in Currency/Hectare unit.'),
+        'The rate of production cost of a crop for each feature in '
+        'Currency/hectare unit.'),
     'help_text': tr(
-        'For a land cover, production cost rate is the rate of product '
-        'cost per area. It is the cost to build the area.'
+        '"{name}" is defined as: {description}. In case where land cover data '
+        'is available, InaSAFE will calculate the production cost for each '
+        'land cover area (exposure feature). The production cost is '
+        'calculated based on the production cost rate multiplied by the area '
+        'of the land cover.').format(
+        name=concepts['production_cost_rate']['name'],
+        description=concepts['production_cost_rate']['description']
     ),
     'citations': [
         {
@@ -2224,9 +2242,15 @@ production_cost_field = {
     'precision': default_field_precision,
     'absolute': True,
     'description': tr(
-        'The production cost of a crop in Currency unit.'),
+        'The total production cost of a crop for each feature.'),
     'help_text': tr(
-        'For a land cover, production cost is the cost to build the area.'
+        '"{name}" is defined as: {description}. In case where land cover data '
+        'is available, InaSAFE will calculate the production cost for each '
+        'land cover area (exposure feature). The production cost is '
+        'calculated based on the production cost rate multiplied by the area '
+        'of the land cover.').format(
+        name=concepts['production_cost']['name'],
+        description=concepts['production_cost']['description']
     ),
     'citations': [
         {
@@ -2248,11 +2272,13 @@ affected_production_cost_field = {
     'precision': default_field_precision,
     'absolute': True,
     'description': tr(
-        'The affected production cost of a crop in Currency unit.'),
+        'The amount of production cost of a crop that is affected for each '
+        'feature.'),
     'help_text': tr(
-        'For a land cover, affected production cost is the cost to build '
-        'the area that is affected by a hazard.'
-    ),
+        '"{affected_name}" is defined as: {affected_description}. This field '
+        'contains the production cost that is affected by the hazard.').format(
+        affected_name=concepts['affected']['name'],
+        affected_description=concepts['affected']['description']),
     'citations': [
         {
             'text': None,
@@ -2264,7 +2290,6 @@ affected_production_cost_field = {
     'units': currencies,
 }
 
-
 # Production value field
 production_value_rate_field = {
     'key': 'production_value_rate_field',
@@ -2275,10 +2300,16 @@ production_value_rate_field = {
     'precision': 0,
     'absolute': True,
     'description': tr(
-        'The rate of production value of a crop in Currency/Hectare unit.'),
+        'The rate of production value of a crop for each feature in '
+        'Currency/hectare unit.'),
     'help_text': tr(
-        'For a land cover, production value rate is the rate of product '
-        'cost per area. It is the value of the area.'
+        '"{name}" is defined as: {description}. In case where land cover data '
+        'is available, InaSAFE will calculate the production value for each '
+        'land cover area (exposure feature). The production value is '
+        'calculated based on the production value rate multiplied by the area '
+        'of the land cover.').format(
+        name=concepts['production_value_rate']['name'],
+        description=concepts['production_value_rate']['description']
     ),
     'citations': [
         {
@@ -2299,16 +2330,16 @@ production_value_field = {
     'precision': default_field_precision,
     'absolute': True,
     'description': tr(
-        'The production value of a crop in Currency unit.'),
+        'The total production value of a crop for each feature.'),
     'help_text': tr(
-        'For a land cover, production value is the value of the area.'
+        '"{name}" is defined as: {description}. In case where land cover data '
+        'is available, InaSAFE will calculate the production value for each '
+        'land cover area (exposure feature). The production value is '
+        'calculated based on the production value rate multiplied by the area '
+        'of the land cover.').format(
+        name=concepts['production_value']['name'],
+        description=concepts['production_value']['description']
     ),
-    'citations': [
-        {
-            'text': None,
-            'link': None
-        }
-    ],
     # Null value can be replaced by default or not
     'replace_null': False,
 }
@@ -2323,11 +2354,14 @@ affected_production_value_field = {
     'precision': default_field_precision,
     'absolute': True,
     'description': tr(
-        'The affected production value of a crop in Currency unit.'),
+        'The amount of production value of a crop that is affected for each '
+        'feature.'),
     'help_text': tr(
-        'For a land cover, affected production value is the value of the '
-        'area that is affected by a hazard.'
-    ),
+        '"{affected_name}" is defined as: {affected_description}. This field '
+        'contains the production value that is affected by the hazard.'
+    ).format(
+        affected_name=concepts['affected']['name'],
+        affected_description=concepts['affected']['description']),
     'citations': [
         {
             'text': None,
