@@ -1,0 +1,2 @@
+include safe/gui/ui/*
+include safe/messaging/example/resources/*
