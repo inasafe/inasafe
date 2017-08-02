@@ -1482,6 +1482,18 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             if the_provenance['provenance_key'] in existing_variables:
                 existing_variables.pop(the_provenance['provenance_key'])
 
+        # Removing generated key from dictionary (e.g.
+        # action_checklist__0__item_list__0)
+        will_be_removed = []
+        for existing_variable in existing_variables:
+            for the_provenance in provenance_list:
+                if existing_variable.startswith(
+                        the_provenance['provenance_key']):
+                    will_be_removed.append(existing_variable)
+                    continue
+        for variable in will_be_removed:
+            existing_variables.pop(variable)
+
         # Need to change QPyNullVariant to None, to be able to store it back.
         non_null_existing_variables = {}
         for k, v in existing_variables.items():
