@@ -268,7 +268,7 @@
                <item row="7" column="0">
                 <widget class="QCheckBox" name="cbx_print_atlas_report">
                  <property name="text">
-                  <string>Print atlas report on atlas driven template</string>
+                  <string>Print atlas report on atlas driven template with the aggregation layer</string>
                  </property>
                 </widget>
                </item>

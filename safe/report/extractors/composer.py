@@ -234,7 +234,7 @@ def qgis_composer_extractor(impact_report, component_metadata):
 
     # check show only impact
     show_only_impact = setting('set_show_only_impact_on_report', False, bool)
-    layers = [impact_report.impact_function.impact]
+    layers = [impact_report.impact] + impact_report.extra_layers
     layer_registry = QgsMapLayerRegistry.instance()
     if not show_only_impact:
         hazard_layer = layer_registry.mapLayers().get(
@@ -270,8 +270,8 @@ def qgis_composer_extractor(impact_report, component_metadata):
     ]
     context.map_elements = map_elements
 
-    # calculate map_legends
-    layers = [impact_report.impact] + impact_report.extra_layers
+    # calculate map_legends, only show the legend for impact layer
+    layers = [impact_report.impact]
     symbol_count = 0
     for l in layers:
         layer = l

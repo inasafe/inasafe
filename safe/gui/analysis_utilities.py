@@ -34,13 +34,19 @@ def generate_impact_report(impact_function, iface):
     :type iface: QGisAppInterface
 
     """
+    # get the extra layers that we need
+    extra_layers = []
+    print_atlas = setting('print_atlas_report', False, bool)
+    if print_atlas:
+        extra_layers.append(impact_function.aggregation_summary)
     # create impact report instance
     report_metadata = ReportMetadata(
         metadata_dict=standard_impact_report_metadata_pdf)
     impact_report = ImpactReport(
         iface,
         report_metadata,
-        impact_function=impact_function)
+        impact_function=impact_function,
+        extra_layers=extra_layers)
 
     # generate report folder
 
@@ -67,13 +73,19 @@ def generate_impact_map_report(impact_function, iface):
     :param iface: QGIS QGisAppInterface instance.
     :type iface: QGisAppInterface
     """
+    # get the extra layers that we need
+    extra_layers = []
+    print_atlas = setting('print_atlas_report', False, bool)
+    if print_atlas:
+        extra_layers.append(impact_function.aggregation_summary)
     # create impact report instance
     report_metadata = ReportMetadata(
         metadata_dict=map_report_component(report_a4_blue))
     impact_report = ImpactReport(
         iface,
         report_metadata,
-        impact_function=impact_function)
+        impact_function=impact_function,
+        extra_layers=extra_layers)
 
     # Get other setting
     logo_path = setting('organisation_logo_path', None, str)
@@ -136,8 +148,12 @@ def add_impact_layers_to_canvas(impact_function, iface):
         except KeyError:
             pass
 
+        visible_layers = [impact_function.impact.id()]
+        print_atlas = setting('print_atlas_report', False, bool)
+        if print_atlas:
+            visible_layers.append(impact_function.aggregation_summary.id())
         # Let's enable only the more detailed layer. See #2925
-        if layer.id() == impact_function.impact.id():
+        if layer.id() in visible_layers:
             layer_node.setVisible(Qt.Checked)
             iface.setActiveLayer(layer)
         elif is_raster_layer(layer):
