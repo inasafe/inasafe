@@ -1,14 +1,13 @@
 # coding=utf-8
 
 import logging
-import random
 import unittest
 
 from safe.definitions.units import (
     unit_millimetres, unit_metres, unit_kilometres, unit_knots)
 from safe.utilities.rounding import (
     rounding_full,
-    rounding,
+    denomination,
     add_separators,
     convert_unit,
     fatalities_range,
@@ -77,6 +76,45 @@ class TestCore(unittest.TestCase):
         self.assertEqual('1,000 - 10,000', fatalities_range(8000))
         self.assertEqual('10,000 - 100,000', fatalities_range(18000))
         self.assertEqual('> 100,000', fatalities_range(101000))
+
+    def test_denomination(self):
+        """Test name number."""
+        result = denomination(1)
+        self.assertEqual(1, result[0])
+        self.assertEqual('unit_ones', result[1]['key'])
+
+        result = denomination(11)
+        self.assertEqual(1.1, result[0])
+        self.assertEqual('unit_tens', result[1]['key'])
+
+        result = denomination(99)
+        self.assertEqual(9.9, result[0])
+        self.assertEqual('unit_tens', result[1]['key'])
+
+        result = denomination(100)
+        self.assertEqual(1, result[0])
+        self.assertEqual('unit_hundreds', result[1]['key'])
+
+        result = denomination(101)
+        self.assertEqual(1.01, result[0])
+        self.assertEqual('unit_hundreds', result[1]['key'])
+
+        result = denomination(1001)
+        self.assertEqual(1.001, result[0])
+        self.assertEqual('unit_thousand', result[1]['key'])
+
+        result = denomination(10000)
+        self.assertEqual(10, result[0])
+        self.assertEqual('unit_thousand', result[1]['key'])
+
+        result = denomination(101000)
+        self.assertEqual(101, result[0])
+        self.assertEqual('unit_thousand', result[1]['key'])
+
+        result = denomination(100000000000000)
+        self.assertEqual(100.0, result[0])
+        self.assertEqual('unit_trillion', result[1]['key'])
+
 
 if __name__ == '__main__':
     unittest.main()

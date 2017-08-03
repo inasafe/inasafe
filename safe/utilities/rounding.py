@@ -1,9 +1,11 @@
 # coding=utf-8
+
 """Rounding and number formatting."""
+
 from decimal import Decimal
 from math import ceil
 
-from safe.definitions.units import unit_mapping
+from safe.definitions.units import unit_mapping, nominal_mapping
 from safe.utilities.i18n import locale
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -284,3 +286,27 @@ def html_scientific_notation_rate(rate):
         html_rate.insert(1, 'x')
         rate_percentage = ''.join(html_rate)
     return rate_percentage
+
+
+def denomination(value):
+    """Return the denomination of a number.
+
+    :param value: The value.
+    :type value: int
+
+    :return: The new value and the denomination as a unit definition.
+    :rtype: list(int, safe.unit.definition)
+    """
+    if value == nominal_mapping.keys()[0]:
+        return 1, nominal_mapping[nominal_mapping.keys()[0]]
+
+    iterator = zip(nominal_mapping.keys(), nominal_mapping.keys()[1:])
+    for min_value, max_value in iterator:
+
+        if min_value <= value < max_value:
+            return float(value) / min_value, nominal_mapping[min_value]
+
+    max_value = nominal_mapping.keys()[-1]
+    new_value = float(value) / max_value
+    new_unit = nominal_mapping[nominal_mapping.keys()[-1]]
+    return new_value, new_unit

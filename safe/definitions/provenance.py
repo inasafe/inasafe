@@ -195,6 +195,38 @@ provenance_layer_profiling = {
     'provenance_key': layer_purpose_profiling['key']
 }
 
+# Layers ID
+provenance_layer_exposure_summary_id = {
+    'key': 'provenance_layer_exposure_summary_id',
+    'name': layer_purpose_exposure_summary['name'] + ' ID',
+    'provenance_key': layer_purpose_exposure_summary['key'] + '_id'
+}
+provenance_layer_aggregate_hazard_impacted_id = {
+    'key': 'provenance_layer_aggregate_hazard_impacted_id',
+    'name': layer_purpose_aggregate_hazard_impacted['name'] + ' ID',
+    'provenance_key': layer_purpose_aggregate_hazard_impacted['key'] + '_id'
+}
+provenance_layer_aggregation_summary_id = {
+    'key': 'provenance_layer_aggregation_summary_id',
+    'name': layer_purpose_aggregation_summary['name'] + ' ID',
+    'provenance_key': layer_purpose_aggregation_summary['key'] + '_id'
+}
+provenance_layer_analysis_impacted_id = {
+    'key': 'provenance_layer_analysis_impacted_id',
+    'name': layer_purpose_analysis_impacted['name'] + ' ID',
+    'provenance_key': layer_purpose_analysis_impacted['key'] + '_id'
+}
+provenance_layer_exposure_summary_table_id = {
+    'key': 'provenance_layer_exposure_summary_table_id',
+    'name': layer_purpose_exposure_summary_table['name'] + ' ID',
+    'provenance_key': layer_purpose_exposure_summary_table['key'] + '_id'
+}
+provenance_layer_profiling_id = {
+    'key': 'provenance_layer_profiling_id',
+    'name': layer_purpose_profiling['name'] + ' ID',
+    'provenance_key': layer_purpose_profiling['key'] + '_id'
+}
+
 provenance_list = [
     provenance_action_checklist,
     provenance_aggregation_keywords,
@@ -232,5 +264,11 @@ provenance_list = [
     provenance_layer_aggregation_summary,
     provenance_layer_analysis_impacted,
     provenance_layer_exposure_summary_table,
-    provenance_layer_profiling
+    provenance_layer_profiling,
+    provenance_layer_exposure_summary_id,
+    provenance_layer_aggregate_hazard_impacted_id,
+    provenance_layer_aggregation_summary_id,
+    provenance_layer_analysis_impacted_id,
+    provenance_layer_exposure_summary_table_id,
+    provenance_layer_profiling_id,
 ]
