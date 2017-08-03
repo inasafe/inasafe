@@ -117,7 +117,13 @@ from safe.definitions.provenance import (
     provenance_layer_aggregate_hazard_impacted,
     provenance_layer_aggregation_summary,
     provenance_layer_analysis_impacted,
-    provenance_layer_exposure_summary_table
+    provenance_layer_exposure_summary_table,
+    provenance_layer_aggregate_hazard_impacted_id,
+    provenance_layer_aggregation_summary_id,
+    provenance_layer_exposure_summary_table_id,
+    provenance_layer_profiling_id,
+    provenance_layer_analysis_impacted_id,
+    provenance_layer_exposure_summary_id,
 )
 from safe.impact_function.provenance_utilities import (
     get_map_title, get_analysis_question)
@@ -1448,6 +1454,12 @@ class ImpactFunction(object):
                 'provenance_key']: None,
             provenance_layer_exposure_summary_table[
                 'provenance_key']: None,
+            provenance_layer_exposure_summary_id['provenance_key']: None,
+            provenance_layer_aggregate_hazard_impacted_id[
+                'provenance_key']: None,
+            provenance_layer_aggregation_summary_id['provenance_key']: None,
+            provenance_layer_analysis_impacted_id['provenance_key']: None,
+            provenance_layer_exposure_summary_table_id['provenance_key']: None,
         }
 
         # End of the impact function, we can add layers to the datastore.
@@ -1471,6 +1483,8 @@ class ImpactFunction(object):
 
             output_layer_provenance[provenance_layer_exposure_summary[
                 'provenance_key']] = self._exposure_summary.publicSource()
+            output_layer_provenance[provenance_layer_exposure_summary_id[
+                'provenance_key']] = self._exposure_summary.id()
 
         # Aggregate hazard impacted
         if self.aggregate_hazard_impacted:
@@ -1492,6 +1506,9 @@ class ImpactFunction(object):
             output_layer_provenance[
                 provenance_layer_aggregate_hazard_impacted['provenance_key']
             ] = self.aggregate_hazard_impacted.publicSource()
+            output_layer_provenance[
+                provenance_layer_aggregate_hazard_impacted_id['provenance_key']
+            ] = self.aggregate_hazard_impacted.id()
 
         # Exposure summary table
         if self._exposure.keywords.get('classification'):
@@ -1513,6 +1530,9 @@ class ImpactFunction(object):
             output_layer_provenance[
                 provenance_layer_exposure_summary_table['provenance_key']
             ] = self._exposure_summary_table.publicSource()
+            output_layer_provenance[
+                provenance_layer_exposure_summary_table_id['provenance_key']
+            ] = self._exposure_summary_table.id()
 
         # Aggregation summary
         self.aggregation_summary.keywords['provenance_data'] = self.provenance
@@ -1529,6 +1549,8 @@ class ImpactFunction(object):
 
         output_layer_provenance[provenance_layer_aggregation_summary[
             'provenance_key']] = self._aggregation_summary.publicSource()
+        output_layer_provenance[provenance_layer_aggregation_summary_id[
+            'provenance_key']] = self._aggregation_summary.id()
 
         # Analysis impacted
         self.analysis_impacted.keywords['provenance_data'] = self.provenance
@@ -1543,6 +1565,8 @@ class ImpactFunction(object):
         self.debug_layer(self._analysis_impacted, add_to_datastore=False)
         output_layer_provenance[provenance_layer_analysis_impacted[
             'provenance_key']] = self._analysis_impacted.publicSource()
+        output_layer_provenance[provenance_layer_analysis_impacted_id[
+            'provenance_key']] = self._analysis_impacted.id()
 
         # Update provenance data with output layers URI
         self._provenance.update(output_layer_provenance)

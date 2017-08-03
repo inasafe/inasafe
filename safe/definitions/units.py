@@ -2,6 +2,8 @@
 
 """Definitions relating to units."""
 
+from collections import OrderedDict
+
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -327,6 +329,133 @@ exposure_unit = {
     ]
 }
 
+
+unit_ones = {
+    'key': 'unit_ones',
+    'name': tr('One'),
+    'plural_name': tr('Ones'),
+    'abbreviation': tr('#'),
+    'description': None,
+    'types': [
+        count_exposure_unit
+    ],
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+
+unit_tens = {
+    'key': 'unit_tens',
+    'name': tr('Ten'),
+    'plural_name': tr('Tens'),
+    'abbreviation': tr('#'),
+    'description': None,
+    'types': [
+        count_exposure_unit
+    ],
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+
+unit_hundreds = {
+    'key': 'unit_hundreds',
+    'name': tr('Hundred'),
+    'plural_name': tr('Hundreds'),
+    'abbreviation': tr('#'),
+    'description': None,
+    'types': [
+        count_exposure_unit
+    ],
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+
+
+unit_thousand = {
+    'key': 'unit_thousand',
+    'name': tr('Thousand'),
+    'plural_name': tr('Thousands'),
+    'abbreviation': tr('#'),
+    'description': None,
+    'types': [
+        count_exposure_unit
+    ],
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+unit_million = {
+    'key': 'unit_million',
+    'name': tr('Million'),
+    'plural_name': tr('Millions'),
+    'abbreviation': tr('#'),
+    'description': None,
+    'types': [
+        count_exposure_unit
+    ],
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+unit_billion = {
+    'key': 'unit_billion',
+    'name': tr('Billion'),
+    'plural_name': tr('Billions'),
+    'abbreviation': tr('#'),
+    'description': None,
+    'types': [
+        count_exposure_unit
+    ],
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+unit_trillion = {
+    'key': 'unit_trillion',
+    'name': tr('Trillion'),
+    'plural_name': tr('Trillions'),
+    'abbreviation': tr('#'),
+    'description': None,
+    'types': [
+        count_exposure_unit
+    ],
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+
+nominal_mapping = OrderedDict()
+nominal_mapping[1] = unit_ones
+nominal_mapping[10] = unit_tens
+nominal_mapping[100] = unit_hundreds
+nominal_mapping[1000] = unit_thousand
+nominal_mapping[1000000] = unit_million
+nominal_mapping[1000000000] = unit_billion
+nominal_mapping[1000000000000] = unit_trillion
+
 unit_mapping = (
     (unit_metres, unit_millimetres, 1000),
     (unit_metres, unit_centimetres, 100),
@@ -364,5 +493,9 @@ units_all = [
     unit_percentage,
     count_exposure_unit,
     density_exposure_unit,
-    exposure_unit
+    exposure_unit,
+    unit_thousand,
+    unit_million,
+    unit_billion,
+    unit_trillion,
 ]
