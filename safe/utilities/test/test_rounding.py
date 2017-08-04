@@ -79,6 +79,17 @@ class TestCore(unittest.TestCase):
 
     def test_denomination(self):
         """Test name number."""
+        result = denomination(None)
+        self.assertIsNone(result)
+
+        result = denomination(-11)
+        self.assertEqual(-1.1, result[0])
+        self.assertEqual('unit_tens', result[1]['key'])
+
+        result = denomination(-1)
+        self.assertEqual(-1, result[0])
+        self.assertEqual('unit_ones', result[1]['key'])
+
         result = denomination(1)
         self.assertEqual(1, result[0])
         self.assertEqual('unit_ones', result[1]['key'])
