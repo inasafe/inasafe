@@ -122,6 +122,13 @@ def content():
            'current project except for the impact layer. ')))
     bullets.add(m.Text(
         m.ImportantText(tr(
+            'Print atlas report on atlas driven template with the '
+            'aggregation layer')),
+        tr('When this option is enabled, InaSAFE will generate an atlas report'
+           'based on aggregation area if the template has atlas generation '
+           'flag enabled.')))
+    bullets.add(m.Text(
+        m.ImportantText(tr(
             'Use selected features only with the aggregation layer')),
         tr('If enabled, running an analysis with some features of the '
            'aggregation layer selected will constrain the analysis to only '

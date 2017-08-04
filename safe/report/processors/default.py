@@ -610,19 +610,19 @@ def qt_svg_to_png_renderer(impact_report, component):
 def atlas_renderer(composition, coverage_layer, output_path, file_format):
     """Extract composition using atlas generation.
 
-    :param composition: QGIS Composition object used for producing the report
+    :param composition: QGIS Composition object used for producing the report.
     :type composition: qgis.core.QgsComposition
 
-    :param coverage_layer: Coverage Layer used for atlas map
+    :param coverage_layer: Coverage Layer used for atlas map.
     :type coverage_layer: QgsMapLayer
 
-    :param output_path: the output path of the product
+    :param output_path: The output path of the product.
     :type output_path: str
 
-    :param file_format: file format of map output, PDF or PNG
-    :type file_format: 'pdf', 'png'
+    :param file_format: File format of map output, 'pdf' or 'png'.
+    :type file_format: str
 
-    :return: generated output path(s)
+    :return: Generated output path(s).
     :rtype: str, list
     """
     # set the composer map to be atlas driven
