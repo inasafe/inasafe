@@ -4,6 +4,7 @@
 
 from decimal import Decimal
 from math import ceil
+from PyQt4.QtCore import QPyNullVariant
 
 from safe.definitions.units import unit_mapping, nominal_mapping
 from safe.utilities.i18n import locale
@@ -297,13 +298,19 @@ def denomination(value):
     :return: The new value and the denomination as a unit definition.
     :rtype: list(int, safe.unit.definition)
     """
-    if value == nominal_mapping.keys()[0]:
-        return 1, nominal_mapping[nominal_mapping.keys()[0]]
+    if isinstance(value, QPyNullVariant):
+        return None
+
+    if not value:
+        return None
+
+    if abs(value) == nominal_mapping.keys()[0]:
+        return 1 * value, nominal_mapping[nominal_mapping.keys()[0]]
 
     iterator = zip(nominal_mapping.keys(), nominal_mapping.keys()[1:])
     for min_value, max_value in iterator:
 
-        if min_value <= value < max_value:
+        if min_value <= abs(value) < max_value:
             return float(value) / min_value, nominal_mapping[min_value]
 
     max_value = nominal_mapping.keys()[-1]
