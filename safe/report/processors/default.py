@@ -13,7 +13,7 @@ from PyQt4 import QtXml
 from tempfile import mkdtemp
 
 from PyQt4.QtCore import QUrl
-from PyQt4.QtGui import QImage, QPainter
+from PyQt4.QtGui import QImage, QPainter, QPrinter
 from PyQt4.QtSvg import QSvgRenderer
 from jinja2.environment import Environment
 from jinja2.exceptions import TemplateNotFound
@@ -28,13 +28,16 @@ from qgis.core import (
     QgsComposerLegendStyle,
     QgsComposerMap,
     QgsComposerLegend,
-    QgsCoordinateTransform
+    QgsCoordinateTransform,
+    QgsProject,
+    PROJECT_SCALES
     )
 
 from safe.common.exceptions import TemplateLoadingError
 from safe.common.utilities import temp_dir
 from safe.report.report_metadata import QgisComposerComponentsMetadata
 from safe.utilities.i18n import tr
+from safe.utilities.settings import general_setting, setting
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -99,9 +102,9 @@ def jinja2_renderer(impact_report, component):
 
 
 def create_qgis_pdf_output(
+        impact_report,
         output_path,
         composition,
-        qgis_composition_context,
         file_format,
         metadata):
     """Produce PDF output using QgsComposition.
@@ -131,8 +134,18 @@ def create_qgis_pdf_output(
     if not os.path.exists(dirname):
         os.makedirs(dirname)
 
+    qgis_composition_context = impact_report.qgis_composition_context
+    aggregation_summary_layer = (
+        impact_report.impact_function.aggregation_summary)
+
+    # process atlas generation
+    print_atlas = setting('print_atlas_report', False, bool)
+    if composition.atlasComposition().enabled() and (
+                print_atlas and aggregation_summary_layer):
+        output_path = atlas_renderer(
+            composition, aggregation_summary_layer, output_path, file_format)
     # for QGIS composer only pdf and png output are available
-    if file_format == QgisComposerComponentsMetadata.OutputFormat.PDF:
+    elif file_format == QgisComposerComponentsMetadata.OutputFormat.PDF:
         try:
             composition.setPlotStyle(
                 qgis_composition_context.plot_style)
@@ -271,9 +284,9 @@ def qgis_composer_html_renderer(impact_report, component):
 
             if each_format in doc_format:
                 result_path = create_qgis_pdf_output(
+                    impact_report,
                     each_path,
                     composition,
-                    impact_report.qgis_composition_context,
                     each_format,
                     component)
                 component_output.append(result_path)
@@ -288,9 +301,9 @@ def qgis_composer_html_renderer(impact_report, component):
 
             if each_format in doc_format:
                 result_path = create_qgis_pdf_output(
+                    impact_report,
                     each_path,
                     composition,
-                    impact_report.qgis_composition_context,
                     each_format,
                     component)
                 component_output[key] = result_path
@@ -304,9 +317,9 @@ def qgis_composer_html_renderer(impact_report, component):
 
         if output_format in doc_format:
             result_path = create_qgis_pdf_output(
+                impact_report,
                 component_output_path,
                 composition,
-                impact_report.qgis_composition_context,
                 output_format,
                 component)
             component_output = result_path
@@ -504,9 +517,9 @@ def qgis_composer_renderer(impact_report, component):
 
             if each_format in doc_format:
                 result_path = create_qgis_pdf_output(
+                    impact_report,
                     each_path,
                     composition,
-                    impact_report.qgis_composition_context,
                     each_format,
                     component)
                 component_output.append(result_path)
@@ -521,9 +534,9 @@ def qgis_composer_renderer(impact_report, component):
 
             if each_format in doc_format:
                 result_path = create_qgis_pdf_output(
+                    impact_report,
                     each_path,
                     composition,
-                    impact_report.qgis_composition_context,
                     each_format,
                     component)
                 component_output[key] = result_path
@@ -537,9 +550,9 @@ def qgis_composer_renderer(impact_report, component):
 
         if output_format in doc_format:
             result_path = create_qgis_pdf_output(
+                impact_report,
                 component_output_path,
                 composition,
-                impact_report.qgis_composition_context,
                 output_format,
                 component)
             component_output = result_path
@@ -592,3 +605,113 @@ def qt_svg_to_png_renderer(impact_report, component):
 
     component.output = output_path
     return component.output
+
+
+def atlas_renderer(composition, coverage_layer, output_path, file_format):
+    """Extract composition using atlas generation.
+
+    :param composition: QGIS Composition object used for producing the report.
+    :type composition: qgis.core.QgsComposition
+
+    :param coverage_layer: Coverage Layer used for atlas map.
+    :type coverage_layer: QgsMapLayer
+
+    :param output_path: The output path of the product.
+    :type output_path: str
+
+    :param file_format: File format of map output, 'pdf' or 'png'.
+    :type file_format: str
+
+    :return: Generated output path(s).
+    :rtype: str, list
+    """
+    # set the composer map to be atlas driven
+    composer_map = composition.getComposerItemById('impact-map')
+    composer_map.setAtlasDriven(True)
+    composer_map.setAtlasScalingMode(QgsComposerMap.Auto)
+
+    # setup the atlas composition and composition atlas mode
+    atlas_composition = composition.atlasComposition()
+    atlas_composition.setCoverageLayer(coverage_layer)
+    atlas_composition.setComposerMap(composer_map)
+    atlas_composition.prepareMap(composer_map)
+    atlas_on_single_file = atlas_composition.singleFile()
+    composition.setAtlasMode(QgsComposition.ExportAtlas)
+
+    if file_format == QgisComposerComponentsMetadata.OutputFormat.PDF:
+        if not atlas_composition.filenamePattern():
+            atlas_composition.setFilenamePattern(
+                "'output_'||@atlas_featurenumber")
+        output_directory = os.path.dirname(output_path)
+
+        printer = QPrinter(QPrinter.HighResolution)
+        painter = QPainter()
+
+        # we need to set the predefined scales for atlas
+        project_scales = []
+        scales = QgsProject.instance().readListEntry(
+            "Scales", "/ScalesList")[0]
+        has_project_scales = QgsProject.instance().readBoolEntry(
+            "Scales", "/useProjectScales")[0]
+        if not has_project_scales or not scales:
+            scales_string = str(general_setting("Map/scales", PROJECT_SCALES))
+            scales = scales_string.split(',')
+        for scale in scales:
+            parts = scale.split(':')
+            if len(parts) == 2:
+                project_scales.append(float(parts[1]))
+        atlas_composition.setPredefinedScales(project_scales)
+
+        if not atlas_composition.beginRender() and (
+                atlas_composition.featureFilterErrorString()):
+            msg = 'Atlas processing error: {error}'.format(
+                error=atlas_composition.featureFilterErrorString())
+            LOGGER.error(msg)
+            return
+
+        if atlas_on_single_file:
+            atlas_composition.prepareForFeature(0)
+            composition.beginPrintAsPDF(printer, output_path)
+            composition.beginPrint(printer)
+            if not painter.begin(printer):
+                msg = ('Atlas processing error: '
+                       'Cannot write to {output}.').format(output=output_path)
+                LOGGER.error(msg)
+                return
+
+        LOGGER.info('Exporting Atlas')
+
+        atlas_output = []
+        for feature_index in range(atlas_composition.numFeatures()):
+            if not atlas_composition.prepareForFeature(feature_index):
+                msg = ('Atlas processing error: Exporting atlas error at '
+                       'feature number {index}').format(index=feature_index)
+                LOGGER.error(msg)
+                return
+            if not atlas_on_single_file:
+                # we need another printer object fot multi file atlas
+                multi_file_printer = QPrinter(QPrinter.HighResolution)
+                current_filename = atlas_composition.currentFilename()
+                output_path = os.path.join(
+                    output_directory, current_filename + '.pdf')
+                composition.beginPrintAsPDF(multi_file_printer, output_path)
+                composition.beginPrint(multi_file_printer)
+                if not painter.begin(multi_file_printer):
+                    msg = ('Atlas processing error: Cannot write to '
+                           '{output}.').format(output=output_path)
+                    LOGGER.error(msg)
+                    return
+                composition.doPrint(multi_file_printer, painter)
+                painter.end()
+                composition.georeferenceOutput(output_path)
+                atlas_output.append(output_path)
+            else:
+                composition.doPrint(printer, painter, feature_index > 0)
+
+        atlas_composition.endRender()
+
+        if atlas_on_single_file:
+            painter.end()
+            return output_path
+
+        return atlas_output
