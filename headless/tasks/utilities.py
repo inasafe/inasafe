@@ -56,11 +56,13 @@ def download_file(url, direct_access=False, user=None, password=None):
                     f.write(chunk)
 
         # get extension
-        content_disposition = r.headers['content-disposition']
-        fname = re.findall("filename=[\'\"]?(.+)[\'\"]", content_disposition)
-        _, ext = os.path.splitext(fname[0])
-        shutil.move(tmpfile, '%s%s' % (tmpfile, ext))
-        tmpfile = '%s%s' % (tmpfile, ext)
+        # Headers is a CaseInsensitive keys. check content-disposition
+        if 'content-disposition' in r.headers:
+            content_disposition = r.headers['content-disposition']
+            fname = re.findall("filename=[\'\"]?(.+)[\'\"]", content_disposition)
+            _, ext = os.path.splitext(fname[0])
+            shutil.move(tmpfile, '%s%s' % (tmpfile, ext))
+            tmpfile = '%s%s' % (tmpfile, ext)
         return tmpfile
     elif parsed_uri.scheme == 'file':
         file_path = urllib.unquote_plus(parsed_uri.path).decode('utf-8')
