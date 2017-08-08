@@ -249,8 +249,9 @@ def get_non_compulsory_fields(layer_purpose, layer_subcategory=None):
     return all_fields
 
 
-def definition(keyword):
-    """Given a keyword, try to get a definition dict for it.
+def definition(keyword, key=None):
+    """Given a keyword and a key (optional), try to get a definition
+    dict for it.
 
     .. versionadded:: 3.2
 
@@ -266,6 +267,9 @@ def definition(keyword):
     :param keyword: A keyword key.
     :type keyword: str
 
+    :param key: A specific key for a deeper search
+    :type key: str
+
     :returns: A dictionary containing the matched key definition
         from definitions, otherwise None if no match was found.
     :rtype: dict, None
@@ -275,7 +279,7 @@ def definition(keyword):
         if not item.startswith("__"):
             var = getattr(definitions, item)
             if isinstance(var, dict):
-                if var.get('key') == keyword:
+                if var.get('key') == keyword or var.get(key) == keyword:
                     return var
     return None
 
