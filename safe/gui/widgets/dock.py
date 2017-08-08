@@ -19,6 +19,7 @@ from qgis.core import (
     QgsExpressionContextUtils
 )
 
+from safe.definitions.exposure import exposure_population
 from safe.definitions.layer_purposes import (
     layer_purpose_exposure_summary,
     layer_purpose_aggregate_hazard_impacted,
@@ -51,6 +52,7 @@ from safe.definitions.reports import (
 from safe.definitions.reports.components import (
     standard_impact_report_metadata_pdf,
     report_a4_blue)
+from safe.report.extractors.util import layer_definition_type
 from safe.report.impact_report import ImpactReport
 from safe.report.report_metadata import ReportMetadata
 from safe.utilities.gis import wkt_to_rectangle, qgis_version
@@ -94,7 +96,8 @@ from safe.gui.analysis_utilities import (
     generate_impact_report,
     generate_impact_map_report,
     add_impact_layers_to_canvas,
-    add_debug_layers_to_canvas)
+    add_debug_layers_to_canvas,
+    generate_infographic_report)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -1205,6 +1208,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.iface.zoomToActiveLayer()
 
         qgis_exposure = self.get_exposure_layer()
+        exposure_type = layer_definition_type(qgis_exposure)
         if self.hide_exposure_flag:
             legend = self.iface.legendInterface()
             legend.setLayerVisible(qgis_exposure, False)
@@ -1232,6 +1236,19 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 send_error_message(self, message)
                 LOGGER.info(message.to_text())
                 return ANALYSIS_FAILED_BAD_CODE, message
+
+            # generate infographic if exposure is population
+            if exposure_type == exposure_population:
+                error_code, message = generate_infographic_report(
+                    self.impact_function, self.iface)
+
+                if error_code == ImpactReport.REPORT_GENERATION_FAILED:
+                    self.hide_busy()
+                    LOGGER.info(tr(
+                        'The impact report could not be generated.'))
+                    send_error_message(self, message)
+                    LOGGER.info(message.to_text())
+                    return ANALYSIS_FAILED_BAD_CODE, message
 
         if self.impact_function.debug_mode:
             add_debug_layers_to_canvas(self.impact_function)
