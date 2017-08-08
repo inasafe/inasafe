@@ -393,7 +393,11 @@ def qgis_composer_renderer(impact_report, component):
     for html_el in context.html_frame_elements:
         item_id = html_el.get('id')
         mode = html_el.get('mode')
-        html_element = composition.getComposerItemById(item_id)
+        composer_item = composition.getComposerItemById(item_id)
+        try:
+            html_element = composition.getComposerHtmlByItem(composer_item)
+        except:
+            pass
         """:type: qgis.core.QgsComposerHtml"""
         if html_element:
             if mode == 'text':
