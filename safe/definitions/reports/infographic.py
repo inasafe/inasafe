@@ -58,8 +58,8 @@ population_chart_header = {
 }
 
 people_section_header = {
-	'id': 'people-section-header',
-	'string_format': tr('People affected by hazard')
+    'id': 'people-section-header',
+    'string_format': tr('People affected by hazard')
 }
 
 age_gender_section_header = {
@@ -168,7 +168,7 @@ icon_over_60_dsplaced = {
 }
 
 icon_disabled_displaced = {
-    'id':'icon-disabled-displaced',
+    'id': 'icon-disabled-displaced',
     'path': resources_path('img', 'definitions', 'disabled.svg')
 }
 

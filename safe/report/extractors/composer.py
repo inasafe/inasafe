@@ -423,7 +423,6 @@ def qgis_composer_infographic_extractor(impact_report, component_metadata):
     .. versionadded:: 4.2
     """
     qgis_context = impact_report.qgis_composition_context
-    inasafe_context = impact_report.inasafe_context
     provenance = impact_report.impact_function.provenance
     extra_args = component_metadata.extra_args
 

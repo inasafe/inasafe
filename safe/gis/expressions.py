@@ -8,7 +8,8 @@ from qgis.core import (
 import datetime
 
 from safe.definitions.provenance import provenance_layer_analysis_impacted_id
-from safe.utilities.rounding import denomination
+from safe.definitions.reports.infographic import no_data_replacement
+from safe.utilities.rounding import denomination, round_affected_number
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -56,9 +57,14 @@ def inasafe_place_value_name(number, feature, parent):
     It needs to be used with inasafe_place_value_coefficient.
     """
     _ = feature, parent  # NOQA
-    if number < 0:
+    rounded_number = round_affected_number(
+        number,
+        enable_rounding=True,
+        use_population_rounding=True
+    )
+    if rounded_number < 0:
         return None
-    value, unit = denomination(number, 1000)
+    value, unit = denomination(rounded_number, 1000)
     if not unit:
         return None
     elif value > 1:
@@ -78,10 +84,15 @@ def inasafe_place_value_coefficient(number, feature, parent):
 
     It needs to be used with inasafe_number_denomination_unit.
     """
-    if number < 0:
-        return '-'
     _ = feature, parent  # NOQA
-    value, unit = denomination(number, 1000)
+    rounded_number = round_affected_number(
+        number,
+        enable_rounding=True,
+        use_population_rounding=True
+    )
+    if rounded_number < 0:
+        return no_data_replacement['string_format']
+    value, unit = denomination(rounded_number, 1000)
     return round(value, 1)
 
 
