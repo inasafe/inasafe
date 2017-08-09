@@ -508,10 +508,10 @@ infographic_people_section_notes_component = {
                 'jinja2/'
                 'infographic-people-section-notes.html',
     'extra_args': {
-        'extra_note': tr('In this analysis, people are considered to be '
-                         'affected if they are exposed to the hazard, and '
-                         'considered to be displaced if they exposed to high '
-                         'or medium hazard.'),
+        'extra_note': tr(
+            'In this analysis, people are considered to be affected if they '
+            'are exposed to the hazard, and considered to be displaced if '
+            'they exposed to high or medium hazard.'),
         'hazard_displacement_rates_note_format': tr(
             '{displacement_rate:.0%} affected in {name} {classification_unit}')
     }

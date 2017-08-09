@@ -80,7 +80,8 @@ class TestCore(unittest.TestCase):
     def test_denomination(self):
         """Test name number."""
         result = denomination(None)
-        self.assertIsNone(result)
+        for item in result:
+            self.assertIsNone(item)
 
         result = denomination(-11)
         self.assertEqual(-1.1, result[0])
@@ -125,6 +126,20 @@ class TestCore(unittest.TestCase):
         result = denomination(100000000000000)
         self.assertEqual(100.0, result[0])
         self.assertEqual('unit_trillion', result[1]['key'])
+
+        # test denomination with minimal value parameter
+
+        result = denomination(1, 1000)
+        self.assertEqual(1, result[0])
+        self.assertIsNone(result[1])
+
+        result = denomination(100, 1000)
+        self.assertEqual(100, result[0])
+        self.assertIsNone(result[1])
+
+        result = denomination(1000, 1000)
+        self.assertEqual(1, result[0])
+        self.assertEqual('unit_thousand', result[1]['key'])
 
 
 if __name__ == '__main__':

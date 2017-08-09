@@ -70,8 +70,8 @@ age_gender_section_header = {
 
 vulnerability_section_header = {
     'id': 'vulnerability-section-header',
-    'string_format': tr('Vulnerable people displaced by age, gender, '
-                        'and disability')
+    'string_format': tr(
+        'Vulnerable people displaced by age, gender, and disability')
 }
 
 female_vulnerability_section_header = {
@@ -112,10 +112,10 @@ age_gender_section_notes = {
 
 minimum_needs_section_notes = {
     'id': 'minimum-needs-section-notes',
-    'string_format': tr('Minimum needs based on Peraturan Kepala (Perka) '
-                        'BNPB No. 7/2008. Additional needs for vulnerable '
-                        'females based on Sphere Standard '
-                        '(http://www.spherehandbook.org/en/appendix-6/)')
+    'string_format': tr(
+        'Minimum needs based on Peraturan Kepala (Perka) BNPB No. 7/2008. '
+        'Additional needs for vulnerable females based on Sphere Standard '
+        '(http://www.spherehandbook.org/en/appendix-6/)')
 }
 
 

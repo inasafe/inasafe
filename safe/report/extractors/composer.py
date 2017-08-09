@@ -23,7 +23,6 @@ from safe.report.extractors.util import (
     value_from_field_name,
     resolve_from_dictionary,
     jinja2_output_as_string)
-from safe.test.utilities import load_layer
 from safe.utilities.settings import setting
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -424,7 +423,6 @@ def qgis_composer_infographic_extractor(impact_report, component_metadata):
     .. versionadded:: 4.2
     """
     qgis_context = impact_report.qgis_composition_context
-    provenance = impact_report.impact_function.provenance
     extra_args = component_metadata.extra_args
 
     context = QGISComposerContext()

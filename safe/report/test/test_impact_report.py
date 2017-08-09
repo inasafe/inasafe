@@ -957,8 +957,7 @@ class TestImpactReport(unittest.TestCase):
                             'value': '10'
                         },
                         {
-                            'header': u'Additional Rice for Pregnant and '
-                                      u'Lactating Women [kg]',
+                            'header': u'Additional Rice [kg]',
                             'value': '10'
                         }],
                     'total_header': u'Total'

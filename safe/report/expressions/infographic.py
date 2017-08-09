@@ -35,6 +35,7 @@ def inasafe_logo_white_path(feature, parent):
     """Retrieve the full path of inasafe-logo-white.svg
 
     """
+    _ = feature, parent  # NOQA
     return inasafe_logo_white['path']
 
 
@@ -44,6 +45,7 @@ def inasafe_field_header(field, feature, parent):
     """Retrieve a header name of the field name from definitions.
 
     """
+    _ = feature, parent  # NOQA
     age_fields = [under_5_displaced_count_field, over_60_displaced_count_field]
     symbol_mapping = {
         'over': '>',
@@ -79,6 +81,7 @@ def minimum_needs_unit(field, feature, parent):
     """Retrieve units of the given minimum needs field name.
 
     """
+    _ = feature, parent  # NOQA
     field_definition = definition(field, 'field_name')
     if field_definition:
         unit_abbreviation = None
@@ -119,6 +122,7 @@ def infographic_header_element(impact_function_name, feature, parent):
     infographic header sentence.
 
     """
+    _ = feature, parent  # NOQA
     string_format = infographic_header['string_format']
     if impact_function_name:
         header = string_format.format(
@@ -133,6 +137,7 @@ def map_overview_header_element(feature, parent):
     """Retrieve map overview header string from definitions.
 
     """
+    _ = feature, parent  # NOQA
     header = map_overview_header['string_format']
     return header.capitalize()
 
@@ -143,6 +148,7 @@ def population_chart_header_element(feature, parent):
     """Retrieve population chart header string from definitions.
 
     """
+    _ = feature, parent  # NOQA
     header = population_chart_header['string_format']
     return header.capitalize()
 
@@ -153,6 +159,7 @@ def people_section_header_element(feature, parent):
     """Retrieve people section header string from definitions.
 
     """
+    _ = feature, parent  # NOQA
     header = people_section_header['string_format']
     return header.capitalize()
 
@@ -163,6 +170,7 @@ def age_gender_section_header_element(feature, parent):
     """Retrieve age gender section header string from definitions.
 
     """
+    _ = feature, parent  # NOQA
     header = age_gender_section_header['string_format']
     return header.capitalize()
 
@@ -173,6 +181,7 @@ def age_gender_section_notes_element(feature, parent):
     """Retrieve age gender section notes string from definitions.
 
     """
+    _ = feature, parent  # NOQA
     notes = age_gender_section_notes['string_format']
     return notes.capitalize()
 
@@ -183,6 +192,7 @@ def vulnerability_section_header_element(feature, parent):
     """Retrieve vulnerability section header string from definitions.
 
     """
+    _ = feature, parent  # NOQA
     header = vulnerability_section_header['string_format']
     return header.capitalize()
 
@@ -193,6 +203,7 @@ def female_vulnerability_section_header_element(feature, parent):
     """Retrieve female vulnerability section header string from definitions.
 
     """
+    _ = feature, parent  # NOQA
     header = female_vulnerability_section_header['string_format']
     return header.capitalize()
 
@@ -203,6 +214,7 @@ def minimum_needs_section_header_element(feature, parent):
     """Retrieve minimum needs section header string from definitions.
 
     """
+    _ = feature, parent  # NOQA
     header = minimum_needs_section_header['string_format']
     return header.capitalize()
 
@@ -214,6 +226,7 @@ def additional_minimum_needs_section_header_element(feature, parent):
     from definitions.
 
     """
+    _ = feature, parent  # NOQA
     header = additional_minimum_needs_section_header['string_format']
     return header.capitalize()
 
@@ -224,5 +237,6 @@ def minimum_needs_section_notes_element(feature, parent):
     """Retrieve minimum needs section notes string from definitions.
 
     """
+    _ = feature, parent  # NOQA
     notes = minimum_needs_section_notes['string_format']
     return notes.capitalize()

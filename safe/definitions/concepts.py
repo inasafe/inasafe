@@ -730,6 +730,7 @@ concepts['production_value'] = {
     ],
 }
 concepts['displacement_rate'] = {
+    'group': tr('Basic concepts'),
     'key': 'displacement_rate',
     'name': tr('Displacement rate'),
     'description': tr(
