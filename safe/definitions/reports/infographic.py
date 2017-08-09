@@ -15,7 +15,8 @@ __revision__ = '$Format:%H$'
 
 
 map_overview = {
-    'id': 'map-overview'
+    'id': 'map-overview',
+    'path': resources_path('img', 'raster_layer', 'map-overview.tif')
 }
 
 
@@ -96,6 +97,25 @@ no_data_replacement = {
 minimum_needs_unit = {
     'id': 'minimum-needs-unit',
     'string_format': tr('{unit_abbreviation}/{frequency}')
+}
+
+age_gender_section_notes = {
+    'id': 'age-gender-section-notes',
+    'string_format': tr('The total number of displaced people presented is '
+                        'the result of the InaSAFE population analysis. '
+                        'The total results has been rounded to the nearest '
+                        'thousand. The size of the icon does not represent '
+                        'the number.If there is a value of 0, then '
+                        'corresponding object will not be displayed on '
+                        'this page.')
+}
+
+minimum_needs_section_notes = {
+    'id': 'minimum-needs-section-notes',
+    'string_format': tr('Minimum needs based on Peraturan Kepala (Perka) '
+                        'BNPB No. 7/2008. Additional needs for vulnerable '
+                        'females based on Sphere Standard '
+                        '(http://www.spherehandbook.org/en/appendix-6/)')
 }
 
 

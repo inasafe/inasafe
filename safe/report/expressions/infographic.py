@@ -16,7 +16,7 @@ from safe.definitions.reports.infographic import (
     minimum_needs_section_header,
     additional_minimum_needs_section_header,
     population_chart_header,
-    inasafe_logo_white)
+    inasafe_logo_white, age_gender_section_notes, minimum_needs_section_notes)
 from safe.definitions.units import exposure_unit
 from safe.definitions.utilities import definition
 from safe.utilities.i18n import tr
@@ -169,6 +169,16 @@ def age_gender_section_header_element(feature, parent):
 
 @qgsfunction(
     args='auto', group=group, usesGeometry=False, referencedColumns=[])
+def age_gender_section_notes_element(feature, parent):
+    """Retrieve age gender section notes string from definitions.
+
+    """
+    notes = age_gender_section_notes['string_format']
+    return notes.capitalize()
+
+
+@qgsfunction(
+    args='auto', group=group, usesGeometry=False, referencedColumns=[])
 def vulnerability_section_header_element(feature, parent):
     """Retrieve vulnerability section header string from definitions.
 
@@ -206,3 +216,13 @@ def additional_minimum_needs_section_header_element(feature, parent):
     """
     header = additional_minimum_needs_section_header['string_format']
     return header.capitalize()
+
+
+@qgsfunction(
+    args='auto', group=group, usesGeometry=False, referencedColumns=[])
+def minimum_needs_section_notes_element(feature, parent):
+    """Retrieve minimum needs section notes string from definitions.
+
+    """
+    notes = minimum_needs_section_notes['string_format']
+    return notes.capitalize()
