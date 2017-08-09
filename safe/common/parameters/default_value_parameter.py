@@ -1,7 +1,7 @@
 # coding=utf-8
 """Default Value Parameter."""
 
-from safe_extras.parameters.generic_parameter import GenericParameter
+from parameters.generic_parameter import GenericParameter
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

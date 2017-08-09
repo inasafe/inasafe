@@ -5,13 +5,12 @@
 import logging
 from PyQt4.QtGui import QWidget, QLabel
 
+from parameters.qt_widgets.parameter_container import ParameterContainer
+
 from safe.common.parameters.default_select_parameter import (
     DefaultSelectParameter)
 from safe.common.parameters.default_select_parameter_widget import (
     DefaultSelectParameterWidget)
-from safe_extras.parameters.qt_widgets.parameter_container import (
-    ParameterContainer)
-
 from safe import messaging as m
 from safe.utilities.i18n import tr
 

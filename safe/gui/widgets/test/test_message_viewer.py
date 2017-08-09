@@ -4,7 +4,7 @@
 import os
 import unittest
 
-from safe_extras.pydispatch import dispatcher
+from pydispatch import dispatcher
 from safe.gui.widgets.message_viewer import MessageViewer
 from safe import messaging as m
 from safe.common.signals import (

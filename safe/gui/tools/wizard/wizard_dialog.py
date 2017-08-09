@@ -9,8 +9,7 @@ from PyQt4.QtCore import pyqtSignature, QSettings
 from PyQt4.QtGui import QDialog, QPixmap
 from qgis.core import QgsMapLayerRegistry
 
-from safe_extras.parameters.parameter_exceptions import (
-    InvalidValidationException)
+from parameters.parameter_exceptions import InvalidValidationException
 
 from safe.utilities.i18n import tr
 from safe.definitions.layer_purposes import (
@@ -26,7 +25,6 @@ from safe.definitions.units import exposure_unit
 from safe.definitions.hazard import continuous_hazard_unit
 from safe.definitions.utilities import get_compulsory_fields
 from safe.definitions.constants import RECENT
-
 from safe.common.exceptions import (
     HashNotFoundError,
     NoKeywordsFoundError,
@@ -36,13 +34,11 @@ from safe.common.exceptions import (
     InaSAFEError,
     MetadataReadError,
     InvalidWizardStep)
-
 from safe.gui.tools.wizard.wizard_strings import (
     category_question_hazard,
     category_question_exposure,
     category_question_aggregation)
 from safe.gui.tools.wizard.utilities import layer_description_html
-
 from safe.utilities.default_values import set_inasafe_default_value_qsetting
 from safe.utilities.gis import (
     is_raster_layer,
