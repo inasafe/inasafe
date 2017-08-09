@@ -42,6 +42,7 @@ from safe.definitions.constants import (
     PREPARE_SUCCESS,
 )
 from safe.definitions.provenance import provenance_list
+from safe.definitions.reports.infographic import map_overview
 from safe.definitions.utilities import map_report_component, get_name
 from safe.defaults import supporters_logo_path
 from safe.definitions.reports import (
@@ -55,6 +56,7 @@ from safe.definitions.reports.components import (
 from safe.report.extractors.util import layer_definition_type
 from safe.report.impact_report import ImpactReport
 from safe.report.report_metadata import ReportMetadata
+from safe.test.utilities import load_layer
 from safe.utilities.gis import wkt_to_rectangle, qgis_version
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
@@ -97,7 +99,9 @@ from safe.gui.analysis_utilities import (
     generate_impact_map_report,
     add_impact_layers_to_canvas,
     add_debug_layers_to_canvas,
-    generate_infographic_report)
+    generate_infographic_report,
+    add_layer_to_canvas,
+    remove_layer_from_canvas)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -1208,7 +1212,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.iface.zoomToActiveLayer()
 
         qgis_exposure = self.get_exposure_layer()
-        exposure_type = layer_definition_type(qgis_exposure)
         if self.hide_exposure_flag:
             legend = self.iface.legendInterface()
             legend.setLayerVisible(qgis_exposure, False)
@@ -1238,9 +1241,21 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 return ANALYSIS_FAILED_BAD_CODE, message
 
             # generate infographic if exposure is population
+            exposure_type = layer_definition_type(
+                self.impact_function.exposure)
             if exposure_type == exposure_population:
+                map_overview_layer, _ = load_layer(map_overview['path'])
+                add_layer_to_canvas(
+                    map_overview_layer,
+                    map_overview['id'],
+                    self.impact_function
+                )
+
                 error_code, message = generate_infographic_report(
                     self.impact_function, self.iface)
+
+                remove_layer_from_canvas(
+                    map_overview_layer, self.impact_function)
 
                 if error_code == ImpactReport.REPORT_GENERATION_FAILED:
                     self.hide_busy()

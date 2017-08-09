@@ -35,6 +35,7 @@ from qgis.core import (
 
 from safe.common.exceptions import TemplateLoadingError
 from safe.common.utilities import temp_dir
+from safe.definitions.reports.infographic import map_overview
 from safe.report.report_metadata import QgisComposerComponentsMetadata
 from safe.utilities.i18n import tr
 from safe.utilities.settings import general_setting, setting
@@ -432,16 +433,23 @@ def qgis_composer_renderer(impact_report, component):
                     map_extent_option, QgsRectangle):
                 # use provided map extent
                 extent = coord_transform.transform(map_extent_option)
+                for l in layers:
+                    layer_extent = coord_transform.transform(l.extent())
+                    if l.name() == map_overview['id']:
+                        map_overview_extent = layer_extent
             else:
                 # if map extent not provided, try to calculate extent
                 # from list of given layers. Combine it so all layers were
                 # shown properly
+                map_overview_extent = None
                 extent = QgsRectangle()
                 extent.setMinimal()
                 for l in layers:
                     # combine extent if different layer is provided.
                     layer_extent = coord_transform.transform(l.extent())
                     extent.combineExtentWith(layer_extent)
+                    if l.name() == map_overview['id']:
+                        map_overview_extent = layer_extent
 
             width = extent.width()
             height = extent.height()
@@ -456,6 +464,10 @@ def qgis_composer_renderer(impact_report, component):
 
             # noinspection PyCallingNonCallable
             square_extent = QgsRectangle(min_x, min_y, max_x, max_y)
+
+            if component.key == 'population-infographic' and (
+                    map_overview_extent):
+                square_extent = map_overview_extent
 
             composer_map.zoomToExtent(square_extent)
             composer_map.renderModeUpdateCachedImage()

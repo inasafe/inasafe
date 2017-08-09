@@ -255,3 +255,56 @@ def add_debug_layers_to_canvas(impact_function):
             if qgis_layer.geometryType() != QGis.NoGeometry and classification:
                 if qgis_layer.keywords['inasafe_fields'].get(hazard_class):
                     hazard_class_style(qgis_layer, classes, True)
+
+
+def add_layer_to_canvas(layer, name, impact_function):
+    """Helper method to add layer to QGIS.
+
+    :param layer: The layer.
+    :type layer: QgsMapLayer
+
+    :param name: Layer name.
+    :type name: str
+
+    :param impact_function: The impact function used.
+    :type impact_function: ImpactFunction
+
+    :param iface: QGIS QGisAppInterface instance.
+    :type iface: QGisAppInterface
+    """
+    group_name = impact_function.name
+
+    # noinspection PyArgumentList
+    root = QgsProject.instance().layerTreeRoot()
+    group_analysis = root.findGroup(group_name)
+    group_analysis.setVisible(Qt.Checked)
+
+    layer.setLayerName(name)
+
+    QgsMapLayerRegistry.instance().addMapLayer(layer, False)
+    layer_node = group_analysis.addLayer(layer)
+
+    layer_node.setVisible(Qt.Checked)
+
+
+def remove_layer_from_canvas(layer, impact_function):
+    """Helper method to remove layer from QGIS.
+
+    :param layer: The layer.
+    :type layer: QgsMapLayer
+
+    :param impact_function: The impact function used.
+    :type impact_function: ImpactFunction
+
+    :param iface: QGIS QGisAppInterface instance.
+    :type iface: QGisAppInterface
+    """
+    group_name = impact_function.name
+
+    # noinspection PyArgumentList
+    root = QgsProject.instance().layerTreeRoot()
+    group_analysis = root.findGroup(group_name)
+    group_analysis.setVisible(Qt.Checked)
+
+    QgsMapLayerRegistry.instance().addMapLayer(layer, False)
+    group_analysis.removeLayer(layer)

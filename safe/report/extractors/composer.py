@@ -18,11 +18,12 @@ from safe.definitions.reports.infographic import (
     html_frame_elements,
     population_chart,
     inasafe_logo_white,
-    image_item_elements)
+    image_item_elements, map_overview)
 from safe.report.extractors.util import (
     value_from_field_name,
     resolve_from_dictionary,
     jinja2_output_as_string)
+from safe.test.utilities import load_layer
 from safe.utilities.settings import setting
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -462,31 +463,16 @@ def qgis_composer_infographic_extractor(impact_report, component_metadata):
 
     """Map Elements"""
 
-    # Set default map to resize
-
-    # check show only impact
-    show_only_impact = setting('set_show_only_impact_on_report', False, bool)
-    layers = [impact_report.impact] + impact_report.extra_layers
+    map_overview_layer = None
     layer_registry = QgsMapLayerRegistry.instance()
-    if not show_only_impact:
-        hazard_layer = layer_registry.mapLayers().get(
-            provenance['hazard_layer_id'], None)
+    for layer in layer_registry.mapLayers().values():
+        if layer.name() == map_overview['id']:
+            map_overview_layer = layer
 
-        aggregation_layer_id = provenance['aggregation_layer_id']
-        if aggregation_layer_id:
-            aggregation_layer = layer_registry.mapLayers().get(
-                aggregation_layer_id, None)
-            layers.insert(0, aggregation_layer)
+    layers = [impact_report.impact_function.analysis_impacted]
 
-        layers.append(hazard_layer)
-
-    # check hide exposure settings
-    hide_exposure_flag = setting('setHideExposureFlag', False, bool)
-    if not hide_exposure_flag:
-        # place exposure at the bottom
-        exposure_layer = layer_registry.mapLayers().get(
-            provenance['exposure_layer_id'])
-        layers.append(exposure_layer)
+    if map_overview_layer:
+        layers.append(map_overview_layer)
 
     # default extent is analysis extent
     if not qgis_context.extent:
