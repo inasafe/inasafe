@@ -1,15 +1,13 @@
 # coding=utf-8
 """Field Mapping Dialog Implementation."""
+import logging
 
 from PyQt4.QtGui import (
     QDialog, QHBoxLayout, QLabel, QDialogButtonBox, QMessageBox)
 from qgis.gui import QgsMapLayerComboBox, QgsMapLayerProxyModel
 from PyQt4.QtCore import pyqtSignature, pyqtSlot, QSettings
 
-import logging
-
-from safe_extras.parameters.parameter_exceptions import (
-    InvalidValidationException)
+from parameters.parameter_exceptions import InvalidValidationException
 
 from safe.definitions.constants import RECENT
 from safe.definitions.layer_purposes import (

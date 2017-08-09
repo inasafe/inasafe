@@ -4,7 +4,7 @@
 from PyQt4.QtGui import (
     QHBoxLayout, QDoubleSpinBox, QRadioButton, QButtonGroup, QWidget)
 
-from safe_extras.parameters.qt_widgets.generic_parameter_widget import (
+from parameters.qt_widgets.generic_parameter_widget import (
     GenericParameterWidget)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

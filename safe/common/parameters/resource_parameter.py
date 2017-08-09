@@ -10,8 +10,8 @@ PARAMETERS_DIR = os.path.abspath(
 if PARAMETERS_DIR not in sys.path:
     sys.path.append(PARAMETERS_DIR)
 
-from safe_extras.parameters.float_parameter import FloatParameter
-from safe_extras.parameters.unit import Unit
+from parameters.float_parameter import FloatParameter
+from parameters.unit import Unit
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

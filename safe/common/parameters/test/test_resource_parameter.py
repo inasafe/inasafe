@@ -3,8 +3,10 @@
 
 import unittest
 
+from parameters.unit import Unit
+
 from safe.common.parameters.resource_parameter import ResourceParameter
-from safe_extras.parameters.unit import Unit
+
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

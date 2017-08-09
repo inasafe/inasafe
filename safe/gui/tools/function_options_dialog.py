@@ -33,16 +33,16 @@ from PyQt4.QtGui import (
     QWidget,
     QScrollArea,
     QVBoxLayout)
+
+from parameters.parameter_exceptions import CollectionLengthError
+from parameters.qt_widgets.parameter_container import ParameterContainer
+
 from safe.common.parameters.resource_parameter_widget import (
     ResourceParameterWidget)
-
 from safe.common.parameters.resource_parameter import ResourceParameter
 from safe.gui.tools.help.function_options_help import function_options_help
 from safe.utilities.i18n import tr
 from safe.utilities.resources import html_footer, html_header, get_ui_class
-from safe_extras.parameters.parameter_exceptions import CollectionLengthError
-from safe_extras.parameters.qt_widgets.parameter_container import (
-    ParameterContainer)
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8

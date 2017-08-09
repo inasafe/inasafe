@@ -5,10 +5,10 @@ from PyQt4.QtCore import Qt
 from PyQt4.QtGui import (
     QHBoxLayout, QGridLayout, QDoubleSpinBox,
     QRadioButton, QButtonGroup, QWidget, QLabel)
-from safe.utilities.i18n import tr
 
-from safe_extras.parameters.qt_widgets.select_parameter_widget import (
-    SelectParameterWidget)
+from parameters.qt_widgets.select_parameter_widget import SelectParameterWidget
+
+from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

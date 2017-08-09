@@ -3,8 +3,7 @@
 
 import logging
 
-from safe_extras.parameters.parameter_exceptions import (
-    InvalidValidationException)
+from parameters.parameter_exceptions import InvalidValidationException
 
 from safe import messaging as m
 from safe.utilities.i18n import tr

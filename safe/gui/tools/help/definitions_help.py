@@ -843,11 +843,11 @@ def definition_to_message(
     :type definition: dict
 
     :param message: The message that the definition should be appended to.
-    :type message: safe_extras.parameters.message.Message
+    :type message: parameters.message.Message
 
     :param table_of_contents: Table of contents that the headings should be
         included in.
-    :type message: safe_extras.parameters.message.Message
+    :type message: parameters.message.Message
 
     :param heading_level: Optional style to apply to the definition
         heading. See HEADING_LOOKUPS

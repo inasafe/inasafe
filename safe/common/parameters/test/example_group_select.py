@@ -9,8 +9,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from PyQt4.QtGui import QApplication, QWidget, QGridLayout
 
-from safe_extras.parameters.qt_widgets.parameter_container import (
-    ParameterContainer)
+from parameters.qt_widgets.parameter_container import ParameterContainer
 
 from safe.common.parameters.group_select_parameter import (
     GroupSelectParameter)

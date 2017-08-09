@@ -2,7 +2,7 @@
 """Group Select Parameter."""
 
 from collections import OrderedDict
-from safe_extras.parameters.generic_parameter import GenericParameter
+from parameters.generic_parameter import GenericParameter
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"

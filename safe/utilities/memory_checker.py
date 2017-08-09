@@ -24,11 +24,12 @@ import logging
 import qgis  # pylint: disable=unused-import
 from PyQt4.QtCore import QCoreApplication
 
+from pydispatch import dispatcher
+
 from safe.common.utilities import get_free_memory
 from safe import messaging as m
 from safe.messaging import styles
 from safe.common.signals import send_dynamic_message, send_static_message
-from safe_extras.pydispatch import dispatcher
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 SUGGESTION_STYLE = styles.GREEN_LEVEL_4_STYLE

@@ -5,9 +5,8 @@
 import logging
 from PyQt4.QtGui import QWidget
 
-from safe_extras.parameters.select_parameter import SelectParameter
-from safe_extras.parameters.qt_widgets.parameter_container import (
-    ParameterContainer)
+from parameters.select_parameter import SelectParameter
+from parameters.qt_widgets.parameter_container import ParameterContainer
 
 from safe import messaging as m
 from safe.utilities.i18n import tr

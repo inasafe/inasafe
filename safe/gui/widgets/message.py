@@ -2,7 +2,7 @@
 
 import logging
 
-from safe_extras.pydispatch import dispatcher
+from pydispatch import dispatcher
 
 from safe.definitions.messages import limitations, disclaimer
 from safe import messaging as m

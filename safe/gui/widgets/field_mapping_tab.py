@@ -17,6 +17,9 @@ from collections import OrderedDict
 import logging
 from functools import partial
 
+from parameters.qt_widgets.parameter_container import (
+    ParameterContainer, InvalidValidationException)
+
 from safe.definitions.constants import (
     DO_NOT_REPORT,
     CUSTOM_VALUE,
@@ -29,13 +32,10 @@ from safe.definitions.constants import (
     RECENT,
     GLOBAL
 )
-
-from safe_extras.parameters.qt_widgets.parameter_container import (
-    ParameterContainer, InvalidValidationException)
 from safe.common.exceptions import KeywordNotFoundError
 
 # Note(IS): I need to use alias to make sure it throws the same exception class
-from safe_extras.parameters.parameter_exceptions import (
+from parameters.parameter_exceptions import (
     InvalidValidationException as OriginalValidationException)
 
 from safe.utilities.i18n import tr

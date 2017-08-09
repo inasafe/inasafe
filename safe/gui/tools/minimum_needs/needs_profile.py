@@ -13,11 +13,12 @@ from shutil import copy, rmtree
 from PyQt4.QtCore import QSettings
 from qgis.core import QgsApplication
 
+from parameters.text_parameter import TextParameter
+
 from safe.common.parameters.resource_parameter import ResourceParameter
 from safe.common.minimum_needs import MinimumNeeds
 from safe.utilities.i18n import tr
 from safe.utilities.resources import resources_path
-from safe_extras.parameters.text_parameter import TextParameter
 
 
 def add_needs_parameters(parameters):

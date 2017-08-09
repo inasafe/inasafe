@@ -11,10 +11,9 @@ from PyQt4.QtGui import (
     QDialog, QFileDialog, QDialogButtonBox, QGroupBox, QVBoxLayout,
     QScrollArea, QWidget)
 
-from safe_extras.parameters.qt_widgets.parameter_container import (
-    ParameterContainer)
-from safe_extras.parameters.float_parameter import FloatParameter
-from safe_extras.parameters.integer_parameter import IntegerParameter
+from parameters.qt_widgets.parameter_container import ParameterContainer
+from parameters.float_parameter import FloatParameter
+from parameters.integer_parameter import IntegerParameter
 
 from safe.definitions.utilities import all_default_fields
 from safe.definitions.constants import qvariant_whole_numbers, GLOBAL
