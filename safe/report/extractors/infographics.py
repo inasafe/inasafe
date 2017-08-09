@@ -98,7 +98,7 @@ def infographic_people_section_notes_extractor(
     }
     context['notes'].append(note)
 
-    concept_keys = ['affected_people', 'displaced_people', 'exposed_people']
+    concept_keys = ['affected_people', 'displaced_people']
     for key in concept_keys:
         note = {
             'title': concepts[key].get('name'),
