@@ -114,8 +114,7 @@ class StepKwSubcategory(WizardStep, FORM_CLASS):
             return None
 
     def clear_further_steps(self):
-        """ Clear all further steps
-            in order to properly calculate the prev step
+        """Clear all further steps in order to properly calculate the prev step
         """
         self.parent.step_kw_hazard_category.lstHazardCategories.clear()
         self.parent.step_kw_layermode.lstLayerModes.clear()

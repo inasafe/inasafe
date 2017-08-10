@@ -27,14 +27,15 @@ def get_wizard_step_ui_class(py_file_name):
 
 
 class WizardStep(QWidget):
+
     """An abstract step.
 
-       Each step is a tab meant to be placed in the wizard.
-       Each derived class must implement mandatory methods.
+    Each step is a tab meant to be placed in the wizard.
+    Each derived class must implement mandatory methods.
     """
 
     def __init__(self, parent=None):
-        """Constructor
+        """Constructor.
 
         :param parent: parent - widget to use as parent.
         :type parent: safe.gui.tools.wizard.wizard_dialog.WizardDialog
@@ -81,7 +82,7 @@ class WizardStep(QWidget):
     def set_widgets(self):
         """Set all widgets on the tab.
 
-           This method must be implemented in derived classes.
+        This method must be implemented in derived classes.
         """
         raise NotImplementedError("The current step class doesn't implement \
             the set_widgets method")

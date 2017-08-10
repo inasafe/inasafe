@@ -98,8 +98,7 @@ class StepKwPurpose(WizardStep, FORM_CLASS):
         return purposes_for_layer(layer_geometry_key)
 
     def clear_further_steps(self):
-        """ Clear all further steps
-            in order to properly calculate the prev step
+        """Clear all further steps in order to properly calculate the prev step
         """
         self.parent.step_kw_hazard_category.lstHazardCategories.clear()
         self.parent.step_kw_subcategory.lstSubcategories.clear()

@@ -17,13 +17,14 @@ __revision__ = '$Format:%H$'
 
 
 class DefaultSelectParameterWidget(SelectParameterWidget):
+
     """Widget class for Default Select Parameter."""
+
     def __init__(self, parameter, parent=None):
         """Constructor
 
         :param parameter: A DefaultSelectParameter object.
         :type parameter: DefaultSelectParameter
-
         """
         super(DefaultSelectParameterWidget, self).__init__(parameter, parent)
 
@@ -110,8 +111,7 @@ class DefaultSelectParameterWidget(SelectParameterWidget):
     def get_parameter(self):
         """Obtain list parameter object from the current widget state.
 
-        :returns: A DefaultSelectParameter from the current state of widget
-
+        :returns: A DefaultSelectParameter from the current state of widget.
         """
         current_index = self.input.currentIndex()
         selected_value = self.input.itemData(current_index, Qt.UserRole)
@@ -201,7 +201,7 @@ class DefaultSelectParameterWidget(SelectParameterWidget):
 
     def enable_radio_button(self):
         """Enable radio button and custom value input area then set selected
-           radio button to 'Do not report'.
+        radio button to 'Do not report'.
         """
         for button in self.default_input_button_group.buttons():
             button.setEnabled(True)

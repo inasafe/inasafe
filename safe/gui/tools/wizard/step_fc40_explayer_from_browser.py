@@ -22,6 +22,7 @@ FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
 class StepFcExpLayerFromBrowser(WizardStepBrowser, FORM_CLASS):
+
     """InaSAFE Wizard Step Exposure Layer Browser."""
 
     def __init__(self, parent=None):
@@ -29,7 +30,6 @@ class StepFcExpLayerFromBrowser(WizardStepBrowser, FORM_CLASS):
 
         :param parent: parent - widget to use as parent (Wizad Dialog).
         :type parent: QWidget
-
         """
         WizardStepBrowser.__init__(self, parent)
         self.tvBrowserExposure.setModel(self.proxy_model)
@@ -38,7 +38,7 @@ class StepFcExpLayerFromBrowser(WizardStepBrowser, FORM_CLASS):
 
     def is_ready_to_next_step(self):
         """Check if the step is complete. If so, there is
-            no reason to block the Next button.
+        no reason to block the Next button.
 
         :returns: True if new step may be enabled.
         :rtype: bool

@@ -14,7 +14,6 @@ class DefaultValueParameter(GenericParameter):
     """Parameter that represent a selection of default value."""
 
     def __init__(self, guid=None):
-
         """Constructor.
 
         :param guid: Optional unique identifier for this parameter.
