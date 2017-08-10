@@ -272,8 +272,7 @@ class InvalidProjectionError(InaSAFEError):
 class InsufficientOverlapError(InaSAFEError):
 
     """An exception raised if an error occurs during extent calculation
-    because the bounding boxes do not overlap.
-    """
+    because the bounding boxes do not overlap."""
 
     pass
 
