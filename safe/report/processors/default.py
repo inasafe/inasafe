@@ -1,11 +1,12 @@
 # coding=utf-8
+
 """
 Module for basic renderer we support. Currently we have:
 
 - Jinja2 Templating renderer
 - QGIS Composition templating renderer
-
 """
+
 import io
 import logging
 import os
@@ -16,13 +17,13 @@ from PyQt4.QtCore import QUrl
 from PyQt4.QtGui import QImage, QPainter, QPrinter
 from PyQt4.QtSvg import QSvgRenderer
 from jinja2.environment import Environment
-from jinja2.exceptions import TemplateNotFound
 from jinja2.loaders import FileSystemLoader
 from qgis.core import (
     QgsMapLayer,
     QgsComposerFrame,
     QgsComposition,
     QgsComposerHtml,
+    QgsComposerPicture,
     QgsRectangle,
     QgsLegendRenderer,
     QgsComposerLegendStyle,
@@ -52,14 +53,14 @@ LOGGER = logging.getLogger('InaSAFE')
 def jinja2_renderer(impact_report, component):
     """Versatile text renderer using Jinja2 Template.
 
-    Render using Jinja2 template
+    Render using Jinja2 template.
 
     :param impact_report: ImpactReport contains data about the report that is
-        going to be generated
+        going to be generated.
     :type impact_report: safe.report.impact_report.ImpactReport
 
     :param component: Contains the component metadata and context for
-        rendering the output
+        rendering the output.
     :type component:
         safe.report.report_metadata.QgisComposerComponentsMetadata
 
@@ -110,26 +111,25 @@ def create_qgis_pdf_output(
         metadata):
     """Produce PDF output using QgsComposition.
 
-    :param output_path: the output path
+    :param output_path: The output path.
     :type output_path: str
 
-    :param composition: QGIS Composition object
+    :param composition: QGIS Composition object.
     :type composition: qgis.core.QgsComposition
 
-    :param qgis_composition_context: QGIS Composition context used by renderer
+    :param qgis_composition_context: QGIS Composition context used by renderer.
     :type qgis_composition_context: safe.report.impact_report.
         QGISCompositionContext
 
-    :param file_format: file format of map output, PDF or PNG
+    :param file_format: file format of map output, PDF or PNG.
     :type file_format: 'pdf', 'png'
 
-    :param metadata: the component metadata
+    :param metadata: The component metadata.
     :type metadata: QgisComposerComponentsMetadata
 
-    :return: generated output path
+    :return: Generated output path.
     :rtype: str
     """
-
     # make sure directory is created
     dirname = os.path.dirname(output_path)
     if not os.path.exists(dirname):
@@ -169,17 +169,16 @@ def create_qgis_pdf_output(
 def create_qgis_template_output(output_path, composition):
     """Produce QGIS Template output.
 
-    :param output_path: the output path
+    :param output_path: The output path.
     :type output_path: str
 
-    :param composition: QGIS Composition object to get template
+    :param composition: QGIS Composition object to get template.
         values
     :type composition: qgis.core.QgsComposition
 
-    :return: generated output path
+    :return: Generated output path.
     :rtype: str
     """
-
     # make sure directory is created
     dirname = os.path.dirname(output_path)
     if not os.path.exists(dirname):
@@ -200,18 +199,18 @@ def qgis_composer_html_renderer(impact_report, component):
     """HTML to PDF renderer using QGIS Composer.
 
     Render using qgis composer for a given impact_report data and component
-    context for html input
+    context for html input.
 
     :param impact_report: ImpactReport contains data about the report that is
-        going to be generated
+        going to be generated.
     :type impact_report: safe.report.impact_report.ImpactReport
 
     :param component: Contains the component metadata and context for
-        rendering the output
+        rendering the output.
     :type component:
         safe.report.report_metadata.QgisComposerComponentsMetadata
 
-    :return: whatever type of output the component should be
+    :return: Whatever type of output the component should be.
 
     .. versionadded:: 4.0
     """
@@ -338,18 +337,18 @@ def qgis_composer_renderer(impact_report, component):
     """Default Map Report Renderer using QGIS Composer.
 
     Render using qgis composer for a given impact_report data and component
-    context
+    context.
 
     :param impact_report: ImpactReport contains data about the report that is
-        going to be generated
+        going to be generated.
     :type impact_report: safe.report.impact_report.ImpactReport
 
     :param component: Contains the component metadata and context for
-        rendering the output
+        rendering the output.
     :type component:
         safe.report.report_metadata.QgisComposerComponentsMetadata
 
-    :return: whatever type of output the component should be
+    :return: Whatever type of output the component should be.
 
     .. versionadded:: 4.0
     """
@@ -586,15 +585,15 @@ def qt_svg_to_png_renderer(impact_report, component):
     """Render SVG into PNG.
 
     :param impact_report: ImpactReport contains data about the report that is
-        going to be generated
+        going to be generated.
     :type impact_report: safe.report.impact_report.ImpactReport
 
     :param component: Contains the component metadata and context for
-        rendering the output
+        rendering the output.
     :type component:
         safe.report.report_metadata.QgisComposerComponentsMetadata
 
-    :return: whatever type of output the component should be
+    :return: Whatever type of output the component should be.
 
     .. versionadded:: 4.0
     """
