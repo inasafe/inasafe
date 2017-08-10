@@ -39,7 +39,7 @@ def inasafe_impact_analysis_layer(field, feature, parent):
 
     index = layer.fieldNameIndex(field)
     if index < 0:
-        return None
+        return index
 
     feature = layer.getFeatures().next()
     return feature[index]
@@ -85,15 +85,17 @@ def inasafe_place_value_coefficient(number, feature, parent):
     It needs to be used with inasafe_number_denomination_unit.
     """
     _ = feature, parent  # NOQA
-    if number is None:
+
+    if number >= 0:
+        rounded_number = round_affected_number(
+            number,
+            enable_rounding=True,
+            use_population_rounding=True
+        )
+        value, unit = denomination(rounded_number, 1000)
+        return str(round(value, 1))
+    else:
         return no_data_replacement['string_format']
-    rounded_number = round_affected_number(
-        number,
-        enable_rounding=True,
-        use_population_rounding=True
-    )
-    value, unit = denomination(rounded_number, 1000)
-    return str(round(value, 1))
 
 
 @qgsfunction(
