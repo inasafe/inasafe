@@ -1846,7 +1846,7 @@ additional_rice_count_field = {
     'key': 'additional_rice_field',
     'name': tr('Additional Weekly Rice kg for Pregnant and Lactating Women'),
     'field_name': 'additional_rice',
-    'header_name': tr('Additional Rice for Pregnant and Lactating Women'),
+    'header_name': tr('Additional Rice'),
     'type': QVariant.Int,
     'length': default_field_length,
     'unit': {
@@ -1875,6 +1875,7 @@ total_affected_field = {
     'key': 'total_affected_field',
     'name': tr('Total Affected'),
     'field_name': 'total_affected',
+    'header_name': tr('Affected'),
     'type': QVariant.Double,
     'length': default_field_length,
     'precision': 2,

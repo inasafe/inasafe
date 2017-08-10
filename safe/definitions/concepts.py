@@ -132,6 +132,7 @@ concepts['affected'] = {
 concepts['exposed_people'] = {
     'group': tr('Basic concepts'),
     'key': 'exposed_people',
+    'name': tr('Exposed People'),
     'description': tr(
         'People who are present in hazard zones and are thereby subject '
         'to potential losses. In InaSAFE, people who are exposed are '
@@ -147,6 +148,7 @@ concepts['exposed_people'] = {
 concepts['affected_people'] = {
     'group': tr('Basic concepts'),
     'key': 'affected_people',
+    'name': tr('Affected People'),
     'description': tr(
         'People who are affected by a hazardous event. People can be '
         'affected directly or indirectly. Affected people may experience '
@@ -206,6 +208,7 @@ concepts['indirectly_affected_people'] = {
 concepts['displaced_people'] = {
     'group': tr('Basic concepts'),
     'key': 'displaced_people',
+    'name': tr('Displaced People'),
     'description': tr(
         'Displaced people are people who, for different reasons and '
         'circumstances because of risk or disaster, have to leave their '
@@ -719,6 +722,19 @@ concepts['production_value'] = {
     'description': tr(
         'The price of a crop in a land cover area. The unit is a currency '
         'unit (e.g. IDR, USD, Euro).'),
+    'citations': [
+        {
+            'text': '',
+            'link': u''
+        }
+    ],
+}
+concepts['displacement_rate'] = {
+    'group': tr('Basic concepts'),
+    'key': 'displacement_rate',
+    'name': tr('Displacement rate'),
+    'description': tr(
+        'The population displacement ratio for a given hazard class.'),
     'citations': [
         {
             'text': '',

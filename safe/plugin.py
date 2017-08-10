@@ -34,6 +34,7 @@ from PyQt4.QtGui import (
     QLineEdit,
     QInputDialog)
 
+from safe.report.expressions import infographic
 from safe.gis import expressions
 from safe.common.version import release_status
 from safe.common.exceptions import (
@@ -631,6 +632,8 @@ class Plugin(object):
         # Unload QGIS expressions loaded by the plugin.
         qgis_expressions = [
             fct[0] for fct in getmembers(expressions) if isfunction(fct[1])]
+        qgis_expressions += [
+            fct[0] for fct in getmembers(infographic) if isfunction(fct[1])]
         for qgis_expression in qgis_expressions:
             if qgis_expression != 'qgsfunction':
                 QgsExpression.unregisterFunction(qgis_expression)

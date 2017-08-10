@@ -14,7 +14,7 @@ from safe.definitions.constants import ANALYSIS_SUCCESS
 from safe.definitions.reports.components import (
     standard_impact_report_metadata_html,
     general_report_component,
-    population_chart_svg_component)
+    population_chart_svg_component, infographic_report)
 from safe.impact_function.impact_function import ImpactFunction
 from safe.report.impact_report import ImpactReport
 from safe.report.report_metadata import ReportMetadata
@@ -169,9 +169,24 @@ class TestEarthquakeReport(unittest.TestCase):
         self.assertTrue(
             analysis_summary.output, empty_component_output_message)
 
+        report_metadata = ReportMetadata(
+            metadata_dict=infographic_report)
+        infographic_impact_report = ImpactReport(
+            IFACE,
+            report_metadata,
+            impact_function=impact_function)
+
+        infographic_impact_report.output_folder = output_folder
+        return_code, message = infographic_impact_report.process_components()
+
+        self.assertEqual(
+            return_code, ImpactReport.REPORT_GENERATION_SUCCESS, message)
+
         # check population pie chart if we have 100% donut slice
-        population_chart_svg = impact_report.metadata.component_by_key(
-            population_chart_svg_component['key'])
+        population_chart_svg = (
+            infographic_impact_report.metadata.component_by_key(
+                population_chart_svg_component['key'])
+        )
 
         expected_slices = [
             {

@@ -3,7 +3,7 @@
 """Rounding and number formatting."""
 
 from decimal import Decimal
-from math import ceil
+from math import ceil, log
 from PyQt4.QtCore import QPyNullVariant
 
 from safe.definitions.units import unit_mapping, nominal_mapping
@@ -289,11 +289,14 @@ def html_scientific_notation_rate(rate):
     return rate_percentage
 
 
-def denomination(value):
+def denomination(value, min_nominal=None):
     """Return the denomination of a number.
 
     :param value: The value.
     :type value: int
+
+    :param min_nominal: Minimum value of denomination eg: 1000, 100.
+    :type min_nominal: int
 
     :return: The new value and the denomination as a unit definition.
     :rtype: list(int, safe.unit.definition)
@@ -302,16 +305,25 @@ def denomination(value):
         return None
 
     if not value:
-        return None
+        return value, None
 
-    if abs(value) == nominal_mapping.keys()[0]:
+    if abs(value) == nominal_mapping.keys()[0] and not min_nominal:
         return 1 * value, nominal_mapping[nominal_mapping.keys()[0]]
 
-    iterator = zip(nominal_mapping.keys(), nominal_mapping.keys()[1:])
+    # we need minimum value of denomination because we don't want to show
+    # '2 ones', '3 tens', etc.
+    index = 0
+    if min_nominal:
+        index = int(ceil(log(min_nominal, 10)))
+
+    iterator = zip(
+        nominal_mapping.keys()[index:], nominal_mapping.keys()[index + 1:])
     for min_value, max_value in iterator:
 
         if min_value <= abs(value) < max_value:
             return float(value) / min_value, nominal_mapping[min_value]
+        elif abs(value) < min_value:
+            return float(value), None
 
     max_value = nominal_mapping.keys()[-1]
     new_value = float(value) / max_value
