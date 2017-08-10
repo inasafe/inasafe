@@ -1,5 +1,9 @@
 # coding=utf-8
+
 """Module used to generate context for analysis detail section."""
+
+import logging
+
 from safe.definitions.exposure import exposure_all, exposure_population
 from safe.definitions.fields import (
     exposure_type_field,
@@ -23,20 +27,22 @@ __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = ':%H$'
 
+LOGGER = logging.getLogger('InaSAFE')
+
 
 def analysis_detail_extractor(impact_report, component_metadata):
     """Extracting analysis result from the impact layer.
 
-    :param impact_report: the impact report that acts as a proxy to fetch
-        all the data that extractor needed
+    :param impact_report: The impact report that acts as a proxy to fetch
+        all the data that extractor needed.
     :type impact_report: safe.report.impact_report.ImpactReport
 
-    :param component_metadata: the component metadata. Used to obtain
-        information about the component we want to render
+    :param component_metadata: The component metadata. Used to obtain
+        information about the component we want to render.
     :type component_metadata: safe.report.report_metadata.
         ReportComponentsMetadata
 
-    :return: context for rendering phase
+    :return: Context for rendering phase.
     :rtype: dict
 
     .. versionadded:: 4.0
@@ -541,7 +547,14 @@ def analysis_detail_extractor(impact_report, component_metadata):
             for field in extra_fields[exposure_type['key']]:
                 field_index = exposure_summary_table.fieldNameIndex(
                     field['field_name'])
-                total_count = int(float(feat[field_index]))
+                # noinspection PyBroadException
+                try:
+                    total_count = int(float(feat[field_index]))
+                except:
+                    LOGGER.debug(
+                        'ERROR : Field name not found: %s, field index: %s' % (
+                            field['field_name'], field_index))
+                    raise
                 total_count = format_number(
                     total_count,
                     enable_rounding=is_rounding,
