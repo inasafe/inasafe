@@ -556,12 +556,10 @@ class PetaBencanaDialog(QDialog, FORM_CLASS):
                     )
 
     def reject(self):
-        """Redefinition of the reject() method.
+        """Redefinition of the method.
 
         It will call the super method.
         """
-        # add our own logic here...
-
         super(PetaBencanaDialog, self).reject()
 
     def download(self, url, output_path):

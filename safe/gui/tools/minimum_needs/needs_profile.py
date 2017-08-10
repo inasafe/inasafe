@@ -1,6 +1,8 @@
 # coding=utf-8
-"""This is the concrete Minimum Needs class that contains the logic to load
-the minimum needs to and from the QSettings"""
+"""
+This is the concrete Minimum Needs class that contains the logic to load
+the minimum needs to and from the QSettings.
+"""
 
 __author__ = 'Christian Christelis <christian@kartoza.com>'
 __date__ = '05/10/2014'

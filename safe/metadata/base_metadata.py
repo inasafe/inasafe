@@ -29,6 +29,7 @@ __revision__ = '$Format:%H$'
 
 
 class BaseMetadata(object):
+
     """
     Abstract Metadata class, this has to be subclassed.
 

@@ -568,11 +568,10 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
                 )
 
     def reject(self):
-        """Redefinition of the reject() method
-        to remove the rectangle selection tool.
+        """Redefinition of the method to remove the rectangle selection tool.
+
         It will call the super method.
         """
-
         self.canvas.unsetMapTool(self.rectangle_map_tool)
         self.rectangle_map_tool.reset()
 

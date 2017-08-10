@@ -99,8 +99,7 @@ class StepKwLayerMode(WizardStep, FORM_CLASS):
             return None
 
     def clear_further_steps(self):
-        """ Clear all further steps
-            in order to properly calculate the prev step
+        """Clear all further steps in order to properly calculate the prev step
         """
         self.parent.step_kw_unit.lstUnits.clear()
         self.parent.step_kw_field.lstFields.clear()

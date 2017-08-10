@@ -1,6 +1,8 @@
 # coding=utf-8
-"""This module contains the abstract class of the MinimumNeeds. The storage
-logic is omitted here."""
+"""
+This module contains the abstract class of the MinimumNeeds. The storage
+logic is omitted here.
+"""
 
 __author__ = 'Christian Christelis <christian@kartoza.com>'
 __date__ = '05/10/2014'
@@ -16,6 +18,7 @@ from safe.utilities.i18n import tr
 
 
 class MinimumNeeds(object):
+
     """A abstract class for handling the minimum needs.
 
     The persistence logic is excluded from this class.

@@ -14,10 +14,11 @@ HELP_WIDGET = get_ui_class('wizard/wizard_help.ui')
 
 
 class WizardHelp(QWidget, HELP_WIDGET):
+
     """An abstract step.
 
-       Each step is a tab meant to be placed in the wizard.
-       Each derived class must implement mandatory methods.
+    Each step is a tab meant to be placed in the wizard.
+    Each derived class must implement mandatory methods.
     """
 
     def __init__(self, parent=None):

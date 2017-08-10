@@ -251,13 +251,12 @@ def clean_inasafe_fields(layer):
 def _size_is_needed(layer):
     """Checker if we need the size field.
 
-     :param layer: The layer to test.
-     :type layer: QgsVectorLayer
+    :param layer: The layer to test.
+    :type layer: QgsVectorLayer
 
-     :return: If we need the size field.
-     :rtype: bool
+    :return: If we need the size field.
+    :rtype: bool
     """
-
     exposure = layer.keywords.get('exposure')
     if not exposure:
         # The layer is not an exposure.

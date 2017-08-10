@@ -234,16 +234,14 @@ class InvalidParameterError(InaSAFEError):
 
 class NoKeywordsFoundError(InaSAFEError):
 
-    """Custom exception for when no keywords file exist for a layer.
-    """
+    """Custom exception for when no keywords file exist for a layer."""
 
     pass
 
 
 class TranslationLoadError(InaSAFEError):
 
-    """Custom exception handler for whe translation file fails
-    to load."""
+    """Custom exception handler for whe translation file fails to load."""
 
     pass
 
@@ -257,8 +255,9 @@ class ComputationError(InaSAFEError):
 
 class NoFeaturesInExtentError(InaSAFEError):
 
-    """An exception that gets thrown when no features are within
-    the extent being clipped."""
+    """An exception that gets thrown when no features are within the extent
+    being clipped.
+    """
 
     pass
 
@@ -273,21 +272,22 @@ class InvalidProjectionError(InaSAFEError):
 class InsufficientOverlapError(InaSAFEError):
 
     """An exception raised if an error occurs during extent calculation
-    because the bounding boxes do not overlap."""
+    because the bounding boxes do not overlap.
+    """
 
     pass
 
 
 class StyleError(InaSAFEError):
 
-    """An exception relating to reading / generating GIS styles"""
+    """An exception relating to reading / generating GIS styles."""
 
     pass
 
 
 class MemoryLayerCreationError(InaSAFEError):
 
-    """Raised if an error occurs creating the cities file"""
+    """Raised if an error occurs creating the cities file."""
 
     pass
 
@@ -295,7 +295,8 @@ class MemoryLayerCreationError(InaSAFEError):
 class CallGDALError(InaSAFEError):
 
     """Raised if failed to call gdal command. Indicate by error message that is
-    not empty"""
+    not empty.
+    """
 
     pass
 
