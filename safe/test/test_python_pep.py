@@ -65,7 +65,7 @@ class TestPythonPep(unittest.TestCase):
             root = './'
             command = ['make', 'pep257']
             output = Popen(command, stdout=PIPE, cwd=root).communicate()[0]
-            default_number_lines = 5
+            default_number_lines = 4
         elif sys.platform.startswith('win'):
             root = '../../'
             command = [
