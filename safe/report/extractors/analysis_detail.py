@@ -518,6 +518,14 @@ def analysis_detail_extractor(impact_report, component_metadata):
         current_unit = None
         currency_unit = setting('currency', expected_type=str)
         for field in extra_fields[exposure_type['key']]:
+            field_index = exposure_summary_table.fieldNameIndex(
+                field['field_name'])
+            if field_index < 0:
+                LOGGER.debug(
+                    'Field name not found: %s, field index: %s' % (
+                        field['field_name'], field_index))
+                continue
+
             units = field.get('units')
             if units:
                 for unit in units:
@@ -552,9 +560,9 @@ def analysis_detail_extractor(impact_report, component_metadata):
                     total_count = int(float(feat[field_index]))
                 except:
                     LOGGER.debug(
-                        'ERROR : Field name not found: %s, field index: %s' % (
+                        'Field name not found: %s, field index: %s' % (
                             field['field_name'], field_index))
-                    raise
+                    continue
                 total_count = format_number(
                     total_count,
                     enable_rounding=is_rounding,
