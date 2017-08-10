@@ -4,6 +4,7 @@
 """
 from __future__ import absolute_import
 
+from safe.definitions.concepts import concepts
 from safe.definitions.exposure import (
     exposure_structure,
     exposure_road,
@@ -148,7 +149,15 @@ general_report_component = {
                 'header': fatalities_field['name'],
                 'field': fatalities_field
             }
-        ]
+        ],
+        'concept_notes': {
+            'concepts': [
+                concepts['exposed_people'],
+                concepts['affected_people'],
+                concepts['displaced_people']
+            ],
+            'note_format': '{name}: {description}'
+        }
     }
 }
 

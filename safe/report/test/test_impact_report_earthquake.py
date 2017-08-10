@@ -161,6 +161,24 @@ class TestEarthquakeReport(unittest.TestCase):
                         }],
                     'value_label': u'Count'
                 }
+            ],
+            'notes': [
+                'Exposed People: People who are present in hazard zones and '
+                'are thereby subject to potential losses. In InaSAFE, people '
+                'who are exposed are those people who are within the extent '
+                'of the hazard.',
+                'Affected People: People who are affected by a hazardous '
+                'event. People can be affected directly or indirectly. '
+                'Affected people may experience short-term or long-term '
+                'consequences to their lives, livelihoods or health and in '
+                'the economic, physical, social, cultural and environmental '
+                'assets. In InaSAFE, people who are killed during the event '
+                'are also considered affected.',
+                'Displaced People: Displaced people are people who, for '
+                'different reasons and circumstances because of risk or '
+                'disaster, have to leave their place of residence. '
+                'In InaSAFE, demographic and minimum needs reports are based '
+                'on displaced / evacuated people.'
             ]
         }
         actual_context = analysis_summary.context
