@@ -72,5 +72,12 @@ def test_manually():
     _run_tests(test_suite, 'custom test class')
 
 
+def run_all_tests():
+    """Run all the tests."""
+    packages = ['safe', 'bin']
+    for package in packages:
+        test_package(package)
+
+
 if __name__ == '__main__':
     test_package()

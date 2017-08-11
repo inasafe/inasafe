@@ -10,48 +10,17 @@ from headless.celery_app import app
 from headless.celeryconfig import DEPLOY_OUTPUT_DIR, DEPLOY_OUTPUT_URL
 from headless.tasks.utilities import download_layer, archive_layer, \
     generate_styles, download_file
-from bin.inasafe import CommandLineArguments, get_impact_function_list, \
-    run_impact_function, build_report, get_layer
+from bin.inasafe import (
+    CommandLineArguments,
+    run_impact_function,
+    build_report,
+    get_layer)
 from safe.utilities.metadata import read_iso19115_metadata
 
 __author__ = 'Rizky Maulana Nugraha <lana.pcfre@gmail.com>'
 __date__ = '1/19/16'
 
 LOGGER = logging.getLogger('InaSAFE')
-
-
-@app.task(queue='inasafe-headless')
-def filter_impact_function(hazard=None, exposure=None):
-    """Filter impact functions
-
-    :param hazard: URL or filepath of hazard
-    :type hazard: str
-
-    :param exposure: URL or filepath of exposure
-    :type exposure: str
-
-    :return: List of Impact Function metadata as dict
-    :rtype: list(dict)
-
-    """
-    # download the file first
-    arguments = CommandLineArguments()
-    if hazard and exposure:
-        hazard_file = download_layer(hazard)
-        exposure_file = download_layer(exposure)
-        arguments.hazard = hazard_file
-        arguments.exposure = exposure_file
-    else:
-        arguments.hazard = None
-        arguments.exposure = None
-    ifs = get_impact_function_list(arguments)
-    result = [
-        {
-            'id': f.metadata().as_dict()['id'],
-            'name': f.metadata().as_dict()['name']
-        } for f in ifs]
-    LOGGER.debug(result)
-    return result
 
 
 @app.task(queue='inasafe-headless')

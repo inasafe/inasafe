@@ -8,8 +8,9 @@ import urlparse
 
 from headless.celery_app import app
 from headless.celeryconfig import DEPLOY_OUTPUT_DIR, DEPLOY_OUTPUT_URL
-from headless.tasks.inasafe_wrapper import filter_impact_function, \
-    run_analysis, read_keywords_iso_metadata
+from headless.tasks.inasafe_wrapper import (
+    run_analysis,
+    read_keywords_iso_metadata)
 from headless.tasks.celery_test_setup import \
     update_celery_configuration
 from headless.tasks.utilities import archive_layer
@@ -69,23 +70,6 @@ class TestTaskCall(unittest.TestCase):
 
     def tearDown(self):
         shutil.rmtree(self.test_deploy_dir)
-
-    def test_filter_impact_function(self):
-
-        celery_result = filter_impact_function.delay(
-            self.hazard_temp, self.exposure_temp)
-
-        ifs = celery_result.get()
-
-        self.assertEqual(len(ifs), 1)
-
-        actual_id = ifs[0]
-        expected_id = {
-            'id': 'FloodEvacuationRasterHazardFunction',
-            'name': u'Raster flood on population'
-        }
-
-        self.assertEqual(actual_id, expected_id)
 
     def test_run_analysis(self):
         celery_result = run_analysis.delay(
