@@ -39,7 +39,7 @@ def inasafe_impact_analysis_layer(field, feature, parent):
 
     index = layer.fieldNameIndex(field)
     if index < 0:
-        return index
+        return None
 
     feature = layer.getFeatures().next()
     return feature[index]
@@ -95,7 +95,7 @@ def inasafe_place_value_coefficient(number, feature, parent):
         value, unit = denomination(rounded_number, 1000)
         return str(round(value, 1))
     else:
-        return no_data_replacement['string_format']
+        return None
 
 
 @qgsfunction(
