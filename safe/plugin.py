@@ -315,6 +315,20 @@ class Plugin(object):
         self.add_action(
             self.action_save_scenario, add_to_toolbar=self.full_toolbar)
 
+    def _create_direction_tool_action(self):
+        """Create action for save scenario dialog."""
+        icon = resources_path('img', 'icons', 'save-as-scenario.svg')
+        self.action_direction_tool = QAction(
+            QIcon(icon),
+            self.tr('Direction and Distance Tool'), self.iface.mainWindow())
+        message = self.tr('Show direction and direction from two points')
+        self.action_direction_tool.setStatusTip(message)
+        self.action_direction_tool.setWhatsThis(message)
+        # noinspection PyUnresolvedReferences
+        self.action_direction_tool.triggered.connect(self.show_direction_tool)
+        self.add_action(
+            self.action_direction_tool, add_to_toolbar=self.full_toolbar)
+
     def _create_osm_downloader_action(self):
         """Create action for import OSM Dialog."""
         icon = resources_path('img', 'icons', 'show-osm-download.svg')
@@ -554,6 +568,7 @@ class Plugin(object):
         self._create_save_scenario_action()
         self._add_spacer_to_menu()
         self._create_show_definitions_action()
+        self._create_direction_tool_action()
 
         # Hook up a slot for when the dock is hidden using its close button
         # or  view-panels
@@ -883,6 +898,16 @@ class Plugin(object):
             iface=self.iface,
             dock=self.dock_widget)
         dialog.exec_()  # modal
+
+    def show_direction_tool(self):
+        """Show the direction tool dialog."""
+        from safe.gui.tools.direction_tool import DirectionTool
+
+        dialog = DirectionTool(
+            parent=self.iface.mainWindow(),
+            iface=self.iface
+        )
+        dialog.show()
 
     def save_scenario(self):
         """Save current scenario to text file"""
