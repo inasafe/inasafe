@@ -174,8 +174,20 @@ def general_report_extractor(impact_report, component_metadata):
         title=provenance['map_legend_title'],
         unit=hazard_classification['classification_unit'])
 
+    # Section notes
+    concepts = resolve_from_dictionary(
+        extra_args, ['concept_notes', 'concepts'])
+    note_format = resolve_from_dictionary(
+        extra_args, ['concept_notes', 'note_format'])
+
+    notes = []
+    for concept in concepts:
+        note = note_format.format(**concept)
+        notes.append(note)
+
     context['header'] = header
     context['summary'] = summary
     context['table_header'] = table_header
+    context['notes'] = notes
 
     return context
