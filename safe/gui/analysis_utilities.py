@@ -7,7 +7,7 @@ from collections import OrderedDict
 from PyQt4.QtCore import QDir, Qt
 from qgis.core import QgsMapLayerRegistry, QgsProject, QgsMapLayer, QGis
 
-from safe.definitions.utilities import definition, map_report_component
+from safe.definitions.utilities import definition, update_template_component
 from safe.definitions.fields import hazard_class_field
 from safe.definitions.reports.components import (
     standard_impact_report_metadata_pdf,
@@ -81,7 +81,7 @@ def generate_impact_map_report(impact_function, iface):
         extra_layers.append(impact_function.aggregation_summary)
     # create impact report instance
     report_metadata = ReportMetadata(
-        metadata_dict=map_report_component(report_a4_blue))
+        metadata_dict=update_template_component(report_a4_blue))
     impact_report = ImpactReport(
         iface,
         report_metadata,
@@ -134,7 +134,7 @@ def generate_infographic_report(impact_function, iface):
         extra_layers.append(impact_function.aggregation_summary)
     # create impact report instance
     report_metadata = ReportMetadata(
-        metadata_dict=infographic_report)
+        metadata_dict=update_template_component(infographic_report))
     impact_report = ImpactReport(
         iface,
         report_metadata,

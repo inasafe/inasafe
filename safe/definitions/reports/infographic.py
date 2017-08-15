@@ -204,7 +204,7 @@ icon_pregnant_displaced = {
 
 icon_lactating_displaced = {
     'id': 'icon-lactating-displaced',
-    'path': resources_path('img', 'definitions', 'pregnant_lactating.svg')
+    'path': resources_path('img', 'definitions', 'lactating.svg')
 }
 
 icon_minimum_needs_rice = {
@@ -239,7 +239,7 @@ icon_additional_rice = {
 
 icon_hygiene_pack = {
     'id': 'icon-hygiene-pack',
-    'path': resources_path('img', 'definitions', 'hygiene_pack.svg')
+    'path': resources_path('img', 'definitions', 'hygiene_packs.svg')
 }
 
 image_item_elements = [

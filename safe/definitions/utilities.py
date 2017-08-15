@@ -1,7 +1,7 @@
 # coding=utf-8
 """Utilities module for helping definitions retrieval."""
 
-from os.path import join, exists
+from os.path import join, exists, splitext
 from qgis.core import QgsApplication
 from copy import deepcopy
 
@@ -24,6 +24,7 @@ from safe.definitions import (
     layer_purpose_aggregation,
     layer_purpose_exposure_summary
 )
+from safe.report.report_metadata import QgisComposerComponentsMetadata
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -460,8 +461,8 @@ def get_field_groups(layer_purpose, layer_subcategory=None):
     return field_groups
 
 
-def map_report_component(component, custom_template_dir=None):
-    """Get a map report component based on custom qpt if exists
+def update_template_component(component, custom_template_dir=None):
+    """Get a component based on custom qpt if exists
 
     :param component: Component as dictionary.
     :type component: dict
@@ -478,6 +479,13 @@ def map_report_component(component, custom_template_dir=None):
             QgsApplication.qgisSettingsDirPath(), 'inasafe')
 
     for component in copy_component['components']:
+        if not component.get('template'):
+            continue
+
+        template_format = splitext(component['template'])[-1][1:]
+        if template_format != QgisComposerComponentsMetadata.OutputFormat.QPT:
+            continue
+
         qpt_file_name = component['template'].split('/')[-1]
         custom_qpt_path = join(custom_template_dir, qpt_file_name)
         if exists(custom_qpt_path):

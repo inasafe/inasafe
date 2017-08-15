@@ -474,7 +474,7 @@ population_chart_svg_component = {
     'tags': [svg_product_tag],
     'extra_args': {
         'chart_title': tr('Estimated total population'),
-        'total_header': tr('Population')
+        'total_header': tr('Affected')
     }
 }
 
