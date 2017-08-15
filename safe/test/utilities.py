@@ -88,7 +88,6 @@ def get_qgis_app():
 
     If QGIS is already running the handle to that app will be returned.
     """
-
     global QGIS_APP, PARENT, IFACE, CANVAS  # pylint: disable=W0603
 
     if iface:
@@ -1142,10 +1141,12 @@ def remove_vector_temp_file(file_path):
 
 
 class FakeLayer(object):
+
     """A Mock layer.
 
     :param source:
     """
+
     def __init__(self, source=None):
         self.layer_source = source
 

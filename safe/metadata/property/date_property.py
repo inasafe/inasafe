@@ -16,7 +16,9 @@ __revision__ = '$Format:%H$'
 
 
 class DateProperty(BaseProperty):
+
     """A property that accepts date input."""
+
     # if you edit this you need to adapt accordingly xml_value and is_valid
     _allowed_python_types = [QDate, datetime, date, NoneType, QDateTime]
 

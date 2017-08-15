@@ -25,6 +25,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 
 class InaSAFEError(RuntimeError):
+
     """Base class for all user defined exceptions"""
 
     suggestion = 'An unspecified error occurred.'
@@ -411,7 +412,7 @@ class MetadataCastError(InaSAFEError):
 
 class InvalidProvenanceDataError(InaSAFEError):
 
-    """When a path for a metadata xml is not correct"""
+    """When a path for a metadata xml is not correct."""
 
     suggestion = 'Check that the IF produced all the required data'
 
@@ -425,7 +426,7 @@ class MissingMetadata(InaSAFEError):
 
 class MissingImpactReport(InaSAFEError):
 
-    """When Impact Report do not have proper input.."""
+    """When Impact Report do not have proper input."""
 
     pass
 
@@ -452,5 +453,7 @@ class ProcessingInstallationError(InaSAFEError):
 
 
 class AlignRastersError(Exception):
-    """Raised if alignment of hazard and exposure rasters failed"""
+
+    """Raised if alignment of hazard and exposure rasters failed."""
+
     pass

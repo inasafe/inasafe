@@ -31,7 +31,9 @@ STATIC_MESSAGE_SIGNAL = 'ApplicationMessage'
 
 
 class ConsoleView():
+
     """A simple console based message queue mockup."""
+
     def __init__(self):
         # Always gets replaced when a new message is passed
         self.static_message = None

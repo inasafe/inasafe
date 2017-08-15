@@ -17,5 +17,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 
 class InvalidMessageItemError(Exception):
+
     """Custom exception for when the passed MessageElement is invalid."""
+
     pass

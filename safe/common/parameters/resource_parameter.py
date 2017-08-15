@@ -20,12 +20,14 @@ __revision__ = '$Format:%H$'
 
 
 class ResourceParameter(FloatParameter):
+
     """A parameter handling specifically the resources used in InaSAFE
     minimum needs.
 
     :param guid: The unique reference to use when addressing this value.
     :type guid: str, None
     """
+
     def __init__(self, guid=None):
         super(ResourceParameter, self).__init__(guid)
         self._frequency = ''
