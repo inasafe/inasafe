@@ -1,5 +1,5 @@
 # coding=utf-8
-"""Resource Parameter Widget"""
+"""Resource Parameter Widget."""
 
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
@@ -17,7 +17,9 @@ __revision__ = '$Format:%H$'
 
 # pylint: disable=super-on-old-class
 class ResourceParameterWidget(FloatParameterWidget):
+
     """Widget class for Resource parameter."""
+
     # pylint: disable=super-on-old-class
     def __init__(self, parameter, parent=None):
         """Constructor
@@ -26,7 +28,6 @@ class ResourceParameterWidget(FloatParameterWidget):
 
         :param parameter: A ResourceParameter object.
         :type parameter: ResourceParameter, FloatParameter
-
         """
         # pylint: disable=E1002
         super(ResourceParameterWidget, self).__init__(parameter, parent)
@@ -37,7 +38,6 @@ class ResourceParameterWidget(FloatParameterWidget):
         """Obtain the parameter object from the current widget state.
 
         :returns: A BooleanParameter from the current state of widget
-
         """
         self._parameter.value = self._input.value()
         return self._parameter
