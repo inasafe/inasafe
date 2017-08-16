@@ -69,16 +69,27 @@ def composition_item(composer, item_id, item_class):
     :return: The composition item, inherited class of QgsComposerItem.
     """
     if item_class.__name__ == 'QgsComposerMap':
+        # It needs this condition for Rohmat (Ubuntu)
         item = composer.getComposerItemById(item_id)
         if isinstance(item, QgsComposerMap):
             return item
 
+    # Normal behaviour
     for item in composer.items():
         if isinstance(item, item_class):
             if item.id() == item_id:
                 return item
-    else:
-        return None
+
+    # Note from Etienne
+    # Still no item? No problem, let's try something else to fetch the map.
+    if item_class.__name__ == 'QgsComposerMap':
+        maps = composer.composerMapItems()
+        for composer_map in maps:
+            if composer_map.displayName() == item_id:
+                return composer_map
+
+    # We found nothing
+    return None
 
 
 def jinja2_renderer(impact_report, component):
