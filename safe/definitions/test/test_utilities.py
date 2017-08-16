@@ -69,7 +69,7 @@ from safe.definitions.utilities import (
     default_classification_value_maps,
     fields_in_field_groups,
     get_field_groups,
-    map_report_component,
+    update_template_component,
     get_name,
     set_provenance
 )
@@ -450,10 +450,10 @@ class TestDefinitionsUtilities(unittest.TestCase):
         expected = []
         self.assertListEqual(field_groups, expected)
 
-    def test_map_report_component(self):
-        """Test for map report component."""
+    def test_update_template_component(self):
+        """Test for custom template component."""
         # Default qpt
-        component = map_report_component(report_a4_blue, '.')
+        component = update_template_component(report_a4_blue, '.')
         self.assertDictEqual(component, report_a4_blue)
 
         # Custom qpt
@@ -467,7 +467,7 @@ class TestDefinitionsUtilities(unittest.TestCase):
             target_path = join(target_directory, split(default_qpt)[1])
             shutil.copy2(default_qpt, target_path)
 
-        component = map_report_component(report_a4_blue, target_directory)
+        component = update_template_component(report_a4_blue, target_directory)
         self.assertTrue(component != report_a4_blue)
 
     def test_set_provenance(self):
