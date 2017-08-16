@@ -50,6 +50,32 @@ __revision__ = '$Format:%H$'
 LOGGER = logging.getLogger('InaSAFE')
 
 
+def composition_item(composer, item_id, item_class):
+    """Fetch a specific item according to its type in a composer.
+
+    We got some problem with QgsComposition::getComposerItemById. Don't use it,
+    and use this function instead.
+    See https://github.com/inasafe/inasafe/issues/4271
+
+    :param composer: The composer to look in.
+    :type composer: QgsComposition
+
+    :param item_id: The ID of the item to look for.
+    :type item_id: basestring
+
+    :param item_class: The expected class name.
+    :type item_class: cls
+
+    :return: The composition item, inherited class of QgsComposerItem.
+    """
+    for item in composer.items():
+        if isinstance(item, item_class):
+            if item.id() == item_id:
+                return item
+    else:
+        return None
+
+
 def jinja2_renderer(impact_report, component):
     """Versatile text renderer using Jinja2 Template.
 
@@ -381,13 +407,10 @@ def qgis_composer_renderer(impact_report, component):
     for img in context.image_elements:
         item_id = img.get('id')
         path = img.get('path')
-        image = composition.getComposerItemById(item_id)
+        image = composition_item(composition, item_id, QgsComposerPicture)
         """:type: qgis.core.QgsComposerPicture"""
-        if image is not None and path is not None:
-            try:
-                image.setPicturePath(path)
-            except:
-                pass
+        if image and path:
+            image.setPicturePath(path)
 
     # replace html frame
     for html_el in context.html_frame_elements:
@@ -422,9 +445,9 @@ def qgis_composer_renderer(impact_report, component):
         split_count = map_el.get('grid_split_count')
         layers = map_el.get('layers')
         map_extent_option = map_el.get('extent')
-        composer_map = composition.getComposerItemById(item_id)
+        composer_map = composition_item(composition, item_id, QgsComposerMap)
         """:type: qgis.core.QgsComposerMap"""
-        if isinstance(composer_map, QgsComposerMap):
+        if composer_map:
             composer_map.setKeepLayerSet(True)
             layer_set = [l.id() for l in layers if isinstance(l, QgsMapLayer)]
             composer_map.setLayerSet(layer_set)
@@ -487,9 +510,9 @@ def qgis_composer_renderer(impact_report, component):
         symbol_count = leg_el.get('symbol_count')
         column_count = leg_el.get('column_count')
 
-        legend = composition.getComposerItemById(item_id)
+        legend = composition_item(composition, item_id, QgsComposerLegend)
         """:type: qgis.core.QgsComposerLegend"""
-        if isinstance(legend, QgsComposerLegend):
+        if legend:
             # set column count
             if column_count:
                 legend.setColumnCount(column_count)
@@ -641,7 +664,7 @@ def atlas_renderer(composition, coverage_layer, output_path, file_format):
     :rtype: str, list
     """
     # set the composer map to be atlas driven
-    composer_map = composition.getComposerItemById('impact-map')
+    composer_map = composition_item(composition, 'impact-map', QgsComposerMap)
     composer_map.setAtlasDriven(True)
     composer_map.setAtlasScalingMode(QgsComposerMap.Auto)
 
