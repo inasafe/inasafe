@@ -68,6 +68,11 @@ def composition_item(composer, item_id, item_class):
 
     :return: The composition item, inherited class of QgsComposerItem.
     """
+    if item_class.__name__ == 'QgsComposerMap':
+        item = composer.getComposerItemById(item_id)
+        if isinstance(item, QgsComposerMap):
+            return item
+
     for item in composer.items():
         if isinstance(item, item_class):
             if item.id() == item_id:
