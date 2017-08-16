@@ -1,2 +1,3 @@
 include safe/gui/ui/*
 include safe/messaging/example/resources/*
+recursive-include safe/test/data/ *
