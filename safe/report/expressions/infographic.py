@@ -56,9 +56,9 @@ def inasafe_field_header(field, feature, parent):
     if field_definition:
         if field_definition in age_fields:
             header_format = tr('{symbol} {age} y.o')
-            header_name = field_definition.get('header_name')
-            if header_name:
-                symbol, age = header_name.split(' ')
+            field_name = field_definition.get('field_name')
+            if field_name:
+                symbol, age = field_name.split('_')[:2]
                 if symbol.lower() in symbol_mapping.keys():
                     header_name = header_format.format(
                         symbol=symbol_mapping[symbol.lower()],
@@ -108,7 +108,7 @@ def minimum_needs_unit(field, feature, parent):
                     field_definition['key'] in once_frequency_field_keys):
             return unit_abbreviation.lower()
 
-        unit_format = '{unit_abbreviation}/{frequency}'
+        unit_format = u'{unit_abbreviation}/{frequency}'
         return unit_format.format(
             unit_abbreviation=unit_abbreviation, frequency=frequency).lower()
 
