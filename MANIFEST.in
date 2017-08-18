@@ -1,3 +1,4 @@
 include safe/gui/ui/*
 include safe/messaging/example/resources/*
+include safe/gui/tools/shake_grid/converter_data/*
 recursive-include safe/test/data/ *
