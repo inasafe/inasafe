@@ -30,6 +30,7 @@ __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
+LOGGER = logging.getLogger('InaSAFE')
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 # Mode
@@ -124,6 +125,9 @@ class StepKwField(WizardStep, FORM_CLASS):
         if not isinstance(field_names, list):
             field_names = [field_names]
         field_descriptions = ''
+        LOGGER.debug('Test')
+        feature_count = self.parent.layer.featureCount()
+        LOGGER.debug('Feature count: %s' % feature_count)
         for field_name in field_names:
             layer_fields = self.parent.layer.dataProvider().fields()
             field_index = layer_fields.indexFromName(field_name)
@@ -134,16 +138,23 @@ class StepKwField(WizardStep, FORM_CLASS):
             # Generate description for the field.
             field_type = layer_fields.field(field_name).typeName()
             field_index = layer_fields.indexFromName(field_name)
-            unique_values = self.parent.layer.uniqueValues(field_index)[0:48]
+            unique_values = self.parent.layer.uniqueValues(field_index)
             unique_values_str = [
                 i is not None and unicode(i) or 'NULL'
-                for i in unique_values]
+                for i in unique_values[0:48]]
             unique_values_str = ', '.join(unique_values_str)
             field_descriptions += tr('<b>Field name</b>: {field_name}').format(
                 field_name=field_name)
             field_descriptions += tr(
                 '<br><b>Field type</b>: {field_type}').format(
                 field_type=field_type)
+            if len(unique_values) == feature_count:
+                unique = tr('Yes')
+            else:
+                unique = tr('No')
+            field_descriptions += tr(
+                '<br><b>Unique</b>: %s (%d unique values from %d '
+                'features)' % (unique, len(unique_values), feature_count))
             field_descriptions += tr(
                 '<br><b>Unique values</b>: {unique_values_str}<br><br>'
             ).format(unique_values_str=unique_values_str)
