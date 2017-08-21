@@ -37,16 +37,16 @@ def current_git_hash():
 
 
 def release_status():
-    """Returns the release status from plugin metadata file.
+    """Returns the release status from safe/version.txt file.
 
     :returns: The status of release - it could be alpha, beta, rc, or final.
     :rtype: basestring
     """
     status = ''
     # Get location of application wide version info
-    root_dir = os.path.abspath(os.path.join(
-        os.path.dirname(__file__), '..', '..'))
-    fid = open(os.path.join(root_dir, 'metadata.txt'))
+    safe_root_dir = os.path.abspath(os.path.join(
+        os.path.dirname(__file__), '..'))
+    fid = open(os.path.join(safe_root_dir, 'version.txt'))
     for line in fid.readlines():
         if line.startswith('status'):
             status = line.strip().split('=')[1]
@@ -67,9 +67,9 @@ def get_version(version=None):
     """
     if version is None:
         # Get location of application wide version info
-        root_dir = os.path.abspath(os.path.join(
-            os.path.dirname(__file__), '..', '..'))
-        fid = open(os.path.join(root_dir, 'metadata.txt'))
+        safe_root_dir = os.path.abspath(os.path.join(
+            os.path.dirname(__file__), '..'))
+        fid = open(os.path.join(safe_root_dir, 'version.txt'))
         version_list = []
         status = ''
         for line in fid.readlines():
