@@ -10108,7 +10108,7 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
     <message>
         <location filename="fields.py" line="2360"/>
         <source>&quot;{affected_name}&quot; is defined as: {affected_description}. This field contains the production value that is affected by the hazard.</source>
-        <translation>&quot;{Affected_name}&quot; didefinisikan sebagai: {affected_description}. Field ini berisi nilai produksi yang terdampak oleh ancaman.</translation>
+        <translation>&quot;{affected_name}&quot; didefinisikan sebagai: {affected_description}. Field ini berisi nilai produksi yang terdampak oleh ancaman.</translation>
     </message>
     <message>
         <location filename="hazard_classifications.py" line="1430"/>
