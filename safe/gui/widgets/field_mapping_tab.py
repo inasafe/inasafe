@@ -17,8 +17,7 @@ from collections import OrderedDict
 import logging
 from functools import partial
 
-from parameters.qt_widgets.parameter_container import (
-    ParameterContainer, InvalidValidationException)
+from parameters.qt_widgets.parameter_container import ParameterContainer
 
 from safe.definitions.constants import (
     DO_NOT_REPORT,
@@ -33,10 +32,6 @@ from safe.definitions.constants import (
     GLOBAL
 )
 from safe.common.exceptions import KeywordNotFoundError
-
-# Note(IS): I need to use alias to make sure it throws the same exception class
-from parameters.parameter_exceptions import (
-    InvalidValidationException as OriginalValidationException)
 
 from safe.utilities.i18n import tr
 from safe.common.parameters.group_select_parameter import (
@@ -320,10 +315,7 @@ class FieldMappingTab(QWidget, object):
             {'fields': {}, 'values': {}}.
         :rtype: dict
         """
-        try:
-            parameters = self.parameter_container.get_parameters(True)
-        except InvalidValidationException as e:
-            raise OriginalValidationException(e)
+        parameters = self.parameter_container.get_parameters(True)
         field_parameters = {}
         value_parameters = {}
         for parameter in parameters:
