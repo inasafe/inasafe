@@ -8,13 +8,17 @@ from qgis.core import (
 import datetime
 
 from safe.definitions.provenance import provenance_layer_analysis_impacted_id
-from safe.definitions.reports.infographic import no_data_replacement
 from safe.utilities.rounding import denomination, round_affected_number
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
+
+##
+# Docstrings for these expressions are used in the QGIS GUI in the Expression
+# dialog and also in the InaSAFE Help dialog.
+##
 
 
 @qgsfunction(
