@@ -152,8 +152,11 @@ class StepKwField(WizardStep, FORM_CLASS):
                 else:
                     unique = tr('No')
                 field_descriptions += tr(
-                    '<br><b>Unique</b>: %s (%d unique values from %d '
-                    'features)' % (unique, len(unique_values), feature_count))
+                    '<br><b>Unique</b>: {unique} ({unique_values_count} '
+                    'unique values from {feature_count} features)'.format(
+                        unique=unique,
+                        unique_values_count=len(unique_values),
+                        feature_count=feature_count))
             field_descriptions += tr(
                 '<br><b>Unique values</b>: {unique_values_str}<br><br>'
             ).format(unique_values_str=unique_values_str)
