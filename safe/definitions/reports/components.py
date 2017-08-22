@@ -151,10 +151,13 @@ general_report_component = {
             }
         ],
         'concept_notes': {
-            'concepts': [
+            'population_concepts': [
                 concepts['exposed_people'],
                 concepts['affected_people'],
                 concepts['displaced_people']
+            ],
+            'general_concepts': [
+                concepts['affected']
             ],
             'note_format': '{name}: {description}'
         }
