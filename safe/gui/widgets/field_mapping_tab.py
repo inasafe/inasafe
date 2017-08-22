@@ -18,7 +18,8 @@ import logging
 from functools import partial
 
 from parameters.qt_widgets.parameter_container import (
-    ParameterContainer, InvalidValidationException)
+    ParameterContainer)
+from parameters.parameter_exceptions import InvalidValidationException
 
 from safe.definitions.constants import (
     DO_NOT_REPORT,
