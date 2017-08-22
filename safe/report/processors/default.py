@@ -532,10 +532,10 @@ def qgis_composer_renderer(impact_report, component):
             # set column count
             if column_count:
                 legend.setColumnCount(column_count)
-            elif symbol_count <= 5:
+            elif symbol_count <= 7:
                 legend.setColumnCount(1)
             else:
-                legend.setColumnCount(symbol_count / 5 + 1)
+                legend.setColumnCount(symbol_count / 7 + 1)
 
             # set legend title
             if title is not None:
