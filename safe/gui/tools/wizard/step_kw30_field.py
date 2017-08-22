@@ -2,7 +2,6 @@
 """InaSAFE Wizard Step Field."""
 
 import re
-import logging
 
 from PyQt4 import QtCore
 from PyQt4.QtGui import QListWidgetItem, QAbstractItemView
@@ -30,7 +29,6 @@ __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
-LOGGER = logging.getLogger('InaSAFE')
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 # Mode
@@ -115,6 +113,7 @@ class StepKwField(WizardStep, FORM_CLASS):
         """
         self.clear_further_steps()
         field_names = self.selected_fields()
+        layer_purpose = self.parent.step_kw_purpose.selected_purpose()
         # Exit if no selection
         if not field_names:
             self.parent.pbnNext.setEnabled(False)
@@ -125,9 +124,7 @@ class StepKwField(WizardStep, FORM_CLASS):
         if not isinstance(field_names, list):
             field_names = [field_names]
         field_descriptions = ''
-        LOGGER.debug('Test')
         feature_count = self.parent.layer.featureCount()
-        LOGGER.debug('Feature count: %s' % feature_count)
         for field_name in field_names:
             layer_fields = self.parent.layer.dataProvider().fields()
             field_index = layer_fields.indexFromName(field_name)
@@ -148,13 +145,15 @@ class StepKwField(WizardStep, FORM_CLASS):
             field_descriptions += tr(
                 '<br><b>Field type</b>: {field_type}').format(
                 field_type=field_type)
-            if len(unique_values) == feature_count:
-                unique = tr('Yes')
-            else:
-                unique = tr('No')
-            field_descriptions += tr(
-                '<br><b>Unique</b>: %s (%d unique values from %d '
-                'features)' % (unique, len(unique_values), feature_count))
+            if (feature_count != -1 and (
+                        layer_purpose == layer_purpose_aggregation)):
+                if len(unique_values) == feature_count:
+                    unique = tr('Yes')
+                else:
+                    unique = tr('No')
+                field_descriptions += tr(
+                    '<br><b>Unique</b>: %s (%d unique values from %d '
+                    'features)' % (unique, len(unique_values), feature_count))
             field_descriptions += tr(
                 '<br><b>Unique values</b>: {unique_values_str}<br><br>'
             ).format(unique_values_str=unique_values_str)
