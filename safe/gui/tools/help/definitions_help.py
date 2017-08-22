@@ -3,8 +3,10 @@
 
 import copy
 import logging
+import re
 from PyQt4 import QtCore
 from os.path import exists
+from inspect import getmembers
 
 import safe.definitions as definitions
 import safe.definitions.post_processors
@@ -39,6 +41,8 @@ from safe.messaging import styles
 from safe.utilities.i18n import tr
 from safe.utilities.resources import resource_url, resources_path
 from safe.utilities.rounding import html_scientific_notation_rate
+from safe.gis import expressions
+from safe.report.expressions import infographic
 
 LOGGER = logging.getLogger('InaSAFE')
 # For chapter sections
@@ -738,6 +742,52 @@ def content():
         row = m.Row()
         row.add(m.Cell(''))
         row.add(m.Cell(post_processor['description'], span=2))
+        table.add(row)
+    message.add(table)
+
+    ##
+    # Reporting
+    ##
+    _create_section_header(
+        message,
+        table_of_contents,
+        'reporting',
+        tr('Reporting'),
+        heading_level=1)
+
+    message.add(m.Paragraph(tr(
+        'This section of the help documentation is intended for advanced '
+        'users who want to modify reports which are produced by InaSAFE.'
+    )))
+
+    _create_section_header(
+        message,
+        table_of_contents,
+        'reporting',
+        tr('QGIS Expressions'),
+        heading_level=2)
+
+    qgis_expressions = {
+        fct[0]: fct[1] for fct in getmembers(expressions)
+        if fct[1].__class__.__name__ == 'QgsExpressionFunction'}
+    qgis_expressions.update({
+        fct[0]: fct[1] for fct in getmembers(infographic)
+        if fct[1].__class__.__name__ == 'QgsExpressionFunction'})
+
+    table = m.Table(style_class='table table-condensed table-striped')
+    row = m.Row()
+    row.add(m.Cell(tr('Name'), header=True))
+    row.add(m.Cell(tr('Description'), header=True))
+    table.add(row)
+    for expression_name, expression in qgis_expressions.iteritems():
+        row = m.Row()
+        row.add(m.Cell(expression_name))
+        help = expression.helptext()
+        # This pattern comes from python/qgis/core/__init__.py ≈ L79
+        pattern = r'<h3>(.*) function</h3><br>'
+        help = re.sub(pattern, '', help)
+        help = re.sub(r'\n', '<br>', help)
+        row.add(m.Cell(help))
         table.add(row)
     message.add(table)
 
