@@ -35,7 +35,7 @@ from safe.test.utilities import (
     load_test_raster_layer)
 from safe.utilities.utilities import readable_os_version
 from safe.definitions.reports.components import (
-    report_a4_blue,
+    map_report,
     standard_impact_report_metadata_html,
     standard_impact_report_metadata_pdf,
     general_report_component,
@@ -1838,7 +1838,7 @@ class TestImpactReport(unittest.TestCase):
 
         # Create impact report
         report_metadata = ReportMetadata(
-            metadata_dict=update_template_component(report_a4_blue))
+            metadata_dict=update_template_component(map_report))
 
         impact_report = ImpactReport(
             IFACE,
@@ -1855,14 +1855,14 @@ class TestImpactReport(unittest.TestCase):
             return_code, ImpactReport.REPORT_GENERATION_SUCCESS, message)
 
         output_path = impact_report.component_absolute_output_path(
-            'a4-portrait-blue')
+            'inasafe-map-report-portrait')
 
         # for now, test that output exists
         for path in output_path.itervalues():
             self.assertTrue(os.path.exists(path), msg=path)
 
         output_path = impact_report.component_absolute_output_path(
-            'a4-landscape-blue')
+            'inasafe-map-report-landscape')
 
         for path in output_path.itervalues():
             self.assertTrue(os.path.exists(path), msg=path)
