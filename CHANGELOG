@@ -1,3 +1,378 @@
+Changelog for version 4.2.0
+================================
+
+4668578b7 (HEAD -> changelog, upstream/develop, develop) Fix import error.
+d9c2a3c61 Show uniqueness in step KW field #3786. (#4379)
+1b60bf012 Fix error when loading InaSAFE in Bahasa Indonesia.
+6b6318db1 Add metadata iso template and other fixtures.
+2f7b31623 fix invalid expression error
+40277d56d Add shake grid converter data to SAFE package.
+d075e8d49 add special case for me to have the map working
+aab3f09ac Add test data in the package.
+b69dc769d special case to fetch a QgsComposerMap
+4b0c79b9c fix how we fetch items in composer, problem with bindings
+7771f9f74 Another patch for Infographic (icons, header, functionality)  (#4365)
+d6551113b add D204 check in PEP257
+6a2d87269 Update importing safe_extras in safe.
+ee18019c5 Infographic patch (#4362)
+e1fd98219 Remove bin and headless.
+496ea219e Add setup.py to allow install safe with pip (#4343)
+d89f13674 update translations
+572fe8ebd Reporting notes tweak (#4361)
+95983607d cleaning the default.py in reporting about PEP257
+f17b1c22b add PEP 257 https://github.com/inasafe/inasafe/pull/4359
+441e1a99c fix field not found error (#4358)
+914f73140 add more debug info when an exception occurs in the analysis extractor
+5cb72ad19 New infographic using qpt template (#4353)
+52842f10b update translations
+9151e54ac Fix not removed variable.
+585c16d08 Enable atlas generation on reporting (#4351)
+2255accd1 add negative and null values to the test
+a01d16c66 add place value expression in qgis
+141e1e1af Update the definition of productivity things.
+b762cd0d2 update some missing translations
+4ccfd13a4 change the key about layer_purpose
+9a413e13c update terminology about output layers
+03ea34c9e Use productivity, production cost, and production value. (#4344)
+ed1345818 Reporting additional needs (#4337)
+5e399a362 Update translation 4.2
+1a6317f9c Reporting landcover (#4326)
+2926a4fd1 Change QPyNullVariant to None when store project variable.
+f2629b4d5 enable landcover analysis for cyclones (#4281)
+60a695f80 Fix failed test in travis.
+a1f1aca21 Add provenance definitions for output layer.
+1a7970b53 Minor fixes.
+5ab1b2c14 fix strings from Transifex
+475dbbd36 Add more description to explain  #4127
+7eb1df15d transform extent's crs to mapcomposer crs (#4330)
+ffbebbf62 reduce logs
+0429cc75c allow only the same geometry type in the output layer
+579a41b79 fix error in default adult ratio (#4332)
+8b0e8df95 Address Etienne's review.
+b37dbe168 Use set provenance to avoid typo.
+e1159165e Add flake config file.
+5e6c06c67 Fix unit test.
+4871612b8 Add get_name to get the pretty name easily.
+a4408a355 Don't set project variable that has already in global variable.
+fc5e14c62 Use exposure and geometry name, not change the case.
+8347423dd Address PR's review.
+cfc8b7524 Remove unused metadata property.
+a88e5a1c3 Use on the fly key for list and dictionary in project variable.
+ceb910687 Add delete provenance project variable.
+8828bd76f Create provenance definitions.
+6ed308042 Rename util to utilities.
+450f29795 Write project variable when output layer is selected. #4303
+d6a7e1913 Update translation for 4.2
+cb55b1c7b fix double demographics items in help window
+5691186d8 Fix #4327 handle Null value.
+2e90c84f1 use exposure extent in an analysis
+84a2c080f change analysis and aggregation styles, fix string about sentry
+028b92ea2 save scenario review
+d0da61fa3 Address Etienne's review.
+bc0ca276e Update test data.
+8d0db2c8f Remove unused metadata properties.
+230fe1180 Adding definition of every keyword's property
+f79d0cb83 Change do not use to do not report. #4127
+fa31dc2f7 Tidying up docker translation tools.
+52b612dc3 Rename test data and coding standard.
+83e9d8e0b Remove unused test data.
+5ec554f7a Add unit test for summarize_result method.
+c451e9e4f Make the summarizer for general cases.
+667bf3c1a Add productivity attributes in exposure summary table.
+ea0469e15 Set productivity fields type to Double.
+7f9be103f Fix #4309
+fc93dc2ea remove some str() functions
+4ca936845 remove earthquake files
+beb2b7fb5 use the main workflow for EQ on population analysis
+4533e8582 use active band keyword in the GIS overlay analysis
+c25f8e4f9 fix use own ID column
+a1d9d71fd Update changelog in metadata for multi band support.
+6a5c2b03a Make SideCI happier.
+92cd4ce85 Update unit test for supporting multi band in wizard.
+0ebf4d73a Use active band in the keyword wizard step.
+e90053b3a First work on multi band support.
+5088752dd Remove band count checker in keyword wizard.
+1cacdbd31 Add active band in metadata properties.
+8d9462d1a Update keyword wizard flow diagram.
+f542088cf Add changelog in metadata for wizard help.
+c6187e18a Finish adding help text for all wizard step.
+4a598dc2d Add more help for several wizard steps.
+74800472b Add help text for layer purpose and purpose type step.
+530bfad09 Remove IF parameter step in IFCW.
+127a27c26 Add help text for extent, summary, and analysis step.
+8c3475390 Add help text for aggregation related wizard step.
+e9dc47a94 Wizard help for layer choosing step.
+37f49d1ad Help text for hazard layer source step.
+6a65fea2d Add help text for IF grid steps and remove unused code.
+d05dd3ac9 Add boiler template for help in wizard step.
+1d3afc870 Small refactor on wizard code.
+164b26f1d Help system for wizard.
+953ed2ed1 Show unit of land cover field in the wizard.
+64723abdf Add currency in the InaSAFE options.
+acb537b51 Add list of currency.
+e68fdfd88 Use quintal and add explanation, add some concepts, and update post processor tree.
+ec3dcdb23 Fix unit test.
+33bd56aaa Fix unit test.
+f0a9779cc Fix unit test and update field in the landcover.
+d45385411 Add prod cost and value post processor.
+c56ff8e2e Remove default value.
+c9de8612f Add unit test for productivity post processor.
+8fc514a9f Add productivity rate and the post processor.
+a72e75087 Fix go to non existent wizard step.
+954ae5a00 Use custom template for reporting.
+30c98eef5 Add utilities to scan custom template for reporting.
+53bb03bda Set status to beta
+a0322a666 fix minimum needs calculator output location (unique filename) (#4275)
+6ce6aaaef fix value in total row in analysis detail section (#4269)
+ecc643742 update map template with filtered legend (#4276)
+2e13f3acb Remove allow resampling step and keywords
+ff6a03078 do not use valuemap algo with continuous dataset
+05294a549 avoid division by 0 in svg charts
+b5776bd97 do not refresh the IF we are using an aggregation layer
+a0cba980e [BACKPORT] Fix issue where keywords wizard icon was not enabling (#4285)
+9df8e515a Add generic exposure data driven classification (#4282)
+46ceb19f1 fix translations in French about unicode
+976c67d92 rename test_earthquake_report to test_impact_report_earthquake (#4279)
+10b327ef2 Updated changelog and metadata for release (#4266)
+835bb9b05 Use QGIS user directory for metadata.db
+d493337de Fix failed unit test.
+bc6da7d21 Remove unused method in KeywordIO.
+bc9a13b6f Fix #3751. Set to use default db path from definition.
+74ea18b28 Rename metadata for output layer. Add other output explicitly to metadata mapping.
+9c03d75d5 Remove unused code in metadata utilities.
+9eaf61650 Update translation.
+69d6a70bd update translations
+d89e5efde Fix #3857. Ignore filter in path.
+75741ab65 Fix #4248. Expression.
+db20d143e Update for Badan Geologi landcover classification
+e9a01d79c update metadata
+ba172848e update French Translations
+4214562c1 fix some strings in Python
+fe39d1614 add pregnant and lactating displaced to the count fields (#4244)
+f81ee557a (tag: version-4_1_0) make the tables in general report in different row (#4237)
+0b3592e6c Update translation for 4.1 (#4228)
+cf1c4d256 add table for exposure definitions (#4235)
+041b51623 Update changelog (#4234)
+083720ded use the first save as pdf logic (#4236)
+b5c1d2b81 remove analysis title from metadata template
+9e269d0ac enable layers in gisv4 project
+a4d6ff53c remove deprecated calls from QgsExpressions
+30d3e85fa add notes for fatality rates (#4197)
+da7d5f727 Another reporting issues (see description) (#4203)
+03a162bcb add some missing lauers to gisv4 project (#4229)
+b0a33703f Show eq fatality model  (#4230)
+0407574df use definitions to create demographics fields
+0cb121afe Remove IF.datetime with IF.starttime to avoid confusion.
+4591db6e7 Add duration to impact function.
+224d04955 Small changelog update (#4225)
+7aa06cee9 smalle formatting fix (#4226)
+1312ea320 Update scenario and PEP8.
+002b20793 Update additional rice post processor.
+44409d79c Remove pregnant_and_lactating post processor.
+a9149b833 Update unit test.
+8753adbf6 Remove pregnant_and_lactating concept.
+a130258f1 Use pregnant + lactating to calculate additional rice.
+d4e57eb60 Reporting separate provenance tree (#4224)
+905ffcbfd Help system improvements (#4219)
+641366849 make a recursive call to serialize a dict
+2147f9423 fix some small issues in the shakemap converter
+5c75004ed small updates aifdr and v4
+8109a08e1 add warning about QGIS needs to restart if you change the EQ model
+6e2d0b620 show busy in the memory profiling
+7d707ea0e Update unit test for #4218.
+ff966a312 Remove invalid or non existing classification. Fix #4214
+2133c191f Add unit test to replicate #4200.
+2ef4463d5 remove fatalitities from EQ generic classification
+1e5ff940b PEP8
+db29e5695 Added citations title in docs
+93bc63706 Show eq model descriptions in help
+044064841 Set up developer doc system using Marco's cyclone guide as an example. See #4179
+8d471ceee Updates to developer documentation to use pretty print for dicts
+cea62da30 Started developer section in help docs
+0320c12d1 Fix heading numbering in help
+b5617f9ff add tree view analysis provenance details (#4170)
+1ae31e614 skip qgis expression if we made a copy
+c7822cdd8 check if layers have some inasafe_fields are up to date
+eebd6e9bd Improve the EQ selection in settings
+65c5b2e98 Add clean step for field mapping step in keyword wizard Fix #4200.
+fa671d898 Add unit test to replicate #4200.
+b90d8738d Fix #4195, add missing field group options.
+b4b7ba175 add the pregnant.svg (#4198)
+ea59013cb fix  #4165 (#4196)
+4d6627853 Update test scenario to fix unit test.
+fc92d9148 Add gender_vulnerability_postprocessors.
+ab1cb30e3 add fatality vector to EQ on pop vector
+c9183606d override bootstrap 4 style (font-size and table padding) (#4177)
+a53f127c9 Remove sum age ratio validation.
+e0061928e fix unboundlocalerror
+abcdcbe9e Merge pull request #4169 from timlinux/inasafe-4163
+4db26e957 Report rounding (#4182)
+967c3d540 improve the profiling table
+cf1f2fbc9 part fix #4165 (#4184)
+2e214b92f part fix #3847 (#4176)
+1581e6ce3 (origin/inasafe-4163, inasafe-4163) Fix last scenario failed test.
+f5700c8c0 Update test scenario and reorder post processor.
+54e16a2c6 Fix failed unit test in test_gender_post_processor.
+5eb8da079 Test fixes
+7ddd7a150 PEP8
+7380da67c Fix failing tests for #4163
+0dcd7b6fa Fix failing tests for #4163
+d53b29b6c Fix failing tests for #4163
+3d5a35d48 Resolved merge conflicts
+37c40d461 Show option to show memory for all user.
+8f707b529 Skip memory profile if disabled.
+94abc228d Add show memory profile in the setting.
+7004a8be3 In progress updates for #4163
+cfee9f017 In progress updates for refactored demographic groups
+255ca4032 remove old QGIS api calls
+0e1a2f958 In progress refactoring of post processors into its own package and sorting out demographic groups
+8ccddbb0a Fix #3878. Use ISO 19115 keywords from setting on analysis result.
+781183a91 small formatting fixes based on review feedback from @ismailsunni for #4169
+a11b6e04a Help text (#4159)
+e6f5c8544 Resolve merge conflicts
+a1eafb7d2 First pass to split demographic groups as per #4163
+77a62bd95 Reporting - action list (#4088)
+ff49bf2a2 make the report relocatable (#4160)
+3d36442fa Fix failed unit test.
+31c001e86 Remove unused code.
+31f8cae74 Update dock after closing FMT.
+e9b9d0b47 Remove dock from option dialog.
+94e9ddee8 Remove random failed test.
+2d5341603 Add notes for exclusive in field groups.
+9f1ee26bf Make moving between field list also non duplicate.
+e62e646f5 Add description that user can the same field.
+40113c003 Fix #4157 Add exclusive for FMT.
+0a4852e71 Add @myarjunar's email to travis.
+7a3969221 Put FMT menu in proper location.
+54fa6d6de Handle empty definition.
+3a8b90c30 Disable FMT for raster.
+e62ecbc29 Changelog (#4155)
+e6049c325 moved realtime and geosafe canvases out to their own graffle docs and into their repos (#4156)
+a2612eb8c Add help text to the FMT.
+2a2426748 Fix bug when no field left in the field list.
+cb398e79b Fix typo and tidy up code.
+0b05805f9 Partfix 4092 (#4144)
+8f15ff28a Reporting column order (#4142)
+bef9d2f17 Partial fix for #4151 - show help_text in field definitions (#4152)
+d91882d11 Options help (#4150)
+2fb03ca32 add notes based on concepts (#4131)
+42a4dde80 Merge pull request #4147 from myarjunar/reporting-general-report
+626d9aec4 Merge pull request #4149 from timlinux/inasafe-4130
+611a66f69 (origin/inasafe-4130, inasafe-4130) Fix #4130 Earthquake help text - set default options
+dc0a33d88 fix general report floats to right when open report in largest size
+902326f9f Reorder post processor
+fb3dea27e Update test data to fix unit test.
+5ec857815 Use variable for magic number.
+523a807b5 Use value from field to calculate additional rice. Fix #4136
+0227aeaa5 Fix 4137 add field group description (#4139)
+0903ba498 Set keyword version to 4.1 (#4135)
+3454050f6 Windspeed  (#4133)
+8c0aef255 Help text (#4123)
+944f286aa Fix unit test in test keyword wizard.
+2a38bd82b Fix unit test in field mapping dialog.
+7ef8fd74f Disable unit test for #4128.
+4523632fe Make Keyword Wizard and FMT always read from metadata file.
+618973172 Add regression test for #4128
+441c655ed Address review from @gustry and @myarjunar.
+9fa797f7b Update test data.
+0bb4d7ad6 Make Landscape happier.
+2bdd3ccfe Only enable FMT when the selected layer has field group.
+286ab0bb4 Add better format of the parameter validation.
+325185662 Catch Keywords Not Found Error on Field Mapping Tool.
+0b25f971c Better invalid field group validation message.
+721fca19c Add field mapping validation in keyword wizard.
+d9c145855 Fix set decimal precision on group parameter.
+89f47b8fd Update parameter package.
+22b1528d0 Add dynamic validator for field ratio.
+7e5c9eca4 Add simple validation for ratio.
+137aee164 [WIP] Add simple validator for field group.
+a648d16cc Fix failed test in develop.
+73c8738cd Make uniform naming.
+9dd049cfe Reporting global default (#4122)
+0cc94c27e fix issue about using global default set by user in the IF
+925b57758 Polish scroll bar in demographic group option.
+e4fbf7323 Change 'Global Default' to 'Demographic Default'
+e146d90ac Fix failed unit test.
+5f3c5827b Add gender_postprocessors to the list.
+53c564949 Fix wrong variable in post processor output.
+77fb29ef7 Fix bug on kw field and better field description.
+b4ea113ef Add unit test for multi fields layer in keywords wizard.
+e79d1e96a Tidy up code.
+ff99ea062 Fix failed test.
+1c85179d8 Add field mapping tool to keyword dialog.
+4533d430e Update keywords wizard diagram.
+7c4a85034 Fix failed unit test.
+879878bde Better field description for field stef in keyword wizard.
+6121bfd17 Add more case for unit test.
+d1a03e218 Fix unit test.
+dfa6eb92d Make field step in keyword wizard able to select more than 1 field.
+be071be83 Update test data for population.
+5f1456a1b Make field in the wizard step extended selection.
+ba4ae9212 Fix failed unit test.
+66e1077f4 Filter out layer that doesn't have layer groups.
+9af33a7d2 Make field groups exposure specific.
+bf6306e3f Only show exposure and aggregation layers in FMT.
+26e7f1013 Add new scenario for testing.
+ec6137742 Address Etienne's comment.
+0a9258b02 Fix failed unit test.
+73c0a451f Tidy up code.
+b1f3ceb17 Fix failed unit test.
+5cde7c096 Add prepare layer method to handle summing fields
+c38f3ab7d Add method to sum fields.
+15f950f12 Update test data and add unit test for multi fields.
+5903eedd5 Fix bug when item is replaced in QListField.
+f2aad33bc Automatically select active layer in field mapping dialog.
+12b492823 Add test data for multi fields exposure.
+6dd49ab14 Added icons for help and mapping tool. Working on help for mapping tool. (#4110)
+6319af576 Profile memory (#4108)
+044d99ba5 Metadata update 4069 (#4111)
+6536a2e2e Able to store the global default value.
+38985e064 Separater field groups in group boxes.
+1ddb44664 (help_test) Updated metadata (#4107)
+1ac8e3f9d Add unit test for field mapping dialog.
+fd42056d0 Add unit test for field mapping tab.
+f2a8c16dd Make sure multiple inasafe fields shown properly in Dock.
+1ff4a753f Fix error when select non exposure/aggregation layer.
+376e5a600 Use iteration to create count ratio mapping.
+ceefe5527 Remove field group from inasafe field and default field step.
+e25822634 Do not use extra fields directly.
+9f3d68cba Fix import error after merging to develop.
+1091efec0 Remove fields from aggregation and exposure.
+6581f51f0 Attempt to fix code standard.
+176b7ddda Add more gender fields.
+f08b3591d Add vulnerability fields, default value, count/ratio
+a9610b6c1 Add youth and infant ratio and count.
+fad1b907d Add header to the field mapping tool.
+5d652e72d PEP8 and fix failed unit test in travis.
+753f66ae9 Show unique values in the footer of dialog.
+2d1131459 Filter out non number fields.
+a749ccd21 Show only unused fields in the field list.
+25ebd28c9 Update from parameter repository.
+0cf77293b Save metadata from field mapping widget.
+728d12fbd Add selected option type method.
+7a809dd9d Add help page in field mapping tool.
+403f52b79 Rename field mapping tab.
+b8cc9dd6c Make drag and drop in field mapping works.
+95e6d3049 Use variable for key and type in the group select parameter.
+84fa9254a Enable field mapping for Exposure.
+bcd5b73a1 Read field mapping from keywords.
+d2eaeb610 Add field mapping tool to InaSAFE toolbar.
+70a6972de Add field mapping widget for #4069.
+4ffd5de5c Add toolbar for value mapping.
+0e877edbe Add group select parameter widget.
+963111f45 Add Group Select Parameter.
+de6116e9e for not population, display real value if <1000
+9855cd168 remove earthquake function setter from IF and use QSettings
+ccb3263bd avoid using definition function into definition package
+09dc68e63 add classification unit to hazard classification definition for general report title (#4064)
+f6e803ef9 Added webhook for travis to inasafe-notices matrix room, updating @timlinux PR. (#4081)
+d15649bb7 Address comment from Etienne and Tim.
+b202c8e05 Add field_groups.py
+68c0c1b04 Add unit test that current metadata able to support multiple field in one inasafe field.
+994d38a8c Merge keyword wizard flow to one omnigrafle file.
+f012e0ace Little fix on PR Template.
+2dde5dae4 Make the output of tag-release prettier.
+
 Changelog for version 4.1.1
 ================================
 
