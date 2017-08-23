@@ -11,9 +11,10 @@ from safe.definitions.utilities import definition, update_template_component
 from safe.definitions.fields import hazard_class_field
 from safe.definitions.reports.components import (
     standard_impact_report_metadata_pdf,
-    report_a4_blue,
+    map_report,
     infographic_report)
 from safe.impact_function.style import hazard_class_style
+from safe.report.extractors.util import layer_definition_type
 from safe.report.report_metadata import ReportMetadata
 from safe.report.impact_report import ImpactReport
 from safe.utilities.gis import is_raster_layer, qgis_version
@@ -79,9 +80,20 @@ def generate_impact_map_report(impact_function, iface):
     print_atlas = setting('print_atlas_report', False, bool)
     if print_atlas:
         extra_layers.append(impact_function.aggregation_summary)
+
+    # get the hazard and exposure type
+    hazard_layer = impact_function.hazard
+    exposure_layer = impact_function.exposure
+
+    hazard_type = layer_definition_type(hazard_layer)
+    exposure_type = layer_definition_type(exposure_layer)
+
     # create impact report instance
     report_metadata = ReportMetadata(
-        metadata_dict=update_template_component(report_a4_blue))
+        metadata_dict=update_template_component(
+            component=map_report,
+            hazard=hazard_type,
+            exposure=exposure_type))
     impact_report = ImpactReport(
         iface,
         report_metadata,
