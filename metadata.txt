@@ -37,7 +37,7 @@ changelog=
     - Impact Functions : Allow exposure data driven classification
     - Tools : Improved display of field preview in Keywords wizard
     - Documentation : Wizards now have context sensitive help
-    - Code Internals : Command line and &#39;headless&#39; code moved to their own repos
+    - Code Internals : Command line and 'headless' code moved to their own repos
     Version 4.1.2
     - Avoid recomputing analysis extent when we pan/zoom with an aggregation layer
     - Fix issue when using a continuous hazard dataset (#4289)
