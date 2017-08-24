@@ -175,10 +175,15 @@ def general_report_extractor(impact_report, component_metadata):
         unit=hazard_classification['classification_unit'])
 
     # Section notes
-    concepts = resolve_from_dictionary(
-        extra_args, ['concept_notes', 'concepts'])
     note_format = resolve_from_dictionary(
         extra_args, ['concept_notes', 'note_format'])
+
+    if is_population:
+        concepts = resolve_from_dictionary(
+            extra_args, ['concept_notes', 'population_concepts'])
+    else:
+        concepts = resolve_from_dictionary(
+            extra_args, ['concept_notes', 'general_concepts'])
 
     notes = []
     for concept in concepts:
