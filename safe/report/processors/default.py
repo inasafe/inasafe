@@ -404,7 +404,12 @@ def qgis_composer_renderer(impact_report, component):
 
     # load template
     main_template_folder = impact_report.metadata.template_folder
-    template_path = os.path.join(main_template_folder, component.template)
+
+    # we do this condition in case custom template was found
+    if component.template.startswith('../qgis-composer-templates/'):
+        template_path = os.path.join(main_template_folder, component.template)
+    else:
+        template_path = component.template
 
     with open(template_path) as template_file:
         template_content = template_file.read()

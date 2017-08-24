@@ -49,7 +49,7 @@ from safe.definitions import (
     provenance_host_name,
     provenance_user
 )
-from safe.definitions.reports.components import report_a4_blue
+from safe.definitions.reports.components import map_report
 
 from safe.definitions.utilities import (
     definition,
@@ -453,8 +453,8 @@ class TestDefinitionsUtilities(unittest.TestCase):
     def test_update_template_component(self):
         """Test for custom template component."""
         # Default qpt
-        component = update_template_component(report_a4_blue, '.')
-        self.assertDictEqual(component, report_a4_blue)
+        component = update_template_component(map_report, '.')
+        self.assertDictEqual(component, map_report)
 
         # Custom qpt
         target_directory = mkdtemp()
@@ -462,13 +462,13 @@ class TestDefinitionsUtilities(unittest.TestCase):
             safe_dir('..'),
             'resources',
             'qgis-composer-templates',
-            'a4-portrait-blue.qpt')
+            'inasafe-map-report-portrait.qpt')
         if exists(default_qpt):
             target_path = join(target_directory, split(default_qpt)[1])
             shutil.copy2(default_qpt, target_path)
 
-        component = update_template_component(report_a4_blue, target_directory)
-        self.assertTrue(component != report_a4_blue)
+        component = update_template_component(map_report, target_directory)
+        self.assertTrue(component != map_report)
 
     def test_set_provenance(self):
         """Test for set_provenance."""

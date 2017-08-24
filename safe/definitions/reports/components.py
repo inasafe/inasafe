@@ -752,13 +752,13 @@ map_report_extra_args = {
         'Geographic Coordinates - {crs}')
 }
 
-report_a4_blue = {
-    'key': 'a4-blue',
-    'name': 'a4-blue',
+map_report = {
+    'key': 'inasafe-map-report',
+    'name': 'inasafe-map-report',
     'template_folder': safe_dir(sub_dir='../resources/report-templates/'),
     'components': [
         {
-            'key': 'a4-portrait-blue',
+            'key': 'inasafe-map-report-portrait',
             'type': qgis_composer_component_type,
             'processor': qgis_composer_renderer,
             'extractor': qgis_composer_extractor,
@@ -767,7 +767,7 @@ report_a4_blue = {
                 'template': QgisComposerComponentsMetadata.OutputFormat.QPT
             },
             'template': '../qgis-composer-templates/'
-                        'a4-portrait-blue.qpt',
+                        'inasafe-map-report-portrait.qpt',
             'tags': [
                 final_product_tag,
                 map_product_tag,
@@ -776,13 +776,13 @@ report_a4_blue = {
                 qpt_product_tag
             ],
             'output_path': {
-                'map': 'a4-portrait-blue.pdf',
-                'template': 'a4-portrait-blue.qpt'
+                'map': 'inasafe-map-report-portrait.pdf',
+                'template': 'inasafe-map-report-portrait.qpt'
             },
             'extra_args': map_report_extra_args
         },
         {
-            'key': 'a4-landscape-blue',
+            'key': 'inasafe-map-report-landscape',
             'type': qgis_composer_component_type,
             'processor': qgis_composer_renderer,
             'extractor': qgis_composer_extractor,
@@ -791,7 +791,7 @@ report_a4_blue = {
                 'template': QgisComposerComponentsMetadata.OutputFormat.QPT
             },
             'template': '../qgis-composer-templates/'
-                        'a4-landscape-blue.qpt',
+                        'inasafe-map-report-landscape.qpt',
             'tags': [
                 final_product_tag,
                 map_product_tag,
@@ -800,8 +800,8 @@ report_a4_blue = {
                 qpt_product_tag
             ],
             'output_path': {
-                'map': 'a4-landscape-blue.pdf',
-                'template': 'a4-landscape-blue.qpt'
+                'map': 'inasafe-map-report-landscape.pdf',
+                'template': 'inasafe-map-report-landscape.qpt'
             },
             'orientation': 'landscape',
             'page_dpi': 300,
@@ -810,6 +810,35 @@ report_a4_blue = {
             'extra_args': map_report_extra_args
         }
     ]
+}
+
+map_report_component_boilerplate = {
+    'key': 'boilerplate',  # should be updated if this component is used
+    'type': qgis_composer_component_type,
+    'processor': qgis_composer_renderer,
+    'extractor': qgis_composer_extractor,
+    'output_format': {
+        'map': QgisComposerComponentsMetadata.OutputFormat.PDF,
+        'template': QgisComposerComponentsMetadata.OutputFormat.QPT
+    },
+    'template': 'boilerplate.qpt',  # should be updated
+    'tags': [
+        final_product_tag,
+        map_product_tag,
+        template_product_tag,
+        pdf_product_tag,
+        qpt_product_tag
+    ],
+    'output_path': {
+        'map': 'boilerplate.pdf',  # should be updated
+        'template': 'boilerplate.qpt'  # should be updated
+    },
+    # we set the orientation is landscape by default
+    'orientation': 'landscape',
+    'page_dpi': 300,
+    'page_width': 297,
+    'page_height': 210,
+    'extra_args': map_report_extra_args
 }
 
 infographic_report = {
