@@ -124,7 +124,7 @@ from safe.definitions.provenance import (
     provenance_layer_profiling_id,
     provenance_layer_analysis_impacted_id,
     provenance_layer_exposure_summary_id,
-)
+    provenance_crs)
 from safe.impact_function.provenance_utilities import (
     get_map_title, get_analysis_question)
 
@@ -2254,6 +2254,10 @@ class ImpactFunction(object):
             self._provenance,
             provenance_action_checklist,
             self.action_checklist())
+
+        # CRS
+        set_provenance(
+            self._provenance, provenance_crs, self.impact.crs().authid())
 
         self._provenance_ready = True
 

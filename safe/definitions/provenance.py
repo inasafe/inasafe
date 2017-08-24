@@ -162,6 +162,11 @@ provenance_user = {
     'name': tr('User'),
     'provenance_key': 'user'
 }
+provenance_crs = {
+    'key': 'provenance_crs',
+    'name': tr('CRS'),
+    'provenance_key': 'crs'
+}
 
 # Output layer path
 provenance_layer_exposure_summary = {
@@ -258,6 +263,7 @@ provenance_list = [
     provenance_requested_extent,
     provenance_start_datetime,
     provenance_user,
+    provenance_crs,
     # Output layer path
     provenance_layer_exposure_summary,
     provenance_layer_aggregate_hazard_impacted,
