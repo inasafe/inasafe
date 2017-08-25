@@ -404,7 +404,12 @@ def qgis_composer_renderer(impact_report, component):
 
     # load template
     main_template_folder = impact_report.metadata.template_folder
-    template_path = os.path.join(main_template_folder, component.template)
+
+    # we do this condition in case custom template was found
+    if component.template.startswith('../qgis-composer-templates/'):
+        template_path = os.path.join(main_template_folder, component.template)
+    else:
+        template_path = component.template
 
     with open(template_path) as template_file:
         template_content = template_file.read()
@@ -532,10 +537,10 @@ def qgis_composer_renderer(impact_report, component):
             # set column count
             if column_count:
                 legend.setColumnCount(column_count)
-            elif symbol_count <= 5:
+            elif symbol_count <= 7:
                 legend.setColumnCount(1)
             else:
-                legend.setColumnCount(symbol_count / 5 + 1)
+                legend.setColumnCount(symbol_count / 7 + 1)
 
             # set legend title
             if title is not None:

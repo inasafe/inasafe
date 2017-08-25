@@ -56,7 +56,7 @@ from safe.definitions.layer_purposes import (
 from safe.definitions.utilities import update_template_component
 from safe.definitions.reports.components import (
     standard_impact_report_metadata_pdf,
-    report_a4_blue)
+    map_report)
 from safe.utilities.gis import extent_string_to_array
 from safe.common.utilities import temp_dir
 from safe.common.signals import send_error_message
@@ -701,7 +701,7 @@ class BatchDialog(QDialog, FORM_CLASS):
 
         # create impact map report instance
         map_report_metadata = ReportMetadata(
-            metadata_dict=update_template_component(report_a4_blue))
+            metadata_dict=update_template_component(map_report))
         impact_map_report = ImpactReport(
             iface,
             map_report_metadata,

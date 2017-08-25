@@ -52,7 +52,7 @@ from safe.definitions.reports import (
     qpt_product_tag)
 from safe.definitions.reports.components import (
     standard_impact_report_metadata_pdf,
-    report_a4_blue, infographic_report)
+    map_report, infographic_report)
 from safe.report.extractors.util import layer_definition_type
 from safe.report.impact_report import ImpactReport
 from safe.report.report_metadata import ReportMetadata
@@ -1018,7 +1018,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         standard_impact_report_metadata = ReportMetadata(
             metadata_dict=standard_impact_report_metadata_pdf)
         standard_map_report_metadata = ReportMetadata(
-            metadata_dict=update_template_component(report_a4_blue))
+            metadata_dict=update_template_component(map_report))
         standard_infographic_report_metadata = ReportMetadata(
             metadata_dict=update_template_component(infographic_report))
 

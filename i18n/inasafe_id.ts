@@ -1,4 +1,5 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="id" sourcelanguage="" version="2.0">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS><TS version="2.0" language="id" sourcelanguage="">
 <context>
     <name>@default</name>
     <message>
@@ -72,57 +73,57 @@
         <translation>Catatan perangkat lunak (software)</translation>
     </message>
     <message>
-        <location filename="memory_checker.py" line="77"/>
+        <location filename="memory_checker.py" line="78"/>
         <source>Checking available memory</source>
         <translation>Memeriksa memory yang tersedia</translation>
     </message>
     <message>
-        <location filename="memory_checker.py" line="90"/>
+        <location filename="memory_checker.py" line="91"/>
         <source>Computed cellsize was None. Memory check currently only works for raster input layers.</source>
         <translation>Ukuran sel yang dihitung tidak ada. Pemeriksaan memory saat ini hanya bekerja untuk input layer data raster saja.</translation>
     </message>
     <message>
-        <location filename="memory_checker.py" line="98"/>
+        <location filename="memory_checker.py" line="99"/>
         <source>Width: </source>
         <translation>Lebar:</translation>
     </message>
     <message>
-        <location filename="memory_checker.py" line="101"/>
+        <location filename="memory_checker.py" line="102"/>
         <source>Height: </source>
         <translation>Tinggi:</translation>
     </message>
     <message>
-        <location filename="memory_checker.py" line="104"/>
+        <location filename="memory_checker.py" line="105"/>
         <source>Cell Size: </source>
         <translation>Ukuran Sel:</translation>
     </message>
     <message>
-        <location filename="memory_checker.py" line="120"/>
+        <location filename="memory_checker.py" line="121"/>
         <source>Memory check error</source>
         <translation>Memeriksa memory error</translation>
     </message>
     <message>
-        <location filename="memory_checker.py" line="121"/>
+        <location filename="memory_checker.py" line="122"/>
         <source>Could not determine free memory</source>
         <translation>Tidak dapat menentukan memory yang kosong</translation>
     </message>
     <message>
-        <location filename="memory_checker.py" line="143"/>
+        <location filename="memory_checker.py" line="144"/>
         <source>Potential memory issue</source>
         <translation>Masalah pada memory yang potensial terjadi</translation>
     </message>
     <message>
-        <location filename="memory_checker.py" line="145"/>
+        <location filename="memory_checker.py" line="146"/>
         <source>There may not be enough free memory to run this analysis. You can attempt to run the analysis anyway, but note that your computer may become unresponsive during execution, and / or the analysis may fail due to insufficient memory. Proceed at your own risk.</source>
         <translation>Mungkin tidak ada memori kosong yang cukup untuk menjalankan analisis ini. Anda dapat tetap mencoba analisis ini, namun dengan catatan komputer Anda mungkin menjadi tidak responsif selama eksekusi, dan atau analisis mungkin gagal karena memori yang tidak cukup. Lakukan dengan risiko Anda sendiri.</translation>
     </message>
     <message>
-        <location filename="memory_checker.py" line="177"/>
+        <location filename="memory_checker.py" line="178"/>
         <source>Suggestion</source>
         <translation>Saran</translation>
     </message>
     <message>
-        <location filename="memory_checker.py" line="179"/>
+        <location filename="memory_checker.py" line="180"/>
         <source>Try zooming in to a smaller area or using a raster layer with a coarser resolution to speed up execution and reduce memory requirements. You could also try adding more RAM to your computer.</source>
         <translation>Cobalah untuk memperbesar (zoom in) ke area yang lebih kecil atau gunakan layer data raster dengan resolusi yang lebih kasar untuk mempercepat eksekusi dan mengurangi kebutuhan memori. Anda juga dapat mencoba menambah RAM ke komputer Anda. </translation>
     </message>
@@ -132,12 +133,12 @@
         <translation>%s menit</translation>
     </message>
     <message>
-        <location filename="memory_checker.py" line="136"/>
+        <location filename="memory_checker.py" line="137"/>
         <source>Memory requirement: about %d mb per raster layer (%d mb available)</source>
         <translation>Kebutuhan memori: %d mb untuk setiap layer raster (%d mb tersedia)</translation>
     </message>
     <message>
-        <location filename="memory_checker.py" line="137"/>
+        <location filename="memory_checker.py" line="138"/>
         <source>Memory used / available: %d/%d</source>
         <translation>Memori digunakan / tersedia: %d/%d</translation>
     </message>
@@ -712,7 +713,7 @@
         <translation>Jumlah</translation>
     </message>
     <message>
-        <location filename="components.py" line="477"/>
+        <location filename="exposure.py" line="40"/>
         <source>Population</source>
         <translation>Penduduk</translation>
     </message>
@@ -722,7 +723,7 @@
         <translation>Lain-lain</translation>
     </message>
     <message>
-        <location filename="needs_profile.py" line="271"/>
+        <location filename="needs_profile.py" line="272"/>
         <source>Provenance</source>
         <translation>Sumber</translation>
     </message>
@@ -837,12 +838,12 @@
         <translation>Rincian tambahan berikut ini akan dilaporkan ketika terjadi masalah.</translation>
     </message>
     <message>
-        <location filename="default.py" line="379"/>
+        <location filename="default.py" line="421"/>
         <source>Error loading template: %s</source>
         <translation>Kesalahan memuat template %s</translation>
     </message>
     <message>
-        <location filename="file_downloader.py" line="107"/>
+        <location filename="file_downloader.py" line="108"/>
         <source>%s : %s of %s</source>
         <translation>%s : %s dari %s</translation>
     </message>
@@ -852,7 +853,7 @@
         <translation>Perlihatkan rincian ...</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="523"/>
+        <location filename="needs_manager_dialog.py" line="524"/>
         <source>weekly</source>
         <translation>per minggu</translation>
     </message>
@@ -900,32 +901,32 @@
 (munculkan %s untuk agregasi jika diperlukan)</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="76"/>
+        <location filename="needs_manager_dialog.py" line="77"/>
         <source>Resource name</source>
         <translation>Nama sumberdaya</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="404"/>
+        <location filename="needs_manager_dialog.py" line="405"/>
         <source>Name of the resource that will be provided as part of minimum needs. e.g. Rice, Water etc.</source>
         <translation>Nama dari sumber daya yang akan disediakan sebagai bagian dari kebutuhan minumum. Misalnya Nasi, Air, dll.</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="408"/>
+        <location filename="needs_manager_dialog.py" line="409"/>
         <source>A &lt;b&gt;resource&lt;/b&gt; is something that you provide to displaced persons in the event of a disaster. The resource will be made available at IDP camps and may need to be stockpiled by contingency planners in their preparations for a disaster.</source>
         <translation>Sebuah &lt;b&gt;sumber daya&lt;/b&gt; adalah sesuatu yang Anda sediakan untuk pengungsi ketika terjadi bencana. Sumber daya akan disediakan di kamp IDP dan mungkin perlu ditimbun oleh perencana kontijensi dalam persiapan bencana mereka.</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="77"/>
+        <location filename="needs_manager_dialog.py" line="78"/>
         <source>Resource description</source>
         <translation>Deskripi sumber daya</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="420"/>
+        <location filename="needs_manager_dialog.py" line="421"/>
         <source>Description of the resource that will be provided as part of minimum needs.</source>
         <translation>Deskrisi sumber daya yang akan disediakan sebagai bagian dari kebutuhan minimum.</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="423"/>
+        <location filename="needs_manager_dialog.py" line="424"/>
         <source>This gives a detailed description of what the resource is and </source>
         <translation>Ini memberikan deskripsi rinci dari apa sumber dayanya dan</translation>
     </message>
@@ -935,112 +936,112 @@
         <translation>Satuan</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="431"/>
+        <location filename="needs_manager_dialog.py" line="432"/>
         <source>Single unit for the resources spelled out. e.g. litre, kilogram etc.</source>
         <translation>Ejaan untuk satuan tunggal sumber daya. Misalnya liter, kilogram, dll.</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="434"/>
+        <location filename="needs_manager_dialog.py" line="435"/>
         <source>A &lt;b&gt;unit&lt;/b&gt; is the basic measurement unit used for computing the allowance per individual. For example when planning water rations the unit would be single litre.</source>
         <translation>Sebuah &lt;b&gt;satuan&lt;/b&gt; adalah satuan ukuran standar tertentu yang digunakan untuk menghitung jatah perorangan. Sebagai contoh, saat perencanaan jatah air maka satuannya menjadi liter.</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="79"/>
+        <location filename="needs_manager_dialog.py" line="80"/>
         <source>Units</source>
         <translation>Satuan jamak</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="444"/>
+        <location filename="needs_manager_dialog.py" line="445"/>
         <source>Multiple units for the resources spelled out. e.g. litres, kilogram etc.</source>
         <translation>Bentuk jamak dari satuan. Contoh, liter, kilogram, dan lain-lain.</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="447"/>
+        <location filename="needs_manager_dialog.py" line="448"/>
         <source>&lt;b&gt;Units&lt;/b&gt; are the basic measurement used for computing the allowance per individual. For example when planning water rations the units would be litres.</source>
         <translation>&lt;b&gt;Satuan&lt;/b&gt; adalah ukuran standar tertentu yang digunakan untuk menghitung jatah perorangan. Sebagai contoh, saat perencanaan jatah air maka satuannya menjadi liter.</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="80"/>
+        <location filename="needs_manager_dialog.py" line="81"/>
         <source>Unit abbreviation</source>
         <translation>Singkatan dari satuan</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="458"/>
+        <location filename="needs_manager_dialog.py" line="459"/>
         <source>Abbreviations of unit for the resources. e.g. l, kg etc.</source>
         <translation>Singkatan dari satuan suatu sumber daya. Contoh, l, kg, dan lain-lain.</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="81"/>
+        <location filename="needs_manager_dialog.py" line="82"/>
         <source>Minimum allowed</source>
         <translation>Batas minimum yang diperbolehkan</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="474"/>
+        <location filename="needs_manager_dialog.py" line="475"/>
         <source>The minimum allowable quantity per person. </source>
         <translation>Kuantitas batas minimum yang diperbolehkan perorangan.</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="476"/>
+        <location filename="needs_manager_dialog.py" line="477"/>
         <source>The &lt;b&gt;minimum&lt;/b&gt; is the minimum allowed quantity of the resource per person. For example you may dictate that the water ration per person per day should never be allowed to be less than 0.5l. This is enforced when tweaking a minimum needs set before an impact evaluation</source>
         <translation>&lt;b&gt;Minimum&lt;/b&gt; adalah kuantitas batas minimum yang diperbolehkan dari suatu sumber daya perorangan. Sebagai contoh, Anda dapat menetapkan jatah air per orang per hari tidak boleh kurang dari 0,5l. Hal ini diwajibkan saat menetapkan kebutuhan minimum sebelum evaluasi dampak</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="82"/>
+        <location filename="needs_manager_dialog.py" line="83"/>
         <source>Maximum allowed</source>
         <translation>Batas maximum yang diperbolehkan</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="490"/>
+        <location filename="needs_manager_dialog.py" line="491"/>
         <source>The maximum allowable quantity per person. </source>
         <translation>Kuantitas batas maximum yang diperbolehkan perorangan.</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="83"/>
+        <location filename="needs_manager_dialog.py" line="84"/>
         <source>Default</source>
         <translation>Default</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="506"/>
+        <location filename="needs_manager_dialog.py" line="507"/>
         <source>The default allowable quantity per person. </source>
         <translation>Kuantitas default yang diperbolehkan perorangan.</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="508"/>
+        <location filename="needs_manager_dialog.py" line="509"/>
         <source>The &lt;b&gt;default&lt;/b&gt; is the default allowed quantity of the resource per person. For example you may indicate that the water ration per person weekly should be 67l.</source>
         <translation>&lt;b&gt;Default&lt;/b&gt; adalah kuantitas default yang diperbolehkan dari suatu sumber daya perorangan. Sebagai contoh, Anda dapat menetapkan jatah air per orang per minggu sebesar 67l.</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="84"/>
+        <location filename="needs_manager_dialog.py" line="85"/>
         <source>Frequency</source>
         <translation>Frekuensi</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="516"/>
+        <location filename="needs_manager_dialog.py" line="517"/>
         <source>The frequency that this resource needs to be provided to a displaced person. e.g. weekly, daily, once etc.</source>
         <translation>Frekuensi yang dibutuhkan sumber daya ini untuk diberikan pada pengungsi. Contoh, per minggu, per hari, satu kali, dan lain-lain.</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="519"/>
+        <location filename="needs_manager_dialog.py" line="520"/>
         <source>The &lt;b&gt;frequency&lt;/b&gt; informs the aid worker how regularly this resource needs to be provided to the displaced person.</source>
         <translation>&lt;b&gt;Frekuensi&lt;/b&gt; memberitahukan relawan bantuan untuk seberapa sering sumber daya tersebut harus diberikan pada pengungsi.</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="85"/>
+        <location filename="needs_manager_dialog.py" line="86"/>
         <source>Readable sentence</source>
         <translation>Kalimat terbaca</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="527"/>
+        <location filename="needs_manager_dialog.py" line="528"/>
         <source>A readable presentation of the resource.</source>
         <translation>Bentuk tulisan dari sumber daya.</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="529"/>
+        <location filename="needs_manager_dialog.py" line="530"/>
         <source>A &lt;b&gt;readable sentence&lt;/b&gt; is a presentation of the resource that displays all pertinent information. If you are unsure then use the default. Properties should be included using double curly brackets &apos;{{&apos; &apos;}}&apos;. Including the resource name would be achieved by including e.g. {{ Resource name }}</source>
         <translation>&lt;b&gt;Kalimat terbaca&lt;/b&gt; adalah bentuk presentasi sumberdaya yang menampilkan informasi yang bersangkutan. Jika Anda tidak yakin, maka gunakan nilai default. Properti objek dapat dimasukkan menggunakan kurung kurawal ganda &apos;{{&apos; &apos;}}&apos;. Nama sumber daya dapat dimasukkan dengan cara, sebagai contoh, {{ Resource name }}</translation>
     </message>
     <message>
-        <location filename="needs_profile.py" line="273"/>
+        <location filename="needs_profile.py" line="274"/>
         <source>The provenance of minimum needs</source>
         <translation>Sumber dari kebutuhan minimum</translation>
     </message>
@@ -2262,12 +2263,12 @@
         <translation>Saat membuka jendela ini, luasan Anda akan digunakan untuk menentukan area yang akan diambil datanya. Anda dapat menentukan area yang diinginkan secara interaktif menggunakan tombol &apos;Pilih pada peta&apos;, yang akan menyembunyikan jendela ini untuk sementara waktu dan membolehkan Anda menentukan kotak batas pada peta. Setelah Anda selesai, jendela ini akan ditampilkan kembali.</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="460"/>
+        <location filename="needs_manager_dialog.py" line="461"/>
         <source>A &lt;b&gt;unit abbreviation&lt;/b&gt; is the basic measurement unit&apos;s shortened. For example when planning water rations the units would be l.</source>
         <translation>&lt;b&gt;Singkatan satuan&lt;/b&gt; adalah ukuran standar satuan yang disingkat. Contohnya, saat perencanaan jatah air satuannya menjadi l.</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="492"/>
+        <location filename="needs_manager_dialog.py" line="493"/>
         <source>The &lt;b&gt;maximum&lt;/b&gt; is the maximum allowed quantity of the resource per person. For example you may dictate that the water ration per person per day should never be allowed to be more than 67l. This is enforced when tweaking a maximum needs set before an impact evaluation.</source>
         <translation>&lt;b&gt;Maximum&lt;/b&gt; adalah kuantitas batas maximum yang diperbolehkan dari suatu sumber daya perorangan. Sebagai contoh, Anda dapat menetapkan jatah air per orang per hari tidak boleh lebih dari 67l. Hal ini diwajibkan saat menetapkan kebutuhan maksimum sebelum evaluasi dampak</translation>
     </message>
@@ -2372,17 +2373,17 @@
         <translation>Rincian: %s</translation>
     </message>
     <message>
-        <location filename="file_downloader.py" line="146"/>
+        <location filename="file_downloader.py" line="147"/>
         <source>The network is unreachable. Please check your internet connection.</source>
         <translation>Jaringan tidak bisa dicapai. Silakan cek koneksi internet Anda.</translation>
     </message>
     <message>
-        <location filename="file_downloader.py" line="167"/>
+        <location filename="file_downloader.py" line="168"/>
         <source>Sorry, the server is unreachable. Please try again later.</source>
         <translation>Maaf, server tidak bisa dicapai. Silakan coba lagi nanti.</translation>
     </message>
     <message>
-        <location filename="file_downloader.py" line="172"/>
+        <location filename="file_downloader.py" line="173"/>
         <source>Sorry, the layer was not found on the server.</source>
         <translation>maaf, lapisan tidak ditemukan di server.</translation>
     </message>
@@ -2757,12 +2758,12 @@
         <translation>Terdampak</translation>
     </message>
     <message>
-        <location filename="file_downloader.py" line="151"/>
+        <location filename="file_downloader.py" line="152"/>
         <source>Sorry, the server aborted your request. Please try a smaller area.</source>
         <translation>Maaf, server membatalkan request Anda. Silahkan coba untuk wilayah yang lebih kecil.</translation>
     </message>
     <message>
-        <location filename="file_downloader.py" line="158"/>
+        <location filename="file_downloader.py" line="159"/>
         <source>Sorry, the server is currently busy with another request. Please try again in a few minutes.</source>
         <translation>Maaf, server sedang sibuk dengan request yang lain. Silakan coba lagi nanti.</translation>
     </message>
@@ -3097,20 +3098,22 @@
         <translation>Kompleks berisi jalan panjang dan bangunan untuk takeoff, landing, dan perawatan pesawat sipil, dengan fasilitas yang tersedia untuk penumpang.</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="270"/>
+        <location filename="needs_manager_dialog.py" line="271"/>
         <source>Restore defaults</source>
         <translation>Kembalikan default</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="271"/>
+        <location filename="needs_manager_dialog.py" line="272"/>
         <source>Restoring defaults will overwrite your changes on profiles provided by InaSAFE. Do you want to continue ?</source>
         <translation>Pemulihan default akan menimpa ulang perubahan pada profil yang disediakan oleh InaSAFE. Apakah Anda ingin melanjutkan ?</translation>
     </message>
     <message numerus="yes">
-        <location filename="needs_manager_dialog.py" line="536"/>
+        <location filename="needs_manager_dialog.py" line="537"/>
         <source>A displaced person should be provided with %(default value)s %(unit)s/%(units)s/%(unit abbreviation)s of %(resource name)s. Though no less than %(minimum allowed)s and no more than %(maximum allowed)s. This should be provided %(frequency)s.default value{{ Default }}</source>
         <comment>unit{{ Unit }}</comment>
-        <translation><numerusform>Penduduk yang diungsikan dapat diberikan %(default value)s %(unit)s/%(units)s/%(unit abbreviation)s %(resource name)s. Meskipun begitu, tidak boleh kurang dari %(minimum allowed)s dan tidak boleh lebih dari %(maximum allowed)s. Bantuan ini mesti disediakan %(frequency)s. Nilai default {{Default}}</numerusform></translation>
+        <translation>
+            <numerusform>Penduduk yang diungsikan dapat diberikan %(default value)s %(unit)s/%(units)s/%(unit abbreviation)s %(resource name)s. Meskipun begitu, tidak boleh kurang dari %(minimum allowed)s dan tidak boleh lebih dari %(maximum allowed)s. Bantuan ini mesti disediakan %(frequency)s. Nilai default {{Default}}</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="shake_grid.py" line="617"/>
@@ -3173,12 +3176,12 @@
         <translation>Panjang</translation>
     </message>
     <message>
-        <location filename="memory_checker.py" line="173"/>
+        <location filename="memory_checker.py" line="174"/>
         <source>Memory issue</source>
         <translation>Permasalahan memori</translation>
     </message>
     <message>
-        <location filename="memory_checker.py" line="175"/>
+        <location filename="memory_checker.py" line="176"/>
         <source>There is not enough free memory to run this analysis.</source>
         <translation>Tidak ada cukup memori bebas untuk menjalankan analisis ini.</translation>
     </message>
@@ -4938,7 +4941,7 @@
         <translation>- Gunakan pilihan ini untuk menentukan alamat email kontak pribadi yang digunakan pada dokumen metadata yang dibangkitkan.</translation>
     </message>
     <message>
-        <location filename="options_dialog.py" line="615"/>
+        <location filename="options_dialog.py" line="614"/>
         <source>In this options you can change the global default values for these variables.</source>
         <translation>Pada pilihan ini kamu dapat mengganti nilai default global untuk variabel-variabel ini.</translation>
     </message>
@@ -4948,17 +4951,17 @@
         <translation>Fungsi dampak tidak akan mampu dijalankan karena dari masukannya.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1192"/>
+        <location filename="dock.py" line="1195"/>
         <source>The impact function could not run because of the inputs.</source>
         <translation>Fungsi dampak tidak dapat dijalankan karena masukannya.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1199"/>
+        <location filename="dock.py" line="1202"/>
         <source>The impact function could not run because of a bug.</source>
         <translation>Fungsi dampak tidak dapat dijalankan karena adanya kesalahan.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1205"/>
+        <location filename="dock.py" line="1208"/>
         <source>The impact function could run without errors.</source>
         <translation>Fungsi dampak dapat dijalankan tanpa kesalahan.</translation>
     </message>
@@ -4978,7 +4981,7 @@
         <translation>Maks &lt;=</translation>
     </message>
     <message>
-        <location filename="step_kw45_inasafe_fields.py" line="173"/>
+        <location filename="step_kw45_inasafe_fields.py" line="172"/>
         <source>There is no available field that has match type for the InaSAFE fields. You can click next.</source>
         <translation>Tidak ada field tersedia yang tipenya cocok untuk field InaSAFE. Anda bisa klik selanjutnya.</translation>
     </message>
@@ -5049,17 +5052,17 @@
         <translation>Global (%s)</translation>
     </message>
     <message>
-        <location filename="field_mapping_tab.py" line="226"/>
+        <location filename="field_mapping_tab.py" line="221"/>
         <source>Custom</source>
         <translation>Kustom</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1175"/>
+        <location filename="dock.py" line="1178"/>
         <source>The impact function should not have been ready.</source>
         <translation>Fungsi dampak tidak seharusnya siap.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1262"/>
+        <location filename="dock.py" line="1265"/>
         <source>The impact report could not be generated.</source>
         <translation>Laporan terdampak tidak dapat dibuat.</translation>
     </message>
@@ -5510,7 +5513,7 @@
     </message>
     <message>
         <location filename="default_values.py" line="46"/>
-        <source>Default value for feature rate per mÂ²</source>
+        <source>Default value for feature rate per m&#xc2;&#xb2;</source>
         <translation>Nilai default untuk nilai fitur per mÂ²</translation>
     </message>
     <message>
@@ -5710,7 +5713,7 @@
     </message>
     <message>
         <location filename="units.py" line="200"/>
-        <source>mÂ²</source>
+        <source>m&#xc2;&#xb2;</source>
         <translation>mÂ²</translation>
     </message>
     <message>
@@ -5864,7 +5867,7 @@
         <translation>Anda telah memilih &lt;b&gt;%s %s&lt;/b&gt;. Silahkan pilih klasifikasi ancaman untuk setiap jenis keterpaparan. Jika Anda ingin mengubah ambang batas, Anda dapat menekan tombol ubah di dekatnya dan Anda dapat mengubah ambang batas di panel kanan. Jangan lupa menyimpan ambang batas sebelum melanjutkan ke langkah selanjutnya.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1383"/>
+        <location filename="dock.py" line="1386"/>
         <source>The requested extent is not overlapping your layers.</source>
         <translation>Cakupan yang diminta tidak bertumpang tindih dengan lapisan anda.</translation>
     </message>
@@ -6850,7 +6853,7 @@
     </message>
     <message>
         <location filename="post_processors.py" line="86"/>
-        <source>A post processor to calculate the value of a feature based on its size. If a feature is a polygon the size is calculated as the area in mÂ². If the feature is a line we use length in metres.</source>
+        <source>A post processor to calculate the value of a feature based on its size. If a feature is a polygon the size is calculated as the area in m&#xc2;&#xb2;. If the feature is a line we use length in metres.</source>
         <translation>Postprosesor untuk menghitung nilai fitur berdasarkan ukurannya. Jika sebuah fitur adalah poligon ukurannya adalah dihitung sebagai luasan dalam mÂ². Jika fitur adalah garis kita menggunakan panjang dalam meter.</translation>
     </message>
     <message>
@@ -7065,7 +7068,7 @@
     </message>
     <message>
         <location filename="units.py" line="166"/>
-        <source>&lt;b&gt;Hectare&lt;/b&gt; is an SI accepted metric system unit of area equal to 100 ares (10,000 mÂ²) and primarily used in the measurement of land</source>
+        <source>&lt;b&gt;Hectare&lt;/b&gt; is an SI accepted metric system unit of area equal to 100 ares (10,000 m&#xc2;&#xb2;) and primarily used in the measurement of land</source>
         <translation>&lt;b&gt;Hectare&lt;/b&gt;  adalah sistem satuan metrik luasajn yang diterima Standar Internasional  yang setara dengan 100 are (10.000 mÂ²) dan biasanya digunakan untuk ukuran tanah</translation>
     </message>
     <message>
@@ -7644,27 +7647,27 @@
         <translation>Perkiraan {title} terdampak per {unit}</translation>
     </message>
     <message>
-        <location filename="field_mapping_dialog.py" line="61"/>
+        <location filename="field_mapping_dialog.py" line="59"/>
         <source>Layer</source>
         <translation>Lapisan</translation>
     </message>
     <message>
-        <location filename="field_mapping_dialog.py" line="178"/>
+        <location filename="field_mapping_dialog.py" line="176"/>
         <source>There is no field group for this layer. Please select another layer.</source>
         <translation>Tidak ada kelompok field untuk lapisan ini. Mohon pilih lapisan lainnya.</translation>
     </message>
     <message>
-        <location filename="field_mapping_dialog.py" line="186"/>
+        <location filename="field_mapping_dialog.py" line="184"/>
         <source> and </source>
         <translation>dan</translation>
     </message>
     <message>
-        <location filename="field_mapping_dialog.py" line="189"/>
+        <location filename="field_mapping_dialog.py" line="187"/>
         <source>, and {0}</source>
         <translation>, dan {0}</translation>
     </message>
     <message>
-        <location filename="field_mapping_dialog.py" line="190"/>
+        <location filename="field_mapping_dialog.py" line="188"/>
         <source>Please fill the information for every tab to determine the attribute for {0} group.</source>
         <translation>Mohon isi informasi di setiap tab untuk menentukan atribut ke kelompok {0}.</translation>
     </message>
@@ -7759,39 +7762,39 @@
         <translation>Untuk dataset keterpaparan, rasio tidak didukung, hanya jumlah. Pemetaan field yang dilakukan di sini akan digunakan untuk menghasilkan kolom baru selama tahap pra-pemrosesan sebelum analisis aktual dilakukan.</translation>
     </message>
     <message>
-        <location filename="options_dialog.py" line="622"/>
+        <location filename="options_dialog.py" line="621"/>
         <source>Non-group fields</source>
         <translation>Field tanpa kelompok</translation>
     </message>
     <message>
-        <location filename="field_mapping_tab.py" line="90"/>
+        <location filename="field_mapping_tab.py" line="85"/>
         <source>List of fields</source>
         <translation>Daftar field</translation>
     </message>
     <message>
-        <location filename="field_mapping_tab.py" line="198"/>
+        <location filename="field_mapping_tab.py" line="193"/>
         <source>Count fields</source>
         <translation>Field banyak</translation>
     </message>
     <message>
-        <location filename="field_mapping_tab.py" line="201"/>
+        <location filename="field_mapping_tab.py" line="196"/>
         <source>Ratio fields</source>
         <translation>Field rasio</translation>
     </message>
     <message>
-        <location filename="field_mapping_tab.py" line="205"/>
+        <location filename="field_mapping_tab.py" line="200"/>
         <source>Global default</source>
         <translation>Default umum</translation>
     </message>
     <message>
-        <location filename="field_mapping_tab.py" line="354"/>
+        <location filename="field_mapping_tab.py" line="346"/>
         <source>Field type: {0}
 </source>
         <translation>Tipe field: {0}
 </translation>
     </message>
     <message>
-        <location filename="field_mapping_tab.py" line="355"/>
+        <location filename="field_mapping_tab.py" line="347"/>
         <source>Unique values: {0}</source>
         <translation>Nilai unik: {0}</translation>
     </message>
@@ -7806,29 +7809,29 @@
         <translation>Memori</translation>
     </message>
     <message>
-        <location filename="step_kw30_field.py" line="143"/>
+        <location filename="step_kw30_field.py" line="144"/>
         <source>&lt;b&gt;Field name&lt;/b&gt;: {field_name}</source>
         <translation>&lt;b&gt;Nama field&lt;/b&gt;: {field_name}</translation>
     </message>
     <message>
-        <location filename="step_kw30_field.py" line="145"/>
+        <location filename="step_kw30_field.py" line="146"/>
         <source>&lt;br&gt;&lt;b&gt;Field type&lt;/b&gt;: {field_type}</source>
         <translation>&lt;br&gt;&lt;b&gt;Tipe field&lt;/b&gt;: {field_type}</translation>
     </message>
     <message>
-        <location filename="step_kw30_field.py" line="148"/>
+        <location filename="step_kw30_field.py" line="161"/>
         <source>&lt;br&gt;&lt;b&gt;Unique values&lt;/b&gt;: {unique_values_str}&lt;br&gt;&lt;br&gt;</source>
         <translation>&lt;br&gt;&lt;b&gt;Nilai unik&lt;/b&gt;: {unique_values_str}&lt;br&gt;&lt;br&gt;</translation>
     </message>
     <message>
-        <location filename="step_kw30_field.py" line="209"/>
+        <location filename="step_kw30_field.py" line="222"/>
         <source>
 You can select 1 field only.</source>
         <translation>
 Anda hanya dapat memilih 1 field.</translation>
     </message>
     <message>
-        <location filename="step_kw30_field.py" line="212"/>
+        <location filename="step_kw30_field.py" line="225"/>
         <source>
 You can select more than 1 field. InaSAFE will sum up the value of the fields that you choose.</source>
         <translation>
@@ -8450,7 +8453,7 @@ Anda dapat memilih lebih dari 1 field. InaSAFE akan menjumlahkan nilai dari fiel
         <translation>catatan tingkat pengungsian</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="646"/>
+        <location filename="wizard_dialog.py" line="642"/>
         <source>Invalid Field Mapping</source>
         <translation>Pemetaan Field Tidak Valid</translation>
     </message>
@@ -8565,7 +8568,7 @@ Anda dapat memilih lebih dari 1 field. InaSAFE akan menjumlahkan nilai dari fiel
         <translation>Perhatikan bahwa isi tab ini mungkin berubah tergantung pada kelompok yang telah ditentukan untuk perincian demografis.</translation>
     </message>
     <message>
-        <location filename="options_dialog.py" line="358"/>
+        <location filename="options_dialog.py" line="357"/>
         <source>Description:
 
 %s
@@ -8590,12 +8593,12 @@ Sitasi:
 %s</translation>
     </message>
     <message>
-        <location filename="field_mapping_tab.py" line="297"/>
+        <location filename="field_mapping_tab.py" line="292"/>
         <source>You can only map one field to one concept.</source>
         <translation>Anda hanya dapat memetakan satu field ke satu konsep.</translation>
     </message>
     <message>
-        <location filename="field_mapping_tab.py" line="311"/>
+        <location filename="field_mapping_tab.py" line="306"/>
         <source>You can map one field to more than one concepts.</source>
         <translation>Anda dapat memetakan satu field ke lebih dari satu konsep.</translation>
     </message>
@@ -8655,7 +8658,7 @@ Sitasi:
         <translation>Parameter jenis ini mengecek nilai dari sebuah keyword untuk layer yang sedang ditangani untuk menjalankan.</translation>
     </message>
     <message>
-        <location filename="options_dialog.py" line="367"/>
+        <location filename="options_dialog.py" line="366"/>
         <source>Please select your preferred earthquake fatality model. The default fatality model is the {model}.</source>
         <translation>Silahkan masukan model fatalitas gempa bumi pilihan Anda. Model fatalitas defaultnya adalah {model}.</translation>
     </message>
@@ -9314,12 +9317,12 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
         <translation>Pada langkah wizard ini: {step_name}, Anda akan dapat mengatur klasifikasi layer yang ditugaskan pada wizard ini.</translation>
     </message>
     <message>
-        <location filename="step_kw30_field.py" line="273"/>
+        <location filename="step_kw30_field.py" line="286"/>
         <source>Field Step</source>
         <translation>Langkah Field</translation>
     </message>
     <message>
-        <location filename="step_kw30_field.py" line="284"/>
+        <location filename="step_kw30_field.py" line="297"/>
         <source>In this wizard step: {step_name}, you will be able to set the field that will be used to apply the classification.</source>
         <translation>Pada langkah wizard ini: {step_name}, Anda akan bisa mengatur field yang akan digunakan untuk menerapkan klasifikasi.</translation>
     </message>
@@ -9349,37 +9352,37 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
         <translation>Ambang Batas Langkah</translation>
     </message>
     <message>
-        <location filename="step_kw44_fields_mapping.py" line="145"/>
+        <location filename="step_kw44_fields_mapping.py" line="144"/>
         <source>Field Mapping Step</source>
         <translation>Langkah Pemetaan Field</translation>
     </message>
     <message>
-        <location filename="step_kw44_fields_mapping.py" line="156"/>
+        <location filename="step_kw44_fields_mapping.py" line="155"/>
         <source>In this wizard step: {step_name}, you will be able to define field mappings to use for demographic breakdowns of your analysis results.</source>
         <translation>Pada langkah wizard ini: {step_name}, Anda akan dapat menentukan pemetaan field untuk digunakan untuk rincian demografis hasil analisis Anda</translation>
     </message>
     <message>
-        <location filename="step_kw45_inasafe_fields.py" line="207"/>
+        <location filename="step_kw45_inasafe_fields.py" line="206"/>
         <source>InaSAFE Field Step</source>
         <translation>Langkah Field InaSAFE</translation>
     </message>
     <message>
-        <location filename="step_kw45_inasafe_fields.py" line="218"/>
+        <location filename="step_kw45_inasafe_fields.py" line="217"/>
         <source>In this wizard step: {step_name}, you will be able to set a field that corresponded with a InaSAFE field concept.</source>
         <translation>Pada langkah wizard ini: {step_name}, Anda akan dapat mengatur field yang sesuai dengan konsep field InaSAFE.</translation>
     </message>
     <message>
-        <location filename="step_kw47_default_inasafe_fields.py" line="242"/>
+        <location filename="step_kw47_default_inasafe_fields.py" line="241"/>
         <source>InaSAFE Default Field Step</source>
         <translation>Langkah Field Default InaSAFE</translation>
     </message>
     <message>
-        <location filename="step_kw47_default_inasafe_fields.py" line="253"/>
+        <location filename="step_kw47_default_inasafe_fields.py" line="252"/>
         <source>In this wizard step: {step_name}, you will be able to set a field that corresponded with a InaSAFE field concept. It also allows you to set a default value for all feature if you do not want to use any field</source>
         <translation>Pada langkah wizard ini: {step_name}, Anda akan dapat mengatur field yang sesuai dengan konsep field InaSAFE. Ini juga memungkinkan Anda untuk mengatur nilai default untuk semua fitur jika Anda tidak ingin menggunakan field apapun</translation>
     </message>
     <message>
-        <location filename="step_kw49_inasafe_raster_default_values.py" line="186"/>
+        <location filename="step_kw49_inasafe_raster_default_values.py" line="183"/>
         <source>In this wizard step: {step_name}, you will be able to set a value that corresponded with a InaSAFE field concept as default value.</source>
         <translation>Pada langkah wizard ini: {step_name}, Anda akan dapat mengatur nilai yang sesuai dengan konsep field InaSAFE sebagai nilai default.</translation>
     </message>
@@ -9414,57 +9417,57 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
         <translation>Pada langkah wizard ini: {step_name}, Anda akan dapat mengulas semua keyword yang telah diatur untuk layer ini.</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="134"/>
+        <location filename="wizard_dialog.py" line="130"/>
         <source>InaSAFE Keywords Creation Wizard</source>
         <translation>Wizard Pembuat Keyword InaSAFE</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="136"/>
+        <location filename="wizard_dialog.py" line="132"/>
         <source>InaSAFE Impact Function Centric Wizard</source>
         <translation>Wizard Fungsi Dampak Tepusat InaSAFE</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="256"/>
+        <location filename="wizard_dialog.py" line="252"/>
         <source>Keywords update wizard for layer &lt;b&gt;{layer_name}&lt;/b&gt;</source>
         <translation>Wizard pembaharuan keyword untuk layer &lt;b&gt;{layer_name}&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="260"/>
+        <location filename="wizard_dialog.py" line="256"/>
         <source>Keywords creation wizard for layer &lt;b&gt;%s&lt;/b&gt;</source>
         <translation>Wizard pembuat keyword untuk layer &lt;b&gt;%s&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="268"/>
+        <location filename="wizard_dialog.py" line="264"/>
         <source>Use this wizard to run a guided impact assessment</source>
         <translation>Pergunakan wizard ini untuk menjalankan perhitungan dampak terpandu</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="608"/>
+        <location filename="wizard_dialog.py" line="604"/>
         <source>Finish</source>
         <translation>Selesai</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="720"/>
+        <location filename="wizard_dialog.py" line="716"/>
         <source>Next</source>
         <translation>Lanjut</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="729"/>
+        <location filename="wizard_dialog.py" line="725"/>
         <source>Show help</source>
         <translation>Tampilkan bantuan</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="733"/>
+        <location filename="wizard_dialog.py" line="729"/>
         <source>Hide help</source>
         <translation>Sembunyikan bantuan</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="868"/>
+        <location filename="wizard_dialog.py" line="864"/>
         <source>InaSAFE</source>
         <translation>InaSAFE</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="868"/>
+        <location filename="wizard_dialog.py" line="864"/>
         <source>An error was encountered when saving the following keywords:
  {error_message}</source>
         <translation>Terjadi kesalahan saat penyimpanan keyword berikut:
@@ -9756,7 +9759,7 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
         <translation>Kumpulan asal analisis sebagai kamus.</translation>
     </message>
     <message>
-        <location filename="field_mapping_tab.py" line="185"/>
+        <location filename="field_mapping_tab.py" line="180"/>
         <source>Do not report</source>
         <translation>Jangan laporkan</translation>
     </message>
@@ -9946,7 +9949,7 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
         <translation>Pada langkah wizard ini: {step_name}, Anda dapat memilih layer agregasi dari daftar layer dari database disk lokal atau postgres.</translation>
     </message>
     <message>
-        <location filename="field_mapping_tab.py" line="277"/>
+        <location filename="field_mapping_tab.py" line="272"/>
         <source>By default, InaSAFE will calculate the default ratio however users have the option to include this in the analysis report. If you do not want to see the default results in the report choose &quot;do not report&quot;.</source>
         <translation>Secara default, InaSAFE akan menghitung rasio default namun pengguna memiliki pilihan untuk memasukkannya ke dalam analisis laporan. Jika Anda tidak ingin melihat hasil default dalam laporan pilih &quot;jangan laporkan&quot;.</translation>
     </message>
@@ -10405,6 +10408,21 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
         <source>{symbol} {age} y.o</source>
         <translation>{symbol} {age} tahun</translation>
     </message>
+    <message>
+        <location filename="step_kw30_field.py" line="152"/>
+        <source>Yes</source>
+        <translation>Ya</translation>
+    </message>
+    <message>
+        <location filename="step_kw30_field.py" line="154"/>
+        <source>No</source>
+        <translation>Tidak</translation>
+    </message>
+    <message>
+        <location filename="step_kw30_field.py" line="155"/>
+        <source>&lt;br&gt;&lt;b&gt;Unique&lt;/b&gt;: {unique} ({unique_values_count} unique values from {feature_count} features)</source>
+        <translation>&lt;br&gt;&lt;b&gt;Unik&lt;/b&gt;: {unique} ({unique_values_count}  nilai unik dari {feature_count} fitur)</translation>
+    </message>
 </context>
 <context>
     <name>AboutDialog</name>
@@ -10415,7 +10433,7 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
     </message>
     <message>
         <location filename="about_dialog.py" line="75"/>
-        <source>Edit by Hugo GarduÃ±o from The Noun Project</source>
+        <source>Edit by Hugo Gardu&#xc3;&#xb1;o from The Noun Project</source>
         <translation>Tombol Edit oleh Hugo GarduÃ±o dari The Noun Project</translation>
     </message>
     <message>
@@ -10456,8 +10474,8 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Helvetica Neue,Helvetica,Segoe UI,Arial,freesans,sans-serif'; font-size:14px; color:#333333; background-color:#ffffff;&quot;&gt;InaSAFE is free software that provides a simple but rigorous way to combine data from communities, local governments and scientists to help assess the possible impact of future disaster events on communities, assets and infrastructure. It uses innovative science and crowd sourcing techniques (OpenStreetMap, OSM) to create realistic disaster scenarios for better planning, preparedness and response activities. It is in demand by disaster managers across Indonesia and around the world. &lt;/span&gt;&lt;/p&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Helvetica Neue,Helvetica,Segoe UI,Arial,freesans,sans-serif&apos;; font-size:14px; color:#333333; background-color:#ffffff;&quot;&gt;InaSAFE is free software that provides a simple but rigorous way to combine data from communities, local governments and scientists to help assess the possible impact of future disaster events on communities, assets and infrastructure. It uses innovative science and crowd sourcing techniques (OpenStreetMap, OSM) to create realistic disaster scenarios for better planning, preparedness and response activities. It is in demand by disaster managers across Indonesia and around the world. &lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Helvetica Neue,Helvetica,Segoe UI,Arial,freesans,sans-serif&apos;; font-size:14px; color:#333333; background-color:#ffffff;&quot;&gt;InaSAFE was developed jointly by the Indonesia&apos;s National Disaster Management Agency (BNPB), the Australian Government and the World Bank - Global Facility for Disaster Reduction and Recovery (World Bank-GFDRR).&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -10476,12 +10494,12 @@ p, li { white-space: pre-wrap; }
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;These are the minimum steps you need to follow in order to use InaSAFE:&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Cantarell'; font-size:11pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;1. Add at least one hazard layer (e.g. earthquake MMI) to QGIS.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;2. Add at least one exposure layer (e.g. structures) to QGIS.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;3. Make sure you have defined keywords for your hazard and exposure layers. You can do this using the keywords icon in the InaSAFE toolbar.&lt;/span&gt;&lt;/p&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;These are the minimum steps you need to follow in order to use InaSAFE:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;1. Add at least one hazard layer (e.g. earthquake MMI) to QGIS.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;2. Add at least one exposure layer (e.g. structures) to QGIS.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;3. Make sure you have defined keywords for your hazard and exposure layers. You can do this using the keywords icon in the InaSAFE toolbar.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;4. Click on the Run button in the InaSAFE panel.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -10504,7 +10522,7 @@ p, li { white-space: pre-wrap; }
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Sans&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -10522,7 +10540,7 @@ p, li { white-space: pre-wrap; }
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Sans&apos;; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -10540,7 +10558,7 @@ p, li { white-space: pre-wrap; }
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://www.bnpb.go.id/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Indonesia’s National Disaster Management Agency (BNPB)&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://dfat.gov.au/geo/indonesia/development-assistance/Pages/disaster-risk-management-in-indonesia.aspx&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Australian Government – Disaster Risk Management in Indonesia&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://www.gfdrr.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;World Bank - Global Facility for Disaster Reductions and Recovery&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
@@ -10785,47 +10803,47 @@ p, li { white-space: pre-wrap; }
         <translation>Silakan pilih layer dampak yang valid sebelum mencoba untuk mencetaknya.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1072"/>
+        <location filename="dock.py" line="1075"/>
         <source>Map Creator</source>
         <translation>Pembuat Peta</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1072"/>
+        <location filename="dock.py" line="1075"/>
         <source>Your PDF was created....opening using the default PDF viewer on your system.</source>
         <translation>PDF Anda telah selesai dibuat....buka dengan menggunakan pembaca berkas PDF pada sistem komputer Anda.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1072"/>
+        <location filename="dock.py" line="1075"/>
         <source>The generated pdfs were saved as:</source>
         <translation>Berkas PDF Anda disimpan di:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1084"/>
+        <location filename="dock.py" line="1087"/>
         <source>The generated htmls were saved as:</source>
         <translation>Berkas HTML Anda disimpan di:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1090"/>
+        <location filename="dock.py" line="1093"/>
         <source>The generated qpts were saved as:</source>
         <translation>Berkas QPT Anda disimpan di:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1351"/>
+        <location filename="dock.py" line="1354"/>
         <source>The hazard layer, exposure layer and your defined analysis area extents all overlap. Press the run button below to continue with the analysis.</source>
         <translation>Lapisan ancaman, paparan dan wilayah luasan analisis yang Anda tetapkan telah tumpang tindih. Tekan tombol jalankan di bawah untuk melanjutkan analisis.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1356"/>
+        <location filename="dock.py" line="1359"/>
         <source>Analysis environment ready</source>
         <translation>Lingkungan analisis telah siap</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1356"/>
+        <location filename="dock.py" line="1359"/>
         <source>More info ...</source>
         <translation>Info lebih lanjut ...</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1394"/>
+        <location filename="dock.py" line="1397"/>
         <source>No overlapping extents</source>
         <translation>Tidak ada luasan perpotongan</translation>
     </message>
@@ -10987,27 +11005,27 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>FieldMappingDialog</name>
     <message>
-        <location filename="field_mapping_dialog.py" line="48"/>
+        <location filename="field_mapping_dialog.py" line="46"/>
         <source>InaSAFE Field Mapping Tool</source>
         <translation>Perangkat Pemetaan Field InaSAFE</translation>
     </message>
     <message>
-        <location filename="field_mapping_dialog.py" line="206"/>
+        <location filename="field_mapping_dialog.py" line="204"/>
         <source>Hide Help</source>
         <translation>Sembunyikan Bantuan</translation>
     </message>
     <message>
-        <location filename="field_mapping_dialog.py" line="209"/>
+        <location filename="field_mapping_dialog.py" line="207"/>
         <source>Show Help</source>
         <translation>Tampilkan Bantuan</translation>
     </message>
     <message>
-        <location filename="field_mapping_dialog.py" line="265"/>
+        <location filename="field_mapping_dialog.py" line="263"/>
         <source>InaSAFE</source>
         <translation>InaSAFE</translation>
     </message>
     <message>
-        <location filename="field_mapping_dialog.py" line="265"/>
+        <location filename="field_mapping_dialog.py" line="263"/>
         <source>An error was encountered when saving the following keywords:
  %s</source>
         <translation>Terjadi kesalahan saat penyimpanan kata kunci berikut: 
@@ -11265,42 +11283,42 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>MessageViewer</name>
     <message>
-        <location filename="message_viewer.py" line="71"/>
+        <location filename="message_viewer.py" line="73"/>
         <source>Show log</source>
         <translation>Tampilkan catatan</translation>
     </message>
     <message>
-        <location filename="message_viewer.py" line="76"/>
+        <location filename="message_viewer.py" line="78"/>
         <source>Show report</source>
         <translation>Tampilkan laporan</translation>
     </message>
     <message>
-        <location filename="message_viewer.py" line="81"/>
+        <location filename="message_viewer.py" line="83"/>
         <source>Save as PDF</source>
         <translation>Simpan sebagai PDF</translation>
     </message>
     <message>
-        <location filename="message_viewer.py" line="143"/>
+        <location filename="message_viewer.py" line="145"/>
         <source>Open in web browser</source>
         <translation>Buka di browser internet</translation>
     </message>
     <message>
-        <location filename="message_viewer.py" line="166"/>
+        <location filename="message_viewer.py" line="168"/>
         <source>log pageToText</source>
         <translation>log pageToText</translation>
     </message>
     <message>
-        <location filename="message_viewer.py" line="325"/>
+        <location filename="message_viewer.py" line="327"/>
         <source>report_path is not set</source>
         <translation>report_path tidak diatur</translation>
     </message>
     <message>
-        <location filename="message_viewer.py" line="334"/>
+        <location filename="message_viewer.py" line="336"/>
         <source>Analysis log</source>
         <translation>Catatan analisis</translation>
     </message>
     <message>
-        <location filename="message_viewer.py" line="342"/>
+        <location filename="message_viewer.py" line="344"/>
         <source>log_path is not set</source>
         <translation>log_path tidak diatur</translation>
     </message>
@@ -11407,82 +11425,82 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>NeedsManagerDialog</name>
     <message>
-        <location filename="needs_manager_dialog.py" line="112"/>
+        <location filename="needs_manager_dialog.py" line="113"/>
         <source>Discard changes</source>
         <translation>Membuang perubahan</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="119"/>
+        <location filename="needs_manager_dialog.py" line="120"/>
         <source>Restore defaults</source>
         <translation>Kembalikan default</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="126"/>
+        <location filename="needs_manager_dialog.py" line="127"/>
         <source>Save resource</source>
         <translation>Menyimpan sumberdaya</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="133"/>
+        <location filename="needs_manager_dialog.py" line="134"/>
         <source>Export ...</source>
         <translation>Ekspor ...</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="140"/>
+        <location filename="needs_manager_dialog.py" line="141"/>
         <source>Import ...</source>
         <translation>Impor ...</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="147"/>
+        <location filename="needs_manager_dialog.py" line="148"/>
         <source>New</source>
         <translation>Baru</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="154"/>
+        <location filename="needs_manager_dialog.py" line="155"/>
         <source>Save</source>
         <translation>Simpan</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="161"/>
+        <location filename="needs_manager_dialog.py" line="162"/>
         <source>Save as</source>
         <translation>Simpan sebagai</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="624"/>
+        <location filename="needs_manager_dialog.py" line="625"/>
         <source>Problem - default value is invalid</source>
         <translation>Masalah - nilai default tidak sah</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="630"/>
+        <location filename="needs_manager_dialog.py" line="631"/>
         <source>Problem - maximum value is invalid</source>
         <translation>Masalah - nilai terbesar tidak sah</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="636"/>
+        <location filename="needs_manager_dialog.py" line="637"/>
         <source>Problem - minimum value is invalid</source>
         <translation>Masalah - nilai terkecil tidak sah</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="744"/>
+        <location filename="needs_manager_dialog.py" line="745"/>
         <source>JSON files (*.json *.JSON)</source>
         <translation>File JSON (*.json *.JSON)</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="744"/>
+        <location filename="needs_manager_dialog.py" line="745"/>
         <source>Create a minimum needs profile</source>
         <translation>Buat profil kebutuhan minimum</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="810"/>
+        <location filename="needs_manager_dialog.py" line="811"/>
         <source>Remove %s.</source>
         <translation>Hapus %s.</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="835"/>
+        <location filename="needs_manager_dialog.py" line="836"/>
         <source>Hide Help</source>
         <translation>Sembunyikan Bantuan</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="838"/>
+        <location filename="needs_manager_dialog.py" line="839"/>
         <source>Show Help</source>
         <translation>Tampilkan Bantuan</translation>
     </message>
@@ -11553,52 +11571,52 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>OptionsDialog</name>
     <message>
-        <location filename="options_dialog.py" line="71"/>
+        <location filename="options_dialog.py" line="70"/>
         <source>InaSAFE %s Options</source>
         <translation>InaSAFE %s Option (pilihan)</translation>
     </message>
     <message>
-        <location filename="options_dialog.py" line="378"/>
+        <location filename="options_dialog.py" line="377"/>
         <source>Set keyword cache file</source>
         <translation>Mengatur berkas cache kata kunci (keyword)</translation>
     </message>
     <message>
-        <location filename="options_dialog.py" line="378"/>
+        <location filename="options_dialog.py" line="377"/>
         <source>Sqlite DB File (*.db)</source>
         <translation>Sqlite DB File (*.db)</translation>
     </message>
     <message>
-        <location filename="options_dialog.py" line="392"/>
+        <location filename="options_dialog.py" line="391"/>
         <source>Results directory</source>
         <translation>Direktori Hasil</translation>
     </message>
     <message>
-        <location filename="options_dialog.py" line="405"/>
+        <location filename="options_dialog.py" line="404"/>
         <source>Set north arrow image file</source>
         <translation>Set file gambar penunjuk arah utara</translation>
     </message>
     <message>
-        <location filename="options_dialog.py" line="423"/>
+        <location filename="options_dialog.py" line="422"/>
         <source>Portable Network Graphics files (*.png *.PNG);;JPEG Images (*.jpg *.jpeg);;GIF Images (*.gif *.GIF);;SVG Images (*.svg *.SVG);;</source>
         <translation>Berkas Portable Network Graphics (*.png *.PNG);;JPEG Images (*.jpg *.jpeg);;GIF Images (*.gif *.GIF);;SVG Images (*.svg *.SVG);;</translation>
     </message>
     <message>
-        <location filename="options_dialog.py" line="423"/>
+        <location filename="options_dialog.py" line="422"/>
         <source>Set organisation logo file</source>
         <translation>Mengatur file logo organisasi</translation>
     </message>
     <message>
-        <location filename="options_dialog.py" line="441"/>
+        <location filename="options_dialog.py" line="440"/>
         <source>Templates directory</source>
         <translation>Direktori template</translation>
     </message>
     <message>
-        <location filename="options_dialog.py" line="537"/>
+        <location filename="options_dialog.py" line="536"/>
         <source>Hide Help</source>
         <translation>Sembunyikan Bantuan</translation>
     </message>
     <message>
-        <location filename="options_dialog.py" line="540"/>
+        <location filename="options_dialog.py" line="539"/>
         <source>Show Help</source>
         <translation>Tampilkan Bantuan</translation>
     </message>
@@ -11805,7 +11823,7 @@ p, li { white-space: pre-wrap; }
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Ubuntu&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:12pt; font-weight:600; color:#f50000;&quot;&gt;Note:&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:12pt;&quot;&gt; The above setting requires a QGIS restart to disable / enable. Error messages and diagnostic information will be posted to http://sentry.kartoza.com/inasafe-desktop/. Some institutions may not allow you to enable this feature - check with your network administrator if unsure. Although the data is submitted anonymously, the information contained in tracebacks may contain file system paths which reveal your identity or other information from your system.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -12589,7 +12607,7 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>StepKwField</name>
     <message>
-        <location filename="step_kw30_field.py" line="196"/>
+        <location filename="step_kw30_field.py" line="209"/>
         <source>{subcategory} in {unit} unit</source>
         <translation>{subcategory} dalam satuan {unit}</translation>
     </message>
@@ -12716,7 +12734,7 @@ p, li { white-space: pre-wrap; }
     <name>pgFcAggLayerDisjoint</name>
     <message>
         <location filename="step_fc65_agglayer_disjoint.ui" line="65"/>
-        <source>The aggregation layer and hazard layer don't intersect, i.e. they cover disjoint areas.
+        <source>The aggregation layer and hazard layer don&apos;t intersect, i.e. they cover disjoint areas.
  Please step back and select another layer.</source>
         <translation>Lapisan agregasi dan ancaman tidak berpotongan, misalnya mereka tidak menutupi area yang sama.
 Mohon kembali ke tahap sebelumnya dan pilih lapisan lain.</translation>
@@ -12857,7 +12875,7 @@ Mohon kembali ke tahap sebelumnya dan pilih lapisan lain.</translation>
     <name>pgFcDisJointLayers</name>
     <message>
         <location filename="step_fc45_disjoint_layers.ui" line="65"/>
-        <source>The hazard layer and exposure layer don't intersect, i.e. they cover disjoint areas.
+        <source>The hazard layer and exposure layer don&apos;t intersect, i.e. they cover disjoint areas.
  Please step back and select another layer.</source>
         <translation>Lapisan ancaman dan keterpaparan tidak berpotongan, misalnya mereka tidak menutupi area yang sama.
 Mohon kembali ke tahap sebelumnya dan pilih lapisan lain.</translation>
@@ -12920,7 +12938,7 @@ Mohon kembali ke tahap sebelumnya dan pilih lapisan lain.</translation>
     <name>pgFcExtentDisjoint</name>
     <message>
         <location filename="step_fc75_extent_disjoint.ui" line="68"/>
-        <source>The selected extent doesn't intersect input layers.
+        <source>The selected extent doesn&apos;t intersect input layers.
  Please step back and select another layer.</source>
         <translation>Cakupan yang dipilih tidak berpotongan dengan lapisan-lapisan masukan.
 Silahkan mundur ke belakangan dan pilih lapisan lainnya.</translation>

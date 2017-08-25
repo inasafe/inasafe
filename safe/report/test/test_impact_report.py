@@ -35,7 +35,7 @@ from safe.test.utilities import (
     load_test_raster_layer)
 from safe.utilities.utilities import readable_os_version
 from safe.definitions.reports.components import (
-    report_a4_blue,
+    map_report,
     standard_impact_report_metadata_html,
     standard_impact_report_metadata_pdf,
     general_report_component,
@@ -242,22 +242,10 @@ class TestImpactReport(unittest.TestCase):
                 }
             ],
             'notes': [
-                'Exposed People: People who are present in hazard zones and '
-                'are thereby subject to potential losses. In InaSAFE, people '
-                'who are exposed are those people who are within the extent '
-                'of the hazard.',
-                'Affected People: People who are affected by a hazardous '
-                'event. People can be affected directly or indirectly. '
-                'Affected people may experience short-term or long-term '
-                'consequences to their lives, livelihoods or health and in '
-                'the economic, physical, social, cultural and environmental '
-                'assets. In InaSAFE, people who are killed during the event '
-                'are also considered affected.',
-                'Displaced People: Displaced people are people who, for '
-                'different reasons and circumstances because of risk or '
-                'disaster, have to leave their place of residence. '
-                'In InaSAFE, demographic and minimum needs reports are based '
-                'on displaced / evacuated people.'
+                'Affected: An exposure element (e.g. people, roads, '
+                'buildings, land cover) that experiences a hazard (e.g. '
+                'tsunami, flood, earthquake) and endures consequences (e.g. '
+                'damage, evacuation, displacement, death) due to that hazard.'
             ]
         }
         actual_context = analysis_summary.context
@@ -1838,7 +1826,7 @@ class TestImpactReport(unittest.TestCase):
 
         # Create impact report
         report_metadata = ReportMetadata(
-            metadata_dict=update_template_component(report_a4_blue))
+            metadata_dict=update_template_component(map_report))
 
         impact_report = ImpactReport(
             IFACE,
@@ -1855,14 +1843,14 @@ class TestImpactReport(unittest.TestCase):
             return_code, ImpactReport.REPORT_GENERATION_SUCCESS, message)
 
         output_path = impact_report.component_absolute_output_path(
-            'a4-portrait-blue')
+            'inasafe-map-report-portrait')
 
         # for now, test that output exists
         for path in output_path.itervalues():
             self.assertTrue(os.path.exists(path), msg=path)
 
         output_path = impact_report.component_absolute_output_path(
-            'a4-landscape-blue')
+            'inasafe-map-report-landscape')
 
         for path in output_path.itervalues():
             self.assertTrue(os.path.exists(path), msg=path)

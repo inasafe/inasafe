@@ -1,6 +1,7 @@
 # coding=utf-8
 """Utilities module for helping definitions retrieval."""
 
+from os import listdir
 from os.path import join, exists, splitext
 from qgis.core import QgsApplication
 from copy import deepcopy
@@ -461,7 +462,8 @@ def get_field_groups(layer_purpose, layer_subcategory=None):
     return field_groups
 
 
-def update_template_component(component, custom_template_dir=None):
+def update_template_component(
+        component, custom_template_dir=None, hazard=None, exposure=None):
     """Get a component based on custom qpt if exists
 
     :param component: Component as dictionary.
@@ -490,6 +492,38 @@ def update_template_component(component, custom_template_dir=None):
         custom_qpt_path = join(custom_template_dir, qpt_file_name)
         if exists(custom_qpt_path):
             component['template'] = custom_qpt_path
+
+    # we want to check if there is hazard-exposure specific template available
+    # in user's custom template directory
+    hazard_exposure_template_dir = join(
+        custom_template_dir, 'hazard-exposure')
+
+    if exists(hazard_exposure_template_dir) and hazard and exposure:
+        for filename in listdir(hazard_exposure_template_dir):
+
+            file_name, file_format = splitext(filename)
+            if file_format[1:] != (
+                    QgisComposerComponentsMetadata.OutputFormat.QPT):
+                continue
+            if hazard['key'] in file_name and exposure['key'] in file_name:
+                # we do the import here to avoid circular import when starting
+                # up the plugin
+                from safe.definitions.reports.components import (
+                    map_report_component_boilerplate)
+                hazard_exposure_component = deepcopy(
+                    map_report_component_boilerplate)
+
+                # we need to update several items in this component
+                map_report_file = '{file_name}.pdf'.format(file_name=file_name)
+                hazard_exposure_component['key'] = file_name
+                hazard_exposure_component['template'] = join(
+                    hazard_exposure_template_dir, filename)
+                hazard_exposure_component['output_path']['template'] = filename
+                hazard_exposure_component['output_path']['map'] = (
+                    map_report_file)
+
+                # add this hazard-exposure component to the returned component
+                copy_component['components'].append(hazard_exposure_component)
 
     return copy_component
 

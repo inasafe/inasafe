@@ -28,13 +28,16 @@ __revision__ = '$Format:%H$'
 
 group = tr('InaSAFE - Infographic Elements')
 
+##
+# Docstrings for these expressions are used in the QGIS GUI in the Expression
+# dialog and also in the InaSAFE Help dialog.
+##
+
 
 @qgsfunction(
     args='auto', group=group, usesGeometry=False, referencedColumns=[])
 def inasafe_logo_white_path(feature, parent):
-    """Retrieve the full path of inasafe-logo-white.svg
-
-    """
+    """Retrieve the full path of inasafe-logo-white.svg."""
     _ = feature, parent  # NOQA
     return inasafe_logo_white['path']
 
@@ -42,9 +45,7 @@ def inasafe_logo_white_path(feature, parent):
 @qgsfunction(
     args='auto', group=group, usesGeometry=False, referencedColumns=[])
 def inasafe_field_header(field, feature, parent):
-    """Retrieve a header name of the field name from definitions.
-
-    """
+    """Retrieve a header name of the field name from definitions."""
     _ = feature, parent  # NOQA
     age_fields = [under_5_displaced_count_field, over_60_displaced_count_field]
     symbol_mapping = {
@@ -78,9 +79,7 @@ def inasafe_field_header(field, feature, parent):
 @qgsfunction(
     args='auto', group=group, usesGeometry=False, referencedColumns=[])
 def minimum_needs_unit(field, feature, parent):
-    """Retrieve units of the given minimum needs field name.
-
-    """
+    """Retrieve units of the given minimum needs field name."""
     _ = feature, parent  # NOQA
     field_definition = definition(field, 'field_name')
     if field_definition:
@@ -120,7 +119,6 @@ def minimum_needs_unit(field, feature, parent):
 def infographic_header_element(impact_function_name, feature, parent):
     """Given an impact function name, it will format it to an
     infographic header sentence.
-
     """
     _ = feature, parent  # NOQA
     string_format = infographic_header['string_format']
@@ -134,9 +132,7 @@ def infographic_header_element(impact_function_name, feature, parent):
 @qgsfunction(
     args='auto', group=group, usesGeometry=False, referencedColumns=[])
 def map_overview_header_element(feature, parent):
-    """Retrieve map overview header string from definitions.
-
-    """
+    """Retrieve map overview header string from definitions."""
     _ = feature, parent  # NOQA
     header = map_overview_header['string_format']
     return header.capitalize()
@@ -145,9 +141,7 @@ def map_overview_header_element(feature, parent):
 @qgsfunction(
     args='auto', group=group, usesGeometry=False, referencedColumns=[])
 def population_chart_header_element(feature, parent):
-    """Retrieve population chart header string from definitions.
-
-    """
+    """Retrieve population chart header string from definitions."""
     _ = feature, parent  # NOQA
     header = population_chart_header['string_format']
     return header.capitalize()
@@ -156,9 +150,7 @@ def population_chart_header_element(feature, parent):
 @qgsfunction(
     args='auto', group=group, usesGeometry=False, referencedColumns=[])
 def people_section_header_element(feature, parent):
-    """Retrieve people section header string from definitions.
-
-    """
+    """Retrieve people section header string from definitions."""
     _ = feature, parent  # NOQA
     header = people_section_header['string_format']
     return header.capitalize()
@@ -167,9 +159,7 @@ def people_section_header_element(feature, parent):
 @qgsfunction(
     args='auto', group=group, usesGeometry=False, referencedColumns=[])
 def age_gender_section_header_element(feature, parent):
-    """Retrieve age gender section header string from definitions.
-
-    """
+    """Retrieve age gender section header string from definitions."""
     _ = feature, parent  # NOQA
     header = age_gender_section_header['string_format']
     return header.capitalize()
@@ -178,9 +168,7 @@ def age_gender_section_header_element(feature, parent):
 @qgsfunction(
     args='auto', group=group, usesGeometry=False, referencedColumns=[])
 def age_gender_section_notes_element(feature, parent):
-    """Retrieve age gender section notes string from definitions.
-
-    """
+    """Retrieve age gender section notes string from definitions."""
     _ = feature, parent  # NOQA
     notes = age_gender_section_notes['string_format']
     return notes.capitalize()
@@ -189,9 +177,7 @@ def age_gender_section_notes_element(feature, parent):
 @qgsfunction(
     args='auto', group=group, usesGeometry=False, referencedColumns=[])
 def vulnerability_section_header_element(feature, parent):
-    """Retrieve vulnerability section header string from definitions.
-
-    """
+    """Retrieve vulnerability section header string from definitions."""
     _ = feature, parent  # NOQA
     header = vulnerability_section_header['string_format']
     return header.capitalize()
@@ -200,9 +186,7 @@ def vulnerability_section_header_element(feature, parent):
 @qgsfunction(
     args='auto', group=group, usesGeometry=False, referencedColumns=[])
 def female_vulnerability_section_header_element(feature, parent):
-    """Retrieve female vulnerability section header string from definitions.
-
-    """
+    """Retrieve female vulnerability section header string from definitions."""
     _ = feature, parent  # NOQA
     header = female_vulnerability_section_header['string_format']
     return header.capitalize()
@@ -211,9 +195,7 @@ def female_vulnerability_section_header_element(feature, parent):
 @qgsfunction(
     args='auto', group=group, usesGeometry=False, referencedColumns=[])
 def minimum_needs_section_header_element(feature, parent):
-    """Retrieve minimum needs section header string from definitions.
-
-    """
+    """Retrieve minimum needs section header string from definitions."""
     _ = feature, parent  # NOQA
     header = minimum_needs_section_header['string_format']
     return header.capitalize()
@@ -224,7 +206,6 @@ def minimum_needs_section_header_element(feature, parent):
 def additional_minimum_needs_section_header_element(feature, parent):
     """Retrieve additional minimum needs section header string
     from definitions.
-
     """
     _ = feature, parent  # NOQA
     header = additional_minimum_needs_section_header['string_format']
@@ -234,9 +215,7 @@ def additional_minimum_needs_section_header_element(feature, parent):
 @qgsfunction(
     args='auto', group=group, usesGeometry=False, referencedColumns=[])
 def minimum_needs_section_notes_element(feature, parent):
-    """Retrieve minimum needs section notes string from definitions.
-
-    """
+    """Retrieve minimum needs section notes string from definitions."""
     _ = feature, parent  # NOQA
     notes = minimum_needs_section_notes['string_format']
     return notes.capitalize()

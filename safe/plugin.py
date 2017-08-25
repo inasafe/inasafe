@@ -4,7 +4,7 @@
 import sys
 import os
 import logging
-from inspect import getmembers, isfunction
+from inspect import getmembers
 
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
@@ -630,13 +630,14 @@ class Plugin(object):
         self.iface.currentLayerChanged.disconnect(self.layer_changed)
 
         # Unload QGIS expressions loaded by the plugin.
-        qgis_expressions = [
-            fct[0] for fct in getmembers(expressions) if isfunction(fct[1])]
-        qgis_expressions += [
-            fct[0] for fct in getmembers(infographic) if isfunction(fct[1])]
-        for qgis_expression in qgis_expressions:
-            if qgis_expression != 'qgsfunction':
-                QgsExpression.unregisterFunction(qgis_expression)
+        qgis_expressions = {
+            fct[0]: fct[1] for fct in getmembers(expressions)
+            if fct[1].__class__.__name__ == 'QgsExpressionFunction'}
+        qgis_expressions.update({
+            fct[0]: fct[1] for fct in getmembers(infographic)
+            if fct[1].__class__.__name__ == 'QgsExpressionFunction'})
+        for qgis_expression in qgis_expressions.keys():
+            QgsExpression.unregisterFunction(qgis_expression)
 
     def toggle_inasafe_action(self, checked):
         """Check or un-check the toggle inaSAFE toolbar button.

@@ -372,10 +372,10 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
                 'output/impact-report-output.pdf'),
             os.path.join(
                 report_path,
-                'output/a4-portrait-blue.pdf'),
+                'output/inasafe-map-report-portrait.pdf'),
             os.path.join(
                 report_path,
-                'output/a4-landscape-blue.pdf'),
+                'output/inasafe-map-report-landscape.pdf'),
         ]
 
         # Make sure the file paths can wrap nicely:
