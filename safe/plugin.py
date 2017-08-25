@@ -36,7 +36,7 @@ from PyQt4.QtGui import (
 
 from safe.report.expressions import infographic, map_report
 from safe.gis import expressions
-from safe.common.version import release_status
+from safe.definitions.versions import inasafe_release_status
 from safe.common.exceptions import (
     KeywordNotFoundError,
     NoKeywordsFoundError,
@@ -436,7 +436,7 @@ class Plugin(object):
 
     def _create_test_layers_action(self):
         """Create action for adding layers (developer mode, non final only)."""
-        final_release = release_status() == 'final'
+        final_release = inasafe_release_status == 'final'
         settings = QSettings()
         self.developer_mode = settings.value(
             'inasafe/developer_mode', False, type=bool)
@@ -457,7 +457,7 @@ class Plugin(object):
 
     def _create_run_test_action(self):
         """Create action for running tests (developer mode, non final only)."""
-        final_release = release_status() == 'final'
+        final_release = inasafe_release_status == 'final'
         settings = QSettings()
         self.developer_mode = settings.value(
             'inasafe/developer_mode', False, type=bool)

@@ -15,6 +15,7 @@ import os
 import sys
 import subprocess
 from exceptions import WindowsError
+from safe.definitions.versions import inasafe_version, inasafe_release_status
 
 
 def current_git_hash():
@@ -36,25 +37,6 @@ def current_git_hash():
     return hash_number
 
 
-def release_status():
-    """Returns the release status from plugin metadata file.
-
-    :returns: The status of release - it could be alpha, beta, rc, or final.
-    :rtype: basestring
-    """
-    status = ''
-    # Get location of application wide version info
-    root_dir = os.path.abspath(os.path.join(
-        os.path.dirname(__file__), '..', '..'))
-    fid = open(os.path.join(root_dir, 'metadata.txt'))
-    for line in fid.readlines():
-        if line.startswith('status'):
-            status = line.strip().split('=')[1]
-    fid.close()
-
-    return status
-
-
 def get_version(version=None):
     """Returns a PEP 386-compliant version number from VERSION.
 
@@ -66,21 +48,8 @@ def get_version(version=None):
 
     """
     if version is None:
-        # Get location of application wide version info
-        root_dir = os.path.abspath(os.path.join(
-            os.path.dirname(__file__), '..', '..'))
-        fid = open(os.path.join(root_dir, 'metadata.txt'))
-        version_list = []
-        status = ''
-        for line in fid.readlines():
-            if line.startswith('version'):
-                version_string = line.strip().split('=')[1]
-                version_list = version_string.split('.')
-
-            if line.startswith('status'):
-                status = line.strip().split('=')[1]
-        fid.close()
-        version = tuple(version_list + [status] + ['0'])
+        version_list = inasafe_version.split('.')
+        version = tuple(version_list + [inasafe_release_status] + ['0'])
 
     if len(version) != 5:
         msg = 'Version must be a tuple of length 5. I got %s' % (version,)
