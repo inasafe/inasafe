@@ -7,6 +7,11 @@ __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
+# InaSAFE version
+inasafe_version = '4.2.0'
+# alpha, beta, rc or final
+inasafe_release_status = 'beta'
+
 # InaSAFE Keyword Version compatibility.
 inasafe_keyword_version = '4.1'
 keyword_version_compatibilities = {
