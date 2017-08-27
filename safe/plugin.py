@@ -902,7 +902,7 @@ class Plugin(object):
         dialog = SaveScenarioDialog(
             iface=self.iface,
             dock=self.dock_widget)
-       dialog.save_scenario()
+        dialog.save_scenario()
 
     def layer_changed(self, layer):
         """Enable or disable keywords editor icon when active layer changes.
