@@ -116,10 +116,10 @@
          </spacer>
         </item>
         <item row="0" column="1" colspan="2">
-         <widget class="QgsMapLayerComboBox" name="hazard_layer"/>
+         <widget class="QgsMapLayerComboBox" name="hazard"/>
         </item>
         <item row="3" column="1" colspan="2">
-         <widget class="QgsMapLayerComboBox" name="exposure_layer"/>
+         <widget class="QgsMapLayerComboBox" name="exposure"/>
         </item>
        </layout>
       </widget>
@@ -246,7 +246,7 @@
   <customwidget>
    <class>QgsMapLayerComboBox</class>
    <extends>QComboBox</extends>
-   <header>qgsmaplayercombobox.h</header>
+   <header>qgis.gui</header>
   </customwidget>
  </customwidgets>
  <resources/>
