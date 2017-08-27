@@ -22,6 +22,10 @@ from safe.definitions.hazard_exposure_specifications import (
 from safe.definitions.post_processors.post_processor_inputs import (
     post_processor_input_types,
     post_processor_input_values)
+from safe.definitions.reports.infographic import (
+    html_frame_elements,
+    image_item_elements
+)
 from safe.gui.tools.help.batch_help import content as batch_help
 from safe.gui.tools.help.dock_help import content as dock_help
 from safe.gui.tools.help.extent_selector_help import content as extent_help
@@ -766,6 +770,12 @@ def content():
         'reporting',
         tr('QGIS Expressions'),
         heading_level=2)
+    message.add(m.Paragraph(tr(
+        'InaSAFE adds a number of expressions that can be used to '
+        'conveniently obtain provenance data to the active analysis results. '
+        'The expressions can also be used elsewhere in QGIS as needed.'
+        '.'
+    )))
 
     qgis_expressions = {
         fct[0]: fct[1] for fct in getmembers(expressions)
@@ -791,6 +801,27 @@ def content():
         table.add(row)
     message.add(table)
 
+    _create_section_header(
+        message,
+        table_of_contents,
+        'reporting',
+        tr('Composer Elements'),
+        heading_level=2)
+    message.add(m.Paragraph(tr(
+        'InaSAFE looks for elements with specific id\'s on the composer '
+        'page and replaces them with InaSAFE specific content.'
+    )))
+    table = m.Table(style_class='table table-condensed table-striped')
+    row = m.Row()
+    row.add(m.Cell(tr('ID'), header=True))
+    row.add(m.Cell(tr('Description'), header=True))
+    table.add(row)
+    for item in html_frame_elements:
+        row = m.Row()
+        row.add(m.Cell(item['id']))
+        row.add(m.Cell(item['description']))
+        table.add(row)
+    message.add(table)
     ##
     # Developer documentation
     ##

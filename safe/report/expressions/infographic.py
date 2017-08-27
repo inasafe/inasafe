@@ -16,7 +16,9 @@ from safe.definitions.reports.infographic import (
     minimum_needs_section_header,
     additional_minimum_needs_section_header,
     population_chart_header,
-    inasafe_logo_white, age_gender_section_notes, minimum_needs_section_notes)
+    inasafe_logo_white,
+    age_gender_section_notes,
+    minimum_needs_section_notes)
 from safe.definitions.units import exposure_unit
 from safe.definitions.utilities import definition
 from safe.utilities.i18n import tr

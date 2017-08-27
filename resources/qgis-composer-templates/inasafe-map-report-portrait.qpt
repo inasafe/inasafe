@@ -45,7 +45,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="32" marginX="1" marginY="1" labelText="[% reference_text_element( @crs ) %]" htmlState="0" halign="1">
+  <ComposerLabel valign="32" marginX="1" marginY="1" labelText="[% crs_text_element( @crs ) %]" htmlState="0" halign="1">
    <LabelFont description="Arial,7,-1,5,50,0,0,0,0,0" style=""/>
    <FontColor red="0" blue="0" green="0"/>
    <ComposerItem pagey="268.733" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="136.998" y="268.733" visibility="1" zValue="55" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="65.9854" outlineWidth="0.3" excludeFromExports="0" uuid="{34bbadb0-c0a5-4139-a688-01c76da1e08a}" height="5.11501" itemRotation="0" frame="false" pagex="136.998">
@@ -253,7 +253,7 @@
    <ComposerItem pagey="199.1" page="1" id="north-arrow" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="10.6795" y="199.1" visibility="1" zValue="11" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="12.6591" outlineWidth="0.3" excludeFromExports="0" uuid="{6a25224f-2695-410c-9458-9d23345594b3}" height="14.3479" itemRotation="0" frame="false" pagex="10.6795">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-    <dataDefinedSource expr="north_arrow_logo_path()" field="" active="true" useExpr="true"/>
+    <dataDefinedSource expr="north_arrow_path()" field="" active="true" useExpr="true"/>
     <customproperties/>
    </ComposerItem>
   </ComposerPicture>

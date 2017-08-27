@@ -1,6 +1,6 @@
 # coding=utf-8
 
-from qgis.core import qgsfunction
+from qgis.core import qgsfunction, QgsCoordinateReferenceSystem
 
 from safe.definitions.reports.map_report import (
     legend_title_header,
@@ -16,10 +16,10 @@ from safe.definitions.reports.map_report import (
     reference_title_header,
     unknown_source_text,
     aggregation_not_used_text,
-    inasafe_logo_white,
-    north_arrow_logo,
-    organisation_logo,
-    reference_text)
+    white_inasafe_logo_path,
+    north_arrow_path,
+    organisation_logo_path,
+    crs_text)
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -132,10 +132,15 @@ def reference_title_header_element(feature, parent):
 
 @qgsfunction(
     args='auto', group=label_group, usesGeometry=False, referencedColumns=[])
-def reference_text_element(crs, feature, parent):
-    """Retrieve reference text string from definitions."""
+def crs_text_element(crs, feature, parent):
+    """Retrieve coordinate reference system text string from definitions.
+    
+    Example usage: crs_text_element(3857).
+    """
     _ = feature, parent  # NOQA
-    text = reference_text['string_format'].format(crs=crs)
+    crs = QgsCoordinateReferenceSystem().createFromId(crs)
+    crs = crs.description()
+    text = crs_text['string_format'].format(crs=crs)
     return text
 
 
@@ -162,15 +167,15 @@ def aggregation_not_used_text_element(feature, parent):
 def inasafe_logo_white_path(feature, parent):
     """Retrieve the full path of inasafe-logo-white.svg."""
     _ = feature, parent  # NOQA
-    return inasafe_logo_white['path']
+    return white_inasafe_logo_path['path']
 
 
 @qgsfunction(
     args='auto', group=image_group, usesGeometry=False, referencedColumns=[])
-def north_arrow_logo_path(feature, parent):
+def north_arrow_path(feature, parent):
     """Retrieve the full path of default north arrow logo."""
     _ = feature, parent  # NOQA
-    return north_arrow_logo['path']
+    return north_arrow_path['path']
 
 
 @qgsfunction(
@@ -178,4 +183,4 @@ def north_arrow_logo_path(feature, parent):
 def organisation_logo_path(feature, parent):
     """Retrieve the full path of inasafe-logo-white.svg."""
     _ = feature, parent  # NOQA
-    return organisation_logo['path']
+    return organisation_logo_path['path']

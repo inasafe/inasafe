@@ -13,7 +13,7 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
-"""Label elements"""
+"""Text elements"""
 
 
 legend_title_header = {
@@ -75,9 +75,9 @@ reference_title_header = {
     'string_format': tr('Reference')
 }
 
-reference_text = {
+crs_text = {
     'id': 'reference-text',
-    'string_format': tr('Geographic Coordinates - {crs}')
+    'string_format': tr('Coordinate Reference System - {crs}')
 }
 
 unknown_source_text = {
@@ -90,21 +90,43 @@ aggregation_not_used_text = {
     'string_format': tr('Not used')
 }
 
+text_variable_elements = [
+    legend_title_header,
+    disclaimer_title_header,
+    disclaimer_text,
+    information_title_header,
+    time_title_header,
+    caution_title_header,
+    caution_text,
+    source_title_header,
+    analysis_title_header,
+    version_title_header,
+    reference_title_header,
+    unknown_source_text,
+    aggregation_not_used_text,
+    crs_text]
 
 """Image elements"""
 
 
-inasafe_logo_white = {
+white_inasafe_logo_path = {
     'id': 'inasafe-logo-white',
     'path': white_inasafe_logo_path()
 }
 
-north_arrow_logo = {
+north_arrow_path = {
     'id': 'north-arrow-logo',
     'path': default_north_arrow_path()
 }
 
-organisation_logo = {
+organisation_logo_path = {
     'id': 'organisation-logo',
     'path': supporters_logo_path()
 }
+
+image_variable_elements = [
+    white_inasafe_logo_path,
+    north_arrow_path,
+    organisation_logo_path]
+
+all_variable_elements = text_variable_elements + image_variable_elements
