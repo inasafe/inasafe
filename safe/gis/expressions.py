@@ -23,10 +23,10 @@ __revision__ = '$Format:%H$'
 
 @qgsfunction(
     args='auto', group='InaSAFE', usesGeometry=False, referencedColumns=[])
-def inasafe_impact_analysis_layer(field, feature, parent):
+def inasafe_impact_analysis_field_value(field, feature, parent):
     """Retrieve a value from a field in the impact analysis layer.
 
-    For instance:  inasafe_impact_analysis_layer('total_not_exposed') -> 3
+    e.g. inasafe_impact_analysis_field_value('total_not_exposed') -> 3
     """
     _ = feature, parent  # NOQA
     project_context_scope = QgsExpressionContextUtils.projectScope()
@@ -109,8 +109,8 @@ def inasafe_place_value_percentage(number, total, feature, parent):
     to the total.
 
     For instance:
-    *   inasafe_place_value_percentage(inasafe_impact_analysis_layer(
-        'female_displaced'), inasafe_impact_analysis_layer('displaced'))
+    *   inasafe_place_value_percentage(inasafe_impact_analysis_field_value(
+        'female_displaced'), inasafe_impact_analysis_field_value('displaced'))
         -> will calculate the percentage of female displaced count to total
         displaced count.
 
