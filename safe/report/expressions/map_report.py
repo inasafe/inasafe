@@ -34,9 +34,7 @@ label_group = tr('InaSAFE - Label Elements')
 @qgsfunction(
     args='auto', group=label_group, usesGeometry=False, referencedColumns=[])
 def legend_title_header_element(feature, parent):
-    """Retrieve legend title header string from definitions.
-
-    """
+    """Retrieve legend title header string from definitions."""
     _ = feature, parent  # NOQA
     header = legend_title_header['string_format']
     return header.capitalize()
@@ -45,9 +43,7 @@ def legend_title_header_element(feature, parent):
 @qgsfunction(
     args='auto', group=label_group, usesGeometry=False, referencedColumns=[])
 def disclaimer_title_header_element(feature, parent):
-    """Retrieve disclaimer title header string from definitions.
-
-    """
+    """Retrieve disclaimer title header string from definitions."""
     _ = feature, parent  # NOQA
     header = disclaimer_title_header['string_format']
     return header.capitalize()
@@ -56,9 +52,7 @@ def disclaimer_title_header_element(feature, parent):
 @qgsfunction(
     args='auto', group=label_group, usesGeometry=False, referencedColumns=[])
 def disclaimer_text_element(feature, parent):
-    """Retrieve disclaimer text string from definitions.
-
-    """
+    """Retrieve disclaimer text string from definitions."""
     _ = feature, parent  # NOQA
     text = disclaimer_text['string_format']
     return text
@@ -67,9 +61,7 @@ def disclaimer_text_element(feature, parent):
 @qgsfunction(
     args='auto', group=label_group, usesGeometry=False, referencedColumns=[])
 def information_title_header_element(feature, parent):
-    """Retrieve information title header string from definitions.
-
-    """
+    """Retrieve information title header string from definitions."""
     _ = feature, parent  # NOQA
     header = information_title_header['string_format']
     return header.capitalize()
@@ -78,9 +70,7 @@ def information_title_header_element(feature, parent):
 @qgsfunction(
     args='auto', group=label_group, usesGeometry=False, referencedColumns=[])
 def time_title_header_element(feature, parent):
-    """Retrieve time title header string from definitions.
-
-    """
+    """Retrieve time title header string from definitions."""
     _ = feature, parent  # NOQA
     header = time_title_header['string_format']
     return header.capitalize()
@@ -89,9 +79,7 @@ def time_title_header_element(feature, parent):
 @qgsfunction(
     args='auto', group=label_group, usesGeometry=False, referencedColumns=[])
 def caution_title_header_element(feature, parent):
-    """Retrieve caution title header string from definitions.
-
-    """
+    """Retrieve caution title header string from definitions."""
     _ = feature, parent  # NOQA
     header = caution_title_header['string_format']
     return header.capitalize()
@@ -100,9 +88,7 @@ def caution_title_header_element(feature, parent):
 @qgsfunction(
     args='auto', group=label_group, usesGeometry=False, referencedColumns=[])
 def caution_text_element(feature, parent):
-    """Retrieve caution text string from definitions.
-
-    """
+    """Retrieve caution text string from definitions."""
     _ = feature, parent  # NOQA
     text = caution_text['string_format']
     return text
@@ -111,9 +97,7 @@ def caution_text_element(feature, parent):
 @qgsfunction(
     args='auto', group=label_group, usesGeometry=False, referencedColumns=[])
 def source_title_header_element(feature, parent):
-    """Retrieve source title header string from definitions.
-
-    """
+    """Retrieve source title header string from definitions."""
     _ = feature, parent  # NOQA
     header = source_title_header['string_format']
     return header.capitalize()
@@ -122,9 +106,7 @@ def source_title_header_element(feature, parent):
 @qgsfunction(
     args='auto', group=label_group, usesGeometry=False, referencedColumns=[])
 def analysis_title_header_element(feature, parent):
-    """Retrieve analysis title header string from definitions.
-
-    """
+    """Retrieve analysis title header string from definitions."""
     _ = feature, parent  # NOQA
     header = analysis_title_header['string_format']
     return header.capitalize()
@@ -133,9 +115,7 @@ def analysis_title_header_element(feature, parent):
 @qgsfunction(
     args='auto', group=label_group, usesGeometry=False, referencedColumns=[])
 def version_title_header_element(feature, parent):
-    """Retrieve version title header string from definitions.
-
-    """
+    """Retrieve version title header string from definitions."""
     _ = feature, parent  # NOQA
     header = version_title_header['string_format']
     return header.capitalize()
@@ -144,9 +124,7 @@ def version_title_header_element(feature, parent):
 @qgsfunction(
     args='auto', group=label_group, usesGeometry=False, referencedColumns=[])
 def reference_title_header_element(feature, parent):
-    """Retrieve reference title header string from definitions.
-
-    """
+    """Retrieve reference title header string from definitions."""
     _ = feature, parent  # NOQA
     header = reference_title_header['string_format']
     return header.capitalize()
@@ -155,9 +133,7 @@ def reference_title_header_element(feature, parent):
 @qgsfunction(
     args='auto', group=label_group, usesGeometry=False, referencedColumns=[])
 def reference_text_element(crs, feature, parent):
-    """Retrieve reference text string from definitions.
-
-    """
+    """Retrieve reference text string from definitions."""
     _ = feature, parent  # NOQA
     text = reference_text['string_format'].format(crs=crs)
     return text
@@ -166,9 +142,7 @@ def reference_text_element(crs, feature, parent):
 @qgsfunction(
     args='auto', group=label_group, usesGeometry=False, referencedColumns=[])
 def unknown_source_text_element(feature, parent):
-    """Retrieve reference title header string from definitions.
-
-    """
+    """Retrieve reference title header string from definitions."""
     _ = feature, parent  # NOQA
     header = unknown_source_text['string_format']
     return header.capitalize()
@@ -177,9 +151,7 @@ def unknown_source_text_element(feature, parent):
 @qgsfunction(
     args='auto', group=label_group, usesGeometry=False, referencedColumns=[])
 def aggregation_not_used_text_element(feature, parent):
-    """Retrieve reference title header string from definitions.
-
-    """
+    """Retrieve reference title header string from definitions."""
     _ = feature, parent  # NOQA
     header = aggregation_not_used_text['string_format']
     return header.capitalize()
@@ -188,9 +160,7 @@ def aggregation_not_used_text_element(feature, parent):
 @qgsfunction(
     args='auto', group=image_group, usesGeometry=False, referencedColumns=[])
 def inasafe_logo_white_path(feature, parent):
-    """Retrieve the full path of inasafe-logo-white.svg
-
-    """
+    """Retrieve the full path of inasafe-logo-white.svg."""
     _ = feature, parent  # NOQA
     return inasafe_logo_white['path']
 
@@ -198,8 +168,7 @@ def inasafe_logo_white_path(feature, parent):
 @qgsfunction(
     args='auto', group=image_group, usesGeometry=False, referencedColumns=[])
 def north_arrow_logo_path(feature, parent):
-    """Retrieve the full path of default north arrow logo
-    """
+    """Retrieve the full path of default north arrow logo."""
     _ = feature, parent  # NOQA
     return north_arrow_logo['path']
 
@@ -207,8 +176,6 @@ def north_arrow_logo_path(feature, parent):
 @qgsfunction(
     args='auto', group=image_group, usesGeometry=False, referencedColumns=[])
 def organisation_logo_path(feature, parent):
-    """Retrieve the full path of inasafe-logo-white.svg
-
-    """
+    """Retrieve the full path of inasafe-logo-white.svg."""
     _ = feature, parent  # NOQA
     return organisation_logo['path']
