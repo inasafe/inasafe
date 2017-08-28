@@ -224,6 +224,19 @@ concepts['displaced_people'] = {
         }
     ],
 }
+concepts['displacement_rate'] = {
+    'group': tr('Basic concepts'),
+    'key': 'displacement_rate',
+    'name': tr('Displacement rate'),
+    'description': tr(
+        'The population displacement ratio for a given hazard class.'),
+    'citations': [
+        {
+            'text': '',
+            'link': u''
+        }
+    ],
+}
 concepts['evacuated_people'] = {
     'group': tr('Basic concepts'),
     'key': 'evacuated_people',
@@ -722,19 +735,6 @@ concepts['production_value'] = {
     'description': tr(
         'The price of a crop in a land cover area. The unit is a currency '
         'unit (e.g. IDR, USD, Euro).'),
-    'citations': [
-        {
-            'text': '',
-            'link': u''
-        }
-    ],
-}
-concepts['displacement_rate'] = {
-    'group': tr('Basic concepts'),
-    'key': 'displacement_rate',
-    'name': tr('Displacement rate'),
-    'description': tr(
-        'The population displacement ratio for a given hazard class.'),
     'citations': [
         {
             'text': '',

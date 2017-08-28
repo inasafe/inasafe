@@ -23,10 +23,7 @@ from safe.definitions.post_processors.post_processor_inputs import (
     post_processor_input_types,
     post_processor_input_values)
 from safe.definitions.reports.report_descriptions import all_reports
-from safe.definitions.reports.infographic import (
-    html_frame_elements,
-    image_item_elements
-)
+from safe.definitions.reports.infographic import  html_frame_elements
 from safe.gui.tools.help.batch_help import content as batch_help
 from safe.gui.tools.help.dock_help import content as dock_help
 from safe.gui.tools.help.extent_selector_help import content as extent_help
@@ -721,12 +718,12 @@ def content():
         row.add(m.Cell(post_processor['name']))
         # Input fields
         bullets = m.BulletedList()
-        for key, value in post_processor['input'].iteritems():
+        for key, value in sorted(post_processor['input'].iteritems()):
             bullets.add(key)
         row.add(m.Cell(bullets))
         # Output fields
         bullets = m.BulletedList()
-        for key, value in post_processor['output'].iteritems():
+        for key, value in sorted(post_processor['output'].iteritems()):
             name = value['value']['name']
             formula_type = value['type']['key']
             if formula_type == 'formula':
@@ -1271,7 +1268,7 @@ def definition_to_message(
                     if isinstance(inasafe_class['numeric_default_min'], dict):
                         bullets = m.BulletedList()
                         minima = inasafe_class['numeric_default_min']
-                        for key, value in minima.iteritems():
+                        for key, value in sorted(minima.iteritems()):
                             bullets.add(u'%s : %s' % (key, value))
                         row.add(m.Cell(bullets))
                     else:
@@ -1286,7 +1283,7 @@ def definition_to_message(
                     if isinstance(inasafe_class['numeric_default_max'], dict):
                         bullets = m.BulletedList()
                         maxima = inasafe_class['numeric_default_max']
-                        for key, value in maxima.iteritems():
+                        for key, value in sorted(maxima.iteritems()):
                             bullets.add(u'%s : %s' % (key, value))
                         row.add(m.Cell(bullets))
                     else:
