@@ -803,6 +803,12 @@ def content():
 
     message.add(table)
 
+    message.add(m.Paragraph(tr(
+        'In the sections that follow, we provide more technical information '
+        'about the custom QGIS Expressions and special template elements '
+        'that can be used to customise your templates.'
+    )))
+
     _create_section_header(
         message,
         table_of_contents,

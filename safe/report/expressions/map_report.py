@@ -134,7 +134,7 @@ def reference_title_header_element(feature, parent):
     args='auto', group=label_group, usesGeometry=False, referencedColumns=[])
 def crs_text_element(crs, feature, parent):
     """Retrieve coordinate reference system text string from definitions.
-    
+
     Example usage: crs_text_element(3857).
     """
     _ = feature, parent  # NOQA
