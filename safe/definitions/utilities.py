@@ -472,10 +472,22 @@ def update_template_component(
     :param custom_template_dir: The directory where the custom template stored.
     :type custom_template_dir: basestring
 
+    :param hazard: The hazard definition.
+    :type hazard: dict
+
+    :param exposure: The exposure definition.
+    :type exposure: dict
+
     :returns: Map report component.
     :rtype: dict
     """
     copy_component = deepcopy(component)
+
+    # get the default template component from the original map report component
+    default_component_keys = []
+    for component in copy_component['components']:
+        default_component_keys.append(component['key'])
+
     if not custom_template_dir:
         custom_template_dir = join(
             QgsApplication.qgisSettingsDirPath(), 'inasafe')
@@ -495,11 +507,8 @@ def update_template_component(
 
     # we want to check if there is hazard-exposure specific template available
     # in user's custom template directory
-    hazard_exposure_template_dir = join(
-        custom_template_dir, 'hazard-exposure')
-
-    if exists(hazard_exposure_template_dir) and hazard and exposure:
-        for filename in listdir(hazard_exposure_template_dir):
+    if exists(custom_template_dir) and hazard and exposure:
+        for filename in listdir(custom_template_dir):
 
             file_name, file_format = splitext(filename)
             if file_format[1:] != (
@@ -517,13 +526,21 @@ def update_template_component(
                 map_report_file = '{file_name}.pdf'.format(file_name=file_name)
                 hazard_exposure_component['key'] = file_name
                 hazard_exposure_component['template'] = join(
-                    hazard_exposure_template_dir, filename)
+                    custom_template_dir, filename)
                 hazard_exposure_component['output_path']['template'] = filename
                 hazard_exposure_component['output_path']['map'] = (
                     map_report_file)
 
                 # add this hazard-exposure component to the returned component
                 copy_component['components'].append(hazard_exposure_component)
+
+                # remove the original template component because we want to
+                # override it using this new hazard-exposure template component
+                new_component = [
+                    component for component in copy_component['components']
+                    if component['key'] not in default_component_keys
+                ]
+                copy_component['components'] = new_component
 
     return copy_component
 
