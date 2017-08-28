@@ -7,7 +7,7 @@ __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
-# InaSAFE version
+# InaSAFE version (please synchronize with metadata.txt)
 inasafe_version = '4.2.0'
 # alpha, beta, rc or final
 inasafe_release_status = 'beta'

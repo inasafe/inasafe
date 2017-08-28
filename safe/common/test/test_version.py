@@ -18,9 +18,11 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 
+import os
 import unittest
 import sys
 from safe.common.version import get_version, current_git_hash
+from safe.definitions.versions import inasafe_version, inasafe_release_status
 
 
 class TestVersion(unittest.TestCase):
@@ -64,6 +66,28 @@ class TestVersion(unittest.TestCase):
             self.assertEqual(len(git_hash), 9)
         else:
             self.assertEqual(len(git_hash), 7)
+
+    def test_compare_version(self):
+        """Test comparing version in 2 places.
+
+        Version in safe/definitions/versions.py should be the same with
+        metadata.txt"""
+        # Get version and release status from metadata.txt
+        root_dir = os.path.abspath(os.path.join(
+            os.path.dirname(__file__), '..', '..', '..'))
+        fid = open(os.path.join(root_dir, 'metadata.txt'))
+
+        for line in fid.readlines():
+            if line.startswith('version'):
+                version_metadata = line.strip().split('=')[1]
+
+            if line.startswith('status'):
+                status_metadata = line.strip().split('=')[1]
+
+            fid.close()
+
+        self.assertEqual(version_metadata, inasafe_version)
+        self.assertEqual(status_metadata, inasafe_release_status)
 
 if __name__ == '__main__':
     unittest.main()
