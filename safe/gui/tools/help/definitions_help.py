@@ -22,6 +22,7 @@ from safe.definitions.hazard_exposure_specifications import (
 from safe.definitions.post_processors.post_processor_inputs import (
     post_processor_input_types,
     post_processor_input_values)
+from safe.definitions.reports.report_descriptions import all_reports
 from safe.definitions.reports.infographic import (
     html_frame_elements,
     image_item_elements
@@ -759,15 +760,53 @@ def content():
         tr('Reporting'),
         heading_level=1)
 
+    paragraph = m.Paragraph(
+        m.ImportantText(tr('Note: ')),
+        m.Text(tr(
+            'This section of the help documentation is intended for advanced '
+            'users who want to modify reports which are produced by InaSAFE.'
+        )))
+    message.add(paragraph)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'reporting-overview',
+        tr('Overview'),
+        heading_level=2)
     message.add(m.Paragraph(tr(
-        'This section of the help documentation is intended for advanced '
-        'users who want to modify reports which are produced by InaSAFE.'
+        'Whenever InaSAFE completes an analysis, it will automatically '
+        'generate a number of reports. Some of these reports are based on '
+        'templates that are shipped with InaSAFE, and can be customised or '
+        'over-ridden by creating your own templates. The following '
+        'reports are produced in InaSAFE:'
     )))
+    table = m.Table(style_class='table table-condensed table-striped')
+    row = m.Row()
+    row.add(m.Cell(tr('Name'), header=True))
+    row.add(m.Cell(tr('Customisable?'), header=True))
+    row.add(m.Cell(tr('Example'), header=True))
+    row.add(m.Cell(tr('Description'), header=True))
+    table.add(row)
+
+    for report in all_reports:
+        row = m.Row()
+        row.add(m.Cell(report['name']))
+        if report['customisable']:
+            row.add(m.Cell(tr('Yes')))
+        else:
+            row.add(m.Cell(tr('No')))
+        png_image_path = resources_path(
+            'img', 'screenshots', report['thumbnail'])
+        row.add(m.Image(png_image_path, style_class='text-center'))
+        row.add(m.Cell(report['description']))
+        table.add(row)
+
+    message.add(table)
 
     _create_section_header(
         message,
         table_of_contents,
-        'reporting',
+        'reporting-expressions',
         tr('QGIS Expressions'),
         heading_level=2)
     message.add(m.Paragraph(tr(
@@ -804,7 +843,7 @@ def content():
     _create_section_header(
         message,
         table_of_contents,
-        'reporting',
+        'reporting-composer-elements',
         tr('Composer Elements'),
         heading_level=2)
     message.add(m.Paragraph(tr(
@@ -1017,10 +1056,11 @@ def definition_to_message(
     # This only for EQ
     if 'earthquake_fatality_models' in definition:
         current_function = current_earthquake_model_name()
-        paragraph = m.Paragraph(
+        paragraph = m.Paragraph(tr(
             'The following earthquake fatality models are available in '
             'InaSAFE. Note that you need to set one of these as the '
-            'active model in InaSAFE Options. The currently active model is: ',
+            'active model in InaSAFE Options. The currently active model '
+            'is: '),
             m.ImportantText(current_function)
         )
         message.add(paragraph)

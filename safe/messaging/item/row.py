@@ -19,6 +19,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from message_element import MessageElement
 from exceptions import InvalidMessageItemError
 from cell import Cell
+from image import Image
 
 # FIXME (MB) remove when all to_* methods are implemented
 # pylint: disable=W0223
@@ -87,6 +88,8 @@ class Row(MessageElement):
             self.cells.append(Cell(item, header=header_flag, align=align))
         elif isinstance(item, Cell):
             self.cells.append(item)
+        elif isinstance(item, Image):
+            self.cells.append(Cell(item))
         elif isinstance(item, list):
             for i in item:
                 self.cells.append(Cell(i, header=header_flag, align=align))

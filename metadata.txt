@@ -35,7 +35,7 @@ changelog=
     - Impact Functions : Added support for working with multi-band rasters
     - Impact Functions : Removed separate workflow for Earthquake impact functions
     - Impact Functions : Allow exposure data driven classification
-    - Tools : Improved display of field preview in Keywords wizard
+    - Tools : PR #4379 Show uniquness in the aggregation ID field in keyword wizard
     - Documentation : Wizards now have context sensitive help
     - Code Internals : Command line and 'headless' code moved to their own repos
 
