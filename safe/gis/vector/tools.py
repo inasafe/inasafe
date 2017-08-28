@@ -16,7 +16,6 @@ from qgis.core import (
     QgsFeature,
     QgsField,
     QgsDistanceArea,
-    QgsUnitTypes,
     QgsWKBTypes
 )
 
@@ -342,7 +341,7 @@ class SizeCalculator(object):
             self.output_unit = exposure_definition['size_unit']
 
     def measure(self, geometry):
-        """Measure the lenght or the area of a geometry.
+        """Measure the length or the area of a geometry.
 
         :param geometry: The geometry.
         :type geometry: QgsGeometry
