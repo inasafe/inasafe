@@ -649,8 +649,7 @@ concepts['productivity_rate'] = {
     'name': tr('Productivity Rate'),
     'description': tr(
         'The weight of a crop from land cover can produce per area unit. The '
-        'unit is weight per area unit (e.g. tons/hectare, quintal('
-        '100kg)/hectare).'),
+        'unit is in quintal(100kg)/hectare.'),
     'citations': [
         {
             'text': '',
@@ -663,8 +662,8 @@ concepts['productivity'] = {
     'key': 'productivity',
     'name': tr('Productivity'),
     'description': tr(
-        'The number of crop in weight unit (e.g. quintals, tons) that can be '
-        'produced in a land cover area.'),
+        'The number of crop in quintal(100kg) unit that can be produced in a '
+        'land cover area.'),
     'citations': [
         {
             'text': '',

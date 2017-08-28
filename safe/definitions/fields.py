@@ -2126,7 +2126,7 @@ productivity_rate_field = {
     'absolute': True,
     'description': tr(
         'The rate of productivity of crop land cover for each feature / '
-        'area.'),
+        'area in hundred kilograms per hectare unit.'),
     'help_text': tr(
         '"{name}" is defined as: {description}. In case where land cover data '
         'is available, InaSAFE will calculate the productivity for each '
@@ -2214,7 +2214,7 @@ production_cost_rate_field = {
     'absolute': True,
     'description': tr(
         'The rate of production cost of a crop for each feature in '
-        'Currency/hectare unit.'),
+        'currency per hectare unit.'),
     'help_text': tr(
         '"{name}" is defined as: {description}. In case where land cover data '
         'is available, InaSAFE will calculate the production cost for each '
@@ -2302,7 +2302,7 @@ production_value_rate_field = {
     'absolute': True,
     'description': tr(
         'The rate of production value of a crop for each feature in '
-        'Currency/hectare unit.'),
+        'currency per hectare unit.'),
     'help_text': tr(
         '"{name}" is defined as: {description}. In case where land cover data '
         'is available, InaSAFE will calculate the production value for each '
