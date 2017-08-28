@@ -834,7 +834,7 @@ def content():
     row.add(m.Cell(tr('Name'), header=True))
     row.add(m.Cell(tr('Description'), header=True))
     table.add(row)
-    for expression_name, expression in qgis_expressions.iteritems():
+    for expression_name, expression in sorted(qgis_expressions.iteritems()):
         row = m.Row()
         row.add(m.Cell(expression_name))
         help = expression.helptext()
