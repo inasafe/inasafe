@@ -119,7 +119,7 @@ def minimum_needs_unit(field, feature, parent):
 @qgsfunction(
     args='auto', group=group, usesGeometry=False, referencedColumns=[])
 def infographic_header_element(impact_function_name, feature, parent):
-    """Given an impact function name, it will format it to an infographic header sentence.
+    """Get a formatted infographic header sentence for an impact function.
     """
     _ = feature, parent  # NOQA
     string_format = infographic_header['string_format']

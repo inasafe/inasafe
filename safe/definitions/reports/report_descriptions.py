@@ -78,7 +78,7 @@ landscape_map_report_description = {
     'your home directory, (hazard) by the class of hazard, and (exposure) '
     'by the class of exposure).'),
   # place thumbs in resources/img/screenshots for them to appear in help
-  'thumbnail': 'landscape-map-report-thumbnail.png'
+  'thumbnail': 'lanscape-map-report-thumbnail.png'
 }
 analysis_provenance_report_description = {
   'name': tr('Analysis provenance'),
@@ -102,7 +102,7 @@ action_checklist_report_description = {
     'specific items such as things that relate to displaced '
     'people if the exposure of the analysis is population.'),
   # place thumbs in resources/img/screenshots for them to appear in help
-  'thumbnail': 'action-checklist-report'
+  'thumbnail': 'action-checklist-report.png'
 }
 
 all_reports = [
