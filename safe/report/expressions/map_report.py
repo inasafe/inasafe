@@ -16,9 +16,10 @@ from safe.definitions.reports.map_report import (
     reference_title_header,
     unknown_source_text,
     aggregation_not_used_text,
+    black_inasafe_logo_path,
     white_inasafe_logo_path,
-    north_arrow_path,
-    organisation_logo_path,
+    inasafe_north_arrow_path,
+    inasafe_organisation_logo_path,
     crs_text)
 from safe.utilities.i18n import tr
 
@@ -161,6 +162,12 @@ def aggregation_not_used_text_element(feature, parent):
     header = aggregation_not_used_text['string_format']
     return header.capitalize()
 
+@qgsfunction(
+    args='auto', group=image_group, usesGeometry=False, referencedColumns=[])
+def inasafe_logo_black_path(feature, parent):
+    """Retrieve the full path of inasafe-logo-black.svg."""
+    _ = feature, parent  # NOQA
+    return black_inasafe_logo_path['path']
 
 @qgsfunction(
     args='auto', group=image_group, usesGeometry=False, referencedColumns=[])
@@ -175,12 +182,12 @@ def inasafe_logo_white_path(feature, parent):
 def north_arrow_path(feature, parent):
     """Retrieve the full path of default north arrow logo."""
     _ = feature, parent  # NOQA
-    return north_arrow_path['path']
+    return inasafe_north_arrow_path['path']
 
 
 @qgsfunction(
     args='auto', group=image_group, usesGeometry=False, referencedColumns=[])
 def organisation_logo_path(feature, parent):
-    """Retrieve the full path of inasafe-logo-white.svg."""
+    """Retrieve the full path of used specified organisation logo."""
     _ = feature, parent  # NOQA
-    return organisation_logo_path['path']
+    return inasafe_organisation_logo_path['path']
