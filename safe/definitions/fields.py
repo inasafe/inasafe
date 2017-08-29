@@ -24,7 +24,7 @@ from safe.definitions.default_values import (
     pregnant_ratio_default_value,
     lactating_ratio_default_value
 )
-from safe.definitions.units import unit_quintal
+from safe.definitions.units import unit_hundred_kilograms
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -2200,7 +2200,7 @@ affected_productivity_field = {
     ],
     # Null value can be replaced by default or not
     'replace_null': False,
-    'units': [unit_quintal]
+    'units': [unit_hundred_kilograms]
 }
 
 # Production cost field
