@@ -34,7 +34,7 @@ people_section_notes = {
     'description': tr(
         'If used, the element-id "people-section-notes" in the composer '
         'layout will be replaced by text explaining the different groups '
-        'of people reported on (displaced, exposed etc.).'),
+        'of people reported on (displaced, exposed, etc.).'),
     'component': 'infographic-people-section-notes'
 }
 
@@ -43,9 +43,9 @@ population_chart_legend = {
     'mode': 'text',
     'text': '',
     'description': tr(
-        'Id used, the element-id "population-chart-legend" in the composer '
+        'If used, the element-id "population-chart-legend" in the composer '
         'layout will be replaced by a chart illustrating the number of '
-        'people in different groups (displaced, expose etc.).'),
+        'people in different groups (displaced, exposed, etc.).'),
     'component': 'population-chart-legend'
 }
 
