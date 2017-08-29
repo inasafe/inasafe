@@ -43,7 +43,10 @@ from safe.definitions.constants import (
 )
 from safe.definitions.provenance import provenance_list
 from safe.definitions.reports.infographic import map_overview
-from safe.definitions.utilities import update_template_component, get_name
+from safe.definitions.utilities import (
+    update_template_component,
+    get_name,
+    definition)
 from safe.defaults import supporters_logo_path
 from safe.definitions.reports import (
     final_product_tag,
@@ -1013,12 +1016,24 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # Fetch report for pdfs report
         report_path = os.path.dirname(impact_layer.source())
 
+        # Get the hazard and exposure definition used in current IF
+        hazard = definition(
+            QgsExpressionContextUtils.projectScope().variable(
+                'hazard_keywords__hazard'))
+        exposure = definition(
+            QgsExpressionContextUtils.projectScope().variable(
+                'exposure_keywords__exposure'))
+
         # TODO: temporary hack until Impact Function becomes serializable
         # need to have impact report
         standard_impact_report_metadata = ReportMetadata(
             metadata_dict=standard_impact_report_metadata_pdf)
         standard_map_report_metadata = ReportMetadata(
-            metadata_dict=update_template_component(map_report))
+            metadata_dict=update_template_component(
+                component=map_report,
+                hazard=hazard,
+                exposure=exposure
+            ))
         standard_infographic_report_metadata = ReportMetadata(
             metadata_dict=update_template_component(infographic_report))
 
