@@ -10426,16 +10426,6 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
         <translation>Jika digunakan element-id &quot;map-overview&quot; di tata letak komposer akan diganti dengan gambaran peta dengan sebuah kotak yang menggambarkan area yang diinginkan untuk analisis.</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="34"/>
-        <source>If used, the element-id &quot;people-section-notes&quot; in the composer layout will be replaced by text explaining the different groups of people reported on (displaced, exposed etc.).</source>
-        <translation>Jika digunakan, element-id &quot;people-section-notes&quot; di tata letak komposer akan diganti dengan penjelasan tertulis tentang perbedaan kelompok dari penduduk yang dilaporkan (mengungsi, terpapar, dll.)</translation>
-    </message>
-    <message>
-        <location filename="infographic.py" line="45"/>
-        <source>Id used, the element-id &quot;population-chart-legend&quot; in the composer layout will be replaced by a chart illustrating the number of people in different groups (displaced, expose etc.).</source>
-        <translation>Jika digunakan, element-id &quot;population-chart-legend&quot; di tata letak komposer akan diganti dengan diagram yang menggambarkan jumlah penduduk di perbedaan kelompok (mengungsi, terpapar, dll.)</translation>
-    </message>
-    <message>
         <location filename="infographic.py" line="64"/>
         <source>If used the element-id &quot;infographic-header&quot; in the composer layout will be replaced by the infographic </source>
         <translation>Jika digunakan element-id &quot;infographic-header&quot; di tata letak komposer akan diganti dengan infografis</translation>
@@ -10594,6 +10584,16 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
         <location filename="map_report.py" line="31"/>
         <source>InaSAFE - Label Elements</source>
         <translation>InaSAFE - Elemen Label</translation>
+    </message>
+    <message>
+        <location filename="infographic.py" line="34"/>
+        <source>If used, the element-id &quot;people-section-notes&quot; in the composer layout will be replaced by text explaining the different groups of people reported on (displaced, exposed, etc.).</source>
+        <translation>Jika digunakan, element-id &quot;people-section-notes&quot; di tata letak komposer akan diganti dengan penjelasan tertulis tentang perbedaan kelompok dari penduduk yang dilaporkan (mengungsi, terpapar, dll.)</translation>
+    </message>
+    <message>
+        <location filename="infographic.py" line="45"/>
+        <source>If used, the element-id &quot;population-chart-legend&quot; in the composer layout will be replaced by a chart illustrating the number of people in different groups (displaced, exposed, etc.).</source>
+        <translation>Jika digunakan, element-id &quot;population-chart-legend&quot; di tata letak komposer akan diganti dengan diagram yang menggambarkan jumlah penduduk di perbedaan kelompok (mengungsi, terpapar, dll.)</translation>
     </message>
 </context>
 <context>

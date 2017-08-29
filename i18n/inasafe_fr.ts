@@ -10427,16 +10427,6 @@ Citations:
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="infographic.py" line="34"/>
-        <source>If used, the element-id &quot;people-section-notes&quot; in the composer layout will be replaced by text explaining the different groups of people reported on (displaced, exposed etc.).</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="infographic.py" line="45"/>
-        <source>Id used, the element-id &quot;population-chart-legend&quot; in the composer layout will be replaced by a chart illustrating the number of people in different groups (displaced, expose etc.).</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="infographic.py" line="64"/>
         <source>If used the element-id &quot;infographic-header&quot; in the composer layout will be replaced by the infographic </source>
         <translation type="unfinished"/>
@@ -10594,6 +10584,16 @@ Citations:
     <message>
         <location filename="map_report.py" line="31"/>
         <source>InaSAFE - Label Elements</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="infographic.py" line="34"/>
+        <source>If used, the element-id &quot;people-section-notes&quot; in the composer layout will be replaced by text explaining the different groups of people reported on (displaced, exposed, etc.).</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="infographic.py" line="45"/>
+        <source>If used, the element-id &quot;population-chart-legend&quot; in the composer layout will be replaced by a chart illustrating the number of people in different groups (displaced, exposed, etc.).</source>
         <translation type="unfinished"/>
     </message>
 </context>
