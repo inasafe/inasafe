@@ -34,7 +34,7 @@ from PyQt4.QtGui import (
     QLineEdit,
     QInputDialog)
 
-from safe.report.expressions import infographic
+from safe.report.expressions import infographic, map_report
 from safe.gis import expressions
 from safe.definitions.versions import inasafe_release_status
 from safe.common.exceptions import (
@@ -635,6 +635,9 @@ class Plugin(object):
             if fct[1].__class__.__name__ == 'QgsExpressionFunction'}
         qgis_expressions.update({
             fct[0]: fct[1] for fct in getmembers(infographic)
+            if fct[1].__class__.__name__ == 'QgsExpressionFunction'})
+        qgis_expressions.update({
+            fct[0]: fct[1] for fct in getmembers(map_report)
             if fct[1].__class__.__name__ == 'QgsExpressionFunction'})
         for qgis_expression in qgis_expressions.keys():
             QgsExpression.unregisterFunction(qgis_expression)

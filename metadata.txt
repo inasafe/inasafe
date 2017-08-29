@@ -18,7 +18,7 @@ about=Developed for the Indonesian Government - BNPB, Australian Government - AI
 # If you change version and status here, please also change in safe/definitions/versions.py
 version=4.2.0
 # alpha, beta, rc or final
-status=beta
+status=final
 
 
 # end of mandatory metadata
@@ -27,40 +27,18 @@ status=beta
 
 changelog=
     Version 4.2
-    - Add Wizard help (#4178)
-    - Add support for multi band dataset (#4263)
-    Version 4.1.2
-    - Avoid recomputing analysis extent when we pan/zoom with an aggregation layer
-    - Fix issue when using a continuous hazard dataset (#4289)
-    - Fix for cases where a pie chart slice calculation has a divide by zero error (#4289)
-    - Fix issue where Keywords Wizard is not enabled if old keywords exist (#4284)
-    - Fix python exception when using InaSAFE in French
-    Version 4.1.1
-    - Fix failed unit test.
-    - Remove unused method in KeywordIO.
-    - Fix #3751. Set to use default db path from definition.
-    - Rename metadata for output layer. Add other output explicitly to metadata mapping.
-    - Remove unused code in metadata utilities.
-    - Update translations
-    - Fix #3857. Ignore filter in path.
-    - Fix #4248. Expression.
-    - Update for Badan Geologi landcover classification
-    - Update French Translations
-    - Fix some strings in Python
-    - Add pregnant and lactating displaced to the count fields (#4244)
-    Version 4.1.0
-    - Reporting : Improved action and checklist reporting
-    - Reporting : Quick save as pdf
-    - Reporting : Detailed demographic breakdowns
-    - Reporting : Inclusion of concept definitions under tables
-    - Reporting : New provenance report
-    - Impact Functions : Standardised Tropical Cyclone wind speed averaging time periods
-    - Impact Functions : Improvements to earthquake options panel
-    - Impact Functions : Options for demographic breakdowns
-    - Impact Functions : Fatalities calculations in earthquake on vector population
-    - Tools : Help system improvements
-    - Documentation : Developer guide for adding a new hazard
-    - Issues : Bug fixes and improvements
+    - Reporting : Expose provenance; as project variables for easy reporting
+    - Reporting : Re-implemented infographics as composer templates
+    - Reporting : Enable atlas generation on reporting
+    - Reporting : Added many custom InaSAFE specific QGIS Expressions to make reporting easier.
+    - Reporting : Fixed bug where maps in report were blank when using OTFP
+    - Impact Functions : Support for Land Cover economic impact calculations
+    - Impact Functions : Added support for working with multi-band rasters
+    - Impact Functions : Removed separate workflow for Earthquake impact functions
+    - Impact Functions : Allow exposure data driven classification
+    - Tools : Improved display of field preview in Keywords wizard
+    - Documentation : Wizards now have context sensitive help
+    - Code Internals : Command line and 'headless' code moved to their own repos
 
 # tags are comma separated with spaces allowed
 tags=contingency planning, impact assessments, disaster scenarios, natural hazards,risk

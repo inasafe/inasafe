@@ -66,11 +66,16 @@ setup(
     url='http://inasafe.org/',
     description=('Realistic natural hazard impact scenarios for better '
                  'planning, preparedness and response activities.'),
+    install_requires=[
+        "inasafe-parameters==1.0.1",
+        "PyDispatcher==2.0.5",
+        "raven==6.1.0",  # This Raven doesn't use simplejson anymore
+    ],
     classifiers=[
-        'Development Status :: 5 - Stable',
+        'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'Intended Audience :: Science/Research',
-        'License :: OSI Approved :: GPL V3 License',
+        'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Topic :: Scientific/Engineering :: GIS',
