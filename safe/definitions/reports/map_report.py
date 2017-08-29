@@ -2,8 +2,11 @@
 
 """Definitions relating to map report template elements."""
 
-from safe.defaults import white_inasafe_logo_path, default_north_arrow_path, \
-    supporters_logo_path
+from safe.defaults import (
+    black_inasafe_logo_path,
+    white_inasafe_logo_path,
+    default_north_arrow_path,
+    supporters_logo_path)
 from safe.definitions.messages import disclaimer
 from safe.utilities.i18n import tr
 
@@ -108,25 +111,32 @@ text_variable_elements = [
 
 """Image elements"""
 
-
 white_inasafe_logo_path = {
     'id': 'inasafe-logo-white',
     'path': white_inasafe_logo_path()
 }
 
-north_arrow_path = {
+black_inasafe_logo_path = {
+    'id': 'inasafe-logo-black',
+    'path': black_inasafe_logo_path()
+}
+
+inasafe_north_arrow_path = {
     'id': 'north-arrow-logo',
     'path': default_north_arrow_path()
 }
 
-organisation_logo_path = {
+inasafe_organisation_logo_path = {
     'id': 'organisation-logo',
+    # We default to the supporters logo, but an org can change to their logo
+    # in options ...
     'path': supporters_logo_path()
 }
 
 image_variable_elements = [
+    black_inasafe_logo_path,
     white_inasafe_logo_path,
-    north_arrow_path,
-    organisation_logo_path]
+    inasafe_north_arrow_path,
+    inasafe_organisation_logo_path]
 
 all_variable_elements = text_variable_elements + image_variable_elements
