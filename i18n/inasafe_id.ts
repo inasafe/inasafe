@@ -677,7 +677,7 @@
         <translation>kategori agregasi</translation>
     </message>
     <message>
-        <location filename="units.py" line="199"/>
+        <location filename="units.py" line="193"/>
         <source>Area</source>
         <translation>Area</translation>
     </message>
@@ -797,12 +797,12 @@
         <translation>meter</translation>
     </message>
     <message>
-        <location filename="units.py" line="247"/>
+        <location filename="units.py" line="241"/>
         <source>MMI</source>
         <translation>MMI</translation>
     </message>
     <message>
-        <location filename="units.py" line="248"/>
+        <location filename="units.py" line="242"/>
         <source>The &lt;b&gt;Modified Mercalli Intensity (MMI)&lt;/b&gt; scale describes the intensity of ground shaking from a earthquake based on the effects observed by people at the surface.</source>
         <translation>Skala &lt;b&gt;Modified Mercalli Intensity (MMI)&lt;/b&gt; mendeskripsikan intensitas getaran tanah dari sebuah kejadian gempa bumi berdasarkan efek yang diamati oleh orang-orang di permukaan. </translation>
     </message>
@@ -1240,42 +1240,42 @@
         <translation>&lt;b&gt;Meter&lt;/b&gt; merupakan sebuah unit besaran metrik. Ada 100 sentimeter dalam 1 meter.</translation>
     </message>
     <message>
-        <location filename="units.py" line="212"/>
+        <location filename="units.py" line="206"/>
         <source>Millimetres</source>
         <translation>Milimeter</translation>
     </message>
     <message>
-        <location filename="units.py" line="213"/>
+        <location filename="units.py" line="207"/>
         <source>millimetres</source>
         <translation>milimeter</translation>
     </message>
     <message>
-        <location filename="units.py" line="215"/>
+        <location filename="units.py" line="209"/>
         <source>mm</source>
         <translation>m</translation>
     </message>
     <message>
-        <location filename="units.py" line="216"/>
+        <location filename="units.py" line="210"/>
         <source>&lt;b&gt;Millimetres&lt;/b&gt; are a metric unit of measure. There are 1000 millimetres in 1 metre.</source>
         <translation>&lt;b&gt;Milimeter&lt;/b&gt; adalah satuan besaran metrik. Ada 1000 milimeter dalam 1 meter.</translation>
     </message>
     <message>
-        <location filename="units.py" line="263"/>
+        <location filename="units.py" line="257"/>
         <source>Percentage</source>
         <translation>Persentase</translation>
     </message>
     <message>
-        <location filename="units.py" line="262"/>
+        <location filename="units.py" line="256"/>
         <source>percentages</source>
         <translation>persentase</translation>
     </message>
     <message>
-        <location filename="units.py" line="264"/>
+        <location filename="units.py" line="258"/>
         <source>%%</source>
         <translation>%%</translation>
     </message>
     <message>
-        <location filename="units.py" line="265"/>
+        <location filename="units.py" line="259"/>
         <source>Percentage values ranges from 0 to 100. It represents a ratio of hundred.</source>
         <translation>Nilai persentase berkisar antara 0 dan 100. Nilai ini mewakili nisbah dari 100.</translation>
     </message>
@@ -1315,17 +1315,17 @@
         <translation>Kelas-kelas tsunami</translation>
     </message>
     <message>
-        <location filename="units.py" line="279"/>
+        <location filename="units.py" line="273"/>
         <source>Count</source>
         <translation>Jumlah</translation>
     </message>
     <message>
-        <location filename="units.py" line="300"/>
+        <location filename="units.py" line="294"/>
         <source>Density</source>
         <translation>Kepadatan</translation>
     </message>
     <message>
-        <location filename="units.py" line="317"/>
+        <location filename="units.py" line="311"/>
         <source>Exposure unit defines the unit for the exposure, for example people can either be measured as count or density (count per area.</source>
         <translation>Satuan paparan menentukan satuan dari paparannya, sebagai contoh, orang dapat diukur sebagai jumlah ataupun (kepadatan per wilayah).</translation>
     </message>
@@ -1527,17 +1527,17 @@
         <translation>Waktu</translation>
     </message>
     <message>
-        <location filename="map_report.py" line="46"/>
+        <location filename="map_report.py" line="49"/>
         <source>Note</source>
         <translation>Catatan</translation>
     </message>
     <message>
-        <location filename="map_report.py" line="51"/>
+        <location filename="map_report.py" line="54"/>
         <source>This assessment is a guide - we strongly recommend that you ground truth the results shown here before deploying resources and / or personnel.</source>
         <translation>Penaksiran ini hanya bersifat panduan - kami sangat menyarankan Anda untuk menyelidiki kebenaran hasil yang ditampilkan di sini sebelum mengirimkan sumber daya dan atau personil.</translation>
     </message>
     <message>
-        <location filename="map_report.py" line="21"/>
+        <location filename="map_report.py" line="24"/>
         <source>Legend</source>
         <translation>Legenda</translation>
     </message>
@@ -3027,22 +3027,22 @@
         <translation>&lt;b&gt;Tempat&lt;/b&gt; digunakan untuk menunjukkan bahwa lokasi tertentu diketahui dari namanya.</translation>
     </message>
     <message>
-        <location filename="units.py" line="228"/>
+        <location filename="units.py" line="222"/>
         <source>Centimetres</source>
         <translation>Sentimeter</translation>
     </message>
     <message>
-        <location filename="units.py" line="229"/>
+        <location filename="units.py" line="223"/>
         <source>centimetres</source>
         <translation>sentimeter</translation>
     </message>
     <message>
-        <location filename="units.py" line="231"/>
+        <location filename="units.py" line="225"/>
         <source>cm</source>
         <translation>cm</translation>
     </message>
     <message>
-        <location filename="units.py" line="232"/>
+        <location filename="units.py" line="226"/>
         <source>&lt;b&gt;Centimetres&lt;/b&gt; are a metric unit of measure. There are 100 centimetres in 1 metre.</source>
         <translation>&lt;b&gt;Centimeter&lt;/b&gt; adalah satuan besaran metrik. Ada 100 sentimeter dalam 1 meter.</translation>
     </message>
@@ -3052,12 +3052,12 @@
         <translation>Tiga kelas yang didukung untuk data ancaman vektor gunung berapi: &lt;b&gt;rendah&lt;/b&gt;, &lt;b&gt;menengah&lt;/b&gt;, atau &lt;b&gt;tinggi&lt;/b&gt;.</translation>
     </message>
     <message>
-        <location filename="units.py" line="281"/>
+        <location filename="units.py" line="275"/>
         <source>Number of people (or any other exposure element) per pixel, building or area. &lt;p&gt;In a raster file, a pixel would have a value assigned to it representing the number (or count) of people in that pixel.&lt;/p&gt; &lt;p&gt;In a vector file, a value would be assigned to an object (e.g. a building or area) representing the number of people in that object.&lt;/p&gt; </source>
         <translation>Jumlah penduduk (atau unsur keterpaparan lainnya) per pixel, bangunan atau daerah. &lt;p&gt;Pada berkas raster, sebuah pixel mungkin memiliki nilai yang mewakili angka (atau jumlah) penduduk pada pixel tersebut.&lt;/p&gt; &lt;p&gt;Pada berkas vektor, sebuah nilai akan dipasangkan untuk tiap obyek (contohnya, bangunan atau daerah) yang mewakili jumlah penduduk pada obyek tersebut.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="units.py" line="302"/>
+        <location filename="units.py" line="296"/>
         <source>Number of people (or any other exposure element) per unit of area. &lt;p&gt; e.g. 35 people per km&lt;sup&gt;2&lt;/sup&gt; &lt;/p&gt;</source>
         <translation>Jumlah penduduk (atau unsur keterpaparan lainnya) per satuan daerah. &lt;p&gt;Contohnya, 35 penduduk per km&lt;sup&gt;2&lt;/sup&gt; &lt;/p&gt;</translation>
     </message>
@@ -3903,7 +3903,7 @@
         <translation>Sebuah pengenal unik untuk setiap fitur analisis.</translation>
     </message>
     <message>
-        <location filename="map_report.py" line="65"/>
+        <location filename="map_report.py" line="68"/>
         <source>Analysis Name</source>
         <translation>Nama Analisis</translation>
     </message>
@@ -4533,7 +4533,7 @@
         <translation>&lt;b&gt;Knot&lt;/b&gt; adalah satuan kecepatan, mengekspresikan jumlah mil laut yang tercakup dalam satu jam.</translation>
     </message>
     <message>
-        <location filename="units.py" line="437"/>
+        <location filename="units.py" line="431"/>
         <source>#</source>
         <translation>#</translation>
     </message>
@@ -4948,17 +4948,17 @@
         <translation>Fungsi dampak tidak akan mampu dijalankan karena dari masukannya.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1195"/>
+        <location filename="dock.py" line="1210"/>
         <source>The impact function could not run because of the inputs.</source>
         <translation>Fungsi dampak tidak dapat dijalankan karena masukannya.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1202"/>
+        <location filename="dock.py" line="1217"/>
         <source>The impact function could not run because of a bug.</source>
         <translation>Fungsi dampak tidak dapat dijalankan karena adanya kesalahan.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1208"/>
+        <location filename="dock.py" line="1223"/>
         <source>The impact function could run without errors.</source>
         <translation>Fungsi dampak dapat dijalankan tanpa kesalahan.</translation>
     </message>
@@ -5054,12 +5054,12 @@
         <translation>Kustom</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1178"/>
+        <location filename="dock.py" line="1193"/>
         <source>The impact function should not have been ready.</source>
         <translation>Fungsi dampak tidak seharusnya siap.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1265"/>
+        <location filename="dock.py" line="1280"/>
         <source>The impact report could not be generated.</source>
         <translation>Laporan terdampak tidak dapat dibuat.</translation>
     </message>
@@ -5359,12 +5359,12 @@
         <translation>Area Ancaman</translation>
     </message>
     <message>
-        <location filename="map_report.py" line="85"/>
+        <location filename="map_report.py" line="88"/>
         <source>Unknown</source>
         <translation>Tidak diketahui</translation>
     </message>
     <message>
-        <location filename="map_report.py" line="90"/>
+        <location filename="map_report.py" line="93"/>
         <source>Not used</source>
         <translation>Tidak digunakan</translation>
     </message>
@@ -5374,7 +5374,7 @@
         <translation>Koordinat Geografis - {crs}</translation>
     </message>
     <message>
-        <location filename="map_report.py" line="60"/>
+        <location filename="map_report.py" line="63"/>
         <source>Data Source</source>
         <translation>Sumber Data</translation>
     </message>
@@ -5684,7 +5684,7 @@
         <translation>{name} [{unit_abbreviation}]</translation>
     </message>
     <message>
-        <location filename="map_report.py" line="70"/>
+        <location filename="map_report.py" line="73"/>
         <source>Software</source>
         <translation>Perangkat lunak</translation>
     </message>
@@ -5694,27 +5694,27 @@
         <translation>InaSAFE {version}</translation>
     </message>
     <message>
-        <location filename="map_report.py" line="75"/>
+        <location filename="map_report.py" line="78"/>
         <source>Reference</source>
         <translation>Referensi</translation>
     </message>
     <message>
-        <location filename="units.py" line="197"/>
+        <location filename="units.py" line="191"/>
         <source>Square Metres</source>
         <translation>Meter Persegi</translation>
     </message>
     <message>
-        <location filename="units.py" line="198"/>
+        <location filename="units.py" line="192"/>
         <source>square metres</source>
         <translation>meter persegi</translation>
     </message>
     <message>
-        <location filename="units.py" line="200"/>
+        <location filename="units.py" line="194"/>
         <source>mÂ²</source>
         <translation>mÂ²</translation>
     </message>
     <message>
-        <location filename="units.py" line="201"/>
+        <location filename="units.py" line="195"/>
         <source>&lt;b&gt;Square Metres&lt;/b&gt; are a metric unit of measure.</source>
         <translation>&lt;b&gt;Meter Persegi&lt;/b&gt; adalah ukuran dari satuan meter.</translation>
     </message>
@@ -5864,7 +5864,7 @@
         <translation>Anda telah memilih &lt;b&gt;%s %s&lt;/b&gt;. Silahkan pilih klasifikasi ancaman untuk setiap jenis keterpaparan. Jika Anda ingin mengubah ambang batas, Anda dapat menekan tombol ubah di dekatnya dan Anda dapat mengubah ambang batas di panel kanan. Jangan lupa menyimpan ambang batas sebelum melanjutkan ke langkah selanjutnya.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1386"/>
+        <location filename="dock.py" line="1401"/>
         <source>The requested extent is not overlapping your layers.</source>
         <translation>Cakupan yang diminta tidak bertumpang tindih dengan lapisan anda.</translation>
     </message>
@@ -7004,12 +7004,12 @@
         <translation>InaSAFE akan mengkombinasikan kedua lapisan ini ke model matematikal. Hasil model ini akan menampilkan efek dari ancaman pada infrastruktur atau penduduk terpapar. Plugin bergantung pada kata kunci metadata sederhana berasosiasi dengan setiap lapisan untuk menentukan jenis informasi yang mewakili lapisan. Anda dapat menentukan kata kunci tersebut dengan memilih lapisan dan kemudian mengklik ikon Kata kunci Wizard InaSAFE pada toolbar:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="207"/>
+        <location filename="dock.py" line="210"/>
         <source>will be affected? Summarise the results by</source>
         <translation>akankah terdampak? Simpulkan hasil dengan</translation>
     </message>
     <message>
-        <location filename="dock.py" line="209"/>
+        <location filename="dock.py" line="212"/>
         <source>will be affected? Summarise the results by selected features in</source>
         <translation>yang akan terdampak? Simpulkan hasil berdasarkan fitur terpilih di</translation>
     </message>
@@ -7239,7 +7239,7 @@
         <translation>Tindakan untuk keterpaparan :  {exposure_name}</translation>
     </message>
     <message>
-        <location filename="dock.py" line="930"/>
+        <location filename="dock.py" line="933"/>
         <source>No Version</source>
         <translation>Tidak Ada Versi</translation>
     </message>
@@ -9037,24 +9037,9 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
         <translation>Postprosesor untuk menghitung produktivitas untuk setiap fitur</translation>
     </message>
     <message>
-        <location filename="units.py" line="179"/>
-        <source>Quintal</source>
-        <translation>Kuintal</translation>
-    </message>
-    <message>
-        <location filename="units.py" line="181"/>
-        <source>quintals</source>
-        <translation>kuintal</translation>
-    </message>
-    <message>
         <location filename="units.py" line="182"/>
         <source>Weight</source>
         <translation>Berat</translation>
-    </message>
-    <message>
-        <location filename="units.py" line="184"/>
-        <source>&lt;b&gt;Quintal&lt;/b&gt; is a unit of weight equal to 100 kilograms (about 220 pounds)</source>
-        <translation>&lt;b&gt;Kuintal&lt;/b&gt; adalah satuan berat yang setara dengan 100 kilogram (sekitar 220 pon)</translation>
     </message>
     <message>
         <location filename="step_fc00_functions1.py" line="177"/>
@@ -10151,72 +10136,72 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
         <translation>Barang tambahan yang perlu disediakan {frequency}</translation>
     </message>
     <message>
-        <location filename="units.py" line="335"/>
+        <location filename="units.py" line="329"/>
         <source>One</source>
         <translation>Satu</translation>
     </message>
     <message>
-        <location filename="units.py" line="336"/>
+        <location filename="units.py" line="330"/>
         <source>Ones</source>
         <translation>Satu</translation>
     </message>
     <message>
-        <location filename="units.py" line="352"/>
+        <location filename="units.py" line="346"/>
         <source>Ten</source>
         <translation>Puluh</translation>
     </message>
     <message>
-        <location filename="units.py" line="353"/>
+        <location filename="units.py" line="347"/>
         <source>Tens</source>
         <translation>Puluh</translation>
     </message>
     <message>
-        <location filename="units.py" line="369"/>
+        <location filename="units.py" line="363"/>
         <source>Hundred</source>
         <translation>Ratus</translation>
     </message>
     <message>
-        <location filename="units.py" line="370"/>
+        <location filename="units.py" line="364"/>
         <source>Hundreds</source>
         <translation>Ratus</translation>
     </message>
     <message>
-        <location filename="units.py" line="387"/>
+        <location filename="units.py" line="381"/>
         <source>Thousand</source>
         <translation>Ribu</translation>
     </message>
     <message>
-        <location filename="units.py" line="388"/>
+        <location filename="units.py" line="382"/>
         <source>Thousands</source>
         <translation>Ribu</translation>
     </message>
     <message>
-        <location filename="units.py" line="403"/>
+        <location filename="units.py" line="397"/>
         <source>Million</source>
         <translation>Juta</translation>
     </message>
     <message>
-        <location filename="units.py" line="404"/>
+        <location filename="units.py" line="398"/>
         <source>Millions</source>
         <translation>Juta</translation>
     </message>
     <message>
-        <location filename="units.py" line="419"/>
+        <location filename="units.py" line="413"/>
         <source>Billion</source>
         <translation>Miliar</translation>
     </message>
     <message>
-        <location filename="units.py" line="420"/>
+        <location filename="units.py" line="414"/>
         <source>Billions</source>
         <translation>Miliar</translation>
     </message>
     <message>
-        <location filename="units.py" line="435"/>
+        <location filename="units.py" line="429"/>
         <source>Trillion</source>
         <translation>Triliun</translation>
     </message>
     <message>
-        <location filename="units.py" line="436"/>
+        <location filename="units.py" line="430"/>
         <source>Trillions</source>
         <translation>Triliun</translation>
     </message>
@@ -10431,12 +10416,12 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
         <translation>Jika digunakan element-id &quot;infographic-header&quot; di tata letak komposer akan diganti dengan infografis</translation>
     </message>
     <message>
-        <location filename="map_report.py" line="36"/>
+        <location filename="map_report.py" line="39"/>
         <source>Analysis Information</source>
         <translation>Informasi Analisis</translation>
     </message>
     <message>
-        <location filename="map_report.py" line="80"/>
+        <location filename="map_report.py" line="83"/>
         <source>Coordinate Reference System - {crs}</source>
         <translation>Sistem Referensi Koordinat - {crs}</translation>
     </message>
@@ -10576,12 +10561,12 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
         <translation>InaSAFE akan menggunakan mata uang terpilih untuk analisis.</translation>
     </message>
     <message>
-        <location filename="map_report.py" line="30"/>
+        <location filename="map_report.py" line="31"/>
         <source>InaSAFE - Image Elements</source>
         <translation>InaSAFE - Elemen Gambar</translation>
     </message>
     <message>
-        <location filename="map_report.py" line="31"/>
+        <location filename="map_report.py" line="32"/>
         <source>InaSAFE - Label Elements</source>
         <translation>InaSAFE - Elemen Label</translation>
     </message>
@@ -10594,6 +10579,21 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
         <location filename="infographic.py" line="45"/>
         <source>If used, the element-id &quot;population-chart-legend&quot; in the composer layout will be replaced by a chart illustrating the number of people in different groups (displaced, exposed, etc.).</source>
         <translation>Jika digunakan, element-id &quot;population-chart-legend&quot; di tata letak komposer akan diganti dengan diagram yang menggambarkan jumlah penduduk di perbedaan kelompok (mengungsi, terpapar, dll.)</translation>
+    </message>
+    <message>
+        <location filename="units.py" line="179"/>
+        <source>Hundreds Kilogram</source>
+        <translation>Kuintal</translation>
+    </message>
+    <message>
+        <location filename="units.py" line="181"/>
+        <source>hundreds kilograms</source>
+        <translation>kuintal</translation>
+    </message>
+    <message>
+        <location filename="units.py" line="184"/>
+        <source>&lt;b&gt;A hundred kilograms&lt;/b&gt; is a unit of weight equal to 100 kilograms.</source>
+        <translation>&lt;b&gt;Kuintal&lt;/b&gt; adalah satuan berat yang setara dengan 100 kilogram.</translation>
     </message>
 </context>
 <context>
@@ -10925,97 +10925,97 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>Dock</name>
     <message>
-        <location filename="dock.py" line="399"/>
+        <location filename="dock.py" line="402"/>
         <source>InaSAFE %s</source>
         <translation>InaSAFE %s</translation>
     </message>
     <message>
-        <location filename="dock.py" line="389"/>
+        <location filename="dock.py" line="392"/>
         <source>The file for organization logo in %s doesn&apos;t exists. Please check in Plugins -&gt; InaSAFE -&gt; Options that your paths are still correct and update them if needed.</source>
         <translation>File untuk logo organisasi di %s tidak ada. Mohon cek di Plugins -&gt; InaSAFE -&gt; Options (Pilihan) bahwa lokasi file sudah benar dan diperbarui jika diperlukan.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="399"/>
+        <location filename="dock.py" line="402"/>
         <source>The file for organization logo has zero height. Please provide valid file for organization logo.</source>
         <translation>File untuk logo organisasi memiliki tinggi nol. Mohon berikan file yang valid untuk logo organisasi.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="486"/>
+        <location filename="dock.py" line="489"/>
         <source>Error while saving</source>
         <translation>Kesalahan ketika menyimpan</translation>
     </message>
     <message>
-        <location filename="dock.py" line="480"/>
+        <location filename="dock.py" line="483"/>
         <source>The destination location must be writable.</source>
         <translation>Lokasi tujuan harus dapat ditulis.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="486"/>
+        <location filename="dock.py" line="489"/>
         <source>Something went wrong.</source>
         <translation>Telah terjadi suatu kesalahan.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="690"/>
+        <location filename="dock.py" line="693"/>
         <source>Entire area</source>
         <translation>Area keseluruhan</translation>
     </message>
     <message>
-        <location filename="dock.py" line="789"/>
+        <location filename="dock.py" line="792"/>
         <source>Analysis status</source>
         <translation>Status analisis</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1005"/>
+        <location filename="dock.py" line="1008"/>
         <source>InaSAFE</source>
         <translation>InaSAFE</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1005"/>
+        <location filename="dock.py" line="1008"/>
         <source>Please select a valid impact layer before trying to print.</source>
         <translation>Silakan pilih layer dampak yang valid sebelum mencoba untuk mencetaknya.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1075"/>
+        <location filename="dock.py" line="1090"/>
         <source>Map Creator</source>
         <translation>Pembuat Peta</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1075"/>
+        <location filename="dock.py" line="1090"/>
         <source>Your PDF was created....opening using the default PDF viewer on your system.</source>
         <translation>PDF Anda telah selesai dibuat....buka dengan menggunakan pembaca berkas PDF pada sistem komputer Anda.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1075"/>
+        <location filename="dock.py" line="1090"/>
         <source>The generated pdfs were saved as:</source>
         <translation>Berkas PDF Anda disimpan di:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1087"/>
+        <location filename="dock.py" line="1102"/>
         <source>The generated htmls were saved as:</source>
         <translation>Berkas HTML Anda disimpan di:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1093"/>
+        <location filename="dock.py" line="1108"/>
         <source>The generated qpts were saved as:</source>
         <translation>Berkas QPT Anda disimpan di:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1354"/>
+        <location filename="dock.py" line="1369"/>
         <source>The hazard layer, exposure layer and your defined analysis area extents all overlap. Press the run button below to continue with the analysis.</source>
         <translation>Lapisan ancaman, paparan dan wilayah luasan analisis yang Anda tetapkan telah tumpang tindih. Tekan tombol jalankan di bawah untuk melanjutkan analisis.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1359"/>
+        <location filename="dock.py" line="1374"/>
         <source>Analysis environment ready</source>
         <translation>Lingkungan analisis telah siap</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1359"/>
+        <location filename="dock.py" line="1374"/>
         <source>More info ...</source>
         <translation>Info lebih lanjut ...</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1397"/>
+        <location filename="dock.py" line="1412"/>
         <source>No overlapping extents</source>
         <translation>Tidak ada luasan perpotongan</translation>
     </message>
