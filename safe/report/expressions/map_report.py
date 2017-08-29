@@ -170,6 +170,7 @@ def inasafe_logo_black_path(feature, parent):
     _ = feature, parent  # NOQA
     return black_inasafe_logo_path['path']
 
+
 @qgsfunction(
     args='auto', group=image_group, usesGeometry=False, referencedColumns=[])
 def inasafe_logo_white_path(feature, parent):
