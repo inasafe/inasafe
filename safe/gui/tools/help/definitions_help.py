@@ -23,7 +23,7 @@ from safe.definitions.post_processors.post_processor_inputs import (
     post_processor_input_types,
     post_processor_input_values)
 from safe.definitions.reports.report_descriptions import all_reports
-from safe.definitions.reports.infographic import  html_frame_elements
+from safe.definitions.reports.infographic import html_frame_elements
 from safe.gui.tools.help.batch_help import content as batch_help
 from safe.gui.tools.help.dock_help import content as dock_help
 from safe.gui.tools.help.extent_selector_help import content as extent_help
