@@ -162,6 +162,7 @@ def aggregation_not_used_text_element(feature, parent):
     header = aggregation_not_used_text['string_format']
     return header.capitalize()
 
+
 @qgsfunction(
     args='auto', group=image_group, usesGeometry=False, referencedColumns=[])
 def inasafe_logo_black_path(feature, parent):
