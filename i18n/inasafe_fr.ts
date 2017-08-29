@@ -677,7 +677,7 @@
         <translation>agrégation par catégorie</translation>
     </message>
     <message>
-        <location filename="units.py" line="199"/>
+        <location filename="units.py" line="193"/>
         <source>Area</source>
         <translation>Surface</translation>
     </message>
@@ -797,12 +797,12 @@
         <translation>mètres</translation>
     </message>
     <message>
-        <location filename="units.py" line="247"/>
+        <location filename="units.py" line="241"/>
         <source>MMI</source>
         <translation>MMI</translation>
     </message>
     <message>
-        <location filename="units.py" line="248"/>
+        <location filename="units.py" line="242"/>
         <source>The &lt;b&gt;Modified Mercalli Intensity (MMI)&lt;/b&gt; scale describes the intensity of ground shaking from a earthquake based on the effects observed by people at the surface.</source>
         <translation>L&apos;échelle de &lt;b&gt;Mercalli modifiée (MMI)&lt;/b&gt; décrit l&apos;intensité d&apos;un séisme, qui se fonde sur l&apos;observation des effets et des conséquences du séisme en un lieu donné.</translation>
     </message>
@@ -1240,42 +1240,42 @@
         <translation>&lt;b&gt;Le mètre&lt;/b&gt; est une unité de mesure métrique. Il y a 100 centimètres dans 1 mètre.</translation>
     </message>
     <message>
-        <location filename="units.py" line="212"/>
+        <location filename="units.py" line="206"/>
         <source>Millimetres</source>
         <translation>Millimètres</translation>
     </message>
     <message>
-        <location filename="units.py" line="213"/>
+        <location filename="units.py" line="207"/>
         <source>millimetres</source>
         <translation>millimètres</translation>
     </message>
     <message>
-        <location filename="units.py" line="215"/>
+        <location filename="units.py" line="209"/>
         <source>mm</source>
         <translation>mm</translation>
     </message>
     <message>
-        <location filename="units.py" line="216"/>
+        <location filename="units.py" line="210"/>
         <source>&lt;b&gt;Millimetres&lt;/b&gt; are a metric unit of measure. There are 1000 millimetres in 1 metre.</source>
         <translation>&lt;b&gt;Le millimètres&lt;/b&gt; est une unité de mesure métrique. Il y a 1000 millimètres dans 1 mètre.</translation>
     </message>
     <message>
-        <location filename="units.py" line="263"/>
+        <location filename="units.py" line="257"/>
         <source>Percentage</source>
         <translation>Pourcentage</translation>
     </message>
     <message>
-        <location filename="units.py" line="262"/>
+        <location filename="units.py" line="256"/>
         <source>percentages</source>
         <translation>pourcentages</translation>
     </message>
     <message>
-        <location filename="units.py" line="264"/>
+        <location filename="units.py" line="258"/>
         <source>%%</source>
         <translation>%%</translation>
     </message>
     <message>
-        <location filename="units.py" line="265"/>
+        <location filename="units.py" line="259"/>
         <source>Percentage values ranges from 0 to 100. It represents a ratio of hundred.</source>
         <translation>Les valeurs des pourcentages varient de 0 à 100. Elle représentent une proportion sur un total de 100. </translation>
     </message>
@@ -1315,17 +1315,17 @@
         <translation>Classes tsunami</translation>
     </message>
     <message>
-        <location filename="units.py" line="279"/>
+        <location filename="units.py" line="273"/>
         <source>Count</source>
         <translation>Total</translation>
     </message>
     <message>
-        <location filename="units.py" line="300"/>
+        <location filename="units.py" line="294"/>
         <source>Density</source>
         <translation>Densité</translation>
     </message>
     <message>
-        <location filename="units.py" line="317"/>
+        <location filename="units.py" line="311"/>
         <source>Exposure unit defines the unit for the exposure, for example people can either be measured as count or density (count per area.</source>
         <translation>L&apos;unité de l&apos;enjeu définit l&apos;unité pour l&apos;enjeu, par exemple la population peut-être mesurée en unité ou en densité.</translation>
     </message>
@@ -1528,17 +1528,17 @@ Vous devez tout d&apos;abord définir la catégorie à laquelle appartient votre
         <translation>Heure</translation>
     </message>
     <message>
-        <location filename="map_report.py" line="46"/>
+        <location filename="map_report.py" line="49"/>
         <source>Note</source>
         <translation>Note</translation>
     </message>
     <message>
-        <location filename="map_report.py" line="51"/>
+        <location filename="map_report.py" line="54"/>
         <source>This assessment is a guide - we strongly recommend that you ground truth the results shown here before deploying resources and / or personnel.</source>
         <translation>Cette évaluation n&apos;est qu&apos;une aide - nous recommandons fortement que vous vérifiez, sur le terrain, l&apos;exactitude des ces calculs avant de déployer des ressources et/ou du personnel.</translation>
     </message>
     <message>
-        <location filename="map_report.py" line="21"/>
+        <location filename="map_report.py" line="24"/>
         <source>Legend</source>
         <translation>Légende</translation>
     </message>
@@ -3029,22 +3029,22 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
         <translation>Un &lt;b&gt;lieu&lt;/b&gt; indique une position particulière qui est connu par un nom précis.</translation>
     </message>
     <message>
-        <location filename="units.py" line="228"/>
+        <location filename="units.py" line="222"/>
         <source>Centimetres</source>
         <translation>Centimètres</translation>
     </message>
     <message>
-        <location filename="units.py" line="229"/>
+        <location filename="units.py" line="223"/>
         <source>centimetres</source>
         <translation>centimètres</translation>
     </message>
     <message>
-        <location filename="units.py" line="231"/>
+        <location filename="units.py" line="225"/>
         <source>cm</source>
         <translation>cm</translation>
     </message>
     <message>
-        <location filename="units.py" line="232"/>
+        <location filename="units.py" line="226"/>
         <source>&lt;b&gt;Centimetres&lt;/b&gt; are a metric unit of measure. There are 100 centimetres in 1 metre.</source>
         <translation>&lt;b&gt;Le centimètre&lt;/b&gt; est une unité de mesure métrique. Il y a 100 centimètres dans 1 mètre.</translation>
     </message>
@@ -3054,12 +3054,12 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
         <translation>Trois classes sont supportés pour un aléa volcanique: &lt;b&gt;faible&lt;/b&gt;, &lt;b&gt;modérée&lt;/b&gt;, ou &lt;b&gt;haut&lt;/b&gt;.</translation>
     </message>
     <message>
-        <location filename="units.py" line="281"/>
+        <location filename="units.py" line="275"/>
         <source>Number of people (or any other exposure element) per pixel, building or area. &lt;p&gt;In a raster file, a pixel would have a value assigned to it representing the number (or count) of people in that pixel.&lt;/p&gt; &lt;p&gt;In a vector file, a value would be assigned to an object (e.g. a building or area) representing the number of people in that object.&lt;/p&gt; </source>
         <translation>Nombre de personnes (ou tout autre enjeu) par pixel, bâtiment ou surface. &lt;p&gt;Dans un fichier raster, un pixel contient la valeur représentant ce nombre dans ce pixel.&lt;/p&gt;&lt;p&gt; Dans un fichier vecteur, une valeur est assigné à l&apos;objet (par ex bâtiment ou surface) représentant le nombre de personnes dans cet objet.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="units.py" line="302"/>
+        <location filename="units.py" line="296"/>
         <source>Number of people (or any other exposure element) per unit of area. &lt;p&gt; e.g. 35 people per km&lt;sup&gt;2&lt;/sup&gt; &lt;/p&gt;</source>
         <translation>Nombre de personnes (ou autre type d&apos;enjeu) par unité de surface. &lt;p&gt;par ex 35 personnes par km&lt;sup&gt;2&lt;/sup&gt;&lt;/p&gt;</translation>
     </message>
@@ -3905,7 +3905,7 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
         <translation>Un identifiant unique pour chaque analyse.</translation>
     </message>
     <message>
-        <location filename="map_report.py" line="65"/>
+        <location filename="map_report.py" line="68"/>
         <source>Analysis Name</source>
         <translation>Nom de l&apos;Analyse</translation>
     </message>
@@ -4535,7 +4535,7 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
         <translation>&lt;b&gt;Le nœud&lt;/b&gt; est une unité de vitesse, exprimant le nombre de nœuds nautiques parcourus en une heure.</translation>
     </message>
     <message>
-        <location filename="units.py" line="437"/>
+        <location filename="units.py" line="431"/>
         <source>#</source>
         <translation>#</translation>
     </message>
@@ -4950,17 +4950,17 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
         <translation>La fonction d&apos;impact ne sera pas capable de se lancer à cause des entrées.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1195"/>
+        <location filename="dock.py" line="1210"/>
         <source>The impact function could not run because of the inputs.</source>
         <translation>La fonction d&apos;impact n&apos;a pas pu s&apos;exécuter à cause des entrées.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1202"/>
+        <location filename="dock.py" line="1217"/>
         <source>The impact function could not run because of a bug.</source>
         <translation>La fonction d&apos;impact n&apos;a pas pu s&apos;exécuter à cause d&apos;un bug.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1208"/>
+        <location filename="dock.py" line="1223"/>
         <source>The impact function could run without errors.</source>
         <translation>La fonction d&apos;impact a pu s&apos;exécuter sans problème.</translation>
     </message>
@@ -5056,12 +5056,12 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>Personnalisé</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1178"/>
+        <location filename="dock.py" line="1193"/>
         <source>The impact function should not have been ready.</source>
         <translation>La fonction d&apos;impact n&apos;aurait pas du être prête.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1265"/>
+        <location filename="dock.py" line="1280"/>
         <source>The impact report could not be generated.</source>
         <translation>Le rapport d&apos;impact n&apos;a pas pu être généré.</translation>
     </message>
@@ -5361,12 +5361,12 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>Zone d&apos;Aléa</translation>
     </message>
     <message>
-        <location filename="map_report.py" line="85"/>
+        <location filename="map_report.py" line="88"/>
         <source>Unknown</source>
         <translation>Inconnu</translation>
     </message>
     <message>
-        <location filename="map_report.py" line="90"/>
+        <location filename="map_report.py" line="93"/>
         <source>Not used</source>
         <translation>Non utilisé</translation>
     </message>
@@ -5376,7 +5376,7 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>Coordonnées Géographiques - {crs}</translation>
     </message>
     <message>
-        <location filename="map_report.py" line="60"/>
+        <location filename="map_report.py" line="63"/>
         <source>Data Source</source>
         <translation>Source des données</translation>
     </message>
@@ -5686,7 +5686,7 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>{name} [{unit_abbreviation}]</translation>
     </message>
     <message>
-        <location filename="map_report.py" line="70"/>
+        <location filename="map_report.py" line="73"/>
         <source>Software</source>
         <translation>Logiciel</translation>
     </message>
@@ -5696,27 +5696,27 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>InaSAFE {version}</translation>
     </message>
     <message>
-        <location filename="map_report.py" line="75"/>
+        <location filename="map_report.py" line="78"/>
         <source>Reference</source>
         <translation>Référence</translation>
     </message>
     <message>
-        <location filename="units.py" line="197"/>
+        <location filename="units.py" line="191"/>
         <source>Square Metres</source>
         <translation>Mètres Carrés</translation>
     </message>
     <message>
-        <location filename="units.py" line="198"/>
+        <location filename="units.py" line="192"/>
         <source>square metres</source>
         <translation>mètres carrés</translation>
     </message>
     <message>
-        <location filename="units.py" line="200"/>
+        <location filename="units.py" line="194"/>
         <source>mÂ²</source>
         <translation>m²</translation>
     </message>
     <message>
-        <location filename="units.py" line="201"/>
+        <location filename="units.py" line="195"/>
         <source>&lt;b&gt;Square Metres&lt;/b&gt; are a metric unit of measure.</source>
         <translation>&lt;b&gt;Le mètre carré&lt;/b&gt; est une unité de métrique de mesure.</translation>
     </message>
@@ -5866,7 +5866,7 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>Vous avez sélectionné &lt;b&gt;%s %s&lt;/b&gt;. Veuillez sélectionner une classification d&apos;aléa pour chaque type d&apos;enjeu. Si vous souhaitez éditer les seuils, vous pouvez cliquer sur le bouton éditer et ensuite apporter des modifications aux seuils dans le panneau de droite. N&apos;oubliez pas de sauvegarder vos seuils avant de continuer à l&apos;étape suivante.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1386"/>
+        <location filename="dock.py" line="1401"/>
         <source>The requested extent is not overlapping your layers.</source>
         <translation>L&apos;emprise demandée ne se superpose pas aux couches.</translation>
     </message>
@@ -7006,12 +7006,12 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>InaSAFE combinera ces deux couches, selon un modèle mathématique. Les résultats de ce modèle montrera l&apos;effet que l&apos;aléa aura sur les infrastructures ou les populations. L’extension se base sur les mots-clés associés à chaque couche pour déterminer ce qu&apos;elles représentent. Vous pouvez définir ces mots-clés en sélectionnant une couche puis en cliquant sur « Assistant de création des mots-clés » dans la barre d’outils.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="207"/>
+        <location filename="dock.py" line="210"/>
         <source>will be affected? Summarise the results by</source>
         <translation>seront affecté(e)s? Synthétiser les résultats par</translation>
     </message>
     <message>
-        <location filename="dock.py" line="209"/>
+        <location filename="dock.py" line="212"/>
         <source>will be affected? Summarise the results by selected features in</source>
         <translation>seront affecté(e)s? Synthétiser les résultats dans les entités sélectionnés dans</translation>
     </message>
@@ -7241,7 +7241,7 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>Actions pour l&apos;enjeu : {exposure_name}</translation>
     </message>
     <message>
-        <location filename="dock.py" line="930"/>
+        <location filename="dock.py" line="933"/>
         <source>No Version</source>
         <translation>Pas de Version</translation>
     </message>
@@ -9038,24 +9038,9 @@ Citations:
         <translation>Un post processeur pour calculer la productivité</translation>
     </message>
     <message>
-        <location filename="units.py" line="179"/>
-        <source>Quintal</source>
-        <translation>Quintal</translation>
-    </message>
-    <message>
-        <location filename="units.py" line="181"/>
-        <source>quintals</source>
-        <translation>quintaux</translation>
-    </message>
-    <message>
         <location filename="units.py" line="182"/>
         <source>Weight</source>
         <translation>Masse</translation>
-    </message>
-    <message>
-        <location filename="units.py" line="184"/>
-        <source>&lt;b&gt;Quintal&lt;/b&gt; is a unit of weight equal to 100 kilograms (about 220 pounds)</source>
-        <translation>Un &lt;b&gt;Quintal&lt;/b&gt; est une unité de masse équivalente à 100 kilogrammes (environ 220 livres)</translation>
     </message>
     <message>
         <location filename="step_fc00_functions1.py" line="177"/>
@@ -10152,72 +10137,72 @@ Citations:
         <translation>Matériels additionnels fournis {frequency}</translation>
     </message>
     <message>
-        <location filename="units.py" line="335"/>
+        <location filename="units.py" line="329"/>
         <source>One</source>
         <translation>Unité</translation>
     </message>
     <message>
-        <location filename="units.py" line="336"/>
+        <location filename="units.py" line="330"/>
         <source>Ones</source>
         <translation>Unités</translation>
     </message>
     <message>
-        <location filename="units.py" line="352"/>
+        <location filename="units.py" line="346"/>
         <source>Ten</source>
         <translation>Dizaine</translation>
     </message>
     <message>
-        <location filename="units.py" line="353"/>
+        <location filename="units.py" line="347"/>
         <source>Tens</source>
         <translation>Dizaines</translation>
     </message>
     <message>
-        <location filename="units.py" line="369"/>
+        <location filename="units.py" line="363"/>
         <source>Hundred</source>
         <translation>Centaine</translation>
     </message>
     <message>
-        <location filename="units.py" line="370"/>
+        <location filename="units.py" line="364"/>
         <source>Hundreds</source>
         <translation>Centaines</translation>
     </message>
     <message>
-        <location filename="units.py" line="387"/>
+        <location filename="units.py" line="381"/>
         <source>Thousand</source>
         <translation>Millier</translation>
     </message>
     <message>
-        <location filename="units.py" line="388"/>
+        <location filename="units.py" line="382"/>
         <source>Thousands</source>
         <translation>Milliers</translation>
     </message>
     <message>
-        <location filename="units.py" line="403"/>
+        <location filename="units.py" line="397"/>
         <source>Million</source>
         <translation>Million</translation>
     </message>
     <message>
-        <location filename="units.py" line="404"/>
+        <location filename="units.py" line="398"/>
         <source>Millions</source>
         <translation>Millions</translation>
     </message>
     <message>
-        <location filename="units.py" line="419"/>
+        <location filename="units.py" line="413"/>
         <source>Billion</source>
         <translation>Milliard</translation>
     </message>
     <message>
-        <location filename="units.py" line="420"/>
+        <location filename="units.py" line="414"/>
         <source>Billions</source>
         <translation>Milliards</translation>
     </message>
     <message>
-        <location filename="units.py" line="435"/>
+        <location filename="units.py" line="429"/>
         <source>Trillion</source>
         <translation>Billion</translation>
     </message>
     <message>
-        <location filename="units.py" line="436"/>
+        <location filename="units.py" line="430"/>
         <source>Trillions</source>
         <translation>Billions</translation>
     </message>
@@ -10432,12 +10417,12 @@ Citations:
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="map_report.py" line="36"/>
+        <location filename="map_report.py" line="39"/>
         <source>Analysis Information</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="map_report.py" line="80"/>
+        <location filename="map_report.py" line="83"/>
         <source>Coordinate Reference System - {crs}</source>
         <translation type="unfinished"/>
     </message>
@@ -10577,12 +10562,12 @@ Citations:
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="map_report.py" line="30"/>
+        <location filename="map_report.py" line="31"/>
         <source>InaSAFE - Image Elements</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="map_report.py" line="31"/>
+        <location filename="map_report.py" line="32"/>
         <source>InaSAFE - Label Elements</source>
         <translation type="unfinished"/>
     </message>
@@ -10594,6 +10579,21 @@ Citations:
     <message>
         <location filename="infographic.py" line="45"/>
         <source>If used, the element-id &quot;population-chart-legend&quot; in the composer layout will be replaced by a chart illustrating the number of people in different groups (displaced, exposed, etc.).</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="units.py" line="179"/>
+        <source>Hundreds Kilogram</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="units.py" line="181"/>
+        <source>hundreds kilograms</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="units.py" line="184"/>
+        <source>&lt;b&gt;A hundred kilograms&lt;/b&gt; is a unit of weight equal to 100 kilograms.</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -10924,97 +10924,97 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>Dock</name>
     <message>
-        <location filename="dock.py" line="399"/>
+        <location filename="dock.py" line="402"/>
         <source>InaSAFE %s</source>
         <translation>InaSAFE %s</translation>
     </message>
     <message>
-        <location filename="dock.py" line="389"/>
+        <location filename="dock.py" line="392"/>
         <source>The file for organization logo in %s doesn&apos;t exists. Please check in Plugins -&gt; InaSAFE -&gt; Options that your paths are still correct and update them if needed.</source>
         <translation>Le fichier pour le logo de votre organisation dans %s n’existe pas. Vérifiez dans Extensions &gt; InaSAFE &gt; Options que le chemin est correct et corrigez-le si nécessaire. </translation>
     </message>
     <message>
-        <location filename="dock.py" line="399"/>
+        <location filename="dock.py" line="402"/>
         <source>The file for organization logo has zero height. Please provide valid file for organization logo.</source>
         <translation>Le fichier de l&apos;organisation n&apos;a pas de hauteur valide. Veuillez fournir un fichier valide pour le logo de l&apos;organisation.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="486"/>
+        <location filename="dock.py" line="489"/>
         <source>Error while saving</source>
         <translation>Erreur lors de l&apos;enregistrement</translation>
     </message>
     <message>
-        <location filename="dock.py" line="480"/>
+        <location filename="dock.py" line="483"/>
         <source>The destination location must be writable.</source>
         <translation>La destination doit avoir le droit d&apos;écriture.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="486"/>
+        <location filename="dock.py" line="489"/>
         <source>Something went wrong.</source>
         <translation>Quelque chose ne va pas.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="690"/>
+        <location filename="dock.py" line="693"/>
         <source>Entire area</source>
         <translation>Zone entière</translation>
     </message>
     <message>
-        <location filename="dock.py" line="789"/>
+        <location filename="dock.py" line="792"/>
         <source>Analysis status</source>
         <translation>État de l&apos;analyse</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1005"/>
+        <location filename="dock.py" line="1008"/>
         <source>InaSAFE</source>
         <translation>InaSAFE</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1005"/>
+        <location filename="dock.py" line="1008"/>
         <source>Please select a valid impact layer before trying to print.</source>
         <translation>Sélectionnez une couche d&apos;impact valide avant d&apos;essayer d&apos;imprimer.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1075"/>
+        <location filename="dock.py" line="1090"/>
         <source>Map Creator</source>
         <translation>Créateur de carte</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1075"/>
+        <location filename="dock.py" line="1090"/>
         <source>Your PDF was created....opening using the default PDF viewer on your system.</source>
         <translation>Votre pdf a été créé... ouverture en cours avec le visualisateur PDF par défaut de votre système.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1075"/>
+        <location filename="dock.py" line="1090"/>
         <source>The generated pdfs were saved as:</source>
         <translation>Les PDFs ont été enregistrés en tant que:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1087"/>
+        <location filename="dock.py" line="1102"/>
         <source>The generated htmls were saved as:</source>
         <translation>Les HTMLs ont été enregistrés en tant que:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1093"/>
+        <location filename="dock.py" line="1108"/>
         <source>The generated qpts were saved as:</source>
         <translation>Les QPTs ont été enregistrés en tant que:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1354"/>
+        <location filename="dock.py" line="1369"/>
         <source>The hazard layer, exposure layer and your defined analysis area extents all overlap. Press the run button below to continue with the analysis.</source>
         <translation>La couche d&apos;aléa, d&apos;enjeu et votre emprise d&apos;analyse se superposent. Pressez le bouton &quot;lancer&quot; afin de continuer l&apos;analyse.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1359"/>
+        <location filename="dock.py" line="1374"/>
         <source>Analysis environment ready</source>
         <translation>Environnement d&apos;analyse prêt</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1359"/>
+        <location filename="dock.py" line="1374"/>
         <source>More info ...</source>
         <translation>Plus d&apos;informations ...</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1397"/>
+        <location filename="dock.py" line="1412"/>
         <source>No overlapping extents</source>
         <translation>Pas de chevauchements dans l&apos;étendue des couches</translation>
     </message>
