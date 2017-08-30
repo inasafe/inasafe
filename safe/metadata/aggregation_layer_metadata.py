@@ -2,7 +2,7 @@
 """Aggregation Layer Metadata"""
 
 from safe.metadata.generic_layer_metadata import GenericLayerMetadata
-from safe.metadata.utils import merge_dictionaries
+from safe.metadata.utilities import merge_dictionaries
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

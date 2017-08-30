@@ -11,7 +11,7 @@ __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
-labels = ['Setting', 'Do not use', 'Custom']
+labels = ['Setting', 'Do not report', 'Custom']
 options = [0.1, None]
 
 

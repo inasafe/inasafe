@@ -10,7 +10,8 @@ from safe.common.parameters.resource_parameter import ResourceParameter
 from safe.definitions.exposure import exposure_population
 from safe.definitions.fields import (
     aggregation_name_field,
-    displaced_field)
+    displaced_field,
+    additional_minimum_needs)
 from safe.definitions.field_groups import (
     age_displaced_count_group,
     gender_displaced_count_group,
@@ -265,19 +266,24 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
         units_label = []
         minimum_needs_items = {
             'group_header': u'Minimum needs breakdown',
-            'fields': minimum_needs_fields
+            'fields': minimum_needs_fields + additional_minimum_needs
         }
 
         for field in minimum_needs_items['fields']:
-            need = field['need_parameter']
-            if isinstance(need, ResourceParameter):
-                unit = None
-                unit_abbreviation = need.unit.abbreviation
-                if unit_abbreviation:
-                    unit_format = '{unit}'
-                    unit = unit_format.format(
-                        unit=unit_abbreviation)
-                units_label.append(unit)
+            unit = None
+            if field.get('need_parameter'):
+                need = field['need_parameter']
+                if isinstance(need, ResourceParameter):
+                    unit_abbreviation = need.unit.abbreviation
+            elif field.get('unit'):
+                need_unit = field.get('unit')
+                unit_abbreviation = need_unit.get('abbreviation')
+
+            if unit_abbreviation:
+                unit_format = '{unit}'
+                unit = unit_format.format(
+                    unit=unit_abbreviation)
+            units_label.append(unit)
 
         context['sections']['minimum_needs'].append(
             create_section(

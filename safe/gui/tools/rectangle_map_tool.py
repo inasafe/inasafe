@@ -19,9 +19,9 @@ from PyQt4.QtGui import QColor
 
 
 class RectangleMapTool(QgsMapToolEmitPoint):
-    """
-    Map tool that lets the user define the analysis extents.
-    """
+
+    """Map tool that lets the user define the analysis extents."""
+
     rectangle_created = pyqtSignal()
     deactivated = pyqtSignal()
 

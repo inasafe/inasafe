@@ -37,7 +37,7 @@ from safe.gui.tools.wizard.layer_browser_proxy_model import (
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_strings import (
     create_postGIS_connection_first)
-from safe.gui.tools.wizard.wizard_utils import layer_description_html
+from safe.gui.tools.wizard.utilities import layer_description_html
 from safe.utilities.gis import qgis_version
 from safe.utilities.utilities import is_keyword_version_supported
 
@@ -48,14 +48,14 @@ __revision__ = '$Format:%H$'
 
 
 class WizardStepBrowser(WizardStep):
-    """A base class for steps containing a QGIS Browser"""
+
+    """A base class for steps containing a QGIS Browser."""
 
     def __init__(self, parent=None):
         """Constructor for the tab.
 
         :param parent: parent - widget to use as parent (Wizad Dialog).
         :type parent: QWidget
-
         """
         WizardStep.__init__(self, parent)
         # Set model for browser
@@ -66,7 +66,7 @@ class WizardStepBrowser(WizardStep):
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.
 
-           This method must be implemented in derived classes.
+        This method must be implemented in derived classes.
 
         :returns: The step to be switched to
         :rtype: WizardStep instance or None
@@ -77,7 +77,7 @@ class WizardStepBrowser(WizardStep):
     def set_widgets(self):
         """Set all widgets on the tab.
 
-           This method must be implemented in derived classes.
+        This method must be implemented in derived classes.
         """
         raise NotImplementedError("The current step class doesn't implement \
             the set_widgets method")

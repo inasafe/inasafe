@@ -126,7 +126,7 @@ class Cell(MessageElement):
         # Special case for when we want to put a nested table in a cell
         # We don't use isinstance because of recursive imports with table
         class_name = self.content.__class__.__name__
-        if class_name in ['BulletedList', 'Table', 'Message']:
+        if class_name in ['BulletedList', 'Table', 'Image', 'Message']:
             html = self.content.to_html()
         else:
             html = self.content.to_html(wrap_slash=self.wrap_slash)
@@ -140,7 +140,7 @@ class Cell(MessageElement):
                 self.html_attributes(), self.span, html)
 
     def to_text(self):
-        """Render a Cell MessageElement as plain text
+        """Render a Cell MessageElement as plain text.
 
         :returns: The plain text representation of the Cell MessageElement.
         :rtype: basestring

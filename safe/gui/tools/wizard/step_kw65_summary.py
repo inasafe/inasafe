@@ -1,8 +1,11 @@
 # coding=utf-8
-"""InaSAFE Keyword Wizard Summary Step."""
+"""InaSAFE Wizard Step Keyword Summary."""
 
 import os
 import re
+
+from safe import messaging as m
+from safe.utilities.i18n import tr
 
 from safe.definitions.constants import inasafe_keyword_version_key
 from safe.definitions.layer_purposes import (
@@ -20,7 +23,8 @@ FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
 class StepKwSummary(WizardStep, FORM_CLASS):
-    """Keyword Wizard Step: Summary"""
+
+    """InaSAFE Wizard Step Keyword Summary."""
 
     def is_ready_to_next_step(self):
         """Check if the step is complete. If so, there is
@@ -135,3 +139,27 @@ class StepKwSummary(WizardStep, FORM_CLASS):
 
         html = header + body + footer
         self.wvKwSummary.setHtml(html)
+
+    @property
+    def step_name(self):
+        """Get the human friendly name for the wizard step.
+
+        :returns: The name of the wizard step.
+        :rtype: str
+        """
+        return tr('Keyword Summary Step')
+
+    def help_content(self):
+        """Return the content of help for this step wizard.
+
+            We only needs to re-implement this method in each wizard step.
+
+        :returns: A message object contains help.
+        :rtype: m.Message
+        """
+        message = m.Message()
+        message.add(m.Paragraph(tr(
+            'In this wizard step: {step_name}, you will be able to '
+            'review all the keywords that have been set for this layer'
+        ).format(step_name=self.step_name)))
+        return message

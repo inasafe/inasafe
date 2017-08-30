@@ -1,9 +1,11 @@
 # coding=utf-8
-from population_post_processors import *
-from post_processors import *
+from safe.definitions.post_processors.productivity_post_processors import \
+    productivity_post_processors
 from minimum_needs_post_processors import *
-from post_processor_inputs import *
+from population_post_processors import *
 from post_processor_functions import *
+from post_processor_inputs import *
+from post_processors import *
 from safe.definitions.post_processors.minimum_needs_post_processors import \
     minimum_needs_post_processors
 
@@ -14,7 +16,8 @@ from safe.definitions.post_processors.minimum_needs_post_processors import \
 # Postprocessor tree
 # # Root : impact layer
 # |--- size
-# |   `--- size rate  disabled in V4.0, ET 13/02/17
+# |   |--- size rate  disabled in V4.0, ET 13/02/17
+# |   `--- productivity
 # |--- affected
 # |--- displaced ratio
 # |--- fatality ratio
@@ -26,7 +29,9 @@ from safe.definitions.post_processors.minimum_needs_post_processors import \
 # |          |--- youth
 # |          |--- adult
 # |          |--- elderly
-# |          `--- minimum needs
+# |          |--- minimum needs
+# |          |--- disabled
+# |          `--- gender_vulnerability
 
 post_processors = [
     post_processor_size,
@@ -42,6 +47,7 @@ post_processors = [
      minimum_needs_post_processors +
      age_vulnerability_postprocessors +
      disabled_vulnerability_postprocessors +
-     gender_vulnerability_postprocessors) + [
-    post_processor_additional_rice
+     gender_vulnerability_postprocessors +
+     productivity_post_processors) + [
+    post_processor_additional_rice,
 ]

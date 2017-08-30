@@ -7,12 +7,14 @@ from collections import OrderedDict
 from PyQt4.QtCore import QDir, Qt
 from qgis.core import QgsMapLayerRegistry, QgsProject, QgsMapLayer, QGis
 
-from safe.definitions.utilities import definition, map_report_component
+from safe.definitions.utilities import definition, update_template_component
 from safe.definitions.fields import hazard_class_field
 from safe.definitions.reports.components import (
     standard_impact_report_metadata_pdf,
-    report_a4_blue)
+    map_report,
+    infographic_report)
 from safe.impact_function.style import hazard_class_style
+from safe.report.extractors.util import layer_definition_type
 from safe.report.report_metadata import ReportMetadata
 from safe.report.impact_report import ImpactReport
 from safe.utilities.gis import is_raster_layer, qgis_version
@@ -34,13 +36,19 @@ def generate_impact_report(impact_function, iface):
     :type iface: QGisAppInterface
 
     """
+    # get the extra layers that we need
+    extra_layers = []
+    print_atlas = setting('print_atlas_report', False, bool)
+    if print_atlas:
+        extra_layers.append(impact_function.aggregation_summary)
     # create impact report instance
     report_metadata = ReportMetadata(
         metadata_dict=standard_impact_report_metadata_pdf)
     impact_report = ImpactReport(
         iface,
         report_metadata,
-        impact_function=impact_function)
+        impact_function=impact_function,
+        extra_layers=extra_layers)
 
     # generate report folder
 
@@ -67,13 +75,30 @@ def generate_impact_map_report(impact_function, iface):
     :param iface: QGIS QGisAppInterface instance.
     :type iface: QGisAppInterface
     """
+    # get the extra layers that we need
+    extra_layers = []
+    print_atlas = setting('print_atlas_report', False, bool)
+    if print_atlas:
+        extra_layers.append(impact_function.aggregation_summary)
+
+    # get the hazard and exposure type
+    hazard_layer = impact_function.hazard
+    exposure_layer = impact_function.exposure
+
+    hazard_type = layer_definition_type(hazard_layer)
+    exposure_type = layer_definition_type(exposure_layer)
+
     # create impact report instance
     report_metadata = ReportMetadata(
-        metadata_dict=map_report_component(report_a4_blue))
+        metadata_dict=update_template_component(
+            component=map_report,
+            hazard=hazard_type,
+            exposure=exposure_type))
     impact_report = ImpactReport(
         iface,
         report_metadata,
-        impact_function=impact_function)
+        impact_function=impact_function,
+        extra_layers=extra_layers)
 
     # Get other setting
     logo_path = setting('organisation_logo_path', None, str)
@@ -84,6 +109,49 @@ def generate_impact_map_report(impact_function, iface):
 
     north_arrow_path = setting('north_arrow_path', None, str)
     impact_report.inasafe_context.north_arrow = north_arrow_path
+
+    # get the extent of impact layer
+    impact_report.qgis_composition_context.extent = \
+        impact_function.impact.extent()
+
+    # generate report folder
+
+    # no other option for now
+    # TODO: retrieve the information from data store
+    if isinstance(impact_function.datastore.uri, QDir):
+        layer_dir = impact_function.datastore.uri.absolutePath()
+    else:
+        # No other way for now
+        return
+
+    # We will generate it on the fly without storing it after datastore
+    # supports
+    impact_report.output_folder = os.path.join(layer_dir, 'output')
+    return impact_report.process_components()
+
+
+def generate_infographic_report(impact_function, iface):
+    """Generate impact map pdf from impact function.
+
+    :param impact_function: The impact function used.
+    :type impact_function: ImpactFunction
+
+    :param iface: QGIS QGisAppInterface instance.
+    :type iface: QGisAppInterface
+    """
+    # get the extra layers that we need
+    extra_layers = []
+    print_atlas = setting('print_atlas_report', False, bool)
+    if print_atlas:
+        extra_layers.append(impact_function.aggregation_summary)
+    # create impact report instance
+    report_metadata = ReportMetadata(
+        metadata_dict=update_template_component(infographic_report))
+    impact_report = ImpactReport(
+        iface,
+        report_metadata,
+        impact_function=impact_function,
+        extra_layers=extra_layers)
 
     # get the extent of impact layer
     impact_report.qgis_composition_context.extent = \
@@ -136,14 +204,22 @@ def add_impact_layers_to_canvas(impact_function, iface):
         except KeyError:
             pass
 
+        visible_layers = [impact_function.impact.id()]
+        print_atlas = setting('print_atlas_report', False, bool)
+        if print_atlas:
+            visible_layers.append(impact_function.aggregation_summary.id())
         # Let's enable only the more detailed layer. See #2925
-        if layer.id() == impact_function.impact.id():
+        if layer.id() in visible_layers:
             layer_node.setVisible(Qt.Checked)
-            iface.setActiveLayer(layer)
         elif is_raster_layer(layer):
             layer_node.setVisible(Qt.Checked)
         else:
             layer_node.setVisible(Qt.Unchecked)
+
+        # we need to set analysis_impacted as an active layer because we need
+        # to get all qgis variables that we need from this layer for
+        # infographic.
+        iface.setActiveLayer(impact_function.analysis_impacted)
 
 
 def add_debug_layers_to_canvas(impact_function):
@@ -191,3 +267,56 @@ def add_debug_layers_to_canvas(impact_function):
             if qgis_layer.geometryType() != QGis.NoGeometry and classification:
                 if qgis_layer.keywords['inasafe_fields'].get(hazard_class):
                     hazard_class_style(qgis_layer, classes, True)
+
+
+def add_layer_to_canvas(layer, name, impact_function):
+    """Helper method to add layer to QGIS.
+
+    :param layer: The layer.
+    :type layer: QgsMapLayer
+
+    :param name: Layer name.
+    :type name: str
+
+    :param impact_function: The impact function used.
+    :type impact_function: ImpactFunction
+
+    :param iface: QGIS QGisAppInterface instance.
+    :type iface: QGisAppInterface
+    """
+    group_name = impact_function.name
+
+    # noinspection PyArgumentList
+    root = QgsProject.instance().layerTreeRoot()
+    group_analysis = root.findGroup(group_name)
+    group_analysis.setVisible(Qt.Checked)
+
+    layer.setLayerName(name)
+
+    QgsMapLayerRegistry.instance().addMapLayer(layer, False)
+    layer_node = group_analysis.addLayer(layer)
+
+    layer_node.setVisible(Qt.Checked)
+
+
+def remove_layer_from_canvas(layer, impact_function):
+    """Helper method to remove layer from QGIS.
+
+    :param layer: The layer.
+    :type layer: QgsMapLayer
+
+    :param impact_function: The impact function used.
+    :type impact_function: ImpactFunction
+
+    :param iface: QGIS QGisAppInterface instance.
+    :type iface: QGisAppInterface
+    """
+    group_name = impact_function.name
+
+    # noinspection PyArgumentList
+    root = QgsProject.instance().layerTreeRoot()
+    group_analysis = root.findGroup(group_name)
+    group_analysis.setVisible(Qt.Checked)
+
+    QgsMapLayerRegistry.instance().addMapLayer(layer, False)
+    group_analysis.removeLayer(layer)

@@ -28,7 +28,7 @@ age_ratio_group = {
     'description': tr(
         'Demographic breakdown to use for displaced population based on age '
         'groups. Age ratio groupings are used when there is a vector '
-        'aggregation layer that contains detailed demographic information ( '
+        'aggregation layer that contains detailed demographic information ('
         'as ratios) about the population living in each administrative or '
         'census area. These ratios are then applied to the count of displaced '
         'population per aggregation area to provide a more detailed break '

@@ -3,8 +3,10 @@
 
 import copy
 import logging
+import re
 from PyQt4 import QtCore
 from os.path import exists
+from inspect import getmembers
 
 import safe.definitions as definitions
 import safe.definitions.post_processors
@@ -20,6 +22,8 @@ from safe.definitions.hazard_exposure_specifications import (
 from safe.definitions.post_processors.post_processor_inputs import (
     post_processor_input_types,
     post_processor_input_values)
+from safe.definitions.reports.report_descriptions import all_reports
+from safe.definitions.reports.infographic import html_frame_elements
 from safe.gui.tools.help.batch_help import content as batch_help
 from safe.gui.tools.help.dock_help import content as dock_help
 from safe.gui.tools.help.extent_selector_help import content as extent_help
@@ -39,6 +43,8 @@ from safe.messaging import styles
 from safe.utilities.i18n import tr
 from safe.utilities.resources import resource_url, resources_path
 from safe.utilities.rounding import html_scientific_notation_rate
+from safe.gis import expressions
+from safe.report.expressions import infographic
 
 LOGGER = logging.getLogger('InaSAFE')
 # For chapter sections
@@ -712,12 +718,12 @@ def content():
         row.add(m.Cell(post_processor['name']))
         # Input fields
         bullets = m.BulletedList()
-        for key, value in post_processor['input'].iteritems():
+        for key, value in sorted(post_processor['input'].iteritems()):
             bullets.add(key)
         row.add(m.Cell(bullets))
         # Output fields
         bullets = m.BulletedList()
-        for key, value in post_processor['output'].iteritems():
+        for key, value in sorted(post_processor['output'].iteritems()):
             name = value['value']['name']
             formula_type = value['type']['key']
             if formula_type == 'formula':
@@ -741,6 +747,123 @@ def content():
         table.add(row)
     message.add(table)
 
+    ##
+    # Reporting
+    ##
+    _create_section_header(
+        message,
+        table_of_contents,
+        'reporting',
+        tr('Reporting'),
+        heading_level=1)
+
+    paragraph = m.Paragraph(
+        m.ImportantText(tr('Note: ')),
+        m.Text(tr(
+            'This section of the help documentation is intended for advanced '
+            'users who want to modify reports which are produced by InaSAFE.'
+        )))
+    message.add(paragraph)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'reporting-overview',
+        tr('Overview'),
+        heading_level=2)
+    message.add(m.Paragraph(tr(
+        'Whenever InaSAFE completes an analysis, it will automatically '
+        'generate a number of reports. Some of these reports are based on '
+        'templates that are shipped with InaSAFE, and can be customised or '
+        'over-ridden by creating your own templates. The following '
+        'reports are produced in InaSAFE:'
+    )))
+    table = m.Table(style_class='table table-condensed table-striped')
+    row = m.Row()
+    row.add(m.Cell(tr('Name'), header=True))
+    row.add(m.Cell(tr('Customisable?'), header=True))
+    row.add(m.Cell(tr('Example'), header=True))
+    row.add(m.Cell(tr('Description'), header=True))
+    table.add(row)
+
+    for report in all_reports:
+        row = m.Row()
+        row.add(m.Cell(report['name']))
+        if report['customisable']:
+            row.add(m.Cell(tr('Yes')))
+        else:
+            row.add(m.Cell(tr('No')))
+        png_image_path = resources_path(
+            'img', 'screenshots', report['thumbnail'])
+        row.add(m.Image(png_image_path, style_class='text-center'))
+        row.add(m.Cell(report['description']))
+        table.add(row)
+
+    message.add(table)
+
+    message.add(m.Paragraph(tr(
+        'In the sections that follow, we provide more technical information '
+        'about the custom QGIS Expressions and special template elements '
+        'that can be used to customise your templates.'
+    )))
+
+    _create_section_header(
+        message,
+        table_of_contents,
+        'reporting-expressions',
+        tr('QGIS Expressions'),
+        heading_level=2)
+    message.add(m.Paragraph(tr(
+        'InaSAFE adds a number of expressions that can be used to '
+        'conveniently obtain provenance data to the active analysis results. '
+        'The expressions can also be used elsewhere in QGIS as needed.'
+        '.'
+    )))
+
+    qgis_expressions = {
+        fct[0]: fct[1] for fct in getmembers(expressions)
+        if fct[1].__class__.__name__ == 'QgsExpressionFunction'}
+    qgis_expressions.update({
+        fct[0]: fct[1] for fct in getmembers(infographic)
+        if fct[1].__class__.__name__ == 'QgsExpressionFunction'})
+
+    table = m.Table(style_class='table table-condensed table-striped')
+    row = m.Row()
+    row.add(m.Cell(tr('Name'), header=True))
+    row.add(m.Cell(tr('Description'), header=True))
+    table.add(row)
+    for expression_name, expression in sorted(qgis_expressions.iteritems()):
+        row = m.Row()
+        row.add(m.Cell(expression_name))
+        help = expression.helptext()
+        # This pattern comes from python/qgis/core/__init__.py ≈ L79
+        pattern = r'<h3>(.*) function</h3><br>'
+        help = re.sub(pattern, '', help)
+        help = re.sub(r'\n', '<br>', help)
+        row.add(m.Cell(help))
+        table.add(row)
+    message.add(table)
+
+    _create_section_header(
+        message,
+        table_of_contents,
+        'reporting-composer-elements',
+        tr('Composer Elements'),
+        heading_level=2)
+    message.add(m.Paragraph(tr(
+        'InaSAFE looks for elements with specific id\'s on the composer '
+        'page and replaces them with InaSAFE specific content.'
+    )))
+    table = m.Table(style_class='table table-condensed table-striped')
+    row = m.Row()
+    row.add(m.Cell(tr('ID'), header=True))
+    row.add(m.Cell(tr('Description'), header=True))
+    table.add(row)
+    for item in html_frame_elements:
+        row = m.Row()
+        row.add(m.Cell(item['id']))
+        row.add(m.Cell(item['description']))
+        table.add(row)
+    message.add(table)
     ##
     # Developer documentation
     ##
@@ -843,11 +966,11 @@ def definition_to_message(
     :type definition: dict
 
     :param message: The message that the definition should be appended to.
-    :type message: safe_extras.parameters.message.Message
+    :type message: parameters.message.Message
 
     :param table_of_contents: Table of contents that the headings should be
         included in.
-    :type message: safe_extras.parameters.message.Message
+    :type message: parameters.message.Message
 
     :param heading_level: Optional style to apply to the definition
         heading. See HEADING_LOOKUPS
@@ -936,10 +1059,11 @@ def definition_to_message(
     # This only for EQ
     if 'earthquake_fatality_models' in definition:
         current_function = current_earthquake_model_name()
-        paragraph = m.Paragraph(
+        paragraph = m.Paragraph(tr(
             'The following earthquake fatality models are available in '
             'InaSAFE. Note that you need to set one of these as the '
-            'active model in InaSAFE Options. The currently active model is: ',
+            'active model in InaSAFE Options. The currently active model '
+            'is: '),
             m.ImportantText(current_function)
         )
         message.add(paragraph)
@@ -1144,7 +1268,7 @@ def definition_to_message(
                     if isinstance(inasafe_class['numeric_default_min'], dict):
                         bullets = m.BulletedList()
                         minima = inasafe_class['numeric_default_min']
-                        for key, value in minima.iteritems():
+                        for key, value in sorted(minima.iteritems()):
                             bullets.add(u'%s : %s' % (key, value))
                         row.add(m.Cell(bullets))
                     else:
@@ -1159,7 +1283,7 @@ def definition_to_message(
                     if isinstance(inasafe_class['numeric_default_max'], dict):
                         bullets = m.BulletedList()
                         maxima = inasafe_class['numeric_default_max']
-                        for key, value in maxima.iteritems():
+                        for key, value in sorted(maxima.iteritems()):
                             bullets.add(u'%s : %s' % (key, value))
                         row.add(m.Cell(bullets))
                     else:

@@ -1,7 +1,7 @@
 # coding=utf-8
 """Default Value Parameter."""
 
-from safe_extras.parameters.generic_parameter import GenericParameter
+from parameters.generic_parameter import GenericParameter
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -14,7 +14,6 @@ class DefaultValueParameter(GenericParameter):
     """Parameter that represent a selection of default value."""
 
     def __init__(self, guid=None):
-
         """Constructor.
 
         :param guid: Optional unique identifier for this parameter.

@@ -35,7 +35,7 @@ from safe.test.utilities import (
     load_test_raster_layer)
 from safe.utilities.utilities import readable_os_version
 from safe.definitions.reports.components import (
-    report_a4_blue,
+    map_report,
     standard_impact_report_metadata_html,
     standard_impact_report_metadata_pdf,
     general_report_component,
@@ -48,7 +48,7 @@ from safe.definitions.reports.components import (
     population_infographic_component,
     analysis_provenance_details_component,
     analysis_provenance_details_simplified_component)
-from safe.definitions.utilities import map_report_component
+from safe.definitions.utilities import update_template_component
 from safe.report.impact_report import ImpactReport
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -240,6 +240,12 @@ class TestImpactReport(unittest.TestCase):
                     ],
                     'value_label': u'Count'
                 }
+            ],
+            'notes': [
+                'Affected: An exposure element (e.g. people, roads, '
+                'buildings, land cover) that experiences a hazard (e.g. '
+                'tsunami, flood, earthquake) and endures consequences (e.g. '
+                'damage, evacuation, displacement, death) due to that hazard.'
             ]
         }
         actual_context = analysis_summary.context
@@ -359,6 +365,7 @@ class TestImpactReport(unittest.TestCase):
             'header': u'Analysis Detail',
             'notes': [],
             'group_border_color': u'#36454f',
+            'extra_table': {},
             'detail_header': {
                 'total_header_index': 5,
                 'breakdown_header_index': 0,
@@ -641,9 +648,9 @@ class TestImpactReport(unittest.TestCase):
                                       u'InaSAFE v4 GeoJSON test layer - '}),
                     ('impact_function', {
                         'header': u'Impact Function',
-                        'provenance': u'Hazard_Generic '
+                        'provenance': u'Generic Hazard '
                                       u'Polygon On '
-                                      u'Structure Point'})
+                                      u'Structures Point'})
                 ])
         }
 
@@ -695,7 +702,7 @@ class TestImpactReport(unittest.TestCase):
             'header': u'Analysis details',
             'details': OrderedDict([('impact_function', {
                 'header': u'Impact Function',
-                'provenances': u'Hazard_Generic Polygon On Structure Point'
+                'provenances': u'Generic Hazard Polygon On Structures Point'
             }), ('hazard', {
                 'header': u'Hazard',
                 'provenances': OrderedDict([('title', {
@@ -950,6 +957,14 @@ class TestImpactReport(unittest.TestCase):
                         {
                             'header': u'Family Kits',
                             'value': '10'
+                        },
+                        {
+                            'header': u'Hygiene Packs',
+                            'value': '10'
+                        },
+                        {
+                            'header': u'Additional Rice [kg]',
+                            'value': '10'
                         }],
                     'total_header': u'Total'
                 }
@@ -971,7 +986,9 @@ class TestImpactReport(unittest.TestCase):
             'For this analysis, the following displacement rates were used: '
             'Wet - 90%, Dry - 0%')
         actual_context = notes_assumptions.context['items'][-1]['item_list'][0]
-        self.assertEqual(expected_context.strip(), actual_context.strip())
+        message = expected_context.strip() + '\n' + actual_context.strip()
+        self.assertEqual(
+            expected_context.strip(), actual_context.strip(), message)
 
         """Check generated report"""
 
@@ -1270,13 +1287,13 @@ class TestImpactReport(unittest.TestCase):
                         'notes': [],
                         'rows': [
                             [u'B', '2,700', '7,400', '45,800', '176,000',
-                             '530', '130'],
+                             '530', '130', '1,100'],
                             [u'C', '6,500', '18,200', '114,000', '434,000',
-                             '1,300', '330'],
+                             '1,300', '330', '2,600'],
                             [u'F', '7,100', '19,800', '124,000', '473,000',
-                             '1,500', '360'],
+                             '1,500', '360', '2,800'],
                             [u'G', '9,500', '26,500', '166,000', '634,000',
-                             '1,900', '480']],
+                             '1,900', '480', '3,800']],
                         'columns': [
                             u'Aggregation area',
                             u'Total Displaced Population',
@@ -1304,8 +1321,13 @@ class TestImpactReport(unittest.TestCase):
                                 'start_group_header': False,
                                 'name': u'Toilets',
                                 'group_header': u'Minimum needs breakdown'
+                            },
+                            {
+                                'start_group_header': False,
+                                'name': u'Hygiene Packs',
+                                'group_header': u'Minimum needs breakdown'
                             }],
-                        'group_header_colspan': 5,
+                        'group_header_colspan': 6,
                         'totals': [
                             u'Total',
                             '25,700',
@@ -1313,7 +1335,8 @@ class TestImpactReport(unittest.TestCase):
                             '449,000',
                             '1,716,000',
                             '5,200',
-                            '1,300']
+                            '1,300',
+                            '10,200']
                     }
                 ])
             ]),
@@ -1453,11 +1476,11 @@ class TestImpactReport(unittest.TestCase):
                                   u'per week',
                         'notes': [],
                         'rows': [
-                            [u'B', '10', '10', '20', '80', '0', '0'],
-                            [u'C', '10', '20', '90', '340', '0', '0'],
-                            [u'F', '10', '10', '70', '260', '0', '0'],
-                            [u'G', '10', '20', '110', '410', '10', '0'],
-                            [u'K', '10', '10', '40', '130', '0', '0']],
+                            [u'B', '10', '10', '20', '80', '0', '0', '0'],
+                            [u'C', '10', '20', '90', '340', '0', '0', '10'],
+                            [u'F', '10', '10', '70', '260', '0', '0', '10'],
+                            [u'G', '10', '20', '110', '410', '10', '0', '10'],
+                            [u'K', '10', '10', '40', '130', '0', '0', '0']],
                         'columns': [
                             u'Aggregation area',
                             u'Total Displaced Population',
@@ -1485,10 +1508,22 @@ class TestImpactReport(unittest.TestCase):
                                 'start_group_header': False,
                                 'name': u'Toilets',
                                 'group_header': u'Minimum needs breakdown'
+                            },
+                            {
+                                'start_group_header': False,
+                                'name': u'Hygiene Packs',
+                                'group_header': u'Minimum needs breakdown'
                             }],
-                        'group_header_colspan': 5,
+                        'group_header_colspan': 6,
                         'totals': [
-                            u'Total', '20', '60', '350', '1,400', '10', '0']
+                            u'Total',
+                            '20',
+                            '60',
+                            '350',
+                            '1,400',
+                            '10',
+                            '0',
+                            '10']
                     }
                 ])
             ]),
@@ -1791,7 +1826,7 @@ class TestImpactReport(unittest.TestCase):
 
         # Create impact report
         report_metadata = ReportMetadata(
-            metadata_dict=map_report_component(report_a4_blue))
+            metadata_dict=update_template_component(map_report))
 
         impact_report = ImpactReport(
             IFACE,
@@ -1808,14 +1843,14 @@ class TestImpactReport(unittest.TestCase):
             return_code, ImpactReport.REPORT_GENERATION_SUCCESS, message)
 
         output_path = impact_report.component_absolute_output_path(
-            'a4-portrait-blue')
+            'inasafe-map-report-portrait')
 
         # for now, test that output exists
         for path in output_path.itervalues():
             self.assertTrue(os.path.exists(path), msg=path)
 
         output_path = impact_report.component_absolute_output_path(
-            'a4-landscape-blue')
+            'inasafe-map-report-landscape')
 
         for path in output_path.itervalues():
             self.assertTrue(os.path.exists(path), msg=path)

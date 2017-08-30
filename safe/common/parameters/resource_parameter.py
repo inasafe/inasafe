@@ -10,8 +10,8 @@ PARAMETERS_DIR = os.path.abspath(
 if PARAMETERS_DIR not in sys.path:
     sys.path.append(PARAMETERS_DIR)
 
-from safe_extras.parameters.float_parameter import FloatParameter
-from safe_extras.parameters.unit import Unit
+from parameters.float_parameter import FloatParameter
+from parameters.unit import Unit
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -20,12 +20,14 @@ __revision__ = '$Format:%H$'
 
 
 class ResourceParameter(FloatParameter):
+
     """A parameter handling specifically the resources used in InaSAFE
     minimum needs.
 
     :param guid: The unique reference to use when addressing this value.
     :type guid: str, None
     """
+
     def __init__(self, guid=None):
         super(ResourceParameter, self).__init__(guid)
         self._frequency = ''

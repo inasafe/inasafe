@@ -7,6 +7,7 @@ from PyQt4.QtCore import QVariant
 from safe.definitions import concepts
 from safe.definitions.constants import (
     qvariant_whole_numbers, qvariant_numbers)
+from safe.definitions.currencies import currencies
 from safe.definitions.default_values import (
     female_ratio_default_value,
     male_ratio_default_value,
@@ -23,6 +24,7 @@ from safe.definitions.default_values import (
     pregnant_ratio_default_value,
     lactating_ratio_default_value
 )
+from safe.definitions.units import unit_hundred_kilograms
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -203,7 +205,7 @@ hazard_value_field = {
     'help_text': tr(
         'A VALUE attribute for the hazard.'),
     'description': tr(
-        'The value attribute for a layer describes the intensity of a hazard'
+        'The value attribute for a layer describes the intensity of a hazard '
         'over the area described by the geometry of the feature. For example '
         'a flood polygon may have a hazard value of "1" indicating that the '
         'flood depth over that whole polygon is 1m. The hazard value is the '
@@ -211,7 +213,7 @@ hazard_value_field = {
         'classify the values in the value field into thresholds. For example, '
         'values greater than or equal to zero meters and less than 0.5m '
         'might be a reclassified into a threshold used to define a "Low" '
-        'flood class).'),
+        'flood class.'),
     'citations': [
         {
             'text': None,
@@ -1558,28 +1560,6 @@ lactating_displaced_count_field = {
     'replace_null': False
 }
 
-
-male_displaced_count_field = {
-    'key': 'male_displaced_count_field',
-    'name': tr('Male Displaced Count'),
-    'field_name': 'male_displaced',
-    'header_name': tr('Male'),
-    'type': qvariant_numbers,
-    'length': default_field_length,
-    'precision': 0,
-    'absolute': True,
-    'description': tr(
-        'Attribute where the number of displaced males for each feature.'),
-    'citations': [
-        {
-            'text': None,
-            'link': None
-        }
-    ],
-    # Null value can be replaced by default or not
-    'replace_null': False
-}
-
 infant_displaced_count_field = {
     'key': 'infant_displaced_count_field',
     'name': tr('Infant Displaced Count'),
@@ -1843,8 +1823,10 @@ hygiene_packs_count_field = {
     'key': 'hygiene_packs_field',
     'name': tr('Weekly Hygiene Packs'),
     'field_name': 'hygiene_packs',
+    'header_name': tr('Hygiene Packs'),
     'type': QVariant.Int,
     'length': default_field_length,
+    'frequency': tr('weekly'),
     'precision': 0,
     'absolute': True,
     'description': tr('Number of Hygiene Packs Weekly for Women.'),
@@ -1864,12 +1846,14 @@ additional_rice_count_field = {
     'key': 'additional_rice_field',
     'name': tr('Additional Weekly Rice kg for Pregnant and Lactating Women'),
     'field_name': 'additional_rice',
+    'header_name': tr('Additional Rice'),
     'type': QVariant.Int,
     'length': default_field_length,
     'unit': {
         'name': 'Kilogram',
         'abbreviation': 'kg'
     },
+    'frequency': tr('weekly'),
     'precision': 0,
     'absolute': True,
     'help_text': tr(
@@ -1891,6 +1875,7 @@ total_affected_field = {
     'key': 'total_affected_field',
     'name': tr('Total Affected'),
     'field_name': 'total_affected',
+    'header_name': tr('Affected'),
     'type': QVariant.Double,
     'length': default_field_length,
     'precision': 2,
@@ -2129,6 +2114,266 @@ population_displaced_per_mmi = {
     'replace_null': False
 }
 
+
+# Productivity field
+productivity_rate_field = {
+    'key': 'productivity_rate_field',
+    'name': tr('Productivity Rate'),
+    'field_name': 'productivity_rate',
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'description': tr(
+        'The rate of productivity of crop land cover for each feature / '
+        'area in hundred kilograms per hectare unit.'),
+    'help_text': tr(
+        '"{name}" is defined as: {description}. In case where land cover data '
+        'is available, InaSAFE will calculate the productivity for each '
+        'land cover area (exposure feature). The productivity is calculated '
+        'based on the productivity rate multiplied by the area of the land '
+        'cover.').format(
+        name=concepts['productivity_rate']['name'],
+        description=concepts['productivity_rate']['description']
+    ),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False,
+}
+
+productivity_field = {
+    'key': 'productivity_field',
+    'name': tr('Productivity'),
+    'field_name': 'productivity',
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': default_field_precision,
+    'absolute': True,
+    'description': tr(
+        'The total weight of a crop that can be produced for each feature.'),
+    'help_text': tr(
+        '"{name}" is defined as: {description}. In case where land cover data '
+        'is available, InaSAFE will calculate the productivity for each '
+        'land cover area (exposure feature). The productivity is calculated '
+        'based on the productivity rate multiplied by the area of the land '
+        'cover.').format(
+        name=concepts['productivity_rate']['name'],
+        description=concepts['productivity_rate']['description']
+    ),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False,
+}
+
+affected_productivity_field = {
+    'key': 'affected_productivity_field',
+    'name': tr('Affected Productivity'),
+    'field_name': 'affected_productivity',
+    'header_name': tr('Productivity'),
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': default_field_precision,
+    'absolute': True,
+    'description': tr(
+        'The total weight of a crop that is affected for each feature.'),
+    'help_text': tr(
+        '"{affected_name}" is defined as: {affected_description}. This field '
+        'contains the productivity that is affected by the hazard.'
+        '').format(
+        affected_name=concepts['affected']['name'],
+        affected_description=concepts['affected']['description']),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False,
+    'units': [unit_hundred_kilograms]
+}
+
+# Production cost field
+production_cost_rate_field = {
+    'key': 'production_cost_rate_field',
+    'name': tr('Production Cost Rate'),
+    'field_name': 'production_cost_rate',
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'description': tr(
+        'The rate of production cost of a crop for each feature in '
+        'currency per hectare unit.'),
+    'help_text': tr(
+        '"{name}" is defined as: {description}. In case where land cover data '
+        'is available, InaSAFE will calculate the production cost for each '
+        'land cover area (exposure feature). The production cost is '
+        'calculated based on the production cost rate multiplied by the area '
+        'of the land cover.').format(
+        name=concepts['production_cost_rate']['name'],
+        description=concepts['production_cost_rate']['description']
+    ),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False,
+}
+
+production_cost_field = {
+    'key': 'production_cost_field',
+    'name': tr('Production Cost'),
+    'field_name': 'production_cost',
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': default_field_precision,
+    'absolute': True,
+    'description': tr(
+        'The total production cost of a crop for each feature.'),
+    'help_text': tr(
+        '"{name}" is defined as: {description}. In case where land cover data '
+        'is available, InaSAFE will calculate the production cost for each '
+        'land cover area (exposure feature). The production cost is '
+        'calculated based on the production cost rate multiplied by the area '
+        'of the land cover.').format(
+        name=concepts['production_cost']['name'],
+        description=concepts['production_cost']['description']
+    ),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False,
+}
+
+affected_production_cost_field = {
+    'key': 'affected_production_cost_field',
+    'name': tr('Affected Production Cost'),
+    'field_name': 'affected_production_cost',
+    'header_name': tr('Production Cost'),
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': default_field_precision,
+    'absolute': True,
+    'description': tr(
+        'The amount of production cost of a crop that is affected for each '
+        'feature.'),
+    'help_text': tr(
+        '"{affected_name}" is defined as: {affected_description}. This field '
+        'contains the production cost that is affected by the hazard.').format(
+        affected_name=concepts['affected']['name'],
+        affected_description=concepts['affected']['description']),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False,
+    'units': currencies,
+}
+
+# Production value field
+production_value_rate_field = {
+    'key': 'production_value_rate_field',
+    'name': tr('Production Value Rate'),
+    'field_name': 'production_value_rate',
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'description': tr(
+        'The rate of production value of a crop for each feature in '
+        'currency per hectare unit.'),
+    'help_text': tr(
+        '"{name}" is defined as: {description}. In case where land cover data '
+        'is available, InaSAFE will calculate the production value for each '
+        'land cover area (exposure feature). The production value is '
+        'calculated based on the production value rate multiplied by the area '
+        'of the land cover.').format(
+        name=concepts['production_value_rate']['name'],
+        description=concepts['production_value_rate']['description']
+    ),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False,
+}
+
+production_value_field = {
+    'key': 'production_value_field',
+    'name': tr('Production Value'),
+    'field_name': 'production_value',
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': default_field_precision,
+    'absolute': True,
+    'description': tr(
+        'The total production value of a crop for each feature.'),
+    'help_text': tr(
+        '"{name}" is defined as: {description}. In case where land cover data '
+        'is available, InaSAFE will calculate the production value for each '
+        'land cover area (exposure feature). The production value is '
+        'calculated based on the production value rate multiplied by the area '
+        'of the land cover.').format(
+        name=concepts['production_value']['name'],
+        description=concepts['production_value']['description']
+    ),
+    # Null value can be replaced by default or not
+    'replace_null': False,
+}
+
+affected_production_value_field = {
+    'key': 'affected_production_value_field',
+    'name': tr('Affected Production Value'),
+    'field_name': 'affected_production_value',
+    'header_name': tr('Production Value'),
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': default_field_precision,
+    'absolute': True,
+    'description': tr(
+        'The amount of production value of a crop that is affected for each '
+        'feature.'),
+    'help_text': tr(
+        '"{affected_name}" is defined as: {affected_description}. This field '
+        'contains the production value that is affected by the hazard.'
+    ).format(
+        affected_name=concepts['affected']['name'],
+        affected_description=concepts['affected']['description']),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False,
+    'units': currencies,
+}
+
 # Inputs
 exposure_fields = [
     exposure_id_field,
@@ -2205,6 +2450,22 @@ analysis_fields = [
     total_field
 ]
 
+# Field that can be used to summarize / aggregate the result in exposure
+# summary table
+summarizer_fields = [
+    productivity_field,
+    production_cost_field,
+    production_value_field
+]
+
+# Mapping between summarizer field and its affected fields in the exposure
+# summary table
+affected_summarizer_fields = {
+    productivity_field['key']: affected_productivity_field,
+    production_cost_field['key']: affected_production_cost_field,
+    production_value_field['key']: affected_production_value_field,
+}
+
 # Add also minimum needs fields
 from safe.definitions.minimum_needs import minimum_needs_fields  # noqa
 count_fields = [
@@ -2215,6 +2476,8 @@ count_fields = [
     # Gender count fields
     female_count_field,
     child_bearing_age_count_field,
+    pregnant_count_field,
+    lactating_count_field,
     male_count_field,
     # Additional needs count fields
     hygiene_packs_count_field,
@@ -2233,6 +2496,8 @@ count_fields = [
     # Gender displaced count fields
     female_displaced_count_field,
     child_bearing_age_displaced_count_field,
+    pregnant_displaced_count_field,
+    lactating_displaced_count_field,
     male_displaced_count_field,
     # Age count fields
     infant_displaced_count_field,
@@ -2245,3 +2510,9 @@ count_fields = [
     over_60_displaced_count_field,
     disabled_displaced_count_field
 ] + minimum_needs_fields
+
+# And also additional minimum needs
+additional_minimum_needs = [
+    hygiene_packs_count_field,
+    additional_rice_count_field
+]

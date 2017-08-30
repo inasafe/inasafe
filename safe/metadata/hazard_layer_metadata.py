@@ -2,7 +2,7 @@
 """Hazard Layer Metadata."""
 
 from safe.metadata.generic_layer_metadata import GenericLayerMetadata
-from safe.metadata.utils import merge_dictionaries
+from safe.metadata.utilities import merge_dictionaries
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -53,6 +53,13 @@ class HazardLayerMetadata(GenericLayerMetadata):
             'inasafe/'
             'thresholds/'
             'gco:Dictionary'),
+        'active_band': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'active_band/'
+            'gco:Integer'),
     }
     _standard_properties = merge_dictionaries(
         GenericLayerMetadata._standard_properties, _standard_properties)

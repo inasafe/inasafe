@@ -1,7 +1,8 @@
 # coding=utf-8
 """Utilities module for helping definitions retrieval."""
 
-from os.path import join, exists
+from os import listdir
+from os.path import join, exists, splitext
 from qgis.core import QgsApplication
 from copy import deepcopy
 
@@ -24,6 +25,7 @@ from safe.definitions import (
     layer_purpose_aggregation,
     layer_purpose_exposure_summary
 )
+from safe.report.report_metadata import QgisComposerComponentsMetadata
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -249,8 +251,9 @@ def get_non_compulsory_fields(layer_purpose, layer_subcategory=None):
     return all_fields
 
 
-def definition(keyword):
-    """Given a keyword, try to get a definition dict for it.
+def definition(keyword, key=None):
+    """Given a keyword and a key (optional), try to get a definition
+    dict for it.
 
     .. versionadded:: 3.2
 
@@ -266,6 +269,9 @@ def definition(keyword):
     :param keyword: A keyword key.
     :type keyword: str
 
+    :param key: A specific key for a deeper search
+    :type key: str
+
     :returns: A dictionary containing the matched key definition
         from definitions, otherwise None if no match was found.
     :rtype: dict, None
@@ -275,9 +281,35 @@ def definition(keyword):
         if not item.startswith("__"):
             var = getattr(definitions, item)
             if isinstance(var, dict):
-                if var.get('key') == keyword:
+                if var.get('key') == keyword or var.get(key) == keyword:
                     return var
     return None
+
+
+def get_name(keyword):
+    """Given a keyword, try to get the name of it.
+
+    .. versionadded:: 4.2
+
+    Definition dicts are defined in keywords.py. We try to return
+    the name if present, otherwise we return none.
+
+    keyword = 'layer_purpose'
+    kio = safe.utilities.keyword_io.Keyword_IO()
+    name = kio.get_name(keyword)
+    print name
+
+    :param keyword: A keyword key.
+    :type keyword: str
+
+    :returns: The name of the keyword
+    :rtype: str
+    """
+    definition_dict = definition(keyword)
+    if definition_dict:
+        return definition_dict.get('name', keyword)
+    # Else, return the keyword
+    return keyword
 
 
 def get_allowed_geometries(layer_purpose_key):
@@ -430,8 +462,9 @@ def get_field_groups(layer_purpose, layer_subcategory=None):
     return field_groups
 
 
-def map_report_component(component, custom_template_dir=None):
-    """Get a map report component based on custom qpt if exists
+def update_template_component(
+        component, custom_template_dir=None, hazard=None, exposure=None):
+    """Get a component based on custom qpt if exists
 
     :param component: Component as dictionary.
     :type component: dict
@@ -439,18 +472,90 @@ def map_report_component(component, custom_template_dir=None):
     :param custom_template_dir: The directory where the custom template stored.
     :type custom_template_dir: basestring
 
+    :param hazard: The hazard definition.
+    :type hazard: dict
+
+    :param exposure: The exposure definition.
+    :type exposure: dict
+
     :returns: Map report component.
     :rtype: dict
     """
     copy_component = deepcopy(component)
+
+    # get the default template component from the original map report component
+    default_component_keys = []
+    for component in copy_component['components']:
+        default_component_keys.append(component['key'])
+
     if not custom_template_dir:
         custom_template_dir = join(
             QgsApplication.qgisSettingsDirPath(), 'inasafe')
 
     for component in copy_component['components']:
+        if not component.get('template'):
+            continue
+
+        template_format = splitext(component['template'])[-1][1:]
+        if template_format != QgisComposerComponentsMetadata.OutputFormat.QPT:
+            continue
+
         qpt_file_name = component['template'].split('/')[-1]
         custom_qpt_path = join(custom_template_dir, qpt_file_name)
         if exists(custom_qpt_path):
             component['template'] = custom_qpt_path
 
+    # we want to check if there is hazard-exposure specific template available
+    # in user's custom template directory
+    if exists(custom_template_dir) and hazard and exposure:
+        for filename in listdir(custom_template_dir):
+
+            file_name, file_format = splitext(filename)
+            if file_format[1:] != (
+                    QgisComposerComponentsMetadata.OutputFormat.QPT):
+                continue
+            if hazard['key'] in file_name and exposure['key'] in file_name:
+                # we do the import here to avoid circular import when starting
+                # up the plugin
+                from safe.definitions.reports.components import (
+                    map_report_component_boilerplate)
+                hazard_exposure_component = deepcopy(
+                    map_report_component_boilerplate)
+
+                # we need to update several items in this component
+                map_report_file = '{file_name}.pdf'.format(file_name=file_name)
+                hazard_exposure_component['key'] = file_name
+                hazard_exposure_component['template'] = join(
+                    custom_template_dir, filename)
+                hazard_exposure_component['output_path']['template'] = filename
+                hazard_exposure_component['output_path']['map'] = (
+                    map_report_file)
+
+                # add this hazard-exposure component to the returned component
+                copy_component['components'].append(hazard_exposure_component)
+
+                # remove the original template component because we want to
+                # override it using this new hazard-exposure template component
+                new_component = [
+                    component for component in copy_component['components']
+                    if component['key'] not in default_component_keys
+                ]
+                copy_component['components'] = new_component
+
     return copy_component
+
+
+def set_provenance(provenance_collection, provenance_dict, value):
+    """Helper to set provenance_dict to provenance_collection.
+
+    :param provenance_collection: The target of dictionary of provenance to
+        be updated.
+    :type provenance_collection: dict
+
+    :param provenance_dict: The provenance dictionary to be the key.
+    :type provenance_dict: dict
+
+    :param value: The value that will be set.
+    :type value: object
+    """
+    provenance_collection[provenance_dict['provenance_key']] = value

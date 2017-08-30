@@ -88,7 +88,6 @@ def get_qgis_app():
 
     If QGIS is already running the handle to that app will be returned.
     """
-
     global QGIS_APP, PARENT, IFACE, CANVAS  # pylint: disable=W0603
 
     if iface:
@@ -214,10 +213,10 @@ def standard_data_path(*args):
 
     .. versionadded:: 3.0
 
-    :param args: List of path e.g. ['control', 'files',
+    :param *args: List of path e.g. ['control', 'files',
         'test-error-message.txt'] or ['control', 'scenarios'] to get the path
         to scenarios dir.
-    :type args: str
+    :type *args: str
 
     :return: Absolute path to the test data or dir path.
     :rtype: str
@@ -264,10 +263,10 @@ def load_test_vector_layer(*args, **kwargs):
 
     See documentation of load_path_vector_layer
 
-    :param args: List of path e.g. ['exposure', 'buildings.shp'].
-    :type args: list[str]
+    :param *args: List of path e.g. ['exposure', 'buildings.shp'].
+    :type *args: list
 
-    :param kwargs: It can be :
+    :param *kwargs: It can be :
         clone=True if you want to copy the layer first to a temporary file.
 
         clone_to_memory=True if you want to create a memory layer.
@@ -275,7 +274,7 @@ def load_test_vector_layer(*args, **kwargs):
         with_keywords=False if you do not want keywords. "clone_to_memory" is
             required.
 
-    :type kwargs: dict
+    :type *kwargs: dict
 
     :return: The vector layer.
     :rtype: QgsVectorLayer
@@ -387,16 +386,16 @@ def load_test_raster_layer(*args, **kwargs):
 
     See documentation of load_path_raster_layer
 
-    :param args: List of path e.g. ['exposure', 'population.asc]'.
-    :type args: list[str]
+    :param *args: List of path e.g. ['exposure', 'population.asc]'.
+    :type *args: list[str]
 
-    :param kwargs: It can be :
+    :param *kwargs: It can be :
         clone=True if you want to copy the layer first to a temporary file.
 
         with_keywords=False if you do not want keywords. "clone" is
             required.
 
-    :type kwargs: dict
+    :type *kwargs: dict
 
     :return: The raster layer.
     :rtype: QgsRasterLayer
@@ -1142,10 +1141,12 @@ def remove_vector_temp_file(file_path):
 
 
 class FakeLayer(object):
+
     """A Mock layer.
 
     :param source:
     """
+
     def __init__(self, source=None):
         self.layer_source = source
 

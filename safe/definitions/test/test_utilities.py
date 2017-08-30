@@ -42,9 +42,14 @@ from safe.definitions import (
     cyclone_au_bom_hazard_classes,
     unit_knots,
     population_field_groups,
-    aggregation_field_groups
+    aggregation_field_groups,
+    productivity_rate_field,
+    production_cost_rate_field,
+    production_value_rate_field,
+    provenance_host_name,
+    provenance_user
 )
-from safe.definitions.reports.components import report_a4_blue
+from safe.definitions.reports.components import map_report
 
 from safe.definitions.utilities import (
     definition,
@@ -64,7 +69,9 @@ from safe.definitions.utilities import (
     default_classification_value_maps,
     fields_in_field_groups,
     get_field_groups,
-    map_report_component
+    update_template_component,
+    get_name,
+    set_provenance
 )
 
 from safe.common.utilities import safe_dir
@@ -91,6 +98,15 @@ class TestDefinitionsUtilities(unittest.TestCase):
         keyword = 'hazards'
         keyword_definition = definition(keyword)
         self.assertTrue('description' in keyword_definition)
+
+    def test_get_name(self):
+        """Test get_name method."""
+        flood_name = get_name(hazard_flood['key'])
+        self.assertEqual(flood_name, hazard_flood['name'])
+
+        not_exist_key = 'Mega flux capacitor'
+        not_found_name = get_name(not_exist_key)
+        self.assertEqual(not_exist_key, not_found_name)
 
     def test_layer_purpose_for_layer(self):
         """Test for purpose_for_layer method."""
@@ -251,6 +267,19 @@ class TestDefinitionsUtilities(unittest.TestCase):
         expected_fields += fields_in_field_groups(
             layer_purpose_aggregation['field_groups'])
         expected_fields = [f for f in expected_fields if f['replace_null']]
+        self.assertListEqual(fields, expected_fields)
+
+        fields = get_fields(
+            layer_purpose_exposure['key'],
+            exposure_land_cover['key'],
+            replace_null=False)
+        expected_fields = deepcopy(exposure_land_cover['compulsory_fields'])
+        expected_fields += deepcopy(exposure_fields)
+        expected_fields += [
+            productivity_rate_field,
+            production_cost_rate_field,
+            production_value_rate_field
+        ]
         self.assertListEqual(fields, expected_fields)
 
         fields = get_fields('aggregation', replace_null=False)
@@ -421,11 +450,11 @@ class TestDefinitionsUtilities(unittest.TestCase):
         expected = []
         self.assertListEqual(field_groups, expected)
 
-    def test_map_report_component(self):
-        """Test for map report component."""
+    def test_update_template_component(self):
+        """Test for custom template component."""
         # Default qpt
-        component = map_report_component(report_a4_blue, '.')
-        self.assertDictEqual(component, report_a4_blue)
+        component = update_template_component(map_report, '.')
+        self.assertDictEqual(component, map_report)
 
         # Custom qpt
         target_directory = mkdtemp()
@@ -433,13 +462,37 @@ class TestDefinitionsUtilities(unittest.TestCase):
             safe_dir('..'),
             'resources',
             'qgis-composer-templates',
-            'inasafe-portrait-template.qpt')
+            'inasafe-map-report-portrait.qpt')
         if exists(default_qpt):
             target_path = join(target_directory, split(default_qpt)[1])
             shutil.copy2(default_qpt, target_path)
 
-        component = map_report_component(report_a4_blue, target_directory)
-        self.assertTrue(component != report_a4_blue)
+        component = update_template_component(map_report, target_directory)
+        self.assertTrue(component != map_report)
+
+    def test_set_provenance(self):
+        """Test for set_provenance."""
+        provenance_collection = {}
+        host_name_value = 'host_name'
+        set_provenance(
+            provenance_collection, provenance_host_name, host_name_value)
+        expected = {provenance_host_name['provenance_key']: host_name_value}
+        self.assertDictEqual(provenance_collection, expected)
+
+        host_name_value = 'new_host_name'
+        set_provenance(
+            provenance_collection, provenance_host_name, host_name_value)
+        expected = {provenance_host_name['provenance_key']: host_name_value}
+        self.assertDictEqual(provenance_collection, expected)
+
+        user_value = 'user'
+        set_provenance(
+            provenance_collection, provenance_user, user_value)
+        expected = {
+            provenance_host_name['provenance_key']: host_name_value,
+            provenance_user['provenance_key']: user_value,
+        }
+        self.assertDictEqual(provenance_collection, expected)
 
 
 if __name__ == '__main__':

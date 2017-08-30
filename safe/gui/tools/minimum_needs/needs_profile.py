@@ -1,6 +1,8 @@
 # coding=utf-8
-"""This is the concrete Minimum Needs class that contains the logic to load
-the minimum needs to and from the QSettings"""
+"""
+This is the concrete Minimum Needs class that contains the logic to load
+the minimum needs to and from the QSettings.
+"""
 
 __author__ = 'Christian Christelis <christian@kartoza.com>'
 __date__ = '05/10/2014'
@@ -13,11 +15,12 @@ from shutil import copy, rmtree
 from PyQt4.QtCore import QSettings
 from qgis.core import QgsApplication
 
+from parameters.text_parameter import TextParameter
+
 from safe.common.parameters.resource_parameter import ResourceParameter
 from safe.common.minimum_needs import MinimumNeeds
 from safe.utilities.i18n import tr
 from safe.utilities.resources import resources_path
-from safe_extras.parameters.text_parameter import TextParameter
 
 
 def add_needs_parameters(parameters):
@@ -122,10 +125,7 @@ class NeedsProfile(MinimumNeeds):
         :type profile: basestring, str
         """
         profile_path = os.path.join(
-            str(self.root_directory),
-            'minimum_needs',
-            profile + '.json'
-        )
+            self.root_directory, 'minimum_needs', profile + '.json')
         self.read_from_file(profile_path)
 
     def save_profile(self, profile):
@@ -136,7 +136,7 @@ class NeedsProfile(MinimumNeeds):
         """
         profile = profile.replace('.json', '')
         profile_path = os.path.join(
-            str(self.root_directory),
+            self.root_directory,
             'minimum_needs',
             profile + '.json'
         )
@@ -195,7 +195,7 @@ class NeedsProfile(MinimumNeeds):
 
         else:
             locale_minimum_needs_dir = os.path.join(
-                str(self.root_directory), 'minimum_needs')
+                self.root_directory, 'minimum_needs')
             path_name = resources_path('minimum_needs')
             if not os.path.exists(locale_minimum_needs_dir):
                 os.makedirs(locale_minimum_needs_dir)
@@ -342,7 +342,7 @@ class NeedsProfile(MinimumNeeds):
         """
         self.remove_file(
             os.path.join(
-                str(self.root_directory), 'minimum_needs', profile + '.json')
+                self.root_directory, 'minimum_needs', profile + '.json')
         )
 
     def move_old_profile(self, locale_minimum_needs_dir):
