@@ -171,7 +171,7 @@
              </property>
              <property name="icon">
               <iconset>
-               <normaloff>../../safe/resources/img/icons/add.svg</normaloff>../../safe/resources/img/icons/add.svg</iconset>
+               <normaloff>../../resources/img/icons/add.svg</normaloff>../../resources/img/icons/add.svg</iconset>
              </property>
              <property name="checkable">
               <bool>false</bool>
@@ -215,7 +215,7 @@
              </property>
              <property name="icon">
               <iconset>
-               <normaloff>../../safe/resources/img/icons/remove.svg</normaloff>../../safe/resources/img/icons/remove.svg</iconset>
+               <normaloff>../../resources/img/icons/remove.svg</normaloff>../../resources/img/icons/remove.svg</iconset>
              </property>
             </widget>
            </item>
@@ -247,7 +247,7 @@
              </property>
              <property name="icon">
               <iconset>
-               <normaloff>../../safe/resources/img/icons/edit.svg</normaloff>../../safe/resources/img/icons/edit.svg</iconset>
+               <normaloff>../../resources/img/icons/edit.svg</normaloff>../../resources/img/icons/edit.svg</iconset>
              </property>
             </widget>
            </item>

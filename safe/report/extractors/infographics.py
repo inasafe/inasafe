@@ -6,7 +6,7 @@ from safe.definitions.concepts import concepts
 from safe.report.extractors.util import (
     resolve_from_dictionary,
     layer_hazard_classification)
-from safe.utilities.resources import resource_url
+from safe.utilities.resources import resource_url, resources_path
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -33,8 +33,7 @@ def population_chart_legend_extractor(impact_report, component_metadata):
     """
     context = {}
 
-    resources_dir = safe_dir(sub_dir='../resources')
-    context['inasafe_resources_base_dir'] = resources_dir
+    context['inasafe_resources_base_dir'] = resources_path()
 
     """Population Charts"""
 

@@ -459,8 +459,7 @@ class TestDefinitionsUtilities(unittest.TestCase):
         # Custom qpt
         target_directory = mkdtemp()
         default_qpt = join(
-            safe_dir('..'),
-            'resources',
+            safe_dir('resources'),
             'qgis-composer-templates',
             'inasafe-map-report-portrait.qpt')
         if exists(default_qpt):
