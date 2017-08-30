@@ -234,7 +234,61 @@ hazard_flood = {
     'layer_modes': [layer_mode_classified, layer_mode_continuous],
     'disabled_exposures': [exposure_place]
 }
+# GEO_DAM_BREAK
+hazard_dam_break = {
+    'key': 'dam_break',
+    'name': tr('DAM Break'),
+    'description': tr(
+        'A <b>flood</b> describes the inundation of land that is normally dry '
+        'by a large amount of water. For example: A <b>flood</b> can occur '
+        'after heavy rainfall, when a river overflows its banks or when a '
+        'dam breaks. The effect of a <b>flood</b> is for land that is '
+        'normally dry to become wet.'),
+    'notes': [
+        {
+            'item_category': 'dam_break_general',
+            'item_header': tr('dam break general notes'),
+            'item_list': [
+                # additional generic notes for flood
+                caveat_simulation,
+                caveat_local_conditions,
+                caveat_analysis_extent,
+            ]
+        }
+    ],
+    'continuous_notes': [  # notes specific to continuous data
+    ],
+    'classified_notes': [  # notes specific to classified data
+    ],
+    'single_event_notes': [  # notes specific to single event data
+    ],
+    'multi_event_notes': [  # notes specific to multi event data
+    ],
+    'actions': [  # these are additional generic actions
 
+    ],
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    'continuous_hazard_units': [unit_feet, unit_metres, unit_generic],
+    'allowed_geometries': [
+        'polygon',
+        'raster'
+    ],
+    'classifications': [
+        flood_hazard_classes,
+        flood_petabencana_hazard_classes,
+        generic_hazard_classes],
+    'compulsory_fields': [hazard_value_field],
+    'fields': hazard_fields,
+    'extra_fields': [],
+    'field_groups': [],
+    'layer_modes': [layer_mode_classified, layer_mode_continuous],
+    'disabled_exposures': [exposure_place]
+}
 hazard_cyclone = {
     'key': 'cyclone',
     'name': tr('Cyclone'),
@@ -482,7 +536,8 @@ hazard_all = [
     hazard_volcano,
     hazard_volcanic_ash,
     hazard_cyclone,
-    hazard_generic
+    hazard_generic,
+    hazard_dam_break # GEO_DAM_BREAK
 ]
 hazards = {
     'key': 'hazards',
