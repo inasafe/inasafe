@@ -12,10 +12,10 @@
             <b>{{ note.title|capitalize }}</b>:
         {% endif %}
         {% if note.description %}
-            {{ note.description|capitalize }}<br>
+            {{ note.description }}<br>
         {% endif %}
         {% if note.citations %}
-            <i>({{ note.citations|capitalize }})</i><br>
+            <i>({{ note.citations }})</i><br>
         {% endif %}
     {% endfor %}
 </p>
