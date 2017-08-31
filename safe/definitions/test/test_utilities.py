@@ -74,7 +74,7 @@ from safe.definitions.utilities import (
     set_provenance
 )
 
-from safe.common.utilities import safe_dir
+from safe.utilities.resources import resources_path
 
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -458,8 +458,7 @@ class TestDefinitionsUtilities(unittest.TestCase):
 
         # Custom qpt
         target_directory = mkdtemp()
-        default_qpt = join(
-            safe_dir('resources'),
+        default_qpt = resources_path(
             'qgis-composer-templates',
             'inasafe-map-report-portrait.qpt')
         if exists(default_qpt):
