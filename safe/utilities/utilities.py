@@ -138,6 +138,35 @@ def humanise_seconds(seconds):
             days, hours, minutes))
 
 
+def generate_expression_help(description, examples):
+    """Generate the help message for QGIS Expressions.
+
+    It will format nicely the help string with some examples.
+
+    :param description: A description of the expression.
+    :type description: basestring
+
+    :param examples: A dictionnary of examples
+    :type examples: dict
+
+    :return: A message object.
+    :rtype: message
+    """
+    help = m.Message()
+    help.add(m.Paragraph(description))
+    help.add(m.Paragraph(tr('Examples:')))
+    bullets = m.BulletedList()
+    for expression, result in examples.iteritems():
+        if result:
+            bullets.add(
+                m.Text(
+                    m.ImportantText(expression), m.Text('→'), m.Text(result)))
+        else:
+            bullets.add(m.Text(m.ImportantText(expression)))
+    help.add(bullets)
+    return help
+
+
 def impact_attribution(keywords, inasafe_flag=False):
     """Make a little table for attribution of data sources used in impact.
 
