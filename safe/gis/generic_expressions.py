@@ -8,7 +8,9 @@ from qgis.core import (
 import datetime
 
 from safe.definitions.provenance import provenance_layer_analysis_impacted_id
+from safe.utilities.i18n import tr
 from safe.utilities.rounding import denomination, round_affected_number
+from safe.utilities.utilities import generate_expression_help
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -16,13 +18,25 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 ##
-# Docstrings for these expressions are used in the QGIS GUI in the Expression
-# dialog and also in the InaSAFE Help dialog.
+# For QGIS < 2.18.13 and QGIS < 2.14.19, docstrings are used in the QGIS GUI
+# in the Expression dialog and also in the InaSAFE Help dialog.
+#
+# For QGIS >= 2.18.13, QGIS >= 2.14.19 and QGIS 3, the translated variable will
+# be used in QGIS.
+# help_text is used for QGIS 2.18 and 2.14
+# helpText is used for QGIS 3 : https://github.com/qgis/QGIS/pull/5059
 ##
+
+description = tr('Retrieve a value from a field in the impact analysis layer.')
+examples = {
+    'inasafe_impact_analysis_field_value(\'total_not_exposed\')': 3
+}
+help_message = generate_expression_help(description, examples)
 
 
 @qgsfunction(
-    args='auto', group='InaSAFE', usesGeometry=False, referencedColumns=[])
+    args='auto', group='InaSAFE', usesGeometry=False, referencedColumns=[],
+    help_text=help_message.to_html(), helpText=help_message.to_html())
 def inasafe_impact_analysis_field_value(field, feature, parent):
     """Retrieve a value from a field in the impact analysis layer.
 
@@ -49,8 +63,19 @@ def inasafe_impact_analysis_field_value(field, feature, parent):
     return feature[index]
 
 
+description = tr(
+    'Given a number, it will return the place value name. It needs to be used '
+    'with inasafe_place_value_coefficient.')
+examples = {
+    'inasafe_place_value_name(10)': tr('Ten'),
+    'inasafe_place_value_name(1700)': tr('Thousand')
+}
+help_message = generate_expression_help(description, examples)
+
+
 @qgsfunction(
-    args='auto', group='InaSAFE', usesGeometry=False, referencedColumns=[])
+    args='auto', group='InaSAFE', usesGeometry=False, referencedColumns=[],
+    help_text=help_message.to_html(), helpText=help_message.to_html())
 def inasafe_place_value_name(number, feature, parent):
     """Given a number, it will return the place value name.
 
@@ -77,8 +102,19 @@ def inasafe_place_value_name(number, feature, parent):
         return unit['name']
 
 
+description = tr(
+    'Given a number, it will return the coefficient of the place value name. '
+    'It needs to be used with inasafe_number_denomination_unit.')
+examples = {
+    'inasafe_place_value_coefficient(10)': 1,
+    'inasafe_place_value_coefficient(1700)': 1.7
+}
+help_message = generate_expression_help(description, examples)
+
+
 @qgsfunction(
-    args='auto', group='InaSAFE', usesGeometry=False, referencedColumns=[])
+    args='auto', group='InaSAFE', usesGeometry=False, referencedColumns=[],
+    help_text=help_message.to_html(), helpText=help_message.to_html())
 def inasafe_place_value_coefficient(number, feature, parent):
     """Given a number, it will return the coefficient of the place value name.
 
@@ -102,8 +138,23 @@ def inasafe_place_value_coefficient(number, feature, parent):
         return None
 
 
+description = tr(
+    'Given a number and total, it will return the percentage of the number to '
+    'the total.')
+examples = {
+    'inasafe_place_value_percentage(inasafe_impact_analysis_field_value('
+    '\'female_displaced\'), '
+    'inasafe_impact_analysis_field_value(\'displaced\'))': tr(
+        'will calculate the percentage of female displaced count to total '
+        'displaced count.'),
+    'inasafe_place_value_percentage(50,100)': '50.0%'
+}
+help_message = generate_expression_help(description, examples)
+
+
 @qgsfunction(
-    args='auto', group='InaSAFE', usesGeometry=False, referencedColumns=[])
+    args='auto', group='InaSAFE', usesGeometry=False, referencedColumns=[],
+    help_text=help_message.to_html(), helpText=help_message.to_html())
 def inasafe_place_value_percentage(number, total, feature, parent):
     """Given a number and total, it will return the percentage of the number
     to the total.
@@ -124,8 +175,19 @@ def inasafe_place_value_percentage(number, total, feature, parent):
     return percentage_format.format(percentage=percentage)
 
 
+description = tr(
+    'Given an inasafe analysis time, it will convert it to a date with '
+    'year-month-date format.')
+examples = {
+    'beautify_date( @start_datetime )': tr(
+        'will convert datetime provided by qgis_variable.')
+}
+help_message = generate_expression_help(description, examples)
+
+
 @qgsfunction(
-    args='auto', group='InaSAFE', usesGeometry=False, referencedColumns=[])
+    args='auto', group='InaSAFE', usesGeometry=False, referencedColumns=[],
+    help_text=help_message.to_html(), helpText=help_message.to_html())
 def beautify_date(inasafe_time, feature, parent):
     """Given an inasafe analysis time, it will convert it to a date with
     year-month-date format.
@@ -141,8 +203,19 @@ def beautify_date(inasafe_time, feature, parent):
     return date
 
 
+description = tr(
+    'Given an inasafe analysis time, it will convert it to a time with '
+    'hour:minute format.')
+examples = {
+    'beautify_date( @start_datetime )': tr(
+        'will convert datetime provided by qgis_variable.')
+}
+help_message = generate_expression_help(description, examples)
+
+
 @qgsfunction(
-    args='auto', group='InaSAFE', usesGeometry=False, referencedColumns=[])
+    args='auto', group='InaSAFE', usesGeometry=False, referencedColumns=[],
+    help_text=help_message.to_html(), helpText=help_message.to_html())
 def beautify_time(inasafe_time, feature, parent):
     """Given an inasafe analysis time, it will convert it to a time with
     hour:minute format.
