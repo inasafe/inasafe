@@ -4,7 +4,6 @@
 import sys
 import os
 import logging
-from inspect import getmembers
 
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
@@ -34,8 +33,7 @@ from PyQt4.QtGui import (
     QLineEdit,
     QInputDialog)
 
-from safe.report.expressions import infographic, map_report
-from safe.gis import expressions
+from safe.utilities.expressions import qgis_expressions
 from safe.definitions.versions import inasafe_release_status
 from safe.common.exceptions import (
     KeywordNotFoundError,
@@ -630,16 +628,7 @@ class Plugin(object):
         self.iface.currentLayerChanged.disconnect(self.layer_changed)
 
         # Unload QGIS expressions loaded by the plugin.
-        qgis_expressions = {
-            fct[0]: fct[1] for fct in getmembers(expressions)
-            if fct[1].__class__.__name__ == 'QgsExpressionFunction'}
-        qgis_expressions.update({
-            fct[0]: fct[1] for fct in getmembers(infographic)
-            if fct[1].__class__.__name__ == 'QgsExpressionFunction'})
-        qgis_expressions.update({
-            fct[0]: fct[1] for fct in getmembers(map_report)
-            if fct[1].__class__.__name__ == 'QgsExpressionFunction'})
-        for qgis_expression in qgis_expressions.keys():
+        for qgis_expression in qgis_expressions().keys():
             QgsExpression.unregisterFunction(qgis_expression)
 
     def toggle_inasafe_action(self, checked):
