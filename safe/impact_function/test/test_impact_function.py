@@ -4,7 +4,6 @@
 
 from copy import deepcopy
 import getpass
-import platform
 from socket import gethostname
 
 import unittest
@@ -24,6 +23,43 @@ from safe.definitions.fields import (
     female_displaced_count_field,
     youth_displaced_count_field,
     displaced_field,
+)
+from safe.definitions.provenance import (
+    provenance_action_checklist,
+    provenance_aggregation_keywords,
+    provenance_aggregation_layer,
+    provenance_aggregation_layer_id,
+    provenance_analysis_extent,
+    provenance_analysis_question,
+    provenance_data_store_uri,
+    provenance_duration,
+    provenance_end_datetime,
+    provenance_exposure_keywords,
+    provenance_exposure_layer,
+    provenance_exposure_layer_id,
+    provenance_gdal_version,
+    provenance_hazard_keywords,
+    provenance_hazard_layer,
+    provenance_hazard_layer_id,
+    provenance_host_name,
+    provenance_impact_function_name,
+    provenance_impact_function_title,
+    provenance_inasafe_version,
+    provenance_map_legend_title,
+    provenance_map_title,
+    provenance_notes,
+    provenance_os,
+    provenance_pyqt_version,
+    provenance_qgis_version,
+    provenance_qt_version,
+    provenance_requested_extent,
+    provenance_start_datetime,
+    provenance_user,
+    provenance_layer_exposure_summary,
+    provenance_layer_aggregate_hazard_impacted,
+    provenance_layer_aggregation_summary,
+    provenance_layer_analysis_impacted,
+    provenance_layer_exposure_summary_table
 )
 from safe.definitions.default_values import female_ratio_default_value
 from safe.definitions.layer_purposes import (
@@ -216,7 +252,7 @@ class TestImpactFunction(unittest.TestCase):
         impact_function.exposure = exposure_layer
         impact_function.hazard = hazard_layer
         impact_function.prepare()
-        self.assertEqual(impact_function.name, 'Flood Polygon On Road Line')
+        self.assertEqual(impact_function.name, 'Flood Polygon On Roads Line')
         self.assertEqual(impact_function.title, 'be affected')
 
     def test_minimum_extent(self):
@@ -759,26 +795,36 @@ class TestImpactFunction(unittest.TestCase):
         hazard_category = definition(hazard_layer.keywords['hazard_category'])
 
         expected_provenance = {
-            'gdal_version': gdal.__version__,
-            'host_name': gethostname(),
-            'map_title': get_map_title(hazard, exposure, hazard_category),
-            'map_legend_title': exposure['layer_legend_title'],
-            'user': getpass.getuser(),
-            'os': readable_os_version(),
-            'pyqt_version': PYQT_VERSION_STR,
-            'qgis_version': QGis.QGIS_VERSION,
-            'qt_version': QT_VERSION_STR,
-            'inasafe_version': get_version(),
-            'aggregation_layer': aggregation_layer.source(),
-            'aggregation_layer_id': aggregation_layer.id(),
-            'exposure_layer': exposure_layer.source(),
-            'exposure_layer_id': exposure_layer.id(),
-            'hazard_layer': hazard_layer.source(),
-            'hazard_layer_id': hazard_layer.id(),
-            'analysis_question': get_analysis_question(hazard, exposure),
-            'aggregation_keywords': deepcopy(aggregation_layer.keywords),
-            'exposure_keywords': deepcopy(exposure_layer.keywords),
-            'hazard_keywords': deepcopy(hazard_layer.keywords),
+            provenance_gdal_version['provenance_key']: gdal.__version__,
+            provenance_host_name['provenance_key']: gethostname(),
+            provenance_map_title['provenance_key']: get_map_title(
+                hazard, exposure, hazard_category),
+            provenance_map_legend_title['provenance_key']: exposure[
+                'layer_legend_title'],
+            provenance_user['provenance_key']: getpass.getuser(),
+            provenance_os['provenance_key']: readable_os_version(),
+            provenance_pyqt_version['provenance_key']: PYQT_VERSION_STR,
+            provenance_qgis_version['provenance_key']: QGis.QGIS_VERSION,
+            provenance_qt_version['provenance_key']: QT_VERSION_STR,
+            provenance_inasafe_version['provenance_key']: get_version(),
+            provenance_aggregation_layer['provenance_key']:
+                aggregation_layer.source(),
+            provenance_aggregation_layer_id['provenance_key']:
+                aggregation_layer.id(),
+            provenance_exposure_layer['provenance_key']:
+                exposure_layer.source(),
+            provenance_exposure_layer_id['provenance_key']:
+                exposure_layer.id(),
+            provenance_hazard_layer['provenance_key']: hazard_layer.source(),
+            provenance_hazard_layer_id['provenance_key']: hazard_layer.id(),
+            provenance_analysis_question['provenance_key']:
+                get_analysis_question(hazard, exposure),
+            provenance_aggregation_keywords['provenance_key']: deepcopy(
+                aggregation_layer.keywords),
+            provenance_exposure_keywords['provenance_key']:
+                deepcopy(exposure_layer.keywords),
+            provenance_hazard_keywords['provenance_key']: deepcopy(
+                hazard_layer.keywords),
         }
 
         # Set up impact function
@@ -796,19 +842,39 @@ class TestImpactFunction(unittest.TestCase):
         self.maxDiff = None
 
         expected_provenance.update({
-            'action_checklist': impact_function.action_checklist(),
-            'analysis_extent': impact_function.analysis_extent.exportToWkt(),
-            'impact_function_name': impact_function.name,
-            'impact_function_title': impact_function.title,
-            'notes': impact_function.notes(),
-            'requested_extent': impact_function.requested_extent,
-            'data_store_uri': impact_function.datastore.uri_path,
-            'start_datetime': impact_function.start_datetime,
-            'end_datetime': impact_function.end_datetime,
-            'duration': impact_function.duration
+            provenance_action_checklist['provenance_key']:
+                impact_function.action_checklist(),
+            provenance_analysis_extent['provenance_key']:
+                impact_function.analysis_extent.exportToWkt(),
+            provenance_impact_function_name['provenance_key']:
+                impact_function.name,
+            provenance_impact_function_title['provenance_key']:
+                impact_function.title,
+            provenance_notes['provenance_key']: impact_function.notes(),
+            provenance_requested_extent['provenance_key']: impact_function.
+                requested_extent,
+            provenance_data_store_uri['provenance_key']: impact_function.
+                datastore.uri_path,
+            provenance_start_datetime['provenance_key']: impact_function.
+                start_datetime,
+            provenance_end_datetime['provenance_key']:
+                impact_function.end_datetime,
+            provenance_duration['provenance_key']: impact_function.duration
         })
 
-        self.assertDictEqual(expected_provenance, impact_function.provenance)
+        self.assertDictContainsSubset(
+            expected_provenance, impact_function.provenance)
+
+        output_layer_provenance_keys = [
+            provenance_layer_exposure_summary['provenance_key'],
+            provenance_layer_aggregate_hazard_impacted['provenance_key'],
+            provenance_layer_aggregation_summary['provenance_key'],
+            provenance_layer_analysis_impacted['provenance_key'],
+            provenance_layer_exposure_summary_table['provenance_key']
+        ]
+
+        for key in output_layer_provenance_keys:
+            self.assertIn(key, impact_function.provenance.keys())
 
         # Future reference: I comment out these lines since the keywords
         # properties are used in the report generation. Removing it will make
@@ -840,26 +906,33 @@ class TestImpactFunction(unittest.TestCase):
         hazard_category = definition(hazard_layer.keywords['hazard_category'])
 
         expected_provenance = {
-            'gdal_version': gdal.__version__,
-            'host_name': gethostname(),
-            'map_title': get_map_title(hazard, exposure, hazard_category),
-            'map_legend_title': exposure['layer_legend_title'],
-            'inasafe_version': get_version(),
-            'pyqt_version': PYQT_VERSION_STR,
-            'qgis_version': QGis.QGIS_VERSION,
-            'qt_version': QT_VERSION_STR,
-            'user': getpass.getuser(),
-            'os': readable_os_version(),
-            'aggregation_layer': None,
-            'aggregation_layer_id': None,
-            'exposure_layer': exposure_layer.source(),
-            'exposure_layer_id': exposure_layer.id(),
-            'hazard_layer': hazard_layer.source(),
-            'hazard_layer_id': hazard_layer.id(),
-            'analysis_question': get_analysis_question(hazard, exposure),
-            'aggregation_keywords': None,
-            'exposure_keywords': deepcopy(exposure_layer.keywords),
-            'hazard_keywords': deepcopy(hazard_layer.keywords),
+            provenance_gdal_version['provenance_key']: gdal.__version__,
+            provenance_host_name['provenance_key']: gethostname(),
+            provenance_map_title['provenance_key']: get_map_title(
+                hazard, exposure, hazard_category),
+            provenance_map_legend_title['provenance_key']: exposure[
+                'layer_legend_title'],
+            provenance_user['provenance_key']: getpass.getuser(),
+            provenance_os['provenance_key']: readable_os_version(),
+            provenance_pyqt_version['provenance_key']: PYQT_VERSION_STR,
+            provenance_qgis_version['provenance_key']: QGis.QGIS_VERSION,
+            provenance_qt_version['provenance_key']: QT_VERSION_STR,
+            provenance_inasafe_version['provenance_key']: get_version(),
+            provenance_aggregation_layer['provenance_key']: None,
+            provenance_aggregation_layer_id['provenance_key']: None,
+            provenance_exposure_layer['provenance_key']:
+                exposure_layer.source(),
+            provenance_exposure_layer_id['provenance_key']:
+                exposure_layer.id(),
+            provenance_hazard_layer['provenance_key']: hazard_layer.source(),
+            provenance_hazard_layer_id['provenance_key']: hazard_layer.id(),
+            provenance_analysis_question['provenance_key']:
+                get_analysis_question(hazard, exposure),
+            provenance_aggregation_keywords['provenance_key']: None,
+            provenance_exposure_keywords['provenance_key']:
+                deepcopy(exposure_layer.keywords),
+            provenance_hazard_keywords['provenance_key']: deepcopy(
+                hazard_layer.keywords),
         }
 
         # Set up impact function
@@ -874,19 +947,39 @@ class TestImpactFunction(unittest.TestCase):
         self.maxDiff = None
 
         expected_provenance.update({
-            'action_checklist': impact_function.action_checklist(),
-            'analysis_extent': impact_function.analysis_extent.exportToWkt(),
-            'impact_function_name': impact_function.name,
-            'impact_function_title': impact_function.title,
-            'notes': impact_function.notes(),
-            'requested_extent': impact_function.requested_extent,
-            'data_store_uri': impact_function.datastore.uri_path,
-            'start_datetime': impact_function.start_datetime,
-            'end_datetime': impact_function.end_datetime,
-            'duration': impact_function.duration
+            provenance_action_checklist['provenance_key']:
+                impact_function.action_checklist(),
+            provenance_analysis_extent['provenance_key']:
+                impact_function.analysis_extent.exportToWkt(),
+            provenance_impact_function_name['provenance_key']:
+                impact_function.name,
+            provenance_impact_function_title['provenance_key']:
+                impact_function.title,
+            provenance_notes['provenance_key']: impact_function.notes(),
+            provenance_requested_extent['provenance_key']: impact_function.
+                requested_extent,
+            provenance_data_store_uri['provenance_key']: impact_function.
+                datastore.uri_path,
+            provenance_start_datetime['provenance_key']: impact_function.
+                start_datetime,
+            provenance_end_datetime['provenance_key']:
+                impact_function.end_datetime,
+            provenance_duration['provenance_key']: impact_function.duration
         })
 
-        self.assertDictEqual(expected_provenance, impact_function.provenance)
+        self.assertDictContainsSubset(
+            expected_provenance, impact_function.provenance)
+
+        output_layer_provenance_keys = [
+            provenance_layer_exposure_summary['provenance_key'],
+            provenance_layer_aggregate_hazard_impacted['provenance_key'],
+            provenance_layer_aggregation_summary['provenance_key'],
+            provenance_layer_analysis_impacted['provenance_key'],
+            provenance_layer_exposure_summary_table['provenance_key']
+        ]
+
+        for key in output_layer_provenance_keys:
+            self.assertIn(key, impact_function.provenance.keys())
 
     def test_vector_post_minimum_needs_value_generation(self):
         """Test minimum needs postprocessors on vector exposure.

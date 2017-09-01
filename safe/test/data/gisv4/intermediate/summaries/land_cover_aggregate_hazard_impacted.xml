@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gmd:MD_Metadata xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.isotc211.org/2005/gmd http://www.isotc211.org/2005/gmd/gmd.xsd">
+  <gmd:fileIdentifier>
+    <gco:CharacterString>None</gco:CharacterString>
+  </gmd:fileIdentifier>
+  <gmd:language>
+    <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/" codeListValue="eng" codeSpace="ISO 639-2">eng</gmd:LanguageCode>
+  </gmd:language>
+  <gmd:characterSet>
+    <gmd:MD_CharacterSetCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_CharacterSetCode" codeListValue="utf8" codeSpace="ISOTC211/19115">utf8</gmd:MD_CharacterSetCode>
+  </gmd:characterSet>
+  <gmd:hierarchyLevel>
+    <gmd:MD_ScopeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_ScopeCode" codeListValue="dataset" codeSpace="ISOTC211/19115">dataset</gmd:MD_ScopeCode>
+  </gmd:hierarchyLevel>
+  <gmd:contact>
+    <gmd:CI_ResponsibleParty>
+      <gmd:organisationName>
+        <gco:CharacterString>Metal Organisation</gco:CharacterString>
+      </gmd:organisationName>
+      <gmd:contactInfo>
+        <gmd:CI_Contact>
+          <gmd:address>
+            <gmd:CI_Address>
+              <gmd:electronicMailAddress>
+                <gco:CharacterString>metal@metal.com</gco:CharacterString>
+              </gmd:electronicMailAddress>
+            </gmd:CI_Address>
+          </gmd:address>
+        </gmd:CI_Contact>
+      </gmd:contactInfo>
+      <gmd:role>
+        <gmd:CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="pointOfContact" codeSpace="ISOTC211/19115">pointOfContact</gmd:CI_RoleCode>
+      </gmd:role>
+    </gmd:CI_ResponsibleParty>
+  </gmd:contact>
+  <gmd:dateStamp>
+    <gco:Date/>
+  </gmd:dateStamp>
+  <gmd:metadataStandardName>
+    <gco:CharacterString>ISO 19115:2003 - Geographic information - Metadata</gco:CharacterString>
+  </gmd:metadataStandardName>
+  <gmd:metadataStandardVersion>
+    <gco:CharacterString>ISO 19115:2003</gco:CharacterString>
+  </gmd:metadataStandardVersion>
+  <gmd:identificationInfo>
+    <gmd:MD_DataIdentification>
+      <gmd:citation>
+        <gmd:CI_Citation>
+          <gmd:title>
+            <gco:CharacterString>Aggregate Hazard Impacted</gco:CharacterString>
+          </gmd:title>
+          <gmd:date>
+            <gmd:CI_Date>
+              <gmd:date>
+                <gco:Date/>
+              </gmd:date>
+              <gmd:dateType>
+                <gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication" codeSpace="ISOTC211/19115">publication</gmd:CI_DateTypeCode>
+              </gmd:dateType>
+            </gmd:CI_Date>
+          </gmd:date>
+          <gmd:date>
+            <gmd:CI_Date>
+              <gmd:date>
+                <gco:Date/>
+              </gmd:date>
+              <gmd:dateType>
+                <gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue="revision" codeSpace="ISOTC211/19115">revision</gmd:CI_DateTypeCode>
+              </gmd:dateType>
+            </gmd:CI_Date>
+          </gmd:date>
+          <gmd:date>
+            <gmd:CI_Date>
+              <gmd:date>
+                <gco:Date/>
+              </gmd:date>
+              <gmd:dateType>
+                <gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue="creation" codeSpace="ISOTC211/19115">creation</gmd:CI_DateTypeCode>
+              </gmd:dateType>
+            </gmd:CI_Date>
+          </gmd:date>
+          <gmd:identifier>
+            <gmd:RS_Identifier>
+              <gmd:code>
+                <gco:CharacterString>None</gco:CharacterString>
+              </gmd:code>
+            </gmd:RS_Identifier>
+          </gmd:identifier>
+        </gmd:CI_Citation>
+      </gmd:citation>
+      <gmd:abstract>
+        <gco:CharacterString/>
+      </gmd:abstract>
+      <gmd:credit>
+        <gco:CharacterString/>
+      </gmd:credit>
+      <gmd:status>
+        <gmd:MD_ProgressCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_ProgressCode" codeListValue="revision" codeSpace="ISOTC211/19115">revision</gmd:MD_ProgressCode>
+      </gmd:status>
+      <gmd:pointOfContact>
+        <gmd:CI_ResponsibleParty>
+          <gmd:organisationName>
+            <gco:CharacterString/>
+          </gmd:organisationName>
+          <gmd:contactInfo>
+            <gmd:CI_Contact>
+              <gmd:address>
+                <gmd:CI_Address>
+                  <gmd:electronicMailAddress>
+                    <gco:CharacterString/>
+                  </gmd:electronicMailAddress>
+                </gmd:CI_Address>
+              </gmd:address>
+            </gmd:CI_Contact>
+          </gmd:contactInfo>
+          <gmd:role>
+            <gmd:CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="pointOfContact" codeSpace="ISOTC211/19115">pointOfContact</gmd:CI_RoleCode>
+          </gmd:role>
+        </gmd:CI_ResponsibleParty>
+      </gmd:pointOfContact>
+      <gmd:resourceMaintenance>
+        <gmd:MD_MaintenanceInformation>
+          <gmd:maintenanceAndUpdateFrequency>
+            <gmd:MD_MaintenanceFrequencyCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_MaintenanceFrequencyCode" codeListValue="continual" codeSpace="ISOTC211/19115">continual</gmd:MD_MaintenanceFrequencyCode>
+          </gmd:maintenanceAndUpdateFrequency>
+        </gmd:MD_MaintenanceInformation>
+      </gmd:resourceMaintenance>
+      <gmd:descriptiveKeywords>
+        <gmd:MD_Keywords>
+          <gmd:keyword>
+            <gco:CharacterString>Human health and safety</gco:CharacterString>
+          </gmd:keyword>
+          <gmd:type>
+            <gmd:MD_KeywordTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_KeywordTypeCode" codeListValue="theme" codeSpace="ISOTC211/19115">theme</gmd:MD_KeywordTypeCode>
+          </gmd:type>
+          <gmd:thesaurusName>
+            <gmd:CI_Citation>
+              <gmd:title>
+                <gco:CharacterString>GEMET - INSPIRE themes, version 1.0</gco:CharacterString>
+              </gmd:title>
+              <gmd:date>
+                <gmd:CI_Date>
+                  <gmd:date>
+                    <gco:Date>2008-06-01</gco:Date>
+                  </gmd:date>
+                  <gmd:dateType>
+                    <gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication" codeSpace="ISOTC211/19115">publication</gmd:CI_DateTypeCode>
+                  </gmd:dateType>
+                </gmd:CI_Date>
+              </gmd:date>
+            </gmd:CI_Citation>
+          </gmd:thesaurusName>
+        </gmd:MD_Keywords>
+      </gmd:descriptiveKeywords>
+      <gmd:resourceConstraints>
+        <gmd:MD_Constraints>
+          <gmd:useLimitation>
+            <gco:CharacterString>Use Metal</gco:CharacterString>
+          </gmd:useLimitation>
+        </gmd:MD_Constraints>
+      </gmd:resourceConstraints>
+      <gmd:language>
+        <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/" codeListValue="eng" codeSpace="ISO 639-2">eng</gmd:LanguageCode>
+      </gmd:language>
+      <gmd:topicCategory>
+        <gmd:MD_TopicCategoryCode>geoscientificInformation</gmd:MD_TopicCategoryCode>
+      </gmd:topicCategory>
+      <gmd:extent>
+        <gmd:EX_Extent>
+                </gmd:EX_Extent>
+      </gmd:extent>
+      <gmd:supplementalInformation>
+        <inasafe_keywords/>
+        <inasafe>
+          <multipart_polygon>
+            <gco:Boolean/>
+          </multipart_polygon>
+          <hazard_keywords>
+            <gco:Dictionary>{&quot;hazard_category&quot;: &quot;single_event&quot;, &quot;classification&quot;: &quot;ash_hazard_classes&quot;, &quot;title&quot;: &quot;hazard_geometry_cleaned&quot;, &quot;thresholds&quot;: {&quot;high&quot;: [5.0, 10.0], &quot;very high&quot;: [10.0, 999999.0], &quot;very low&quot;: [0.01, 0.1], &quot;medium&quot;: [2.0, 5.0], &quot;low&quot;: [0.1, 2.0]}, &quot;keyword_version&quot;: &quot;4.0&quot;, &quot;hazard&quot;: &quot;volcanic_ash&quot;, &quot;continuous_hazard_unit&quot;: &quot;centimetres&quot;, &quot;value_map&quot;: {&quot;high&quot;: [4], &quot;very high&quot;: [5], &quot;very low&quot;: [1], &quot;medium&quot;: [3], &quot;low&quot;: [2]}, &quot;inasafe_fields&quot;: {&quot;wood_exposure_count_field&quot;: &quot;wood_exposure_count&quot;, &quot;affected_field&quot;: &quot;affected&quot;, &quot;farm_exposure_count_field&quot;: &quot;farm_exposure_count&quot;, &quot;total_field&quot;: &quot;total&quot;, &quot;hazard_class_field&quot;: &quot;hazard_class&quot;, &quot;residential_exposure_count_field&quot;: &quot;residential_exposure_count&quot;, &quot;hazard_id_field&quot;: &quot;hazard_id&quot;, &quot;aggregation_name_field&quot;: &quot;aggregation_name&quot;, &quot;aggregation_id_field&quot;: &quot;aggregation_id&quot;}, &quot;layer_geometry&quot;: &quot;polygon&quot;, &quot;layer_purpose&quot;: &quot;hazard&quot;, &quot;layer_mode&quot;: &quot;classified&quot;}</gco:Dictionary>
+          </hazard_keywords>
+          <inasafe_fields>
+            <gco:Dictionary>{&quot;wood_exposure_count_field&quot;: &quot;wood_exposure_count&quot;, &quot;affected_field&quot;: &quot;affected&quot;, &quot;farm_exposure_count_field&quot;: &quot;farm_exposure_count&quot;, &quot;total_field&quot;: &quot;total&quot;, &quot;hazard_class_field&quot;: &quot;hazard_class&quot;, &quot;residential_exposure_count_field&quot;: &quot;residential_exposure_count&quot;, &quot;hazard_id_field&quot;: &quot;hazard_id&quot;, &quot;aggregation_name_field&quot;: &quot;aggregation_name&quot;, &quot;aggregation_id_field&quot;: &quot;aggregation_id&quot;}</gco:Dictionary>
+          </inasafe_fields>
+          <inasafe_default_values>
+            <gco:Dictionary/>
+          </inasafe_default_values>
+          <aggregation_keywords>
+            <gco:Dictionary>{&quot;inasafe_fields&quot;: {&quot;total_affected_field&quot;: &quot;total_affected&quot;, &quot;residential_affected_field&quot;: &quot;residential_affected&quot;, &quot;wood_affected_field&quot;: &quot;wood_affected&quot;, &quot;aggregation_id_field&quot;: &quot;aggregation_id&quot;, &quot;farm_affected_field&quot;: &quot;farm_affected&quot;, &quot;aggregation_name_field&quot;: &quot;aggregation_name&quot;}, &quot;inasafe_default_values&quot;: {}, &quot;title&quot;: &quot;aggr_from_bbox&quot;, &quot;layer_purpose&quot;: &quot;aggregation&quot;, &quot;keyword_version&quot;: &quot;4.1&quot;}</gco:Dictionary>
+          </aggregation_keywords>
+          <scale>
+            <gco:CharacterString/>
+          </scale>
+          <source>
+            <gco:CharacterString/>
+          </source>
+          <layer_geometry>
+            <gco:CharacterString>polygon</gco:CharacterString>
+          </layer_geometry>
+          <report>
+            <gco:CharacterString/>
+          </report>
+          <exposure_keywords>
+            <gco:Dictionary/>
+          </exposure_keywords>
+          <keyword_version>
+            <gco:CharacterString>4.1</gco:CharacterString>
+          </keyword_version>
+          <datatype>
+            <gco:CharacterString/>
+          </datatype>
+          <layer_purpose>
+            <gco:CharacterString>aggregate_hazard_impacted</gco:CharacterString>
+          </layer_purpose>
+          <provenance_data>
+            <gco:Dictionary>{&quot;qgis_version&quot;: &quot;2.14.10-Essen&quot;, &quot;hazard_keywords&quot;: {&quot;hazard_category&quot;: &quot;single_event&quot;, &quot;title&quot;: &quot;Ash&quot;, &quot;thresholds&quot;: {&quot;structure&quot;: {&quot;ash_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [5, 10.0], &quot;very high&quot;: [10, 9999999999], &quot;very low&quot;: [0.01, 0.0999999999999999], &quot;medium&quot;: [2, 5.0], &quot;low&quot;: [0.1, 2.0]}}}, &quot;place&quot;: {&quot;ash_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [5, 10.0], &quot;very high&quot;: [10, 9999999999], &quot;very low&quot;: [0.01, 0.0999999999999999], &quot;medium&quot;: [2, 5.0], &quot;low&quot;: [0.1, 2.0]}}}, &quot;land_cover&quot;: {&quot;ash_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [5.0, 10.0], &quot;very high&quot;: [10.0, 999999.0], &quot;very low&quot;: [0.01, 0.1], &quot;medium&quot;: [2.0, 5.0], &quot;low&quot;: [0.1, 2.0]}}}, &quot;road&quot;: {&quot;ash_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [5, 10.0], &quot;very high&quot;: [10, 9999999999], &quot;very low&quot;: [0.01, 0.0999999999999999], &quot;medium&quot;: [2, 5.0], &quot;low&quot;: [0.1, 2.0]}}}, &quot;population&quot;: {&quot;ash_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [5.0, 10.0], &quot;very high&quot;: [10.0, 999999.0], &quot;very low&quot;: [0.01, 0.1], &quot;medium&quot;: [2.0, 5.0], &quot;low&quot;: [0.1, 2.0]}}}}, &quot;keyword_version&quot;: &quot;4.0&quot;, &quot;hazard&quot;: &quot;volcanic_ash&quot;, &quot;continuous_hazard_unit&quot;: &quot;centimetres&quot;, &quot;layer_geometry&quot;: &quot;raster&quot;, &quot;layer_purpose&quot;: &quot;hazard&quot;, &quot;layer_mode&quot;: &quot;continuous&quot;}, &quot;aggregation_layer&quot;: null, &quot;qt_version&quot;: &quot;4.8.6&quot;, &quot;duration&quot;: 0.795633, &quot;impact_function_name&quot;: &quot;Volcanic_Ash Raster On Land_Cover Polygon&quot;, &quot;exposure_layer&quot;: &quot;/Users/ismailsunni/dev/python/inasafe-dev/safe/test/data/exposure/landcover.geojson&quot;, &quot;map_title&quot;: &quot;Land cover affected by Volcanic ash event&quot;, &quot;requested_extent&quot;: null, &quot;aggregation_keywords&quot;: null, &quot;map_legend_title&quot;: &quot;Area of landcover&quot;, &quot;impact_function_title&quot;: &quot;be affected&quot;, &quot;analysis_question&quot;: &quot;In the event of a Volcanic ash, what area of Land cover might be affected?&quot;, &quot;pyqt_version&quot;: &quot;4.11.4&quot;, &quot;aggregation_layer_id&quot;: null, &quot;gdal_version&quot;: &quot;2.1.2&quot;, &quot;end_datetime&quot;: &quot;2017-07-19T09:27:38.653424&quot;, &quot;start_datetime&quot;: &quot;2017-07-19T09:27:37.857791&quot;, &quot;hazard_layer_id&quot;: &quot;ash_raster_wgs8420170621155751278&quot;, &quot;hazard_layer&quot;: &quot;/Users/ismailsunni/dev/python/inasafe-dev/safe/test/data/hazard/ash_raster_wgs84.tif&quot;, &quot;analysis_extent&quot;: &quot;Polygon ((11889347.7755999993532896 -691482.61071200005244464, 11889347.7755999993532896 -687482.61071200005244464, 11893347.7755999993532896 -687482.61071200005244464, 11893347.7755999993532896 -691482.61071200005244464, 11889347.7755999993532896 -691482.61071200005244464))&quot;, &quot;inasafe_version&quot;: &quot;4.2.0b0&quot;, &quot;user&quot;: &quot;ismailsunni&quot;, &quot;exposure_keywords&quot;: {&quot;classification&quot;: &quot;generic_landcover_classes&quot;, &quot;title&quot;: &quot;landcover&quot;, &quot;keyword_version&quot;: &quot;4.1&quot;, &quot;source&quot;: &quot;My data&quot;, &quot;value_map&quot;: {&quot;farm&quot;: [&quot;Meadow&quot;], &quot;residential&quot;: [&quot;Population&quot;], &quot;wood&quot;: [&quot;Forest&quot;, &quot;Water&quot;]}, &quot;layer_purpose&quot;: &quot;exposure&quot;, &quot;layer_geometry&quot;: &quot;polygon&quot;, &quot;inasafe_fields&quot;: {&quot;productivity_cost_rate_field&quot;: &quot;productivity_cost_rate&quot;, &quot;exposure_id_field&quot;: &quot;id&quot;, &quot;productivity_rate_field&quot;: &quot;productivity_rate&quot;, &quot;exposure_type_field&quot;: &quot;FCODE&quot;, &quot;productivity_value_rate_field&quot;: &quot;productivity_value_rate&quot;}, &quot;layer_mode&quot;: &quot;classified&quot;, &quot;exposure&quot;: &quot;land_cover&quot;}, &quot;data_store_uri&quot;: &quot;/var/folders/h7/k16m33695_g2ptlzy0z8vxb00000gp/T/inasafe/2017-02-23/ismailsunni/impacts/Volcanic_AshRasterOnLand_CoverPolygon_19July2017_09h27-38.016955&quot;, &quot;notes&quot;: [{&quot;item_list&quot;: [&quot;The impacts on roads, people, buildings and other exposure elements may be underestimated if the exposure data are incomplete.&quot;, &quot;Areas reported for land cover have been rounded to the nearest 10 hectares if the total is less than 1,000; nearest 100 hectares if more than 1,000 and less than 100,000; and nearest 1000 hectares if more than 100,000.&quot;, &quot;Rounding is applied to all land cover areas, which may cause discrepancies between subtotals and totals.&quot;, &quot;Note that report rows containing totals are calculated from the entire analysis area totals and then rounded, whereas the subtotal rows are calculated from the aggregation areas and then rounded. Using this approach we avoid adding already rounded numbers and in so doing compounding the rounding.&quot;], &quot;item_header&quot;: &quot;land cover exposure general notes&quot;, &quot;item_category&quot;: &quot;land_cover_general&quot;}, {&quot;item_list&quot;: [&quot;The extent and severity of the mapped scenario or hazard zones may not be consistent with future events.&quot;, &quot;The impacts on roads, people, buildings and other exposure elements may differ from the analysis results due to local conditions such as terrain and infrastructure type.&quot;, &quot;The analysis extent is limited to the extent of the aggregation layer or analysis extent. Hazard and exposure data outside the analysis extent are not included in the impact layer, impact map or impact reports.&quot;], &quot;item_header&quot;: &quot;volcanic ash general notes&quot;, &quot;item_category&quot;: &quot;volcanic_ash_general&quot;}, &quot;Volcanic ash is modelled hazard data estimating the thickness of ash on the ground following a volcanic eruption.&quot;], &quot;action_checklist&quot;: [{&quot;item_list&quot;: [&quot;What type of crops are planted in the affected fields?&quot;, &quot;How long will the activity or function of the land cover be disturbed?&quot;, &quot;What proportion of the land cover is damaged?&quot;, &quot;What potential losses will result from the land cover damage?&quot;, &quot;How much productivity will be lost during this event?&quot;, &quot;Which crops were ready for harvest during this event?&quot;, &quot;What is the ownership system of the land/crops/field?&quot;, &quot;Are the land/crops/field accessible after the event?&quot;, &quot;What urgent actions can be taken to normalize the land/crops/field?&quot;, &quot;What tools or equipment are needed for early recovery of the land/crops/field?&quot;], &quot;item_header&quot;: &quot;general checklist&quot;, &quot;item_category&quot;: &quot;general&quot;}, {&quot;item_list&quot;: [&quot;What action can be taken to secure water supplies and protect crops?&quot;], &quot;item_header&quot;: &quot;volcanic ash specific&quot;, &quot;item_category&quot;: &quot;additional_volcanic_ash&quot;}], &quot;exposure_layer_id&quot;: &quot;landcover20170621134514258&quot;, &quot;host_name&quot;: &quot;estragon.local&quot;, &quot;os&quot;: &quot; 10.12.5&quot;}</gco:Dictionary>
+          </provenance_data>
+          <resolution>
+            <gco:FloatTuple/>
+          </resolution>
+          <layer_mode>
+            <gco:CharacterString>classified</gco:CharacterString>
+          </layer_mode>
+        </inasafe>
+        <inasafe_provenance>
+</inasafe_provenance>
+      </gmd:supplementalInformation>
+    </gmd:MD_DataIdentification>
+  </gmd:identificationInfo>
+  <gmd:distributionInfo>
+    <gmd:MD_Distribution>
+      <gmd:distributionFormat>
+        <gmd:MD_Format>
+          <gmd:name>
+            <gco:CharacterString>unknown</gco:CharacterString>
+          </gmd:name>
+          <gmd:version>
+            <gco:CharacterString>unknown</gco:CharacterString>
+          </gmd:version>
+        </gmd:MD_Format>
+      </gmd:distributionFormat>
+      <gmd:transferOptions>
+        <gmd:MD_DigitalTransferOptions>
+          <gmd:onLine>
+            <gmd:CI_OnlineResource>
+              <gmd:linkage>
+                <gmd:URL>metal.com</gmd:URL>
+              </gmd:linkage>
+            </gmd:CI_OnlineResource>
+          </gmd:onLine>
+        </gmd:MD_DigitalTransferOptions>
+      </gmd:transferOptions>
+    </gmd:MD_Distribution>
+  </gmd:distributionInfo>
+  <gmd:dataQualityInfo>
+    <gmd:DQ_DataQuality>
+      <gmd:scope>
+        <gmd:DQ_Scope>
+          <gmd:level>
+            <gmd:MD_ScopeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_ScopeCode" codeListValue="dataset" codeSpace="ISOTC211/19115">dataset</gmd:MD_ScopeCode>
+          </gmd:level>
+        </gmd:DQ_Scope>
+      </gmd:scope>
+      <gmd:report>
+        <gmd:DQ_DomainConsistency>
+          <gmd:result>
+            <gmd:DQ_ConformanceResult>
+              <gmd:specification>
+                <gmd:CI_Citation>
+                  <gmd:title>
+                    <gco:CharacterString/>
+                  </gmd:title>
+                  <gmd:date>
+                    <gmd:CI_Date>
+                      <gmd:date>
+                        <gco:Date/>
+                      </gmd:date>
+                      <gmd:dateType>
+                        <gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue="creation" codeSpace="ISOTC211/19115">creation</gmd:CI_DateTypeCode>
+                      </gmd:dateType>
+                    </gmd:CI_Date>
+                  </gmd:date>
+                </gmd:CI_Citation>
+              </gmd:specification>
+              <gmd:explanation>
+                <gco:CharacterString>See the referenced specification</gco:CharacterString>
+              </gmd:explanation>
+              <gmd:pass>
+                <gco:Boolean>true</gco:Boolean>
+              </gmd:pass>
+            </gmd:DQ_ConformanceResult>
+          </gmd:result>
+        </gmd:DQ_DomainConsistency>
+      </gmd:report>
+      <gmd:lineage>
+        <gmd:LI_Lineage>
+          <gmd:statement>
+            <gco:CharacterString/>
+          </gmd:statement>
+        </gmd:LI_Lineage>
+      </gmd:lineage>
+    </gmd:DQ_DataQuality>
+  </gmd:dataQualityInfo>
+  <gmd:metadataMaintenance>
+    <gmd:MD_MaintenanceInformation>
+      <gmd:maintenanceAndUpdateFrequency>
+        <gmd:MD_MaintenanceFrequencyCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_MaintenanceFrequencyCode" codeListValue="continual" codeSpace="ISOTC211/19115">continual</gmd:MD_MaintenanceFrequencyCode>
+      </gmd:maintenanceAndUpdateFrequency>
+      <gmd:maintenanceNote>
+        <gco:CharacterString>This record was generated by InaSAFE (http://inasafe.org)</gco:CharacterString>
+      </gmd:maintenanceNote>
+    </gmd:MD_MaintenanceInformation>
+  </gmd:metadataMaintenance>
+</gmd:MD_Metadata>

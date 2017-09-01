@@ -22,13 +22,14 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 class MetadataDbIO(QObject):
+
     """Class for doing metadata read/write operations on the local DB
 
-     The local sqlite db is used for supporting metadata for remote
-     datasources.
+    The local sqlite db is used for supporting metadata for remote
+    datasources.
 
-     .. versionadded:: 3.2
-     """
+    .. versionadded:: 3.2
+    """
 
     def __init__(self):
         """Constructor for the metadataDbIO object."""

@@ -2,6 +2,7 @@
 """Definitions relating to default setting of fresh InaSAFE."""
 from os.path import join
 from qgis.core import QgsApplication
+from safe.definitions.currencies import idr
 # from safe.utilities.resources import resources_path
 
 inasafe_default_settings = {
@@ -9,6 +10,7 @@ inasafe_default_settings = {
     'set_layer_from_title_flag': True,
     'setZoomToImpactFlag': True,
     'set_show_only_impact_on_report': False,
+    'print_atlas_report': False,
     'setHideExposureFlag': False,
     'useSelectedFeaturesOnly': True,
     'useSentry': False,
@@ -22,6 +24,8 @@ inasafe_default_settings = {
     'ISO19115_URL': 'http://inasafe.org',
     'ISO19115_EMAIL': 'info@inasafe.org',
     'ISO19115_LICENSE': 'Free use with accreditation',
+
+    'currency': idr['key'],
 
     'keywordCachePath': join(
         QgsApplication.qgisSettingsDirPath(), 'inasafe', 'metadata.db')

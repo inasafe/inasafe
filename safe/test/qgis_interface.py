@@ -42,16 +42,19 @@ LOGGER = logging.getLogger('InaSAFE')
 
 # noinspection PyMethodMayBeStatic,PyPep8Naming
 class QgisInterface(QObject):
+
     """Class to expose qgis objects and functions to plugins.
 
     This class is here for enabling us to run unit tests only,
     so most methods are simply stubs.
     """
+
     currentLayerChanged = pyqtSignal(QgsMapCanvasLayer)
     layerSavedAs = pyqtSignal(QgsMapLayer, str)
 
     def __init__(self, canvas):
-        """Constructor
+        """Constructor.
+
         :param canvas:
         """
         QObject.__init__(self)

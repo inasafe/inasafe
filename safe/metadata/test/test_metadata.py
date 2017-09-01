@@ -13,7 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.metadata.utils import insert_xml_element
+from safe.metadata.utilities import insert_xml_element
 
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'

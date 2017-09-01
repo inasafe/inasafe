@@ -24,11 +24,12 @@ from safe.utilities.resources import (
 
 
 class Brand(Text):
+
     """A class to model the inasafe brand.
 
     .. versionadded: 3.2
-
     """
+
     def __init__(self, **kwargs):
         """Creates a brand element.
 

@@ -1,7 +1,7 @@
 # coding=utf-8
 """Default Select Parameter."""
 
-from safe_extras.parameters.select_parameter import SelectParameter
+from parameters.select_parameter import SelectParameter
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

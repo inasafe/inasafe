@@ -1,29 +1,27 @@
 # coding=utf-8
-"""Default InaSAFE Fields Step."""
+"""InaSAFE Wizard Step InaSAFE Default Fields."""
 
 # noinspection PyPackageRequirements
 import logging
 from PyQt4.QtGui import QWidget, QLabel
 
+from parameters.qt_widgets.parameter_container import ParameterContainer
+
 from safe.common.parameters.default_select_parameter import (
     DefaultSelectParameter)
 from safe.common.parameters.default_select_parameter_widget import (
     DefaultSelectParameterWidget)
-from safe_extras.parameters.qt_widgets.parameter_container import (
-    ParameterContainer)
+from safe import messaging as m
+from safe.utilities.i18n import tr
 
 from safe.definitions.layer_purposes import (layer_purpose_aggregation)
 from safe.definitions.utilities import get_fields, get_compulsory_fields
 from safe.definitions.layer_geometry import layer_geometry_raster
 from safe.definitions.constants import no_field
-from safe.gui.tools.wizard.wizard_utils import get_inasafe_default_value_fields
-
-from safe.definitions.fields import (
-    youth_ratio_field, adult_ratio_field, elderly_ratio_field)
+from safe.gui.tools.wizard.utilities import get_inasafe_default_value_fields
 
 from safe.gui.tools.wizard.wizard_step import (
     WizardStep, get_wizard_step_ui_class)
-from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -35,7 +33,8 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
-    """Keyword Wizard Step: Default InaSAFE Fields"""
+
+    """InaSAFE Wizard Step InaSAFE Default Fields."""
 
     def __init__(self, parent=None):
         """Constructor for the tab.
@@ -184,7 +183,7 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
         for parameter_widget in self.parameter_container.\
                 get_parameter_widgets():
             parameter_widget.widget().set_default(None)
-            # Set selected radio button to 'Do not use'
+            # Set selected radio button to 'Do not report'
             parameter_widget.widget().set_selected_radio_button()
         # Set default value from existing keywords
         if existing_inasafe_default_values:
@@ -193,7 +192,7 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
                     get_parameter_widget_by_guid(guid)
                 if isinstance(parameter_widget, DefaultSelectParameterWidget):
                     parameter_widget.set_default(default)
-                    # Set selected radio button to 'Do not use'
+                    # Set selected radio button to 'Do not report'
                     parameter_widget.set_selected_radio_button()
 
     def get_inasafe_fields(self):
@@ -232,43 +231,28 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
         self.parameters = []
         self.parameter_container = ParameterContainer()
 
-    def is_good_age_ratios(self):
-        """Method to check the sum of age ratio is 1.
+    @property
+    def step_name(self):
+        """Get the human friendly name for the wizard step.
 
-        :returns: True if the sum is 1 or the sum less than 1 but there is
-            None.
-        :rtype: bool
+        :returns: The name of the wizard step.
+        :rtype: str
         """
-        default_values = self.get_inasafe_default_values()
+        return tr('InaSAFE Default Field Step')
 
-        youth_ratio = default_values.get(youth_ratio_field['key'])
-        adult_ratio = default_values.get(adult_ratio_field['key'])
-        elderly_ratio = default_values.get(elderly_ratio_field['key'])
-        ratios = [youth_ratio, adult_ratio, elderly_ratio]
+    def help_content(self):
+        """Return the content of help for this step wizard.
 
-        if None in ratios:
-            # If there is None, just check to not exceeding 1
-            clean_ratios = [x for x in ratios if x is not None]
-            ratios.remove(None)
-            if sum(clean_ratios) > 1:
-                return False
-        else:
-            if sum(ratios) != 1:
-                return False
+            We only needs to re-implement this method in each wizard step.
 
-        return True
-
-    def toggle_age_ratio_sum_message(self, flag):
-        """Method to show error message about sum of age ratio.
-
-        :param flag: Flag if the ratio is valid or not.
-        :type flag: bool
+        :returns: A message object contains help.
+        :rtype: m.Message
         """
-        if not flag:
-            self.message_label.setText(
-                tr('The sum of your age ratios is not 1. Please fix it '
-                   'first before you can continue to the next step.'))
-            self.message_label.setStyleSheet('color: red')
-        else:
-            self.message_label.setText(tr('You are good to go.'))
-            self.message_label.setStyleSheet('color: green')
+        message = m.Message()
+        message.add(m.Paragraph(tr(
+            'In this wizard step: {step_name}, you will be able to '
+            'set a field that corresponded with a InaSAFE field '
+            'concept. It also allows you to set a default value for all '
+            'feature if you do not want to use any field').format(
+            step_name=self.step_name)))
+        return message

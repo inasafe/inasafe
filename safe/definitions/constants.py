@@ -10,7 +10,6 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 inasafe_keyword_version_key = 'keyword_version'
-multipart_polygon_key = 'multipart_polygon'
 no_field = tr('No Field')
 no_data_value = 200
 zero_default_value = 0.0
@@ -30,6 +29,7 @@ qvariant_numbers = qvariant_whole_numbers + [
 ]
 
 # Extent selector
+EXPOSURE = 'Exposure'
 HAZARD_EXPOSURE = 'HazardExposure'
 HAZARD_EXPOSURE_VIEW = 'HazardExposureView'
 HAZARD_EXPOSURE_BOOKMARK = 'HazardExposureBookmark'
@@ -56,7 +56,7 @@ GLOBAL = 'global'
 RECENT = 'recent'
 
 # Options keys in the field mapping
-DO_NOT_USE = 'do not use'
+DO_NOT_REPORT = 'do not report'
 CUSTOM_VALUE = 'custom value'
 GLOBAL_DEFAULT = 'global default'
 FIELDS = 'fields'

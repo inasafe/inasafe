@@ -1,17 +1,8 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
+"""InaSAFE Wizard Step Title."""
 
-This module provides: Keyword Wizard Step: Layer Title
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
+from safe import messaging as m
+from safe.utilities.i18n import tr
 
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step import WizardStep
@@ -25,7 +16,8 @@ FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
 class StepKwTitle(WizardStep, FORM_CLASS):
-    """Keyword Wizard Step: Layer Title"""
+
+    """InaSAFE Wizard Step Title."""
 
     def __init__(self, parent=None):
         """Constructor for the tab.
@@ -75,3 +67,27 @@ class StepKwTitle(WizardStep, FORM_CLASS):
             else:
                 title = self.parent.layer.name()
             self.leTitle.setText(title)
+
+    @property
+    def step_name(self):
+        """Get the human friendly name for the wizard step.
+
+        :returns: The name of the wizard step.
+        :rtype: str
+        """
+        return tr('Title Step')
+
+    def help_content(self):
+        """Return the content of help for this step wizard.
+
+            We only needs to re-implement this method in each wizard step.
+
+        :returns: A message object contains help.
+        :rtype: m.Message
+        """
+        message = m.Message()
+        message.add(m.Paragraph(tr(
+            'In this wizard step: {step_name}, you will be able to '
+            'set the title of this layer that will show up in the '
+            'analysis report').format(step_name=self.step_name)))
+        return message

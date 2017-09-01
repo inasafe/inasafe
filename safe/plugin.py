@@ -4,6 +4,7 @@
 import sys
 import os
 import logging
+from inspect import getmembers
 
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
@@ -14,6 +15,7 @@ from qgis.core import (
     QgsRasterLayer,
     QgsMapLayerRegistry,
     QgsMapLayer,
+    QgsExpression,
     QgsProject)
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import (
@@ -32,7 +34,9 @@ from PyQt4.QtGui import (
     QLineEdit,
     QInputDialog)
 
-from safe.common.version import release_status
+from safe.report.expressions import infographic, map_report
+from safe.gis import expressions
+from safe.definitions.versions import inasafe_release_status
 from safe.common.exceptions import (
     KeywordNotFoundError,
     NoKeywordsFoundError,
@@ -432,7 +436,7 @@ class Plugin(object):
 
     def _create_test_layers_action(self):
         """Create action for adding layers (developer mode, non final only)."""
-        final_release = release_status() == 'final'
+        final_release = inasafe_release_status == 'final'
         settings = QSettings()
         self.developer_mode = settings.value(
             'inasafe/developer_mode', False, type=bool)
@@ -453,7 +457,7 @@ class Plugin(object):
 
     def _create_run_test_action(self):
         """Create action for running tests (developer mode, non final only)."""
-        final_release = release_status() == 'final'
+        final_release = inasafe_release_status == 'final'
         settings = QSettings()
         self.developer_mode = settings.value(
             'inasafe/developer_mode', False, type=bool)
@@ -624,6 +628,19 @@ class Plugin(object):
         self.dock_widget.setVisible(False)
         self.dock_widget.destroy()
         self.iface.currentLayerChanged.disconnect(self.layer_changed)
+
+        # Unload QGIS expressions loaded by the plugin.
+        qgis_expressions = {
+            fct[0]: fct[1] for fct in getmembers(expressions)
+            if fct[1].__class__.__name__ == 'QgsExpressionFunction'}
+        qgis_expressions.update({
+            fct[0]: fct[1] for fct in getmembers(infographic)
+            if fct[1].__class__.__name__ == 'QgsExpressionFunction'})
+        qgis_expressions.update({
+            fct[0]: fct[1] for fct in getmembers(map_report)
+            if fct[1].__class__.__name__ == 'QgsExpressionFunction'})
+        for qgis_expression in qgis_expressions.keys():
+            QgsExpression.unregisterFunction(qgis_expression)
 
     def toggle_inasafe_action(self, checked):
         """Check or un-check the toggle inaSAFE toolbar button.
@@ -898,8 +915,6 @@ class Plugin(object):
         elif not hasattr(layer, 'providerType'):
             enable_keyword_wizard = False
         elif layer.providerType() == 'wms':
-            enable_keyword_wizard = False
-        elif is_raster_layer(layer) and layer.bandCount() > 1:
             enable_keyword_wizard = False
         else:
             enable_keyword_wizard = True

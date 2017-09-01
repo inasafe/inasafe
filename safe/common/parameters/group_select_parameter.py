@@ -2,7 +2,7 @@
 """Group Select Parameter."""
 
 from collections import OrderedDict
-from safe_extras.parameters.generic_parameter import GenericParameter
+from parameters.generic_parameter import GenericParameter
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -29,9 +29,9 @@ class GroupSelectParameter(GenericParameter):
         # Store options, with label, type, and value
         # Example:
         # Options = {
-        #     'do not use':
+        #     'do not report':
         #         {
-        #             'label': 'Do not use',
+        #             'label': 'Do not report',
         #             'value': None,
         #             'type': 'static',
         #             'constraint': {}

@@ -16,6 +16,8 @@ __date__ = '27/05/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+from pydispatch import dispatcher
+
 from safe.messaging import (
     Message,
     Paragraph,
@@ -23,7 +25,6 @@ from safe.messaging import (
     Text,
     ImportantText,
     EmphasizedText)
-from safe_extras.pydispatch import dispatcher
 
 
 DYNAMIC_MESSAGE_SIGNAL = 'ImpactFunctionMessage'
@@ -31,7 +32,9 @@ STATIC_MESSAGE_SIGNAL = 'ApplicationMessage'
 
 
 class ConsoleView():
+
     """A simple console based message queue mockup."""
+
     def __init__(self):
         # Always gets replaced when a new message is passed
         self.static_message = None

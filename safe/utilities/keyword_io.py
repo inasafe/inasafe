@@ -30,17 +30,18 @@ LOGGER = logging.getLogger('InaSAFE')
 # Notes(IS): This class can be replaced by safe.utilities.metadata
 # Some methods for viewing the keywords should be put in the other class
 class KeywordIO(QObject):
+
     """Class for doing keyword read/write operations.
 
     It abstracts away differences between using SAFE to get keywords from a
     .keywords file and this plugins implementation of keyword caching in a
-    local sqlite db used for supporting keywords for remote datasources."""
+    local sqlite db used for supporting keywords for remote datasources.
+    """
 
     def __init__(self, layer=None):
         """Constructor for the KeywordIO object.
 
         .. versionchanged:: 3.3 added optional layer parameter.
-
         """
         QObject.__init__(self)
         self.layer = layer
@@ -72,7 +73,6 @@ class KeywordIO(QObject):
         :raises: HashNotFoundError, Exception, OperationalError,
             NoKeywordsFoundError, KeywordNotFoundError, InvalidParameterError,
             UnsupportedProviderError
-
         """
         source = layer.source()
 
@@ -126,7 +126,7 @@ class KeywordIO(QObject):
         :type show_header: bool
 
         :returns: A safe message object containing a table.
-        :rtype: safe.messaging.message
+        :rtype: safe.messaging.Message
         """
         if keywords is None and self.layer is not None:
             keywords = self.read_keywords(self.layer)

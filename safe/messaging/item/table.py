@@ -27,8 +27,8 @@ class Table(MessageElement):
     def __init__(self, *args, **kwargs):
         """Creates a table object
 
-        :param args: args can be list or Row
-        :type args: list, row
+        :param *args: args can be list or Row
+        :type *args: list, row
 
 
         We pass the kwargs on to the base class so an exception is raised

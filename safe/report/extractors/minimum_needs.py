@@ -1,7 +1,7 @@
 # coding=utf-8
 """Module used to generate context for minimum needs section."""
 from safe.common.parameters.resource_parameter import ResourceParameter
-from safe.definitions.fields import displaced_field
+from safe.definitions.fields import displaced_field, additional_minimum_needs
 from safe.definitions.minimum_needs import (
     minimum_needs_fields,
     minimum_needs_namespace)
@@ -74,13 +74,18 @@ def minimum_needs_extractor(impact_report, component_metadata):
 
     frequencies = {}
     # map each needs to its frequency groups
-    for field in minimum_needs_fields:
-        need_parameter = field['need_parameter']
+    for field in (minimum_needs_fields + additional_minimum_needs):
+        need_parameter = field.get('need_parameter')
         if isinstance(need_parameter, ResourceParameter):
-            if need_parameter.frequency not in frequencies:
-                frequencies[need_parameter.frequency] = [field]
+            frequency = need_parameter.frequency
+        else:
+            frequency = field.get('frequency')
+
+        if frequency:
+            if frequency not in frequencies:
+                frequencies[frequency] = [field]
             else:
-                frequencies[need_parameter.frequency].append(field)
+                frequencies[frequency].append(field)
 
     needs = []
     analysis_feature = analysis_layer.getFeatures().next()
@@ -107,13 +112,29 @@ def minimum_needs_extractor(impact_report, component_metadata):
                 enable_rounding=is_rounding,
                 is_population=True)
 
-            need_parameter = field['need_parameter']
-            """:type: ResourceParameter"""
-            header = tr(need_parameter.name)
-            if need_parameter.unit.abbreviation:
+            if field.get('need_parameter'):
+                need_parameter = field['need_parameter']
+                """:type: ResourceParameter"""
+                name = tr(need_parameter.name)
+                unit_abbreviation = need_parameter.unit.abbreviation
+
+            else:
+                if field.get('header_name'):
+                    name = field.get('header_name')
+                else:
+                    name = field.get('name')
+
+                need_unit = field.get('unit')
+                if need_unit:
+                    unit_abbreviation = need_unit.get('abbreviation')
+
+            if unit_abbreviation:
                 header = need_header_format.format(
-                    name=header,
-                    unit_abbreviation=need_parameter.unit.abbreviation)
+                    name=name,
+                    unit_abbreviation=unit_abbreviation)
+            else:
+                header = name
+
             item = {
                 'header': header,
                 'value': value

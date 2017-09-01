@@ -1,0 +1,48 @@
+{% extends 'standard-template/jinja2/base.html' %}
+{% block content %}
+    <style>
+        table {
+            font-family: sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th {
+            width: 10px;
+            padding: 5px;
+        }
+
+        td {
+            padding: 5px;
+            font-size: 6pt;
+        }
+
+        .legend-label{
+            font-size: 8pt;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+    {% if population_chart['context'] %}
+        {% for slice in population_chart['context'].slices %}
+        .hazard-class.label-class-{{ population_chart.css_label_classes[loop.index] }}{
+            width: 8px;
+            height: 8px;
+            display: inline-block;
+            margin: 0 8px;
+            background-color: {{ slice.fill }};
+        }
+        {% endfor %}
+    {% endif %}
+    </style>
+    <table>
+        {% for slice in population_chart['context'].slices %}
+            {% if slice.label %}
+            <tr class="legend-label">
+                <th><span class="hazard-class label-class-{{ population_chart.css_label_classes[loop.index] }}"></span></th>
+                <td>{{ slice.label|capitalize }}</td>
+            </tr>
+            {% endif %}
+        {% endfor %}
+    </table>
+{% endblock content %}

@@ -1,5 +1,5 @@
 # coding=utf-8
-"""Keyword Wizard Step: Classify (Value Mapping)."""
+"""InaSAFE Wizard Step Value Mapping."""
 
 import json
 
@@ -9,6 +9,9 @@ from PyQt4.QtCore import QPyNullVariant
 from osgeo import gdal
 from osgeo.gdalconst import GA_ReadOnly
 
+from safe.utilities.i18n import tr
+from safe import messaging as m
+
 from safe.definitions.layer_purposes import layer_purpose_aggregation
 from safe.definitions.layer_geometry import layer_geometry_raster
 from safe.definitions.utilities import get_fields, get_compulsory_fields
@@ -16,7 +19,7 @@ from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_strings import (
     classify_raster_question, classify_vector_question)
-from safe.gui.tools.wizard.wizard_utils import skip_inasafe_field
+from safe.gui.tools.wizard.utilities import skip_inasafe_field
 from safe.utilities.gis import is_raster_layer
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -28,7 +31,8 @@ FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
 class StepKwClassify(WizardStep, FORM_CLASS):
-    """Keyword Wizard Step: Classify (Value Mapping)."""
+
+    """InaSAFE Wizard Step Value Mapping."""
 
     def __init__(self, parent=None):
         """Constructor for the tab.
@@ -143,15 +147,15 @@ class StepKwClassify(WizardStep, FORM_CLASS):
 
         classification = self.parent.step_kw_classification.\
             selected_classification()
-        default_classes = classification['classes']
         classification_name = classification['name']
 
         if is_raster_layer(self.parent.layer):
             self.lblClassify.setText(classify_raster_question % (
                 subcategory['name'], purpose['name'], classification_name))
             dataset = gdal.Open(self.parent.layer.source(), GA_ReadOnly)
+            active_band = self.parent.step_kw_band_selector.selected_band()
             unique_values = numpy.unique(numpy.array(
-                dataset.GetRasterBand(1).ReadAsArray()))
+                dataset.GetRasterBand(active_band).ReadAsArray()))
             field_type = 0
             # Convert datatype to a json serializable type
             if numpy.issubdtype(unique_values.dtype, float):
@@ -169,16 +173,33 @@ class StepKwClassify(WizardStep, FORM_CLASS):
                     classification_name, field.upper()))
             unique_values = self.parent.layer.uniqueValues(field_index)
 
-        # Assign unique values to classes (according to default)
-        unassigned_values = list()
-        assigned_values = dict()
-        for default_class in default_classes:
-            assigned_values[default_class['key']] = list()
+        clean_unique_values = []
         for unique_value in unique_values:
             if unique_value is None or isinstance(
                     unique_value, QPyNullVariant):
                 # Don't classify features with NULL value
                 continue
+            clean_unique_values.append(unique_value)
+
+        # get default classes
+        default_classes = classification['classes']
+        if classification['key'] == 'data_driven_classes':
+            for unique_value in clean_unique_values:
+                name = unicode(unique_value).upper().replace('_', ' ')
+                default_class = {'key': unique_value,
+                                 'name': name,
+                                 # 'description': tr('Settlement'),
+                                 'string_defaults': [name]}
+
+                default_classes.append(default_class)
+
+        # Assign unique values to classes (according to default)
+        unassigned_values = list()
+        assigned_values = dict()
+
+        for default_class in default_classes:
+            assigned_values[default_class['key']] = list()
+        for unique_value in clean_unique_values:
             # Capitalization of the value and removing '_' (raw OSM data).
             value_as_string = unicode(unique_value).upper().replace('_', ' ')
             assigned = False
@@ -200,9 +221,11 @@ class StepKwClassify(WizardStep, FORM_CLASS):
                 if condition_1 or condition_2:
                     assigned_values[default_class['key']] += [unique_value]
                     assigned = True
+
             if not assigned:
                 # add to unassigned values list otherwise
                 unassigned_values += [unique_value]
+
         self.populate_classified_values(
             unassigned_values, assigned_values, default_classes)
 
@@ -210,8 +233,11 @@ class StepKwClassify(WizardStep, FORM_CLASS):
         # Note the default_classes and unique_values are already loaded!
 
         value_map = self.parent.get_existing_keyword('value_map')
+        value_map_classification_name = self.parent.get_existing_keyword(
+            'classification')
         # Do not continue if there is no value_map in existing keywords
-        if value_map is None:
+        if (value_map is None or
+                value_map_classification_name != classification['key']):
             return
 
         # Do not continue if user selected different field
@@ -231,11 +257,8 @@ class StepKwClassify(WizardStep, FORM_CLASS):
                 value_map = json.loads(value_map)
             except ValueError:
                 return
-        for unique_value in unique_values:
-            if unique_value is None or isinstance(
-                    unique_value, QPyNullVariant):
-                # Don't classify features with NULL value
-                continue
+
+        for unique_value in clean_unique_values:
             # check in value map
             assigned = False
             for key, value_list in value_map.iteritems():
@@ -245,7 +268,7 @@ class StepKwClassify(WizardStep, FORM_CLASS):
             if not assigned:
                 unassigned_values += [unique_value]
         self.populate_classified_values(
-            unassigned_values, assigned_values, default_classes)
+           unassigned_values, assigned_values, default_classes)
 
     def populate_classified_values(
             self, unassigned_values, assigned_values, default_classes):
@@ -310,3 +333,28 @@ class StepKwClassify(WizardStep, FORM_CLASS):
                     QtCore.Qt.ItemIsDragEnabled)
                 tree_leaf.setData(0, QtCore.Qt.UserRole, value)
                 tree_leaf.setText(0, string_value)
+
+    @property
+    def step_name(self):
+        """Get the human friendly name for the wizard step.
+
+        :returns: The name of the wizard step.
+        :rtype: str
+        """
+        return tr('Value Mapping Step')
+
+    def help_content(self):
+        """Return the content of help for this step wizard.
+
+            We only needs to re-implement this method in each wizard step.
+
+        :returns: A message object contains help.
+        :rtype: m.Message
+        """
+        message = m.Message()
+        message.add(m.Paragraph(tr(
+            'In this wizard step: {step_name}, you will be able to map the '
+            'value in the field (in the left panel) to a group in the right '
+            'panel. You can do this by drag the value and drop it to the '
+            'preferred group.').format(step_name=self.step_name)))
+        return message

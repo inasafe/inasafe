@@ -1,17 +1,5 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
-
-This module provides: Function Centric Wizard Step: Disjoint Layers
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
+"""InaSAFE Wizard Step Disjoint Layers."""
 
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QPixmap
@@ -19,6 +7,9 @@ from safe.utilities.resources import resources_path
 
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step import WizardStep
+
+from safe import messaging as m
+from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -29,7 +20,7 @@ FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
 class StepFcDisjointLayers(WizardStep, FORM_CLASS):
-    """Function Centric Wizard Step: Disjoint Layers"""
+    """InaSAFE Wizard Step Disjoint Layers."""
 
     def is_ready_to_next_step(self):
         """Check if the step is complete. If so, there is
@@ -53,3 +44,29 @@ class StepFcDisjointLayers(WizardStep, FORM_CLASS):
         """Set widgets on the Disjoint Layers tab"""
         self.lblIconDisjoint_1.setPixmap(
             QPixmap(resources_path('img', 'wizard', 'icon-stop.svg')))
+
+    @property
+    def step_name(self):
+        """Get the human friendly name for the wizard step.
+
+        :returns: The name of the wizard step.
+        :rtype: str
+        """
+        # noinspection SqlDialectInspection,SqlNoDataSourceInspection
+        return tr('Disjoint Layers')
+
+    def help_content(self):
+        """Return the content of help for this step wizard.
+
+            We only needs to re-implement this method in each wizard step.
+
+        :returns: A message object contains help.
+        :rtype: m.Message
+        """
+        message = m.Message()
+        message.add(m.Paragraph(tr(
+            'In this wizard step: {step_name}, you will know that your '
+            'exposure layer does not intersect with your hazard layer. You '
+            'can not go forward and you need to change the layer to run an '
+            'analysis.').format(step_name=self.step_name)))
+        return message

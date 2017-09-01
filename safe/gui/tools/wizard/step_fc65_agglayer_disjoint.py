@@ -1,21 +1,12 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
-
-This module provides: Function Centric Wizard Step: Agg. Layer Disjoints
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
+"""InaSAFE Wizard Step Aggregation Layer Disjoint."""
 
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QPixmap
 from safe.utilities.resources import resources_path
+
+from safe import messaging as m
+from safe.utilities.i18n import tr
 
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step import WizardStep
@@ -29,11 +20,13 @@ FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
 class StepFcAggLayerDisjoint(WizardStep, FORM_CLASS):
-    """Function Centric Wizard Step: Agg. Layer Disjoints"""
+
+    """InaSAFE Wizard Step Aggregation Layer Disjoint."""
 
     def is_ready_to_next_step(self):
-        """Check if the step is complete. If so, there is
-            no reason to block the Next button.
+        """Check if the step is complete.
+
+        If so, there is no reason to block the Next button.
 
         :returns: True if new step may be enabled.
         :rtype: bool
@@ -50,6 +43,33 @@ class StepFcAggLayerDisjoint(WizardStep, FORM_CLASS):
         return None
 
     def set_widgets(self):
-        """Set widgets on the Aggregation Layer Disjoint tab"""
+        """Set widgets on the Aggregation Layer Disjoint tab."""
         self.lblIconDisjoint_2.setPixmap(
             QPixmap(resources_path('img', 'wizard', 'icon-stop.svg')))
+
+    @property
+    def step_name(self):
+        """Get the human friendly name for the wizard step.
+
+        :returns: The name of the wizard step.
+        :rtype: str
+        """
+        # noinspection SqlDialectInspection,SqlNoDataSourceInspection
+        return tr('Disjoint Layers')
+
+    def help_content(self):
+        """Return the content of help for this step wizard.
+
+        We only needs to re-implement this method in each wizard step.
+
+        :returns: A message object contains help.
+        :rtype: m.Message
+        """
+        message = m.Message()
+        message.add(m.Paragraph(tr(
+            'In this wizard step: {step_name}, you will know that your '
+            'exposure and hazard layer do not intersect with your aggregation '
+            'layer. You can not go forward and you need to change the layer '
+            'to run an analysis.'
+        ).format(step_name=self.step_name)))
+        return message

@@ -1,5 +1,7 @@
 # coding=utf-8
+
 """Utilities for InaSAFE."""
+
 import os
 import sys
 import platform
@@ -31,7 +33,9 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 class MEMORYSTATUSEX(ctypes.Structure):
+
     """This class is used for getting the free memory on Windows."""
+
     _fields_ = [
         ("dwLength", ctypes.c_ulong),
         ("dwMemoryLoad", ctypes.c_ulong),
@@ -60,7 +64,6 @@ def verify(statement, message=None):
 
     :raises: VerificationError
     """
-
     if bool(statement) is False:
         # noinspection PyExceptionInherit
         raise VerificationError(message)
@@ -158,7 +161,6 @@ def unique_filename(**kwargs):
     /tmp/inasafe/23-08-2012/timlinux/impacts/tmpoOAmOi.shp
 
     """
-
     if 'dir' not in kwargs:
         path = temp_dir('impacts')
         kwargs['dir'] = path
@@ -206,6 +208,7 @@ def get_free_memory():
 
 def get_free_memory_win():
     """Return current free memory on the machine for windows.
+
     Warning : this script is really not robust
     Return in MB unit
     """
@@ -216,6 +219,7 @@ def get_free_memory_win():
 
 def get_free_memory_linux():
     """Return current free memory on the machine for linux.
+
     Warning : this script is really not robust
     Return in MB unit
     """
@@ -231,6 +235,7 @@ def get_free_memory_linux():
 
 def get_free_memory_osx():
     """Return current free memory on the machine for mac os.
+
     Warning : this script is really not robust
     Return in MB unit
     """
@@ -286,7 +291,6 @@ def humanize_min_max(min_value, max_value, interval):
     :returns: A two-tuple consisting of a string for min_value and a string for
             max_value.
     :rtype: tuple
-
     """
     current_interval = max_value - min_value
     if interval > 1:
@@ -303,6 +307,7 @@ def humanize_min_max(min_value, max_value, interval):
 
 def format_decimal(interval, value):
     """Return formatted decimal according to interval decimal place
+
     For example:
     interval = 0.33 (two decimal places)
     my_float = 1.1215454
@@ -419,7 +424,8 @@ def unhumanize_class(my_classes):
 
 def unhumanize_number(number):
     """Return number without formatting.
-    if something goes wrong in the conversion just return the passed number
+
+    If something goes wrong in the conversion just return the passed number
     We catch AttributeError in case the number has no replace method which
     means it is not a string but already an int or float
     We catch ValueError if number is a sting but not parseable to a number
@@ -630,8 +636,9 @@ def humanize_file_size(size):
 
 
 def add_to_list(my_list, my_element):
-    """Helper function to add new my_element to my_list based on its type
-    . Add as new element if it's not a list, otherwise extend to the list
+    """Helper function to add new my_element to my_list based on its type.
+
+    Add as new element if it's not a list, otherwise extend to the list
     if it's a list.
     It's also guarantee that all elements are unique
 

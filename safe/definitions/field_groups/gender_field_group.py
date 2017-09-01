@@ -59,7 +59,7 @@ gender_displaced_count_group = {
     'name': tr('Gender Displaced Count'),
     'header_name': tr('Gender'),
     'description': tr(
-        'Demographic breakdown produced for displaced population based on'
+        'Demographic breakdown produced for displaced population based on '
         'gender specific groups (pregnant, lactating etc.). These demographic '
         'concepts provide a detailed break down of the number of people '
         'displaced in each gender specific group.'),

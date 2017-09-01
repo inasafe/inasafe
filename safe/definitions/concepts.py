@@ -113,6 +113,7 @@ concepts['exposure'] = {
 concepts['affected'] = {
     'group': tr('Basic concepts'),
     'key': 'affected',
+    'name': tr('Affected'),
     'description': tr(
         'An exposure element (e.g. people, roads, buildings, land '
         'cover) that experiences a hazard (e.g. tsunami, flood, '
@@ -131,6 +132,7 @@ concepts['affected'] = {
 concepts['exposed_people'] = {
     'group': tr('Basic concepts'),
     'key': 'exposed_people',
+    'name': tr('Exposed People'),
     'description': tr(
         'People who are present in hazard zones and are thereby subject '
         'to potential losses. In InaSAFE, people who are exposed are '
@@ -146,6 +148,7 @@ concepts['exposed_people'] = {
 concepts['affected_people'] = {
     'group': tr('Basic concepts'),
     'key': 'affected_people',
+    'name': tr('Affected People'),
     'description': tr(
         'People who are affected by a hazardous event. People can be '
         'affected directly or indirectly. Affected people may experience '
@@ -205,6 +208,7 @@ concepts['indirectly_affected_people'] = {
 concepts['displaced_people'] = {
     'group': tr('Basic concepts'),
     'key': 'displaced_people',
+    'name': tr('Displaced People'),
     'description': tr(
         'Displaced people are people who, for different reasons and '
         'circumstances because of risk or disaster, have to leave their '
@@ -217,6 +221,19 @@ concepts['displaced_people'] = {
                 'Risk Reduction: A Technical Review'),
             'link': u'http://www.preventionweb.net/files/'
                     u'45462_backgoundpaperonterminologyaugust20.pdf'
+        }
+    ],
+}
+concepts['displacement_rate'] = {
+    'group': tr('Basic concepts'),
+    'key': 'displacement_rate',
+    'name': tr('Displacement rate'),
+    'description': tr(
+        'The population displacement ratio for a given hazard class.'),
+    'citations': [
+        {
+            'text': '',
+            'link': u''
         }
     ],
 }
@@ -293,19 +310,7 @@ concepts['killed_people'] = {
         }
     ],
 }
-concepts['people'] = {
-    'group': tr('Demographics'),
-    'key': 'people',
-    'description': tr(
-        'Human beings in general or considered collectively.'),
-    'citations': [
-        {
-            'text': tr(
-                'Oxford Dictionary.'),
-            'link': u'https://en.oxforddictionaries.com/definition/people'
-        }
-    ],
-}
+
 concepts['female'] = {
     'group': tr('Gender'),
     'key': 'female',
@@ -329,6 +334,19 @@ concepts['male'] = {
             'text': tr(
                 'Oxford Dictionary.'),
             'link': u'https://en.oxforddictionaries.com/definition/male'
+        }
+    ],
+}
+concepts['people'] = {
+    'group': tr('Demographics'),
+    'key': 'people',
+    'description': tr(
+        'Human beings in general or considered collectively.'),
+    'citations': [
+        {
+            'text': tr(
+                'Oxford Dictionary.'),
+            'link': u'https://en.oxforddictionaries.com/definition/people'
         }
     ],
 }
@@ -631,6 +649,91 @@ concepts['rounding_methodology'] = {
         'subtotal rows are calculated from the aggregation areas and '
         'then rounded. Using this approach we avoid adding already '
         'rounded numbers and in so doing compounding the rounding.'),
+    'citations': [
+        {
+            'text': '',
+            'link': u''
+        }
+    ],
+}
+concepts['productivity_rate'] = {
+    'group': tr('Productivity'),
+    'key': 'productivity_rate',
+    'name': tr('Productivity Rate'),
+    'description': tr(
+        'The weight of a crop from land cover can produce per area unit. The '
+        'unit is in hundred kilograms /hectare.'),
+    'citations': [
+        {
+            'text': '',
+            'link': u''
+        }
+    ],
+}
+concepts['productivity'] = {
+    'group': tr('Productivity'),
+    'key': 'productivity',
+    'name': tr('Productivity'),
+    'description': tr(
+        'The number of crop in hundred kilograms unit that can be produced in '
+        'a land cover area.'),
+    'citations': [
+        {
+            'text': '',
+            'link': u''
+        }
+    ],
+}
+concepts['production_cost_rate'] = {
+    'group': tr('Productivity'),
+    'key': 'production_cost_rate',
+    'name': tr('Production Cost Rate'),
+    'description': tr(
+        'The amount of money that is needed to build a crop land cover per '
+        'area unit. The default unit is currency per area unit (e.g. '
+        'IDR/hectare, USD/hectare).'),
+    'citations': [
+        {
+            'text': '',
+            'link': u''
+        }
+    ],
+}
+concepts['production_cost'] = {
+    'group': tr('Productivity'),
+    'key': 'production_cost',
+    'name': tr('Production Cost'),
+    'description': tr(
+        'The amount of money that is needed to build a crop land cover area. '
+        'The unit is a currency unit (e.g. IDR, USD, Euro).'),
+    'citations': [
+        {
+            'text': '',
+            'link': u''
+        }
+    ],
+}
+concepts['production_value_rate'] = {
+    'group': tr('Productivity'),
+    'key': 'production_value_rate',
+    'name': tr('Production Value Rate'),
+    'description': tr(
+        'The price of a crop per area unit. The default unit is currency per '
+        'area unit. (e.g. IDR/hectare, USD/hectare).'),
+    'citations': [
+        {
+            'text': '',
+            'link': u''
+        }
+    ],
+}
+concepts['production_value'] = {
+    'group': tr('Productivity'),
+    'key': 'production_value',
+    'name': tr('Production Value'),
+    'description': tr(
+        'The price of a crop in a land cover area. The unit is a currency '
+        'unit (e.g. IDR, USD, Euro).'),
     'citations': [
         {
             'text': '',

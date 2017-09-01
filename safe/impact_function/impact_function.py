@@ -45,8 +45,6 @@ from safe.gis.vector.summary_1_aggregate_hazard import (
     aggregate_hazard_summary)
 from safe.gis.vector.summary_2_aggregation import aggregation_summary
 from safe.gis.vector.summary_3_analysis import analysis_summary
-from safe.gis.vector.summary_33_eq_raster_analysis import (
-    analysis_eartquake_summary)
 from safe.gis.vector.summary_4_exposure_summary_table import (
     exposure_summary_table)
 from safe.gis.vector.recompute_counts import recompute_counts
@@ -55,10 +53,13 @@ from safe.gis.raster.clip_bounding_box import clip_by_extent
 from safe.gis.raster.reclassify import reclassify as reclassify_raster
 from safe.gis.raster.polygonize import polygonize
 from safe.gis.raster.zonal_statistics import zonal_stats
-from safe.gis.raster.align import align_rasters
-from safe.gis.raster.rasterize import rasterize_vector_layer
 from safe.definitions.analysis_steps import analysis_steps
-from safe.definitions.utilities import definition, get_non_compulsory_fields
+from safe.definitions.utilities import (
+    definition,
+    get_non_compulsory_fields,
+    get_name,
+    set_provenance
+)
 from safe.definitions.exposure import indivisible_exposure
 from safe.definitions.fields import (
     size_field,
@@ -75,6 +76,55 @@ from safe.definitions.layer_purposes import (
     layer_purpose_exposure_summary_table,
     layer_purpose_profiling,
 )
+from safe.definitions.styles import (
+    aggregation_color,
+    aggregation_width,
+    analysis_color,
+    analysis_width)
+
+from safe.definitions.provenance import (
+    provenance_action_checklist,
+    provenance_aggregation_keywords,
+    provenance_aggregation_layer,
+    provenance_aggregation_layer_id,
+    provenance_analysis_extent,
+    provenance_analysis_question,
+    provenance_data_store_uri,
+    provenance_duration,
+    provenance_end_datetime,
+    provenance_exposure_keywords,
+    provenance_exposure_layer,
+    provenance_exposure_layer_id,
+    provenance_gdal_version,
+    provenance_hazard_keywords,
+    provenance_hazard_layer,
+    provenance_hazard_layer_id,
+    provenance_host_name,
+    provenance_impact_function_name,
+    provenance_impact_function_title,
+    provenance_inasafe_version,
+    provenance_map_legend_title,
+    provenance_map_title,
+    provenance_notes,
+    provenance_os,
+    provenance_pyqt_version,
+    provenance_qgis_version,
+    provenance_qt_version,
+    provenance_requested_extent,
+    provenance_start_datetime,
+    provenance_user,
+    provenance_layer_exposure_summary,
+    provenance_layer_aggregate_hazard_impacted,
+    provenance_layer_aggregation_summary,
+    provenance_layer_analysis_impacted,
+    provenance_layer_exposure_summary_table,
+    provenance_layer_aggregate_hazard_impacted_id,
+    provenance_layer_aggregation_summary_id,
+    provenance_layer_exposure_summary_table_id,
+    provenance_layer_profiling_id,
+    provenance_layer_analysis_impacted_id,
+    provenance_layer_exposure_summary_id,
+    provenance_crs)
 from safe.impact_function.provenance_utilities import (
     get_map_title, get_analysis_question)
 
@@ -103,8 +153,6 @@ from safe.common.exceptions import (
     ProcessingInstallationError,
 )
 from safe.definitions.earthquake import EARTHQUAKE_FUNCTIONS
-from safe.impact_function.earthquake import (
-    exposed_people_stats, make_summary_layer)
 from safe.impact_function.postprocessors import (
     run_single_post_processor, enough_input)
 from safe.impact_function.create_extra_layers import (
@@ -118,7 +166,6 @@ from safe.impact_function.style import (
     generate_classified_legend,
     hazard_class_style,
     simple_polygon_without_brush,
-    displaced_people_style,
 )
 from safe.utilities.gis import is_vector_layer, is_raster_layer
 from safe.utilities.i18n import tr
@@ -126,7 +173,7 @@ from safe.utilities.default_values import get_inasafe_default_value_qsetting
 from safe.utilities.unicode import get_unicode
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.metadata import (
-    active_thresholds_value_maps, active_classification, copy_layer_keywords)
+    active_thresholds_value_maps, copy_layer_keywords, write_iso19115_metadata)
 from safe.utilities.utilities import (
     replace_accentuated_characters,
     get_error_message,
@@ -144,7 +191,6 @@ SUGGESTION_STYLE = styles.GREEN_LEVEL_4_STYLE
 WARNING_STYLE = styles.RED_LEVEL_4_STYLE
 
 LOGGER = logging.getLogger('InaSAFE')
-
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -182,6 +228,8 @@ class ImpactFunction(object):
         self._requested_extent = None
         # Requested extent's CRS
         self._requested_extent_crs = None
+        # Use exposure view only
+        self.use_exposure_view_only = False
 
         # The current extent defined by the impact function. Read-only.
         # The CRS is the exposure CRS.
@@ -207,17 +255,21 @@ class ImpactFunction(object):
         self._start_datetime = None
         self._end_datetime = None
         self._duration = 0
-        self._provenance = {
-            # Environment
-            'host_name': gethostname(),
-            'user': getpass.getuser(),
-            'qgis_version': QGis.QGIS_VERSION,
-            'gdal_version': gdal.__version__,
-            'qt_version': QT_VERSION_STR,
-            'pyqt_version': PYQT_VERSION_STR,
-            'os': readable_os_version(),
-            'inasafe_version': get_version(),
-        }
+        self._provenance = {}
+        # Environment
+        set_provenance(self._provenance, provenance_host_name, gethostname())
+        set_provenance(self._provenance, provenance_user, getpass.getuser())
+        set_provenance(
+            self._provenance, provenance_qgis_version, QGis.QGIS_VERSION)
+        set_provenance(
+            self._provenance, provenance_gdal_version, gdal.__version__)
+        set_provenance(self._provenance, provenance_qt_version, QT_VERSION_STR)
+        set_provenance(
+            self._provenance, provenance_pyqt_version, PYQT_VERSION_STR)
+        set_provenance(
+            self._provenance, provenance_os, readable_os_version())
+        set_provenance(
+            self._provenance, provenance_inasafe_version, get_version())
 
         # Earthquake function
         value = setting(
@@ -860,6 +912,15 @@ class ImpactFunction(object):
                     )
                     return PREPARE_FAILED_BAD_INPUT, message
 
+                if self.use_exposure_view_only:
+                    message = generate_input_error_message(
+                        tr('Error with the requested extent'),
+                        m.Paragraph(tr(
+                            'Use exposure view only can not be set to True if '
+                            'you use an aggregation layer.'))
+                    )
+                    return PREPARE_FAILED_BAD_INPUT, message
+
                 status, message = self._check_layer(
                     self.aggregation, 'aggregation')
                 aggregation_source = self.aggregation.publicSource()
@@ -877,6 +938,15 @@ class ImpactFunction(object):
                         m.Paragraph(tr(
                             'Requested Extent CRS must be set when requested '
                             'is not null.'))
+                    )
+                    return PREPARE_FAILED_BAD_INPUT, message
+
+                if self.requested_extent and self.use_exposure_view_only:
+                    message = generate_input_error_message(
+                        tr('Error with the requested extent'),
+                        m.Paragraph(tr(
+                            'Requested Extent must be null when you use the '
+                            'exposure view only.'))
                     )
                     return PREPARE_FAILED_BAD_INPUT, message
 
@@ -911,16 +981,20 @@ class ImpactFunction(object):
                 return status, message
 
             # Set the name
+            hazard_name = get_name(self.hazard.keywords.get('hazard'))
+            exposure_name = get_name(self.exposure.keywords.get('exposure'))
+            hazard_geometry_name = get_name(
+                self.hazard.keywords.get('layer_geometry'))
+            exposure_geometry_name = get_name(
+                self.exposure.keywords.get('layer_geometry'))
             self._name = tr(
                 '{hazard_type} {hazard_geometry} On {exposure_type} '
                 '{exposure_geometry}').format(
-                hazard_type=tr(self.hazard.keywords.get('hazard').title()),
-                hazard_geometry=tr(
-                    self.hazard.keywords.get('layer_geometry').title()),
-                exposure_type=tr(
-                    self.exposure.keywords.get('exposure').title()),
-                exposure_geometry=tr(
-                    self.exposure.keywords.get('layer_geometry').title()))
+                hazard_type=hazard_name,
+                hazard_geometry=hazard_geometry_name,
+                exposure_type=exposure_name,
+                exposure_geometry=exposure_geometry_name
+            ).title()
 
             # Set the title
             if self.exposure.keywords.get('exposure') == 'population':
@@ -939,24 +1013,51 @@ class ImpactFunction(object):
         else:
             # Everything was fine.
             self._is_ready = True
-            self._provenance['exposure_layer'] = self.exposure.publicSource()
+            set_provenance(
+                self._provenance,
+                provenance_exposure_layer,
+                self.exposure.publicSource())
             # reference to original layer being used
-            self._provenance['exposure_layer_id'] = original_exposure.id()
-            self._provenance['exposure_keywords'] = copy_layer_keywords(
-                self.exposure.keywords)
-            self._provenance['hazard_layer'] = self.hazard.publicSource()
+            set_provenance(
+                self._provenance,
+                provenance_exposure_layer_id,
+                original_exposure.id())
+            set_provenance(
+                self._provenance,
+                provenance_exposure_keywords,
+                copy_layer_keywords(self.exposure.keywords))
+            set_provenance(
+                self._provenance,
+                provenance_hazard_layer,
+                self.hazard.publicSource())
             # reference to original layer being used
-            self._provenance['hazard_layer_id'] = original_hazard.id()
-            self._provenance['hazard_keywords'] = copy_layer_keywords(
-                self.hazard.keywords)
+            set_provenance(
+                self._provenance,
+                provenance_hazard_layer_id,
+                original_hazard.id())
+            set_provenance(
+                self._provenance,
+                provenance_hazard_keywords,
+                copy_layer_keywords(self.hazard.keywords))
             # reference to original layer being used
             if original_aggregation:
-                self._provenance['aggregation_layer_id'] = (
+                set_provenance(
+                    self._provenance,
+                    provenance_aggregation_layer_id,
                     original_aggregation.id())
             else:
-                self._provenance['aggregation_layer_id'] = None
-            self._provenance['aggregation_layer'] = aggregation_source
-            self._provenance['aggregation_keywords'] = aggregation_keywords
+                set_provenance(
+                    self._provenance,
+                    provenance_aggregation_layer_id,
+                    None)
+            set_provenance(
+                self._provenance,
+                provenance_aggregation_layer,
+                aggregation_source)
+            set_provenance(
+                self._provenance,
+                provenance_aggregation_keywords,
+                aggregation_keywords)
 
             return PREPARE_SUCCESS, None
 
@@ -1016,6 +1117,10 @@ class ImpactFunction(object):
                 else:
                     self._analysis_extent = hazard_exposure.intersection(
                         user_bounding_box)
+
+            elif self.use_exposure_view_only:
+                self._analysis_extent = exposure_extent
+
             else:
                 self._analysis_extent = hazard_exposure
 
@@ -1282,125 +1387,15 @@ class ImpactFunction(object):
         self.callback(2, step_count, analysis_steps['aggregation_preparation'])
         self.aggregation_preparation()
 
-        # Special case for Raster Earthquake hazard on Raster population.
-        damage_curve = False
-        if is_raster_layer(self.hazard):
-            if self.hazard.keywords.get('hazard') == 'earthquake':
-                if is_raster_layer(self.exposure):
-                    if self.exposure.keywords.get('exposure') == 'population':
-                        damage_curve = True
+        # Special case for earthquake hazard on population. We need to remove
+        # the fatality model.
+        earthquake_on_population = False
+        if self.hazard.keywords.get('hazard') == 'earthquake':
+            if self.exposure.keywords.get('exposure') == 'population':
+                earthquake_on_population = True
+        if not earthquake_on_population:
+            self._earthquake_function = None
 
-        if damage_curve:
-            self.damage_curve_analysis()
-        else:
-            self.gis_overlay_analysis()
-
-        self._performance_log = profiling_log()
-        self.callback(7, step_count, analysis_steps['post_processing'])
-        if is_vector_layer(self._exposure_summary):
-            # We post process the exposure summary
-            self.post_process(self._exposure_summary)
-        else:
-            if is_vector_layer(self._aggregate_hazard_impacted):
-                # We post process the aggregate hazard.
-                # Raster continuous exposure.
-                self.post_process(self._aggregate_hazard_impacted)
-            else:
-                # We post process the aggregation.
-                # Earthquake raster on population raster.
-                self.post_process(self._aggregation_summary)
-
-        self._performance_log = profiling_log()
-        self.callback(8, step_count, analysis_steps['summary_calculation'])
-        self.summary_calculation()
-
-        self._end_datetime = datetime.now()
-        self._provenance['start_datetime'] = self.start_datetime
-        self._provenance['end_datetime'] = self.end_datetime
-        self._provenance['duration'] = self.duration
-        self._generate_provenance()
-
-        # End of the impact function, we can add layers to the datastore.
-        # We replace memory layers by the real layer from the datastore.
-
-        # Exposure summary
-        if self._exposure_summary:
-            self._exposure_summary.keywords[
-                'provenance_data'] = self.provenance
-            self.append_ISO19115_keywords(
-                self._exposure_summary.keywords)
-            result, name = self.datastore.add_layer(
-                self._exposure_summary,
-                layer_purpose_exposure_summary['key'])
-            if not result:
-                raise Exception(
-                    tr('Something went wrong with the datastore : '
-                       '{error_message}').format(error_message=name))
-            self._exposure_summary = self.datastore.layer(name)
-            self.debug_layer(self._exposure_summary, add_to_datastore=False)
-
-        # Aggregate hazard impacted
-        if self.aggregate_hazard_impacted:
-            self.aggregate_hazard_impacted.keywords[
-                'provenance_data'] = self.provenance
-            self.append_ISO19115_keywords(
-                self.aggregate_hazard_impacted.keywords)
-            result, name = self.datastore.add_layer(
-                self._aggregate_hazard_impacted,
-                layer_purpose_aggregate_hazard_impacted['key'])
-            if not result:
-                raise Exception(
-                    tr('Something went wrong with the datastore : '
-                       '{error_message}').format(error_message=name))
-            self._aggregate_hazard_impacted = self.datastore.layer(name)
-            self.debug_layer(
-                self._aggregate_hazard_impacted, add_to_datastore=False)
-
-        # Exposure summary table
-        if self._exposure.keywords.get('classification'):
-            self._exposure_summary_table.keywords[
-                'provenance_data'] = self.provenance
-            self.append_ISO19115_keywords(
-                self._exposure_summary_table.keywords)
-            result, name = self.datastore.add_layer(
-                self._exposure_summary_table,
-                layer_purpose_exposure_summary_table['key'])
-            if not result:
-                raise Exception(
-                    tr('Something went wrong with the datastore : '
-                       '{error_message}').format(error_message=name))
-            self._exposure_summary_table = self.datastore.layer(name)
-            self.debug_layer(
-                self._exposure_summary_table, add_to_datastore=False)
-
-        # Aggregation summary
-        self.aggregation_summary.keywords['provenance_data'] = self.provenance
-        self.append_ISO19115_keywords(self.aggregation_summary.keywords)
-        result, name = self.datastore.add_layer(
-            self._aggregation_summary,
-            layer_purpose_aggregation_summary['key'])
-        if not result:
-            raise Exception(
-                tr('Something went wrong with the datastore : '
-                   '{error_message}').format(error_message=name))
-        self._aggregation_summary = self.datastore.layer(name)
-        self.debug_layer(self._aggregation_summary, add_to_datastore=False)
-
-        # Analysis impacted
-        self.analysis_impacted.keywords['provenance_data'] = self.provenance
-        self.append_ISO19115_keywords(self.analysis_impacted.keywords)
-        result, name = self.datastore.add_layer(
-            self._analysis_impacted, layer_purpose_analysis_impacted['key'])
-        if not result:
-            raise Exception(
-                tr('Something went wrong with the datastore : '
-                   '{error_message}').format(error_message=name))
-        self._analysis_impacted = self.datastore.layer(name)
-        self.debug_layer(self._analysis_impacted, add_to_datastore=False)
-
-    @profile
-    def gis_overlay_analysis(self):
-        """Perform an overlay analysis between the exposure and the hazard."""
         LOGGER.info('Starting a GIS overlay analysis')
         # This is not a EQ raster on raster population. We need to set it to
         # None as we don't want notes specific to EQ raster on population.
@@ -1424,60 +1419,185 @@ class ImpactFunction(object):
         self.callback(6, step_count, analysis_steps['combine_hazard_exposure'])
         self.intersect_exposure_and_aggregate_hazard()
 
-    @profile
-    def damage_curve_analysis(self):
-        """Perform a damage curve analysis."""
-        # For now we support only the earthquake raster on population raster.
-        self.earthquake_raster_population_raster()
+        self._performance_log = profiling_log()
+        self.callback(7, step_count, analysis_steps['post_processing'])
+        if is_vector_layer(self._exposure_summary):
+            # We post process the exposure summary
+            self.post_process(self._exposure_summary)
+        else:
+            # We post process the aggregate hazard.
+            # Raster continuous exposure.
+            self.post_process(self._aggregate_hazard_impacted)
 
-    @profile
-    def earthquake_raster_population_raster(self):
-        """Perform a damage curve analysis with EQ raster on population raster.
-        """
-        LOGGER.info('ANALYSIS : Starting a EQ raster on population raster')
+        self._performance_log = profiling_log()
+        self.callback(8, step_count, analysis_steps['summary_calculation'])
+        self.summary_calculation()
 
-        classification_key = active_classification(
-            self.hazard.keywords, 'population')
-        thresholds = active_thresholds_value_maps(
-            self.hazard.keywords, 'population')
-        self.hazard.keywords['classification'] = classification_key
-        self.hazard.keywords['thresholds'] = thresholds
-        self.aggregation.keywords['hazard_keywords'] = dict(
-            self.hazard.keywords)
+        self._end_datetime = datetime.now()
+        set_provenance(
+            self._provenance, provenance_start_datetime, self.start_datetime)
+        set_provenance(
+            self._provenance, provenance_end_datetime, self.end_datetime)
+        set_provenance(
+            self._provenance, provenance_duration, self.duration)
+        self._generate_provenance()
 
-        self.set_state_process(
-            'hazard', 'Align the hazard layer with the exposure')
-        self.set_state_process(
-            'exposure', 'Align the exposure layer with the hazard')
-        self.hazard, self.exposure = align_rasters(
-            self.hazard, self.exposure, self.analysis_impacted.extent())
-        self.debug_layer(self.hazard)
-        self.debug_layer(self.exposure)
+        # Update provenance with output layer path
+        output_layer_provenance = {
+            provenance_layer_exposure_summary[
+                'provenance_key']: None,
+            provenance_layer_aggregate_hazard_impacted[
+                'provenance_key']: None,
+            provenance_layer_aggregation_summary[
+                'provenance_key']: None,
+            provenance_layer_analysis_impacted[
+                'provenance_key']: None,
+            provenance_layer_exposure_summary_table[
+                'provenance_key']: None,
+            provenance_layer_exposure_summary_id['provenance_key']: None,
+            provenance_layer_aggregate_hazard_impacted_id[
+                'provenance_key']: None,
+            provenance_layer_aggregation_summary_id['provenance_key']: None,
+            provenance_layer_analysis_impacted_id['provenance_key']: None,
+            provenance_layer_exposure_summary_table_id['provenance_key']: None,
+        }
 
-        self.set_state_process(
-            'aggregation', 'Rasterize the aggregation layer')
-        aggregation_aligned = rasterize_vector_layer(
-            self.aggregation,
-            self.hazard.dataProvider().xSize(),
-            self.hazard.dataProvider().ySize(),
-            self.hazard.extent())
-        self.debug_layer(aggregation_aligned)
+        # End of the impact function, we can add layers to the datastore.
+        # We replace memory layers by the real layer from the datastore.
 
-        self.set_state_process('exposure', 'Compute exposed people')
-        exposed, self._exposure_summary = exposed_people_stats(
-            self.hazard,
-            self.exposure,
-            aggregation_aligned)
-        self.debug_layer(self._exposure_summary)
+        # Exposure summary
+        if self._exposure_summary:
+            self._exposure_summary.keywords[
+                'provenance_data'] = self.provenance
+            self.append_ISO19115_keywords(
+                self._exposure_summary.keywords)
+            result, name = self.datastore.add_layer(
+                self._exposure_summary,
+                layer_purpose_exposure_summary['key'])
+            if not result:
+                raise Exception(
+                    tr('Something went wrong with the datastore : '
+                       '{error_message}').format(error_message=name))
+            self._exposure_summary = self.datastore.layer(name)
+            self.debug_layer(self._exposure_summary, add_to_datastore=False)
 
-        self.set_state_process('impact function', 'Set summaries')
-        self._aggregation_summary = make_summary_layer(
-            exposed, self.aggregation)
-        self._aggregation_summary.keywords['exposure_keywords'] = dict(
-            self.exposure_summary.keywords)
-        self._aggregation_summary.keywords['hazard_keywords'] = dict(
-            self.hazard.keywords)
-        self.debug_layer(self._aggregation_summary)
+            output_layer_provenance[provenance_layer_exposure_summary[
+                'provenance_key']] = self._exposure_summary.publicSource()
+            output_layer_provenance[provenance_layer_exposure_summary_id[
+                'provenance_key']] = self._exposure_summary.id()
+
+        # Aggregate hazard impacted
+        if self.aggregate_hazard_impacted:
+            self.aggregate_hazard_impacted.keywords[
+                'provenance_data'] = self.provenance
+            self.append_ISO19115_keywords(
+                self.aggregate_hazard_impacted.keywords)
+            result, name = self.datastore.add_layer(
+                self._aggregate_hazard_impacted,
+                layer_purpose_aggregate_hazard_impacted['key'])
+            if not result:
+                raise Exception(
+                    tr('Something went wrong with the datastore : '
+                       '{error_message}').format(error_message=name))
+            self._aggregate_hazard_impacted = self.datastore.layer(name)
+            self.debug_layer(
+                self._aggregate_hazard_impacted, add_to_datastore=False)
+
+            output_layer_provenance[
+                provenance_layer_aggregate_hazard_impacted['provenance_key']
+            ] = self.aggregate_hazard_impacted.publicSource()
+            output_layer_provenance[
+                provenance_layer_aggregate_hazard_impacted_id['provenance_key']
+            ] = self.aggregate_hazard_impacted.id()
+
+        # Exposure summary table
+        if self._exposure.keywords.get('classification'):
+            self._exposure_summary_table.keywords[
+                'provenance_data'] = self.provenance
+            self.append_ISO19115_keywords(
+                self._exposure_summary_table.keywords)
+            result, name = self.datastore.add_layer(
+                self._exposure_summary_table,
+                layer_purpose_exposure_summary_table['key'])
+            if not result:
+                raise Exception(
+                    tr('Something went wrong with the datastore : '
+                       '{error_message}').format(error_message=name))
+            self._exposure_summary_table = self.datastore.layer(name)
+            self.debug_layer(
+                self._exposure_summary_table, add_to_datastore=False)
+
+            output_layer_provenance[
+                provenance_layer_exposure_summary_table['provenance_key']
+            ] = self._exposure_summary_table.publicSource()
+            output_layer_provenance[
+                provenance_layer_exposure_summary_table_id['provenance_key']
+            ] = self._exposure_summary_table.id()
+
+        # Aggregation summary
+        self.aggregation_summary.keywords['provenance_data'] = self.provenance
+        self.append_ISO19115_keywords(self.aggregation_summary.keywords)
+        result, name = self.datastore.add_layer(
+            self._aggregation_summary,
+            layer_purpose_aggregation_summary['key'])
+        if not result:
+            raise Exception(
+                tr('Something went wrong with the datastore : '
+                   '{error_message}').format(error_message=name))
+        self._aggregation_summary = self.datastore.layer(name)
+        self.debug_layer(self._aggregation_summary, add_to_datastore=False)
+
+        output_layer_provenance[provenance_layer_aggregation_summary[
+            'provenance_key']] = self._aggregation_summary.publicSource()
+        output_layer_provenance[provenance_layer_aggregation_summary_id[
+            'provenance_key']] = self._aggregation_summary.id()
+
+        # Analysis impacted
+        self.analysis_impacted.keywords['provenance_data'] = self.provenance
+        self.append_ISO19115_keywords(self.analysis_impacted.keywords)
+        result, name = self.datastore.add_layer(
+            self._analysis_impacted, layer_purpose_analysis_impacted['key'])
+        if not result:
+            raise Exception(
+                tr('Something went wrong with the datastore : '
+                   '{error_message}').format(error_message=name))
+        self._analysis_impacted = self.datastore.layer(name)
+        self.debug_layer(self._analysis_impacted, add_to_datastore=False)
+        output_layer_provenance[provenance_layer_analysis_impacted[
+            'provenance_key']] = self._analysis_impacted.publicSource()
+        output_layer_provenance[provenance_layer_analysis_impacted_id[
+            'provenance_key']] = self._analysis_impacted.id()
+
+        # Update provenance data with output layers URI
+        self._provenance.update(output_layer_provenance)
+        if self._exposure_summary:
+            self._exposure_summary.keywords[
+                'provenance_data'] = self.provenance
+            write_iso19115_metadata(
+                self._exposure_summary.publicSource(),
+                self._exposure_summary.keywords)
+        if self._aggregate_hazard_impacted:
+            self._aggregate_hazard_impacted.keywords[
+                'provenance_data'] = self.provenance
+            write_iso19115_metadata(
+                self._aggregate_hazard_impacted.publicSource(),
+                self._aggregate_hazard_impacted.keywords)
+        if self._exposure_summary_table:
+            self._exposure_summary_table.keywords[
+                'provenance_data'] = self.provenance
+            write_iso19115_metadata(
+                self._exposure_summary_table.publicSource(),
+                self._exposure_summary_table.keywords)
+
+        self.aggregation_summary.keywords['provenance_data'] = self.provenance
+        write_iso19115_metadata(
+            self.aggregation_summary.publicSource(),
+            self.aggregation_summary.keywords)
+
+        self.analysis_impacted.keywords['provenance_data'] = self.provenance
+        write_iso19115_metadata(
+            self.analysis_impacted.publicSource(),
+            self.analysis_impacted.keywords)
 
     @profile
     def aggregation_preparation(self):
@@ -1943,18 +2063,17 @@ class ImpactFunction(object):
                     self._exposure, self._aggregate_hazard_impacted)
                 self.debug_layer(self._exposure_summary)
 
-            if self._exposure_summary:
-                # set title using definition
-                # the title will be overwritten anyway by standard title
-                # set this as fallback.
-                self._exposure_summary.keywords['title'] = (
-                    layer_purpose_exposure_summary['name'])
-                if qgis_version() >= 21800:
-                    self._exposure_summary.setName(
-                        self._exposure_summary.keywords['title'])
-                else:
-                    self._exposure_summary.setLayerName(
-                        self._exposure_summary.keywords['title'])
+            # set title using definition
+            # the title will be overwritten anyway by standard title
+            # set this as fallback.
+            self._exposure_summary.keywords['title'] = (
+                layer_purpose_exposure_summary['name'])
+            if qgis_version() >= 21800:
+                self._exposure_summary.setName(
+                    self._exposure_summary.keywords['title'])
+            else:
+                self._exposure_summary.setLayerName(
+                    self._exposure_summary.keywords['title'])
 
     @profile
     def post_process(self, layer):
@@ -1981,12 +2100,13 @@ class ImpactFunction(object):
                 if valid:
                     self.set_state_process('post_processor', name)
                     message = u'{name} : Running'.format(name=name)
+                    LOGGER.info(message)
 
             else:
-                message = u'{name} : Could not run : {reason}'.format(
-                    name=name, reason=message)
-
-            LOGGER.info(message)
+                # message = u'{name} : Could not run : {reason}'.format(
+                #     name=name, reason=message)
+                # LOGGER.info(message)
+                pass
 
         self.debug_layer(layer, add_to_datastore=False)
 
@@ -1998,7 +2118,7 @@ class ImpactFunction(object):
         """
         LOGGER.info('ANALYSIS : Summary calculation')
         if is_vector_layer(self._exposure_summary):
-            # The exposure summary might be a raster if it's an EQ if.
+            # With continuous exposure, we don't have an exposure summary layer
             self.set_state_process(
                 'impact function',
                 'Aggregate the impact summary')
@@ -2006,38 +2126,26 @@ class ImpactFunction(object):
                 self.exposure_summary, self._aggregate_hazard_impacted)
             self.debug_layer(self._exposure_summary, add_to_datastore=False)
 
-        if self._aggregate_hazard_impacted:
+        self.set_state_process(
+            'impact function', 'Aggregate the aggregation summary')
+        self._aggregation_summary = aggregation_summary(
+            self._aggregate_hazard_impacted, self.aggregation)
+        self.debug_layer(
+            self._aggregation_summary, add_to_datastore=False)
+
+        self.set_state_process(
+            'impact function', 'Aggregate the analysis summary')
+        self._analysis_impacted = analysis_summary(
+            self._aggregate_hazard_impacted, self._analysis_impacted)
+        self.debug_layer(self._analysis_impacted)
+
+        if self._exposure.keywords.get('classification'):
             self.set_state_process(
-                'impact function',
-                'Aggregate the aggregation summary')
-            self._aggregation_summary = aggregation_summary(
-                self._aggregate_hazard_impacted, self.aggregation)
+                'impact function', 'Build the exposure summary table')
+            self._exposure_summary_table = exposure_summary_table(
+                self._aggregate_hazard_impacted, self._exposure_summary)
             self.debug_layer(
-                self._aggregation_summary, add_to_datastore=False)
-
-            self.set_state_process(
-                'impact function',
-                'Aggregate the analysis summary')
-            self._analysis_impacted = analysis_summary(
-                self._aggregate_hazard_impacted, self._analysis_impacted)
-            self.debug_layer(self._analysis_impacted)
-
-            if self._exposure.keywords.get('classification'):
-                self.set_state_process(
-                    'impact function',
-                    'Build the exposure summary table')
-                self._exposure_summary_table = exposure_summary_table(
-                    self._aggregate_hazard_impacted)
-                self.debug_layer(
-                    self._exposure_summary_table, add_to_datastore=False)
-        else:
-            # We are running EQ raster on population raster.
-            self.set_state_process(
-                'impact function',
-                'Aggregate the earthquake analysis summary')
-            self._analysis_impacted = analysis_eartquake_summary(
-                self.aggregation_summary, self.analysis_impacted)
-            self.debug_layer(self._analysis_impacted, add_to_datastore=False)
+                self._exposure_summary_table, add_to_datastore=False)
 
     def style(self):
         """Function to apply some styles to the layers."""
@@ -2051,22 +2159,20 @@ class ImpactFunction(object):
         # Let's style layers which have a geometry and have hazard_class
         hazard_class = hazard_class_field['key']
         for layer in self.outputs:
-            if is_vector_layer(layer):
-                without_geometries = [QGis.NoGeometry, QGis.UnknownGeometry]
-                if layer.geometryType() not in without_geometries:
-                    display_not_exposed = False
-                    if layer == self.impact or self.debug_mode:
-                        display_not_exposed = True
+            without_geometries = [QGis.NoGeometry, QGis.UnknownGeometry]
+            if layer.geometryType() not in without_geometries:
+                display_not_exposed = False
+                if layer == self.impact or self.debug_mode:
+                    display_not_exposed = True
 
-                    if layer.keywords['inasafe_fields'].get(hazard_class):
-                        hazard_class_style(layer, classes, display_not_exposed)
-
-            else:
-                displaced_people_style(layer)
+                if layer.keywords['inasafe_fields'].get(hazard_class):
+                    hazard_class_style(layer, classes, display_not_exposed)
 
         # Let's style the aggregation and analysis layer.
-        simple_polygon_without_brush(self.aggregation_summary)
-        simple_polygon_without_brush(self.analysis_impacted)
+        simple_polygon_without_brush(
+            self.aggregation_summary, aggregation_width, aggregation_color)
+        simple_polygon_without_brush(
+            self.analysis_impacted, analysis_width, analysis_color)
 
     @property
     def provenance(self):
@@ -2077,23 +2183,7 @@ class ImpactFunction(object):
 
         The impact function will call generate_provenance at the end of the IF.
 
-        List of keys (for quick lookup):
-
-        [
-            'exposure_keywords',
-            'hazard_keywords',
-            'impact_function_name',
-            'impact_function_title',
-            'map_title',
-            'map_legend_title',
-            'analysis_question',
-            'report_question',
-            'requested_extent',
-            'analysis_extent',
-            'data_store_uri',
-            'notes',
-            'action_checklist',
-        ]
+        List of keys (for quick lookup): safe/definitions/provenance.py
 
         :returns: Dictionary that contains all provenance.
         :rtype: dict
@@ -2117,31 +2207,57 @@ class ImpactFunction(object):
             'hazard_category'])
 
         # InaSAFE
-        self._provenance['impact_function_name'] = self.name
-        self._provenance['impact_function_title'] = self.title
+        set_provenance(
+            self._provenance, provenance_impact_function_name, self.name)
+        set_provenance(
+            self._provenance, provenance_impact_function_title, self.title)
 
         # Map title
-        self._provenance['map_title'] = get_map_title(
-            hazard, exposure, hazard_category)
-        self._provenance['map_legend_title'] = exposure['layer_legend_title']
+        set_provenance(
+            self._provenance,
+            provenance_map_title,
+            get_map_title(hazard, exposure, hazard_category))
 
-        self._provenance['analysis_question'] = get_analysis_question(
-            hazard, exposure)
+        set_provenance(
+            self._provenance,
+            provenance_map_legend_title,
+            exposure['layer_legend_title'])
+
+        set_provenance(
+            self._provenance,
+            provenance_analysis_question,
+            get_analysis_question(hazard, exposure))
 
         if self.requested_extent:
-            self._provenance['requested_extent'] = (
-                self.requested_extent.asWktCoordinates()
-            )
+            set_provenance(
+                self._provenance,
+                provenance_requested_extent,
+                self.requested_extent.asWktCoordinates())
         else:
-            self._provenance['requested_extent'] = None
-        self._provenance['analysis_extent'] = (
-            self.analysis_extent.exportToWkt()
-        )
-        self._provenance['data_store_uri'] = self.datastore.uri_path
+            set_provenance(
+                self._provenance,
+                provenance_requested_extent,
+                None)
+        set_provenance(
+            self._provenance,
+            provenance_analysis_extent,
+            self.analysis_extent.exportToWkt())
+
+        set_provenance(
+            self._provenance,
+            provenance_data_store_uri,
+            self.datastore.uri_path)
 
         # Notes and Action
-        self._provenance['notes'] = self.notes()
-        self._provenance['action_checklist'] = self.action_checklist()
+        set_provenance(self._provenance, provenance_notes, self.notes())
+        set_provenance(
+            self._provenance,
+            provenance_action_checklist,
+            self.action_checklist())
+
+        # CRS
+        set_provenance(
+            self._provenance, provenance_crs, self.impact.crs().authid())
 
         self._provenance_ready = True
 

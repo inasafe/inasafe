@@ -1,47 +1,35 @@
-# -*- coding: utf-8 -*-
-"""
-InaSAFE Disaster risk assessment tool developed by AusAid -
-**metadata module.**
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-"""
-from safe.metadata.encoder import MetadataEncoder
-
-__author__ = 'marco@opengis.ch'
-__revision__ = '$Format:%H$'
-__date__ = '27/05/2015'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
-
-# using this approach:
-# http://eli.thegreenplace.net/2009/02/06/getters-and-setters-in-python
+# coding=utf-8
+"""This module base metadata implementation."""
 
 import abc
-from datetime import datetime
 import json
 import os
+from datetime import datetime
 from xml.etree import ElementTree
 
+from safe.definitions.metadata import TYPE_CONVERSIONS, METADATA_XML_TEMPLATE
 from safe.common.exceptions import MetadataReadError, HashNotFoundError
+from safe.metadata.encoder import MetadataEncoder
 from safe.metadata.metadata_db_io import MetadataDbIO
-from safe.metadata.utils import (
-    METADATA_XML_TEMPLATE,
-    TYPE_CONVERSIONS,
+from safe.metadata.utilities import (
     XML_NS,
     insert_xml_element,
     read_property_from_xml,
     reading_ancillary_files
 )
 from safe.utilities.i18n import tr
-from safe.definitions.constants import multipart_polygon_key
+
+# using this approach:
+# http://eli.thegreenplace.net/2009/02/06/getters-and-setters-in-python
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 
 class BaseMetadata(object):
+
     """
     Abstract Metadata class, this has to be subclassed.
 
@@ -109,13 +97,6 @@ class BaseMetadata(object):
             'gmd:CI_OnlineResource/'
             'gmd:linkage/'
             'gmd:URL'),
-        'report': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'report/'
-            'gco:CharacterString'),
         'layer_purpose': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
@@ -158,27 +139,6 @@ class BaseMetadata(object):
             'inasafe/'
             'source/'
             'gco:CharacterString'),
-        'datatype': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'datatype/'
-            'gco:CharacterString'),
-        'multipart_polygon': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            '%s/'
-            'gco:Boolean' % multipart_polygon_key),
-        'resolution': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'resolution/'
-            'gco:FloatTuple'),
         'inasafe_fields': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'

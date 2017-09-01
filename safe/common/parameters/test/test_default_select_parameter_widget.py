@@ -37,7 +37,7 @@ class TestDefaultSelectParameterWidget(unittest.TestCase):
             '\xddounicode test']
         default_select_parameter.value = 'affected'
         default_select_parameter.default_labels = [
-            'Setting (%s)', 'Do not use', 'Custom']
+            'Setting (%s)', 'Do not report', 'Custom']
         default_select_parameter.default_values = [0.1, None, 0.2]
         default_select_parameter.default_value = 0.1
 
@@ -63,7 +63,7 @@ class TestDefaultSelectParameterWidget(unittest.TestCase):
             '\xddounicode test']
         default_select_parameter.value = 'affected'
         default_select_parameter.default_labels = [
-            'Setting (%s)', 'Do not use', 'Custom']
+            'Setting (%s)', 'Do not report', 'Custom']
         default_select_parameter.default_values = [0.1, None, 0.2]
 
         widget = DefaultSelectParameterWidget(default_select_parameter)

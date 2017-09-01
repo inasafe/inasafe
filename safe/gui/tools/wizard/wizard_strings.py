@@ -68,12 +68,6 @@ unit_question = tr(
     '<p>We need to know what units the continuous data are in. For example in '
     'a raster layer, each cell might represent depth in metres or depth in '
     'feet.</p>')  # (subcategory, layer purpose)
-allow_resampling_question = tr(
-    'You have selected <b>%s %s</b> for this <b>%s data</b> raster layer. '
-    '<p>For some exposure types you may not want InaSAFE to resample the '
-    'raster to the hazard layer resolution during analyses. Please select the '
-    'check box below if you want to set the <i>allow_resampling</i> '
-    'keyword to <i>False</i>.</p>')  # (subcategory, layer purpose, layer_mode)
 
 flood_metres_question = tr('flood depth in metres')
 flood_feet_question = tr('flood depth in feet')

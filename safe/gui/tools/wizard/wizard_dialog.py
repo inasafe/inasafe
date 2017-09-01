@@ -9,8 +9,7 @@ from PyQt4.QtCore import pyqtSignature, QSettings
 from PyQt4.QtGui import QDialog, QPixmap
 from qgis.core import QgsMapLayerRegistry
 
-from safe_extras.parameters.parameter_exceptions import (
-    InvalidValidationException)
+from parameters.parameter_exceptions import InvalidValidationException
 
 from safe.utilities.i18n import tr
 from safe.definitions.layer_purposes import (
@@ -26,7 +25,6 @@ from safe.definitions.units import exposure_unit
 from safe.definitions.hazard import continuous_hazard_unit
 from safe.definitions.utilities import get_compulsory_fields
 from safe.definitions.constants import RECENT
-
 from safe.common.exceptions import (
     HashNotFoundError,
     NoKeywordsFoundError,
@@ -36,13 +34,11 @@ from safe.common.exceptions import (
     InaSAFEError,
     MetadataReadError,
     InvalidWizardStep)
-
 from safe.gui.tools.wizard.wizard_strings import (
     category_question_hazard,
     category_question_exposure,
     category_question_aggregation)
-from safe.gui.tools.wizard.wizard_utils import layer_description_html
-
+from safe.gui.tools.wizard.utilities import layer_description_html
 from safe.utilities.default_values import set_inasafe_default_value_qsetting
 from safe.utilities.gis import (
     is_raster_layer,
@@ -57,7 +53,6 @@ from safe.utilities.qgis_utilities import display_warning_message_box
 
 from step_fc00_functions1 import StepFcFunctions1
 from step_fc05_functions2 import StepFcFunctions2
-from step_fc10_function import StepFcFunction
 from step_fc15_hazlayer_origin import StepFcHazLayerOrigin
 from step_fc20_hazlayer_from_canvas import StepFcHazLayerFromCanvas
 from step_fc25_hazlayer_from_browser import StepFcHazLayerFromBrowser
@@ -71,17 +66,16 @@ from step_fc60_agglayer_from_browser import StepFcAggLayerFromBrowser
 from step_fc65_agglayer_disjoint import StepFcAggLayerDisjoint
 from step_fc70_extent import StepFcExtent
 from step_fc75_extent_disjoint import StepFcExtentDisjoint
-from step_fc80_params import StepFcParams
 from step_fc85_summary import StepFcSummary
 from step_kw00_purpose import StepKwPurpose
 from step_kw05_subcategory import StepKwSubcategory
 from step_kw10_hazard_category import StepKwHazardCategory
+from step_kw13_band_selector import StepKwBandSelector
 from step_kw15_layermode import StepKwLayerMode
 from step_kw20_unit import StepKwUnit
 from step_kw25_classification import StepKwClassification
 from step_kw30_field import StepKwField
 from step_kw33_multi_classifications import StepKwMultiClassifications
-from step_kw35_resample import StepKwResample
 from step_kw40_classify import StepKwClassify
 from step_kw43_threshold import StepKwThreshold
 from step_kw44_fields_mapping import StepKwFieldsMapping
@@ -92,7 +86,11 @@ from step_kw49_inasafe_raster_default_values import (
 from step_kw55_source import StepKwSource
 from step_kw60_title import StepKwTitle
 from step_kw65_summary import StepKwSummary
-from.step_fc90_analysis import StepFcAnalysis
+from step_fc90_analysis import StepFcAnalysis
+
+from safe.gui.tools.wizard.wizard_help import WizardHelp
+from safe.gui.tools.wizard import STEP_KW, STEP_FC
+
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -129,8 +127,9 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.setupUi(self)
         self.setWindowTitle('InaSAFE')
         # Constants
-        self.keyword_creation_wizard_name = 'InaSAFE Keywords Creation Wizard'
-        self.ifcw_name = 'InaSAFE Impact Function Centric Wizard'
+        self.keyword_creation_wizard_name = tr(
+            'InaSAFE Keywords Creation Wizard')
+        self.ifcw_name = tr('InaSAFE Impact Function Centric Wizard')
         # Note the keys should remain untranslated as we need to write
         # english to the keywords file.
         # Save reference to the QGIS interface and parent
@@ -162,12 +161,12 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.step_kw_purpose = StepKwPurpose(self)
         self.step_kw_subcategory = StepKwSubcategory(self)
         self.step_kw_hazard_category = StepKwHazardCategory(self)
+        self.step_kw_band_selector = StepKwBandSelector(self)
         self.step_kw_layermode = StepKwLayerMode(self)
         self.step_kw_unit = StepKwUnit(self)
         self.step_kw_classification = StepKwClassification(self)
         self.step_kw_field = StepKwField(self)
         self.step_kw_multi_classifications = StepKwMultiClassifications(self)
-        self.step_kw_resample = StepKwResample(self)
         self.step_kw_classify = StepKwClassify(self)
         self.step_kw_threshold = StepKwThreshold(self)
         self.step_kw_fields_mapping = StepKwFieldsMapping(self)
@@ -178,9 +177,9 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.step_kw_source = StepKwSource(self)
         self.step_kw_title = StepKwTitle(self)
         self.step_kw_summary = StepKwSummary(self)
+
         self.step_fc_functions1 = StepFcFunctions1(self)
         self.step_fc_functions2 = StepFcFunctions2(self)
-        self.step_fc_function = StepFcFunction(self)
         self.step_fc_hazlayer_origin = StepFcHazLayerOrigin(self)
         self.step_fc_hazlayer_from_canvas = StepFcHazLayerFromCanvas(self)
         self.step_fc_hazlayer_from_browser = StepFcHazLayerFromBrowser(self)
@@ -194,18 +193,20 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.step_fc_agglayer_disjoint = StepFcAggLayerDisjoint(self)
         self.step_fc_extent = StepFcExtent(self)
         self.step_fc_extent_disjoint = StepFcExtentDisjoint(self)
-        self.step_fc_params = StepFcParams(self)
         self.step_fc_summary = StepFcSummary(self)
         self.step_fc_analysis = StepFcAnalysis(self)
+
+        self.wizard_help = WizardHelp(self)
+
         self.stackedWidget.addWidget(self.step_kw_purpose)
         self.stackedWidget.addWidget(self.step_kw_subcategory)
         self.stackedWidget.addWidget(self.step_kw_hazard_category)
+        self.stackedWidget.addWidget(self.step_kw_band_selector)
         self.stackedWidget.addWidget(self.step_kw_layermode)
         self.stackedWidget.addWidget(self.step_kw_unit)
         self.stackedWidget.addWidget(self.step_kw_classification)
         self.stackedWidget.addWidget(self.step_kw_field)
         self.stackedWidget.addWidget(self.step_kw_multi_classifications)
-        self.stackedWidget.addWidget(self.step_kw_resample)
         self.stackedWidget.addWidget(self.step_kw_classify)
         self.stackedWidget.addWidget(self.step_kw_threshold)
         self.stackedWidget.addWidget(self.step_kw_fields_mapping)
@@ -218,7 +219,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.stackedWidget.addWidget(self.step_kw_summary)
         self.stackedWidget.addWidget(self.step_fc_functions1)
         self.stackedWidget.addWidget(self.step_fc_functions2)
-        self.stackedWidget.addWidget(self.step_fc_function)
         self.stackedWidget.addWidget(self.step_fc_hazlayer_origin)
         self.stackedWidget.addWidget(self.step_fc_hazlayer_from_canvas)
         self.stackedWidget.addWidget(self.step_fc_hazlayer_from_browser)
@@ -232,9 +232,10 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.stackedWidget.addWidget(self.step_fc_agglayer_disjoint)
         self.stackedWidget.addWidget(self.step_fc_extent)
         self.stackedWidget.addWidget(self.step_fc_extent_disjoint)
-        self.stackedWidget.addWidget(self.step_fc_params)
         self.stackedWidget.addWidget(self.step_fc_summary)
         self.stackedWidget.addWidget(self.step_fc_analysis)
+
+        self.stackedWidget.addWidget(self.wizard_help)
 
         # QSetting
         self.setting = QSettings()
@@ -242,24 +243,25 @@ class WizardDialog(QDialog, FORM_CLASS):
         # Wizard Steps
         self.impact_function_steps = []
         self.keyword_steps = []
+        self.on_help = False
 
     def set_mode_label_to_keywords_creation(self):
         """Set the mode label to the Keywords Creation/Update mode."""
         self.setWindowTitle(self.keyword_creation_wizard_name)
         if self.get_existing_keyword('layer_purpose'):
-            mode_name = (self.tr(
-                'Keywords update wizard for layer <b>%s</b>'
-            ) % self.layer.name())
+            mode_name = tr(
+                'Keywords update wizard for layer <b>{layer_name}</b>').format(
+                layer_name=self.layer.name())
         else:
-            mode_name = (self.tr(
-                'Keywords creation wizard for layer <b>%s</b>'
-            ) % self.layer.name())
+            mode_name = tr(
+                'Keywords creation wizard for layer <b>%s</b>').format(
+                layer_name=self.layer.name())
         self.lblSubtitle.setText(mode_name)
 
     def set_mode_label_to_ifcw(self):
         """Set the mode label to the IFCW."""
         self.setWindowTitle(self.ifcw_name)
-        self.lblSubtitle.setText(self.tr(
+        self.lblSubtitle.setText(tr(
             'Use this wizard to run a guided impact assessment'))
 
     def set_keywords_creation_mode(self, layer=None, keywords=None):
@@ -555,9 +557,9 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         # set the current layer (e.g. for the keyword creation sub-thread)
         self.layer = layer
-        if purpose == 'hazard':
+        if purpose == layer_purpose_hazard['key']:
             self.hazard_layer = layer
-        elif purpose == 'exposure':
+        elif purpose == layer_purpose_exposure['key']:
             self.exposure_layer = layer
         else:
             self.aggregation_layer = layer
@@ -570,8 +572,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         else:
             self.is_selected_layer_keywordless = True
 
-        desc = layer_description_html(layer, keywords)
-        return desc
+        description = layer_description_html(layer, keywords)
+        return description
 
     # ===========================
     # NAVIGATION
@@ -583,7 +585,7 @@ class WizardDialog(QDialog, FORM_CLASS):
            entering the new step.
 
         :param step: The step widget to be moved to.
-        :type step: QWidget
+        :type step: WizardStep
         """
         self.stackedWidget.setCurrentWidget(step)
 
@@ -598,11 +600,11 @@ class WizardDialog(QDialog, FORM_CLASS):
         # Set Next button label
         if (step in [self.step_kw_summary, self.step_fc_analysis] and
                 self.parent_step is None):
-            self.pbnNext.setText(self.tr('Finish'))
+            self.pbnNext.setText(tr('Finish'))
         elif step == self.step_fc_summary:
-            self.pbnNext.setText(self.tr('Run'))
+            self.pbnNext.setText(tr('Run'))
         else:
-            self.pbnNext.setText(self.tr('Next'))
+            self.pbnNext.setText(tr('Next'))
 
         # Run analysis after switching to the new step
         if step == self.step_fc_analysis:
@@ -631,14 +633,6 @@ class WizardDialog(QDialog, FORM_CLASS):
            executed when the Next button is released.
         """
         current_step = self.get_current_step()
-        # For checking age sum == 1
-        if current_step == self.step_kw_default_inasafe_fields:
-            good_ratios = self.step_kw_default_inasafe_fields.\
-                is_good_age_ratios()
-            self.step_kw_default_inasafe_fields.toggle_age_ratio_sum_message(
-                    good_ratios)
-            if not good_ratios:
-                return
 
         if current_step == self.step_kw_fields_mapping:
             try:
@@ -648,9 +642,9 @@ class WizardDialog(QDialog, FORM_CLASS):
                     self, tr('Invalid Field Mapping'), get_string(e.message))
                 return
 
-        if current_step.step_type == 'step_fc':
+        if current_step.step_type == STEP_FC:
             self.impact_function_steps.append(current_step)
-        elif current_step.step_type == 'step_kw':
+        elif current_step.step_type == STEP_KW:
             self.keyword_steps.append(current_step)
         else:
             LOGGER.debug(current_step.step_type)
@@ -699,9 +693,9 @@ class WizardDialog(QDialog, FORM_CLASS):
            executed when the Back button is released.
         """
         current_step = self.get_current_step()
-        if current_step.step_type == 'step_fc':
+        if current_step.step_type == STEP_FC:
             new_step = self.impact_function_steps.pop()
-        elif current_step.step_type == 'step_kw':
+        elif current_step.step_type == STEP_KW:
             try:
                 new_step = self.keyword_steps.pop()
             except IndexError:
@@ -718,9 +712,24 @@ class WizardDialog(QDialog, FORM_CLASS):
         if new_step == self.step_fc_extent:
             self.step_fc_extent.set_widgets()
         # Set Next button label
-        self.pbnNext.setText(self.tr('Next'))
+        self.pbnNext.setText(tr('Next'))
         self.pbnNext.setEnabled(True)
         self.go_to_step(new_step)
+
+    # prevents actions being handled twice
+    # noinspection PyPep8Naming
+    @pyqtSignature('')
+    def on_pbnHelp_released(self):
+        if self.on_help:
+            self.pbnHelp.setText(tr('Show help'))
+            self.wizard_help.restore_button_state()
+            self.stackedWidget.setCurrentWidget(self.wizard_help.wizard_step)
+        else:
+            self.pbnHelp.setText(tr('Hide help'))
+            self.wizard_help.show_help(self.get_current_step())
+            self.stackedWidget.setCurrentWidget(self.wizard_help)
+
+        self.on_help = not self.on_help
 
     def get_current_step(self):
         """Return current step of the wizard.
@@ -746,6 +755,10 @@ class WizardDialog(QDialog, FORM_CLASS):
             key = self.step_kw_purpose.selected_purpose()['key']
             keywords[key] = self.step_kw_subcategory.\
                 selected_subcategory()['key']
+        if self.get_layer_geometry_key() == layer_geometry_raster['key']:
+            if self.step_kw_band_selector.selected_band():
+                keywords['active_band'] = self.step_kw_band_selector.\
+                    selected_band()
         if keywords['layer_purpose'] == layer_purpose_hazard['key']:
             if self.step_kw_hazard_category.selected_hazard_category():
                 keywords['hazard_category'] \
@@ -760,10 +773,6 @@ class WizardDialog(QDialog, FORM_CLASS):
             else:
                 key = exposure_unit['key']
             keywords[key] = self.step_kw_unit.selected_unit()['key']
-        if self.step_kw_resample.selected_allow_resampling() is not None:
-            keywords['allow_resampling'] = (
-                self.step_kw_resample.selected_allow_resampling() and
-                'true' or 'false')
         if self.step_kw_field.selected_fields():
             field_key = self.field_keyword_for_the_layer()
             inasafe_fields[field_key] = self.step_kw_field.selected_fields()
@@ -852,17 +861,18 @@ class WizardDialog(QDialog, FORM_CLASS):
             error_message = get_error_message(e)
             # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
             QtGui.QMessageBox.warning(
-                self, self.tr('InaSAFE'),
-                ((self.tr(
-                    'An error was encountered when saving the following '
-                    'keywords:\n %s') % error_message.to_html())))
+                self,
+                tr('InaSAFE'),
+                tr('An error was encountered when saving the following '
+                   'keywords:\n {error_message}').format(
+                    error_message=error_message.to_html()))
         if self.dock is not None:
             # noinspection PyUnresolvedReferences
             self.dock.get_layers()
 
         # Save default value to QSetting
         if current_keywords.get('inasafe_default_values'):
-            for key, value in \
-                    current_keywords['inasafe_default_values'].items():
+            for key, value in (
+                    current_keywords['inasafe_default_values'].items()):
                 set_inasafe_default_value_qsetting(
                     self.setting, RECENT, key, value)

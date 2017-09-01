@@ -1,22 +1,10 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
+"""InaSAFE Wizard Step Aggregation Layer Origin."""
 
-This module provides: Function Centric Wizard Step: Aggregation Layer Origin
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
-
-# noinspection PyPackageRequirements
 from PyQt4.QtGui import QPixmap
 
 from safe.utilities.i18n import tr
+from safe import messaging as m
 
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step import WizardStep
@@ -30,7 +18,7 @@ FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
 class StepFcAggLayerOrigin(WizardStep, FORM_CLASS):
-    """Function Centric Wizard Step: Aggregation Layer Origin"""
+    """InaSAFE Wizard Step Aggregation Layer Origin."""
 
     def is_ready_to_next_step(self):
         """Check if the step is complete. If so, there is
@@ -113,3 +101,28 @@ class StepFcAggLayerOrigin(WizardStep, FORM_CLASS):
 
         # Set icon
         self.lblIconIFCWAggregationOrigin.setPixmap(QPixmap(None))
+
+    @property
+    def step_name(self):
+        """Get the human friendly name for the wizard step.
+
+        :returns: The name of the wizard step.
+        :rtype: str
+        """
+        return tr('Aggregation Layer Origin')
+
+    def help_content(self):
+        """Return the content of help for this step wizard.
+
+            We only needs to re-implement this method in each wizard step.
+
+        :returns: A message object contains help.
+        :rtype: m.Message
+        """
+        message = m.Message()
+        message.add(m.Paragraph(tr(
+            'In this wizard step: {step_name}, you can choose where your '
+            'aggregation layer come from. The option for choosing aggregation '
+            'layer from QGIS can not be chosen if there is no aggregation '
+            'layer in QGIS.').format(step_name=self.step_name)))
+        return message

@@ -1,16 +1,18 @@
 # coding=utf-8
 """Group Select Parameter Widget."""
 
+import logging
+
 from PyQt4.QtGui import (
     QDoubleSpinBox, QVBoxLayout, QRadioButton, QButtonGroup,
     QWidget, QLabel, QSizePolicy, QSpacerItem, QListWidget,
     QGridLayout, QAbstractItemView, QListWidgetItem)
 from PyQt4.QtCore import Qt
 
-from safe_extras.parameters.qt_widgets.generic_parameter_widget import (
+from parameters.qt_widgets.generic_parameter_widget import (
     GenericParameterWidget)
+
 from safe.definitions.constants import STATIC, SINGLE_DYNAMIC, MULTIPLE_DYNAMIC
-import logging
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"

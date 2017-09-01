@@ -10,6 +10,7 @@ from safe.definitions.layer_geometry import (
 )
 from safe.definitions.field_groups import (
     aggregation_field_groups, population_field_groups)
+from safe.definitions.keyword_properties import property_layer_purpose
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -62,10 +63,10 @@ layer_purpose_aggregation = {
 }
 
 layer_purpose_exposure_summary = {
-    'key': 'exposure_summary',
-    'name': tr('Impact Layer - Exposure Summary'),
+    'key': 'impact_analysis',
+    'name': tr('Impact Analysis'),
     'description': tr(
-        'This <b>impact layer - exposure summary</b> contains all the '
+        'This <b>Impact Analysis</b> contains all the '
         'results for the spatial analysis of the hazard, exposure and '
         'aggregation layers (if used) within the analysis extent. This '
         'layer is not created if the input includes a continuous raster '
@@ -81,10 +82,10 @@ layer_purpose_exposure_summary = {
 }
 
 layer_purpose_aggregate_hazard_impacted = {
-    'key': 'aggregate_hazard_impacted',
-    'name': tr('Aggregate Hazard Impacted'),
+    'key': 'hazard_aggregation_summary',
+    'name': tr('Hazard Aggregation Summary'),
     'description': tr(
-        'An <b>aggregate hazard impacted</b> layer is created during an '
+        'An <b>hazard aggregation summary</b> is created during an '
         'InaSAFE analysis. This layer is a cross product between the hazard '
         'layer, the aggregate layer and the exposure summary layer. The '
         'layer geometries are firstly a union between the hazard layer and '
@@ -114,9 +115,9 @@ layer_purpose_aggregate_hazard_impacted = {
 
 layer_purpose_aggregation_summary = {
     'key': 'aggregation_summary',
-    'name': tr('Impact Layer - Aggregation Summary'),
+    'name': tr('Aggregation Summary'),
     'description': tr(
-        "This <b>impact layer - aggregation summary</b> contains the "
+        "This <b>aggregation summary</b> contains the "
         "analysis results for each exposure type by hazard type, summarised "
         "by aggregation area. Where an aggregation layer was not used; the "
         "analysis area is defined by the extent of the input layers or the "
@@ -131,10 +132,10 @@ layer_purpose_aggregation_summary = {
 }
 
 layer_purpose_analysis_impacted = {
-    'key': 'analysis_impacted',
-    'name': tr('Analysis Impacted'),
+    'key': 'analysis_summary',
+    'name': tr('Analysis Summary'),
     'description': tr(
-        'An <b>analysis impacted</b> layer is the result from InaSAFE '
+        'An <b>analysis summary</b> layer is the result from InaSAFE '
         'analysis. It contains only one geometry polygon. This geometry is '
         'created by computing the outer bounding polygon of all of the '
         'aggregation layer features that were used for the analysis. Whereas '
@@ -171,7 +172,7 @@ layer_purpose_exposure_summary_table = {
 }
 
 layer_purpose_profiling = {
-    'key': 'profiling',
+    'key': 'analysis_log',
     'name': tr('Analysis Log'),
     'description': tr(
         'The <b>analysis log</b> contains information intended for '
@@ -191,9 +192,7 @@ layer_purpose_profiling = {
 layer_purpose = {
     'key': 'layer_purpose',
     'name': tr('Purpose'),
-    'description': tr(
-        'The purpose of the layer can be hazard layer, exposure layer, or '
-        'aggregation layer'),
+    'description': property_layer_purpose['description'],
     'types': [
         layer_purpose_hazard,
         layer_purpose_exposure,

@@ -3,6 +3,7 @@
 """Styles."""
 
 from collections import OrderedDict
+from PyQt4.QtGui import QColor
 from qgis.core import (
     QgsSymbolV2,
     QgsRendererCategoryV2,
@@ -13,7 +14,6 @@ from qgis.core import (
     QGis,
     QgsRasterShader,
     QgsColorRampShader,
-    QgsSingleBandPseudoColorRenderer,
 )
 
 from safe.definitions.styles import (
@@ -22,7 +22,6 @@ from safe.definitions.styles import (
     template_with_minimum_thresholds,
     template_with_maximum_thresholds,
     template_with_range_thresholds,
-    legend_raster_displaced,
 )
 from safe.definitions.fields import hazard_class_field, hazard_count_field
 from safe.definitions.hazard_classifications import not_exposed_class
@@ -331,11 +330,17 @@ def _format_label(
     return label
 
 
-def simple_polygon_without_brush(layer):
+def simple_polygon_without_brush(layer, width='0.26', color=QColor('black')):
     """Simple style to apply a border line only to a polygon layer.
 
     :param layer: The layer to style.
     :type layer: QgsVectorLayer
+
+    :param color: Color to use for the line. Default to black.
+    :type color: QColor
+
+    :param width: Width to use for the line. Default to '0.26'.
+    :type width: str
     """
     registry = QgsSymbolLayerV2Registry.instance()
     line_metadata = registry.symbolLayerMetadata("SimpleLine")
@@ -344,8 +349,8 @@ def simple_polygon_without_brush(layer):
     # Line layer
     line_layer = line_metadata.createSymbolLayer(
         {
-            'width': '0.26',
-            'color': '0,0,0',
+            'width': width,
+            'color': color.name(),
             'offset': '0',
             'penstyle': 'solid',
             'use_custom_dash': '0',
@@ -359,22 +364,3 @@ def simple_polygon_without_brush(layer):
 
     renderer = QgsSingleSymbolRendererV2(symbol)
     layer.setRendererV2(renderer)
-
-
-def displaced_people_style(layer):
-    """Simple style to display a displaced count with a binary style.
-
-    :param layer: The layer to style.
-    :type layer: QgsRasterLayer
-    """
-    color_ramp = QgsColorRampShader()
-    color_ramp.setColorRampType(QgsColorRampShader.INTERPOLATED)
-    color_ramp.setColorRampItemList(legend_raster_displaced)
-
-    shader = QgsRasterShader()
-    shader.setRasterShaderFunction(color_ramp)
-
-    renderer = QgsSingleBandPseudoColorRenderer(
-        layer.dataProvider(), 1, shader)
-
-    layer.setRenderer(renderer)

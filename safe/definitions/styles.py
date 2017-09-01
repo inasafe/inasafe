@@ -2,8 +2,6 @@
 """Styles and colors which are used in InaSAFE."""
 
 from PyQt4.QtGui import QColor
-from qgis.core import QgsColorRampShader
-from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -37,13 +35,6 @@ MMI_10 = QColor('#dd0000')
 MMI_11 = QColor('#880000')
 MMI_12 = QColor('#440000')
 
-# Displaced people raster after an EQ raster. The first item is the value in
-# the raster.
-legend_raster_displaced = [
-    QgsColorRampShader.ColorRampItem(0, transparent, tr('Not Displaced')),
-    QgsColorRampShader.ColorRampItem(1, QColor('#a53c12'), tr('Displaced')),
-]
-
 # Colors used in reporting.
 affected_column_background = QColor('#fff8e9')
 charcoal_black = QColor('#36454F')
@@ -76,3 +67,11 @@ last_analysis_width = 5
 # Availability options color in wizard
 available_option_color = QColor(120, 255, 120)
 unavailable_option_color = QColor(220, 220, 220)
+
+# Aggregation layer
+aggregation_width = '0.35'
+aggregation_color = QColor(255, 125, 125)
+
+# Analysis layer
+analysis_width = '0.50'
+analysis_color = QColor(255, 0, 0)
