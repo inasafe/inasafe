@@ -16,7 +16,6 @@ from safe.definitions.reports.infographic import (
     minimum_needs_section_header,
     additional_minimum_needs_section_header,
     population_chart_header,
-    inasafe_logo_white,
     age_gender_section_notes,
     minimum_needs_section_notes)
 from safe.definitions.units import exposure_unit
@@ -50,15 +49,6 @@ help_message = generate_expression_help(description, examples)
 
 @qgsfunction(
     args='auto', group=group, usesGeometry=False, referencedColumns=[])
-def inasafe_logo_white_path(feature, parent):
-    """Retrieve the full path of inasafe-logo-white.svg."""
-    _ = feature, parent  # NOQA
-    return inasafe_logo_white['path']
-
-
-@qgsfunction(
-    args='auto', group=group, usesGeometry=False, referencedColumns=[],
-    help_text=help_message.to_html(), helpText=help_message.to_html())
 def inasafe_field_header(field, feature, parent):
     """Retrieve a header name of the field name from definitions.
 
