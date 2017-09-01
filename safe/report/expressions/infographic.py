@@ -16,7 +16,6 @@ from safe.definitions.reports.infographic import (
     minimum_needs_section_header,
     additional_minimum_needs_section_header,
     population_chart_header,
-    inasafe_logo_white,
     age_gender_section_notes,
     minimum_needs_section_notes)
 from safe.definitions.units import exposure_unit
@@ -34,14 +33,6 @@ group = tr('InaSAFE - Infographic Elements')
 # Docstrings for these expressions are used in the QGIS GUI in the Expression
 # dialog and also in the InaSAFE Help dialog.
 ##
-
-
-@qgsfunction(
-    args='auto', group=group, usesGeometry=False, referencedColumns=[])
-def inasafe_logo_white_path(feature, parent):
-    """Retrieve the full path of inasafe-logo-white.svg."""
-    _ = feature, parent  # NOQA
-    return inasafe_logo_white['path']
 
 
 @qgsfunction(
