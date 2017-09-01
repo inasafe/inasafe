@@ -40,7 +40,9 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 class MessageViewer(QtWebKit.QWebView):
-    """A simple message queue"""
+
+    """A simple message queue."""
+
     static_message_count = 0
 
     # noinspection PyOldStyleClasses

@@ -8,8 +8,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from PyQt4.QtGui import QApplication, QWidget, QGridLayout
 
-from safe_extras.parameters.qt_widgets.parameter_container import (
-    ParameterContainer)
+from parameters.qt_widgets.parameter_container import ParameterContainer
 
 from safe.common.parameters.default_value_parameter import (
     DefaultValueParameter)
@@ -32,7 +31,7 @@ def main():
     default_value_parameter.help_text = 'Help text'
     default_value_parameter.description = 'Description'
     default_value_parameter.labels = [
-        'Setting', 'Do not use', 'Custom']
+        'Setting', 'Do not report', 'Custom']
     default_value_parameter.options = [0, 1, None]
 
     parameters = [

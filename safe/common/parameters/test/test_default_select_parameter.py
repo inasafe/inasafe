@@ -3,10 +3,11 @@
 
 from unittest import TestCase
 
+from parameters.parameter_exceptions import ValueNotAllowedException
+
 from safe.common.parameters.default_select_parameter import (
     DefaultSelectParameter)
-from safe_extras.parameters.parameter_exceptions import (
-    ValueNotAllowedException)
+
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -15,7 +16,7 @@ __revision__ = '$Format:%H$'
 
 selected = 'one'
 options = ['one', 'two', 'three', 'four', 'five']
-default_labels = ['Setting', 'Do not use', 'Custom']
+default_labels = ['Setting', 'Do not report', 'Custom']
 default_values = [0.1, None]
 
 

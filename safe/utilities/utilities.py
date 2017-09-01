@@ -373,7 +373,7 @@ def human_sorting(the_list):
     def alphanum_key(s):
         """Turn a string into a list of string and number chunks.
 
-            For instance : "z23a" -> ["z", 23, "a"]
+        For instance : "z23a" -> ["z", 23, "a"]
         """
         return [try_int(c) for c in re.split('([0-9]+)', s)]
 

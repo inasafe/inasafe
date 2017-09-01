@@ -12,11 +12,13 @@ from safe.definitions.styles import (
 from safe.definitions.font import big_font
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
-from safe.gui.tools.wizard.wizard_utils import RoleHazard, RoleExposure
+from safe.gui.tools.wizard.utilities import RoleHazard, RoleExposure
 from safe.definitions.layer_purposes import (
     layer_purpose_exposure, layer_purpose_hazard)
 from safe.utilities.resources import resources_path
 from safe.utilities.settings import setting
+from safe.utilities.i18n import tr
+from safe import messaging as m
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -164,3 +166,32 @@ class StepFcFunctions1(WizardStep, FORM_CLASS):
             QtGui.QHeaderView.Stretch)
 
         self.populate_function_table_1()
+
+    @property
+    def step_name(self):
+        """Get the human friendly name for the wizard step.
+
+        :returns: The name of the wizard step.
+        :rtype: str
+        """
+        return tr('Impact Function Filter by Layer Purpose Step')
+
+    def help_content(self):
+        """Return the content of help for this step wizard.
+
+            We only needs to re-implement this method in each wizard step.
+
+        :returns: A message object contains help.
+        :rtype: m.Message
+        """
+        message = m.Message()
+        message.add(m.Paragraph(tr(
+            'In this wizard step: {step_name}, there is a grid that shows all '
+            'possible combination for hazard and exposure that can be run in '
+            'InaSAFE. You can select a grid cell where your intended exposure '
+            'and hazard intersect. This will help you to choose the '
+            'layer that is suitable for the analysis. You can only '
+            'select the green grid cell. The grey color indicates that the '
+            'combination is not supported by InaSAFE.'
+            '').format(step_name=self.step_name)))
+        return message

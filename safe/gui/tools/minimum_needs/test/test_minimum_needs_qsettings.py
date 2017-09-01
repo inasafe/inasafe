@@ -26,11 +26,12 @@ import qgis  # pylint: disable=unused-import
 from PyQt4.QtCore import QSettings
 import json
 
-from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
-from safe.common.minimum_needs import MinimumNeeds
-from safe_extras.parameters.parameter_exceptions import (
+from parameters.parameter_exceptions import (
     InvalidMaximumError,
     ValueOutOfBounds)
+
+from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
+from safe.common.minimum_needs import MinimumNeeds
 
 
 class TestNeedsProfile(NeedsProfile):

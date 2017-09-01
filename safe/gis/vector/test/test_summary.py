@@ -3,25 +3,24 @@
 import unittest
 
 from safe.test.utilities import (
-    load_test_vector_layer, load_test_raster_layer, qgis_iface)
+    load_test_vector_layer, qgis_iface)
 
-from safe.definitions.utilities import definition
 from safe.definitions.fields import (
     total_field,
     exposure_class_field,
     hazard_class_field,
-    hazard_count_field,
-    exposure_count_field
+    exposure_count_field,
+    productivity_field,
+    production_cost_field,
+    production_value_field
 )
-from safe.definitions.constants import PREPARE_SUCCESS, ANALYSIS_SUCCESS
 from safe.gis.vector.tools import read_dynamic_inasafe_field
 from safe.gis.vector.summary_1_aggregate_hazard import (
     aggregate_hazard_summary)
 from safe.gis.vector.summary_2_aggregation import aggregation_summary
 from safe.gis.vector.summary_3_analysis import analysis_summary
 from safe.gis.vector.summary_4_exposure_summary_table import (
-    exposure_summary_table)
-from safe.impact_function.impact_function import ImpactFunction
+    exposure_summary_table, summarize_result)
 from safe.gis.sanity_check import check_inasafe_fields
 
 qgis_iface()
@@ -169,7 +168,7 @@ class TestAggregateSummary(unittest.TestCase):
         hazard_class_index = aggregate_hazard.fieldNameIndex(hazard_class)
         unique_hazard = aggregate_hazard.uniqueValues(hazard_class_index)
 
-        layer = exposure_summary_table(aggregate_hazard)
+        layer = exposure_summary_table(aggregate_hazard, None)
 
         check_inasafe_fields(layer)
 
@@ -184,30 +183,71 @@ class TestAggregateSummary(unittest.TestCase):
         # one for total
         self.assertEqual(layer.fields().count(), len(unique_hazard) + 5)
 
-    def test_analysis_earthquake_summary(self):
-        """Test we can compute summary after an EQ on population."""
-        hazard = load_test_raster_layer('gisv4', 'hazard', 'earthquake.asc')
-        exposure = load_test_raster_layer(
-            'gisv4', 'exposure', 'raster', 'population.asc')
-        aggregation = load_test_vector_layer(
-            'gisv4', 'aggregation', 'small_grid.geojson')
+    def test_exposure_summary_table_productivity(self):
+        """Test we can produce the breakdown for the exposure type."""
+        aggregate_hazard = load_test_vector_layer(
+            'gisv4',
+            'intermediate',
+            'summaries',
+            'land_cover_aggregate_hazard_impacted.geojson')
 
-        impact_function = ImpactFunction()
-        impact_function.hazard = hazard
-        impact_function.exposure = exposure
-        impact_function.aggregation = aggregation
-        status, message = impact_function.prepare()
-        self.assertEqual(PREPARE_SUCCESS, status, message)
-        status, message = impact_function.run()
-        self.assertEqual(ANALYSIS_SUCCESS, status, message)
+        aggregate_hazard.keywords['hazard_keywords'] = {
+            'classification': 'generic_hazard_classes'
+        }
 
-        layer = impact_function.analysis_impacted
-        classification = hazard.keywords['classification']
-        classes = definition(classification)['classes']
-        for hazard_class in classes:
-            field_name = hazard_count_field['field_name'] % hazard_class['key']
-            message = '%s is not found in the EQ summary layer.' % field_name
-            self.assertNotEqual(-1, layer.fieldNameIndex(field_name), message)
+        exposure_summary = load_test_vector_layer(
+            'gisv4',
+            'intermediate',
+            'summaries',
+            'land_cover_exposure_summary.geojson'
+        )
 
-        check_inasafe_fields(impact_function.analysis_impacted)
-        check_inasafe_fields(impact_function.aggregation_summary)
+        # I need the number of unique exposure
+        unique_exposure = read_dynamic_inasafe_field(
+            aggregate_hazard.keywords['inasafe_fields'],
+            exposure_count_field)
+
+        # I need the number of unique hazard
+        fields = aggregate_hazard.keywords['inasafe_fields']
+        hazard_class = fields[hazard_class_field['key']]
+        hazard_class_index = aggregate_hazard.fieldNameIndex(hazard_class)
+        unique_hazard = aggregate_hazard.uniqueValues(hazard_class_index)
+
+        layer = exposure_summary_table(aggregate_hazard, exposure_summary)
+
+        check_inasafe_fields(layer)
+
+        self.assertEqual(len(unique_exposure), layer.featureCount())
+
+        # We should have
+        # one column per hazard
+        # one for the exposure
+        # one for total affected
+        # one for total not affected
+        # one for total not exposed
+        # one for total
+        # one for affected productivity
+        # one for affected production cost
+        # one for affected production value
+        self.assertEqual(layer.fields().count(), len(unique_hazard) + 8)
+
+    def test_summarize_result(self):
+        """Test for summarize_result_method."""
+        exposure_summary = load_test_vector_layer(
+            'gisv4',
+            'intermediate',
+            'summaries',
+            'land_cover_exposure_summary.geojson'
+        )
+
+        summarizer_dicts = summarize_result(exposure_summary)
+
+        productivity_summary = summarizer_dicts.get(productivity_field['key'])
+        production_cost_summary = summarizer_dicts.get(
+            production_cost_field['key'])
+        production_value_summary = summarizer_dicts.get(
+            production_value_field['key'])
+
+        self.assertIsNotNone(productivity_summary)
+        self.assertIsNotNone(production_cost_summary)
+        self.assertIsNotNone(production_value_summary)

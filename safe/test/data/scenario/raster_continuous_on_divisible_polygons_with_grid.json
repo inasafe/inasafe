@@ -25,7 +25,10 @@
       "info": {},
       "process":[
         "Size Value Post Processor",
-        "Affected Post Processor"
+        "Affected Post Processor",
+        "Productivity Post Processor",
+        "Production Cost Post Processor",
+        "Production Value Post Processor"
       ]
     },
     "aggregation":{

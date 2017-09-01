@@ -18,7 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 from safe.metadata.generic_layer_metadata import GenericLayerMetadata
-from safe.metadata.utils import merge_dictionaries
+from safe.metadata.utilities import merge_dictionaries
 
 
 class ExposureLayerMetadata(GenericLayerMetadata):
@@ -43,13 +43,6 @@ class ExposureLayerMetadata(GenericLayerMetadata):
             'inasafe/'
             'exposure_unit/'
             'gco:CharacterString'),
-        'allow_resampling': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'allow_resampling/'
-            'gco:CharacterString'),
         'classification': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
@@ -64,6 +57,13 @@ class ExposureLayerMetadata(GenericLayerMetadata):
             'inasafe/'
             'value_map/'
             'gco:Dictionary'),
+        'active_band': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'active_band/'
+            'gco:Integer'),
     }
     _standard_properties = merge_dictionaries(
             GenericLayerMetadata._standard_properties, _standard_properties)

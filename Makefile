@@ -137,6 +137,18 @@ pep8:
 	@pep8 --version
 	@pep8 --repeat --ignore=E203,E121,E122,E123,E124,E125,E126,E127,E128,E402 --exclude venv,pydev,safe_extras,keywords_dialog_base.py,wizard_dialog_base.py,dock_base.py,options_dialog_base.py,minimum_needs_configuration.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py  . || true
 
+# Run pep257 style checking
+#http://pypi.python.org/pypi/pep257
+# http://pep257.readthedocs.io/en/latest/error_codes.html
+pep257:
+	@echo
+	@echo "-----------"
+	@echo "PEP257 issues"
+	@echo "-----------"
+	@pep257 --version
+	@pep257 --ignore=D100,D101,D102,D103,D104,D105,D200,D202,D203,D205,D210,D211,D300,D301,D302,D400,D401 --count safe/ || true
+
+
 # Run entire test suite - excludes realtime until we have QGIS 2.0 support
 test_suite: testdata
 	@echo
@@ -351,6 +363,19 @@ docker-test: testdata clean
 		--cover-package=safe safe
 
 
+docker-update-translation-strings:
+	@echo "Update translation using docker"
+	@docker run -t -i -v $(DIR):/home kartoza/qt-translation make update-translation-strings
+
+docker-compile-translation-strings:
+	@echo "Update translation using docker"
+	@docker run -t -i -v $(DIR):/home kartoza/qt-translation make compile-translation-strings
+
+docker-test-translation:
+	@echo "Update translation using docker"
+	@docker run -t -i -v $(DIR):/home kartoza/qt-translation make test-translations
+
+
 ##########################################################
 #
 # Make targets specific to Jenkins go below this point
@@ -437,15 +462,3 @@ apidocs:
 	@cd docs && $(MAKE) html
 	@echo "HTML API docs has been builded."
 	@echo "You can look it under docs/_build directory.."
-
-docker-update-translation-strings:
-	@echo "Update translation using docker"
-	@docker run -t -i -v $(DIR):/home ismailsunni/docker-translation make update-translation-strings
-
-docker-compile-translation-strings:
-	@echo "Update translation using docker"
-	@docker run -t -i -v $(DIR):/home ismailsunni/docker-translation make compile-translation-strings
-
-docker-test-translation:
-	@echo "Update translation using docker"
-	@docker run -t -i -v $(DIR):/home ismailsunni/docker-translation make test-translations

@@ -20,7 +20,7 @@ DIR='inasafe'
 
 OUT="/tmp/${DIR}.${VERSION}.zip"
 
-WORKDIR=/tmp/${DIR}$$
+WORKDIR=/tmp/${DIR}
 TARGZFILE="/tmp/${DIR}.tar.gz"
 
 mkdir -p ${WORKDIR}

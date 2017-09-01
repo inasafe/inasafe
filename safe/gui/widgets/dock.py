@@ -5,18 +5,21 @@ import os
 import shutil
 import logging
 import codecs
+from datetime import datetime
+from numbers import Number
 
 from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import Qt, pyqtSlot
+from PyQt4.QtCore import Qt, pyqtSlot, QPyNullVariant
 from qgis.core import (
     QgsRectangle,
     QgsGeometry,
     QgsMapLayer,
     QgsMapLayerRegistry,
     QgsCoordinateReferenceSystem,
-    QgsProject,
-    QGis)
+    QgsExpressionContextUtils
+)
 
+from safe.definitions.exposure import exposure_population
 from safe.definitions.layer_purposes import (
     layer_purpose_exposure_summary,
     layer_purpose_aggregate_hazard_impacted,
@@ -26,6 +29,7 @@ from safe.definitions.layer_purposes import (
 )
 from safe.definitions.constants import (
     inasafe_keyword_version_key,
+    EXPOSURE,
     HAZARD_EXPOSURE_VIEW,
     HAZARD_EXPOSURE_BOUNDINGBOX,
     ANALYSIS_FAILED_BAD_INPUT,
@@ -37,7 +41,12 @@ from safe.definitions.constants import (
     PREPARE_FAILED_BAD_LAYER,
     PREPARE_SUCCESS,
 )
-from safe.definitions.utilities import map_report_component
+from safe.definitions.provenance import provenance_list
+from safe.definitions.reports.infographic import map_overview
+from safe.definitions.utilities import (
+    update_template_component,
+    get_name,
+    definition)
 from safe.defaults import supporters_logo_path
 from safe.definitions.reports import (
     final_product_tag,
@@ -46,9 +55,11 @@ from safe.definitions.reports import (
     qpt_product_tag)
 from safe.definitions.reports.components import (
     standard_impact_report_metadata_pdf,
-    report_a4_blue)
+    map_report, infographic_report)
+from safe.report.extractors.util import layer_definition_type
 from safe.report.impact_report import ImpactReport
 from safe.report.report_metadata import ReportMetadata
+from safe.test.utilities import load_layer
 from safe.utilities.gis import wkt_to_rectangle, qgis_version
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
@@ -90,7 +101,10 @@ from safe.gui.analysis_utilities import (
     generate_impact_report,
     generate_impact_map_report,
     add_impact_layers_to_canvas,
-    add_debug_layers_to_canvas)
+    add_debug_layers_to_canvas,
+    generate_infographic_report,
+    add_layer_to_canvas,
+    remove_layer_from_canvas)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -333,7 +347,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         if self.organisation_logo_path:
             dock_width = float(self.width())
 
-            # Dont let the image be more tha 100px hight
+            # Dont let the image be more than 100px height
             maximum_height = 100.0  # px
             pixmap = QtGui.QPixmap(self.organisation_logo_path)
             # it will throw Overflow Error if pixmap.height() == 0
@@ -584,10 +598,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         Only **polygon vector** layers will be added to the aggregate list.
 
-        :param args: Arguments that may have been passed to this slot.
+        :param *args: Arguments that may have been passed to this slot.
             Typically a list of layers, but depends on which slot or function
             called this function.
-        :type args: list
+        :type *args: list
 
         ..note:: \*args is only used for debugging purposes.
         """
@@ -622,7 +636,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     (layer not in canvas_layers)):
                 continue
 
-            # .. todo:: check raster is single band
             #    store uuid in user property of list widget for layers
 
             name = layer.name()
@@ -701,7 +714,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         :returns: The currently selected map layer in the hazard combo.
         :rtype: QgsMapLayer
-
         """
         index = self.hazard_layer_combo.currentIndex()
         if index < 0:
@@ -871,9 +883,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         If the active layer is changed and it has keywords and a report,
         show the report.
 
-        :param layer: QgsMapLayer instance that is now active
+        :param layer: QgsMapLayer instance that is now active.
         :type layer: QgsMapLayer, QgsRasterLayer, QgsVectorLayer
-
         """
         # Don't handle this event if we are already handling another layer
         # addition or removal event.
@@ -895,7 +906,17 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 layer_purpose_aggregation_summary['key'],
                 layer_purpose_analysis_impacted['key'],
                 layer_purpose_exposure_summary_table['key'],
+                # Legacy from InaSAFE < 4.2. We still want to open old
+                # analysis made with 4.0 an 4.1.
+                # We should remove them later.
+                'exposure_summary',
+                'aggregate_hazard_impacted',
+                'aggregation_summary',
+                'analysis_impacted'
             ]
+
+            provenances = keywords.get('provenance_data', {})
+            self.set_provenance_to_project_variables(provenances)
 
             show_keywords = True
             if keywords.get('layer_purpose') in impacted_layer:
@@ -910,7 +931,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             if show_keywords:
                 if inasafe_keyword_version_key not in keywords.keys():
                     show_keyword_version_message(
-                        self, 'No Version', self.inasafe_version)
+                        self, tr('No Version'), self.inasafe_version)
                     self.print_button.setEnabled(False)
                 else:
                     keyword_version = str(keywords.get(
@@ -995,16 +1016,31 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # Fetch report for pdfs report
         report_path = os.path.dirname(impact_layer.source())
 
+        # Get the hazard and exposure definition used in current IF
+        hazard = definition(
+            QgsExpressionContextUtils.projectScope().variable(
+                'hazard_keywords__hazard'))
+        exposure = definition(
+            QgsExpressionContextUtils.projectScope().variable(
+                'exposure_keywords__exposure'))
+
         # TODO: temporary hack until Impact Function becomes serializable
         # need to have impact report
         standard_impact_report_metadata = ReportMetadata(
             metadata_dict=standard_impact_report_metadata_pdf)
         standard_map_report_metadata = ReportMetadata(
-            metadata_dict=map_report_component(report_a4_blue))
+            metadata_dict=update_template_component(
+                component=map_report,
+                hazard=hazard,
+                exposure=exposure
+            ))
+        standard_infographic_report_metadata = ReportMetadata(
+            metadata_dict=update_template_component(infographic_report))
 
         standard_report_metadata = [
             standard_impact_report_metadata,
-            standard_map_report_metadata
+            standard_map_report_metadata,
+            standard_infographic_report_metadata
         ]
 
         def retrieve_components(tags):
@@ -1043,7 +1079,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         pdf_output_paths = retrieve_paths(pdf_products, '.pdf')
 
         html_products = retrieve_components(
-                [final_product_tag, html_product_tag])
+            [final_product_tag, html_product_tag])
         html_output_paths = retrieve_paths(html_products, '.html')
 
         qpt_products = retrieve_components(
@@ -1222,6 +1258,31 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 LOGGER.info(message.to_text())
                 return ANALYSIS_FAILED_BAD_CODE, message
 
+            # generate infographic if exposure is population
+            exposure_type = layer_definition_type(
+                self.impact_function.exposure)
+            if exposure_type == exposure_population:
+                map_overview_layer, _ = load_layer(map_overview['path'])
+                add_layer_to_canvas(
+                    map_overview_layer,
+                    map_overview['id'],
+                    self.impact_function
+                )
+
+                error_code, message = generate_infographic_report(
+                    self.impact_function, self.iface)
+
+                remove_layer_from_canvas(
+                    map_overview_layer, self.impact_function)
+
+                if error_code == ImpactReport.REPORT_GENERATION_FAILED:
+                    self.hide_busy()
+                    LOGGER.info(tr(
+                        'The impact report could not be generated.'))
+                    send_error_message(self, message)
+                    LOGGER.info(message.to_text())
+                    return ANALYSIS_FAILED_BAD_CODE, message
+
         if self.impact_function.debug_mode:
             add_debug_layers_to_canvas(self.impact_function)
 
@@ -1289,6 +1350,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 wkt = self.extent.user_extent.exportToWkt()
                 impact_function.requested_extent = wkt_to_rectangle(wkt)
                 impact_function.requested_extent_crs = self.extent.crs
+
+            elif mode == EXPOSURE:
+                impact_function.use_exposure_view_only = True
 
             elif mode == HAZARD_EXPOSURE_VIEW:
                 impact_function.requested_extent = (
@@ -1396,3 +1460,99 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             return False, message
         else:
             return True, None
+
+    def set_provenance_to_project_variables(self, provenances):
+        """Helper method to update / create provenance in project variables.
+
+        :param provenances: Keys and values from provenances.
+        :type provenances: dict
+        """
+        def write_project_variable(key, value):
+            """Helper to write project variable for base_key and value.
+
+            The key will be:
+            - base_key__KEY: value for dictionary.
+            - base_key__INDEX: value for list, tuple, set.
+            - date will be converted to ISO.
+            - None will be converted to ''.
+
+            :param key: The key.
+            :type key: basestring
+
+            :param value: A list of dictionary.
+            :type value: dict, list, tuple, set
+            """
+            if isinstance(value, (list, tuple, set)):
+                for element_index, element_value in enumerate(value):
+                    write_project_variable(
+                        '%s__%s' % (key, element_index), element_value)
+            elif isinstance(value, dict):
+                for dict_key, dict_value in value.items():
+                    write_project_variable(
+                        '%s__%s' % (key, dict_key), dict_value)
+            elif isinstance(value, (bool, str, unicode, Number)):
+                # Don't use get_name for field
+                if 'field' in key:
+                    pretty_value = get_name(value)
+                    QgsExpressionContextUtils.setProjectVariable(
+                        key, pretty_value)
+                else:
+                    QgsExpressionContextUtils.setProjectVariable(key, value)
+            elif isinstance(value, type(None)):
+                QgsExpressionContextUtils.setProjectVariable(key, '')
+            elif isinstance(value, datetime):
+                QgsExpressionContextUtils.setProjectVariable(
+                    key, value.isoformat())
+            elif isinstance(value, QtCore.QUrl):
+                QgsExpressionContextUtils.setProjectVariable(
+                    key, value.toString())
+            else:
+                LOGGER.warning('Not handled provenance')
+                LOGGER.warning('Key: %s, Type: %s, Value: %s' % (
+                    key, type(value), value))
+
+        # Remove old provenance data first
+        self.remove_provenance_project_variables()
+        for key, value in provenances.items():
+            if QgsExpressionContextUtils.globalScope().hasVariable(key):
+                continue
+            write_project_variable(key, value)
+
+    def remove_provenance_project_variables(self):
+        """Removing variables from provenance data."""
+        project_context_scope = QgsExpressionContextUtils.projectScope()
+        existing_variable_names = project_context_scope.variableNames()
+
+        # Save the existing variables that's not provenance variable.
+        existing_variables = {}
+        for existing_variable_name in existing_variable_names:
+            existing_variables[existing_variable_name] = \
+                project_context_scope.variable(existing_variable_name)
+        for the_provenance in provenance_list:
+            if the_provenance['provenance_key'] in existing_variables:
+                existing_variables.pop(the_provenance['provenance_key'])
+
+        # Removing generated key from dictionary (e.g.
+        # action_checklist__0__item_list__0)
+        will_be_removed = []
+        for existing_variable in existing_variables:
+            for the_provenance in provenance_list:
+                if existing_variable.startswith(
+                        the_provenance['provenance_key']):
+                    will_be_removed.append(existing_variable)
+                    continue
+        for variable in will_be_removed:
+            existing_variables.pop(variable)
+
+        # Need to change QPyNullVariant to None, to be able to store it back.
+        non_null_existing_variables = {}
+        for k, v in existing_variables.items():
+            if not isinstance(v, QPyNullVariant):
+                non_null_existing_variables[k] = v
+            else:
+                non_null_existing_variables[k] = None
+
+        # This method will set non_null_existing_variables, and remove the
+        # other variable
+        QgsExpressionContextUtils.setProjectVariables(
+            non_null_existing_variables)

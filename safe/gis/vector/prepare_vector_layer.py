@@ -166,7 +166,10 @@ def _check_value_mapping(layer, exposure_key=None):
         classification = layer.keywords['classification']
 
     exposure_classification = definition(classification)
-    other = exposure_classification['classes'][-1]['key']
+
+    other = None
+    if exposure_classification['key'] != 'data_driven_classes':
+        other = exposure_classification['classes'][-1]['key']
 
     exposure_mapped = []
     for group in value_map.itervalues():
@@ -248,13 +251,12 @@ def clean_inasafe_fields(layer):
 def _size_is_needed(layer):
     """Checker if we need the size field.
 
-     :param layer: The layer to test.
-     :type layer: QgsVectorLayer
+    :param layer: The layer to test.
+    :type layer: QgsVectorLayer
 
-     :return: If we need the size field.
-     :rtype: bool
+    :return: If we need the size field.
+    :rtype: bool
     """
-
     exposure = layer.keywords.get('exposure')
     if not exposure:
         # The layer is not an exposure.
@@ -381,7 +383,7 @@ def _add_id_column(layer):
     for layer_type, field in mapping.iteritems():
         if layer_purpose == layer_type:
             safe_id = field
-            if layer.keywords.get(field['key']):
+            if layer.keywords['inasafe_fields'].get(field['key']):
                 has_id_column = True
             break
 

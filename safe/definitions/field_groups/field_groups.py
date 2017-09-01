@@ -144,13 +144,15 @@ disability_vulnerability_count_group['notes'] += \
 disability_vulnerability_displaced_count_group['notes'] += \
     disability_vulnerability_group_notes
 
-for field_group in all_field_groups:
-    field_group['notes'].insert(
-        0,
-        tr('{group_name} group: {note}').format(
-            group_name=field_group['name'],
-            note=field_group['description']))
-    del field_group  # to prevent duplicate definition
+# see issue #4334
+
+# for field_group in all_field_groups:
+#     field_group['notes'].insert(
+#         0,
+#         tr('{group_name} group: {note}').format(
+#             group_name=field_group['name'],
+#             note=field_group['description']))
+#     del field_group  # to prevent duplicate definition
 
 displaced_field_groups = [
     age_displaced_count_group,

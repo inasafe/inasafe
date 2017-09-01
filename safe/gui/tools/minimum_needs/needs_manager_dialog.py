@@ -34,6 +34,16 @@ from PyQt4.QtGui import (
 # pylint: disable=unused-import
 from qgis.core import QGis  # force sip2 api
 
+from parameters.float_parameter import FloatParameter
+from parameters.parameter_exceptions import (
+    ValueOutOfBounds,
+    InvalidMaximumError,
+    InvalidMinimumError)
+from parameters.qt_widgets.parameter_container import (
+    ParameterContainer)
+from parameters.string_parameter import StringParameter
+from parameters.text_parameter import TextParameter
+
 from safe.common.parameters.resource_parameter import ResourceParameter
 from safe.gui.tools.help.needs_manager_help import needs_manager_helps
 from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
@@ -41,15 +51,6 @@ from safe.messaging import styles
 from safe.utilities.i18n import tr
 from safe.utilities.resources import (
     resources_path, get_ui_class, html_footer, html_header)
-from safe_extras.parameters.float_parameter import FloatParameter
-from safe_extras.parameters.parameter_exceptions import (
-    ValueOutOfBounds,
-    InvalidMaximumError,
-    InvalidMinimumError)
-from safe_extras.parameters.qt_widgets.parameter_container import (
-    ParameterContainer)
-from safe_extras.parameters.string_parameter import StringParameter
-from safe_extras.parameters.text_parameter import TextParameter
 
 INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
 FORM_CLASS = get_ui_class('needs_manager_dialog_base.ui')

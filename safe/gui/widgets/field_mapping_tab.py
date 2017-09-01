@@ -17,8 +17,10 @@ from collections import OrderedDict
 import logging
 from functools import partial
 
+from parameters.qt_widgets.parameter_container import ParameterContainer
+
 from safe.definitions.constants import (
-    DO_NOT_USE,
+    DO_NOT_REPORT,
     CUSTOM_VALUE,
     GLOBAL_DEFAULT,
     FIELDS,
@@ -29,14 +31,7 @@ from safe.definitions.constants import (
     RECENT,
     GLOBAL
 )
-
-from safe_extras.parameters.qt_widgets.parameter_container import (
-    ParameterContainer, InvalidValidationException)
 from safe.common.exceptions import KeywordNotFoundError
-
-# Note(IS): I need to use alias to make sure it throws the same exception class
-from safe_extras.parameters.parameter_exceptions import (
-    InvalidValidationException as OriginalValidationException)
 
 from safe.utilities.i18n import tr
 from safe.common.parameters.group_select_parameter import (
@@ -181,11 +176,11 @@ class FieldMappingTab(QWidget, object):
         used_fields = []
         self.parameters = []
         for field in self.field_group.get('fields', []):
-            selected_option = DO_NOT_USE
+            selected_option = DO_NOT_REPORT
             options = OrderedDict([
-                (DO_NOT_USE,
+                (DO_NOT_REPORT,
                  {
-                     'label': tr('Do not use'),
+                     'label': tr('Do not report'),
                      'value': None,
                      'type': STATIC,
                      'constraint': {}
@@ -274,6 +269,11 @@ class FieldMappingTab(QWidget, object):
 
         self.parameter_layout.addWidget(self.parameter_container)
 
+        default_ratio_help_text = tr(
+            'By default, InaSAFE will calculate the default ratio '
+            'however users have the option to include this in the '
+            'analysis report. If you do not want to see the default '
+            'results in the report choose "do not report".')
         # Set move or copy
         if self.field_group.get('exclusive', False):
             # If exclusive, do not add used field.
@@ -288,6 +288,7 @@ class FieldMappingTab(QWidget, object):
                 pass
             # Set header
             header_text = self.field_group['description']
+            header_text += '\n\n' + default_ratio_help_text
             header_text += '\n\n' + tr(
                 'You can only map one field to one concept.')
         else:
@@ -301,6 +302,7 @@ class FieldMappingTab(QWidget, object):
             self.connect_drop_remove_parameter()
             # Set header
             header_text = self.field_group['description']
+            header_text += '\n\n' + default_ratio_help_text
             header_text += '\n\n' + tr(
                 'You can map one field to more than one concepts.')
 
@@ -313,10 +315,7 @@ class FieldMappingTab(QWidget, object):
             {'fields': {}, 'values': {}}.
         :rtype: dict
         """
-        try:
-            parameters = self.parameter_container.get_parameters(True)
-        except InvalidValidationException as e:
-            raise OriginalValidationException(e)
+        parameters = self.parameter_container.get_parameters(True)
         field_parameters = {}
         value_parameters = {}
         for parameter in parameters:
@@ -359,8 +358,8 @@ class FieldMappingTab(QWidget, object):
     def drop_remove(*args, **kwargs):
         """Action when we need to remove dropped item.
 
-        :param args: Position arguments.
-        :type args: list
+        :param *args: Position arguments.
+        :type *args: list
 
         :param kwargs: Keywords arguments.
         :type kwargs: dict

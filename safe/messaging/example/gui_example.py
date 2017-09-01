@@ -23,7 +23,8 @@ import os
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
 from PyQt4 import Qt, QtWebKit
-from safe_extras.pydispatch import dispatcher
+
+from pydispatch import dispatcher
 
 from safe.messaging import (
     Message,
@@ -39,7 +40,9 @@ STATIC_MESSAGE_SIGNAL = 'ApplicationMessage'
 
 
 class WebView(QtWebKit.QWebView):
+
     """A simple message queue mockup."""
+
     def __init__(self):
         super(WebView, self).__init__()
         self.setWindowTitle('Message Viewer')
@@ -64,6 +67,7 @@ class WebView(QtWebKit.QWebView):
 
     def static_message_event(self, sender, message):
         """Static message event handler - set message state based on event.
+
         :param message:
         :param sender:
         """

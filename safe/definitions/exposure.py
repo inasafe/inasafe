@@ -14,7 +14,10 @@ from safe.definitions.fields import (
     exposure_fields,
     exposure_name_field,
     population_count_field,
-    exposure_type_field)
+    exposure_type_field,
+    productivity_rate_field,
+    production_cost_rate_field,
+    production_value_rate_field)
 from safe.definitions.field_groups import population_field_groups
 from safe.definitions.layer_modes import (
     layer_mode_continuous, layer_mode_classified)
@@ -23,7 +26,8 @@ from safe.definitions.exposure_classifications import (
     generic_road_classes,
     generic_structure_classes,
     generic_landcover_classes,
-    badan_geologi_landcover_classes)
+    badan_geologi_landcover_classes,
+    data_driven_classes)
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -236,7 +240,7 @@ exposure_road = {
     ],
     'size_unit': unit_metres,
     'units': [unit_metres, unit_kilometres],
-    'classifications': [generic_road_classes],
+    'classifications': [generic_road_classes, data_driven_classes],
     'compulsory_fields': [exposure_type_field],
     'fields': exposure_fields,
     'extra_fields': [
@@ -312,7 +316,7 @@ exposure_structure = {
     ],
     'size_unit': unit_square_metres,
     'units': [count_exposure_unit],
-    'classifications': [generic_structure_classes],
+    'classifications': [generic_structure_classes, data_driven_classes],
     'compulsory_fields': [exposure_type_field],
     'fields': exposure_fields,
     'extra_fields': [
@@ -363,7 +367,7 @@ exposure_place = {
     ],
     'size_unit': None,  # It's a point layer.
     'units': [count_exposure_unit],
-    'classifications': [generic_place_classes],
+    'classifications': [generic_place_classes, data_driven_classes],
     'compulsory_fields': [exposure_type_field],
     'fields': exposure_fields,
     'extra_fields': [exposure_name_field],
@@ -437,12 +441,17 @@ exposure_land_cover = {
     'size_unit': unit_hectares,
     'units': [unit_hectares],
     'classifications': [
-        generic_landcover_classes, badan_geologi_landcover_classes],
+        generic_landcover_classes,
+        badan_geologi_landcover_classes,
+        data_driven_classes],
     'compulsory_fields': [exposure_type_field],
     'fields': exposure_fields,
     'extra_fields': [
         # feature_value_field, disabled in V4.0, ET 13/02/17
         # feature_rate_field disabled in V4.0, ET 13/02/17
+        productivity_rate_field,
+        production_cost_rate_field,
+        production_value_rate_field
     ],
     'field_groups': [],
     'layer_modes': [layer_mode_classified],

@@ -1428,7 +1428,7 @@ cyclone_au_bom_hazard_classes = {
             'name': tr('Category 3 (severe tropical cyclone)'),
             'affected': True,
             'description': tr(
-                'Some roof and structural damage. Some caravans destroyed.'
+                'Some roof and structural damage. Some caravans destroyed. '
                 'Power failures likely. A Category 3 cyclone\'s strongest '
                 'winds are VERY DESTRUCTIVE winds with typical gusts over '
                 'open flat land of 90 - 121 kt. '

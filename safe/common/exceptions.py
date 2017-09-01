@@ -25,6 +25,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 
 class InaSAFEError(RuntimeError):
+
     """Base class for all user defined exceptions"""
 
     suggestion = 'An unspecified error occurred.'
@@ -234,16 +235,14 @@ class InvalidParameterError(InaSAFEError):
 
 class NoKeywordsFoundError(InaSAFEError):
 
-    """Custom exception for when no keywords file exist for a layer.
-    """
+    """Custom exception for when no keywords file exist for a layer."""
 
     pass
 
 
 class TranslationLoadError(InaSAFEError):
 
-    """Custom exception handler for whe translation file fails
-    to load."""
+    """Custom exception handler for whe translation file fails to load."""
 
     pass
 
@@ -257,8 +256,9 @@ class ComputationError(InaSAFEError):
 
 class NoFeaturesInExtentError(InaSAFEError):
 
-    """An exception that gets thrown when no features are within
-    the extent being clipped."""
+    """An exception that gets thrown when no features are within the extent
+    being clipped.
+    """
 
     pass
 
@@ -273,21 +273,22 @@ class InvalidProjectionError(InaSAFEError):
 class InsufficientOverlapError(InaSAFEError):
 
     """An exception raised if an error occurs during extent calculation
-    because the bounding boxes do not overlap."""
+    because the bounding boxes do not overlap.
+    """
 
     pass
 
 
 class StyleError(InaSAFEError):
 
-    """An exception relating to reading / generating GIS styles"""
+    """An exception relating to reading / generating GIS styles."""
 
     pass
 
 
 class MemoryLayerCreationError(InaSAFEError):
 
-    """Raised if an error occurs creating the cities file"""
+    """Raised if an error occurs creating the cities file."""
 
     pass
 
@@ -295,7 +296,8 @@ class MemoryLayerCreationError(InaSAFEError):
 class CallGDALError(InaSAFEError):
 
     """Raised if failed to call gdal command. Indicate by error message that is
-    not empty"""
+    not empty.
+    """
 
     pass
 
@@ -410,7 +412,7 @@ class MetadataCastError(InaSAFEError):
 
 class InvalidProvenanceDataError(InaSAFEError):
 
-    """When a path for a metadata xml is not correct"""
+    """When a path for a metadata xml is not correct."""
 
     suggestion = 'Check that the IF produced all the required data'
 
@@ -424,7 +426,7 @@ class MissingMetadata(InaSAFEError):
 
 class MissingImpactReport(InaSAFEError):
 
-    """When Impact Report do not have proper input.."""
+    """When Impact Report do not have proper input."""
 
     pass
 
@@ -451,5 +453,7 @@ class ProcessingInstallationError(InaSAFEError):
 
 
 class AlignRastersError(Exception):
-    """Raised if alignment of hazard and exposure rasters failed"""
+
+    """Raised if alignment of hazard and exposure rasters failed."""
+
     pass

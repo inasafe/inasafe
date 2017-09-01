@@ -32,7 +32,7 @@ class TestDefaultValueParameterWidget(unittest.TestCase):
             'Value to be used for affected field.')
         default_value_parameter.element_type = str
         default_value_parameter.labels = [
-            'Setting (%s)', 'Do not use', 'Custom']
+            'Setting (%s)', 'Do not report', 'Custom']
         default_value_parameter.options = [0.1, None, 0.2]
         default_value_parameter.value = 0.1
 

@@ -53,10 +53,10 @@ from safe.definitions.layer_purposes import (
     layer_purpose_hazard,
     layer_purpose_exposure,
     layer_purpose_aggregation)
-from safe.definitions.utilities import map_report_component
+from safe.definitions.utilities import update_template_component
 from safe.definitions.reports.components import (
     standard_impact_report_metadata_pdf,
-    report_a4_blue)
+    map_report)
 from safe.utilities.gis import extent_string_to_array
 from safe.common.utilities import temp_dir
 from safe.common.signals import send_error_message
@@ -231,19 +231,17 @@ class BatchDialog(QDialog, FORM_CLASS):
         # NOTE(gigih): need this line to remove existing rows
         self.table.setRowCount(0)
 
-        path = str(scenario_directory)
-
-        if not os.path.exists(path):
+        if not os.path.exists(scenario_directory):
             # LOGGER.info('Scenario directory does not exist: %s' % path)
             return
 
         # only support .py and .txt files
-        for current_path in os.listdir(path):
+        for current_path in os.listdir(scenario_directory):
             extension = os.path.splitext(current_path)[1]
-            absolute_path = os.path.join(path, current_path)
+            absolute_path = os.path.join(scenario_directory, current_path)
 
             if extension == '.py':
-                append_row(self.table, str(current_path), absolute_path)
+                append_row(self.table, current_path, absolute_path)
             elif extension == '.txt':
                 # insert scenarios from file into table widget
                 try:
@@ -387,7 +385,7 @@ class BatchDialog(QDialog, FORM_CLASS):
         :return: QGIS layer.
         :rtype: QgsMapLayer
         """
-        scenario_dir = str(self.source_directory.text())
+        scenario_dir = self.source_directory.text()
         joined_path = os.path.join(scenario_dir, layer_path)
         full_path = os.path.normpath(joined_path)
         file_name = os.path.split(layer_path)[-1]
@@ -606,15 +604,15 @@ class BatchDialog(QDialog, FORM_CLASS):
                 result = self.run_task(item, status_item, index=index)
                 if result:
                     # P for passed
-                    report.append('P: %s\n' % str(name_item))
+                    report.append('P: %s\n' % name_item)
                     pass_count += 1
                 else:
-                    report.append('F: %s\n' % str(name_item))
+                    report.append('F: %s\n' % name_item)
                     fail_count += 1
             except Exception, e:  # pylint: disable=W0703
                 LOGGER.exception('Batch execution failed. The exception: ' +
                                  str(e))
-                report.append('F: %s\n' % str(name_item))
+                report.append('F: %s\n' % name_item)
                 fail_count += 1
                 self.disable_busy_cursor()
 
@@ -652,7 +650,7 @@ class BatchDialog(QDialog, FORM_CLASS):
         current_time = datetime.now().strftime('%Y%m%d%H%M%S')
         report_path = 'batch-report-' + current_time + '.txt'
         output_path = self.output_directory.text()
-        path = os.path.join(str(output_path), report_path)
+        path = os.path.join(output_path, report_path)
 
         try:
             report_file = file(path, 'w')
@@ -703,7 +701,7 @@ class BatchDialog(QDialog, FORM_CLASS):
 
         # create impact map report instance
         map_report_metadata = ReportMetadata(
-            metadata_dict=map_report_component(report_a4_blue))
+            metadata_dict=update_template_component(map_report))
         impact_map_report = ImpactReport(
             iface,
             map_report_metadata,

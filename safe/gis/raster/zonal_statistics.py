@@ -59,8 +59,13 @@ def zonal_stats(raster, vector, callback=None):
 
     copy_layer(vector, layer)
 
+    input_band = layer.keywords.get('active_band', 1)
     analysis = QgsZonalStatistics(
-        layer, raster.source(), 'exposure_', 1, QgsZonalStatistics.Sum)
+        layer,
+        raster.source(),
+        'exposure_',
+        input_band,
+        QgsZonalStatistics.Sum)
     result = analysis.calculateStatistics(None)
     LOGGER.debug(tr('Zonal stats on %s : %s' % (raster.source(), result)))
 

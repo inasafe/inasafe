@@ -1,10 +1,13 @@
 # coding=utf-8
-"""Keyword Wizard Step Layer Purpose."""
+"""InaSAFE Wizard Step Layer Purpose."""
 
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore
 from PyQt4.QtCore import pyqtSignature
 from PyQt4.QtGui import QListWidgetItem, QPixmap
+
+from safe.utilities.i18n import tr
+from safe import messaging as m
 
 from safe.definitions.layer_purposes import layer_purpose_aggregation
 from safe.definitions.utilities import purposes_for_layer
@@ -25,7 +28,8 @@ FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
 class StepKwPurpose(WizardStep, FORM_CLASS):
-    """Keyword Wizard Step Layer Purpose."""
+
+    """InaSAFE Wizard Step Layer Purpose."""
 
     def is_ready_to_next_step(self):
         """Check if the step is complete.
@@ -94,8 +98,7 @@ class StepKwPurpose(WizardStep, FORM_CLASS):
         return purposes_for_layer(layer_geometry_key)
 
     def clear_further_steps(self):
-        """ Clear all further steps
-            in order to properly calculate the prev step
+        """Clear all further steps in order to properly calculate the prev step
         """
         self.parent.step_kw_hazard_category.lstHazardCategories.clear()
         self.parent.step_kw_subcategory.lstSubcategories.clear()
@@ -149,3 +152,28 @@ class StepKwPurpose(WizardStep, FORM_CLASS):
                     purposes.index(purpose_keyword))
 
         self.auto_select_one_item(self.lstCategories)
+
+    @property
+    def step_name(self):
+        """Get the human friendly name for the wizard step.
+
+        :returns: The name of the wizard step.
+        :rtype: str
+        """
+        return tr('Layer Purpose Step')
+
+    def help_content(self):
+        """Return the content of help for this step wizard.
+
+            We only needs to re-implement this method in each wizard step.
+
+        :returns: A message object contains help.
+        :rtype: m.Message
+        """
+        message = m.Message()
+        message.add(m.Paragraph(tr(
+            'In this wizard step: {step_name}, you will be able to set the '
+            'purpose of the layer. We have 3 options: hazard, exposure, '
+            'and aggregation layer purpose.'
+            '').format(step_name=self.step_name)))
+        return message

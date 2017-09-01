@@ -149,7 +149,8 @@ def clip(layer_to_clip, mask_layer, callback=None):
                 out_feat = QgsFeature()
                 out_feat.setGeometry(new_geom)
                 out_feat.setAttributes(in_feat.attributes())
-                writer.addFeature(out_feat)
+                if new_geom.type() == layer_to_clip.geometryType():
+                    writer.addFeature(out_feat)
             except:
                 LOGGER.debug(
                     tr('Feature geometry error: One or more output features '

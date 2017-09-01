@@ -1,11 +1,13 @@
 # coding=utf-8
-"""InaSAFE Keyword Wizard Step for Choosing Classifications."""
+"""InaSAFE Wizard Step Classifications."""
 
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore
 from PyQt4.QtGui import QListWidgetItem
 
 from safe.utilities.i18n import tr
+from safe import messaging as m
+
 from safe.common.exceptions import InvalidWizardStep
 from safe.definitions.layer_purposes import (
     layer_purpose_hazard, layer_purpose_exposure)
@@ -25,7 +27,8 @@ FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
 class StepKwClassification(WizardStep, FORM_CLASS):
-    """Keyword Wizard Step: Classification Selector."""
+
+    """InaSAFE Wizard Step Classifications."""
 
     def is_ready_to_next_step(self):
         """Check if the step is complete. If so, there is
@@ -112,8 +115,7 @@ class StepKwClassification(WizardStep, FORM_CLASS):
             return None
 
     def clear_further_steps(self):
-        """ Clear all further steps
-            in order to properly calculate the prev step
+        """Clear all further steps in order to properly calculate the prev step
         """
         self.parent.step_kw_classify.treeClasses.clear()
 
@@ -150,3 +152,28 @@ class StepKwClassification(WizardStep, FORM_CLASS):
                     classifications.index(classification_keyword))
 
         self.auto_select_one_item(self.lstClassifications)
+
+    @property
+    def step_name(self):
+        """Get the human friendly name for the wizard step.
+
+        :returns: The name of the wizard step.
+        :rtype: str
+        """
+        return tr('Classification Step')
+
+    def help_content(self):
+        """Return the content of help for this step wizard.
+
+            We only needs to re-implement this method in each wizard step.
+
+        :returns: A message object contains help.
+        :rtype: m.Message
+        """
+        message = m.Message()
+        message.add(m.Paragraph(tr(
+            'In this wizard step: {step_name}, you will be able to set the '
+            'classification of the layer that is being assigned in this '
+            'wizard.'
+        ).format(step_name=self.step_name)))
+        return message
