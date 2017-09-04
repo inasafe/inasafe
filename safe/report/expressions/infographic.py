@@ -266,7 +266,7 @@ def vulnerability_section_header_element(feature, parent):
 
 
 description = tr(
-    'Retrieve female vulnerability section header string from definitions..')
+    'Retrieve female vulnerability section header string from definitions.')
 examples = {
     'female_vulnerability_section_header_element()': None
 }
