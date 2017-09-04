@@ -79,7 +79,7 @@ def disclaimer_title_header_element(feature, parent):
 
 
 description = tr(
-    'Retrieve disclaimer text string from definitions')
+    'Retrieve disclaimer text string from definitions.')
 examples = {
     'disclaimer_text_element()': None
 }

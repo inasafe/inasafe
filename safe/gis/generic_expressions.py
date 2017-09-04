@@ -176,7 +176,7 @@ def inasafe_place_value_percentage(number, total, feature, parent):
 
 
 description = tr(
-    'Given an inasafe analysis time, it will convert it to a date with '
+    'Given an InaSAFE analysis time, it will convert it to a date with '
     'year-month-date format.')
 examples = {
     'beautify_date( @start_datetime )': tr(
@@ -189,7 +189,7 @@ help_message = generate_expression_help(description, examples)
     args='auto', group='InaSAFE', usesGeometry=False, referencedColumns=[],
     help_text=help_message.to_html(), helpText=help_message.to_html())
 def beautify_date(inasafe_time, feature, parent):
-    """Given an inasafe analysis time, it will convert it to a date with
+    """Given an InaSAFE analysis time, it will convert it to a date with
     year-month-date format.
 
     For instance:
@@ -204,7 +204,7 @@ def beautify_date(inasafe_time, feature, parent):
 
 
 description = tr(
-    'Given an inasafe analysis time, it will convert it to a time with '
+    'Given an InaSAFE analysis time, it will convert it to a time with '
     'hour:minute format.')
 examples = {
     'beautify_date( @start_datetime )': tr(
@@ -217,7 +217,7 @@ help_message = generate_expression_help(description, examples)
     args='auto', group='InaSAFE', usesGeometry=False, referencedColumns=[],
     help_text=help_message.to_html(), helpText=help_message.to_html())
 def beautify_time(inasafe_time, feature, parent):
-    """Given an inasafe analysis time, it will convert it to a time with
+    """Given an InaSAFE analysis time, it will convert it to a time with
     hour:minute format.
 
     For instance:
