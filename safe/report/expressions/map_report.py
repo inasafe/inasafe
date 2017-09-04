@@ -136,12 +136,12 @@ def reference_title_header_element(feature, parent):
 def crs_text_element(crs, feature, parent):
     """Retrieve coordinate reference system text string from definitions.
 
-    Example usage: crs_text_element(3857).
+    Example usage: crs_text_element('EPSG:3857').
     """
     _ = feature, parent  # NOQA
-    crs = QgsCoordinateReferenceSystem().createFromId(crs)
-    crs = crs.description()
-    text = crs_text['string_format'].format(crs=crs)
+    crs_definition = QgsCoordinateReferenceSystem(crs)
+    crs_description = crs_definition.description()
+    text = crs_text['string_format'].format(crs=crs_description)
     return text
 
 
