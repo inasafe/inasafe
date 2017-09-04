@@ -33,6 +33,8 @@ from safe.common.utilities import temp_dir
 
 LOGGER = logging.getLogger('InaSAFE')
 
+LOGGER = logging.getLogger('InaSAFE')
+
 
 class BatchDialogTest(unittest.TestCase):
     """Tests for the script/batch runner dialog."""
