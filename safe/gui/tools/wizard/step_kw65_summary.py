@@ -14,6 +14,7 @@ from safe.definitions.versions import inasafe_keyword_version
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.utilities import layers_intersect
+from safe.utilities.resources import resources_path
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -109,22 +110,15 @@ class StepKwSummary(WizardStep, FORM_CLASS):
         current_keywords = self.parent.get_keywords()
         current_keywords[inasafe_keyword_version_key] = inasafe_keyword_version
 
-        base_dir = os.path.abspath(os.path.join(
-            os.path.dirname(__file__),
-            os.pardir,
-            os.pardir,
-            os.pardir,
-            os.pardir,
-            'resources'))
-        header_path = os.path.join(base_dir, 'header.html')
-        footer_path = os.path.join(base_dir, 'footer.html')
+        header_path = resources_path('header.html')
+        footer_path = resources_path('footer.html')
         header_file = file(header_path)
         footer_file = file(footer_path)
         header = header_file.read()
         footer = footer_file.read()
         header_file.close()
         footer_file.close()
-        header = header.replace('PATH', base_dir)
+        header = header.replace('PATH', resources_path())
 
         # TODO: Clone the dict inside keyword_io.to_message rather then here.
         #       It pops the dict elements damaging the function parameter

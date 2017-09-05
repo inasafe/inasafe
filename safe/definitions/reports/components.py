@@ -25,7 +25,7 @@ from safe.definitions.reports import (
     template_product_tag,
     qpt_product_tag)
 
-from safe.common.utilities import safe_dir
+from safe.utilities.resources import resources_path
 from safe.definitions.fields import (
     affected_field,
     total_affected_field,
@@ -586,7 +586,7 @@ impact_report_component_metadata = [
 standard_impact_report_metadata_html = {
     'key': 'analysis-result-html',
     'name': 'analysis-result-html',
-    'template_folder': safe_dir(sub_dir='../resources/report-templates/'),
+    'template_folder': resources_path('report-templates'),
     'components': impact_report_component_metadata + [
         {
             'key': 'impact-report',
@@ -596,9 +596,9 @@ standard_impact_report_metadata_html = {
             'output_format': Jinja2ComponentsMetadata.OutputFormat.File,
             'output_path': 'impact-report-output.html',
             'resources': [
-                safe_dir(sub_dir='../resources/css'),
-                safe_dir(sub_dir='../resources/js'),
-                safe_dir(sub_dir='../resources/img')],
+                resources_path('css'),
+                resources_path('js'),
+                resources_path('img')],
             'template': 'standard-template/'
                         'jinja2/'
                         'impact-report-layout.html',
@@ -678,7 +678,7 @@ standard_impact_report_metadata_html = {
 standard_impact_report_metadata_pdf = {
     'key': 'analysis-result-pdf',
     'name': 'analysis-result-pdf',
-    'template_folder': safe_dir(sub_dir='../resources/report-templates/'),
+    'template_folder': resources_path('report-templates'),
     'components': standard_impact_report_metadata_html['components'] + [
         # Impact Report PDF
         {
@@ -755,7 +755,7 @@ map_report_extra_args = {
 map_report = {
     'key': 'inasafe-map-report',
     'name': 'inasafe-map-report',
-    'template_folder': safe_dir(sub_dir='../resources/report-templates/'),
+    'template_folder': resources_path('report-templates'),
     'components': [
         {
             'key': 'inasafe-map-report-portrait',
@@ -844,7 +844,7 @@ map_report_component_boilerplate = {
 infographic_report = {
     'key': 'infographic_report',
     'name': 'infographic_report',
-    'template_folder': safe_dir(sub_dir='../resources/report-templates/'),
+    'template_folder': resources_path('report-templates'),
     'components': [
         population_chart_svg_component,
         population_chart_png_component,
