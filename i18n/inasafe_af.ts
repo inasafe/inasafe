@@ -37,37 +37,37 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="158"/>
+        <location filename="utilities.py" line="187"/>
         <source>sourced from</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="160"/>
+        <location filename="utilities.py" line="189"/>
         <source>Hazard details</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="163"/>
+        <location filename="utilities.py" line="192"/>
         <source>Exposure details</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="170"/>
+        <location filename="utilities.py" line="199"/>
         <source>Hazard layer</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="185"/>
+        <location filename="utilities.py" line="214"/>
         <source>an unknown source</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="180"/>
+        <location filename="utilities.py" line="209"/>
         <source>Exposure layer</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="202"/>
+        <location filename="utilities.py" line="231"/>
         <source>Software notes</source>
         <translation type="unfinished"/>
     </message>
@@ -587,7 +587,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1457"/>
+        <location filename="definitions_help.py" line="1448"/>
         <source>Displacement rate</source>
         <translation type="unfinished"/>
     </message>
@@ -926,7 +926,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="117"/>
+        <location filename="wizard_utils.py" line="117"/>
         <source>Unit</source>
         <translation type="unfinished"/>
     </message>
@@ -1101,7 +1101,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="103"/>
+        <location filename="wizard_utils.py" line="103"/>
         <source>Hazard</source>
         <translation type="unfinished"/>
     </message>
@@ -1432,7 +1432,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="128"/>
+        <location filename="wizard_utils.py" line="128"/>
         <source>Purpose</source>
         <translation type="unfinished"/>
     </message>
@@ -1502,7 +1502,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="207"/>
+        <location filename="utilities.py" line="236"/>
         <source>This report was created using InaSAFE version %s. Visit http://inasafe.org to get your free copy of this software! %s</source>
         <translation type="unfinished"/>
     </message>
@@ -1552,7 +1552,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="159"/>
+        <location filename="utilities.py" line="188"/>
         <source>Analysis details</source>
         <translation type="unfinished"/>
     </message>
@@ -2712,42 +2712,42 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="115"/>
+        <location filename="wizard_utils.py" line="115"/>
         <source>classified data</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="128"/>
+        <location filename="wizard_utils.py" line="128"/>
         <source>Title</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="128"/>
+        <location filename="wizard_utils.py" line="128"/>
         <source>Source</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="159"/>
+        <location filename="wizard_utils.py" line="159"/>
         <source>This layer has no valid keywords assigned</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="159"/>
+        <location filename="wizard_utils.py" line="159"/>
         <source>SOURCE</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="159"/>
+        <location filename="wizard_utils.py" line="159"/>
         <source>TYPE</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="159"/>
+        <location filename="wizard_utils.py" line="159"/>
         <source>In the next step you will be able to assign keywords to this layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1455"/>
+        <location filename="definitions_help.py" line="1446"/>
         <source>Affected</source>
         <translation type="unfinished"/>
     </message>
@@ -3163,7 +3163,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1390"/>
+        <location filename="definitions_help.py" line="1381"/>
         <source>Length</source>
         <translation type="unfinished"/>
     </message>
@@ -4548,332 +4548,332 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="109"/>
+        <location filename="definitions_help.py" line="107"/>
         <source>InaSAFE help</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="767"/>
+        <location filename="definitions_help.py" line="765"/>
         <source>Overview</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="146"/>
+        <location filename="definitions_help.py" line="144"/>
         <source>Limitations and License</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="210"/>
+        <location filename="definitions_help.py" line="208"/>
         <source>Core functionality and tools</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="217"/>
+        <location filename="definitions_help.py" line="215"/>
         <source>The InaSAFE Dock</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="225"/>
+        <location filename="definitions_help.py" line="223"/>
         <source>InaSAFE Reports</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="233"/>
+        <location filename="definitions_help.py" line="231"/>
         <source>Managing analysis extents with the extents selector</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="241"/>
+        <location filename="definitions_help.py" line="239"/>
         <source>InaSAFE Options</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="249"/>
+        <location filename="definitions_help.py" line="247"/>
         <source>The Batch Runner</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="273"/>
+        <location filename="definitions_help.py" line="271"/>
         <source>The Shakemap Converter</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="335"/>
+        <location filename="definitions_help.py" line="333"/>
         <source>The minimum needs tool</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="342"/>
+        <location filename="definitions_help.py" line="340"/>
         <source>The minimum needs manager</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="354"/>
+        <location filename="definitions_help.py" line="352"/>
         <source>Analysis steps</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="360"/>
+        <location filename="definitions_help.py" line="358"/>
         <source>Analysis internal process</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="372"/>
+        <location filename="definitions_help.py" line="370"/>
         <source>Progress reporting steps</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="387"/>
+        <location filename="definitions_help.py" line="385"/>
         <source>Hazard Concepts</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="412"/>
+        <location filename="definitions_help.py" line="410"/>
         <source>Exposure Concepts</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="430"/>
+        <location filename="definitions_help.py" line="428"/>
         <source>InaSAFE Defaults</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1473"/>
+        <location filename="definitions_help.py" line="1464"/>
         <source>Name</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="439"/>
+        <location filename="definitions_help.py" line="437"/>
         <source>Default value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1459"/>
+        <location filename="definitions_help.py" line="1450"/>
         <source>Default min</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1460"/>
+        <location filename="definitions_help.py" line="1451"/>
         <source>Default max</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="940"/>
+        <location filename="definitions_help.py" line="931"/>
         <source>Description</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="465"/>
+        <location filename="definitions_help.py" line="463"/>
         <source>Fields</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="471"/>
+        <location filename="definitions_help.py" line="469"/>
         <source>Input dataset fields</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="477"/>
+        <location filename="definitions_help.py" line="475"/>
         <source>Exposure fields</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="482"/>
+        <location filename="definitions_help.py" line="480"/>
         <source>Hazard fields</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="487"/>
+        <location filename="definitions_help.py" line="485"/>
         <source>Aggregation fields</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="492"/>
+        <location filename="definitions_help.py" line="490"/>
         <source>Output dataset fields</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="498"/>
+        <location filename="definitions_help.py" line="496"/>
         <source>Impact fields</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="503"/>
+        <location filename="definitions_help.py" line="501"/>
         <source>Aggregate hazard fields</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="518"/>
+        <location filename="definitions_help.py" line="516"/>
         <source>Analysis fields</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="528"/>
+        <location filename="definitions_help.py" line="526"/>
         <source>Layer Geometry Types</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="534"/>
+        <location filename="definitions_help.py" line="532"/>
         <source>Vector</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="571"/>
+        <location filename="definitions_help.py" line="569"/>
         <source>Layer Modes</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="587"/>
+        <location filename="definitions_help.py" line="585"/>
         <source>Layer Purposes</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="638"/>
+        <location filename="definitions_help.py" line="636"/>
         <source>All Units</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1169"/>
+        <location filename="definitions_help.py" line="1160"/>
         <source>Plural</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1170"/>
+        <location filename="definitions_help.py" line="1161"/>
         <source>Abbreviation</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="703"/>
+        <location filename="definitions_help.py" line="701"/>
         <source>Post Processors</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="670"/>
+        <location filename="definitions_help.py" line="668"/>
         <source>Post Processor Input Types</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="681"/>
+        <location filename="definitions_help.py" line="679"/>
         <source>Post Processor Input Values</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="692"/>
+        <location filename="definitions_help.py" line="690"/>
         <source>Post Processor Process Types</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="713"/>
+        <location filename="definitions_help.py" line="711"/>
         <source>Input Fields</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="714"/>
+        <location filename="definitions_help.py" line="712"/>
         <source>Output Fields</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="885"/>
+        <location filename="definitions_help.py" line="876"/>
         <source>Contents</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1049"/>
+        <location filename="definitions_help.py" line="1040"/>
         <source>General notes:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1099"/>
+        <location filename="definitions_help.py" line="1090"/>
         <source>Notes for continuous datasets:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1108"/>
+        <location filename="definitions_help.py" line="1099"/>
         <source>Notes for classified datasets:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1117"/>
+        <location filename="definitions_help.py" line="1108"/>
         <source>Notes for single events</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1128"/>
+        <location filename="definitions_help.py" line="1119"/>
         <source>Notes for multi events / scenarios:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1141"/>
+        <location filename="definitions_help.py" line="1132"/>
         <source>Actions:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1165"/>
+        <location filename="definitions_help.py" line="1156"/>
         <source>Units:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1196"/>
+        <location filename="definitions_help.py" line="1187"/>
         <source>Hazard classifications</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1294"/>
+        <location filename="definitions_help.py" line="1285"/>
         <source>unspecified</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1317"/>
+        <location filename="definitions_help.py" line="1308"/>
         <source>Exposure entities in this class ARE considered affected</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1320"/>
+        <location filename="definitions_help.py" line="1311"/>
         <source>Exposure entities in this class are NOT considered affected</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1326"/>
+        <location filename="definitions_help.py" line="1317"/>
         <source>This class is NOT required in the hazard keywords.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1329"/>
+        <location filename="definitions_help.py" line="1320"/>
         <source>This class IS required in the hazard keywords.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1388"/>
+        <location filename="definitions_help.py" line="1379"/>
         <source>Field Name</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1389"/>
+        <location filename="definitions_help.py" line="1380"/>
         <source>Type</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1391"/>
+        <location filename="definitions_help.py" line="1382"/>
         <source>Precision</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1436"/>
+        <location filename="definitions_help.py" line="1427"/>
         <source>Decimal number</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1437"/>
+        <location filename="definitions_help.py" line="1428"/>
         <source>Text</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1438"/>
+        <location filename="definitions_help.py" line="1429"/>
         <source>Whole number</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1474"/>
+        <location filename="definitions_help.py" line="1465"/>
         <source>Default values</source>
         <translation type="unfinished"/>
     </message>
@@ -5038,7 +5038,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="183"/>
+        <location filename="wizard_utils.py" line="183"/>
         <source>Global (%s)</source>
         <translation type="unfinished"/>
     </message>
@@ -5723,32 +5723,32 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="281"/>
+        <location filename="definitions_help.py" line="279"/>
         <source>The Multi Buffer Tool</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1047"/>
+        <location filename="definitions_help.py" line="1038"/>
         <source>Notes:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1120"/>
+        <location filename="definitions_help.py" line="1111"/>
         <source>No single event notes defined.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1133"/>
+        <location filename="definitions_help.py" line="1124"/>
         <source>No multi-event notes defined.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1183"/>
+        <location filename="definitions_help.py" line="1174"/>
         <source>Fields:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1209"/>
+        <location filename="definitions_help.py" line="1200"/>
         <source>Classes:</source>
         <translation type="unfinished"/>
     </message>
@@ -6623,7 +6623,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="265"/>
+        <location filename="definitions_help.py" line="263"/>
         <source>The PetaBencana Downloader</source>
         <translation type="unfinished"/>
     </message>
@@ -6853,12 +6853,12 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="163"/>
+        <location filename="definitions_help.py" line="161"/>
         <source>Glossary of terms</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="896"/>
+        <location filename="definitions_help.py" line="887"/>
         <source>Term</source>
         <translation type="unfinished"/>
     </message>
@@ -7113,12 +7113,12 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="508"/>
+        <location filename="definitions_help.py" line="506"/>
         <source>Aggregation summary fields</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="513"/>
+        <location filename="definitions_help.py" line="511"/>
         <source>Exposure summary table fields</source>
         <translation type="unfinished"/>
     </message>
@@ -7223,12 +7223,12 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1087"/>
+        <location filename="definitions_help.py" line="1078"/>
         <source>Notes for exposure : {exposure_name}</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1153"/>
+        <location filename="definitions_help.py" line="1144"/>
         <source>Actions for exposure : {exposure_name}</source>
         <translation type="unfinished"/>
     </message>
@@ -7238,7 +7238,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="136"/>
+        <location filename="wizard_utils.py" line="136"/>
         <source>Your layer&apos;s keyword&apos;s version ({layer_version}) does not match with your InaSAFE version ({inasafe_version}). If you wish to use it as an exposure, hazard, or aggregation layer in an analysis, please update the keywords. Click Next if you want to assign keywords now.</source>
         <translation type="unfinished"/>
     </message>
@@ -7663,17 +7663,17 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="298"/>
+        <location filename="definitions_help.py" line="296"/>
         <source>Exposure Groups</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="312"/>
+        <location filename="definitions_help.py" line="310"/>
         <source>Aggregation Groups</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1456"/>
+        <location filename="definitions_help.py" line="1447"/>
         <source>Fatality rate</source>
         <translation type="unfinished"/>
     </message>
@@ -8446,7 +8446,7 @@ You can select more than 1 field. InaSAFE will sum up the value of the fields th
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="257"/>
+        <location filename="definitions_help.py" line="255"/>
         <source>The OpenStreetmap Downloader</source>
         <translation type="unfinished"/>
     </message>
@@ -8707,17 +8707,17 @@ Citations:
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="290"/>
+        <location filename="definitions_help.py" line="288"/>
         <source>The Field Mapping Tool</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="871"/>
+        <location filename="definitions_help.py" line="862"/>
         <source>Developer Guide</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1347"/>
+        <location filename="definitions_help.py" line="1338"/>
         <source>Citations:</source>
         <translation type="unfinished"/>
     </message>
@@ -10124,7 +10124,7 @@ Citations:
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="units.py" line="346"/>
+        <location filename="generic_expressions.py" line="70"/>
         <source>Ten</source>
         <translation type="unfinished"/>
     </message>
@@ -10144,7 +10144,7 @@ Citations:
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="units.py" line="381"/>
+        <location filename="generic_expressions.py" line="71"/>
         <source>Thousand</source>
         <translation type="unfinished"/>
     </message>
@@ -10334,7 +10334,7 @@ Citations:
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="infographic.py" line="61"/>
+        <location filename="infographic.py" line="69"/>
         <source>{symbol} {age} y.o</source>
         <translation type="unfinished"/>
     </message>
@@ -10464,62 +10464,62 @@ Citations:
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="753"/>
+        <location filename="definitions_help.py" line="751"/>
         <source>Reporting</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="760"/>
+        <location filename="definitions_help.py" line="758"/>
         <source>This section of the help documentation is intended for advanced users who want to modify reports which are produced by InaSAFE.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="773"/>
+        <location filename="definitions_help.py" line="771"/>
         <source>Whenever InaSAFE completes an analysis, it will automatically generate a number of reports. Some of these reports are based on templates that are shipped with InaSAFE, and can be customised or over-ridden by creating your own templates. The following reports are produced in InaSAFE:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="783"/>
+        <location filename="definitions_help.py" line="781"/>
         <source>Customisable?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="784"/>
+        <location filename="definitions_help.py" line="782"/>
         <source>Example</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="803"/>
+        <location filename="definitions_help.py" line="801"/>
         <source>In the sections that follow, we provide more technical information about the custom QGIS Expressions and special template elements that can be used to customise your templates.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="809"/>
+        <location filename="definitions_help.py" line="807"/>
         <source>QGIS Expressions</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="815"/>
+        <location filename="definitions_help.py" line="813"/>
         <source>InaSAFE adds a number of expressions that can be used to conveniently obtain provenance data to the active analysis results. The expressions can also be used elsewhere in QGIS as needed..</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="846"/>
+        <location filename="definitions_help.py" line="837"/>
         <source>Composer Elements</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="852"/>
+        <location filename="definitions_help.py" line="843"/>
         <source>InaSAFE looks for elements with specific id&apos;s on the composer page and replaces them with InaSAFE specific content.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="858"/>
+        <location filename="definitions_help.py" line="849"/>
         <source>ID</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1064"/>
+        <location filename="definitions_help.py" line="1055"/>
         <source>The following earthquake fatality models are available in InaSAFE. Note that you need to set one of these as the active model in InaSAFE Options. The currently active model is: </source>
         <translation type="unfinished"/>
     </message>
@@ -10539,12 +10539,12 @@ Citations:
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="map_report.py" line="31"/>
+        <location filename="map_report.py" line="32"/>
         <source>InaSAFE - Image Elements</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="map_report.py" line="32"/>
+        <location filename="map_report.py" line="33"/>
         <source>InaSAFE - Label Elements</source>
         <translation type="unfinished"/>
     </message>
@@ -10571,6 +10571,211 @@ Citations:
     <message>
         <location filename="units.py" line="184"/>
         <source>&lt;b&gt;A hundred kilograms&lt;/b&gt; is a unit of weight equal to 100 kilograms.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="generic_expressions.py" line="30"/>
+        <source>Retrieve a value from a field in the impact analysis layer.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="generic_expressions.py" line="66"/>
+        <source>Given a number, it will return the place value name. It needs to be used with inasafe_place_value_coefficient.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="generic_expressions.py" line="105"/>
+        <source>Given a number, it will return the coefficient of the place value name. It needs to be used with inasafe_number_denomination_unit.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="generic_expressions.py" line="141"/>
+        <source>Given a number and total, it will return the percentage of the number to the total.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="generic_expressions.py" line="147"/>
+        <source>will calculate the percentage of female displaced count to total displaced count.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="generic_expressions.py" line="178"/>
+        <source>Given an InaSAFE analysis time, it will convert it to a date with year-month-date format.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="generic_expressions.py" line="210"/>
+        <source>will convert datetime provided by qgis_variable.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="generic_expressions.py" line="206"/>
+        <source>Given an InaSAFE analysis time, it will convert it to a time with hour:minute format.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="align.py" line="82"/>
+        <source>Unable to select reference layer</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="wizard_utils.py" line="183"/>
+        <source>Do not use</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="map_report.py" line="320"/>
+        <source>Retrieve the full path of inasafe-logo-white.svg.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="infographic.py" line="89"/>
+        <source>Retrieve units of the given minimum needs field name.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="infographic.py" line="91"/>
+        <source>l/weekly</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="infographic.py" line="139"/>
+        <source>Get a formatted infographic header sentence for an impact function.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="infographic.py" line="142"/>
+        <source>Estimated impact of a flood</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="infographic.py" line="165"/>
+        <source>Retrieve map overview header string from definitions.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="infographic.py" line="182"/>
+        <source>Retrieve population chart header string from definitions.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="infographic.py" line="199"/>
+        <source>Retrieve people section header string from definitions.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="infographic.py" line="216"/>
+        <source>Retrieve age gender section header string from definitions.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="infographic.py" line="233"/>
+        <source>Retrieve age gender section notes string from definitions.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="infographic.py" line="250"/>
+        <source>Retrieve vulnerability section header string from definitions.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="infographic.py" line="268"/>
+        <source>Retrieve female vulnerability section header string from definitions.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="infographic.py" line="286"/>
+        <source>Retrieve minimum needs section header string from definitions.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="infographic.py" line="304"/>
+        <source>Retrieve additional minimum needs section header string from definition.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="infographic.py" line="324"/>
+        <source>Retrieve minimum needs section notes string from definitions.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="map_report.py" line="46"/>
+        <source>Retrieve legend title header string from definitions.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="map_report.py" line="63"/>
+        <source>Retrieve disclaimer title header string from definitions.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="map_report.py" line="81"/>
+        <source>Retrieve disclaimer text string from definitions.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="map_report.py" line="99"/>
+        <source>Retrieve information title header string from definitions.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="map_report.py" line="117"/>
+        <source>Retrieve time title header string from definitions.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="map_report.py" line="135"/>
+        <source>Retrieve caution title header string from definitions.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="map_report.py" line="153"/>
+        <source>Retrieve caution text string from definitions.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="map_report.py" line="171"/>
+        <source>Retrieve source title header string from definitions.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="map_report.py" line="189"/>
+        <source>Retrieve analysis title header string from definitions.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="map_report.py" line="207"/>
+        <source>Retrieve version title header string from definitions.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="map_report.py" line="285"/>
+        <source>Retrieve reference title header string from definitions.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="map_report.py" line="243"/>
+        <source>Retrieve coordinate reference system text string from definitions.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="map_report.py" line="303"/>
+        <source>Retrieve the full path of inasafe-logo-black.svg</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="map_report.py" line="337"/>
+        <source>Retrieve the full path of default north arrow logo.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="map_report.py" line="354"/>
+        <source>Retrieve the full path of used specified organisation logo.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="utilities.py" line="157"/>
+        <source>Examples:</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -12319,217 +12524,217 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>Plugin</name>
     <message>
-        <location filename="plugin.py" line="624"/>
+        <location filename="plugin.py" line="622"/>
         <source>InaSAFE</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="plugin.py" line="170"/>
+        <location filename="plugin.py" line="168"/>
         <source>Toggle InaSAFE Dock</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="plugin.py" line="176"/>
+        <location filename="plugin.py" line="174"/>
         <source>Show/hide InaSAFE dock widget</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="plugin.py" line="190"/>
+        <location filename="plugin.py" line="188"/>
         <source>Keywords Creation Wizard</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="plugin.py" line="196"/>
+        <location filename="plugin.py" line="194"/>
         <source>Open InaSAFE keywords creation wizard</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="plugin.py" line="206"/>
+        <location filename="plugin.py" line="204"/>
         <source>Impact Function Centric Wizard</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="plugin.py" line="212"/>
+        <location filename="plugin.py" line="210"/>
         <source>Open InaSAFE impact function centric wizard</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="plugin.py" line="222"/>
+        <location filename="plugin.py" line="220"/>
         <source>Options</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="plugin.py" line="227"/>
+        <location filename="plugin.py" line="225"/>
         <source>Open InaSAFE options dialog</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="plugin.py" line="235"/>
+        <location filename="plugin.py" line="233"/>
         <source>Minimum Needs Calculator</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="plugin.py" line="240"/>
+        <location filename="plugin.py" line="238"/>
         <source>Open InaSAFE minimum needs calculator</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="plugin.py" line="249"/>
+        <location filename="plugin.py" line="247"/>
         <source>Multi Buffer</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="plugin.py" line="254"/>
+        <location filename="plugin.py" line="252"/>
         <source>Open InaSAFE multi buffer</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="plugin.py" line="264"/>
+        <location filename="plugin.py" line="262"/>
         <source>Minimum Needs Configuration</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="plugin.py" line="270"/>
+        <location filename="plugin.py" line="268"/>
         <source>Open InaSAFE minimum needs configuration</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="plugin.py" line="280"/>
+        <location filename="plugin.py" line="278"/>
         <source>Shakemap Converter</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="plugin.py" line="285"/>
+        <location filename="plugin.py" line="283"/>
         <source>Open InaSAFE Converter</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="plugin.py" line="295"/>
+        <location filename="plugin.py" line="293"/>
         <source>Batch Runner</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="plugin.py" line="300"/>
+        <location filename="plugin.py" line="298"/>
         <source>Open Batch Runner</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="plugin.py" line="309"/>
+        <location filename="plugin.py" line="307"/>
         <source>Save Current Scenario</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="plugin.py" line="312"/>
+        <location filename="plugin.py" line="310"/>
         <source>Save current scenario to text file</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="plugin.py" line="329"/>
+        <location filename="plugin.py" line="327"/>
         <source>OpenStreetMap Downloader</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="plugin.py" line="341"/>
+        <location filename="plugin.py" line="339"/>
         <source>Add OpenStreetMap Tile Layer</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="plugin.py" line="343"/>
+        <location filename="plugin.py" line="341"/>
         <source>Use this to add an OSM layer to your map. It needs internet access to function.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="plugin.py" line="352"/>
+        <location filename="plugin.py" line="350"/>
         <source>InaSAFE Help</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="plugin.py" line="356"/>
+        <location filename="plugin.py" line="354"/>
         <source>Show InaSAFE Help</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="plugin.py" line="358"/>
+        <location filename="plugin.py" line="356"/>
         <source>Use this to show a document describing all InaSAFE concepts.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="plugin.py" line="391"/>
+        <location filename="plugin.py" line="389"/>
         <source>Add PetaBencana Flood Layer</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="plugin.py" line="393"/>
+        <location filename="plugin.py" line="391"/>
         <source>Use this to add a PetaBencana layer to your map. It needs internet access to function.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="plugin.py" line="405"/>
+        <location filename="plugin.py" line="403"/>
         <source>Toggle Scenario Outlines</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="plugin.py" line="408"/>
+        <location filename="plugin.py" line="406"/>
         <source>Toggle rubber bands showing scenario extents.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="plugin.py" line="425"/>
+        <location filename="plugin.py" line="423"/>
         <source>Set Analysis Area</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="plugin.py" line="431"/>
+        <location filename="plugin.py" line="429"/>
         <source>Set the analysis area for InaSAFE</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="plugin.py" line="445"/>
+        <location filename="plugin.py" line="443"/>
         <source>Add Test Layers</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="plugin.py" line="451"/>
+        <location filename="plugin.py" line="449"/>
         <source>Add test layers</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="plugin.py" line="691"/>
+        <location filename="plugin.py" line="680"/>
         <source>Run tests in %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="plugin.py" line="488"/>
+        <location filename="plugin.py" line="486"/>
         <source>Select package</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="plugin.py" line="495"/>
+        <location filename="plugin.py" line="493"/>
         <source>Select Test Package</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="plugin.py" line="680"/>
+        <location filename="plugin.py" line="669"/>
         <source>Select the python test package</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="plugin.py" line="840"/>
+        <location filename="plugin.py" line="829"/>
         <source>OpenStreetMap</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="plugin.py" line="369"/>
+        <location filename="plugin.py" line="367"/>
         <source>InaSAFE Field Mapping Tool</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="plugin.py" line="373"/>
+        <location filename="plugin.py" line="371"/>
         <source>Assign field mapping to layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="plugin.py" line="375"/>
+        <location filename="plugin.py" line="373"/>
         <source>Use this tool to assign field mapping in layer.</source>
         <translation type="unfinished"/>
     </message>
@@ -12681,10 +12886,31 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
+    <name>StepFcFunction</name>
+    <message>
+        <location filename="step_fc10_function.py" line="71"/>
+        <source>Function</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="step_fc10_function.py" line="74"/>
+        <source>Overview</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>StepFcFunctions2</name>
     <message>
         <location filename="step_fc05_functions2.py" line="108"/>
         <source>Available functions:</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>StepFcParams</name>
+    <message>
+        <location filename="step_fc80_params.py" line="76"/>
+        <source>Please set impact functions parameters.&lt;br/&gt;Parameters for impact function &quot;%s&quot; that can be modified are:</source>
         <translation type="unfinished"/>
     </message>
 </context>
