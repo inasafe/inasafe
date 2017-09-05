@@ -476,7 +476,8 @@ def qgis_composer_renderer(impact_report, component):
                     map_extent_option, QgsRectangle):
                 # use provided map extent
                 extent = coord_transform.transform(map_extent_option)
-                for l in layers:
+                for l in [layer for layer in layers if
+                          isinstance(layer, QgsMapLayer)]:
                     layer_extent = coord_transform.transform(l.extent())
                     if l.name() == map_overview['id']:
                         map_overview_extent = layer_extent
@@ -487,7 +488,8 @@ def qgis_composer_renderer(impact_report, component):
                 map_overview_extent = None
                 extent = QgsRectangle()
                 extent.setMinimal()
-                for l in layers:
+                for l in [layer for layer in layers if
+                          isinstance(layer, QgsMapLayer)]:
                     # combine extent if different layer is provided.
                     layer_extent = coord_transform.transform(l.extent())
                     extent.combineExtentWith(layer_extent)
