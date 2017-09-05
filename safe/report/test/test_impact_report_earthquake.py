@@ -21,6 +21,7 @@ from safe.report.report_metadata import ReportMetadata
 from safe.test.utilities import (
     get_qgis_app,
     load_test_raster_layer)
+from safe.utilities.resources import resources_path
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -51,7 +52,7 @@ class TestEarthquakeReport(unittest.TestCase):
 
     def assert_compare_file_control(self, control_path, actual_path):
         """Helper to compare file."""
-        current_directory = safe_dir(sub_dir='../resources')
+        current_directory = resources_path()
         context = {
             'current_directory': current_directory
         }

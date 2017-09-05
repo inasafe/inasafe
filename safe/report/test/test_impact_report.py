@@ -50,6 +50,7 @@ from safe.definitions.reports.components import (
     analysis_provenance_details_simplified_component)
 from safe.definitions.utilities import update_template_component
 from safe.report.impact_report import ImpactReport
+from safe.utilities.resources import resources_path
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -78,7 +79,7 @@ class TestImpactReport(unittest.TestCase):
 
     def assert_compare_file_control(self, control_path, actual_path):
         """Helper to compare file."""
-        current_directory = safe_dir(sub_dir='../resources')
+        current_directory = resources_path()
         context = {
             'current_directory': current_directory
         }

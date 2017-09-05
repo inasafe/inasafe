@@ -34,6 +34,7 @@ from safe.messaging import (
     Text,
     ImportantText,
     EmphasizedText)
+from safe.utilities.resources import resources_path
 
 DYNAMIC_MESSAGE_SIGNAL = 'ImpactFunctionMessage'
 STATIC_MESSAGE_SIGNAL = 'ApplicationMessage'
@@ -54,16 +55,15 @@ class WebView(QtWebKit.QWebView):
         self.show()
 
         # Read the header and footer html snippets
-        base_dir = os.path.dirname(__file__)
-        header_path = os.path.join(base_dir, 'resources', 'header.html')
-        footer_path = os.path.join(base_dir, 'resources', 'footer.html')
+        header_path = resources_path('header.html')
+        footer_path = resources_path('footer.html')
         header_file = file(header_path)
         footer_file = file(footer_path)
         header = header_file.read()
         self.footer = footer_file.read()
         header_file.close()
         footer_file.close()
-        self.header = header.replace('PATH', base_dir)
+        self.header = header.replace('PATH', resources_path())
 
     def static_message_event(self, sender, message):
         """Static message event handler - set message state based on event.
