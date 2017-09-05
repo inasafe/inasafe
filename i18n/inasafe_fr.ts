@@ -37,37 +37,37 @@
         <translation>%i jours, %i heures et %i minutes</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="158"/>
+        <location filename="utilities.py" line="187"/>
         <source>sourced from</source>
         <translation>d&apos;origine</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="160"/>
+        <location filename="utilities.py" line="189"/>
         <source>Hazard details</source>
         <translation>Détails de l&apos;aléa</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="163"/>
+        <location filename="utilities.py" line="192"/>
         <source>Exposure details</source>
         <translation>Détails de l&apos;exposition</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="170"/>
+        <location filename="utilities.py" line="199"/>
         <source>Hazard layer</source>
         <translation>Couche d&apos;aléas</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="185"/>
+        <location filename="utilities.py" line="214"/>
         <source>an unknown source</source>
         <translation>une source inconnue</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="180"/>
+        <location filename="utilities.py" line="209"/>
         <source>Exposure layer</source>
         <translation>Couche d&apos;exposition</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="202"/>
+        <location filename="utilities.py" line="231"/>
         <source>Software notes</source>
         <translation>Notes à propos du logiciel</translation>
     </message>
@@ -587,7 +587,7 @@
         <translation>Proportion de personnes âgées</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1457"/>
+        <location filename="definitions_help.py" line="1448"/>
         <source>Displacement rate</source>
         <translation>Taux de d&apos;évacuation</translation>
     </message>
@@ -930,7 +930,7 @@
         <translation>Ceci indique la description détaillée de ce qu&apos;est la ressource et</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="117"/>
+        <location filename="wizard_utils.py" line="117"/>
         <source>Unit</source>
         <translation>Unité </translation>
     </message>
@@ -1105,7 +1105,7 @@
         <translation>&lt;html&gt;Afin d&apos;utiliser des couches PostGIS, veuillez fermer l&apos;assistant, créez une nouvelle connexion PostGIS et relancez l&apos;assistant.&lt;br /&gt;&lt;br /&gt;Vous pouvez gérer les connexions dans le menu &lt;i&gt;Couche&lt;/i&gt; &gt; &lt;i&gt;Ajouter une couche&lt;/i&gt; &gt; &lt;i&gt;Ajouter une couche PostGIS&lt;/i&gt;.&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="103"/>
+        <location filename="wizard_utils.py" line="103"/>
         <source>Hazard</source>
         <translation>Aléas</translation>
     </message>
@@ -1438,7 +1438,7 @@ Vous devez tout d&apos;abord définir la catégorie à laquelle appartient votre
         <translation>Aléas</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="128"/>
+        <location filename="wizard_utils.py" line="128"/>
         <source>Purpose</source>
         <translation>Catégorie</translation>
     </message>
@@ -1508,7 +1508,7 @@ Vous devez tout d&apos;abord définir la catégorie à laquelle appartient votre
         <translation>Chaînes nulles (PyQt4.QtCore.QPyNullVariant) trouvée dans les données.</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="207"/>
+        <location filename="utilities.py" line="236"/>
         <source>This report was created using InaSAFE version %s. Visit http://inasafe.org to get your free copy of this software! %s</source>
         <translation>Ce rapport a été créé avec la version %s d&apos;InaSAFE. Rendez-vous sur http://inasafe.org pour obtenir votre copie gratuite du logiciel !</translation>
     </message>
@@ -1558,7 +1558,7 @@ Vous devez tout d&apos;abord définir la catégorie à laquelle appartient votre
         <translation>Quelles routes peuvent-être utilisés pour évacuer la population ou distribuer du matériel ?</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="159"/>
+        <location filename="utilities.py" line="188"/>
         <source>Analysis details</source>
         <translation>Détails de l&apos;analyse</translation>
     </message>
@@ -2719,42 +2719,42 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
         <translation>Liste des frontières OSM</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="115"/>
+        <location filename="wizard_utils.py" line="115"/>
         <source>classified data</source>
         <translation>donnée classifiée</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="128"/>
+        <location filename="wizard_utils.py" line="128"/>
         <source>Title</source>
         <translation>Intitulé </translation>
     </message>
     <message>
-        <location filename="utilities.py" line="128"/>
+        <location filename="wizard_utils.py" line="128"/>
         <source>Source</source>
         <translation>Source</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="159"/>
+        <location filename="wizard_utils.py" line="159"/>
         <source>This layer has no valid keywords assigned</source>
         <translation>Cette couche n&apos;a pas de mots-clés valides </translation>
     </message>
     <message>
-        <location filename="utilities.py" line="159"/>
+        <location filename="wizard_utils.py" line="159"/>
         <source>SOURCE</source>
         <translation>SOURCE</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="159"/>
+        <location filename="wizard_utils.py" line="159"/>
         <source>TYPE</source>
         <translation>TYPE</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="159"/>
+        <location filename="wizard_utils.py" line="159"/>
         <source>In the next step you will be able to assign keywords to this layer.</source>
         <translation>Lors de la prochaine étape, vous pourrez attribuer des mots-clés à cette couche. </translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1455"/>
+        <location filename="definitions_help.py" line="1446"/>
         <source>Affected</source>
         <translation>Affecté</translation>
     </message>
@@ -3170,7 +3170,7 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
         <translation>Réseau routier</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1390"/>
+        <location filename="definitions_help.py" line="1381"/>
         <source>Length</source>
         <translation>Longueur</translation>
     </message>
@@ -4555,332 +4555,332 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
         <translation>Entités qui ont été supprimés de %s : %s</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="109"/>
+        <location filename="definitions_help.py" line="107"/>
         <source>InaSAFE help</source>
         <translation>Aide InaSAFE</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="767"/>
+        <location filename="definitions_help.py" line="765"/>
         <source>Overview</source>
         <translation>Présentation</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="146"/>
+        <location filename="definitions_help.py" line="144"/>
         <source>Limitations and License</source>
         <translation>Limitations et Licence</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="210"/>
+        <location filename="definitions_help.py" line="208"/>
         <source>Core functionality and tools</source>
         <translation>Fonctionnalité coeur et outils</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="217"/>
+        <location filename="definitions_help.py" line="215"/>
         <source>The InaSAFE Dock</source>
         <translation>Le dock InaSAFE</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="225"/>
+        <location filename="definitions_help.py" line="223"/>
         <source>InaSAFE Reports</source>
         <translation>Rapports InaSAFE</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="233"/>
+        <location filename="definitions_help.py" line="231"/>
         <source>Managing analysis extents with the extents selector</source>
         <translation>Gestion de l&apos;emprise d&apos;analyse avec le sélectionneur d&apos;emprise</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="241"/>
+        <location filename="definitions_help.py" line="239"/>
         <source>InaSAFE Options</source>
         <translation>Options InaSAFE</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="249"/>
+        <location filename="definitions_help.py" line="247"/>
         <source>The Batch Runner</source>
         <translation>Le Traitement par Lots</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="273"/>
+        <location filename="definitions_help.py" line="271"/>
         <source>The Shakemap Converter</source>
         <translation>Le Convertisseur Shakemap</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="335"/>
+        <location filename="definitions_help.py" line="333"/>
         <source>The minimum needs tool</source>
         <translation>L&apos;outil des besoins minimaux</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="342"/>
+        <location filename="definitions_help.py" line="340"/>
         <source>The minimum needs manager</source>
         <translation>Le gestionnaire des besoins minimaux</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="354"/>
+        <location filename="definitions_help.py" line="352"/>
         <source>Analysis steps</source>
         <translation>Étape de l&apos;analyse</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="360"/>
+        <location filename="definitions_help.py" line="358"/>
         <source>Analysis internal process</source>
         <translation>Traitement interne à l&apos;analyse</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="372"/>
+        <location filename="definitions_help.py" line="370"/>
         <source>Progress reporting steps</source>
         <translation>Étape de progression</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="387"/>
+        <location filename="definitions_help.py" line="385"/>
         <source>Hazard Concepts</source>
         <translation>Concept d&apos;Aléa</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="412"/>
+        <location filename="definitions_help.py" line="410"/>
         <source>Exposure Concepts</source>
         <translation>Concept d&apos;Enjeu</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="430"/>
+        <location filename="definitions_help.py" line="428"/>
         <source>InaSAFE Defaults</source>
         <translation>Défauts InaSAFE</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1473"/>
+        <location filename="definitions_help.py" line="1464"/>
         <source>Name</source>
         <translation>Nom </translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="439"/>
+        <location filename="definitions_help.py" line="437"/>
         <source>Default value</source>
         <translation>Valeur par défaut</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1459"/>
+        <location filename="definitions_help.py" line="1450"/>
         <source>Default min</source>
         <translation>Défaut min</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1460"/>
+        <location filename="definitions_help.py" line="1451"/>
         <source>Default max</source>
         <translation>Défaut max</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="940"/>
+        <location filename="definitions_help.py" line="931"/>
         <source>Description</source>
         <translation>Description</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="465"/>
+        <location filename="definitions_help.py" line="463"/>
         <source>Fields</source>
         <translation>Champs</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="471"/>
+        <location filename="definitions_help.py" line="469"/>
         <source>Input dataset fields</source>
         <translation>Champs en entrée d&apos;un jeu de donnée</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="477"/>
+        <location filename="definitions_help.py" line="475"/>
         <source>Exposure fields</source>
         <translation>Champs</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="482"/>
+        <location filename="definitions_help.py" line="480"/>
         <source>Hazard fields</source>
         <translation>Champs de l&apos;aléa</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="487"/>
+        <location filename="definitions_help.py" line="485"/>
         <source>Aggregation fields</source>
         <translation>Champs de l&apos;agrégation</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="492"/>
+        <location filename="definitions_help.py" line="490"/>
         <source>Output dataset fields</source>
         <translation>Champs en sortie d&apos;un jeu de donnée</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="498"/>
+        <location filename="definitions_help.py" line="496"/>
         <source>Impact fields</source>
         <translation>Champs d&apos;impact</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="503"/>
+        <location filename="definitions_help.py" line="501"/>
         <source>Aggregate hazard fields</source>
         <translation>Champs de l&apos;aléa par agrégation</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="518"/>
+        <location filename="definitions_help.py" line="516"/>
         <source>Analysis fields</source>
         <translation>Champs de l&apos;analyse</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="528"/>
+        <location filename="definitions_help.py" line="526"/>
         <source>Layer Geometry Types</source>
         <translation>Type de Géométrie de la couche</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="534"/>
+        <location filename="definitions_help.py" line="532"/>
         <source>Vector</source>
         <translation>Vecteur</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="571"/>
+        <location filename="definitions_help.py" line="569"/>
         <source>Layer Modes</source>
         <translation>Mode de la couche</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="587"/>
+        <location filename="definitions_help.py" line="585"/>
         <source>Layer Purposes</source>
         <translation>Usages des Couches</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="638"/>
+        <location filename="definitions_help.py" line="636"/>
         <source>All Units</source>
         <translation>Toutes Unités</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1169"/>
+        <location filename="definitions_help.py" line="1160"/>
         <source>Plural</source>
         <translation>Pluriel</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1170"/>
+        <location filename="definitions_help.py" line="1161"/>
         <source>Abbreviation</source>
         <translation>Abréviation</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="703"/>
+        <location filename="definitions_help.py" line="701"/>
         <source>Post Processors</source>
         <translation>Post-traitements</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="670"/>
+        <location filename="definitions_help.py" line="668"/>
         <source>Post Processor Input Types</source>
         <translation>Type d&apos;Entrée Post Processeur</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="681"/>
+        <location filename="definitions_help.py" line="679"/>
         <source>Post Processor Input Values</source>
         <translation>Valeur d&apos;Entrée Post Processeur</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="692"/>
+        <location filename="definitions_help.py" line="690"/>
         <source>Post Processor Process Types</source>
         <translation>Type de Traitement Post Processor</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="713"/>
+        <location filename="definitions_help.py" line="711"/>
         <source>Input Fields</source>
         <translation>Champ en entrée</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="714"/>
+        <location filename="definitions_help.py" line="712"/>
         <source>Output Fields</source>
         <translation>Champ en sortie</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="885"/>
+        <location filename="definitions_help.py" line="876"/>
         <source>Contents</source>
         <translation>Contenu</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1049"/>
+        <location filename="definitions_help.py" line="1040"/>
         <source>General notes:</source>
         <translation>Notes générales:</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1099"/>
+        <location filename="definitions_help.py" line="1090"/>
         <source>Notes for continuous datasets:</source>
         <translation>Notes pour les jeux de données continus:</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1108"/>
+        <location filename="definitions_help.py" line="1099"/>
         <source>Notes for classified datasets:</source>
         <translation>Notes pour les jeux de données classifiés:</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1117"/>
+        <location filename="definitions_help.py" line="1108"/>
         <source>Notes for single events</source>
         <translation>Notes pour les événements uniques</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1128"/>
+        <location filename="definitions_help.py" line="1119"/>
         <source>Notes for multi events / scenarios:</source>
         <translation>Notes pour les événements multiples / scénarios:</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1141"/>
+        <location filename="definitions_help.py" line="1132"/>
         <source>Actions:</source>
         <translation>Actions:</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1165"/>
+        <location filename="definitions_help.py" line="1156"/>
         <source>Units:</source>
         <translation>Unités:</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1196"/>
+        <location filename="definitions_help.py" line="1187"/>
         <source>Hazard classifications</source>
         <translation>Classification de l&apos;aléa</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1294"/>
+        <location filename="definitions_help.py" line="1285"/>
         <source>unspecified</source>
         <translation>non spécifié(e)</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1317"/>
+        <location filename="definitions_help.py" line="1308"/>
         <source>Exposure entities in this class ARE considered affected</source>
         <translation>Les entités de l&apos;enjeu dans cette classe SONT considérées affectées.</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1320"/>
+        <location filename="definitions_help.py" line="1311"/>
         <source>Exposure entities in this class are NOT considered affected</source>
         <translation>Les entités de l&apos;enjeu dans cette classe NE sont PAS considérées affectées.</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1326"/>
+        <location filename="definitions_help.py" line="1317"/>
         <source>This class is NOT required in the hazard keywords.</source>
         <translation>Cette classe N&apos;EST PAS requise dans les mots-clés de l&apos;aléa.</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1329"/>
+        <location filename="definitions_help.py" line="1320"/>
         <source>This class IS required in the hazard keywords.</source>
         <translation>Cette classe EST requise dans les mots-clés de l&apos;aléa.</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1388"/>
+        <location filename="definitions_help.py" line="1379"/>
         <source>Field Name</source>
         <translation>Nom du champ</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1389"/>
+        <location filename="definitions_help.py" line="1380"/>
         <source>Type</source>
         <translation>Type</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1391"/>
+        <location filename="definitions_help.py" line="1382"/>
         <source>Precision</source>
         <translation>Précision</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1436"/>
+        <location filename="definitions_help.py" line="1427"/>
         <source>Decimal number</source>
         <translation>Nombre décimal</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1437"/>
+        <location filename="definitions_help.py" line="1428"/>
         <source>Text</source>
         <translation>Texte</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1438"/>
+        <location filename="definitions_help.py" line="1429"/>
         <source>Whole number</source>
         <translation>Nombre entier</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1474"/>
+        <location filename="definitions_help.py" line="1465"/>
         <source>Default values</source>
         <translation>Valeurs par défaut</translation>
     </message>
@@ -5046,7 +5046,7 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>&lt;p&gt;Vous avez sélectionné &lt;b&gt;%s %s&lt;/b&gt; comme enjeu en entrée.&lt;/p&gt; &lt;p&gt;Choisissez la couche d&apos;enjeu que vous souhaiteriez utiliser pour votre analyse.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="183"/>
+        <location filename="wizard_utils.py" line="183"/>
         <source>Global (%s)</source>
         <translation>Global (%s)</translation>
     </message>
@@ -5731,32 +5731,32 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>Clé enjeu est manquant du mappage des valeurs d&apos;aléa.</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="281"/>
+        <location filename="definitions_help.py" line="279"/>
         <source>The Multi Buffer Tool</source>
         <translation>L&apos;outil Multi-Tampon</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1047"/>
+        <location filename="definitions_help.py" line="1038"/>
         <source>Notes:</source>
         <translation>Notes:</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1120"/>
+        <location filename="definitions_help.py" line="1111"/>
         <source>No single event notes defined.</source>
         <translation>Pas de note pour un événement unique défini</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1133"/>
+        <location filename="definitions_help.py" line="1124"/>
         <source>No multi-event notes defined.</source>
         <translation>Pas de note pour un événement multiple défini</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1183"/>
+        <location filename="definitions_help.py" line="1174"/>
         <source>Fields:</source>
         <translation>Champs:</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1209"/>
+        <location filename="definitions_help.py" line="1200"/>
         <source>Classes:</source>
         <translation>Classes:</translation>
     </message>
@@ -6631,7 +6631,7 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>La clé exposure est manquante dans la classification de l&apos;aléa.</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="265"/>
+        <location filename="definitions_help.py" line="263"/>
         <source>The PetaBencana Downloader</source>
         <translation>Le Téléchargeur PetaBencana</translation>
     </message>
@@ -6861,12 +6861,12 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>Personnes Déplacées</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="163"/>
+        <location filename="definitions_help.py" line="161"/>
         <source>Glossary of terms</source>
         <translation>Glossaire des termes</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="896"/>
+        <location filename="definitions_help.py" line="887"/>
         <source>Term</source>
         <translation>Terme</translation>
     </message>
@@ -7121,12 +7121,12 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>Estimation du {title} {unit} par agrégation</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="508"/>
+        <location filename="definitions_help.py" line="506"/>
         <source>Aggregation summary fields</source>
         <translation>Champs du résumé de l&apos;agrégation</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="513"/>
+        <location filename="definitions_help.py" line="511"/>
         <source>Exposure summary table fields</source>
         <translation>Champs du résumé de l&apos;enjeu</translation>
     </message>
@@ -7231,12 +7231,12 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>Une classification d&apos;aléa est utilisée pour définir les seuils de sévérité (classes) pour un aléa donné. La classification sera utilisée pour créer des zones qui possèdent un niveau d&apos;aléa similaire. Pendant l&apos;analyse, chaque enjeu sera évalué pour déterminer le niveau d&apos;aléa et ainsi connaître si l&apos;enjeu est affecté ou pas par l&apos;aléa.</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1087"/>
+        <location filename="definitions_help.py" line="1078"/>
         <source>Notes for exposure : {exposure_name}</source>
         <translation>Notes pour l&apos;enjeu : {exposure_name}</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1153"/>
+        <location filename="definitions_help.py" line="1144"/>
         <source>Actions for exposure : {exposure_name}</source>
         <translation>Actions pour l&apos;enjeu : {exposure_name}</translation>
     </message>
@@ -7246,7 +7246,7 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>Pas de Version</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="136"/>
+        <location filename="wizard_utils.py" line="136"/>
         <source>Your layer&apos;s keyword&apos;s version ({layer_version}) does not match with your InaSAFE version ({inasafe_version}). If you wish to use it as an exposure, hazard, or aggregation layer in an analysis, please update the keywords. Click Next if you want to assign keywords now.</source>
         <translation>La version {layer_version} des mots-clés de votre couche ne fonctionne pas avec votre version d&apos;InaSAFE ({inasafe_version}). Si vous souhaitez utiliser cette couche en tant que couche d&apos;aléas, enjeux ou agrégation dans une analyse InaSAFE, veuillez mettre à jour les mots-clés. Cliquez sur Suivant si vous souhaitez affecter des mots-clés maintenant. </translation>
     </message>
@@ -7671,17 +7671,17 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>Veuillez remplir les informations pour tous les onglets afin de déterminer l&apos;attribut pour le groupe {0}.</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="298"/>
+        <location filename="definitions_help.py" line="296"/>
         <source>Exposure Groups</source>
         <translation>Groupe d&apos;enjeu</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="312"/>
+        <location filename="definitions_help.py" line="310"/>
         <source>Aggregation Groups</source>
         <translation>Groupe d&apos;agrégation</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1456"/>
+        <location filename="definitions_help.py" line="1447"/>
         <source>Fatality rate</source>
         <translation>Ratio de fatalité</translation>
     </message>
@@ -8457,7 +8457,7 @@ Vous pouvez sélectionner plus d&apos;un champ. InaSAFE va additionner les valeu
         <translation>Mappage des Champs Invalide</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="257"/>
+        <location filename="definitions_help.py" line="255"/>
         <source>The OpenStreetmap Downloader</source>
         <translation>Le Téléchargeur OpenStreetMap</translation>
     </message>
@@ -8728,17 +8728,17 @@ Citations:
         <translation>Environnement de l&apos;Analyse</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="290"/>
+        <location filename="definitions_help.py" line="288"/>
         <source>The Field Mapping Tool</source>
         <translation>Outil de Mappage des Champs</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="871"/>
+        <location filename="definitions_help.py" line="862"/>
         <source>Developer Guide</source>
         <translation>Guide pour les développeurs</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1347"/>
+        <location filename="definitions_help.py" line="1338"/>
         <source>Citations:</source>
         <translation>Citations:</translation>
     </message>
@@ -10147,7 +10147,7 @@ Citations:
         <translation>Unités</translation>
     </message>
     <message>
-        <location filename="units.py" line="346"/>
+        <location filename="generic_expressions.py" line="70"/>
         <source>Ten</source>
         <translation>Dizaine</translation>
     </message>
@@ -10167,7 +10167,7 @@ Citations:
         <translation>Centaines</translation>
     </message>
     <message>
-        <location filename="units.py" line="381"/>
+        <location filename="generic_expressions.py" line="71"/>
         <source>Thousand</source>
         <translation>Millier</translation>
     </message>
@@ -10357,7 +10357,7 @@ Citations:
         <translation>InaSAFE - Éléments Infographiques</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="61"/>
+        <location filename="infographic.py" line="69"/>
         <source>{symbol} {age} y.o</source>
         <translation>{symbol} {age} ans</translation>
     </message>
@@ -10379,62 +10379,62 @@ Citations:
     <message>
         <location filename="concepts.py" line="670"/>
         <source>The weight of a crop from land cover can produce per area unit. The unit is in hundred kilograms /hectare.</source>
-        <translation type="unfinished"/>
+        <translation>La masse qu&apos;une culture peut produire par unité de surface. L&apos;unité est en cent kilogrammes / hectare.</translation>
     </message>
     <message>
         <location filename="concepts.py" line="685"/>
         <source>The number of crop in hundred kilograms unit that can be produced in a land cover area.</source>
-        <translation type="unfinished"/>
+        <translation>Nombre de cultures en cent kilogrammes d&apos;unité qui peut être produite dans une zone de l&apos;occupation du sol.</translation>
     </message>
     <message>
         <location filename="fields.py" line="2127"/>
         <source>The rate of productivity of crop land cover for each feature / area in hundred kilograms per hectare unit.</source>
-        <translation type="unfinished"/>
+        <translation>Le ratio de productivité de l&apos;occupation du sol pour chaque entité pour cent kilogrammes par hectare.</translation>
     </message>
     <message>
         <location filename="fields.py" line="2215"/>
         <source>The rate of production cost of a crop for each feature in currency per hectare unit.</source>
-        <translation type="unfinished"/>
+        <translation>Le taux de coût de production d&apos;une récolte pour chaque entité en devise par hectare.</translation>
     </message>
     <message>
         <location filename="fields.py" line="2303"/>
         <source>The rate of production value of a crop for each feature in currency per hectare unit.</source>
-        <translation type="unfinished"/>
+        <translation>Le ratio de la valeur de production d&apos;une culture pour chaque entité en unité devise / hectare.</translation>
     </message>
     <message>
         <location filename="provenance.py" line="167"/>
         <source>CRS</source>
-        <translation type="unfinished"/>
+        <translation>CRS</translation>
     </message>
     <message>
         <location filename="infographic.py" line="19"/>
         <source>If used the element-id &quot;map-overview&quot; in the composer layout will be replaced with an overview map with a box illustrating the area of interest for the analysis.</source>
-        <translation type="unfinished"/>
+        <translation>Si utilisé, l&apos;élément-id &quot;map-overview&quot; dans le modèle du composeur sera remplacé par une carte d&apos;ensemble avec une emprise illustrant la zone d&apos;intérêt pour l&apos;analyse.</translation>
     </message>
     <message>
         <location filename="infographic.py" line="64"/>
         <source>If used the element-id &quot;infographic-header&quot; in the composer layout will be replaced by the infographic </source>
-        <translation type="unfinished"/>
+        <translation>Si utilisé, l&apos;élément-id &quot;infographic-header&quot; dans le modèle de composeur sera remplacé par l&apos;infographie</translation>
     </message>
     <message>
         <location filename="map_report.py" line="39"/>
         <source>Analysis Information</source>
-        <translation type="unfinished"/>
+        <translation>Information de l&apos;Analyse</translation>
     </message>
     <message>
         <location filename="map_report.py" line="83"/>
         <source>Coordinate Reference System - {crs}</source>
-        <translation type="unfinished"/>
+        <translation>Système de Coordonnées de Référence - {crs}</translation>
     </message>
     <message>
         <location filename="report_descriptions.py" line="13"/>
         <source>Infographic report</source>
-        <translation type="unfinished"/>
+        <translation>Rapport Infographique</translation>
     </message>
     <message>
         <location filename="report_descriptions.py" line="15"/>
         <source>Only generated for cases where the exposure dataset is population, the infographic report provides a visual &quot;at a glance&quot; overview of the impacts population. It uses the Indonesian minimum needs profile, so users in other countries should probably implement a customised version of this report which caters for their local minimum needs profile.</source>
-        <translation type="unfinished"/>
+        <translation>Seulement généré pour les cas où l&apos;enjeu est population, le rapport infographique fournit un aperçu visuel &quot;d&apos;un coup d&apos;œil&quot; de l&apos;impact sur la population. Il utilise le profil Indonésien des besoins minimaux, donc les utilisateurs d&apos;autres pays devraient probablement mettre en œuvre une version personnalisée de ce rapport qui répond à leur profil de besoins minimum local.</translation>
     </message>
     <message>
         <location filename="report_descriptions.py" line="26"/>
@@ -10444,37 +10444,37 @@ Citations:
     <message>
         <location filename="report_descriptions.py" line="28"/>
         <source>The impact report provides a tabular overview of the analysis including details of the analysis question, the general report, the minimum needs and other demographic breakdowns (when exposure is population), a list of notes and assumptions and basic details of the datasets used in the analysis.</source>
-        <translation type="unfinished"/>
+        <translation>Le rapport d&apos;impact fournit une vue d&apos;ensemble de l&apos;analyse, y compris les détails de la question d&apos;analyse, le rapport général, les besoins minimaux et autres décompositions démographiques (lorsque l&apos;enjeu est population), une liste de notes et hypothèses et les détails de base des jeux de données utilisés dans une analyse.</translation>
     </message>
     <message>
         <location filename="report_descriptions.py" line="38"/>
         <source>Portrait map</source>
-        <translation type="unfinished"/>
+        <translation>Carte portrait</translation>
     </message>
     <message>
         <location filename="report_descriptions.py" line="40"/>
         <source>A standard map report is produced in a portrait layout for this report. We provide both portrait and landscape layouts so that the reports can accommodate different shapes of reporting area. The master template for this report is found in the InaSAFE plugin directory under &quot;resources/qgis-composer-templates/inasafe-map-report-portrait.qpt&quot;. If you make a copy of this report to your &quot;&lt;home&gt;/.qgis2/inasafe&quot; directory, you can edit this copy and override the default layout and content options provided by InaSAFE. See also the manual for details about expressions and composer elements that you can use in your reports. In addition to this basic override mechanism, you can provide hazard / exposure specific variants of this template by using the following path and naming convention: &quot;(home)/.qgis2/inasafe/inasafe-map-report-portrait-(hazard)-(exposure).qpt&quot; (where (home) is replaced by the path to your home directory, (hazard) by the class of hazard, and (exposure) by the class of exposure).</source>
-        <translation type="unfinished"/>
+        <translation>Un rapport cartographique standard est produit dans une mise en page portrait pour ce rapport. Nous fournissons à la fois des modèles portraits et paysages afin que les rapports puissent s&apos;adapter à différentes format de rapports. Le modèle maître pour ce rapport se trouve dans le répertoire de plugins InaSAFE sous &quot;ressources / qgis-composer-templates / inasafe-map-report-portrait.qpt&quot;. Si vous effectuez une copie de ce rapport dans votre répertoire &quot;(home) / .qgis2 / inasafe&quot;, vous pouvez éditer cette copie et remplacer les options de mise en page et de contenu fournies par InaSAFE. Voir aussi le manuel pour plus d&apos;informations sur les expressions et les éléments du compositeur que vous pouvez utiliser dans vos rapports. En plus de ce mécanisme de substitution de base, vous pouvez fournir des variantes spécifiques à l&apos;aléa / enjeu de ce modèle en utilisant le chemin d&apos;accès suivant et la convention de dénomination: &quot;(home) /.qgis2 / inasafe / inasafe-map-report-portrait- (hazard) (exposure) .qpt &quot;(où (home) est remplacé par le chemin d&apos;accès à votre répertoire personnel (hazard) par l&apos;aléa et (exposure) par un enjeu).</translation>
     </message>
     <message>
         <location filename="report_descriptions.py" line="61"/>
         <source>Landscape map</source>
-        <translation type="unfinished"/>
+        <translation>Carte paysage</translation>
     </message>
     <message>
         <location filename="report_descriptions.py" line="63"/>
         <source>A standard map report is produced in a landscape layout. We provide both portrait and landscape layouts so that the reports can accommodate different shapes of reporting area. The master template for this report is found in the InaSAFE plugin directory under &quot;resources/qgis-composer-templates/inasafe-map-report-landscape.qpt&quot;. If you make a copy of this report to your &quot;&lt;home&gt;/.qgis2/inasafe&quot; directory, you can edit this copy and override the default layout and content options provided by InaSAFE. See also the manual for details about expressions and composer elements that you can use in your reports. In addition to this basic override mechanism, you can provide hazard / exposure specific variants of this template by using the following path and naming convention: &quot;(home)/.qgis2/inasafe/inasafe-map-report-landscape-(hazard)-(exposure).qpt&quot; (where (home) is replaced by the path to your home directory, (hazard) by the class of hazard, and (exposure) by the class of exposure).</source>
-        <translation type="unfinished"/>
+        <translation>Un rapport cartographique standard est produit dans une mise en page paysage pour ce rapport. Nous fournissons à la fois des modèles portraits et paysages afin que les rapports puissent s&apos;adapter à différentes format de rapports. Le modèle maître pour ce rapport se trouve dans le répertoire de plugins InaSAFE sous &quot;ressources / qgis-composer-templates / inasafe-map-report-landscape.qpt&quot;. Si vous effectuez une copie de ce rapport dans votre répertoire &quot;(home) / .qgis2 / inasafe&quot;, vous pouvez éditer cette copie et remplacer les options de mise en page et de contenu fournies par InaSAFE. Voir aussi le manuel pour plus d&apos;informations sur les expressions et les éléments du compositeur que vous pouvez utiliser dans vos rapports. En plus de ce mécanisme de substitution de base, vous pouvez fournir des variantes spécifiques à l&apos;aléa / enjeu de ce modèle en utilisant le chemin d&apos;accès suivant et la convention de dénomination: &quot;(home) /.qgis2 / inasafe / inasafe-map-report-landscape- (hazard) (exposure) .qpt &quot;(où (home) est remplacé par le chemin d&apos;accès à votre répertoire personnel (hazard) par l&apos;aléa et (exposure) par un enjeu).</translation>
     </message>
     <message>
         <location filename="report_descriptions.py" line="84"/>
         <source>Analysis provenance</source>
-        <translation type="unfinished"/>
+        <translation>Provenance de l&apos;Analyse</translation>
     </message>
     <message>
         <location filename="report_descriptions.py" line="86"/>
         <source>When providing a report generated by InaSAFE to a decision make, it is important that there is accompanying information that describes which datasets were used, what settings were used, and so on. The provenance report is designed to address this need by providing detailed technical information about the analysis.</source>
-        <translation type="unfinished"/>
+        <translation>Lorsque un rapport généré par InaSAFE est fourni à une prise de décision, il est important qu&apos;il y ait des informations d&apos;accompagnement qui décrivent les ensembles de données utilisées, les paramètres utilisés et ainsi de suite. Le rapport de provenance est conçu pour répondre à ce besoin en fournissant des informations techniques détaillées sur l&apos;analyse.</translation>
     </message>
     <message>
         <location filename="report_descriptions.py" line="96"/>
@@ -10484,72 +10484,72 @@ Citations:
     <message>
         <location filename="report_descriptions.py" line="98"/>
         <source>The action checklist report provides a list of actions for the DRR practitioner to be aware of or think about. These include general items such as &quot;how will warnings be disseminated?&quot; and specific items such as things that relate to displaced people if the exposure of the analysis is population.</source>
-        <translation type="unfinished"/>
+        <translation>Le rapport &quot;liste de contrôle des actions&quot; fournit une liste d&apos;actions pour que le praticien de la réduction des risques et des désastres soit conscient. Celui-ci comprend des éléments généraux tels que «comment les avertissements seront diffusés?» et des éléments spécifiques tels que les choses qui concernent les personnes déplacées si l&apos;exposition de l&apos;analyse est une population.</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="753"/>
+        <location filename="definitions_help.py" line="751"/>
         <source>Reporting</source>
-        <translation type="unfinished"/>
+        <translation>Rapport</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="760"/>
+        <location filename="definitions_help.py" line="758"/>
         <source>This section of the help documentation is intended for advanced users who want to modify reports which are produced by InaSAFE.</source>
-        <translation type="unfinished"/>
+        <translation>Cette section de la documentation d&apos;aide est destinée aux utilisateurs avancés qui souhaitent modifier les rapports produits par InaSAFE.</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="773"/>
+        <location filename="definitions_help.py" line="771"/>
         <source>Whenever InaSAFE completes an analysis, it will automatically generate a number of reports. Some of these reports are based on templates that are shipped with InaSAFE, and can be customised or over-ridden by creating your own templates. The following reports are produced in InaSAFE:</source>
-        <translation type="unfinished"/>
+        <translation>Chaque fois que InaSAFE complète une analyse, il générera automatiquement un certain nombre de rapports. Certains de ces rapports sont basés sur des modèles qui sont livrés avec InaSAFE, et peuvent être personnalisés ou surchargés en créant vos propres modèles. Les rapports suivants sont produits dans InaSAFE:</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="783"/>
+        <location filename="definitions_help.py" line="781"/>
         <source>Customisable?</source>
-        <translation type="unfinished"/>
+        <translation>Personnalisable?</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="784"/>
+        <location filename="definitions_help.py" line="782"/>
         <source>Example</source>
-        <translation type="unfinished"/>
+        <translation>Exemple</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="803"/>
+        <location filename="definitions_help.py" line="801"/>
         <source>In the sections that follow, we provide more technical information about the custom QGIS Expressions and special template elements that can be used to customise your templates.</source>
-        <translation type="unfinished"/>
+        <translation>Dans les sections qui suivent, nous fournissons plus d&apos;informations techniques sur les expressions QGIS personnalisées et les éléments spéciaux qui peuvent être utilisés pour personnaliser vos modèles.</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="809"/>
+        <location filename="definitions_help.py" line="807"/>
         <source>QGIS Expressions</source>
-        <translation type="unfinished"/>
+        <translation>Expressions QGIS</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="815"/>
+        <location filename="definitions_help.py" line="813"/>
         <source>InaSAFE adds a number of expressions that can be used to conveniently obtain provenance data to the active analysis results. The expressions can also be used elsewhere in QGIS as needed..</source>
-        <translation type="unfinished"/>
+        <translation>InaSAFE ajoute un certain nombre d&apos;expressions qui peuvent être utilisées pour obtenir facilement des données de l&apos;analyse actif. Les expressions peuvent également être utilisées ailleurs dans QGIS au besoin.</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="846"/>
+        <location filename="definitions_help.py" line="837"/>
         <source>Composer Elements</source>
-        <translation type="unfinished"/>
+        <translation>Éléments du Composeur</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="852"/>
+        <location filename="definitions_help.py" line="843"/>
         <source>InaSAFE looks for elements with specific id&apos;s on the composer page and replaces them with InaSAFE specific content.</source>
-        <translation type="unfinished"/>
+        <translation>InaSAFE recherche des éléments avec des identifiants spécifiques sur la page du compositeur et les remplace par un contenu spécifique InaSAFE.</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="858"/>
+        <location filename="definitions_help.py" line="849"/>
         <source>ID</source>
-        <translation type="unfinished"/>
+        <translation>ID</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1064"/>
+        <location filename="definitions_help.py" line="1055"/>
         <source>The following earthquake fatality models are available in InaSAFE. Note that you need to set one of these as the active model in InaSAFE Options. The currently active model is: </source>
-        <translation type="unfinished"/>
+        <translation>Les modèles de mortalité sismique suivants sont disponibles dans InaSAFE. Notez que vous devez définir l&apos;un de ces modèles comme modèle actif dans les options InaSAFE. Le modèle actuellement actif est:</translation>
     </message>
     <message>
         <location filename="options_help.py" line="123"/>
         <source>When this option is enabled, InaSAFE will generate an atlas report based on aggregation area if the template has atlas generation flag enabled.</source>
-        <translation type="unfinished"/>
+        <translation>Lorsque cette option est activée, InaSAFE génèrera un rapport d&apos;atlas basé sur la zone d&apos;agrégation si le modèle possède la génération d&apos;atlas activée.</translation>
     </message>
     <message>
         <location filename="options_help.py" line="143"/>
@@ -10559,42 +10559,247 @@ Citations:
     <message>
         <location filename="options_help.py" line="143"/>
         <source>InaSAFE will use the selected currency for the analysis.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="map_report.py" line="31"/>
-        <source>InaSAFE - Image Elements</source>
-        <translation type="unfinished"/>
+        <translation>InaSAFE utilisera la devise sélectionnée pour l&apos;analyse.</translation>
     </message>
     <message>
         <location filename="map_report.py" line="32"/>
+        <source>InaSAFE - Image Elements</source>
+        <translation>InaSAFE - Éléments d&apos;image</translation>
+    </message>
+    <message>
+        <location filename="map_report.py" line="33"/>
         <source>InaSAFE - Label Elements</source>
-        <translation type="unfinished"/>
+        <translation>InaSAFE - Éléments d&apos;étiquette</translation>
     </message>
     <message>
         <location filename="infographic.py" line="34"/>
         <source>If used, the element-id &quot;people-section-notes&quot; in the composer layout will be replaced by text explaining the different groups of people reported on (displaced, exposed, etc.).</source>
-        <translation type="unfinished"/>
+        <translation>Si utilisé, l&apos;élément-id &quot;people-section-notes&quot; dans le modèle de composeur sera remplacé par un texte expliquant les différents groupes de personnes signalés (déplacés, exposés, etc.).</translation>
     </message>
     <message>
         <location filename="infographic.py" line="45"/>
         <source>If used, the element-id &quot;population-chart-legend&quot; in the composer layout will be replaced by a chart illustrating the number of people in different groups (displaced, exposed, etc.).</source>
-        <translation type="unfinished"/>
+        <translation>Si utilisé, l&apos;élément-id &quot;population-graphique-légende&quot; dans le modèle de composeur sera remplacé par un graphique illustrant le nombre de personnes dans différents groupes (déplacés, exposés, etc.).</translation>
     </message>
     <message>
         <location filename="units.py" line="179"/>
         <source>Hundreds Kilogram</source>
-        <translation type="unfinished"/>
+        <translation>Cent kilogrammes</translation>
     </message>
     <message>
         <location filename="units.py" line="181"/>
         <source>hundreds kilograms</source>
-        <translation type="unfinished"/>
+        <translation>cent kilogrammes</translation>
     </message>
     <message>
         <location filename="units.py" line="184"/>
         <source>&lt;b&gt;A hundred kilograms&lt;/b&gt; is a unit of weight equal to 100 kilograms.</source>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt;Une centaine de kilos&lt;/b&gt; est une unité de poids égale à 100 kilogrammes.</translation>
+    </message>
+    <message>
+        <location filename="generic_expressions.py" line="30"/>
+        <source>Retrieve a value from a field in the impact analysis layer.</source>
+        <translation>Récupération d&apos;une valeur d&apos;un champ dans la couche d&apos;analyse d&apos;impact.</translation>
+    </message>
+    <message>
+        <location filename="generic_expressions.py" line="66"/>
+        <source>Given a number, it will return the place value name. It needs to be used with inasafe_place_value_coefficient.</source>
+        <translation>Compte tenu d&apos;un nombre, cela renverra le nom de ce nombre. Il doit être utilisé avec inasafe_place_value_coefficient.</translation>
+    </message>
+    <message>
+        <location filename="generic_expressions.py" line="105"/>
+        <source>Given a number, it will return the coefficient of the place value name. It needs to be used with inasafe_number_denomination_unit.</source>
+        <translation>Compte tenu d&apos;un nombre, cela renverra le coefficient de ce nombre. Il doit être utilisé avec inasafe_number_denomination_unit.</translation>
+    </message>
+    <message>
+        <location filename="generic_expressions.py" line="141"/>
+        <source>Given a number and total, it will return the percentage of the number to the total.</source>
+        <translation>Compte tenu d&apos;un nombre et d&apos;un total, cela renverra le pourcentage du nombre au total.</translation>
+    </message>
+    <message>
+        <location filename="generic_expressions.py" line="147"/>
+        <source>will calculate the percentage of female displaced count to total displaced count.</source>
+        <translation>calculera le pourcentage de l&apos;effectif féminin au nombre total de personnes déplacées.</translation>
+    </message>
+    <message>
+        <location filename="generic_expressions.py" line="178"/>
+        <source>Given an InaSAFE analysis time, it will convert it to a date with year-month-date format.</source>
+        <translation>Compte tenu d&apos;un temps d&apos;analyse InaSAFE, cela le convertira en format année-mois-jour.</translation>
+    </message>
+    <message>
+        <location filename="generic_expressions.py" line="210"/>
+        <source>will convert datetime provided by qgis_variable.</source>
+        <translation>convertira la date disponible par qgis_variable.</translation>
+    </message>
+    <message>
+        <location filename="generic_expressions.py" line="206"/>
+        <source>Given an InaSAFE analysis time, it will convert it to a time with hour:minute format.</source>
+        <translation>Compte tenu d&apos;un temps d&apos;analyse InaSAFE, cela le convertira en format heures:minutes.</translation>
+    </message>
+    <message>
+        <location filename="align.py" line="82"/>
+        <source>Unable to select reference layer</source>
+        <translation>Impossible de sélectionner la couche de référence</translation>
+    </message>
+    <message>
+        <location filename="wizard_utils.py" line="183"/>
+        <source>Do not use</source>
+        <translation>Ne pas utiliser</translation>
+    </message>
+    <message>
+        <location filename="map_report.py" line="320"/>
+        <source>Retrieve the full path of inasafe-logo-white.svg.</source>
+        <translation>Récupération du chemin complet inasafe-logo-white.svg.</translation>
+    </message>
+    <message>
+        <location filename="infographic.py" line="89"/>
+        <source>Retrieve units of the given minimum needs field name.</source>
+        <translation>Récupération de l&apos;unité pour un nom de champ de besoin minimal.</translation>
+    </message>
+    <message>
+        <location filename="infographic.py" line="91"/>
+        <source>l/weekly</source>
+        <translation>l / hedbomadaire</translation>
+    </message>
+    <message>
+        <location filename="infographic.py" line="139"/>
+        <source>Get a formatted infographic header sentence for an impact function.</source>
+        <translation>Obtenir une phrase d&apos;en-tête infographique formatée pour une fonction d&apos;impact.</translation>
+    </message>
+    <message>
+        <location filename="infographic.py" line="142"/>
+        <source>Estimated impact of a flood</source>
+        <translation>Estimation d&apos;Impact pour une inondation</translation>
+    </message>
+    <message>
+        <location filename="infographic.py" line="165"/>
+        <source>Retrieve map overview header string from definitions.</source>
+        <translation>Récupération de la chaîne d&apos;en-tête de la carte d&apos;aperçu à partir des définitions.</translation>
+    </message>
+    <message>
+        <location filename="infographic.py" line="182"/>
+        <source>Retrieve population chart header string from definitions.</source>
+        <translation>Récupération de la chaîne d&apos;en-tête du diagramme de population à partir des définitions.</translation>
+    </message>
+    <message>
+        <location filename="infographic.py" line="199"/>
+        <source>Retrieve people section header string from definitions.</source>
+        <translation>Récupération de la chaîne d&apos;en-tête de la section des personnes à partir des définitions.</translation>
+    </message>
+    <message>
+        <location filename="infographic.py" line="216"/>
+        <source>Retrieve age gender section header string from definitions.</source>
+        <translation>Récupération de la chaîne d&apos;en-tête de la section de genre d&apos;âge à partir des définitions.</translation>
+    </message>
+    <message>
+        <location filename="infographic.py" line="233"/>
+        <source>Retrieve age gender section notes string from definitions.</source>
+        <translation>Récupération de la chaîne de notes de la catégorie de genre à partir des définitions.</translation>
+    </message>
+    <message>
+        <location filename="infographic.py" line="250"/>
+        <source>Retrieve vulnerability section header string from definitions.</source>
+        <translation>Récupération de la chaîne d&apos;en-tête de la section de la vulnérabilité à partir des définitions.</translation>
+    </message>
+    <message>
+        <location filename="infographic.py" line="268"/>
+        <source>Retrieve female vulnerability section header string from definitions.</source>
+        <translation>Récupération de la chaîne d&apos;en-tête de la section de vulnérabilité des femmes à partir des définitions.</translation>
+    </message>
+    <message>
+        <location filename="infographic.py" line="286"/>
+        <source>Retrieve minimum needs section header string from definitions.</source>
+        <translation>Récupération de la chaîne d&apos;en-tête de la section des besoins minimaux à partir des définitions.</translation>
+    </message>
+    <message>
+        <location filename="infographic.py" line="304"/>
+        <source>Retrieve additional minimum needs section header string from definition.</source>
+        <translation>Récupération de la chaîne d&apos;en-tête de la section des besoins minimaux supplémentaires à partir des définitions.</translation>
+    </message>
+    <message>
+        <location filename="infographic.py" line="324"/>
+        <source>Retrieve minimum needs section notes string from definitions.</source>
+        <translation>Récupération de la chaîne de la section des notes des besoins minimaux à partir des définitions.</translation>
+    </message>
+    <message>
+        <location filename="map_report.py" line="46"/>
+        <source>Retrieve legend title header string from definitions.</source>
+        <translation>Récupération de la chaîne d&apos;en-tête du titre de la légende à partir des définitions.</translation>
+    </message>
+    <message>
+        <location filename="map_report.py" line="63"/>
+        <source>Retrieve disclaimer title header string from definitions.</source>
+        <translation>Récupération de la chaîne d&apos;en-tête du titre de la clause de non-responsabilité à partir des définitions.</translation>
+    </message>
+    <message>
+        <location filename="map_report.py" line="81"/>
+        <source>Retrieve disclaimer text string from definitions.</source>
+        <translation>Récupération de la chaîne de texte de la clause de non-responsabilité à partir des définitions.</translation>
+    </message>
+    <message>
+        <location filename="map_report.py" line="99"/>
+        <source>Retrieve information title header string from definitions.</source>
+        <translation>Récupération de la chaîne d&apos;en-tête du titre d&apos;information à partir des définitions.</translation>
+    </message>
+    <message>
+        <location filename="map_report.py" line="117"/>
+        <source>Retrieve time title header string from definitions.</source>
+        <translation>Récupération de la chaîne d&apos;en-tête du titre du temps à partir des définitions.</translation>
+    </message>
+    <message>
+        <location filename="map_report.py" line="135"/>
+        <source>Retrieve caution title header string from definitions.</source>
+        <translation>Récupération de la chaîne d&apos;en-tête de titre de précaution à partir des définitions.</translation>
+    </message>
+    <message>
+        <location filename="map_report.py" line="153"/>
+        <source>Retrieve caution text string from definitions.</source>
+        <translation>Récupération de la chaîne de texte de précaution à partir des définitions.</translation>
+    </message>
+    <message>
+        <location filename="map_report.py" line="171"/>
+        <source>Retrieve source title header string from definitions.</source>
+        <translation>Récupération de la chaîne d&apos;en-tête du titre source à partir des définitions.</translation>
+    </message>
+    <message>
+        <location filename="map_report.py" line="189"/>
+        <source>Retrieve analysis title header string from definitions.</source>
+        <translation>Récupération de la chaîne d&apos;en-tête du titre de l&apos;analyse à partir des définitions.</translation>
+    </message>
+    <message>
+        <location filename="map_report.py" line="207"/>
+        <source>Retrieve version title header string from definitions.</source>
+        <translation>Récupération de la chaîne d&apos;en-tête du titre de la version à partir des définitions.</translation>
+    </message>
+    <message>
+        <location filename="map_report.py" line="285"/>
+        <source>Retrieve reference title header string from definitions.</source>
+        <translation>Récupération de la chaîne d&apos;en-tête du titre de référence à partir des définitions.</translation>
+    </message>
+    <message>
+        <location filename="map_report.py" line="243"/>
+        <source>Retrieve coordinate reference system text string from definitions.</source>
+        <translation>Récupération de la chaîne d&apos;en-tête du titre de référence à partir des définitions.</translation>
+    </message>
+    <message>
+        <location filename="map_report.py" line="303"/>
+        <source>Retrieve the full path of inasafe-logo-black.svg</source>
+        <translation>Récupération du chemin complet de inasafe-logo-black.svg</translation>
+    </message>
+    <message>
+        <location filename="map_report.py" line="337"/>
+        <source>Retrieve the full path of default north arrow logo.</source>
+        <translation>Récupération du chemin d&apos;accès complet du logo de flèche nord par défaut.</translation>
+    </message>
+    <message>
+        <location filename="map_report.py" line="354"/>
+        <source>Retrieve the full path of used specified organisation logo.</source>
+        <translation>Récupération du chemin d&apos;accès complet du logo d&apos;organisation spécifié.</translation>
+    </message>
+    <message>
+        <location filename="utilities.py" line="157"/>
+        <source>Examples:</source>
+        <translation>Exemples:</translation>
     </message>
 </context>
 <context>
@@ -12378,217 +12583,217 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>Plugin</name>
     <message>
-        <location filename="plugin.py" line="624"/>
+        <location filename="plugin.py" line="622"/>
         <source>InaSAFE</source>
         <translation>InaSAFE</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="170"/>
+        <location filename="plugin.py" line="168"/>
         <source>Toggle InaSAFE Dock</source>
         <translation>Afficher le panneau InaSAFE</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="176"/>
+        <location filename="plugin.py" line="174"/>
         <source>Show/hide InaSAFE dock widget</source>
         <translation>Afficher/masquer le panneau InaSAFE</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="190"/>
+        <location filename="plugin.py" line="188"/>
         <source>Keywords Creation Wizard</source>
         <translation>Assistant de création des mots-clés</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="196"/>
+        <location filename="plugin.py" line="194"/>
         <source>Open InaSAFE keywords creation wizard</source>
         <translation>Ouvrir l&apos;assistant de création des mots-clés InaSAFE </translation>
     </message>
     <message>
-        <location filename="plugin.py" line="206"/>
+        <location filename="plugin.py" line="204"/>
         <source>Impact Function Centric Wizard</source>
         <translation>Assistant pas-à-pas des fonctions d&apos;impact d&apos;InaSAFE</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="212"/>
+        <location filename="plugin.py" line="210"/>
         <source>Open InaSAFE impact function centric wizard</source>
         <translation>Ouvrir l&apos;assistant pas-à-pas des fonctions d&apos;impact d&apos;InaSAFE</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="222"/>
+        <location filename="plugin.py" line="220"/>
         <source>Options</source>
         <translation>Options</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="227"/>
+        <location filename="plugin.py" line="225"/>
         <source>Open InaSAFE options dialog</source>
         <translation>Ouvrir la fenêtre des options</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="235"/>
+        <location filename="plugin.py" line="233"/>
         <source>Minimum Needs Calculator</source>
         <translation>Calculateur des besoins minimaux</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="240"/>
+        <location filename="plugin.py" line="238"/>
         <source>Open InaSAFE minimum needs calculator</source>
         <translation>Ouvrir le calculateur des besoins minimaux InaSAFE</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="249"/>
+        <location filename="plugin.py" line="247"/>
         <source>Multi Buffer</source>
         <translation>Multi Tampon</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="254"/>
+        <location filename="plugin.py" line="252"/>
         <source>Open InaSAFE multi buffer</source>
         <translation>Ouvrir l&apos;outil multi-tampon d&apos;InaSAFE</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="264"/>
+        <location filename="plugin.py" line="262"/>
         <source>Minimum Needs Configuration</source>
         <translation>Configuration des besoins minimaux</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="270"/>
+        <location filename="plugin.py" line="268"/>
         <source>Open InaSAFE minimum needs configuration</source>
         <translation>Ouvrir la configuration des besoins minimaux d&apos;InaSAFE</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="280"/>
+        <location filename="plugin.py" line="278"/>
         <source>Shakemap Converter</source>
         <translation>Convertisseur Shakemap</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="285"/>
+        <location filename="plugin.py" line="283"/>
         <source>Open InaSAFE Converter</source>
         <translation>Ouvrir le convertisseur InaSAFE</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="295"/>
+        <location filename="plugin.py" line="293"/>
         <source>Batch Runner</source>
         <translation>Exécution par lots</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="300"/>
+        <location filename="plugin.py" line="298"/>
         <source>Open Batch Runner</source>
         <translation>Ouvrir l&apos;outil d&apos;exécution par lots</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="309"/>
+        <location filename="plugin.py" line="307"/>
         <source>Save Current Scenario</source>
         <translation>Enregistrer le scénario en cours</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="312"/>
+        <location filename="plugin.py" line="310"/>
         <source>Save current scenario to text file</source>
         <translation>Enregistrer le scénario en cours sous forme de fichier texte</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="329"/>
+        <location filename="plugin.py" line="327"/>
         <source>OpenStreetMap Downloader</source>
         <translation>Téléchargement OpenStreetMap</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="341"/>
+        <location filename="plugin.py" line="339"/>
         <source>Add OpenStreetMap Tile Layer</source>
         <translation>Ajouter la couche OpenStreetMap</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="343"/>
+        <location filename="plugin.py" line="341"/>
         <source>Use this to add an OSM layer to your map. It needs internet access to function.</source>
         <translation>Utiliser ceci pour ajouter une couche OSM à la carte. Une connexion internet est nécessaire pour cette fonction.</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="352"/>
+        <location filename="plugin.py" line="350"/>
         <source>InaSAFE Help</source>
         <translation>Aide InaSAFE</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="356"/>
+        <location filename="plugin.py" line="354"/>
         <source>Show InaSAFE Help</source>
         <translation>Afficher l&apos;aide InaSAFE</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="358"/>
+        <location filename="plugin.py" line="356"/>
         <source>Use this to show a document describing all InaSAFE concepts.</source>
         <translation>Utilisez ceci pour afficher un document décrivant tous les concepts d&apos;InaSAFE.</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="391"/>
+        <location filename="plugin.py" line="389"/>
         <source>Add PetaBencana Flood Layer</source>
         <translation>Ajouter une couche d&apos;inondation PetaBencana</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="393"/>
+        <location filename="plugin.py" line="391"/>
         <source>Use this to add a PetaBencana layer to your map. It needs internet access to function.</source>
         <translation>Utiliser ceci pour ajouter une couche PetaBencana à la carte. Une connexion internet est nécessaire pour cette fonction.</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="405"/>
+        <location filename="plugin.py" line="403"/>
         <source>Toggle Scenario Outlines</source>
         <translation>Afficher la présentation des scénarios</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="408"/>
+        <location filename="plugin.py" line="406"/>
         <source>Toggle rubber bands showing scenario extents.</source>
         <translation>Changer l&apos;affichage de l&apos;emprise du scénario.</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="425"/>
+        <location filename="plugin.py" line="423"/>
         <source>Set Analysis Area</source>
         <translation>Définir la zone d&apos;analyse </translation>
     </message>
     <message>
-        <location filename="plugin.py" line="431"/>
+        <location filename="plugin.py" line="429"/>
         <source>Set the analysis area for InaSAFE</source>
         <translation>Définir la zone d&apos;analyse d&apos;InaSAFE</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="445"/>
+        <location filename="plugin.py" line="443"/>
         <source>Add Test Layers</source>
         <translation>Ajouter des couches de test</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="451"/>
+        <location filename="plugin.py" line="449"/>
         <source>Add test layers</source>
         <translation>Ajouter des couches de test</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="691"/>
+        <location filename="plugin.py" line="680"/>
         <source>Run tests in %s</source>
         <translation>Lancement des tests dans %s</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="488"/>
+        <location filename="plugin.py" line="486"/>
         <source>Select package</source>
         <translation>Sélection du package</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="495"/>
+        <location filename="plugin.py" line="493"/>
         <source>Select Test Package</source>
         <translation>Sélection du package de test</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="680"/>
+        <location filename="plugin.py" line="669"/>
         <source>Select the python test package</source>
         <translation>Sélectionnez le package python pour les tests</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="840"/>
+        <location filename="plugin.py" line="829"/>
         <source>OpenStreetMap</source>
         <translation>OpenStreetMap</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="369"/>
+        <location filename="plugin.py" line="367"/>
         <source>InaSAFE Field Mapping Tool</source>
         <translation>Outil de mappage des champs InaSAFE</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="373"/>
+        <location filename="plugin.py" line="371"/>
         <source>Assign field mapping to layer.</source>
         <translation>Assigner un mappage des champs pour la couche.</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="375"/>
+        <location filename="plugin.py" line="373"/>
         <source>Use this tool to assign field mapping in layer.</source>
         <translation>Utiliser cet outil pour assigner un mappage des champs pour la couche.</translation>
     </message>
@@ -12740,11 +12945,32 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
+    <name>StepFcFunction</name>
+    <message>
+        <location filename="step_fc10_function.py" line="71"/>
+        <source>Function</source>
+        <translation>Fonction</translation>
+    </message>
+    <message>
+        <location filename="step_fc10_function.py" line="74"/>
+        <source>Overview</source>
+        <translation>Présentation</translation>
+    </message>
+</context>
+<context>
     <name>StepFcFunctions2</name>
     <message>
         <location filename="step_fc05_functions2.py" line="108"/>
         <source>Available functions:</source>
         <translation>Fonctions disponibles :</translation>
+    </message>
+</context>
+<context>
+    <name>StepFcParams</name>
+    <message>
+        <location filename="step_fc80_params.py" line="76"/>
+        <source>Please set impact functions parameters.&lt;br/&gt;Parameters for impact function &quot;%s&quot; that can be modified are:</source>
+        <translation>Définir les paramètres des fonctions d&apos;impact. &lt;br/&gt;Les Paramètres pour la fonction d&apos;impact &quot;%s&quot; qui peuvent être modifiés sont : </translation>
     </message>
 </context>
 <context>
