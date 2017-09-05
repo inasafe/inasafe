@@ -1,7 +1,7 @@
 .git
 safe
 realtime
-i18n
+safe/i18n
 safe_extras
 scripts
 docs
