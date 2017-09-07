@@ -2,67 +2,67 @@
 <context>
     <name>AshEvent</name>
     <message>
-        <location filename="ash_event.py" line="250"/>
+        <location filename="ash_event.py" line="255"/>
         <source>Volcanic Ash Impact</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="251"/>
+        <location filename="ash_event.py" line="256"/>
         <source>Volcano: %s, %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="254"/>
+        <location filename="ash_event.py" line="259"/>
         <source>Province: %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="255"/>
+        <location filename="ash_event.py" line="260"/>
         <source>Alert Level: %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="259"/>
+        <location filename="ash_event.py" line="264"/>
         <source>Position: %s, %s; Eruption Column Height (a.s.l) - %d m</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="262"/>
+        <location filename="ash_event.py" line="267"/>
         <source>Elapsed time since event: %s hour(s) and %s minute(s)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="264"/>
+        <location filename="ash_event.py" line="269"/>
         <source>Potential impact at each fallout level</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="266"/>
+        <location filename="ash_event.py" line="271"/>
         <source>Nearby places</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="267"/>
+        <location filename="ash_event.py" line="272"/>
         <source>Land Cover Impact</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="268"/>
+        <location filename="ash_event.py" line="273"/>
         <source>The impact estimation is automatically generated and only takes into account the population, cities and land cover affected by different levels of volcanic ash fallout at surface level. The estimate is based on volcanic ash fallout data from Badan Geologi, population count data derived by DMInnovation from worldpop.org.uk, place information and land cover classification data provided by Indonesian Geospatial Portal at http://portal.ina-sdi.or.id and software developed by BNPB. Limitation in the estimates of surface fallout, population and place names datasets may result in a significant misrepresentation of the on-the-surface situation in the figures shown here. Consequently, decisions should not be made solely on the information presented here and should always be verified by ground truthing and other reliable information sources.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="285"/>
+        <location filename="ash_event.py" line="290"/>
         <source>This report was created using InaSAFE version %s. Visit http://inasafe.org for more information. </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="288"/>
+        <location filename="ash_event.py" line="293"/>
         <source>Supported by DMInnovation, Geoscience Australia and the World Bank-GFDRR</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="706"/>
+        <location filename="ash_event.py" line="711"/>
         <source>People Affected</source>
         <translation type="unfinished"/>
     </message>

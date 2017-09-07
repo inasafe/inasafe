@@ -10,7 +10,7 @@
     <message>
         <location filename="ash_event.py" line="256"/>
         <source>Volcano: %s, %s</source>
-        <translation type="unfinished"></translation>
+        <translation>Gunung: %s, %s</translation>
     </message>
     <message>
         <location filename="ash_event.py" line="259"/>
@@ -20,17 +20,17 @@
     <message>
         <location filename="ash_event.py" line="260"/>
         <source>Alert Level: %s</source>
-        <translation type="unfinished"></translation>
+        <translation>Tingkat Peringatan: %s</translation>
     </message>
     <message>
         <location filename="ash_event.py" line="264"/>
         <source>Position: %s, %s; Eruption Column Height (a.s.l) - %d m</source>
-        <translation type="unfinished"></translation>
+        <translation>Posisi: %s, %s; Tinggi Kolom Erupsi (d.p.l) - %d m</translation>
     </message>
     <message>
         <location filename="ash_event.py" line="267"/>
         <source>Elapsed time since event: %s hour(s) and %s minute(s)</source>
-        <translation type="unfinished"></translation>
+        <translation>Waktu berlalu sejak kejadian: %s jam dan %s menit</translation>
     </message>
     <message>
         <location filename="ash_event.py" line="269"/>
@@ -50,7 +50,7 @@
     <message>
         <location filename="ash_event.py" line="273"/>
         <source>The impact estimation is automatically generated and only takes into account the population, cities and land cover affected by different levels of volcanic ash fallout at surface level. The estimate is based on volcanic ash fallout data from Badan Geologi, population count data derived by DMInnovation from worldpop.org.uk, place information and land cover classification data provided by Indonesian Geospatial Portal at http://portal.ina-sdi.or.id and software developed by BNPB. Limitation in the estimates of surface fallout, population and place names datasets may result in a significant misrepresentation of the on-the-surface situation in the figures shown here. Consequently, decisions should not be made solely on the information presented here and should always be verified by ground truthing and other reliable information sources.</source>
-        <translation type="unfinished"></translation>
+        <translation>Perkiraan dampak ini dihasilkan secara otomatis dan hanya memperhitungkan penduduk, data perkotaan dan penutup lahan yang terdampak oleh berbagai tingkat curahan abu vulkanik di permukaan tanah. Perkiraan ini berdasarkan pada data curahan abu vulkanik yang bersumber dari Badan Geologi, data jumlah penduduk yang diturunkan oleh DMInnovation dari worldpop.org.uk, informasi tempat dan data klasifikasi penutup lahan dari Portal Geospasial Indonesia di http://portal.ina-sdi.or.id dan perangkat lunak yang dikembangkan oleh BNPB. Batasan dalam perkiraan curahan abu vulkanik, data populasi, dan data nama tempat dapat menghasilkan kesalahan representasi yang signifikan dari situasi yang sebenarnya terjadi. Oleh karena itu, keputusan tidak seharusnya diambil semata-mata hanya berdasarkan informasi yang ditunjukkan disini dan seharusnya selalu diperiksa kebenarannya dengan survey lapangan ataupun dari sumber informasi lainnya yang terpercaya.</translation>
     </message>
     <message>
         <location filename="ash_event.py" line="290"/>
@@ -60,7 +60,7 @@
     <message>
         <location filename="ash_event.py" line="293"/>
         <source>Supported by DMInnovation, Geoscience Australia and the World Bank-GFDRR</source>
-        <translation type="unfinished"></translation>
+        <translation>Didukung oleh DMInnovation, Geoscience Australia dan Bank Dunia-GFDRR</translation>
     </message>
     <message>
         <location filename="ash_event.py" line="711"/>
@@ -145,7 +145,11 @@ BPBD Provinsi DKI Jakarta
 Gedung Dinas Teknis Lt. 5
 Jl. Abdul Muis No. 66, Telp. 121
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Pusat Pengendalian Operasi (Pusdalops)
+BPBD Provinsi DKI Jakarta
+Gedung Dinas Teknis Lt. 5
+Jl. Abdul Muis No. 66, Telp. 121
+</translation>
     </message>
     <message>
         <location filename="flood_event.py" line="656"/>
@@ -268,7 +272,7 @@ Jl. Abdul Muis No. 66, Telp. 121
     <message>
         <location filename="shake_event.py" line="1007"/>
         <source>People Exposed (x 1000)</source>
-        <translation type="unfinished"></translation>
+        <translation>Penduduk terpapar (x 1000)</translation>
     </message>
     <message>
         <location filename="shake_event.py" line="1011"/>
@@ -283,7 +287,7 @@ Jl. Abdul Muis No. 66, Telp. 121
     <message>
         <location filename="shake_event.py" line="1672"/>
         <source>Estimated number of people exposed by each MMI level</source>
-        <translation type="unfinished"></translation>
+        <translation>Perkiraan jumlah penduduk terpapar untuk setiap tingkatan MMI</translation>
     </message>
     <message>
         <location filename="shake_event.py" line="1674"/>
@@ -303,7 +307,7 @@ Jl. Abdul Muis No. 66, Telp. 121
     <message>
         <location filename="shake_event.py" line="1687"/>
         <source>This impact estimation is automatically generated and only takes into account the population and cities affected by different levels of ground shaking. The estimate is based on ground shaking data from BMKG, population count data derived by DMInnovation from worldpop.org.uk and BPS Census Data 2010, place information data provided by Indonesian Geospatial Portal at http://tanahair.indonesia.go.id and software developed by BNPB. Limitations in the estimates of ground shaking, population and place names datasets may result in significant misrepresentation of the on-the-ground situation in the figures shown here. Consequently, decisions should not be made solely on the information presented here and should always be verified by ground truthing and other reliable information sources. The fatality calculation assumes that no fatalities occur for shake levels below MMI 4. Fatality counts of less than 50 are rounded down.</source>
-        <translation type="unfinished"></translation>
+        <translation>Perkiraan dampak ini dihasilkan secara otomatis dan hanya memperhitungkan penduduk dan kota yang terdampak oleh beberapa tingkatan getaran tanah. Perkiraan ini berdasarkan data getaran dari BMKG, data jumlah penduduk yang diturunkan oleh AIFDR dari worldpop.org.uk dan data sensus BPS 2010, informasi tempat dari Portal Geospasial Indonesia di  http://tanahair.indonesia.go.id dan perangkat lunak yang dikembangkan oleh BNPB. Batasan dalam perkiraan getaran tanah, data populasi, dan data nama tempat dapat menghasilkan kesalahan representasi dari situasi yang sebenarnya terjadi. Oleh karena itu keputusan tidak seharusnya diambil semata-mata hanya berdasarkan informasi yang ditunjukkan di sini dan seharusnya selalu diperiksa kebenarannya dengan survei lapangan ataupun dari sumber informasi lainnya yang terpercaya. Perhitungan kematian menggunakan asumsi bahwa tidak terjadi kematian pada level getaran di bawah 4 MMI. Jumlah kematian kurang dari 50 akan dibulatkan kebawah.</translation>
     </message>
     <message>
         <location filename="shake_event.py" line="1705"/>
@@ -328,7 +332,7 @@ Jl. Abdul Muis No. 66, Telp. 121
     <message>
         <location filename="shake_event.py" line="1721"/>
         <source>bearing</source>
-        <translation>menanggung</translation>
+        <translation>azimuth</translation>
     </message>
     <message>
         <location filename="shake_event.py" line="1737"/>
