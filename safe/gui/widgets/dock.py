@@ -16,7 +16,8 @@ from qgis.core import (
     QgsMapLayer,
     QgsMapLayerRegistry,
     QgsCoordinateReferenceSystem,
-    QgsExpressionContextUtils
+    QgsExpressionContextUtils,
+    QgsRasterLayer
 )
 
 from safe.definitions.exposure import exposure_population
@@ -59,7 +60,6 @@ from safe.definitions.reports.components import (
 from safe.report.extractors.util import layer_definition_type
 from safe.report.impact_report import ImpactReport
 from safe.report.report_metadata import ReportMetadata
-from safe.test.utilities import load_layer
 from safe.utilities.gis import wkt_to_rectangle, qgis_version
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
@@ -1262,7 +1262,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             exposure_type = layer_definition_type(
                 self.impact_function.exposure)
             if exposure_type == exposure_population:
-                map_overview_layer, _ = load_layer(map_overview['path'])
+                map_overview_layer = QgsRasterLayer(
+                    map_overview['path'], 'Overview')
                 add_layer_to_canvas(
                     map_overview_layer,
                     map_overview['id'],
