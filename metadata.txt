@@ -16,7 +16,7 @@ description=InaSAFE is free software that allows disaster managers to study real
 about=Developed for the Indonesian Government - BNPB, Australian Government - AIFDR and DMInnovation and, and World Bank - GFDRR
 
 # If you change version and status here, please also change in safe/definitions/versions.py
-version=4.2.2
+version=4.2.3
 # alpha, beta, rc or final
 status=final
 
@@ -26,8 +26,10 @@ status=final
 # Optional items:
 
 changelog=
-    Version 4.2.2
+    Version 4.2.3
     - Code Internals : Move resources and i18n package into safe package
+    Version 4.2.2
+    - Fix fail to install inasafe from plugin manager
     Version 4.2.1
     - Fix missing CRS in map report
     - Add some missing translations for Bahasa Indonesia and French
