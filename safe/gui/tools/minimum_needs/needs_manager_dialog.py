@@ -650,9 +650,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         file_name_dialog.setAcceptMode(QtGui.QFileDialog.AcceptOpen)
         file_name_dialog.setNameFilter(self.tr('JSON files (*.json *.JSON)'))
         file_name_dialog.setDefaultSuffix('json')
-        current_directory = os.path.dirname(__file__)
-        path_name = os.path.join(
-            current_directory, '..', '..', 'resources', 'minimum_needs')
+        path_name = resources_path('minimum_needs')
         file_name_dialog.setDirectory(path_name)
         if file_name_dialog.exec_():
             file_name = file_name_dialog.selectedFiles()[0]

@@ -207,8 +207,7 @@ def action_checklist_report_extractor(impact_report, component_metadata):
         context[key] = jinja2_output_as_string(
             impact_report, component['key'])
 
-    resources_dir = safe_dir(sub_dir='../resources')
-    context['inasafe_resources_base_dir'] = resources_dir
+    context['inasafe_resources_base_dir'] = resources_path()
 
     return context
 
