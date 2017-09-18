@@ -146,7 +146,7 @@ pep257:
 	@echo "PEP257 issues"
 	@echo "-----------"
 	@pep257 --version
-	@pep257 --ignore=D100,D101,D102,D103,D104,D105,D200,D202,D203,D205,D210,D211,D300,D301,D302,D400,D401 --count safe/ || true
+	@pep257 --ignore=D100,D101,D102,D103,D104,D105,D200,D202,D203,D205,D210,D211,D300,D301,D302,D400,D401 safe/ || true
 
 
 # Run entire test suite - excludes realtime until we have QGIS 2.0 support
