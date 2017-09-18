@@ -57,6 +57,8 @@ hello_world_metadata_html = {
 
 class TestHelloWorldReport(unittest.TestCase):
 
+    """Test about report generation, from scratch."""
+
     @classmethod
     def fixtures_dir(cls, path):
         """Helper to return fixture path."""

@@ -1,5 +1,7 @@
 # coding=utf-8
 
+"""Some helpers about the summary calculation."""
+
 from PyQt4.QtCore import QPyNullVariant
 
 

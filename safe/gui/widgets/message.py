@@ -1,5 +1,7 @@
 # coding=utf-8
 
+"""Helpers to generate and display messages in the dock."""
+
 import logging
 
 from pydispatch import dispatcher
@@ -42,7 +44,6 @@ def missing_keyword_message(sender, missing_keyword_exception):
 
     :param missing_keyword_exception: A KeywordNotFoundError exception.
     :type missing_keyword_exception: KeywordNotFoundError
-
     """
     warning_heading = m.Heading(
         tr('Missing Keyword'), **WARNING_STYLE)

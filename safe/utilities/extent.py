@@ -1,5 +1,7 @@
 # coding=utf-8
 
+"""Related to the extent (with or without an aggregation layer."""
+
 from qgis.core import (
     QgsCoordinateTransform,
     QgsRectangle,
@@ -59,7 +61,7 @@ class Extent(object):
 
     @property
     def show_rubber_bands(self):
-        """Return if we display rubberbands
+        """Return if we display rubberbands.
 
         :return: Boolean if we display rubberbands
         :rtype: bool
