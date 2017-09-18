@@ -43,7 +43,7 @@ shutil.copyfile(SOURCE_PATH, GRID_PATH)
 SHAKE_GRID = ShakeGrid('Test Title', 'Test Source', GRID_PATH)
 
 
-class ShakeGridTest(unittest.TestCase):
+class TestShakeGrid(unittest.TestCase):
     """Class to test ShakeGrid."""
 
     @classmethod

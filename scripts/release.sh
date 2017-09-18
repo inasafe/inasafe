@@ -68,8 +68,6 @@ find ${WORKDIR}/${DIR} -name *_test.py -delete
 find ${WORKDIR}/${DIR} -name *.po -delete
 find ${WORKDIR}/${DIR} -name *.ts -delete
 
-rpl "from safe.test.utilities import HAZDATA, EXPDATA, TESTDATA, BOUNDDATA" "" ${WORKDIR}/${DIR}/safe/api.py
-
 rm -rf ${WORKDIR}/${DIR}/*.bat
 
 

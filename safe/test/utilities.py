@@ -38,26 +38,6 @@ GEOCRS = 4326  # constant for EPSG:GEOCRS Geographic CRS id
 GOOGLECRS = 3857  # constant for EPSG:GOOGLECRS Google Mercator id
 DEVNULL = open(os.devnull, 'w')
 
-# FIXME AG: We are going to remove the usage of all the data from
-# inasafe_data and just use data in standard_data_path. But until that is done,
-# we still keep TESTDATA, HAZDATA, EXPDATA, and BOUNDATA below
-
-# Assuming test data three levels up
-pardir = os.path.abspath(os.path.join(
-    os.path.realpath(os.path.dirname(__file__)),
-    '..',
-    '..',
-    '..'))
-
-# Location of test data
-DATANAME = 'inasafe_data'
-DATADIR = os.path.join(pardir, DATANAME)
-
-# Bundled test data
-TESTDATA = os.path.join(DATADIR, 'test')  # Artificial datasets
-HAZDATA = os.path.join(DATADIR, 'hazard')  # Real hazard layers
-EXPDATA = os.path.join(DATADIR, 'exposure')  # Real exposure layers
-BOUNDDATA = os.path.join(DATADIR, 'boundaries')  # Real exposure layers
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
