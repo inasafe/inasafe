@@ -1,5 +1,7 @@
 # coding=utf-8
 
+"""Definitions about InaSAFE reports."""
+
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

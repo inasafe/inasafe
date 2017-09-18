@@ -1,5 +1,7 @@
 # coding=utf-8
 
+"""Functions to translate a word or to get the locale   ."""
+
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import

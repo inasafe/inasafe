@@ -140,13 +140,14 @@ pep8:
 # Run pep257 style checking
 #http://pypi.python.org/pypi/pep257
 # http://pep257.readthedocs.io/en/latest/error_codes.html
+# D104 will be disabled.
 pep257:
 	@echo
 	@echo "-----------"
 	@echo "PEP257 issues"
 	@echo "-----------"
 	@pep257 --version
-	@pep257 --ignore=D100,D101,D102,D103,D104,D105,D200,D202,D203,D205,D210,D211,D300,D301,D302,D400,D401 safe/ || true
+	@pep257 --ignore=D102,D103,D104,D105,D200,D202,D203,D205,D210,D211,D300,D301,D302,D400,D401 safe/ || true
 
 
 # Run entire test suite - excludes realtime until we have QGIS 2.0 support

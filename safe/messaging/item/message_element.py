@@ -1,24 +1,18 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool by AusAid - **Message Element.**
 
-Contact : ole.moller.nielsen@gmail.com
+"""Message Element class for the Messaging package."""
 
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-"""
 import json
 
-__author__ = 'marco@opengis.ch'
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
-__date__ = '27/05/2013'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
 
 
 class MessageElement(object):
+
+    """Message Element class for the Messaging package."""
 
     def __init__(
             self,
@@ -26,8 +20,8 @@ class MessageElement(object):
             style_class=None,
             icon=None,
             attributes=None):
-        """
-        Constructor for a message element
+        """Constructor for a message element.
+
         :param element_id: Optional id - will be ignored in text renderer.
         :param style_class: Optional class = will be ignored in text renderer.
 
@@ -46,7 +40,6 @@ class MessageElement(object):
         attributes to the generated html. e.g.
 
         Text('foo', attributes='width: "100%"')
-
         """
         self.element_id = element_id
         self.style_class = style_class
@@ -77,7 +70,7 @@ class MessageElement(object):
                 isinstance(message, float))
 
     def to_html(self):
-        """Render a MessageElement queue as html
+        """Render a MessageElement queue as html.
 
         :returns: Html representation of the Text MessageElement.
         :rtype: str
@@ -85,7 +78,7 @@ class MessageElement(object):
         raise NotImplementedError('Please Implement this method')
 
     def to_text(self):
-        """Render a MessageElement queue as text
+        """Render a MessageElement queue as text.
 
         :returns: Text representation of the Text MessageElement.
         :rtype: str
@@ -93,7 +86,7 @@ class MessageElement(object):
         raise NotImplementedError('Please Implement this method')
 
     def to_markdown(self):
-        """Render a MessageElement queue as markdown
+        """Render a MessageElement queue as markdown.
 
         :returns: Markdown representation of the Text MessageElement.
         :rtype: str
@@ -101,7 +94,7 @@ class MessageElement(object):
         raise NotImplementedError('Please Implement this method')
 
     def to_dict(self):
-        """Render a MessageElement as python dict
+        """Render a MessageElement as python dict.
 
         :return: Python dict representation
         :rtype: dict
@@ -115,7 +108,7 @@ class MessageElement(object):
         }
 
     def to_json(self):
-        """Render a MessageElement queue as JSON
+        """Render a MessageElement queue as JSON.
 
         :returns: Json representation of the Text MessageElement.
         :rtype: str

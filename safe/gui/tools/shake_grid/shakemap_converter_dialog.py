@@ -1,5 +1,7 @@
 # coding=utf-8
 
+"""Importer for shakemap grid.xml files."""
+
 import logging
 import os
 

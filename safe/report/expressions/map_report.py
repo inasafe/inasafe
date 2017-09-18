@@ -1,5 +1,7 @@
 # coding=utf-8
 
+"""QGIS Expressions which are available in the QGIS GUI interface."""
+
 from qgis.core import qgsfunction, QgsCoordinateReferenceSystem
 
 from safe.definitions.reports.map_report import (

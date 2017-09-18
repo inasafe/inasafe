@@ -1,4 +1,7 @@
 # coding=utf-8
+
+"""Postprocessors about population and demographics."""
+
 from collections import OrderedDict
 from post_processor_functions import (
     multiply,

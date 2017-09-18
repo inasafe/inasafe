@@ -1,4 +1,7 @@
 # coding=utf-8
+
+"""Python functions that we use in postprocessors."""
+
 # noinspection PyUnresolvedReferences
 from PyQt4.QtCore import QPyNullVariant
 from safe.definitions.hazard_classifications import (

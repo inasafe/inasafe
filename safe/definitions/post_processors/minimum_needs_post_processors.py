@@ -1,4 +1,7 @@
 # coding=utf-8
+
+"""Postprocessors about additional items in minimum needs."""
+
 from safe.definitions import minimum_needs_fields, displaced_field
 from safe.utilities.i18n import tr
 from safe.definitions.concepts import concepts

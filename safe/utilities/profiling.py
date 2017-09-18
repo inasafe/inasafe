@@ -20,6 +20,8 @@ __revision__ = '$Format:%H$'
 
 
 class Tree(object):
+    """Internal representation of the tree."""
+
     def __init__(self, key):
 
         # Name of the current function

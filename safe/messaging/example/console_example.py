@@ -67,7 +67,10 @@ class ConsoleView():
         print string
 
 
-class ImpactFunction1():
+class ImpactFunction1(object):
+
+    """Feedback progress for the impact function."""
+
     def __init__(self):
         message = Message(SuccessParagraph('IF1 was initialised'))
         dispatcher.send(
@@ -85,7 +88,10 @@ class ImpactFunction1():
             message=message)
 
 
-class App():
+class App(object):
+
+    """Class for messaging."""
+
     def __init__(self):
         self.message_queue = ConsoleView()
         # Set up dispatcher for dynamic messages

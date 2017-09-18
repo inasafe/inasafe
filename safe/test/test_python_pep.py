@@ -70,7 +70,7 @@ class TestPythonPep(unittest.TestCase):
             root = '../../'
             command = [
                 'pep257',
-                '--ignore=D100,D101,D102,D103,D104,D105,D200,D201,D202,D203,'
+                '--ignore=D102,D103,D104,D105,D200,D201,D202,D203,'
                 'D205,D210,D211,D300,D301,D302,D400,D401,'
                 'safe/']
             # Shamelessly hardcoded path for now..TS
