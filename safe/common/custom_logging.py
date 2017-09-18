@@ -31,11 +31,10 @@ from raven import Client  # NOQA
 from safe.common.utilities import log_file_path  # NOQA
 from safe.utilities.i18n import tr  # NOQA
 
-__author__ = 'tim@kartoza.com'
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
-__date__ = '29/01/2011'
-__copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
-__copyright__ += 'Disaster Reduction'
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -110,7 +109,6 @@ def setup_logger(logger_name, log_file=None, sentry_url=None):
 
     .. note:: The file logs are written to the inasafe user tmp dir e.g.:
        /tmp/inasafe/23-08-2012/timlinux/logs/inasafe.log
-
     """
     logger = logging.getLogger(logger_name)
     logger.setLevel(logging.DEBUG)
@@ -131,22 +129,19 @@ def setup_logger(logger_name, log_file=None, sentry_url=None):
     else:
         file_handler = logging.FileHandler(log_file)
     file_handler.setLevel(default_handler_level)
+    file_handler.setFormatter(formatter)
+    add_logging_handler_once(logger, file_handler)
 
-    # create console handler with a higher log level
-    console_handler = logging.StreamHandler()
-    console_handler.setLevel(logging.INFO)
+    if 'MUTE_LOGS' not in os.environ:
+        # create console handler with a higher log level
+        console_handler = logging.StreamHandler()
+        console_handler.setLevel(logging.INFO)
+        console_handler.setFormatter(formatter)
+        add_logging_handler_once(logger, console_handler)
 
     # create a QGIS handler
     qgis_handler = QgsLogHandler()
-
-    # Set formatters
-    file_handler.setFormatter(formatter)
-    console_handler.setFormatter(formatter)
     qgis_handler.setFormatter(formatter)
-
-    # add the handlers to the logger
-    add_logging_handler_once(logger, file_handler)
-    add_logging_handler_once(logger, console_handler)
     add_logging_handler_once(logger, qgis_handler)
 
     # Sentry handler - this is optional hence the localised import
