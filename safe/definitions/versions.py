@@ -10,7 +10,7 @@ __revision__ = '$Format:%H$'
 # InaSAFE version (please synchronize with metadata.txt)
 inasafe_version = '4.3.0'
 # alpha, beta, rc or final
-inasafe_release_status = 'final'
+inasafe_release_status = 'alpha'
 
 # InaSAFE Keyword Version compatibility.
 inasafe_keyword_version = '4.3'
