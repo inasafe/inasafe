@@ -127,7 +127,6 @@ class StepKwSummary(WizardStep, FORM_CLASS):
         if self.parent.parent_step:
             # It's the KW mode embedded in IFCW mode,
             # so check if the layer is compatible
-            im_func = self.parent.step_fc_function.selected_function()
             if not self.parent.is_layer_compatible(
                     self.parent.layer, None, current_keywords):
                 msg = self.tr(
