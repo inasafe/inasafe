@@ -383,6 +383,8 @@ aggregation_postprocessors_component = {
             'section_header_format': tr(
                 'Estimated number of people displaced by {header_name} '
                 'per aggregation area'),
+            'section_header_format_no_aggregation': tr(
+                'Estimated number of people displaced by {header_name} '),
             'group_header_format': tr('{header_name} breakdown'),
             'zero_displaced_message': tr(
                 'Analysis produced 0 displaced count. '
