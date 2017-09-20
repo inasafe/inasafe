@@ -1,7 +1,6 @@
 # coding=utf-8
 """InaSAFE Wizard Step Keyword Summary."""
 
-import os
 import re
 
 from safe import messaging as m
@@ -14,6 +13,7 @@ from safe.definitions.versions import inasafe_keyword_version
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.utilities.resources import resources_path
+from safe.gui.tools.wizard.utilities import layers_intersect
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -55,12 +55,21 @@ class StepKwSummary(WizardStep, FORM_CLASS):
                 elif parent_step in [self.parent.step_fc_explayer_from_canvas,
                                      self.parent.
                                      step_fc_explayer_from_browser]:
-                    new_step = self.parent.step_fc_disjoint_layers
+                    if layers_intersect(
+                            self.parent.hazard_layer,
+                            self.parent.exposure_layer):
+                        new_step = self.parent.step_fc_agglayer_origin
+                    else:
+                        new_step = self.parent.step_fc_disjoint_layers
 
                 elif parent_step in [self.parent.step_fc_agglayer_from_canvas,
                                      self.parent.
                                      step_fc_agglayer_from_browser]:
-                    new_step = self.parent.step_fc_agglayer_disjoint
+                    if layers_intersect(self.parent.exposure_layer,
+                                        self.parent.aggregation_layer):
+                        new_step = self.parent.step_fc_summary
+                    else:
+                        new_step = self.parent.step_fc_agglayer_disjoint
                 else:
                     raise Exception('No such step')
             else:
