@@ -4,7 +4,8 @@ from safe.definitions.exposure import exposure_population
 from safe.definitions.fields import (
     hazard_count_field,
     total_field,
-    fatalities_field)
+    fatalities_field,
+    total_not_exposed_field)
 from safe.report.extractors.util import (
     layer_definition_type,
     resolve_from_dictionary,
@@ -108,11 +109,25 @@ def general_report_extractor(impact_report, component_metadata):
             hazard_stats.append(stats)
 
         # find total field
-        try:
-            field_name = analysis_inasafe_fields[total_field['key']]
+        fields = [total_not_exposed_field, total_field]
+
+        # calculate the total exposed number by subtract total with
+        # total not exposed number
+        value_to_count = {}
+        for field in fields:
+            field_name = analysis_inasafe_fields[field['key']]
             total = value_from_field_name(field_name, analysis_layer)
+            value_to_count[field['key']] = total
+
+        total_exposed = abs(
+            value_to_count[total_field['key']] -
+            value_to_count[total_not_exposed_field['key']])
+
+        try:
             total = format_number(
-                total, enable_rounding=is_rounded, is_population=is_population)
+                total_exposed,
+                enable_rounding=is_rounded,
+                is_population=is_population)
             stats = {
                 'key': total_field['key'],
                 'name': total_field['name'],
