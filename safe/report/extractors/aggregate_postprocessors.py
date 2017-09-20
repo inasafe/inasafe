@@ -87,14 +87,18 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
         zero_displaced = False
 
     context['use_aggregation'] = use_aggregation
-    if not use_aggregation:
-        context['header'] = resolve_from_dictionary(
-            extra_args, 'header')
+    context['header'] = resolve_from_dictionary(
+        extra_args, 'header')
 
     group_header_format = resolve_from_dictionary(
         extra_args, ['defaults', 'group_header_format'])
+
     section_header_format = resolve_from_dictionary(
-        extra_args, ['defaults', 'section_header_format'])
+        extra_args,
+        ['defaults', 'section_header_format'])
+    if not use_aggregation:
+        section_header_format = resolve_from_dictionary(
+            extra_args, ['defaults', 'section_header_format_no_aggregation'])
 
     """Age Groups"""
     age_items = {
