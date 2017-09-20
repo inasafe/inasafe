@@ -8,9 +8,9 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 # InaSAFE version (please synchronize with metadata.txt)
-inasafe_version = '4.2.2'
+inasafe_version = '4.2.3'
 # alpha, beta, rc or final
-inasafe_release_status = 'final'
+inasafe_release_status = 'beta'
 
 # InaSAFE Keyword Version compatibility.
 inasafe_keyword_version = '4.2'
