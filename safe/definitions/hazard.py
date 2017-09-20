@@ -239,11 +239,11 @@ hazard_dam_break = {
     'key': 'dam_break',
     'name': tr('DAM Break'),
     'description': tr(
-        'A <b>flood</b> describes the inundation of land that is normally dry '
-        'by a large amount of water. For example: A <b>flood</b> can occur '
-        'after heavy rainfall, when a river overflows its banks or when a '
-        'dam breaks. The effect of a <b>flood</b> is for land that is '
-        'normally dry to become wet.'),
+        'A <b>DAM Break</b> is a catastrophic type of failure characterized by '
+        'the sudden, rapid, and uncontrolled release of impounded water '
+        'as a result of structural failures or deficiencies in the dam. '
+        '<b>DAM Break</b> can range from fairly minor to catastrophic, and can '
+        'possibly harm human life and property downstream from the failure. '),
     'notes': [
         {
             'item_category': 'dam_break_general',
