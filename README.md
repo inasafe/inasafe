@@ -7,7 +7,7 @@ InaSAFE is free software that allows disaster managers to study realistic
 natural hazard impact scenarios for better planning, preparedness and
 response activities. InaSAFE is a plugin for [QGIS](http://qgis.org).
 
-For more information about InaSAFE and its documentation please visit [inasafe.org] (http://www.inasafe.org).
+For more information about InaSAFE and its documentation please visit [inasafe.org](http://www.inasafe.org).
 
 The latest source code is available at
 [https://github.com/inasafe/inasafe](https://github.com/inasafe/inasafe),
@@ -80,11 +80,9 @@ History
 * In March 2011, Risk In A Box (the predecessor to InaSAFE) was built as a web 
   application running as a GeoNode Plugin.
 * InaSAFE development as a QGIS plugin started in January 2012.
-* In October 2012, version 1.0 of InaSAFE was launched at the [5th Asian ministerial conference on disaster risk reduction (AMCDRR)](
-  http://www.unisdr.org/we/inform/events/23540) where it was demonstrated to 
+* In October 2012, version 1.0 of InaSAFE was launched at the [5th Asian ministerial conference on disaster risk reduction (AMCDRR)](http://www.unisdr.org/we/inform/events/23540) where it was demonstrated to 
   the then president of Indonesia, Susilo Bambang Yudhoyono who praised the project.
-* On 30 Jan 2013, InaSAFE was awarded the prestigious [Black Duck Open Source.
-  Rookie of the Year Award] (https://www.blackducksoftware.com/open-source-rookies).
+* On 30 Jan 2013, InaSAFE was awarded the prestigious [Black Duck Open Source Rookie of the Year Award](https://www.blackducksoftware.com/open-source-rookies).
 * Version 2.0 of InaSAFE was released in January, 2014.
 * Version 3.0 was released in March 2015 which added support
   for using the QGIS API within impact functions.
@@ -139,10 +137,9 @@ such damages.
 
 Thank you
 =========
-[![PyCharm](https://cloud.githubusercontent.com/assets/1421861/16826865/4cde910c-49ab-11e6-95ae-48cf21f3a69f.png)]
-(https://www.jetbrains.com/pycharm) 
+[![PyCharm](https://cloud.githubusercontent.com/assets/1421861/16826865/4cde910c-49ab-11e6-95ae-48cf21f3a69f.png)](https://www.jetbrains.com/pycharm) 
 
-We use [PyCharm] (https://www.jetbrains.com/pycharm) for our python development work 
+We use [PyCharm](https://www.jetbrains.com/pycharm) for our python development work 
 
 JetBrains kindly sponsor the licenses for InaSAFE under their 'free for 
 open source projects' programme. Please support them by buying a professional 
