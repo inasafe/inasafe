@@ -140,10 +140,11 @@ class TestAggregateSummary(unittest.TestCase):
         # expected number of fields:
         # - one field for each hazard class
         # - 2 fields for analysis id and analysis name
-        # - 4 fields for total affected, not_affected, not exposed and total
+        # - 5 fields for total affected, not_affected, not exposed, exposed
+        # and total
         self.assertEqual(
             layer.fields().count(),
-            len(unique_hazard) + number_of_fields + 4
+            len(unique_hazard) + number_of_fields + 5
         )
 
     def test_exposure_summary_table(self):

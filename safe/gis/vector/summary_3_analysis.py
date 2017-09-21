@@ -16,6 +16,7 @@ from safe.definitions.fields import (
     total_affected_field,
     total_not_affected_field,
     total_not_exposed_field,
+    total_exposed_field,
     total_field,
     hazard_count_field,
 )
@@ -136,6 +137,7 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
     counts = [
         total_affected_field,
         total_not_affected_field,
+        total_exposed_field,
         total_not_exposed_field,
         total_field]
 
@@ -168,21 +170,25 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
             else:
                 not_affected_sum += sum
 
-        # Affected field
+        # Total Affected field
         analysis.changeAttributeValue(
             area.id(), shift + len(unique_hazard), affected_sum)
 
-        # Not affected field
+        # Total Not affected field
         analysis.changeAttributeValue(
             area.id(), shift + len(unique_hazard) + 1, not_affected_sum)
 
-        # Not exposed field
+        # Total Exposed field
         analysis.changeAttributeValue(
-            area.id(), shift + len(unique_hazard) + 2, not_exposed_sum)
+            area.id(), shift + len(unique_hazard) + 2, total - not_exposed_sum)
+
+        # Total Not exposed field
+        analysis.changeAttributeValue(
+            area.id(), shift + len(unique_hazard) + 3, not_exposed_sum)
 
         # Total field
         analysis.changeAttributeValue(
-            area.id(), shift + len(unique_hazard) + 3, total)
+            area.id(), shift + len(unique_hazard) + 4, total)
 
         # Any absolute postprocessors
         for i, field in enumerate(absolute_values.itervalues()):
@@ -190,7 +196,7 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
                 all='all'
             )
             analysis.changeAttributeValue(
-                area.id(), shift + len(unique_hazard) + 4 + i, value)
+                area.id(), shift + len(unique_hazard) + 5 + i, value)
 
     # Sanity check ± 1 to the result. Disabled for now as it seems ± 1 is not
     # enough. ET 13/02/17
