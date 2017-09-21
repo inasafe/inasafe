@@ -1956,6 +1956,34 @@ total_not_exposed_field = {
     'replace_null': False
 }
 
+# Total exposed field
+total_exposed_field = {
+    'key': 'total_exposed_field',
+    'name': tr('Total Exposed'),
+    'field_name': 'total_exposed',
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': 2,
+    'absolute': True,
+    'description': tr(
+        'The total exposed field stores the cumulative total number of '
+        'exposed features or entities.'),
+    'help_text': tr(
+        'The total exposed field is added to the analysis layer, '
+        'aggregate impact layer and aggregate hazard impact layer during the '
+        'impact analysis. It represents the cumulative count of exposed '
+        'exposure features (e.g. buildings) or entities (e.g. people) for '
+        'each area.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
 # # # # # # # # # #
 # Count, dynamics, outputs (Absolute values)
 # # # # # # # # # #
@@ -2447,6 +2475,7 @@ analysis_fields = [
     total_affected_field,
     total_not_affected_field,
     total_not_exposed_field,
+    total_exposed_field,
     total_field
 ]
 
