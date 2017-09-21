@@ -22,7 +22,7 @@ from safe.definitions.fields import (
     total_not_affected_field,
     total_affected_field,
     total_not_exposed_field,
-    total_field)
+    total_exposed_field)
 from safe.definitions.field_groups import (
     age_displaced_count_group,
     gender_displaced_count_group)
@@ -213,9 +213,9 @@ class TestImpactReport(unittest.TestCase):
                         },
                         {
                             'value': '5',
-                            'name': u'Total',
+                            'name': u'Total Exposed',
                             'as_header': True,
-                            'key': total_field['key']
+                            'key': total_exposed_field['key']
                         }
                     ],
                     'value_label': u'Count'

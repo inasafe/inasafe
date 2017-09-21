@@ -129,8 +129,8 @@ class TestEarthquakeReport(unittest.TestCase):
                         {'value': 0, 'name': u'I', 'key': 'I'},
                         {
                             'as_header': True,
-                            'key': 'total_field',
-                            'name': u'Total',
+                            'key': 'total_exposed_field',
+                            'name': u'Total Exposed',
                             'value': '200'
                         }
                     ],
