@@ -22,6 +22,9 @@ from qgis.core import (
 
 from safe.definitions.exposure import exposure_population
 from safe.definitions.layer_purposes import (
+    layer_purpose_hazard,
+    layer_purpose_exposure,
+    layer_purpose_aggregation,
     layer_purpose_exposure_summary,
     layer_purpose_aggregate_hazard_impacted,
     layer_purpose_aggregation_summary,
@@ -678,13 +681,13 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 # continue ignoring this layer
                 continue
 
-            if layer_purpose == 'hazard':
+            if layer_purpose == layer_purpose_hazard['key']:
                 add_ordered_combo_item(
                     self.hazard_layer_combo, title, source)
-            elif layer_purpose == 'exposure':
+            elif layer_purpose == layer_purpose_exposure['key']:
                 add_ordered_combo_item(
                     self.exposure_layer_combo, title, source)
-            elif layer_purpose == 'aggregation':
+            elif layer_purpose == layer_purpose_aggregation['key']:
                 add_ordered_combo_item(
                     self.aggregation_layer_combo, title, source)
 
@@ -1464,7 +1467,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 continue
             write_project_variable(key, value)
 
-    def remove_provenance_project_variables(self):
+    @staticmethod
+    def remove_provenance_project_variables():
         """Removing variables from provenance data."""
         project_context_scope = QgsExpressionContextUtils.projectScope()
         existing_variable_names = project_context_scope.variableNames()
