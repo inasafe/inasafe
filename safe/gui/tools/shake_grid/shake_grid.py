@@ -848,21 +848,26 @@ class ShakeGrid(object):
             'depth': self.depth,
             'description': self.description,
             'location': self.location,
-            'day': self.day,
-            'month': self.month,
-            'year': self.year,
-            'time': self.time,
-            'hour': self.hour,
-            'minute': self.minute,
-            'second': self.second,
+            # 'day': self.day,
+            # 'month': self.month,
+            # 'year': self.year,
+            # 'time': self.time,
+            # 'hour': self.hour,
+            # 'minute': self.minute,
+            # 'second': self.second,
             'time_zone': self.time_zone,
             'x_minimum': self.x_minimum,
             'x_maximum': self.x_maximum,
             'y_minimum': self.y_minimum,
             'y_maximum': self.y_maximum,
         }
-        from pprint import pprint
-        pprint(extra_keywords)
+        # Delete empty element.
+        empty_keys = []
+        for key, value in extra_keywords.items():
+            if value is None:
+                empty_keys.append(key)
+        for empty_key in empty_keys:
+            extra_keywords.pop(empty_key)
         keywords = {
             'hazard': hazard_earthquake['key'],
             'hazard_category': hazard_category_single_event['key'],
