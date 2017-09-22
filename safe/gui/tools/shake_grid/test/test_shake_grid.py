@@ -34,7 +34,7 @@ SHAKE_GRID = ShakeGrid('Test Title', 'Test Source', GRID_PATH)
 
 
 class TestShakeGrid(unittest.TestCase):
-    
+
     """Class to test ShakeGrid."""
 
     @classmethod
