@@ -238,7 +238,7 @@ analysis_detail_component = {
         'breakdown_header_class_format': tr('{exposure} class'),
         'header': tr('Analysis Detail'),
         'table_header_format': tr(
-            'Estimated {title} {unit} by {exposure} type'),
+            'Estimated {title} {unit} affected by {exposure} type'),
         'notes': [],
         'extra_table_header_format': tr(
             'Estimated loss by affected {exposure} type'),
@@ -351,7 +351,7 @@ aggregation_result_component = {
         'header': tr('Aggregation Result'),
         'notes': [],
         'table_header_format': tr(
-            'Estimated {title} {unit} by aggregation area'),
+            'Estimated {title} {unit} affected by aggregation area'),
         'aggregation_area_default_header': tr('Aggregation area'),
         'total_header': tr('Total'),
         'total_in_aggregation_header': tr('Total'),

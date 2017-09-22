@@ -389,7 +389,7 @@ class TestImpactReport(unittest.TestCase):
                 }
             },
             'detail_table': {
-                'table_header': u'Estimated Number of structures by '
+                'table_header': u'Estimated Number of structures affected by '
                                 u'Structure type',
                 'headers': [
                     u'Structure type',
@@ -552,7 +552,7 @@ class TestImpactReport(unittest.TestCase):
         expected_context = {
             'notes': [],
             'aggregation_result': {
-                'table_header': u'Estimated Number of structures by '
+                'table_header': u'Estimated Number of structures affected by '
                                 u'aggregation area',
                 'header_label': u'Aggregation area',
                 'rows': [
@@ -1115,7 +1115,7 @@ class TestImpactReport(unittest.TestCase):
 
         expected_context = {
             'aggregation_result': {
-                'table_header': u'Estimated Number of structures by '
+                'table_header': u'Estimated Number of structures affected by '
                                 u'aggregation area',
                 'header_label': u'Aggregation area',
                 'rows': [
