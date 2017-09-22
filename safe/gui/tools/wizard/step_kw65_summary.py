@@ -2,6 +2,7 @@
 """InaSAFE Wizard Step Keyword Summary."""
 
 import re
+import os
 
 from safe import messaging as m
 from safe.utilities.i18n import tr
