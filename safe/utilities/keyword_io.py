@@ -254,7 +254,8 @@ class KeywordIO(QObject):
         if keyword in [
                 'value_map',
                 'inasafe_fields',
-                'inasafe_default_values']:
+                'inasafe_default_values',
+                'extra_keywords']:
             value = self._dict_to_row(value)
         elif keyword == 'value_maps':
             value = self._value_maps_row(value)
@@ -460,13 +461,15 @@ class KeywordIO(QObject):
         if isinstance(keyword_value, basestring):
             keyword_value = literal_eval(keyword_value)
         table = m.Table(style_class='table table-condensed')
-        for key, value in keyword_value.items():
+        # Sorting the key
+        for key in sorted(keyword_value.keys()):
+            value = keyword_value[key]
             row = m.Row()
             # First the heading
             if definition(key):
                 name = definition(key)['name']
             else:
-                name = tr(key.capitalize())
+                name = tr(key.replace('_', ' ').capitalize())
             row.add(m.Cell(m.ImportantText(name)))
             # Then the value. If it contains more than one element we
             # present it as a bullet list, otherwise just as simple text

@@ -1,21 +1,5 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
-- **Converter Test Cases.**
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
-
-__author__ = 'ismail@kartoza.com'
-__date__ = '27/03/2013'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
+"""Test Shake Grid."""
 
 import os
 import unittest
@@ -25,10 +9,16 @@ from qgis.core import QgsVectorLayer
 from safe.common.utilities import unique_filename, temp_dir
 from safe.test.utilities import standard_data_path, get_qgis_app
 from safe.gui.tools.shake_grid.shake_grid import (
-    ShakeGrid,
-    convert_mmi_data)
+    ShakeGrid, convert_mmi_data)
+from safe.utilities.metadata import read_iso19115_metadata
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
+__copyright__ = "Copyright 2017, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
+
 # Parse the grid once and use it for all tests to fasten the tests
 # Use temp directory to do the testing
 SOURCE_PATH = standard_data_path(
@@ -44,6 +34,7 @@ SHAKE_GRID = ShakeGrid('Test Title', 'Test Source', GRID_PATH)
 
 
 class TestShakeGrid(unittest.TestCase):
+    
     """Class to test ShakeGrid."""
 
     @classmethod
@@ -173,6 +164,9 @@ class TestShakeGrid(unittest.TestCase):
         # Check the keywords file
         expected_keywords = raster_path.replace('tif', 'xml')
         self.assertTrue(os.path.exists(expected_keywords))
+        # Check that extra_keywords exists
+        keywords = read_iso19115_metadata(raster_path)
+        self.assertIn('extra_keywords', keywords.keys())
 
     def test_mmi_to_shapefile(self):
         """Check we can convert the shake event to a shapefile."""
