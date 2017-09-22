@@ -638,9 +638,7 @@ flood_petabencana_hazard_classes = {
             'name': tr('Use caution'),
             'affected': False,
             'description': tr(
-                'No water encountered above ground height but there are may '
-                'be floods in surrounding areas and you should use caution '
-                'when moving around in this area.'),
+                'Water is present but depth is not confirmed.'),
             'fatality_rate': None,
             # displacement rate estimated from DMI analysis of historical
             # flood data and IDP numbers
