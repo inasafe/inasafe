@@ -29,6 +29,7 @@ changelog=
     Version 4.2.3
     - Fix failed to assign keyword by using IFCW
     - Fix wrong layer intersection checking in IFCW
+    - Earthquake fatality model selection
     Version 4.2.2
     - Fix fail to install inasafe from plugin manager
     Version 4.2.1

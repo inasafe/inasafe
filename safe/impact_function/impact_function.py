@@ -1394,12 +1394,11 @@ class ImpactFunction(object):
             if self.exposure.keywords.get('exposure') == 'population':
                 earthquake_on_population = True
         if not earthquake_on_population:
+            # This is not a EQ raster on raster population. We need to set it
+            # to None as we don't want notes specific to EQ raster on
+            # population.
             self._earthquake_function = None
 
-        LOGGER.info('Starting a GIS overlay analysis')
-        # This is not a EQ raster on raster population. We need to set it to
-        # None as we don't want notes specific to EQ raster on population.
-        self._earthquake_function = None
         step_count = len(analysis_steps)
 
         self._performance_log = profiling_log()
