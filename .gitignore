@@ -62,3 +62,6 @@ venv
 scripts/build.nsi
 gdalwmscache
 safe/metadata/test/inasafe/
+# Generated file
+*metadata.db
+safe/gui/tools/wizard/test/inasafe/metadata.db
