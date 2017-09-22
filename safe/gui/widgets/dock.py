@@ -44,6 +44,7 @@ from safe.definitions.constants import (
     PREPARE_FAILED_INSUFFICIENT_OVERLAP_REQUESTED_EXTENT,
     PREPARE_FAILED_BAD_LAYER,
     PREPARE_SUCCESS,
+    entire_area_item_aggregation,
 )
 from safe.definitions.provenance import provenance_list
 from safe.definitions.reports.infographic import map_overview
@@ -641,11 +642,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
             #    store uuid in user property of list widget for layers
 
-            name = layer.name()
-            source = layer.id()
+            layer_id = layer.id()
+
             # See if there is a title for this layer, if not,
             # fallback to the layer's filename
-
             # noinspection PyBroadException
             try:
                 title = self.keyword_io.read_keywords(layer, 'title')
@@ -683,17 +683,18 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
             if layer_purpose == layer_purpose_hazard['key']:
                 add_ordered_combo_item(
-                    self.hazard_layer_combo, title, source)
+                    self.hazard_layer_combo, title, layer_id)
             elif layer_purpose == layer_purpose_exposure['key']:
                 add_ordered_combo_item(
-                    self.exposure_layer_combo, title, source)
+                    self.exposure_layer_combo, title, layer_id)
             elif layer_purpose == layer_purpose_aggregation['key']:
                 add_ordered_combo_item(
-                    self.aggregation_layer_combo, title, source)
+                    self.aggregation_layer_combo, title, layer_id)
 
         self.unblock_signals()
         # handle the aggregation_layer_combo combo
-        self.aggregation_layer_combo.insertItem(0, self.tr('Entire area'))
+        self.aggregation_layer_combo.insertItem(
+            0, entire_area_item_aggregation)
         self.aggregation_layer_combo.setCurrentIndex(0)
         self.toggle_aggregation_layer_combo()
 

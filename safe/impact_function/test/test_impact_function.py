@@ -113,6 +113,7 @@ from safe.utilities.unicode import byteify
 from safe.utilities.gis import wkt_to_rectangle
 from safe.utilities.utilities import readable_os_version
 from safe.impact_function.impact_function import ImpactFunction
+from safe.impact_function.impact_function_utilities import check_input_layer
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -225,9 +226,7 @@ class TestImpactFunction(unittest.TestCase):
         # noinspection PyCallingNonCallable
         exposure_layer = QgsVectorLayer(exposure_path, 'Building', 'ogr')
 
-        impact_function = ImpactFunction()
-        impact_function.exposure = exposure_layer
-        impact_function._check_layer(impact_function.exposure, 'exposure')
+        check_input_layer(exposure_layer, 'exposure')
 
         expected_inasafe_fields = {
             exposure_type_field['key']: 'TYPE',
@@ -235,7 +234,7 @@ class TestImpactFunction(unittest.TestCase):
         self.assertDictEqual(
             exposure_layer.keywords['inasafe_fields'], expected_inasafe_fields)
 
-        fields = impact_function.exposure.dataProvider().fieldNameMap().keys()
+        fields = exposure_layer.dataProvider().fieldNameMap().keys()
         self.assertIn(
             exposure_layer.keywords['inasafe_fields']['exposure_type_field'],
             fields

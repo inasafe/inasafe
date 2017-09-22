@@ -291,7 +291,10 @@ def add_layer_to_canvas(layer, name, impact_function):
     group_analysis = root.findGroup(group_name)
     group_analysis.setVisible(Qt.Checked)
 
-    layer.setLayerName(name)
+    if qgis_version() >= 21800:
+        layer.setName(name)
+    else:
+        layer.setLayerName(name)
 
     QgsMapLayerRegistry.instance().addMapLayer(layer, False)
     layer_node = group_analysis.addLayer(layer)

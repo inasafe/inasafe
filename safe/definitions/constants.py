@@ -28,6 +28,9 @@ qvariant_numbers = qvariant_whole_numbers + [
     QVariant.Double,
 ]
 
+# Dock
+entire_area_item_aggregation = tr('Entire area')
+
 # Extent selector
 EXPOSURE = 'Exposure'
 HAZARD_EXPOSURE = 'HazardExposure'

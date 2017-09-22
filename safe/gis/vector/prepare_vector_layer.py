@@ -48,7 +48,7 @@ from safe.definitions.post_processors import post_processor_size
 from safe.utilities.i18n import tr
 from safe.utilities.profiling import profile
 from safe.utilities.metadata import (
-    active_thresholds_value_maps, active_classification)
+    active_thresholds_value_maps, active_classification, copy_layer_keywords)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -91,7 +91,7 @@ def prepare_vector_layer(layer, callback=None):
         output_layer_name, layer.geometryType(), layer.crs(), layer.fields())
 
     # We transfer keywords to the output.
-    cleaned.keywords = layer.keywords
+    cleaned.keywords = copy_layer_keywords(layer.keywords)
 
     copy_layer(layer, cleaned)
     _remove_features(cleaned)
