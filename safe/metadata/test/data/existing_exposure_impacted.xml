@@ -172,30 +172,33 @@
       <gmd:supplementalInformation>
         <inasafe_keywords/>
         <inasafe>
-          <scale>
-            <gco:CharacterString/>
-          </scale>
-          <keyword_version>
-            <gco:CharacterString/>
-          </keyword_version>
           <layer_mode>
             <gco:CharacterString/>
           </layer_mode>
-          <source>
+          <scale>
             <gco:CharacterString/>
-          </source>
+          </scale>
+          <inasafe_extra_keywords>
+            <gco:Dictionary/>
+          </inasafe_extra_keywords>
           <hazard_keywords>
             <gco:Dictionary/>
           </hazard_keywords>
-          <inasafe_fields>
-            <gco:Dictionary/>
-          </inasafe_fields>
+          <keyword_version>
+            <gco:CharacterString/>
+          </keyword_version>
           <layer_geometry>
             <gco:CharacterString/>
           </layer_geometry>
+          <source>
+            <gco:CharacterString/>
+          </source>
           <layer_purpose>
             <gco:CharacterString/>
           </layer_purpose>
+          <inasafe_fields>
+            <gco:Dictionary/>
+          </inasafe_fields>
           <inasafe_default_values>
             <gco:Dictionary/>
           </inasafe_default_values>

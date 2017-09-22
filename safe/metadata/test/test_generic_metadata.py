@@ -35,6 +35,8 @@ from safe.metadata.test import (
 
 class TestGenericMetadata(TestCase):
 
+    maxDiff = None
+
     def test_json_write(self):
         with open(EXISTING_GENERIC_JSON) as f:
             expected_json = f.read()
@@ -73,7 +75,7 @@ class TestGenericMetadata(TestCase):
         with open(EXISTING_GENERIC_JSON) as f:
             expected_metadata = f.read()
 
-        self.assertEquals(expected_metadata, metadata.json)
+        self.assertMultiLineEqual(expected_metadata, metadata.json)
 
         # With filtering
         FILTERED_PATH = (

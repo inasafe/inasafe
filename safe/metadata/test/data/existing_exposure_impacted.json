@@ -118,6 +118,16 @@
       "value": null,
       "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/inasafe_default_values/gco:Dictionary"
     },
+    "inasafe_extra_keywords": {
+      "allowed_python_types": [
+        "dict",
+        "NoneType"
+      ],
+      "name": "inasafe_extra_keywords",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/inasafe_extra_keywords/gco:Dictionary"
+    },
     "inasafe_fields": {
       "allowed_python_types": [
         "dict",

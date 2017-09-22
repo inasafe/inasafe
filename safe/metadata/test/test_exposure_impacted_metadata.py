@@ -46,6 +46,7 @@ from safe.metadata.test import (
 
 
 class TestImpactMetadata(TestCase):
+    maxDiff = None
     def test_metadata_provenance(self):
         metadata = self.generate_test_metadata()
         self.assertEqual(metadata.provenance.count, 4)
@@ -168,7 +169,7 @@ class TestImpactMetadata(TestCase):
         read_tmp_metadata = OutputLayerMetadata(
             EXISTING_IMPACT_FILE, json_uri=json_tmp_file
         )
-        self.assertEquals(expected_metadata, read_tmp_metadata.xml)
+        self.assertMultiLineEqual(expected_metadata, read_tmp_metadata.xml)
 
     def generate_test_metadata(self):
         # if you change this you need to update IMPACT_TEST_FILE_JSON
