@@ -46,7 +46,11 @@ from safe.metadata.test import (
 
 
 class TestImpactMetadata(TestCase):
+
+    """Test for Impact Data."""
+
     maxDiff = None
+
     def test_metadata_provenance(self):
         metadata = self.generate_test_metadata()
         self.assertEqual(metadata.provenance.count, 4)
