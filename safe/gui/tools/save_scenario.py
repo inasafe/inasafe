@@ -14,6 +14,7 @@ from PyQt4 import QtGui
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QDialog, QFileDialog
 
+from safe.gui.gui_utilities import layer_from_combo
 from safe.utilities.i18n import tr
 from safe.utilities.gis import extent_to_array, viewport_geo_array
 from safe.utilities.keyword_io import KeywordIO
@@ -62,9 +63,10 @@ class SaveScenarioDialog(QDialog):
         2. self.hazard_layer must be not None
         3. self.function_id is not an empty string or None
         """
-        self.exposure_layer = self.dock.get_exposure_layer()
-        self.hazard_layer = self.dock.get_hazard_layer()
-        self.aggregation_layer = self.dock.get_aggregation_layer()
+        self.exposure_layer = layer_from_combo(self.dock.exposure_layer_combo)
+        self.hazard_layer = layer_from_combo(self.dock.hazard_layer_combo)
+        self.aggregation_layer = layer_from_combo(
+            self.dock.aggregation_layer_combo)
 
         is_valid = True
         warning_message = None

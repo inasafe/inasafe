@@ -239,34 +239,6 @@ def impact_attribution(keywords, inasafe_flag=False):
     return report
 
 
-def add_ordered_combo_item(combo, text, data=None):
-    """Add a combo item ensuring that all items are listed alphabetically.
-
-    Although QComboBox allows you to set an InsertAlphabetically enum
-    this only has effect when a user interactively adds combo items to
-    an editable combo. This we have this little function to ensure that
-    combos are always sorted alphabetically.
-
-    :param combo: Combo box receiving the new item.
-    :type combo: QComboBox
-
-    :param text: Display text for the combo.
-    :type text: str
-
-    :param data: Optional UserRole data to be associated with the item.
-    :type data: QVariant, str
-    """
-    size = combo.count()
-    for combo_index in range(0, size):
-        item_text = combo.itemText(combo_index)
-        # see if text alphabetically precedes item_text
-        if cmp(text.lower(), item_text.lower()) < 0:
-            combo.insertItem(combo_index, text, data)
-            return
-        # otherwise just add it to the end
-    combo.insertItem(size, text, data)
-
-
 def open_in_browser(file_path):
     """Open a file in the default web browser.
 
