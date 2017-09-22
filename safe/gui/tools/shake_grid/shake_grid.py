@@ -1,23 +1,5 @@
-# -*- coding: utf-8 -*-
-"""**Functionality related to convert format file.**
-
-InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-Initially this was adapted from shake_event.py and now realtime uses this.
-"""
-
-__author__ = 'ismail@kartoza.com'
-__version__ = '0.5.0'
-__date__ = '11/02/2013'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
+# coding=utf-8
+"""A converter for USGS shakemap grid.xml files."""
 
 import os
 import sys
@@ -46,11 +28,11 @@ from safe.common.exceptions import (
     GridXmlFileNotFoundError,
     GridXmlParseError,
     ContourCreationError,
-    InvalidLayerError)
+    InvalidLayerError,
+    CallGDALError)
 from safe.utilities.styling import mmi_colour
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.i18n import tr
-from safe.common.exceptions import CallGDALError
 from safe.definitions.hazard import hazard_earthquake
 from safe.definitions.hazard_category import hazard_category_single_event
 from safe.definitions.hazard_classifications import earthquake_mmi_scale
@@ -59,6 +41,11 @@ from safe.definitions.layer_modes import layer_mode_continuous
 from safe.definitions.layer_purposes import layer_purpose_hazard
 from safe.definitions.units import unit_mmi
 from safe.definitions.versions import inasafe_keyword_version
+
+__copyright__ = "Copyright 2017, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -75,6 +62,7 @@ def data_dir():
 
 
 class ShakeGrid(object):
+
     """A converter for USGS shakemap grid.xml files to geotiff."""
 
     def __init__(
@@ -458,8 +446,7 @@ class ShakeGrid(object):
             else:
                 raise Exception(message)
 
-    def mmi_to_raster(
-            self, force_flag=False, algorithm='nearest'):
+    def mmi_to_raster(self, force_flag=False, algorithm='nearest'):
         """Convert the grid.xml's mmi column to a raster using gdal_grid.
 
         A geotiff file will be created.
@@ -854,6 +841,28 @@ class ShakeGrid(object):
             classes[item['key']] = [
                 item['numeric_default_min'], item['numeric_default_max']]
 
+        extra_keywords = {
+            'latitude': self.latitude,
+            'longitude': self.longitude,
+            'magnitude': self.magnitude,
+            'depth': self.depth,
+            'description': self.description,
+            'location': self.location,
+            'day': self.day,
+            'month': self.month,
+            'year': self.year,
+            'time': self.time,
+            'hour': self.hour,
+            'minute': self.minute,
+            'second': self.second,
+            'time_zone': self.time_zone,
+            'x_minimum': self.x_minimum,
+            'x_maximum': self.x_maximum,
+            'y_minimum': self.y_minimum,
+            'y_maximum': self.y_maximum,
+        }
+        from pprint import pprint
+        pprint(extra_keywords)
         keywords = {
             'hazard': hazard_earthquake['key'],
             'hazard_category': hazard_category_single_event['key'],
@@ -863,7 +872,8 @@ class ShakeGrid(object):
             'layer_purpose': layer_purpose_hazard['key'],
             'continuous_hazard_unit': unit_mmi['key'],
             'classification': earthquake_mmi_scale['key'],
-            'thresholds': classes
+            'thresholds': classes,
+            'inasafe_extra_keywords': extra_keywords
         }
 
         if self.algorithm_name:

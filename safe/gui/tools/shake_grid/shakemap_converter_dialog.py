@@ -1,6 +1,5 @@
 # coding=utf-8
-
-"""Importer for shakemap grid.xml files."""
+"""A dialog for converting grid.xml file."""
 
 import logging
 import os
@@ -30,7 +29,6 @@ from safe.definitions.hazard_classifications import earthquake_mmi_scale
 INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
 LOGGER = logging.getLogger('InaSAFE')
 FORM_CLASS = get_ui_class('shakemap_importer_dialog_base.ui')
-
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -175,6 +173,7 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         else:
             algorithm = 'invdist'
 
+        # noinspection PyUnresolvedReferences
         QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
 
         file_name = convert_mmi_data(
@@ -200,6 +199,7 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         else:
             LOGGER.debug("Failed to load")
 
+        # noinspection PyUnresolvedReferences
         QtGui.qApp.restoreOverrideCursor()
 
         if self.load_result.isChecked():
