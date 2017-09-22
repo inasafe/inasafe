@@ -256,6 +256,8 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
             impact_function.use_selected_features_only = (
                 setting('useSelectedFeaturesOnly', False, bool))
         else:
+            # self.extent.crs is the map canvas CRS.
+            impact_function.crs = self.extent.crs
             mode = setting('analysis_extents_mode')
             if self.extent.user_extent:
                 # This like a hack to transform a geometry to a rectangle.
@@ -263,12 +265,10 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
                 # impact_function.requested_extent needs a QgsRectangle.
                 wkt = self.extent.user_extent.exportToWkt()
                 impact_function.requested_extent = wkt_to_rectangle(wkt)
-                impact_function.requested_extent_crs = self.extent.crs
 
             elif mode == HAZARD_EXPOSURE_VIEW:
                 impact_function.requested_extent = (
                     self.iface.mapCanvas().extent())
-                impact_function.requested_extent_crs = self.extent.crs
 
             elif mode == EXPOSURE:
                 impact_function.use_exposure_view_only = True

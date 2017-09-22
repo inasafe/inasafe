@@ -1259,6 +1259,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 self.aggregation_question_label.setText(
                     self.label_without_selection)
         else:
+            # self.extent.crs is the map canvas CRS.
+            impact_function.crs = self.extent.crs
             self.aggregation_question_label.setText(
                 self.label_without_selection)
             mode = setting('analysis_extents_mode')
@@ -1268,7 +1270,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 # impact_function.requested_extent needs a QgsRectangle.
                 wkt = self.extent.user_extent.exportToWkt()
                 impact_function.requested_extent = wkt_to_rectangle(wkt)
-                impact_function.requested_extent_crs = self.extent.crs
 
             elif mode == EXPOSURE:
                 impact_function.use_exposure_view_only = True
@@ -1276,7 +1277,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             elif mode == HAZARD_EXPOSURE_VIEW:
                 impact_function.requested_extent = (
                     self.iface.mapCanvas().extent())
-                impact_function.requested_extent_crs = self.extent.crs
 
         status, message = impact_function.prepare()
         if status == PREPARE_SUCCESS:

@@ -474,7 +474,7 @@ class BatchDialog(QDialog, FORM_CLASS):
                     parameters[layer_purpose_aggregation['key']])
             elif parameters['extent']:
                 impact_function.requested_extent = parameters['extent']
-                impact_function.requested_extent_crs = parameters['crs']
+                impact_function.crs = parameters['crs']
             prepare_status, prepare_message = impact_function.prepare()
             if prepare_status == PREPARE_SUCCESS:
                 LOGGER.info('Impact function ready')
