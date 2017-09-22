@@ -153,12 +153,12 @@ class BaseMetadata(object):
             'inasafe/'
             'inasafe_default_values/'
             'gco:Dictionary'),
-        'inasafe_extra_keywords': (
+        'extra_keywords': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
             'inasafe/'
-            'inasafe_extra_keywords/'
+            'extra_keywords/'
             'gco:Dictionary'),
     }
 

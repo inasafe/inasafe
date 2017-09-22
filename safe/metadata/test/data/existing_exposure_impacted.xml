@@ -172,15 +172,15 @@
       <gmd:supplementalInformation>
         <inasafe_keywords/>
         <inasafe>
-          <layer_mode>
-            <gco:CharacterString/>
-          </layer_mode>
           <scale>
             <gco:CharacterString/>
           </scale>
-          <inasafe_extra_keywords>
+          <layer_mode>
+            <gco:CharacterString/>
+          </layer_mode>
+          <provenance_data>
             <gco:Dictionary/>
-          </inasafe_extra_keywords>
+          </provenance_data>
           <hazard_keywords>
             <gco:Dictionary/>
           </hazard_keywords>
@@ -202,9 +202,9 @@
           <inasafe_default_values>
             <gco:Dictionary/>
           </inasafe_default_values>
-          <provenance_data>
+          <extra_keywords>
             <gco:Dictionary/>
-          </provenance_data>
+          </extra_keywords>
           <aggregation_keywords>
             <gco:Dictionary/>
           </aggregation_keywords>

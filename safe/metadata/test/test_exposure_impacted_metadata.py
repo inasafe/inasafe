@@ -134,14 +134,14 @@ class TestImpactMetadata(TestCase):
         with open(filename) as f:
             written_json = f.read()
 
-        self.assertEquals(expected_json, written_json)
+        self.assertMultiLineEqual(expected_json, written_json)
 
     def test_json_read(self):
         metadata = OutputLayerMetadata(EXISTING_IMPACT_FILE)
         with open(EXISTING_IMPACT_JSON) as f:
             expected_metadata = f.read()
 
-        self.assertEquals(expected_metadata, metadata.json)
+        self.assertMultiLineEqual(expected_metadata, metadata.json)
 
     def test_invalid_json_read(self):
         with self.assertRaises(MetadataReadError):
