@@ -99,8 +99,6 @@ def inasafe_place_value_name(number, feature, parent):
     value, unit = denomination(rounded_number, 1000)
     if not unit:
         return None
-    elif value > 1:
-        return unit['plural_name']
     else:
         return unit['name']
 

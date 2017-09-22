@@ -327,7 +327,7 @@ exposure_structure = {
     'layer_modes': [layer_mode_classified],
     'display_not_exposed': True,
     'use_population_rounding': False,
-    'layer_legend_title': tr('Number of buildings'),
+    'layer_legend_title': tr('Number of structures'),
     'measure_question': tr('how many')
 }
 exposure_place = {

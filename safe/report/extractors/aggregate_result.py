@@ -57,6 +57,10 @@ def aggregation_result_extractor(impact_report, component_metadata):
     aggregation_summary_fields = aggregation_summary.keywords[
         'inasafe_fields']
     debug_mode = impact_report.impact_function.debug_mode
+    use_aggregation = bool(impact_report.impact_function.provenance[
+                               'aggregation_layer'])
+    if not use_aggregation:
+        return context
 
     """Filtering report sections"""
 

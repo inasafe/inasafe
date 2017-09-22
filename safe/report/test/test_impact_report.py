@@ -22,7 +22,7 @@ from safe.definitions.fields import (
     total_not_affected_field,
     total_affected_field,
     total_not_exposed_field,
-    total_field)
+    total_exposed_field)
 from safe.definitions.field_groups import (
     age_displaced_count_group,
     gender_displaced_count_group)
@@ -191,7 +191,7 @@ class TestImpactReport(unittest.TestCase):
         expected_context = {
             'header': u'General Report',
             'table_header': (
-                u'Estimated Number of buildings affected per hazard zone'),
+                u'Estimated Number of structures affected per hazard zone'),
             'summary': [
                 {
                     'header_label': u'Hazard Zone',
@@ -212,10 +212,10 @@ class TestImpactReport(unittest.TestCase):
                             'key': 'low'
                         },
                         {
-                            'value': '9',
-                            'name': u'Total',
+                            'value': '5',
+                            'name': u'Total Exposed',
                             'as_header': True,
-                            'key': total_field['key']
+                            'key': total_exposed_field['key']
                         }
                     ],
                     'value_label': u'Count'
@@ -389,7 +389,7 @@ class TestImpactReport(unittest.TestCase):
                 }
             },
             'detail_table': {
-                'table_header': u'Estimated Number of buildings by '
+                'table_header': u'Estimated Number of structures by '
                                 u'Structure type',
                 'headers': [
                     u'Structure type',
@@ -552,7 +552,7 @@ class TestImpactReport(unittest.TestCase):
         expected_context = {
             'notes': [],
             'aggregation_result': {
-                'table_header': u'Estimated Number of buildings by '
+                'table_header': u'Estimated Number of structures by '
                                 u'aggregation area',
                 'header_label': u'Aggregation area',
                 'rows': [
@@ -1031,40 +1031,45 @@ class TestImpactReport(unittest.TestCase):
             aggregation_result_component['key'])
         """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
 
-        expected_context = {
-            'aggregation_result': {
-                'table_header': u'Estimated Number of buildings by '
-                                u'aggregation area',
-                'header_label': u'Aggregation area',
-                'rows': [
-                    {
-                        'type_values': ['21', '2', '1', '4', '4', '1'],
-                        'total': '33',
-                        'name': u'Entire Area'
-                    }
-                ],
-                'type_header_labels': [
-                    u'Residential',
-                    u'Education',
-                    u'Health',
-                    u'Place of worship',
-                    u'Government',
-                    u'Commercial',
-                ],
-                'total_in_aggregation_area_label': u'Total',
-                'total_label': u'Total',
-                'total_all': '33',
-                'type_total_values': ['21', '2', '1', '4', '4', '1']
-            },
-            'header': u'Aggregation Result',
-            'notes': []
-        }
+        # We comment below code because currently we want to remove aggregation
+        # table if there is no aggregation area used. We might want to use this
+        # test later if somehow we change our mind.
+
+        # expected_context = {
+        #     'aggregation_result': {
+        #         'table_header': u'Estimated Number of structures by '
+        #                         u'aggregation area',
+        #         'header_label': u'Aggregation area',
+        #         'rows': [
+        #             {
+        #                 'type_values': ['21', '2', '1', '4', '4', '1'],
+        #                 'total': '33',
+        #                 'name': u'Entire Area'
+        #             }
+        #         ],
+        #         'type_header_labels': [
+        #             u'Residential',
+        #             u'Education',
+        #             u'Health',
+        #             u'Place of worship',
+        #             u'Government',
+        #             u'Commercial',
+        #         ],
+        #         'total_in_aggregation_area_label': u'Total',
+        #         'total_label': u'Total',
+        #         'total_all': '33',
+        #         'type_total_values': ['21', '2', '1', '4', '4', '1']
+        #     },
+        #     'header': u'Aggregation Result',
+        #     'notes': []
+        # }
+
+        # self.assertTrue(
+        #     aggregation_result.output, empty_component_output_message)
 
         actual_context = aggregation_result.context
 
-        self.assertDictEqual(expected_context, actual_context)
-        self.assertTrue(
-            aggregation_result.output, empty_component_output_message)
+        self.assertFalse(actual_context)
 
         """Check generated report"""
 
@@ -1110,7 +1115,7 @@ class TestImpactReport(unittest.TestCase):
 
         expected_context = {
             'aggregation_result': {
-                'table_header': u'Estimated Number of buildings by '
+                'table_header': u'Estimated Number of structures by '
                                 u'aggregation area',
                 'header_label': u'Aggregation area',
                 'rows': [
@@ -1202,6 +1207,7 @@ class TestImpactReport(unittest.TestCase):
 
         actual_context = aggregation_postprocessors.context
         expected_context = {
+            'header': u'Detailed demographic breakdown',
             'sections': OrderedDict([
                 ('age', [
                     {
@@ -1393,6 +1399,7 @@ class TestImpactReport(unittest.TestCase):
             aggregation_postprocessors_component['key'])
         """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
         expected_context = {
+            'header': u'Detailed demographic breakdown',
             'sections': OrderedDict([
                 ('age', [
                     {
