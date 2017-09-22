@@ -57,6 +57,7 @@ from safe.definitions.reports import (
 from safe.definitions.reports.components import (
     standard_impact_report_metadata_pdf,
     map_report, infographic_report)
+from safe.gui.gui_utilities import layer_from_combo, add_ordered_combo_item
 from safe.report.extractors.util import layer_definition_type
 from safe.report.impact_report import ImpactReport
 from safe.report.report_metadata import ReportMetadata
@@ -65,7 +66,6 @@ from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.utilities import (
     get_error_message,
-    add_ordered_combo_item,
     is_keyword_version_supported,
 )
 from safe.utilities.settings import setting, set_setting
@@ -552,7 +552,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             # We have one aggregation layer. We should not display the user
             # extent.
             self.extent.clear_user_analysis_extent()
-            self.aggregation = self.get_aggregation_layer()
+            self.aggregation = layer_from_combo(self.aggregation_layer_combo)
 
         self.validate_impact_function()
 
@@ -562,8 +562,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         Whether the combo is toggled on or off will depend on the current dock
         status.
         """
-        selected_hazard_layer = self.get_hazard_layer()
-        selected_exposure_layer = self.get_exposure_layer()
+        selected_hazard_layer = layer_from_combo(self.hazard_layer_combo)
+        selected_exposure_layer = layer_from_combo(self.exposure_layer_combo)
 
         # more than 1 because No aggregation is always there
         if ((self.aggregation_layer_combo.count() > 1) and
@@ -705,61 +705,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # ensure the dock keywords info panel is updated
         # make sure to do this after the lock is released!
         self.layer_changed(self.iface.activeLayer())
-
-    def get_hazard_layer(self):
-        """Get the QgsMapLayer currently selected in the hazard combo.
-
-        Obtain QgsMapLayer id from the userrole of the QtCombo for hazard
-        and return it as a QgsMapLayer.
-
-        :returns: The currently selected map layer in the hazard combo.
-        :rtype: QgsMapLayer
-        """
-        index = self.hazard_layer_combo.currentIndex()
-        if index < 0:
-            return None
-
-        layer_id = self.hazard_layer_combo.itemData(
-            index, QtCore.Qt.UserRole)
-        layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
-        return layer
-
-    def get_exposure_layer(self):
-        """Get the QgsMapLayer currently selected in the exposure combo.
-
-        Obtain QgsMapLayer id from the userrole of the QtCombo for exposure
-        and return it as a QgsMapLayer.
-
-        :returns: Currently selected map layer in the exposure combo.
-        :rtype: QgsMapLayer
-        """
-        index = self.exposure_layer_combo.currentIndex()
-        if index < 0:
-            return None
-
-        layer_id = self.exposure_layer_combo.itemData(
-            index, QtCore.Qt.UserRole)
-        layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
-        return layer
-
-    def get_aggregation_layer(self):
-        """Get the QgsMapLayer currently selected in the post processing combo.
-
-        Obtain QgsMapLayer id from the userrole of the QtCombo for post
-        processing combo return it as a QgsMapLayer.
-
-        :returns: None if no aggregation is selected or aggregation_layer_combo
-            is disabled, otherwise a polygon layer.
-        :rtype: QgsVectorLayer or None
-        """
-        index = self.aggregation_layer_combo.currentIndex()
-        if index < 0:
-            return None
-
-        layer_id = self.aggregation_layer_combo.itemData(
-            index, QtCore.Qt.UserRole)
-        layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
-        return layer
 
     @pyqtSlot('bool')
     def toggle_rubber_bands(self, flag):
@@ -1229,7 +1174,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         if self.zoom_to_impact_flag:
             self.iface.zoomToActiveLayer()
 
-        qgis_exposure = self.get_exposure_layer()
+        qgis_exposure = layer_from_combo(self.exposure_layer_combo)
         if self.hide_exposure_flag:
             legend = self.iface.legendInterface()
             legend.setLayerVisible(qgis_exposure, False)
@@ -1324,9 +1269,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         # Finally, we need to check if an IF can run.
         impact_function = ImpactFunction()
-        impact_function.hazard = self.get_hazard_layer()
-        impact_function.exposure = self.get_exposure_layer()
-        aggregation = self.get_aggregation_layer()
+        impact_function.hazard = layer_from_combo(self.hazard_layer_combo)
+        impact_function.exposure = layer_from_combo(self.exposure_layer_combo)
+        aggregation = layer_from_combo(self.aggregation_layer_combo)
 
         if aggregation:
             impact_function.aggregation = aggregation
@@ -1381,7 +1326,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
             self.extent.set_next_analysis_extent(
                 impact_function.analysis_extent,
-                self.get_exposure_layer().crs())
+                layer_from_combo(self.exposure_layer_combo).crs())
 
             self.run_button.setEnabled(True)
             send_static_message(self, ready_message())
