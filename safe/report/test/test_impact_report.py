@@ -53,7 +53,7 @@ from safe.utilities.resources import resources_path
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from qgis.core import QgsMapLayerRegistry
+from qgis.core import QgsMapLayerRegistry, QgsCoordinateReferenceSystem
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -136,7 +136,10 @@ class TestImpactReport(unittest.TestCase):
         impact_function = ImpactFunction()
         impact_function.exposure = exposure_layer
         impact_function.hazard = hazard_layer
-        impact_function.aggregation = aggregation_layer
+        if aggregation_layer:
+            impact_function.aggregation = aggregation_layer
+        else:
+            impact_function.crs = QgsCoordinateReferenceSystem(4326)
         impact_function.prepare()
         return_code, message = impact_function.run()
 
@@ -1253,10 +1256,10 @@ class TestImpactReport(unittest.TestCase):
                         'header': u'Estimated number of people displaced by '
                                   u'Age per aggregation area',
                         'notes': age_displaced_count_group['notes'],
-                        'rows': [[u'B', '2,700', '660', '1,800', '240'],
+                        'rows': [[u'B', '2,600', '640', '1,700', '230'],
                                  [u'C', '6,500', '1,700', '4,300', '590'],
-                                 [u'F', '7,100', '1,800', '4,700', '640'],
-                                 [u'G', '9,500', '2,400', '6,300', '860']],
+                                 [u'F', '7,200', '1,800', '4,800', '650'],
+                                 [u'G', '9,500', '2,400', '6,300', '850']],
                         'columns': [u'Aggregation area',
                                     u'Total Displaced Population',
                                     {
@@ -1276,7 +1279,7 @@ class TestImpactReport(unittest.TestCase):
                                     }],
                         'group_header_colspan': 3,
                         'totals': [
-                            u'Total', '25,700', '6,400', '16,900', '2,400']
+                            u'Total', '25,600', '6,400', '16,900', '2,400']
                     }
                 ]),
                 ('gender', [
@@ -1285,9 +1288,9 @@ class TestImpactReport(unittest.TestCase):
                                   u'Gender per aggregation area',
                         'notes': gender_displaced_count_group['notes'],
                         'rows': [
-                            [u'B', '2,700', '1,400'],
+                            [u'B', '2,600', '1,300'],
                             [u'C', '6,500', '3,300'],
-                            [u'F', '7,100', '3,600'],
+                            [u'F', '7,200', '3,600'],
                             [u'G', '9,500', '4,800']],
                         'columns': [
                             u'Aggregation area',
@@ -1299,7 +1302,7 @@ class TestImpactReport(unittest.TestCase):
                             }],
                         'group_header_colspan': 1,
                         'totals': [
-                            u'Total', '25,700', '12,900']
+                            u'Total', '25,600', '12,800']
                     }
                 ]),
                 ('vulnerability', [
@@ -1332,13 +1335,13 @@ class TestImpactReport(unittest.TestCase):
                                   u'per week',
                         'notes': [],
                         'rows': [
-                            [u'B', '2,700', '7,400', '45,800', '176,000',
-                             '530', '130', '1,100'],
+                            [u'B', '2,600', '7,200', '44,500', '171,000',
+                             '510', '130', '1,100'],
                             [u'C', '6,500', '18,200', '114,000', '434,000',
                              '1,300', '330', '2,600'],
-                            [u'F', '7,100', '19,800', '124,000', '473,000',
-                             '1,500', '360', '2,800'],
-                            [u'G', '9,500', '26,500', '166,000', '634,000',
+                            [u'F', '7,200', '20,000', '125,000', '478,000',
+                             '1,500', '360', '2,900'],
+                            [u'G', '9,500', '26,500', '166,000', '632,000',
                              '1,900', '480', '3,800']],
                         'columns': [
                             u'Aggregation area',
@@ -1376,10 +1379,10 @@ class TestImpactReport(unittest.TestCase):
                         'group_header_colspan': 6,
                         'totals': [
                             u'Total',
-                            '25,700',
+                            '25,600',
                             '71,700',
-                            '449,000',
-                            '1,716,000',
+                            '448,000',
+                            '1,714,000',
                             '5,200',
                             '1,300',
                             '10,200']

@@ -1,5 +1,7 @@
 # coding=utf-8
+
 """Unittest for Earthquake Report."""
+
 import os
 
 import io
@@ -8,8 +10,8 @@ import shutil
 import unittest
 
 from jinja2.environment import Template
+from qgis.core import QgsCoordinateReferenceSystem
 
-from safe.common.utilities import safe_dir
 from safe.definitions.constants import ANALYSIS_SUCCESS
 from safe.definitions.reports.components import (
     standard_impact_report_metadata_html,
@@ -79,6 +81,8 @@ class TestEarthquakeReport(unittest.TestCase):
         impact_function = ImpactFunction()
         impact_function.exposure = exposure_layer
         impact_function.hazard = hazard_layer
+        impact_function.crs = QgsCoordinateReferenceSystem(
+            4326)
         impact_function.prepare()
         return_code, message = impact_function.run()
 

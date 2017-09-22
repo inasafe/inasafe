@@ -40,7 +40,7 @@
     },
     "hazard":{
       "info": {
-        "use_same_projection":true
+        "use_same_projection_as_aggregation":true
       },
       "process":[
         "Clip raster by analysis bounding box",
@@ -53,7 +53,9 @@
       ]
     },
     "exposure":{
-      "info": {},
+      "info": {
+        "use_same_projection_as_aggregation":true
+      },
       "process":[
         "Smart clip",
         "Cleaning the vector exposure attribute table",
