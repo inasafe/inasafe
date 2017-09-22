@@ -207,6 +207,9 @@ def run_scenario(scenario, use_debug=False):
     if aggregation_path:
         impact_function.aggregation = QgsVectorLayer(
             aggregation_path, 'Aggregation', 'ogr')
+    else:
+        impact_function.crs = QgsCoordinateReferenceSystem(
+            4326)
 
     status, message = impact_function.prepare()
     if status != 0:
@@ -283,6 +286,8 @@ class TestImpactFunction(unittest.TestCase):
         impact_function = ImpactFunction()
         impact_function.exposure = exposure_layer
         impact_function.hazard = hazard_layer
+        impact_function.crs = QgsCoordinateReferenceSystem(
+            4326)
         impact_function.prepare()
         self.assertEqual(impact_function.name, 'Flood Polygon On Roads Line')
         self.assertEqual(impact_function.title, 'be affected')
@@ -307,6 +312,8 @@ class TestImpactFunction(unittest.TestCase):
         impact_function = ImpactFunction()
         impact_function.exposure = exposure_layer
         impact_function.hazard = hazard_layer
+        impact_function.crs = QgsCoordinateReferenceSystem(
+            4326)
         status, message = impact_function.prepare()
         self.assertEqual(PREPARE_SUCCESS, status, message)
         message = (
@@ -339,7 +346,7 @@ class TestImpactFunction(unittest.TestCase):
             '106.885165 -6.237576, '
             '106.772279 -6.237576'
             '))')
-        impact_function.requested_extent_crs = QgsCoordinateReferenceSystem(
+        impact_function.crs = QgsCoordinateReferenceSystem(
             4326)
 
         status, message = impact_function.prepare()
@@ -422,6 +429,8 @@ class TestImpactFunction(unittest.TestCase):
         impact_function = ImpactFunction()
         impact_function.exposure = exposure_layer
         impact_function.hazard = hazard_layer
+        impact_function.crs = QgsCoordinateReferenceSystem(
+            4326)
         impact_function.prepare()
         # Let's remove one field from keywords.
         # We monkey patch keywords for testing after `prepare` & before `run`.
@@ -537,6 +546,8 @@ class TestImpactFunction(unittest.TestCase):
         impact_function.debug_mode = True
         impact_function.exposure = exposure_layer
         impact_function.hazard = hazard_layer
+        impact_function.crs = QgsCoordinateReferenceSystem(
+            4326)
         impact_function.prepare()
         expected_layers = [
             layer_purpose_aggregate_hazard_impacted['key'],
@@ -1013,6 +1024,8 @@ class TestImpactFunction(unittest.TestCase):
         impact_function = ImpactFunction()
         impact_function.exposure = exposure_layer
         impact_function.hazard = hazard_layer
+        impact_function.crs = QgsCoordinateReferenceSystem(
+            4326)
         status, message = impact_function.prepare()
         self.assertEqual(PREPARE_SUCCESS, status, message)
         status, message = impact_function.run()
@@ -1127,6 +1140,8 @@ class TestImpactFunction(unittest.TestCase):
         impact_function = ImpactFunction()
         impact_function.exposure = exposure_layer
         impact_function.hazard = hazard_layer
+        impact_function.crs = QgsCoordinateReferenceSystem(
+            4326)
         impact_function.prepare()
         return_code, message = impact_function.run()
 

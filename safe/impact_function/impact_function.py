@@ -222,15 +222,16 @@ class ImpactFunction(object):
         # Use debug to store intermediate results
         self.debug_mode = False
 
-        # Requested extent to use
+        # Requested extent to use (according to the CRS property).
         self._requested_extent = None
-        # Requested extent's CRS
-        self._requested_extent_crs = None
+        # Analysis CRS if no aggregation layer.
+        self._crs = None
         # Use exposure view only
         self.use_exposure_view_only = False
 
         # The current extent defined by the impact function. Read-only.
-        # The CRS is the exposure CRS.
+        # The CRS is the aggregation CRS or the crs property if no
+        # aggregation.
         self._analysis_extent = None
 
         # set this to a gui call back / web callback etc as needed.
@@ -653,6 +654,8 @@ class ImpactFunction(object):
 
         It can be the extent from the map canvas, a bookmark or bbox ...
 
+        The crs of this rectangle is defined with the crs property.
+
         :returns: A QgsRectangle.
         :rtype: QgsRectangle
         """
@@ -663,7 +666,7 @@ class ImpactFunction(object):
         """Setter for extent property.
 
         :param extent: Analysis boundaries expressed as a QgsRectangle.
-            The extent CRS should match the extent_crs property of this IF
+            The extent CRS should match the crs property of this IF
             instance.
         :type extent: QgsRectangle
         """
@@ -674,24 +677,26 @@ class ImpactFunction(object):
             raise InvalidExtentError('%s is not a valid extent.' % extent)
 
     @property
-    def requested_extent_crs(self):
+    def crs(self):
         """Property for the extent CRS of impact function analysis.
+
+        This property must be null if we use an aggregation layer.
+        Otherwise, this parameter must be set. It will be the analysis CRS.
 
         :return crs: The coordinate reference system for the analysis boundary.
         :rtype: QgsCoordinateReferenceSystem
         """
-        return self._requested_extent_crs
+        return self._crs
 
-    @requested_extent_crs.setter
-    def requested_extent_crs(self, crs):
+    @crs.setter
+    def crs(self, crs):
         """Setter for extent_crs property.
 
         :param crs: The coordinate reference system for the analysis boundary.
         :type crs: QgsCoordinateReferenceSystem
         """
-        self._requested_extent_crs = crs
         if isinstance(crs, QgsCoordinateReferenceSystem):
-            self._requested_extent_crs = crs
+            self._crs = crs
             self._is_ready = False
         else:
             raise InvalidExtentError('%s is not a valid CRS object.' % crs)
@@ -780,7 +785,9 @@ class ImpactFunction(object):
         """The current earthquake function to use.
 
         There is not setter for the earthquake fatality function. You need to
-        use the key inasafe/earthquake_function in QSettings.
+        use the key inasafe/earthquake_function in QSettings and restart QGIS.
+
+        The earthquake fatality model is read when QGIS starts.
 
         :return: The earthquake function.
         :rtype: str
@@ -950,7 +957,7 @@ class ImpactFunction(object):
                     )
                     return PREPARE_FAILED_BAD_INPUT, message
 
-                if self._requested_extent_crs:
+                if self._crs:
                     message = generate_input_error_message(
                         tr('Error with the requested extent'),
                         m.Paragraph(tr(
@@ -979,12 +986,14 @@ class ImpactFunction(object):
             else:
                 aggregation_source = None
                 aggregation_keywords = None
-                if self.requested_extent and not self.requested_extent_crs:
+
+                if not self.crs:
                     message = generate_input_error_message(
-                        tr('Error with the requested extent'),
+                        tr('Error with the requested CRS'),
                         m.Paragraph(tr(
-                            'Requested Extent CRS must be set when requested '
-                            'is not null.'))
+                            'CRS must be set when you don\'t use an '
+                            'aggregation layer. It will be used for the '
+                            'analysis CRS.'))
                     )
                     return PREPARE_FAILED_BAD_INPUT, message
 
@@ -1158,7 +1167,7 @@ class ImpactFunction(object):
         """Compute the minimum extent between layers.
 
         This function will set the self._analysis_extent geometry using
-        exposure CRS.
+        aggregation CRS or crs property.
 
         :return: A tuple with the status of the IF and an error message if
             needed.
@@ -1171,11 +1180,20 @@ class ImpactFunction(object):
         """
         exposure_extent = QgsGeometry.fromRect(self.exposure.extent())
         hazard_extent = QgsGeometry.fromRect(self.hazard.extent())
+        if self.aggregation:
+            analysis_crs = self.aggregation.crs()
+        else:
+            analysis_crs = self._crs
 
-        if self.hazard.crs().authid() != self.exposure.crs().authid():
+        if self.hazard.crs().authid() != analysis_crs.authid():
             crs_transform = QgsCoordinateTransform(
-                self.hazard.crs(), self.exposure.crs())
+                self.hazard.crs(), analysis_crs)
             hazard_extent.transform(crs_transform)
+
+        if self.exposure.crs().authid() != analysis_crs.authid():
+            crs_transform = QgsCoordinateTransform(
+                self.exposure.crs(), analysis_crs)
+            exposure_extent.transform(crs_transform)
 
         # We check if the hazard and the exposure overlap.
         if not exposure_extent.intersects(hazard_extent):
@@ -1189,12 +1207,12 @@ class ImpactFunction(object):
             hazard_exposure = exposure_extent.intersection(hazard_extent)
 
         if not self.aggregation:
-            if self.requested_extent and self.requested_extent_crs:
+            if self.requested_extent:
                 user_bounding_box = QgsGeometry.fromRect(self.requested_extent)
 
-                if self.requested_extent_crs != self.exposure.crs():
+                if self.crs != self.exposure.crs():
                     crs_transform = QgsCoordinateTransform(
-                        self.requested_extent_crs, self.exposure.crs())
+                        self.crs, self.exposure.crs())
                     user_bounding_box.transform(crs_transform)
 
                 if not hazard_exposure.intersects(user_bounding_box):
@@ -1252,11 +1270,6 @@ class ImpactFunction(object):
                         'this layer.'))
                 )
                 return PREPARE_FAILED_BAD_LAYER, message
-
-            if self.aggregation.crs().authid() != self.exposure.crs().authid():
-                crs_transform = QgsCoordinateTransform(
-                    self.aggregation.crs(), self.exposure.crs())
-                self._analysis_extent.transform(crs_transform)
 
         return PREPARE_SUCCESS, None
 
@@ -1731,13 +1744,13 @@ class ImpactFunction(object):
             self.set_state_info('aggregation', 'provided', False)
             LOGGER.info(
                 'The aggregation layer is not provided. We are going to '
-                'create it from the analysis extent.')
+                'create it from the analysis extent and the expected CRS.')
 
             self.set_state_process(
                 'aggregation',
                 'Convert bbox aggregation to polygon layer with keywords')
             self.aggregation = create_virtual_aggregation(
-                self.analysis_extent, self.exposure.crs())
+                self.analysis_extent, self.crs)
             self.debug_layer(self.aggregation)
 
             exposure = definition(self.exposure.keywords['exposure'])
@@ -1809,20 +1822,6 @@ class ImpactFunction(object):
                 'aggregation', 'Cleaning the aggregation layer')
             self.aggregation = prepare_vector_layer(self.aggregation)
             self.debug_layer(self.aggregation)
-
-            if self.aggregation.crs().authid() != self.exposure.crs().authid():
-                self.set_state_process(
-                    'aggregation',
-                    'Reproject aggregation layer to exposure CRS')
-                # noinspection PyTypeChecker
-                self.aggregation = reproject(
-                    self.aggregation, self.exposure.crs())
-                self.debug_layer(self.aggregation)
-
-            else:
-                self.set_state_process(
-                    'aggregation',
-                    'Aggregation layer already in exposure CRS')
 
             # We need to check if we can add default ratios to the exposure
             # by looking also in the aggregation layer.
@@ -1951,7 +1950,7 @@ class ImpactFunction(object):
             'aggregation',
             'Convert the aggregation layer to the analysis layer')
         self._analysis_impacted = create_analysis_layer(
-            self.analysis_extent, self.exposure.crs(), self.name)
+            self.analysis_extent, self.aggregation.crs(), self.name)
         self.debug_layer(self._analysis_impacted)
 
     @profile
@@ -1960,17 +1959,19 @@ class ImpactFunction(object):
         LOGGER.info('ANALYSIS : Hazard preparation')
 
         use_same_projection = (
-            self.hazard.crs().authid() == self.exposure.crs().authid())
+            self.hazard.crs().authid() == self.aggregation.crs().authid())
         self.set_state_info(
-            'hazard', 'use_same_projection', use_same_projection)
+            'hazard',
+            'use_same_projection_as_aggregation',
+            use_same_projection)
 
         if is_raster_layer(self.hazard):
 
-            extent = self.analysis_impacted.extent()
+            extent = self._analysis_impacted.extent()
             if not use_same_projection:
                 transform = QgsCoordinateTransform(
                     self.analysis_impacted.crs(), self.hazard.crs())
-                extent = transform.transform(self.analysis_impacted.extent())
+                extent = transform.transform(extent)
 
             self.set_state_process(
                 'hazard', 'Clip raster by analysis bounding box')
@@ -1992,12 +1993,12 @@ class ImpactFunction(object):
             self.hazard = polygonize(self.hazard)
             self.debug_layer(self.hazard)
 
-        if self.hazard.crs().authid() != self.exposure.crs().authid():
+        if not use_same_projection:
             self.set_state_process(
                 'hazard',
-                'Reproject hazard layer to exposure CRS')
+                'Reproject hazard layer to aggregation CRS')
             # noinspection PyTypeChecker
-            self.hazard = reproject(self.hazard, self.exposure.crs())
+            self.hazard = reproject(self.hazard, self.aggregation.crs())
             self.debug_layer(self.hazard, check_fields=False)
 
         self.set_state_process(
@@ -2054,6 +2055,14 @@ class ImpactFunction(object):
     def exposure_preparation(self):
         """This function is doing the exposure preparation."""
         LOGGER.info('ANALYSIS : Exposure preparation')
+
+        use_same_projection = (
+            self.exposure.crs().authid() == self.aggregation.crs().authid())
+        self.set_state_info(
+            'exposure',
+            'use_same_projection_as_aggregation',
+            use_same_projection)
+
         if is_raster_layer(self.exposure):
             if self.exposure.keywords.get('layer_mode') == 'continuous':
                 if self.exposure.keywords.get('exposure_unit') == 'density':
@@ -2073,9 +2082,12 @@ class ImpactFunction(object):
 
         # We may need to add the size of the original feature. So don't want to
         # split the feature yet.
+        if use_same_projection:
+            mask = self._analysis_impacted
+        else:
+            mask = reproject(self._analysis_impacted, self.exposure.crs())
         self.set_state_process('exposure', 'Smart clip')
-        self.exposure = smart_clip(
-            self.exposure, self._analysis_impacted)
+        self.exposure = smart_clip(self.exposure, mask)
         self.debug_layer(self.exposure, check_fields=False)
 
         self.set_state_process(
@@ -2084,6 +2096,15 @@ class ImpactFunction(object):
         # noinspection PyTypeChecker
         self.exposure = prepare_vector_layer(self.exposure)
         self.debug_layer(self.exposure)
+
+        if not use_same_projection:
+            self.set_state_process(
+                'exposure',
+                'Reproject exposure layer to aggregation CRS')
+            # noinspection PyTypeChecker
+            self.exposure = reproject(
+                self.exposure, self.aggregation.crs())
+            self.debug_layer(self.exposure)
 
         self.set_state_process('exposure', 'Compute ratios from counts')
         self.exposure = from_counts_to_ratios(self.exposure)
@@ -2125,6 +2146,10 @@ class ImpactFunction(object):
             self.set_state_process(
                 'impact function',
                 'Zonal stats between exposure and aggregate hazard')
+
+            # Be careful, our own zonal stats will take care of different
+            # projections between the two layers. We don't want to reproject
+            # rasters.
             # noinspection PyTypeChecker
             self._aggregate_hazard_impacted = zonal_stats(
                 self.exposure, self._aggregate_hazard_impacted)
