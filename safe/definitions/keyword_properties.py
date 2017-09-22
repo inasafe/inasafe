@@ -312,3 +312,11 @@ property_provenance_data = {
         'A collection of provenance of the analysis as dictionary.'
     )
 }
+
+property_extra_keywords = {
+    'key': 'extra_keywords',
+    'name': tr('Extra Keywords'),
+    'description': tr(
+        'A collection of extra keyword for creating richer report.'
+    )
+}

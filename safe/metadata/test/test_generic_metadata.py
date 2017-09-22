@@ -47,7 +47,7 @@ class TestGenericMetadata(TestCase):
         with open(filename) as f:
             written_json = f.read()
 
-        self.assertEquals(expected_json, written_json)
+        self.assertMultiLineEqual(expected_json, written_json)
 
     def test_json_write_no_metadata(self):
         """Test write metadata for no metadata layer file."""
