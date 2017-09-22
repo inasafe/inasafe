@@ -1,5 +1,5 @@
 # coding=utf-8
-"""InaSAFE Plugin"""
+"""InaSAFE Plugin."""
 
 import sys
 import os
@@ -85,6 +85,7 @@ class Plugin(object):
         self.action_dock = None
         self.action_extent_selector = None
         self.action_field_mapping = None
+        self.action_multi_exposure = None
         self.action_function_centric_wizard = None
         self.action_import_dialog = None
         self.action_keywords_wizard = None
@@ -377,6 +378,23 @@ class Plugin(object):
             self.action_field_mapping,
             add_to_toolbar=True)
 
+    def _create_mutli_exposure_action(self):
+        """Create action for showing the multi exposure tool."""
+        self.action_multi_exposure = QAction(
+            QIcon(resources_path('img', 'icons', 'show-multi-exposure.svg')),
+            self.tr('InaSAFE Multi Exposure Tool'),
+            self.iface.mainWindow())
+        self.action_multi_exposure.setStatusTip(self.tr(
+            'Open the multi exposure tool.'))
+        self.action_multi_exposure.setWhatsThis(self.tr(
+            'Open the multi exposure tool.'))
+        self.action_multi_exposure.setEnabled(True)
+        self.action_multi_exposure.triggered.connect(
+            self.show_multi_exposure)
+        self.add_action(
+            self.action_multi_exposure,
+            add_to_toolbar=True)
+
     def _create_add_petabencana_layer_action(self):
         """Create action for import OSM Dialog."""
         icon = resources_path('img', 'icons', 'add-petabencana-layer.svg')
@@ -539,6 +557,7 @@ class Plugin(object):
         self._create_analysis_wizard_action()
         self._add_spacer_to_menu()
         self._create_field_mapping_action()
+        self._create_mutli_exposure_action()
         self._create_osm_downloader_action()
         self._create_add_osm_layer_action()
         self._create_add_petabencana_layer_action()
@@ -861,6 +880,12 @@ class Plugin(object):
             self.dock_widget.layer_changed(self.iface.activeLayer())
         else:
             LOGGER.debug('Show field mapping not accepted')
+
+    def show_multi_exposure(self):
+        """Show InaSAFE Multi Exposure."""
+        from safe.gui.tools.multi_exposure_dialog import MultiExposureDialog
+        dialog = MultiExposureDialog(self.iface.mainWindow())
+        dialog.show()  # non modal
 
     def add_petabencana_layer(self):
         """Add petabencana layer to the map.

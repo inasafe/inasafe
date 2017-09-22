@@ -10,7 +10,10 @@ from qgis.core import (
     QgsCoordinateTransform,
     QGis,
     QgsRectangle,
+    QgsVectorLayer,
+    QgsRasterLayer,
 )
+from safe.utilities.metadata import copy_layer_keywords
 from safe.utilities.utilities import LOGGER
 
 
@@ -163,6 +166,26 @@ def validate_geo_array(extent):
         return False
 
     return True
+
+
+def deep_duplicate_layer(layer):
+    """Duplicate the layer by taking the same source and copying keywords.
+
+    :param layer: Layer to be duplicated.
+    :type layer: QgsMapLayer
+
+    :return: The new QgsMapLayer object.
+    :rtype: QgsMapLayer
+    """
+    if is_vector_layer(layer):
+        new_layer = QgsVectorLayer(
+            layer.source(), layer.name(), layer.providerType())
+    else:
+        new_layer = QgsRasterLayer(layer.source(), layer.name())
+
+    new_layer.keywords = copy_layer_keywords(layer.keywords)
+
+    return layer
 
 
 def is_raster_layer(layer):
