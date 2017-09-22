@@ -568,18 +568,18 @@ flood_petabencana_hazard_classes = {
     'classes': [
         {
             'key': 'high',
-            'value': 3,
+            'value': 4,
             'color': red,
             'name': tr('High'),
             'affected': True,
-            'description': tr('Water is above waist height.'),
+            'description': tr('Flooding is over 150 centimetres.'),
             'fatality_rate': None,
             # displacement rate estimated from DMI analysis of historical
             # flood data and IDP numbers
             'displacement_rate': 0.05,
             'numeric_default_min': 1.5,
             'numeric_default_max': big_number,
-            'string_defaults': ['high'],
+            'string_defaults': ['high, severe'],
             'citations': [
                 {
                     'text': None,
@@ -589,19 +589,19 @@ flood_petabencana_hazard_classes = {
         },
         {
             'key': 'medium',
-            'value': 2,
+            'value': 3,
             'color': orange,
             'name': tr('Medium'),
             'affected': True,
             'description': tr(
-                'Water is above knee height, below waist height.'),
+                'Flooding between 71 and 150 centimetres.'),
             'fatality_rate': None,
             # displacement rate estimated from DMI analysis of historical
             # flood data and IDP numbers
             'displacement_rate': 0.03,
             'numeric_default_min': 0.7,
             'numeric_default_max': 1.5,
-            'string_defaults': ['medium'],
+            'string_defaults': ['medium, moderate'],
             'citations': [
                 {
                     'text': None,
@@ -611,19 +611,19 @@ flood_petabencana_hazard_classes = {
         },
         {
             'key': 'low',
-            'value': 1,
+            'value': 2,
             'color': yellow,
             'name': tr('Low'),
             'affected': True,
             'description': tr(
-                'Water encountered up to knee deep.'),
+                'Flooding of between 10 and 70 centimetres.'),
             'fatality_rate': None,
             # displacement rate estimated from DMI analysis of historical
             # flood data and IDP numbers
             'displacement_rate': 0.01,
             'numeric_default_min': 0.1,
             'numeric_default_max': 0.7,
-            'string_defaults': ['low'],
+            'string_defaults': ['low, minor'],
             'citations': [
                 {
                     'text': None,
@@ -638,14 +638,14 @@ flood_petabencana_hazard_classes = {
             'name': tr('Use caution'),
             'affected': False,
             'description': tr(
-                'Water is present but depth is not confirmed.'),
+                'An unknown level of flooding - use caution - '),
             'fatality_rate': None,
             # displacement rate estimated from DMI analysis of historical
             # flood data and IDP numbers
             'displacement_rate': 0.0,
             'numeric_default_min': 0,
             'numeric_default_max': 0.1,
-            'string_defaults': ['caution'],
+            'string_defaults': ['caution, unknown'],
             'citations': [
                 {
                     'text': None,
