@@ -305,6 +305,16 @@ def qgis_composer_html_renderer(impact_report, component):
                 qurl = QUrl.fromLocalFile(url)
                 html_element.setUrl(qurl)
 
+    # Attempt on removing blank page. Notes: We assume that the blank page
+    # will always appears in the last x page(s), not in the middle.
+
+    empty_number = 0
+    for i in range(composition.numPages()):
+        if composition.pageIsEmpty(i + 1):
+            empty_number += 1
+
+    composition.setNumPages(composition.numPages() - empty_number)
+
     # process to output
 
     # in case output folder not specified
