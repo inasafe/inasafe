@@ -5,7 +5,7 @@ import logging
 from sqlite3 import OperationalError
 
 from PyQt4 import QtGui
-from PyQt4.QtCore import pyqtSignature, QSettings
+from PyQt4.QtCore import pyqtSignature, QSettings, pyqtSignal
 from PyQt4.QtGui import QDialog, QPixmap
 from qgis.core import QgsMapLayerRegistry
 
@@ -104,6 +104,8 @@ FORM_CLASS = get_ui_class('wizard/wizard_dialog_base.ui')
 
 class WizardDialog(QDialog, FORM_CLASS):
     """Dialog implementation class for the InaSAFE wizard."""
+
+    resized = pyqtSignal()
 
     def __init__(self, parent=None, iface=None, dock=None):
         """Constructor for the dialog.
@@ -244,6 +246,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.impact_function_steps = []
         self.keyword_steps = []
         self.on_help = False
+
+        self.resized.connect(self.after_resize)
 
     def set_mode_label_to_keywords_creation(self):
         """Set the mode label to the Keywords Creation/Update mode."""
@@ -876,3 +880,19 @@ class WizardDialog(QDialog, FORM_CLASS):
                     current_keywords['inasafe_default_values'].items()):
                 set_inasafe_default_value_qsetting(
                     self.setting, RECENT, key, value)
+
+    # Adapted from https://stackoverflow.com/a/43126946/1198772
+    def resizeEvent(self, event):
+        """Emit custom signal when the window is re-sized.
+
+        :param event: The re-sized event.
+        :type event: QResizeEvent
+        """
+        self.resized.emit()
+        return super(WizardDialog, self).resizeEvent(event)
+
+    def after_resize(self):
+        """Method after resizing the window."""
+        if self.get_current_step() == self.step_kw_fields_mapping:
+            LOGGER.debug('On Field Mappings')
+            # Updating size when in the field mapping.
