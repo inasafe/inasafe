@@ -6,7 +6,7 @@ from sqlite3 import OperationalError
 
 from PyQt4 import QtGui
 from PyQt4.QtCore import pyqtSignature, QSettings, pyqtSignal
-from PyQt4.QtGui import QDialog, QPixmap
+from PyQt4.QtGui import QDialog, QPixmap, QSizePolicy
 from qgis.core import QgsMapLayerRegistry
 
 from parameters.parameter_exceptions import InvalidValidationException
@@ -894,5 +894,15 @@ class WizardDialog(QDialog, FORM_CLASS):
     def after_resize(self):
         """Method after resizing the window."""
         if self.get_current_step() == self.step_kw_fields_mapping:
-            LOGGER.debug('On Field Mappings')
-            # Updating size when in the field mapping.
+            # Use MinimumExpanding when on the Field Mapping Step
+            vertical_size_policy = QSizePolicy.MinimumExpanding
+        else:
+            vertical_size_policy = QSizePolicy.Preferred
+
+        size_policy = QSizePolicy()
+        size_policy.setHorizontalPolicy(QSizePolicy.Preferred)
+        size_policy.setVerticalPolicy(vertical_size_policy)
+        self.scrollAreaWidgetContents.setSizePolicy(size_policy)
+        # Also reset the max height. 190 is a number that make it pretty
+        max_height = self.height() - 190
+        self.scrollAreaWidgetContents.setMaximumHeight(max_height)
