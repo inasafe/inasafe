@@ -159,7 +159,7 @@ general_report_component = {
             'general_concepts': [
                 concepts['affected']
             ],
-            'note_format': '{name}: {description}'
+            'note_format': u'{name}: {description}'
         }
     }
 }
