@@ -727,17 +727,17 @@
         <translation>Origine</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1292"/>
+        <location filename="hazard_classifications.py" line="1290"/>
         <source>Low</source>
         <translation>Bas</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1266"/>
+        <location filename="hazard_classifications.py" line="1264"/>
         <source>Medium</source>
         <translation>Modéré</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1237"/>
+        <location filename="hazard_classifications.py" line="1235"/>
         <source>High</source>
         <translation>Élevé</translation>
     </message>
@@ -807,7 +807,7 @@
         <translation>L&apos;échelle de &lt;b&gt;Mercalli modifiée (MMI)&lt;/b&gt; décrit l&apos;intensité d&apos;un séisme, qui se fonde sur l&apos;observation des effets et des conséquences du séisme en un lieu donné.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1171"/>
+        <location filename="hazard_classifications.py" line="1169"/>
         <source>No water above ground height.</source>
         <translation>Absence d&apos;eau au niveau du sol.</translation>
     </message>
@@ -930,7 +930,7 @@
         <translation>Ceci indique la description détaillée de ce qu&apos;est la ressource et</translation>
     </message>
     <message>
-        <location filename="wizard_utils.py" line="117"/>
+        <location filename="utilities.py" line="117"/>
         <source>Unit</source>
         <translation>Unité </translation>
     </message>
@@ -1105,7 +1105,7 @@
         <translation>&lt;html&gt;Afin d&apos;utiliser des couches PostGIS, veuillez fermer l&apos;assistant, créez une nouvelle connexion PostGIS et relancez l&apos;assistant.&lt;br /&gt;&lt;br /&gt;Vous pouvez gérer les connexions dans le menu &lt;i&gt;Couche&lt;/i&gt; &gt; &lt;i&gt;Ajouter une couche&lt;/i&gt; &gt; &lt;i&gt;Ajouter une couche PostGIS&lt;/i&gt;.&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="wizard_utils.py" line="103"/>
+        <location filename="utilities.py" line="103"/>
         <source>Hazard</source>
         <translation>Aléas</translation>
     </message>
@@ -1310,7 +1310,7 @@
         <translation>Classes d&apos;inondation</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="805"/>
+        <location filename="hazard_classifications.py" line="803"/>
         <source>Tsunami classes</source>
         <translation>Classes tsunami</translation>
     </message>
@@ -1438,7 +1438,7 @@ Vous devez tout d&apos;abord définir la catégorie à laquelle appartient votre
         <translation>Aléas</translation>
     </message>
     <message>
-        <location filename="wizard_utils.py" line="128"/>
+        <location filename="utilities.py" line="128"/>
         <source>Purpose</source>
         <translation>Catégorie</translation>
     </message>
@@ -1498,7 +1498,7 @@ Vous devez tout d&apos;abord définir la catégorie à laquelle appartient votre
         <translation>kg/m2</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1833"/>
+        <location filename="hazard_classifications.py" line="1831"/>
         <source>Classes</source>
         <translation>Classes</translation>
     </message>
@@ -1583,7 +1583,7 @@ Vous devez tout d&apos;abord définir la catégorie à laquelle appartient votre
         <translation>Inondé</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="909"/>
+        <location filename="hazard_classifications.py" line="907"/>
         <source>Dry</source>
         <translation>Sec</translation>
     </message>
@@ -2719,37 +2719,37 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
         <translation>Liste des frontières OSM</translation>
     </message>
     <message>
-        <location filename="wizard_utils.py" line="115"/>
+        <location filename="utilities.py" line="115"/>
         <source>classified data</source>
         <translation>donnée classifiée</translation>
     </message>
     <message>
-        <location filename="wizard_utils.py" line="128"/>
+        <location filename="utilities.py" line="128"/>
         <source>Title</source>
         <translation>Intitulé </translation>
     </message>
     <message>
-        <location filename="wizard_utils.py" line="128"/>
+        <location filename="utilities.py" line="128"/>
         <source>Source</source>
         <translation>Source</translation>
     </message>
     <message>
-        <location filename="wizard_utils.py" line="159"/>
+        <location filename="utilities.py" line="159"/>
         <source>This layer has no valid keywords assigned</source>
         <translation>Cette couche n&apos;a pas de mots-clés valides </translation>
     </message>
     <message>
-        <location filename="wizard_utils.py" line="159"/>
+        <location filename="utilities.py" line="159"/>
         <source>SOURCE</source>
         <translation>SOURCE</translation>
     </message>
     <message>
-        <location filename="wizard_utils.py" line="159"/>
+        <location filename="utilities.py" line="159"/>
         <source>TYPE</source>
         <translation>TYPE</translation>
     </message>
     <message>
-        <location filename="wizard_utils.py" line="159"/>
+        <location filename="utilities.py" line="159"/>
         <source>In the next step you will be able to assign keywords to this layer.</source>
         <translation>Lors de la prochaine étape, vous pourrez attribuer des mots-clés à cette couche. </translation>
     </message>
@@ -2919,12 +2919,12 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
         <translation>Une structure proposant des services au public en incluant les services d&apos;urgence.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1169"/>
+        <location filename="hazard_classifications.py" line="1167"/>
         <source>Dry zone</source>
         <translation>Zone sèche</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1220"/>
+        <location filename="hazard_classifications.py" line="1218"/>
         <source>Water above 8.0m.</source>
         <translation>Eau supérieure à 8.0m.</translation>
     </message>
@@ -4215,112 +4215,112 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
         <translation>Absence d&apos;eau au niveau du sol.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="664"/>
+        <location filename="hazard_classifications.py" line="662"/>
         <source>Ash classes</source>
         <translation>Classes nuée ardente</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1218"/>
+        <location filename="hazard_classifications.py" line="1216"/>
         <source>Very high</source>
         <translation>Très élevé</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1326"/>
+        <location filename="hazard_classifications.py" line="1324"/>
         <source>Cyclone classes (AU - BOM)</source>
         <translation>Classes cyclone (AU - BOM)</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1359"/>
+        <location filename="hazard_classifications.py" line="1357"/>
         <source>Category 5 (severe tropical cyclone)</source>
         <translation>Catégorie 5 (cyclone tropical sévère)</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1390"/>
+        <location filename="hazard_classifications.py" line="1388"/>
         <source>Category 4 (severe tropical cyclone)</source>
         <translation>Catégorie 4 (cyclone tropical sévère)</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1428"/>
+        <location filename="hazard_classifications.py" line="1426"/>
         <source>Category 3 (severe tropical cyclone)</source>
         <translation>Catégorie 3 (cyclone tropical sévère)</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1465"/>
+        <location filename="hazard_classifications.py" line="1463"/>
         <source>Category 2 (tropical cyclone)</source>
         <translation>Catégorie 2 (cyclone tropical)</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1503"/>
+        <location filename="hazard_classifications.py" line="1501"/>
         <source>Category 1 (tropical cyclone)</source>
         <translation>Catégorie 1 (cyclone tropical)</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1540"/>
+        <location filename="hazard_classifications.py" line="1538"/>
         <source>Tropical Depression</source>
         <translation>Dépression Tropicale</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1579"/>
+        <location filename="hazard_classifications.py" line="1577"/>
         <source>Hurricane classes (SSHWS)</source>
         <translation>Classes ouragan (SSHWS)</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1609"/>
+        <location filename="hazard_classifications.py" line="1607"/>
         <source>Category 5 (major hurricane)</source>
         <translation>Catégorie 5 (ouragan majeur)</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1611"/>
+        <location filename="hazard_classifications.py" line="1609"/>
         <source>Catastrophic damage will occur: A high percentage of framed homes will be destroyed, with total roof failure and wall collapse. Fallen trees and power poles will isolate residential areas. Power outages will last for weeks to possibly months. Most of the area will be uninhabitable for weeks or months.</source>
         <translation>Destruction des toitures, des portes et des fenêtres. Dommages importants aux charpentes des bâtiments renforcés. Destruction de certaines habitations non-renforcées. Dommages importants aux premiers étages des habitations à moins de 500 mètres du rivage dus aux inondations. Évacuation des maisons dans un rayon de 8 à 16 km des côtes. La plupart des habitations ne seront plus habitables pour plusieurs semaines.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1643"/>
+        <location filename="hazard_classifications.py" line="1641"/>
         <source>Category 4 (major hurricane)</source>
         <translation>Catégorie 4 (ouragan majeur)</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1645"/>
+        <location filename="hazard_classifications.py" line="1643"/>
         <source>Catastrophic damage will occur: Well-built framed homes can sustain severe damage with loss of most of the roof structure and/or some exterior walls. Most trees will be snapped or uprooted and power poles downed. Fallen trees and power poles will isolate residential areas. Power outages will last weeks to possibly months. Most of the area will be uninhabitable for weeks or months.</source>
         <translation>Dommages importants à la structure des bâtiments non-renforcés. Dommages importants au rez-de-chaussée des habitations dus aux inondations. Inondations importantes sur les zones côtières à moins de 3 mètres au-dessus du niveau de la mer, jusqu&apos;à plus de 9 km dans les terres. Érosion importante sur les plages. Évacuation des plain-pieds dans un rayon de 400 mètres des côtes, des habitations d&apos;un étage dans un rayon de 3,2 km et des rivages. La plupart des habitations ne seront plus habitables pour plusieurs semaines.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1683"/>
+        <location filename="hazard_classifications.py" line="1681"/>
         <source>Category 3 (major hurricane)</source>
         <translation>Catégorie 3 (ouragan majeur)</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1685"/>
+        <location filename="hazard_classifications.py" line="1683"/>
         <source>Devastating damage will occur: Well-built framed homes may incur major damage or removal of roof decking and gable ends. Many trees will be snapped or uprooted, blocking numerous roads. Electricity and water will be unavailable for several days to weeks after the storm passes.</source>
         <translation>Dommages à la structure des bâtiments non-renforcés. Les maisons mobiles sont détruites. Dommages importants à la végétation. Les grands arbres sont déracinés. Inondations importantes sur les terrains côtiers à moins de 1,50 mètres au-dessus du niveau de la mer, jusqu&apos;à plus de 15 km dans les terres. Les habitations côtières sont endommagées par les vagues et les débris. Évacuation des habitations situées dans les terres basses.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1721"/>
+        <location filename="hazard_classifications.py" line="1719"/>
         <source>Category 2 (hurricane)</source>
         <translation>Catégorie 2 (ouragan)</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1723"/>
+        <location filename="hazard_classifications.py" line="1721"/>
         <source>Extremely dangerous winds will cause extensive damage: Well-constructed frame homes could sustain major roof and siding damage. Many shallowly rooted trees will be snapped or uprooted and block numerous roads. Near-total power loss is expected with outages that could last from several days to weeks.</source>
         <translation>Dommages possibles aux toitures, portes et fenêtres des habitations. Dommages importants aux maisons mobiles. Les panneaux de signalisation sont arrachés. Dommages importants à la végétation. Les petits arbres sont déracinés. Les routes et les plaines basses sont inondées avant l&apos;arrivée de l&apos;ouragan. Dommages importants aux quais et jetées. Les petites embarcations sont arrachées de leurs amarres. Évacuation des habitations longeant les côtes.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1759"/>
+        <location filename="hazard_classifications.py" line="1757"/>
         <source>Category 1 (hurricane)</source>
         <translation>Catégorie 1 (ouragan)</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1761"/>
+        <location filename="hazard_classifications.py" line="1759"/>
         <source>Very dangerous winds will produce some damage: Well-constructed frame homes could have damage to roof, shingles, vinyl siding and gutters. Large branches of trees will snap and shallowly rooted trees may be toppled. Extensive damage to power lines and poles likely will result in power outages that could last a few to several days.</source>
         <translation>Peu ou pas de dommages aux habitations. Dommages limités aux maisons mobiles, la végétation et aux panneaux de signalisation. Inondations côtières. Dommages légers aux quais et jetées.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1797"/>
+        <location filename="hazard_classifications.py" line="1795"/>
         <source>No hurricane</source>
         <translation>Absence d&apos;ouragan</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1799"/>
+        <location filename="hazard_classifications.py" line="1797"/>
         <source>Winds less than Category 1 Hurricane</source>
         <translation>Vent inférieur à la catégorie ouragan 1.</translation>
     </message>
@@ -4950,17 +4950,17 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
         <translation>La fonction d&apos;impact ne sera pas capable de se lancer à cause des entrées.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1210"/>
+        <location filename="dock.py" line="1213"/>
         <source>The impact function could not run because of the inputs.</source>
         <translation>La fonction d&apos;impact n&apos;a pas pu s&apos;exécuter à cause des entrées.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1217"/>
+        <location filename="dock.py" line="1220"/>
         <source>The impact function could not run because of a bug.</source>
         <translation>La fonction d&apos;impact n&apos;a pas pu s&apos;exécuter à cause d&apos;un bug.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1223"/>
+        <location filename="dock.py" line="1226"/>
         <source>The impact function could run without errors.</source>
         <translation>La fonction d&apos;impact a pu s&apos;exécuter sans problème.</translation>
     </message>
@@ -5046,7 +5046,7 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>&lt;p&gt;Vous avez sélectionné &lt;b&gt;%s %s&lt;/b&gt; comme enjeu en entrée.&lt;/p&gt; &lt;p&gt;Choisissez la couche d&apos;enjeu que vous souhaiteriez utiliser pour votre analyse.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="wizard_utils.py" line="183"/>
+        <location filename="utilities.py" line="183"/>
         <source>Global (%s)</source>
         <translation>Global (%s)</translation>
     </message>
@@ -5056,12 +5056,12 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>Personnalisé</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1193"/>
+        <location filename="dock.py" line="1196"/>
         <source>The impact function should not have been ready.</source>
         <translation>La fonction d&apos;impact n&apos;aurait pas du être prête.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1280"/>
+        <location filename="dock.py" line="1284"/>
         <source>The impact report could not be generated.</source>
         <translation>Le rapport d&apos;impact n&apos;a pas pu être généré.</translation>
     </message>
@@ -5626,27 +5626,27 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>Classification de l&apos;aléa</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="774"/>
+        <location filename="hazard_classifications.py" line="772"/>
         <source>Very low</source>
         <translation>Très faible</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1337"/>
+        <location filename="hazard_classifications.py" line="1335"/>
         <source>Australian Bureau of Meteorology - Tropical Cyclone Intensity and Impacts</source>
         <translation>Bureau Australien de la Météorologie - Intensité et Impact des Cyclones Tropicaux</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1344"/>
+        <location filename="hazard_classifications.py" line="1342"/>
         <source>Tropical cyclone scales - wikpedia</source>
         <translation>Échelles cyclones tropicaux - wikipedia</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1593"/>
+        <location filename="hazard_classifications.py" line="1591"/>
         <source>NOAA - NHC</source>
         <translation>NOAA - NHC</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1597"/>
+        <location filename="hazard_classifications.py" line="1595"/>
         <source>Saffir-Simpson scale - wikipedia</source>
         <translation>Échelle de Saffir-Simpson - wikipedia</translation>
     </message>
@@ -5866,7 +5866,7 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>Vous avez sélectionné &lt;b&gt;%s %s&lt;/b&gt;. Veuillez sélectionner une classification d&apos;aléa pour chaque type d&apos;enjeu. Si vous souhaitez éditer les seuils, vous pouvez cliquer sur le bouton éditer et ensuite apporter des modifications aux seuils dans le panneau de droite. N&apos;oubliez pas de sauvegarder vos seuils avant de continuer à l&apos;étape suivante.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1401"/>
+        <location filename="dock.py" line="1405"/>
         <source>The requested extent is not overlapping your layers.</source>
         <translation>L&apos;emprise demandée ne se superpose pas aux couches.</translation>
     </message>
@@ -6041,7 +6041,7 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>Le champ total non affecté est ajouté à la couche d&apos;analyse, la couche d&apos;agrégation pendant la phase d&apos;analyse. Il représente un effectif cumulé des entités de l&apos;enjeu non affectés.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1542"/>
+        <location filename="hazard_classifications.py" line="1540"/>
         <source>A tropical depression is a tropical disturbance, that has a clearly defined surface circulation, which has maximum sustained winds of less than 34 kt.</source>
         <translation>Une dépression tropicale est une perturbation tropicale, qui possède une surface de circulation clairement définie ayant un maximum des vents soutenus à moins de 34 kt.</translation>
     </message>
@@ -6296,117 +6296,97 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>PetaBencana.id</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="575"/>
-        <source>Water is above waist height.</source>
-        <translation>L&apos;eau est présente à hauteur de la taille.</translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="596"/>
-        <source>Water is above knee height, below waist height.</source>
-        <translation>L&apos;eau est présente entre les genoux et la taille.</translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="618"/>
-        <source>Water encountered up to knee deep.</source>
-        <translation>L&apos;eau est présente jusqu&apos;aux genoux.</translation>
-    </message>
-    <message>
         <location filename="hazard_classifications.py" line="638"/>
         <source>Use caution</source>
         <translation>Prudence</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="640"/>
-        <source>No water encountered above ground height but there are may be floods in surrounding areas and you should use caution when moving around in this area.</source>
-        <translation>Il n&apos;y a pas d&apos;eau au niveau du sol mais il peut y avoir des inondations dans les environs et vous devez vous déplacer avec prudence dans la zone.</translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="665"/>
+        <location filename="hazard_classifications.py" line="663"/>
         <source>Five classes are supported for volcanic ash hazard data: &lt;b&gt;very low&lt;/b&gt;, &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, &lt;b&gt;high&lt;/b&gt; or &lt;b&gt;very high&lt;/b&gt;.</source>
         <translation>Cinq classes sont supportées pour les nuées ardentes: &lt;b&gt;très faible&lt;/b&gt;, &lt;b&gt;faible&lt;/b&gt;, &lt;b&gt;modéré&lt;/b&gt;, &lt;b&gt;élevé&lt;/b&gt; ou &lt;b&gt;très élevé&lt;/b&gt;.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="684"/>
+        <location filename="hazard_classifications.py" line="682"/>
         <source>Dry loading on buildings causing structural collapse.</source>
         <translation>Un dépôt solide sur les structures provoquant l&apos;effondrement.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="705"/>
+        <location filename="hazard_classifications.py" line="703"/>
         <source>Dry loading on buildings causing structural damage but not collapse; wet loading on buildings (i.e. ash loading + heavy rainfall) causing structural collapse.</source>
         <translation>Dépôt solide sur les bâtiments causant des dommages structurels mais n&apos;entrainant pas l&apos;effondrement;  cependant, un dépôt solide et humide (cendre et pluie par exemple) peut provoquer un effondrement.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="728"/>
+        <location filename="hazard_classifications.py" line="726"/>
         <source>Damage to less vulnerable agricultural crops (e.g. tea plantations) and destruction of more vulnerable crops; destruction of critical infrastructure; cosmetic (non-structural) damage to buildings</source>
         <translation>Dommages sur les cultures les moins vulnérables (plantation de thé par ex) et destruction des cultures vulnérables; destruction des infrastructures critiques; dommages visuelles et non structurelles sur les bâtiments</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="753"/>
+        <location filename="hazard_classifications.py" line="751"/>
         <source>Damage to transportation routes (e.g. airports, roads, railways); damage to critical infrastructure (e.g. electricity supply); damage to more vulnerable agricultural crops (e.g. rice fields)</source>
         <translation>Dommages sur les réseaux de transport (aéroports, routes, voies ferrés par ex), dommages sur les infrastructures critiques (fournisseur d&apos;électricité), dommages sur les cultures vulnérables (rizière par ex).</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="776"/>
+        <location filename="hazard_classifications.py" line="774"/>
         <source>Impact on health (respiration), livestock, and contamination of water supply.</source>
         <translation>Impact sur la santé (respiration), bétail, et la contamination de l&apos;approvisionnement en eau.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="807"/>
+        <location filename="hazard_classifications.py" line="805"/>
         <source>Tsunami hazards can be classified into one of four classes for an area. The area is either &lt;b&gt;dry&lt;/b&gt;, &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, or &lt;b&gt;high&lt;/b&gt;, for tsunami hazard classification. The following description for these classes is provided by Badan Geologi based on BNPB Perka 2/2012</source>
         <translation>L&apos;aléa tsunami peut être classifié dans une de ces quatre classes pour une zone donnée. La zone est soit &lt;b&gt;sèche&lt;/b&gt;, &lt;b&gt;faible&lt;/b&gt;, &lt;b&gt;modérée&lt;/b&gt; ou &lt;b&gt;haute&lt;/b&gt; pour la classification d&apos;un tsunami. La description précédente pour ces classes est décrite par Badan Geologi dans BNPB Perka 2/2012</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="949"/>
+        <location filename="hazard_classifications.py" line="947"/>
         <source>BNPB Perka 2/2012</source>
         <translation>BNPB Perka 2/2012</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="961"/>
+        <location filename="hazard_classifications.py" line="959"/>
         <source>The area is potentially hit by a tsunami wave with an inundation depth &gt; 3 m or reach a tsunami intensity scale of VII or more (Papadopoulos and Imamura, 2001). Tsunami wave with 4 m inundation depth cause damage to small vessel, a few ships are drifted inland, severe damage on most wooden houses. Boulders are deposited on shore. If tsunami height reaches 8 m, it will cause severe damage. Dykes, wave breaker, tsunami protection walls and green belts will be washed away.</source>
         <translation>Cet espace est potentiellement touché par une vague tsunamique supérieur à 3m ou atteint une intensité tsunamique de VII ou plus (Papadopoulos et Imamura, 2001). Une vague tsunamique de 4m entraîne des dommages aux petits navires, des dommages conséquents sur les bâtiments en bois et quelques bateaux s&apos;échouent sur les terres. Si le tsunami atteint 8m, des dommages très importants sont subis. Les digues et les protections contre les tsunamis sont dévastés.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1268"/>
+        <location filename="hazard_classifications.py" line="1266"/>
         <source>Water above 1.1m and less than 3.0m. The area is potentially hit by a tsunami wave with an inundation depth of 1 - 3 m or equal to V-VI tsunami intensity scale (Papadopoulos and Imamura, 2001). Tsunami wave with a 3m inundation depth causes most people frightened and to flee to higher ground. Small vessels drift and collide. Damage occurs to some wooden houses, while most of them are safe.</source>
         <translation>Profondeur d&apos;eau entre 1.1m et moins de 3.0m. Cet espace est potentiellement touché par une vague tsunamique entre 1 et 3 m ou équivalent à l&apos;échelle tsunamique V - VI (Papadopoulos et Imamura, 2001). Une vague tsunamique de 3m engendre une peur non négligeable sur la population qui l&apos;oblige à s&apos;élever le plus possible. Les petits navires dérivent et se collisionnent. Quelques bâtiments en bois subissent des dommages, certains sont non affectés.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1294"/>
+        <location filename="hazard_classifications.py" line="1292"/>
         <source>Water above ground height and less than 1.0m. The area is potentially hit by a tsunami wave with an inundation depth less than 1 m or similar to tsunami intensity scale of V or less in (Papadopoulos and Imamura, 2001). Tsunami wave of 1m height causes few people to be frightened and flee to higher elevation. Felt by most people on large ship, observed from shore. Small vessels drift and collide and some turn over. Sand is deposited and there is flooding of areas close to the shore.</source>
         <translation>Hauteur d&apos;inondation inférieur à 1.0m. Cette zone est probablement atteinte par une vague tsunamique avec une hauteur d&apos;inondation inférieur à 1m ou similaire à une intensité tsunamique de V ou moins (Papadopoulos et Imamura, 2001). Une vague tsunamique de 1m de haut provoque une peur sur la population et l&apos;oblige à s&apos;élever le plus possible. Ressentie par la plupart des personnes sur un bateau et observée depuis la rive. Les petits navires dérivent et certains chavirent. Le sable est déposé et les espaces proches de la rive sont inondés.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="937"/>
+        <location filename="hazard_classifications.py" line="935"/>
         <source>Tsunami population classes</source>
         <translation>Classes tsunami population</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="939"/>
+        <location filename="hazard_classifications.py" line="937"/>
         <source>Tsunami hazards can be classified into one of three classes for an area. The area is either &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, or &lt;b&gt;high&lt;/b&gt;, for tsunami hazard classification. The following description for these classes is provided by Badan Geologi based on BNPB Perka 2/2012, and modified for population by Pak Hamza</source>
         <translation>L&apos;aléa tsunami peut être classifié dans une de ces trois classes pour une zone donnée. La zone est soit &lt;b&gt;sèche&lt;/b&gt;, &lt;b&gt;faible&lt;/b&gt;, &lt;b&gt;modérée&lt;/b&gt; ou &lt;b&gt;haute&lt;/b&gt; pour la classification d&apos;un tsunami. La description précédente pour ces classes est décrite par Badan Geologi dans BNPB Perka 2/2012 et modifié pour la population par Pak Hamza.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="989"/>
+        <location filename="hazard_classifications.py" line="987"/>
         <source>Water above 0.7m and less than 3.0m. The area is potentially hit by a tsunami wave with an inundation depth of 1 - 3 m or equal to V-VI tsunami intensity scale (Papadopoulos and Imamura, 2001). Tsunami wave with a 3m inundation depth causes most people frightened and to flee to higher ground. Small vessels drift and collide. Damage occurs to some wooden houses, while most of them are safe.</source>
         <translation>Profondeur d&apos;eau entre 0.7m et moins de 3.0m. Cet espace est potentiellement touché par une vague tsunamique entre 1 et 3 m ou équivalent à l&apos;échelle tsunamique V - VI (Papadopoulos et Imamura, 2001). Une vague tsunamique de 3m engendre une peur non négligeable sur la population qui l&apos;oblige à s&apos;élever le plus possible. Les petits navires dérivent et se collisionnent. Quelques bâtiments en bois subissent des dommages, certains sont non affectés.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1047"/>
+        <location filename="hazard_classifications.py" line="1045"/>
         <source>Tsunami classes ITB</source>
         <translation>Classes tsunami ITB</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1199"/>
+        <location filename="hazard_classifications.py" line="1197"/>
         <source>Tsunami hazards can be classified into one of five classes for an area. The area is either &lt;b&gt;dry&lt;/b&gt;, &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, &lt;b&gt;high&lt;/b&gt;, or &lt;b&gt;very high&lt;/b&gt; for tsunami hazard classification. The following description for these classes is provided by Pak Hamza ITB based on Papadopoulos and Imamura, 2001.</source>
         <translation>L&apos;aléa tsunami peut être classifié dans une de ces cinq classes pour une zone donnée. La zone est soit &lt;b&gt;sèche&lt;/b&gt;, &lt;b&gt;faible&lt;/b&gt;, &lt;b&gt;modérée&lt;/b&gt;, &lt;b&gt;haute&lt;/b&gt; ou &lt;b&gt;très haute&lt;/b&gt; pour la classification d&apos;un tsunami. La description précédente pour ces classes est décrite par Pak Hamza ITB basée sur Papadopoulos et Imamura, 2001.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1239"/>
+        <location filename="hazard_classifications.py" line="1237"/>
         <source>Water above 3.1m and less than 8.0m. The area is potentially hit by a tsunami wave with an inundation depth &gt; 3 m or reach a tsunami intensity scale of VII or even more (Papadopoulos and Imamura, 2001). Tsunami wave with 4 m inundation depth cause damage to small vessel, a few ships are drifted inland, severe damage on most wooden houses. Boulders are deposited on shore. If tsunami height reaches 8 m, it will cause severe damage. Dykes, wave breaker, tsunami protection walls and green belts will be washed away.</source>
         <translation>Profondeur d&apos;eau entre 3.1m et 8.0m. Cet espace est potentiellement touché par une vague tsunamique supérieur à 3m ou atteint une intensité tsunamique de VII ou plus (Papadopoulos et Imamura, 2001). Une vague tsunamique de 4m entraîne des dommages aux petits navires, des dommages conséquents sur les bâtiments en bois et quelques bateaux s&apos;échouent sur les terres. Si le tsunami atteint 8m, des dommages très importants sont subis. Les digues et les protections contre les tsunamis sont dévastés.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1198"/>
+        <location filename="hazard_classifications.py" line="1196"/>
         <source>Tsunami population classes ITB</source>
         <translation>Classes tsunami population ITB</translation>
     </message>
@@ -6681,7 +6661,7 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>La couche d&apos;agrégation semble avoir des problèmes. Quelques entités peuvent être invalides. Vous devez vérifier la validité de votre couche ou utiliser une sélection au sein de cette couche.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1561"/>
+        <location filename="impact_function.py" line="1560"/>
         <source>Something went wrong with the datastore : {error_message}</source>
         <translation>Une erreur est survenu avec le entrepôt : {error_message}</translation>
     </message>
@@ -7006,12 +6986,12 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>InaSAFE combinera ces deux couches, selon un modèle mathématique. Les résultats de ce modèle montrera l&apos;effet que l&apos;aléa aura sur les infrastructures ou les populations. L’extension se base sur les mots-clés associés à chaque couche pour déterminer ce qu&apos;elles représentent. Vous pouvez définir ces mots-clés en sélectionnant une couche puis en cliquant sur « Assistant de création des mots-clés » dans la barre d’outils.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="210"/>
+        <location filename="dock.py" line="213"/>
         <source>will be affected? Summarise the results by</source>
         <translation>seront affecté(e)s? Synthétiser les résultats par</translation>
     </message>
     <message>
-        <location filename="dock.py" line="212"/>
+        <location filename="dock.py" line="215"/>
         <source>will be affected? Summarise the results by selected features in</source>
         <translation>seront affecté(e)s? Synthétiser les résultats dans les entités sélectionnés dans</translation>
     </message>
@@ -7191,7 +7171,7 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>Forêt</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1812"/>
+        <location filename="hazard_classifications.py" line="1810"/>
         <source>Displacement rate is a generalized estimate (personal communication Craig Arthur)</source>
         <translation>Le ratio de d&apos;évacuation est une estimation généralisée (communication personnelle Craig Arthur)</translation>
     </message>
@@ -7226,7 +7206,7 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>Les personnes évacuées sont des personnes qui, pour différentes raisons et circonstances en raison de conditions de risque ou de catastrophe, se déplacent temporairement vers des endroits plus sûrs avant, pendant ou après la survenance d&apos;un événement dangereux. L&apos;évacuation peut provenir des lieux de résidence, des lieux de travail, des écoles et des hôpitaux vers d&apos;autres endroits. L&apos;évacuation est généralement une mobilisation planifiée et organisée de personnes, d&apos;animaux et de biens pour un retour éventuel. Dans InaSAFE, les rapports démographiques et sur les besoins minimaux sont basés sur les personnes déplacées / évacuées.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1834"/>
+        <location filename="hazard_classifications.py" line="1832"/>
         <source>A hazard classification is used to define a range of severity thresholds (classes) for a hazard layer. The classification will be used to create zones of data that each present a similar hazard level. During the analysis, each exposure feature will be assessed to determine which hazard class it coincides with, and then a determination will be made as to whether and how the exposure feature is likely to be impacted by the hazard.</source>
         <translation>Une classification d&apos;aléa est utilisée pour définir les seuils de sévérité (classes) pour un aléa donné. La classification sera utilisée pour créer des zones qui possèdent un niveau d&apos;aléa similaire. Pendant l&apos;analyse, chaque enjeu sera évalué pour déterminer le niveau d&apos;aléa et ainsi connaître si l&apos;enjeu est affecté ou pas par l&apos;aléa.</translation>
     </message>
@@ -7241,12 +7221,12 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>Actions pour l&apos;enjeu : {exposure_name}</translation>
     </message>
     <message>
-        <location filename="dock.py" line="933"/>
+        <location filename="dock.py" line="936"/>
         <source>No Version</source>
         <translation>Pas de Version</translation>
     </message>
     <message>
-        <location filename="wizard_utils.py" line="136"/>
+        <location filename="utilities.py" line="136"/>
         <source>Your layer&apos;s keyword&apos;s version ({layer_version}) does not match with your InaSAFE version ({inasafe_version}). If you wish to use it as an exposure, hazard, or aggregation layer in an analysis, please update the keywords. Click Next if you want to assign keywords now.</source>
         <translation>La version {layer_version} des mots-clés de votre couche ne fonctionne pas avec votre version d&apos;InaSAFE ({inasafe_version}). Si vous souhaitez utiliser cette couche en tant que couche d&apos;aléas, enjeux ou agrégation dans une analyse InaSAFE, veuillez mettre à jour les mots-clés. Cliquez sur Suivant si vous souhaitez affecter des mots-clés maintenant. </translation>
     </message>
@@ -7576,7 +7556,7 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>Le nombre de personnes handicapées déplacées pour chaque entité.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1321"/>
+        <location filename="hazard_classifications.py" line="1319"/>
         <source>hazard zone</source>
         <translation>zone d&apos;aléa</translation>
     </message>
@@ -7586,7 +7566,7 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>Intensité MMI</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1828"/>
+        <location filename="hazard_classifications.py" line="1826"/>
         <source>cyclone category</source>
         <translation>catégorie cyclone</translation>
     </message>
@@ -8352,32 +8332,32 @@ Vous pouvez sélectionner plus d&apos;un champ. InaSAFE va additionner les valeu
         <translation>notes générales volcanisme</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1327"/>
+        <location filename="hazard_classifications.py" line="1325"/>
         <source>&lt;b&gt;Tropical cyclone&lt;/b&gt; intensity is classified using five classes according to the Australian Bureau of Meteorology. Tropical Cyclone intensity is defined as the maximum mean wind speed over open flat land or water, averaged over a 10-minute period. This is sometimes referred to as the maximum sustained wind and will be experienced around the eye-wall of the cyclone.</source>
         <translation>L&apos;intensité d&apos;un &lt;b&gt;cyclone tropical&lt;/b&gt; est classée selon cinq classes selon le Bureau Australien de Météorologie. L&apos;intensité du cyclone tropical est définie comme la vitesse moyenne maximale des vents sur une terre plate ouverte ou une eau, sur une période de 10 minutes. On parle parfois du vent soutenu maximum et sera expérimenté autour de la paroi des yeux du cyclone.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1361"/>
+        <location filename="hazard_classifications.py" line="1359"/>
         <source>Extremely dangerous with widespread destruction. A Category 5 cyclone&apos;s strongest winds are VERY DESTRUCTIVE winds with typical gusts over open flat land of more than 151 kt. </source>
         <translation>Extrêmement dangereux avec une destruction généralisée. Les vents les plus forts du cyclone de catégorie 5 sont des vents TRÈS DESTRUCTEURS avec des rafales typiques sur un terrain plat ouvert de plus de 151 kt.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1392"/>
+        <location filename="hazard_classifications.py" line="1390"/>
         <source>Significant roofing loss and structural damage. Many caravans destroyed and blown away. Dangerous airborne debris . Widespread power failures. A Category 4 cyclone&apos;s strongest winds are VERY DESTRUCTIVE winds with typical gusts over open flat land of 122 - 151 kt. </source>
         <translation>Perte importante des toitures et dommages structurels. De nombreuses caravanes sont détruites et souflées. Débris aéroportés dangereux. Défaillances d&apos;alimentation électrique généralisées. Les vents les plus forts d&apos;un cyclone de catégorie 4 sont des vents TRÈS DESTRUCTEURS avec des rafales typiques sur un terrain plat ouvert de 122 à 151 kt.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1467"/>
+        <location filename="hazard_classifications.py" line="1465"/>
         <source>Minor house damage. Significant damage to signs, trees and caravans. Heavy damage to some crops. Risk of power failure. Small craft may break moorings. A Category 2 cyclone&apos;s strongest winds are DESTRUCTIVE winds with typical gusts over open flat land of 68 - 89 kt. </source>
         <translation>Dommages mineurs sur les maisons. Dommages importants aux panneaux, aux arbres et aux caravanes. Des dommages également importants à certaines cultures. Risque de panne de courant. Les petites embarcations peuvent briser les amarres. Les vents les plus forts d&apos;un cyclone de catégorie 2 sont des vents DESTRUCTEURS avec des rafales typiques sur un terrain plat ouvert de 68 à 89 kt.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1505"/>
+        <location filename="hazard_classifications.py" line="1503"/>
         <source>Negligible house damage. Damage to some crops, trees and caravans. Craft may drag moorings. A Category 1 cyclone&apos;s strongest winds are GALES with typical gusts over open flat land of 49 - 67 kt. </source>
         <translation>Dégâts négligeables sur les maisons. Dégâts à certaines cultures, arbres et caravanes. Les bâteaux peuvent glisser des amarres. Les vents les plus forts du cyclone de catégorie 1 sont des tempêtes avec des rafales typiques sur des terrains ouverts de 49 à 67 kt.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1580"/>
+        <location filename="hazard_classifications.py" line="1578"/>
         <source>The &lt;b&gt;Saffir-Simpson Hurricane Wind Scale&lt;/b&gt; is a 1 to 5 rating based on a hurricane&apos;s sustained wind speed, measured over a 1-minute period. This scale estimates potential property damage. Hurricanes reaching Category 3 and higher are considered major hurricanes because of their potential for significant loss of life and damage. Category 1 and 2 storms are still dangerous, however, and require preventative measures. In the western North Pacific, the term &quot;super typhoon&quot; is used for tropical cyclones with sustained winds exceeding 150 mph.</source>
         <translation>L&lt;b&gt;&apos;échelle des vents Ouragan Saffir-Simpson&lt;/b&gt; est une évaluation de 1 à 5 selon la vitesse de vent soutenue d&apos;un ouragan, mesurée sur une période de 1 minute. Cette échelle estime les dommages potentiels à la propriété. Les ouragans atteignant la catégorie 3 et plus sont considérés comme des ouragans majeurs en raison de leurs pertes de vie potentielles et des dégâts importants. Les tempêtes de catégorie 1 et 2 sont tout de même dangereuses et nécessitent des mesures préventives. Dans le Pacifique Nord-Ouest, le terme «super typhon» est utilisé pour les cyclones tropicaux avec des vents soutenus dépassant 150 km / h.</translation>
     </message>
@@ -8452,7 +8432,7 @@ Vous pouvez sélectionner plus d&apos;un champ. InaSAFE va additionner les valeu
         <translation>notes ratios d&apos;évacuation</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="642"/>
+        <location filename="wizard_dialog.py" line="646"/>
         <source>Invalid Field Mapping</source>
         <translation>Mappage des Champs Invalide</translation>
     </message>
@@ -9390,67 +9370,62 @@ Citations:
         <translation>Durant cette étape: {step_name}, vous allez définir le titre pour cette couche qui s&apos;affichera dans les rapports d&apos;analyse.</translation>
     </message>
     <message>
-        <location filename="step_kw65_summary.py" line="150"/>
+        <location filename="step_kw65_summary.py" line="159"/>
         <source>Keyword Summary Step</source>
         <translation>Étape résumé des mots-clés</translation>
     </message>
     <message>
-        <location filename="step_kw65_summary.py" line="161"/>
+        <location filename="step_kw65_summary.py" line="170"/>
         <source>In this wizard step: {step_name}, you will be able to review all the keywords that have been set for this layer</source>
         <translation>Durant cette étape: {step_name}, vous allez pouvoir vérifier tous les mots-clés que vous avez définis pour la couche.</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="130"/>
+        <location filename="wizard_dialog.py" line="132"/>
         <source>InaSAFE Keywords Creation Wizard</source>
         <translation>Assistant de création des mots-clés InaSAFE</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="132"/>
+        <location filename="wizard_dialog.py" line="134"/>
         <source>InaSAFE Impact Function Centric Wizard</source>
         <translation>Assistant pas-à-pas des fonctions d&apos;impact d&apos;InaSAFE</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="252"/>
+        <location filename="wizard_dialog.py" line="256"/>
         <source>Keywords update wizard for layer &lt;b&gt;{layer_name}&lt;/b&gt;</source>
         <translation>Assistant mise à jour des mots-clés pour la couche &lt;b&gt;{layer_name}&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="256"/>
-        <source>Keywords creation wizard for layer &lt;b&gt;%s&lt;/b&gt;</source>
-        <translation>Assistant de création des mots-clés pour la couche &lt;b&gt;%s&lt;/b&gt;</translation>
-    </message>
-    <message>
-        <location filename="wizard_dialog.py" line="264"/>
+        <location filename="wizard_dialog.py" line="268"/>
         <source>Use this wizard to run a guided impact assessment</source>
         <translation>Utilisez cet assistant pour établir une évaluation d&apos;impact</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="604"/>
+        <location filename="wizard_dialog.py" line="608"/>
         <source>Finish</source>
         <translation>Terminer</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="716"/>
+        <location filename="wizard_dialog.py" line="720"/>
         <source>Next</source>
         <translation>Suivant</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="725"/>
+        <location filename="wizard_dialog.py" line="729"/>
         <source>Show help</source>
         <translation>Afficher l&apos;aide</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="729"/>
+        <location filename="wizard_dialog.py" line="733"/>
         <source>Hide help</source>
         <translation>Masquer l&apos;aide</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="864"/>
+        <location filename="wizard_dialog.py" line="868"/>
         <source>InaSAFE</source>
         <translation>InaSAFE</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="864"/>
+        <location filename="wizard_dialog.py" line="868"/>
         <source>An error was encountered when saving the following keywords:
  {error_message}</source>
         <translation>Une erreur est survenue lors de l&apos;enregistrement des mots-clés:
@@ -10072,7 +10047,7 @@ Citations:
         <translation>&quot;{affected_name}&quot; est défini comme suit: {affected_description}. Ce champ contient la valeur de production qui est affectée par l&apos;aléa.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1430"/>
+        <location filename="hazard_classifications.py" line="1428"/>
         <source>Some roof and structural damage. Some caravans destroyed. Power failures likely. A Category 3 cyclone&apos;s strongest winds are VERY DESTRUCTIVE winds with typical gusts over open flat land of 90 - 121 kt. </source>
         <translation>Quelques dommages sur les toits et aux structures. Certaines caravanes sont détruites. Des pannes d&apos;électricité sont possibles. Les vents les plus forts d&apos;un cyclone de catégorie 3 sont des vents TRÈS DESTRUCTEURS avec des rafales typiques sur un terrain plat ouvert de 90 à 121 kt.</translation>
     </message>
@@ -10357,7 +10332,7 @@ Citations:
         <translation>InaSAFE - Éléments Infographiques</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="69"/>
+        <location filename="infographic.py" line="68"/>
         <source>{symbol} {age} y.o</source>
         <translation>{symbol} {age} ans</translation>
     </message>
@@ -10597,6 +10572,26 @@ Citations:
         <translation>&lt;b&gt;Une centaine de kilos&lt;/b&gt; est une unité de poids égale à 100 kilogrammes.</translation>
     </message>
     <message>
+        <location filename="hazard_classifications.py" line="575"/>
+        <source>Flooding is over 150 centimetres.</source>
+        <translation>Inondation supérieure à 150 centimètres.</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="596"/>
+        <source>Flooding between 71 and 150 centimetres.</source>
+        <translation>Inondation entre 71 et 150 centimètres.</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="618"/>
+        <source>Flooding of between 10 and 70 centimetres.</source>
+        <translation>Inondation entre 10 et 70 centimètres.</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="640"/>
+        <source>An unknown level of flooding - use caution - </source>
+        <translation>Niveau d&apos;inondation inconnu - soyez prudent - </translation>
+    </message>
+    <message>
         <location filename="generic_expressions.py" line="30"/>
         <source>Retrieve a value from a field in the impact analysis layer.</source>
         <translation>Récupération d&apos;une valeur d&apos;un champ dans la couche d&apos;analyse d&apos;impact.</translation>
@@ -10637,14 +10632,9 @@ Citations:
         <translation>Compte tenu d&apos;un temps d&apos;analyse InaSAFE, cela le convertira en format heures:minutes.</translation>
     </message>
     <message>
-        <location filename="align.py" line="82"/>
-        <source>Unable to select reference layer</source>
-        <translation>Impossible de sélectionner la couche de référence</translation>
-    </message>
-    <message>
-        <location filename="wizard_utils.py" line="183"/>
-        <source>Do not use</source>
-        <translation>Ne pas utiliser</translation>
+        <location filename="wizard_dialog.py" line="260"/>
+        <source>Keywords creation wizard for layer &lt;b&gt;{layer_name}&lt;/b&gt;</source>
+        <translation>Assistant de création des mots-clés pour la couche &lt;b&gt;{layer_name}&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="map_report.py" line="320"/>
@@ -10652,72 +10642,72 @@ Citations:
         <translation>Récupération du chemin complet inasafe-logo-white.svg.</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="89"/>
+        <location filename="infographic.py" line="88"/>
         <source>Retrieve units of the given minimum needs field name.</source>
         <translation>Récupération de l&apos;unité pour un nom de champ de besoin minimal.</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="91"/>
+        <location filename="infographic.py" line="90"/>
         <source>l/weekly</source>
         <translation>l / hedbomadaire</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="139"/>
+        <location filename="infographic.py" line="138"/>
         <source>Get a formatted infographic header sentence for an impact function.</source>
         <translation>Obtenir une phrase d&apos;en-tête infographique formatée pour une fonction d&apos;impact.</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="142"/>
+        <location filename="infographic.py" line="141"/>
         <source>Estimated impact of a flood</source>
         <translation>Estimation d&apos;Impact pour une inondation</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="165"/>
+        <location filename="infographic.py" line="164"/>
         <source>Retrieve map overview header string from definitions.</source>
         <translation>Récupération de la chaîne d&apos;en-tête de la carte d&apos;aperçu à partir des définitions.</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="182"/>
+        <location filename="infographic.py" line="181"/>
         <source>Retrieve population chart header string from definitions.</source>
         <translation>Récupération de la chaîne d&apos;en-tête du diagramme de population à partir des définitions.</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="199"/>
+        <location filename="infographic.py" line="198"/>
         <source>Retrieve people section header string from definitions.</source>
         <translation>Récupération de la chaîne d&apos;en-tête de la section des personnes à partir des définitions.</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="216"/>
+        <location filename="infographic.py" line="215"/>
         <source>Retrieve age gender section header string from definitions.</source>
         <translation>Récupération de la chaîne d&apos;en-tête de la section de genre d&apos;âge à partir des définitions.</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="233"/>
+        <location filename="infographic.py" line="232"/>
         <source>Retrieve age gender section notes string from definitions.</source>
         <translation>Récupération de la chaîne de notes de la catégorie de genre à partir des définitions.</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="250"/>
+        <location filename="infographic.py" line="249"/>
         <source>Retrieve vulnerability section header string from definitions.</source>
         <translation>Récupération de la chaîne d&apos;en-tête de la section de la vulnérabilité à partir des définitions.</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="268"/>
+        <location filename="infographic.py" line="267"/>
         <source>Retrieve female vulnerability section header string from definitions.</source>
         <translation>Récupération de la chaîne d&apos;en-tête de la section de vulnérabilité des femmes à partir des définitions.</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="286"/>
+        <location filename="infographic.py" line="285"/>
         <source>Retrieve minimum needs section header string from definitions.</source>
         <translation>Récupération de la chaîne d&apos;en-tête de la section des besoins minimaux à partir des définitions.</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="304"/>
+        <location filename="infographic.py" line="303"/>
         <source>Retrieve additional minimum needs section header string from definition.</source>
         <translation>Récupération de la chaîne d&apos;en-tête de la section des besoins minimaux supplémentaires à partir des définitions.</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="324"/>
+        <location filename="infographic.py" line="323"/>
         <source>Retrieve minimum needs section notes string from definitions.</source>
         <translation>Récupération de la chaîne de la section des notes des besoins minimaux à partir des définitions.</translation>
     </message>
@@ -11129,97 +11119,97 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>Dock</name>
     <message>
-        <location filename="dock.py" line="402"/>
+        <location filename="dock.py" line="405"/>
         <source>InaSAFE %s</source>
         <translation>InaSAFE %s</translation>
     </message>
     <message>
-        <location filename="dock.py" line="392"/>
+        <location filename="dock.py" line="395"/>
         <source>The file for organization logo in %s doesn&apos;t exists. Please check in Plugins -&gt; InaSAFE -&gt; Options that your paths are still correct and update them if needed.</source>
         <translation>Le fichier pour le logo de votre organisation dans %s n’existe pas. Vérifiez dans Extensions &gt; InaSAFE &gt; Options que le chemin est correct et corrigez-le si nécessaire. </translation>
     </message>
     <message>
-        <location filename="dock.py" line="402"/>
+        <location filename="dock.py" line="405"/>
         <source>The file for organization logo has zero height. Please provide valid file for organization logo.</source>
         <translation>Le fichier de l&apos;organisation n&apos;a pas de hauteur valide. Veuillez fournir un fichier valide pour le logo de l&apos;organisation.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="489"/>
+        <location filename="dock.py" line="492"/>
         <source>Error while saving</source>
         <translation>Erreur lors de l&apos;enregistrement</translation>
     </message>
     <message>
-        <location filename="dock.py" line="483"/>
+        <location filename="dock.py" line="486"/>
         <source>The destination location must be writable.</source>
         <translation>La destination doit avoir le droit d&apos;écriture.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="489"/>
+        <location filename="dock.py" line="492"/>
         <source>Something went wrong.</source>
         <translation>Quelque chose ne va pas.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="693"/>
+        <location filename="dock.py" line="696"/>
         <source>Entire area</source>
         <translation>Zone entière</translation>
     </message>
     <message>
-        <location filename="dock.py" line="792"/>
+        <location filename="dock.py" line="795"/>
         <source>Analysis status</source>
         <translation>État de l&apos;analyse</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1008"/>
+        <location filename="dock.py" line="1011"/>
         <source>InaSAFE</source>
         <translation>InaSAFE</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1008"/>
+        <location filename="dock.py" line="1011"/>
         <source>Please select a valid impact layer before trying to print.</source>
         <translation>Sélectionnez une couche d&apos;impact valide avant d&apos;essayer d&apos;imprimer.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1090"/>
+        <location filename="dock.py" line="1093"/>
         <source>Map Creator</source>
         <translation>Créateur de carte</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1090"/>
+        <location filename="dock.py" line="1093"/>
         <source>Your PDF was created....opening using the default PDF viewer on your system.</source>
         <translation>Votre pdf a été créé... ouverture en cours avec le visualisateur PDF par défaut de votre système.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1090"/>
+        <location filename="dock.py" line="1093"/>
         <source>The generated pdfs were saved as:</source>
         <translation>Les PDFs ont été enregistrés en tant que:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1102"/>
+        <location filename="dock.py" line="1105"/>
         <source>The generated htmls were saved as:</source>
         <translation>Les HTMLs ont été enregistrés en tant que:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1108"/>
+        <location filename="dock.py" line="1111"/>
         <source>The generated qpts were saved as:</source>
         <translation>Les QPTs ont été enregistrés en tant que:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1369"/>
+        <location filename="dock.py" line="1373"/>
         <source>The hazard layer, exposure layer and your defined analysis area extents all overlap. Press the run button below to continue with the analysis.</source>
         <translation>La couche d&apos;aléa, d&apos;enjeu et votre emprise d&apos;analyse se superposent. Pressez le bouton &quot;lancer&quot; afin de continuer l&apos;analyse.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1374"/>
+        <location filename="dock.py" line="1378"/>
         <source>Analysis environment ready</source>
         <translation>Environnement d&apos;analyse prêt</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1374"/>
+        <location filename="dock.py" line="1378"/>
         <source>More info ...</source>
         <translation>Plus d&apos;informations ...</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1412"/>
+        <location filename="dock.py" line="1416"/>
         <source>No overlapping extents</source>
         <translation>Pas de chevauchements dans l&apos;étendue des couches</translation>
     </message>
@@ -12945,32 +12935,11 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-    <name>StepFcFunction</name>
-    <message>
-        <location filename="step_fc10_function.py" line="71"/>
-        <source>Function</source>
-        <translation>Fonction</translation>
-    </message>
-    <message>
-        <location filename="step_fc10_function.py" line="74"/>
-        <source>Overview</source>
-        <translation>Présentation</translation>
-    </message>
-</context>
-<context>
     <name>StepFcFunctions2</name>
     <message>
         <location filename="step_fc05_functions2.py" line="108"/>
         <source>Available functions:</source>
         <translation>Fonctions disponibles :</translation>
-    </message>
-</context>
-<context>
-    <name>StepFcParams</name>
-    <message>
-        <location filename="step_fc80_params.py" line="76"/>
-        <source>Please set impact functions parameters.&lt;br/&gt;Parameters for impact function &quot;%s&quot; that can be modified are:</source>
-        <translation>Définir les paramètres des fonctions d&apos;impact. &lt;br/&gt;Les Paramètres pour la fonction d&apos;impact &quot;%s&quot; qui peuvent être modifiés sont : </translation>
     </message>
 </context>
 <context>
@@ -13035,7 +13004,7 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>StepKwSummary</name>
     <message>
-        <location filename="step_kw65_summary.py" line="133"/>
+        <location filename="step_kw65_summary.py" line="142"/>
         <source>The selected keywords don&apos;t match requirements of the selected impact function (%s). You can continue with registering the layer, however, you&apos;ll need to choose another layer for that function.</source>
         <translation>Les mots-clés sélectionnés ne correspondent pas aux mots-clés requis par la fonction de calcul d&apos;impact (%s). Vous pouvez continuer la sélection de la couche, cependant, vous allez devoir en choisir une autre pour cette fonction.</translation>
     </message>
