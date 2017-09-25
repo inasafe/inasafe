@@ -11,6 +11,13 @@ from safe.metadata.utilities import XML_NS
 from safe.metadata.utilities import merge_dictionaries
 from safe.metadata.encoder import MetadataEncoder
 
+from safe.definitions.keyword_properties import (
+    property_exposure_keywords,
+    property_hazard_keywords,
+    property_aggregation_keywords,
+    property_provenance_data
+)
+
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
@@ -43,28 +50,28 @@ class OutputLayerMetadata(BaseMetadata):
     # these are properties that need special getters and setters thus are
     # not put in the standard_properties
     _standard_properties = {
-        'exposure_keywords': (
+        property_exposure_keywords['key']: (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
             'inasafe/'
             'exposure_keywords/'
             'gco:Dictionary'),
-        'hazard_keywords': (
+        property_hazard_keywords['key']: (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
             'inasafe/'
             'hazard_keywords/'
             'gco:Dictionary'),
-        'aggregation_keywords': (
+        property_aggregation_keywords['key']: (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
             'inasafe/'
             'aggregation_keywords/'
             'gco:Dictionary'),
-        'provenance_data': (
+        property_provenance_data['key']: (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'

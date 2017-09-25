@@ -11,6 +11,9 @@ from PyQt4.QtCore import QUrl, QDateTime
 from qgis.core import QgsMapLayer
 
 from safe.definitions.utilities import definition
+from safe.definitions.keyword_properties import (
+    property_extra_keywords
+)
 from safe import messaging as m
 
 from safe.messaging import styles
@@ -147,13 +150,13 @@ class KeywordIO(QObject):
             'value_maps',  # attribute values
             'inasafe_fields',
             'inasafe_default_values',
-            'resample',
             'source',
             'url',
             'scale',
             'license',
             'date',
-            'keyword_version'
+            property_extra_keywords['key'],
+            'keyword_version',
         ]  # everything else in arbitrary order
         report = m.Message()
         if show_header:
@@ -255,7 +258,7 @@ class KeywordIO(QObject):
                 'value_map',
                 'inasafe_fields',
                 'inasafe_default_values',
-                'extra_keywords']:
+                property_extra_keywords['key']]:
             value = self._dict_to_row(value)
         elif keyword == 'value_maps':
             value = self._value_maps_row(value)

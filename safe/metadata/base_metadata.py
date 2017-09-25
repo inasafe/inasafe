@@ -8,6 +8,24 @@ from datetime import datetime
 from xml.etree import ElementTree
 
 from safe.definitions.metadata import TYPE_CONVERSIONS, METADATA_XML_TEMPLATE
+from safe.definitions.keyword_properties import (
+    property_extra_keywords,
+    property_organisation,
+    property_email,
+    property_date,
+    property_abstract,
+    property_title,
+    property_license,
+    property_url,
+    property_layer_purpose,
+    property_layer_mode,
+    property_layer_geometry,
+    property_keyword_version,
+    property_scale,
+    property_source,
+    property_inasafe_fields,
+    property_inasafe_default_values
+)
 from safe.common.exceptions import MetadataReadError, HashNotFoundError
 from safe.metadata.encoder import MetadataEncoder
 from safe.metadata.metadata_db_io import MetadataDbIO
@@ -52,12 +70,12 @@ class BaseMetadata(object):
     # paths in xml files for standard properties these are the ones we try
     # to read from an xml file
     _standard_properties = {
-        'organisation': (
+        property_organisation['key']: (
             'gmd:contact/'
             'gmd:CI_ResponsibleParty/'
             'gmd:organisationName/'
             'gco:CharacterString'),
-        'email': (
+        property_email['key']: (
             'gmd:contact/'
             'gmd:CI_ResponsibleParty/'
             'gmd:contactInfo/'
@@ -66,29 +84,29 @@ class BaseMetadata(object):
             'gmd:CI_Address/'
             'gmd:electronicMailAddress/'
             'gco:CharacterString'),
-        'date': (
+        property_date['key']: (
             'gmd:dateStamp/'
             'gco:Date'),
-        'abstract': (
+        property_abstract['key']: (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:abstract/'
             'gco:CharacterString'),
-        'title': (
+        property_title['key']: (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:citation/'
             'gmd:CI_Citation/'
             'gmd:title/'
             'gco:CharacterString'),
-        'license': (
+        property_license['key']: (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:resourceConstraints/'
             'gmd:MD_Constraints/'
             'gmd:useLimitation/'
             'gco:CharacterString'),
-        'url': (
+        property_url['key']: (
             'gmd:distributionInfo/'
             'gmd:MD_Distribution/'
             'gmd:transferOptions/'
@@ -97,63 +115,63 @@ class BaseMetadata(object):
             'gmd:CI_OnlineResource/'
             'gmd:linkage/'
             'gmd:URL'),
-        'layer_purpose': (
+        property_layer_purpose['key']: (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
             'inasafe/'
             'layer_purpose/'
             'gco:CharacterString'),
-        'layer_mode': (
+        property_layer_mode['key']: (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
             'inasafe/'
             'layer_mode/'
             'gco:CharacterString'),
-        'layer_geometry': (
+        property_layer_geometry['key']: (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
             'inasafe/'
             'layer_geometry/'
             'gco:CharacterString'),
-        'keyword_version': (
+        property_keyword_version['key']: (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
             'inasafe/'
             'keyword_version/'
             'gco:CharacterString'),
-        'scale': (
+        property_scale['key']: (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
             'inasafe/'
             'scale/'
             'gco:CharacterString'),
-        'source': (
+        property_source['key']: (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
             'inasafe/'
             'source/'
             'gco:CharacterString'),
-        'inasafe_fields': (
+        property_inasafe_fields['key']: (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
             'inasafe/'
             'inasafe_fields/'
             'gco:Dictionary'),
-        'inasafe_default_values': (
+        property_inasafe_default_values['key']: (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
             'inasafe/'
             'inasafe_default_values/'
             'gco:Dictionary'),
-        'extra_keywords': (
+        property_extra_keywords['key']: (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
