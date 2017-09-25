@@ -1,24 +1,20 @@
-# -*- coding: utf-8 -*-
-"""
-InaSAFE Disaster risk assessment tool developed by AusAid -
-**metadata module.**
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-"""
-
-__author__ = 'marco@opengis.ch'
-__revision__ = '$Format:%H$'
-__date__ = '27/05/2015'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
+# coding=utf-8
+"""This module exposure layer metadata implementation."""
 
 from safe.metadata.generic_layer_metadata import GenericLayerMetadata
 from safe.metadata.utilities import merge_dictionaries
+from safe.definitions.keyword_properties import (
+    property_exposure,
+    property_exposure_unit,
+    property_classification,
+    property_value_map,
+    property_active_band
+)
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 
 class ExposureLayerMetadata(GenericLayerMetadata):
@@ -29,35 +25,35 @@ class ExposureLayerMetadata(GenericLayerMetadata):
     """
 
     _standard_properties = {
-        'exposure': (
+        property_exposure['key']: (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
             'inasafe/'
             'exposure/'
             'gco:CharacterString'),
-        'exposure_unit': (
+        property_exposure_unit['key']: (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
             'inasafe/'
             'exposure_unit/'
             'gco:CharacterString'),
-        'classification': (
+        property_classification['key']: (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
             'inasafe/'
             'classification/'
             'gco:CharacterString'),
-        'value_map': (
+        property_value_map['key']: (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
             'inasafe/'
             'value_map/'
             'gco:Dictionary'),
-        'active_band': (
+        property_active_band['key']: (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'

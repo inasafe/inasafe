@@ -1,8 +1,16 @@
 # coding=utf-8
-"""Hazard Layer Metadata."""
+"""This module exposure layer metadata implementation."""
 
 from safe.metadata.generic_layer_metadata import GenericLayerMetadata
 from safe.metadata.utilities import merge_dictionaries
+from safe.definitions.keyword_properties import (
+    property_hazard,
+    property_hazard_category,
+    property_continuous_hazard_unit,
+    property_value_maps,
+    property_thresholds,
+    property_active_band
+)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -18,42 +26,42 @@ class HazardLayerMetadata(GenericLayerMetadata):
     """
 
     _standard_properties = {
-        'hazard': (
+        property_hazard['key']: (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
             'inasafe/'
             'hazard/'
             'gco:CharacterString'),
-        'hazard_category': (
+        property_hazard_category['key']: (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
             'inasafe/'
             'hazard_category/'
             'gco:CharacterString'),
-        'continuous_hazard_unit': (
+        property_continuous_hazard_unit['key']: (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
             'inasafe/'
             'continuous_hazard_unit/'
             'gco:CharacterString'),
-        'value_maps': (
+        property_value_maps['key']: (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
             'inasafe/'
             'value_map/'
             'gco:Dictionary'),
-        'thresholds': (
+        property_thresholds['key']: (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
             'inasafe/'
             'thresholds/'
             'gco:Dictionary'),
-        'active_band': (
+        property_active_band['key']: (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
