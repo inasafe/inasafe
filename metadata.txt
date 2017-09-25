@@ -18,7 +18,7 @@ about=Developed for the Indonesian Government - BNPB, Australian Government - AI
 # If you change version and status here, please also change in safe/definitions/versions.py
 version=4.2.3
 # alpha, beta, rc or final
-status=beta
+status=final
 
 
 # end of mandatory metadata
