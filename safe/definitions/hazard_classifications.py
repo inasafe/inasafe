@@ -579,7 +579,7 @@ flood_petabencana_hazard_classes = {
             'displacement_rate': 0.05,
             'numeric_default_min': 1.5,
             'numeric_default_max': big_number,
-            'string_defaults': ['high, severe'],
+            'string_defaults': ['high', 'severe'],
             'citations': [
                 {
                     'text': None,
@@ -601,7 +601,7 @@ flood_petabencana_hazard_classes = {
             'displacement_rate': 0.03,
             'numeric_default_min': 0.7,
             'numeric_default_max': 1.5,
-            'string_defaults': ['medium, moderate'],
+            'string_defaults': ['medium', 'moderate'],
             'citations': [
                 {
                     'text': None,
@@ -623,7 +623,7 @@ flood_petabencana_hazard_classes = {
             'displacement_rate': 0.01,
             'numeric_default_min': 0.1,
             'numeric_default_max': 0.7,
-            'string_defaults': ['low, minor'],
+            'string_defaults': ['low', 'minor'],
             'citations': [
                 {
                     'text': None,
@@ -645,7 +645,7 @@ flood_petabencana_hazard_classes = {
             'displacement_rate': 0.0,
             'numeric_default_min': 0,
             'numeric_default_max': 0.1,
-            'string_defaults': ['caution, unknown'],
+            'string_defaults': ['caution', 'unknown'],
             'citations': [
                 {
                     'text': None,
@@ -686,7 +686,7 @@ ash_hazard_classes = {
             'displacement_rate': 1.0,
             'numeric_default_min': 10,
             'numeric_default_max': big_number,
-            'string_defaults': ['very hight'],
+            'string_defaults': ['very high'],
             'citations': [
                 {
                     'text': None,
