@@ -38,37 +38,37 @@
         <translation>%i days, %i hours and %i minutes</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="158"/>
+        <location filename="utilities.py" line="187"/>
         <source>sourced from</source>
         <translation>sourced from</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="160"/>
+        <location filename="utilities.py" line="189"/>
         <source>Hazard details</source>
         <translation>Hazard details</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="163"/>
+        <location filename="utilities.py" line="192"/>
         <source>Exposure details</source>
         <translation>Exposure details</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="170"/>
+        <location filename="utilities.py" line="199"/>
         <source>Hazard layer</source>
         <translation>Hazard layer</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="185"/>
+        <location filename="utilities.py" line="214"/>
         <source>an unknown source</source>
         <translation>an unknown source</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="180"/>
+        <location filename="utilities.py" line="209"/>
         <source>Exposure layer</source>
         <translation>Exposure layer</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="202"/>
+        <location filename="utilities.py" line="231"/>
         <source>Software notes</source>
         <translation>Software notes</translation>
     </message>
@@ -588,7 +588,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1457"/>
+        <location filename="definitions_help.py" line="1448"/>
         <source>Displacement rate</source>
         <translation type="unfinished"></translation>
     </message>
@@ -728,17 +728,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1292"/>
+        <location filename="hazard_classifications.py" line="1290"/>
         <source>Low</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1266"/>
+        <location filename="hazard_classifications.py" line="1264"/>
         <source>Medium</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1237"/>
+        <location filename="hazard_classifications.py" line="1235"/>
         <source>High</source>
         <translation type="unfinished"></translation>
     </message>
@@ -808,7 +808,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1171"/>
+        <location filename="hazard_classifications.py" line="1169"/>
         <source>No water above ground height.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1307,7 +1307,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="805"/>
+        <location filename="hazard_classifications.py" line="803"/>
         <source>Tsunami classes</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1493,7 +1493,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1833"/>
+        <location filename="hazard_classifications.py" line="1831"/>
         <source>Classes</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1503,7 +1503,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="utilities.py" line="207"/>
+        <location filename="utilities.py" line="236"/>
         <source>This report was created using InaSAFE version %s. Visit http://inasafe.org to get your free copy of this software! %s</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1553,7 +1553,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="utilities.py" line="159"/>
+        <location filename="utilities.py" line="188"/>
         <source>Analysis details</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1578,7 +1578,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="909"/>
+        <location filename="hazard_classifications.py" line="907"/>
         <source>Dry</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2748,7 +2748,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1455"/>
+        <location filename="definitions_help.py" line="1446"/>
         <source>Affected</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2913,12 +2913,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1169"/>
+        <location filename="hazard_classifications.py" line="1167"/>
         <source>Dry zone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1220"/>
+        <location filename="hazard_classifications.py" line="1218"/>
         <source>Water above 8.0m.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3167,7 +3167,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1390"/>
+        <location filename="definitions_help.py" line="1381"/>
         <source>Length</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4212,112 +4212,112 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="664"/>
+        <location filename="hazard_classifications.py" line="662"/>
         <source>Ash classes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1218"/>
+        <location filename="hazard_classifications.py" line="1216"/>
         <source>Very high</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1326"/>
+        <location filename="hazard_classifications.py" line="1324"/>
         <source>Cyclone classes (AU - BOM)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1359"/>
+        <location filename="hazard_classifications.py" line="1357"/>
         <source>Category 5 (severe tropical cyclone)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1390"/>
+        <location filename="hazard_classifications.py" line="1388"/>
         <source>Category 4 (severe tropical cyclone)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1428"/>
+        <location filename="hazard_classifications.py" line="1426"/>
         <source>Category 3 (severe tropical cyclone)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1465"/>
+        <location filename="hazard_classifications.py" line="1463"/>
         <source>Category 2 (tropical cyclone)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1503"/>
+        <location filename="hazard_classifications.py" line="1501"/>
         <source>Category 1 (tropical cyclone)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1540"/>
+        <location filename="hazard_classifications.py" line="1538"/>
         <source>Tropical Depression</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1579"/>
+        <location filename="hazard_classifications.py" line="1577"/>
         <source>Hurricane classes (SSHWS)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1609"/>
+        <location filename="hazard_classifications.py" line="1607"/>
         <source>Category 5 (major hurricane)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1611"/>
+        <location filename="hazard_classifications.py" line="1609"/>
         <source>Catastrophic damage will occur: A high percentage of framed homes will be destroyed, with total roof failure and wall collapse. Fallen trees and power poles will isolate residential areas. Power outages will last for weeks to possibly months. Most of the area will be uninhabitable for weeks or months.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1643"/>
+        <location filename="hazard_classifications.py" line="1641"/>
         <source>Category 4 (major hurricane)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1645"/>
+        <location filename="hazard_classifications.py" line="1643"/>
         <source>Catastrophic damage will occur: Well-built framed homes can sustain severe damage with loss of most of the roof structure and/or some exterior walls. Most trees will be snapped or uprooted and power poles downed. Fallen trees and power poles will isolate residential areas. Power outages will last weeks to possibly months. Most of the area will be uninhabitable for weeks or months.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1683"/>
+        <location filename="hazard_classifications.py" line="1681"/>
         <source>Category 3 (major hurricane)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1685"/>
+        <location filename="hazard_classifications.py" line="1683"/>
         <source>Devastating damage will occur: Well-built framed homes may incur major damage or removal of roof decking and gable ends. Many trees will be snapped or uprooted, blocking numerous roads. Electricity and water will be unavailable for several days to weeks after the storm passes.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1721"/>
+        <location filename="hazard_classifications.py" line="1719"/>
         <source>Category 2 (hurricane)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1723"/>
+        <location filename="hazard_classifications.py" line="1721"/>
         <source>Extremely dangerous winds will cause extensive damage: Well-constructed frame homes could sustain major roof and siding damage. Many shallowly rooted trees will be snapped or uprooted and block numerous roads. Near-total power loss is expected with outages that could last from several days to weeks.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1759"/>
+        <location filename="hazard_classifications.py" line="1757"/>
         <source>Category 1 (hurricane)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1761"/>
+        <location filename="hazard_classifications.py" line="1759"/>
         <source>Very dangerous winds will produce some damage: Well-constructed frame homes could have damage to roof, shingles, vinyl siding and gutters. Large branches of trees will snap and shallowly rooted trees may be toppled. Extensive damage to power lines and poles likely will result in power outages that could last a few to several days.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1797"/>
+        <location filename="hazard_classifications.py" line="1795"/>
         <source>No hurricane</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1799"/>
+        <location filename="hazard_classifications.py" line="1797"/>
         <source>Winds less than Category 1 Hurricane</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4552,332 +4552,332 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="109"/>
+        <location filename="definitions_help.py" line="107"/>
         <source>InaSAFE help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="767"/>
+        <location filename="definitions_help.py" line="765"/>
         <source>Overview</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="146"/>
+        <location filename="definitions_help.py" line="144"/>
         <source>Limitations and License</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="210"/>
+        <location filename="definitions_help.py" line="208"/>
         <source>Core functionality and tools</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="217"/>
+        <location filename="definitions_help.py" line="215"/>
         <source>The InaSAFE Dock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="225"/>
+        <location filename="definitions_help.py" line="223"/>
         <source>InaSAFE Reports</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="233"/>
+        <location filename="definitions_help.py" line="231"/>
         <source>Managing analysis extents with the extents selector</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="241"/>
+        <location filename="definitions_help.py" line="239"/>
         <source>InaSAFE Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="249"/>
+        <location filename="definitions_help.py" line="247"/>
         <source>The Batch Runner</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="273"/>
+        <location filename="definitions_help.py" line="271"/>
         <source>The Shakemap Converter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="335"/>
+        <location filename="definitions_help.py" line="333"/>
         <source>The minimum needs tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="342"/>
+        <location filename="definitions_help.py" line="340"/>
         <source>The minimum needs manager</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="354"/>
+        <location filename="definitions_help.py" line="352"/>
         <source>Analysis steps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="360"/>
+        <location filename="definitions_help.py" line="358"/>
         <source>Analysis internal process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="372"/>
+        <location filename="definitions_help.py" line="370"/>
         <source>Progress reporting steps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="387"/>
+        <location filename="definitions_help.py" line="385"/>
         <source>Hazard Concepts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="412"/>
+        <location filename="definitions_help.py" line="410"/>
         <source>Exposure Concepts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="430"/>
+        <location filename="definitions_help.py" line="428"/>
         <source>InaSAFE Defaults</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1473"/>
+        <location filename="definitions_help.py" line="1464"/>
         <source>Name</source>
         <translation type="unfinished">Name</translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="439"/>
+        <location filename="definitions_help.py" line="437"/>
         <source>Default value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1459"/>
+        <location filename="definitions_help.py" line="1450"/>
         <source>Default min</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1460"/>
+        <location filename="definitions_help.py" line="1451"/>
         <source>Default max</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="940"/>
+        <location filename="definitions_help.py" line="931"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="465"/>
+        <location filename="definitions_help.py" line="463"/>
         <source>Fields</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="471"/>
+        <location filename="definitions_help.py" line="469"/>
         <source>Input dataset fields</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="477"/>
+        <location filename="definitions_help.py" line="475"/>
         <source>Exposure fields</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="482"/>
+        <location filename="definitions_help.py" line="480"/>
         <source>Hazard fields</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="487"/>
+        <location filename="definitions_help.py" line="485"/>
         <source>Aggregation fields</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="492"/>
+        <location filename="definitions_help.py" line="490"/>
         <source>Output dataset fields</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="498"/>
+        <location filename="definitions_help.py" line="496"/>
         <source>Impact fields</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="503"/>
+        <location filename="definitions_help.py" line="501"/>
         <source>Aggregate hazard fields</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="518"/>
+        <location filename="definitions_help.py" line="516"/>
         <source>Analysis fields</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="528"/>
+        <location filename="definitions_help.py" line="526"/>
         <source>Layer Geometry Types</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="534"/>
+        <location filename="definitions_help.py" line="532"/>
         <source>Vector</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="571"/>
+        <location filename="definitions_help.py" line="569"/>
         <source>Layer Modes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="587"/>
+        <location filename="definitions_help.py" line="585"/>
         <source>Layer Purposes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="638"/>
+        <location filename="definitions_help.py" line="636"/>
         <source>All Units</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1169"/>
+        <location filename="definitions_help.py" line="1160"/>
         <source>Plural</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1170"/>
+        <location filename="definitions_help.py" line="1161"/>
         <source>Abbreviation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="703"/>
+        <location filename="definitions_help.py" line="701"/>
         <source>Post Processors</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="670"/>
+        <location filename="definitions_help.py" line="668"/>
         <source>Post Processor Input Types</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="681"/>
+        <location filename="definitions_help.py" line="679"/>
         <source>Post Processor Input Values</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="692"/>
+        <location filename="definitions_help.py" line="690"/>
         <source>Post Processor Process Types</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="713"/>
+        <location filename="definitions_help.py" line="711"/>
         <source>Input Fields</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="714"/>
+        <location filename="definitions_help.py" line="712"/>
         <source>Output Fields</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="885"/>
+        <location filename="definitions_help.py" line="876"/>
         <source>Contents</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1049"/>
+        <location filename="definitions_help.py" line="1040"/>
         <source>General notes:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1099"/>
+        <location filename="definitions_help.py" line="1090"/>
         <source>Notes for continuous datasets:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1108"/>
+        <location filename="definitions_help.py" line="1099"/>
         <source>Notes for classified datasets:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1117"/>
+        <location filename="definitions_help.py" line="1108"/>
         <source>Notes for single events</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1128"/>
+        <location filename="definitions_help.py" line="1119"/>
         <source>Notes for multi events / scenarios:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1141"/>
+        <location filename="definitions_help.py" line="1132"/>
         <source>Actions:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1165"/>
+        <location filename="definitions_help.py" line="1156"/>
         <source>Units:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1196"/>
+        <location filename="definitions_help.py" line="1187"/>
         <source>Hazard classifications</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1294"/>
+        <location filename="definitions_help.py" line="1285"/>
         <source>unspecified</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1317"/>
+        <location filename="definitions_help.py" line="1308"/>
         <source>Exposure entities in this class ARE considered affected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1320"/>
+        <location filename="definitions_help.py" line="1311"/>
         <source>Exposure entities in this class are NOT considered affected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1326"/>
+        <location filename="definitions_help.py" line="1317"/>
         <source>This class is NOT required in the hazard keywords.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1329"/>
+        <location filename="definitions_help.py" line="1320"/>
         <source>This class IS required in the hazard keywords.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1388"/>
+        <location filename="definitions_help.py" line="1379"/>
         <source>Field Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1389"/>
+        <location filename="definitions_help.py" line="1380"/>
         <source>Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1391"/>
+        <location filename="definitions_help.py" line="1382"/>
         <source>Precision</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1436"/>
+        <location filename="definitions_help.py" line="1427"/>
         <source>Decimal number</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1437"/>
+        <location filename="definitions_help.py" line="1428"/>
         <source>Text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1438"/>
+        <location filename="definitions_help.py" line="1429"/>
         <source>Whole number</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1474"/>
+        <location filename="definitions_help.py" line="1465"/>
         <source>Default values</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4947,17 +4947,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1210"/>
+        <location filename="dock.py" line="1213"/>
         <source>The impact function could not run because of the inputs.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1217"/>
+        <location filename="dock.py" line="1220"/>
         <source>The impact function could not run because of a bug.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1223"/>
+        <location filename="dock.py" line="1226"/>
         <source>The impact function could run without errors.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5052,12 +5052,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1193"/>
+        <location filename="dock.py" line="1196"/>
         <source>The impact function should not have been ready.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1280"/>
+        <location filename="dock.py" line="1284"/>
         <source>The impact report could not be generated.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5622,27 +5622,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="774"/>
+        <location filename="hazard_classifications.py" line="772"/>
         <source>Very low</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1337"/>
+        <location filename="hazard_classifications.py" line="1335"/>
         <source>Australian Bureau of Meteorology - Tropical Cyclone Intensity and Impacts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1344"/>
+        <location filename="hazard_classifications.py" line="1342"/>
         <source>Tropical cyclone scales - wikpedia</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1593"/>
+        <location filename="hazard_classifications.py" line="1591"/>
         <source>NOAA - NHC</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1597"/>
+        <location filename="hazard_classifications.py" line="1595"/>
         <source>Saffir-Simpson scale - wikipedia</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5727,32 +5727,32 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="281"/>
+        <location filename="definitions_help.py" line="279"/>
         <source>The Multi Buffer Tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1047"/>
+        <location filename="definitions_help.py" line="1038"/>
         <source>Notes:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1120"/>
+        <location filename="definitions_help.py" line="1111"/>
         <source>No single event notes defined.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1133"/>
+        <location filename="definitions_help.py" line="1124"/>
         <source>No multi-event notes defined.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1183"/>
+        <location filename="definitions_help.py" line="1174"/>
         <source>Fields:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1209"/>
+        <location filename="definitions_help.py" line="1200"/>
         <source>Classes:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5862,7 +5862,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1401"/>
+        <location filename="dock.py" line="1405"/>
         <source>The requested extent is not overlapping your layers.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6037,7 +6037,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1542"/>
+        <location filename="hazard_classifications.py" line="1540"/>
         <source>A tropical depression is a tropical disturbance, that has a clearly defined surface circulation, which has maximum sustained winds of less than 34 kt.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6292,117 +6292,97 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="575"/>
-        <source>Water is above waist height.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="596"/>
-        <source>Water is above knee height, below waist height.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="618"/>
-        <source>Water encountered up to knee deep.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="hazard_classifications.py" line="638"/>
         <source>Use caution</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="640"/>
-        <source>No water encountered above ground height but there are may be floods in surrounding areas and you should use caution when moving around in this area.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="665"/>
+        <location filename="hazard_classifications.py" line="663"/>
         <source>Five classes are supported for volcanic ash hazard data: &lt;b&gt;very low&lt;/b&gt;, &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, &lt;b&gt;high&lt;/b&gt; or &lt;b&gt;very high&lt;/b&gt;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="684"/>
+        <location filename="hazard_classifications.py" line="682"/>
         <source>Dry loading on buildings causing structural collapse.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="705"/>
+        <location filename="hazard_classifications.py" line="703"/>
         <source>Dry loading on buildings causing structural damage but not collapse; wet loading on buildings (i.e. ash loading + heavy rainfall) causing structural collapse.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="728"/>
+        <location filename="hazard_classifications.py" line="726"/>
         <source>Damage to less vulnerable agricultural crops (e.g. tea plantations) and destruction of more vulnerable crops; destruction of critical infrastructure; cosmetic (non-structural) damage to buildings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="753"/>
+        <location filename="hazard_classifications.py" line="751"/>
         <source>Damage to transportation routes (e.g. airports, roads, railways); damage to critical infrastructure (e.g. electricity supply); damage to more vulnerable agricultural crops (e.g. rice fields)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="776"/>
+        <location filename="hazard_classifications.py" line="774"/>
         <source>Impact on health (respiration), livestock, and contamination of water supply.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="807"/>
+        <location filename="hazard_classifications.py" line="805"/>
         <source>Tsunami hazards can be classified into one of four classes for an area. The area is either &lt;b&gt;dry&lt;/b&gt;, &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, or &lt;b&gt;high&lt;/b&gt;, for tsunami hazard classification. The following description for these classes is provided by Badan Geologi based on BNPB Perka 2/2012</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="949"/>
+        <location filename="hazard_classifications.py" line="947"/>
         <source>BNPB Perka 2/2012</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="961"/>
+        <location filename="hazard_classifications.py" line="959"/>
         <source>The area is potentially hit by a tsunami wave with an inundation depth &gt; 3 m or reach a tsunami intensity scale of VII or more (Papadopoulos and Imamura, 2001). Tsunami wave with 4 m inundation depth cause damage to small vessel, a few ships are drifted inland, severe damage on most wooden houses. Boulders are deposited on shore. If tsunami height reaches 8 m, it will cause severe damage. Dykes, wave breaker, tsunami protection walls and green belts will be washed away.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1268"/>
+        <location filename="hazard_classifications.py" line="1266"/>
         <source>Water above 1.1m and less than 3.0m. The area is potentially hit by a tsunami wave with an inundation depth of 1 - 3 m or equal to V-VI tsunami intensity scale (Papadopoulos and Imamura, 2001). Tsunami wave with a 3m inundation depth causes most people frightened and to flee to higher ground. Small vessels drift and collide. Damage occurs to some wooden houses, while most of them are safe.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1294"/>
+        <location filename="hazard_classifications.py" line="1292"/>
         <source>Water above ground height and less than 1.0m. The area is potentially hit by a tsunami wave with an inundation depth less than 1 m or similar to tsunami intensity scale of V or less in (Papadopoulos and Imamura, 2001). Tsunami wave of 1m height causes few people to be frightened and flee to higher elevation. Felt by most people on large ship, observed from shore. Small vessels drift and collide and some turn over. Sand is deposited and there is flooding of areas close to the shore.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="937"/>
+        <location filename="hazard_classifications.py" line="935"/>
         <source>Tsunami population classes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="939"/>
+        <location filename="hazard_classifications.py" line="937"/>
         <source>Tsunami hazards can be classified into one of three classes for an area. The area is either &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, or &lt;b&gt;high&lt;/b&gt;, for tsunami hazard classification. The following description for these classes is provided by Badan Geologi based on BNPB Perka 2/2012, and modified for population by Pak Hamza</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="989"/>
+        <location filename="hazard_classifications.py" line="987"/>
         <source>Water above 0.7m and less than 3.0m. The area is potentially hit by a tsunami wave with an inundation depth of 1 - 3 m or equal to V-VI tsunami intensity scale (Papadopoulos and Imamura, 2001). Tsunami wave with a 3m inundation depth causes most people frightened and to flee to higher ground. Small vessels drift and collide. Damage occurs to some wooden houses, while most of them are safe.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1047"/>
+        <location filename="hazard_classifications.py" line="1045"/>
         <source>Tsunami classes ITB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1199"/>
+        <location filename="hazard_classifications.py" line="1197"/>
         <source>Tsunami hazards can be classified into one of five classes for an area. The area is either &lt;b&gt;dry&lt;/b&gt;, &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, &lt;b&gt;high&lt;/b&gt;, or &lt;b&gt;very high&lt;/b&gt; for tsunami hazard classification. The following description for these classes is provided by Pak Hamza ITB based on Papadopoulos and Imamura, 2001.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1239"/>
+        <location filename="hazard_classifications.py" line="1237"/>
         <source>Water above 3.1m and less than 8.0m. The area is potentially hit by a tsunami wave with an inundation depth &gt; 3 m or reach a tsunami intensity scale of VII or even more (Papadopoulos and Imamura, 2001). Tsunami wave with 4 m inundation depth cause damage to small vessel, a few ships are drifted inland, severe damage on most wooden houses. Boulders are deposited on shore. If tsunami height reaches 8 m, it will cause severe damage. Dykes, wave breaker, tsunami protection walls and green belts will be washed away.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1198"/>
+        <location filename="hazard_classifications.py" line="1196"/>
         <source>Tsunami population classes ITB</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6627,7 +6607,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="265"/>
+        <location filename="definitions_help.py" line="263"/>
         <source>The PetaBencana Downloader</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6677,7 +6657,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1561"/>
+        <location filename="impact_function.py" line="1560"/>
         <source>Something went wrong with the datastore : {error_message}</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6857,12 +6837,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="163"/>
+        <location filename="definitions_help.py" line="161"/>
         <source>Glossary of terms</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="896"/>
+        <location filename="definitions_help.py" line="887"/>
         <source>Term</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7002,12 +6982,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="210"/>
+        <location filename="dock.py" line="213"/>
         <source>will be affected? Summarise the results by</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="212"/>
+        <location filename="dock.py" line="215"/>
         <source>will be affected? Summarise the results by selected features in</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7117,12 +7097,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="508"/>
+        <location filename="definitions_help.py" line="506"/>
         <source>Aggregation summary fields</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="513"/>
+        <location filename="definitions_help.py" line="511"/>
         <source>Exposure summary table fields</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7187,7 +7167,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1812"/>
+        <location filename="hazard_classifications.py" line="1810"/>
         <source>Displacement rate is a generalized estimate (personal communication Craig Arthur)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7222,22 +7202,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1834"/>
+        <location filename="hazard_classifications.py" line="1832"/>
         <source>A hazard classification is used to define a range of severity thresholds (classes) for a hazard layer. The classification will be used to create zones of data that each present a similar hazard level. During the analysis, each exposure feature will be assessed to determine which hazard class it coincides with, and then a determination will be made as to whether and how the exposure feature is likely to be impacted by the hazard.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1087"/>
+        <location filename="definitions_help.py" line="1078"/>
         <source>Notes for exposure : {exposure_name}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1153"/>
+        <location filename="definitions_help.py" line="1144"/>
         <source>Actions for exposure : {exposure_name}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="933"/>
+        <location filename="dock.py" line="936"/>
         <source>No Version</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7572,7 +7552,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1321"/>
+        <location filename="hazard_classifications.py" line="1319"/>
         <source>hazard zone</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7582,7 +7562,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1828"/>
+        <location filename="hazard_classifications.py" line="1826"/>
         <source>cyclone category</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7667,17 +7647,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="298"/>
+        <location filename="definitions_help.py" line="296"/>
         <source>Exposure Groups</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="312"/>
+        <location filename="definitions_help.py" line="310"/>
         <source>Aggregation Groups</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1456"/>
+        <location filename="definitions_help.py" line="1447"/>
         <source>Fatality rate</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8345,32 +8325,32 @@ You can select more than 1 field. InaSAFE will sum up the value of the fields th
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1327"/>
+        <location filename="hazard_classifications.py" line="1325"/>
         <source>&lt;b&gt;Tropical cyclone&lt;/b&gt; intensity is classified using five classes according to the Australian Bureau of Meteorology. Tropical Cyclone intensity is defined as the maximum mean wind speed over open flat land or water, averaged over a 10-minute period. This is sometimes referred to as the maximum sustained wind and will be experienced around the eye-wall of the cyclone.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1361"/>
+        <location filename="hazard_classifications.py" line="1359"/>
         <source>Extremely dangerous with widespread destruction. A Category 5 cyclone&apos;s strongest winds are VERY DESTRUCTIVE winds with typical gusts over open flat land of more than 151 kt. </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1392"/>
+        <location filename="hazard_classifications.py" line="1390"/>
         <source>Significant roofing loss and structural damage. Many caravans destroyed and blown away. Dangerous airborne debris . Widespread power failures. A Category 4 cyclone&apos;s strongest winds are VERY DESTRUCTIVE winds with typical gusts over open flat land of 122 - 151 kt. </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1467"/>
+        <location filename="hazard_classifications.py" line="1465"/>
         <source>Minor house damage. Significant damage to signs, trees and caravans. Heavy damage to some crops. Risk of power failure. Small craft may break moorings. A Category 2 cyclone&apos;s strongest winds are DESTRUCTIVE winds with typical gusts over open flat land of 68 - 89 kt. </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1505"/>
+        <location filename="hazard_classifications.py" line="1503"/>
         <source>Negligible house damage. Damage to some crops, trees and caravans. Craft may drag moorings. A Category 1 cyclone&apos;s strongest winds are GALES with typical gusts over open flat land of 49 - 67 kt. </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1580"/>
+        <location filename="hazard_classifications.py" line="1578"/>
         <source>The &lt;b&gt;Saffir-Simpson Hurricane Wind Scale&lt;/b&gt; is a 1 to 5 rating based on a hurricane&apos;s sustained wind speed, measured over a 1-minute period. This scale estimates potential property damage. Hurricanes reaching Category 3 and higher are considered major hurricanes because of their potential for significant loss of life and damage. Category 1 and 2 storms are still dangerous, however, and require preventative measures. In the western North Pacific, the term &quot;super typhoon&quot; is used for tropical cyclones with sustained winds exceeding 150 mph.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8445,12 +8425,12 @@ You can select more than 1 field. InaSAFE will sum up the value of the fields th
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="642"/>
+        <location filename="wizard_dialog.py" line="646"/>
         <source>Invalid Field Mapping</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="257"/>
+        <location filename="definitions_help.py" line="255"/>
         <source>The OpenStreetmap Downloader</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8711,17 +8691,17 @@ Citations:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="290"/>
+        <location filename="definitions_help.py" line="288"/>
         <source>The Field Mapping Tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="871"/>
+        <location filename="definitions_help.py" line="862"/>
         <source>Developer Guide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1347"/>
+        <location filename="definitions_help.py" line="1338"/>
         <source>Citations:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9372,67 +9352,62 @@ Citations:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="step_kw65_summary.py" line="150"/>
+        <location filename="step_kw65_summary.py" line="159"/>
         <source>Keyword Summary Step</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="step_kw65_summary.py" line="161"/>
+        <location filename="step_kw65_summary.py" line="170"/>
         <source>In this wizard step: {step_name}, you will be able to review all the keywords that have been set for this layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="130"/>
+        <location filename="wizard_dialog.py" line="132"/>
         <source>InaSAFE Keywords Creation Wizard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="132"/>
+        <location filename="wizard_dialog.py" line="134"/>
         <source>InaSAFE Impact Function Centric Wizard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="252"/>
+        <location filename="wizard_dialog.py" line="256"/>
         <source>Keywords update wizard for layer &lt;b&gt;{layer_name}&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="256"/>
-        <source>Keywords creation wizard for layer &lt;b&gt;%s&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="wizard_dialog.py" line="264"/>
+        <location filename="wizard_dialog.py" line="268"/>
         <source>Use this wizard to run a guided impact assessment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="604"/>
+        <location filename="wizard_dialog.py" line="608"/>
         <source>Finish</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="716"/>
+        <location filename="wizard_dialog.py" line="720"/>
         <source>Next</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="725"/>
+        <location filename="wizard_dialog.py" line="729"/>
         <source>Show help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="729"/>
+        <location filename="wizard_dialog.py" line="733"/>
         <source>Hide help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="864"/>
+        <location filename="wizard_dialog.py" line="868"/>
         <source>InaSAFE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="864"/>
+        <location filename="wizard_dialog.py" line="868"/>
         <source>An error was encountered when saving the following keywords:
  {error_message}</source>
         <translation type="unfinished"></translation>
@@ -10053,7 +10028,7 @@ Citations:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1430"/>
+        <location filename="hazard_classifications.py" line="1428"/>
         <source>Some roof and structural damage. Some caravans destroyed. Power failures likely. A Category 3 cyclone&apos;s strongest winds are VERY DESTRUCTIVE winds with typical gusts over open flat land of 90 - 121 kt. </source>
         <translation type="unfinished"></translation>
     </message>
@@ -10128,7 +10103,7 @@ Citations:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="units.py" line="346"/>
+        <location filename="generic_expressions.py" line="70"/>
         <source>Ten</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10148,7 +10123,7 @@ Citations:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="units.py" line="381"/>
+        <location filename="generic_expressions.py" line="71"/>
         <source>Thousand</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10338,7 +10313,7 @@ Citations:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="infographic.py" line="61"/>
+        <location filename="infographic.py" line="68"/>
         <source>{symbol} {age} y.o</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10468,62 +10443,62 @@ Citations:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="753"/>
+        <location filename="definitions_help.py" line="751"/>
         <source>Reporting</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="760"/>
+        <location filename="definitions_help.py" line="758"/>
         <source>This section of the help documentation is intended for advanced users who want to modify reports which are produced by InaSAFE.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="773"/>
+        <location filename="definitions_help.py" line="771"/>
         <source>Whenever InaSAFE completes an analysis, it will automatically generate a number of reports. Some of these reports are based on templates that are shipped with InaSAFE, and can be customised or over-ridden by creating your own templates. The following reports are produced in InaSAFE:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="783"/>
+        <location filename="definitions_help.py" line="781"/>
         <source>Customisable?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="784"/>
+        <location filename="definitions_help.py" line="782"/>
         <source>Example</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="803"/>
+        <location filename="definitions_help.py" line="801"/>
         <source>In the sections that follow, we provide more technical information about the custom QGIS Expressions and special template elements that can be used to customise your templates.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="809"/>
+        <location filename="definitions_help.py" line="807"/>
         <source>QGIS Expressions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="815"/>
+        <location filename="definitions_help.py" line="813"/>
         <source>InaSAFE adds a number of expressions that can be used to conveniently obtain provenance data to the active analysis results. The expressions can also be used elsewhere in QGIS as needed..</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="846"/>
+        <location filename="definitions_help.py" line="837"/>
         <source>Composer Elements</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="852"/>
+        <location filename="definitions_help.py" line="843"/>
         <source>InaSAFE looks for elements with specific id&apos;s on the composer page and replaces them with InaSAFE specific content.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="858"/>
+        <location filename="definitions_help.py" line="849"/>
         <source>ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="definitions_help.py" line="1064"/>
+        <location filename="definitions_help.py" line="1055"/>
         <source>The following earthquake fatality models are available in InaSAFE. Note that you need to set one of these as the active model in InaSAFE Options. The currently active model is: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -10543,12 +10518,12 @@ Citations:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="map_report.py" line="31"/>
+        <location filename="map_report.py" line="32"/>
         <source>InaSAFE - Image Elements</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="map_report.py" line="32"/>
+        <location filename="map_report.py" line="33"/>
         <source>InaSAFE - Label Elements</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10575,6 +10550,226 @@ Citations:
     <message>
         <location filename="units.py" line="184"/>
         <source>&lt;b&gt;A hundred kilograms&lt;/b&gt; is a unit of weight equal to 100 kilograms.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="575"/>
+        <source>Flooding is over 150 centimetres.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="596"/>
+        <source>Flooding between 71 and 150 centimetres.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="618"/>
+        <source>Flooding of between 10 and 70 centimetres.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="640"/>
+        <source>An unknown level of flooding - use caution - </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="generic_expressions.py" line="30"/>
+        <source>Retrieve a value from a field in the impact analysis layer.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="generic_expressions.py" line="66"/>
+        <source>Given a number, it will return the place value name. It needs to be used with inasafe_place_value_coefficient.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="generic_expressions.py" line="105"/>
+        <source>Given a number, it will return the coefficient of the place value name. It needs to be used with inasafe_number_denomination_unit.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="generic_expressions.py" line="141"/>
+        <source>Given a number and total, it will return the percentage of the number to the total.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="generic_expressions.py" line="147"/>
+        <source>will calculate the percentage of female displaced count to total displaced count.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="generic_expressions.py" line="178"/>
+        <source>Given an InaSAFE analysis time, it will convert it to a date with year-month-date format.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="generic_expressions.py" line="210"/>
+        <source>will convert datetime provided by qgis_variable.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="generic_expressions.py" line="206"/>
+        <source>Given an InaSAFE analysis time, it will convert it to a time with hour:minute format.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="wizard_dialog.py" line="260"/>
+        <source>Keywords creation wizard for layer &lt;b&gt;{layer_name}&lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="map_report.py" line="320"/>
+        <source>Retrieve the full path of inasafe-logo-white.svg.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="infographic.py" line="88"/>
+        <source>Retrieve units of the given minimum needs field name.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="infographic.py" line="90"/>
+        <source>l/weekly</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="infographic.py" line="138"/>
+        <source>Get a formatted infographic header sentence for an impact function.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="infographic.py" line="141"/>
+        <source>Estimated impact of a flood</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="infographic.py" line="164"/>
+        <source>Retrieve map overview header string from definitions.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="infographic.py" line="181"/>
+        <source>Retrieve population chart header string from definitions.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="infographic.py" line="198"/>
+        <source>Retrieve people section header string from definitions.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="infographic.py" line="215"/>
+        <source>Retrieve age gender section header string from definitions.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="infographic.py" line="232"/>
+        <source>Retrieve age gender section notes string from definitions.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="infographic.py" line="249"/>
+        <source>Retrieve vulnerability section header string from definitions.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="infographic.py" line="267"/>
+        <source>Retrieve female vulnerability section header string from definitions.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="infographic.py" line="285"/>
+        <source>Retrieve minimum needs section header string from definitions.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="infographic.py" line="303"/>
+        <source>Retrieve additional minimum needs section header string from definition.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="infographic.py" line="323"/>
+        <source>Retrieve minimum needs section notes string from definitions.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="map_report.py" line="46"/>
+        <source>Retrieve legend title header string from definitions.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="map_report.py" line="63"/>
+        <source>Retrieve disclaimer title header string from definitions.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="map_report.py" line="81"/>
+        <source>Retrieve disclaimer text string from definitions.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="map_report.py" line="99"/>
+        <source>Retrieve information title header string from definitions.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="map_report.py" line="117"/>
+        <source>Retrieve time title header string from definitions.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="map_report.py" line="135"/>
+        <source>Retrieve caution title header string from definitions.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="map_report.py" line="153"/>
+        <source>Retrieve caution text string from definitions.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="map_report.py" line="171"/>
+        <source>Retrieve source title header string from definitions.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="map_report.py" line="189"/>
+        <source>Retrieve analysis title header string from definitions.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="map_report.py" line="207"/>
+        <source>Retrieve version title header string from definitions.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="map_report.py" line="285"/>
+        <source>Retrieve reference title header string from definitions.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="map_report.py" line="243"/>
+        <source>Retrieve coordinate reference system text string from definitions.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="map_report.py" line="303"/>
+        <source>Retrieve the full path of inasafe-logo-black.svg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="map_report.py" line="337"/>
+        <source>Retrieve the full path of default north arrow logo.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="map_report.py" line="354"/>
+        <source>Retrieve the full path of used specified organisation logo.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="utilities.py" line="157"/>
+        <source>Examples:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -10874,97 +11069,97 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>Dock</name>
     <message>
-        <location filename="dock.py" line="402"/>
+        <location filename="dock.py" line="405"/>
         <source>InaSAFE %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="392"/>
+        <location filename="dock.py" line="395"/>
         <source>The file for organization logo in %s doesn&apos;t exists. Please check in Plugins -&gt; InaSAFE -&gt; Options that your paths are still correct and update them if needed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="402"/>
+        <location filename="dock.py" line="405"/>
         <source>The file for organization logo has zero height. Please provide valid file for organization logo.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="489"/>
+        <location filename="dock.py" line="492"/>
         <source>Error while saving</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="483"/>
+        <location filename="dock.py" line="486"/>
         <source>The destination location must be writable.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="489"/>
+        <location filename="dock.py" line="492"/>
         <source>Something went wrong.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="693"/>
+        <location filename="dock.py" line="696"/>
         <source>Entire area</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="792"/>
+        <location filename="dock.py" line="795"/>
         <source>Analysis status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1008"/>
+        <location filename="dock.py" line="1011"/>
         <source>InaSAFE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1008"/>
+        <location filename="dock.py" line="1011"/>
         <source>Please select a valid impact layer before trying to print.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1090"/>
+        <location filename="dock.py" line="1093"/>
         <source>Map Creator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1090"/>
+        <location filename="dock.py" line="1093"/>
         <source>Your PDF was created....opening using the default PDF viewer on your system.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1090"/>
+        <location filename="dock.py" line="1093"/>
         <source>The generated pdfs were saved as:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1102"/>
+        <location filename="dock.py" line="1105"/>
         <source>The generated htmls were saved as:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1108"/>
+        <location filename="dock.py" line="1111"/>
         <source>The generated qpts were saved as:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1369"/>
+        <location filename="dock.py" line="1373"/>
         <source>The hazard layer, exposure layer and your defined analysis area extents all overlap. Press the run button below to continue with the analysis.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1374"/>
+        <location filename="dock.py" line="1378"/>
         <source>Analysis environment ready</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1374"/>
+        <location filename="dock.py" line="1378"/>
         <source>More info ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1412"/>
+        <location filename="dock.py" line="1416"/>
         <source>No overlapping extents</source>
         <translation type="unfinished"></translation>
     </message>
@@ -12323,217 +12518,217 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>Plugin</name>
     <message>
-        <location filename="plugin.py" line="624"/>
+        <location filename="plugin.py" line="622"/>
         <source>InaSAFE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="170"/>
+        <location filename="plugin.py" line="168"/>
         <source>Toggle InaSAFE Dock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="176"/>
+        <location filename="plugin.py" line="174"/>
         <source>Show/hide InaSAFE dock widget</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="190"/>
+        <location filename="plugin.py" line="188"/>
         <source>Keywords Creation Wizard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="196"/>
+        <location filename="plugin.py" line="194"/>
         <source>Open InaSAFE keywords creation wizard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="206"/>
+        <location filename="plugin.py" line="204"/>
         <source>Impact Function Centric Wizard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="212"/>
+        <location filename="plugin.py" line="210"/>
         <source>Open InaSAFE impact function centric wizard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="222"/>
+        <location filename="plugin.py" line="220"/>
         <source>Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="227"/>
+        <location filename="plugin.py" line="225"/>
         <source>Open InaSAFE options dialog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="235"/>
+        <location filename="plugin.py" line="233"/>
         <source>Minimum Needs Calculator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="240"/>
+        <location filename="plugin.py" line="238"/>
         <source>Open InaSAFE minimum needs calculator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="249"/>
+        <location filename="plugin.py" line="247"/>
         <source>Multi Buffer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="254"/>
+        <location filename="plugin.py" line="252"/>
         <source>Open InaSAFE multi buffer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="264"/>
+        <location filename="plugin.py" line="262"/>
         <source>Minimum Needs Configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="270"/>
+        <location filename="plugin.py" line="268"/>
         <source>Open InaSAFE minimum needs configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="280"/>
+        <location filename="plugin.py" line="278"/>
         <source>Shakemap Converter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="285"/>
+        <location filename="plugin.py" line="283"/>
         <source>Open InaSAFE Converter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="295"/>
+        <location filename="plugin.py" line="293"/>
         <source>Batch Runner</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="300"/>
+        <location filename="plugin.py" line="298"/>
         <source>Open Batch Runner</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="309"/>
+        <location filename="plugin.py" line="307"/>
         <source>Save Current Scenario</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="312"/>
+        <location filename="plugin.py" line="310"/>
         <source>Save current scenario to text file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="329"/>
+        <location filename="plugin.py" line="327"/>
         <source>OpenStreetMap Downloader</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="341"/>
+        <location filename="plugin.py" line="339"/>
         <source>Add OpenStreetMap Tile Layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="343"/>
+        <location filename="plugin.py" line="341"/>
         <source>Use this to add an OSM layer to your map. It needs internet access to function.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="352"/>
+        <location filename="plugin.py" line="350"/>
         <source>InaSAFE Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="356"/>
+        <location filename="plugin.py" line="354"/>
         <source>Show InaSAFE Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="358"/>
+        <location filename="plugin.py" line="356"/>
         <source>Use this to show a document describing all InaSAFE concepts.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="391"/>
+        <location filename="plugin.py" line="389"/>
         <source>Add PetaBencana Flood Layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="393"/>
+        <location filename="plugin.py" line="391"/>
         <source>Use this to add a PetaBencana layer to your map. It needs internet access to function.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="405"/>
+        <location filename="plugin.py" line="403"/>
         <source>Toggle Scenario Outlines</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="408"/>
+        <location filename="plugin.py" line="406"/>
         <source>Toggle rubber bands showing scenario extents.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="425"/>
+        <location filename="plugin.py" line="423"/>
         <source>Set Analysis Area</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="431"/>
+        <location filename="plugin.py" line="429"/>
         <source>Set the analysis area for InaSAFE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="445"/>
+        <location filename="plugin.py" line="443"/>
         <source>Add Test Layers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="451"/>
+        <location filename="plugin.py" line="449"/>
         <source>Add test layers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="691"/>
+        <location filename="plugin.py" line="680"/>
         <source>Run tests in %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="488"/>
+        <location filename="plugin.py" line="486"/>
         <source>Select package</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="495"/>
+        <location filename="plugin.py" line="493"/>
         <source>Select Test Package</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="680"/>
+        <location filename="plugin.py" line="669"/>
         <source>Select the python test package</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="840"/>
+        <location filename="plugin.py" line="829"/>
         <source>OpenStreetMap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="369"/>
+        <location filename="plugin.py" line="367"/>
         <source>InaSAFE Field Mapping Tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="373"/>
+        <location filename="plugin.py" line="371"/>
         <source>Assign field mapping to layer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="375"/>
+        <location filename="plugin.py" line="373"/>
         <source>Use this tool to assign field mapping in layer.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -12754,7 +12949,7 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>StepKwSummary</name>
     <message>
-        <location filename="step_kw65_summary.py" line="133"/>
+        <location filename="step_kw65_summary.py" line="142"/>
         <source>The selected keywords don&apos;t match requirements of the selected impact function (%s). You can continue with registering the layer, however, you&apos;ll need to choose another layer for that function.</source>
         <translation type="unfinished"></translation>
     </message>

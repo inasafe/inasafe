@@ -727,17 +727,17 @@
         <translation>Sumber</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1292"/>
+        <location filename="hazard_classifications.py" line="1290"/>
         <source>Low</source>
         <translation>Rendah</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1266"/>
+        <location filename="hazard_classifications.py" line="1264"/>
         <source>Medium</source>
         <translation>Sedang</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1237"/>
+        <location filename="hazard_classifications.py" line="1235"/>
         <source>High</source>
         <translation>Tinggi</translation>
     </message>
@@ -807,7 +807,7 @@
         <translation>Skala &lt;b&gt;Modified Mercalli Intensity (MMI)&lt;/b&gt; mendeskripsikan intensitas getaran tanah dari sebuah kejadian gempa bumi berdasarkan efek yang diamati oleh orang-orang di permukaan. </translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1171"/>
+        <location filename="hazard_classifications.py" line="1169"/>
         <source>No water above ground height.</source>
         <translation>Tidak ada air pada ketinggian air tanah.</translation>
     </message>
@@ -930,7 +930,7 @@
         <translation>Ini memberikan deskripsi rinci dari apa sumber dayanya dan</translation>
     </message>
     <message>
-        <location filename="wizard_utils.py" line="117"/>
+        <location filename="utilities.py" line="117"/>
         <source>Unit</source>
         <translation>Satuan</translation>
     </message>
@@ -1105,7 +1105,7 @@
         <translation>&lt;html&gt;Untuk menggunakan lapisan PostGIS, silahkan tutup wizard, buat koneksi PostGIS baru, dan jalankan wizard lagi. &lt;br/&gt;&lt;br/&gt; Anda dapat mengatur koneksi di menu &lt;i&gt;Layer&lt;/i&gt; &gt; &lt;i&gt;Tambah Lapisan&lt;/i&gt; &gt; &lt;i&gt;Tambahkan Layer PostGIS&lt;/i&gt;.&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="wizard_utils.py" line="103"/>
+        <location filename="utilities.py" line="103"/>
         <source>Hazard</source>
         <translation>Ancaman</translation>
     </message>
@@ -1310,7 +1310,7 @@
         <translation>Kelas banjir</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="805"/>
+        <location filename="hazard_classifications.py" line="803"/>
         <source>Tsunami classes</source>
         <translation>Kelas-kelas tsunami</translation>
     </message>
@@ -1437,7 +1437,7 @@
         <translation>Ancaman</translation>
     </message>
     <message>
-        <location filename="wizard_utils.py" line="128"/>
+        <location filename="utilities.py" line="128"/>
         <source>Purpose</source>
         <translation>Tujuan</translation>
     </message>
@@ -1497,7 +1497,7 @@
         <translation>kg/m2</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1833"/>
+        <location filename="hazard_classifications.py" line="1831"/>
         <source>Classes</source>
         <translation>Kelas-kelas</translation>
     </message>
@@ -1582,7 +1582,7 @@
         <translation>Basah</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="909"/>
+        <location filename="hazard_classifications.py" line="907"/>
         <source>Dry</source>
         <translation>Kering</translation>
     </message>
@@ -2717,37 +2717,37 @@
         <translation>Daftar definisi Batas Administrasi OSM</translation>
     </message>
     <message>
-        <location filename="wizard_utils.py" line="115"/>
+        <location filename="utilities.py" line="115"/>
         <source>classified data</source>
         <translation>data terklasifikasi</translation>
     </message>
     <message>
-        <location filename="wizard_utils.py" line="128"/>
+        <location filename="utilities.py" line="128"/>
         <source>Title</source>
         <translation>Judul</translation>
     </message>
     <message>
-        <location filename="wizard_utils.py" line="128"/>
+        <location filename="utilities.py" line="128"/>
         <source>Source</source>
         <translation>Sumber</translation>
     </message>
     <message>
-        <location filename="wizard_utils.py" line="159"/>
+        <location filename="utilities.py" line="159"/>
         <source>This layer has no valid keywords assigned</source>
         <translation>Lapisan ini tidak memiliki kata kunci yang valid</translation>
     </message>
     <message>
-        <location filename="wizard_utils.py" line="159"/>
+        <location filename="utilities.py" line="159"/>
         <source>SOURCE</source>
         <translation>SUMBER</translation>
     </message>
     <message>
-        <location filename="wizard_utils.py" line="159"/>
+        <location filename="utilities.py" line="159"/>
         <source>TYPE</source>
         <translation>TIPE</translation>
     </message>
     <message>
-        <location filename="wizard_utils.py" line="159"/>
+        <location filename="utilities.py" line="159"/>
         <source>In the next step you will be able to assign keywords to this layer.</source>
         <translation>Di langkah selanjutnya Anda akan bisa memberikan kata kunci untuk lapisan ini.</translation>
     </message>
@@ -2917,12 +2917,12 @@
         <translation>Bangunan atau fasilitas yang menyediakan layanan atau memfasilitasi publik termasuk layanan darurat.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1169"/>
+        <location filename="hazard_classifications.py" line="1167"/>
         <source>Dry zone</source>
         <translation>Wilayah kering</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1220"/>
+        <location filename="hazard_classifications.py" line="1218"/>
         <source>Water above 8.0m.</source>
         <translation>Air di atas 8.0 m.</translation>
     </message>
@@ -4213,112 +4213,112 @@
         <translation>Tidak ada air ditemui di atas ketinggian tanah.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="664"/>
+        <location filename="hazard_classifications.py" line="662"/>
         <source>Ash classes</source>
         <translation>Kelas abu vulkanik</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1218"/>
+        <location filename="hazard_classifications.py" line="1216"/>
         <source>Very high</source>
         <translation>Sangat tinggi</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1326"/>
+        <location filename="hazard_classifications.py" line="1324"/>
         <source>Cyclone classes (AU - BOM)</source>
         <translation>Kelas siklon (AU - BOM)</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1359"/>
+        <location filename="hazard_classifications.py" line="1357"/>
         <source>Category 5 (severe tropical cyclone)</source>
         <translation>Kategori 5 (siklon tropis parah)</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1390"/>
+        <location filename="hazard_classifications.py" line="1388"/>
         <source>Category 4 (severe tropical cyclone)</source>
         <translation>Kategori 4 (siklon tropis parah)</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1428"/>
+        <location filename="hazard_classifications.py" line="1426"/>
         <source>Category 3 (severe tropical cyclone)</source>
         <translation>Kategori 3 (siklon tropis parah)</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1465"/>
+        <location filename="hazard_classifications.py" line="1463"/>
         <source>Category 2 (tropical cyclone)</source>
         <translation>Kategori 2 (siklon tropis)</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1503"/>
+        <location filename="hazard_classifications.py" line="1501"/>
         <source>Category 1 (tropical cyclone)</source>
         <translation>Kategori 1 (siklon tropis)</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1540"/>
+        <location filename="hazard_classifications.py" line="1538"/>
         <source>Tropical Depression</source>
         <translation>Depresi Tropis</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1579"/>
+        <location filename="hazard_classifications.py" line="1577"/>
         <source>Hurricane classes (SSHWS)</source>
         <translation>Kelas badai (SSHWS)</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1609"/>
+        <location filename="hazard_classifications.py" line="1607"/>
         <source>Category 5 (major hurricane)</source>
         <translation>Kategori 5 (badai besar)</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1611"/>
+        <location filename="hazard_classifications.py" line="1609"/>
         <source>Catastrophic damage will occur: A high percentage of framed homes will be destroyed, with total roof failure and wall collapse. Fallen trees and power poles will isolate residential areas. Power outages will last for weeks to possibly months. Most of the area will be uninhabitable for weeks or months.</source>
         <translation>Kerusakan dahsyat akan terjadi: Sebagian besar rumah akan hancur dengan kerusakan total pada atap dan runtuhnya dinding rumah. Pepohonan dan tiang listrik yang tumbang akan menutup akses ke daerah pemukiman. Pemadaman listrik dapat berlangsung hingga hitungan bulan. Sebagian besar area yang terdampak tidak akan dapat ditinggali hingga berminggu-minggu.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1643"/>
+        <location filename="hazard_classifications.py" line="1641"/>
         <source>Category 4 (major hurricane)</source>
         <translation>Kategori 4 (badai besar)</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1645"/>
+        <location filename="hazard_classifications.py" line="1643"/>
         <source>Catastrophic damage will occur: Well-built framed homes can sustain severe damage with loss of most of the roof structure and/or some exterior walls. Most trees will be snapped or uprooted and power poles downed. Fallen trees and power poles will isolate residential areas. Power outages will last weeks to possibly months. Most of the area will be uninhabitable for weeks or months.</source>
         <translation>Kerusakan dahsyat akan terjadi: Rumah dengan kerangka yang baik dapat mengalami kerusakan parah berupa hilangnya atap dan dinding luar. Pepohonan dan tiang-tiang listrik akan patah ataupun tumbang, dan mengisolasi daerah pemukiman. Pemadaman listrik dapat berlangsung hingga hitungan bulan. Sebagian besar area yang terdampak tidak akan dapat ditinggali hingga berminggu-minggu.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1683"/>
+        <location filename="hazard_classifications.py" line="1681"/>
         <source>Category 3 (major hurricane)</source>
         <translation>Kategori 3 (badai besar)</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1685"/>
+        <location filename="hazard_classifications.py" line="1683"/>
         <source>Devastating damage will occur: Well-built framed homes may incur major damage or removal of roof decking and gable ends. Many trees will be snapped or uprooted, blocking numerous roads. Electricity and water will be unavailable for several days to weeks after the storm passes.</source>
         <translation>Kerusakan parah akan terjadi: Rumah dengan kerangka yang baik akan mengalami kerusakan besar maupun lepasnya kerangka atap. Pepohon an akan tumbang dan menghalangi jalan. Listrik dan air dapat tidak tersedia hingga beberapa minggu setelah badai terjadi.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1721"/>
+        <location filename="hazard_classifications.py" line="1719"/>
         <source>Category 2 (hurricane)</source>
         <translation>Kategori 2 (badai)</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1723"/>
+        <location filename="hazard_classifications.py" line="1721"/>
         <source>Extremely dangerous winds will cause extensive damage: Well-constructed frame homes could sustain major roof and siding damage. Many shallowly rooted trees will be snapped or uprooted and block numerous roads. Near-total power loss is expected with outages that could last from several days to weeks.</source>
         <translation>Angin dengan tingkat bahaya ekstrim akan berakibat pada kerusakan yang luas: Rumah dengan kerangka yang baik akan mengalami kerusakan atap yang parah. Rumah dengan dinding kayu juga akan mengalami kerusakan yang parah. Pepohonan dengan akar yang dangkal akan patah atau tumbang dan menghalangi jalan. Kerusakan jaringan listrik diperkirakan secara menyeluruh dengan pemadaman listrik yang dapat mencapai beberapa minggu.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1759"/>
+        <location filename="hazard_classifications.py" line="1757"/>
         <source>Category 1 (hurricane)</source>
         <translation>Kategori 1 (badai)</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1761"/>
+        <location filename="hazard_classifications.py" line="1759"/>
         <source>Very dangerous winds will produce some damage: Well-constructed frame homes could have damage to roof, shingles, vinyl siding and gutters. Large branches of trees will snap and shallowly rooted trees may be toppled. Extensive damage to power lines and poles likely will result in power outages that could last a few to several days.</source>
         <translation>Angin yang sangat berbahaya akan mengakibatkan beberapa kerusakan: Rumah dengan kerangka yang baik akan mengalami kerusakan pada atap, genting maupun talang air. Dahan pohon akan patah dan pohon dengan akar yang dangkal akan tumbang. Kerusakan luas pada tiang dan jaringan listrik dapat berdampak pada pemadaman listrik hingga beberapa hari.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1797"/>
+        <location filename="hazard_classifications.py" line="1795"/>
         <source>No hurricane</source>
         <translation>Tidak ada badai</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1799"/>
+        <location filename="hazard_classifications.py" line="1797"/>
         <source>Winds less than Category 1 Hurricane</source>
         <translation>Angin kurang dari badai kategori 1</translation>
     </message>
@@ -4948,17 +4948,17 @@
         <translation>Fungsi dampak tidak akan mampu dijalankan karena dari masukannya.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1210"/>
+        <location filename="dock.py" line="1213"/>
         <source>The impact function could not run because of the inputs.</source>
         <translation>Fungsi dampak tidak dapat dijalankan karena masukannya.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1217"/>
+        <location filename="dock.py" line="1220"/>
         <source>The impact function could not run because of a bug.</source>
         <translation>Fungsi dampak tidak dapat dijalankan karena adanya kesalahan.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1223"/>
+        <location filename="dock.py" line="1226"/>
         <source>The impact function could run without errors.</source>
         <translation>Fungsi dampak dapat dijalankan tanpa kesalahan.</translation>
     </message>
@@ -5044,7 +5044,7 @@
         <translation>&lt;p&gt;Anda telah memilih &lt;b&gt;%s %s&lt;/b&gt; sebagai masukan keterpaparan &lt;/p&gt; &lt;p&gt;Silahkan pilih lapisan keterpaparan yang ingin Anda gunakan untuk penaksiran Anda.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="wizard_utils.py" line="183"/>
+        <location filename="utilities.py" line="183"/>
         <source>Global (%s)</source>
         <translation>Global (%s)</translation>
     </message>
@@ -5054,12 +5054,12 @@
         <translation>Kustom</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1193"/>
+        <location filename="dock.py" line="1196"/>
         <source>The impact function should not have been ready.</source>
         <translation>Fungsi dampak tidak seharusnya siap.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1280"/>
+        <location filename="dock.py" line="1284"/>
         <source>The impact report could not be generated.</source>
         <translation>Laporan terdampak tidak dapat dibuat.</translation>
     </message>
@@ -5624,27 +5624,27 @@
         <translation>Klasifikasi Ancaman</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="774"/>
+        <location filename="hazard_classifications.py" line="772"/>
         <source>Very low</source>
         <translation>Sangat Rendah</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1337"/>
+        <location filename="hazard_classifications.py" line="1335"/>
         <source>Australian Bureau of Meteorology - Tropical Cyclone Intensity and Impacts</source>
         <translation>Biro Meteorologi Australia - Intensitas dan Dampak Siklon Tropis</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1344"/>
+        <location filename="hazard_classifications.py" line="1342"/>
         <source>Tropical cyclone scales - wikpedia</source>
         <translation>Skala siklon tropis - wikipedia</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1593"/>
+        <location filename="hazard_classifications.py" line="1591"/>
         <source>NOAA - NHC</source>
         <translation>NOAA - NHC</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1597"/>
+        <location filename="hazard_classifications.py" line="1595"/>
         <source>Saffir-Simpson scale - wikipedia</source>
         <translation>Skala Saffir-Simpson - wikipedia</translation>
     </message>
@@ -5864,7 +5864,7 @@
         <translation>Anda telah memilih &lt;b&gt;%s %s&lt;/b&gt;. Silahkan pilih klasifikasi ancaman untuk setiap jenis keterpaparan. Jika Anda ingin mengubah ambang batas, Anda dapat menekan tombol ubah di dekatnya dan Anda dapat mengubah ambang batas di panel kanan. Jangan lupa menyimpan ambang batas sebelum melanjutkan ke langkah selanjutnya.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1401"/>
+        <location filename="dock.py" line="1405"/>
         <source>The requested extent is not overlapping your layers.</source>
         <translation>Cakupan yang diminta tidak bertumpang tindih dengan lapisan anda.</translation>
     </message>
@@ -6039,7 +6039,7 @@
         <translation>Field total tidak terdampak ditambahkan ke lapisan analisis, lapisan dampak agregasi dan lapisan dampak ancaman agregasi selama analisis dampak. Ini menyajikan jumlah kumulatif dari fitur keterpaparan tidak terdampak (misalnya bangunan) atau entitas (misalnya penduduk) untuk setiap area.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1542"/>
+        <location filename="hazard_classifications.py" line="1540"/>
         <source>A tropical depression is a tropical disturbance, that has a clearly defined surface circulation, which has maximum sustained winds of less than 34 kt.</source>
         <translation>Depresi tropis adalah gangguan tropis, memiliki sirkulasi permukaan yang jelas, yang memiliki kecepatan hembusan angin maksimum kurang dari 34 knot.</translation>
     </message>
@@ -6294,117 +6294,97 @@
         <translation>PetaBencana.id</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="575"/>
-        <source>Water is above waist height.</source>
-        <translation>Air di atas tinggi pinggang.</translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="596"/>
-        <source>Water is above knee height, below waist height.</source>
-        <translation>Air di atas tinggi lutut, di bawah tinggi pinggang.</translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="618"/>
-        <source>Water encountered up to knee deep.</source>
-        <translation>Air yang ditemui hingga sedalam lutut.</translation>
-    </message>
-    <message>
         <location filename="hazard_classifications.py" line="638"/>
         <source>Use caution</source>
         <translation>Hati-hati</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="640"/>
-        <source>No water encountered above ground height but there are may be floods in surrounding areas and you should use caution when moving around in this area.</source>
-        <translation>Tidak ada air yang dijumpai di atas tanah tetapi ada kemungkinan banjir di area sekitarnya dan Anda harus berhati-hati ketika berjalan di sekitar area ini.</translation>
-    </message>
-    <message>
-        <location filename="hazard_classifications.py" line="665"/>
+        <location filename="hazard_classifications.py" line="663"/>
         <source>Five classes are supported for volcanic ash hazard data: &lt;b&gt;very low&lt;/b&gt;, &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, &lt;b&gt;high&lt;/b&gt; or &lt;b&gt;very high&lt;/b&gt;.</source>
         <translation>Lima kelas yang didukung untuk data ancaman vektor abu vulkan: &lt;b&gt;sangat rendah&lt;/b&gt;, &lt;b&gt;rendah&lt;/b&gt;, &lt;b&gt;sedang&lt;/b&gt;, &lt;b&gt;tinggi&lt;/b&gt; atau &lt;b&gt;sangat tinggi&lt;/b&gt;.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="684"/>
+        <location filename="hazard_classifications.py" line="682"/>
         <source>Dry loading on buildings causing structural collapse.</source>
         <translation>Muatan kering pada bangunan mengakibatkan keruntuhan struktur.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="705"/>
+        <location filename="hazard_classifications.py" line="703"/>
         <source>Dry loading on buildings causing structural damage but not collapse; wet loading on buildings (i.e. ash loading + heavy rainfall) causing structural collapse.</source>
         <translation>Muatan kering pada bangunan menyebabkan kerusakan struktural tetapi tidak runtuh; beban kering pada bangunan (misalnya muatan debu + hujan deras) mengakibatkan keruntuhan struktural.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="728"/>
+        <location filename="hazard_classifications.py" line="726"/>
         <source>Damage to less vulnerable agricultural crops (e.g. tea plantations) and destruction of more vulnerable crops; destruction of critical infrastructure; cosmetic (non-structural) damage to buildings</source>
         <translation>Kerusakan pada tanaman pertanian yang kerentanan lebih sedikit (contoh: perkebunan teh) dan kerusakan tanaman yang lebih rentan; kerusakan pada infrastruktur kritis; kerusakan kosmetik (non-struktural) pada bangunan</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="753"/>
+        <location filename="hazard_classifications.py" line="751"/>
         <source>Damage to transportation routes (e.g. airports, roads, railways); damage to critical infrastructure (e.g. electricity supply); damage to more vulnerable agricultural crops (e.g. rice fields)</source>
         <translation>Kerusakan pada rute transportasi (contoh: bandara, jalan, rel kereta api); kerusakan pada infrastruktur kritis (contoh: persediaan kelistrikan); kerusakan pada tanaman pertanian yang lebih rentan (contoh: sawah)</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="776"/>
+        <location filename="hazard_classifications.py" line="774"/>
         <source>Impact on health (respiration), livestock, and contamination of water supply.</source>
         <translation>Dampak pada kesehatan (respirasi), ternak, dan kontaminasi persediaan air.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="807"/>
+        <location filename="hazard_classifications.py" line="805"/>
         <source>Tsunami hazards can be classified into one of four classes for an area. The area is either &lt;b&gt;dry&lt;/b&gt;, &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, or &lt;b&gt;high&lt;/b&gt;, for tsunami hazard classification. The following description for these classes is provided by Badan Geologi based on BNPB Perka 2/2012</source>
         <translation>Ancaman tsunami dapat diklasifikasikan ke dalam satu dari empat kelas untuk suatu area. Area ini bisa &lt;b&gt;kering&lt;/b&gt;, &lt;b&gt;rendah&lt;/b&gt;, &lt;b&gt;sedang&lt;/b&gt;, atau &lt;b&gt;tinggi&lt;/b&gt;, untuk klasifikasi ancaman tsunami. Deskripsi mengenai kelas-kelas tersebut disediakan oleh Badan Geologi berdasarkan Perka. BNPB No.2/2012</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="949"/>
+        <location filename="hazard_classifications.py" line="947"/>
         <source>BNPB Perka 2/2012</source>
         <translation>Perka. BNPB No.2/2012</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="961"/>
+        <location filename="hazard_classifications.py" line="959"/>
         <source>The area is potentially hit by a tsunami wave with an inundation depth &gt; 3 m or reach a tsunami intensity scale of VII or more (Papadopoulos and Imamura, 2001). Tsunami wave with 4 m inundation depth cause damage to small vessel, a few ships are drifted inland, severe damage on most wooden houses. Boulders are deposited on shore. If tsunami height reaches 8 m, it will cause severe damage. Dykes, wave breaker, tsunami protection walls and green belts will be washed away.</source>
         <translation>Area berpotensi diterjang gelombang dengan kedalaman rendaman &gt; 3 m atau mencapai skala intensitas tsunami VII atau lebih (Papadopoulos dan Imamura, 2001). Gelombang tsunami dengan kedalaman rendaman 4 m menyebabkan kerusakan pada kapal kecil, beberapa kapal besar hanyut ke daratan, kerusakan parah pada rumah kayu. Bebatuan besar mengendap di pantai. Jika ketinggian tsunami mencapai 8 m, akan menyebabkan kerusakan parah. Tanggul, pemecah gelombang, dinding pelindung tsunami dan sabuk hijau akan hanyut.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1268"/>
+        <location filename="hazard_classifications.py" line="1266"/>
         <source>Water above 1.1m and less than 3.0m. The area is potentially hit by a tsunami wave with an inundation depth of 1 - 3 m or equal to V-VI tsunami intensity scale (Papadopoulos and Imamura, 2001). Tsunami wave with a 3m inundation depth causes most people frightened and to flee to higher ground. Small vessels drift and collide. Damage occurs to some wooden houses, while most of them are safe.</source>
         <translation>Air di atas 1,1 m dan kurang dari 3,0 m. Area berpotensi diterjang gelombang tsunami dengan kedalaman 1 - 3 m atau setara dengan V-VI skala intensitas tsunami (Papadoupulos dan Imamura, 2001). Gelombang tsunami dengan kedalaman genangan 3 m menyebabkan sebagian besar penduduk ketakutan dan mengungsi ke tempat yang lebih tinggi. Kapal kecil hanyut dan bertabrakan. Kerusakan terjadi pada beberapa rumah kayu dengan sebagian besar diantaranya aman.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1294"/>
+        <location filename="hazard_classifications.py" line="1292"/>
         <source>Water above ground height and less than 1.0m. The area is potentially hit by a tsunami wave with an inundation depth less than 1 m or similar to tsunami intensity scale of V or less in (Papadopoulos and Imamura, 2001). Tsunami wave of 1m height causes few people to be frightened and flee to higher elevation. Felt by most people on large ship, observed from shore. Small vessels drift and collide and some turn over. Sand is deposited and there is flooding of areas close to the shore.</source>
         <translation>Air di atas permukaan tanah dan ketinggian kurang dari 1,0 m. Area berpotensi diterjang gelombang tsunami dengan kedalaman kurang dari 1 m atau setara dengan V atau kurang skala intensitas tsunami (Papadoupulos dan Imamura, 2001). Gelombang tsunami dengan ketinggian 1 m menyebabkan orang-orang ketakutan dan mengungsi ke tempat yang lebih tinggi. Dirasakan oleh sebagian besar orang pada kapal besar, terlihat dari pantai. Kapal kecil akan hanyut dan bertabrakan dan beberapa akan terbalik. Pasir mengendap dan akan ada banjir di wilayah dekat dengan pantai.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="937"/>
+        <location filename="hazard_classifications.py" line="935"/>
         <source>Tsunami population classes</source>
         <translation>Klasifikasi penduduk tsunami</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="939"/>
+        <location filename="hazard_classifications.py" line="937"/>
         <source>Tsunami hazards can be classified into one of three classes for an area. The area is either &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, or &lt;b&gt;high&lt;/b&gt;, for tsunami hazard classification. The following description for these classes is provided by Badan Geologi based on BNPB Perka 2/2012, and modified for population by Pak Hamza</source>
         <translation>Ancaman tsunami dapat diklasifikasikan ke dalam satu dari tiga kelas untuk suatu area. Area ini bisa &lt;b&gt;rendah&lt;/b&gt;, &lt;b&gt;sedang&lt;/b&gt;, atau &lt;b&gt;tinggi&lt;/b&gt;, untuk klasifikasi ancaman tsunami. Deskripsi mengenai kelas-kelas tersebut disediakan oleh Badan Geologi berdasarkan Perka. BNPB No.2/2012, dan dimodifikasi untuk populasi oleh Pak Hamza</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="989"/>
+        <location filename="hazard_classifications.py" line="987"/>
         <source>Water above 0.7m and less than 3.0m. The area is potentially hit by a tsunami wave with an inundation depth of 1 - 3 m or equal to V-VI tsunami intensity scale (Papadopoulos and Imamura, 2001). Tsunami wave with a 3m inundation depth causes most people frightened and to flee to higher ground. Small vessels drift and collide. Damage occurs to some wooden houses, while most of them are safe.</source>
         <translation>Air di atas 0.7m dan kurang dari 3.0m. Wilayah berpotensi diterjang gelombang tsunami dengan kedalaman genangan 1-3 m atau setara dengan V-VI skala intensitas tsunami (Papadopulos dan Imamura, 2001). Gelombang tsunami dengan kedalaman genangan 3m menyebabkan sebagian besar penduduk ketakutan dan kabur ke tempat yang lebih tinggi. Kapal kecil hanyut dan bertabrakan. Kerusakan terjadi pada beberapa rumah kayu dengan sebagian besar diantaranya aman.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1047"/>
+        <location filename="hazard_classifications.py" line="1045"/>
         <source>Tsunami classes ITB</source>
         <translation>Klasifikasi tsunami menurut ITB</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1199"/>
+        <location filename="hazard_classifications.py" line="1197"/>
         <source>Tsunami hazards can be classified into one of five classes for an area. The area is either &lt;b&gt;dry&lt;/b&gt;, &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, &lt;b&gt;high&lt;/b&gt;, or &lt;b&gt;very high&lt;/b&gt; for tsunami hazard classification. The following description for these classes is provided by Pak Hamza ITB based on Papadopoulos and Imamura, 2001.</source>
         <translation>Ancaman tsunami dapat diklasifikasikan ke dalam satu dari lima klas untuk suatu area. Area ini baik &lt;b&gt;kering&lt;/b&gt;, &lt;b&gt;rendah&lt;/b&gt;, &lt;b&gt;sedang&lt;/b&gt;, &lt;b&gt;tinggi&lt;/b&gt;, atau &lt;b&gt;sangat tinggi&lt;/b&gt; untuk klasifikasi ancaman tsunami. Deskripsi mengenai kelas-kelas tersebut disediakan oleh Pak Hamza ITB berdasarkan Papadopoulos and Imamura, 2001.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1239"/>
+        <location filename="hazard_classifications.py" line="1237"/>
         <source>Water above 3.1m and less than 8.0m. The area is potentially hit by a tsunami wave with an inundation depth &gt; 3 m or reach a tsunami intensity scale of VII or even more (Papadopoulos and Imamura, 2001). Tsunami wave with 4 m inundation depth cause damage to small vessel, a few ships are drifted inland, severe damage on most wooden houses. Boulders are deposited on shore. If tsunami height reaches 8 m, it will cause severe damage. Dykes, wave breaker, tsunami protection walls and green belts will be washed away.</source>
         <translation>Air di atas 3,1 m dan kurang dari 8,0 m. Area berpotensi diterjang gelombang tsunami dengan kedalaman rendaman &gt; 3 m atau mencapai VII atau bahkan lebih skala intensitas tsunami (Papadopoulos dan Imamura, 2001). Gelombang tsunami dengan kedalaman rendaman 4 m menyebabkan kerusakan pada kapal kecil, dan beberapa kapal besar hanyut ke daratan, kerusakan parah pada rumah kayu. Batu besar mengendap di pantai. Jika ketinggian tsunami mencapai 8  akan menyebabkan kerusakan parah. Tanggul, pemecah gelombang, dinding pelindung tsunami dan sabuk hijau akan hanyut.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1198"/>
+        <location filename="hazard_classifications.py" line="1196"/>
         <source>Tsunami population classes ITB</source>
         <translation>Klasifikasi penduduk tsunami menurut ITB</translation>
     </message>
@@ -6679,7 +6659,7 @@
         <translation>Tampaknya ada masalah pada lapisan agregasi. Beberapa fitur kemungkinan tidak valid. Cobalah untuk melakukan pengecekan validitas atau lakukan pemilihan fitur tertentu pada lapisan ini.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1561"/>
+        <location filename="impact_function.py" line="1560"/>
         <source>Something went wrong with the datastore : {error_message}</source>
         <translation>Terjadi sebuah kesalahan dengan datastore : {error_message}</translation>
     </message>
@@ -7004,12 +6984,12 @@
         <translation>InaSAFE akan mengkombinasikan kedua lapisan ini ke model matematikal. Hasil model ini akan menampilkan efek dari ancaman pada infrastruktur atau penduduk terpapar. Plugin bergantung pada kata kunci metadata sederhana berasosiasi dengan setiap lapisan untuk menentukan jenis informasi yang mewakili lapisan. Anda dapat menentukan kata kunci tersebut dengan memilih lapisan dan kemudian mengklik ikon Kata kunci Wizard InaSAFE pada toolbar:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="210"/>
+        <location filename="dock.py" line="213"/>
         <source>will be affected? Summarise the results by</source>
         <translation>akankah terdampak? Simpulkan hasil dengan</translation>
     </message>
     <message>
-        <location filename="dock.py" line="212"/>
+        <location filename="dock.py" line="215"/>
         <source>will be affected? Summarise the results by selected features in</source>
         <translation>yang akan terdampak? Simpulkan hasil berdasarkan fitur terpilih di</translation>
     </message>
@@ -7189,7 +7169,7 @@
         <translation>Hutan</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1812"/>
+        <location filename="hazard_classifications.py" line="1810"/>
         <source>Displacement rate is a generalized estimate (personal communication Craig Arthur)</source>
         <translation>Tingkat pengungsian adalah sebuah perkiraan umum (komunikasi personal Craig Arthur)</translation>
     </message>
@@ -7224,7 +7204,7 @@
         <translation>Penduduk yang dievakuasi adalah penduduk yang untuk berbagai alasan dan keadaan dikarenakan kondisi ataupun bencana, pindah sementara ke tempat yang lebih aman sebelum, pada saat atau setelah kemunculan kejadian yang ancaman. Evakuasi dapat muncul dari tempat-tempat bermukim, kerja, sekolah dan rumah sakit atau tempat lain. Evakuasi biasanya merupakan mobilisasi terrencana dan terorganisaasi dari penduduk, hewan dan barang-barang untuk kembali. Di InasAFE, demografis dan laporan kebutuhan minimum berdasar pada penduduk yang mengungsi atau dievakuasi.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1834"/>
+        <location filename="hazard_classifications.py" line="1832"/>
         <source>A hazard classification is used to define a range of severity thresholds (classes) for a hazard layer. The classification will be used to create zones of data that each present a similar hazard level. During the analysis, each exposure feature will be assessed to determine which hazard class it coincides with, and then a determination will be made as to whether and how the exposure feature is likely to be impacted by the hazard.</source>
         <translation>Sebuah klasifikasi ancaman digunakan untuk mendefinisikan berbagai ambang keparahan (kelas) untuk lapisan ancaman. Klasifikasi tersebut akan digunakan untuk membuat zona data yang berisi masing-masing tingkat ancaman yang sama. Selama analisis, masing-masing fitur exposure akan dinilai untuk menentukan kelas ancaman yang bertepatan, dan kemudian tekad akan dibuat apakah dan bagaimana fitur keterpaparan kemungkinan akan terkena dampak ancaman.</translation>
     </message>
@@ -7239,12 +7219,12 @@
         <translation>Tindakan untuk keterpaparan :  {exposure_name}</translation>
     </message>
     <message>
-        <location filename="dock.py" line="933"/>
+        <location filename="dock.py" line="936"/>
         <source>No Version</source>
         <translation>Tidak Ada Versi</translation>
     </message>
     <message>
-        <location filename="wizard_utils.py" line="136"/>
+        <location filename="utilities.py" line="136"/>
         <source>Your layer&apos;s keyword&apos;s version ({layer_version}) does not match with your InaSAFE version ({inasafe_version}). If you wish to use it as an exposure, hazard, or aggregation layer in an analysis, please update the keywords. Click Next if you want to assign keywords now.</source>
         <translation>Versi kata kunci lapisan Anda ({layer_version}) tidak cocok dengan versi InaSAFE Anda ({inasafe_version}). Jika Anda ingin menggunakannya sebagai lapisan keterpaparan, ancaman, atau agregasi di analisis, silahkan perbarui kata kuncinya. Klik Lanjut untuk memberikan kata kunci sekarang.</translation>
     </message>
@@ -7574,7 +7554,7 @@
         <translation>Banyak penyandang disabilitas yang mengungsi untuk setiap fitur</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1321"/>
+        <location filename="hazard_classifications.py" line="1319"/>
         <source>hazard zone</source>
         <translation>area ancaman</translation>
     </message>
@@ -7584,7 +7564,7 @@
         <translation>Intensitas MMI</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1828"/>
+        <location filename="hazard_classifications.py" line="1826"/>
         <source>cyclone category</source>
         <translation>kategori siklon</translation>
     </message>
@@ -8350,32 +8330,32 @@ Anda dapat memilih lebih dari 1 field. InaSAFE akan menjumlahkan nilai dari fiel
         <translation>catatan umum gunungapi</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1327"/>
+        <location filename="hazard_classifications.py" line="1325"/>
         <source>&lt;b&gt;Tropical cyclone&lt;/b&gt; intensity is classified using five classes according to the Australian Bureau of Meteorology. Tropical Cyclone intensity is defined as the maximum mean wind speed over open flat land or water, averaged over a 10-minute period. This is sometimes referred to as the maximum sustained wind and will be experienced around the eye-wall of the cyclone.</source>
         <translation>Intensitas &lt;b&gt;siklon tropis&lt;/b&gt; diklasifikasikan menggunakan lima klas menurut Biro Meteorologi Australia. Intensitas siklon tropis didefinisikan sebagai kecepatan angin rata-rata maksimum di atas tanah terbuka atau air, rata-rata berakhir dalam periode 10 menit. Kecepatan ini kadang-kadang disebut sebagai angin maksimum berkelanjutan dan akan dialami di sekitar mata-dinding siklon.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1361"/>
+        <location filename="hazard_classifications.py" line="1359"/>
         <source>Extremely dangerous with widespread destruction. A Category 5 cyclone&apos;s strongest winds are VERY DESTRUCTIVE winds with typical gusts over open flat land of more than 151 kt. </source>
         <translation>Sangat berbahaya dengan kerusakan luas. Angin siklon terkuat pada kategori 5 adalah angin yang sangat merusak dengan hembusan khas di atas dataran terbuka lebih dari 151 knot.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1392"/>
+        <location filename="hazard_classifications.py" line="1390"/>
         <source>Significant roofing loss and structural damage. Many caravans destroyed and blown away. Dangerous airborne debris . Widespread power failures. A Category 4 cyclone&apos;s strongest winds are VERY DESTRUCTIVE winds with typical gusts over open flat land of 122 - 151 kt. </source>
         <translation>Kerusakan signifikan kehilangan atap dan struktural. Banyak mobil karavan rusak dan tertiup menjauh. Puing udara yang berbahaya. Gangguan kelistrikan yang meluas. Angin siklon terkuat kategori 4 adalah angin yang sangat merusak dengan hembusan khas di atas dataran terbuka dari 122 - 151 knot.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1467"/>
+        <location filename="hazard_classifications.py" line="1465"/>
         <source>Minor house damage. Significant damage to signs, trees and caravans. Heavy damage to some crops. Risk of power failure. Small craft may break moorings. A Category 2 cyclone&apos;s strongest winds are DESTRUCTIVE winds with typical gusts over open flat land of 68 - 89 kt. </source>
         <translation>Rumah rusak ringan. Kerusakan signifikan pada rambu, pepohonan, dan mobil karavan. Kerusakan parah pada beberapa tanaman. Berisiki pada gangguan kelistrikan. Kapal kecil mungkin terlepas dari tambatan. Angin siklon terkuat kategori 2 adalah angin yang merusak dengan hembusan khas di atas dataran terbuka dari 68 - 89 knot.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1505"/>
+        <location filename="hazard_classifications.py" line="1503"/>
         <source>Negligible house damage. Damage to some crops, trees and caravans. Craft may drag moorings. A Category 1 cyclone&apos;s strongest winds are GALES with typical gusts over open flat land of 49 - 67 kt. </source>
         <translation>Kerusakan rumah sangat ringan. Kerusakan pada beberapa tanaman, pepohonan, dan mobil karavan. Kapal mungkin terseret tambatan. Angin siklon terkuat kategori 1 adalah angin kencang dengan hembusan khas di atas dataran terbuka dari 49 - 67 knot.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1580"/>
+        <location filename="hazard_classifications.py" line="1578"/>
         <source>The &lt;b&gt;Saffir-Simpson Hurricane Wind Scale&lt;/b&gt; is a 1 to 5 rating based on a hurricane&apos;s sustained wind speed, measured over a 1-minute period. This scale estimates potential property damage. Hurricanes reaching Category 3 and higher are considered major hurricanes because of their potential for significant loss of life and damage. Category 1 and 2 storms are still dangerous, however, and require preventative measures. In the western North Pacific, the term &quot;super typhoon&quot; is used for tropical cyclones with sustained winds exceeding 150 mph.</source>
         <translation>&lt;b&gt;Skala Badai Saffir-Simpson&lt;/b&gt; merupakan skala dengan 5 tingkatan/kategori yang didasarkan pada kecepatan berkelanjutan dari angin badai, yang diukur dalam rentang periode 1 menit. Badai dengan kategori 3 atau lebih dianggap sebagai badai besar karena berpotensial menyebabkan kerusakan maupun korban jiwa. Walaupun demikian, badai pada kategori 1 dan 2 juga tetap dianggap membahayakan dan membutuhkan tindakan pencegahan. Di bagian barat Pasifik Utara, istilah &quot;Super Typhoon&quot; digunakan untuk  angin siklon tropis dengan kecepatan berkelanjutan melebihi 150 mph.</translation>
     </message>
@@ -8450,7 +8430,7 @@ Anda dapat memilih lebih dari 1 field. InaSAFE akan menjumlahkan nilai dari fiel
         <translation>catatan tingkat pengungsian</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="642"/>
+        <location filename="wizard_dialog.py" line="646"/>
         <source>Invalid Field Mapping</source>
         <translation>Pemetaan Field Tidak Valid</translation>
     </message>
@@ -9389,67 +9369,62 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
         <translation>Pada langkah wizard ini: {step_name}, Anda akan dapat mengulas judul layer ini yang akan muncul dalam laporan analisis</translation>
     </message>
     <message>
-        <location filename="step_kw65_summary.py" line="150"/>
+        <location filename="step_kw65_summary.py" line="159"/>
         <source>Keyword Summary Step</source>
         <translation>Langkah Ringkasan Keyword</translation>
     </message>
     <message>
-        <location filename="step_kw65_summary.py" line="161"/>
+        <location filename="step_kw65_summary.py" line="170"/>
         <source>In this wizard step: {step_name}, you will be able to review all the keywords that have been set for this layer</source>
         <translation>Pada langkah wizard ini: {step_name}, Anda akan dapat mengulas semua keyword yang telah diatur untuk layer ini.</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="130"/>
+        <location filename="wizard_dialog.py" line="132"/>
         <source>InaSAFE Keywords Creation Wizard</source>
         <translation>Wizard Pembuat Keyword InaSAFE</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="132"/>
+        <location filename="wizard_dialog.py" line="134"/>
         <source>InaSAFE Impact Function Centric Wizard</source>
         <translation>Wizard Fungsi Dampak Tepusat InaSAFE</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="252"/>
+        <location filename="wizard_dialog.py" line="256"/>
         <source>Keywords update wizard for layer &lt;b&gt;{layer_name}&lt;/b&gt;</source>
         <translation>Wizard pembaharuan keyword untuk layer &lt;b&gt;{layer_name}&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="256"/>
-        <source>Keywords creation wizard for layer &lt;b&gt;%s&lt;/b&gt;</source>
-        <translation>Wizard pembuat keyword untuk layer &lt;b&gt;%s&lt;/b&gt;</translation>
-    </message>
-    <message>
-        <location filename="wizard_dialog.py" line="264"/>
+        <location filename="wizard_dialog.py" line="268"/>
         <source>Use this wizard to run a guided impact assessment</source>
         <translation>Pergunakan wizard ini untuk menjalankan perhitungan dampak terpandu</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="604"/>
+        <location filename="wizard_dialog.py" line="608"/>
         <source>Finish</source>
         <translation>Selesai</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="716"/>
+        <location filename="wizard_dialog.py" line="720"/>
         <source>Next</source>
         <translation>Lanjut</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="725"/>
+        <location filename="wizard_dialog.py" line="729"/>
         <source>Show help</source>
         <translation>Tampilkan bantuan</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="729"/>
+        <location filename="wizard_dialog.py" line="733"/>
         <source>Hide help</source>
         <translation>Sembunyikan bantuan</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="864"/>
+        <location filename="wizard_dialog.py" line="868"/>
         <source>InaSAFE</source>
         <translation>InaSAFE</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="864"/>
+        <location filename="wizard_dialog.py" line="868"/>
         <source>An error was encountered when saving the following keywords:
  {error_message}</source>
         <translation>Terjadi kesalahan saat penyimpanan keyword berikut:
@@ -10071,7 +10046,7 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
         <translation>&quot;{affected_name}&quot; didefinisikan sebagai: {affected_description}. Field ini berisi nilai produksi yang terdampak oleh ancaman.</translation>
     </message>
     <message>
-        <location filename="hazard_classifications.py" line="1430"/>
+        <location filename="hazard_classifications.py" line="1428"/>
         <source>Some roof and structural damage. Some caravans destroyed. Power failures likely. A Category 3 cyclone&apos;s strongest winds are VERY DESTRUCTIVE winds with typical gusts over open flat land of 90 - 121 kt. </source>
         <translation>Kerusakan beberapa atap dan struktural. Beberapa mobil karavan rusak. Kemungkinan gangguan kelistrikan. Angin siklon terkuat kategori 3 adalah angin yang sangat merusak dengan hembusan khas di atas dataran terbuka dari 90 - 121 knot.</translation>
     </message>
@@ -10356,7 +10331,7 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
         <translation>InaSAFE - Elemen Infografis</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="69"/>
+        <location filename="infographic.py" line="68"/>
         <source>{symbol} {age} y.o</source>
         <translation>{symbol} {age} tahun</translation>
     </message>
@@ -10596,6 +10571,26 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
         <translation>&lt;b&gt;Kuintal&lt;/b&gt; adalah satuan berat yang setara dengan 100 kilogram.</translation>
     </message>
     <message>
+        <location filename="hazard_classifications.py" line="575"/>
+        <source>Flooding is over 150 centimetres.</source>
+        <translation>Terbanjiri lebih dari 150 sentimeter.</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="596"/>
+        <source>Flooding between 71 and 150 centimetres.</source>
+        <translation>Terbanjiri antara 71 dan 150 sentimeter.</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="618"/>
+        <source>Flooding of between 10 and 70 centimetres.</source>
+        <translation>Terbanjiri antara 10 dan 70 sentimeter.</translation>
+    </message>
+    <message>
+        <location filename="hazard_classifications.py" line="640"/>
+        <source>An unknown level of flooding - use caution - </source>
+        <translation>Kedalaman banjir tidak diketahui - berhati-hatilah -</translation>
+    </message>
+    <message>
         <location filename="generic_expressions.py" line="30"/>
         <source>Retrieve a value from a field in the impact analysis layer.</source>
         <translation>Ambil nilai dari sebuah field di layer analisis dampak.</translation>
@@ -10636,14 +10631,9 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
         <translation>Mengingat waktu analisis InaSAFE, maka akan mengkonversinya menjadi format waktu dengan jam:menit.</translation>
     </message>
     <message>
-        <location filename="align.py" line="82"/>
-        <source>Unable to select reference layer</source>
-        <translation>Tidak bisa memilih lapisan referensi</translation>
-    </message>
-    <message>
-        <location filename="wizard_utils.py" line="183"/>
-        <source>Do not use</source>
-        <translation>Tidak menggunakan</translation>
+        <location filename="wizard_dialog.py" line="260"/>
+        <source>Keywords creation wizard for layer &lt;b&gt;{layer_name}&lt;/b&gt;</source>
+        <translation>Wizard pembuat keyword untuk layer &lt;b&gt;{layer_name}&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="map_report.py" line="320"/>
@@ -10651,72 +10641,72 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
         <translation>Ambil path lengkap dari inasafe-logo-white.svg.</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="89"/>
+        <location filename="infographic.py" line="88"/>
         <source>Retrieve units of the given minimum needs field name.</source>
         <translation>Ambil satuan dari nama field kebutuhan minimum yang diberikan.</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="91"/>
+        <location filename="infographic.py" line="90"/>
         <source>l/weekly</source>
         <translation>l/minggu</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="139"/>
+        <location filename="infographic.py" line="138"/>
         <source>Get a formatted infographic header sentence for an impact function.</source>
         <translation>Dapatkan kalimat header infografis berformat untuk fungsi dampak.</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="142"/>
+        <location filename="infographic.py" line="141"/>
         <source>Estimated impact of a flood</source>
         <translation>Perkiraan dampak banjir</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="165"/>
+        <location filename="infographic.py" line="164"/>
         <source>Retrieve map overview header string from definitions.</source>
         <translation>Ambil string header gambaran peta dari definisi.</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="182"/>
+        <location filename="infographic.py" line="181"/>
         <source>Retrieve population chart header string from definitions.</source>
         <translation>Ambil string header grafik penduduk dari definisi.</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="199"/>
+        <location filename="infographic.py" line="198"/>
         <source>Retrieve people section header string from definitions.</source>
         <translation>Ambil string header bagian penduduk dari definisi.</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="216"/>
+        <location filename="infographic.py" line="215"/>
         <source>Retrieve age gender section header string from definitions.</source>
         <translation>Ambil string header bagian umur jenis kelamin dari definisi.</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="233"/>
+        <location filename="infographic.py" line="232"/>
         <source>Retrieve age gender section notes string from definitions.</source>
         <translation>Ambil string catatan bagian umur jenis kelamin dari definisi.</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="250"/>
+        <location filename="infographic.py" line="249"/>
         <source>Retrieve vulnerability section header string from definitions.</source>
         <translation>Ambil string header bagian kerentanan dari definisi.</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="268"/>
+        <location filename="infographic.py" line="267"/>
         <source>Retrieve female vulnerability section header string from definitions.</source>
         <translation>Ambil string header bagian kerentanan wanita dari definisi.</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="286"/>
+        <location filename="infographic.py" line="285"/>
         <source>Retrieve minimum needs section header string from definitions.</source>
         <translation>Ambil string header bagian kebutuhan minimum dari definisi.</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="304"/>
+        <location filename="infographic.py" line="303"/>
         <source>Retrieve additional minimum needs section header string from definition.</source>
         <translation>Ambil string header bagian kebutuhan minimum tambahan dari definisi.</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="324"/>
+        <location filename="infographic.py" line="323"/>
         <source>Retrieve minimum needs section notes string from definitions.</source>
         <translation>Ambil string bagian catatan kebutuhan minimum dari definisi.</translation>
     </message>
@@ -11130,97 +11120,97 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>Dock</name>
     <message>
-        <location filename="dock.py" line="402"/>
+        <location filename="dock.py" line="405"/>
         <source>InaSAFE %s</source>
         <translation>InaSAFE %s</translation>
     </message>
     <message>
-        <location filename="dock.py" line="392"/>
+        <location filename="dock.py" line="395"/>
         <source>The file for organization logo in %s doesn&apos;t exists. Please check in Plugins -&gt; InaSAFE -&gt; Options that your paths are still correct and update them if needed.</source>
         <translation>File untuk logo organisasi di %s tidak ada. Mohon cek di Plugins -&gt; InaSAFE -&gt; Options (Pilihan) bahwa lokasi file sudah benar dan diperbarui jika diperlukan.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="402"/>
+        <location filename="dock.py" line="405"/>
         <source>The file for organization logo has zero height. Please provide valid file for organization logo.</source>
         <translation>File untuk logo organisasi memiliki tinggi nol. Mohon berikan file yang valid untuk logo organisasi.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="489"/>
+        <location filename="dock.py" line="492"/>
         <source>Error while saving</source>
         <translation>Kesalahan ketika menyimpan</translation>
     </message>
     <message>
-        <location filename="dock.py" line="483"/>
+        <location filename="dock.py" line="486"/>
         <source>The destination location must be writable.</source>
         <translation>Lokasi tujuan harus dapat ditulis.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="489"/>
+        <location filename="dock.py" line="492"/>
         <source>Something went wrong.</source>
         <translation>Telah terjadi suatu kesalahan.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="693"/>
+        <location filename="dock.py" line="696"/>
         <source>Entire area</source>
         <translation>Area keseluruhan</translation>
     </message>
     <message>
-        <location filename="dock.py" line="792"/>
+        <location filename="dock.py" line="795"/>
         <source>Analysis status</source>
         <translation>Status analisis</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1008"/>
+        <location filename="dock.py" line="1011"/>
         <source>InaSAFE</source>
         <translation>InaSAFE</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1008"/>
+        <location filename="dock.py" line="1011"/>
         <source>Please select a valid impact layer before trying to print.</source>
         <translation>Silakan pilih layer dampak yang valid sebelum mencoba untuk mencetaknya.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1090"/>
+        <location filename="dock.py" line="1093"/>
         <source>Map Creator</source>
         <translation>Pembuat Peta</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1090"/>
+        <location filename="dock.py" line="1093"/>
         <source>Your PDF was created....opening using the default PDF viewer on your system.</source>
         <translation>PDF Anda telah selesai dibuat....buka dengan menggunakan pembaca berkas PDF pada sistem komputer Anda.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1090"/>
+        <location filename="dock.py" line="1093"/>
         <source>The generated pdfs were saved as:</source>
         <translation>Berkas PDF Anda disimpan di:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1102"/>
+        <location filename="dock.py" line="1105"/>
         <source>The generated htmls were saved as:</source>
         <translation>Berkas HTML Anda disimpan di:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1108"/>
+        <location filename="dock.py" line="1111"/>
         <source>The generated qpts were saved as:</source>
         <translation>Berkas QPT Anda disimpan di:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1369"/>
+        <location filename="dock.py" line="1373"/>
         <source>The hazard layer, exposure layer and your defined analysis area extents all overlap. Press the run button below to continue with the analysis.</source>
         <translation>Lapisan ancaman, paparan dan wilayah luasan analisis yang Anda tetapkan telah tumpang tindih. Tekan tombol jalankan di bawah untuk melanjutkan analisis.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1374"/>
+        <location filename="dock.py" line="1378"/>
         <source>Analysis environment ready</source>
         <translation>Lingkungan analisis telah siap</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1374"/>
+        <location filename="dock.py" line="1378"/>
         <source>More info ...</source>
         <translation>Info lebih lanjut ...</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1412"/>
+        <location filename="dock.py" line="1416"/>
         <source>No overlapping extents</source>
         <translation>Tidak ada luasan perpotongan</translation>
     </message>
@@ -12946,32 +12936,11 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-    <name>StepFcFunction</name>
-    <message>
-        <location filename="step_fc10_function.py" line="71"/>
-        <source>Function</source>
-        <translation>Fungsi</translation>
-    </message>
-    <message>
-        <location filename="step_fc10_function.py" line="74"/>
-        <source>Overview</source>
-        <translation>Ikhtisar</translation>
-    </message>
-</context>
-<context>
     <name>StepFcFunctions2</name>
     <message>
         <location filename="step_fc05_functions2.py" line="108"/>
         <source>Available functions:</source>
         <translation>Fungsi yang tersedia:</translation>
-    </message>
-</context>
-<context>
-    <name>StepFcParams</name>
-    <message>
-        <location filename="step_fc80_params.py" line="76"/>
-        <source>Please set impact functions parameters.&lt;br/&gt;Parameters for impact function &quot;%s&quot; that can be modified are:</source>
-        <translation>Silahkan set parameter fungsi dampak.&lt;br/&gt;Parameter untuk fungsi dampak &quot;%s&quot; yang dapat dimodifikasi adalah:</translation>
     </message>
 </context>
 <context>
@@ -13036,7 +13005,7 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>StepKwSummary</name>
     <message>
-        <location filename="step_kw65_summary.py" line="133"/>
+        <location filename="step_kw65_summary.py" line="142"/>
         <source>The selected keywords don&apos;t match requirements of the selected impact function (%s). You can continue with registering the layer, however, you&apos;ll need to choose another layer for that function.</source>
         <translation>Kata kunci yand dipilih tidak sesuai dengan kebutuhan fungsi dampak yang dipilih (%s). Anda dapat melanjutkan pendaftaran lapisan, tetapi Anda harus memilih lapisan lain untuk fungsi tersebut.</translation>
     </message>
