@@ -11,6 +11,9 @@ from safe.test.utilities import standard_data_path, get_qgis_app
 from safe.gui.tools.shake_grid.shake_grid import (
     ShakeGrid, convert_mmi_data)
 from safe.utilities.metadata import read_iso19115_metadata
+from safe.definitions.keyword_properties import (
+    property_extra_keywords
+)
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -166,7 +169,7 @@ class TestShakeGrid(unittest.TestCase):
         self.assertTrue(os.path.exists(expected_keywords))
         # Check that extra_keywords exists
         keywords = read_iso19115_metadata(raster_path)
-        self.assertIn('extra_keywords', keywords.keys())
+        self.assertIn(property_extra_keywords['key'], keywords.keys())
 
     def test_mmi_to_shapefile(self):
         """Check we can convert the shake event to a shapefile."""

@@ -8,6 +8,9 @@ from datetime import datetime
 from xml.etree import ElementTree
 
 from safe.definitions.metadata import TYPE_CONVERSIONS, METADATA_XML_TEMPLATE
+from safe.definitions.keyword_properties import (
+    property_extra_keywords
+)
 from safe.common.exceptions import MetadataReadError, HashNotFoundError
 from safe.metadata.encoder import MetadataEncoder
 from safe.metadata.metadata_db_io import MetadataDbIO
@@ -153,7 +156,7 @@ class BaseMetadata(object):
             'inasafe/'
             'inasafe_default_values/'
             'gco:Dictionary'),
-        'extra_keywords': (
+        property_extra_keywords['key']: (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'

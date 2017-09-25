@@ -1,5 +1,6 @@
 # coding=utf-8
-"""A converter for USGS shakemap grid.xml files."""
+
+"""A converter for shakemap grid.xml files."""
 
 import os
 import sys
@@ -41,6 +42,9 @@ from safe.definitions.layer_modes import layer_mode_continuous
 from safe.definitions.layer_purposes import layer_purpose_hazard
 from safe.definitions.units import unit_mmi
 from safe.definitions.versions import inasafe_keyword_version
+from safe.definitions.keyword_properties import (
+    property_extra_keywords
+)
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -878,7 +882,7 @@ class ShakeGrid(object):
             'continuous_hazard_unit': unit_mmi['key'],
             'classification': earthquake_mmi_scale['key'],
             'thresholds': classes,
-            'extra_keywords': extra_keywords
+            property_extra_keywords['key']: extra_keywords
         }
 
         if self.algorithm_name:
