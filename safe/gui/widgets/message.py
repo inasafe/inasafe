@@ -78,6 +78,36 @@ def missing_keyword_message(sender, missing_keyword_exception):
     send_static_message(sender, message)
 
 
+def conflicting_plugin_string():
+    """Return the error message when a plugin is conflicting with InaSAFE.
+
+    :return: The error string.
+    :rtype: basestring
+    """
+    message = tr(
+        'The plugin EmergencyMapper is conflicting with InaSAFE. You may have '
+        'some issues by running InaSAFE. You should remove the other plugin, '
+        'not only disable it. Check that the folder doesn\'t exist '
+        'anymore on your system.')
+    return message
+
+
+def conflicting_plugin_message():
+    """Unfortunately, one plugin is conflicting with InaSAFE.
+
+    We are displaying a message about this conflict.
+
+    :returns: Information for the user on how to get started.
+    :rtype: safe.messaging.Message
+    """
+    message = m.Message()
+    message.add(LOGO_ELEMENT)
+    message.add(m.Heading(tr('Conflicting plugin detected'), **WARNING_STYLE))
+    notes = m.Paragraph(conflicting_plugin_string())
+    message.add(notes)
+    return message
+
+
 def getting_started_message():
     """Generate a message for initial application state.
 

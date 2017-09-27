@@ -13,6 +13,8 @@ import unicodedata
 import webbrowser
 
 from PyQt4.QtCore import QPyNullVariant
+from qgis.core import QgsApplication
+from os.path import join, isdir
 
 from safe.common.exceptions import NoKeywordsFoundError, MetadataReadError
 from safe.definitions.versions import (
@@ -440,3 +442,16 @@ def readable_os_version():
         return ' {version}'.format(version=platform.mac_ver()[0])
     elif platform.system() == 'Windows':
         return platform.platform()
+
+
+def is_plugin_installed(name):
+    """Check if a plugin is installed, even if it's not enabled.
+
+    :param name: Name of the plugin to check.
+    :type name: string
+
+    :return: If the plugin is installed.
+    :rtype: bool
+    """
+    directory = QgsApplication.qgisSettingsDirPath()
+    return isdir(join(directory, 'python', 'plugins', name))
