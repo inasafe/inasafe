@@ -4,10 +4,8 @@
 
 import logging
 from qgis.core import (
-    QGis,
     QgsGeometry,
     QgsFeatureRequest,
-    QgsWKBTypes,
     QgsFeature,
 )
 
@@ -48,7 +46,7 @@ def smart_clip(layer_to_clip, mask_layer, callback=None):
     .. versionadded:: 4.0
     """
     output_layer_name = smart_clip_steps['output_layer_name']
-    processing_step = smart_clip_steps['step_name']
+    processing_step = smart_clip_steps['step_name']  # NOQA
 
     writer = create_memory_layer(
         output_layer_name,

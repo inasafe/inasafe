@@ -6,6 +6,7 @@ This code was taken from http://stackoverflow.com/a/3620972
 
 """
 
+
 import time
 import inspect
 from functools import wraps
@@ -100,6 +101,7 @@ class Tree(object):
         step = step.capitalize()
 
         return step
+
 
 ROOT = None
 

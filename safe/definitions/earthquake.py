@@ -113,6 +113,7 @@ def itb_bayesian_fatality_rates():
     }
     return fatality_rate
 
+
 EARTHQUAKE_FUNCTIONS = (
     {
         'key': 'itb_bayesian_fatality_rates',

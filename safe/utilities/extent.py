@@ -4,14 +4,10 @@
 
 from qgis.core import (
     QgsCoordinateTransform,
-    QgsRectangle,
     QgsGeometry,
-    QgsPoint,
-    QgsCoordinateReferenceSystem,
     QGis)
-from qgis.gui import QgsRubberBand  # pylint: disable=no-name-in-module
-# noinspection PyPackageRequirements
-from PyQt4.QtCore import QSettings, Qt
+from qgis.gui import QgsRubberBand
+from PyQt4.QtCore import Qt
 
 from safe.definitions.styles import (
     user_analysis_color,

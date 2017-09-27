@@ -58,7 +58,7 @@ def reclassify(layer, exposure_key=None, callback=None):
     """
     output_layer_name = reclassify_vector_steps['output_layer_name']
     output_layer_name = output_layer_name % layer.keywords['title']
-    processing_step = reclassify_vector_steps['step_name']
+    processing_step = reclassify_vector_steps['step_name']  # NOQA
 
     # This layer should have this keyword, or it's a mistake from the dev.
     inasafe_fields = layer.keywords['inasafe_fields']

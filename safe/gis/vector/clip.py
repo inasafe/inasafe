@@ -4,7 +4,6 @@
 
 import logging
 from qgis.core import (
-    QGis,
     QgsGeometry,
     QgsFeatureRequest,
     QgsWKBTypes,
@@ -55,7 +54,7 @@ def clip(layer_to_clip, mask_layer, callback=None):
     output_layer_name = clip_steps['output_layer_name']
     output_layer_name = output_layer_name % (
         layer_to_clip.keywords['layer_purpose'])
-    processing_step = clip_steps['step_name']
+    processing_step = clip_steps['step_name']  # NOQA
 
     writer = create_memory_layer(
         output_layer_name,
@@ -100,10 +99,10 @@ def clip(layer_to_clip, mask_layer, callback=None):
         if not input_features:
             continue
 
-        if single_clip_feature:
-            total = 100.0 / len(input_features)
-        else:
-            total = 0
+        # if single_clip_feature:
+        #     total = 100.0 / len(input_features)
+        # else:
+        #     total = 0
 
         for current, in_feat in enumerate(input_features):
             if not in_feat.geometry():

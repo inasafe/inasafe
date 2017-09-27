@@ -4,7 +4,6 @@
 
 import logging
 from qgis.core import (
-    QGis,
     QgsGeometry,
     QgsFeatureRequest,
     QgsWKBTypes,
@@ -57,7 +56,7 @@ def intersection(source, mask, callback=None):
     output_layer_name = intersection_steps['output_layer_name']
     output_layer_name = output_layer_name % (
         source.keywords['layer_purpose'])
-    processing_step = intersection_steps['step_name']
+    processing_step = intersection_steps['step_name']  # NOQA
 
     fields = source.fields()
     fields.extend(mask.fields())

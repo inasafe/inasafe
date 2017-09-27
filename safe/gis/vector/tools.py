@@ -11,7 +11,6 @@ from qgis.core import (
     QgsVectorLayer,
     QgsSpatialIndex,
     QgsFeatureRequest,
-    QgsCoordinateReferenceSystem,
     QGis,
     QgsFeature,
     QgsField,

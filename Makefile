@@ -149,6 +149,15 @@ pep257:
 	@pep257 --version
 	@pep257 --ignore=D102,D103,D104,D105,D200,D202,D203,D205,D210,D211,D300,D301,D302,D400,D401 safe/ || true
 
+# Run flake8 style checking
+flake8:
+	@echo
+	@echo "-----------"
+	@echo "Flake8 issues"
+	@echo "-----------"
+	@flake8 --version
+	@flake8 || true
+
 
 # Run entire test suite - excludes realtime until we have QGIS 2.0 support
 test_suite: testdata

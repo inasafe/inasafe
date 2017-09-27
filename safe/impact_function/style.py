@@ -12,8 +12,6 @@ from qgis.core import (
     QgsSymbolLayerV2Registry,
     QgsConditionalStyle,
     QGis,
-    QgsRasterShader,
-    QgsColorRampShader,
 )
 
 from safe.definitions.styles import (

@@ -1,7 +1,6 @@
 #!/usr/bin/env python
-"""**Generating rst file for api documentation**
+"""Generating rst file for api documentation."""
 
-"""
 
 __author__ = 'Ismail Sunni <ismailsunni@yahoo.co.id>'
 __revision__ = '$Format:%H$'
@@ -311,6 +310,7 @@ def main():
             max_depth=max_depth)
 
     print 'Done.'
+
 
 if __name__ == '__main__':
     main()

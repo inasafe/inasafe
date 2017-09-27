@@ -126,6 +126,7 @@ class App(object):
             _ = i
             impact_function1.run()
 
+
 if __name__ == '__main__':
     app = App()
     app.run()

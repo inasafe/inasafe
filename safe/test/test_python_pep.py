@@ -14,6 +14,32 @@ __revision__ = '$Format:%H$'
 
 class TestPythonPep(unittest.TestCase):
 
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Travis is not reading the config')
+    def test_flake8(self):
+        """Test if the code is Flake8 compliant."""
+        if os.environ.get('ON_TRAVIS', False):
+            root = '../'
+            command = ['flake8']
+            output = Popen(command, stdout=PIPE, cwd=root).communicate()[0]
+            default_number_lines = 0
+        elif sys.platform.startswith('win'):
+            # ET I don't know on windows.
+            pass
+
+        else:
+            # OSX and linux just delegate to make
+            root = '../../'
+            command = ['make', 'flake8']
+            output = Popen(command, stdout=PIPE, cwd=root).communicate()[0]
+            default_number_lines = 5
+
+        # make pep8 produces some extra lines by default.
+        lines = len(output.splitlines()) - default_number_lines
+        print output
+        message = 'Hey mate, go back to your keyboard :)'
+        self.assertEquals(lines, 0, message)
+
     def test_pep8(self):
         """Test if the code is PEP8 compliant."""
         if os.environ.get('ON_TRAVIS', False):

@@ -6,7 +6,6 @@ from itertools import product
 from PyQt4.QtCore import QFileInfo, QDir, QFile
 from qgis.core import (
     QgsVectorFileWriter,
-    QgsRasterLayer,
     QgsRasterPipe,
     QgsRasterFileWriter
 )

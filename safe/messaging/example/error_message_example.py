@@ -87,6 +87,7 @@ def error_creator5():
         e4.error_message.append(message)
         raise
 
+
 if __name__ == '__main__':
     # best practice non safe style errors
     # try:

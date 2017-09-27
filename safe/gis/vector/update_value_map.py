@@ -47,7 +47,7 @@ def update_value_map(layer, exposure_key=None, callback=None):
     .. versionadded:: 4.0
     """
     output_layer_name = assign_inasafe_values_steps['output_layer_name']
-    processing_step = assign_inasafe_values_steps['step_name']
+    processing_step = assign_inasafe_values_steps['step_name']  # NOQA
     output_layer_name = output_layer_name % layer.keywords['layer_purpose']
 
     keywords = layer.keywords

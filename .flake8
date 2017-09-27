@@ -1,0 +1,14 @@
+[flake8]
+exclude = safe_extras,test_*.py,__init__.py,extras
+max-line-length = 79
+
+# E12x continuation line indentation
+# E251 no spaces around keyword / parameter equals
+# E303 too many blank lines (3)
+# E402 module level import not at top of file because of tests with get_qgis_app
+
+# TO REMOVE
+# F401 imported but unused
+# F821 undefined name 'im_func'
+# F841 local variable
+ignore = E121,E122,E123,E125,E126,E127,E128,E251,E303,E402,F401,F821,F841
