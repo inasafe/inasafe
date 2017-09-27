@@ -3,7 +3,6 @@
 """Buffer a vector layer using many buffers (for volcanoes or rivers)."""
 
 from qgis.core import (
-    QgsVectorLayer,
     QgsCoordinateReferenceSystem,
     QgsCoordinateTransform,
     QgsGeometry,

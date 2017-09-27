@@ -59,6 +59,7 @@ def validate_sum(parameter_container, validation_message, **kwargs):
         'message': ''
     }
 
+
 # Add validator here.
 validators = {
     'sum': validate_sum

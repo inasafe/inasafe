@@ -27,6 +27,7 @@ def hello_world_extractor(impact_report, component):
     context['hello_world'] = "Hello World!"
     return context
 
+
 # second step
 hello_world_component = {
     'key': 'hello-world',

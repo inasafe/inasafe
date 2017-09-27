@@ -45,7 +45,7 @@ def recompute_counts(layer, callback=None):
     .. versionadded:: 4.0
     """
     output_layer_name = recompute_counts_steps['output_layer_name']
-    processing_step = recompute_counts_steps['step_name']
+    processing_step = recompute_counts_steps['step_name']  # NOQA
 
     fields = layer.keywords['inasafe_fields']
 

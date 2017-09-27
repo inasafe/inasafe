@@ -18,8 +18,6 @@ from qgis.core import (
     QgsProject)
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import (
-    QLocale,
-    QTranslator,
     QCoreApplication,
     Qt,
     QSettings)

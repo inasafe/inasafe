@@ -50,8 +50,7 @@ exposure_population = {
                 caveat_incomplete_data,
                 tr('Exposed population varies by the time (day or night, '
                    'weekends, holidays etc.). Such variations are not '
-                   'included in the analysis.'
-                ),
+                   'included in the analysis.'),
                 tr('Numbers reported for population counts have been rounded '
                    'to the nearest 10 people if the total is less than 1,000; '
                    'nearest 100 people if more than 1,000 and less than '

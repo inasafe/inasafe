@@ -54,7 +54,7 @@ def zonal_stats(raster, vector, callback=None):
     .. versionadded:: 4.0
     """
     output_layer_name = zonal_stats_steps['output_layer_name']
-    processing_step = zonal_stats_steps['step_name']
+    processing_step = zonal_stats_steps['step_name']  # NOQA
 
     exposure = raster.keywords['exposure']
     if raster.crs().authid() != vector.crs().authid():

@@ -3,8 +3,6 @@
 """Reproject a vector layer to a specific CRS."""
 
 from qgis.core import (
-    QgsVectorLayer,
-    QgsCoordinateReferenceSystem,
     QgsCoordinateTransform,
     QgsFeature,
 )

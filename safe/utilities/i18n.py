@@ -51,12 +51,12 @@ def tr(text, context='@default'):
             'The translation: "%s".\n'
             'The number of %% character does not match (%s and %s).'
             'Please check the translation in transifex for %s.' % (
-            text,
-            translated_text,
-            text.count('%'),
-            translated_text.count('%s'),
-            locale()
-        ))
+                text,
+                translated_text,
+                text.count('%'),
+                translated_text.count('%s'),
+                locale()
+            ))
         LOGGER.warning(content)
         return text
 

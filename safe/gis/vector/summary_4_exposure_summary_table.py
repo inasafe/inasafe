@@ -77,7 +77,8 @@ def exposure_summary_table(
     """
     output_layer_name = summary_4_exposure_summary_table_steps[
         'output_layer_name']
-    processing_step = summary_4_exposure_summary_table_steps['step_name']
+    processing_step = (
+        summary_4_exposure_summary_table_steps['step_name'])  # NOQA
 
     source_fields = aggregate_hazard.keywords['inasafe_fields']
 

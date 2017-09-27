@@ -58,7 +58,7 @@ def union(union_a, union_b, callback=None):
     .. versionadded:: 4.0
     """
     output_layer_name = union_steps['output_layer_name']
-    processing_step = union_steps['step_name']
+    processing_step = union_steps['step_name']  # NOQA
     output_layer_name = output_layer_name % (
         union_a.keywords['layer_purpose'],
         union_b.keywords['layer_purpose']

@@ -4,7 +4,7 @@
 
 Tim Sutton, 2016
 """
-from safe.test.utilities import get_qgis_app, get_dock
+from safe.test.utilities import get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 # from PyQt4.QtGui import QApplication
 from safe.gui.tools.help_dialog import HelpDialog

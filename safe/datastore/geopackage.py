@@ -15,7 +15,6 @@ from osgeo import ogr, osr, gdal
 from PyQt4.QtCore import QFileInfo
 from qgis.core import (
     QgsVectorLayer,
-    QgsRasterLayer,
 )
 
 from safe.definitions.gis import QGIS_OGR_GEOMETRY_MAP

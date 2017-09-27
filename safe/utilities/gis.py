@@ -4,19 +4,13 @@
 from osgeo import gdal
 from qgis.core import (
     QgsMapLayer,
-    QgsField,
-    QgsFeature,
     QgsPoint,
     QgsGeometry,
-    QgsSpatialIndex,
-    QgsVectorFileWriter,
     QgsCoordinateReferenceSystem,
     QgsCoordinateTransform,
     QGis,
     QgsRectangle,
-    QgsPoint,
-    QgsVectorLayer,
-    QgsRasterLayer)
+)
 from safe.utilities.utilities import LOGGER
 
 

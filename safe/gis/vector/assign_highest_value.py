@@ -4,10 +4,8 @@
 
 import logging
 from qgis.core import (
-    QGis,
     QgsFeatureRequest,
     QgsGeometry,
-    QgsWKBTypes,
 )
 
 from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
@@ -60,7 +58,7 @@ def assign_highest_value(exposure, hazard, callback=None):
     .. versionadded:: 4.0
     """
     output_layer_name = assign_highest_value_steps['output_layer_name']
-    processing_step = assign_highest_value_steps['step_name']
+    processing_step = assign_highest_value_steps['step_name']  # NOQA
 
     hazard_inasafe_fields = hazard.keywords['inasafe_fields']
 

@@ -14,7 +14,7 @@ from numbers import Integral
 import math
 import colorsys
 # pylint: disable=unused-import
-from collections import OrderedDict
+from collections import OrderedDict  # NOQA
 # pylint: enable=unused-import
 
 from qgis.core import (

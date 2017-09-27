@@ -213,6 +213,7 @@ class Dock():
             impact_function1.run()
             impact_function2.run()
 
+
 if __name__ == '__main__':
     app = Qt.QApplication(sys.argv)
     dock = Dock()

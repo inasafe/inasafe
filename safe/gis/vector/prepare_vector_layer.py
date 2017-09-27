@@ -3,9 +3,8 @@
 """Prepare layers for InaSAFE."""
 
 import logging
-from PyQt4.QtCore import QPyNullVariant, QVariant
+from PyQt4.QtCore import QPyNullVariant
 from qgis.core import (
-    QgsVectorLayer,
     QgsField,
     QgsFeatureRequest,
     QGis,
@@ -82,13 +81,11 @@ def prepare_vector_layer(layer, callback=None):
     """
     output_layer_name = prepare_vector_steps['output_layer_name']
     output_layer_name = output_layer_name % layer.keywords['layer_purpose']
-    processing_step = prepare_vector_steps['step_name']
+    processing_step = prepare_vector_steps['step_name']  # NOQA
 
     if not layer.keywords.get('inasafe_fields'):
         msg = 'inasafe_fields is missing in keywords from %s' % layer.name()
         raise InvalidKeywordsForProcessingAlgorithm(msg)
-
-    feature_count = layer.featureCount()
 
     cleaned = create_memory_layer(
         output_layer_name, layer.geometryType(), layer.crs(), layer.fields())

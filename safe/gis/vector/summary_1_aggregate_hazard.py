@@ -72,8 +72,9 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
 
     .. versionadded:: 4.0
     """
-    output_layer_name = summary_1_aggregate_hazard_steps['output_layer_name']
-    processing_step = summary_1_aggregate_hazard_steps['step_name']
+    output_layer_name = (
+        summary_1_aggregate_hazard_steps['output_layer_name'])  # NOQA
+    processing_step = summary_1_aggregate_hazard_steps['step_name']  # NOQA
 
     source_fields = impact.keywords['inasafe_fields']
     target_fields = aggregate_hazard.keywords['inasafe_fields']

@@ -69,7 +69,7 @@ def reclassify(layer, exposure_key=None, overwrite_input=False, callback=None):
     .. versionadded:: 4.0
     """
     output_layer_name = reclassify_raster_steps['output_layer_name']
-    processing_step = reclassify_raster_steps['step_name']
+    processing_step = reclassify_raster_steps['step_name']  # NOQA
     output_layer_name = output_layer_name % layer.keywords['layer_purpose']
 
     if exposure_key:
