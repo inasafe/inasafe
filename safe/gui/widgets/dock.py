@@ -97,6 +97,8 @@ from safe.gui.widgets.message import (
     show_no_keywords_message,
     show_keyword_version_message,
     getting_started_message,
+    conflicting_plugin_message,
+    conflicting_plugin_string,
     no_overlap_message,
     ready_message,
     enable_messaging)
@@ -108,6 +110,7 @@ from safe.gui.analysis_utilities import (
     generate_infographic_report,
     add_layer_to_canvas,
     remove_layer_from_canvas)
+from safe.utilities.utilities import is_plugin_installed
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -148,6 +151,11 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             http://doc.qt.nokia.com/4.7-snapshot/designer-using-a-ui-file.html
         """
         QtGui.QDockWidget.__init__(self, None)
+
+        # Dirty hack to display a warning about this plugin.
+        self.conflicting_plugin_detected = is_plugin_installed(
+            'EmergencyMapper')
+
         self.setupUi(self)
         self.show_question_button.setVisible(False)
         self.progress_bar.hide()
@@ -621,7 +629,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         # For issue #618
         if len(layers) == 0:
-            send_static_message(self, getting_started_message())
+            if self.conflicting_plugin_detected:
+                send_static_message(self, conflicting_plugin_message())
+            else:
+                send_static_message(self, getting_started_message())
             return
 
         self.get_layers_lock = True
@@ -896,7 +907,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         # Do nothing if there is no active layer - see #1861
         if not self._has_active_layer():
-            send_static_message(self, getting_started_message())
+            if self.conflicting_plugin_detected:
+                send_static_message(self, conflicting_plugin_message())
+            else:
+                send_static_message(self, getting_started_message())
 
         # Now try to read the keywords and show them in the dock
         try:
@@ -960,7 +974,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             # Added this check in 3.2 for #1861
             active_layer = self.iface.activeLayer()
             if active_layer is None:
-                send_static_message(self, getting_started_message())
+                if self.conflicting_plugin_detected:
+                    send_static_message(self, conflicting_plugin_message())
+                else:
+                    send_static_message(self, getting_started_message())
             else:
                 show_no_keywords_message(self)
                 self.print_button.setEnabled(False)
@@ -1186,6 +1203,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         Please update the code in step_fc990_analysis.py in function
         setup_and_run_analysis(). It should follow approximately the same code.
         """
+        if self.conflicting_plugin_detected:
+            display_critical_message_bar(
+                tr('Conflicting plugin'), conflicting_plugin_string())
+
         # Start the analysis
         self.impact_function = self.validate_impact_function()
         if not isinstance(self.impact_function, ImpactFunction):
@@ -1460,7 +1481,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         hazard_index = self.hazard_layer_combo.currentIndex()
         exposure_index = self.exposure_layer_combo.currentIndex()
         if hazard_index == -1 or exposure_index == -1:
-            message = getting_started_message()
+            if self.conflicting_plugin_detected:
+                message = conflicting_plugin_message()
+            else:
+                message = getting_started_message()
             return False, message
         else:
             return True, None
