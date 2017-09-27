@@ -3,6 +3,7 @@ from PyQt4.QtCore import QVariant
 from safe.utilities.resources import get_ui_class
 from qgis.gui import QgsMapLayerProxyModel
 from qgis.core import (
+    QgsDistanceArea,
     QgsFeature,
     QgsGeometry,
     QgsField,
@@ -30,7 +31,11 @@ class DirectionTool(QtGui.QDialog, FORM_CLASS):
         cancel_button.clicked.connect(self.reject)
 
     def bearing_to_cardinal(self, bearing_angle):
+        """
 
+        :param bearing_angle:
+        :return:
+        """
         direction_list = [
             'N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE',
             'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WW',
@@ -48,23 +53,6 @@ class DirectionTool(QtGui.QDialog, FORM_CLASS):
         index %= direction_count
         return direction_list[index]
 
-    def to_pseudomercator(self, point_geometry):
-        '''Transform coordinate from WGS 84 to Pseudo Mercator.
-
-        :param point_geometry: Point
-        :type point_geometry: QgsGeometry
-        :return: transformed point
-        :rtype : QgsGeometry
-        '''
-
-        pseudomercator = QgsCoordinateReferenceSystem()
-        pseudomercator.createFromId(3857)
-        wgs84 = QgsCoordinateReferenceSystem()
-        wgs84.createFromId(4326)
-        do_transform = QgsCoordinateTransform(wgs84, pseudomercator)
-        point_geometry.transform(do_transform)
-        return point_geometry
-
 
     def distance_and_bearing(self, hazard_layer, exposure_layer, update_layer=True):
         '''Calculate bearing angle.
@@ -75,6 +63,9 @@ class DirectionTool(QtGui.QDialog, FORM_CLASS):
         :type point_b: QgsPointLayer
         '''
         index = 0
+        distance = QgsDistanceArea()
+        distance.setEllipsoidalMode(True)
+        distance.setEllipsoid('WGS84')
         exposure_provider = exposure_layer.dataProvider()
         for field in exposure_provider.fields():
             index += 1
@@ -96,23 +87,18 @@ class DirectionTool(QtGui.QDialog, FORM_CLASS):
             print 'hazard layer contain more than one feature'  # implement logging later
             print 'using the first feature as default'          # implement logging later
             hazard_feature = hazard_feature_list[0]
-        hazard_geometry = hazard_feature.geometry()
-        hazard_transformed = self.to_pseudomercator(hazard_geometry)
-        hazard_point = hazard_transformed.asPoint()
+        hazard_point = hazard_feature.geometry().asPoint()
         exposure_layer.startEditing()
         for feature in exposure_layer.getFeatures():
             fid = feature.id()
-            exposure_geometry = feature.geometry()
-            exposure_transformed = self.to_pseudomercator(exposure_geometry)
-            exposure_point = exposure_transformed.asPoint()
+            exposure_point = feature.geometry().asPoint()
             # calculate cardinality
             bearing_angle = hazard_point.azimuth(exposure_point)
             cardinality = self.bearing_to_cardinal(bearing_angle)
             # calculate distance
-            square_distance = exposure_point.sqrDist(hazard_point)
-            distance = math.sqrt(square_distance)
+            measure_distance = distance.measureLine(hazard_point, exposure_point)
 
-            exposure_layer.changeAttributeValue(fid, distance_index, distance)
+            exposure_layer.changeAttributeValue(fid, distance_index, measure_distance)
             exposure_layer.changeAttributeValue(fid, bearing_index, bearing_angle)
             exposure_layer.changeAttributeValue(fid, direction_index, cardinality)
 
