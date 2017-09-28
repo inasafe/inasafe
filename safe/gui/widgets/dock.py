@@ -651,10 +651,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     (layer not in canvas_layers)):
                 continue
 
-            #    store uuid in user property of list widget for layers
-
+            # store uuid in user property of list widget for layers
             layer_id = layer.id()
-
+            # Avoid uninitialized variable
+            title = None
             # See if there is a title for this layer, if not,
             # fallback to the layer's filename
             # noinspection PyBroadException
