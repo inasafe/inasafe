@@ -56,8 +56,8 @@ def filter_impact_function(hazard=None, exposure=None):
 @app.task(queue='inasafe-headless-analysis')
 def run_analysis(hazard, exposure, function, aggregation=None,
                  generate_report=False,
-                 requested_extent=None):
-
+                 requested_extent=None,
+                 archive_impact=False):
     """Run analysis with a given combination
 
     Proxy tasks for celery broker. It is not actually implemented here.
@@ -82,6 +82,10 @@ def run_analysis(hazard, exposure, function, aggregation=None,
     :param requested_extent: An extent of BBOX format list to denote the area
         of analysis. In CRS EPSG:4326
     :type requested_extent: list(float)
+
+    :param archive_impact: Flag to tell that impact Layer will be archived
+        as zip file
+    :type archive_impact: bool
 
     :return: Impact layer url
     :rtype: str
@@ -128,8 +132,9 @@ def run_analysis(hazard, exposure, function, aggregation=None,
         arguments.output_file = new_name
         build_report(arguments)
 
-    # archiving the layer
-    new_name = archive_layer(new_name)
+    if archive_impact:
+        # archiving the layer to be transferred over http as a whole
+        new_name = archive_layer(new_name)
     # new_name is a file path to archived layer
     # we need to return the url
     new_basename = os.path.basename(new_name)
