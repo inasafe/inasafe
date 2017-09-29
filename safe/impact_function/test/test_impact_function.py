@@ -66,6 +66,9 @@ from safe.definitions.layer_purposes import (
     layer_purpose_profiling,
     layer_purpose_analysis_impacted,
     layer_purpose_aggregate_hazard_impacted,
+    layer_purpose_exposure_summary,
+    layer_purpose_exposure_summary_table,
+    layer_purpose_aggregation_summary,
 )
 from safe.definitions.minimum_needs import minimum_needs_fields
 from safe.definitions.utilities import definition
@@ -146,7 +149,8 @@ def run_scenario(scenario, use_debug=False):
     :param use_debug: If we should use debug_mode when we run the scenario.
     :type use_debug: bool
 
-    :returns: Tuple(status, Flow dictionary, outputs).
+    :returns: Tuple(status, Flow dictionary, outputs, computed number of
+                outputs).
     :rtype: list
     """
     if os.path.exists(scenario['exposure']):
@@ -205,6 +209,8 @@ def run_scenario(scenario, use_debug=False):
     if status != 0:
         return status, message, None
 
+    counts = len(impact_function.output_layers_expected())
+
     status, message = impact_function.run()
     if status != 0:
         return status, message, None
@@ -213,7 +219,12 @@ def run_scenario(scenario, use_debug=False):
         if layer.type() == QgsMapLayer.VectorLayer:
             check_inasafe_fields(layer)
 
-    return status, impact_function.state, impact_function.outputs
+    return (
+        status,
+        impact_function.state,
+        impact_function.outputs,
+        counts,
+    )
 
 
 class TestImpactFunction(unittest.TestCase):
@@ -239,7 +250,8 @@ class TestImpactFunction(unittest.TestCase):
             exposure_layer.keywords['inasafe_fields']['exposure_type_field'],
             fields
         )
-        inasafe_fields = exposure_layer.keywords['inasafe_fields']
+        # We check that this key exists in the dictionary.
+        exposure_layer.keywords['inasafe_fields']
 
     def test_impact_function_behaviour(self):
         """Test behaviour of impact function."""
@@ -253,6 +265,17 @@ class TestImpactFunction(unittest.TestCase):
         impact_function.prepare()
         self.assertEqual(impact_function.name, 'Flood Polygon On Roads Line')
         self.assertEqual(impact_function.title, 'be affected')
+
+        expected_layers = [
+            layer_purpose_exposure_summary['key'],
+            layer_purpose_aggregate_hazard_impacted['key'],
+            layer_purpose_aggregation_summary['key'],
+            layer_purpose_analysis_impacted['key'],
+            layer_purpose_exposure_summary_table['key'],
+            layer_purpose_profiling['key'],
+        ]
+        self.assertListEqual(
+            expected_layers, impact_function.output_layers_expected())
 
     def test_minimum_extent(self):
         """Test we can compute the minimum extent in the IF."""
@@ -383,6 +406,15 @@ class TestImpactFunction(unittest.TestCase):
         # We monkey patch keywords for testing after `prepare` & before `run`.
         fields = impact_function.exposure.keywords['inasafe_fields']
         del fields[female_count_field['key']]
+        expected_layers = [
+            layer_purpose_exposure_summary['key'],
+            layer_purpose_aggregate_hazard_impacted['key'],
+            layer_purpose_aggregation_summary['key'],
+            layer_purpose_analysis_impacted['key'],
+            layer_purpose_profiling['key'],
+        ]
+        self.assertListEqual(
+            expected_layers, impact_function.output_layers_expected())
         status, message = impact_function.run()
         self.assertEqual(ANALYSIS_SUCCESS, status, message)
 
@@ -485,6 +517,14 @@ class TestImpactFunction(unittest.TestCase):
         impact_function.exposure = exposure_layer
         impact_function.hazard = hazard_layer
         impact_function.prepare()
+        expected_layers = [
+            layer_purpose_aggregate_hazard_impacted['key'],
+            layer_purpose_aggregation_summary['key'],
+            layer_purpose_analysis_impacted['key'],
+            layer_purpose_profiling['key'],
+        ]
+        self.assertListEqual(
+            expected_layers, impact_function.output_layers_expected())
         status, message = impact_function.run()
         self.assertEqual(ANALYSIS_SUCCESS, status, message)
 
@@ -627,7 +667,8 @@ class TestImpactFunction(unittest.TestCase):
         LOGGER.info('Running the scenario : %s' % scenario_path)
         scenario, expected_steps, expected_outputs = read_json_flow(
             scenario_path)
-        status, steps, outputs = run_scenario(scenario, use_debug)
+        status, steps, outputs, computed_nb_outputs = (
+            run_scenario(scenario, use_debug))
         self.assertEqual(0, status, steps)
         # self.assertDictEqual(expected_steps, steps, scenario_path)
         try:
@@ -637,6 +678,7 @@ class TestImpactFunction(unittest.TestCase):
         # - 1 because I added the profiling table, and this table is not
         # counted in the JSON file.
         self.assertEqual(len(outputs) - 1, expected_outputs['count'])
+        self.assertEqual(len(outputs), computed_nb_outputs)
 
     @unittest.skipIf(
         os.environ.get('ON_TRAVIS', False),

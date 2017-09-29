@@ -251,6 +251,8 @@ class ImpactFunction(object):
         self._end_datetime = None
         self._duration = 0
         self._provenance = {}
+        self._output_layer_expected = None
+
         # Environment
         set_provenance(self._provenance, provenance_host_name, gethostname())
         set_provenance(self._provenance, provenance_user, getpass.getuser())
@@ -409,6 +411,26 @@ class ImpactFunction(object):
         :returns: A list of vector layers.
         :rtype: list
         """
+        outputs = self._outputs()
+
+        if len(outputs) != len(self._output_layer_expected):
+            # This will never happen in production.
+            # Travis will fail before.
+            # If this happen, it's an error from InaSAFE core developers.
+            raise Exception(
+                'The computed count of output layers is wrong. It should be '
+                '{expected} but the count is {count}.'.format(
+                    expected=len(self._output_layer_expected),
+                    count=len(outputs)))
+
+        return outputs
+
+    def _outputs(self):
+        """List of layers containing outputs from the IF.
+
+        :returns: A list of vector layers.
+        :rtype: list
+        """
         layers = OrderedDict()
         layers[layer_purpose_exposure_summary['key']] = (
             self._exposure_summary)
@@ -445,7 +467,7 @@ class ImpactFunction(object):
         :returns: A vector layer.
         :rtype: QgsMapLayer
         """
-        return self.outputs[0]
+        return self._outputs()[0]
 
     @property
     def exposure_summary(self):
@@ -964,7 +986,55 @@ class ImpactFunction(object):
                 provenance_aggregation_keywords,
                 aggregation_keywords)
 
+            # Set output layer expected
+            self._output_layer_expected = self._compute_output_layer_expected()
+
             return PREPARE_SUCCESS, None
+
+    def output_layers_expected(self):
+        """Compute the output layers expected that the IF will produce.
+
+        You must call this function between the `prepare` and the `run`.
+        Otherwise you will get an empty list.
+
+        :return: List of expected layers.
+        :rtype: list
+        """
+        if not self._is_ready:
+            return []
+        else:
+            return self._output_layer_expected
+
+    def _compute_output_layer_expected(self):
+        """Compute output layers expected that the IF will produce.
+
+        Be careful when you call this function. It's a private function, better
+        to use the public function `output_layers_expected()`.
+
+        :return: List of expected layer keys.
+        :rtype: list
+        """
+        # Actually, an IF can produce maximum 6 layers, by default.
+        expected = [
+            layer_purpose_exposure_summary['key'],  # 1
+            layer_purpose_aggregate_hazard_impacted['key'],  # 2
+            layer_purpose_aggregation_summary['key'],  # 3
+            layer_purpose_analysis_impacted['key'],  # 4
+            layer_purpose_exposure_summary_table['key'],  # 5
+            layer_purpose_profiling['key'],  # 6
+        ]
+        if is_raster_layer(self.exposure):
+            if self.exposure.keywords.get('layer_mode') == 'continuous':
+                # If the exposure is a continuous raster, we can't provide the
+                # exposure impacted layer.
+                expected.remove(layer_purpose_exposure_summary['key'])
+
+        if not self.exposure.keywords.get('classification'):
+            # If the exposure doesn't have a classification, such as population
+            # census layer, we can't provide an exposure breakdown layer.
+            expected.remove(layer_purpose_exposure_summary_table['key'])
+
+        return expected
 
     def _compute_analysis_extent(self):
         """Compute the minimum extent between layers.
@@ -2062,7 +2132,7 @@ class ImpactFunction(object):
 
         # Let's style layers which have a geometry and have hazard_class
         hazard_class = hazard_class_field['key']
-        for layer in self.outputs:
+        for layer in self._outputs():
             without_geometries = [QGis.NoGeometry, QGis.UnknownGeometry]
             if layer.geometryType() not in without_geometries:
                 display_not_exposed = False
