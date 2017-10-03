@@ -6,7 +6,7 @@ from sqlite3 import OperationalError
 
 from PyQt4 import QtGui
 from PyQt4.QtCore import pyqtSignature, QSettings, pyqtSignal
-from PyQt4.QtGui import QDialog, QPixmap, QSizePolicy
+from PyQt4.QtGui import QDialog, QPixmap
 from qgis.core import QgsMapLayerRegistry
 
 from parameters.parameter_exceptions import InvalidValidationException
