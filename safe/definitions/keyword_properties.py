@@ -318,5 +318,20 @@ property_extra_keywords = {
     'name': tr('Extra Keywords'),
     'description': tr(
         'A collection of extra keyword for creating richer report.'
-    )
+    ),
+    # For translation
+    'member_names':
+        {
+            'latitude': tr('Latitude'),
+            'longitude': tr('Longitude'),
+            'magnitude': tr('Magnitude'),
+            'depth': tr('Depth'),
+            'description': tr('Description'),
+            'location': tr('Location'),
+            'time_zone': tr('Time zone'),
+            'x_minimum': tr('X minimum'),
+            'x_maximum': tr('X maximum'),
+            'y_minimum': tr('Y minimum'),
+            'y_maximum': tr('Y maximum'),
+        }
 }
