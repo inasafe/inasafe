@@ -2,7 +2,6 @@
 """Wizard Utilities Functions"""
 
 import logging
-import re
 import sys
 from PyQt4 import QtCore
 from PyQt4.QtGui import QWidgetItem, QSpacerItem, QLayout
@@ -10,11 +9,14 @@ from PyQt4.QtGui import QWidgetItem, QSpacerItem, QLayout
 from qgis.core import QgsCoordinateTransform
 
 import safe.gui.tools.wizard.wizard_strings
+
 from safe.common.version import get_version
 from safe.definitions.constants import RECENT, GLOBAL
 from safe.definitions.layer_modes import layer_mode_classified
 from safe.definitions.layer_purposes import (
     layer_purpose_exposure, layer_purpose_hazard)
+from safe.definitions.layer_purposes import (
+    layer_geometry_line, layer_geometry_point, layer_geometry_polygon)
 from safe.utilities.gis import (
     is_raster_layer, is_point_layer, is_polygon_layer)
 from safe.utilities.i18n import tr
@@ -116,7 +118,7 @@ def layer_description_html(layer, keywords=None):
             unit = '<tr><td><b>%s</b>: </td><td>%s</td></tr>' % (
                 tr('Unit'), unit)
 
-        desc = """
+        description = """
             <table border="0" width="100%%">
             <tr><td><b>%s</b>: </td><td>%s</td></tr>
             <tr><td><b>%s</b>: </td><td>%s</td></tr>
@@ -132,7 +134,7 @@ def layer_description_html(layer, keywords=None):
     elif keywords:
         # The layer has keywords, but the version is wrong
         layer_version = keyword_version or tr('No Version')
-        desc = tr(
+        description = tr(
             'Your layer\'s keyword\'s version ({layer_version}) does not '
             'match with your InaSAFE version ({inasafe_version}). If you wish '
             'to use it as an exposure, hazard, or aggregation layer in an '
@@ -142,15 +144,15 @@ def layer_description_html(layer, keywords=None):
     else:
         # The layer is keywordless
         if is_point_layer(layer):
-            geom_type = 'point'
+            geom_type = layer_geometry_point['key']
         elif is_polygon_layer(layer):
-            geom_type = 'polygon'
+            geom_type = layer_geometry_polygon['key']
         else:
-            geom_type = 'line'
+            geom_type = layer_geometry_line['key']
 
         # hide password in the layer source
         source = layer.publicSource()
-        desc = """
+        description = """
             %s<br/><br/>
             <b>%s</b>: %s<br/>
             <b>%s</b>: %s<br/><br/>
@@ -161,7 +163,7 @@ def layer_description_html(layer, keywords=None):
                'vector (%s)' % geom_type,
                tr('In the next step you will be able' +
                   ' to assign keywords to this layer.'))
-    return desc
+    return description
 
 
 def get_inasafe_default_value_fields(qsetting, field_key):
