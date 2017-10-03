@@ -135,9 +135,9 @@ class StepKwSummary(WizardStep, FORM_CLASS):
                     self.parent.layer, None, current_keywords):
                 msg = self.tr(
                     'The selected keywords don\'t match requirements of the '
-                    'selected impact function (%s). You can continue with '
-                    'registering the layer, however, you\'ll need to choose '
-                    'another layer for that function.') % im_func['name']
+                    'selected combination for the impact function. You can '
+                    'continue with registering the layer, however, you\'ll '
+                    'need to choose another layer for that function.')
                 body = '<br/><h5 class="problem">%s</h5> %s' % (msg, body)
 
         html = header + body + footer
