@@ -3,6 +3,7 @@
 
 import re
 import logging
+from copy import deepcopy
 
 from PyQt4.QtCore import QVariant, Qt
 from PyQt4.QtGui import QListWidgetItem, QAbstractItemView
@@ -197,14 +198,14 @@ class StepKwField(WizardStep, FORM_CLASS):
         # Set mode
         # Notes(IS) I hard coded this one, need to fix it after it's working.
         field_key = self.parent.field_keyword_for_the_layer()
-        if (field_key == population_count_field['key']):
+        if field_key == population_count_field['key']:
             self.mode = MULTI_MODE
         else:
             self.mode = SINGLE_MODE
 
         # Filtering based on field type
         layer_field = definition(field_key)
-        layer_field_types = layer_field['type']
+        layer_field_types = deepcopy(layer_field['type'])
         if not isinstance(layer_field_types, list):
             layer_field_types = [layer_field_types]
 
