@@ -1455,9 +1455,11 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             :param value: A list of dictionary.
             :type value: dict, list, tuple, set
             """
-            # skipped_keys = ['action_list']
-            # if key in skipped_keys:
-            #     return
+            duplicated_global_variables = {
+                'os': 'qgis_os_name'
+            }
+            if key in duplicated_global_variables.keys():
+                return
             if isinstance(value, (list, tuple, set, dict)):
                 # Skip if the type is too complex.
                 return
