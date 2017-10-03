@@ -377,8 +377,7 @@ class WizardStepBrowser(WizardStep):
 
         try:
             keywords = self.keyword_io.read_keywords(layer)
-            if ('layer_purpose' not in keywords and
-                    'impact_summary' not in keywords):
+            if 'layer_purpose' not in keywords:
                 keywords = None
         except (HashNotFoundError,
                 OperationalError,
