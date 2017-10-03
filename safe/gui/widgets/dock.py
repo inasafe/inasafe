@@ -1455,14 +1455,12 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             :param value: A list of dictionary.
             :type value: dict, list, tuple, set
             """
-            if isinstance(value, (list, tuple, set)):
-                for element_index, element_value in enumerate(value):
-                    write_project_variable(
-                        '%s__%s' % (key, element_index), element_value)
-            elif isinstance(value, dict):
-                for dict_key, dict_value in value.items():
-                    write_project_variable(
-                        '%s__%s' % (key, dict_key), dict_value)
+            # skipped_keys = ['action_list']
+            # if key in skipped_keys:
+            #     return
+            if isinstance(value, (list, tuple, set, dict)):
+                # Skip if the type is too complex.
+                return
             elif isinstance(value, (bool, str, unicode, Number)):
                 # Don't use get_name for field
                 if 'field' in key:
