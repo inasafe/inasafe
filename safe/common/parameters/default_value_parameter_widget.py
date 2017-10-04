@@ -1,8 +1,7 @@
 # coding=utf-8
 """Default Value Parameter Widget."""
 
-from PyQt4.QtGui import (
-    QHBoxLayout, QDoubleSpinBox, QRadioButton, QButtonGroup, QWidget)
+from PyQt4.QtGui import QHBoxLayout, QDoubleSpinBox, QRadioButton, QButtonGroup
 
 from parameters.qt_widgets.generic_parameter_widget import (
     GenericParameterWidget)

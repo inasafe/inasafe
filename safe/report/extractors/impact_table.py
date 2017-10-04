@@ -5,7 +5,6 @@ This is useful to do layouting.
 """
 from __future__ import absolute_import
 
-from safe.common.utilities import safe_dir
 from safe.report.extractors.composer import QGISComposerContext
 from safe.report.extractors.util import (
     jinja2_output_as_string,

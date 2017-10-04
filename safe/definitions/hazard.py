@@ -37,10 +37,7 @@ from safe.definitions.fields import (
     hazard_name_field, hazard_fields, hazard_value_field)
 from safe.definitions.earthquake import EARTHQUAKE_FUNCTIONS
 from safe.definitions.exposure import (
-    exposure_place,
-    exposure_land_cover,
-    exposure_road,
-    exposure_population)
+    exposure_place, exposure_land_cover, exposure_road)
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

@@ -21,7 +21,7 @@ import time
 
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=unused-import
+import qgis  # NOQA pylint: disable=unused-import
 from PyQt4 import QtCore, QtGui, QtWebKit
 
 from safe import messaging as m

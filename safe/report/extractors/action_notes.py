@@ -1,7 +1,7 @@
 # coding=utf-8
 """Module used to generate context for action and notes sections.
 """
-from safe.common.utilities import safe_dir
+
 from safe.definitions.exposure import exposure_population
 from safe.report.extractors.composer import QGISComposerContext
 from safe.report.extractors.util import (

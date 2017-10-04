@@ -3,7 +3,6 @@
 
 # noinspection PyPackageRequirements
 import logging
-from PyQt4.QtGui import QWidget
 
 from parameters.select_parameter import SelectParameter
 from parameters.qt_widgets.parameter_container import ParameterContainer

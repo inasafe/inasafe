@@ -1,12 +1,12 @@
-# -*- coding: utf-8 -*-
-
+# coding=utf-8
 """Extent selector dialog."""
 
 import logging
 import sqlite3
 # noinspection PyUnresolvedReferences
 # pylint: disable=unused-import
-from qgis.core import QGis  # force sip2 api
+# force sip2 api
+from qgis.core import QGis  # NOQA
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import pyqtSignal, pyqtSlot, pyqtSignature
 # noinspection PyPackageRequirements

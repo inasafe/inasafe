@@ -23,17 +23,13 @@ from PyQt4.QtNetwork import QNetworkReply
 # noinspection PyUnresolvedReferences
 # pylint: disable=unused-import
 from qgis.core import (
-    QGis,  # force sip2 api
-    QgsRectangle,
+    QGis,  # NOQA pylint: disable=unused-import
     QgsMapLayerRegistry,
-    QgsProject,
     QgsVectorLayer,
     QgsVectorFileWriter,
     QgsField,
     QgsExpression,
-    QgsFeature,
-    QgsExpressionContext,
-    QgsNetworkAccessManager)
+    QgsExpressionContext)
 # pylint: enable=unused-import
 
 # noinspection PyPackageRequirements
@@ -68,11 +64,10 @@ LOGGER = logging.getLogger('InaSAFE')
 
 FORM_CLASS = get_ui_class('peta_bencana_dialog_base.ui')
 
-__author__ = 'tim@kartoza.com'
+__copyright__ = "Copyright 2015, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
-__date__ = '23/11/2015'
-__copyright__ = ('Copyright 2015, Australia Indonesia Facility for '
-                 'Disaster Reduction')
 
 
 class PetaBencanaDialog(QDialog, FORM_CLASS):
