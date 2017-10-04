@@ -2,72 +2,72 @@
 <context>
     <name>@default</name>
     <message>
-        <location filename="test_translations.py" line="136"/>
+        <location filename="test_translations.py" line="134"/>
         <source>No styleInfo was found for layer %s</source>
         <translation>Tidak ada informasi gaya yang ditemukan pada lapisan %s</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="64"/>
+        <location filename="utilities.py" line="66"/>
         <source>No details provided</source>
         <translation>Tidak ada detil/rincian yang tersedia</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="126"/>
+        <location filename="utilities.py" line="128"/>
         <source>%i seconds</source>
         <translation>%i detik</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="128"/>
+        <location filename="utilities.py" line="130"/>
         <source>a minute</source>
         <translation>satu menit</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="132"/>
+        <location filename="utilities.py" line="134"/>
         <source>over an hour</source>
         <translation>lebih dari satu jam</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="134"/>
+        <location filename="utilities.py" line="136"/>
         <source>%i hours and %i minutes</source>
         <translation>%i jam dan %i menit</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="137"/>
+        <location filename="utilities.py" line="139"/>
         <source>%i days, %i hours and %i minutes</source>
         <translation>%i hari, %i jam, dan %i menit</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="187"/>
+        <location filename="utilities.py" line="189"/>
         <source>sourced from</source>
         <translation>bersumber dari</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="189"/>
+        <location filename="utilities.py" line="191"/>
         <source>Hazard details</source>
         <translation>Detil/rincian ancaman bencana</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="192"/>
+        <location filename="utilities.py" line="194"/>
         <source>Exposure details</source>
         <translation>Detil/rincian keterpaparan</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="199"/>
+        <location filename="utilities.py" line="201"/>
         <source>Hazard layer</source>
         <translation>Layer data ancaman bencana</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="214"/>
+        <location filename="utilities.py" line="216"/>
         <source>an unknown source</source>
         <translation>sumber tidak diketahui</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="209"/>
+        <location filename="utilities.py" line="211"/>
         <source>Exposure layer</source>
         <translation>Layer data keterpaparan</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="231"/>
+        <location filename="utilities.py" line="233"/>
         <source>Software notes</source>
         <translation>Catatan perangkat lunak (software)</translation>
     </message>
@@ -127,7 +127,7 @@
         <translation>Cobalah untuk memperbesar (zoom in) ke area yang lebih kecil atau gunakan layer data raster dengan resolusi yang lebih kasar untuk mempercepat eksekusi dan mengurangi kebutuhan memori. Anda juga dapat mencoba menambah RAM ke komputer Anda. </translation>
     </message>
     <message>
-        <location filename="utilities.py" line="130"/>
+        <location filename="utilities.py" line="132"/>
         <source>%s minutes</source>
         <translation>%s menit</translation>
     </message>
@@ -162,7 +162,7 @@
         <translation>Letusan gunung berapi</translation>
     </message>
     <message>
-        <location filename="test_translations.py" line="53"/>
+        <location filename="test_translations.py" line="54"/>
         <source>Be affected</source>
         <translation>Terkena dampak</translation>
     </message>
@@ -312,7 +312,7 @@
         <translation>Bangunan OSM</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="259"/>
+        <location filename="exposure.py" line="258"/>
         <source>Structures</source>
         <translation>Struktur</translation>
     </message>
@@ -632,7 +632,7 @@
         <translation>Jenis kelamin</translation>
     </message>
     <message>
-        <location filename="age_field_group.py" line="74"/>
+        <location filename="age_field_group.py" line="77"/>
         <source>Age</source>
         <translation>Usia</translation>
     </message>
@@ -742,29 +742,29 @@
         <translation>Tinggi</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="300"/>
+        <location filename="exposure.py" line="299"/>
         <source>Which buildings will be evacuation centres?</source>
         <translation>Bangunan mana saja yang memiliki pusat evakuasi?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="301"/>
+        <location filename="exposure.py" line="300"/>
         <source>Where will we locate the operations centre?</source>
         <translation>Dimana kita akan menempatkan pusat operasi?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="302"/>
+        <location filename="exposure.py" line="301"/>
         <source>Where will we locate warehouse and/or distribution centres?</source>
         <translation>Dimana kita akan menempatkan gudang dan/atau pusat distribusi?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="76"/>
+        <location filename="exposure.py" line="75"/>
         <source>How will warnings be disseminated?</source>
         <translation>Bagimana peringatan tanggap bencana akan disebarluaskan?</translation>
     </message>
     <message>
         <location filename="exposure.py" line="41"/>
         <source>The &lt;b&gt;population&lt;/b&gt; describes the people that might be exposed to a particular hazard.</source>
-        <translation>&lt;b&gt;Penduduk&lt;/b&gt; mendeskripsikan orang yang mungkin akan terpapar suatu anaman. </translation>
+        <translation>&lt;b&gt;Penduduk&lt;/b&gt; mendeskripsikan orang yang mungkin akan terpapar suatu ancaman. </translation>
     </message>
     <message>
         <location filename="units.py" line="35"/>
@@ -779,7 +779,7 @@
     <message>
         <location filename="hazard.py" line="186"/>
         <source>A &lt;b&gt;flood&lt;/b&gt; describes the inundation of land that is normally dry by a large amount of water. For example: A &lt;b&gt;flood&lt;/b&gt; can occur after heavy rainfall, when a river overflows its banks or when a dam breaks. The effect of a &lt;b&gt;flood&lt;/b&gt; is for land that is normally dry to become wet.</source>
-        <translation>&lt;b&gt;Banjir&lt;/b&gt; mendeskripsikan terjadinya genangan pada suatu lahan kering oleh air dalam jumlah besar. Sebagai contoh: Suatu &lt;b&gt;banjir&lt;/b&gt; dapat terjadi setelah hujan turun secara deras, ketika sebuah sungai meluap dari bataran atau ketika bendungan rusak. Efek dari &lt;b&gt;flood&lt;/b&gt; adalah lahan yang normalnya kering menjadi basah. </translation>
+        <translation>&lt;b&gt;Banjir&lt;/b&gt; mendeskripsikan terjadinya genangan pada suatu lahan kering oleh air dalam jumlah besar. Sebagai contoh: Suatu &lt;b&gt;banjir&lt;/b&gt; dapat terjadi setelah hujan turun secara deras, ketika sebuah sungai meluap dari bantaran atau ketika bendungan rusak. Efek dari &lt;b&gt;banjir&lt;/b&gt; adalah lahan yang normalnya kering menjadi basah. </translation>
     </message>
     <message>
         <location filename="hazard.py" line="431"/>
@@ -837,7 +837,7 @@
         <translation>Rincian tambahan berikut ini akan dilaporkan ketika terjadi masalah.</translation>
     </message>
     <message>
-        <location filename="default.py" line="426"/>
+        <location filename="default.py" line="438"/>
         <source>Error loading template: %s</source>
         <translation>Kesalahan memuat template %s</translation>
     </message>
@@ -862,12 +862,12 @@
         <translation>Mengambil %s</translation>
     </message>
     <message>
-        <location filename="base_metadata.py" line="336"/>
+        <location filename="base_metadata.py" line="343"/>
         <source>the file %s does not appear to be valid JSON</source>
         <translation>berkas %s kelihatannya bukan JSON yang valid</translation>
     </message>
     <message>
-        <location filename="base_metadata.py" line="356"/>
+        <location filename="base_metadata.py" line="363"/>
         <source>the file DB entry for %s does not appear to be valid JSON</source>
         <translation>Entri berkas database untuk %s kelihatannya bukan JSON yang valid</translation>
     </message>
@@ -1110,7 +1110,7 @@
         <translation>Ancaman</translation>
     </message>
     <message>
-        <location filename="keyword_io.py" line="558"/>
+        <location filename="keyword_io.py" line="573"/>
         <source>Exposure</source>
         <translation>Keterpaparan</translation>
     </message>
@@ -1507,22 +1507,22 @@
         <translation>Null (PyQt4.QtCore.QPyNullVariant) ditemukan di data.</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="236"/>
+        <location filename="utilities.py" line="238"/>
         <source>This report was created using InaSAFE version %s. Visit http://inasafe.org to get your free copy of this software! %s</source>
         <translation>Laporan ini dibuat dengan menggunakan InaSAFE versi %s. Kunjungi http://inasafe.org untuk mendapatkan salinan bebas dari software ini! %s</translation>
     </message>
     <message>
-        <location filename="message.py" line="125"/>
+        <location filename="message.py" line="156"/>
         <source>Disclaimer</source>
         <translation>Ketentuan</translation>
     </message>
     <message>
-        <location filename="components.py" line="735"/>
+        <location filename="components.py" line="737"/>
         <source>Date</source>
         <translation>Tanggal</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="296"/>
+        <location filename="impact_function.py" line="291"/>
         <source>Time</source>
         <translation>Waktu</translation>
     </message>
@@ -1542,22 +1542,22 @@
         <translation>Legenda</translation>
     </message>
     <message>
-        <location filename="components.py" line="746"/>
+        <location filename="components.py" line="748"/>
         <source>Analysis information</source>
         <translation>Informasi analisis</translation>
     </message>
     <message>
-        <location filename="components.py" line="747"/>
+        <location filename="components.py" line="749"/>
         <source>Report produced by</source>
         <translation>Laporan dibuat oleh</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="222"/>
+        <location filename="exposure.py" line="221"/>
         <source>Which roads can be used to evacuate people or to distribute logistics?</source>
         <translation>Jalan mana yang dapat digunakan untuk mengevakuasi penduduk atau membagikan logistik?</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="188"/>
+        <location filename="utilities.py" line="190"/>
         <source>Analysis details</source>
         <translation>Detil Analisis</translation>
     </message>
@@ -1677,7 +1677,7 @@
         <translation>- tekan ini untuk melihat kredit untuk proyek InaSAFE</translation>
     </message>
     <message>
-        <location filename="message.py" line="147"/>
+        <location filename="message.py" line="178"/>
         <source>Run</source>
         <translation>Hitung</translation>
     </message>
@@ -2292,42 +2292,42 @@
         <translation>Anda telah memilih data &lt;b&gt;terklasifikasi&lt;/b&gt; untuk lapisan vektor &lt;b&gt;%s&lt;/b&gt;. Mohon pilih atribut pada lapisan ini yang mewakili id-id-nya.</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="296"/>
+        <location filename="exposure.py" line="295"/>
         <source>Are the water and electricity services still operating?</source>
         <translation>Apakah layanan air dan listrik masih berjalan?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="298"/>
+        <location filename="exposure.py" line="297"/>
         <source>Are the health centres still open?</source>
         <translation>Apakah pusat kesehatan masih dibuka?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="299"/>
+        <location filename="exposure.py" line="298"/>
         <source>Are the other public services accessible?</source>
         <translation>Apakah layanan publik lain bisa diakses?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="297"/>
+        <location filename="exposure.py" line="296"/>
         <source>Are the schools and hospitals still active?</source>
         <translation>Apakah sekolah dan rumah sakit masih aktif?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="78"/>
+        <location filename="exposure.py" line="77"/>
         <source>Which group or population is most affected?</source>
         <translation>Kelompok atau penduduk manakah yang paling terdampak?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="79"/>
+        <location filename="exposure.py" line="78"/>
         <source>Who are the vulnerable people in the population and why?</source>
         <translation>Siapa saja penduduk yang rentan dan mengapa?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="84"/>
+        <location filename="exposure.py" line="83"/>
         <source>What are the security factors for relief responders?</source>
         <translation>Apa saja faktor keamanan untuk pemberi bantuan?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="83"/>
+        <location filename="exposure.py" line="82"/>
         <source>Who are the key people responsible for coordination?</source>
         <translation>Siapa orang penting yang bertanggung jawab untuk koordinasi?</translation>
     </message>
@@ -2387,7 +2387,7 @@
         <translation>maaf, lapisan tidak ditemukan di server.</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="92"/>
+        <location filename="exposure.py" line="91"/>
         <source>What are people&apos;s likely movements?</source>
         <translation>Apa tindakan penduduk yang mungkin terjadi?</translation>
     </message>
@@ -2452,7 +2452,7 @@
         <translation>&lt;b&gt;Tsunami&lt;/b&gt; mendeskripsikan sebuah atau beberapa seri gelombang laut yang besar, atau gelombang yang biasanya disebabkan oleh gempa bumi bawah laut atau gunung berapi. &lt;b&gt;Tsunami&lt;/b&gt; di laut mungkin tidak dapat terdeteksi tetapi gelombang &lt;b&gt;tsunami&lt;/b&gt;  yang menghantam daratan dapat menyebabkan kerusakan yang besar dan banjir. </translation>
     </message>
     <message>
-        <location filename="exposure.py" line="260"/>
+        <location filename="exposure.py" line="259"/>
         <source>A &lt;b&gt;structure&lt;/b&gt; can be any relatively permanent man made feature such as a building (an enclosed structure with walls and a roof), telecommunications facility or bridge.</source>
         <translation>&lt;b&gt;Struktur&lt;/b&gt; dapat berupa apapun yang berhubungan dengan buatan manusia yang sifatnya permanen misalnya sebuah bangunan (sebuah struktur tertutup dengan dinding dan atap), atau sebuah fasilitas komunikasi atau sebuah jembatan. </translation>
     </message>
@@ -2802,52 +2802,52 @@
         <translation>Batas politik</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="414"/>
+        <location filename="exposure.py" line="413"/>
         <source>What type of crops are planted in the affected fields?</source>
         <translation>Jenis tumbuhan apa yang ditanam di ladang yang terdampak?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="415"/>
+        <location filename="exposure.py" line="414"/>
         <source>How long will the activity or function of the land cover be disturbed?</source>
         <translation>Berapa lama aktivitas atau fungsi dari penutup lahan akan terganggu?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="417"/>
+        <location filename="exposure.py" line="416"/>
         <source>What proportion of the land cover is damaged?</source>
         <translation>Berapa perbandingan bagian penutup lahan yang rusak?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="418"/>
+        <location filename="exposure.py" line="417"/>
         <source>What potential losses will result from the land cover damage?</source>
         <translation>Apa potensi kerugian sebagai akibat dari kerusakan penutup lahan?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="420"/>
+        <location filename="exposure.py" line="419"/>
         <source>How much productivity will be lost during this event?</source>
         <translation>Berapa banyak produktivitas yang hilang selama kejadian?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="421"/>
+        <location filename="exposure.py" line="420"/>
         <source>Which crops were ready for harvest during this event?</source>
         <translation>Tanaman mana yang sudah siap dipanen selama kejadian?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="422"/>
+        <location filename="exposure.py" line="421"/>
         <source>What is the ownership system of the land/crops/field?</source>
         <translation>Sistem kepemilikan apa yang digunakan untuk lahan / tanaman / ladang?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="423"/>
+        <location filename="exposure.py" line="422"/>
         <source>Are the land/crops/field accessible after the event?</source>
         <translation>Apakah pakah lahan / tumbuhan / ladang masih bisa diakses setelah kejadian?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="424"/>
+        <location filename="exposure.py" line="423"/>
         <source>What urgent actions can be taken to normalize the land/crops/field?</source>
         <translation>Langkah penting apa yang bisa diambil untuk menormalkan lahan / tumbuhan / ladang?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="426"/>
+        <location filename="exposure.py" line="425"/>
         <source>What tools or equipment are needed for early recovery of the land/crops/field?</source>
         <translation>Alat atau peralatan apa saja yang diperlukan untuk pemulihan awal lahan / tumbuhan / ladang ?</translation>
     </message>
@@ -3002,27 +3002,27 @@
         <translation>Terminologi UNISDR (2009) pada pengurangan resiko bencana.</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="202"/>
+        <location filename="exposure.py" line="201"/>
         <source>Roads marked as not affected may still be unusable due to network isolation. Roads marked as affected may still be usable if they are elevated above the local landscape.</source>
         <translation>Jalan yang ditandai tidak terdampak mungkin tidak dapat digunakan karena terisolasi dari jaringan. Jalan yang ditandai terdampak mungkin masih dapat digunakan apabila terletak lebih tinggi dari lanskap lokal.</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="208"/>
+        <location filename="exposure.py" line="207"/>
         <source>Roads are closed if they are affected.</source>
         <translation>Jalan ditutup apabila terdampak.</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="209"/>
+        <location filename="exposure.py" line="208"/>
         <source>Roads are open if they are not affected.</source>
         <translation>Jalan dibuka apabila tidak terdampak.</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="227"/>
+        <location filename="exposure.py" line="226"/>
         <source>Which government department is responsible for supplying equipment?</source>
         <translation>Departemen pemerintahan mana yang bertanggung jawab untuk menyediakan peralatan?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="336"/>
+        <location filename="exposure.py" line="335"/>
         <source>A &lt;b&gt;place&lt;/b&gt; is used to indicate that a particular location is known by a particular name.</source>
         <translation>&lt;b&gt;Tempat&lt;/b&gt; digunakan untuk menunjukkan bahwa lokasi tertentu diketahui dari namanya.</translation>
     </message>
@@ -3113,7 +3113,7 @@
         <translation><numerusform>Penduduk yang diungsikan dapat diberikan %(default value)s %(unit)s/%(units)s/%(unit abbreviation)s %(resource name)s. Meskipun begitu, tidak boleh kurang dari %(minimum allowed)s dan tidak boleh lebih dari %(maximum allowed)s. Bantuan ini mesti disediakan %(frequency)s. Nilai default {{Default}}</numerusform></translation>
     </message>
     <message>
-        <location filename="shake_grid.py" line="617"/>
+        <location filename="shake_grid.py" line="604"/>
         <source>ogr2ogr could not be found on your computer</source>
         <translation>ogr2ogr tidak dapat ditemukan di dalam komputer Anda</translation>
     </message>
@@ -3128,42 +3128,42 @@
         <translation>Anda telah memilih &lt;b&gt;tempat&lt;/b&gt; sebagai masukan keterpaparan untuk lapisan vektor &lt;b&gt;%s&lt;/b&gt;. Mohon pilih atribut pada lapisan ini yang mewakili nama tersebut.</translation>
     </message>
     <message>
-        <location filename="message.py" line="47"/>
+        <location filename="message.py" line="48"/>
         <source>Missing Keyword</source>
         <translation>Keyword Hilang</translation>
     </message>
     <message>
-        <location filename="message.py" line="49"/>
+        <location filename="message.py" line="50"/>
         <source>There is missing keyword that needed for this analysis.</source>
         <translation>Ada keyword yang hilang yang diperlukan untuk analisis ini.</translation>
     </message>
     <message>
-        <location filename="message.py" line="51"/>
+        <location filename="message.py" line="52"/>
         <source>Detail</source>
         <translation>Rincian</translation>
     </message>
     <message>
-        <location filename="message.py" line="55"/>
+        <location filename="message.py" line="56"/>
         <source>The layer &lt;b&gt;%s&lt;/b&gt; is missing the keyword &lt;i&gt;%s&lt;/i&gt;.</source>
         <translation>Lapisan &lt;b&gt;%s&lt;/b&gt; kehilangan keyword &lt;i&gt;%s&lt;/i&gt;</translation>
     </message>
     <message>
-        <location filename="message.py" line="61"/>
+        <location filename="message.py" line="62"/>
         <source>Please use the keyword wizard to update the keywords. You can open the wizard by clicking on the </source>
         <translation>Silahkan gunakan keyword wizard untuk mengubah keyword. Anda dapat membuka wizard dengan menekan pada</translation>
     </message>
     <message>
-        <location filename="message.py" line="226"/>
+        <location filename="message.py" line="257"/>
         <source> icon in the toolbar.</source>
         <translation>di toolbar.</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="335"/>
+        <location filename="exposure.py" line="334"/>
         <source>Places</source>
         <translation>Lokasi</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="184"/>
+        <location filename="exposure.py" line="183"/>
         <source>Roads</source>
         <translation>Jalan</translation>
     </message>
@@ -3188,7 +3188,7 @@
         <translation>kejadian</translation>
     </message>
     <message>
-        <location filename="message.py" line="96"/>
+        <location filename="message.py" line="127"/>
         <source>hazard</source>
         <translation>ancaman</translation>
     </message>
@@ -3203,22 +3203,22 @@
         <translation>Dampak pada jalan, penduduk, bangunan dan unsur keterpaparan lain dapat berbeda dari hasil analisis dikarenakan kondisi lingkungan lokal seperti lahan dan tipe infrastruktur.</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="93"/>
+        <location filename="exposure.py" line="92"/>
         <source>How will we reach displaced people?</source>
         <translation>Bagaimana kita akan menjangkau orang-orang yang terpindahkan?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="346"/>
+        <location filename="exposure.py" line="345"/>
         <source>Where places are represented as a single point, the effect of the hazard over the entire place may differ from the point at which the place is represented on the map.</source>
         <translation>Saat tempat-tempat diwakilkan sebagai sebuah titik, efek dari ancaman pada tempat tersebut dapat berbeda dari titik dimana tempat tersebut diwakilkan pada peta.</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="116"/>
+        <location filename="exposure.py" line="115"/>
         <source>What kind of food does the population normally consume?</source>
         <translation>Makanan seperti apa yang biasa dikonsumsi penduduk?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="106"/>
+        <location filename="exposure.py" line="105"/>
         <source>What are the critical non-food items required by the affected population?</source>
         <translation>Apa saja benda selain makanan yang penting yang dibutuhkan penduduk terdampak?</translation>
     </message>
@@ -3238,7 +3238,7 @@
         <translation>Penduduk yang kehilangannya nyawanya sebagai akibat dari peristiwa berbahaya.</translation>
     </message>
     <message>
-        <location filename="summary_2_aggregation.py" line="103"/>
+        <location filename="summary_2_aggregation.py" line="104"/>
         <source>True</source>
         <translation>Benar</translation>
     </message>
@@ -3453,157 +3453,157 @@
         <translation>Rasio Default Global Orang Tua</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="82"/>
+        <location filename="exposure.py" line="81"/>
         <source>How will we distribute relief items?</source>
         <translation>Bagaimana kita akan mendistribusikan barang-barang bantuan?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="81"/>
+        <location filename="exposure.py" line="80"/>
         <source>Where can we obtain additional relief items?</source>
         <translation>Dimana kita bisa mendapatkan barang-barang bantuan tambahan?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="85"/>
+        <location filename="exposure.py" line="84"/>
         <source>Are there enough victim identification units?</source>
         <translation>Apakah unit identifikasi korban mencukupi?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="94"/>
+        <location filename="exposure.py" line="93"/>
         <source>Are there enough covered floor areas available for the displaced people?</source>
         <translation>Apakah wilayah tertutup lantai yang tersedia cukup untuk penduduk yang mengungsi?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="96"/>
+        <location filename="exposure.py" line="95"/>
         <source>What are the land-use rights for the settlement location?</source>
         <translation>Apa saja hak-hak penggunaan lahan untuk lokasi permukiman?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="100"/>
+        <location filename="exposure.py" line="99"/>
         <source>What is the appropriate construction for temporary or transitional household shelter?</source>
         <translation>Apa konstruksi yang sesuai untuk hunian rumah tangga sementara atau peralihan?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="102"/>
+        <location filename="exposure.py" line="101"/>
         <source>What are the existing environmental risks or vulnerabilities at the shelter location?</source>
         <translation>Apa risiko atau kerentanan lingkungan yang ada di lokasi hunian?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="104"/>
+        <location filename="exposure.py" line="103"/>
         <source>Are there enough clothing, bedding and household items available for the displaced people?</source>
         <translation>Apakah pakaian, selimut, dan peralatan rumah tangga yang tersedia cukup untuk penduduk yang mengungsi?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="108"/>
+        <location filename="exposure.py" line="107"/>
         <source>Are the non-food items available at an active local market?</source>
         <translation>Apakah bahan-bahan bukan makanan tersedia di pasar tradisional setempat?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="117"/>
+        <location filename="exposure.py" line="116"/>
         <source>Are there any alternative source of food?</source>
         <translation>Apakah ada alternatif sumber makanan?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="118"/>
+        <location filename="exposure.py" line="117"/>
         <source>Is there enough food for the displaced people?</source>
         <translation>Apakah ada cukup makanan untuk penduduk yang mengungsi?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="119"/>
+        <location filename="exposure.py" line="118"/>
         <source>Are there any crops that can be used for consumption?</source>
         <translation>Apakah ada tanaman-tanaman yang dapat digunakan untuk konsumsi?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="120"/>
+        <location filename="exposure.py" line="119"/>
         <source>Are there large numbers of separated children?</source>
         <translation>Apakah ada sejumlah besar anak-anak yang terpisah?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="127"/>
+        <location filename="exposure.py" line="126"/>
         <source>What water and sanitation practices were the population accustomed to before the emergency?</source>
         <translation>Apa praktik air dan sanitasi yang biasa dilakukan populasi sebelum keadaan darurat?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="129"/>
+        <location filename="exposure.py" line="128"/>
         <source>What type of outreach system would work for hygiene promotion for this situation?</source>
         <translation>Apa tipe sistem penjangkauan yang akan bekerja untuk promosi kebersihan di situasi ini?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="131"/>
+        <location filename="exposure.py" line="130"/>
         <source>What is the current water supply source and who are the present users?</source>
         <translation>Apa sumber pasokan air saat ini dan siapa penggunanya sekarang?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="133"/>
+        <location filename="exposure.py" line="132"/>
         <source>Are there enough water supply, sanitation and hygiene, items available for displaced people?</source>
         <translation>Apakah pasokan air, sanitasi, dan kebesihan, barang-barang yang tersedia cukup untuk penduduk yang mengungsi?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="135"/>
+        <location filename="exposure.py" line="134"/>
         <source>Are water collection points close enough to where people live?</source>
         <translation>Apakah tempat penampungan air cukup dekat dengan dimana penduduk tinggal?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="137"/>
+        <location filename="exposure.py" line="136"/>
         <source>Are water collection points safe?</source>
         <translation>Apakah tempat penampungan air aman?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="138"/>
+        <location filename="exposure.py" line="137"/>
         <source>Is the water source contaminated or at risk of contamination?</source>
         <translation>Adakah sumber air yang terkontaminasi atau berisiko terkontaminasi?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="140"/>
+        <location filename="exposure.py" line="139"/>
         <source>Are there alternative sources of water nearby?</source>
         <translation>Apakah ada alternatif sumber air terdekat?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="141"/>
+        <location filename="exposure.py" line="140"/>
         <source>Is there a drainage problem?</source>
         <translation>Adakah masalah drainase?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="148"/>
+        <location filename="exposure.py" line="147"/>
         <source>What are the existing health problems?</source>
         <translation>Apa masalah kesehatan yang ada?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="149"/>
+        <location filename="exposure.py" line="148"/>
         <source>What are the potential epidemic diseases?</source>
         <translation>Apa saja penyakit yang berpotensi menjadi wabah?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="150"/>
+        <location filename="exposure.py" line="149"/>
         <source>Are there any potential disease outbreaks?</source>
         <translation>Apakah ada potensi wabah penyakit lainnya?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="151"/>
+        <location filename="exposure.py" line="150"/>
         <source>Are there any healthcare sources that are accessible and functioning?</source>
         <translation>Apakah ada sumber pelayanan kesehatan yang dapat diakses dan berfungsi?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="158"/>
+        <location filename="exposure.py" line="157"/>
         <source>The Sphere Handbook: Humanitarian Charter and Minimum Standards in Humanitarian Response</source>
         <translation>Buku Pegangan Sphere: Piagam Kemanusiaan dan Standar Minimum dalam Respons Kemanusiaan</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="225"/>
+        <location filename="exposure.py" line="224"/>
         <source>What sort of equipment will be needed to reopen roads?</source>
         <translation>Peralatan seperti apa yang akan diperlukan untuk membuka jalan lagi?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="226"/>
+        <location filename="exposure.py" line="225"/>
         <source>Where will we get the equipment needed to open roads?</source>
         <translation>Dimana kita akan mendapatkan peralatan yang diperlukan untuk membuka jalan?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="294"/>
+        <location filename="exposure.py" line="293"/>
         <source>Which structures have warning capacity (e.g. sirens or speakers)?</source>
         <translation>Bangunan mana saja yang memiliki kapasitas peringatan (contoh: sirene, pengeras suara, dll)</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="384"/>
+        <location filename="exposure.py" line="383"/>
         <source>The &lt;b&gt;land cover&lt;/b&gt; exposure data describes features on the surface of the earth that might be exposed to a particular hazard. This might include crops, forest and urban areas. </source>
         <translation>Paparan &lt;b&gt;penutup lahan&lt;/b&gt; menjelaskan fitur yang ada pada permukaan bumi yang mungkin terpapar ancaman tertentu. Hal ini mencakup tanaman, hutan dan wilayah berpenghuni.</translation>
     </message>
@@ -4128,57 +4128,57 @@
         <translation>Field total terdampak menyimpan jumlah total kumulatif dari fitur terdampak atau entitas.</translation>
     </message>
     <message>
-        <location filename="fields.py" line="2023"/>
+        <location filename="fields.py" line="2051"/>
         <source>Total %s</source>
         <translation>Total %s</translation>
     </message>
     <message>
-        <location filename="fields.py" line="1972"/>
+        <location filename="fields.py" line="2000"/>
         <source>The total exposure count field stores the cumulative total number of exposed features or entities.</source>
         <translation>Field jumlah total keterpaparan menyimpan jumlah total kumulatif dari fitur keterpaparan atau entitas.</translation>
     </message>
     <message>
-        <location filename="fields.py" line="1975"/>
+        <location filename="fields.py" line="2003"/>
         <source>The total exposure count field is added to the analysis layer, aggregate impact layer and aggregate hazard impact layer during the impact analysis. It represents the cumulative count of affected exposured features (e.g. buildings) or entities (e.g. people) for each area.</source>
         <translation>Field jumlah total keterpaparan ditambahkan ke lapisan analisis, lapisan dampak agregasi dan lapisan dampak ancaman agregasi selama analisis dampak. Ini menyajikan jumlah kumulatif dari fitur keterpaparan terdampak (misalnya bangunan) atau entitas (misalnya penduduk) untuk setiap area.</translation>
     </message>
     <message>
-        <location filename="fields.py" line="1994"/>
+        <location filename="fields.py" line="2022"/>
         <source>Affected %s</source>
         <translation>Terdampak %s</translation>
     </message>
     <message>
-        <location filename="fields.py" line="2030"/>
+        <location filename="fields.py" line="2058"/>
         <source>The total affected field stores the cumulative total number of affected exposure features or entities.</source>
         <translation>Field total terdampak menyimpan jumlah total kumulatif dari fitur keterpaparan terdampak atau entitas.</translation>
     </message>
     <message>
-        <location filename="fields.py" line="2052"/>
+        <location filename="fields.py" line="2080"/>
         <source>MMI %s exposed</source>
         <translation>MMI %s terpapar</translation>
     </message>
     <message>
-        <location filename="fields.py" line="2060"/>
+        <location filename="fields.py" line="2088"/>
         <source>The number of exposed population for a given MMI level.</source>
         <translation>Jumlah populasi terpapar untuk level MMI diberikan.</translation>
     </message>
     <message>
-        <location filename="fields.py" line="2075"/>
+        <location filename="fields.py" line="2103"/>
         <source>MMI %s fatalities</source>
         <translation>MMI %s kematian</translation>
     </message>
     <message>
-        <location filename="fields.py" line="2083"/>
+        <location filename="fields.py" line="2111"/>
         <source>The number of fatalities for a given MMI level.</source>
         <translation>Jumlah kematian untuk level MMI diberikan.</translation>
     </message>
     <message>
-        <location filename="fields.py" line="2097"/>
+        <location filename="fields.py" line="2125"/>
         <source>MMI %s displaced</source>
         <translation>MMI %s mengungsi</translation>
     </message>
     <message>
-        <location filename="fields.py" line="2105"/>
+        <location filename="fields.py" line="2133"/>
         <source>The number of displaced population for a given MMI level.</source>
         <translation>Jumlah populasi yang mengungsi untuk level MMI diberikan.</translation>
     </message>
@@ -4363,22 +4363,22 @@
         <translation>Tipe ini mengambil masukan nilainya dari properti lapisan. Misalnya lapisan Sistem Referensi Koordinat dari lapisan.</translation>
     </message>
     <message>
-        <location filename="population_post_processors.py" line="422"/>
+        <location filename="population_post_processors.py" line="425"/>
         <source>Weekly Hygiene Packs Post Processor</source>
         <translation>Postprosesor Paket Higienis Mingguan</translation>
     </message>
     <message>
-        <location filename="population_post_processors.py" line="524"/>
+        <location filename="population_post_processors.py" line="527"/>
         <source>Youth Post Processor</source>
         <translation>Postprosesor Anak Muda</translation>
     </message>
     <message>
-        <location filename="population_post_processors.py" line="560"/>
+        <location filename="population_post_processors.py" line="563"/>
         <source>Adult Post Processor</source>
         <translation>Postprosesor Orang Dewasa</translation>
     </message>
     <message>
-        <location filename="population_post_processors.py" line="596"/>
+        <location filename="population_post_processors.py" line="599"/>
         <source>Elderly Post Processor</source>
         <translation>Postprosesor Lanjut Usia</translation>
     </message>
@@ -4538,7 +4538,7 @@
         <translation>#</translation>
     </message>
     <message>
-        <location filename="zonal_statistics.py" line="70"/>
+        <location filename="zonal_statistics.py" line="88"/>
         <source>Zonal stats on %s : %s</source>
         <translation>Zonal stats pada %s : %s</translation>
     </message>
@@ -4548,7 +4548,7 @@
         <translation>Kesalahan fitur geometri: Salah satu keluaran fitur atau lebih diabaikan karena geomteri tidak valid.</translation>
     </message>
     <message>
-        <location filename="prepare_vector_layer.py" line="363"/>
+        <location filename="prepare_vector_layer.py" line="360"/>
         <source>Features which have been removed from %s : %s</source>
         <translation>Fitur yang telah dihapus dari %s : %s</translation>
     </message>
@@ -4948,17 +4948,17 @@
         <translation>Fungsi dampak tidak akan mampu dijalankan karena dari masukannya.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1213"/>
+        <location filename="dock.py" line="1180"/>
         <source>The impact function could not run because of the inputs.</source>
         <translation>Fungsi dampak tidak dapat dijalankan karena masukannya.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1220"/>
+        <location filename="dock.py" line="1187"/>
         <source>The impact function could not run because of a bug.</source>
         <translation>Fungsi dampak tidak dapat dijalankan karena adanya kesalahan.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1226"/>
+        <location filename="dock.py" line="1193"/>
         <source>The impact function could run without errors.</source>
         <translation>Fungsi dampak dapat dijalankan tanpa kesalahan.</translation>
     </message>
@@ -5054,117 +5054,117 @@
         <translation>Kustom</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1196"/>
+        <location filename="dock.py" line="1163"/>
         <source>The impact function should not have been ready.</source>
         <translation>Fungsi dampak tidak seharusnya siap.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1284"/>
+        <location filename="dock.py" line="1251"/>
         <source>The impact report could not be generated.</source>
         <translation>Laporan terdampak tidak dapat dibuat.</translation>
     </message>
     <message>
-        <location filename="message.py" line="89"/>
+        <location filename="message.py" line="120"/>
         <source>Getting started</source>
         <translation>Persiapan</translation>
     </message>
     <message>
-        <location filename="message.py" line="90"/>
+        <location filename="message.py" line="121"/>
         <source>These are the minimum steps you need to follow in order to use InaSAFE:</source>
         <translation>Berikut adalah langkah-langkah minimum yang perlu dilakukan untuk menggunakan InaSAFE:</translation>
     </message>
     <message>
-        <location filename="message.py" line="100"/>
+        <location filename="message.py" line="131"/>
         <source>Add at least one </source>
         <translation>Tambahkan setidaknya satu layer</translation>
     </message>
     <message>
-        <location filename="message.py" line="96"/>
+        <location filename="message.py" line="127"/>
         <source> layer (e.g. earthquake MMI) to QGIS.</source>
         <translation>(misalnya layer gempabumi MMI) ke QGIS.</translation>
     </message>
     <message>
-        <location filename="message.py" line="100"/>
+        <location filename="message.py" line="131"/>
         <source>exposure</source>
         <translation>keterpaparan</translation>
     </message>
     <message>
-        <location filename="message.py" line="100"/>
+        <location filename="message.py" line="131"/>
         <source> layer (e.g. structures) to QGIS.</source>
         <translation>(misalnya layer struktur bangunan) ke QGIS.</translation>
     </message>
     <message>
-        <location filename="message.py" line="104"/>
+        <location filename="message.py" line="135"/>
         <source>Make sure you have defined keywords for your hazard and exposure layers. You can do this using the keywords creation wizard </source>
         <translation>Pastikan Anda telah mendefinisikan kata kunci untuk lapisan ancaman dan keterpaparan. Anda dapat melakukan ini dengan menggunakan antarmuka pembuat kata kunci </translation>
     </message>
     <message>
-        <location filename="message.py" line="104"/>
+        <location filename="message.py" line="135"/>
         <source> in the toolbar.</source>
         <translation>di toolbar.</translation>
     </message>
     <message>
-        <location filename="message.py" line="113"/>
+        <location filename="message.py" line="144"/>
         <source>Click on the </source>
         <translation>Klik pada tombol</translation>
     </message>
     <message>
-        <location filename="message.py" line="113"/>
+        <location filename="message.py" line="144"/>
         <source> button below.</source>
         <translation>di bawah ini.</translation>
     </message>
     <message>
-        <location filename="message.py" line="119"/>
+        <location filename="message.py" line="150"/>
         <source>Limitations</source>
         <translation>Batasan</translation>
     </message>
     <message>
-        <location filename="message.py" line="133"/>
+        <location filename="message.py" line="164"/>
         <source>Currently there are no overlapping extents between the hazard layer, the exposure layer and the user defined analysis area. Try zooming to the analysis area, clearing the analysis area or defining a new one using the analysis area definition tool.</source>
         <translation>Saat ini tidak ada luasan yang tumpang tindih di antara lapisan ancaman, lapisan keterpaparan dan daerah analisis pengguna. Coba perbesar hingga ke daerah analisis, bersihkan daerah analisis atau tentukan luasan baru menggunakan kakas penentuan daerah analisis.</translation>
     </message>
     <message>
-        <location filename="message.py" line="146"/>
+        <location filename="message.py" line="177"/>
         <source>Ready</source>
         <translation>Siap</translation>
     </message>
     <message>
-        <location filename="message.py" line="147"/>
+        <location filename="message.py" line="178"/>
         <source>You can now proceed to run your analysis by clicking the </source>
         <translation>Anda dapat melanjutkan menjalankan analisis Anda dengan menekan</translation>
     </message>
     <message>
-        <location filename="message.py" line="147"/>
+        <location filename="message.py" line="178"/>
         <source>button.</source>
         <translation>tombol.</translation>
     </message>
     <message>
-        <location filename="message.py" line="169"/>
+        <location filename="message.py" line="200"/>
         <source>Layer Keyword&apos;s Version Mismatch:</source>
         <translation>Ketidakcocokan Versi Kata kunci Lapisan:</translation>
     </message>
     <message>
-        <location filename="message.py" line="203"/>
+        <location filename="message.py" line="234"/>
         <source>Layer Keywords Outdated:</source>
         <translation>Kata Kunci Lapisan Kadaluwarsa:</translation>
     </message>
     <message>
-        <location filename="message.py" line="203"/>
+        <location filename="message.py" line="234"/>
         <source>Please update the keywords for your layers and then try to run the analysis again. Use the keyword wizard </source>
         <translation>Mohon perbarui kata kunci untuk lapisan Anda dan kemudian coba untuk menjalankan analisis lagi. Gunakan wizard kata kunci.</translation>
     </message>
     <message>
-        <location filename="message.py" line="203"/>
+        <location filename="message.py" line="234"/>
         <source> icon in the toolbar to update your layer&apos;s keywords.</source>
         <translation>Ikon di toolbar untuk memperbarui kata kunci lapisan Anda.</translation>
     </message>
     <message>
-        <location filename="message.py" line="226"/>
+        <location filename="message.py" line="257"/>
         <source>Layer keywords missing:</source>
         <translation>Kata kunci layer hilang:</translation>
     </message>
     <message>
-        <location filename="message.py" line="226"/>
+        <location filename="message.py" line="257"/>
         <source>No keywords have been defined for this layer yet or there is an issue with the currently defined keywords and they need to be reviewed. If you wish to use this layer as an exposure, hazard, or aggregation layer in an analysis, please use the keyword wizard to update the keywords. You can open the wizard by clicking on the </source>
         <translation>Tidak ada kata kunci yang ditetapkan untuk lapisan ini pada saat ini atau ada masalah dengan kata kunci yang didefinisikan sekarang dan perlu dicek. Jika Anda ingin menggunakannya sebagai lapisan paparan, ancaman, atau agregasi pada analisis, tolong gunakan wizard kata kunci untuk memperbarui kata kunci. Anda dapat membuka wizard dengan melakukan klik pada</translation>
     </message>
@@ -5174,107 +5174,107 @@
         <translation>Seluruh Area</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="295"/>
+        <location filename="impact_function.py" line="290"/>
         <source>Function</source>
         <translation>Fungsi</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="820"/>
+        <location filename="impact_function_utilities.py" line="83"/>
         <source>The layer {source} must be updated to {version}.</source>
         <translation>Lapisan {source} harus diperbaharui ke {version}.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="869"/>
+        <location filename="impact_function.py" line="774"/>
         <source>The exposure layer is compulsory</source>
         <translation>Lapisan keterpaparan wajib ada</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="869"/>
+        <location filename="impact_function.py" line="774"/>
         <source>The impact function needs an exposure layer to run. You must provide it.</source>
         <translation>Fungsi dampak membutuhkan lapisan keterpaparan untuk dijalankan. Anda harus menyediakannya.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="883"/>
+        <location filename="impact_function.py" line="788"/>
         <source>The hazard layer is compulsory</source>
         <translation>Lapisan ancaman wajib ada</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="883"/>
+        <location filename="impact_function.py" line="788"/>
         <source>The impact function needs a hazard layer to run. You must provide it.</source>
         <translation>Fungsi dampak membutuhkan lapisan ancaman untuk dijalankan. Anda harus menyediakannya.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="945"/>
+        <location filename="impact_function.py" line="850"/>
         <source>Error with the requested extent</source>
         <translation>Kesalahan dengan luasan yang diminta</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="898"/>
+        <location filename="impact_function.py" line="803"/>
         <source>Requested Extent must be null when an aggregation is provided.</source>
         <translation>Luasan yang diminta harus kosong/null ketika disediakan agregasi.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="907"/>
+        <location filename="impact_function.py" line="812"/>
         <source>Requested Extent CRS must be null when an aggregation is provided.</source>
         <translation>CRS luasan yang diminta harus kosong/null ketika agregasi tersedia.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="936"/>
+        <location filename="impact_function.py" line="841"/>
         <source>Requested Extent CRS must be set when requested is not null.</source>
         <translation>Luasan CRS yang diminta harus diatur ketika permintaan tidak kosong/null.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1001"/>
+        <location filename="impact_function.py" line="906"/>
         <source>need evacuation</source>
         <translation>perlu evakuasi</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1003"/>
+        <location filename="impact_function.py" line="908"/>
         <source>be affected</source>
         <translation>terkena dampak</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1089"/>
+        <location filename="impact_function.py" line="994"/>
         <source>Layers need to overlap.</source>
         <translation>Lapisan-lapisan perlu untuk bertumpang tindih.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1089"/>
+        <location filename="impact_function.py" line="994"/>
         <source>The exposure and the hazard layer need to overlap.</source>
         <translation>Lapisan keterpaparan dan ancaman perlu untuk tumpang tindih.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1108"/>
+        <location filename="impact_function.py" line="1013"/>
         <source>The bounding box need to overlap layers.</source>
         <translation>Kotak pembatas perlu bertumpang tindih dengan lapisan.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1108"/>
+        <location filename="impact_function.py" line="1013"/>
         <source>The requested analysis extent is not overlaping the exposure and the hazard.</source>
         <translation>Luasan analisis yang diminta tidak tumpang tindih dengan keterpaparan dan ancaman.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1234"/>
+        <location filename="multi_exposure_wrapper.py" line="215"/>
         <source>You need to run `prepare` first.</source>
         <translation>Anda perlu menjalankan `persiapan` dahulu.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1263"/>
+        <location filename="impact_function.py" line="1168"/>
         <source>No features in the extent</source>
         <translation>Tidak ada fitur di luasan</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1269"/>
+        <location filename="impact_function.py" line="1174"/>
         <source>Try zooming in to a bigger area or check your features (geometry and attribute table). For instance, an empty geometry or an hazard without value are removed during the process.</source>
         <translation>Coba zoom ke area yang lebih besar atau periksa fitur Anda (geometri dan tabel atribut). Misalnya, sebuah geometri kosong atau bahaya tanpa nilai dikeluarkan selama proses tersebut.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1283"/>
+        <location filename="impact_function.py" line="1188"/>
         <source>Configuration issue</source>
         <translation>Permasalahan konfigurasi</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1285"/>
+        <location filename="impact_function.py" line="1190"/>
         <source>There is a problem with the Processing plugin.</source>
         <translation>Ada masalah dengan plugin Processing.</translation>
     </message>
@@ -5369,7 +5369,7 @@
         <translation>Tidak digunakan</translation>
     </message>
     <message>
-        <location filename="components.py" line="751"/>
+        <location filename="components.py" line="753"/>
         <source>Geographic Coordinates - {crs}</source>
         <translation>Koordinat Geografis - {crs}</translation>
     </message>
@@ -5409,7 +5409,7 @@
         <translation>Kebutuhan minimum</translation>
     </message>
     <message>
-        <location filename="components.py" line="479"/>
+        <location filename="components.py" line="481"/>
         <source>Estimated total population</source>
         <translation>Perkiraan jumlah penduduk</translation>
     </message>
@@ -5459,7 +5459,7 @@
         <translation>Cakupan analisis dibatasi oleh cakupan dari lapisan agregasi maupun cakupan analisis. Data ancaman maupun keterpaparan di luar cakupan analisis tidak dimasukkan ke dalam lapisan dampak, peta dampak, maupun laporan dampak.</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="272"/>
+        <location filename="exposure.py" line="271"/>
         <source>Structures overlapping the analysis extent may be assigned a hazard status lower than that to which they are exposed outside the analysis area.</source>
         <translation>Struktur bangunan yang tumpang tindih dengan cakupan analisis memungkinkan untuk diberikan status ancaman lebih rendah dari bagian struktur yang berada diluar analisis area.</translation>
     </message>
@@ -5514,72 +5514,67 @@
         <translation>Nilai default untuk nilai fitur per mÂ²</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="178"/>
+        <location filename="exposure.py" line="177"/>
         <source>Number of people</source>
         <translation>Banyak penduduk</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="379"/>
+        <location filename="exposure.py" line="378"/>
         <source>how many</source>
         <translation>berapa banyak</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="185"/>
+        <location filename="exposure.py" line="184"/>
         <source>A &lt;b&gt;road&lt;/b&gt; is defined as a route used by a vehicle or people to travel between two or more points.</source>
         <translation>Sebuah &lt;b&gt;jalan&lt;/b&gt; didefinisikan sebagai jalur yang digunakan oleh kendaraan maupun orang untuk berpindah tempat dari satu tempat ke tempat lain.</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="195"/>
+        <location filename="exposure.py" line="194"/>
         <source>Numbers for road lengths have been rounded to the nearest 10 metres if the total is less than 1,000; nearest 100 metres if more than 1,000 and less than 100,000; and nearest 1000 metres if more than 100,000.</source>
         <translation>Angka untuk panjang jalan telah dibulatkan ke 10 meter terdekat apabila total kurang dari 1.000; 100 meter terdekat apabila lebih dari 1.000 dan kurang dari 100.000; dan 1.000 meter terdekat apabila lebih dari 100.000.</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="199"/>
+        <location filename="exposure.py" line="198"/>
         <source>Rounding is applied to all road lengths, which may cause discrepancies between subtotals and totals.</source>
         <translation>Pembulatan diterapkan pada semua panjang jalan, yang dapat berakibat pada perbedaan antara subtotal dengan total.</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="254"/>
+        <location filename="exposure.py" line="253"/>
         <source>Length of roads</source>
         <translation>Panjang jalan</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="255"/>
+        <location filename="exposure.py" line="254"/>
         <source>what length of</source>
         <translation>berapakah panjang dari</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="279"/>
+        <location filename="exposure.py" line="278"/>
         <source>Rounding is applied to all structure counts, which may cause discrepancies between subtotals and totals.</source>
         <translation>Pembulatan diterapkan pada semua jumlah bangunan, yang dapat berakibat pada perbedaan antara subtotal dengan total.</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="330"/>
-        <source>Number of buildings</source>
-        <translation>Banyak bangunan</translation>
-    </message>
-    <message>
-        <location filename="exposure.py" line="378"/>
+        <location filename="exposure.py" line="377"/>
         <source>Number of places</source>
         <translation>Banyak tempat</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="395"/>
+        <location filename="exposure.py" line="394"/>
         <source>Areas reported for land cover have been rounded to the nearest 10 hectares if the total is less than 1,000; nearest 100 hectares if more than 1,000 and less than 100,000; and nearest 1000 hectares if more than 100,000.</source>
         <translation>Luasan yang dilaporkan untuk tutupan lahan yang dibulatkan ke 10 hektare terdekat apabila total kurang dari 1,000; 100 hektare terdekat apabila lebih dari 1,000 dan kurang dari 100,000; dan 1000 hektare terdekat apabila lebih dari 100,000.</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="399"/>
+        <location filename="exposure.py" line="398"/>
         <source>Rounding is applied to all land cover areas, which may cause discrepancies between subtotals and totals.</source>
         <translation>Pembulatan diterapkan pada semua luasan penutup lahan, yang dapat berakibat pada perbedaan antara subtotal dengan total.</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="460"/>
+        <location filename="exposure.py" line="459"/>
         <source>Area of landcover</source>
         <translation>Luasan tutupan lahan</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="461"/>
+        <location filename="exposure.py" line="460"/>
         <source>what area of</source>
         <translation>berapakah luasan dari</translation>
     </message>
@@ -5601,7 +5596,7 @@
     <message>
         <location filename="fields.py" line="1934"/>
         <source>Total Not Exposed</source>
-        <translation>Jumlah Tidak Terpapar.</translation>
+        <translation>Jumlah Tidak Terpapar</translation>
     </message>
     <message>
         <location filename="fields.py" line="1940"/>
@@ -5649,12 +5644,12 @@
         <translation>Skala Saffir-Simpson - wikipedia</translation>
     </message>
     <message>
-        <location filename="population_post_processors.py" line="105"/>
+        <location filename="population_post_processors.py" line="108"/>
         <source>Displaced Post Processor</source>
         <translation>Postprosesor Pengungsi</translation>
     </message>
     <message>
-        <location filename="minimum_needs_post_processors.py" line="28"/>
+        <location filename="minimum_needs_post_processors.py" line="31"/>
         <source>Additional Weekly Rice kg for Pregnant and Lactating Women Post Processor</source>
         <translation>Postprosesor Kilogram Beras Mingguan Tambahan untuk Ibu Hamil dan Menyusui</translation>
     </message>
@@ -5689,7 +5684,7 @@
         <translation>Perangkat lunak</translation>
     </message>
     <message>
-        <location filename="components.py" line="744"/>
+        <location filename="components.py" line="746"/>
         <source>InaSAFE {version}</source>
         <translation>InaSAFE {version}</translation>
     </message>
@@ -5719,12 +5714,12 @@
         <translation>&lt;b&gt;Meter Persegi&lt;/b&gt; adalah ukuran dari satuan meter.</translation>
     </message>
     <message>
-        <location filename="prepare_vector_layer.py" line="108"/>
+        <location filename="prepare_vector_layer.py" line="105"/>
         <source>No feature has been found in the {purpose}</source>
         <translation>Tidak ada fitur ditemukan pada {purpose}</translation>
     </message>
     <message>
-        <location filename="prepare_vector_layer.py" line="150"/>
+        <location filename="prepare_vector_layer.py" line="147"/>
         <source>Hazard value mapping missing exposure key.</source>
         <translation>Pemetaan nilai ancaman tidak memiliki kata kunci keterpaparan.</translation>
     </message>
@@ -5814,22 +5809,22 @@
         <translation>Pemetaan nilai</translation>
     </message>
     <message>
-        <location filename="keyword_io.py" line="575"/>
+        <location filename="keyword_io.py" line="590"/>
         <source>No classifications set.</source>
         <translation>Tidak ada klasifikasi dipilih.</translation>
     </message>
     <message>
-        <location filename="keyword_io.py" line="580"/>
+        <location filename="keyword_io.py" line="595"/>
         <source>Class name</source>
         <translation>Nama kelas</translation>
     </message>
     <message>
-        <location filename="keyword_io.py" line="408"/>
+        <location filename="keyword_io.py" line="412"/>
         <source>Minimum</source>
         <translation>Minimum</translation>
     </message>
     <message>
-        <location filename="keyword_io.py" line="409"/>
+        <location filename="keyword_io.py" line="413"/>
         <source>Maximum</source>
         <translation>Maksimum</translation>
     </message>
@@ -5864,12 +5859,12 @@
         <translation>Anda telah memilih &lt;b&gt;%s %s&lt;/b&gt;. Silahkan pilih klasifikasi ancaman untuk setiap jenis keterpaparan. Jika Anda ingin mengubah ambang batas, Anda dapat menekan tombol ubah di dekatnya dan Anda dapat mengubah ambang batas di panel kanan. Jangan lupa menyimpan ambang batas sebelum melanjutkan ke langkah selanjutnya.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1405"/>
+        <location filename="dock.py" line="1372"/>
         <source>The requested extent is not overlapping your layers.</source>
         <translation>Cakupan yang diminta tidak bertumpang tindih dengan lapisan anda.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1153"/>
+        <location filename="impact_function.py" line="1058"/>
         <source>There is a problem with the aggregation layer.</source>
         <translation>Ada masalah dengan lapisan agregasi.</translation>
     </message>
@@ -5969,27 +5964,27 @@
         <translation>TIpe masukan ini menggunakan nilai dari properti geometri.</translation>
     </message>
     <message>
-        <location filename="population_post_processors.py" line="106"/>
+        <location filename="population_post_processors.py" line="109"/>
         <source>A post processor to calculate the number of displaced people. &quot;Displaced&quot; is defined as: {displaced_concept}</source>
         <translation>Postprosesor untuk menghitung banyak penduduk yang mengungsi. &quot;Mengungsi&quot; didefinisikan sebagai: {displaced_concept}</translation>
     </message>
     <message>
-        <location filename="minimum_needs_post_processors.py" line="32"/>
+        <location filename="minimum_needs_post_processors.py" line="35"/>
         <source>A post processor to calculate additional rice for pregnant and lactating women who are displaced. &quot;Displaced&quot; is defined as: {displaced_concept}</source>
         <translation>Postprosesor untuk menghitung tambahan beras untuk ibu hamil dan menyusui yang mengungsi.  &quot;Mengungsi&quot; didefinisikan sebagai: {displaced_concept}</translation>
     </message>
     <message>
-        <location filename="population_post_processors.py" line="525"/>
+        <location filename="population_post_processors.py" line="528"/>
         <source>A post processor to calculate the number of displaced youth. &quot;Youth&quot; is defined as: {youth_concept} &quot;Displaced&quot; is defined as: {displaced_concept}</source>
         <translation>Postprosesor untuk menghitung banyak anak muda yang mengungsi. &quot;Anak Muda&quot; didefinisikan sebagai: {youth_concept}. &quot;Mengungsi&quot; didefinisikan sebagai: {displaced_concept}</translation>
     </message>
     <message>
-        <location filename="population_post_processors.py" line="561"/>
+        <location filename="population_post_processors.py" line="564"/>
         <source>A post processor to calculate the number of displaced adults. &quot;Adult&quot; is defined as: {adult_concept}. &quot;Displaced&quot; is defined as: {displaced_concept}</source>
         <translation>Postprosesor untuk menghitung banyak orang dewasa yang mengungsi. &quot;Orang Dewasa&quot; didefinisikan sebagai: {adult_concept}. &quot;Mengungsi&quot; didefinisikan sebagai: {displaced_concept}</translation>
     </message>
     <message>
-        <location filename="population_post_processors.py" line="597"/>
+        <location filename="population_post_processors.py" line="600"/>
         <source>A post processor to calculate the number of displaced elderly people. &quot;Elderly&quot; is defined as: {elderly_concept}. &quot;Displaced&quot; is defined as: {displaced_concept}</source>
         <translation>Postprosesor untuk menghitung banyak orang tua yang mengungsi. &quot;Orang Tua&quot; didefinisikan sebagai: {elderly_concept}. &quot;Mengungsi&quot; didefinisikan sebagai: {displaced_concept}</translation>
     </message>
@@ -5999,27 +5994,27 @@
         <translation>Postprosesor untuk menentukan jika fitur terdampak atau tidak (menurut klasifikasi ancaman). Ini dapat menjadi &quot;{not_exposed_value}&quot;.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="957"/>
+        <location filename="impact_function.py" line="862"/>
         <source>Incompatible exposure/hazard</source>
         <translation>Ancaman/keterpaparan tidak sesuai</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="959"/>
+        <location filename="impact_function.py" line="864"/>
         <source>The hazard layer is not set up for this kind of exposure. In InaSAFE, you need to define keywords in the hazard layer for each exposure type that you want to use with the hazard.</source>
         <translation>Lapisan ancaman tidak diset untuk jenis keterpaparan ini. Pada InaSAFE, anda perlu mendefinisikan kata kunci didalam lapisan ancaman untuk setiap tipe keterpaparan yang akan anda gunakan dengan lapisan ancaman tersebut.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="966"/>
+        <location filename="impact_function.py" line="871"/>
         <source>Please select the hazard layer in the legend and then run the keyword wizard to define the needed keywords for {exposure_type} exposure.</source>
         <translation>Silakan pilih lapisan ancaman pada legenda kemudian jalankan wizard kata kunci untuk mendefinisikan kata kunci yang dibutuhkan oleh keterpaparan {exposure_type}</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1289"/>
+        <location filename="impact_function.py" line="1194"/>
         <source>InaSAFE depends on the QGIS Processing plugin. This is a core plugin that ships with QGIS. It used to be possible to install the processing plugin from the QGIS Plugin Manager, however we advise you not to use these version since the Plugin Manager version may be incompatible with the version needed by InaSAFE. To resolve this issue, check in your .qgis2/python/plugins directory if you have a processing folder. If you do, remove the processing folder and then restart QGIS. If this issue persists, please report the problem to the InaSAFE team.</source>
         <translation>InaSAFE bergantung pada pada plugin QGIS Processing. Plugin ini merupakan plugin utama yang terpasang bersama QGIS. Plugin ini sebelumnya bisa dipasang melalui Pengelola Plugin QGIS, akan tetapi kami menganjurkan anda untuk tidak menggunakan versi tersebut karena versi yang dipasang melalui Pengelola Plugin bisa tidak sesuai dengan versi yang dibutuhkan oleh InaSAFE. Untuk mengatasi masalah ini, cek pada direktori .qgis2/python/plugins anda. Jika terdapat folder Processing pada direktori tersebut, hapuslah folder tersebut dan mulai ulang QGIS. Jika masalah ini masih muncul, laporkanlah pada team InaSAFE.</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="224"/>
+        <location filename="exposure.py" line="223"/>
         <source>What type of vehicles can use the not affected roads?</source>
         <translation>Jenis kendaraan apa yang bisa melewati jalan yang tidak terdampak?</translation>
     </message>
@@ -6059,22 +6054,22 @@
         <translation>Fungsi dampak tidak mampu dijalankan karena ada kesalahan.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1265"/>
+        <location filename="impact_function.py" line="1170"/>
         <source>There are no features in the analysis extent.</source>
         <translation>Tidak ada fitur di luasan analisa.</translation>
     </message>
     <message>
-        <location filename="keyword_io.py" line="370"/>
+        <location filename="keyword_io.py" line="374"/>
         <source>%s to %s</source>
         <translation>%s sampai %s</translation>
     </message>
     <message>
-        <location filename="keyword_io.py" line="563"/>
+        <location filename="keyword_io.py" line="578"/>
         <source>Classification</source>
         <translation>Klasifikasi</translation>
     </message>
     <message>
-        <location filename="keyword_io.py" line="581"/>
+        <location filename="keyword_io.py" line="596"/>
         <source>Values</source>
         <translation>Nilai</translation>
     </message>
@@ -6084,32 +6079,32 @@
         <translation>Pada tahap persiapan keterpaparan dalam analisis, kita akan mengkonversi data keterpaparan ke dalam format yang dapat digunakan untuk analisis.</translation>
     </message>
     <message>
-        <location filename="earthquake.py" line="116"/>
+        <location filename="earthquake.py" line="117"/>
         <source>ITB fatality model based on a Bayesian approach. This model was developed by Institut Teknologi Bandung (ITB) and implemented by Dr. Hyeuk Ryu, Geoscience Australia.</source>
         <translation>Model fatalitas ITB berdasarkan pendekatan Bayesian. Model ini dikembangkan oleh Institut Teknologi Bandung (ITB) dan diimplementasikan oleh Dr. Hyeuk Ryu, Geoscience Australia.</translation>
     </message>
     <message>
-        <location filename="earthquake.py" line="116"/>
+        <location filename="earthquake.py" line="117"/>
         <source>An Empirical Fatality Model for Indonesia Based on a Bayesian Approach by W. Sengara, M. Suarjana, M.A. Yulman, H. Ghasemi, and H. Ryu. submitted for Journal of the Geological Society.</source>
         <translation>Model Fatalitas Empiris untuk Basis Indonesia pada Pendekatan Bayesian oleh W. Sengara, M. Suarjana, M.A. Yulman, H. Ghasemi, dan H. Ryu. diserahkan untuk Jurnal Komunitas Geologis.</translation>
     </message>
     <message>
-        <location filename="earthquake.py" line="116"/>
+        <location filename="earthquake.py" line="117"/>
         <source>ITB fatality model is modified from the USGS Pager model. This model was developed by Institut Teknologi Bandung (ITB) and implemented by Dr. Hadi Ghasemi, Geoscience Australia.</source>
         <translation>Model fatalitas ITB dimodifikasi dari model USGS Pager. Model ini dikembangkan oleh Institut Teknologi Bandung (ITB) dan diimplementasikan oleh Dr. Hadi Ghasemi, Geoscience Australia.</translation>
     </message>
     <message>
-        <location filename="earthquake.py" line="116"/>
+        <location filename="earthquake.py" line="117"/>
         <source>Indonesian Earthquake Building-Damage and Fatality Models and Post Disaster Survey Guidelines Development, Bali, 27-28 February 2012, 54pp.,</source>
         <translation>Indonesian Earthquake Building-Damage and Fatality Models and Post Disaster Survey Guidelines Development Bali, 27-28 February 2012, 54pp.,</translation>
     </message>
     <message>
-        <location filename="earthquake.py" line="116"/>
+        <location filename="earthquake.py" line="117"/>
         <source>USGS Pager fatality estimation model. This model was developed by Institut Teknologi Bandung (ITB) and implemented by Dr. Hyeuk Ryu, Geoscience Australia.</source>
         <translation>Model estimasi fatalitas USGS Pager. Model ini dikembangkan oleh Institut Teknologi Bandung (ITB) dan diimplementasikan oleh Dr. Hyeuk Ryu, Geoscience Australia.</translation>
     </message>
     <message>
-        <location filename="earthquake.py" line="116"/>
+        <location filename="earthquake.py" line="117"/>
         <source>Jaiswal, K. S., Wald, D. J., and Hearne, M. (2009a). Estimating casualties for large worldwide earthquakes using an empirical approach. U.S. Geological Survey Open-File Report 2009-1136.</source>
         <translation>Jaiswal, K. S., Wald, D. J., and Hearne, M. (2009a). Estimating casualties for large worldwide earthquakes using an empirical approach. U.S. Geological Survey Open-File Report 2009-1136.</translation>
     </message>
@@ -6419,7 +6414,7 @@
         <translation>Tipe proses ini mengambil masukan sebagai argumen dan memprosesnya dengan melewatinya sebagai argumen untuk fungsi Python.</translation>
     </message>
     <message>
-        <location filename="population_post_processors.py" line="423"/>
+        <location filename="population_post_processors.py" line="426"/>
         <source>A post processor to calculate needed hygiene packs weekly for women who are displaced. &quot;Displaced&quot; is defined as: {displaced_concept}</source>
         <translation>Postprosesor untuk menghitung berapa banyak paket kebersihan yang diperlukan oleh wanita yang mengungsi setiap pekan. &quot;Mengungsi&quot; didefinisikan sebagai: {displaced_concept}</translation>
     </message>
@@ -6554,22 +6549,22 @@
         <translation>Untuk analisis ini, tingkat perpindahan berikut digunakan: {rate_description}</translation>
     </message>
     <message>
-        <location filename="components.py" line="444"/>
+        <location filename="components.py" line="446"/>
         <source>source not available</source>
         <translation>sumber tidak tersedia</translation>
     </message>
     <message>
-        <location filename="components.py" line="445"/>
+        <location filename="components.py" line="447"/>
         <source>reference unspecified</source>
         <translation>referensi tidak terspesifikasi</translation>
     </message>
     <message>
-        <location filename="components.py" line="446"/>
+        <location filename="components.py" line="448"/>
         <source>not used</source>
         <translation>tidak digunakan</translation>
     </message>
     <message>
-        <location filename="components.py" line="461"/>
+        <location filename="components.py" line="463"/>
         <source>Impact Function</source>
         <translation>Fungsi Dampak</translation>
     </message>
@@ -6604,7 +6599,7 @@
         <translation>Lapisan bukan berupa raster ataupun vector : {type}</translation>
     </message>
     <message>
-        <location filename="prepare_vector_layer.py" line="162"/>
+        <location filename="prepare_vector_layer.py" line="159"/>
         <source>Hazard classification is missing exposure key.</source>
         <translation>Klasifikasi ancaman tidak memuat kata kunci keterpaparan.</translation>
     </message>
@@ -6654,17 +6649,17 @@
         <translation>Anda telah memilih &lt;b&gt;%s %s&lt;/b&gt; sebagai lapisan &lt;b&gt;kontinyu&lt;/b&gt; dengan &lt;b&gt;%s&lt;/b&gt;. Nilai minimum tidak dimasukan ke dalam rentang, sementara nilai maksimum akan dimasukan. Mohon masukkan nilai minimum dan maksimum di bawah setiap klas. Nilai minimum untuk lapisan adalah &lt;b&gt;%s&lt;/b&gt; dan nilai maksimum adalah &lt;b&gt;%s&lt;/b&gt;.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1153"/>
+        <location filename="impact_function.py" line="1058"/>
         <source>The aggregation layer seems to have a problem. Some features might be invalid. You should check the validity of this layer or use a selection within this layer.</source>
         <translation>Tampaknya ada masalah pada lapisan agregasi. Beberapa fitur kemungkinan tidak valid. Cobalah untuk melakukan pengecekan validitas atau lakukan pemilihan fitur tertentu pada lapisan ini.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1560"/>
+        <location filename="impact_function.py" line="1465"/>
         <source>Something went wrong with the datastore : {error_message}</source>
         <translation>Terjadi sebuah kesalahan dengan datastore : {error_message}</translation>
     </message>
     <message>
-        <location filename="keyword_io.py" line="101"/>
+        <location filename="keyword_io.py" line="102"/>
         <source>The layer is not a QgsMapLayer : {type}</source>
         <translation>Bukan lapisan QgsMapLayer : {type}</translation>
     </message>
@@ -6809,17 +6804,17 @@
         <translation>Catatan pada baris pelaporan yang berisi total dihitung dari seluruh total analisis area dan kemudian dibulatkan, sedangkan baris subtotal dihitung dari area agregasi dan kemudian dibulatkan. Menggunakan pendekatan ini kita menghindari penambahan angka yang sudah dibulatkan dan  begitu pula dalam penggabungan pembulatan.</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="59"/>
+        <location filename="exposure.py" line="58"/>
         <source>Rounding is applied to all population values, which may cause discrepancies between subtotals and totals. </source>
         <translation>Pembulatan diterapkan untuk semua nilai populasi, yang dapat menyebabkan perbedaan antara subtotal dan total.</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="98"/>
+        <location filename="exposure.py" line="97"/>
         <source>What is the ownership of the shelter or settlement location?</source>
         <translation>Sistem kepemilikan apa yang digunakan untuk tempat atau lokasi pengungsian?</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="275"/>
+        <location filename="exposure.py" line="274"/>
         <source>Numbers reported for structures have been rounded to the nearest 10 if the total is less than 1,000; nearest 100 if more than 1,000 and less than 100,000; and nearest 1000 if more than 100,000.</source>
         <translation>Angka yang dilaporkan untuk struktur telah dibulatkan ke 10 unit terdekat apabila total kurang dari 1.000; 100 unit terdekat apabila lebih dari 1.000 dan kurang dari 100.000; dan 1.000 unit terdekat apabila lebih dari 100.000.</translation>
     </message>
@@ -6874,7 +6869,7 @@
         <translation>Orang yang mengungsi adalah orang yang harus meninggalkan rumah mereka untuk alasan dan keadaan tertentu yang disebabkan oleh adanya bahaya maupun bencana. Pada InaSAFE, laporan demografi dan kebutuhan minimum didasarkan pada orang yang mengungsi / terevakuasi.</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="62"/>
+        <location filename="exposure.py" line="61"/>
         <source>If displacement counts are 0, no minimum needs and displaced related postprocessors will be shown.</source>
         <translation>Jika banyak pengungsi adalah 0, tidak ada posprosesor yang berkaitan dengan kebutuhan minimum atau pengungsi yang akan ditampilkan.</translation>
     </message>
@@ -6924,12 +6919,12 @@
         <translation>&quot;Terdampak&quot; didefinisikan sebagai: {concept}</translation>
     </message>
     <message>
-        <location filename="fields.py" line="2003"/>
+        <location filename="fields.py" line="2031"/>
         <source>&quot;Affected&quot; is defined as: {concept} The total affected field is added to the analysis layer, aggregate impact layer and aggregate hazard impact layer during the impact analysis. It represents the cumulative count of affected exposure features (e.g. buildings) or entities (e.g. people) for each area.</source>
         <translation>&quot;Terdampak&quot; didefinisikan sebagai: {concept} Field total terdampak ditambahkan ke lapisan analisis, lapisan dampak agregasi dan lapisan dampak ancaman agregasi selama analisis dampak. Ini menyajikan jumlah kumulatif dari fitur keterpaparan tidak terdampak (misalnya bangunan) atau entitas (misalnya penduduk) untuk setiap area.</translation>
     </message>
     <message>
-        <location filename="fields.py" line="2033"/>
+        <location filename="fields.py" line="2061"/>
         <source>&quot;Hazard&quot; is defined as: {concept} The hazard count field is added to the analysis layer, aggregate impact layer and aggregate hazard impact layer during the impact analysis. It represents the cumulative count of hazard features for each area.</source>
         <translation>&quot;Ancaman&quot; didefinisikan sebagai: {concept} Field banyaknya ancaman ditambahkan ke lapisan analisis, lapisan dampak agregasi dan lapisan dampak ancaman agregasi selama analisis dampak. Ini menyajikan jumlah kumulatif dari fitur ancaman untuk setiap ancaman.</translation>
     </message>
@@ -6969,7 +6964,7 @@
         <translation>Detil Analisis</translation>
     </message>
     <message>
-        <location filename="components.py" line="387"/>
+        <location filename="components.py" line="389"/>
         <source>Analysis produced 0 displaced count. No calculations produced.</source>
         <translation>Analisis menghasilkan 0 pengungsi. Tidak ada perhitungan yang dihasilkan.</translation>
     </message>
@@ -6984,12 +6979,12 @@
         <translation>InaSAFE akan mengkombinasikan kedua lapisan ini ke model matematikal. Hasil model ini akan menampilkan efek dari ancaman pada infrastruktur atau penduduk terpapar. Plugin bergantung pada kata kunci metadata sederhana berasosiasi dengan setiap lapisan untuk menentukan jenis informasi yang mewakili lapisan. Anda dapat menentukan kata kunci tersebut dengan memilih lapisan dan kemudian mengklik ikon Kata kunci Wizard InaSAFE pada toolbar:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="213"/>
+        <location filename="dock.py" line="222"/>
         <source>will be affected? Summarise the results by</source>
         <translation>akankah terdampak? Simpulkan hasil dengan</translation>
     </message>
     <message>
-        <location filename="dock.py" line="215"/>
+        <location filename="dock.py" line="224"/>
         <source>will be affected? Summarise the results by selected features in</source>
         <translation>yang akan terdampak? Simpulkan hasil berdasarkan fitur terpilih di</translation>
     </message>
@@ -7019,12 +7014,12 @@
         <translation>Skenario ancaman tsunami memperkirakan luasan maksimum dari gelombang tsunami di atas daratan.</translation>
     </message>
     <message>
-        <location filename="population_post_processors.py" line="67"/>
+        <location filename="population_post_processors.py" line="70"/>
         <source>Population Displacement Ratio Post Processor</source>
         <translation>Postprosesor Rasio Pengungsian Penduduk</translation>
     </message>
     <message>
-        <location filename="population_post_processors.py" line="68"/>
+        <location filename="population_post_processors.py" line="71"/>
         <source>A post processor to add the population displacement ratio according to the hazard class</source>
         <translation>Postprosesor untuk menambahkan rasio penduduk yang mengungsi menurut kelas ancaman.</translation>
     </message>
@@ -7084,19 +7079,9 @@
         <translation>Menghitung tabel ringkasan keterpaparan</translation>
     </message>
     <message>
-        <location filename="components.py" line="240"/>
-        <source>Estimated {title} {unit} by {exposure} type</source>
-        <translation>Perkiraan {title} {unit} menurut tipe {exposure}</translation>
-    </message>
-    <message>
         <location filename="components.py" line="292"/>
         <source>Exposures in this following hazard classes are considered affected: {hazard_classes}</source>
         <translation>Keterpaparan pada kelas-kelas ancaman berikut ini dianggap terdampak: {hazard_classes}</translation>
-    </message>
-    <message>
-        <location filename="components.py" line="353"/>
-        <source>Estimated {title} {unit} by aggregation area</source>
-        <translation>Perkiraan {title} {unit} berdasarkan wilayah agregasi</translation>
     </message>
     <message>
         <location filename="definitions_help.py" line="506"/>
@@ -7174,12 +7159,12 @@
         <translation>Tingkat pengungsian adalah sebuah perkiraan umum (komunikasi personal Craig Arthur)</translation>
     </message>
     <message>
-        <location filename="earthquake.py" line="116"/>
+        <location filename="earthquake.py" line="117"/>
         <source>The ITB bayesian fatality model, from Institut Teknologi Bandung 2012, is based on the ITB fatality model and uses Indonesian fatality data</source>
         <translation>Model fatalitas bayesian ITB, dari Institut Teknologi Bandung 2012, berdasarkan model fatalitas ITB dan menggunakan data fatalitas Indonesia.</translation>
     </message>
     <message>
-        <location filename="earthquake.py" line="116"/>
+        <location filename="earthquake.py" line="117"/>
         <source>The USGS Population Vulnerability Pager fatality model using Indonesian country coefficients.</source>
         <translation>Model fatalitas Kerentanan Penduduk Pager USGS menggunakan koefisien negara Indonesia.</translation>
     </message>
@@ -7219,7 +7204,7 @@
         <translation>Tindakan untuk keterpaparan :  {exposure_name}</translation>
     </message>
     <message>
-        <location filename="dock.py" line="936"/>
+        <location filename="dock.py" line="896"/>
         <source>No Version</source>
         <translation>Tidak Ada Versi</translation>
     </message>
@@ -7229,12 +7214,12 @@
         <translation>Versi kata kunci lapisan Anda ({layer_version}) tidak cocok dengan versi InaSAFE Anda ({inasafe_version}). Jika Anda ingin menggunakannya sebagai lapisan keterpaparan, ancaman, atau agregasi di analisis, silahkan perbarui kata kuncinya. Klik Lanjut untuk memberikan kata kunci sekarang.</translation>
     </message>
     <message>
-        <location filename="message.py" line="169"/>
+        <location filename="message.py" line="200"/>
         <source>Your layer&apos;s keyword&apos;s version ({layer_version}) does not match with your InaSAFE version ({inasafe_version}). If you wish to use it as an exposure, hazard, or aggregation layer in an analysis, please use the keyword wizard to update the keywords. You can open the wizard by clicking on the </source>
         <translation>Versi kata kunci lapisan Anda ({layer_version}) tidak cocok dengan versi InaSAFE ({inasafe_version}) Anda. Apabila Anda menginginkan untuk menggunakan lapisan ini sebagai lapisan paparan, ancaman, atau agregasi pada analisis, mohon gunakan wizard kata kunci untuk memperbarui kata kunci. Anda dapat membuka wizard dengan melakukan klik pada</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="990"/>
+        <location filename="impact_function.py" line="895"/>
         <source>{hazard_type} {hazard_geometry} On {exposure_type} {exposure_geometry}</source>
         <translation> {hazard_geometry} {hazard_type} pada {exposure_geometry} {exposure_type}</translation>
     </message>
@@ -7274,17 +7259,17 @@
         <translation>Global Default Rasio Usia Subur</translation>
     </message>
     <message>
-        <location filename="age_field_group.py" line="27"/>
+        <location filename="age_field_group.py" line="30"/>
         <source>Age Ratio</source>
         <translation>Rasio Umur</translation>
     </message>
     <message>
-        <location filename="age_field_group.py" line="51"/>
+        <location filename="age_field_group.py" line="54"/>
         <source>Age Count</source>
         <translation>Jumlah Umur</translation>
     </message>
     <message>
-        <location filename="age_field_group.py" line="73"/>
+        <location filename="age_field_group.py" line="76"/>
         <source>Age Displaced Count</source>
         <translation>Jumlah Umur Mengungsi</translation>
     </message>
@@ -7569,52 +7554,52 @@
         <translation>kategori siklon</translation>
     </message>
     <message>
-        <location filename="population_post_processors.py" line="230"/>
+        <location filename="population_post_processors.py" line="233"/>
         <source>Child Bearing Age Post Processor</source>
         <translation>Postprosesor Usia Subur</translation>
     </message>
     <message>
-        <location filename="population_post_processors.py" line="231"/>
+        <location filename="population_post_processors.py" line="234"/>
         <source>A post processor to calculate the number of displaced child bearing age. &quot;Child Bearing Age&quot; is defined as: {child_bearing_age_concept} &quot;Displaced&quot; is defined as: {displaced_concept}</source>
         <translation>Postprosesor untuk menghitung banyak wanita usia subur. &quot;Wanita Usia Subur&quot; didefinisikan sebagai: {child_bearing_age_concept}. &quot;Mengungsi&quot; didefinisikan sebagai: {displaced_concept}</translation>
     </message>
     <message>
-        <location filename="population_post_processors.py" line="452"/>
+        <location filename="population_post_processors.py" line="455"/>
         <source>Infant Post Processor</source>
         <translation>Postprosesor Bayi</translation>
     </message>
     <message>
-        <location filename="population_post_processors.py" line="453"/>
+        <location filename="population_post_processors.py" line="456"/>
         <source>A post processor to calculate the number of displaced infant. &quot;Infant&quot; is defined as: {infant_concept} &quot;Displaced&quot; is defined as: {displaced_concept}</source>
         <translation>Postprosesor untuk menghitung banyak bayi yang mengungsi. &quot;Bayi&quot; didefinisikan sebagai: {infant_concept}. &quot;Mengungsi&quot; didefinisikan sebagai: {displaced_concept}</translation>
     </message>
     <message>
-        <location filename="population_post_processors.py" line="488"/>
+        <location filename="population_post_processors.py" line="491"/>
         <source>Child Post Processor</source>
         <translation>Postprosesor Anak</translation>
     </message>
     <message>
-        <location filename="population_post_processors.py" line="489"/>
+        <location filename="population_post_processors.py" line="492"/>
         <source>A post processor to calculate the number of displaced child. &quot;Child&quot; is defined as: {child_concept} &quot;Displaced&quot; is defined as: {displaced_concept}</source>
         <translation>Postprosesor untuk menghitung banyak anak yang mengungsi. &quot;Anak&quot; didefinisikan sebagai: {child_concept}. &quot;Mengungsi&quot; didefinisikan sebagai: {displaced_concept}</translation>
     </message>
     <message>
-        <location filename="population_post_processors.py" line="632"/>
+        <location filename="population_post_processors.py" line="635"/>
         <source>Under 5 Years Old Post Processor</source>
         <translation>Postprosesor dibawah 5 tahun</translation>
     </message>
     <message>
-        <location filename="population_post_processors.py" line="633"/>
+        <location filename="population_post_processors.py" line="636"/>
         <source>A post processor to calculate the number of displaced under 5 years old. &quot;Under 5 Years Old&quot; is defined as: {under_5_concept}. &quot;Displaced&quot; is defined as: {displaced_concept}</source>
         <translation>Postprosesor untuk menghitung banyak anak dibawah 5 tahun yang mengungsi. &quot;Dibawah 5 Tahun&quot; didefinisikan sebagai: {under_5_concept}. &quot;Mengungsi&quot; didefinisikan sebagai: {displaced_concept}</translation>
     </message>
     <message>
-        <location filename="population_post_processors.py" line="668"/>
+        <location filename="population_post_processors.py" line="671"/>
         <source>Over 60 Years Old Post Processor</source>
         <translation>Postprosesor diatas 60 tahun</translation>
     </message>
     <message>
-        <location filename="population_post_processors.py" line="669"/>
+        <location filename="population_post_processors.py" line="672"/>
         <source>A post processor to calculate the number of displaced over 60 years old. &quot;Over 60 Years Old&quot; is defined as: {over_60_concept}. &quot;Displaced&quot; is defined as: {displaced_concept}</source>
         <translation>Postprosesor untuk menghitung banyak orang tua diatas 60 tahun yang mengungsi. &quot;Diatas 60 Tahun&quot; didefinisikan sebagai: {over_60_concept}. &quot;Mengungsi&quot; didefinisikan sebagai: {displaced_concept}</translation>
     </message>
@@ -7781,7 +7766,7 @@
         <translation>Keyword layer_purpose tidak ditemukan di lapisan {layer_name}</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="298"/>
+        <location filename="impact_function.py" line="293"/>
         <source>Memory</source>
         <translation>Memori</translation>
     </message>
@@ -7945,47 +7930,47 @@ Anda dapat memilih lebih dari 1 field. InaSAFE akan menjumlahkan nilai dari fiel
         <translation>catatan umum keterpaparan penduduk</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="412"/>
+        <location filename="exposure.py" line="411"/>
         <source>general checklist</source>
         <translation>daftar tindakan umum</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="90"/>
+        <location filename="exposure.py" line="89"/>
         <source>shelter, settlement, and non-food item</source>
         <translation>hunian, permukiman, dan bahan-bahan bukan makanan</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="114"/>
+        <location filename="exposure.py" line="113"/>
         <source>food security and nutrition</source>
         <translation>keamanan makanan dan nutrisi</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="125"/>
+        <location filename="exposure.py" line="124"/>
         <source>sanitation and clean water</source>
         <translation>sanitasi dan air bersih</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="146"/>
+        <location filename="exposure.py" line="145"/>
         <source>health facilities</source>
         <translation>fasilitas kesehatan</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="191"/>
+        <location filename="exposure.py" line="190"/>
         <source>road exposure general notes</source>
         <translation>catatan umum keterpaparan jalan</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="268"/>
+        <location filename="exposure.py" line="267"/>
         <source>structure exposure general notes</source>
         <translation>catatan umum keterpaparan struktur</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="342"/>
+        <location filename="exposure.py" line="341"/>
         <source>place exposure general notes</source>
         <translation>catatan umum keterpaparan tempat</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="391"/>
+        <location filename="exposure.py" line="390"/>
         <source>land cover exposure general notes</source>
         <translation>catatan umum keterpaparan penutup lahan</translation>
     </message>
@@ -7995,17 +7980,17 @@ Anda dapat memilih lebih dari 1 field. InaSAFE akan menjumlahkan nilai dari fiel
         <translation>Jumlah rasio usia tidak boleh lebih dari 1.</translation>
     </message>
     <message>
-        <location filename="age_field_group.py" line="52"/>
+        <location filename="age_field_group.py" line="55"/>
         <source>Demographic breakdown to use for displaced population based on age groups. Age count groupings are used when there is a vector population dataset that contains detailed demographic information (as counts) about the population living in each administrative or census area.</source>
         <translation>Perincian demografis untuk digunakan pada penduduk mengungsi berdasarkan kelompok umur. Pengelompokan rasio umur digunakan ketika ada dataset vektor penduduk yang mengandung informasi detil demografis (sebagai jumlah) tentang penduduk yang hidup di setiap area administratif atau sensus. </translation>
     </message>
     <message>
-        <location filename="age_field_group.py" line="75"/>
+        <location filename="age_field_group.py" line="78"/>
         <source>Demographic breakdown produced for displaced population based on age groups. These demographic concepts provide a detailed break down of the number of people displaced in each age group.</source>
         <translation>Rincian demografis dihasilkan untuk penduduk mengungsi berdasarkan kelompok umur. Konsep demografis ini menyediakan rincian mendetil dari banyak orang mengungsi di setiap kelompok umur.</translation>
     </message>
     <message>
-        <location filename="age_field_group.py" line="90"/>
+        <location filename="age_field_group.py" line="93"/>
         <source>No age ratios provided, no demographic breakdown for age carried out.</source>
         <translation>Tidak tersedia rasio umur, tidak ada rincian demografis untuk umur yang dilakukan.</translation>
     </message>
@@ -8370,52 +8355,52 @@ Anda dapat memilih lebih dari 1 field. InaSAFE akan menjumlahkan nilai dari fiel
         <translation>catatan spesifik gempabumi terhadap penduduk</translation>
     </message>
     <message>
-        <location filename="population_post_processors.py" line="269"/>
+        <location filename="population_post_processors.py" line="272"/>
         <source>Pregnant Post Processor</source>
         <translation>Postprosesor Hamil</translation>
     </message>
     <message>
-        <location filename="population_post_processors.py" line="270"/>
+        <location filename="population_post_processors.py" line="273"/>
         <source>A post processor to calculate the number of displaced pregnant women. &quot;Pregnant&quot; is defined as: {pregnant_concept} &quot;Displaced&quot; is defined as: {displaced_concept}</source>
         <translation>Postprosesor untuk menghitung jumlah perempuan hamil yang mengungsi. &quot;Hamil&quot; didefinisikan sebagai: {pregnant_concept}. &quot;Mengungsi&quot; didefinisikan sebagai: {displaced_concept}</translation>
     </message>
     <message>
-        <location filename="population_post_processors.py" line="306"/>
+        <location filename="population_post_processors.py" line="309"/>
         <source>Lactating Women Post Processor</source>
         <translation>Postprosesor Perempuan Menyusui</translation>
     </message>
     <message>
-        <location filename="population_post_processors.py" line="307"/>
+        <location filename="population_post_processors.py" line="310"/>
         <source>A post processor to calculate the number of displaced lactating women. &quot;Lactating&quot; is defined as: {lactating_concept} &quot;Displaced&quot; is defined as: {displaced_concept}</source>
         <translation>Postprosesor untuk menghitung jumlah perempuan menyusui yang mengungsi. &quot;Menyusui&quot; didefinisikan sebagai: {lactating_concept}. &quot;Mengungsi&quot; didefinisikan sebagai: {displaced_concept}</translation>
     </message>
     <message>
-        <location filename="population_post_processors.py" line="344"/>
+        <location filename="population_post_processors.py" line="347"/>
         <source>Male Post Processor</source>
         <translation>Postprosesor Laki-laki</translation>
     </message>
     <message>
-        <location filename="population_post_processors.py" line="345"/>
+        <location filename="population_post_processors.py" line="348"/>
         <source>A post processor to calculate the number of displaced males.&quot;Male&quot; is defined as: {male_concept}. &quot;Displaced&quot; is defined as: {displaced_concept}</source>
         <translation>Postprosesor untuk menghitung jumlah laki-laki yang mengungsi. &quot;Laki-laki&quot; didefinisikan sebagai: {male_concept}. &quot;Mengungsi&quot; didefinisikan sebagai: {displaced_concept}</translation>
     </message>
     <message>
-        <location filename="population_post_processors.py" line="383"/>
+        <location filename="population_post_processors.py" line="386"/>
         <source>Female Post Processor</source>
         <translation>Postprosesor Perempuan</translation>
     </message>
     <message>
-        <location filename="population_post_processors.py" line="384"/>
+        <location filename="population_post_processors.py" line="387"/>
         <source>A post processor to calculate the number of displaced females.&quot;Female&quot; is defined as: {female_concept}. &quot;Displaced&quot; is defined as: {displaced_concept}</source>
         <translation>Postprosesor untuk menghitung jumlah perempuan yang mengungsi. &quot;Perempuan&quot; didefinisikan sebagai: {female_concept}. &quot;Mengungsi&quot; didefinisikan sebagai: {displaced_concept}</translation>
     </message>
     <message>
-        <location filename="population_post_processors.py" line="704"/>
+        <location filename="population_post_processors.py" line="707"/>
         <source>Disability Vulnerability Post Processor</source>
         <translation>Postprosesor Kerentanan Disabilitas</translation>
     </message>
     <message>
-        <location filename="population_post_processors.py" line="705"/>
+        <location filename="population_post_processors.py" line="708"/>
         <source>A post processor to calculate the number of displaced people who are especially vulnerable because they have disabilities. &quot;Disabled&quot; is defined as: {disabled_concept}. &quot;Displaced&quot; is defined as: {displaced_concept}</source>
         <translation>Postprosesor untuk menghitung jumlah orang mengungsi yang utamanya rentan karena mereka memiliki keterbatasan. &quot;Disabilitas&quot; didefinisikan sebagai: {disabled_concept}. &quot;Mengungsi&quot; didefinisikan sebagai: {displaced_concept}</translation>
     </message>
@@ -8580,22 +8565,22 @@ Sitasi:
         <translation>Anda dapat memetakan satu field ke lebih dari satu konsep.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="321"/>
+        <location filename="impact_function.py" line="316"/>
         <source>Busy</source>
         <translation>Sibuk</translation>
     </message>
     <message>
-        <location filename="earthquake.py" line="116"/>
+        <location filename="earthquake.py" line="117"/>
         <source>ITB bayesian fatality model</source>
         <translation>Model fatalitas ITB bayesian</translation>
     </message>
     <message>
-        <location filename="earthquake.py" line="116"/>
+        <location filename="earthquake.py" line="117"/>
         <source>ITB fatality model</source>
         <translation>Model fatalitas ITB</translation>
     </message>
     <message>
-        <location filename="earthquake.py" line="116"/>
+        <location filename="earthquake.py" line="117"/>
         <source>Pager fatality model</source>
         <translation>Model fatalitas Pager</translation>
     </message>
@@ -8615,17 +8600,17 @@ Sitasi:
         <translation>&quot;Fatalitas&quot; didefinisikan sebagai: {concept} Dalam kasus dimana data penduduk tersedia dan ancamannya berupa gempa bumi, InaSAFE akan menghitung perkiraan jumlah orang yang meninggal per fitur keterpaparan, area agregasi ancaman, area agregasi dan untuk keseluruhan area analisis. Rasio penduduk yang mengungsi dihitung berdasarkan definisi untuk setiap klas ancaman.</translation>
     </message>
     <message>
-        <location filename="population_post_processors.py" line="150"/>
+        <location filename="population_post_processors.py" line="153"/>
         <source>Population Fatality Ratio Post Processor</source>
         <translation>Postprosesor Rasio Fatalitas Penduduk</translation>
     </message>
     <message>
-        <location filename="population_post_processors.py" line="194"/>
+        <location filename="population_post_processors.py" line="197"/>
         <source>Fatalities Post Processor</source>
         <translation>Postprosesor Fatalitas</translation>
     </message>
     <message>
-        <location filename="population_post_processors.py" line="195"/>
+        <location filename="population_post_processors.py" line="198"/>
         <source>A post processor to calculate the number of fatalities. </source>
         <translation>Postprosesor untuk menghitung banyak fatalitas.</translation>
     </message>
@@ -8640,68 +8625,68 @@ Sitasi:
         <translation>Silahkan masukan model fatalitas gempa bumi pilihan Anda. Model fatalitas defaultnya adalah {model}.</translation>
     </message>
     <message>
-        <location filename="earthquake.py" line="116"/>
+        <location filename="earthquake.py" line="117"/>
         <source>Algorithm:</source>
         <translation>Algoritma:</translation>
     </message>
     <message>
-        <location filename="earthquake.py" line="116"/>
+        <location filename="earthquake.py" line="117"/>
         <source>In this study, the same functional form as Allen (2009) is adopted to express fatality rate as a function of intensity (see Eq. 10 in the report). The Matlab built-in function (fminsearch) for  Nelder-Mead algorithm was used to estimate the model parameters. The objective function (L2G norm) that is minimised during the optimisation is the same as the one used by Jaiswal et al. (2010).</source>
         <translation>Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk menyatakan tingkat fatalitas sebagai fungsi dari intensitas (lihat Eq. 10 dalam laporan). Fungsi Matlab yang telah tersedia (fminsearch) untuk algoritma Nelder-Mead digunakan untuk memperkirakan parameter model. Fungsi obyektif (L2G norm) yang diminimasi pada tahap optimasi sama dengan yang digunakan oleh Jaiswal et al. (2010).</translation>
     </message>
     <message>
-        <location filename="earthquake.py" line="116"/>
+        <location filename="earthquake.py" line="117"/>
         <source>Caveats and limitations:</source>
         <translation>Peringatan dan keterbatasan:</translation>
     </message>
     <message>
-        <location filename="earthquake.py" line="116"/>
+        <location filename="earthquake.py" line="117"/>
         <source>The current model is the result of the above mentioned workshop and reflects the best available information. However, the current model has a number of issues listed below and is expected to evolve further over time.</source>
         <translation>Model terkini adalah hasil dari workshop yang disebutkan di atas dan merefleksikan ketersediaan informasi terbaik. Namun, model terkini memiliki sejumlah isu yang tercantum di bawah dan diharapkan untuk berkembang lebih jauh dari waktu ke waktu.</translation>
     </message>
     <message>
-        <location filename="earthquake.py" line="116"/>
+        <location filename="earthquake.py" line="117"/>
         <source>1 - The model is based on limited number of observed fatality rates during 4 past fatal events.</source>
         <translation>1 - Model ini dibuat berdasarkan jumlah pengamatan yang terbatas tentang tingkat fatalitas selama 4 peristiwa bencana mematikan terakhir.</translation>
     </message>
     <message>
-        <location filename="earthquake.py" line="116"/>
+        <location filename="earthquake.py" line="117"/>
         <source>2 - The model clearly over-predicts the fatality rates at intensities higher than VIII.</source>
         <translation>2 - Model ini dengan jelas terlalu berlebihan memperkirakan tingkat fatalitas pada intensitas lebih dari VIII.</translation>
     </message>
     <message>
-        <location filename="earthquake.py" line="116"/>
+        <location filename="earthquake.py" line="117"/>
         <source>3 - The model only estimates the expected fatality rate for a given intensity level; however the associated uncertainty for the proposed model is not addressed.</source>
         <translation>3 - Model ini hanya memperkirakan tingkat fatalitas untuk level intensitas tertentu; Hanya saja, ketidakpastian yang terkait model ini tidak dibahas lebih lanjut.</translation>
     </message>
     <message>
-        <location filename="earthquake.py" line="116"/>
+        <location filename="earthquake.py" line="117"/>
         <source>4 - There are few known mistakes in developing the current model:</source>
         <translation>4 - Ada beberapa kesalahan yang diketahui dalam pengembangan model terkini:</translation>
     </message>
     <message>
-        <location filename="earthquake.py" line="116"/>
+        <location filename="earthquake.py" line="117"/>
         <source>- rounding MMI values to the nearest 0.5,</source>
         <translation>- pembulatan nilai MMI mendekati 0,5 ,</translation>
     </message>
     <message>
-        <location filename="earthquake.py" line="116"/>
+        <location filename="earthquake.py" line="117"/>
         <source>- Implementing Finite-Fault models of candidate events, and</source>
         <translation>- Menerapkan model Finite-Fault untuk kandidat kejadian, dan</translation>
     </message>
     <message>
-        <location filename="earthquake.py" line="116"/>
+        <location filename="earthquake.py" line="117"/>
         <source>- consistency between selected GMPEs with those in use by </source>
         <comment>BMKG. These issues will be addressed by ITB team in the final report.</comment>
         <translation>- konsistensi antara GMPEs dipilih dengan yang digunakan oleh</translation>
     </message>
     <message>
-        <location filename="earthquake.py" line="116"/>
+        <location filename="earthquake.py" line="117"/>
         <source>Note: Because of these caveats, decisions should not be made solely on the information presented here and should always be verified by ground truthing and other reliable information sources.</source>
         <translation>Catatan: Karena peringatan ini, keputusan tidak boleh dilakukan hanya atas informasi yang disajikan di sini dan harus selalu diverifikasi melalui kebenaran di lapangan dan sumber informasi terpercaya lainnya.</translation>
     </message>
     <message>
-        <location filename="components.py" line="427"/>
+        <location filename="components.py" line="429"/>
         <source>Analysis Environment</source>
         <translation>Lingkungan Analisis</translation>
     </message>
@@ -8776,62 +8761,62 @@ Sitasi:
         <translation>Perangkat ini akan melakukan konversi &apos;shakemap&apos; gempabumi dari format grid xml menjadi file GeoTIFF. File yang diimpor dapat digunakan dalam InaSAFE sebagai input untuk fungsi dampak yang membutuhkan lapisan gempa. Untuk menggunakan perangkat ini secara efektif:</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="776"/>
+        <location filename="impact_function_utilities.py" line="39"/>
         <source>The {purpose} layer is invalid</source>
         <translation>Layer {purpose} tidak valid</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="792"/>
+        <location filename="impact_function_utilities.py" line="55"/>
         <source>The {purpose} layer does not have keywords.</source>
         <translation>Lapisan {purpose} tidak memiliki kata kunci.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="795"/>
+        <location filename="impact_function_utilities.py" line="58"/>
         <source>The {purpose} layer does not have keywords. Use the wizard to assign keywords to the layer.</source>
         <translation>Lapisan {purpose} tidak memiliki kata kunci. Gunakan wizard untuk menetapkan kata kunci pada lapisan.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="805"/>
+        <location filename="impact_function_utilities.py" line="68"/>
         <source>The expected {purpose} layer is not an {purpose}.</source>
         <translation>Diharapkan lapisan {purpose} bukan merupakan {purpose}.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="833"/>
+        <location filename="impact_function_utilities.py" line="96"/>
         <source>The {purpose} layer is not up to date.</source>
         <translation>Lapisan {purpose} tidak kekinian.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="835"/>
+        <location filename="impact_function_utilities.py" line="98"/>
         <source>The layer {source} must be updated with the keyword wizard. Your fields which have been set in the keywords previously are not matching your layer.</source>
         <translation>Lapisan {source} harus diperbarui dengan wizard kata kunci. Fields Anda yang telah ditetapkan pada kata kata kunci sebelumnya tidak sesuai dengan lapisan Anda.</translation>
     </message>
     <message>
-        <location filename="hello_world_report.py" line="45"/>
+        <location filename="hello_world_report.py" line="46"/>
         <source>Hello World!</source>
         <translation>Halo Dunia!</translation>
     </message>
     <message>
-        <location filename="exposure.py" line="55"/>
+        <location filename="exposure.py" line="54"/>
         <source>Numbers reported for population counts have been rounded to the nearest 10 people if the total is less than 1,000; nearest 100 people if more than 1,000 and less than 100,000; and nearest 1,000 if more than 100,000.</source>
         <translation>Angka yang dilaporkan untuk jumlah penduduk telah dibulatkan ke 10 orang terdekat apabila total kurang dari 1.000; 100 orang terdekat apabila lebih dari 1.000 dan kurang dari 100.000; dan 1.000 orang terdekat apabila lebih dari 100.000.</translation>
     </message>
     <message>
-        <location filename="population_post_processors.py" line="151"/>
+        <location filename="population_post_processors.py" line="154"/>
         <source>A post processor to add the population fatality ratio according to the hazard class. Only the MMI classification has a fatality model.</source>
         <translation>Postprosesor untuk menambahkan rasio fatalitas penduduk menurut kelas ancaman. Hanya klasifikasi MMI yang memiliki model fatalitas.</translation>
     </message>
     <message>
-        <location filename="components.py" line="452"/>
+        <location filename="components.py" line="454"/>
         <source>Hazard source</source>
         <translation>Sumber ancaman</translation>
     </message>
     <message>
-        <location filename="components.py" line="455"/>
+        <location filename="components.py" line="457"/>
         <source>Exposure source</source>
         <translation>Sumber keterpaparan</translation>
     </message>
     <message>
-        <location filename="components.py" line="458"/>
+        <location filename="components.py" line="460"/>
         <source>Aggregation source</source>
         <translation>Sumber agregasi</translation>
     </message>
@@ -8937,32 +8922,32 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
         <translation>Perkiraan banyaknya penduduk yang mengungsi untuk setiap {header_name} per wilayah agregasi</translation>
     </message>
     <message>
-        <location filename="components.py" line="386"/>
+        <location filename="components.py" line="388"/>
         <source>{header_name} breakdown</source>
         <translation>Rincian {header_name}</translation>
     </message>
     <message>
-        <location filename="components.py" line="390"/>
+        <location filename="components.py" line="392"/>
         <source>Gender ratio is not found. No calculations produced.</source>
         <translation>Tidak ditemukan rasio jenis kelamin. Tidak ada perhitungan yang dihasilkan.</translation>
     </message>
     <message>
-        <location filename="components.py" line="393"/>
+        <location filename="components.py" line="395"/>
         <source>Age ratio is not found. No calculations produced.</source>
         <translation>Tidak ditemukan rasio umur. Tidak ada perhitungan yang dihasilkan.</translation>
     </message>
     <message>
-        <location filename="components.py" line="396"/>
+        <location filename="components.py" line="398"/>
         <source>Vulnerability ratio is not found. No calculations produced.</source>
         <translation>Tidak ditemukan rasio kerentanan. Tidak ada perhitungan yang dihasilkan.</translation>
     </message>
     <message>
-        <location filename="earthquake.py" line="116"/>
+        <location filename="earthquake.py" line="117"/>
         <source>The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, zeta=2.15</source>
         <translation>Koefisien yang digunakan di model Indonesia adalah x=0,62275231, y=8,03314466, zeta=2,15</translation>
     </message>
     <message>
-        <location filename="earthquake.py" line="116"/>
+        <location filename="earthquake.py" line="117"/>
         <source>Allen, T. I., Wald, D. J., Earle, P. S., Marano, K. D., Hotovec, A. J., Lin, K., and Hearne, M., 2009. An Atlas of ShakeMaps and population exposure catalog for earthquake loss modeling, Bull. Earthq. Eng. 7, 701-718. Jaiswal, K., and Wald, D., 2010. An empirical model for global earthquake fatality estimation, Earthq. Spectra 26, 1017-1037.</source>
         <translation>Allen, T. I., Wald, D. J., Earle, P. S., Marano, K. D., Hotovec, A. J., Lin, K., and Hearne, M., 2009. An Atlas of ShakeMaps and population exposure catalog for earthquake loss modeling, Bull. Earthq. Eng. 7, 701-718.Jaiswal, K., and Wald, D., 2010. An empirical model for global earthquake fatality estimation, Earthq. Spectra 26, 1017-1037.</translation>
     </message>
@@ -8977,7 +8962,7 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
         <translation>Interplay antara rasio default, lapisan agregasi yang disediakan rasio dan lapisan penduduk terpapar diilustrasikan pada tabel di bawah ini.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="778"/>
+        <location filename="impact_function_utilities.py" line="41"/>
         <source>The impact function needs a {exposure} layer to run. You must provide a valid {exposure} layer.</source>
         <translation>Fungsi dampak membutuhkan lapisan {exposure} untuk dijalankan. Anda harus menyediakan lapisan {exposure} yang valid.</translation>
     </message>
@@ -8987,7 +8972,7 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
         <translation>Rasio default untuk usia subur per 100 orang dari total populasi.</translation>
     </message>
     <message>
-        <location filename="fields.py" line="2182"/>
+        <location filename="fields.py" line="2210"/>
         <source>Productivity</source>
         <translation>Produktivitas</translation>
     </message>
@@ -9002,7 +8987,7 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
         <translation>Klasifikasi berdasarkan isi dari dataset keterpaparan.</translation>
     </message>
     <message>
-        <location filename="fields.py" line="2121"/>
+        <location filename="fields.py" line="2149"/>
         <source>Productivity Rate</source>
         <translation>Tingkat Produktivitas</translation>
     </message>
@@ -9369,12 +9354,12 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
         <translation>Pada langkah wizard ini: {step_name}, Anda akan dapat mengulas judul layer ini yang akan muncul dalam laporan analisis</translation>
     </message>
     <message>
-        <location filename="step_kw65_summary.py" line="159"/>
+        <location filename="step_kw65_summary.py" line="152"/>
         <source>Keyword Summary Step</source>
         <translation>Langkah Ringkasan Keyword</translation>
     </message>
     <message>
-        <location filename="step_kw65_summary.py" line="170"/>
+        <location filename="step_kw65_summary.py" line="163"/>
         <source>In this wizard step: {step_name}, you will be able to review all the keywords that have been set for this layer</source>
         <translation>Pada langkah wizard ini: {step_name}, Anda akan dapat mengulas semua keyword yang telah diatur untuk layer ini.</translation>
     </message>
@@ -9441,27 +9426,27 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
         <translation>Tidak ada teks bantuan untuk langkah wizard ini.</translation>
     </message>
     <message>
-        <location filename="keyword_io.py" line="162"/>
+        <location filename="keyword_io.py" line="164"/>
         <source>Layer keywords:</source>
         <translation>Kata kunci lapisan:</translation>
     </message>
     <message>
-        <location filename="keyword_io.py" line="164"/>
+        <location filename="keyword_io.py" line="166"/>
         <source>The following keywords are defined for the active layer:</source>
         <translation>Kata kunci berikut ini dipunyai oleh layer yang aktif:</translation>
     </message>
     <message>
-        <location filename="keyword_io.py" line="187"/>
+        <location filename="keyword_io.py" line="189"/>
         <source>Reference system</source>
         <translation>Sistem referensi</translation>
     </message>
     <message>
-        <location filename="keyword_io.py" line="192"/>
+        <location filename="keyword_io.py" line="194"/>
         <source>Layer source</source>
         <translation>Sumber lapisan</translation>
     </message>
     <message>
-        <location filename="fields.py" line="2180"/>
+        <location filename="fields.py" line="2208"/>
         <source>Affected Productivity</source>
         <translation>Produktivitas Terdampak</translation>
     </message>
@@ -9851,27 +9836,27 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
         <translation>Pengguna</translation>
     </message>
     <message>
-        <location filename="save_scenario.py" line="72"/>
+        <location filename="save_scenario.py" line="74"/>
         <source>Exposure layer is not found, can not save scenario. Please add exposure layer to do so.</source>
         <translation>Layer keterpaparan tidak ditemukan, tidak dapat menyimpan skenario. Silakan tambahkan layer keterpaparan.</translation>
     </message>
     <message>
-        <location filename="save_scenario.py" line="78"/>
+        <location filename="save_scenario.py" line="80"/>
         <source>Hazard layer is not found, can not save scenario. Please add hazard layer to do so.</source>
         <translation>Layer ancaman bencana tidak ditemukan, tidak dapat menyimpan skenario. Silakan tambahkan layer ancaman bencana.</translation>
     </message>
     <message>
-        <location filename="save_scenario.py" line="94"/>
+        <location filename="save_scenario.py" line="96"/>
         <source>InaSAFE Save Scenario Warning</source>
         <translation>Peringan Penyimpanan Skenario InaSAFE </translation>
     </message>
     <message>
-        <location filename="save_scenario.py" line="122"/>
+        <location filename="save_scenario.py" line="124"/>
         <source>Save Scenario</source>
         <translation>Simpan Skenario</translation>
     </message>
     <message>
-        <location filename="save_scenario.py" line="161"/>
+        <location filename="save_scenario.py" line="163"/>
         <source>Failed to save scenario to {path}, exception {exception}</source>
         <translation>Gagal menyimpan skenario pada {path}, pengecualian {exception}</translation>
     </message>
@@ -9881,12 +9866,12 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
         <translation>Pada langkah wizard ini: {step_name}, Anda akan dapat mengatur ambang batas setiap kelas dalam klasifikasi yang Anda pilih pada langkah sebelumnya.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="916"/>
+        <location filename="impact_function.py" line="821"/>
         <source>Use exposure view only can not be set to True if you use an aggregation layer.</source>
         <translation>Gunakan hanya tampilan keterpaparan tidak dapat diatur ke True jika Anda menggunakan layer agregasi.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="945"/>
+        <location filename="impact_function.py" line="850"/>
         <source>Requested Extent must be null when you use the exposure view only.</source>
         <translation>Luasan yang diminta harus kosong/null ketika Anda menggunakan tampilan keterpaparan saja.</translation>
     </message>
@@ -9911,12 +9896,12 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
         <translation>Secara default, InaSAFE akan menghitung rasio default namun pengguna memiliki pilihan untuk memasukkannya ke dalam analisis laporan. Jika Anda tidak ingin melihat hasil default dalam laporan pilih &quot;jangan laporkan&quot;.</translation>
     </message>
     <message>
-        <location filename="fields.py" line="2270"/>
+        <location filename="fields.py" line="2298"/>
         <source>Production Cost</source>
         <translation>Biaya Produksi</translation>
     </message>
     <message>
-        <location filename="fields.py" line="2352"/>
+        <location filename="fields.py" line="2380"/>
         <source>Production Value</source>
         <translation>Nilai Produksi</translation>
     </message>
@@ -9926,7 +9911,7 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
         <translation>Perkiraan kerugian untuk setiap jenis {exposure} terdampak</translation>
     </message>
     <message>
-        <location filename="fields.py" line="2209"/>
+        <location filename="fields.py" line="2237"/>
         <source>Production Cost Rate</source>
         <translation>Tingkat Biaya Produksi</translation>
     </message>
@@ -9941,7 +9926,7 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
         <translation>Jumlah uang yang dibutuhkan untuk membangun area tanaman tutupan lahan. Satuan ini adalah satuan mata uang (misalnya IDR, USD, Euro).</translation>
     </message>
     <message>
-        <location filename="fields.py" line="2297"/>
+        <location filename="fields.py" line="2325"/>
         <source>Production Value Rate</source>
         <translation>Tingkat Nilai Produksi</translation>
     </message>
@@ -9956,7 +9941,7 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
         <translation>Harga tanaman di area tutupan lahan. Satuan ini adalah satuan mata uang (misalnya IDR, USD, Euro).</translation>
     </message>
     <message>
-        <location filename="age_field_group.py" line="28"/>
+        <location filename="age_field_group.py" line="31"/>
         <source>Demographic breakdown to use for displaced population based on age groups. Age ratio groupings are used when there is a vector aggregation layer that contains detailed demographic information (as ratios) about the population living in each administrative or census area. These ratios are then applied to the count of displaced population per aggregation area to provide a more detailed break down of the number of people displaced in each age group.</source>
         <translation>Perincian demografis untuk digunakan pada penduduk mengungsi berdasarkan kelompok umur. Pengelompokan rasio umur digunakan ketika ada lapisan vektor agregasi yang mengandung informasi detil demografis (sebagai rasio) tentang penduduk yang hidup di setiap area administratif atau sensus. Rasio ini kemudian diterapkan ke jumlah penduduk mengungsi per area agregasi untuk menyediakan perincian yang lebih detil pada jumlah orang yang di setiap kelompok umur.</translation>
     </message>
@@ -9976,72 +9961,72 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
         <translation>Paket Higienis</translation>
     </message>
     <message>
-        <location filename="fields.py" line="2159"/>
+        <location filename="fields.py" line="2187"/>
         <source>&quot;{name}&quot; is defined as: {description}. In case where land cover data is available, InaSAFE will calculate the productivity for each land cover area (exposure feature). The productivity is calculated based on the productivity rate multiplied by the area of the land cover.</source>
         <translation>&quot;{name}&quot; didefinisikan sebagai: {description}. Pada kasus dimana data tutupan lahan tersedia, InaSAFE akan menghitung produktivitas untuk setiap area tutupan lahan (fitur keterpaparan). Produktivitas dihitung berdasarkan tingkat produktivitas dikalikan dengan area tutupan lahan.</translation>
     </message>
     <message>
-        <location filename="fields.py" line="2157"/>
+        <location filename="fields.py" line="2185"/>
         <source>The total weight of a crop that can be produced for each feature.</source>
         <translation>Total berat tanaman yang dapat diproduksi untuk setiap fitur.</translation>
     </message>
     <message>
-        <location filename="fields.py" line="2187"/>
+        <location filename="fields.py" line="2215"/>
         <source>The total weight of a crop that is affected for each feature.</source>
         <translation>Total berat tanaman yang terdampak untuk setiap fitur.</translation>
     </message>
     <message>
-        <location filename="fields.py" line="2189"/>
+        <location filename="fields.py" line="2217"/>
         <source>&quot;{affected_name}&quot; is defined as: {affected_description}. This field contains the productivity that is affected by the hazard.</source>
         <translation>&quot;{affected_name}&quot; didefinisikan sebagai: {affected_description}. Field ini berisi produktivitas yang terdampak oleh ancaman.</translation>
     </message>
     <message>
-        <location filename="fields.py" line="2247"/>
+        <location filename="fields.py" line="2275"/>
         <source>&quot;{name}&quot; is defined as: {description}. In case where land cover data is available, InaSAFE will calculate the production cost for each land cover area (exposure feature). The production cost is calculated based on the production cost rate multiplied by the area of the land cover.</source>
         <translation>&quot;{name}&quot; didefinisikan sebagai: {description}. Pada kasus dimana data tutupan lahan tersedia, InaSAFE akan menghitung biaya produksi untuk setiap area tutupan lahan (fitur keterpaparan). Biaya produksi dihitung berdasarkan tingkat biaya produksi dikalikan dengan area tutupan lahan.</translation>
     </message>
     <message>
-        <location filename="fields.py" line="2245"/>
+        <location filename="fields.py" line="2273"/>
         <source>The total production cost of a crop for each feature.</source>
         <translation>Total biaya produksi tanaman untuk setiap fitur.</translation>
     </message>
     <message>
-        <location filename="fields.py" line="2268"/>
+        <location filename="fields.py" line="2296"/>
         <source>Affected Production Cost</source>
         <translation>Biaya Produksi Terdampak</translation>
     </message>
     <message>
-        <location filename="fields.py" line="2275"/>
+        <location filename="fields.py" line="2303"/>
         <source>The amount of production cost of a crop that is affected for each feature.</source>
         <translation>Jumlah biaya produksi tanaman yang terdampak untuk setiap fitur.</translation>
     </message>
     <message>
-        <location filename="fields.py" line="2278"/>
+        <location filename="fields.py" line="2306"/>
         <source>&quot;{affected_name}&quot; is defined as: {affected_description}. This field contains the production cost that is affected by the hazard.</source>
         <translation>&quot;{affected_name}&quot; didefinisikan sebagai: {affected_description}. Field ini berisi biaya produksi yang terdampak oleh ancaman.</translation>
     </message>
     <message>
-        <location filename="fields.py" line="2335"/>
+        <location filename="fields.py" line="2363"/>
         <source>&quot;{name}&quot; is defined as: {description}. In case where land cover data is available, InaSAFE will calculate the production value for each land cover area (exposure feature). The production value is calculated based on the production value rate multiplied by the area of the land cover.</source>
         <translation>&quot;{name}&quot; didefinisikan sebagai: {description}. Pada kasus dimana data tutupan lahan tersedia, InaSAFE akan menghitung nilai produksi untuk setiap area tutupan lahan (fitur keterpaparan). Nilai produksi dihitung berdasarkan tingkat nilai produksi dikalikan dengan area tutupan lahan.</translation>
     </message>
     <message>
-        <location filename="fields.py" line="2333"/>
+        <location filename="fields.py" line="2361"/>
         <source>The total production value of a crop for each feature.</source>
         <translation>Total nilai produksi tanaman untuk setiap fitur.</translation>
     </message>
     <message>
-        <location filename="fields.py" line="2350"/>
+        <location filename="fields.py" line="2378"/>
         <source>Affected Production Value</source>
         <translation>Nilai Produksi Terdampak</translation>
     </message>
     <message>
-        <location filename="fields.py" line="2357"/>
+        <location filename="fields.py" line="2385"/>
         <source>The amount of production value of a crop that is affected for each feature.</source>
         <translation>Jumlah nilai produksi tanaman yang terdampak untuk setiap fitur.</translation>
     </message>
     <message>
-        <location filename="fields.py" line="2360"/>
+        <location filename="fields.py" line="2388"/>
         <source>&quot;{affected_name}&quot; is defined as: {affected_description}. This field contains the production value that is affected by the hazard.</source>
         <translation>&quot;{affected_name}&quot; didefinisikan sebagai: {affected_description}. Field ini berisi nilai produksi yang terdampak oleh ancaman.</translation>
     </message>
@@ -10121,7 +10106,7 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
         <translation>Satu</translation>
     </message>
     <message>
-        <location filename="generic_expressions.py" line="70"/>
+        <location filename="generic_expressions.py" line="73"/>
         <source>Ten</source>
         <translation>Puluh</translation>
     </message>
@@ -10141,7 +10126,7 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
         <translation>Ratus</translation>
     </message>
     <message>
-        <location filename="generic_expressions.py" line="71"/>
+        <location filename="generic_expressions.py" line="74"/>
         <source>Thousand</source>
         <translation>Ribu</translation>
     </message>
@@ -10251,12 +10236,12 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
         <translation>Beras Tambahan</translation>
     </message>
     <message>
-        <location filename="components.py" line="523"/>
+        <location filename="components.py" line="525"/>
         <source>In this analysis, people are considered to be affected if they are exposed to the hazard, and considered to be displaced if they exposed to high or medium hazard.</source>
         <translation>Dalam analisis ini, peduduk dianggap terdampak jika terpapar ancaman, dan dianggap mengungsi jika terpapar ancaman tinggi atau menengah.</translation>
     </message>
     <message>
-        <location filename="components.py" line="527"/>
+        <location filename="components.py" line="529"/>
         <source>{displacement_rate:.0%} affected in {name} {classification_unit}</source>
         <translation>{displacement_rate:.0%} terdampak di {name} {classification_unit}</translation>
     </message>
@@ -10326,12 +10311,12 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
         <translation>Kebutuhan minimum berdasarkan pada Peraturan Kepala (Perka) BNPB No. 7/2008. Kebutuhan tambahan untuk wanita rentan berdasarkan Standar Sphere (http://www.spherehandbook.org/en/appendix-6/)</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="31"/>
+        <location filename="infographic.py" line="33"/>
         <source>InaSAFE - Infographic Elements</source>
         <translation>InaSAFE - Elemen Infografis</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="68"/>
+        <location filename="infographic.py" line="71"/>
         <source>{symbol} {age} y.o</source>
         <translation>{symbol} {age} tahun</translation>
     </message>
@@ -10361,17 +10346,17 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
         <translation>Jumlah tanaman dalam satuan kuintal yang dapat diproduksi dalam satuan tutupan lahan.</translation>
     </message>
     <message>
-        <location filename="fields.py" line="2127"/>
+        <location filename="fields.py" line="2155"/>
         <source>The rate of productivity of crop land cover for each feature / area in hundred kilograms per hectare unit.</source>
         <translation>Tingkat produktivitas tanaman tutupan lahan untuk setiap fitur / area dalam satuan kuintal per hektar.</translation>
     </message>
     <message>
-        <location filename="fields.py" line="2215"/>
+        <location filename="fields.py" line="2243"/>
         <source>The rate of production cost of a crop for each feature in currency per hectare unit.</source>
         <translation>Tingkat biaya produksi tanaman untuk setiap fitur dalam satuan mata uang per hektar.</translation>
     </message>
     <message>
-        <location filename="fields.py" line="2303"/>
+        <location filename="fields.py" line="2331"/>
         <source>The rate of production value of a crop for each feature in currency per hectare unit.</source>
         <translation>Tingkat nilai produksi tanaman untuk setiap fitur dalam satuan mata uang per hektar.</translation>
     </message>
@@ -10401,62 +10386,62 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
         <translation>Sistem Referensi Koordinat - {crs}</translation>
     </message>
     <message>
-        <location filename="report_descriptions.py" line="13"/>
+        <location filename="report_descriptions.py" line="15"/>
         <source>Infographic report</source>
         <translation>Laporan infografis</translation>
     </message>
     <message>
-        <location filename="report_descriptions.py" line="15"/>
+        <location filename="report_descriptions.py" line="17"/>
         <source>Only generated for cases where the exposure dataset is population, the infographic report provides a visual &quot;at a glance&quot; overview of the impacts population. It uses the Indonesian minimum needs profile, so users in other countries should probably implement a customised version of this report which caters for their local minimum needs profile.</source>
         <translation>Hanya dihasilkan untuk kasus dimana dataset keterpaparan adalah penduduk, laporan infografis menyediakan gambaran visual &quot;sekilas pandang&quot; tentang dampak penduduk. Ini menggunakan profil kebutuhan minimum Indonesia, sehingga pengguna di negara lain mungkin harus menerapkan versi kustomisasi dari laporan ini yang memenuhi profil kebutuhan minimum lokal mereka.</translation>
     </message>
     <message>
-        <location filename="report_descriptions.py" line="26"/>
+        <location filename="report_descriptions.py" line="28"/>
         <source>Impact report</source>
         <translation>Laporan dampak</translation>
     </message>
     <message>
-        <location filename="report_descriptions.py" line="28"/>
+        <location filename="report_descriptions.py" line="30"/>
         <source>The impact report provides a tabular overview of the analysis including details of the analysis question, the general report, the minimum needs and other demographic breakdowns (when exposure is population), a list of notes and assumptions and basic details of the datasets used in the analysis.</source>
         <translation>Laporan dampak menyediakan gambaran tabel mengenai analisis termasuk detail pertanyaan analisis, laporan umum, kebutuhan minimum dan rincian demografis lainnya (bila keterpaparan adalah penduduk), daftar catatan dan asumsi dan detail dasar dari dataset yang digunakan dalam analisis.</translation>
     </message>
     <message>
-        <location filename="report_descriptions.py" line="38"/>
+        <location filename="report_descriptions.py" line="40"/>
         <source>Portrait map</source>
         <translation>Peta tegak</translation>
     </message>
     <message>
-        <location filename="report_descriptions.py" line="40"/>
+        <location filename="report_descriptions.py" line="42"/>
         <source>A standard map report is produced in a portrait layout for this report. We provide both portrait and landscape layouts so that the reports can accommodate different shapes of reporting area. The master template for this report is found in the InaSAFE plugin directory under &quot;resources/qgis-composer-templates/inasafe-map-report-portrait.qpt&quot;. If you make a copy of this report to your &quot;&lt;home&gt;/.qgis2/inasafe&quot; directory, you can edit this copy and override the default layout and content options provided by InaSAFE. See also the manual for details about expressions and composer elements that you can use in your reports. In addition to this basic override mechanism, you can provide hazard / exposure specific variants of this template by using the following path and naming convention: &quot;(home)/.qgis2/inasafe/inasafe-map-report-portrait-(hazard)-(exposure).qpt&quot; (where (home) is replaced by the path to your home directory, (hazard) by the class of hazard, and (exposure) by the class of exposure).</source>
         <translation>Laporan peta standar adalah diproduksi di tata letak tegak untuk laporan ini. Kami menyediakan kedua tata letak tegak dan mendatar sehingga laporan tersebut dapat mengakomodasi perbedaan bentuk dari area pelaporan. Template utama untuk laporan ini ditemukan di direktori plugin InaSAFE di bawah &quot;resources/qgis-composer-templates/inasafe-map-report-portrait.qpt&quot;. Jika Anda membuat salinan laporan ini ke direktori  &quot;&lt;home&gt;/.qgis2/inasafe&quot; Anda, Anda dapat mengubah salinan ini dan menimpa tata letak default dan pilihan isi yang disediakan oleh InaSAFE. Lihat juga manual untuk detail tentang ekspresi dan elemen komposer yang dapat Anda gunakan dalam laporan Anda. Selain mekanisme menimpa dasar ini, Anda dapat menyediakan varian spesifik ancaman / keterpaparan dari template ini dengan menggunakan jalur dan konvensi penamaan berikut: &quot;(home)/.qgis2/inasafe/inasafe-map-report-portrait-(hazard)-(exposure).qpt&quot; (dimana (home) digantikan dengan jalur ke direktori awal Anda, (hazard) berdasarkan klas ancaman, dan (exposure) berdasarkan klas keterpaparan).</translation>
     </message>
     <message>
-        <location filename="report_descriptions.py" line="61"/>
+        <location filename="report_descriptions.py" line="63"/>
         <source>Landscape map</source>
         <translation>Peta mendatar</translation>
     </message>
     <message>
-        <location filename="report_descriptions.py" line="63"/>
+        <location filename="report_descriptions.py" line="65"/>
         <source>A standard map report is produced in a landscape layout. We provide both portrait and landscape layouts so that the reports can accommodate different shapes of reporting area. The master template for this report is found in the InaSAFE plugin directory under &quot;resources/qgis-composer-templates/inasafe-map-report-landscape.qpt&quot;. If you make a copy of this report to your &quot;&lt;home&gt;/.qgis2/inasafe&quot; directory, you can edit this copy and override the default layout and content options provided by InaSAFE. See also the manual for details about expressions and composer elements that you can use in your reports. In addition to this basic override mechanism, you can provide hazard / exposure specific variants of this template by using the following path and naming convention: &quot;(home)/.qgis2/inasafe/inasafe-map-report-landscape-(hazard)-(exposure).qpt&quot; (where (home) is replaced by the path to your home directory, (hazard) by the class of hazard, and (exposure) by the class of exposure).</source>
         <translation>Laporan peta standar adalah diproduksi di tata letak mendatar untuk laporan ini. Kami menyediakan kedua tata letak tegak dan mendatar sehingga laporan tersebut dapat mengakomodasi perbedaan bentuk dari area pelaporan. Template utama untuk laporan ini ditemukan di direktori plugin InaSAFE di bawah &quot;resources/qgis-composer-templates/inasafe-map-report-portrait.qpt&quot;. Jika Anda membuat salinan laporan ini ke direktori  &quot;&lt;home&gt;/.qgis2/inasafe&quot; Anda, Anda dapat mengubah salinan ini dan menimpa tata letak default dan pilihan isi yang disediakan oleh InaSAFE. Lihat juga manual untuk detail tentang ekspresi dan elemen komposer yang dapat Anda gunakan dalam laporan Anda. Selain mekanisme menimpa dasar ini, Anda dapat menyediakan varian spesifik ancaman / keterpaparan dari template ini dengan menggunakan jalur dan konvensi penamaan berikut: &quot;(home)/.qgis2/inasafe/inasafe-map-report-landscape-(hazard)-(exposure).qpt&quot; (dimana (home) digantikan dengan jalur ke direktori awal Anda, (hazard) berdasarkan klas ancaman, dan (exposure) berdasarkan klas keterpaparan).</translation>
     </message>
     <message>
-        <location filename="report_descriptions.py" line="84"/>
+        <location filename="report_descriptions.py" line="86"/>
         <source>Analysis provenance</source>
         <translation>Asal analisis</translation>
     </message>
     <message>
-        <location filename="report_descriptions.py" line="86"/>
+        <location filename="report_descriptions.py" line="88"/>
         <source>When providing a report generated by InaSAFE to a decision make, it is important that there is accompanying information that describes which datasets were used, what settings were used, and so on. The provenance report is designed to address this need by providing detailed technical information about the analysis.</source>
         <translation>Saat memberikan laporan yang dibuat oleh InaSAFE untuk pengambilan keputusan, ini penting agar ada informasi yang menyertainya yang menjelaskan dataset mana yang digunakan, pengaturan apa yang digunakan, dan seterusnya. Laporan asalnya didesain untuk memenuhi kebutuhan ini dengan memberikan informasi teknis terperinci mengenai analisis tersebut.</translation>
     </message>
     <message>
-        <location filename="report_descriptions.py" line="96"/>
+        <location filename="report_descriptions.py" line="98"/>
         <source>Action checklist</source>
         <translation>Daftar tindakan:</translation>
     </message>
     <message>
-        <location filename="report_descriptions.py" line="98"/>
+        <location filename="report_descriptions.py" line="100"/>
         <source>The action checklist report provides a list of actions for the DRR practitioner to be aware of or think about. These include general items such as &quot;how will warnings be disseminated?&quot; and specific items such as things that relate to displaced people if the exposure of the analysis is population.</source>
         <translation>Laporan daftar periksa menyediakan daftar tindakan untuk praktisi PRB agar menyadari atau memikirkannya. Ini termasuk item umum seperti &quot;bagaimana peringatan akan disebarluaskan?&quot; dan item tertentu seperti hal-hal yang berhubungan dengan penduduk mengungsi jika analisis keterpaparan merupakan penduduk.</translation>
     </message>
@@ -10536,12 +10521,12 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
         <translation>InaSAFE akan menggunakan mata uang terpilih untuk analisis.</translation>
     </message>
     <message>
-        <location filename="map_report.py" line="32"/>
+        <location filename="map_report.py" line="34"/>
         <source>InaSAFE - Image Elements</source>
         <translation>InaSAFE - Elemen Gambar</translation>
     </message>
     <message>
-        <location filename="map_report.py" line="33"/>
+        <location filename="map_report.py" line="35"/>
         <source>InaSAFE - Label Elements</source>
         <translation>InaSAFE - Elemen Label</translation>
     </message>
@@ -10571,6 +10556,31 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
         <translation>&lt;b&gt;Kuintal&lt;/b&gt; adalah satuan berat yang setara dengan 100 kilogram.</translation>
     </message>
     <message>
+        <location filename="constants.py" line="32"/>
+        <source>Entire area</source>
+        <translation>Wilayah keseluruhan</translation>
+    </message>
+    <message>
+        <location filename="exposure.py" line="329"/>
+        <source>Number of structures</source>
+        <translation>Jumlah struktur</translation>
+    </message>
+    <message>
+        <location filename="fields.py" line="1962"/>
+        <source>Total Exposed</source>
+        <translation>Total Terpapar</translation>
+    </message>
+    <message>
+        <location filename="fields.py" line="1968"/>
+        <source>The total exposed field stores the cumulative total number of exposed features or entities.</source>
+        <translation>Field jumlah terpapar menyimpan jumlah total kumulatif dari fitur atau entitas terpapar.</translation>
+    </message>
+    <message>
+        <location filename="fields.py" line="1971"/>
+        <source>The total exposed field is added to the analysis layer, aggregate impact layer and aggregate hazard impact layer during the impact analysis. It represents the cumulative count of exposed exposure features (e.g. buildings) or entities (e.g. people) for each area.</source>
+        <translation>Field total terpapar ditambahkan ke lapisan analisis, lapisan dampak agregasi dan lapisan dampak ancaman agregasi selama proses analisis dampak. Field ini menyajikan jumlah kumulatif dari fitur (misalnya bangunan) atau entitas (misalnya penduduk) pada lapisan keterpaparan yang terpapar untuk setiap area.</translation>
+    </message>
+    <message>
         <location filename="hazard_classifications.py" line="575"/>
         <source>Flooding is over 150 centimetres.</source>
         <translation>Terbanjiri lebih dari 150 sentimeter.</translation>
@@ -10591,44 +10601,74 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
         <translation>Kedalaman banjir tidak diketahui - berhati-hatilah -</translation>
     </message>
     <message>
-        <location filename="generic_expressions.py" line="30"/>
+        <location filename="keyword_properties.py" line="318"/>
+        <source>Extra Keywords</source>
+        <translation>Kata Kunci Tambahan</translation>
+    </message>
+    <message>
+        <location filename="keyword_properties.py" line="319"/>
+        <source>A collection of extra keyword for creating richer report.</source>
+        <translation>Kumpulan kata kunci tambahan untuk membuat laporan yang lebih kaya.</translation>
+    </message>
+    <message>
+        <location filename="components.py" line="240"/>
+        <source>Estimated {title} {unit} affected by {exposure} type</source>
+        <translation>Perkiraan {title} {unit} terdampak oleh tipe {exposure}</translation>
+    </message>
+    <message>
+        <location filename="components.py" line="353"/>
+        <source>Estimated {title} {unit} affected by aggregation area</source>
+        <translation>Perkiraan {title} {unit} terdampak oleh area aggregasi</translation>
+    </message>
+    <message>
+        <location filename="components.py" line="386"/>
+        <source>Estimated number of people displaced by {header_name} </source>
+        <translation>Perkiraan jumlah penduduk mengungsi oleh {header_name} </translation>
+    </message>
+    <message>
+        <location filename="generic_expressions.py" line="33"/>
         <source>Retrieve a value from a field in the impact analysis layer.</source>
         <translation>Ambil nilai dari sebuah field di layer analisis dampak.</translation>
     </message>
     <message>
-        <location filename="generic_expressions.py" line="66"/>
+        <location filename="generic_expressions.py" line="69"/>
         <source>Given a number, it will return the place value name. It needs to be used with inasafe_place_value_coefficient.</source>
         <translation>Dengan suatu nomor, maka akan mengembalikan nama nilai tempat. Ini perlu digunakan dengan inasafe_place_value_coefficient.</translation>
     </message>
     <message>
-        <location filename="generic_expressions.py" line="105"/>
+        <location filename="generic_expressions.py" line="106"/>
         <source>Given a number, it will return the coefficient of the place value name. It needs to be used with inasafe_number_denomination_unit.</source>
         <translation>Dengan suatu nomor, maka akan mengembalikan koefisien dari nama nilai tempat. Ini perlu digunakan dengan inasafe_number_denomination_unit.</translation>
     </message>
     <message>
-        <location filename="generic_expressions.py" line="141"/>
+        <location filename="generic_expressions.py" line="142"/>
         <source>Given a number and total, it will return the percentage of the number to the total.</source>
         <translation>Dengan suatu nomor dan total, maka akan mengembalikan persentase dari total jumlah.</translation>
     </message>
     <message>
-        <location filename="generic_expressions.py" line="147"/>
+        <location filename="generic_expressions.py" line="148"/>
         <source>will calculate the percentage of female displaced count to total displaced count.</source>
         <translation>akan menghitung persentase jumlah pengungsi wanita terhadap jumlah total pengungsi.</translation>
     </message>
     <message>
-        <location filename="generic_expressions.py" line="178"/>
+        <location filename="generic_expressions.py" line="179"/>
         <source>Given an InaSAFE analysis time, it will convert it to a date with year-month-date format.</source>
         <translation>Mengingat waktu analisis InaSAFE, maka akan mengkonversinya menjadi format tanggal dengan tahun-bulan-tanggal.</translation>
     </message>
     <message>
-        <location filename="generic_expressions.py" line="210"/>
+        <location filename="generic_expressions.py" line="211"/>
         <source>will convert datetime provided by qgis_variable.</source>
         <translation>akan mengkonversi waktu tanggal yang disediakan oleh qgis_variable.</translation>
     </message>
     <message>
-        <location filename="generic_expressions.py" line="206"/>
+        <location filename="generic_expressions.py" line="207"/>
         <source>Given an InaSAFE analysis time, it will convert it to a time with hour:minute format.</source>
         <translation>Mengingat waktu analisis InaSAFE, maka akan mengkonversinya menjadi format waktu dengan jam:menit.</translation>
+    </message>
+    <message>
+        <location filename="multi_exposure_dialog.py" line="102"/>
+        <source>Do not use</source>
+        <translation>Tidak menggunakan</translation>
     </message>
     <message>
         <location filename="wizard_dialog.py" line="260"/>
@@ -10636,159 +10676,244 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
         <translation>Wizard pembuat keyword untuk layer &lt;b&gt;{layer_name}&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="map_report.py" line="320"/>
+        <location filename="dock.py" line="1153"/>
+        <source>Conflicting plugin</source>
+        <translation>Plugin konflik</translation>
+    </message>
+    <message>
+        <location filename="message.py" line="88"/>
+        <source>The plugin EmergencyMapper is conflicting with InaSAFE. You may have some issues by running InaSAFE. You should remove the other plugin, not only disable it. Check that the folder doesn&apos;t exist anymore on your system.</source>
+        <translation>Plugin EmergencyMapper mengalami konflik dengan InaSAFE. Anda mungkin menjumpai beberapa permasalahan dengan menjalankan InaSAFE. Anda harus menghapus plugin lainnya, tidak hanya menonaktifkan. Periksa apakah folder tersebut tidak ada lagi dalam sistem Anda.</translation>
+    </message>
+    <message>
+        <location filename="message.py" line="106"/>
+        <source>Conflicting plugin detected</source>
+        <translation>Plugin yang konflik terdeteksi</translation>
+    </message>
+    <message>
+        <location filename="multi_exposure_wrapper.py" line="144"/>
+        <source>No exposure layer provided</source>
+        <translation>Tidak ada layer keterpaparan tersedia</translation>
+    </message>
+    <message>
+        <location filename="multi_exposure_wrapper.py" line="144"/>
+        <source>You need to provide at least one exposure.</source>
+        <translation>Anda perlu menyediakan setidaknya satu keterpaparan.</translation>
+    </message>
+    <message>
+        <location filename="multi_exposure_wrapper.py" line="157"/>
+        <source>Same exposure</source>
+        <translation>Keterpaparan yang sama</translation>
+    </message>
+    <message>
+        <location filename="multi_exposure_wrapper.py" line="157"/>
+        <source>Not the same exposure</source>
+        <translation>Bukan keterpaparan yang sama</translation>
+    </message>
+    <message>
+        <location filename="map_report.py" line="322"/>
         <source>Retrieve the full path of inasafe-logo-white.svg.</source>
         <translation>Ambil path lengkap dari inasafe-logo-white.svg.</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="88"/>
+        <location filename="infographic.py" line="91"/>
         <source>Retrieve units of the given minimum needs field name.</source>
         <translation>Ambil satuan dari nama field kebutuhan minimum yang diberikan.</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="90"/>
+        <location filename="infographic.py" line="93"/>
         <source>l/weekly</source>
         <translation>l/minggu</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="138"/>
+        <location filename="infographic.py" line="141"/>
         <source>Get a formatted infographic header sentence for an impact function.</source>
         <translation>Dapatkan kalimat header infografis berformat untuk fungsi dampak.</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="141"/>
+        <location filename="infographic.py" line="144"/>
         <source>Estimated impact of a flood</source>
         <translation>Perkiraan dampak banjir</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="164"/>
+        <location filename="infographic.py" line="167"/>
         <source>Retrieve map overview header string from definitions.</source>
         <translation>Ambil string header gambaran peta dari definisi.</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="181"/>
+        <location filename="infographic.py" line="184"/>
         <source>Retrieve population chart header string from definitions.</source>
         <translation>Ambil string header grafik penduduk dari definisi.</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="198"/>
+        <location filename="infographic.py" line="201"/>
         <source>Retrieve people section header string from definitions.</source>
         <translation>Ambil string header bagian penduduk dari definisi.</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="215"/>
+        <location filename="infographic.py" line="218"/>
         <source>Retrieve age gender section header string from definitions.</source>
         <translation>Ambil string header bagian umur jenis kelamin dari definisi.</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="232"/>
+        <location filename="infographic.py" line="235"/>
         <source>Retrieve age gender section notes string from definitions.</source>
         <translation>Ambil string catatan bagian umur jenis kelamin dari definisi.</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="249"/>
+        <location filename="infographic.py" line="252"/>
         <source>Retrieve vulnerability section header string from definitions.</source>
         <translation>Ambil string header bagian kerentanan dari definisi.</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="267"/>
+        <location filename="infographic.py" line="270"/>
         <source>Retrieve female vulnerability section header string from definitions.</source>
         <translation>Ambil string header bagian kerentanan wanita dari definisi.</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="285"/>
+        <location filename="infographic.py" line="288"/>
         <source>Retrieve minimum needs section header string from definitions.</source>
         <translation>Ambil string header bagian kebutuhan minimum dari definisi.</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="303"/>
+        <location filename="infographic.py" line="306"/>
         <source>Retrieve additional minimum needs section header string from definition.</source>
         <translation>Ambil string header bagian kebutuhan minimum tambahan dari definisi.</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="323"/>
+        <location filename="infographic.py" line="326"/>
         <source>Retrieve minimum needs section notes string from definitions.</source>
         <translation>Ambil string bagian catatan kebutuhan minimum dari definisi.</translation>
     </message>
     <message>
-        <location filename="map_report.py" line="46"/>
+        <location filename="map_report.py" line="48"/>
         <source>Retrieve legend title header string from definitions.</source>
         <translation>Ambil string header judul legenda dari definisi.</translation>
     </message>
     <message>
-        <location filename="map_report.py" line="63"/>
+        <location filename="map_report.py" line="65"/>
         <source>Retrieve disclaimer title header string from definitions.</source>
         <translation>Ambil string header judul batasan dari definisi.</translation>
     </message>
     <message>
-        <location filename="map_report.py" line="81"/>
+        <location filename="map_report.py" line="83"/>
         <source>Retrieve disclaimer text string from definitions.</source>
         <translation>Ambil string teks batasan dari definisi.</translation>
     </message>
     <message>
-        <location filename="map_report.py" line="99"/>
+        <location filename="map_report.py" line="101"/>
         <source>Retrieve information title header string from definitions.</source>
         <translation>Ambil string header informasi judul dari definisi.</translation>
     </message>
     <message>
-        <location filename="map_report.py" line="117"/>
+        <location filename="map_report.py" line="119"/>
         <source>Retrieve time title header string from definitions.</source>
         <translation>Ambil string header judul waktu dari definisi.</translation>
     </message>
     <message>
-        <location filename="map_report.py" line="135"/>
+        <location filename="map_report.py" line="137"/>
         <source>Retrieve caution title header string from definitions.</source>
         <translation>Ambil string header judul peringatan dari definisi.</translation>
     </message>
     <message>
-        <location filename="map_report.py" line="153"/>
+        <location filename="map_report.py" line="155"/>
         <source>Retrieve caution text string from definitions.</source>
         <translation>Ambil string teks peringatan dari definisi.</translation>
     </message>
     <message>
-        <location filename="map_report.py" line="171"/>
+        <location filename="map_report.py" line="173"/>
         <source>Retrieve source title header string from definitions.</source>
         <translation>Ambil string header judul sumber dari definisi.</translation>
     </message>
     <message>
-        <location filename="map_report.py" line="189"/>
+        <location filename="map_report.py" line="191"/>
         <source>Retrieve analysis title header string from definitions.</source>
         <translation>Ambil string header judul analisis dari definition.</translation>
     </message>
     <message>
-        <location filename="map_report.py" line="207"/>
+        <location filename="map_report.py" line="209"/>
         <source>Retrieve version title header string from definitions.</source>
         <translation>Ambil string header judul versi dari definisi.</translation>
     </message>
     <message>
-        <location filename="map_report.py" line="285"/>
+        <location filename="map_report.py" line="287"/>
         <source>Retrieve reference title header string from definitions.</source>
         <translation>Ambil string header judul referensi dari definisi.</translation>
     </message>
     <message>
-        <location filename="map_report.py" line="243"/>
+        <location filename="map_report.py" line="245"/>
         <source>Retrieve coordinate reference system text string from definitions.</source>
         <translation>Ambil string teks sistem referensi koordinat dari definisi.</translation>
     </message>
     <message>
-        <location filename="map_report.py" line="303"/>
+        <location filename="map_report.py" line="305"/>
         <source>Retrieve the full path of inasafe-logo-black.svg</source>
         <translation>Ambil path lengkap dari inasafe-logo-black.svg</translation>
     </message>
     <message>
-        <location filename="map_report.py" line="337"/>
+        <location filename="map_report.py" line="339"/>
         <source>Retrieve the full path of default north arrow logo.</source>
         <translation>Ambil path lengkap dari logo default arah utara.</translation>
     </message>
     <message>
-        <location filename="map_report.py" line="354"/>
+        <location filename="map_report.py" line="356"/>
         <source>Retrieve the full path of used specified organisation logo.</source>
         <translation>Ambil path lengkap dari logo organisasi yang ditentukan.</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="157"/>
+        <location filename="utilities.py" line="159"/>
         <source>Examples:</source>
         <translation>Contoh:</translation>
+    </message>
+    <message>
+        <location filename="keyword_properties.py" line="325"/>
+        <source>Latitude</source>
+        <translation>Lintang</translation>
+    </message>
+    <message>
+        <location filename="keyword_properties.py" line="326"/>
+        <source>Longitude</source>
+        <translation>Bujur</translation>
+    </message>
+    <message>
+        <location filename="keyword_properties.py" line="327"/>
+        <source>Magnitude</source>
+        <translation>Magnitudo</translation>
+    </message>
+    <message>
+        <location filename="keyword_properties.py" line="328"/>
+        <source>Depth</source>
+        <translation>Kedalaman</translation>
+    </message>
+    <message>
+        <location filename="keyword_properties.py" line="330"/>
+        <source>Location</source>
+        <translation>Lokasi</translation>
+    </message>
+    <message>
+        <location filename="keyword_properties.py" line="331"/>
+        <source>Time zone</source>
+        <translation>Zona waktu</translation>
+    </message>
+    <message>
+        <location filename="keyword_properties.py" line="332"/>
+        <source>X minimum</source>
+        <translation>X minimum</translation>
+    </message>
+    <message>
+        <location filename="keyword_properties.py" line="333"/>
+        <source>X maximum</source>
+        <translation>X maksimum</translation>
+    </message>
+    <message>
+        <location filename="keyword_properties.py" line="334"/>
+        <source>Y minimum</source>
+        <translation>Y minimum</translation>
+    </message>
+    <message>
+        <location filename="keyword_properties.py" line="335"/>
+        <source>Y maximum</source>
+        <translation>Y maksimum</translation>
     </message>
 </context>
 <context>
@@ -11116,101 +11241,116 @@ p, li { white-space: pre-wrap; }
         <source>Threshold</source>
         <translation>Ambang batas</translation>
     </message>
+    <message>
+        <location filename="multi_exposure_dialog_base.ui" line="14"/>
+        <source>Multi Exposure Analysis</source>
+        <translation>Analisis Multipel Keterpaparan</translation>
+    </message>
+    <message>
+        <location filename="multi_exposure_dialog_base.ui" line="20"/>
+        <source>This tool allows you to run an multi-exposure analysis. By selecting one or many exposures, the impact function will aggregate the results in one report.</source>
+        <translation>Perangkat ini mengizinkan Anda untuk menghitung analisis multipel keterpaparan. Dengan memilih satu atau banyak keterpaparan, fungsi dampak akan mengumpulkan hasilnya dalam satu laporan.</translation>
+    </message>
+    <message>
+        <location filename="multi_exposure_dialog_base.ui" line="35"/>
+        <source>Hazard</source>
+        <translation>Ancaman</translation>
+    </message>
+    <message>
+        <location filename="multi_exposure_dialog_base.ui" line="52"/>
+        <source>Aggregation</source>
+        <translation>Agregasi</translation>
+    </message>
 </context>
 <context>
     <name>Dock</name>
     <message>
-        <location filename="dock.py" line="405"/>
+        <location filename="dock.py" line="414"/>
         <source>InaSAFE %s</source>
         <translation>InaSAFE %s</translation>
     </message>
     <message>
-        <location filename="dock.py" line="395"/>
+        <location filename="dock.py" line="404"/>
         <source>The file for organization logo in %s doesn&apos;t exists. Please check in Plugins -&gt; InaSAFE -&gt; Options that your paths are still correct and update them if needed.</source>
         <translation>File untuk logo organisasi di %s tidak ada. Mohon cek di Plugins -&gt; InaSAFE -&gt; Options (Pilihan) bahwa lokasi file sudah benar dan diperbarui jika diperlukan.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="405"/>
+        <location filename="dock.py" line="414"/>
         <source>The file for organization logo has zero height. Please provide valid file for organization logo.</source>
         <translation>File untuk logo organisasi memiliki tinggi nol. Mohon berikan file yang valid untuk logo organisasi.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="492"/>
+        <location filename="dock.py" line="501"/>
         <source>Error while saving</source>
         <translation>Kesalahan ketika menyimpan</translation>
     </message>
     <message>
-        <location filename="dock.py" line="486"/>
+        <location filename="dock.py" line="495"/>
         <source>The destination location must be writable.</source>
         <translation>Lokasi tujuan harus dapat ditulis.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="492"/>
+        <location filename="dock.py" line="501"/>
         <source>Something went wrong.</source>
         <translation>Telah terjadi suatu kesalahan.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="696"/>
-        <source>Entire area</source>
-        <translation>Area keseluruhan</translation>
-    </message>
-    <message>
-        <location filename="dock.py" line="795"/>
+        <location filename="dock.py" line="752"/>
         <source>Analysis status</source>
         <translation>Status analisis</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1011"/>
+        <location filename="dock.py" line="974"/>
         <source>InaSAFE</source>
         <translation>InaSAFE</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1011"/>
+        <location filename="dock.py" line="974"/>
         <source>Please select a valid impact layer before trying to print.</source>
         <translation>Silakan pilih layer dampak yang valid sebelum mencoba untuk mencetaknya.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1093"/>
+        <location filename="dock.py" line="1056"/>
         <source>Map Creator</source>
         <translation>Pembuat Peta</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1093"/>
+        <location filename="dock.py" line="1056"/>
         <source>Your PDF was created....opening using the default PDF viewer on your system.</source>
         <translation>PDF Anda telah selesai dibuat....buka dengan menggunakan pembaca berkas PDF pada sistem komputer Anda.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1093"/>
+        <location filename="dock.py" line="1056"/>
         <source>The generated pdfs were saved as:</source>
         <translation>Berkas PDF Anda disimpan di:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1105"/>
+        <location filename="dock.py" line="1068"/>
         <source>The generated htmls were saved as:</source>
         <translation>Berkas HTML Anda disimpan di:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1111"/>
+        <location filename="dock.py" line="1074"/>
         <source>The generated qpts were saved as:</source>
         <translation>Berkas QPT Anda disimpan di:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1373"/>
+        <location filename="dock.py" line="1340"/>
         <source>The hazard layer, exposure layer and your defined analysis area extents all overlap. Press the run button below to continue with the analysis.</source>
         <translation>Lapisan ancaman, paparan dan wilayah luasan analisis yang Anda tetapkan telah tumpang tindih. Tekan tombol jalankan di bawah untuk melanjutkan analisis.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1378"/>
+        <location filename="dock.py" line="1345"/>
         <source>Analysis environment ready</source>
         <translation>Lingkungan analisis telah siap</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1378"/>
+        <location filename="dock.py" line="1345"/>
         <source>More info ...</source>
         <translation>Info lebih lanjut ...</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1416"/>
+        <location filename="dock.py" line="1383"/>
         <source>No overlapping extents</source>
         <translation>Tidak ada luasan perpotongan</translation>
     </message>
@@ -11294,77 +11434,77 @@ p, li { white-space: pre-wrap; }
         <translation>Area Analisis InaSAFE</translation>
     </message>
     <message>
-        <location filename="extent_selector_dialog_base.ui" line="49"/>
+        <location filename="extent_selector_dialog_base.ui" line="53"/>
         <source>about:blank</source>
         <translation>Perihal:kosong</translation>
     </message>
     <message>
-        <location filename="extent_selector_dialog_base.ui" line="64"/>
+        <location filename="extent_selector_dialog_base.ui" line="73"/>
         <source>When carrying out an analysis without an aggregation layer, which clipping behaviour should be used?</source>
         <translation>Ketika menjalankan analisis tanpa lapisan agregasi, perilaku pemotongan mana yang seharusnya digunakan?</translation>
     </message>
     <message>
-        <location filename="extent_selector_dialog_base.ui" line="71"/>
+        <location filename="extent_selector_dialog_base.ui" line="261"/>
         <source>Use intersection of hazard and exposure layers</source>
         <translation>Gunakan perpotongan dari lapisan ancaman dan keterpaparan</translation>
     </message>
     <message>
-        <location filename="extent_selector_dialog_base.ui" line="78"/>
+        <location filename="extent_selector_dialog_base.ui" line="247"/>
         <source>Use intersection of hazard, exposure and this bookmark</source>
         <translation>Gunakan perpotongan dari ancaman, keterpaparan, dan bookmark ini</translation>
     </message>
     <message>
-        <location filename="extent_selector_dialog_base.ui" line="92"/>
+        <location filename="extent_selector_dialog_base.ui" line="296"/>
         <source>Use intersection of hazard, exposure and this bounding box</source>
         <translation>Gunakan perpotongan dari ancaman, keterpaparan, dan kotak batas ini</translation>
     </message>
     <message>
-        <location filename="extent_selector_dialog_base.ui" line="131"/>
+        <location filename="extent_selector_dialog_base.ui" line="104"/>
         <source>West: </source>
         <translation>Barat:</translation>
     </message>
     <message>
-        <location filename="extent_selector_dialog_base.ui" line="158"/>
+        <location filename="extent_selector_dialog_base.ui" line="134"/>
         <source>North: </source>
         <translation>Utara:</translation>
     </message>
     <message>
-        <location filename="extent_selector_dialog_base.ui" line="174"/>
+        <location filename="extent_selector_dialog_base.ui" line="157"/>
         <source>Drag on map</source>
         <translation>Geser pada peta</translation>
     </message>
     <message>
-        <location filename="extent_selector_dialog_base.ui" line="192"/>
+        <location filename="extent_selector_dialog_base.ui" line="178"/>
         <source>South: </source>
         <translation>Selatan:</translation>
     </message>
     <message>
-        <location filename="extent_selector_dialog_base.ui" line="219"/>
+        <location filename="extent_selector_dialog_base.ui" line="208"/>
         <source>East: </source>
         <translation>Timur:</translation>
     </message>
     <message>
-        <location filename="extent_selector_dialog_base.ui" line="254"/>
+        <location filename="extent_selector_dialog_base.ui" line="233"/>
         <source>Show warning when analysis extent is invalid</source>
         <translation>Tampilan peringatan ketika luasan analisis tidak valid</translation>
     </message>
     <message>
-        <location filename="extent_selector_dialog_base.ui" line="247"/>
+        <location filename="extent_selector_dialog_base.ui" line="344"/>
         <source>Show confirmation message when extents are valid</source>
         <translation>Tampilkan pesan konfirmasi ketika luasan valid</translation>
     </message>
     <message>
-        <location filename="extent_selector_dialog_base.ui" line="237"/>
+        <location filename="extent_selector_dialog_base.ui" line="313"/>
         <source>To use a bookmark, first create one using the QGIS bookmark tool</source>
         <translation>Untuk menggunakan bookmark, pertama buat satu bookmark dulu dengan menggunakan kakasa bookmark QGIS</translation>
     </message>
     <message>
-        <location filename="extent_selector_dialog_base.ui" line="102"/>
+        <location filename="extent_selector_dialog_base.ui" line="275"/>
         <source>Use intersection of hazard, exposure and current view extent</source>
         <translation>Gunakan perpotongan dari ancaman, keterpaparan, dan luasan tampilan sekarang</translation>
     </message>
     <message>
-        <location filename="extent_selector_dialog_base.ui" line="261"/>
+        <location filename="extent_selector_dialog_base.ui" line="330"/>
         <source>Use extent of exposure layer</source>
         <translation>Menggunakan cakupan dari lapisan keterpaparan</translation>
     </message>
@@ -11719,6 +11859,14 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
+    <name>MultiExposureDialog</name>
+    <message>
+        <location filename="multi_exposure_dialog.py" line="197"/>
+        <source>Analysis status</source>
+        <translation>Status analisis</translation>
+    </message>
+</context>
+<context>
     <name>NeedsCalculatorDialog</name>
     <message>
         <location filename="needs_calculator_dialog.py" line="59"/>
@@ -11847,27 +11995,27 @@ p, li { white-space: pre-wrap; }
         <translation>Masalah - nilai terkecil tidak sah</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="745"/>
+        <location filename="needs_manager_dialog.py" line="743"/>
         <source>JSON files (*.json *.JSON)</source>
         <translation>File JSON (*.json *.JSON)</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="745"/>
+        <location filename="needs_manager_dialog.py" line="743"/>
         <source>Create a minimum needs profile</source>
         <translation>Buat profil kebutuhan minimum</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="811"/>
+        <location filename="needs_manager_dialog.py" line="809"/>
         <source>Remove %s.</source>
         <translation>Hapus %s.</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="836"/>
+        <location filename="needs_manager_dialog.py" line="834"/>
         <source>Hide Help</source>
         <translation>Sembunyikan Bantuan</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="839"/>
+        <location filename="needs_manager_dialog.py" line="837"/>
         <source>Show Help</source>
         <translation>Tampilkan Bantuan</translation>
     </message>
@@ -12574,219 +12722,229 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>Plugin</name>
     <message>
-        <location filename="plugin.py" line="622"/>
+        <location filename="plugin.py" line="639"/>
         <source>InaSAFE</source>
         <translation>InaSAFE</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="168"/>
+        <location filename="plugin.py" line="167"/>
         <source>Toggle InaSAFE Dock</source>
         <translation>Tombol untuk beralih ke InaSAFE</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="174"/>
+        <location filename="plugin.py" line="173"/>
         <source>Show/hide InaSAFE dock widget</source>
         <translation>Tampilkan/sembunyikan widget InaSAFE</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="188"/>
+        <location filename="plugin.py" line="187"/>
         <source>Keywords Creation Wizard</source>
         <translation>Wizard Pembuat Keyword</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="194"/>
+        <location filename="plugin.py" line="193"/>
         <source>Open InaSAFE keywords creation wizard</source>
         <translation>Buka Wizard Pembuat Keyword InaSAFE</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="204"/>
+        <location filename="plugin.py" line="203"/>
         <source>Impact Function Centric Wizard</source>
         <translation>Wizard Fungsi Dampak Tepusat</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="210"/>
+        <location filename="plugin.py" line="209"/>
         <source>Open InaSAFE impact function centric wizard</source>
         <translation>Buka wizard fungsi dampak tepusat InaSAFE</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="220"/>
+        <location filename="plugin.py" line="219"/>
         <source>Options</source>
         <translation>Pilihan</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="225"/>
+        <location filename="plugin.py" line="224"/>
         <source>Open InaSAFE options dialog</source>
         <translation>Buka dialog InaSAFE Option (pilihan)</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="233"/>
+        <location filename="plugin.py" line="232"/>
         <source>Minimum Needs Calculator</source>
         <translation>Kalkulator Kebutuhan Minimum</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="238"/>
+        <location filename="plugin.py" line="237"/>
         <source>Open InaSAFE minimum needs calculator</source>
         <translation>Bukan Kalkulator Kebutuhan Minimal InaSAFE</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="247"/>
+        <location filename="plugin.py" line="246"/>
         <source>Multi Buffer</source>
         <translation>Multi Buffer</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="252"/>
+        <location filename="plugin.py" line="251"/>
         <source>Open InaSAFE multi buffer</source>
         <translation>Buka multi buffer InaSAFE</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="262"/>
+        <location filename="plugin.py" line="261"/>
         <source>Minimum Needs Configuration</source>
         <translation>Konfigurasi Kebutuhan Minimal</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="268"/>
+        <location filename="plugin.py" line="267"/>
         <source>Open InaSAFE minimum needs configuration</source>
         <translation>Buka konfigurasi kebutuhan minimal InaSAFE</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="278"/>
+        <location filename="plugin.py" line="277"/>
         <source>Shakemap Converter</source>
         <translation>Konversi Shakemap</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="283"/>
+        <location filename="plugin.py" line="282"/>
         <source>Open InaSAFE Converter</source>
         <translation>Buka InaSAFE Converter</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="293"/>
+        <location filename="plugin.py" line="292"/>
         <source>Batch Runner</source>
         <translation>Batch Runner</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="298"/>
+        <location filename="plugin.py" line="297"/>
         <source>Open Batch Runner</source>
         <translation>Buka Batch Runner</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="307"/>
+        <location filename="plugin.py" line="306"/>
         <source>Save Current Scenario</source>
         <translation>Simpan skenario terkini</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="310"/>
+        <location filename="plugin.py" line="309"/>
         <source>Save current scenario to text file</source>
         <translation>Simpan skenario saat ini ke file text</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="327"/>
+        <location filename="plugin.py" line="326"/>
         <source>OpenStreetMap Downloader</source>
         <translation>Pengunduh OpenStreetMap</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="339"/>
+        <location filename="plugin.py" line="338"/>
         <source>Add OpenStreetMap Tile Layer</source>
         <translation>Tambah Lapisan Tile OpenStreetMap</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="341"/>
+        <location filename="plugin.py" line="340"/>
         <source>Use this to add an OSM layer to your map. It needs internet access to function.</source>
         <translation>Gunakan ini untuk menambahkan lapisan OSM ke dalam peta Anda. Ini membutuhkan akses internet supaya berfungsi.</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="350"/>
+        <location filename="plugin.py" line="349"/>
         <source>InaSAFE Help</source>
         <translation>Bantuan InaSAFE</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="354"/>
+        <location filename="plugin.py" line="353"/>
         <source>Show InaSAFE Help</source>
         <translation>Tampilkan Bantuan InaSAFE</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="356"/>
+        <location filename="plugin.py" line="355"/>
         <source>Use this to show a document describing all InaSAFE concepts.</source>
         <translation>Gunakan ini untuk menunjukkan deskripsi seluruh dokumen konsep InaSAFE.</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="389"/>
+        <location filename="plugin.py" line="405"/>
         <source>Add PetaBencana Flood Layer</source>
         <translation>Tambahkan Lapisan Banjir PetaBencana</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="391"/>
+        <location filename="plugin.py" line="407"/>
         <source>Use this to add a PetaBencana layer to your map. It needs internet access to function.</source>
         <translation>Gunakan ini untuk menambahkan lapisan PetaBencana ke dalam peta Anda. Ini membutuhkan akses internet supaya berfungsi.</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="403"/>
+        <location filename="plugin.py" line="419"/>
         <source>Toggle Scenario Outlines</source>
         <translation>Tombol untuk beralih ke garis bantu skenario</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="406"/>
+        <location filename="plugin.py" line="422"/>
         <source>Toggle rubber bands showing scenario extents.</source>
         <translation>Tombol pita batas penunjuk luasan skenario.</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="423"/>
+        <location filename="plugin.py" line="439"/>
         <source>Set Analysis Area</source>
         <translation>Tentukan Daerah Analisis</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="429"/>
+        <location filename="plugin.py" line="445"/>
         <source>Set the analysis area for InaSAFE</source>
         <translation>Mengatur area analisis untuk InaSAFE</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="443"/>
+        <location filename="plugin.py" line="459"/>
         <source>Add Test Layers</source>
         <translation>Tambah Lapisan Uji</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="449"/>
+        <location filename="plugin.py" line="465"/>
         <source>Add test layers</source>
         <translation>Tambah lapisan uji</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="680"/>
+        <location filename="plugin.py" line="697"/>
         <source>Run tests in %s</source>
         <translation>Jalankan test di %s</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="486"/>
+        <location filename="plugin.py" line="502"/>
         <source>Select package</source>
         <translation>Pilih paket</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="493"/>
+        <location filename="plugin.py" line="509"/>
         <source>Select Test Package</source>
         <translation>Pilih paket test</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="669"/>
+        <location filename="plugin.py" line="686"/>
         <source>Select the python test package</source>
         <translation>Pilih paket tes python</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="829"/>
+        <location filename="plugin.py" line="846"/>
         <source>OpenStreetMap</source>
         <translation>OpenStreetMap</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="367"/>
+        <location filename="plugin.py" line="366"/>
         <source>InaSAFE Field Mapping Tool</source>
         <translation>Perangkat Pemetaan Field InaSAFE</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="371"/>
+        <location filename="plugin.py" line="370"/>
         <source>Assign field mapping to layer.</source>
         <translation>Menetapkan pemetaan field pada lapisan.</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="373"/>
+        <location filename="plugin.py" line="372"/>
         <source>Use this tool to assign field mapping in layer.</source>
         <translation>Gunakan perangkat ini untuk menetapkan pemetaan field pada lapisan.</translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="383"/>
+        <source>InaSAFE Multi Exposure Tool</source>
+        <translation>Perangkat Multipel Keterpaparan InaSAFE</translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="389"/>
+        <source>Open the multi exposure tool.</source>
+        <translation>Buka perangkat multipel keterpaparan.</translation>
     </message>
 </context>
 <context>
@@ -12827,32 +12985,32 @@ p, li { white-space: pre-wrap; }
         <translation>Berkas masukan tidak ada</translation>
     </message>
     <message>
-        <location filename="shakemap_converter_dialog.py" line="227"/>
+        <location filename="shakemap_converter_dialog.py" line="229"/>
         <source>Input file</source>
         <translation>Berkas masukan</translation>
     </message>
     <message>
-        <location filename="shakemap_converter_dialog.py" line="227"/>
+        <location filename="shakemap_converter_dialog.py" line="229"/>
         <source>Raw grid file (*.xml)</source>
         <translation>File grid mentah (*.xml)</translation>
     </message>
     <message>
-        <location filename="shakemap_converter_dialog.py" line="237"/>
+        <location filename="shakemap_converter_dialog.py" line="239"/>
         <source>Output file</source>
         <translation>Berkas keluaran</translation>
     </message>
     <message>
-        <location filename="shakemap_converter_dialog.py" line="237"/>
+        <location filename="shakemap_converter_dialog.py" line="239"/>
         <source>Raster file (*.tif)</source>
         <translation>File raster (*.tif)</translation>
     </message>
     <message>
-        <location filename="shakemap_converter_dialog.py" line="258"/>
+        <location filename="shakemap_converter_dialog.py" line="260"/>
         <source>Hide Help</source>
         <translation>Sembunyikan Bantuan</translation>
     </message>
     <message>
-        <location filename="shakemap_converter_dialog.py" line="261"/>
+        <location filename="shakemap_converter_dialog.py" line="263"/>
         <source>Show Help</source>
         <translation>Tampilkan Bantuan</translation>
     </message>
@@ -13005,7 +13163,7 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>StepKwSummary</name>
     <message>
-        <location filename="step_kw65_summary.py" line="142"/>
+        <location filename="step_kw65_summary.py" line="135"/>
         <source>The selected keywords don&apos;t match requirements of the selected impact function (%s). You can continue with registering the layer, however, you&apos;ll need to choose another layer for that function.</source>
         <translation>Kata kunci yand dipilih tidak sesuai dengan kebutuhan fungsi dampak yang dipilih (%s). Anda dapat melanjutkan pendaftaran lapisan, tetapi Anda harus memilih lapisan lain untuk fungsi tersebut.</translation>
     </message>

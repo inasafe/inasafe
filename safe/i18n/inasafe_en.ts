@@ -1107,7 +1107,7 @@
         <translation type="unfinished">Hazard</translation>
     </message>
     <message>
-        <location filename="keyword_io.py" line="561"/>
+        <location filename="keyword_io.py" line="573"/>
         <source>Exposure</source>
         <translation type="unfinished">Exposure</translation>
     </message>
@@ -5807,22 +5807,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keyword_io.py" line="578"/>
+        <location filename="keyword_io.py" line="590"/>
         <source>No classifications set.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keyword_io.py" line="583"/>
+        <location filename="keyword_io.py" line="595"/>
         <source>Class name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keyword_io.py" line="409"/>
+        <location filename="keyword_io.py" line="412"/>
         <source>Minimum</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keyword_io.py" line="410"/>
+        <location filename="keyword_io.py" line="413"/>
         <source>Maximum</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6057,17 +6057,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keyword_io.py" line="371"/>
+        <location filename="keyword_io.py" line="374"/>
         <source>%s to %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keyword_io.py" line="566"/>
+        <location filename="keyword_io.py" line="578"/>
         <source>Classification</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keyword_io.py" line="584"/>
+        <location filename="keyword_io.py" line="596"/>
         <source>Values</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6657,7 +6657,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keyword_io.py" line="101"/>
+        <location filename="keyword_io.py" line="102"/>
         <source>The layer is not a QgsMapLayer : {type}</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9408,22 +9408,22 @@ Citations:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keyword_io.py" line="162"/>
+        <location filename="keyword_io.py" line="164"/>
         <source>Layer keywords:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keyword_io.py" line="164"/>
+        <location filename="keyword_io.py" line="166"/>
         <source>The following keywords are defined for the active layer:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keyword_io.py" line="187"/>
+        <location filename="keyword_io.py" line="189"/>
         <source>Reference system</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keyword_io.py" line="192"/>
+        <location filename="keyword_io.py" line="194"/>
         <source>Layer source</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10845,6 +10845,56 @@ Citations:
     <message>
         <location filename="utilities.py" line="159"/>
         <source>Examples:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="keyword_properties.py" line="325"/>
+        <source>Latitude</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="keyword_properties.py" line="326"/>
+        <source>Longitude</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="keyword_properties.py" line="327"/>
+        <source>Magnitude</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="keyword_properties.py" line="328"/>
+        <source>Depth</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="keyword_properties.py" line="330"/>
+        <source>Location</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="keyword_properties.py" line="331"/>
+        <source>Time zone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="keyword_properties.py" line="332"/>
+        <source>X minimum</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="keyword_properties.py" line="333"/>
+        <source>X maximum</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="keyword_properties.py" line="334"/>
+        <source>Y minimum</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="keyword_properties.py" line="335"/>
+        <source>Y maximum</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
