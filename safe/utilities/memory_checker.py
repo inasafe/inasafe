@@ -1,5 +1,7 @@
 # coding=utf-8
 
+"""Memory checker."""
+
 import logging
 
 # This import is to enable SIP API V2

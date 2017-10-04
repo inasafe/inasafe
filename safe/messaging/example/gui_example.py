@@ -1,5 +1,7 @@
 # coding=utf-8
 
+"""WebView."""
+
 import sys
 
 # This import is to enable SIP API V2

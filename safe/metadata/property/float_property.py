@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+"""Float property."""
+
 from types import NoneType
 
 from safe.common.exceptions import MetadataCastError

@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+"""Boolean property."""
+
 from types import NoneType
 
 from safe.common.exceptions import MetadataCastError
