@@ -33,8 +33,8 @@ fi
 # Finally define which languages we are translating for
 
 echo "
-TRANSLATIONS = i18n/inasafe_id.ts \\
-               i18n/inasafe_fr.ts \\
-               i18n/inasafe_es_ES.ts \\
-               i18n/inasafe_vi.ts \\
-               i18n/inasafe_af.ts"  >> ${PRO_FILE}
+TRANSLATIONS = safe/i18n/inasafe_id.ts \\
+               safe/i18n/inasafe_fr.ts \\
+               safe/i18n/inasafe_es_ES.ts \\
+               safe/i18n/inasafe_vi.ts \\
+               safe/i18n/inasafe_af.ts"  >> ${PRO_FILE}
