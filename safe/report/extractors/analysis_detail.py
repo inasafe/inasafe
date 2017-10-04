@@ -530,10 +530,10 @@ def analysis_detail_extractor(impact_report, component_metadata):
             if units:
                 for unit in units:
                     if currency_unit == unit['key']:
-                        current_unit = currency_unit
+                        current_unit = unit['name']
                         break
                 if not current_unit:
-                    current_unit = units[0]['key']
+                    current_unit = units[0]['name']
 
             header_format = '{header} ({unit})'
             headers.append(header_format.format(
