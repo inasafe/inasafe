@@ -1,5 +1,7 @@
 # coding=utf-8
 
+"""Table."""
+
 from message_element import MessageElement
 from exceptions import InvalidMessageItemError
 from row import Row

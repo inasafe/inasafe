@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+"""Integer property."""
+
 from types import NoneType
 
 

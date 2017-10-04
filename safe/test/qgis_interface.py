@@ -1,5 +1,7 @@
 # coding=utf-8
 
+"""Fake QGIS Interface."""
+
 import logging
 
 from qgis.core import QgsMapLayerRegistry, QgsMapLayer, QgsProject
