@@ -350,7 +350,8 @@ class OptionsDialog(QDialog, FORM_CLASS):
         for citation in model['citations']:
             citations += citation['text'] + '\n\n'
 
-        text = tr('Description:\n\n%s\n\n'
+        text = tr(
+            'Description:\n\n%s\n\n'
             'Notes:\n\n%s\n\n'
             'Citations:\n\n%s') % (
             model['description'],

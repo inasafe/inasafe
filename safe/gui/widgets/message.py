@@ -60,14 +60,14 @@ def missing_keyword_message(sender, missing_keyword_exception):
         )
     )
     suggestion = m.Paragraph(
-            tr('Please use the keyword wizard to update the keywords. You '
-               'can open the wizard by clicking on the '),
-            m.Image(
-                'file:///%s/img/icons/'
-                'show-keyword-wizard.svg' % resources_path(),
-                **SMALL_ICON_STYLE),
-            tr(
-                ' icon in the toolbar.'))
+        tr('Please use the keyword wizard to update the keywords. You '
+           'can open the wizard by clicking on the '),
+        m.Image(
+            'file:///%s/img/icons/'
+            'show-keyword-wizard.svg' % resources_path(),
+            **SMALL_ICON_STYLE),
+        tr(' icon in the toolbar.')
+    )
 
     message = m.Message()
     message.add(warning_heading)

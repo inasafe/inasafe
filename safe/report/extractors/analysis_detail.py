@@ -447,7 +447,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
         group_key = None
         for key, group in header_hazard_group.iteritems():
             if hazard_class_name in group['hazards'] or (
-                        hazard_class_name in group['total']):
+                    hazard_class_name in group['total']):
                 group_key = key
                 break
 

@@ -120,7 +120,7 @@ def pretty_table(iterable, header):
             [
                 str(c) + ' ' * (
                     l - len(str(c))) + '|' for c, l in zip(
-                row, max_len)]) + '\n'
+                    row, max_len)]) + '\n'
     output += '-' * (sum(max_len) + 1) + '\n'
     return output
 

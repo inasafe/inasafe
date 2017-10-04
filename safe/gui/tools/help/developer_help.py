@@ -134,7 +134,7 @@ def content():
             'v4 is the default codebase. In the next sections we will show '
             'each file that needs to be extended in order to add a new hazard '
             'type.'
-    ))
+        ))
     message.add(paragraph)
 
     # Setting up units

@@ -252,7 +252,8 @@ class Plugin(object):
             'Open InaSAFE multi buffer'))
         self.action_multi_buffer.triggered.connect(
             self.show_multi_buffer)
-        self.add_action(self.action_multi_buffer,
+        self.add_action(
+            self.action_multi_buffer,
             add_to_toolbar=self.full_toolbar)
 
     def _create_minimum_needs_options_action(self):

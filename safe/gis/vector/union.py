@@ -148,7 +148,7 @@ def union(union_a, union_b, callback=None):
                     if int_geom.wkbType() == QgsWKBTypes.Unknown\
                             or QgsWKBTypes.flatType(
                             int_geom.geometry().wkbType()) == \
-                                    QgsWKBTypes.GeometryCollection:
+                            QgsWKBTypes.GeometryCollection:
                         # Intersection produced different geometry types
                         temp_list = int_geom.asGeometryCollection()
                         for i in temp_list:
@@ -172,7 +172,7 @@ def union(union_a, union_b, callback=None):
                         # produced by the intersection
                         # fix #3549
                         if int_geom.wkbType() in wkb_type_groups[
-                            wkb_type_groups[int_geom.wkbType()]]:
+                                wkb_type_groups[int_geom.wkbType()]]:
                             try:
                                 _write_feature(
                                     at_map_a + at_map_b,
@@ -193,14 +193,14 @@ def union(union_a, union_b, callback=None):
                 int_b = QgsGeometry.unaryUnion(list_intersecting_b)
                 diff_geom = geometry_checker(diff_geom.difference(int_b))
                 if diff_geom is None or \
-                    diff_geom.isGeosEmpty() or not diff_geom.isGeosValid():
+                        diff_geom.isGeosEmpty() or not diff_geom.isGeosValid():
                     # LOGGER.debug(
                     #     tr('GEOS geoprocessing error: One or more input '
                     #        'features have invalid geometry.'))
                     pass
 
             if diff_geom is not None and (
-                            diff_geom.wkbType() == 0 or QgsWKBTypes.flatType(
+                diff_geom.wkbType() == 0 or QgsWKBTypes.flatType(
                     diff_geom.geometry().wkbType()) ==
                     QgsWKBTypes.GeometryCollection):
                 temp_list = diff_geom.asGeometryCollection()

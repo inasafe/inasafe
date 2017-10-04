@@ -299,7 +299,7 @@ class NeedsProfile(MinimumNeeds):
         :rtype: QString
         """
         if not QgsApplication.qgisSettingsDirPath() or (
-                    QgsApplication.qgisSettingsDirPath() == ''):
+                QgsApplication.qgisSettingsDirPath() == ''):
             self._root_directory = None
         else:
             # noinspection PyArgumentList

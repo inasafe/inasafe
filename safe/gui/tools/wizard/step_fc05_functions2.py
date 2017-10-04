@@ -174,7 +174,7 @@ class StepFcFunctions2(WizardStep, FORM_CLASS):
                     'allowed_geometries']
                 exposure_geometry_allowed = (
                     exposure_geometry['key'] in exposure[
-                            'allowed_geometries'])
+                        'allowed_geometries'])
 
                 if hazard_geometry_allowed and exposure_geometry_allowed:
                     background_color = available_option_color

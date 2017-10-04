@@ -1610,7 +1610,7 @@ class ImpactFunction(object):
                             # The exposure hasn't a count field, we should add
                             # it.
                             default_value = get_inasafe_default_value_qsetting(
-                                    QSettings(), GLOBAL, ratio_field)
+                                QSettings(), GLOBAL, ratio_field)
                             keywords['inasafe_default_values'][ratio_field] = (
                                 default_value)
                             LOGGER.info(

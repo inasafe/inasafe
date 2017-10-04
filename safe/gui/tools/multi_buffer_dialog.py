@@ -244,7 +244,7 @@ class MultiBufferDialog(QtGui.QDialog, FORM_CLASS):
             self.button_box.button(QtGui.QDialogButtonBox.Ok).setEnabled(False)
         elif (self.hazard_class_form.count() > 0 and
                 self.layer.currentLayer().name() and
-                    len(self.output_form.text()) >= 0):
+                len(self.output_form.text()) >= 0):
             self.button_box.button(QtGui.QDialogButtonBox.Ok).setEnabled(True)
         else:
             self.button_box.button(QtGui.QDialogButtonBox.Ok).setEnabled(False)

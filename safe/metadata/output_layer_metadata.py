@@ -134,8 +134,8 @@ class OutputLayerMetadata(BaseMetadata):
 
         metadata['provenance'] = self.provenance.dict
         json_dumps = json.dumps(
-                metadata, indent=2, sort_keys=True, separators=(',', ': '),
-                cls=MetadataEncoder)
+            metadata, indent=2, sort_keys=True, separators=(',', ': '),
+            cls=MetadataEncoder)
         if not json_dumps.endswith('\n'):
             json_dumps += '\n'
         return json_dumps
@@ -242,7 +242,7 @@ class OutputLayerMetadata(BaseMetadata):
                     else:
                         data[key] = ''
                 self.append_if_provenance_step(
-                        title, description, timestamp, data)
+                    title, description, timestamp, data)
             else:
                 self.append_provenance_step(title, description, timestamp)
 
@@ -293,7 +293,7 @@ class OutputLayerMetadata(BaseMetadata):
         :type data: dict
         """
         step_time = self._provenance.append_if_provenance_step(
-                title, description, timestamp, data)
+            title, description, timestamp, data)
         if step_time > self.last_update:
             self.last_update = step_time
 

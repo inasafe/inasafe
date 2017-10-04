@@ -150,7 +150,7 @@ class StepKwField(WizardStep, FORM_CLASS):
                 '<br><b>Field type</b>: {field_type}').format(
                 field_type=field_type)
             if (feature_count != -1 and (
-                        layer_purpose == layer_purpose_aggregation)):
+                    layer_purpose == layer_purpose_aggregation)):
                 if len(unique_values) == feature_count:
                     unique = tr('Yes')
                 else:

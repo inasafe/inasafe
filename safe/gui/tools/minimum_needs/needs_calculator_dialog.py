@@ -1,17 +1,9 @@
 # coding=utf-8
-"""**Minimum Needs Implementation.**
+"""Minimum Needs Implementation.
 
 .. tip:: Provides minimum needs assessment for a polygon layer containing
     counts of people affected per polygon.
-
 """
-
-__author__ = 'tim@kartoza.com, ole.moller.nielsen@gmail.com'
-__revision__ = '$Format:%H$'
-__date__ = '20/1/2013'
-__license__ = "GPL"
-__copyright__ = 'Copyright 2013, Australia Indonesia Facility for '
-__copyright__ += 'Disaster Reduction'
 
 import logging
 import os
@@ -38,6 +30,11 @@ from safe.messaging import styles
 from safe.utilities.qgis_utilities import display_critical_message_box
 from safe.utilities.resources import html_footer, html_header, get_ui_class
 from safe.utilities.utilities import humanise_exception
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
 LOGGER = logging.getLogger('InaSAFE')

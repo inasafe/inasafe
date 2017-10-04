@@ -302,7 +302,7 @@ def summarize_result(exposure_summary, callback=None):
                 continue
             if is_affected:
                 if exposure_class_name not in summarization_dicts[
-                    summarizer_field['key']]:
+                        summarizer_field['key']]:
                     summarization_dicts[summarizer_field['key']][
                         exposure_class_name] = 0
                 value = feature[summarizer_field['field_name']]

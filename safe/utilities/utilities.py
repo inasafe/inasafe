@@ -235,7 +235,7 @@ def impact_attribution(keywords, inasafe_flag=False):
         inasafe_phrase = tr(
             'This report was created using InaSAFE version %s. Visit '
             'http://inasafe.org to get your free copy of this software! %s'
-            ) % (get_version(), disclaimer())
+        ) % (get_version(), disclaimer())
 
         report.add(m.Paragraph(m.Text(inasafe_phrase)))
     return report

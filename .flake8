@@ -3,8 +3,5 @@ exclude = safe_extras,test_*.py,__init__.py,extras
 max-line-length = 79
 
 # E12x continuation line indentation
-# E251 no spaces around keyword / parameter equals
-# E303 too many blank lines (3)
-# E402 module level import not at top of file because of tests with get_qgis_app
 
-ignore = E121,E122,E123,E125,E126,E127,E128,E251,E303,E402
+ignore = E121

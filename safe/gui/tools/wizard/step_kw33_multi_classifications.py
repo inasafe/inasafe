@@ -296,7 +296,8 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
                     # Disable if there is no classification chosen.
                     exposure_edit_button.setEnabled(False)
                 exposure_edit_button.clicked.connect(
-                    partial(self.edit_button_clicked,
+                    partial(
+                        self.edit_button_clicked,
                         edit_button=exposure_edit_button,
                         exposure_combo_box=exposure_combo_box,
                         exposure=exposure))

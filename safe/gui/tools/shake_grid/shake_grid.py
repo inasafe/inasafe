@@ -514,11 +514,13 @@ class ShakeGrid(object):
         # (Sunni): I'm not sure how this 'mmi' will work
         # (Tim): Its the mapping to which field in the CSV contains the data
         #    to be gridded.
-        command = ((
-            '%(gdal_grid)s -a %(alg)s -zfield "mmi" -txe %(xMin)s '
-            '%(xMax)s -tye %(yMin)s %(yMax)s -outsize %(dimX)i '
-            '%(dimY)i -of GTiff -ot Float16 -a_srs EPSG:4326 -l mmi '
-            '"%(vrt)s" "%(tif)s"') % {
+        command = (
+            (
+                '%(gdal_grid)s -a %(alg)s -zfield "mmi" -txe %(xMin)s '
+                '%(xMax)s -tye %(yMin)s %(yMax)s -outsize %(dimX)i '
+                '%(dimY)i -of GTiff -ot Float16 -a_srs EPSG:4326 -l mmi '
+                '"%(vrt)s" "%(tif)s"'
+            ) % {
                 'gdal_grid': which('gdal_grid')[0],
                 'alg': algorithm,
                 'xMin': self.x_minimum,
@@ -529,7 +531,8 @@ class ShakeGrid(object):
                 'dimY': self.rows,
                 'vrt': vrt_path,
                 'tif': tif_path
-            })
+            }
+        )
 
         LOGGER.info('Created this gdal command:\n%s' % command)
         # Now run GDAL warp scottie...
@@ -589,7 +592,7 @@ class ShakeGrid(object):
         LOGGER.debug('Path for ogr2ogr: %s' % binary_list)
         if len(binary_list) < 1:
             raise CallGDALError(
-                    tr('ogr2ogr could not be found on your computer'))
+                tr('ogr2ogr could not be found on your computer'))
         # Use the first matching gdalwarp found
         binary = binary_list[0]
         command = (
@@ -882,7 +885,7 @@ class ShakeGrid(object):
         if self.algorithm_name:
             layer_path = os.path.join(
                 self.output_dir, '%s-%s.tif' % (
-                        self.output_basename, algorithm))
+                    self.output_basename, algorithm))
         else:
             layer_path = os.path.join(
                 self.output_dir, '%s.tif' % self.output_basename)

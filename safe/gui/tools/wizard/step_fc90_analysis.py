@@ -359,8 +359,9 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
             QtGui.QMessageBox.warning(
                 self,
                 'InaSAFE',
-                tr('Please select a valid impact layer before '
-                        'trying to print.'))
+                tr(
+                    'Please select a valid impact layer before trying to '
+                    'print.'))
             return
 
         # Get output path from datastore

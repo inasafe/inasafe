@@ -128,7 +128,7 @@ def minimum_needs_unit(field, feature, parent):
             'minimum_needs__toilets_count_field'
         ]
         if not frequency or (
-                    field_definition['key'] in once_frequency_field_keys):
+                field_definition['key'] in once_frequency_field_keys):
             return unit_abbreviation.lower()
 
         unit_format = u'{unit_abbreviation}/{frequency}'

@@ -32,7 +32,7 @@ from qgis.core import (
     QgsCoordinateTransform,
     QgsProject,
     PROJECT_SCALES
-    )
+)
 
 from safe.common.exceptions import TemplateLoadingError
 from safe.common.utilities import temp_dir
@@ -184,7 +184,7 @@ def create_qgis_pdf_output(
     # process atlas generation
     print_atlas = setting('print_atlas_report', False, bool)
     if composition.atlasComposition().enabled() and (
-                print_atlas and aggregation_summary_layer):
+            print_atlas and aggregation_summary_layer):
         output_path = atlas_renderer(
             composition, aggregation_summary_layer, output_path, file_format)
     # for QGIS composer only pdf and png output are available

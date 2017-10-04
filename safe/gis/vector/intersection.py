@@ -96,7 +96,7 @@ def intersection(source, mask, callback=None):
                 if int_geom.wkbType() == QgsWKBTypes.Unknown\
                         or QgsWKBTypes.flatType(
                         int_geom.geometry().wkbType()) ==\
-                                QgsWKBTypes.GeometryCollection:
+                        QgsWKBTypes.GeometryCollection:
                     int_com = geom.combine(tmp_geom)
                     int_geom = QgsGeometry()
                     if int_com:
