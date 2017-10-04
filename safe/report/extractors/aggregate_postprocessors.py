@@ -633,10 +633,8 @@ def create_section_without_aggregation(
 
     # figuring out displaced field
     try:
-        displaced_field_name = analysis_layer_fields[
-            displaced_field['key']]
-        displaced_field_name = aggregation_summary_fields[
-            displaced_field['key']]
+        analysis_layer_fields[displaced_field['key']]
+        aggregation_summary_fields[displaced_field['key']]
     except KeyError:
         # no displaced field, can't show result
         return {}

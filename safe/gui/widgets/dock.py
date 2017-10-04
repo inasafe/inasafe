@@ -617,7 +617,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         ..note:: \*args is only used for debugging purposes.
         """
-        _ = args
+        _ = args  # NOQA
         # Prevent recursion
         if self.get_layers_lock:
             return

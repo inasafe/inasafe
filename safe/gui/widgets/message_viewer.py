@@ -47,7 +47,7 @@ class MessageViewer(QtWebKit.QWebView):
 
     # noinspection PyOldStyleClasses
     def __init__(self, the_parent):
-        _ = the_parent  # needed for promoted Qt widget in designer
+        _ = the_parent  # NOQA needed for promoted Qt widget in designer
         super(MessageViewer, self).__init__()
         self.setWindowTitle('Message Viewer')
         # We use this var to keep track of the last allocated div id
@@ -193,7 +193,7 @@ class MessageViewer(QtWebKit.QWebView):
         if message == self.static_message:
             return
         # LOGGER.debug('Static message event %i' % self.static_message_count)
-        _ = sender  # we arent using it
+        _ = sender  # NOQA
         self.dynamic_messages = []
         self.static_message = message
         self.show_messages()
@@ -225,7 +225,7 @@ class MessageViewer(QtWebKit.QWebView):
         :type message: safe.messaging.Message
         """
         # LOGGER.debug('Dynamic message event')
-        _ = sender  # we arent using it
+        _ = sender  # NOQA
         self.dynamic_messages.append(message)
         self.dynamic_messages_log.append(message)
         # Old way (works but causes full page refresh)

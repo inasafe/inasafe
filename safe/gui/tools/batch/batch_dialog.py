@@ -728,8 +728,9 @@ class BatchDialog(QDialog, FORM_CLASS):
             # noinspection PyTypeChecker,PyCallByClass,PyArgumentList
             QtGui.QDesktopServices.openUrl(url)
         else:
-            report = open(report_path).read()
+            # report = open(report_path).read()
             # LOGGER.info(report)
+            pass
 
     def update_default_output_dir(self):
         """Update output dir if set to default."""

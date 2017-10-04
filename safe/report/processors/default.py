@@ -259,7 +259,6 @@ def qgis_composer_html_renderer(impact_report, component):
     context = component.context
     """:type: safe.report.extractors.composer.QGISComposerContext"""
     qgis_composition_context = impact_report.qgis_composition_context
-    inasafe_context = impact_report.inasafe_context
 
     # load composition object
     composition = QgsComposition(qgis_composition_context.map_settings)
@@ -409,7 +408,6 @@ def qgis_composer_renderer(impact_report, component):
     context = component.context
     """:type: safe.report.extractors.composer.QGISComposerContext"""
     qgis_composition_context = impact_report.qgis_composition_context
-    inasafe_context = impact_report.inasafe_context
 
     # load composition object
     composition = QgsComposition(qgis_composition_context.map_settings)

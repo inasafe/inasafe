@@ -44,14 +44,14 @@ class ConsoleView():
 
     def static_message_event(self, sender, message):
         """Static message event handler - set message state based on event."""
-        _ = sender  # we arent using it
+        _ = sender  # NOQA
         self.dynamic_messages = []
         self.static_message = message
         self.show_messages()
 
     def dynamic_message_event(self, sender, message):
         """Dynamic event handler - set message state based on event."""
-        _ = sender  # we arent using it
+        _ = sender  # NOQA
         self.dynamic_messages.append(message)
         self.show_messages()
 
@@ -123,7 +123,7 @@ class App(object):
         impact_function1 = ImpactFunction1()
         # Run some tasks that will spawn dynamic messages
         for i in range(1, 10):
-            _ = i
+            _ = i  # NOQA
             impact_function1.run()
 
 

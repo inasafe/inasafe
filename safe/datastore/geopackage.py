@@ -61,7 +61,8 @@ class GeoPackage(DataStore):
                     raise ErrorDataStore(msg)
         else:
             path = self.uri.absoluteFilePath()
-            datasource = self.vector_driver.CreateDataSource(path)
+            # We need this variable to be created. The delete will create it.
+            datasource = self.vector_driver.CreateDataSource(path)  # NOQA
             del datasource
 
     @property

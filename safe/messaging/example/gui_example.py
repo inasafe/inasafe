@@ -71,7 +71,7 @@ class WebView(QtWebKit.QWebView):
         :param message:
         :param sender:
         """
-        _ = sender  # we arent using it
+        _ = sender  # NOQA
         self.dynamic_messages = []
         self.static_message = message
         self.show_messages()
@@ -81,7 +81,7 @@ class WebView(QtWebKit.QWebView):
         :param message:
         :param sender:
         """
-        _ = sender  # we arent using it
+        _ = sender  # NOQA
         self.dynamic_messages.append(message)
         self.show_messages()
 
@@ -99,9 +99,9 @@ class WebView(QtWebKit.QWebView):
         self.setHtml(string)
 
 
-class ImpactFunction1():
-    """Fake impact function 1
-    """
+class ImpactFunction1(object):
+
+    """Fake impact function 1."""
 
     def __init__(self):
         message = Message(SuccessParagraph('IF1 was initialised'))
@@ -112,8 +112,7 @@ class ImpactFunction1():
         self.count = 0
 
     def run(self):
-        """Run
-        """
+        """Run."""
         self.count += 1
         message = Paragraph('IF1 run %i - running' % self.count)
         dispatcher.send(
@@ -122,9 +121,9 @@ class ImpactFunction1():
             message=message)
 
 
-class ImpactFunction2():
-    """Fake impact function 2.
-    """
+class ImpactFunction2(object):
+
+    """Fake impact function 2."""
 
     def __init__(self):
         message = Message(SuccessParagraph('IF2 was initialised'))
@@ -135,8 +134,7 @@ class ImpactFunction2():
         self.count = 0
 
     def run(self):
-        """Run.
-        """
+        """Run."""
         self.count += 1
         message = Paragraph('IF2 run %i - running' % self.count)
         dispatcher.send(
@@ -145,9 +143,9 @@ class ImpactFunction2():
             message=message)
 
 
-class Dock():
-    """Dock.
-    """
+class Dock(object):
+
+    """Dock."""
 
     def __init__(self):
         self.message_queue = WebView()
@@ -166,8 +164,7 @@ class Dock():
             sender=dispatcher.Any)
 
     def run(self):
-        """Run.
-        """
+        """Run."""
         message = Message()
         message.add(Heading('Processing starting'))
         text = Text('This is an example application showing how the ')
@@ -209,7 +206,7 @@ class Dock():
         impact_function2 = ImpactFunction2()
         # Run some tasks that will spawn dynamic messages
         for i in range(1, 10):
-            _ = i
+            _ = i  # NOQA
             impact_function1.run()
             impact_function2.run()
 
