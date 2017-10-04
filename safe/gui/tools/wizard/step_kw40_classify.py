@@ -116,9 +116,7 @@ class StepKwClassify(WizardStep, FORM_CLASS):
 
         .. note:: This is a slot executed when the item change.
         """
-
-        # Treat var as unused
-        _ = column
+        _ = column  # NOQA
 
         if int(item.flags() & QtCore.Qt.ItemIsDropEnabled) \
                 and int(item.flags() & QtCore.Qt.ItemIsDragEnabled):

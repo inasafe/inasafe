@@ -40,10 +40,6 @@ def analysis_provenance_details_extractor(impact_report, component_metadata):
     context = {}
     extra_args = component_metadata.extra_args
 
-    default_source = resolve_from_dictionary(
-        extra_args, ['defaults', 'source'])
-    default_reference = resolve_from_dictionary(
-        extra_args, ['defaults', 'reference'])
     provenance_format_args = resolve_from_dictionary(
         extra_args, 'provenance_format')
 
@@ -87,8 +83,6 @@ def analysis_provenance_details_extractor(impact_report, component_metadata):
 
     header = resolve_from_dictionary(
         provenance_format_args, 'hazard_header')
-    provenance_format = resolve_from_dictionary(
-        provenance_format_args, 'hazard_format')
     hazard_provenance = {
         'header': header.title(),
         'provenances': headerize(
@@ -110,8 +104,6 @@ def analysis_provenance_details_extractor(impact_report, component_metadata):
 
     header = resolve_from_dictionary(
         provenance_format_args, 'exposure_header')
-    provenance_format = resolve_from_dictionary(
-        provenance_format_args, 'exposure_format')
     exposure_provenance = {
         'header': header.title(),
         'provenances': headerize(
@@ -128,8 +120,6 @@ def analysis_provenance_details_extractor(impact_report, component_metadata):
 
     header = resolve_from_dictionary(
         provenance_format_args, 'aggregation_header')
-    provenance_format = resolve_from_dictionary(
-        provenance_format_args, 'aggregation_format')
 
     aggregation_provenance = {
         'header': header.title(),
@@ -191,8 +181,6 @@ def analysis_provenance_details_extractor(impact_report, component_metadata):
     impact_function_name = impact_report.impact_function.name
     header = resolve_from_dictionary(
         provenance_format_args, 'impact_function_header')
-    provenance_format = resolve_from_dictionary(
-        provenance_format_args, 'impact_function_format')
     impact_function_provenance = {
         'header': header.title(),
         'provenances': impact_function_name

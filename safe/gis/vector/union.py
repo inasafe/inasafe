@@ -220,12 +220,10 @@ def union(union_a, union_b, callback=None):
                        'ignored due to invalid geometry.'))
 
     length = len(union_a.fields())
-    at_map_a = [None] * length
 
     # nFeat = len(union_b.getFeatures())
     for in_feat_a in union_b.getFeatures():
         # progress.setPercentage(nElement / float(nFeat) * 100)
-        add = False
         geom = geometry_checker(in_feat_a.geometry())
         atMap = [None] * length
         atMap.extend(in_feat_a.attributes())
@@ -235,7 +233,6 @@ def union(union_a, union_b, callback=None):
         for id in intersects:
             request = QgsFeatureRequest().setFilterFid(id)
             inFeatB = union_a.getFeatures(request).next()
-            atMapB = inFeatB.attributes()
             tmpGeom = QgsGeometry(geometry_checker(inFeatB.geometry()))
 
             if geom.intersects(tmpGeom):

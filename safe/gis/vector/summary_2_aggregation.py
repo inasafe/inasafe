@@ -63,10 +63,6 @@ def aggregation_summary(aggregate_hazard, aggregation, callback=None):
 
     .. versionadded:: 4.0
     """
-    output_layer_name = (
-        summary_2_aggregation_steps['output_layer_name'])  # NOQA
-    processing_step = summary_2_aggregation_steps['step_name']  # NOQA
-
     source_fields = aggregate_hazard.keywords['inasafe_fields']
     target_fields = aggregation.keywords['inasafe_fields']
 

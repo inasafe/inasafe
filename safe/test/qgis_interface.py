@@ -134,7 +134,7 @@ class QgisInterface(QObject):
     def __getattr__(self, *args, **kwargs):
         # It's for processing module
         def dummy(*a, **kwa):
-            _ = a, kwa
+            _ = a, kwa  # NOQA
             return QgisInterface(self.canvas)
         return dummy
 

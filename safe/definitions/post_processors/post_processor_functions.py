@@ -99,7 +99,7 @@ def post_processor_population_displacement_function(
     :return: The displacement ratio for a given hazard class.
     :rtype: float
     """
-    _ = population
+    _ = population  # NOQA
     for hazard in hazard_classes_all:
         if hazard['key'] == classification:
             classification = hazard['classes']
@@ -130,7 +130,7 @@ def post_processor_population_fatality_function(
     :return: The displacement ratio for a given hazard class.
     :rtype: float
     """
-    _ = population
+    _ = population  # NOQA
     for hazard in hazard_classes_all:
         if hazard['key'] == classification:
             classification = hazard['classes']
