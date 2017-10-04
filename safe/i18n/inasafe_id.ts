@@ -9923,7 +9923,7 @@ Harap dicatat bahwa tingkat fatalitas yang didaftar di sini adalah berdasarkan m
     <message>
         <location filename="components.py" line="243"/>
         <source>Estimated loss by affected {exposure} type</source>
-        <translation>Perkiraan kerugian untuk setiap jenis {keterpaparan} terdampak</translation>
+        <translation>Perkiraan kerugian untuk setiap jenis {exposure} terdampak</translation>
     </message>
     <message>
         <location filename="fields.py" line="2209"/>
