@@ -5,7 +5,6 @@
 import logging
 from PyQt4.QtCore import QPyNullVariant
 from qgis.core import (
-    QGis,
     QgsGeometry,
     QgsFeatureRequest,
     QgsWKBTypes,

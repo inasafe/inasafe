@@ -6,7 +6,7 @@ import os
 import logging
 
 # noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=unused-import
+import qgis  # NOQA pylint: disable=unused-import
 # Import the PyQt and QGIS libraries
 from qgis.core import (
     QGis,

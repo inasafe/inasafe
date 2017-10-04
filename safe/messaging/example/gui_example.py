@@ -1,27 +1,10 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool by AusAid - **Dispatcher gui example.**
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-"""
-
-__author__ = 'tim@kartoza.com'
-__revision__ = '$Format:%H$'
-__date__ = '27/05/2013'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
 
 import sys
-import os
 
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=unused-import
+import qgis  # NOQA pylint: disable=unused-import
 from PyQt4 import Qt, QtWebKit
 
 from pydispatch import dispatcher
@@ -35,6 +18,11 @@ from safe.messaging import (
     ImportantText,
     EmphasizedText)
 from safe.utilities.resources import resources_path
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 DYNAMIC_MESSAGE_SIGNAL = 'ImpactFunctionMessage'
 STATIC_MESSAGE_SIGNAL = 'ApplicationMessage'

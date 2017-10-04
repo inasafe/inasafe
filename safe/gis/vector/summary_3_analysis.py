@@ -4,7 +4,7 @@
 
 from math import isnan
 from PyQt4.QtCore import QPyNullVariant
-from qgis.core import QGis, QgsFeatureRequest
+from qgis.core import QgsFeatureRequest
 
 from safe.definitions.fields import (
     analysis_id_field,
