@@ -20,16 +20,16 @@ safe_extras_dir = os.path.abspath(
 if safe_extras_dir not in sys.path:
     sys.path.append(safe_extras_dir)
 
-from qgis.core import QgsMessageLog
-from PyQt4.QtCore import QSettings
+from qgis.core import QgsMessageLog  # NOQA
+from PyQt4.QtCore import QSettings  # NOQA
 # pylint: disable=F0401
 # noinspection PyUnresolvedReferences,PyPackageRequirements
-from raven.handlers.logging import SentryHandler
+from raven.handlers.logging import SentryHandler  # NOQA
 # noinspection PyUnresolvedReferences,PyPackageRequirements
-from raven import Client
+from raven import Client  # NOQA
 # pylint: enable=F0401
-from safe.common.utilities import log_file_path
-from safe.utilities.i18n import tr
+from safe.common.utilities import log_file_path  # NOQA
+from safe.utilities.i18n import tr  # NOQA
 
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'

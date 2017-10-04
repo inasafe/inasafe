@@ -66,4 +66,4 @@ class ExposureLayerMetadata(GenericLayerMetadata):
             'gco:Integer'),
     }
     _standard_properties = merge_dictionaries(
-            GenericLayerMetadata._standard_properties, _standard_properties)
+        GenericLayerMetadata._standard_properties, _standard_properties)

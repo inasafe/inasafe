@@ -246,7 +246,8 @@ post_processor_child_bearing_age = {
         },
         # input as a list means, try to get the input from the
         # listed source. Pick the first available
-        'child_bearing_age_ratio': [{
+        'child_bearing_age_ratio': [
+            {
                 'value': child_bearing_age_ratio_field,
                 'type': field_input_type
             },
@@ -256,7 +257,8 @@ post_processor_child_bearing_age = {
                     'inasafe_default_values',
                     child_bearing_age_ratio_field['key'],
                 ],
-            }]
+            }
+        ]
     },
     'output': {
         'child_bearing_age_displaced': {
@@ -284,17 +286,19 @@ post_processor_pregnant = {
         },
         # input as a list means, try to get the input from the
         # listed source. Pick the first available
-        'pregnant_ratio': [{
-            'value': pregnant_ratio_field,
-            'type': field_input_type
-        },
+        'pregnant_ratio': [
+            {
+                'value': pregnant_ratio_field,
+                'type': field_input_type
+            },
             {
                 'type': keyword_input_type,
                 'value': [
                     'inasafe_default_values',
                     pregnant_ratio_field['key'],
                 ],
-            }]
+            }
+        ]
     },
     'output': {
         'pregnant_displaced': {
@@ -321,17 +325,19 @@ post_processor_lactating = {
         },
         # input as a list means, try to get the input from the
         # listed source. Pick the first available
-        'lactating_lactating_ratio': [{
-            'value': lactating_ratio_field,
-            'type': field_input_type
-        },
+        'lactating_lactating_ratio': [
+            {
+                'value': lactating_ratio_field,
+                'type': field_input_type
+            },
             {
                 'type': keyword_input_type,
                 'value': [
                     'inasafe_default_values',
                     lactating_ratio_field['key'],
                 ],
-            }]
+            }
+        ]
     },
     'output': {
         'lactating_displaced': {
@@ -466,7 +472,8 @@ post_processor_infant = {
         },
         # input as a list means, try to get the input from the
         # listed source. Pick the first available
-        'infant_ratio': [{
+        'infant_ratio': [
+            {
                 'value': infant_ratio_field,
                 'type': field_input_type
             },
@@ -476,7 +483,8 @@ post_processor_infant = {
                     'inasafe_default_values',
                     infant_ratio_field['key'],
                 ],
-            }]
+            }
+        ]
     },
     'output': {
         'infant_displaced': {
@@ -502,7 +510,8 @@ post_processor_child = {
         },
         # input as a list means, try to get the input from the
         # listed source. Pick the first available
-        'child_ratio': [{
+        'child_ratio': [
+            {
                 'value': child_ratio_field,
                 'type': field_input_type
             },
@@ -512,7 +521,8 @@ post_processor_child = {
                     'inasafe_default_values',
                     child_ratio_field['key'],
                 ],
-            }]
+            }
+        ]
     },
     'output': {
         'child_displaced': {
@@ -538,7 +548,8 @@ post_processor_youth = {
         },
         # input as a list means, try to get the input from the
         # listed source. Pick the first available
-        'youth_ratio': [{
+        'youth_ratio': [
+            {
                 'value': youth_ratio_field,
                 'type': field_input_type
             },
@@ -548,7 +559,8 @@ post_processor_youth = {
                     'inasafe_default_values',
                     youth_ratio_field['key'],
                 ],
-            }]
+            }
+        ]
     },
     'output': {
         'youth_displaced': {
@@ -574,7 +586,8 @@ post_processor_adult = {
         },
         # input as a list means, try to get the input from the
         # listed source. Pick the first available
-        'adult_ratio': [{
+        'adult_ratio': [
+            {
                 'value': adult_ratio_field,
                 'type': field_input_type
             },
@@ -584,7 +597,8 @@ post_processor_adult = {
                     'inasafe_default_values',
                     adult_ratio_field['key'],
                 ],
-            }]
+            }
+        ]
     },
     'output': {
         'adult_displaced': {
@@ -610,7 +624,8 @@ post_processor_elderly = {
         },
         # input as a list means, try to get the input from the
         # listed source. Pick the first available
-        'elderly_ratio': [{
+        'elderly_ratio': [
+            {
                 'value': elderly_ratio_field,
                 'type': field_input_type
             },
@@ -620,7 +635,8 @@ post_processor_elderly = {
                     'inasafe_default_values',
                     elderly_ratio_field['key'],
                 ],
-            }]
+            }
+        ]
     },
     'output': {
         'elderly_displaced': {
@@ -646,7 +662,8 @@ post_processor_under_5 = {
         },
         # input as a list means, try to get the input from the
         # listed source. Pick the first available
-        'under_5_ratio': [{
+        'under_5_ratio': [
+            {
                 'value': under_5_ratio_field,
                 'type': field_input_type
             },
@@ -656,7 +673,8 @@ post_processor_under_5 = {
                     'inasafe_default_values',
                     under_5_ratio_field['key'],
                 ],
-            }]
+            }
+        ]
     },
     'output': {
         'under_5_displaced': {
@@ -682,7 +700,8 @@ post_processor_over_60 = {
         },
         # input as a list means, try to get the input from the
         # listed source. Pick the first available
-        'over_60_ratio': [{
+        'over_60_ratio': [
+            {
                 'value': over_60_ratio_field,
                 'type': field_input_type
             },
@@ -692,7 +711,8 @@ post_processor_over_60 = {
                     'inasafe_default_values',
                     over_60_ratio_field['key'],
                 ],
-            }]
+            }
+        ]
     },
     'output': {
         'over_60_displaced': {
@@ -719,7 +739,8 @@ post_processor_disability_vulnerability = {
         },
         # input as a list means, try to get the input from the
         # listed source. Pick the first available
-        'over_60_ratio': [{
+        'over_60_ratio': [
+            {
                 'value': disabled_ratio_field,
                 'type': field_input_type
             },
@@ -729,7 +750,8 @@ post_processor_disability_vulnerability = {
                     'inasafe_default_values',
                     disabled_ratio_field['key'],
                 ],
-            }]
+            }
+        ]
     },
     'output': {
         'over_60_displaced': {

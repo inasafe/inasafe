@@ -162,7 +162,7 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
             analysis.changeAttributeValue(area.id(), shift + i, sum)
 
             affected = post_processor_affected_function(
-                    classification=classification, hazard_class=val)
+                classification=classification, hazard_class=val)
             if affected == not_exposed_class['key']:
                 not_exposed_sum += sum
             elif affected:

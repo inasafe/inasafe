@@ -447,8 +447,8 @@ class BatchDialog(QDialog, FORM_CLASS):
                 # set status to 'fail'
                 status_item.setText(self.tr('Script Fail'))
 
-                LOGGER.exception('Running macro failed. The exception: ' +
-                    str(e))
+                LOGGER.exception(
+                    'Running macro failed. The exception: ' + str(e))
                 result = False
         elif isinstance(value, dict):
             # start in new project if toggle is active

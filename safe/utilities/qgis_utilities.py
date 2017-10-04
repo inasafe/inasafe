@@ -1,13 +1,6 @@
 # coding=utf-8
-"""
-QGIS utilities for InaSAFE
-"""
 
-__author__ = 'etienne'
-__revision__ = '$Format:%H$'
-__date__ = '17/02/2015'
-__copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
-__copyright__ += 'Disaster Reduction'
+"""QGIS utilities for InaSAFE."""
 
 from qgis.gui import QgsMessageBar
 from qgis.core import QGis, QgsProject, QgsMapLayerRegistry, QgsLayerTreeLayer
@@ -15,6 +8,11 @@ from qgis.utils import iface
 from PyQt4.QtGui import QMessageBox, QPushButton
 
 from safe.utilities.i18n import tr
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 
 def add_above_layer(new_layer, *existing_layers):

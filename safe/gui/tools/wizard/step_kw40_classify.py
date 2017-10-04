@@ -167,8 +167,8 @@ class StepKwClassify(WizardStep, FORM_CLASS):
             field_type = self.parent.layer.dataProvider().\
                 fields()[field_index].type()
             self.lblClassify.setText(classify_vector_question % (
-                    subcategory['name'], purpose['name'],
-                    classification_name, field.upper()))
+                subcategory['name'], purpose['name'],
+                classification_name, field.upper()))
             unique_values = self.parent.layer.uniqueValues(field_index)
 
         clean_unique_values = []

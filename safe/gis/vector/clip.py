@@ -8,7 +8,7 @@ from qgis.core import (
     QgsFeatureRequest,
     QgsWKBTypes,
     QgsFeature,
-    )
+)
 
 from safe.utilities.i18n import tr
 from safe.definitions.processing_steps import clip_steps
@@ -122,8 +122,8 @@ def clip(layer_to_clip, mask_layer, callback=None):
                 new_geom = combined_clip_geom.intersection(cur_geom)
                 if new_geom.wkbType() == QgsWKBTypes.Unknown \
                         or QgsWKBTypes.flatType(
-                            new_geom.geometry().wkbType()) == \
-                                QgsWKBTypes.GeometryCollection:
+                        new_geom.geometry().wkbType()) == \
+                        QgsWKBTypes.GeometryCollection:
                     int_com = in_feat.geometry().combine(new_geom)
                     int_sym = in_feat.geometry().symDifference(new_geom)
                     if not int_com or not int_sym:

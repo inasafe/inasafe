@@ -155,9 +155,9 @@ class FieldMappingDialog(QDialog, FORM_CLASS):
             try:
                 self.metadata = self.keyword_io.read_keywords(self.layer)
             except (
-                NoKeywordsFoundError,
-                KeywordNotFoundError,
-                MetadataReadError) as e:
+                    NoKeywordsFoundError,
+                    KeywordNotFoundError,
+                    MetadataReadError) as e:
                 raise e
         if 'inasafe_default_values' not in self.metadata:
             self.metadata['inasafe_default_values'] = {}
@@ -170,8 +170,9 @@ class FieldMappingDialog(QDialog, FORM_CLASS):
         self.main_layout.addWidget(self.field_mapping_widget)
 
         # Set header label
-        group_names = [self.field_mapping_widget.tabText(i) for i in
-             range(self.field_mapping_widget.count())]
+        group_names = [
+            self.field_mapping_widget.tabText(i) for i in range(
+                self.field_mapping_widget.count())]
         if len(group_names) == 0:
             header_text = tr(
                 'There is no field group for this layer. Please select '

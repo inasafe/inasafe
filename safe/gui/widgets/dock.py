@@ -1303,7 +1303,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 self.use_selected_features_only)
 
             if self.use_selected_features_only and (
-                        aggregation.selectedFeatureCount() > 0):
+                    aggregation.selectedFeatureCount() > 0):
                 self.aggregation_question_label.setText(
                     self.label_with_selection)
             else:

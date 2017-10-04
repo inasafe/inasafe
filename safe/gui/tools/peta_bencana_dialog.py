@@ -547,8 +547,9 @@ class PetaBencanaDialog(QDialog, FORM_CLASS):
                     self.tr(
                         'Your current projection is different than EPSG:4326. '
                         'You should enable \'on the fly\' to display '
-                        'correctly your layers')
+                        'correctly your layers'
                     )
+                )
 
     def reject(self):
         """Redefinition of the method.
