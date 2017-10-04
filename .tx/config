@@ -2,8 +2,8 @@
 host = https://www.transifex.com
 
 [inasafe-code.safe]
-file_filter = i18n/inasafe_<lang>.ts
-source_file = i18n/inasafe_en.ts
+file_filter = safe/i18n/inasafe_<lang>.ts
+source_file = safe/i18n/inasafe_en.ts
 source_lang = en
 type = QT
 
