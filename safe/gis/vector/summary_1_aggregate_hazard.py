@@ -21,8 +21,6 @@ from safe.definitions.fields import (
 from safe.definitions.layer_purposes import (
     layer_purpose_aggregate_hazard_impacted)
 from safe.definitions.post_processors import post_processor_affected_function
-from safe.definitions.processing_steps import (
-    summary_1_aggregate_hazard_steps)
 from safe.definitions.utilities import definition
 from safe.definitions.hazard_classifications import not_exposed_class
 from safe.gis.vector.summary_tools import (

@@ -13,7 +13,6 @@ from PyQt4.QtCore import QT_VERSION_STR, QSettings
 from PyQt4.Qt import PYQT_VERSION_STR
 from osgeo import gdal
 from qgis.core import (
-    QgsMapLayer,
     QgsGeometry,
     QgsCoordinateTransform,
     QgsCoordinateReferenceSystem,
@@ -121,7 +120,6 @@ from safe.definitions.provenance import (
     provenance_layer_aggregate_hazard_impacted_id,
     provenance_layer_aggregation_summary_id,
     provenance_layer_exposure_summary_table_id,
-    provenance_layer_profiling_id,
     provenance_layer_analysis_impacted_id,
     provenance_layer_exposure_summary_id,
     provenance_crs)

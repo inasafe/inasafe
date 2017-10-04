@@ -4,8 +4,6 @@
 
 import logging
 from qgis.core import (
-    QgsCoordinateReferenceSystem,
-    QgsVectorLayer,
     QgsFeature,
     QGis,
 )

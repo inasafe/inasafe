@@ -3,7 +3,7 @@
 """Aggregate the aggregate hazard to the aggregation layer."""
 
 from PyQt4.QtCore import QPyNullVariant
-from qgis.core import QGis, QgsFeatureRequest
+from qgis.core import QgsFeatureRequest
 
 from safe.definitions.fields import (
     aggregation_id_field,
@@ -17,8 +17,6 @@ from safe.definitions.fields import (
 )
 from safe.definitions.layer_purposes import (
     layer_purpose_aggregation_summary)
-from safe.definitions.processing_steps import (
-    summary_2_aggregation_steps)
 from safe.gis.vector.tools import read_dynamic_inasafe_field
 from safe.gis.vector.summary_tools import (
     check_inputs, create_absolute_values_structure, add_fields)
