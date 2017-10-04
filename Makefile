@@ -31,7 +31,7 @@ default: quicktest
 
 #Qt .ts file updates - run to register new strings for translation in safe_qgis
 update-translation-strings:
-        #update application strings
+	# update application strings
 	@echo "Checking current translation."
 	@scripts/update-strings.sh $(LOCALES)
 
