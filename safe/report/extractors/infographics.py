@@ -1,7 +1,7 @@
 # coding=utf-8
 """Infographic extractor class for standard reporting.
 """
-from safe.common.utilities import safe_dir
+
 from safe.definitions.concepts import concepts
 from safe.report.extractors.util import (
     resolve_from_dictionary,

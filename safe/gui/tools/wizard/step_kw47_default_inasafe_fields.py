@@ -3,7 +3,7 @@
 
 # noinspection PyPackageRequirements
 import logging
-from PyQt4.QtGui import QWidget, QLabel
+from PyQt4.QtGui import QLabel
 
 from parameters.qt_widgets.parameter_container import ParameterContainer
 

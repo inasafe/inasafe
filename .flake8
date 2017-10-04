@@ -7,6 +7,4 @@ max-line-length = 79
 # E303 too many blank lines (3)
 # E402 module level import not at top of file because of tests with get_qgis_app
 
-# TO REMOVE
-# F401 imported but unused
 ignore = E121,E122,E123,E125,E126,E127,E128,E251,E303,E402

@@ -4,7 +4,6 @@ from __future__ import absolute_import
 
 from collections import OrderedDict
 
-from safe.common.utilities import safe_dir
 from safe.report.extractors.composer import QGISComposerContext
 from safe.report.extractors.util import resolve_from_dictionary, \
     jinja2_output_as_string

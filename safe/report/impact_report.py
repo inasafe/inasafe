@@ -11,10 +11,7 @@ import logging
 import os
 import shutil
 
-from qgis.core import (
-    QgsComposition,
-    QgsRectangle,
-    QgsRasterLayer)
+from qgis.core import QgsComposition, QgsRasterLayer
 
 from safe.common.exceptions import (
     KeywordNotFoundError)

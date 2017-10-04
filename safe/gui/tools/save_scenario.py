@@ -8,7 +8,7 @@ from ConfigParser import ConfigParser
 
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=unused-import
+import qgis  # NOQA pylint: disable=unused-import
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui
 # noinspection PyPackageRequirements

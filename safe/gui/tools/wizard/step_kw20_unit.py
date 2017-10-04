@@ -9,7 +9,6 @@ from safe.utilities.i18n import tr
 from safe import messaging as m
 
 from safe.definitions.layer_purposes import layer_purpose_hazard
-from safe.definitions.exposure import exposure_population
 from safe.definitions.units import exposure_unit
 from safe.definitions.hazard import continuous_hazard_unit
 from safe.definitions.utilities import (

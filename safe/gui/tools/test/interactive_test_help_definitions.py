@@ -3,9 +3,8 @@
 """Interactive test for definitions help."""
 
 
-from safe.test.utilities import get_qgis_app, get_dock
+from safe.test.utilities import get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-from PyQt4.QtGui import QApplication
 from safe.gui.tools.help_dialog import HelpDialog
 from safe.gui.tools.help import definitions_help
 

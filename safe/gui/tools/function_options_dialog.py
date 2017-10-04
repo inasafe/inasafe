@@ -1,28 +1,11 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool developed by AusAid -
-**Impact Functions Dialog.**
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
-
-__author__ = 'oz@tanoshiistudio.com'
-__revision__ = '$Format:%H$'
-__date__ = '01/10/2012'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
+"""Function Option Dialog (deprecated?)"""
 
 import logging
 from PyQt4 import QtGui, QtCore
 from collections import OrderedDict
 
-import qgis  # pylint: disable=unused-import
+import qgis  # NOQA pylint: disable=unused-import
 from PyQt4.QtCore import pyqtSignature, pyqtSlot
 from PyQt4.QtGui import (
     QGroupBox,
@@ -43,6 +26,11 @@ from safe.common.parameters.resource_parameter import ResourceParameter
 from safe.gui.tools.help.function_options_help import function_options_help
 from safe.utilities.i18n import tr
 from safe.utilities.resources import html_footer, html_header, get_ui_class
+
+__copyright__ = "Copyright 2017, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8

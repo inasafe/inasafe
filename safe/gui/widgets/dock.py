@@ -11,7 +11,6 @@ from numbers import Number
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import Qt, pyqtSlot, QPyNullVariant
 from qgis.core import (
-    QgsRectangle,
     QgsGeometry,
     QgsMapLayer,
     QgsMapLayerRegistry,

@@ -6,10 +6,7 @@ from __future__ import absolute_import
 
 from safe.definitions.concepts import concepts
 from safe.definitions.exposure import (
-    exposure_structure,
-    exposure_road,
-    exposure_land_cover,
-    exposure_population)
+    exposure_structure, exposure_road, exposure_land_cover)
 from safe.definitions.reports import (
     jinja2_component_type,
     qgis_composer_component_type,
@@ -37,11 +34,6 @@ from safe.definitions.fields import (
     population_count_field,
     displaced_field,
     fatalities_field,
-    female_displaced_count_field,
-    youth_displaced_count_field,
-    adult_displaced_count_field,
-    elderly_displaced_count_field,
-    exposure_count_field,
     affected_productivity_field,
     affected_production_cost_field,
     affected_production_value_field)

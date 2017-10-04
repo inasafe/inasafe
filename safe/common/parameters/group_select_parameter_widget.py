@@ -5,8 +5,8 @@ import logging
 
 from PyQt4.QtGui import (
     QDoubleSpinBox, QVBoxLayout, QRadioButton, QButtonGroup,
-    QWidget, QLabel, QSizePolicy, QSpacerItem, QListWidget,
-    QGridLayout, QAbstractItemView, QListWidgetItem)
+    QWidget, QLabel, QSizePolicy, QListWidget, QGridLayout,
+    QAbstractItemView, QListWidgetItem)
 from PyQt4.QtCore import Qt
 
 from parameters.qt_widgets.generic_parameter_widget import (
