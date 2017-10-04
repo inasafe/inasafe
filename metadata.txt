@@ -28,6 +28,7 @@ status=beta
 changelog=
     Version 4.2.4
     - Move resources and translation to safe package.
+    - Fix bug Analysis Detail from Landcover Impact Report not shown in Bahasa version #4487
     Version 4.2.3
     - Fix failed to assign keyword by using IFCW
     - Fix wrong layer intersection checking in IFCW
