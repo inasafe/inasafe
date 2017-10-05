@@ -45,7 +45,8 @@ from safe.definitions.constants import (
     PREPARE_SUCCESS,
     entire_area_item_aggregation,
 )
-from safe.definitions.provenance import provenance_list
+from safe.definitions.provenance import (
+    provenance_list, duplicated_global_variables)
 from safe.definitions.reports.infographic import map_overview
 from safe.definitions.utilities import (
     update_template_component,
@@ -1455,9 +1456,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             :param value: A list of dictionary.
             :type value: dict, list, tuple, set
             """
-            duplicated_global_variables = {
-                'os': 'qgis_os_name'
-            }
             if key in duplicated_global_variables.keys():
                 return
             if isinstance(value, (list, tuple, set, dict)):
