@@ -3,14 +3,22 @@
 
 import logging
 import os
+from copy import deepcopy
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature
 
 from qgis.core import (
     QgsGeometry,
     QgsCoordinateReferenceSystem,
-    QgsMapLayerRegistry)
+    QgsMapLayerRegistry,
+    QgsRasterLayer)
 
+from safe.definitions.exposure import exposure_population
+from safe.definitions.reports.components import (
+    all_default_report_components,
+    infographic_report)
+from safe.definitions.reports.infographic import map_overview
+from safe.report.extractors.util import layer_definition_type
 from safe.utilities.i18n import tr
 from safe.utilities.extent import Extent
 from safe.definitions.constants import (
@@ -30,10 +38,10 @@ from safe.impact_function.impact_function import ImpactFunction
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.analysis_utilities import (
-    generate_impact_report,
-    generate_impact_map_report,
     add_impact_layers_to_canvas,
-)
+    add_layer_to_canvas,
+    generate_report,
+    remove_layer_from_canvas)
 from safe import messaging as m
 from safe.messaging import styles
 from safe.report.impact_report import ImpactReport
@@ -187,21 +195,28 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
             legend = self.iface.legendInterface()
             legend.setLayerVisible(qgis_exposure, False)
 
-        # Generate impact report
-        error_code, message = generate_impact_report(
-            self.impact_function, self.parent.iface)
+        # generate report from component definition
+        report_components = deepcopy(all_default_report_components)
 
-        if error_code == ImpactReport.REPORT_GENERATION_FAILED:
-            self.hide_busy()
-            LOGGER.info(tr(
-                'The impact report could not be generated.'))
-            send_error_message(self, message)
-            LOGGER.info(message.to_text())
-            return ANALYSIS_FAILED_BAD_CODE, message
+        # don't generate infographic if exposure is not population
+        exposure_type = layer_definition_type(
+            self.impact_function.exposure)
+        if exposure_type != exposure_population:
+            report_components.remove(infographic_report)
+        else:
+            # if exposure is population, we need to add map overview layer
+            map_overview_layer = QgsRasterLayer(
+                map_overview['path'], 'Overview')
+            add_layer_to_canvas(
+                map_overview_layer,
+                map_overview['id'],
+                self.impact_function)
 
-        # Generate Impact Map Report
-        error_code, message = generate_impact_map_report(
-            self.impact_function, self.iface)
+        error_code, message = generate_report(
+            report_components, self.impact_function, self.iface)
+
+        remove_layer_from_canvas(
+            map_overview_layer, self.impact_function)
 
         if error_code == ImpactReport.REPORT_GENERATION_FAILED:
             self.hide_busy()
