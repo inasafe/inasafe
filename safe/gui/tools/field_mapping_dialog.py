@@ -103,6 +103,7 @@ class FieldMappingDialog(QDialog, FORM_CLASS):
         self.layer_input_layout.addWidget(self.layer_combo_box)
 
         self.header_label = QLabel()
+        self.header_label.setWordWrap(True)
         self.main_layout.addWidget(self.header_label)
         self.main_layout.addLayout(self.layer_input_layout)
 

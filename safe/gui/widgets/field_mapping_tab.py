@@ -96,6 +96,7 @@ class FieldMappingTab(QWidget, object):
 
         # Footer
         self.footer_label = QLabel()
+        self.footer_label.setWordWrap(True)
 
         # Parameters
         self.extra_parameters = [
