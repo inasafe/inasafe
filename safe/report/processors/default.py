@@ -482,6 +482,7 @@ def qgis_composer_renderer(impact_report, component):
             composer_map.setKeepLayerSet(True)
             layer_set = [l.id() for l in layers if isinstance(l, QgsMapLayer)]
             composer_map.setLayerSet(layer_set)
+            map_overview_extent = None
             if map_extent_option and isinstance(
                     map_extent_option, QgsRectangle):
                 # use provided map extent
@@ -495,7 +496,6 @@ def qgis_composer_renderer(impact_report, component):
                 # if map extent not provided, try to calculate extent
                 # from list of given layers. Combine it so all layers were
                 # shown properly
-                map_overview_extent = None
                 extent = QgsRectangle()
                 extent.setMinimal()
                 for l in [layer for layer in layers if
