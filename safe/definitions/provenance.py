@@ -278,3 +278,8 @@ provenance_list = [
     provenance_layer_exposure_summary_table_id,
     provenance_layer_profiling_id,
 ]
+
+# Mapping to global variable in QGIS
+duplicated_global_variables = {
+    provenance_os['provenance_key']: 'qgis_os_name'
+}
