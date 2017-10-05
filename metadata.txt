@@ -30,6 +30,7 @@ changelog=
     - Move resources and translation to safe package.
     - Fix bug Analysis Detail from Landcover Impact Report not shown in Bahasa version #4487
     - Fix several typos and translation issue in Bahasa Indonesia
+    - Cleaning up code in the wizard #4485
     Version 4.2.3
     - Fix failed to assign keyword by using IFCW
     - Fix wrong layer intersection checking in IFCW
