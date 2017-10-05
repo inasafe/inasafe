@@ -9,10 +9,7 @@ from qgis.core import QgsMapLayerRegistry, QgsProject, QgsMapLayer, QGis
 
 from safe.definitions.utilities import definition, update_template_component
 from safe.definitions.fields import hazard_class_field
-from safe.definitions.reports.components import (
-    standard_impact_report_metadata_pdf,
-    map_report,
-    infographic_report)
+from safe.definitions.reports.components import map_report
 from safe.impact_function.style import hazard_class_style
 from safe.report.extractors.util import layer_definition_type
 from safe.report.report_metadata import ReportMetadata
@@ -26,151 +23,80 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
-def generate_impact_report(impact_function, iface):
-    """Generate the impact report from an impact function.
+def generate_report(components, impact_function, iface):
+    """Generate Impact Report from an Impact Function.
 
-    :param impact_function: The impact function used.
-    :type impact_function: ImpactFunction
+    :param components: List of report components to be generated.
+    :type components: list
 
-    :param iface: QGIS QGisAppInterface instance.
-    :type iface: QGisAppInterface
-
-    """
-    # get the extra layers that we need
-    extra_layers = []
-    print_atlas = setting('print_atlas_report', False, bool)
-    if print_atlas:
-        extra_layers.append(impact_function.aggregation_summary)
-    # create impact report instance
-    report_metadata = ReportMetadata(
-        metadata_dict=standard_impact_report_metadata_pdf)
-    impact_report = ImpactReport(
-        iface,
-        report_metadata,
-        impact_function=impact_function,
-        extra_layers=extra_layers)
-
-    # generate report folder
-
-    # no other option for now
-    # TODO: retrieve the information from data store
-    if isinstance(impact_function.datastore.uri, QDir):
-        layer_dir = impact_function.datastore.uri.absolutePath()
-    else:
-        # No other way for now
-        return
-
-    # We will generate it on the fly without storing it after datastore
-    # supports
-    impact_report.output_folder = os.path.join(layer_dir, 'output')
-    return impact_report.process_components()
-
-
-def generate_impact_map_report(impact_function, iface):
-    """Generate impact map pdf from impact function.
-
-    :param impact_function: The impact function used.
+    :param impact_function: The impact function to be used.
     :type impact_function: ImpactFunction
 
     :param iface: QGIS QGisAppInterface instance.
     :type iface: QGisAppInterface
     """
-    # get the extra layers that we need
+
     extra_layers = []
     print_atlas = setting('print_atlas_report', False, bool)
+
+    hazard_type = layer_definition_type(impact_function.hazard)
+    exposure_type = layer_definition_type(impact_function.exposure)
+    aggregation_summary_layer = impact_function.aggregation_summary
+
     if print_atlas:
-        extra_layers.append(impact_function.aggregation_summary)
+        extra_layers.append(aggregation_summary_layer)
 
-    # get the hazard and exposure type
-    hazard_layer = impact_function.hazard
-    exposure_layer = impact_function.exposure
+    for report_component in components:
+        # create impact report instance
 
-    hazard_type = layer_definition_type(hazard_layer)
-    exposure_type = layer_definition_type(exposure_layer)
+        if report_component['key'] == map_report['key']:
+            report_metadata = ReportMetadata(
+                metadata_dict=update_template_component(
+                    component=report_component,
+                    hazard=hazard_type,
+                    exposure=exposure_type))
+        else:
+            report_metadata = ReportMetadata(
+                metadata_dict=update_template_component(report_component))
 
-    # create impact report instance
-    report_metadata = ReportMetadata(
-        metadata_dict=update_template_component(
-            component=map_report,
-            hazard=hazard_type,
-            exposure=exposure_type))
-    impact_report = ImpactReport(
-        iface,
-        report_metadata,
-        impact_function=impact_function,
-        extra_layers=extra_layers)
+        impact_report = ImpactReport(
+            iface,
+            report_metadata,
+            impact_function=impact_function,
+            extra_layers=extra_layers)
 
-    # Get other setting
-    logo_path = setting('organisation_logo_path', None, str)
-    impact_report.inasafe_context.organisation_logo = logo_path
+        # Get other setting
+        logo_path = setting('organisation_logo_path', None, str)
+        impact_report.inasafe_context.organisation_logo = logo_path
 
-    disclaimer_text = setting('reportDisclaimer', None, str)
-    impact_report.inasafe_context.disclaimer = disclaimer_text
+        disclaimer_text = setting('reportDisclaimer', None, str)
+        impact_report.inasafe_context.disclaimer = disclaimer_text
 
-    north_arrow_path = setting('north_arrow_path', None, str)
-    impact_report.inasafe_context.north_arrow = north_arrow_path
+        north_arrow_path = setting('north_arrow_path', None, str)
+        impact_report.inasafe_context.north_arrow = north_arrow_path
 
-    # get the extent of impact layer
-    impact_report.qgis_composition_context.extent = \
-        impact_function.impact.extent()
+        # get the extent of impact layer
+        impact_report.qgis_composition_context.extent = \
+            impact_function.impact.extent()
 
-    # generate report folder
+        # generate report folder
 
-    # no other option for now
-    # TODO: retrieve the information from data store
-    if isinstance(impact_function.datastore.uri, QDir):
-        layer_dir = impact_function.datastore.uri.absolutePath()
-    else:
-        # No other way for now
-        return
+        # no other option for now
+        # TODO: retrieve the information from data store
+        if isinstance(impact_function.datastore.uri, QDir):
+            layer_dir = impact_function.datastore.uri.absolutePath()
+        else:
+            # No other way for now
+            return
 
-    # We will generate it on the fly without storing it after datastore
-    # supports
-    impact_report.output_folder = os.path.join(layer_dir, 'output')
-    return impact_report.process_components()
+        # We will generate it on the fly without storing it after datastore
+        # supports
+        impact_report.output_folder = os.path.join(layer_dir, 'output')
+        error_code, message = impact_report.process_components()
+        if error_code == ImpactReport.REPORT_GENERATION_FAILED:
+            break
 
-
-def generate_infographic_report(impact_function, iface):
-    """Generate impact map pdf from impact function.
-
-    :param impact_function: The impact function used.
-    :type impact_function: ImpactFunction
-
-    :param iface: QGIS QGisAppInterface instance.
-    :type iface: QGisAppInterface
-    """
-    # get the extra layers that we need
-    extra_layers = []
-    print_atlas = setting('print_atlas_report', False, bool)
-    if print_atlas:
-        extra_layers.append(impact_function.aggregation_summary)
-    # create impact report instance
-    report_metadata = ReportMetadata(
-        metadata_dict=update_template_component(infographic_report))
-    impact_report = ImpactReport(
-        iface,
-        report_metadata,
-        impact_function=impact_function,
-        extra_layers=extra_layers)
-
-    # get the extent of impact layer
-    impact_report.qgis_composition_context.extent = \
-        impact_function.impact.extent()
-
-    # generate report folder
-
-    # no other option for now
-    # TODO: retrieve the information from data store
-    if isinstance(impact_function.datastore.uri, QDir):
-        layer_dir = impact_function.datastore.uri.absolutePath()
-    else:
-        # No other way for now
-        return
-
-    # We will generate it on the fly without storing it after datastore
-    # supports
-    impact_report.output_folder = os.path.join(layer_dir, 'output')
-    return impact_report.process_components()
+    return error_code, message
 
 
 def add_impact_layers_to_canvas(impact_function, iface):

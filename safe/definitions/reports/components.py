@@ -847,3 +847,6 @@ infographic_report = {
         population_infographic_component
     ]
 }
+
+all_default_report_components = [
+    standard_impact_report_metadata_pdf, map_report, infographic_report]
