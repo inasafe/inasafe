@@ -10,7 +10,7 @@ from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import QFileInfo, pyqtSignature, pyqtSlot
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QDialogButtonBox, QDialog, QFileDialog, QMessageBox
-from qgis.core import QgsRasterLayer, QgsMapLayerRegistry
+from qgis.core import QgsVectorLayer, QgsRasterLayer, QgsMapLayerRegistry
 from qgis.utils import iface
 
 from safe import messaging as m
@@ -65,6 +65,7 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         self.on_output_path_textChanged()
         self.update_warning()
         self.output_layer = None
+        self.place_layer = None
 
         # Event register
         # noinspection PyUnresolvedReferences
@@ -109,6 +110,25 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         if self.use_output_default.isChecked():
             self.get_output_from_input()
         self.update_warning()
+
+    # noinspection PyPep8Naming
+    def on_input_place_textChanged(self):
+        """Action when input place layer name is changed."""
+        if os.path.exists(self.input_place.text()):
+            try:
+                self.place_layer = QgsVectorLayer(
+                    self.input_place.text(),
+                    'Nearby Cities',
+                    'ogr'
+                )
+                if self.place_layer.isValid():
+                    LOGGER.debug('Get field information')
+                    self.name_field.setLayer(self.place_layer)
+                    self.population_field.setLayer(self.place_layer)
+                else:
+                    LOGGER.debug('failed to set name field')
+            except:
+                pass
 
     def update_warning(self):
         """Update warning message and enable/disable Ok button."""
@@ -237,6 +257,13 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
             self, self.tr('Output file'), 'grid.tif',
             self.tr('Raster file (*.tif)'))
         self.output_path.setText(filename)
+
+    @pyqtSignature('')
+    def on_open_place_tool_clicked(self):
+        filename = QFileDialog.getOpenFileName(
+            self, self.tr('Input place layer'),'',
+            self.tr('All Files (*.*)'))
+        self.input_place.setText(filename)
 
     def load_result_toggled(self):
         """Function that perform action when load_result checkbox is clicked.
