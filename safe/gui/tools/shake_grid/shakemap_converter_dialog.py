@@ -261,7 +261,7 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
     @pyqtSignature('')
     def on_open_place_tool_clicked(self):
         filename = QFileDialog.getOpenFileName(
-            self, self.tr('Input place layer'),'',
+            self, self.tr('Input place layer'), '',
             self.tr('All Files (*.*)'))
         self.input_place.setText(filename)
 

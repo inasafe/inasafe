@@ -28,10 +28,10 @@ def bearing_to_cardinal(angle):
     return direction_list[index]
 
 
-def distance_direction(hazard_point, places_layer, name, population=False):
+def get_direction_distance(hazard_point, places_layer, name, population=None):
     """Calculate distance and bearing angle.
 
-    :param hazard_point:
+    :param hazard_point: A point
     :param places_layer:
     :param name:
     :param population:
