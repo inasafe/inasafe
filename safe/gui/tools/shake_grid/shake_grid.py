@@ -18,6 +18,7 @@ from osgeo import gdal, ogr
 from osgeo.gdalconst import GA_ReadOnly
 from pytz import timezone
 from qgis.core import (
+    QgsPoint,
     QgsVectorLayer,
     QgsFeatureRequest,
     QgsRectangle,
@@ -38,6 +39,7 @@ from safe.definitions.layer_modes import layer_mode_continuous
 from safe.definitions.layer_purposes import layer_purpose_hazard
 from safe.definitions.units import unit_mmi
 from safe.definitions.versions import inasafe_keyword_version
+from safe.utilities.direction_distance import get_direction_distance
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.styling import mmi_colour
@@ -70,6 +72,9 @@ class ShakeGrid(object):
             title,
             source,
             grid_xml_path,
+            place_layer=None,
+            name_field=None,
+            population_field=None,
             output_dir=None,
             output_basename=None,
             algorithm_filename_flag=True):
@@ -137,6 +142,11 @@ class ShakeGrid(object):
         self.algorithm_name = algorithm_filename_flag
         self.grid_xml_path = grid_xml_path
         self.parse_grid_xml()
+        self.place_layer = place_layer
+        self.name_field = name_field
+        self.population_field = population_field
+        self.locality = None
+        self.nearby_cities = None
 
     def extract_date_time(self, the_time_stamp):
         """Extract the parts of a date given a timestamp as per below example.
@@ -823,6 +833,26 @@ class ShakeGrid(object):
 
         layer.commitChanges()
 
+    def generate_locality_info(self):
+        """Generate information related to the locality of the hazard."""
+
+        epicenter = QgsPoint(self.longitude, self.latitude)
+        place_layer = self.place_layer
+        sorted_cities = get_direction_distance(
+            epicenter,
+            place_layer,
+            self.name_field,
+            self.population_field
+        )
+        nearest_city = sorted_cities[0]
+        # combine locality text
+        city_name = nearest_city[str(self.name_field)]
+        city_distance = nearest_city['distance']
+        city_direction = nearest_city['bearing_to']
+        self.locality = 'Located ' + str(city_distance/1000) + ' km, ' + \
+                        city_direction + ' of ' + city_name
+        self.nearby_cities = sorted_cities[:5]
+
     def create_keyword_file(self, algorithm):
         """Create keyword file for the raster file created.
 
@@ -844,6 +874,7 @@ class ShakeGrid(object):
             classes[item['key']] = [
                 item['numeric_default_min'], item['numeric_default_max']]
 
+        self.generate_locality_info()
         extra_keywords = {
             'latitude': self.latitude,
             'longitude': self.longitude,
@@ -851,6 +882,7 @@ class ShakeGrid(object):
             'depth': self.depth,
             'description': self.description,
             'location': self.location,
+            'locality': self.locality,
             # 'day': self.day,
             # 'month': self.month,
             # 'year': self.year,
