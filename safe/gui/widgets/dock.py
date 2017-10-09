@@ -145,11 +145,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         :param iface: A QGisAppInterface instance we use to access QGIS via.
         :type iface: QgsAppInterface
-
-        .. note:: We use the multiple inheritance approach from Qt4 so that
-            for elements are directly accessible in the form context and we can
-            use autoconnect to set up slots. See article below:
-            http://doc.qt.nokia.com/4.7-snapshot/designer-using-a-ui-file.html
         """
         QtGui.QDockWidget.__init__(self, None)
 
@@ -263,6 +258,12 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.run_button.clicked.connect(self.accept)
         self.about_button.clicked.connect(self.about)
         self.print_button.clicked.connect(self.print_map)
+        self.hazard_layer_combo.currentIndexChanged.connect(
+            self.index_changed_hazard_layer_combo)
+        self.exposure_layer_combo.currentIndexChanged.connect(
+            self.index_changed_exposure_layer_combo)
+        self.aggregation_layer_combo.currentIndexChanged.connect(
+            self.index_changed_aggregation_layer_combo)
 
     def about(self):
         """Open the About dialog."""
@@ -504,37 +505,29 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         disable_busy_cursor()
 
-    # noinspection PyPep8Naming
-    @pyqtSlot(int)
-    def on_hazard_layer_combo_currentIndexChanged(self, index):
+    def index_changed_hazard_layer_combo(self, index):
         """Automatic slot executed when the Hazard combo is changed.
 
         This is here so that we can see if the ok button should be enabled.
 
         :param index: The index number of the selected hazard layer.
         """
-        # Add any other logic you might like here...
         del index
         self.toggle_aggregation_layer_combo()
         self.validate_impact_function()
 
-    # noinspection PyPep8Naming
-    @pyqtSlot(int)
-    def on_exposure_layer_combo_currentIndexChanged(self, index):
+    def index_changed_exposure_layer_combo(self, index):
         """Automatic slot executed when the Exposure combo is changed.
 
         This is here so that we can see if the ok button should be enabled.
 
         :param index: The index number of the selected exposure layer.
         """
-        # Add any other logic you might like here...
         del index
         self.toggle_aggregation_layer_combo()
         self.validate_impact_function()
 
-    # noinspection PyPep8Naming
-    @pyqtSlot(int)
-    def on_aggregation_layer_combo_currentIndexChanged(self, index):
+    def index_changed_aggregation_layer_combo(self, index):
         """Automatic slot executed when the Aggregation combo is changed.
 
         :param index: The index number of the selected exposure layer.
