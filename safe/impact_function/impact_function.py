@@ -274,6 +274,53 @@ class ImpactFunction(object):
             raise WrongEarthquakeFunction
         self._earthquake_function = value
 
+    def __eq__(self, other):
+        """Operator overloading for equal (=).
+
+        :param other: Other Impact Function to be compared.
+        :type other: ImpactFunction
+
+        :returns: True if both are the same IF, other wise False.
+        :rtype: bool
+        """
+        properties = [
+            'performance_log',
+            'hazard',
+            'exposure',
+            'aggregation',
+            # 'outputs',
+            # 'impact',
+            # 'exposure_summary',
+            # 'aggregate_hazard_impacted',
+            # 'aggregation_summary',
+            # 'analysis_impacted',
+            # 'exposure_summary_table',
+            'profiling',
+            'requested_extent',
+            'requested_extent_crs',
+            'analysis_extent',
+            'datastore',
+            'name',
+            'title',
+            'start_datetime',
+            'end_datetime',
+            'duration',
+            'earthquake_function',
+            # 'callback',
+        ]
+        for if_property in properties:
+            try:
+                if getattr(self, if_property) != getattr(other, if_property):
+                    return False
+            except AttributeError as e:
+                LOGGER.error(e)
+                return False
+            except Exception as e:
+                LOGGER.error('Error on %s with error message %s' % (
+                    if_property, e))
+                return False
+        return True
+
     @property
     def performance_log(self):
         """Property for the performance log that can be used for benchmarking.
