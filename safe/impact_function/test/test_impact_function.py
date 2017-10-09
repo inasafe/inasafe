@@ -1149,6 +1149,10 @@ class TestImpactFunction(unittest.TestCase):
                     inasafe_fields,
                     message.format(field_key=field['key']))
 
+    def test_equality(self):
+        """Testing IF equal operator."""
+        new_impact_function = ImpactFunction()
+        self.assertEqual(new_impact_function, new_impact_function)
 
 if __name__ == '__main__':
     unittest.main()
