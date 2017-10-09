@@ -4,11 +4,38 @@
 
 from PyQt4.QtCore import QPyNullVariant
 
+from safe.definitions.layer_geometry import (
+    layer_geometry_raster,
+    layer_geometry_point,
+    layer_geometry_line,
+    layer_geometry_polygon,
+)
+from safe.utilities.gis import is_raster_layer, is_point_layer, is_line_layer
 
-__copyright__ = "Copyright 2016, The InaSAFE Project"
+
+__copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
+
+
+def geometry_type(layer):
+    """Retrieve the geometry type: point, line, polygon or raster for a layer.
+
+    :param layer: The layer.
+    :type layer: QgsMapLayer
+
+    :return: The definition key.
+    :rtype: basestring
+    """
+    if is_raster_layer(layer):
+        return layer_geometry_raster['key']
+    elif is_point_layer(layer):
+        return layer_geometry_point['key']
+    elif is_line_layer(layer):
+        return layer_geometry_line['key']
+    else:
+        return layer_geometry_polygon['key']
 
 
 def reclassify_value(one_value, ranges):
@@ -19,7 +46,7 @@ def reclassify_value(one_value, ranges):
     :param one_value: The continuous value to classify.
     :type one_value: float
 
-    :param ranges: Classes,
+    :param ranges: Classes, following the hazard classification definitions.
     :type ranges: OrderedDict
 
     :return: The classified value or None.
