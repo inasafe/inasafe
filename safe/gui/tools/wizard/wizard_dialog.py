@@ -16,9 +16,7 @@ from safe.definitions.layer_purposes import (
     layer_purpose_exposure, layer_purpose_aggregation, layer_purpose_hazard)
 from safe.definitions.layer_geometry import (
     layer_geometry_raster,
-    layer_geometry_line,
-    layer_geometry_point,
-    layer_geometry_polygon)
+)
 from safe.definitions.layer_modes import (
     layer_mode_continuous, layer_mode_classified)
 from safe.definitions.units import exposure_unit
@@ -34,6 +32,7 @@ from safe.common.exceptions import (
     InaSAFEError,
     MetadataReadError,
     InvalidWizardStep)
+from safe.gis.tools import geometry_type
 from safe.gui.tools.wizard.wizard_strings import (
     category_question_hazard,
     category_question_exposure,
@@ -41,8 +40,6 @@ from safe.gui.tools.wizard.wizard_strings import (
 from safe.gui.tools.wizard.utilities import layer_description_html
 from safe.utilities.default_values import set_inasafe_default_value_qsetting
 from safe.utilities.gis import (
-    is_raster_layer,
-    is_point_layer,
     is_polygon_layer)
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.resources import get_ui_class, resources_path
@@ -505,14 +502,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         if not layer:
             layer = self.layer
-        if is_raster_layer(layer):
-            return layer_geometry_raster['key']
-        elif is_point_layer(layer):
-            return layer_geometry_point['key']
-        elif is_polygon_layer(layer):
-            return layer_geometry_polygon['key']
-        else:
-            return layer_geometry_line['key']
+        return geometry_type(layer)
 
     def get_existing_keyword(self, keyword):
         """Obtain an existing keyword's value.

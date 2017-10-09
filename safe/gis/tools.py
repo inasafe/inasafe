@@ -10,7 +10,8 @@ from safe.definitions.layer_geometry import (
     layer_geometry_line,
     layer_geometry_polygon,
 )
-from safe.utilities.gis import is_raster_layer, is_point_layer, is_line_layer
+from safe.utilities.gis import (
+    is_raster_layer, is_point_layer, is_line_layer, is_polygon_layer)
 
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
@@ -34,8 +35,10 @@ def geometry_type(layer):
         return layer_geometry_point['key']
     elif is_line_layer(layer):
         return layer_geometry_line['key']
-    else:
+    elif is_polygon_layer(layer):
         return layer_geometry_polygon['key']
+    else:
+        return None
 
 
 def reclassify_value(one_value, ranges):
