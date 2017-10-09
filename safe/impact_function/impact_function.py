@@ -28,6 +28,7 @@ from safe.common.version import get_version
 from safe.datastore.folder import Folder
 from safe.datastore.datastore import DataStore
 from safe.gis.sanity_check import check_inasafe_fields, check_layer
+from safe.gis.tools import geometry_type
 from safe.gis.vector.tools import remove_fields
 from safe.gis.vector.from_counts_to_ratios import from_counts_to_ratios
 from safe.gis.vector.prepare_vector_layer import prepare_vector_layer
@@ -908,10 +909,8 @@ class ImpactFunction(object):
             # Set the name
             hazard_name = get_name(self.hazard.keywords.get('hazard'))
             exposure_name = get_name(self.exposure.keywords.get('exposure'))
-            hazard_geometry_name = get_name(
-                self.hazard.keywords.get('layer_geometry'))
-            exposure_geometry_name = get_name(
-                self.exposure.keywords.get('layer_geometry'))
+            hazard_geometry_name = get_name(geometry_type(self.hazard))
+            exposure_geometry_name = get_name(geometry_type(self.exposure))
             self._name = tr(
                 '{hazard_type} {hazard_geometry} On {exposure_type} '
                 '{exposure_geometry}').format(
