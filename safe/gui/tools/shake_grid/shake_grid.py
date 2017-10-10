@@ -846,11 +846,13 @@ class ShakeGrid(object):
         )
         nearest_city = sorted_cities[0]
         # combine locality text
-        city_name = nearest_city[str(self.name_field)]
+        city_name = nearest_city['name']
         city_distance = nearest_city['distance']
-        city_direction = nearest_city['bearing_to']
-        self.locality = 'Located ' + str(city_distance/1000) + ' km, ' + \
-                        city_direction + ' of ' + city_name
+        city_bearing = nearest_city['bearing_to']
+        city_direction = nearest_city['direction_to']
+        self.locality = 'Located ' + str(math.floor(city_distance/1000)) + \
+                        ' km, ' + str(math.floor(city_bearing)) + '° ' + \
+                        city_direction + ' of ' + str(city_name)
         self.nearby_cities = sorted_cities[:5]
 
     def create_keyword_file(self, algorithm):
@@ -944,6 +946,9 @@ def convert_mmi_data(
         grid_xml_path,
         title,
         source,
+        place_layer=None,
+        place_name=None,
+        place_population=None,
         output_path=None,
         algorithm=None,
         algorithm_filename_flag=True):
@@ -957,6 +962,15 @@ def convert_mmi_data(
 
     :param source: The source of the shake data.
     :type source: str
+
+    :param place_layer: Nearby cities/places.
+    :type place_layer: QgsVectorLayer
+
+    :param place_name: Column name that indicates name of the cities.
+    :type place_name: str
+
+    :param place_population: Column name that indicates number of population.
+    :type place_population: str
 
     :param output_path: Specify which path to use as an alternative to the
         default.
@@ -983,9 +997,12 @@ def convert_mmi_data(
         output_dir = output_path
         output_basename = None
     converter = ShakeGrid(
-        title=title,
-        source=source,
-        grid_xml_path=grid_xml_path,
+        title,
+        source,
+        grid_xml_path,
+        place_layer,
+        place_name,
+        place_population,
         output_dir=output_dir,
         output_basename=output_basename,
         algorithm_filename_flag=algorithm_filename_flag)
