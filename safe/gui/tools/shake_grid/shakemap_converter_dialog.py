@@ -115,20 +115,17 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
     def on_input_place_textChanged(self):
         """Action when input place layer name is changed."""
         if os.path.exists(self.input_place.text()):
-            try:
-                self.place_layer = QgsVectorLayer(
-                    self.input_place.text(),
-                    'Nearby Cities',
-                    'ogr'
-                )
-                if self.place_layer.isValid():
-                    LOGGER.debug('Get field information')
-                    self.name_field.setLayer(self.place_layer)
-                    self.population_field.setLayer(self.place_layer)
-                else:
-                    LOGGER.debug('failed to set name field')
-            except:
-                pass
+            self.place_layer = QgsVectorLayer(
+                self.input_place.text(),
+                self.tr('Nearby Cities'),
+                'ogr'
+            )
+            if self.place_layer.isValid():
+                LOGGER.debug('Get field information')
+                self.name_field.setLayer(self.place_layer)
+                self.population_field.setLayer(self.place_layer)
+            else:
+                LOGGER.debug('failed to set name field')
 
     def update_warning(self):
         """Update warning message and enable/disable Ok button."""
@@ -199,6 +196,9 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
             input_path,
             input_title,
             input_source,
+            self.place_layer,
+            self.name_field.currentText(),
+            self.population_field.currentText(),
             output_path,
             algorithm=algorithm,
             algorithm_filename_flag=True)
