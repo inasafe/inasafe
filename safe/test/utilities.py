@@ -22,11 +22,10 @@ from qgis.core import (
     QgsMapLayerRegistry)
 from qgis.utils import iface
 
-from safe.common.exceptions import NoKeywordsFoundError
+from safe.gis.utilities import load_layer
 from safe.common.utilities import unique_filename, temp_dir
 from safe.definitions.constants import HAZARD_EXPOSURE
 from safe.gis.vector.tools import create_memory_layer, copy_layer
-from safe.utilities.metadata import read_iso19115_metadata
 from safe.utilities.utilities import monkey_patch_keywords
 
 QGIS_APP = None  # Static variable used to hold hand to running QGIS app
@@ -440,50 +439,6 @@ def load_path_raster_layer(path, **kwargs):
     monkey_patch_keywords(layer)
 
     return layer
-
-
-def load_layer(layer_path):
-    """Helper to load and return a single QGIS layer
-
-    :param layer_path: Path name to raster or vector file.
-    :type layer_path: str
-
-    :returns: tuple containing layer and its layer_purpose.
-    :rtype: (QgsMapLayer, str)
-
-    """
-    # Extract basename and absolute path
-    file_name = os.path.split(layer_path)[-1]  # In case path was absolute
-    base_name, extension = os.path.splitext(file_name)
-
-    # Determine if layer is hazard or exposure
-    layer_purpose = 'undefined'
-    try:
-        keywords = read_iso19115_metadata(layer_path)
-        if 'layer_purpose' in keywords:
-            layer_purpose = keywords['layer_purpose']
-    except NoKeywordsFoundError:
-        pass
-
-    # Create QGis Layer Instance
-    if extension in ['.asc', '.tif', '.tiff']:
-        layer = QgsRasterLayer(layer_path, base_name)
-    elif extension in ['.shp', '.geojson', '.gpkg']:
-        layer = QgsVectorLayer(layer_path, base_name, 'ogr')
-    else:
-        message = 'File %s had illegal extension' % layer_path
-        raise Exception(message)
-
-    # noinspection PyUnresolvedReferences
-    message = 'Layer "%s" is not valid' % layer.source()
-    # noinspection PyUnresolvedReferences
-    if not layer.isValid():
-        LOGGER.debug(message)
-        raise Exception(message)
-
-    monkey_patch_keywords(layer)
-
-    return layer, layer_purpose
 
 
 def set_canvas_crs(epsg_id, enable_projection=False):

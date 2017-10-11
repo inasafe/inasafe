@@ -26,9 +26,9 @@ from safe.utilities.styling import (
 from safe.test.utilities import (
     standard_data_path,
     load_test_vector_layer,
-    load_layer,
     get_qgis_app,
     clone_shp_layer)
+from safe.gis.utilities import load_layer
 from safe.common.exceptions import StyleError
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
