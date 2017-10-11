@@ -6,10 +6,10 @@ from qgis.core import QgsDataSourceURI, QgsVectorLayer
 
 from safe.common.exceptions import NoKeywordsFoundError
 from safe.test.utilities import (
-    load_layer,
     get_qgis_app,
     standard_data_path,
     clone_raster_layer)
+from safe.gis.utilities import load_layer
 from safe.utilities.keyword_io import KeywordIO
 
 __copyright__ = "Copyright 2011, The InaSAFE Project"

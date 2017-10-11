@@ -26,9 +26,9 @@ from safe.report.extractors.util import (
     resolve_from_dictionary,
     retrieve_exposure_classes_lists)
 from safe.test.utilities import (
-    load_layer,
     standard_data_path,
     get_qgis_app)
+from safe.gis.utilities import load_layer
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
