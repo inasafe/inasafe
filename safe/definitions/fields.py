@@ -6,7 +6,7 @@ from PyQt4.QtCore import QVariant
 
 from safe.definitions import concepts
 from safe.definitions.constants import (
-    qvariant_whole_numbers, qvariant_numbers)
+    qvariant_whole_numbers, qvariant_numbers, qvariant_all)
 from safe.definitions.currencies import currencies
 from safe.definitions.default_values import (
     female_ratio_default_value,
@@ -195,11 +195,12 @@ hazard_name_field = {
 }
 
 # Hazard Value
+
 hazard_value_field = {
     'key': 'hazard_value_field',
     'name': tr('Hazard Value'),
     'field_name': 'hazard_value',
-    'type': [QVariant.String, QVariant.Int, QVariant.Double],
+    'type': qvariant_all,
     'length': default_field_length,
     'precision': 0,
     'help_text': tr(
@@ -223,7 +224,6 @@ hazard_value_field = {
     # Null value can be replaced by default or not
     'replace_null': False
 }
-
 # Hazard Class
 hazard_class_field = {
     'key': 'hazard_class_field',
