@@ -47,7 +47,8 @@ from safe.definitions import (
     production_cost_rate_field,
     production_value_rate_field,
     provenance_host_name,
-    provenance_user
+    provenance_user,
+    provenance_crs
 )
 from safe.definitions.reports.components import map_report
 
@@ -71,7 +72,8 @@ from safe.definitions.utilities import (
     get_field_groups,
     update_template_component,
     get_name,
-    set_provenance
+    set_provenance,
+    get_provenance
 )
 
 from safe.utilities.resources import resources_path
@@ -492,6 +494,22 @@ class TestDefinitionsUtilities(unittest.TestCase):
         }
         self.assertDictEqual(provenance_collection, expected)
 
+    def test_get_provenance(self):
+        """Test fot get_provenance"""
+        provenance_collection = {}
+        host_name_value = 'host_name'
+        set_provenance(
+            provenance_collection, provenance_host_name, host_name_value)
+        user_value = 'user'
+        set_provenance(
+            provenance_collection, provenance_user, user_value)
+
+        self.assertEqual(host_name_value, get_provenance(
+            provenance_collection, provenance_host_name))
+        self.assertEqual(user_value, get_provenance(
+            provenance_collection, provenance_user))
+        self.assertIsNone(
+            get_provenance(provenance_collection, provenance_crs))
 
 if __name__ == '__main__':
     unittest.main()
