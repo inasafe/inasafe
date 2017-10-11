@@ -559,3 +559,19 @@ def set_provenance(provenance_collection, provenance_dict, value):
     :type value: object
     """
     provenance_collection[provenance_dict['provenance_key']] = value
+
+
+def get_provenance(provenance_collection, provenance_dict):
+    """Helper to get provenance_dict value from provenance_collection.
+
+    :param provenance_collection: The target of dictionary of provenance to
+        be updated.
+    :type provenance_collection: dict
+
+    :param provenance_dict: The provenance dictionary to be the key.
+    :type provenance_dict: dict
+
+    :returns: The value of the provenance.
+    :rtype value: object
+    """
+    return provenance_collection.get(provenance_dict['provenance_key'])
