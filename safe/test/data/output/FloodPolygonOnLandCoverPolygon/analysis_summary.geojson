@@ -1,0 +1,7 @@
+{
+"type": "FeatureCollection",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::3857" } },
+"features": [
+{ "type": "Feature", "properties": { "analysis_id": 1, "analysis_name": "Flood Polygon On Land Cover Polygon", "dry_hazard_count": 297.1896, "wet_hazard_count": 194.8685, "not exposed_hazard_count": 423.0523, "total_affected": 194.8685, "total_not_affected": 297.1896, "total_exposed": 492.0581, "total_not_exposed": 423.0523, "total": 915.1104 }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 11889813.28584286943078, -691006.586327555007301 ], [ 11889813.28584286943078, -687895.598084959667176 ], [ 11892769.872337158769369, -687895.598084959667176 ], [ 11892769.872337158769369, -691006.586327555007301 ], [ 11889813.28584286943078, -691006.586327555007301 ] ] ] ] } }
+]
+}
