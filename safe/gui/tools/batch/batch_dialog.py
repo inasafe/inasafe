@@ -21,6 +21,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import sys
 import logging
+from copy import deepcopy
 from datetime import datetime
 
 from StringIO import StringIO
@@ -56,7 +57,9 @@ from safe.definitions.layer_purposes import (
 from safe.definitions.utilities import update_template_component
 from safe.definitions.reports.components import (
     standard_impact_report_metadata_pdf,
-    map_report)
+    map_report,
+    all_default_report_components,
+    infographic_report)
 from safe.utilities.gis import extent_string_to_array
 from safe.common.utilities import temp_dir
 from safe.common.signals import send_error_message
@@ -67,10 +70,11 @@ from safe.gui.tools.help.batch_help import batch_help
 from safe.impact_function.impact_function import ImpactFunction
 from safe.report.report_metadata import ReportMetadata
 from safe.report.impact_report import ImpactReport
-from safe.gui.analysis_utilities import (
-    generate_impact_report,
-    generate_impact_map_report)
+from safe.gui.analysis_utilities import generate_report
 from safe.utilities.qgis_utilities import display_critical_message_box
+from safe.definitions.exposure import exposure_population
+from safe.report.extractors.util import layer_definition_type
+
 
 INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
 LOGGER = logging.getLogger('InaSAFE')
@@ -506,18 +510,25 @@ class BatchDialog(QDialog, FORM_CLASS):
 
                         # generate map report and impact report
                         try:
-                            # this line is to save the impact report in default
-                            # InaSAFE directory.
-                            generate_impact_report(impact_function, self.iface)
-                            generate_impact_map_report(
-                                impact_function,
-                                self.iface)
+                            # generate report from component definition and
+                            # save it in the default output directory
+                            report_components = deepcopy(
+                                all_default_report_components)
+
+                            # don't generate infographic if exposure is not
+                            # a population
+                            exposure_type = layer_definition_type(
+                                impact_function.exposure)
+                            if exposure_type != exposure_population:
+                                report_components.remove(infographic_report)
+
+                            error_code, message = generate_report(
+                                report_components, impact_function, self.iface)
+
                             # this line is to save the report in user specified
                             # directory.
                             self.generate_pdf_report(
-                                impact_function,
-                                self.iface,
-                                group_name)
+                                impact_function, self.iface, group_name)
                         except:
                             status_item.setText(
                                 self.tr('Report failed to generate.'))

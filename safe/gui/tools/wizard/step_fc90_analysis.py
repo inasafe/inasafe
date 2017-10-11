@@ -10,14 +10,12 @@ from PyQt4.QtCore import pyqtSignature
 from qgis.core import (
     QgsGeometry,
     QgsCoordinateReferenceSystem,
-    QgsMapLayerRegistry,
-    QgsRasterLayer)
+    QgsMapLayerRegistry)
 
 from safe.definitions.exposure import exposure_population
 from safe.definitions.reports.components import (
     all_default_report_components,
     infographic_report)
-from safe.definitions.reports.infographic import map_overview
 from safe.report.extractors.util import layer_definition_type
 from safe.utilities.i18n import tr
 from safe.utilities.extent import Extent
@@ -203,20 +201,9 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
             self.impact_function.exposure)
         if exposure_type != exposure_population:
             report_components.remove(infographic_report)
-        else:
-            # if exposure is population, we need to add map overview layer
-            map_overview_layer = QgsRasterLayer(
-                map_overview['path'], 'Overview')
-            add_layer_to_canvas(
-                map_overview_layer,
-                map_overview['id'],
-                self.impact_function)
 
         error_code, message = generate_report(
             report_components, self.impact_function, self.iface)
-
-        remove_layer_from_canvas(
-            map_overview_layer, self.impact_function)
 
         if error_code == ImpactReport.REPORT_GENERATION_FAILED:
             self.hide_busy()
