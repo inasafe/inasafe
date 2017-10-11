@@ -28,6 +28,8 @@ qvariant_numbers = qvariant_whole_numbers + [
     QVariant.Double,
 ]
 
+qvariant_all = qvariant_numbers + [QVariant.String]
+
 # Extent selector
 EXPOSURE = 'Exposure'
 HAZARD_EXPOSURE = 'HazardExposure'
