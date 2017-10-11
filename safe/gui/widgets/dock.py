@@ -16,7 +16,6 @@ from qgis.core import (
     QgsMapLayerRegistry,
     QgsCoordinateReferenceSystem,
     QgsExpressionContextUtils,
-    QgsRasterLayer
 )
 
 from copy import deepcopy
@@ -110,8 +109,6 @@ from safe.gui.widgets.message import (
 from safe.gui.analysis_utilities import (
     add_impact_layers_to_canvas,
     add_debug_layers_to_canvas,
-    add_layer_to_canvas,
-    remove_layer_from_canvas,
     generate_report)
 from safe.utilities.utilities import is_plugin_installed
 
@@ -1208,20 +1205,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 self.impact_function.exposure)
             if exposure_type != exposure_population:
                 report_components.remove(infographic_report)
-            else:
-                # if exposure is population, we need to add map overview layer
-                map_overview_layer = QgsRasterLayer(
-                    map_overview['path'], 'Overview')
-                add_layer_to_canvas(
-                    map_overview_layer,
-                    map_overview['id'],
-                    self.impact_function)
 
             error_code, message = generate_report(
                 report_components, self.impact_function, self.iface)
-
-            remove_layer_from_canvas(
-                map_overview_layer, self.impact_function)
 
             if error_code == ImpactReport.REPORT_GENERATION_FAILED:
                 self.hide_busy()

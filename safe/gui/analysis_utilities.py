@@ -5,8 +5,13 @@
 import os
 from collections import OrderedDict
 from PyQt4.QtCore import QDir, Qt
-from qgis.core import QgsMapLayerRegistry, QgsProject, QgsMapLayer, QGis
+from qgis.core import (
+    QgsMapLayerRegistry,
+    QgsProject,
+    QgsRasterLayer)
 
+from safe.definitions.exposure import exposure_population
+from safe.definitions.reports.infographic import map_overview
 from safe.definitions.utilities import definition, update_template_component
 from safe.definitions.fields import hazard_class_field
 from safe.definitions.reports.components import map_report
@@ -35,6 +40,14 @@ def generate_report(components, impact_function, iface):
     :param iface: QGIS QGisAppInterface instance.
     :type iface: QGisAppInterface
     """
+    # if exposure is population, we need to add
+    # map overview layer
+    exposure_type = layer_definition_type(impact_function.exposure)
+    if exposure_type == exposure_population:
+        map_overview_layer = QgsRasterLayer(
+            map_overview['path'], 'Overview')
+        add_layer_to_canvas(
+            map_overview_layer, map_overview['id'], impact_function)
 
     extra_layers = []
     print_atlas = setting('print_atlas_report', False, bool)
@@ -95,6 +108,8 @@ def generate_report(components, impact_function, iface):
         error_code, message = impact_report.process_components()
         if error_code == ImpactReport.REPORT_GENERATION_FAILED:
             break
+
+    remove_layer_from_canvas(map_overview_layer, impact_function)
 
     return error_code, message
 
