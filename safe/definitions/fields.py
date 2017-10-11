@@ -304,26 +304,6 @@ aggregation_name_field = {
 # Analysis
 # # # # # # # # # #
 
-analysis_id_field = {
-    'key': 'analysis_id_field',
-    'name': tr('Analysis ID'),
-    'field_name': 'analysis_id',
-    'type': qvariant_whole_numbers,
-    'length': default_field_length,
-    'precision': 0,
-    'absolute': False,
-    'description': tr(  # short description
-        'An ID attribute in the analysis layer.'),
-    'help_text': tr(
-        'A unique identifier for each analysis feature.'),
-    'citations': [
-        {
-            'text': None,
-            'link': None
-        }
-    ]
-}
-
 analysis_name_field = {
     'key': 'analysis_name_field',
     'name': tr('Analysis Name'),
@@ -2469,7 +2449,6 @@ exposure_summary_table_fields = [
 ]
 
 analysis_fields = [
-    analysis_id_field,
     analysis_name_field,
     hazard_count_field,
     total_affected_field,

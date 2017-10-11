@@ -7,7 +7,6 @@ from PyQt4.QtCore import QPyNullVariant
 from qgis.core import QgsFeatureRequest
 
 from safe.definitions.fields import (
-    analysis_id_field,
     analysis_name_field,
     aggregation_id_field,
     aggregation_name_field,
@@ -74,7 +73,6 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
     target_fields = analysis.keywords['inasafe_fields']
 
     target_compulsory_fields = [
-        analysis_id_field,
         analysis_name_field,
     ]
     check_inputs(target_compulsory_fields, target_fields)

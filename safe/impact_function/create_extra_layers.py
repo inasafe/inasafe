@@ -11,7 +11,6 @@ from qgis.core import (
 from safe.definitions.fields import (
     aggregation_id_field,
     aggregation_name_field,
-    analysis_id_field,
     analysis_name_field,
     profiling_function_field,
     profiling_time_field,
@@ -100,7 +99,6 @@ def create_analysis_layer(analysis_extent, crs, name):
     :rtype: QgsVectorLayer
     """
     fields = [
-        create_field_from_definition(analysis_id_field),
         create_field_from_definition(analysis_name_field)
     ]
     analysis_layer = create_memory_layer(
@@ -111,7 +109,7 @@ def create_analysis_layer(analysis_extent, crs, name):
     feature = QgsFeature()
     # noinspection PyCallByClass,PyArgumentList,PyTypeChecker
     feature.setGeometry(analysis_extent)
-    feature.setAttributes([1, name])
+    feature.setAttributes([name])
     analysis_layer.addFeature(feature)
     analysis_layer.commitChanges()
 
@@ -122,7 +120,6 @@ def create_analysis_layer(analysis_extent, crs, name):
     analysis_layer.keywords[inasafe_keyword_version_key] = (
         inasafe_keyword_version)
     analysis_layer.keywords['inasafe_fields'] = {
-        analysis_id_field['key']: analysis_id_field['field_name'],
         analysis_name_field['key']: analysis_name_field['field_name']
     }
 
