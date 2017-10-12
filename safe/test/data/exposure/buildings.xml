@@ -170,7 +170,6 @@
                 </gmd:EX_Extent>
       </gmd:extent>
       <gmd:supplementalInformation>
-        <inasafe_keywords/>
         <inasafe>
           <classification>
             <gco:CharacterString>generic_structure_classes</gco:CharacterString>
