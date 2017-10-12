@@ -305,11 +305,11 @@ class ImpactFunction(object):
             'analysis_extent',  # Done
             'datastore',  # Done
             'name',  # Done
-            'title', # Done
+            'title',  # Done
             'start_datetime',  # Done
             'end_datetime',  # Done
             'duration',  # Done
-            'earthquake_function',
+            'earthquake_function',  # Done
             # 'callback',
         ]
         for if_property in properties:
@@ -2487,6 +2487,11 @@ class ImpactFunction(object):
         # Duration
         duration = get_provenance(provenance, provenance_duration)
         impact_function._duration = duration
+
+        # Earthquake function
+        earthquake_function = get_provenance(
+            provenance, provenance_earthquake_function)
+        impact_function._earthquake_function = earthquake_function
 
         return impact_function
 

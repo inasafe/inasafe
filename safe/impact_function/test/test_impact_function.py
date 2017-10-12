@@ -1182,6 +1182,7 @@ class TestImpactFunction(unittest.TestCase):
         self.assertIsInstance(impact_function.start_datetime, datetime)
         self.assertIsInstance(impact_function.end_datetime, datetime)
         self.assertLess(0, impact_function.duration)
+        self.assertIsNone(impact_function.earthquake_function)
 
 if __name__ == '__main__':
     unittest.main()
