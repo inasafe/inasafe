@@ -157,6 +157,11 @@ provenance_start_datetime = {
     'name': tr('Start Datetime'),
     'provenance_key': 'start_datetime'
 }
+provenance_earthquake_function = {
+    'key': 'provenance_earthquake_function',
+    'name': tr('Earthquake Function'),
+    'provenance_key': 'earthquake_function'
+}
 provenance_user = {
     'key': 'provenance_user',
     'name': tr('User'),
@@ -241,6 +246,7 @@ provenance_list = [
     provenance_analysis_question,
     provenance_data_store_uri,
     provenance_duration,
+    provenance_earthquake_function,
     provenance_end_datetime,
     provenance_exposure_keywords,
     provenance_exposure_layer,

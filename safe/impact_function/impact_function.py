@@ -93,6 +93,7 @@ from safe.definitions.provenance import (
     provenance_analysis_question,
     provenance_data_store_uri,
     provenance_duration,
+    provenance_earthquake_function,
     provenance_end_datetime,
     provenance_exposure_keywords,
     provenance_exposure_layer,
@@ -725,7 +726,7 @@ class ImpactFunction(object):
 
             self.progress_callback(current, maximum, message=None)
 
-        :rtype: function
+        :rtype: function()
 
         .. seealso:: console_progress_callback
         """
@@ -1420,6 +1421,11 @@ class ImpactFunction(object):
             # to None as we don't want notes specific to EQ raster on
             # population.
             self._earthquake_function = None
+
+        set_provenance(
+            self._provenance,
+            provenance_earthquake_function,
+            self._earthquake_function)
 
         step_count = len(analysis_steps)
 
