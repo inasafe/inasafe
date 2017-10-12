@@ -1171,7 +1171,7 @@ class TestImpactFunction(unittest.TestCase):
             layer_purpose_analysis_impacted['key'])
         output_metadata = analysis_summary.keywords
         from pprint import pprint
-        # pprint(output_metadata)
+        pprint(output_metadata)
         impact_function = ImpactFunction.load_from_output_metadata(
             output_metadata)
         self.assertIsNotNone(impact_function.exposure)
@@ -1184,6 +1184,19 @@ class TestImpactFunction(unittest.TestCase):
         self.assertIsInstance(impact_function.end_datetime, datetime)
         self.assertLess(0, impact_function.duration)
         self.assertIsNone(impact_function.earthquake_function)
+        # Output layers
+        self.assertIsInstance(impact_function.exposure_summary, QgsVectorLayer)
+        self.assertIsInstance(
+            impact_function.aggregate_hazard_impacted, QgsVectorLayer)
+        self.assertIsInstance(
+            impact_function.aggregation_summary, QgsVectorLayer)
+        self.assertIsInstance(
+            impact_function.analysis_impacted, QgsVectorLayer)
+        # self.assertIsInstance(
+        #     impact_function.exposure_summary_table, QgsVectorLayer)
+        self.assertIsInstance(impact_function.impact, QgsVectorLayer)
+        # self.assertEquals(len(impact_function.outputs), 6)
+
 
 
 if __name__ == '__main__':
