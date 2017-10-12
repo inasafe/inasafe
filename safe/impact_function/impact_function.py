@@ -2429,21 +2429,17 @@ class ImpactFunction(object):
         exposure_path = get_provenance(provenance, provenance_exposure_layer)
         if exposure_path:
             impact_function.exposure = load_layer(exposure_path)[0]
-        else:
-            impact_function.exposure = None
+
         # Set hazard layer
         hazard_path = get_provenance(provenance, provenance_hazard_layer)
         if hazard_path:
             impact_function.hazard = load_layer(hazard_path)[0]
-        else:
-            impact_function.hazard = None
+
         # Set aggregation layer
         aggregation_path = get_provenance(
             provenance, provenance_aggregation_layer)
         if aggregation_path:
             impact_function.aggregation = load_layer(aggregation_path)[0]
-        else:
-            impact_function.aggregation = None
 
         # Requested extent
         requested_extent = get_provenance(
@@ -2463,8 +2459,6 @@ class ImpactFunction(object):
         data_store_uri = get_provenance(provenance, provenance_data_store_uri)
         if data_store_uri:
             impact_function.datastore = Folder(data_store_uri)
-        else:
-            impact_function.datastore = None
 
         # Name
         name = get_provenance(provenance, provenance_impact_function_name)
@@ -2492,6 +2486,38 @@ class ImpactFunction(object):
         earthquake_function = get_provenance(
             provenance, provenance_earthquake_function)
         impact_function._earthquake_function = earthquake_function
+
+        # Output layers
+        # 'exposure_summary',
+        exposure_summary_path = get_provenance(
+            provenance, provenance_layer_exposure_summary)
+        if exposure_summary_path:
+            impact_function._exposure_summary = load_layer(
+                exposure_summary_path)[0]
+        # 'aggregate_hazard_impacted',
+        aggregate_hazard_impacted_path = get_provenance(
+            provenance, provenance_layer_aggregate_hazard_impacted)
+        if aggregate_hazard_impacted_path:
+            impact_function._aggregate_hazard_impacted = load_layer(
+                aggregate_hazard_impacted_path)[0]
+        # 'aggregation_summary',
+        aggregation_summary_path = get_provenance(
+            provenance, provenance_layer_aggregation_summary)
+        if aggregation_summary_path:
+            impact_function._aggregation_summary = load_layer(
+                aggregation_summary_path)[0]
+        # 'analysis_impacted',
+        analysis_impacted_path = get_provenance(
+            provenance, provenance_layer_analysis_impacted)
+        if analysis_impacted_path:
+            impact_function._analysis_impacted = load_layer(
+                analysis_impacted_path)[0]
+        # 'exposure_summary_table',
+        exposure_summary_table_path = get_provenance(
+            provenance, provenance_layer_exposure_summary_table)
+        # if exposure_summary_table_path:
+        #     impact_function._exposure_summary_table = load_layer(
+        #         exposure_summary_table_path)
 
         return impact_function
 
