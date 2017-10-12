@@ -302,12 +302,12 @@ class ImpactFunction(object):
             'requested_extent',  # Done
             'requested_extent_crs',  # Not yet
             'analysis_extent',  # Done
-            'datastore',
-            'name',
-            'title',
-            'start_datetime',
-            'end_datetime',
-            'duration',
+            'datastore',  # Done
+            'name',  # Done
+            'title', # Done
+            'start_datetime',  # Done
+            'end_datetime',  # Done
+            'duration',  # Done
             'earthquake_function',
             # 'callback',
         ]
@@ -2455,11 +2455,32 @@ class ImpactFunction(object):
 
         # Data store
         data_store_uri = get_provenance(provenance, provenance_data_store_uri)
-        print data_store_uri
         if data_store_uri:
             impact_function.datastore = Folder(data_store_uri)
         else:
             impact_function.datastore = None
+
+        # Name
+        name = get_provenance(provenance, provenance_impact_function_name)
+        impact_function._name = name
+
+        # Title
+        title = get_provenance(provenance, provenance_impact_function_title)
+        impact_function._title = title
+
+        # Start date time
+        start_datetime = get_provenance(
+            provenance, provenance_start_datetime)
+        impact_function._start_datetime = start_datetime
+
+        # End date time
+        end_datetime = get_provenance(
+            provenance, provenance_end_datetime)
+        impact_function._end_datetime = end_datetime
+
+        # Duration
+        duration = get_provenance(provenance, provenance_duration)
+        impact_function._duration = duration
 
         return impact_function
 
