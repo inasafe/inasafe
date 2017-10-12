@@ -1,7 +1,0 @@
-{
-"type": "FeatureCollection",
-"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::3857" } },
-"features": [
-{ "type": "Feature", "properties": { "aggregation_id": 1, "aggregation_name": "Entire Area", "wood_affected": 48.2672, "farm_affected": 14.3242, "residential_affected": 132.2771, "total_affected": 194.8685 }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 11889813.28584286943078, -691006.586327555007301 ], [ 11889813.28584286943078, -687895.598084959667176 ], [ 11892769.872337158769369, -687895.598084959667176 ], [ 11892769.872337158769369, -691006.586327555007301 ], [ 11889813.28584286943078, -691006.586327555007301 ] ] ] ] } }
-]
-}
