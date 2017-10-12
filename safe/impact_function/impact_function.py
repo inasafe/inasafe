@@ -2456,7 +2456,7 @@ class ImpactFunction(object):
         analysis_extent = get_provenance(
             provenance, provenance_analysis_extent)
         if analysis_extent:
-            impact_function._analysis_extent = wkt_to_rectangle(
+            impact_function._analysis_extent = QgsGeometry.fromWkt(
                 analysis_extent)
 
         # Data store
