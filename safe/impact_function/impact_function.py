@@ -27,6 +27,7 @@ from safe.common.utilities import temp_dir
 from safe.common.version import get_version
 from safe.datastore.folder import Folder
 from safe.datastore.datastore import DataStore
+from safe.gis.utilities import load_layer
 from safe.gis.sanity_check import check_inasafe_fields, check_layer
 from safe.gis.tools import geometry_type
 from safe.gis.vector.tools import remove_fields
@@ -58,7 +59,8 @@ from safe.definitions.utilities import (
     definition,
     get_non_compulsory_fields,
     get_name,
-    set_provenance
+    set_provenance,
+    get_provenance
 )
 from safe.definitions.exposure import indivisible_exposure
 from safe.definitions.fields import (
@@ -163,7 +165,8 @@ from safe.impact_function.style import (
     hazard_class_style,
     simple_polygon_without_brush,
 )
-from safe.utilities.gis import is_vector_layer, is_raster_layer
+from safe.utilities.gis import (
+    is_vector_layer, is_raster_layer, wkt_to_rectangle)
 from safe.utilities.i18n import tr
 from safe.utilities.default_values import get_inasafe_default_value_qsetting
 from safe.utilities.unicode import get_unicode
@@ -284,10 +287,10 @@ class ImpactFunction(object):
         :rtype: bool
         """
         properties = [
-            'performance_log',
-            'hazard',
-            'exposure',
-            'aggregation',
+            'performance_log',  # Not yet
+            'hazard',  # Done
+            'exposure',  # Done
+            'aggregation',  # Done
             # 'outputs',
             # 'impact',
             # 'exposure_summary',
@@ -295,10 +298,10 @@ class ImpactFunction(object):
             # 'aggregation_summary',
             # 'analysis_impacted',
             # 'exposure_summary_table',
-            'profiling',
-            'requested_extent',
-            'requested_extent_crs',
-            'analysis_extent',
+            'profiling',  # Not yet
+            'requested_extent',  # Done
+            'requested_extent_crs',  # Not yet
+            'analysis_extent',  # Done
             'datastore',
             'name',
             'title',
@@ -2403,3 +2406,80 @@ class ImpactFunction(object):
         for key, value in ISO19115_mapping.items():
             ISO19115_keywords[value] = setting(key, expected_type=str)
         keywords.update(ISO19115_keywords)
+
+    @staticmethod
+    def load_from_output_metadata(output_metadata):
+        """Set Impact Function based on an output of an analysis's metadata.
+
+        :param output_metadata: Metadata from an output layer.
+        :type output_metadata: OutputLayerMetadata
+
+        :returns: Impact Function based on the metadata.
+        :rtype: ImpactFunction
+        """
+        impact_function = ImpactFunction()
+        provenance = output_metadata['provenance_data']
+        # Set exposure layer
+        exposure_path = get_provenance(provenance, provenance_exposure_layer)
+        if exposure_path:
+            impact_function.exposure = load_layer(exposure_path)[0]
+        else:
+            impact_function.exposure = None
+        # Set hazard layer
+        hazard_path = get_provenance(provenance, provenance_hazard_layer)
+        if hazard_path:
+            impact_function.hazard = load_layer(hazard_path)[0]
+        else:
+            impact_function.hazard = None
+        # Set aggregation layer
+        aggregation_path = get_provenance(
+            provenance, provenance_aggregation_layer)
+        if aggregation_path:
+            impact_function.aggregation = load_layer(aggregation_path)[0]
+        else:
+            impact_function.aggregation = None
+
+        # Requested extent
+        requested_extent = get_provenance(
+            provenance, provenance_requested_extent)
+        if requested_extent:
+            impact_function.requested_extent = wkt_to_rectangle(
+                requested_extent)
+
+        # Analysis extent
+        analysis_extent = get_provenance(
+            provenance, provenance_analysis_extent)
+        if analysis_extent:
+            impact_function._analysis_extent = wkt_to_rectangle(
+                analysis_extent)
+
+        # Data store
+        data_store_uri = get_provenance(provenance, provenance_data_store_uri)
+        print data_store_uri
+        if data_store_uri:
+            impact_function.datastore = Folder(data_store_uri)
+        else:
+            impact_function.datastore = None
+
+        return impact_function
+
+    # def load(self, serialized_impact_function):
+    #     """Load or create IF from a dictionary.
+    #
+    #     :param serialized_impact_function: A dictionary that represent an
+    #         impact function.
+    #     :type serialized_impact_function: dicts
+    #     """
+    #     pass
+    #
+    # def serialize(self):
+    #     """Serialize Impact Function to a dictionary.
+    #
+    #     :returns: The Impact Function serialization.
+    #     :rtype: dict
+    #     """
+    #     serialized = {}
+    #     if self._provenance_ready:
+    #         hazard_path =
+    #         serialized['hazard'] = self.provenance[provenance_hazard_layer[
+    #             'provenance_key']]
