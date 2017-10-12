@@ -22,6 +22,7 @@ from qgis.core import (
     QgsVectorLayer,
     QgsFeatureRequest,
     QgsRectangle,
+    QgsRaster,
     QgsRasterLayer)
 
 from safe.common.exceptions import (
@@ -64,7 +65,6 @@ def data_dir():
 
 
 class ShakeGrid(object):
-
     """A converter for USGS shakemap grid.xml files to geotiff."""
 
     def __init__(
@@ -555,6 +555,7 @@ class ShakeGrid(object):
         if 'invdist' in algorithm:
             algorithm = 'invdist'
 
+        self.generate_locality_info(tif_path)
         # copy the keywords file from fixtures for this layer
         self.create_keyword_file(algorithm)
 
@@ -833,27 +834,78 @@ class ShakeGrid(object):
 
         layer.commitChanges()
 
-    def generate_locality_info(self):
+    def mmi_point_sampling(self, place_layer, raster_mmi_path):
+        """Get MMI information from ShakeMap Tiff on place location.
+
+        Get the MMI value on each cities/places from the generated tiff files.
+        :param place_layer: Point layer generated from distance calculation
+        :type place_layer: QgsVectorLayer
+        :param raster_mmi_path: Path to converted mmi raster.
+        :type raster_mmi_path: str
+        :return:
+        """
+        shake_raster = QgsRasterLayer(raster_mmi_path, 'shake_raster')
+        shake_provider = shake_raster.dataProvider()
+
+        place_fields = place_layer.dataProvider().fields()
+        mmi_field_index = place_fields.indexFromName('mmi')
+
+        place_layer.startEditing()
+        for feature in place_layer.getFeatures():
+            fid = feature.id()
+            point = feature.geometry().asPoint()
+            mmi_identify = shake_provider.identify(
+                point,
+                QgsRaster.IdentifyFormatValue
+            )
+            mmi = mmi_identify.results()[1]
+            place_layer.changeAttributeValue(fid, mmi_field_index, mmi)
+        place_layer.commitChanges()
+        return place_layer
+
+
+    def generate_locality_info(self, raster_mmi_path):
         """Generate information related to the locality of the hazard."""
 
         epicenter = QgsPoint(self.longitude, self.latitude)
         place_layer = self.place_layer
-        sorted_cities = get_direction_distance(
+        measured_place_layer = get_direction_distance(
             epicenter,
             place_layer,
             self.name_field,
             self.population_field
         )
-        nearest_city = sorted_cities[0]
+        mmi_point_layer = self.mmi_point_sampling(
+            measured_place_layer,
+            raster_mmi_path
+        )
+        places = []
+        for feature in mmi_point_layer.getFeatures():
+            place = {
+                'name' : feature[self.name_field],
+                'population' : feature[self.population_field],
+                'distance' : feature['distance'],
+                'bearing_to' : feature['bearing_to'],
+                'dir_to' : feature['dir_to'],
+                'mmi_values' : feature['mmi']
+            }
+            places.append(place)
+        # sort the place by mmi and by population
+        sorted_places = sorted(
+            places,
+            key=itemgetter('mmi_values','population'),
+            reverse=True
+        )
+        nearest_place = sorted_places[0]
         # combine locality text
-        city_name = nearest_city['name']
-        city_distance = nearest_city['distance']
-        city_bearing = nearest_city['bearing_to']
-        city_direction = nearest_city['direction_to']
-        self.locality = 'Located ' + str(math.floor(city_distance/1000)) + \
+        city_name = nearest_place['name']
+        city_distance = nearest_place['distance']
+        city_bearing = nearest_place['bearing_to']
+        city_direction = nearest_place['dir_to']
+        self.locality = 'Located ' + str(math.floor(city_distance / 1000)) + \
                         ' km, ' + str(math.floor(city_bearing)) + '° ' + \
-                        city_direction + ' of ' + str(city_name)
-        self.nearby_cities = sorted_cities[:5]
+                        str(city_direction) + ' of ' + str(city_name)
+        self.nearby_cities = sorted_places[:5]
 
     def create_keyword_file(self, algorithm):
         """Create keyword file for the raster file created.
@@ -876,7 +928,6 @@ class ShakeGrid(object):
             classes[item['key']] = [
                 item['numeric_default_min'], item['numeric_default_max']]
 
-        self.generate_locality_info()
         extra_keywords = {
             'latitude': self.latitude,
             'longitude': self.longitude,
@@ -884,7 +935,7 @@ class ShakeGrid(object):
             'depth': self.depth,
             'description': self.description,
             'location': self.location,
-            'locality': self.locality,
+            # 'locality': self.locality, # Commenting this for the moment
             # 'day': self.day,
             # 'month': self.month,
             # 'year': self.year,
