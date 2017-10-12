@@ -8,7 +8,6 @@ from PyQt4.QtCore import QVariant
 from qgis.core import (
     QgsDistanceArea,
     QgsField,
-    QgsRasterLayer,
     QGis
 )
 from safe.gis.vector.tools import create_memory_layer
