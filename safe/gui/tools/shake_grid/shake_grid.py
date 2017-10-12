@@ -32,6 +32,7 @@ from safe.common.exceptions import (
     InvalidLayerError,
     CallGDALError)
 from safe.common.utilities import which, romanise
+from safe.datastore.folder import Folder
 from safe.definitions.hazard import hazard_earthquake
 from safe.definitions.hazard_category import hazard_category_single_event
 from safe.definitions.hazard_classifications import earthquake_mmi_scale
@@ -842,7 +843,8 @@ class ShakeGrid(object):
         :type place_layer: QgsVectorLayer
         :param raster_mmi_path: Path to converted mmi raster.
         :type raster_mmi_path: str
-        :return:
+        :return: Modified place layer containing MMI values
+        :rtype: QgsVectorLayer
         """
         shake_raster = QgsRasterLayer(raster_mmi_path, 'shake_raster')
         shake_provider = shake_raster.dataProvider()
@@ -861,20 +863,26 @@ class ShakeGrid(object):
             mmi = mmi_identify.results()[1]
             place_layer.changeAttributeValue(fid, mmi_field_index, mmi)
         place_layer.commitChanges()
+        # save the memory place layer
+        data_store = Folder(self.output_dir)
+        data_store.default_vector_format = 'geojson'
+        data_store.add_layer(
+            place_layer,
+            '%s-nearby-places' % self.output_basename
+        )
         return place_layer
 
-
     def generate_locality_info(self, raster_mmi_path):
-        """Generate information related to the locality of the hazard."""
+        """Generate information related to the locality of the hazard.
+
+        :param raster_mmi_path: path to converted raster mmi
+        :type raster_mmi_path: str
+        """
 
         epicenter = QgsPoint(self.longitude, self.latitude)
         place_layer = self.place_layer
-        measured_place_layer = get_direction_distance(
-            epicenter,
-            place_layer,
-            self.name_field,
-            self.population_field
-        )
+
+        measured_place_layer = get_direction_distance(epicenter, place_layer)
         mmi_point_layer = self.mmi_point_sampling(
             measured_place_layer,
             raster_mmi_path
@@ -882,18 +890,18 @@ class ShakeGrid(object):
         places = []
         for feature in mmi_point_layer.getFeatures():
             place = {
-                'name' : feature[self.name_field],
-                'population' : feature[self.population_field],
-                'distance' : feature['distance'],
-                'bearing_to' : feature['bearing_to'],
-                'dir_to' : feature['dir_to'],
-                'mmi_values' : feature['mmi']
+                'name': feature[self.name_field],
+                'population': feature[self.population_field],
+                'distance': feature['distance'],
+                'bearing_to': feature['bearing_to'],
+                'dir_to': feature['dir_to'],
+                'mmi_values': feature['mmi']
             }
             places.append(place)
         # sort the place by mmi and by population
         sorted_places = sorted(
             places,
-            key=itemgetter('mmi_values','population'),
+            key=itemgetter('mmi_values', 'population'),
             reverse=True
         )
         nearest_place = sorted_places[0]
@@ -935,7 +943,7 @@ class ShakeGrid(object):
             'depth': self.depth,
             'description': self.description,
             'location': self.location,
-            # 'locality': self.locality, # Commenting this for the moment
+            'locality': self.locality,
             # 'day': self.day,
             # 'month': self.month,
             # 'year': self.year,
