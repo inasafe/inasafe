@@ -98,6 +98,7 @@ from qgis.core import (
     QgsMapLayer,
     QgsCoordinateReferenceSystem,
     QgsRectangle,
+    QgsGeometry,
     QGis)
 from osgeo import gdal
 from PyQt4.QtCore import QT_VERSION_STR
@@ -1163,26 +1164,27 @@ class TestImpactFunction(unittest.TestCase):
         """Test load from metadata."""
         analysis_summary = load_test_vector_layer(
             'output',
-            'FloodPolygonOnLandCoverPolygon',
+            'FloodRasterOnLandCoverPolygon_12October2017_16h36-32.797220',
             'analysis_summary.geojson')
         self.assertEqual(
             analysis_summary.keywords['layer_purpose'],
             layer_purpose_analysis_impacted['key'])
         output_metadata = analysis_summary.keywords
         from pprint import pprint
-        pprint(output_metadata)
+        # pprint(output_metadata)
         impact_function = ImpactFunction.load_from_output_metadata(
             output_metadata)
         self.assertIsNotNone(impact_function.exposure)
         self.assertIsNotNone(impact_function.hazard)
-        self.assertIsNone(impact_function.aggregation)
+        self.assertIsNotNone(impact_function.aggregation)
         self.assertIsNone(impact_function.requested_extent)
-        self.assertIsInstance(impact_function.analysis_extent, QgsRectangle)
+        self.assertIsInstance(impact_function.analysis_extent, QgsGeometry)
         self.assertIsInstance(impact_function.datastore, DataStore)
         self.assertIsInstance(impact_function.start_datetime, datetime)
         self.assertIsInstance(impact_function.end_datetime, datetime)
         self.assertLess(0, impact_function.duration)
         self.assertIsNone(impact_function.earthquake_function)
+
 
 if __name__ == '__main__':
     unittest.main()
