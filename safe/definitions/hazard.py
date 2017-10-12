@@ -14,7 +14,8 @@ from safe.definitions.hazard_classifications import (
     tsunami_hazard_population_classes_ITB,
     ash_hazard_classes,
     cyclone_au_bom_hazard_classes,
-    cyclone_sshws_hazard_classes)
+    cyclone_sshws_hazard_classes,
+    inundation_classes) # GEO_DAM_BREAK
 from safe.definitions.caveats import (
     caveat_simulation, caveat_local_conditions, caveat_analysis_extent,)
 from safe.definitions.concepts import concepts
@@ -279,8 +280,7 @@ hazard_dam_break = {
         'raster'
     ],
     'classifications': [
-        flood_hazard_classes,
-        flood_petabencana_hazard_classes,
+        inundation_classes,
         generic_hazard_classes],
     'compulsory_fields': [hazard_value_field],
     'fields': hazard_fields,

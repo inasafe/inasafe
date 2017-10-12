@@ -659,6 +659,91 @@ flood_petabencana_hazard_classes = {
     'classification_unit': tr('hazard zone')
 }
 
+# GEO_DAM_BREAK
+inundation_classes = {
+    'key': 'inundation_classes',
+    'name': tr('Inundation classes (DAM Failure)'),
+    'description': tr(
+        'This is a binary classification for an area. The area is either '
+        '<b>wet</b> (affected by flood water) or <b>dry</b> (not affected '
+        'by flood water). This unit does not describe how <b>wet</b> or '
+        '<b>dry</b> an area is.'), # ask
+    'type': hazard_classification_type,
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    'classes': [
+        {
+            'key': 'inundation_3',
+            'value': 3,
+            'color': red,
+            'name': tr('Inundation Class 3 (Daerah Bahaya 3)'),
+            'affected': True, # ask
+            'description': tr('Water is present above ground height.'), # ask
+            'string_defaults': ['wet', '1', 'YES', 'y', 'yes', 'true'], # ask
+            'fatality_rate': None,
+            'displacement_rate': 0.01, # ask
+            'numeric_default_min': 1.5,
+            'numeric_default_max': big_number,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
+            'key': 'inundation_2',
+            'value': 2,
+            'color': orange,
+            'name': tr('Inundation Class 2 (Daerah Bahaya 2)'),
+            'affected': False,
+            'description': tr('No water encountered above ground height.'),
+            'string_defaults': ['dry', '0', 'No', 'n', 'no', 'false'],
+            'fatality_rate': None,
+            'displacement_rate': 0.0,
+            'numeric_default_min': 0.6,
+            'numeric_default_max': 1.5,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
+            'key': 'inundation_1',
+            'value': 1,
+            'color': yellow,
+            'name': tr('Inundation Class 3 (Daerah Bahaya 3)'),
+            'affected': False,
+            'description': tr('No water encountered above ground height.'),
+            'string_defaults': ['dry', '0', 'No', 'n', 'no', 'false'],
+            'fatality_rate': None,
+            'displacement_rate': 0.0,
+            'numeric_default_min': 0,
+            'numeric_default_max': 0.6,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+    ],
+    'exposures': [
+        exposure_land_cover,
+        exposure_place,
+        exposure_population,
+        exposure_road,
+        exposure_structure
+    ],
+    'classification_unit': tr('hazard zone')
+}
+
 ash_hazard_classes = {
     'key': 'ash_hazard_classes',
     'name': tr('Ash classes'),
@@ -1851,6 +1936,7 @@ hazard_classification = {
         generic_hazard_classes,
         flood_hazard_classes,
         flood_petabencana_hazard_classes,
+        inundation_classes, # GEO_DAM_BREAK
         earthquake_mmi_scale,
         tsunami_hazard_classes,
         tsunami_hazard_population_classes,
