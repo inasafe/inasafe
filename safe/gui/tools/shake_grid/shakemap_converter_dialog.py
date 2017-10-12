@@ -36,7 +36,6 @@ __revision__ = '$Format:%H$'
 
 
 class ShakemapConverterDialog(QDialog, FORM_CLASS):
-
     """Importer for shakemap grid.xml files."""
 
     def __init__(self, parent=None, iface=None, dock_widget=None):
@@ -73,6 +72,7 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
             self.get_output_from_input)
         # noinspection PyUnresolvedReferences
         self.input_path.textChanged.connect(self.on_input_path_textChanged)
+        self.input_place.textChanged.connect(self.prepare_place_layer)
         # noinspection PyUnresolvedReferences
         self.output_path.textChanged.connect(self.on_output_path_textChanged)
         self.load_result.clicked.connect(self.load_result_toggled)
@@ -112,7 +112,7 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         self.update_warning()
 
     # noinspection PyPep8Naming
-    def on_input_place_textChanged(self):
+    def prepare_place_layer(self):
         """Action when input place layer name is changed."""
         if os.path.exists(self.input_place.text()):
             self.place_layer = QgsVectorLayer(
