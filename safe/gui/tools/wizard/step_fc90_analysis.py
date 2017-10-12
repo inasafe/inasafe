@@ -3,7 +3,6 @@
 
 import logging
 import os
-from copy import deepcopy
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature
 
@@ -12,11 +11,6 @@ from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsMapLayerRegistry)
 
-from safe.definitions.exposure import exposure_population
-from safe.definitions.reports.components import (
-    all_default_report_components,
-    infographic_report)
-from safe.report.extractors.util import layer_definition_type
 from safe.utilities.i18n import tr
 from safe.utilities.extent import Extent
 from safe.definitions.constants import (
@@ -36,10 +30,7 @@ from safe.impact_function.impact_function import ImpactFunction
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.analysis_utilities import (
-    add_impact_layers_to_canvas,
-    add_layer_to_canvas,
-    generate_report,
-    remove_layer_from_canvas)
+    add_impact_layers_to_canvas, generate_report)
 from safe import messaging as m
 from safe.messaging import styles
 from safe.report.impact_report import ImpactReport
@@ -193,17 +184,7 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
             legend = self.iface.legendInterface()
             legend.setLayerVisible(qgis_exposure, False)
 
-        # generate report from component definition
-        report_components = deepcopy(all_default_report_components)
-
-        # don't generate infographic if exposure is not population
-        exposure_type = layer_definition_type(
-            self.impact_function.exposure)
-        if exposure_type != exposure_population:
-            report_components.remove(infographic_report)
-
-        error_code, message = generate_report(
-            report_components, self.impact_function, self.iface)
+        error_code, message = generate_report(self.impact_function, self.iface)
 
         if error_code == ImpactReport.REPORT_GENERATION_FAILED:
             self.hide_busy()

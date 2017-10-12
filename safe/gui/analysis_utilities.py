@@ -4,17 +4,21 @@
 
 import os
 from collections import OrderedDict
+from copy import deepcopy
 from PyQt4.QtCore import QDir, Qt
 from qgis.core import (
     QgsMapLayerRegistry,
     QgsProject,
-    QgsRasterLayer)
+    QgsRasterLayer,
+    QgsMapLayer,
+    QGis)
 
 from safe.definitions.exposure import exposure_population
 from safe.definitions.reports.infographic import map_overview
 from safe.definitions.utilities import definition, update_template_component
 from safe.definitions.fields import hazard_class_field
-from safe.definitions.reports.components import map_report
+from safe.definitions.reports.components import (
+    map_report, all_default_report_components, infographic_report)
 from safe.impact_function.style import hazard_class_style
 from safe.report.extractors.util import layer_definition_type
 from safe.report.report_metadata import ReportMetadata
@@ -28,11 +32,8 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
-def generate_report(components, impact_function, iface):
+def generate_report(impact_function, iface):
     """Generate Impact Report from an Impact Function.
-
-    :param components: List of report components to be generated.
-    :type components: list
 
     :param impact_function: The impact function to be used.
     :type impact_function: ImpactFunction
@@ -40,6 +41,14 @@ def generate_report(components, impact_function, iface):
     :param iface: QGIS QGisAppInterface instance.
     :type iface: QGisAppInterface
     """
+    # generate report from component definition
+    report_components = deepcopy(all_default_report_components)
+
+    # don't generate infographic if exposure is not population
+    exposure_type = layer_definition_type(impact_function.exposure)
+    if exposure_type != exposure_population:
+        report_components.remove(infographic_report)
+
     # if exposure is population, we need to add
     # map overview layer
     exposure_type = layer_definition_type(impact_function.exposure)
@@ -59,18 +68,18 @@ def generate_report(components, impact_function, iface):
     if print_atlas:
         extra_layers.append(aggregation_summary_layer)
 
-    for report_component in components:
+    for component in report_components:
         # create impact report instance
 
-        if report_component['key'] == map_report['key']:
+        if component['key'] == map_report['key']:
             report_metadata = ReportMetadata(
                 metadata_dict=update_template_component(
-                    component=report_component,
+                    component=component,
                     hazard=hazard_type,
                     exposure=exposure_type))
         else:
             report_metadata = ReportMetadata(
-                metadata_dict=update_template_component(report_component))
+                metadata_dict=update_template_component(component))
 
         impact_report = ImpactReport(
             iface,

@@ -18,9 +18,6 @@ from qgis.core import (
     QgsExpressionContextUtils,
 )
 
-from copy import deepcopy
-
-from safe.definitions.exposure import exposure_population
 from safe.definitions.layer_purposes import (
     layer_purpose_hazard,
     layer_purpose_exposure,
@@ -48,7 +45,6 @@ from safe.definitions.constants import (
 )
 from safe.definitions.provenance import (
     provenance_list, duplicated_global_variables)
-from safe.definitions.reports.infographic import map_overview
 from safe.definitions.utilities import (
     update_template_component,
     get_name,
@@ -62,10 +58,8 @@ from safe.definitions.reports import (
 from safe.definitions.reports.components import (
     standard_impact_report_metadata_pdf,
     map_report,
-    infographic_report,
-    all_default_report_components)
+    infographic_report)
 from safe.gui.gui_utilities import layer_from_combo, add_ordered_combo_item
-from safe.report.extractors.util import layer_definition_type
 from safe.report.impact_report import ImpactReport
 from safe.report.report_metadata import ReportMetadata
 from safe.utilities.gis import wkt_to_rectangle, qgis_version
@@ -1197,17 +1191,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             legend.setLayerVisible(qgis_exposure, False)
 
         if setting('generate_report', True, bool):
-            # generate report from component definition
-            report_components = deepcopy(all_default_report_components)
-
-            # don't generate infographic if exposure is not population
-            exposure_type = layer_definition_type(
-                self.impact_function.exposure)
-            if exposure_type != exposure_population:
-                report_components.remove(infographic_report)
-
             error_code, message = generate_report(
-                report_components, self.impact_function, self.iface)
+                self.impact_function, self.iface)
 
             if error_code == ImpactReport.REPORT_GENERATION_FAILED:
                 self.hide_busy()
