@@ -5,6 +5,7 @@
 from copy import deepcopy
 import getpass
 from socket import gethostname
+from datetime import datetime
 
 import unittest
 import json
@@ -1178,6 +1179,9 @@ class TestImpactFunction(unittest.TestCase):
         self.assertIsNone(impact_function.requested_extent)
         self.assertIsInstance(impact_function.analysis_extent, QgsRectangle)
         self.assertIsInstance(impact_function.datastore, DataStore)
+        self.assertIsInstance(impact_function.start_datetime, datetime)
+        self.assertIsInstance(impact_function.end_datetime, datetime)
+        self.assertLess(0, impact_function.duration)
 
 if __name__ == '__main__':
     unittest.main()
