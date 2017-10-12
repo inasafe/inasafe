@@ -81,6 +81,7 @@ from safe.test.utilities import (
     compare_wkt
 )
 from safe.common.version import get_version
+from safe.datastore.datastore import DataStore
 from safe.test.debug_helper import print_attribute_table
 
 from safe.impact_function.provenance_utilities import (
@@ -95,6 +96,7 @@ from qgis.core import (
     QgsRasterLayer,
     QgsMapLayer,
     QgsCoordinateReferenceSystem,
+    QgsRectangle,
     QGis)
 from osgeo import gdal
 from PyQt4.QtCore import QT_VERSION_STR
@@ -115,6 +117,8 @@ from safe.gis.sanity_check import check_inasafe_fields
 from safe.utilities.unicode import byteify
 from safe.utilities.gis import wkt_to_rectangle
 from safe.utilities.utilities import readable_os_version
+from safe.utilities.metadata import read_iso19115_metadata
+from safe.metadata.output_layer_metadata import OutputLayerMetadata
 from safe.impact_function.impact_function import ImpactFunction
 from safe.impact_function.impact_function_utilities import check_input_layer
 
@@ -1153,6 +1157,27 @@ class TestImpactFunction(unittest.TestCase):
         """Testing IF equal operator."""
         new_impact_function = ImpactFunction()
         self.assertEqual(new_impact_function, new_impact_function)
+
+    def test_load_from_metadata(self):
+        """Test load from metadata."""
+        analysis_summary = load_test_vector_layer(
+            'output',
+            'FloodPolygonOnLandCoverPolygon',
+            'analysis_summary.geojson')
+        self.assertEqual(
+            analysis_summary.keywords['layer_purpose'],
+            layer_purpose_analysis_impacted['key'])
+        output_metadata = analysis_summary.keywords
+        from pprint import pprint
+        pprint(output_metadata)
+        impact_function = ImpactFunction.load_from_output_metadata(
+            output_metadata)
+        self.assertIsNotNone(impact_function.exposure)
+        self.assertIsNotNone(impact_function.hazard)
+        self.assertIsNone(impact_function.aggregation)
+        self.assertIsNone(impact_function.requested_extent)
+        self.assertIsInstance(impact_function.analysis_extent, QgsRectangle)
+        self.assertIsInstance(impact_function.datastore, DataStore)
 
 if __name__ == '__main__':
     unittest.main()
