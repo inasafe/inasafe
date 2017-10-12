@@ -167,7 +167,6 @@
                 </gmd:EX_Extent>
       </gmd:extent>
       <gmd:supplementalInformation>
-        <inasafe_keywords/>
         <inasafe>
           <source>
             <gco:CharacterString/>
