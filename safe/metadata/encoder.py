@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-
+# coding=utf-8
 """Tools for metadata encoding."""
 
 import json
@@ -7,11 +6,10 @@ from datetime import datetime, date
 
 from PyQt4.QtCore import QDate, Qt, QDateTime, QUrl
 
-__author__ = 'ismailsunni'
-__project_name__ = 'inasafe-dev'
-__filename__ = 'encoder.py'
-__date__ = '2/18/16'
-__copyright__ = 'imajimatika@gmail.com'
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 
 class MetadataEncoder(json.JSONEncoder):

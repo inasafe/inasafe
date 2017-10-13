@@ -1,14 +1,9 @@
 # coding=utf-8
 """Metadata for Output Layer."""
 
-import json
-from xml.etree import ElementTree
 from safe.metadata import GenericLayerMetadata
 
-from safe.metadata.utilities import reading_ancillary_files, prettify_xml
-from safe.metadata.utilities import XML_NS
 from safe.metadata.utilities import merge_dictionaries
-from safe.metadata.encoder import MetadataEncoder
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
