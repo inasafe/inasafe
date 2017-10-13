@@ -217,19 +217,6 @@ class TestImpactMetadata(TestCase):
             '2016-02-18T12:34:56', '%Y-%m-%dT%H:%M:%S')
         metadata.url = QUrl('http://inasafe.org')
 
-        metadata.append_provenance_step(
-            'Title 1', 'Description of step 1', '2015-06-25T13:14:24.508974')
-        metadata.append_provenance_step(
-            'Title 2', 'Description of step 2', '2015-06-25T13:14:24.508980')
-        metadata.append_provenance_step(
-            'Title 3', 'Description of step 3', '2015-06-25T13:14:24.508984')
-        metadata.append_if_provenance_step(
-            'IF Provenance',
-            'IF Provenance',
-            '2015-06-25T13:14:24.510000',
-            good_data
-        )
-
         return metadata
 
     def test_update_from_dict(self):
@@ -260,26 +247,11 @@ class TestImpactMetadata(TestCase):
         }
 
         metadata = OutputLayerMetadata('random_layer_id')
-        provenance = Provenance()
-        provenance.append_step(
-            'Title 1', 'Description of step 1', '2015-06-25T13:14:24.508974')
-        provenance.append_step(
-            'Title 2', 'Description of step 2', '2015-06-25T13:14:24.508980')
-        provenance.append_if_provenance_step(
-            'Title 3',
-            'Description of step 3',
-            '2015-06-25T13:14:24.508984',
-            data=good_data
-        )
         keywords = {
             'layer_purpose': 'impact_layer',
             'layer_geometry': 'raster',
-            'if_provenance': provenance,
         }
         metadata.update_from_dict(keywords)
         self.assertEqual(metadata.layer_purpose, 'impact_layer')
         self.assertEqual(metadata.layer_geometry, 'raster')
         self.assertNotEqual(metadata.layer_mode, 'raster')
-        self.assertEqual(len(metadata.provenance.steps), 3)
-        self.assertEqual(metadata.provenance.get(2), provenance.get(2))
-        self.assertEqual(metadata.provenance.get(2).user, 'my_user')
