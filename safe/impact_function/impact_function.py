@@ -295,12 +295,12 @@ class ImpactFunction(object):
             'aggregation',  # Done
             # 'outputs',
             # 'impact',
-            # 'exposure_summary',
-            # 'aggregate_hazard_impacted',
-            # 'aggregation_summary',
-            # 'analysis_impacted',
-            # 'exposure_summary_table',
-            'profiling',  # Not yet
+            'exposure_summary',  # Done
+            'aggregate_hazard_impacted',  # Done
+            'aggregation_summary',  # Done
+            'analysis_impacted',  # Done
+            'exposure_summary_table',  # Done
+            'profiling',  # Done
             'requested_extent',  # Done
             'requested_extent_crs',  # Not yet
             'analysis_extent',  # Done
