@@ -1,0 +1,90 @@
+function,time
+|\ Run,1.98400
+|*\ Aggregation preparation,0.06600
+|**\ Prepare vector layer,0.04500
+|***| Create memory layer,0.00800
+|***| Copy layer,0.01700
+|***| Remove features,0.01000
+|***| Add id column,0.00100
+|***\ Clean inasafe fields,0.00500
+|****\ Sum fields,0.00000
+|*****| Copy fields,0.00100
+|****\ Sum fields,0.00100
+|*****| Copy fields,0.00100
+|****| Remove fields,0.00000
+|**\ Reproject,0.00900
+|***| Create memory layer,0.00700
+|**\ Create analysis layer,0.00700
+|***| Create memory layer,0.00600
+|*\ Hazard preparation,0.17900
+|**| Clip by extent,0.08500
+|**| Reclassify,0.02300
+|**| Polygonize,0.01500
+|**\ Reproject,0.01100
+|***| Create memory layer,0.00800
+|**\ Clip,0.01200
+|***| Create memory layer,0.00600
+|**\ Prepare vector layer,0.02200
+|***| Create memory layer,0.00700
+|***| Copy layer,0.00100
+|***| Remove features,0.00400
+|***| Add id column,0.00100
+|***\ Clean inasafe fields,0.00600
+|****\ Sum fields,0.00200
+|*****| Copy fields,0.00100
+|****| Sum fields,0.00000
+|****| Remove fields,0.00000
+|**\ Update value map,0.00200
+|***| Remove fields,0.00000
+|*\ Aggregate hazard preparation,0.37300
+|**| Clean layer,0.00200
+|**\ Union,0.36900
+|***| Create memory layer,0.00700
+|***| Create spatial index,0.00000
+|***| Create spatial index,0.00000
+|***| Fill hazard class,0.00100
+|*\ Exposure preparation,0.05400
+|**\ Smart clip,0.00900
+|***| Create memory layer,0.00600
+|**\ Prepare vector layer,0.02600
+|***| Create memory layer,0.00700
+|***| Copy layer,0.00100
+|***| Remove features,0.00200
+|***| Add id column,0.00000
+|***\ Clean inasafe fields,0.01200
+|****\ Sum fields,0.00100
+|*****| Copy fields,0.00100
+|****\ Sum fields,0.00200
+|*****| Copy fields,0.00100
+|****| Sum fields,0.00100
+|****\ Sum fields,0.00200
+|*****| Copy fields,0.00100
+|****\ Sum fields,0.00200
+|*****| Copy fields,0.00100
+|****| Remove fields,0.00000
+|***| Check value mapping,0.00100
+|**| From counts to ratios,0.00100
+|**\ Clip,0.01000
+|***| Create memory layer,0.00700
+|**| Add default values,0.00100
+|**\ Update value map,0.00100
+|***| Remove fields,0.00000
+|*\ Intersect exposure and aggregate hazard,0.06200
+|**| Clean layer,0.00100
+|**| Clean layer,0.01200
+|**\ Intersection,0.04600
+|***| Create memory layer,0.00700
+|***| Create spatial index,0.00100
+|*\ Post process,0.04800
+|**| Run single post processor,0.02500
+|**| Run single post processor,0.00300
+|**| Run single post processor,0.00300
+|**| Run single post processor,0.00400
+|**| Run single post processor,0.00300
+|*\ Summary calculation,0.02500
+|**| Aggregate hazard summary,0.00600
+|**| Aggregation summary,0.00200
+|**| Analysis summary,0.00200
+|**\ Exposure summary table,0.01100
+|***| Create memory layer,0.00600
+|***| Summarize result,0.00200
