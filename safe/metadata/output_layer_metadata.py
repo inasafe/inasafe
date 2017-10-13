@@ -3,7 +3,7 @@
 
 import json
 from xml.etree import ElementTree
-from safe.metadata import BaseMetadata
+from safe.metadata import GenericLayerMetadata
 
 from safe.metadata.utilities import reading_ancillary_files, prettify_xml
 from safe.metadata.utilities import XML_NS
@@ -16,7 +16,7 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
-class OutputLayerMetadata(BaseMetadata):
+class OutputLayerMetadata(GenericLayerMetadata):
     """
     Metadata class for exposure summary layers
 
@@ -72,84 +72,4 @@ class OutputLayerMetadata(BaseMetadata):
             'gco:Dictionary'),
     }
     _standard_properties = merge_dictionaries(
-        BaseMetadata._standard_properties, _standard_properties)
-
-    def __init__(self, layer_uri, xml_uri=None, json_uri=None):
-        """
-        Constructor
-
-        :param layer_uri: uri of the layer for which the metadata ae
-        :type layer_uri: str
-        :param xml_uri: uri of an xml file to use
-        :type xml_uri: str
-        :param json_uri: uri of a json file to use
-        :type json_uri: str
-        """
-        
-        # initialize base class
-        super(
-            OutputLayerMetadata, self).__init__(
-            layer_uri, xml_uri, json_uri
-        )
-
-    @property
-    def json(self):
-        """
-        json representation of the metadata
-
-        :return: json representation of the metadata
-        :rtype: str
-        """
-        metadata = self.dict
-
-        metadata['provenance'] = self.provenance.dict
-        json_dumps = json.dumps(
-            metadata, indent=2, sort_keys=True, separators=(',', ': '),
-            cls=MetadataEncoder)
-        if not json_dumps.endswith('\n'):
-            json_dumps += '\n'
-        return json_dumps
-
-    def read_json(self):
-        """
-        read metadata from json and set all the found properties.
-
-        :return: the read metadata
-        :rtype: dict
-        """
-        with reading_ancillary_files(self):
-            metadata = super(OutputLayerMetadata, self).read_json()
-
-        return metadata
-
-    @property
-    def xml(self):
-        """
-        xml representation of the metadata.
-
-        :return: xml representation of the metadata
-        :rtype: ElementTree.Element
-        """
-
-        root = super(OutputLayerMetadata, self).xml
-        return prettify_xml(ElementTree.tostring(root))
-
-    def read_xml(self):
-        """
-        read metadata from xml and set all the found properties.
-
-        :return: the root element of the xml
-        :rtype: ElementTree.Element
-        """
-
-        with reading_ancillary_files(self):
-            root = super(OutputLayerMetadata, self).read_xml()
-        return root
-
-    def update_from_dict(self, keywords):
-        """Update metadata value from a keywords dictionary.
-
-        :param keywords:
-        :return:
-        """
-        super(OutputLayerMetadata, self).update_from_dict(keywords)
+        GenericLayerMetadata._standard_properties, _standard_properties)
