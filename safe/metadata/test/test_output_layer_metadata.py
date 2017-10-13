@@ -33,7 +33,6 @@ from safe.common.exceptions import MetadataReadError
 from safe.common.utilities import unique_filename
 
 from safe.metadata import OutputLayerMetadata
-from safe.metadata.provenance import Provenance
 from safe.metadata.test import (
     TEMP_DIR,
     EXISTING_IMPACT_JSON,
@@ -53,8 +52,6 @@ class TestImpactMetadata(TestCase):
 
     def test_metadata_provenance(self):
         metadata = self.generate_test_metadata()
-        self.assertEqual(metadata.provenance.count, 4)
-        self.assertEqual(metadata.provenance.last.title, 'IF Provenance')
 
     def test_metadata_date(self):
         metadata = OutputLayerMetadata('random_layer_id')
@@ -177,30 +174,6 @@ class TestImpactMetadata(TestCase):
 
     def generate_test_metadata(self):
         # if you change this you need to update IMPACT_TEST_FILE_JSON
-        good_data = {
-            'start_time': '20140714_060955',
-            'finish_time': '20140714_061255',
-            'hazard_layer': 'path/to/hazard/layer',
-            'exposure_layer': 'path/to/exposure/layer',
-            'impact_function_id': 'IF_id',
-            'impact_function_version': '2.1',
-            'host_name': 'my_computer',
-            'user': 'my_user',
-            'qgis_version': '2.4',
-            'gdal_version': '1.9.1',
-            'qt_version': '4.5',
-            'pyqt_version': '5.1',
-            'os': 'ubuntu 12.04',
-            'inasafe_version': '2.1',
-            'exposure_pixel_size': '0.1',
-            'hazard_pixel_size': '0.2',
-            'impact_pixel_size': '0.1',
-            'actual_extent': [0, 1, 2, 2],
-            'requested_extent': [0, 1, 2, 2],
-            'actual_extent_crs': 'EPSG: 4326',
-            'requested_extent_crs': 'EPSG: 4326',
-            'parameter': {},
-        }
         metadata = OutputLayerMetadata('random_layer_id')
         path = TEST_XML_BASEPATH + 'gco:CharacterString'
         # using str
@@ -221,30 +194,6 @@ class TestImpactMetadata(TestCase):
 
     def test_update_from_dict(self):
         """Test update_from_dict method."""
-        good_data = {
-            'start_time': '20140714_060955',
-            'finish_time': '20140714_061255',
-            'hazard_layer': 'path/to/hazard/layer',
-            'exposure_layer': 'path/to/exposure/layer',
-            'impact_function_id': 'IF_id',
-            'impact_function_version': '2.1',
-            'host_name': 'my_computer',
-            'user': 'my_user',
-            'qgis_version': '2.4',
-            'gdal_version': '1.9.1',
-            'qt_version': '4.5',
-            'pyqt_version': '5.1',
-            'os': 'ubuntu 12.04',
-            'inasafe_version': '2.1',
-            'exposure_pixel_size': '0.1',
-            'hazard_pixel_size': '0.2',
-            'impact_pixel_size': '0.1',
-            'actual_extent': [0, 1, 2, 2],
-            'requested_extent': [0, 1, 2, 2],
-            'actual_extent_crs': 'EPSG: 4326',
-            'requested_extent_crs': 'EPSG: 4326',
-            'parameter': {},
-        }
 
         metadata = OutputLayerMetadata('random_layer_id')
         keywords = {
