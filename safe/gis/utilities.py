@@ -45,6 +45,9 @@ def load_layer(layer_path):
         layer = QgsRasterLayer(layer_path, base_name)
     elif extension in ['.shp', '.geojson', '.gpkg']:
         layer = QgsVectorLayer(layer_path, base_name, 'ogr')
+    elif extension in ['.csv']:
+        uri = 'file:///%s?delimiter=%s' % (layer_path, ',')
+        layer = QgsVectorLayer(uri, base_name, 'delimitedtext')
     else:
         message = 'File %s had illegal extension' % layer_path
         raise Exception(message)

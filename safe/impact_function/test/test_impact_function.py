@@ -1164,14 +1164,12 @@ class TestImpactFunction(unittest.TestCase):
         """Test load from metadata."""
         analysis_summary = load_test_vector_layer(
             'output',
-            'FloodRasterOnLandCoverPolygon_12October2017_16h36-32.797220',
+            'FloodRasterOnLandCoverPolygon_13October2017_13h16-20.167673',
             'analysis_summary.geojson')
         self.assertEqual(
             analysis_summary.keywords['layer_purpose'],
             layer_purpose_analysis_impacted['key'])
         output_metadata = analysis_summary.keywords
-        from pprint import pprint
-        pprint(output_metadata)
         impact_function = ImpactFunction.load_from_output_metadata(
             output_metadata)
         self.assertIsNotNone(impact_function.exposure)
@@ -1192,10 +1190,11 @@ class TestImpactFunction(unittest.TestCase):
             impact_function.aggregation_summary, QgsVectorLayer)
         self.assertIsInstance(
             impact_function.analysis_impacted, QgsVectorLayer)
-        # self.assertIsInstance(
-        #     impact_function.exposure_summary_table, QgsVectorLayer)
+        self.assertIsInstance(
+            impact_function.exposure_summary_table, QgsVectorLayer)
+        self.assertIsInstance(impact_function.profiling, QgsVectorLayer)
         self.assertIsInstance(impact_function.impact, QgsVectorLayer)
-        # self.assertEquals(len(impact_function.outputs), 6)
+        self.assertEquals(len(impact_function.outputs), 6)
 
 
 

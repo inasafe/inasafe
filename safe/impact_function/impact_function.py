@@ -4,7 +4,7 @@
 
 import getpass
 from datetime import datetime
-from os.path import join, exists
+from os.path import join, exists, dirname
 from os import makedirs
 from collections import OrderedDict
 from socket import gethostname
@@ -121,6 +121,7 @@ from safe.definitions.provenance import (
     provenance_layer_aggregation_summary,
     provenance_layer_analysis_impacted,
     provenance_layer_exposure_summary_table,
+    provenance_layer_profiling,
     provenance_layer_aggregate_hazard_impacted_id,
     provenance_layer_aggregation_summary_id,
     provenance_layer_exposure_summary_table_id,
@@ -496,7 +497,7 @@ class ImpactFunction(object):
 
         for expected_purpose, layer in layers.iteritems():
             if layer:
-                purpose = layer.keywords['layer_purpose']
+                purpose = layer.keywords.get('layer_purpose')
                 if purpose != expected_purpose:
                     # ET 18/11/16
                     # I'm disabling this check. If an exception is raised in
@@ -1481,6 +1482,7 @@ class ImpactFunction(object):
                 'provenance_key']: None,
             provenance_layer_exposure_summary_table[
                 'provenance_key']: None,
+            provenance_layer_profiling['provenance_key']: None,
             provenance_layer_exposure_summary_id['provenance_key']: None,
             provenance_layer_aggregate_hazard_impacted_id[
                 'provenance_key']: None,
@@ -1594,6 +1596,14 @@ class ImpactFunction(object):
             'provenance_key']] = self._analysis_impacted.publicSource()
         output_layer_provenance[provenance_layer_analysis_impacted_id[
             'provenance_key']] = self._analysis_impacted.id()
+
+        # Put profiling file path to the provenance
+        # FIXME(IS): Very hacky
+        profiling_path = join(dirname(
+            self._analysis_impacted.publicSource()),
+            layer_purpose_profiling['name'] + '.csv')
+        output_layer_provenance[
+            provenance_layer_profiling['provenance_key']] = profiling_path
 
         # Update provenance data with output layers URI
         self._provenance.update(output_layer_provenance)
@@ -2488,56 +2498,42 @@ class ImpactFunction(object):
         impact_function._earthquake_function = earthquake_function
 
         # Output layers
-        # 'exposure_summary',
+        # exposure_summary
         exposure_summary_path = get_provenance(
             provenance, provenance_layer_exposure_summary)
         if exposure_summary_path:
             impact_function._exposure_summary = load_layer(
                 exposure_summary_path)[0]
-        # 'aggregate_hazard_impacted',
+        # aggregate_hazard_impacted
         aggregate_hazard_impacted_path = get_provenance(
             provenance, provenance_layer_aggregate_hazard_impacted)
         if aggregate_hazard_impacted_path:
             impact_function._aggregate_hazard_impacted = load_layer(
                 aggregate_hazard_impacted_path)[0]
-        # 'aggregation_summary',
+        # aggregation_summary
         aggregation_summary_path = get_provenance(
             provenance, provenance_layer_aggregation_summary)
         if aggregation_summary_path:
             impact_function._aggregation_summary = load_layer(
                 aggregation_summary_path)[0]
-        # 'analysis_impacted',
+        # analysis_impacted
         analysis_impacted_path = get_provenance(
             provenance, provenance_layer_analysis_impacted)
         if analysis_impacted_path:
             impact_function._analysis_impacted = load_layer(
                 analysis_impacted_path)[0]
-        # 'exposure_summary_table',
+        # exposure_summary_table
         exposure_summary_table_path = get_provenance(
             provenance, provenance_layer_exposure_summary_table)
-        # if exposure_summary_table_path:
-        #     impact_function._exposure_summary_table = load_layer(
-        #         exposure_summary_table_path)
+        if exposure_summary_table_path:
+            impact_function._exposure_summary_table = load_layer(
+                exposure_summary_table_path)[0]
+
+        profiling_path = get_provenance(provenance, provenance_layer_profiling)
+        if profiling_path:
+            impact_function._profiling_table = load_layer(profiling_path)[0]
+
+        impact_function._output_layer_expected = \
+            impact_function._compute_output_layer_expected()
 
         return impact_function
-
-    # def load(self, serialized_impact_function):
-    #     """Load or create IF from a dictionary.
-    #
-    #     :param serialized_impact_function: A dictionary that represent an
-    #         impact function.
-    #     :type serialized_impact_function: dicts
-    #     """
-    #     pass
-    #
-    # def serialize(self):
-    #     """Serialize Impact Function to a dictionary.
-    #
-    #     :returns: The Impact Function serialization.
-    #     :rtype: dict
-    #     """
-    #     serialized = {}
-    #     if self._provenance_ready:
-    #         hazard_path =
-    #         serialized['hazard'] = self.provenance[provenance_hazard_layer[
-    #             'provenance_key']]
