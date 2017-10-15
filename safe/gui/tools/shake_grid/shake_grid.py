@@ -556,7 +556,8 @@ class ShakeGrid(object):
         if 'invdist' in algorithm:
             algorithm = 'invdist'
 
-        self.generate_locality_info(tif_path)
+        if  self.place_layer is not None:
+            self.generate_locality_info(tif_path)
         # copy the keywords file from fixtures for this layer
         self.create_keyword_file(algorithm)
 

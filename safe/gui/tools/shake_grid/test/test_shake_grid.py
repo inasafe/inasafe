@@ -209,7 +209,7 @@ class TestShakeGrid(unittest.TestCase):
             suffix='.tif',
             dir=temp_dir('test'))
         result = convert_mmi_data(
-            GRID_PATH, grid_title, grid_source, output_raster)
+            GRID_PATH, grid_title, grid_source, output_path=output_raster)
         expected_result = output_raster.replace('.tif', '-nearest.tif')
         self.assertEqual(
             result, expected_result,
