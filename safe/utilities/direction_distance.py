@@ -47,6 +47,7 @@ def get_direction_distance(hazard_point, places_layer):
 
     :param hazard_point: A point indicating hazard location
     :type hazard_point: QgsPoint
+
     :param places_layer: Vector Layer containing place information
     :type places_layer: QgsVectorLayer
 
