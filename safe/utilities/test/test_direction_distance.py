@@ -1,3 +1,7 @@
+# coding=utf-8
+"""Test Direction and Distance Calculation."""
+
+
 import unittest
 
 from safe.utilities.direction_distance import (
@@ -5,9 +9,12 @@ from safe.utilities.direction_distance import (
 )
 
 
-class MyTestCase(unittest.TestCase):
+class TestDirectionDistance(unittest.TestCase):
+
+    """Class to test direction_distance"""
 
     def test_cardinality(self):
+        """Test getting cardinality information when an angle is given."""
         # Test using standard bearing angle
         self.assertEqual(bearing_to_cardinal(0), 'N')
         self.assertEqual(bearing_to_cardinal(22.5), 'NNE')
@@ -26,6 +33,17 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(bearing_to_cardinal(-112.5), 'WSW')
         self.assertEqual(bearing_to_cardinal(-135), 'SW')
         self.assertEqual(bearing_to_cardinal(-157.5), 'SSW')
+
+        # Test with non standard bearing angle
+        self.assertEqual(bearing_to_cardinal(10), 'N')
+        self.assertEqual(bearing_to_cardinal(20), 'N')
+        self.assertEqual(bearing_to_cardinal(30), 'NNE')
+        self.assertEqual(bearing_to_cardinal(40), 'NNE')
+        self.assertEqual(bearing_to_cardinal(50), 'NE')
+        self.assertEqual(bearing_to_cardinal(60), 'NE')
+        self.assertEqual(bearing_to_cardinal(70), 'ENE')
+        self.assertEqual(bearing_to_cardinal(80), 'ENE')
+
 
 if __name__ == '__main__':
     unittest.main()
