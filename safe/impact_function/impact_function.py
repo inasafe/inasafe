@@ -290,50 +290,43 @@ class ImpactFunction(object):
         :rtype: bool
         """
         properties = [
-            'requested_extent',  # Done
-            'requested_extent_crs',  # Not yet
-            'analysis_extent',  # Done
-            'datastore',  # Done
-            'name',  # Done
-            'title',  # Done
-            'start_datetime',  # Done
-            'end_datetime',  # Done
-            'duration',  # Done
-            'earthquake_function',  # Done
-
-            # 'performance_log',  # Not yet
-            'hazard',  # Done
-            'exposure',  # Done
-            'aggregation',  # Done
-            # 'outputs',
-            # 'impact',
-            'exposure_summary',  # Done
-            'aggregate_hazard_impacted',  # Done
-            'aggregation_summary',  # Done, fix it
-            'analysis_impacted',  # Done
-            'exposure_summary_table',  # Done
-            # 'profiling',  # Done, fix it
-
-            # 'callback',
+            'requested_extent',
+            'requested_extent_crs',
+            'analysis_extent',
+            'datastore',
+            'name',
+            'title',
+            'start_datetime',
+            'end_datetime',
+            'duration',
+            'earthquake_function',
+            # 'performance_log',  # I don't need we need this one
+            'hazard',
+            'exposure',
+            'aggregation',
+            'impact',
+            'exposure_summary',
+            'aggregate_hazard_impacted',
+            'aggregation_summary',
+            'analysis_impacted',
+            'exposure_summary_table',
+            'profiling',
         ]
         for if_property in properties:
             try:
-                from pprint import pprint
                 property_a = getattr(self, if_property)
                 property_b = getattr(other, if_property)
                 if isinstance(property_a, QgsMapLayer):
                     if byteify(property_a.keywords) != byteify(
                             property_b.keywords):
-                        pprint(byteify(property_a.keywords))
-                        print '================================='
-                        pprint(byteify(property_b.keywords))
-                        print 'Keyword Layer is not equal is %s' % if_property
+                        LOGGER.debug(
+                            'Keyword Layer is not equal is %s' % if_property)
                         return False
                 elif isinstance(property_a, QgsGeometry):
                     if not property_a.equals(property_b):
                         string_a = property_a.exportToWkt()
                         string_b = property_b.exportToWkt()
-                        print (
+                        LOGGER.debug(
                             '[Non Layer] The not equal property is %s.\n'
                             'A: %s\nB: %s' % (if_property, string_a, string_b))
                         return False
@@ -341,7 +334,7 @@ class ImpactFunction(object):
                     if property_a.uri_path != property_b.uri_path:
                         string_a = property_a.uri_path
                         string_b = property_b.uri_path
-                        print (
+                        LOGGER.debug(
                             '[Non Layer] The not equal property is %s.\n'
                             'A: %s\nB: %s' % (if_property, string_a, string_b))
                         return False
@@ -349,7 +342,7 @@ class ImpactFunction(object):
                     if property_a != property_b:
                         string_a = get_unicode(property_a)
                         string_b = get_unicode(property_b)
-                        print (
+                        LOGGER.debug(
                             '[Non Layer] The not equal property is %s.\n'
                             'A: %s\nB: %s' % (if_property, string_a, string_b))
                         return False
@@ -357,8 +350,8 @@ class ImpactFunction(object):
                 LOGGER.error(e)
                 return False
             except Exception as e:
-                LOGGER.error('Error on %s with error message %s' % (
-                    if_property, e))
+                LOGGER.error(
+                    'Error on %s with error message %s' % (if_property, e))
                 return False
         return True
 
@@ -1312,6 +1305,10 @@ class ImpactFunction(object):
                     'Something went wrong with the datastore : {error_message}'
                     .format(error_message=name))
             self._profiling_table = self.datastore.layer(name)
+            self.profiling.keywords['provenance_data'] = self.provenance
+            write_iso19115_metadata(
+                self.profiling.publicSource(),
+                self.profiling.keywords)
 
             # Later, we should move this call.
             self.style()
