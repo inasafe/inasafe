@@ -1204,8 +1204,6 @@ class TestImpactFunction(unittest.TestCase):
         run_time_impact_function = self.test_scenario(
             join(path, scenario + '.json'), False)
         output_metadata = run_time_impact_function.impact.keywords
-        from pprint import pprint
-        # pprint(output_metadata)
         loaded_impact_function = ImpactFunction.load_from_output_metadata(
             output_metadata)
         self.assertEquals(run_time_impact_function, loaded_impact_function)

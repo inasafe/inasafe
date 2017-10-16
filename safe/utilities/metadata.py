@@ -20,6 +20,7 @@ from safe.definitions.layer_purposes import (
     layer_purpose_analysis_impacted,
     layer_purpose_exposure_summary_table,
     layer_purpose_aggregation_summary,
+    layer_purpose_profiling,
 )
 from safe.definitions.layer_modes import layer_mode_continuous
 from safe.definitions.versions import inasafe_keyword_version
@@ -46,6 +47,7 @@ METADATA_CLASSES = {
     layer_purpose_analysis_impacted['key']: OutputLayerMetadata,
     layer_purpose_aggregate_hazard_impacted['key']: OutputLayerMetadata,
     layer_purpose_aggregation_summary['key']: OutputLayerMetadata,
+    layer_purpose_profiling['key']: OutputLayerMetadata,
 }
 
 
@@ -97,6 +99,10 @@ def read_iso19115_metadata(layer_uri, keyword=None):
     :rtype: dict, basestring
     """
     xml_uri = os.path.splitext(layer_uri)[0] + '.xml'
+    # Remove the prefix for local file. For example csv.
+    file_prefix = 'file:'
+    if xml_uri.startswith(file_prefix):
+        xml_uri = xml_uri[len(file_prefix):]
     if not os.path.exists(xml_uri):
         xml_uri = None
     if not xml_uri and os.path.exists(layer_uri):
