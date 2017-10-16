@@ -46,13 +46,10 @@ def generate_report(impact_function, iface):
 
     # don't generate infographic if exposure is not population
     exposure_type = layer_definition_type(impact_function.exposure)
+    map_overview_layer = None
     if exposure_type != exposure_population:
         report_components.remove(infographic_report)
-
-    # if exposure is population, we need to add
-    # map overview layer
-    exposure_type = layer_definition_type(impact_function.exposure)
-    if exposure_type == exposure_population:
+    else:
         map_overview_layer = QgsRasterLayer(
             map_overview['path'], 'Overview')
         add_layer_to_canvas(
@@ -118,7 +115,8 @@ def generate_report(impact_function, iface):
         if error_code == ImpactReport.REPORT_GENERATION_FAILED:
             break
 
-    remove_layer_from_canvas(map_overview_layer, impact_function)
+    if map_overview_layer:
+        remove_layer_from_canvas(map_overview_layer, impact_function)
 
     return error_code, message
 
