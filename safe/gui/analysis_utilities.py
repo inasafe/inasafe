@@ -20,10 +20,10 @@ from safe.definitions.fields import hazard_class_field
 from safe.definitions.reports.components import (
     map_report, all_default_report_components, infographic_report)
 from safe.impact_function.style import hazard_class_style
-from safe.report.extractors.util import layer_definition_type
 from safe.report.report_metadata import ReportMetadata
 from safe.report.impact_report import ImpactReport
 from safe.utilities.gis import is_raster_layer, qgis_version
+from safe.utilities.metadata import active_classification
 from safe.utilities.settings import setting
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -45,7 +45,8 @@ def generate_report(impact_function, iface):
     report_components = deepcopy(all_default_report_components)
 
     # don't generate infographic if exposure is not population
-    exposure_type = layer_definition_type(impact_function.exposure)
+    exposure_type = definition(
+        impact_function.provenance['exposure_keywords']['exposure'])
     map_overview_layer = None
     if exposure_type != exposure_population:
         report_components.remove(infographic_report)
@@ -58,8 +59,8 @@ def generate_report(impact_function, iface):
     extra_layers = []
     print_atlas = setting('print_atlas_report', False, bool)
 
-    hazard_type = layer_definition_type(impact_function.hazard)
-    exposure_type = layer_definition_type(impact_function.exposure)
+    hazard_type = definition(
+        impact_function.provenance['hazard_keywords']['hazard'])
     aggregation_summary_layer = impact_function.aggregation_summary
 
     if print_atlas:
@@ -181,12 +182,14 @@ def add_debug_layers_to_canvas(impact_function):
     group_debug = root.insertGroup(0, name)
     group_debug.setVisible(Qt.Unchecked)
     group_debug.setExpanded(False)
+    hazard_keywords = impact_function.provenance['hazard_keywords']
+    exposure_keywords = impact_function.provenance['exposure_keywords']
 
     # Let's style the hazard class in each layers.
     # noinspection PyBroadException
     try:
-        classification = (
-            impact_function.hazard.keywords['classification'])
+        classification = active_classification(
+            hazard_keywords, exposure_keywords['exposure'])
         classification = definition(classification)
 
         classes = OrderedDict()

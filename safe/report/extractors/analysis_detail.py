@@ -12,13 +12,13 @@ from safe.definitions.fields import (
     total_affected_field,
     total_not_affected_field,
     total_field, total_not_exposed_field, affected_field)
+from safe.definitions.utilities import definition
 from safe.report.extractors.util import (
-    layer_definition_type,
     resolve_from_dictionary,
     value_from_field_name,
-    layer_hazard_classification,
     retrieve_exposure_classes_lists)
 from safe.utilities.i18n import tr
+from safe.utilities.metadata import active_classification
 from safe.utilities.rounding import format_number
 from safe.utilities.settings import setting
 
@@ -50,8 +50,6 @@ def analysis_detail_extractor(impact_report, component_metadata):
     context = {}
     extra_args = component_metadata.extra_args
 
-    hazard_layer = impact_report.hazard
-    exposure_layer = impact_report.exposure
     analysis_layer = impact_report.analysis
     analysis_layer_fields = analysis_layer.keywords['inasafe_fields']
     analysis_feature = analysis_layer.getFeatures().next()
@@ -61,14 +59,17 @@ def analysis_detail_extractor(impact_report, component_metadata):
             'inasafe_fields']
     provenance = impact_report.impact_function.provenance
     debug_mode = impact_report.impact_function.debug_mode
+    hazard_keywords = provenance['hazard_keywords']
+    exposure_keywords = provenance['exposure_keywords']
 
     """Initializations"""
 
     # Get hazard classification
-    hazard_classification = layer_hazard_classification(hazard_layer)
+    hazard_classification = definition(
+        active_classification(hazard_keywords, exposure_keywords['exposure']))
 
     # Get exposure type definition
-    exposure_type = layer_definition_type(exposure_layer)
+    exposure_type = definition(exposure_keywords['exposure'])
     # Only round the number when it is population exposure and it is not
     # in debug mode
     is_rounding = not debug_mode
@@ -289,7 +290,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
         details.append(row)
 
     # retrieve classes definitions
-    exposure_classes_lists = retrieve_exposure_classes_lists(exposure_layer)
+    exposure_classes_lists = retrieve_exposure_classes_lists(exposure_keywords)
 
     # sort detail rows based on class order
     # create function to sort

@@ -5,11 +5,11 @@ from safe.definitions.fields import (
     hazard_count_field,
     fatalities_field,
     total_exposed_field)
+from safe.definitions.utilities import definition
 from safe.report.extractors.util import (
-    layer_definition_type,
     resolve_from_dictionary,
-    value_from_field_name,
-    layer_hazard_classification)
+    value_from_field_name)
+from safe.utilities.metadata import active_classification
 from safe.utilities.rounding import format_number, fatalities_range
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -39,13 +39,13 @@ def general_report_extractor(impact_report, component_metadata):
     extra_args = component_metadata.extra_args
 
     # figure out analysis report type
-    hazard_layer = impact_report.hazard
-    exposure_layer = impact_report.exposure
     analysis_layer = impact_report.analysis
     provenance = impact_report.impact_function.provenance
     debug_mode = impact_report.impact_function.debug_mode
+    hazard_keywords = provenance['hazard_keywords']
+    exposure_keywords = provenance['exposure_keywords']
 
-    exposure_type = layer_definition_type(exposure_layer)
+    exposure_type = definition(exposure_keywords['exposure'])
     # Only round the number when it is population exposure and it is not
     # in debug mode
     is_rounded = not debug_mode
@@ -64,11 +64,12 @@ def general_report_extractor(impact_report, component_metadata):
     else:
         value_header = u'{name}'.format(**exposure_unit)
 
-    # in case there is a classification
-    if 'classification' in hazard_layer.keywords:
+    # Get hazard classification
+    hazard_classification = definition(
+        active_classification(hazard_keywords, exposure_keywords['exposure']))
 
-        # retrieve hazard classification from hazard layer
-        hazard_classification = layer_hazard_classification(hazard_layer)
+    # in case there is a classification
+    if hazard_classification:
 
         # classified hazard must have hazard count in analysis layer
         hazard_stats = []
@@ -157,7 +158,6 @@ def general_report_extractor(impact_report, component_metadata):
             report_stats.append(row_stats)
 
     # Give report section
-    exposure_type = layer_definition_type(exposure_layer)
     header_label = exposure_type['name']
     summary.append({
         'header_label': header_label,
