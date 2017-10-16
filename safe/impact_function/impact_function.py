@@ -309,7 +309,7 @@ class ImpactFunction(object):
             # 'impact',
             'exposure_summary',  # Done
             'aggregate_hazard_impacted',  # Done
-            # 'aggregation_summary',  # Done, fix it
+            'aggregation_summary',  # Done, fix it
             'analysis_impacted',  # Done
             'exposure_summary_table',  # Done
             # 'profiling',  # Done, fix it

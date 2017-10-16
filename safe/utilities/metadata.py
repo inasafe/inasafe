@@ -18,7 +18,8 @@ from safe.definitions.layer_purposes import (
     layer_purpose_exposure_summary,
     layer_purpose_aggregate_hazard_impacted,
     layer_purpose_analysis_impacted,
-    layer_purpose_exposure_summary_table
+    layer_purpose_exposure_summary_table,
+    layer_purpose_aggregation_summary,
 )
 from safe.definitions.layer_modes import layer_mode_continuous
 from safe.definitions.versions import inasafe_keyword_version
@@ -43,7 +44,8 @@ METADATA_CLASSES = {
     layer_purpose_exposure_summary['key']: OutputLayerMetadata,
     layer_purpose_exposure_summary_table['key']: OutputLayerMetadata,
     layer_purpose_analysis_impacted['key']: OutputLayerMetadata,
-    layer_purpose_aggregate_hazard_impacted['key']: OutputLayerMetadata
+    layer_purpose_aggregate_hazard_impacted['key']: OutputLayerMetadata,
+    layer_purpose_aggregation_summary['key']: OutputLayerMetadata,
 }
 
 
@@ -61,6 +63,10 @@ def write_iso19115_metadata(layer_uri, keywords):
         if keywords['layer_purpose'] in METADATA_CLASSES:
             metadata = METADATA_CLASSES[keywords['layer_purpose']](layer_uri)
         else:
+            LOGGER.info(
+                'The layer purpose is not supported explicitly. It will use '
+                'generic metadata. The layer purpose is %s' %
+                keywords['layer_purpose'])
             metadata = GenericLayerMetadata(layer_uri)
     else:
         metadata = GenericLayerMetadata(layer_uri)
