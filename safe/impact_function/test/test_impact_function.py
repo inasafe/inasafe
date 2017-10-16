@@ -97,7 +97,6 @@ from qgis.core import (
     QgsRasterLayer,
     QgsMapLayer,
     QgsCoordinateReferenceSystem,
-    QgsRectangle,
     QgsGeometry,
     QGis)
 from osgeo import gdal
@@ -119,8 +118,6 @@ from safe.gis.sanity_check import check_inasafe_fields
 from safe.utilities.unicode import byteify
 from safe.utilities.gis import wkt_to_rectangle
 from safe.utilities.utilities import readable_os_version
-from safe.utilities.metadata import read_iso19115_metadata
-from safe.metadata.output_layer_metadata import OutputLayerMetadata
 from safe.impact_function.impact_function import ImpactFunction
 from safe.impact_function.impact_function_utilities import check_input_layer
 
@@ -230,6 +227,7 @@ def run_scenario(scenario, use_debug=False):
         impact_function.state,
         impact_function.outputs,
         counts,
+        impact_function
     )
 
 
@@ -660,10 +658,9 @@ class TestImpactFunction(unittest.TestCase):
         # test_provenance pass
         del hazard_layer
 
-    def test_scenario(self, scenario_path=None):
+    def test_scenario(self, scenario_path=None, use_debug=True):
         """Run test single scenario."""
         self.maxDiff = None
-        use_debug = True
 
         if not scenario_path:
             scenario_path = standard_data_path(
@@ -673,7 +670,7 @@ class TestImpactFunction(unittest.TestCase):
         LOGGER.info('Running the scenario : %s' % scenario_path)
         scenario, expected_steps, expected_outputs = read_json_flow(
             scenario_path)
-        status, steps, outputs, computed_nb_outputs = (
+        status, steps, outputs, computed_nb_outputs, impact_function = (
             run_scenario(scenario, use_debug))
         self.assertEqual(0, status, steps)
         # self.assertDictEqual(expected_steps, steps, scenario_path)
@@ -685,6 +682,7 @@ class TestImpactFunction(unittest.TestCase):
         # counted in the JSON file.
         self.assertEqual(len(outputs) - 1, expected_outputs['count'])
         self.assertEqual(len(outputs), computed_nb_outputs)
+        return impact_function
 
     @unittest.skipIf(
         os.environ.get('ON_TRAVIS', False),
@@ -1196,6 +1194,18 @@ class TestImpactFunction(unittest.TestCase):
         self.assertIsInstance(impact_function.impact, QgsVectorLayer)
         self.assertEquals(len(impact_function.outputs), 6)
 
+    def test_deserialize_impact_function(self):
+        """Test run IF then deserialize it."""
+        path = standard_data_path('scenario')
+        scenario = 'earthquake_raster_on_raster_population'
+        impact_function = self.test_scenario(
+            join(path, scenario + '.json'), False)
+        output_metadata = impact_function.impact.keywords
+        from pprint import pprint
+        # pprint(output_metadata)
+        new_impact_function = ImpactFunction.load_from_output_metadata(
+            output_metadata)
+        self.assertEquals(impact_function, new_impact_function)
 
 
 if __name__ == '__main__':

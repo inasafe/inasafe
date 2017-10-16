@@ -18,7 +18,8 @@ from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsRectangle,
     QgsVectorLayer,
-    QGis
+    QGis,
+    QgsMapLayer
 )
 
 import logging
@@ -171,7 +172,7 @@ from safe.utilities.gis import (
     is_vector_layer, is_raster_layer, wkt_to_rectangle)
 from safe.utilities.i18n import tr
 from safe.utilities.default_values import get_inasafe_default_value_qsetting
-from safe.utilities.unicode import get_unicode
+from safe.utilities.unicode import get_unicode, byteify
 from safe.utilities.metadata import (
     active_thresholds_value_maps, copy_layer_keywords, write_iso19115_metadata)
 from safe.utilities.utilities import (
@@ -289,18 +290,6 @@ class ImpactFunction(object):
         :rtype: bool
         """
         properties = [
-            'performance_log',  # Not yet
-            'hazard',  # Done
-            'exposure',  # Done
-            'aggregation',  # Done
-            # 'outputs',
-            # 'impact',
-            'exposure_summary',  # Done
-            'aggregate_hazard_impacted',  # Done
-            'aggregation_summary',  # Done
-            'analysis_impacted',  # Done
-            'exposure_summary_table',  # Done
-            'profiling',  # Done
             'requested_extent',  # Done
             'requested_extent_crs',  # Not yet
             'analysis_extent',  # Done
@@ -311,12 +300,59 @@ class ImpactFunction(object):
             'end_datetime',  # Done
             'duration',  # Done
             'earthquake_function',  # Done
+
+            # 'performance_log',  # Not yet
+            'hazard',  # Done
+            'exposure',  # Done
+            'aggregation',  # Done
+            # 'outputs',
+            # 'impact',
+            'exposure_summary',  # Done
+            'aggregate_hazard_impacted',  # Done
+            # 'aggregation_summary',  # Done, fix it
+            'analysis_impacted',  # Done
+            'exposure_summary_table',  # Done
+            # 'profiling',  # Done, fix it
+
             # 'callback',
         ]
         for if_property in properties:
             try:
-                if getattr(self, if_property) != getattr(other, if_property):
-                    return False
+                from pprint import pprint
+                property_a = getattr(self, if_property)
+                property_b = getattr(other, if_property)
+                if isinstance(property_a, QgsMapLayer):
+                    if byteify(property_a.keywords) != byteify(
+                            property_b.keywords):
+                        pprint(byteify(property_a.keywords))
+                        print '================================='
+                        pprint(byteify(property_b.keywords))
+                        print 'Keyword Layer is not equal is %s' % if_property
+                        return False
+                elif isinstance(property_a, QgsGeometry):
+                    if not property_a.equals(property_b):
+                        string_a = property_a.exportToWkt()
+                        string_b = property_b.exportToWkt()
+                        print (
+                            '[Non Layer] The not equal property is %s.\n'
+                            'A: %s\nB: %s' % (if_property, string_a, string_b))
+                        return False
+                elif isinstance(property_a, DataStore):
+                    if property_a.uri_path != property_b.uri_path:
+                        string_a = property_a.uri_path
+                        string_b = property_b.uri_path
+                        print (
+                            '[Non Layer] The not equal property is %s.\n'
+                            'A: %s\nB: %s' % (if_property, string_a, string_b))
+                        return False
+                else:
+                    if property_a != property_b:
+                        string_a = get_unicode(property_a)
+                        string_b = get_unicode(property_b)
+                        print (
+                            '[Non Layer] The not equal property is %s.\n'
+                            'A: %s\nB: %s' % (if_property, string_a, string_b))
+                        return False
             except AttributeError as e:
                 LOGGER.error(e)
                 return False
@@ -1282,6 +1318,17 @@ class ImpactFunction(object):
 
             # End of the impact function. We need to set this IF not ready.
             self._is_ready = False
+
+            # Set back input layers.
+            self.hazard = load_layer(
+                get_provenance(self.provenance, provenance_hazard_layer))[0]
+            self.exposure = load_layer(
+                get_provenance(self.provenance, provenance_exposure_layer))[0]
+            aggregation_path = get_provenance(
+                self.provenance, provenance_aggregation_layer)
+            LOGGER.debug('Aggregation %s' % aggregation_path)
+            if aggregation_path:
+                self.aggregation = load_layer(aggregation_path)[0]
 
         except NoFeaturesInExtentError:
             warning_heading = m.Heading(
