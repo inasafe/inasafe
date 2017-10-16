@@ -3,7 +3,7 @@
 
 import os
 import logging
-from qgis._core import QgsRasterLayer, QgsVectorLayer
+from qgis.core import QgsRasterLayer, QgsVectorLayer
 
 from safe.common.exceptions import NoKeywordsFoundError
 from safe.utilities.metadata import read_iso19115_metadata
