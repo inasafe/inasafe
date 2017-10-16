@@ -20,9 +20,14 @@ def bearing_to_cardinal(angle):
 
     :param angle: Bearing angle
     :type angle: angle in degrees
+
     :return: cardinality of input angle
     :rtype: string
     """
+
+    # this method could still be improved later, since the acquisition interval
+    # is a bit strange, i.e the input angle of 22.499° will return `N` even
+    # though 22.5° is the direction for `NNE`
     direction_list = [
         'N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE',
         'SSE', 'S', 'SSW', 'SW', 'WSW', 'W',
@@ -44,6 +49,7 @@ def get_direction_distance(hazard_point, places_layer):
     :type hazard_point: QgsPoint
     :param places_layer: Vector Layer containing place information
     :type places_layer: QgsVectorLayer
+
     :return: memory layer of city with direction and distance value
     :rtype: QgsVectorLayer
     """
@@ -64,22 +70,30 @@ def get_direction_distance(hazard_point, places_layer):
     for feature in places_layer.getFeatures():
         feature_list.append(feature)
     output_provider.addFeatures(feature_list)
+    # define new field name
+    distance_field = 'distance'
+    bearing_to_field = 'bearing_to'
+    bearing_from_field = 'bearing_fr'
+    direction_to_field = 'dir_to'
+    direction_from_field = 'dir_from'
+    mmi_field = 'mmi'
     # create new fields to store the calculation result
     output_provider.addAttributes([
-        QgsField('distance', QVariant.Double),
-        QgsField('bearing_to', QVariant.Double),
-        QgsField('dir_to', QVariant.String),
-        QgsField('bearing_fr', QVariant.Double),
-        QgsField('dir_from', QVariant.String),
-        QgsField('mmi', QVariant.Double)
+        QgsField(distance_field, QVariant.Double),
+        QgsField(bearing_to_field, QVariant.Double),
+        QgsField(direction_to_field, QVariant.String),
+        QgsField(bearing_from_field, QVariant.Double),
+        QgsField(direction_from_field, QVariant.String),
+        QgsField(mmi_field, QVariant.Double)
     ])
     output_layer.updateFields()
     # get field index
-    distance_index = output_provider.fields().indexFromName('distance')
-    bearing_to_index = output_provider.fields().indexFromName('bearing_to')
-    dir_to_index = output_provider.fields().indexFromName('dir_to')
-    bearing_fr_index = output_provider.fields().indexFromName('bearing_fr')
-    dir_from_index = output_provider.fields().indexFromName('dir_from')
+    output_fields = output_provider.fields()
+    distance_index = output_fields.indexFromName(distance_field)
+    bearing_to_index = output_fields.indexFromName(bearing_to_field)
+    dir_to_index = output_fields.indexFromName(direction_to_field)
+    bearing_fr_index = output_fields.indexFromName(bearing_from_field)
+    dir_from_index = output_fields.indexFromName(direction_from_field)
     # start calculating distance and get cardinality
     output_layer.startEditing()
     for feature in output_layer.getFeatures():

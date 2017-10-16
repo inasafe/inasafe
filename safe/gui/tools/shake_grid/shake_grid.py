@@ -556,8 +556,10 @@ class ShakeGrid(object):
         if 'invdist' in algorithm:
             algorithm = 'invdist'
 
+        # Generate the locality if place layer and name are given
         if self.place_layer is not None:
-            self.generate_locality_info(tif_path)
+            if self.name_field != '':
+                self.generate_locality_info(tif_path)
         # copy the keywords file from fixtures for this layer
         self.create_keyword_file(algorithm)
 
@@ -880,6 +882,7 @@ class ShakeGrid(object):
         :type raster_mmi_path: str
         """
 
+        sort_key = None
         epicenter = QgsPoint(self.longitude, self.latitude)
         place_layer = self.place_layer
 
@@ -892,29 +895,38 @@ class ShakeGrid(object):
         for feature in mmi_point_layer.getFeatures():
             place = {
                 'name': feature[self.name_field],
-                'population': feature[self.population_field],
                 'distance': feature['distance'],
                 'bearing_to': feature['bearing_to'],
                 'dir_to': feature['dir_to'],
                 'mmi_values': feature['mmi']
             }
+            if self.population_field != '':
+                place['population'] = feature[self.population_field]
+                sort_key = itemgetter('mmi_values', 'population')
+            else:
+                sort_key = itemgetter('mmi_values')
             places.append(place)
         # sort the place by mmi and by population
         sorted_places = sorted(
             places,
-            key=itemgetter('mmi_values', 'population'),
+            key=sort_key,
             reverse=True
         )
         nearest_place = sorted_places[0]
         # combine locality text
-        city_name = nearest_place['name']
+        city_name = str(nearest_place['name'])
         city_distance = nearest_place['distance']
-        city_bearing = nearest_place['bearing_to']
-        city_direction = nearest_place['dir_to']
-        self.locality = 'Located ' + str(math.floor(city_distance / 1000)) + \
-                        ' km, ' + str(math.floor(city_bearing)) + '° ' + \
-                        str(city_direction) + ' of ' + str(city_name)
-        self.nearby_cities = sorted_places[:5]
+        distance_km = str(math.floor(city_distance / 1000))
+        city_bearing = str(math.floor(nearest_place['bearing_to']))
+        city_direction = str(nearest_place['dir_to'])
+        self.locality = tr(
+            'Located {distance} km, {bearing}° {direction} of {city}.'
+        ).format(
+            distance=distance_km,
+            bearing=city_bearing,
+            direction=city_direction,
+            city=city_name
+        )
 
     def create_keyword_file(self, algorithm):
         """Create keyword file for the raster file created.
