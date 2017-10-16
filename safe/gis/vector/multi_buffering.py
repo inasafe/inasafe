@@ -72,7 +72,7 @@ def multi_buffering(layer, radii, callback=None):
 
     buffered = create_memory_layer(
         output_layer_name, QGis.Polygon, input_crs, fields)
-    data_provider = buffered.dataProvider()
+    buffered.startEditing()
 
     # Reproject features if needed into UTM if the layer is in 4326.
     if layer.crs().authid() == 'EPSG:4326':
@@ -115,10 +115,12 @@ def multi_buffering(layer, radii, callback=None):
             new_feature.setGeometry(circle)
             new_feature.setAttributes(attributes)
 
-            data_provider.addFeatures([new_feature])
+            buffered.addFeature(new_feature)
 
         if callback:
             callback(current=i, maximum=feature_count, step=processing_step)
+
+    buffered.commitChanges()
 
     # We transfer keywords to the output.
     buffered.keywords = layer.keywords

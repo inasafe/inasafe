@@ -66,7 +66,6 @@ if os.path.exists(translation_path):
     QCoreApplication.installTranslator(translator)
 
 
-# noinspection PyDocstring
 # noinspection PyDocstring,PyPep8Naming
 def classFactory(iface):
     """Load Plugin class from file Plugin."""
