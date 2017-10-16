@@ -252,7 +252,7 @@ def qgis_composer_extractor(impact_report, component_metadata):
         if aggregation_layer_id:
             aggregation_layer = layer_registry.mapLayers().get(
                 aggregation_layer_id, None)
-            layers.insert(0, aggregation_layer)
+            layers.append(aggregation_layer)
 
         layers.append(hazard_layer)
 
