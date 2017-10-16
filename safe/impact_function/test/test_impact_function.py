@@ -1158,6 +1158,9 @@ class TestImpactFunction(unittest.TestCase):
         new_impact_function = ImpactFunction()
         self.assertEqual(new_impact_function, new_impact_function)
 
+    @unittest.skipIf(
+        not os.path.exists('/Users/ismailsunni/dev/python/inasafe-dev'),
+        'The path is not absolute from the output layer metadata.')
     def test_load_from_metadata(self):
         """Test load from metadata."""
         analysis_summary = load_test_vector_layer(
@@ -1198,14 +1201,14 @@ class TestImpactFunction(unittest.TestCase):
         """Test run IF then deserialize it."""
         path = standard_data_path('scenario')
         scenario = 'earthquake_raster_on_raster_population'
-        impact_function = self.test_scenario(
+        run_time_impact_function = self.test_scenario(
             join(path, scenario + '.json'), False)
-        output_metadata = impact_function.impact.keywords
+        output_metadata = run_time_impact_function.impact.keywords
         from pprint import pprint
         # pprint(output_metadata)
-        new_impact_function = ImpactFunction.load_from_output_metadata(
+        loaded_impact_function = ImpactFunction.load_from_output_metadata(
             output_metadata)
-        self.assertEquals(impact_function, new_impact_function)
+        self.assertEquals(run_time_impact_function, loaded_impact_function)
 
 
 if __name__ == '__main__':
