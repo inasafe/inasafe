@@ -842,10 +842,13 @@ class ShakeGrid(object):
         """Get MMI information from ShakeMap Tiff on place location.
 
         Get the MMI value on each cities/places from the generated tiff files.
+
         :param place_layer: Point layer generated from distance calculation
         :type place_layer: QgsVectorLayer
+
         :param raster_mmi_path: Path to converted mmi raster.
         :type raster_mmi_path: str
+
         :return: Modified place layer containing MMI values
         :rtype: QgsVectorLayer
         """
