@@ -156,7 +156,7 @@ class FieldMappingTab(QWidget, object):
         if excluded_fields is None:
             excluded_fields = []
         self.field_list.clear()
-        for field in self.layer.dataProvider().fields():
+        for field in self.layer.fields():
             # Skip if it's excluded
             if field.name() in excluded_fields:
                 continue

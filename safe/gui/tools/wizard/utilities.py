@@ -249,10 +249,9 @@ def skip_inasafe_field(layer, inasafe_fields):
     :returns: True if there are no specified field type.
     :rtype: bool
     """
-    layer_data_provider = layer.dataProvider()
     # Iterate through all inasafe fields
     for inasafe_field in inasafe_fields:
-        for field in layer_data_provider.fields():
+        for field in layer.fields():
             # Check the field type
             if isinstance(inasafe_field['type'], list):
                 if field.type() in inasafe_field['type']:

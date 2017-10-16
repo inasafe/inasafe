@@ -118,15 +118,13 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
         if self.parameters:
             self.parameters = []
 
-        layer_data_provider = self.parent.layer.dataProvider()
-
         # Iterate through all inasafe fields
         # existing_inasafe_default_values
 
         for inasafe_field in self.inasafe_fields_for_the_layer():
             # Option for Not Available
             option_list = [no_field]
-            for field in layer_data_provider.fields():
+            for field in self.parent.layer.fields():
                 # Check the field type
                 if isinstance(inasafe_field['type'], list):
                     if field.type() in inasafe_field['type']:

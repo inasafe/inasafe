@@ -313,7 +313,7 @@ class PetaBencanaDialog(QDialog, FORM_CLASS):
         # as a string.
         # This is used for cartography
         flood_class_field = QgsField('floodclass', QVariant.Int)
-        layer.dataProvider().addAttributes([flood_class_field])
+        layer.addAttribute(flood_class_field)
         layer.commitChanges()
         layer.startEditing()
         flood_class_idx = layer.fieldNameIndex('floodclass')

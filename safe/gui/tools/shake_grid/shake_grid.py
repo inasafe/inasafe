@@ -767,7 +767,7 @@ class ShakeGrid(object):
         layer.startEditing()
         # Now loop through the db adding selected features to mem layer
         request = QgsFeatureRequest()
-        fields = layer.dataProvider().fields()
+        fields = layer.fields()
 
         for feature in layer.getFeatures(request):
             if not feature.isValid():

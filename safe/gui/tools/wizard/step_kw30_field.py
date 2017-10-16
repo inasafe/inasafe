@@ -130,7 +130,7 @@ class StepKwField(WizardStep, FORM_CLASS):
         field_descriptions = ''
         feature_count = self.parent.layer.featureCount()
         for field_name in field_names:
-            layer_fields = self.parent.layer.dataProvider().fields()
+            layer_fields = self.parent.layer.fields()
             field_index = layer_fields.indexFromName(field_name)
             # Exit if the selected field_names comes from a previous wizard run
             if field_index < 0:
@@ -245,7 +245,7 @@ class StepKwField(WizardStep, FORM_CLASS):
         self.lstFields.clear()
 
         default_item = None
-        for field in self.parent.layer.dataProvider().fields():
+        for field in self.parent.layer.fields():
             # Skip if it's not in the field types requirement
             if field.type() not in layer_field_types:
                 continue

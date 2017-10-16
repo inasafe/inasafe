@@ -797,10 +797,8 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
                 unique_values = [int(i) for i in unique_values]
         else:
             field = self.parent.step_kw_field.selected_fields()
-            field_index = self.parent.layer.dataProvider().fields(). \
-                indexFromName(field)
-            field_type = self.parent.layer.dataProvider(). \
-                fields()[field_index].type()
+            field_index = self.parent.layer.fields().indexFromName(field)
+            field_type = self.parent.layer.fields()[field_index].type()
             description_text = classify_vector_question % (
                 layer_subcategory['name'],
                 layer_purpose['name'],
