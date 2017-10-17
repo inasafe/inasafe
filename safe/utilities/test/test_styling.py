@@ -1,20 +1,7 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool developed by AusAid -
- **Styling Tests.**
 
-Contact : ole.moller.nielsen@gmail.com
+"""Test Styling."""
 
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
-__author__ = 'tim@kartoza.com'
-__date__ = '17/10/2013'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
 import unittest
 import os
 
@@ -28,15 +15,20 @@ from safe.test.utilities import (
     load_test_vector_layer,
     get_qgis_app,
     clone_shp_layer)
-from safe.gis.utilities import load_layer
+from safe.gis.tools import load_layer
 from safe.common.exceptions import StyleError
+
+__copyright__ = "Copyright 2017, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class StylingTest(unittest.TestCase):
-    """Tests for qgis styling related functions.
-    """
+
+    """Tests for qgis styling related functions."""
 
     def setUp(self):
         os.environ['LANG'] = 'en'

@@ -22,7 +22,7 @@ from qgis.core import (
     QgsMapLayerRegistry)
 from qgis.utils import iface
 
-from safe.gis.utilities import load_layer
+from safe.gis.tools import load_layer
 from safe.common.utilities import unique_filename, temp_dir
 from safe.definitions.constants import HAZARD_EXPOSURE
 from safe.gis.vector.tools import create_memory_layer, copy_layer
