@@ -299,7 +299,7 @@ class ImpactFunction(object):
             'end_datetime',
             'duration',
             'earthquake_function',
-            # 'performance_log',  # I don't need we need this one
+            # 'performance_log',  # I don't think need we need this one
             'hazard',
             'exposure',
             'aggregation',
@@ -346,12 +346,23 @@ class ImpactFunction(object):
                             'A: %s\nB: %s' % (if_property, string_a, string_b))
                         return False
             except AttributeError as e:
-                LOGGER.error(e)
+                LOGGER.error(
+                    'Property %s is not found. The exception is %s' % (
+                        if_property, e))
                 return False
+            except IndexError as e:
+                if if_property == 'impact':
+                    continue
+                else:
+                    LOGGER.error(
+                        'Property %s is out of index. The exception is %s' % (
+                            if_property, e))
+                    return False
             except Exception as e:
                 LOGGER.error(
                     'Error on %s with error message %s' % (if_property, e))
                 return False
+
         return True
 
     @property
