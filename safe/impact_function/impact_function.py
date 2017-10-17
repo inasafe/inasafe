@@ -19,7 +19,7 @@ from qgis.core import (
     QgsRectangle,
     QgsVectorLayer,
     QGis,
-    QgsMapLayer
+    QgsMapLayer,
 )
 
 import logging

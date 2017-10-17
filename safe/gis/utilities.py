@@ -18,14 +18,13 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 def load_layer(layer_path):
-    """Helper to load and return a single QGIS layer
+    """Helper to load and return a single QGIS layer.
 
     :param layer_path: Path name to raster or vector file.
     :type layer_path: str
 
     :returns: tuple containing layer and its layer_purpose.
     :rtype: (QgsMapLayer, str)
-
     """
     # Extract basename and absolute path
     file_name = os.path.split(layer_path)[-1]  # In case path was absolute
