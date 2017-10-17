@@ -127,7 +127,9 @@ from safe.definitions.provenance import (
     provenance_layer_exposure_summary_table_id,
     provenance_layer_analysis_impacted_id,
     provenance_layer_exposure_summary_id,
-    provenance_crs)
+    provenance_crs,
+    provenance_debug_mode,
+)
 from safe.impact_function.provenance_utilities import (
     get_map_title, get_analysis_question)
 
@@ -289,6 +291,7 @@ class ImpactFunction(object):
         :rtype: bool
         """
         properties = [
+            'debug_mode',
             'requested_extent',
             'requested_extent_crs',
             'analysis_extent',
@@ -312,6 +315,10 @@ class ImpactFunction(object):
             'profiling',
         ]
         for if_property in properties:
+            # Skip if it's debug mode for profiling
+            if self.debug_mode:
+                if if_property == 'profiling':
+                    continue
             try:
                 property_a = getattr(self, if_property)
                 property_b = getattr(other, if_property)
@@ -1350,6 +1357,8 @@ class ImpactFunction(object):
             LOGGER.debug('Aggregation %s' % aggregation_path)
             if aggregation_path:
                 self.aggregation = load_layer(aggregation_path)[0]
+            else:
+                self.aggregation = None
 
         except NoFeaturesInExtentError:
             warning_heading = m.Heading(
@@ -2364,6 +2373,10 @@ class ImpactFunction(object):
         set_provenance(
             self._provenance, provenance_crs, self.impact.crs().authid())
 
+        # Debug mode
+        set_provenance(
+            self._provenance, provenance_debug_mode, self.debug_mode)
+
         self._provenance_ready = True
 
     def exposure_notes(self):
@@ -2565,6 +2578,10 @@ class ImpactFunction(object):
             provenance, provenance_earthquake_function)
         impact_function._earthquake_function = earthquake_function
 
+        # Debug mode
+        debug_mode = get_provenance(provenance, provenance_debug_mode)
+        impact_function.debug_mode = debug_mode
+
         # Output layers
         # exposure_summary
         exposure_summary_path = get_provenance(
@@ -2596,10 +2613,14 @@ class ImpactFunction(object):
         if exposure_summary_table_path:
             impact_function._exposure_summary_table = load_layer(
                 exposure_summary_table_path)[0]
-
-        profiling_path = get_provenance(provenance, provenance_layer_profiling)
-        if profiling_path:
-            impact_function._profiling_table = load_layer(profiling_path)[0]
+        # profiling
+        # Skip if it's debug mode
+        if not impact_function.debug_mode:
+            profiling_path = get_provenance(
+                provenance, provenance_layer_profiling)
+            if profiling_path:
+                impact_function._profiling_table = load_layer(
+                    profiling_path)[0]
 
         impact_function._output_layer_expected = \
             impact_function._compute_output_layer_expected()

@@ -179,6 +179,12 @@ provenance_crs = {
     'provenance_key': 'crs'
 }
 
+provenance_debug_mode = {
+    'key': 'provenance_debug_mode',
+    'name': tr('Debug Mode'),
+    'provenance_key': 'debug'
+}
+
 # Output layer path
 provenance_layer_exposure_summary = {
     'key': 'provenance_layer_exposure_summary',
