@@ -321,6 +321,20 @@ class ImpactFunction(object):
                         LOGGER.debug(
                             'Keyword Layer is not equal is %s' % if_property)
                         return False
+                    if isinstance(property_a, QgsVectorLayer):
+                        fields_a = [f.name() for f in property_a.fields()]
+                        fields_b = [f.name() for f in property_b.fields()]
+                        if fields_a != fields_b:
+                            LOGGER.debug(
+                                'Layer fields is not equal for %s'
+                                % if_property)
+                            return False
+                        if (property_a.featureCount() !=
+                                property_b.featureCount()):
+                            LOGGER.debug(
+                                'Feature count is not equal for %s' %
+                                if_property)
+                            return False
                 elif isinstance(property_a, QgsGeometry):
                     if not property_a.equals(property_b):
                         string_a = property_a.exportToWkt()
