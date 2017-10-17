@@ -677,8 +677,9 @@ class TestImpactFunction(unittest.TestCase):
         # self.assertDictEqual(expected_steps, steps, scenario_path)
         try:
             self.assertDictEqual(byteify(expected_steps), byteify(steps))
-        except AssertionError as e:
-            raise AssertionError(e.message + '\nThe file is ' + scenario_path)
+        except AssertionError:
+            LOGGER.debug("Exception found in" + scenario_path)
+            raise
         # - 1 because I added the profiling table, and this table is not
         # counted in the JSON file.
         self.assertEqual(len(outputs) - 1, expected_outputs['count'])
@@ -686,15 +687,15 @@ class TestImpactFunction(unittest.TestCase):
 
         # Test deserialization
         if test_loader:
-            LOGGER.debug('Test deserialization. Lontong')
+            LOGGER.debug('Test deserialization.')
             output_metadata = impact_function.impact.keywords
             new_impact_function = ImpactFunction. \
                 load_from_output_metadata(output_metadata)
             try:
                 self.assertEquals(impact_function, new_impact_function)
-            except AssertionError as e:
-                raise AssertionError(
-                    e.message + '\nThe scenario is ' + scenario_path)
+            except AssertionError:
+                LOGGER.debug("Exception found in" + scenario_path)
+                raise
 
         return impact_function
 
@@ -727,7 +728,7 @@ class TestImpactFunction(unittest.TestCase):
         }
 
         # If we want to invert the selection.
-        invert = True
+        invert = False
 
         path = standard_data_path('scenario')
         # Sort it to make it easy to debug
