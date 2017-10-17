@@ -28,7 +28,7 @@ from safe.report.extractors.util import (
 from safe.test.utilities import (
     standard_data_path,
     get_qgis_app)
-from safe.gis.utilities import load_layer
+from safe.gis.tools import load_layer
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
