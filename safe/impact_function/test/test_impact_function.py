@@ -658,7 +658,8 @@ class TestImpactFunction(unittest.TestCase):
         # test_provenance pass
         del hazard_layer
 
-    def test_scenario(self, scenario_path=None, use_debug=True):
+    def test_scenario(
+            self, scenario_path=None, use_debug=True, test_loader=False):
         """Run test single scenario."""
         self.maxDiff = None
 
@@ -682,6 +683,19 @@ class TestImpactFunction(unittest.TestCase):
         # counted in the JSON file.
         self.assertEqual(len(outputs) - 1, expected_outputs['count'])
         self.assertEqual(len(outputs), computed_nb_outputs)
+
+        # Test deserialization
+        if test_loader:
+            LOGGER.debug('Test deserialization. Lontong')
+            output_metadata = impact_function.impact.keywords
+            new_impact_function = ImpactFunction. \
+                load_from_output_metadata(output_metadata)
+            try:
+                self.assertEquals(impact_function, new_impact_function)
+            except AssertionError as e:
+                raise AssertionError(
+                    e.message + '\nThe scenario is ' + scenario_path)
+
         return impact_function
 
     @unittest.skipIf(
@@ -713,10 +727,12 @@ class TestImpactFunction(unittest.TestCase):
         }
 
         # If we want to invert the selection.
-        invert = False
+        invert = True
 
         path = standard_data_path('scenario')
-        for scenario, enabled in scenarios.iteritems():
+        # Sort it to make it easy to debug
+        for scenario in sorted(scenarios.keys()):
+            enabled = scenarios[scenario]
             if (not invert and enabled) or (invert and not enabled):
                 self.test_scenario(join(path, scenario + '.json'))
 
@@ -742,7 +758,7 @@ class TestImpactFunction(unittest.TestCase):
             if scenario.get('enable', True):
                 print "Test JSON scenario : "
                 print json_file
-                self.test_scenario(json_file)
+                self.test_scenario(json_file, test_loader=True)
                 count += 1
         self.assertEqual(len(json_files), count)
 
@@ -1197,6 +1213,9 @@ class TestImpactFunction(unittest.TestCase):
         self.assertIsInstance(impact_function.impact, QgsVectorLayer)
         self.assertEquals(len(impact_function.outputs), 6)
 
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False),
+        'Duplicate test of test_scenario_directory.')
     def test_deserialize_impact_function(self):
         """Test run IF then deserialize it."""
         path = standard_data_path('scenario')
