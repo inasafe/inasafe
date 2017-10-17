@@ -27,11 +27,10 @@ def process_ash(
         hazard_url=None):
     LOGGER.info('-------------------------------------------')
 
-    # if 'INASAFE_LOCALE' in os.environ:
-    #     locale_option = os.environ['INASAFE_LOCALE']
-    # else:
-    #     locale_option = 'en'
-    locale_option = 'en'
+    if 'INASAFE_LOCALE' in os.environ:
+        locale_option = os.environ['INASAFE_LOCALE']
+    else:
+        locale_option = 'en'
 
     working_directory = ASH_WORKING_DIRECTORY
     try:

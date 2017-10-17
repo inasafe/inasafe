@@ -53,6 +53,16 @@ compile-realtime-translation-strings:
 	@lrelease-qt4 inasafe.pro
 	@rm inasafe.pro
 
+transifex-push-source-realtime:
+	@tx push -s -r inasafe-code.inasafe-realtime
+
+transifex-pull-realtime:
+	@tx pull -r inasafe-code.inasafe-realtime
+
+transifex-push-language-realtime:
+	@echo "Push translation to Transifex for language $(LANG)"
+	@tx push -t -l $LANG -r inasafe-code.inasafe-realtime
+
 test-translations:
 	@echo
 	@echo "----------------------------------------------------------------"

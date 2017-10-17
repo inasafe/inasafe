@@ -32,8 +32,8 @@
  <body>
   <table frame="box" width="100%">
    <tr>
-    <th align="left" width="40%">Land Cover Type</th>
-    <th align="right" width="30%">Area affected (km<sup>2</sup>)</th>
+    <th align="left" width="40%">{{ landcover_type_header|safe }}</th>
+    <th align="right" width="30%">{{ landcover_area_header|safe }}</th>
    </tr>
    {% for item in landcover_list %}
      <tr>

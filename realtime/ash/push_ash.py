@@ -97,14 +97,11 @@ def push_ash_event_to_rest(ash_event, fail_silent=True):
         response = session(
             'ash-report',
             ash_data['volcano_name'],
-            ash_event.time.strftime(timestring)).GET()
+            ash_event.time.strftime(timestring),
+            ash_event.locale).GET()
         report_exists = False
         if response.status_code == requests.codes.ok:
-            result = response.json()
-            if result and 'count' in result and result['count'] > 0:
-                report_exists = True
-        elif response.status_code == requests.codes.not_found:
-            report_exists = False
+            report_exists = True
 
         if report_exists:
             # event exists, we should update using PUT Url

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="id" sourcelanguage="">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="id" version="2.0">
 <context>
     <name>AshEvent</name>
     <message>
@@ -63,9 +62,124 @@
         <translation>Didukung oleh DMInnovation, Geoscience Australia dan Bank Dunia-GFDRR</translation>
     </message>
     <message>
-        <location filename="ash_event.py" line="711"/>
+        <location filename="ash_event.py" line="786"/>
         <source>People Affected</source>
         <translation>Penduduk Terdampak</translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="600"/>
+        <source>Fallout Level</source>
+        <translation>Tingkat Jatuhan</translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="468"/>
+        <source>Very Low</source>
+        <translation>Sangat Rendah</translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="469"/>
+        <source>Low</source>
+        <translation>Rendah</translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="470"/>
+        <source>Moderate</source>
+        <translation>Sedang</translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="471"/>
+        <source>High</source>
+        <translation>Tinggi</translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="472"/>
+        <source>Very High</source>
+        <translation>Sangat Tinggi</translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="372"/>
+        <source>Potential Impact</source>
+        <translation>Potensi Dampak</translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="373"/>
+        <source>Impact on health (respiration), livestock, and contamination of water supply.</source>
+        <translation>Dampak pada kesehatan (respirasi), ternak, dan kontaminasi persediaan air.</translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="374"/>
+        <source>Damage to transportation routes (e.g. airports, roads, railways); damage to critical infrastructur (e.g. electricity supply); damage to more vulnerable agricultural crops (e.g. rice fields)</source>
+        <translation>Kerusakan pada rute transportasi (contoh: bandara, jalan, rel kereta api); kerusakan pada infrastruktur kritis (contoh: persediaan kelistrikan); kerusakan pada tanaman pertanian yang lebih rentan (contoh: sawah)</translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="375"/>
+        <source>Damage to less vulnerable agricultural crops (e.g. tea plantations) and destruction of more vulnerable crops; destruction of critical infrastructure; cosmetic (non-structural) damage to buildings</source>
+        <translation>Kerusakan pada tanaman pertanian yang kerentanan lebih sedikit (contoh: perkebunan teh) dan kerusakan tanaman yang lebih rentan; kerusakan pada infrastruktur kritis; kerusakan kosmetik (non-struktural) pada bangunan</translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="376"/>
+        <source>Dry loading on buildings causing structural damage but not collapse; Wet loading on buildings (i.e. ash loading + heavy rainfall) causing structural collapse.</source>
+        <translation>Muatan kering pada bangunan menyebabkan kerusakan struktural tetapi tidak runtuh; beban kering pada bangunan (misalnya muatan abu + hujan deras) mengakibatkan keruntuhan struktural.</translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="377"/>
+        <source>Dry loading on buildings causing structural collapse.</source>
+        <translation>Muatan kering pada bangunan mengakibatkan keruntuhan struktur.</translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="382"/>
+        <source>People Affected (x1000)</source>
+        <translation>Penduduk Terdampak (x1000)</translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="384"/>
+        <source>Ash Thickness Range (cm)</source>
+        <translation>Rentang Ketebalan Abu (cm)</translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="447"/>
+        <source>Land Cover Type</source>
+        <translation>Tipe Penutup Lahan</translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="448"/>
+        <source>Area affected (km&lt;sup&gt;2&lt;/sup&gt;)</source>
+        <translation>Area terdampak (km&lt;sup&gt;2&lt;/sup&gt;)</translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="598"/>
+        <source>Name</source>
+        <translation>Nama</translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="599"/>
+        <source>People (x1000)/ Airport affected</source>
+        <translation>Penduduk (x1000)/ Bandara terdampak</translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="426"/>
+        <source>Forest</source>
+        <translation>Hutan</translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="427"/>
+        <source>Plantation</source>
+        <translation>Perkebunan</translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="428"/>
+        <source>Water Supply</source>
+        <translation>Persediaan Air</translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="429"/>
+        <source>Settlement</source>
+        <translation>Pemukiman</translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="430"/>
+        <source>Rice Field</source>
+        <translation>Ladang Padi</translation>
     </message>
 </context>
 <context>

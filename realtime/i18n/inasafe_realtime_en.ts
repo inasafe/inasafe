@@ -63,8 +63,123 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ash_event.py" line="711"/>
+        <location filename="ash_event.py" line="786"/>
         <source>People Affected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="600"/>
+        <source>Fallout Level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="468"/>
+        <source>Very Low</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="469"/>
+        <source>Low</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="470"/>
+        <source>Moderate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="471"/>
+        <source>High</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="472"/>
+        <source>Very High</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="372"/>
+        <source>Potential Impact</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="373"/>
+        <source>Impact on health (respiration), livestock, and contamination of water supply.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="374"/>
+        <source>Damage to transportation routes (e.g. airports, roads, railways); damage to critical infrastructur (e.g. electricity supply); damage to more vulnerable agricultural crops (e.g. rice fields)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="375"/>
+        <source>Damage to less vulnerable agricultural crops (e.g. tea plantations) and destruction of more vulnerable crops; destruction of critical infrastructure; cosmetic (non-structural) damage to buildings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="376"/>
+        <source>Dry loading on buildings causing structural damage but not collapse; Wet loading on buildings (i.e. ash loading + heavy rainfall) causing structural collapse.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="377"/>
+        <source>Dry loading on buildings causing structural collapse.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="382"/>
+        <source>People Affected (x1000)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="384"/>
+        <source>Ash Thickness Range (cm)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="447"/>
+        <source>Land Cover Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="448"/>
+        <source>Area affected (km&lt;sup&gt;2&lt;/sup&gt;)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="598"/>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="599"/>
+        <source>People (x1000)/ Airport affected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="426"/>
+        <source>Forest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="427"/>
+        <source>Plantation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="428"/>
+        <source>Water Supply</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="429"/>
+        <source>Settlement</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="430"/>
+        <source>Rice Field</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -51,15 +51,17 @@
 	<body>
 		<table width="100%">
 			<tr>
-				<td width="22.5%">Fallout Level</th>
-				<th class="lv1">Very Low</th>
-				<th class="lv2">Low</th>
-				<th class="lv3">Moderate</th>
-				<th class="lv4">High</th>
-				<th class="lv5">Very High</th>
+				{% for h in table_header %}
+					{% if loop.first %}
+						<th width="22.5%">
+					{% else %}
+						<th class="{{ h.class }}">
+					{% endif %}
+					{{ h.header|safe }}</th>
+				{% endfor %}
 			</tr>
 			<tr style="background-color:#f2f2f2">
-				<td>People Affected (x1000)</td>
+				<td>{{ affected_header|safe }}</td>
 				<td style="font-weight:bold">{{ very_low }}</td>
 				<td style="font-weight:bold">{{ low }}</td>
 				<td style="font-weight:bold">{{ medium }}</td>
@@ -67,15 +69,17 @@
 				<td style="font-weight:bold">{{ very_high }}</td>
 			</tr>
 			<tr style="font-size:11px; line-height:1.2">
-				<td style="font-size:14px" class="top">Potential Impact</td>
-				<td class="top">Impact on health (respiration), livestock, and contamination of water supply.</td>
-				<td class="top">Damage to transportation routes (e.g. airports, roads, railways); damage to critical infrastructur (e.g. electricity supply); damage to more vulnerable agricultural crops (e.g. rice fields)</td>
-				<td class="top">Damage to less vulnerable agricultural crops (e.g. tea plantations) and destruction of more vulnerable crops; destruction of critical infrastructure; cosmetic (non-structural) damage to buildings</td>
-				<td class="top">Dry loading on buildings causing structural damage but not collapse; Wet loading on buildings (i.e. ash loading + heavy rainfall) causing structural collapse. </td>
-				<td class="top">Dry loading on buildings causing structural collapse.</td>
+				{% for h in potential_impact_header %}
+					{% if loop.first %}
+						<td style="font-size:14px" class="top">
+					{% else %}
+						<td class="top">
+					{% endif %}
+					{{ h|safe }}</td>
+				{% endfor %}
 			</tr>
 			<tr style="font:bold">
-				<td style="font-weight:bold">Ash Thickness Range (cm)</td>
+				<td style="font-weight:bold">{{ ash_thickness_header|safe }}</td>
 				<td style="font-weight:bold">>0.01 - 0.1</td>
 				<td style="font-weight:bold">>0.1 - 2</td>
 				<td style="font-weight:bold">>2 - 5</td>

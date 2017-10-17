@@ -233,7 +233,7 @@ class AshEvent(QObject):
         dateformat = '%Y%m%d%H%M%S'
         timestring = self.time.strftime(dateformat)
         event_folder = '%s-%s' % (timestring, self.volcano_name)
-        return os.path.join(self.working_dir, event_folder, path)
+        return os.path.join(self.working_dir, event_folder, self.locale, path)
 
     def event_dict(self):
         tz = pytz.timezone('Asia/Jakarta')
@@ -341,9 +341,52 @@ class AshEvent(QObject):
         # }
         population_template = self.ash_fixtures_dir(
             'population-table.template.html')
+
+        table_header = [
+            {
+                'header': self.tr('Fallout Level')
+            },
+            {
+                'header': self.tr('Very Low'),
+                'class': 'lv1'
+            },
+            {
+                'header': self.tr('Low'),
+                'class': 'lv2'
+            },
+            {
+                'header': self.tr('Moderate'),
+                'class': 'lv3'
+            },
+            {
+                'header': self.tr('High'),
+                'class': 'lv4'
+            },
+            {
+                'header': self.tr('Very High'),
+                'class': 'lv5'
+            },
+        ]
+
+        potential_impact_header = [
+            self.tr('Potential Impact'),
+            self.tr('Impact on health (respiration), livestock, and contamination of water supply.'),
+            self.tr('Damage to transportation routes (e.g. airports, roads, railways); damage to critical infrastructur (e.g. electricity supply); damage to more vulnerable agricultural crops (e.g. rice fields)'),
+            self.tr('Damage to less vulnerable agricultural crops (e.g. tea plantations) and destruction of more vulnerable crops; destruction of critical infrastructure; cosmetic (non-structural) damage to buildings'),
+            self.tr('Dry loading on buildings causing structural damage but not collapse; Wet loading on buildings (i.e. ash loading + heavy rainfall) causing structural collapse.'),
+            self.tr('Dry loading on buildings causing structural collapse.')
+        ]
+
+        context = {
+            'table_header': table_header,
+            'affected_header': self.tr('People Affected (x1000)'),
+            'potential_impact_header': potential_impact_header,
+            'ash_thickness_header': self.tr('Ash Thickness Range (cm)')
+        }
+        context.update(population_dict)
         with open(population_template) as f:
             template = Template(f.read())
-            html_string = template.render(**population_dict)
+            html_string = template.render(**context)
 
         with open(self.population_html_path, 'w') as f:
             f.write(html_string)
@@ -368,29 +411,46 @@ class AshEvent(QObject):
         # landcover_list =
         # [
         #     {
-        #         'type': 'settlement',
+        #         'type': 'Settlement',
         #         'area': 1000
         #     },
         #     {
-        #         'type': 'rice field',
+        #         'type': 'Rice Field',
         #         'area': 10
         #     },
         # ]
+
+        # Landcover type localization for dynamic translations:
+        # noqa
+        landcover_types = [
+            self.tr('Forest'),
+            self.tr('Plantation'),
+            self.tr('Water Supply'),
+            self.tr('Settlement'),
+            self.tr('Rice Field')
+        ]
+
         landcover_list = []
         for land_type, area in landcover_dict.iteritems():
             if not land_type.lower() == 'other':
                 landcover_list.append({
-                    'type': land_type,
+                    'type': self.tr(land_type),
                     'area': format_int(int(area))
                 })
 
         landcover_list.sort(key=lambda x: x['area'], reverse=True)
         landcover_template = self.ash_fixtures_dir(
             'landcover-table.template.html')
+
+        context = {
+            'landcover_list': landcover_list,
+            'landcover_type_header': self.tr('Land Cover Type'),
+            'landcover_area_header': self.tr('Area affected (km<sup>2</sup>)')
+        }
         with open(landcover_template) as f:
             template = Template(f.read())
             # generate table here
-            html_string = template.render(landcover_list=landcover_list)
+            html_string = template.render(**context)
 
         with open(self.landcover_html_path, 'w') as f:
             f.write(html_string)
@@ -403,6 +463,13 @@ class AshEvent(QObject):
             2: 'Moderate',
             3: 'High',
             4: 'Very High'
+        }
+        hazard_label = {
+            0: self.tr('Very Low'),
+            1: self.tr('Low'),
+            2: self.tr('Moderate'),
+            3: self.tr('High'),
+            4: self.tr('Very High')
         }
 
         # load PLACES
@@ -444,9 +511,10 @@ class AshEvent(QObject):
                 # 'the type'
                 # ]
                 haz = hazard_mapping[haz_class]
+                label = hazard_label[haz_class]
                 item = {
                     'class': haz_class,
-                    'hazard': haz,
+                    'hazard': label,
                     'css': haz.lower().replace(' ', '-'),
                     'pop_val': city_pop,
                     'population': format_int(
@@ -483,9 +551,10 @@ class AshEvent(QObject):
                 haz_class = f.attributes()[hazard_field_index]
                 airport_name = f.attributes()[name_field_index]
                 haz = hazard_mapping[haz_class]
+                label = hazard_label[haz_class]
                 item = {
                     'class': haz_class,
-                    'hazard': haz,
+                    'hazard': label,
                     'css': haz.lower().replace(' ', '-'),
                     'pop_val': 0,
                     'population': '0',
@@ -524,10 +593,16 @@ class AshEvent(QObject):
 
         nearby_template = self.ash_fixtures_dir(
             'nearby-table.template.html')
+        context = {
+            'item_list': item_list,
+            'name_header': self.tr('Name'),
+            'affected_header': self.tr('People (x1000)/ Airport affected'),
+            'fallout_header': self.tr('Fallout Level')
+        }
         with open(nearby_template) as f:
             template = Template(f.read())
             # generate table here
-            html_string = template.render(item_list=item_list)
+            html_string = template.render(**context)
 
         with open(self.nearby_html_path, 'w') as f:
             f.write(html_string)

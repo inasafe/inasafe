@@ -58,9 +58,9 @@
 	<body>
 		<table frame="box" width="100%">
 			<tr>
-				<th align="left" width="45%">Name</th>
-				<th align="center" width="35%">People (x1000)/ Airport affected</th>
-				<th align="left" width="20%">Fallout Level</th>
+				<th align="left" width="45%">{{ name_header|safe }}</th>
+				<th align="center" width="35%">{{ affected_header|safe }}</th>
+				<th align="left" width="20%">{{ fallout_header|safe }}</th>
 			</tr>
 			{% for item in item_list %}
 			<tr>

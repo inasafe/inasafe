@@ -58,7 +58,7 @@ def process_event(
         LOGGER.info('Creating Ash Event for locale %s.' % locale)
         event = AshEvent(
             working_dir=working_dir,
-            locale='en',
+            locale=locale,
             event_time=event_time,
             volcano_name=volcano_name,
             volcano_location=volcano_location,
