@@ -3,9 +3,10 @@
 """
 
 from safe.definitions.concepts import concepts
+from safe.definitions.utilities import definition
 from safe.report.extractors.util import (
-    resolve_from_dictionary,
-    layer_hazard_classification)
+    resolve_from_dictionary)
+from safe.utilities.metadata import active_classification
 from safe.utilities.resources import resource_url, resources_path
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -84,8 +85,10 @@ def infographic_people_section_notes_extractor(
 
     .. versionadded:: 4.2
     """
-    hazard_layer = impact_report.hazard
     extra_args = component_metadata.extra_args
+    provenance = impact_report.impact_function.provenance
+    hazard_keywords = provenance['hazard_keywords']
+    exposure_keywords = provenance['exposure_keywords']
 
     context = {}
     context['notes'] = []
@@ -106,7 +109,8 @@ def infographic_people_section_notes_extractor(
         }
         context['notes'].append(note)
 
-    hazard_classification = layer_hazard_classification(hazard_layer)
+    hazard_classification = definition(
+        active_classification(hazard_keywords, exposure_keywords['exposure']))
 
     # generate rate description
     displacement_rates_note_format = resolve_from_dictionary(

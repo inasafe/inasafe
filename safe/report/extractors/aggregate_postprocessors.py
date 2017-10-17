@@ -20,10 +20,12 @@ from safe.definitions.minimum_needs import minimum_needs_fields
 from safe.definitions.post_processors.population_post_processors import (
     age_postprocessors,
     gender_postprocessors)
-from safe.definitions.utilities import postprocessor_output_field
+from safe.definitions.utilities import (
+    postprocessor_output_field,
+    definition)
 from safe.report.extractors.util import (
     value_from_field_name,
-    resolve_from_dictionary, layer_definition_type)
+    resolve_from_dictionary)
 from safe.utilities.rounding import format_number
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -57,16 +59,17 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
 
     extra_args = component_metadata.extra_args
     # Find out aggregation report type
-    exposure_layer = impact_report.exposure
     aggregation_summary = impact_report.aggregation_summary
     analysis_layer = impact_report.analysis
     analysis_layer_fields = impact_report.analysis.keywords['inasafe_fields']
     debug_mode = impact_report.impact_function.debug_mode
     use_aggregation = bool(impact_report.impact_function.provenance[
         'aggregation_layer'])
+    provenance = impact_report.impact_function.provenance
+    exposure_keywords = provenance['exposure_keywords']
 
     # Get exposure type definition
-    exposure_type = layer_definition_type(exposure_layer)
+    exposure_type = definition(exposure_keywords['exposure'])
 
     # this entire section is only for population exposure type
     if not exposure_type == exposure_population:

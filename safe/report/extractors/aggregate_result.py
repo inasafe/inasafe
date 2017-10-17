@@ -9,9 +9,9 @@ from safe.definitions.fields import (
     total_affected_field,
     exposure_type_field,
     exposure_class_field)
+from safe.definitions.utilities import definition
 from safe.gis.vector.tools import read_dynamic_inasafe_field
 from safe.report.extractors.util import (
-    layer_definition_type,
     resolve_from_dictionary,
     retrieve_exposure_classes_lists)
 from safe.utilities.rounding import format_number
@@ -46,9 +46,9 @@ def aggregation_result_extractor(impact_report, component_metadata):
 
     extra_args = component_metadata.extra_args
     # Find out aggregation report type
-    exposure_layer = impact_report.exposure
     analysis_layer = impact_report.analysis
     provenance = impact_report.impact_function.provenance
+    exposure_keywords = provenance['exposure_keywords']
     exposure_summary_table = impact_report.exposure_summary_table
     if exposure_summary_table:
         exposure_summary_table_fields = exposure_summary_table.keywords[
@@ -66,7 +66,7 @@ def aggregation_result_extractor(impact_report, component_metadata):
 
     # Only process for applicable exposure types
     # Get exposure type definition
-    exposure_type = layer_definition_type(exposure_layer)
+    exposure_type = definition(exposure_keywords['exposure'])
     # Only round the number when it is population exposure and it is not
     # in debug mode
     is_rounded = not debug_mode
@@ -89,7 +89,7 @@ def aggregation_result_extractor(impact_report, component_metadata):
     # we need to sort the column
     # get the classes lists
     # retrieve classes definitions
-    exposure_classes_lists = retrieve_exposure_classes_lists(exposure_layer)
+    exposure_classes_lists = retrieve_exposure_classes_lists(exposure_keywords)
 
     # sort columns based on class order
     # create function to sort

@@ -3,12 +3,12 @@
 """
 
 from safe.definitions.exposure import exposure_population
+from safe.definitions.utilities import definition
 from safe.report.extractors.composer import QGISComposerContext
 from safe.report.extractors.util import (
     resolve_from_dictionary,
-    layer_definition_type,
-    layer_hazard_classification,
     jinja2_output_as_string)
+from safe.utilities.metadata import active_classification
 from safe.utilities.resources import (
     resource_url,
     resources_path)
@@ -65,11 +65,11 @@ def notes_assumptions_extractor(impact_report, component_metadata):
     .. versionadded:: 4.0
     """
     context = {}
-    hazard_layer = impact_report.hazard
-    exposure_layer = impact_report.exposure
     provenance = impact_report.impact_function.provenance
     extra_args = component_metadata.extra_args
-    exposure_type = layer_definition_type(exposure_layer)
+    hazard_keywords = provenance['hazard_keywords']
+    exposure_keywords = provenance['exposure_keywords']
+    exposure_type = definition(exposure_keywords['exposure'])
 
     analysis_note_dict = resolve_from_dictionary(extra_args, 'analysis_notes')
     context['items'] = [analysis_note_dict]
@@ -78,7 +78,8 @@ def notes_assumptions_extractor(impact_report, component_metadata):
     context['items'] += provenance['notes']
 
     # Get hazard classification
-    hazard_classification = layer_hazard_classification(hazard_layer)
+    hazard_classification = definition(
+        active_classification(hazard_keywords, exposure_keywords['exposure']))
 
     # Check hazard affected class
     affected_classes = []
