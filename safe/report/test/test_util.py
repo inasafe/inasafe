@@ -187,7 +187,7 @@ class TestReportUtil(unittest.TestCase):
                 layer_paths, expected_classes_lists):
             path = standard_data_path(*layer_path)
             layer, _ = load_layer(path)
-            actual_classes = retrieve_exposure_classes_lists(layer)
+            actual_classes = retrieve_exposure_classes_lists(layer.keywords)
             try:
                 self.assertEqual(
                     expected_classes, actual_classes)
