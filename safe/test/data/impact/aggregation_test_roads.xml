@@ -250,8 +250,6 @@
             <gco:CharacterString/>
           </impact_summary>
         </inasafe>
-        <inasafe_provenance>
-</inasafe_provenance>
       </gmd:supplementalInformation>
     </gmd:MD_DataIdentification>
   </gmd:identificationInfo>
