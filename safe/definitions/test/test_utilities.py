@@ -495,7 +495,7 @@ class TestDefinitionsUtilities(unittest.TestCase):
         self.assertDictEqual(provenance_collection, expected)
 
     def test_get_provenance(self):
-        """Test fot get_provenance"""
+        """Test for get_provenance."""
         provenance_collection = {}
         host_name_value = 'host_name'
         set_provenance(
@@ -510,6 +510,7 @@ class TestDefinitionsUtilities(unittest.TestCase):
             provenance_collection, provenance_user))
         self.assertIsNone(
             get_provenance(provenance_collection, provenance_crs))
+
 
 if __name__ == '__main__':
     unittest.main()
