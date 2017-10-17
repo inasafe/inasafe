@@ -1676,11 +1676,12 @@ class ImpactFunction(object):
 
         # Put profiling file path to the provenance
         # FIXME(IS): Very hacky
-        profiling_path = join(dirname(
-            self._analysis_impacted.publicSource()),
-            layer_purpose_profiling['name'] + '.csv')
-        output_layer_provenance[
-            provenance_layer_profiling['provenance_key']] = profiling_path
+        if not self.debug_mode:
+            profiling_path = join(dirname(
+                self._analysis_impacted.publicSource()),
+                layer_purpose_profiling['name'] + '.csv')
+            output_layer_provenance[
+                provenance_layer_profiling['provenance_key']] = profiling_path
 
         # Update provenance data with output layers URI
         self._provenance.update(output_layer_provenance)
