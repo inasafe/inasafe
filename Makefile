@@ -344,34 +344,23 @@ build-nightlies:
 #
 ##########################################################
 
-docker-run-tests:
-    # The image is hosted in docker hub at
-    # https://registry.hub.docker.com/u/inasafe/inasafe-test-runner/
-	docker pull inasafe/inasafe-test-runner
-	#docker rm inasafe-test-runner
-	docker run -i -t --rm --name="inasafe-tests" \
-		-v /Users/timlinux/dev/python/inasafe_data/:/inasafe_data \
-		-v /Users/timlinux/dev/python/inasafe:/inasafe \
-		inasafe/inasafe-test-runner \
-		/bin/bash
-
-
-docker-test: testdata clean
+docker-start-test-container:
 	@echo
 	@echo "----------------------------------"
-	@echo "Regression Test Suite for running in docker"
-	@echo " against QGIS 2.x"
+	@echo "Start docker container for testing with QGIS 2.14"
+	@echo "Image: kartoza/qgis-testing:boundlessgeo-2.14.7"
+	@echo "You can use 'make docker-test' after that"
 	@echo "----------------------------------"
-	@PYTHONPATH=`pwd`:$(PYTHONPATH) xvfb-run \
-		--server-args="-screen 0, 1024x768x24" \
-		nosetests \
-		-v \
-		--with-id \
-		--with-xcoverage \
-		--with-xunit \
-		--verbose \
-		--cover-package=safe safe
+	@./start-docker-test.sh
 
+docker-test:
+	@echo
+	@echo "----------------------------------"
+	@echo "Run tests in docker"
+	@echo "You must run 'make docker-start-test-container' before."
+	@echo "You can change the tested package in 'test_suite.py' in the 'test_package' function."
+	@echo "----------------------------------"
+	@./run-docker-test.sh
 
 docker-update-translation-strings:
 	@echo "Update translation using docker"
