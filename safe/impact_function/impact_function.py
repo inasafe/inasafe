@@ -306,7 +306,7 @@ class ImpactFunction(object):
         properties = [
             'debug_mode',
             'requested_extent',
-            'requested_extent_crs',
+            'crs',
             'analysis_extent',
             'datastore',
             'name',
@@ -2662,5 +2662,12 @@ class ImpactFunction(object):
 
         impact_function._output_layer_expected = \
             impact_function._compute_output_layer_expected()
+
+        # crs
+        crs = get_provenance(provenance, provenance_crs)
+        if crs:
+            impact_function._crs = QgsCoordinateReferenceSystem(crs)
+        else:
+            impact_function._crs = None
 
         return impact_function
