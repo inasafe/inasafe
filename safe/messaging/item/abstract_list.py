@@ -16,11 +16,12 @@ __date__ = '24/05/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+from exceptions import InvalidMessageItemError
+
 from PyQt4.QtCore import QPyNullVariant
-from safe.utilities.i18n import tr
 
 from message_element import MessageElement
-from exceptions import InvalidMessageItemError
+from safe.utilities.i18n import tr
 from text import PlainText
 
 

@@ -3,14 +3,15 @@
 """Add default values."""
 
 import logging
+
 from PyQt4.QtCore import QPyNullVariant
 
 from safe.common.exceptions import (
     InvalidKeywordsForProcessingAlgorithm)
 from safe.definitions.processing_steps import assign_default_values_steps
 from safe.definitions.utilities import definition
-from safe.gis.vector.tools import create_field_from_definition
 from safe.gis.sanity_check import check_layer
+from safe.gis.vector.tools import create_field_from_definition
 from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

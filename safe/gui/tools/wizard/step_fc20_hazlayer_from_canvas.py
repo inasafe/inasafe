@@ -7,16 +7,14 @@ from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import pyqtSignature
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QListWidgetItem, QPixmap
-
 from qgis.core import QgsMapLayerRegistry
 
-from safe.definitions.layer_purposes import layer_purpose_hazard
-from safe.utilities.resources import resources_path
 from safe import messaging as m
-from safe.utilities.i18n import tr
-
+from safe.definitions.layer_purposes import layer_purpose_hazard
 from safe.gui.tools.wizard.wizard_step import (
     WizardStep, get_wizard_step_ui_class)
+from safe.utilities.i18n import tr
+from safe.utilities.resources import resources_path
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

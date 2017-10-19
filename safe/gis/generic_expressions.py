@@ -2,13 +2,13 @@
 
 """QGIS Expressions which are available in the QGIS GUI interface."""
 
+import datetime
+
 from qgis.core import (
     qgsfunction,
     QgsMapLayerRegistry,
     QgsExpressionContextUtils,
 )
-
-import datetime
 
 from safe.definitions.provenance import provenance_layer_analysis_impacted_id
 from safe.utilities.i18n import tr

@@ -3,6 +3,7 @@
 """Aggregate the aggregate hazard to the analysis layer."""
 
 from math import isnan
+
 from PyQt4.QtCore import QPyNullVariant
 from qgis.core import QgsFeatureRequest
 
@@ -19,17 +20,17 @@ from safe.definitions.fields import (
     total_field,
     hazard_count_field,
 )
-from safe.definitions.processing_steps import (
-    summary_3_analysis_steps)
 from safe.definitions.hazard_classifications import not_exposed_class
 from safe.definitions.layer_purposes import layer_purpose_analysis_impacted
 from safe.definitions.post_processors import post_processor_affected_function
+from safe.definitions.processing_steps import (
+    summary_3_analysis_steps)
+from safe.gis.sanity_check import check_layer
 from safe.gis.vector.summary_tools import (
     check_inputs, create_absolute_values_structure, add_fields)
-from safe.gis.sanity_check import check_layer
 from safe.utilities.gis import qgis_version
-from safe.utilities.profiling import profile
 from safe.utilities.pivot_table import FlatTable
+from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

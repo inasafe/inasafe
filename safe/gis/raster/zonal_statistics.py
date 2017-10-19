@@ -3,20 +3,21 @@
 """Zonal statistics on a raster layer."""
 
 import logging
+
 from qgis.analysis import QgsZonalStatistics
 from qgis.core import QgsFeatureRequest
 
-from safe.gis.sanity_check import check_layer
-from safe.gis.vector.tools import (
-    copy_layer, create_memory_layer, create_field_from_definition)
-from safe.gis.vector.prepare_vector_layer import copy_fields, remove_fields
-from safe.gis.vector.reproject import reproject
 from safe.definitions.fields import exposure_count_field, total_field
-from safe.definitions.processing_steps import zonal_stats_steps
 from safe.definitions.layer_purposes import (
     layer_purpose_aggregate_hazard_impacted)
-from safe.utilities.profiling import profile
+from safe.definitions.processing_steps import zonal_stats_steps
+from safe.gis.sanity_check import check_layer
+from safe.gis.vector.prepare_vector_layer import copy_fields, remove_fields
+from safe.gis.vector.reproject import reproject
+from safe.gis.vector.tools import (
+    copy_layer, create_memory_layer, create_field_from_definition)
 from safe.utilities.i18n import tr
+from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

@@ -4,6 +4,7 @@
 
 # noinspection PyUnresolvedReferences
 from PyQt4.QtCore import QPyNullVariant
+
 from safe.definitions.hazard_classifications import (
     not_exposed_class,
     hazard_classes_all)

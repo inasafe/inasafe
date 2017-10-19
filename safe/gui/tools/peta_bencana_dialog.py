@@ -11,15 +11,26 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-import os
 import logging
+import os
 import time
-
 from shutil import copy
-from PyQt4 import QtCore
-from PyQt4.QtCore import QVariant, Qt
-from PyQt4.QtNetwork import QNetworkReply
 
+from PyQt4 import QtCore
+# noinspection PyPackageRequirements
+from PyQt4 import QtGui
+# noinspection PyPackageRequirements
+from PyQt4.QtCore import QSettings, pyqtSignature, QRegExp, pyqtSlot
+from PyQt4.QtCore import QVariant, Qt
+# noinspection PyPackageRequirements
+from PyQt4.QtGui import (
+    QDialog,
+    QProgressDialog,
+    QMessageBox,
+    QFileDialog,
+    QRegExpValidator,
+    QButtonGroup)
+from PyQt4.QtNetwork import QNetworkReply
 # noinspection PyUnresolvedReferences
 # pylint: disable=unused-import
 from qgis.core import (
@@ -30,20 +41,6 @@ from qgis.core import (
     QgsField,
     QgsExpression,
     QgsExpressionContext)
-# pylint: enable=unused-import
-
-# noinspection PyPackageRequirements
-from PyQt4 import QtGui
-# noinspection PyPackageRequirements
-from PyQt4.QtCore import QSettings, pyqtSignature, QRegExp, pyqtSlot
-# noinspection PyPackageRequirements
-from PyQt4.QtGui import (
-    QDialog,
-    QProgressDialog,
-    QMessageBox,
-    QFileDialog,
-    QRegExpValidator,
-    QButtonGroup)
 
 from safe.common.exceptions import (
     CanceledImportDialogError,
@@ -51,13 +48,15 @@ from safe.common.exceptions import (
 from safe.definitions.peta_bencana import development_api, production_api
 from safe.gui.tools.help.peta_bencana_help import peta_bencana_help
 from safe.utilities.file_downloader import FileDownloader
-from safe.utilities.resources import (
-    html_footer, html_header, get_ui_class, resources_path)
 from safe.utilities.qgis_utilities import (
     display_warning_message_box,
     display_warning_message_bar)
-from safe.utilities.settings import setting
 from safe.utilities.qt import disable_busy_cursor
+from safe.utilities.resources import (
+    html_footer, html_header, get_ui_class, resources_path)
+from safe.utilities.settings import setting
+
+# pylint: enable=unused-import
 
 
 LOGGER = logging.getLogger('InaSAFE')

@@ -3,8 +3,9 @@
 """Tools for vector layers."""
 
 import logging
-from uuid import uuid4
 from math import isnan
+from uuid import uuid4
+
 from PyQt4.QtCore import QPyNullVariant
 from qgis.core import (
     QgsGeometry,
@@ -19,8 +20,8 @@ from qgis.core import (
 )
 
 from safe.common.exceptions import MemoryLayerCreationError
-from safe.definitions.utilities import definition
 from safe.definitions.units import unit_metres, unit_square_metres
+from safe.definitions.utilities import definition
 from safe.gis.vector.clean_geometry import geometry_checker
 from safe.utilities.profiling import profile
 from safe.utilities.rounding import convert_unit

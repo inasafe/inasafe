@@ -7,21 +7,20 @@ This class will manage how to launch and optimize a multi exposure analysis.
 """
 
 import logging
-
 from datetime import datetime
 
+from safe import messaging as m
 from safe.definitions.constants import (
     PREPARE_SUCCESS,
     PREPARE_FAILED_BAD_INPUT,
     ANALYSIS_FAILED_BAD_INPUT,
     ANALYSIS_SUCCESS,
 )
+from safe.gui.widgets.message import generate_input_error_message
 from safe.impact_function.impact_function import ImpactFunction
 from safe.impact_function.impact_function_utilities import check_input_layer
-from safe.gui.widgets.message import generate_input_error_message
 from safe.utilities.gis import deep_duplicate_layer
 from safe.utilities.i18n import tr
-from safe import messaging as m
 
 LOGGER = logging.getLogger('InaSAFE')
 

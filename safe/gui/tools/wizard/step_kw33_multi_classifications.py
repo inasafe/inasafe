@@ -2,32 +2,28 @@
 """InaSAFE Wizard Step Multi Classifications."""
 
 import logging
-from functools import partial
 from collections import OrderedDict
-import numpy
+from functools import partial
 
+import numpy
+from PyQt4.QtCore import Qt, QPyNullVariant
 from PyQt4.QtGui import (
     QLabel, QHBoxLayout, QComboBox, QPushButton,
     QDoubleSpinBox, QGridLayout, QListWidget, QTreeWidget, QAbstractItemView,
     QListWidgetItem, QFont, QTreeWidgetItem, QSizePolicy)
-from PyQt4.QtCore import Qt, QPyNullVariant
 from PyQt4.QtWebKit import QWebView
-
 from osgeo import gdal
 from osgeo.gdalconst import GA_ReadOnly
 from qgis.core import QgsRasterBandStats
 
 import safe.messaging as m
-from safe.messaging import styles
-from safe.utilities.i18n import tr
-
 from safe.definitions.exposure import exposure_all, exposure_population
-from safe.definitions.hazard import hazard_earthquake
 from safe.definitions.font import big_font
+from safe.definitions.hazard import hazard_earthquake
+from safe.definitions.hazard_classifications import (
+    earthquake_mmi_scale)
+from safe.definitions.layer_modes import layer_mode_continuous
 from safe.definitions.layer_purposes import layer_purpose_aggregation
-from safe.gui.tools.wizard.wizard_step import (
-    WizardStep, get_wizard_step_ui_class)
-from safe.utilities.gis import is_raster_layer
 from safe.definitions.utilities import (
     definition,
     get_fields,
@@ -35,21 +31,23 @@ from safe.definitions.utilities import (
     default_classification_thresholds,
     default_classification_value_maps
 )
-from safe.definitions.hazard_classifications import (
-    earthquake_mmi_scale)
-from safe.definitions.layer_modes import layer_mode_continuous
-from safe.gui.tools.wizard.wizard_strings import (
-    multiple_classified_hazard_classifications_vector,
-    multiple_continuous_hazard_classifications_vector,
-    multiple_classified_hazard_classifications_raster,
-    multiple_continuous_hazard_classifications_raster)
 from safe.gui.tools.wizard.utilities import clear_layout, skip_inasafe_field
-from safe.utilities.resources import html_footer, html_header
+from safe.gui.tools.wizard.wizard_step import (
+    WizardStep, get_wizard_step_ui_class)
 from safe.gui.tools.wizard.wizard_strings import (
     continuous_raster_question,
     continuous_vector_question,
     classify_raster_question,
     classify_vector_question)
+from safe.gui.tools.wizard.wizard_strings import (
+    multiple_classified_hazard_classifications_vector,
+    multiple_continuous_hazard_classifications_vector,
+    multiple_classified_hazard_classifications_raster,
+    multiple_continuous_hazard_classifications_raster)
+from safe.messaging import styles
+from safe.utilities.gis import is_raster_layer
+from safe.utilities.i18n import tr
+from safe.utilities.resources import html_footer, html_header
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

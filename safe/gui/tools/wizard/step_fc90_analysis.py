@@ -3,16 +3,16 @@
 
 import logging
 import os
+
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature
-
 from qgis.core import (
     QgsGeometry,
     QgsCoordinateReferenceSystem,
     QgsMapLayerRegistry)
 
-from safe.utilities.i18n import tr
-from safe.utilities.extent import Extent
+from safe import messaging as m
+from safe.common.signals import send_static_message, send_error_message
 from safe.definitions.constants import (
     ANALYSIS_FAILED_BAD_INPUT,
     ANALYSIS_FAILED_BAD_CODE,
@@ -23,19 +23,19 @@ from safe.definitions.constants import (
     HAZARD_EXPOSURE_VIEW,
     HAZARD_EXPOSURE_BOUNDINGBOX
 )
-from safe.common.signals import send_static_message, send_error_message
-from safe.gui.widgets.message import enable_messaging
-from safe.utilities.qt import enable_busy_cursor, disable_busy_cursor
-from safe.impact_function.impact_function import ImpactFunction
-from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
-from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.analysis_utilities import (
     add_impact_layers_to_canvas, generate_report)
-from safe import messaging as m
+from safe.gui.tools.wizard.wizard_step import WizardStep
+from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
+from safe.gui.widgets.message import enable_messaging
+from safe.impact_function.impact_function import ImpactFunction
 from safe.messaging import styles
 from safe.report.impact_report import ImpactReport
-from safe.utilities.settings import setting
+from safe.utilities.extent import Extent
 from safe.utilities.gis import wkt_to_rectangle
+from safe.utilities.i18n import tr
+from safe.utilities.qt import enable_busy_cursor, disable_busy_cursor
+from safe.utilities.settings import setting
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

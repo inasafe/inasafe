@@ -1,7 +1,7 @@
 # coding=utf-8
 """Module that contains helper function for report context extraction."""
-import os
 import codecs
+import os
 
 from jinja2.exceptions import TemplateError
 

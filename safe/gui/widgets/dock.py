@@ -1,10 +1,10 @@
 # coding=utf-8
 """InaSAFE Dock."""
 
+import codecs
+import logging
 import os
 import shutil
-import logging
-import codecs
 from datetime import datetime
 from numbers import Number
 
@@ -18,16 +18,16 @@ from qgis.core import (
     QgsExpressionContextUtils,
 )
 
-from safe.definitions.layer_purposes import (
-    layer_purpose_hazard,
-    layer_purpose_exposure,
-    layer_purpose_aggregation,
-    layer_purpose_exposure_summary,
-    layer_purpose_aggregate_hazard_impacted,
-    layer_purpose_aggregation_summary,
-    layer_purpose_analysis_impacted,
-    layer_purpose_exposure_summary_table,
-)
+from safe import messaging as m
+from safe.common.exceptions import (
+    KeywordNotFoundError,
+    NoKeywordsFoundError,
+    InvalidParameterError,
+    HashNotFoundError,
+    MetadataReadError)
+from safe.common.signals import (send_static_message, send_error_message)
+from safe.common.version import get_version
+from safe.defaults import supporters_logo_path
 from safe.definitions.constants import (
     inasafe_keyword_version_key,
     EXPOSURE,
@@ -43,13 +43,18 @@ from safe.definitions.constants import (
     PREPARE_SUCCESS,
     entire_area_item_aggregation,
 )
+from safe.definitions.layer_purposes import (
+    layer_purpose_hazard,
+    layer_purpose_exposure,
+    layer_purpose_aggregation,
+    layer_purpose_exposure_summary,
+    layer_purpose_aggregate_hazard_impacted,
+    layer_purpose_aggregation_summary,
+    layer_purpose_analysis_impacted,
+    layer_purpose_exposure_summary_table,
+)
 from safe.definitions.provenance import (
     provenance_list, duplicated_global_variables)
-from safe.definitions.utilities import (
-    update_template_component,
-    get_name,
-    definition)
-from safe.defaults import supporters_logo_path
 from safe.definitions.reports import (
     final_product_tag,
     pdf_product_tag,
@@ -59,36 +64,15 @@ from safe.definitions.reports.components import (
     standard_impact_report_metadata_pdf,
     map_report,
     infographic_report)
+from safe.definitions.utilities import (
+    update_template_component,
+    get_name,
+    definition)
+from safe.gui.analysis_utilities import (
+    add_impact_layers_to_canvas,
+    add_debug_layers_to_canvas,
+    generate_report)
 from safe.gui.gui_utilities import layer_from_combo, add_ordered_combo_item
-from safe.report.impact_report import ImpactReport
-from safe.report.report_metadata import ReportMetadata
-from safe.utilities.gis import wkt_to_rectangle, qgis_version
-from safe.utilities.i18n import tr
-from safe.utilities.keyword_io import KeywordIO
-from safe.utilities.utilities import (
-    get_error_message,
-    is_keyword_version_supported,
-)
-from safe.utilities.settings import setting, set_setting
-from safe.utilities.resources import get_ui_class
-from safe.utilities.qgis_utilities import (
-    display_critical_message_bar,
-    display_warning_message_bar,
-    display_information_message_bar)
-from safe.utilities.extent import Extent
-from safe.utilities.qt import disable_busy_cursor, enable_busy_cursor
-
-from safe.common.version import get_version
-from safe.common.signals import (send_static_message, send_error_message)
-from safe import messaging as m
-from safe.messaging import styles
-from safe.common.exceptions import (
-    KeywordNotFoundError,
-    NoKeywordsFoundError,
-    InvalidParameterError,
-    HashNotFoundError,
-    MetadataReadError)
-from safe.impact_function.impact_function import ImpactFunction
 from safe.gui.tools.about_dialog import AboutDialog
 from safe.gui.tools.help_dialog import HelpDialog
 from safe.gui.widgets.message import (
@@ -100,10 +84,25 @@ from safe.gui.widgets.message import (
     no_overlap_message,
     ready_message,
     enable_messaging)
-from safe.gui.analysis_utilities import (
-    add_impact_layers_to_canvas,
-    add_debug_layers_to_canvas,
-    generate_report)
+from safe.impact_function.impact_function import ImpactFunction
+from safe.messaging import styles
+from safe.report.impact_report import ImpactReport
+from safe.report.report_metadata import ReportMetadata
+from safe.utilities.extent import Extent
+from safe.utilities.gis import wkt_to_rectangle, qgis_version
+from safe.utilities.i18n import tr
+from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.qgis_utilities import (
+    display_critical_message_bar,
+    display_warning_message_bar,
+    display_information_message_bar)
+from safe.utilities.qt import disable_busy_cursor, enable_busy_cursor
+from safe.utilities.resources import get_ui_class
+from safe.utilities.settings import setting, set_setting
+from safe.utilities.utilities import (
+    get_error_message,
+    is_keyword_version_supported,
+)
 from safe.utilities.utilities import is_plugin_installed
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

@@ -4,12 +4,11 @@
 import logging
 
 from safe import messaging as m
-from safe.utilities.i18n import tr
-
-from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.extent_selector_dialog import ExtentSelectorDialog
-from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.help.extent_selector_help import extent_mode_content
+from safe.gui.tools.wizard.wizard_step import WizardStep
+from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
+from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

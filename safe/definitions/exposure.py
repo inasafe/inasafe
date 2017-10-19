@@ -1,15 +1,16 @@
 # coding=utf-8
 """Definitions relating to exposure in InaSAFE."""
 
-from safe.definitions.concepts import concepts
 from safe.definitions.caveats import caveat_incomplete_data
-from safe.definitions.units import (
-    count_exposure_unit,
-    unit_metres,
-    unit_square_metres,
-    unit_hectares,
-    unit_kilometres,
-)
+from safe.definitions.concepts import concepts
+from safe.definitions.exposure_classifications import (
+    generic_place_classes,
+    generic_road_classes,
+    generic_structure_classes,
+    generic_landcover_classes,
+    badan_geologi_landcover_classes,
+    data_driven_classes)
+from safe.definitions.field_groups import population_field_groups
 from safe.definitions.fields import (
     exposure_fields,
     exposure_name_field,
@@ -18,16 +19,15 @@ from safe.definitions.fields import (
     productivity_rate_field,
     production_cost_rate_field,
     production_value_rate_field)
-from safe.definitions.field_groups import population_field_groups
 from safe.definitions.layer_modes import (
     layer_mode_continuous, layer_mode_classified)
-from safe.definitions.exposure_classifications import (
-    generic_place_classes,
-    generic_road_classes,
-    generic_structure_classes,
-    generic_landcover_classes,
-    badan_geologi_landcover_classes,
-    data_driven_classes)
+from safe.definitions.units import (
+    count_exposure_unit,
+    unit_metres,
+    unit_square_metres,
+    unit_hectares,
+    unit_kilometres,
+)
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

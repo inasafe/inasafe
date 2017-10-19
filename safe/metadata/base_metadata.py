@@ -7,8 +7,8 @@ import os
 from datetime import datetime
 from xml.etree import ElementTree
 
-from safe.definitions.metadata import TYPE_CONVERSIONS, METADATA_XML_TEMPLATE
 from safe.common.exceptions import MetadataReadError, HashNotFoundError
+from safe.definitions.metadata import TYPE_CONVERSIONS, METADATA_XML_TEMPLATE
 from safe.metadata.encoder import MetadataEncoder
 from safe.metadata.metadata_db_io import MetadataDbIO
 from safe.metadata.utilities import (

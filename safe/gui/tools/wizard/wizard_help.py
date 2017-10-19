@@ -3,6 +3,7 @@
 
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QWidget
+
 from safe.utilities.resources import get_ui_class, html_header, html_footer
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

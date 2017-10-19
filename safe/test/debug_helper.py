@@ -11,6 +11,7 @@ InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
 """
 
 from tempfile import mkdtemp
+
 from PyQt4.QtCore import QVariant
 from qgis.core import (
     QgsMapLayerRegistry,
@@ -21,8 +22,8 @@ from qgis.core import (
     QgsCoordinateReferenceSystem,
 )
 
-from safe.gis.vector.tools import create_memory_layer
 from safe.datastore.folder import Folder
+from safe.gis.vector.tools import create_memory_layer
 
 __author__ = 'etienne@kartoza.com'
 __date__ = '20/04/2016'

@@ -4,14 +4,15 @@
 
 import logging
 
+from PyQt4.QtCore import QObject, pyqtSlot, pyqtSignal
 from qgis.core import QgsMapLayerRegistry, QgsMapLayer, QgsProject
+from qgis.gui import QgsLayerTreeMapCanvasBridge
 # pylint: disable=no-name-in-module
 from qgis.gui import (
     QgsMapCanvasLayer,
     QgsMessageBar)
-from PyQt4.QtCore import QObject, pyqtSlot, pyqtSignal
+
 from safe.test.qgis_legend_interface import QgisLegend
-from qgis.gui import QgsLayerTreeMapCanvasBridge
 
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'

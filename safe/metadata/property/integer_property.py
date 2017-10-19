@@ -4,7 +4,6 @@
 
 from types import NoneType
 
-
 from safe.common.exceptions import MetadataCastError
 from safe.metadata.property import BaseProperty
 

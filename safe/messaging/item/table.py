@@ -2,8 +2,9 @@
 
 """Table."""
 
-from message_element import MessageElement
 from exceptions import InvalidMessageItemError
+
+from message_element import MessageElement
 from row import Row
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

@@ -2,14 +2,14 @@
 
 """Definitions relating to exposure."""
 from safe.definitions.concepts import concepts
+from safe.definitions.field_groups import aggregation_field_groups
+from safe.definitions.keyword_properties import property_layer_purpose
 from safe.definitions.layer_geometry import (
     layer_geometry_raster,
     layer_geometry_line,
     layer_geometry_point,
     layer_geometry_polygon
 )
-from safe.definitions.field_groups import aggregation_field_groups
-from safe.definitions.keyword_properties import property_layer_purpose
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

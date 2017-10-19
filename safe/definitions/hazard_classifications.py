@@ -9,18 +9,16 @@ Minimum value IS NOT included, but maximum value IS included to the range.
 Mathematical expression:
 minimum_value < x <= maximum_value
 """
+from safe.definitions import concepts
 from safe.definitions.constants import big_number
 from safe.definitions.earthquake import (
     earthquake_fatality_rate, current_earthquake_model_name)
-from safe.definitions import concepts
-from safe.utilities.i18n import tr
-from safe.definitions.units import (
-    unit_centimetres,
-    unit_miles_per_hour,
-    unit_kilometres_per_hour,
-    unit_knots,
-    unit_metres_per_second
-)
+from safe.definitions.exposure import (
+    exposure_land_cover,
+    exposure_place,
+    exposure_population,
+    exposure_road,
+    exposure_structure)
 from safe.definitions.styles import (
     grey,
     green,
@@ -40,12 +38,14 @@ from safe.definitions.styles import (
     MMI_3,
     MMI_2,
     MMI_1)
-from safe.definitions.exposure import (
-    exposure_land_cover,
-    exposure_place,
-    exposure_population,
-    exposure_road,
-    exposure_structure)
+from safe.definitions.units import (
+    unit_centimetres,
+    unit_miles_per_hour,
+    unit_kilometres_per_hour,
+    unit_knots,
+    unit_metres_per_second
+)
+from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

@@ -6,21 +6,19 @@ import os
 from PyQt4 import QtCore
 from PyQt4.QtGui import QListWidgetItem, QPixmap
 
-from safe.utilities.i18n import tr
 from safe import messaging as m
-
 from safe.definitions.layer_purposes import (
     layer_purpose_exposure, layer_purpose_hazard)
 from safe.definitions.utilities import (
     hazards_for_layer,
     definition,
     exposures_for_layer)
-
+from safe.gui.tools.wizard.utilities import get_question_text
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
-from safe.gui.tools.wizard.utilities import get_question_text
-from safe.utilities.resources import resources_path
 from safe.utilities.gis import is_raster_layer
+from safe.utilities.i18n import tr
+from safe.utilities.resources import resources_path
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

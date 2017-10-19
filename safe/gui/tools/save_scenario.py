@@ -2,8 +2,8 @@
 
 """Save Scenario Dialog."""
 
-import os
 import logging
+import os
 from ConfigParser import ConfigParser
 
 # This import is to enable SIP API V2
@@ -15,8 +15,8 @@ from PyQt4 import QtGui
 from PyQt4.QtGui import QDialog, QFileDialog
 
 from safe.gui.gui_utilities import layer_from_combo
-from safe.utilities.i18n import tr
 from safe.utilities.gis import extent_to_array, viewport_geo_array
+from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.settings import setting, set_setting
 

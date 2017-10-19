@@ -4,10 +4,8 @@
 
 from inspect import getmembers
 
-
 from safe.gis import generic_expressions
 from safe.report.expressions import infographic, map_report
-
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

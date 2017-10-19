@@ -4,19 +4,17 @@
 # noinspection PyPackageRequirements
 import logging
 
-from parameters.select_parameter import SelectParameter
 from parameters.qt_widgets.parameter_container import ParameterContainer
+from parameters.select_parameter import SelectParameter
 
 from safe import messaging as m
-from safe.utilities.i18n import tr
-
+from safe.definitions.constants import no_field
+from safe.definitions.layer_geometry import layer_geometry_raster
 from safe.definitions.layer_purposes import (layer_purpose_aggregation)
 from safe.definitions.utilities import get_fields, get_compulsory_fields
-from safe.definitions.layer_geometry import layer_geometry_raster
-from safe.definitions.constants import no_field
-
 from safe.gui.tools.wizard.wizard_step import (
     WizardStep, get_wizard_step_ui_class)
+from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

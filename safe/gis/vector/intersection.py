@@ -3,6 +3,7 @@
 """Intersect two layers."""
 
 import logging
+
 from qgis.core import (
     QgsGeometry,
     QgsFeatureRequest,
@@ -10,12 +11,12 @@ from qgis.core import (
     QgsFeature,
 )
 
-from safe.utilities.i18n import tr
 from safe.definitions.layer_purposes import layer_purpose_exposure_summary
 from safe.definitions.processing_steps import intersection_steps
+from safe.gis.sanity_check import check_layer
 from safe.gis.vector.tools import (
     create_memory_layer, wkb_type_groups, create_spatial_index)
-from safe.gis.sanity_check import check_layer
+from safe.utilities.i18n import tr
 from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

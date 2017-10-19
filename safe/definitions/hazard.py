@@ -2,6 +2,14 @@
 
 """Definitions relating to hazards."""
 
+from safe.definitions.caveats import (
+    caveat_simulation, caveat_local_conditions, caveat_analysis_extent, )
+from safe.definitions.concepts import concepts
+from safe.definitions.earthquake import EARTHQUAKE_FUNCTIONS
+from safe.definitions.exposure import (
+    exposure_place, exposure_land_cover, exposure_road)
+from safe.definitions.fields import (
+    hazard_name_field, hazard_fields, hazard_value_field)
 from safe.definitions.hazard_classifications import (
     generic_hazard_classes,
     volcano_hazard_classes,
@@ -15,9 +23,8 @@ from safe.definitions.hazard_classifications import (
     ash_hazard_classes,
     cyclone_au_bom_hazard_classes,
     cyclone_sshws_hazard_classes)
-from safe.definitions.caveats import (
-    caveat_simulation, caveat_local_conditions, caveat_analysis_extent,)
-from safe.definitions.concepts import concepts
+from safe.definitions.layer_modes import (
+    layer_mode_classified, layer_mode_continuous)
 from safe.definitions.units import (
     unit_feet,
     unit_generic,
@@ -31,13 +38,6 @@ from safe.definitions.units import (
     unit_kilometres_per_hour,
     unit_knots,
     unit_metres_per_second)
-from safe.definitions.layer_modes import (
-    layer_mode_classified, layer_mode_continuous)
-from safe.definitions.fields import (
-    hazard_name_field, hazard_fields, hazard_value_field)
-from safe.definitions.earthquake import EARTHQUAKE_FUNCTIONS
-from safe.definitions.exposure import (
-    exposure_place, exposure_land_cover, exposure_road)
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

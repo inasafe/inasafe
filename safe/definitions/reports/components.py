@@ -7,22 +7,6 @@ from __future__ import absolute_import
 from safe.definitions.concepts import concepts
 from safe.definitions.exposure import (
     exposure_structure, exposure_road, exposure_land_cover)
-from safe.definitions.reports import (
-    jinja2_component_type,
-    qgis_composer_component_type,
-    qt_renderer_component_type,
-    svg_product_tag,
-    png_product_tag,
-    infographic_product_tag,
-    final_product_tag,
-    html_product_tag,
-    table_product_tag,
-    map_product_tag,
-    pdf_product_tag,
-    template_product_tag,
-    qpt_product_tag)
-
-from safe.utilities.resources import resources_path
 from safe.definitions.fields import (
     affected_field,
     total_affected_field,
@@ -37,6 +21,20 @@ from safe.definitions.fields import (
     affected_productivity_field,
     affected_production_cost_field,
     affected_production_value_field)
+from safe.definitions.reports import (
+    jinja2_component_type,
+    qgis_composer_component_type,
+    qt_renderer_component_type,
+    svg_product_tag,
+    png_product_tag,
+    infographic_product_tag,
+    final_product_tag,
+    html_product_tag,
+    table_product_tag,
+    map_product_tag,
+    pdf_product_tag,
+    template_product_tag,
+    qpt_product_tag)
 from safe.definitions.styles import charcoal_black
 from safe.report.extractors.action_notes import (
     action_checklist_extractor,
@@ -55,10 +53,10 @@ from safe.report.extractors.analysis_provenance_details import (
     analysis_provenance_details_pdf_extractor)
 from safe.report.extractors.analysis_question import (
     analysis_question_extractor)
-from safe.report.extractors.general_report import general_report_extractor
 from safe.report.extractors.composer import (
     qgis_composer_extractor,
     qgis_composer_infographic_extractor)
+from safe.report.extractors.general_report import general_report_extractor
 from safe.report.extractors.impact_table import (
     impact_table_extractor,
     impact_table_pdf_extractor)
@@ -79,6 +77,7 @@ from safe.report.report_metadata import (
     Jinja2ComponentsMetadata,
     QgisComposerComponentsMetadata)
 from safe.utilities.i18n import tr
+from safe.utilities.resources import resources_path
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

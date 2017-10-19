@@ -3,16 +3,17 @@
 
 import logging
 import sqlite3
+
+# noinspection PyPackageRequirements
+from PyQt4 import QtGui
+# noinspection PyPackageRequirements
+from PyQt4.QtCore import pyqtSignal, pyqtSlot, pyqtSignature
+# noinspection PyPackageRequirements
+from PyQt4.QtGui import QDialog
 # noinspection PyUnresolvedReferences
 # pylint: disable=unused-import
 # force sip2 api
 from qgis.core import QGis  # NOQA
-# noinspection PyPackageRequirements
-from PyQt4.QtCore import pyqtSignal, pyqtSlot, pyqtSignature
-# noinspection PyPackageRequirements
-from PyQt4 import QtGui
-# noinspection PyPackageRequirements
-from PyQt4.QtGui import QDialog
 from qgis.core import (
     QgsPoint,
     QgsRectangle,
@@ -28,13 +29,12 @@ from safe.definitions.constants import (
     HAZARD_EXPOSURE_VIEW,
     HAZARD_EXPOSURE_BOOKMARK,
     HAZARD_EXPOSURE_BOUNDINGBOX)
-from safe.utilities.resources import html_header, html_footer, get_ui_class
-from safe.utilities.gis import wkt_to_rectangle
-from safe.utilities.settings import setting, set_setting
-
+from safe.gui.tools.help.extent_selector_help import extent_selector_help
 from safe.gui.tools.rectangle_map_tool import RectangleMapTool
 from safe.messaging import styles
-from safe.gui.tools.help.extent_selector_help import extent_selector_help
+from safe.utilities.gis import wkt_to_rectangle
+from safe.utilities.resources import html_header, html_footer, get_ui_class
+from safe.utilities.settings import setting, set_setting
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"

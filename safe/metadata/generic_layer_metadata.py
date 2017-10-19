@@ -2,6 +2,7 @@
 """This module exposure metadata implementation."""
 
 from xml.etree import ElementTree
+
 from safe.metadata import BaseMetadata
 from safe.metadata.utilities import reading_ancillary_files, prettify_xml
 

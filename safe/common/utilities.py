@@ -2,20 +2,18 @@
 
 """Utilities for InaSAFE."""
 
-import os
-import sys
-import platform
-from datetime import date
-import getpass
-from tempfile import mkstemp
-from subprocess import PIPE, Popen
-import ctypes
-from numbers import Integral
-import math
 import colorsys
-# pylint: disable=unused-import
-from collections import OrderedDict  # NOQA
-# pylint: enable=unused-import
+import ctypes
+import getpass
+import logging
+import math
+import os
+import platform
+import sys
+from datetime import date
+from numbers import Integral
+from subprocess import PIPE, Popen
+from tempfile import mkstemp
 
 from qgis.core import (
     QgsCoordinateReferenceSystem,
@@ -28,7 +26,6 @@ from safe.utilities.rounding import (
     thousand_separator, decimal_separator, add_separators)
 
 
-import logging
 LOGGER = logging.getLogger('InaSAFE')
 
 

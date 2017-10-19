@@ -4,13 +4,11 @@
 
 from PyQt4.QtCore import QPyNullVariant
 
-
+from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
 from safe.definitions.fields import count_fields
 from safe.definitions.utilities import definition
-from safe.utilities.pivot_table import FlatTable
-from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
 from safe.gis.vector.tools import create_field_from_definition
-
+from safe.utilities.pivot_table import FlatTable
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

@@ -1,36 +1,35 @@
 # coding=utf-8
 """A converter for USGS shakemap grid.xml files."""
 
-import os
-import sys
-import shutil
-import logging
 import codecs
-import pytz
-from xml.dom import minidom
+import logging
+import os
+import shutil
+import sys
 from datetime import datetime
-from pytz import timezone
 from subprocess import call, CalledProcessError
-from osgeo import gdal, ogr
-from osgeo.gdalconst import GA_ReadOnly
+from xml.dom import minidom
+
+import pytz
 # This import is required to enable PyQt API v2
 # noinspection PyUnresolvedReferences
 import qgis  # NOQA pylint: disable=unused-import
+from osgeo import gdal, ogr
+from osgeo.gdalconst import GA_ReadOnly
+from pytz import timezone
 from qgis.core import (
     QgsVectorLayer,
     QgsFeatureRequest,
     QgsRectangle,
     QgsRasterLayer)
-from safe.common.utilities import which, romanise
+
 from safe.common.exceptions import (
     GridXmlFileNotFoundError,
     GridXmlParseError,
     ContourCreationError,
     InvalidLayerError,
     CallGDALError)
-from safe.utilities.styling import mmi_colour
-from safe.utilities.keyword_io import KeywordIO
-from safe.utilities.i18n import tr
+from safe.common.utilities import which, romanise
 from safe.definitions.hazard import hazard_earthquake
 from safe.definitions.hazard_category import hazard_category_single_event
 from safe.definitions.hazard_classifications import earthquake_mmi_scale
@@ -39,6 +38,9 @@ from safe.definitions.layer_modes import layer_mode_continuous
 from safe.definitions.layer_purposes import layer_purpose_hazard
 from safe.definitions.units import unit_mmi
 from safe.definitions.versions import inasafe_keyword_version
+from safe.utilities.i18n import tr
+from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.styling import mmi_colour
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"

@@ -6,17 +6,15 @@ import logging
 from parameters.parameter_exceptions import InvalidValidationException
 
 from safe import messaging as m
-from safe.utilities.i18n import tr
-
 from safe.definitions.layer_purposes import (
     layer_purpose_aggregation, layer_purpose_hazard, layer_purpose_exposure)
+from safe.definitions.utilities import get_fields, get_non_compulsory_fields
+from safe.gui.tools.help.field_mapping_help import field_mapping_help_content
+from safe.gui.tools.wizard.utilities import skip_inasafe_field
 from safe.gui.tools.wizard.wizard_step import (
     WizardStep, get_wizard_step_ui_class)
-from safe.gui.tools.wizard.utilities import skip_inasafe_field
-from safe.definitions.utilities import get_fields, get_non_compulsory_fields
 from safe.gui.widgets.field_mapping_widget import FieldMappingWidget
-from safe.gui.tools.help.field_mapping_help import field_mapping_help_content
-
+from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"

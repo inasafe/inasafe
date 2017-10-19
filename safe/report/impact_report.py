@@ -13,15 +13,15 @@ import shutil
 
 from qgis.core import QgsComposition, QgsRasterLayer
 
+from safe import messaging as m
 from safe.common.exceptions import (
     KeywordNotFoundError)
-from safe.definitions.messages import disclaimer
 from safe.defaults import (
     white_inasafe_logo_path,
     black_inasafe_logo_path,
     supporters_logo_path,
     default_north_arrow_path)
-from safe import messaging as m
+from safe.definitions.messages import disclaimer
 from safe.messaging import styles
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO

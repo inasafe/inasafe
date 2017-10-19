@@ -5,7 +5,6 @@ from PyQt4.QtCore import Qt
 from PyQt4.QtGui import (
     QHBoxLayout, QGridLayout, QDoubleSpinBox,
     QRadioButton, QButtonGroup, QWidget, QLabel)
-
 from parameters.qt_widgets.select_parameter_widget import SelectParameterWidget
 
 from safe.utilities.i18n import tr

@@ -5,7 +5,6 @@
 from qgis.core import QGis, QgsWKBTypes
 
 from safe.common.exceptions import InvalidLayerError
-
 from safe.utilities.gis import is_vector_layer, is_raster_layer
 from safe.utilities.i18n import tr
 

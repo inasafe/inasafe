@@ -7,6 +7,7 @@ contextual information to accompany the data shown to them.
 """
 
 from collections import OrderedDict
+
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

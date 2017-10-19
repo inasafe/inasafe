@@ -1,8 +1,11 @@
 # coding=utf-8
 """Definitions relating to default setting of fresh InaSAFE."""
 from os.path import join
+
 from qgis.core import QgsApplication
+
 from safe.definitions.currencies import idr
+
 # from safe.utilities.resources import resources_path
 
 inasafe_default_settings = {

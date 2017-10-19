@@ -1,30 +1,29 @@
 # coding=utf-8
 """InaSAFE Wizard Step Field."""
 
-import re
 import logging
+import re
 from copy import deepcopy
 
 from PyQt4.QtCore import QVariant, Qt
 from PyQt4.QtGui import QListWidgetItem, QAbstractItemView
 
-from safe.utilities.i18n import tr
 from safe import messaging as m
-
+from safe.definitions.fields import population_count_field
+from safe.definitions.layer_modes import layer_mode_continuous
 from safe.definitions.layer_purposes import (
     layer_purpose_aggregation, layer_purpose_hazard, layer_purpose_exposure)
-from safe.definitions.layer_modes import layer_mode_continuous
+from safe.definitions.utilities import (
+    get_fields, get_non_compulsory_fields, get_field_groups, definition)
+from safe.gui.tools.wizard.utilities import (
+    get_question_text, skip_inasafe_field)
 from safe.gui.tools.wizard.wizard_step import (
     WizardStep, get_wizard_step_ui_class)
 from safe.gui.tools.wizard.wizard_strings import (
     field_question_subcategory_unit,
     field_question_subcategory_classified,
     field_question_aggregation)
-from safe.gui.tools.wizard.utilities import (
-    get_question_text, skip_inasafe_field)
-from safe.definitions.utilities import (
-    get_fields, get_non_compulsory_fields, get_field_groups, definition)
-from safe.definitions.fields import population_count_field
+from safe.utilities.i18n import tr
 
 LOGGER = logging.getLogger('InaSAFE')
 

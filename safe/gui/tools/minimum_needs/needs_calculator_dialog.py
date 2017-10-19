@@ -8,18 +8,17 @@
 import logging
 import os
 
-from qgis.core import QgsMapLayerRegistry
-from qgis.gui import QgsMapLayerProxyModel, QgsFieldProxyModel
-
 from PyQt4 import QtGui
 from PyQt4.QtCore import pyqtSignature, pyqtSlot, QSettings
+from qgis.core import QgsMapLayerRegistry
+from qgis.gui import QgsMapLayerProxyModel, QgsFieldProxyModel
 
 from safe.common.utilities import temp_dir, unique_filename
 from safe.common.version import get_version
 from safe.datastore.folder import Folder
+from safe.definitions import minimum_needs_post_processors
 from safe.definitions.fields import displaced_field, aggregation_name_field
 from safe.definitions.layer_purposes import layer_purpose_aggregation
-from safe.definitions import minimum_needs_post_processors
 from safe.gis.vector.prepare_vector_layer import (
     clean_inasafe_fields)
 from safe.gis.vector.tools import (

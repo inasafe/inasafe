@@ -8,13 +8,12 @@ import logging
 # noinspection PyUnresolvedReferences
 import qgis  # NOQA pylint: disable=unused-import
 from PyQt4.QtCore import QCoreApplication
-
 from pydispatch import dispatcher
 
-from safe.common.utilities import get_free_memory
 from safe import messaging as m
-from safe.messaging import styles
 from safe.common.signals import send_dynamic_message, send_static_message
+from safe.common.utilities import get_free_memory
+from safe.messaging import styles
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

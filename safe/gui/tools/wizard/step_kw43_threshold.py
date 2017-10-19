@@ -1,24 +1,24 @@
 # coding=utf-8
 """InaSAFE Wizard Step Threshold."""
 
+import logging
 from collections import OrderedDict
 from functools import partial
-import logging
+
 from PyQt4.QtGui import QDoubleSpinBox, QHBoxLayout, QLabel
 from qgis.core import QgsRasterBandStats
 
-from safe.utilities.i18n import tr
 from safe import messaging as m
-
-from safe.definitions.layer_purposes import layer_purpose_aggregation
 from safe.definitions.layer_geometry import layer_geometry_raster
+from safe.definitions.layer_purposes import layer_purpose_aggregation
 from safe.definitions.utilities import get_fields, get_non_compulsory_fields
+from safe.gui.tools.wizard.utilities import clear_layout, skip_inasafe_field
 from safe.gui.tools.wizard.wizard_step import (
     WizardStep, get_wizard_step_ui_class)
-from safe.gui.tools.wizard.utilities import clear_layout, skip_inasafe_field
 from safe.gui.tools.wizard.wizard_strings import (
     continuous_raster_question, continuous_vector_question)
 from safe.utilities.gis import is_raster_layer
+from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

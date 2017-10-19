@@ -3,6 +3,7 @@
 """Folder datastore implementation."""
 
 from itertools import product
+
 from PyQt4.QtCore import QFileInfo, QDir, QFile
 from qgis.core import (
     QgsVectorFileWriter,
@@ -10,8 +11,8 @@ from qgis.core import (
     QgsRasterFileWriter
 )
 
-from safe.datastore.datastore import DataStore
 from safe.common.exceptions import ErrorDataStore
+from safe.datastore.datastore import DataStore
 from safe.utilities.utilities import human_sorting
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

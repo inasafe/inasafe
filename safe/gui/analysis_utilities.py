@@ -5,6 +5,7 @@
 import os
 from collections import OrderedDict
 from copy import deepcopy
+
 from PyQt4.QtCore import QDir, Qt
 from qgis.core import (
     QgsMapLayerRegistry,
@@ -14,14 +15,14 @@ from qgis.core import (
     QGis)
 
 from safe.definitions.exposure import exposure_population
-from safe.definitions.reports.infographic import map_overview
-from safe.definitions.utilities import definition, update_template_component
 from safe.definitions.fields import hazard_class_field
 from safe.definitions.reports.components import (
     map_report, all_default_report_components, infographic_report)
+from safe.definitions.reports.infographic import map_overview
+from safe.definitions.utilities import definition, update_template_component
 from safe.impact_function.style import hazard_class_style
-from safe.report.report_metadata import ReportMetadata
 from safe.report.impact_report import ImpactReport
+from safe.report.report_metadata import ReportMetadata
 from safe.utilities.gis import is_raster_layer, qgis_version
 from safe.utilities.metadata import active_classification
 from safe.utilities.settings import setting

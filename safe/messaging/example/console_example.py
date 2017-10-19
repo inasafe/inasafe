@@ -26,7 +26,6 @@ from safe.messaging import (
     ImportantText,
     EmphasizedText)
 
-
 DYNAMIC_MESSAGE_SIGNAL = 'ImpactFunctionMessage'
 STATIC_MESSAGE_SIGNAL = 'ApplicationMessage'
 

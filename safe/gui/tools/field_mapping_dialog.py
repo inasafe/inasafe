@@ -2,32 +2,31 @@
 """Field Mapping Dialog Implementation."""
 import logging
 
+from PyQt4.QtCore import pyqtSignature, pyqtSlot, QSettings
 from PyQt4.QtGui import (
     QDialog, QHBoxLayout, QLabel, QDialogButtonBox, QMessageBox)
-from qgis.gui import QgsMapLayerComboBox, QgsMapLayerProxyModel
-from PyQt4.QtCore import pyqtSignature, pyqtSlot, QSettings
-
 from parameters.parameter_exceptions import InvalidValidationException
+from qgis.gui import QgsMapLayerComboBox, QgsMapLayerProxyModel
 
-from safe.definitions.constants import RECENT
-from safe.definitions.layer_purposes import (
-    layer_purpose_exposure, layer_purpose_hazard)
 from safe.common.exceptions import (
     NoKeywordsFoundError,
     KeywordNotFoundError,
     MetadataReadError,
     InaSAFEError)
-from safe.utilities.resources import (
-    get_ui_class, html_footer, html_header)
+from safe.definitions.constants import RECENT
+from safe.definitions.layer_purposes import (
+    layer_purpose_exposure, layer_purpose_hazard)
+from safe.definitions.utilities import get_field_groups
+from safe.gui.tools.help.field_mapping_help import field_mapping_help
+from safe.gui.widgets.field_mapping_widget import FieldMappingWidget
+from safe.utilities.default_values import set_inasafe_default_value_qsetting
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
-from safe.gui.widgets.field_mapping_widget import FieldMappingWidget
-from safe.gui.tools.help.field_mapping_help import field_mapping_help
-from safe.utilities.utilities import get_error_message
-from safe.utilities.default_values import set_inasafe_default_value_qsetting
 from safe.utilities.qgis_utilities import display_warning_message_box
-from safe.definitions.utilities import get_field_groups
+from safe.utilities.resources import (
+    get_ui_class, html_footer, html_header)
 from safe.utilities.unicode import get_string
+from safe.utilities.utilities import get_error_message
 
 FORM_CLASS = get_ui_class('field_mapping_dialog_base.ui')
 

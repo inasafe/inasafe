@@ -12,9 +12,9 @@ from safe.definitions.fields import (
 from safe.definitions.post_processors import size
 from safe.definitions.processing_steps import (
     recompute_counts_steps)
-from safe.utilities.profiling import profile
-from safe.gis.vector.tools import SizeCalculator
 from safe.gis.sanity_check import check_layer
+from safe.gis.vector.tools import SizeCalculator
+from safe.utilities.profiling import profile
 
 LOGGER = logging.getLogger('InaSAFE')
 

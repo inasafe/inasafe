@@ -1,10 +1,11 @@
 # coding=utf-8
 """Utilities module for helping definitions retrieval."""
 
+from copy import deepcopy
 from os import listdir
 from os.path import join, exists, splitext
+
 from qgis.core import QgsApplication
-from copy import deepcopy
 
 from safe import definitions
 from safe.definitions import fields

@@ -3,11 +3,10 @@
 """Postprocessors about additional items in minimum needs."""
 
 from safe.definitions import minimum_needs_fields, displaced_field
-from safe.utilities.i18n import tr
 from safe.definitions.concepts import concepts
+from safe.definitions.fields import additional_rice_count_field
 from safe.definitions.fields import (
     pregnant_displaced_count_field, lactating_displaced_count_field)
-from safe.definitions.fields import additional_rice_count_field
 from safe.definitions.post_processors.post_processor_inputs import (
     constant_input_type,
     field_input_type,
@@ -16,6 +15,7 @@ from safe.definitions.post_processors.post_processors import (
     formula_process,
     multiply,
     function_process)
+from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"

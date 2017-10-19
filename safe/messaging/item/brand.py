@@ -15,12 +15,12 @@ __date__ = '28/05/2013'
 __copyright__ = ('Copyright 2015, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from text import Text
 # TODO: I don't really like importing this here as it breaks the modularity of
 # TODO: messaging. TS
 from safe.utilities.resources import (
     resources_path,
     resource_url)
+from text import Text
 
 
 class Brand(Text):

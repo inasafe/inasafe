@@ -1,8 +1,8 @@
 # coding=utf-8
 """This module contains utilities for locating application resources (img etc).
 """
-import os
 import codecs
+import os
 
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences

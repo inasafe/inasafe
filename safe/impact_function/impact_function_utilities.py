@@ -2,6 +2,7 @@
 
 """Utilities for Impact Function."""
 
+from safe import messaging as m
 from safe.common.exceptions import NoKeywordsFoundError, InvalidLayerError
 from safe.definitions.constants import (
     inasafe_keyword_version_key,
@@ -11,11 +12,10 @@ from safe.definitions.constants import (
 from safe.definitions.versions import inasafe_keyword_version
 from safe.gis.sanity_check import check_inasafe_fields
 from safe.gui.widgets.message import generate_input_error_message
-from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.gis import is_vector_layer
 from safe.utilities.i18n import tr
+from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.utilities import is_keyword_version_supported
-from safe import messaging as m
 
 
 def check_input_layer(layer, purpose):

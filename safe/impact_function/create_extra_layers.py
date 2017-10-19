@@ -3,11 +3,13 @@
 """Create extra layers in the impact function."""
 
 import logging
+
 from qgis.core import (
     QgsFeature,
     QGis,
 )
 
+from safe.definitions.constants import inasafe_keyword_version_key
 from safe.definitions.fields import (
     aggregation_id_field,
     aggregation_name_field,
@@ -16,18 +18,17 @@ from safe.definitions.fields import (
     profiling_time_field,
     profiling_memory_field
 )
-from safe.definitions.constants import inasafe_keyword_version_key
-from safe.definitions.versions import inasafe_keyword_version
 from safe.definitions.layer_purposes import (
     layer_purpose_profiling,
     layer_purpose_aggregation,
     layer_purpose_analysis_impacted,
 )
+from safe.definitions.versions import inasafe_keyword_version
 from safe.gis.vector.tools import (
     create_memory_layer, create_field_from_definition, copy_layer)
 from safe.utilities.gis import qgis_version
-from safe.utilities.profiling import profile
 from safe.utilities.i18n import tr
+from safe.utilities.profiling import profile
 from safe.utilities.settings import setting
 
 LOGGER = logging.getLogger('InaSAFE')

@@ -23,9 +23,10 @@ import qgis  # NOQA pylint: disable=unused-import
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature, pyqtSlot
 
+from safe.gui.tools.help.impact_report_help import impact_report_help
 from safe.utilities.resources import (
     get_ui_class, resources_path, html_header, html_footer)
-from safe.gui.tools.help.impact_report_help import impact_report_help
+
 FORM_CLASS = get_ui_class('impact_report_dialog_base.ui')
 
 

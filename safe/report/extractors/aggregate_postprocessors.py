@@ -2,20 +2,21 @@
 """Module used to generate context for aggregation postprocessors sections.
 """
 
+from collections import OrderedDict
+
 # noinspection PyUnresolvedReferences
 from PyQt4.QtCore import QPyNullVariant
-from collections import OrderedDict
 
 from safe.common.parameters.resource_parameter import ResourceParameter
 from safe.definitions.exposure import exposure_population
-from safe.definitions.fields import (
-    aggregation_name_field,
-    displaced_field,
-    additional_minimum_needs)
 from safe.definitions.field_groups import (
     age_displaced_count_group,
     gender_displaced_count_group,
     vulnerability_displaced_count_groups)
+from safe.definitions.fields import (
+    aggregation_name_field,
+    displaced_field,
+    additional_minimum_needs)
 from safe.definitions.minimum_needs import minimum_needs_fields
 from safe.definitions.post_processors.population_post_processors import (
     age_postprocessors,

@@ -4,10 +4,8 @@
 
 import logging
 
-
 from PyQt4.QtGui import (
     QDialog, QComboBox, QLabel, QDialogButtonBox, QApplication, QSizePolicy)
-
 from qgis.core import QgsMapLayerRegistry
 from qgis.utils import iface
 
@@ -36,6 +34,7 @@ from safe.impact_function.multi_exposure_wrapper import (
     MultiExposureImpactFunction)
 from safe.messaging import styles
 from safe.utilities.gis import qgis_version
+from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.qt import disable_busy_cursor, enable_busy_cursor
 from safe.utilities.resources import (
@@ -45,7 +44,6 @@ from safe.utilities.settings import setting
 from safe.utilities.utilities import (
     is_keyword_version_supported,
 )
-from safe.utilities.i18n import tr
 
 LOGGER = logging.getLogger('InaSAFE')
 FORM_CLASS = get_ui_class('multi_exposure_dialog_base.ui')

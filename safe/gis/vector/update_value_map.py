@@ -14,8 +14,8 @@ from safe.definitions.fields import (
 from safe.definitions.layer_purposes import (
     layer_purpose_hazard, layer_purpose_exposure)
 from safe.definitions.processing_steps import assign_inasafe_values_steps
-from safe.gis.vector.tools import remove_fields
 from safe.gis.sanity_check import check_layer
+from safe.gis.vector.tools import remove_fields
 from safe.utilities.metadata import (
     active_thresholds_value_maps, active_classification)
 from safe.utilities.profiling import profile
