@@ -2,6 +2,7 @@
 """Module for class container of Report and ReportComponent Metadata.
 """
 from importlib import import_module
+from copy import deepcopy
 
 from safe.definitions.reports import (
     jinja2_component_type,
@@ -389,7 +390,7 @@ class ReportMetadata(object):
             self._key = metadata_dict.get('key')
             self._name = metadata_dict.get('name')
             self._tags = metadata_dict.get('tags')
-            _components = metadata_dict.get('components')
+            _components = deepcopy(metadata_dict.get('components'))
             self._components = []
             for c in _components:
                 _comp = self._load_components(c)
