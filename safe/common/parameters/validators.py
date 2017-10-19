@@ -1,8 +1,10 @@
 # coding=utf-8
 """List of custom validations for parameter container."""
 
-from safe.definitions.constants import STATIC, SINGLE_DYNAMIC
 import logging
+
+from safe.definitions.constants import STATIC, SINGLE_DYNAMIC
+
 LOGGER = logging.getLogger('InaSAFE')
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"

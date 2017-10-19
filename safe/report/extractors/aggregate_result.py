@@ -14,8 +14,8 @@ from safe.gis.vector.tools import read_dynamic_inasafe_field
 from safe.report.extractors.util import (
     resolve_from_dictionary,
     retrieve_exposure_classes_lists)
-from safe.utilities.rounding import format_number
 from safe.utilities.i18n import tr
+from safe.utilities.rounding import format_number
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

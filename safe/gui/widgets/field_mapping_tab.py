@@ -1,6 +1,11 @@
 # coding=utf-8
 """Field Mapping Widget Implementation."""
 
+import logging
+from collections import OrderedDict
+from functools import partial
+
+from PyQt4.QtCore import Qt, QSettings
 from PyQt4.QtGui import (
     QWidget,
     QListWidget,
@@ -11,14 +16,14 @@ from PyQt4.QtGui import (
     QVBoxLayout,
     QLabel,
     QSizePolicy)
-from PyQt4.QtCore import Qt, QSettings
-
-from collections import OrderedDict
-import logging
-from functools import partial
-
 from parameters.qt_widgets.parameter_container import ParameterContainer
 
+from safe.common.exceptions import KeywordNotFoundError
+from safe.common.parameters.group_select_parameter import (
+    GroupSelectParameter)
+from safe.common.parameters.group_select_parameter_widget import (
+    GroupSelectParameterWidget)
+from safe.common.parameters.validators import validators
 from safe.definitions.constants import (
     DO_NOT_REPORT,
     CUSTOM_VALUE,
@@ -31,15 +36,8 @@ from safe.definitions.constants import (
     RECENT,
     GLOBAL
 )
-from safe.common.exceptions import KeywordNotFoundError
-
-from safe.utilities.i18n import tr
-from safe.common.parameters.group_select_parameter import (
-    GroupSelectParameter)
-from safe.common.parameters.group_select_parameter_widget import (
-    GroupSelectParameterWidget)
-from safe.common.parameters.validators import validators
 from safe.utilities.default_values import get_inasafe_default_value_qsetting
+from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"

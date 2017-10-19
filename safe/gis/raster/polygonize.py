@@ -4,7 +4,6 @@
 
 
 from osgeo import gdal, osr, ogr
-
 from qgis.core import (
     QgsVectorLayer,
     QgsFeatureRequest,

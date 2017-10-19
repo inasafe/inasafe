@@ -17,13 +17,14 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import os
-from PyQt4.QtCore import QPyNullVariant
-from safe.utilities.i18n import tr
-
-from message_element import MessageElement
 from exceptions import InvalidMessageItemError
 
+from PyQt4.QtCore import QPyNullVariant
+
+from message_element import MessageElement
+from safe.utilities.i18n import tr
 from safe.utilities.unicode import get_unicode
+
 
 # FIXME (MB) remove when all to_* methods are implemented
 # pylint: disable=W0223

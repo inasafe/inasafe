@@ -9,11 +9,11 @@ import os
 import re
 import shutil
 import sys
-from PyQt4 import QtGui  # pylint: disable=W0621
 from itertools import izip
 from os.path import exists, splitext, basename, join
 from tempfile import mkdtemp
 
+from PyQt4 import QtGui  # pylint: disable=W0621
 from qgis.core import (
     QgsVectorLayer,
     QgsRasterLayer,
@@ -22,9 +22,9 @@ from qgis.core import (
     QgsMapLayerRegistry)
 from qgis.utils import iface
 
-from safe.gis.tools import load_layer
 from safe.common.utilities import unique_filename, temp_dir
 from safe.definitions.constants import HAZARD_EXPOSURE
+from safe.gis.tools import load_layer
 from safe.gis.vector.tools import create_memory_layer, copy_layer
 from safe.utilities.utilities import monkey_patch_keywords
 

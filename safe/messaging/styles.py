@@ -18,8 +18,9 @@ text element.
 
 """
 import os
-import urlparse
 import urllib
+import urlparse
+
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
 import qgis  # NOQA pylint: disable=unused-import

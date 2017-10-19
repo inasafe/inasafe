@@ -1,12 +1,11 @@
 # coding=utf-8
 """Provenance Utilities."""
 
-from safe.utilities.i18n import tr
-
 from safe.definitions.hazard import hazard_generic
 from safe.definitions.hazard_category import hazard_category_single_event
 from safe.definitions.hazard_exposure_specifications import (
     specific_analysis_question)
+from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

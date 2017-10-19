@@ -1,16 +1,16 @@
 # coding=utf-8
 """InaSAFE Keyword Wizard Band Selector."""
 
+import logging
+
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore
 from PyQt4.QtGui import QListWidgetItem
-
 from qgis.core import QgsRasterBandStats
 
-from safe.utilities.i18n import tr
 from safe.gui.tools.wizard.wizard_step import (
     get_wizard_step_ui_class, WizardStep)
-import logging
+from safe.utilities.i18n import tr
 
 LOGGER = logging.getLogger('InaSAFE')
 

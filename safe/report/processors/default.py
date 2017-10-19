@@ -10,9 +10,9 @@ Module for basic renderer we support. Currently we have:
 import io
 import logging
 import os
-from PyQt4 import QtXml
 from tempfile import mkdtemp
 
+from PyQt4 import QtXml
 from PyQt4.QtCore import QUrl
 from PyQt4.QtGui import QImage, QPainter, QPrinter
 from PyQt4.QtSvg import QSvgRenderer

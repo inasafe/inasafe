@@ -3,6 +3,7 @@
 """Clip and mask a hazard layer."""
 
 import logging
+
 from PyQt4.QtCore import QPyNullVariant
 from qgis.core import (
     QgsGeometry,
@@ -11,14 +12,14 @@ from qgis.core import (
     QgsFeature,
 )
 
-from safe.utilities.i18n import tr
-from safe.definitions.processing_steps import union_steps
 from safe.definitions.fields import hazard_class_field, aggregation_id_field
 from safe.definitions.hazard_classifications import not_exposed_class
+from safe.definitions.processing_steps import union_steps
+from safe.gis.sanity_check import check_layer
+from safe.gis.vector.clean_geometry import geometry_checker
 from safe.gis.vector.tools import (
     create_memory_layer, wkb_type_groups, create_spatial_index)
-from safe.gis.vector.clean_geometry import geometry_checker
-from safe.gis.sanity_check import check_layer
+from safe.utilities.i18n import tr
 from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

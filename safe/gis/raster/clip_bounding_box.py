@@ -2,9 +2,9 @@
 
 """Clip a raster by bounding box."""
 
-import processing
 import logging
 
+import processing
 from qgis.core import QgsRasterLayer
 
 from safe.common.exceptions import ProcessingInstallationError

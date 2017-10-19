@@ -16,10 +16,12 @@ __date__ = '04/06/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from message_element import MessageElement
 from exceptions import InvalidMessageItemError
+
 from cell import Cell
 from image import Image
+from message_element import MessageElement
+
 
 # FIXME (MB) remove when all to_* methods are implemented
 # pylint: disable=W0223

@@ -25,12 +25,12 @@ import qgis  # NOQA pylint: disable=unused-import
 from PyQt4 import QtCore, QtGui, QtWebKit
 
 from safe import messaging as m
-from safe.messaging.message import MessageElement
 from safe.common.exceptions import InvalidParameterError
-from safe.utilities.utilities import html_to_file, open_in_browser
+from safe.messaging.message import MessageElement
 from safe.utilities.qt import qt_at_least
-from safe.utilities.utilities import unique_filename
 from safe.utilities.resources import html_footer, html_header, resources_path
+from safe.utilities.utilities import html_to_file, open_in_browser
+from safe.utilities.utilities import unique_filename
 
 DYNAMIC_MESSAGE_SIGNAL = 'ImpactFunctionMessage'
 STATIC_MESSAGE_SIGNAL = 'ApplicationMessage'

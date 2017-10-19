@@ -16,12 +16,12 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import traceback
+
 from safe.messaging import (
     Message,
     ErrorMessage,
     ImportantText,
     Paragraph)
-
 
 DYNAMIC_MESSAGE_SIGNAL = 'ImpactFunctionMessage'
 

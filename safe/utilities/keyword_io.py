@@ -7,13 +7,11 @@ from datetime import datetime
 
 from PyQt4.QtCore import QObject
 from PyQt4.QtCore import QUrl, QDateTime
-
 from qgis.core import QgsMapLayer
 
-from safe.definitions.utilities import definition
-from safe.definitions.keyword_properties import property_extra_keywords
 from safe import messaging as m
-
+from safe.definitions.keyword_properties import property_extra_keywords
+from safe.definitions.utilities import definition
 from safe.messaging import styles
 from safe.utilities.i18n import tr
 from safe.utilities.metadata import (

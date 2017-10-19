@@ -3,6 +3,7 @@
 
 import sys
 from collections import OrderedDict
+
 from safe.test.utilities import get_qgis_app
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()

@@ -2,6 +2,7 @@
 """Example usage of custom parameters."""
 
 import sys
+
 from safe.test.utilities import get_qgis_app
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()

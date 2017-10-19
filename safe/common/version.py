@@ -12,9 +12,10 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 import os
-import sys
 import subprocess
+import sys
 from exceptions import WindowsError
+
 from safe.definitions.versions import inasafe_version, inasafe_release_status
 
 

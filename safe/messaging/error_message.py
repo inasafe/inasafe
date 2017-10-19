@@ -36,7 +36,6 @@ from .styles import (
     TRACEBACK_ITEMS_STYLE,
     ORANGE_LEVEL_4_STYLE)
 
-
 LOGGER = logging.getLogger('InaSAFE')
 # from pydev import pydevd
 

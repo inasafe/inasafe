@@ -9,18 +9,17 @@ from PyQt4.QtCore import QPyNullVariant
 from osgeo import gdal
 from osgeo.gdalconst import GA_ReadOnly
 
-from safe.utilities.i18n import tr
 from safe import messaging as m
-
-from safe.definitions.layer_purposes import layer_purpose_aggregation
 from safe.definitions.layer_geometry import layer_geometry_raster
+from safe.definitions.layer_purposes import layer_purpose_aggregation
 from safe.definitions.utilities import get_fields, get_compulsory_fields
+from safe.gui.tools.wizard.utilities import skip_inasafe_field
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_strings import (
     classify_raster_question, classify_vector_question)
-from safe.gui.tools.wizard.utilities import skip_inasafe_field
 from safe.utilities.gis import is_raster_layer
+from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

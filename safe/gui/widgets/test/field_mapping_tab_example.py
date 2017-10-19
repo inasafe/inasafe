@@ -2,6 +2,7 @@
 """Example usage of field mapping widget."""
 
 import sys
+
 from safe.test.utilities import get_qgis_app, load_test_vector_layer
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()

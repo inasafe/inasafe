@@ -4,27 +4,26 @@
 import logging
 import os
 
-from qgis.core import QgsRasterLayer, QgsMapLayerRegistry
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import QFileInfo, pyqtSignature, pyqtSlot
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QDialogButtonBox, QDialog, QFileDialog, QMessageBox
+from qgis.core import QgsRasterLayer, QgsMapLayerRegistry
 from qgis.utils import iface
 
-from safe.common.version import get_version
 from safe import messaging as m
-from safe.messaging import styles
-from safe.utilities.styling import mmi_ramp_roman
-from safe.utilities.resources import html_footer, html_header, get_ui_class
+from safe.common.version import get_version
+from safe.definitions.hazard_classifications import earthquake_mmi_scale
+from safe.gis.raster.reclassify import reclassify
+from safe.gui.tools.help.shakemap_converter_help import shakemap_converter_help
 from safe.gui.tools.shake_grid.shake_grid import convert_mmi_data
 from safe.gui.tools.wizard.wizard_dialog import WizardDialog
-from safe.gui.tools.help.shakemap_converter_help import shakemap_converter_help
-from safe.gis.raster.reclassify import reclassify
+from safe.messaging import styles
 from safe.utilities.keyword_io import KeywordIO
-from safe.definitions.hazard_classifications import earthquake_mmi_scale
-
+from safe.utilities.resources import html_footer, html_header, get_ui_class
+from safe.utilities.styling import mmi_ramp_roman
 
 INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
 LOGGER = logging.getLogger('InaSAFE')

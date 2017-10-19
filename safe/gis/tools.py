@@ -2,14 +2,13 @@
 
 """Tools for GIS operations."""
 
-import os
 import logging
+import os
 
 from PyQt4.QtCore import QPyNullVariant
 from qgis.core import QgsRasterLayer, QgsVectorLayer
 
 from safe.common.exceptions import NoKeywordsFoundError
-
 from safe.definitions.layer_geometry import (
     layer_geometry_raster,
     layer_geometry_point,

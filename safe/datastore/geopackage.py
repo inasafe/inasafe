@@ -11,15 +11,15 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-from osgeo import ogr, osr, gdal
 from PyQt4.QtCore import QFileInfo
+from osgeo import ogr, osr, gdal
 from qgis.core import (
     QgsVectorLayer,
 )
 
-from safe.definitions.gis import QGIS_OGR_GEOMETRY_MAP
-from safe.datastore.datastore import DataStore
 from safe.common.exceptions import ErrorDataStore
+from safe.datastore.datastore import DataStore
+from safe.definitions.gis import QGIS_OGR_GEOMETRY_MAP
 
 
 class GeoPackage(DataStore):

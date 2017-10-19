@@ -2,12 +2,12 @@
 
 """Related to the extent (with or without an aggregation layer."""
 
+from PyQt4.QtCore import Qt
 from qgis.core import (
     QgsCoordinateTransform,
     QgsGeometry,
     QGis)
 from qgis.gui import QgsRubberBand
-from PyQt4.QtCore import Qt
 
 from safe.definitions.styles import (
     user_analysis_color,

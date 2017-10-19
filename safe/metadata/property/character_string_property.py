@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 """
 from types import NoneType
+
 from safe.metadata.property import BaseProperty
 
 __author__ = 'marco@opengis.ch'

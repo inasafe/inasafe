@@ -2,41 +2,39 @@
 """InaSAFE Options Dialog"""
 
 import logging
+
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
 import qgis  # NOQA pylint: disable=unused-import
-
 from PyQt4.QtCore import pyqtSignature, pyqtSlot, QVariant, QSettings
 from PyQt4.QtGui import (
     QDialog, QFileDialog, QDialogButtonBox, QGroupBox, QVBoxLayout,
     QScrollArea, QWidget)
-
-from parameters.qt_widgets.parameter_container import ParameterContainer
 from parameters.float_parameter import FloatParameter
 from parameters.integer_parameter import IntegerParameter
+from parameters.qt_widgets.parameter_container import ParameterContainer
 
-from safe.definitions.utilities import all_default_fields
+from safe.common.utilities import temp_dir
+from safe.common.version import get_version
+from safe.defaults import supporters_logo_path, default_north_arrow_path
 from safe.definitions.constants import qvariant_whole_numbers, GLOBAL
+from safe.definitions.currencies import currencies
 from safe.definitions.default_settings import inasafe_default_settings
-from safe.definitions.messages import disclaimer
+from safe.definitions.earthquake import EARTHQUAKE_FUNCTIONS
+from safe.definitions.field_groups import all_field_groups
 from safe.definitions.fields import (
     youth_ratio_field,
     adult_ratio_field,
     elderly_ratio_field
 )
-from safe.definitions.field_groups import all_field_groups
-from safe.common.utilities import temp_dir
-from safe.defaults import supporters_logo_path, default_north_arrow_path
-from safe.definitions.earthquake import EARTHQUAKE_FUNCTIONS
-from safe.definitions.currencies import currencies
+from safe.definitions.messages import disclaimer
+from safe.definitions.utilities import all_default_fields
+from safe.gui.tools.help.options_help import options_help
 from safe.utilities.default_values import (
     set_inasafe_default_value_qsetting, get_inasafe_default_value_qsetting)
 from safe.utilities.i18n import tr
 from safe.utilities.resources import get_ui_class, html_header, html_footer
 from safe.utilities.settings import setting, set_setting
-from safe.common.version import get_version
-from safe.gui.tools.help.options_help import options_help
-
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

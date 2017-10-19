@@ -3,14 +3,40 @@
 """Postprocessors about population and demographics."""
 
 from collections import OrderedDict
+
 from post_processor_functions import (
     multiply,
     post_processor_population_displacement_function,
     post_processor_population_fatality_function,
 )
-from safe.definitions.exposure import exposure_population
 from safe.definitions.concepts import concepts
-from safe.definitions.hazard_classifications import earthquake_mmi_scale
+from safe.definitions.exposure import exposure_population
+# Displaced field
+from safe.definitions.fields import (
+    child_bearing_age_displaced_count_field,
+    pregnant_displaced_count_field,
+    lactating_displaced_count_field,
+    infant_displaced_count_field,
+    child_displaced_count_field,
+    youth_displaced_count_field,
+    adult_displaced_count_field,
+    elderly_displaced_count_field,
+    under_5_displaced_count_field,
+    over_60_displaced_count_field,
+    disabled_displaced_count_field)
+# Count fields
+from safe.definitions.fields import (
+    displaced_field,
+    fatalities_field,
+    female_displaced_count_field,
+    population_count_field,
+    exposure_count_field,
+    male_displaced_count_field,
+    hygiene_packs_count_field)
+# Other fields
+from safe.definitions.fields import (
+    hazard_class_field,
+)
 # Ratio fields
 from safe.definitions.fields import (
     population_displacement_ratio_field,
@@ -28,39 +54,14 @@ from safe.definitions.fields import (
     under_5_ratio_field,
     over_60_ratio_field,
     disabled_ratio_field)
-# Count fields
-from safe.definitions.fields import (
-    displaced_field,
-    fatalities_field,
-    female_displaced_count_field,
-    population_count_field,
-    exposure_count_field,
-    male_displaced_count_field,
-    hygiene_packs_count_field)
-# Displaced field
-from safe.definitions.fields import (
-    child_bearing_age_displaced_count_field,
-    pregnant_displaced_count_field,
-    lactating_displaced_count_field,
-    infant_displaced_count_field,
-    child_displaced_count_field,
-    youth_displaced_count_field,
-    adult_displaced_count_field,
-    elderly_displaced_count_field,
-    under_5_displaced_count_field,
-    over_60_displaced_count_field,
-    disabled_displaced_count_field)
-# Other fields
-from safe.definitions.fields import (
-    hazard_class_field,
-)
+from safe.definitions.hazard_classifications import earthquake_mmi_scale
+from safe.definitions.post_processors.post_processor_inputs import \
+    constant_input_type, field_input_type, keyword_input_type
 from safe.definitions.post_processors.post_processor_inputs import (
     dynamic_field_input_type, keyword_value_expected)
 from safe.definitions.post_processors.post_processors import (
     function_process,
     formula_process)
-from safe.definitions.post_processors.post_processor_inputs import \
-    constant_input_type, field_input_type, keyword_input_type
 from safe.utilities.i18n import tr
 
 # A postprocessor can be defined with a formula or with a python function.

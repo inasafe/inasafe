@@ -6,17 +6,17 @@ import logging
 
 from pydispatch import dispatcher
 
-from safe.definitions.messages import limitations, disclaimer
 from safe import messaging as m
-from safe.messaging import styles
 from safe.common.signals import (
     DYNAMIC_MESSAGE_SIGNAL,
     STATIC_MESSAGE_SIGNAL,
     ERROR_MESSAGE_SIGNAL,
     send_static_message
 )
-from safe.utilities.resources import resources_path
+from safe.definitions.messages import limitations, disclaimer
+from safe.messaging import styles
 from safe.utilities.i18n import tr
+from safe.utilities.resources import resources_path
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

@@ -1,8 +1,8 @@
 # coding=utf-8
 """Module for class container of Report and ReportComponent Metadata.
 """
-from importlib import import_module
 from copy import deepcopy
+from importlib import import_module
 
 from safe.definitions.reports import (
     jinja2_component_type,

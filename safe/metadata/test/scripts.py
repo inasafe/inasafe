@@ -1,9 +1,9 @@
 # coding=utf-8
 """Scripts for metadata."""
 
+from safe.metadata.aggregation_layer_metadata import AggregationLayerMetadata
 from safe.metadata.exposure_layer_metadata import ExposureLayerMetadata
 from safe.metadata.hazard_layer_metadata import HazardLayerMetadata
-from safe.metadata.aggregation_layer_metadata import AggregationLayerMetadata
 from safe.metadata.output_layer_metadata import \
     OutputLayerMetadata
 

@@ -3,6 +3,7 @@
 """Aggregate the impact table to the aggregate hazard."""
 
 import logging
+
 from PyQt4.QtCore import QPyNullVariant
 from qgis.core import QGis, QgsFeatureRequest
 
@@ -18,18 +19,18 @@ from safe.definitions.fields import (
     affected_field,
     size_field,
 )
+from safe.definitions.hazard_classifications import not_exposed_class
 from safe.definitions.layer_purposes import (
     layer_purpose_aggregate_hazard_impacted)
 from safe.definitions.post_processors import post_processor_affected_function
 from safe.definitions.utilities import definition
-from safe.definitions.hazard_classifications import not_exposed_class
+from safe.gis.sanity_check import check_layer
 from safe.gis.vector.summary_tools import (
     check_inputs, create_absolute_values_structure, add_fields)
-from safe.gis.sanity_check import check_layer
 from safe.utilities.gis import qgis_version
-from safe.utilities.profiling import profile
-from safe.utilities.pivot_table import FlatTable
 from safe.utilities.i18n import tr
+from safe.utilities.pivot_table import FlatTable
+from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

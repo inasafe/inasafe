@@ -7,11 +7,10 @@ from qgis.core import (
     QgsFeature,
 )
 
-from safe.gis.vector.tools import create_memory_layer
-from safe.gis.sanity_check import check_layer
 from safe.definitions.processing_steps import reproject_steps
+from safe.gis.sanity_check import check_layer
+from safe.gis.vector.tools import create_memory_layer
 from safe.utilities.profiling import profile
-
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

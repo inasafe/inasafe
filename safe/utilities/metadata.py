@@ -1,7 +1,7 @@
 # coding=utf-8
 """Metadata Utilities."""
-import os
 import logging
+import os
 from copy import deepcopy
 from datetime import datetime, date
 
@@ -11,6 +11,7 @@ from safe.common.exceptions import (
     MetadataReadError,
     KeywordNotFoundError,
     NoKeywordsFoundError)
+from safe.definitions.layer_modes import layer_mode_continuous
 from safe.definitions.layer_purposes import (
     layer_purpose_hazard,
     layer_purpose_exposure,
@@ -22,7 +23,6 @@ from safe.definitions.layer_purposes import (
     layer_purpose_aggregation_summary,
     layer_purpose_profiling,
 )
-from safe.definitions.layer_modes import layer_mode_continuous
 from safe.definitions.versions import inasafe_keyword_version
 from safe.metadata import (
     ExposureLayerMetadata,

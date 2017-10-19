@@ -2,10 +2,10 @@
 
 """QGIS utilities for InaSAFE."""
 
-from qgis.gui import QgsMessageBar
-from qgis.core import QGis, QgsProject, QgsMapLayerRegistry, QgsLayerTreeLayer
-from qgis.utils import iface
 from PyQt4.QtGui import QMessageBox, QPushButton
+from qgis.core import QGis, QgsProject, QgsMapLayerRegistry, QgsLayerTreeLayer
+from qgis.gui import QgsMessageBar
+from qgis.utils import iface
 
 from safe.utilities.i18n import tr
 

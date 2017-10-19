@@ -7,22 +7,9 @@ from sqlite3 import OperationalError
 from PyQt4 import QtGui
 from PyQt4.QtCore import pyqtSignature, QSettings, pyqtSignal
 from PyQt4.QtGui import QDialog, QPixmap
+from parameters.parameter_exceptions import InvalidValidationException
 from qgis.core import QgsMapLayerRegistry
 
-from parameters.parameter_exceptions import InvalidValidationException
-
-from safe.utilities.i18n import tr
-from safe.definitions.layer_purposes import (
-    layer_purpose_exposure, layer_purpose_aggregation, layer_purpose_hazard)
-from safe.definitions.layer_geometry import (
-    layer_geometry_raster,
-)
-from safe.definitions.layer_modes import (
-    layer_mode_continuous, layer_mode_classified)
-from safe.definitions.units import exposure_unit
-from safe.definitions.hazard import continuous_hazard_unit
-from safe.definitions.utilities import get_compulsory_fields
-from safe.definitions.constants import RECENT
 from safe.common.exceptions import (
     HashNotFoundError,
     NoKeywordsFoundError,
@@ -32,22 +19,35 @@ from safe.common.exceptions import (
     InaSAFEError,
     MetadataReadError,
     InvalidWizardStep)
+from safe.definitions.constants import RECENT
+from safe.definitions.hazard import continuous_hazard_unit
+from safe.definitions.layer_geometry import (
+    layer_geometry_raster,
+)
+from safe.definitions.layer_modes import (
+    layer_mode_continuous, layer_mode_classified)
+from safe.definitions.layer_purposes import (
+    layer_purpose_exposure, layer_purpose_aggregation, layer_purpose_hazard)
+from safe.definitions.units import exposure_unit
+from safe.definitions.utilities import get_compulsory_fields
 from safe.gis.tools import geometry_type
+from safe.gui.tools.wizard import STEP_KW, STEP_FC
+from safe.gui.tools.wizard.utilities import layer_description_html
+from safe.gui.tools.wizard.wizard_help import WizardHelp
 from safe.gui.tools.wizard.wizard_strings import (
     category_question_hazard,
     category_question_exposure,
     category_question_aggregation)
-from safe.gui.tools.wizard.utilities import layer_description_html
 from safe.utilities.default_values import set_inasafe_default_value_qsetting
 from safe.utilities.gis import (
     is_polygon_layer)
+from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.qgis_utilities import display_warning_message_box
 from safe.utilities.resources import get_ui_class, resources_path
 from safe.utilities.unicode import get_unicode, get_string
 from safe.utilities.utilities import (
     get_error_message, is_keyword_version_supported)
-from safe.utilities.qgis_utilities import display_warning_message_box
-
 from step_fc00_functions1 import StepFcFunctions1
 from step_fc05_functions2 import StepFcFunctions2
 from step_fc15_hazlayer_origin import StepFcHazLayerOrigin
@@ -64,6 +64,7 @@ from step_fc65_agglayer_disjoint import StepFcAggLayerDisjoint
 from step_fc70_extent import StepFcExtent
 from step_fc75_extent_disjoint import StepFcExtentDisjoint
 from step_fc85_summary import StepFcSummary
+from step_fc90_analysis import StepFcAnalysis
 from step_kw00_purpose import StepKwPurpose
 from step_kw05_subcategory import StepKwSubcategory
 from step_kw10_hazard_category import StepKwHazardCategory
@@ -83,11 +84,6 @@ from step_kw49_inasafe_raster_default_values import (
 from step_kw55_source import StepKwSource
 from step_kw60_title import StepKwTitle
 from step_kw65_summary import StepKwSummary
-from step_fc90_analysis import StepFcAnalysis
-
-from safe.gui.tools.wizard.wizard_help import WizardHelp
-from safe.gui.tools.wizard import STEP_KW, STEP_FC
-
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

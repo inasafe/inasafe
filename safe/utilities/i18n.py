@@ -2,12 +2,13 @@
 
 """Functions to translate a word or to get the locale   ."""
 
+import logging
+
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
 import qgis  # NOQA pylint: disable=unused-import
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import QCoreApplication, QSettings, QLocale
-import logging
 
 from safe.utilities.unicode import get_unicode
 

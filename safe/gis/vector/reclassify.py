@@ -5,9 +5,9 @@
 from qgis.core import QgsField
 
 from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
-from safe.definitions.utilities import definition
 from safe.definitions.fields import hazard_class_field, hazard_value_field
 from safe.definitions.processing_steps import reclassify_vector_steps
+from safe.definitions.utilities import definition
 from safe.gis.sanity_check import check_layer
 from safe.gis.tools import reclassify_value
 from safe.utilities.metadata import (

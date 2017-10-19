@@ -2,8 +2,9 @@
 """Helper function for InaSAFE settings."""
 
 from PyQt4.QtCore import QSettings
-from safe.utilities.i18n import tr
+
 from safe.definitions.default_settings import inasafe_default_settings
+from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

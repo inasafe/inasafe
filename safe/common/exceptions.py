@@ -14,8 +14,8 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-from safe.utilities.unicode import get_unicode, get_string
 from safe.messaging.item.message_element import MessageElement
+from safe.utilities.unicode import get_unicode, get_string
 
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'

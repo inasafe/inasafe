@@ -2,23 +2,24 @@
 """InaSAFE Wizard Step for Choosing Exposure and Hazard."""
 
 from copy import deepcopy
+
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import pyqtSignature
 
-from safe.definitions.hazard import hazard_all
+from safe import messaging as m
 from safe.definitions.exposure import exposure_all
-from safe.definitions.styles import (
-    available_option_color, unavailable_option_color)
 from safe.definitions.font import big_font
-from safe.gui.tools.wizard.wizard_step import WizardStep
-from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
-from safe.gui.tools.wizard.utilities import RoleHazard, RoleExposure
+from safe.definitions.hazard import hazard_all
 from safe.definitions.layer_purposes import (
     layer_purpose_exposure, layer_purpose_hazard)
+from safe.definitions.styles import (
+    available_option_color, unavailable_option_color)
+from safe.gui.tools.wizard.utilities import RoleHazard, RoleExposure
+from safe.gui.tools.wizard.wizard_step import WizardStep
+from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
+from safe.utilities.i18n import tr
 from safe.utilities.resources import resources_path
 from safe.utilities.settings import setting
-from safe.utilities.i18n import tr
-from safe import messaging as m
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

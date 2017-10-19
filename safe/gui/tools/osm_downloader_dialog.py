@@ -17,12 +17,13 @@ __date__ = '4/12/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import os
 import logging
+import os
 
 # noinspection PyUnresolvedReferences
 # pylint: disable=unused-import
 from qgis.core import QGis, QgsRectangle  # force sip2 api
+
 try:
     from qgis.core import QgsExpressionContextUtils
 except ImportError:

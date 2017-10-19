@@ -2,33 +2,33 @@
 
 """Utilities module."""
 
-import re
 import codecs
 import json
 import logging
 import platform
+import re
 import sys
 import traceback
 import unicodedata
 import webbrowser
+from os.path import join, isdir
 
 from PyQt4.QtCore import QPyNullVariant
 from qgis.core import QgsApplication
-from os.path import join, isdir
 
+from safe import messaging as m
 from safe.common.exceptions import NoKeywordsFoundError, MetadataReadError
+from safe.common.utilities import unique_filename
+from safe.common.version import get_version
+from safe.definitions.messages import disclaimer
 from safe.definitions.versions import (
     inasafe_keyword_version,
     keyword_version_compatibilities)
-from safe.definitions.messages import disclaimer
-from safe import messaging as m
-from safe.common.utilities import unique_filename
-from safe.common.version import get_version
 from safe.messaging import styles, Message
 from safe.messaging.error_message import ErrorMessage
 from safe.utilities.i18n import tr
-from safe.utilities.unicode import get_unicode
 from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.unicode import get_unicode
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

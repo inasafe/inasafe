@@ -6,16 +6,17 @@ import os
 from collections import OrderedDict
 from operator import itemgetter
 
-from qgis.core import QgsMapLayerRegistry
-from qgis.gui import QgsMapLayerProxyModel
 from PyQt4 import QtGui
 from PyQt4.QtCore import pyqtSignature, pyqtSlot
 from PyQt4.QtGui import QFileDialog, QIcon
+from qgis.core import QgsMapLayerRegistry
+from qgis.gui import QgsMapLayerProxyModel
+
 from safe.common.utilities import unique_filename, temp_dir
 from safe.datastore.folder import Folder
 from safe.gis.vector.multi_buffering import multi_buffering
-from safe.gui.tools.wizard.wizard_dialog import WizardDialog
 from safe.gui.tools.help.multi_buffer_help import multi_buffer_help
+from safe.gui.tools.wizard.wizard_dialog import WizardDialog
 from safe.messaging import styles
 from safe.utilities.resources import (
     get_ui_class,

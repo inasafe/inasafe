@@ -2,21 +2,22 @@
 
 """Reclassify a raster layer."""
 
+from os.path import isfile
+
 import numpy as np
 from osgeo import gdal
-from os.path import isfile
 from qgis.core import QgsRasterLayer
 
 from safe.common.exceptions import (
     FileNotFoundError, InvalidKeywordsForProcessingAlgorithm)
 from safe.common.utilities import unique_filename, temp_dir
 from safe.definitions.constants import no_data_value
-from safe.definitions.utilities import definition
 from safe.definitions.processing_steps import reclassify_raster_steps
+from safe.definitions.utilities import definition
 from safe.gis.sanity_check import check_layer
-from safe.utilities.profiling import profile
 from safe.utilities.metadata import (
     active_thresholds_value_maps, active_classification)
+from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

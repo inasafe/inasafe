@@ -8,7 +8,6 @@ import sys
 # noinspection PyUnresolvedReferences
 import qgis  # NOQA pylint: disable=unused-import
 from PyQt4 import Qt, QtWebKit
-
 from pydispatch import dispatcher
 
 from safe.messaging import (

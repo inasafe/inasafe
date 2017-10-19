@@ -3,14 +3,15 @@
 """Impact Function."""
 
 import getpass
-from datetime import datetime
-from os.path import join, exists, dirname
-from os import makedirs
+import logging
 from collections import OrderedDict
+from datetime import datetime
+from os import makedirs
+from os.path import join, exists, dirname
 from socket import gethostname
 
-from PyQt4.QtCore import QT_VERSION_STR, QSettings
 from PyQt4.Qt import PYQT_VERSION_STR
+from PyQt4.QtCore import QT_VERSION_STR, QSettings
 from osgeo import gdal
 from qgis.core import (
     QgsGeometry,
@@ -22,53 +23,40 @@ from qgis.core import (
     QgsMapLayer,
 )
 
-import logging
-
+from safe import messaging as m
+from safe.common.exceptions import (
+    InaSAFEError,
+    InvalidExtentError,
+    WrongEarthquakeFunction,
+    NoFeaturesInExtentError,
+    ProcessingInstallationError,
+)
 from safe.common.utilities import temp_dir
 from safe.common.version import get_version
-from safe.datastore.folder import Folder
 from safe.datastore.datastore import DataStore
-from safe.gis.sanity_check import check_inasafe_fields, check_layer
-from safe.gis.tools import geometry_type, load_layer
-from safe.gis.vector.tools import remove_fields
-from safe.gis.vector.from_counts_to_ratios import from_counts_to_ratios
-from safe.gis.vector.prepare_vector_layer import prepare_vector_layer
-from safe.gis.vector.clean_geometry import clean_layer
-from safe.gis.vector.reproject import reproject
-from safe.gis.vector.assign_highest_value import assign_highest_value
-from safe.gis.vector.default_values import add_default_values
-from safe.gis.vector.reclassify import reclassify as reclassify_vector
-from safe.gis.vector.union import union
-from safe.gis.vector.clip import clip
-from safe.gis.vector.smart_clip import smart_clip
-from safe.gis.vector.intersection import intersection
-from safe.gis.vector.summary_1_aggregate_hazard import (
-    aggregate_hazard_summary)
-from safe.gis.vector.summary_2_aggregation import aggregation_summary
-from safe.gis.vector.summary_3_analysis import analysis_summary
-from safe.gis.vector.summary_4_exposure_summary_table import (
-    exposure_summary_table)
-from safe.gis.vector.recompute_counts import recompute_counts
-from safe.gis.vector.update_value_map import update_value_map
-from safe.gis.raster.clip_bounding_box import clip_by_extent
-from safe.gis.raster.reclassify import reclassify as reclassify_raster
-from safe.gis.raster.polygonize import polygonize
-from safe.gis.raster.zonal_statistics import zonal_stats
+from safe.datastore.folder import Folder
+from safe.definitions import count_ratio_mapping, post_processors
 from safe.definitions.analysis_steps import analysis_steps
-from safe.definitions.utilities import (
-    definition,
-    get_non_compulsory_fields,
-    get_name,
-    set_provenance,
-    get_provenance
-)
+from safe.definitions.constants import (
+    GLOBAL,
+    ANALYSIS_SUCCESS,
+    ANALYSIS_FAILED_BAD_INPUT,
+    ANALYSIS_FAILED_BAD_CODE,
+    PREPARE_SUCCESS,
+    PREPARE_FAILED_BAD_INPUT,
+    PREPARE_FAILED_INSUFFICIENT_OVERLAP,
+    PREPARE_FAILED_INSUFFICIENT_OVERLAP_REQUESTED_EXTENT,
+    PREPARE_FAILED_BAD_LAYER,
+    PREPARE_FAILED_BAD_CODE)
+from safe.definitions.earthquake import EARTHQUAKE_FUNCTIONS
 from safe.definitions.exposure import indivisible_exposure
 from safe.definitions.fields import (
     size_field,
     exposure_class_field,
     hazard_class_field,
 )
-from safe.definitions import count_ratio_mapping, post_processors
+from safe.definitions.hazard_exposure_specifications import (
+    specific_actions, specific_notes)
 from safe.definitions.layer_purposes import (
     layer_purpose_exposure,
     layer_purpose_exposure_summary,
@@ -78,12 +66,6 @@ from safe.definitions.layer_purposes import (
     layer_purpose_exposure_summary_table,
     layer_purpose_profiling,
 )
-from safe.definitions.styles import (
-    aggregation_color,
-    aggregation_width,
-    analysis_color,
-    analysis_width)
-
 from safe.definitions.provenance import (
     provenance_action_checklist,
     provenance_aggregation_keywords,
@@ -130,32 +112,45 @@ from safe.definitions.provenance import (
     provenance_crs,
     provenance_debug_mode,
 )
-from safe.impact_function.provenance_utilities import (
-    get_map_title, get_analysis_question)
-
-from safe.definitions.constants import (
-    GLOBAL,
-    ANALYSIS_SUCCESS,
-    ANALYSIS_FAILED_BAD_INPUT,
-    ANALYSIS_FAILED_BAD_CODE,
-    PREPARE_SUCCESS,
-    PREPARE_FAILED_BAD_INPUT,
-    PREPARE_FAILED_INSUFFICIENT_OVERLAP,
-    PREPARE_FAILED_INSUFFICIENT_OVERLAP_REQUESTED_EXTENT,
-    PREPARE_FAILED_BAD_LAYER,
-    PREPARE_FAILED_BAD_CODE)
-from safe.definitions.hazard_exposure_specifications import (
-    specific_actions, specific_notes)
-from safe.common.exceptions import (
-    InaSAFEError,
-    InvalidExtentError,
-    WrongEarthquakeFunction,
-    NoFeaturesInExtentError,
-    ProcessingInstallationError,
+from safe.definitions.styles import (
+    aggregation_color,
+    aggregation_width,
+    analysis_color,
+    analysis_width)
+from safe.definitions.utilities import (
+    definition,
+    get_non_compulsory_fields,
+    get_name,
+    set_provenance,
+    get_provenance
 )
-from safe.definitions.earthquake import EARTHQUAKE_FUNCTIONS
-from safe.impact_function.postprocessors import (
-    run_single_post_processor, enough_input)
+from safe.gis.raster.clip_bounding_box import clip_by_extent
+from safe.gis.raster.polygonize import polygonize
+from safe.gis.raster.reclassify import reclassify as reclassify_raster
+from safe.gis.raster.zonal_statistics import zonal_stats
+from safe.gis.sanity_check import check_inasafe_fields, check_layer
+from safe.gis.tools import geometry_type, load_layer
+from safe.gis.vector.assign_highest_value import assign_highest_value
+from safe.gis.vector.clean_geometry import clean_layer
+from safe.gis.vector.clip import clip
+from safe.gis.vector.default_values import add_default_values
+from safe.gis.vector.from_counts_to_ratios import from_counts_to_ratios
+from safe.gis.vector.intersection import intersection
+from safe.gis.vector.prepare_vector_layer import prepare_vector_layer
+from safe.gis.vector.reclassify import reclassify as reclassify_vector
+from safe.gis.vector.recompute_counts import recompute_counts
+from safe.gis.vector.reproject import reproject
+from safe.gis.vector.smart_clip import smart_clip
+from safe.gis.vector.summary_1_aggregate_hazard import (
+    aggregate_hazard_summary)
+from safe.gis.vector.summary_2_aggregation import aggregation_summary
+from safe.gis.vector.summary_3_analysis import analysis_summary
+from safe.gis.vector.summary_4_exposure_summary_table import (
+    exposure_summary_table)
+from safe.gis.vector.tools import remove_fields
+from safe.gis.vector.union import union
+from safe.gis.vector.update_value_map import update_value_map
+from safe.gui.widgets.message import generate_input_error_message
 from safe.impact_function.create_extra_layers import (
     create_analysis_layer,
     create_virtual_aggregation,
@@ -163,30 +158,32 @@ from safe.impact_function.create_extra_layers import (
     create_valid_aggregation,
 )
 from safe.impact_function.impact_function_utilities import check_input_layer
+from safe.impact_function.postprocessors import (
+    run_single_post_processor, enough_input)
+from safe.impact_function.provenance_utilities import (
+    get_map_title, get_analysis_question)
 from safe.impact_function.style import (
     layer_title,
     generate_classified_legend,
     hazard_class_style,
     simple_polygon_without_brush,
 )
+from safe.messaging import styles
+from safe.utilities.default_values import get_inasafe_default_value_qsetting
 from safe.utilities.gis import (
     is_vector_layer, is_raster_layer, wkt_to_rectangle)
+from safe.utilities.gis import qgis_version
 from safe.utilities.i18n import tr
-from safe.utilities.default_values import get_inasafe_default_value_qsetting
-from safe.utilities.unicode import get_unicode, byteify
 from safe.utilities.metadata import (
     active_thresholds_value_maps, copy_layer_keywords, write_iso19115_metadata)
+from safe.utilities.profiling import (
+    profile, clear_prof_data, profiling_log)
+from safe.utilities.settings import setting
+from safe.utilities.unicode import get_unicode, byteify
 from safe.utilities.utilities import (
     replace_accentuated_characters,
     get_error_message,
     readable_os_version)
-from safe.utilities.profiling import (
-    profile, clear_prof_data, profiling_log)
-from safe.utilities.gis import qgis_version
-from safe.utilities.settings import setting
-from safe import messaging as m
-from safe.messaging import styles
-from safe.gui.widgets.message import generate_input_error_message
 
 SUGGESTION_STYLE = styles.GREEN_LEVEL_4_STYLE
 WARNING_STYLE = styles.RED_LEVEL_4_STYLE

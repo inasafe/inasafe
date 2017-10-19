@@ -2,10 +2,9 @@
 """Function Option Dialog (deprecated?)"""
 
 import logging
-from PyQt4 import QtGui, QtCore
 from collections import OrderedDict
 
-import qgis  # NOQA pylint: disable=unused-import
+from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature, pyqtSlot
 from PyQt4.QtGui import (
     QGroupBox,
@@ -16,13 +15,12 @@ from PyQt4.QtGui import (
     QWidget,
     QScrollArea,
     QVBoxLayout)
-
 from parameters.parameter_exceptions import CollectionLengthError
 from parameters.qt_widgets.parameter_container import ParameterContainer
 
+from safe.common.parameters.resource_parameter import ResourceParameter
 from safe.common.parameters.resource_parameter_widget import (
     ResourceParameterWidget)
-from safe.common.parameters.resource_parameter import ResourceParameter
 from safe.gui.tools.help.function_options_help import function_options_help
 from safe.utilities.i18n import tr
 from safe.utilities.resources import html_footer, html_header, get_ui_class

@@ -13,6 +13,7 @@ from qgis.core import (
     QgsVectorLayer,
     QgsRasterLayer,
 )
+
 from safe.utilities.metadata import copy_layer_keywords
 from safe.utilities.utilities import LOGGER
 

@@ -18,21 +18,12 @@ __date__ = '01/10/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+import logging
 import os
 import sys
-import logging
-from datetime import datetime
-
-from StringIO import StringIO
 from ConfigParser import ConfigParser, MissingSectionHeaderError, ParsingError
-
-from qgis.core import (
-    QgsRectangle,
-    QgsCoordinateReferenceSystem,
-    QgsMapLayerRegistry,
-    QgsProject,
-    QgsVectorLayer,
-    QgsRasterLayer)
+from StringIO import StringIO
+from datetime import datetime
 
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature, pyqtSlot, QSettings, Qt
@@ -43,7 +34,16 @@ from PyQt4.QtGui import (
     QTableWidgetItem,
     QPushButton,
     QDialogButtonBox)
+from qgis.core import (
+    QgsRectangle,
+    QgsCoordinateReferenceSystem,
+    QgsMapLayerRegistry,
+    QgsProject,
+    QgsVectorLayer,
+    QgsRasterLayer)
 
+from safe.common.signals import send_error_message
+from safe.common.utilities import temp_dir
 from safe.definitions.constants import (
     ANALYSIS_SUCCESS,
     PREPARE_SUCCESS,
@@ -53,22 +53,19 @@ from safe.definitions.layer_purposes import (
     layer_purpose_hazard,
     layer_purpose_exposure,
     layer_purpose_aggregation)
-from safe.definitions.utilities import update_template_component
 from safe.definitions.reports.components import (
     standard_impact_report_metadata_pdf, map_report)
-from safe.utilities.gis import extent_string_to_array
-from safe.common.utilities import temp_dir
-from safe.common.signals import send_error_message
-from safe.utilities.resources import (
-    html_footer, html_header, get_ui_class)
-from safe.messaging import styles
+from safe.definitions.utilities import update_template_component
+from safe.gui.analysis_utilities import generate_report
 from safe.gui.tools.help.batch_help import batch_help
 from safe.impact_function.impact_function import ImpactFunction
-from safe.report.report_metadata import ReportMetadata
+from safe.messaging import styles
 from safe.report.impact_report import ImpactReport
-from safe.gui.analysis_utilities import generate_report
+from safe.report.report_metadata import ReportMetadata
+from safe.utilities.gis import extent_string_to_array
 from safe.utilities.qgis_utilities import display_critical_message_box
-
+from safe.utilities.resources import (
+    html_footer, html_header, get_ui_class)
 
 INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
 LOGGER = logging.getLogger('InaSAFE')
