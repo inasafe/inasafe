@@ -253,7 +253,7 @@ class TestImpactFunction(unittest.TestCase):
 
         equal, message = first.is_equal(second)
         if not equal:
-            self.fail(self._formatMessage(msg, message))
+            self.fail(self._formatMessage('%s\n%s' % (msg, message), message))
 
     def test_keyword_monkey_patch(self):
         """Test behaviour of generating keywords."""
@@ -752,13 +752,16 @@ class TestImpactFunction(unittest.TestCase):
 
         # If we want to invert the selection.
         invert = False
+        # If we want to also test the IF loader / deserialization.
+        test_loader = False
 
         path = standard_data_path('scenario')
         # Sort it to make it easy to debug
         for scenario in sorted(scenarios.keys()):
             enabled = scenarios[scenario]
             if (not invert and enabled) or (invert and not enabled):
-                self.test_scenario(join(path, scenario + '.json'))
+                self.test_scenario(
+                    join(path, scenario + '.json'), test_loader=test_loader)
 
         json_files = [
             join(path, f) for f in listdir(path)
@@ -1242,20 +1245,6 @@ class TestImpactFunction(unittest.TestCase):
         self.assertIsInstance(impact_function.impact, QgsVectorLayer)
         self.assertEquals(len(impact_function.outputs), 6)
 
-    @unittest.skipIf(
-        os.environ.get('ON_TRAVIS', False),
-        'Duplicate test of test_scenario_directory.')
-    def test_deserialize_impact_function(self):
-        """Test run IF then deserialize it."""
-        path = standard_data_path('scenario')
-        scenario = 'earthquake_raster_on_raster_population'
-        run_time_impact_function = self.test_scenario(
-            join(path, scenario + '.json'), False)
-        output_metadata = run_time_impact_function.impact.keywords
-        loaded_impact_function = ImpactFunction.load_from_output_metadata(
-            output_metadata)
-        self.assertEqualImpactFunction(
-            run_time_impact_function, loaded_impact_function)
 
 
 if __name__ == '__main__':

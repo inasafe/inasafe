@@ -335,6 +335,11 @@ class ImpactFunction(object):
             try:
                 property_a = getattr(self, if_property)
                 property_b = getattr(other, if_property)
+                if type(property_a) != type(property_b):
+                    message = (
+                        'Different type of property %s.\nA: %s\nB: %s' % (
+                            if_property, type(property_a), type(property_b)))
+                    return False, message
                 if isinstance(property_a, QgsMapLayer):
                     if byteify(property_a.keywords) != byteify(
                             property_b.keywords):
