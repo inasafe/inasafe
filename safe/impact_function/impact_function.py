@@ -290,6 +290,18 @@ class ImpactFunction(object):
         :returns: True if both are the same IF, other wise False.
         :rtype: bool
         """
+        return self.is_equal(other)[0]
+
+    def is_equal(self, other):
+        """Equality checker with message
+
+        :param other: Other Impact Function to be compared.
+        :type other: ImpactFunction
+
+        :returns: True if both are the same IF, other wise False and the
+            message.
+        :rtype: bool, str
+        """
         properties = [
             'debug_mode',
             'requested_extent',
@@ -325,66 +337,66 @@ class ImpactFunction(object):
                 if isinstance(property_a, QgsMapLayer):
                     if byteify(property_a.keywords) != byteify(
                             property_b.keywords):
-                        LOGGER.debug(
+                        message = (
                             'Keyword Layer is not equal is %s' % if_property)
-                        return False
+                        return False, message
                     if isinstance(property_a, QgsVectorLayer):
                         fields_a = [f.name() for f in property_a.fields()]
                         fields_b = [f.name() for f in property_b.fields()]
                         if fields_a != fields_b:
-                            LOGGER.debug(
-                                'Layer fields is not equal for %s'
-                                % if_property)
-                            return False
+                            message = (
+                                'Layer fields is not equal for %s' %
+                                if_property)
+                            return False, message
                         if (property_a.featureCount() !=
                                 property_b.featureCount()):
-                            LOGGER.debug(
+                            message = (
                                 'Feature count is not equal for %s' %
                                 if_property)
-                            return False
+                            return False, message
                 elif isinstance(property_a, QgsGeometry):
                     if not property_a.equals(property_b):
                         string_a = property_a.exportToWkt()
                         string_b = property_b.exportToWkt()
-                        LOGGER.debug(
+                        message = (
                             '[Non Layer] The not equal property is %s.\n'
                             'A: %s\nB: %s' % (if_property, string_a, string_b))
-                        return False
+                        return False, message
                 elif isinstance(property_a, DataStore):
                     if property_a.uri_path != property_b.uri_path:
                         string_a = property_a.uri_path
                         string_b = property_b.uri_path
-                        LOGGER.debug(
+                        message = (
                             '[Non Layer] The not equal property is %s.\n'
                             'A: %s\nB: %s' % (if_property, string_a, string_b))
-                        return False
+                        return False, message
                 else:
                     if property_a != property_b:
                         string_a = get_unicode(property_a)
                         string_b = get_unicode(property_b)
-                        LOGGER.debug(
+                        message = (
                             '[Non Layer] The not equal property is %s.\n'
                             'A: %s\nB: %s' % (if_property, string_a, string_b))
-                        return False
+                        return False, message
             except AttributeError as e:
-                LOGGER.error(
+                message = (
                     'Property %s is not found. The exception is %s' % (
                         if_property, e))
-                return False
+                return False, message
             except IndexError as e:
                 if if_property == 'impact':
                     continue
                 else:
-                    LOGGER.error(
+                    message = (
                         'Property %s is out of index. The exception is %s' % (
                             if_property, e))
-                    return False
+                    return False, message
             except Exception as e:
-                LOGGER.error(
+                message = (
                     'Error on %s with error message %s' % (if_property, e))
-                return False
+                return False, message
 
-        return True
+        return True, ''
 
     @property
     def performance_log(self):

@@ -235,6 +235,23 @@ class TestImpactFunction(unittest.TestCase):
 
     """Test Impact Function."""
 
+    def assertEqualImpactFunction(self, first, second, msg=None):
+        """Special assert for impact function equality."""
+        if not isinstance(first, ImpactFunction):
+            message = (
+                'First object is not an ImpactFunction object, but a %s' %
+                type(second))
+            self.fail(self._formatMessage(msg, message))
+        if not isinstance(second, ImpactFunction):
+            message = (
+                'Second object is not an ImpactFunction object, but a %s' %
+                type(second))
+            self.fail(self._formatMessage(msg, message))
+
+        equal, message = first.is_equal(second)
+        if not equal:
+            self.fail(self._formatMessage(msg, message))
+
     def test_keyword_monkey_patch(self):
         """Test behaviour of generating keywords."""
         exposure_path = standard_data_path('exposure', 'building-points.shp')
@@ -675,11 +692,8 @@ class TestImpactFunction(unittest.TestCase):
             run_scenario(scenario, use_debug))
         self.assertEqual(0, status, steps)
         # self.assertDictEqual(expected_steps, steps, scenario_path)
-        try:
-            self.assertDictEqual(byteify(expected_steps), byteify(steps))
-        except AssertionError:
-            LOGGER.debug("Exception found in" + scenario_path)
-            raise
+        message = "Exception found in " + scenario_path
+        self.assertDictEqual(byteify(expected_steps), byteify(steps), message)
         # - 1 because I added the profiling table, and this table is not
         # counted in the JSON file.
         self.assertEqual(len(outputs) - 1, expected_outputs['count'])
@@ -691,11 +705,9 @@ class TestImpactFunction(unittest.TestCase):
             output_metadata = impact_function.impact.keywords
             new_impact_function = ImpactFunction. \
                 load_from_output_metadata(output_metadata)
-            try:
-                self.assertEquals(impact_function, new_impact_function)
-            except AssertionError:
-                LOGGER.debug("Exception found in" + scenario_path)
-                raise
+            message = "Exception found in " + scenario_path
+            self.assertEqualImpactFunction(
+                impact_function, new_impact_function, message)
 
         return impact_function
 
@@ -1173,7 +1185,8 @@ class TestImpactFunction(unittest.TestCase):
     def test_equality(self):
         """Testing IF equal operator."""
         new_impact_function = ImpactFunction()
-        self.assertEqual(new_impact_function, new_impact_function)
+        self.assertEqualImpactFunction(
+            new_impact_function, new_impact_function)
 
     @unittest.skipIf(
         not os.path.exists('/Users/ismailsunni/dev/python/inasafe-dev'),
@@ -1226,7 +1239,8 @@ class TestImpactFunction(unittest.TestCase):
         output_metadata = run_time_impact_function.impact.keywords
         loaded_impact_function = ImpactFunction.load_from_output_metadata(
             output_metadata)
-        self.assertEquals(run_time_impact_function, loaded_impact_function)
+        self.assertEqualImpactFunction(
+            run_time_impact_function, loaded_impact_function)
 
 
 if __name__ == '__main__':
