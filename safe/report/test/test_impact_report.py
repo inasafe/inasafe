@@ -15,7 +15,6 @@ from jinja2.environment import Template
 from PyQt4.Qt import PYQT_VERSION_STR
 from PyQt4.QtCore import QT_VERSION_STR
 
-from safe.common.utilities import safe_dir
 from safe.common.version import get_version
 from safe.definitions.constants import ANALYSIS_SUCCESS
 from safe.definitions.fields import (
@@ -63,7 +62,6 @@ __revision__ = '$Format:%H$'
 
 
 class TestImpactReport(unittest.TestCase):
-
     """Test Impact Report.
 
     .. versionadded:: 4.0
@@ -893,7 +891,7 @@ class TestImpactReport(unittest.TestCase):
                     'header': 'InaSAFE Default Values '
                 }), ('aggregation_layer', {
                     'content': aggregation_layer.source(),
-                     'header': 'Aggregation Layer '
+                    'header': 'Aggregation Layer '
                 }), ('keyword_version', {
                     'content': u'4.1',
                     'header': 'Keyword Version '
@@ -952,7 +950,7 @@ class TestImpactReport(unittest.TestCase):
         """
         output_folder = self.fixtures_dir('../output/minimum_needs')
 
-        # Minimum needs only occured when population is displaced
+        # Minimum needs only occurred when population is displaced
         # so, use flood hazard.
         hazard_layer = load_test_vector_layer(
             'hazard', 'flood_multipart_polygons.shp')
@@ -1068,8 +1066,6 @@ class TestImpactReport(unittest.TestCase):
             hazard_layer, exposure_layer)
 
         """Check generated context"""
-        empty_component_output_message = 'Empty component output'
-
         aggregation_result = impact_report.metadata.component_by_key(
             aggregation_result_component['key'])
         """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
@@ -1106,7 +1102,7 @@ class TestImpactReport(unittest.TestCase):
         #     'header': u'Aggregation Result',
         #     'notes': []
         # }
-
+        # empty_component_output_message = 'Empty component output'
         # self.assertTrue(
         #     aggregation_result.output, empty_component_output_message)
 
