@@ -2414,7 +2414,7 @@ class ImpactFunction(object):
 
         # CRS
         set_provenance(
-            self._provenance, provenance_crs, self.impact.crs().authid())
+            self._provenance, provenance_crs, self.crs.authid())
 
         # Debug mode
         set_provenance(
