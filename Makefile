@@ -344,20 +344,11 @@ build-nightlies:
 #
 ##########################################################
 
-docker-start-test-container:
-	@echo
-	@echo "----------------------------------"
-	@echo "Start docker container for testing with QGIS 2.14"
-	@echo "Image: kartoza/qgis-testing:boundlessgeo-2.14.7"
-	@echo "You can use 'make docker-test' after that"
-	@echo "----------------------------------"
-	@./start-docker-test.sh
-
 docker-test:
 	@echo
 	@echo "----------------------------------"
 	@echo "Run tests in docker"
-	@echo "You must run 'make docker-start-test-container' before."
+	@echo "Image: kartoza/qgis-testing:boundlessgeo-2.14.7"
 	@echo "You can change the tested package in 'test_suite.py' in the 'test_package' function."
 	@echo "----------------------------------"
 	@./run-docker-test.sh

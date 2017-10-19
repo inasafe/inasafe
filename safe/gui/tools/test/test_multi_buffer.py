@@ -22,11 +22,6 @@ class MultiBufferTest(unittest.TestCase):
         """Test initialisation run before each test."""
         self.output_path = standard_data_path(
             'hazard', 'volcano_point_multi_buffer.geojson')
-        pass
-
-    def tearDown(self):
-        """Run after each test."""
-        pass
 
     def multi_buffer_test(self, output_path):
         """Function to test the functionality of multi buffer tool.
@@ -76,6 +71,14 @@ class MultiBufferTest(unittest.TestCase):
         new_field_names = actual_field_names[-2:]
 
         self.assertEqual(expected_fields_name, new_field_names)
+
+        # We need to clean generated files
+        try:
+            os.remove(self.output_path)
+            os.remove(self.output_path.replace('.geojson', '.xml'))
+        except OSError:
+            # With the test_temp_output test, these files don't exist.
+            pass
 
     def test_temp_output(self):
         """Test the multi buffer tool if user do not provide

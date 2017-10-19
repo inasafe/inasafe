@@ -14,6 +14,9 @@ __revision__ = '$Format:%H$'
 
 class TestPythonPep(unittest.TestCase):
 
+    @unittest.skipIf(
+        os.environ.get('WITH_PYTHON_PEP', False),
+        'We can use make flake8 separately')
     def test_flake8(self):
         """Test if the code is Flake8 compliant."""
         if os.environ.get('ON_TRAVIS', False):
@@ -38,6 +41,9 @@ class TestPythonPep(unittest.TestCase):
         message = 'Hey mate, go back to your keyboard :)'
         self.assertEquals(lines, 0, message)
 
+    @unittest.skipIf(
+        os.environ.get('WITH_PYTHON_PEP', False),
+        'We can use make pep8 separately')
     def test_pep8(self):
         """Test if the code is PEP8 compliant."""
         if os.environ.get('ON_TRAVIS', False):
@@ -83,6 +89,9 @@ class TestPythonPep(unittest.TestCase):
             'lines from PEP8.)' % (default_number_lines, lines))
         self.assertEquals(lines, 0, message)
 
+    @unittest.skipIf(
+        os.environ.get('WITH_PYTHON_PEP', False),
+        'We can use make pep257 separately')
     def test_pep257(self):
         """Test if docstrings are PEP257 compliant."""
         if os.environ.get('ON_TRAVIS', False):
