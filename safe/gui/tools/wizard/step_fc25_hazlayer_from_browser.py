@@ -9,7 +9,7 @@ from safe.definitions.layer_purposes import layer_purpose_hazard
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step_browser import WizardStepBrowser
 from safe.utilities.i18n import tr
-from safe.utilities.resources import resources_path
+from safe.gui.tools.wizard.utilities import get_image_path
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -75,9 +75,7 @@ class StepFcHazLayerFromBrowser(WizardStepBrowser, FORM_CLASS):
         # Set icon
         hazard = self.parent.step_fc_functions1.selected_value(
             layer_purpose_hazard['key'])
-        icon_path = resources_path(
-            'img', 'wizard', 'keyword-subcategory-%s.svg'
-                             % (hazard['key'] or 'notset'))
+        icon_path = get_image_path(hazard)
         self.lblIconIFCWHazardFromBrowser.setPixmap(QPixmap(icon_path))
 
     @property
