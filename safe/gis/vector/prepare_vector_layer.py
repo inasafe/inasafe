@@ -45,6 +45,7 @@ from safe.gis.vector.tools import (
     copy_layer,
     create_field_from_definition
 )
+from safe.definitions.exposure_classifications import data_driven_classes
 from safe.impact_function.postprocessors import run_single_post_processor
 from safe.utilities.i18n import tr
 from safe.utilities.metadata import (
@@ -166,7 +167,7 @@ def _check_value_mapping(layer, exposure_key=None):
     exposure_classification = definition(classification)
 
     other = None
-    if exposure_classification['key'] != 'data_driven_classes':
+    if exposure_classification['key'] != data_driven_classes['key']:
         other = exposure_classification['classes'][-1]['key']
 
     exposure_mapped = []

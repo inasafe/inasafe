@@ -4,8 +4,10 @@
 import json
 
 import numpy
-from PyQt4 import QtCore, QtGui
-from PyQt4.QtCore import QPyNullVariant
+from copy import deepcopy
+from PyQt4.QtGui import (
+    QListWidgetItem, QFont, QAbstractItemView, QTreeWidgetItem)
+from PyQt4.QtCore import QPyNullVariant, Qt
 from osgeo import gdal
 from osgeo.gdalconst import GA_ReadOnly
 
@@ -13,9 +15,10 @@ from safe import messaging as m
 from safe.definitions.layer_geometry import layer_geometry_raster
 from safe.definitions.layer_purposes import layer_purpose_aggregation
 from safe.definitions.utilities import get_fields, get_compulsory_fields
+from safe.definitions.exposure_classifications import data_driven_classes
 from safe.gui.tools.wizard.utilities import skip_inasafe_field
-from safe.gui.tools.wizard.wizard_step import WizardStep
-from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
+from safe.gui.tools.wizard.wizard_step import (
+    WizardStep, get_wizard_step_ui_class)
 from safe.gui.tools.wizard.wizard_strings import (
     classify_raster_question, classify_vector_question)
 from safe.utilities.gis import is_raster_layer
@@ -36,7 +39,7 @@ class StepKwClassify(WizardStep, FORM_CLASS):
     def __init__(self, parent=None):
         """Constructor for the tab.
 
-        :param parent: parent - widget to use as parent (Wizad Dialog).
+        :param parent: parent - widget to use as parent (Wizard Dialog).
         :type parent: QWidget
 
         """
@@ -117,9 +120,9 @@ class StepKwClassify(WizardStep, FORM_CLASS):
         """
         _ = column  # NOQA
 
-        if int(item.flags() & QtCore.Qt.ItemIsDropEnabled) \
-                and int(item.flags() & QtCore.Qt.ItemIsDragEnabled):
-            item.setFlags(item.flags() & ~QtCore.Qt.ItemIsDropEnabled)
+        if int(item.flags() & Qt.ItemIsDropEnabled) \
+                and int(item.flags() & Qt.ItemIsDragEnabled):
+            item.setFlags(item.flags() & ~Qt.ItemIsDropEnabled)
 
     def selected_mapping(self):
         """Obtain the value-to-class mapping set by user.
@@ -132,9 +135,9 @@ class StepKwClassify(WizardStep, FORM_CLASS):
         for tree_branch in tree_clone.takeChildren():
             value_list = []
             for tree_leaf in tree_branch.takeChildren():
-                value_list += [tree_leaf.data(0, QtCore.Qt.UserRole)]
+                value_list += [tree_leaf.data(0, Qt.UserRole)]
             if value_list:
-                value_map[tree_branch.data(0, QtCore.Qt.UserRole)] = value_list
+                value_map[tree_branch.data(0, Qt.UserRole)] = value_list
         return value_map
 
     def set_widgets(self):
@@ -177,8 +180,8 @@ class StepKwClassify(WizardStep, FORM_CLASS):
             clean_unique_values.append(unique_value)
 
         # get default classes
-        default_classes = classification['classes']
-        if classification['key'] == 'data_driven_classes':
+        default_classes = deepcopy(classification['classes'])
+        if classification['key'] == data_driven_classes['key']:
             for unique_value in clean_unique_values:
                 name = unicode(unique_value).upper().replace('_', ' ')
                 default_class = {'key': unique_value,
@@ -284,30 +287,28 @@ class StepKwClassify(WizardStep, FORM_CLASS):
         # Populate the unique values list
         self.lstUniqueValues.clear()
         self.lstUniqueValues.setSelectionMode(
-            QtGui.QAbstractItemView.ExtendedSelection)
+            QAbstractItemView.ExtendedSelection)
         for value in unassigned_values:
             value_as_string = value is not None and unicode(value) or 'NULL'
-            list_item = QtGui.QListWidgetItem(self.lstUniqueValues)
+            list_item = QListWidgetItem(self.lstUniqueValues)
             list_item.setFlags(
-                QtCore.Qt.ItemIsEnabled |
-                QtCore.Qt.ItemIsSelectable |
-                QtCore.Qt.ItemIsDragEnabled)
-            list_item.setData(QtCore.Qt.UserRole, value)
+                Qt.ItemIsEnabled |
+                Qt.ItemIsSelectable |
+                Qt.ItemIsDragEnabled)
+            list_item.setData(Qt.UserRole, value)
             list_item.setText(value_as_string)
             self.lstUniqueValues.addItem(list_item)
         # Populate assigned values tree
         self.treeClasses.clear()
-        bold_font = QtGui.QFont()
+        bold_font = QFont()
         bold_font.setItalic(True)
         bold_font.setBold(True)
         bold_font.setWeight(75)
-        self.treeClasses.invisibleRootItem().setFlags(
-            QtCore.Qt.ItemIsEnabled)
+        self.treeClasses.invisibleRootItem().setFlags(Qt.ItemIsEnabled)
         for default_class in default_classes:
             # Create branch for class
-            tree_branch = QtGui.QTreeWidgetItem(self.treeClasses)
-            tree_branch.setFlags(
-                QtCore.Qt.ItemIsDropEnabled | QtCore.Qt.ItemIsEnabled)
+            tree_branch = QTreeWidgetItem(self.treeClasses)
+            tree_branch.setFlags(Qt.ItemIsDropEnabled | Qt.ItemIsEnabled)
             tree_branch.setExpanded(True)
             tree_branch.setFont(0, bold_font)
             if 'name' in default_class:
@@ -315,18 +316,18 @@ class StepKwClassify(WizardStep, FORM_CLASS):
             else:
                 default_class_name = default_class['key']
             tree_branch.setText(0, default_class_name)
-            tree_branch.setData(0, QtCore.Qt.UserRole, default_class['key'])
+            tree_branch.setData(0, Qt.UserRole, default_class['key'])
             if 'description' in default_class:
                 tree_branch.setToolTip(0, default_class['description'])
             # Assign known values
             for value in assigned_values[default_class['key']]:
                 string_value = value is not None and unicode(value) or 'NULL'
-                tree_leaf = QtGui.QTreeWidgetItem(tree_branch)
+                tree_leaf = QTreeWidgetItem(tree_branch)
                 tree_leaf.setFlags(
-                    QtCore.Qt.ItemIsEnabled |
-                    QtCore.Qt.ItemIsSelectable |
-                    QtCore.Qt.ItemIsDragEnabled)
-                tree_leaf.setData(0, QtCore.Qt.UserRole, value)
+                    Qt.ItemIsEnabled |
+                    Qt.ItemIsSelectable |
+                    Qt.ItemIsDragEnabled)
+                tree_leaf.setData(0, Qt.UserRole, value)
                 tree_leaf.setText(0, string_value)
 
     @property
