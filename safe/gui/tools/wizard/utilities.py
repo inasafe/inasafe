@@ -6,7 +6,7 @@ import sys
 import os
 
 from PyQt4 import QtCore
-from PyQt4.QtGui import QWidgetItem, QSpacerItem, QLayout, QIcon
+from PyQt4.QtGui import QWidgetItem, QSpacerItem, QLayout
 from qgis.core import QgsCoordinateTransform
 
 import safe.gui.tools.wizard.wizard_strings
@@ -24,6 +24,7 @@ from safe.utilities.i18n import tr
 from safe.utilities.utilities import is_keyword_version_supported
 from safe.utilities.resources import resources_path
 
+
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
@@ -38,6 +39,10 @@ RoleHazardConstraint = QtCore.Qt.UserRole + 3
 RoleExposureConstraint = QtCore.Qt.UserRole + 4
 
 LOGGER = logging.getLogger('InaSAFE')
+
+
+not_set_image_path = resources_path(
+    'img', 'wizard', 'keyword-subcategory-notset.svg')
 
 
 def get_question_text(constant):
@@ -262,20 +267,19 @@ def skip_inasafe_field(layer, inasafe_fields):
                     return False
     return True
 
-def get_icon(definition):
-    """Helper function to get icon from a definition in resource directory.
+
+def get_image_path(definition):
+    """Helper to get path of image from a definition in resource directory.
 
     :param definition: A definition (hazard, exposure).
     :type definition: dict
 
-    :returns: The definition's icon.
-    :rtype: QIcon
+    :returns: The definition's image path.
+    :rtype: str
     """
     path = resources_path(
         'img', 'wizard', 'keyword-subcategory-%s.svg' % definition['key'])
     if os.path.exists(path):
-        return QIcon(path)
+        return path
     else:
-        default_path = resources_path(
-        'img', 'wizard', 'keyword-subcategory-notset.svg')
-        return QIcon(default_path)
+        return not_set_image_path

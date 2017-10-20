@@ -12,7 +12,7 @@ from safe.gui.tools.wizard.wizard_strings import (
     select_hazlayer_from_canvas_question,
     select_hazlayer_from_browser_question)
 from safe.utilities.i18n import tr
-from safe.utilities.resources import resources_path
+from safe.gui.tools.wizard.utilities import get_image_path
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -110,9 +110,7 @@ class StepFcHazLayerOrigin(WizardStep, FORM_CLASS):
             lblSelectBrowserHazLayer.setText(text)
 
         # Set icon
-        icon_path = resources_path(
-            'img', 'wizard', 'keyword-subcategory-%s.svg' % (
-                hazard['key'] or 'notset'))
+        icon_path = get_image_path(hazard)
         self.lblIconIFCWHazardOrigin.setPixmap(QPixmap(icon_path))
 
     @property

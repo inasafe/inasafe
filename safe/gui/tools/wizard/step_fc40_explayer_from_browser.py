@@ -6,11 +6,10 @@ from PyQt4.QtGui import QPixmap
 
 from safe import messaging as m
 from safe.definitions.layer_purposes import layer_purpose_exposure
-from safe.gui.tools.wizard.utilities import layers_intersect
+from safe.gui.tools.wizard.utilities import layers_intersect, get_image_path
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step_browser import WizardStepBrowser
 from safe.utilities.i18n import tr
-from safe.utilities.resources import resources_path
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -78,9 +77,7 @@ class StepFcExpLayerFromBrowser(WizardStepBrowser, FORM_CLASS):
         # Set icon
         exposure = self.parent.step_fc_functions1.selected_value(
             layer_purpose_exposure['key'])
-        icon_path = resources_path(
-            'img', 'wizard', 'keyword-subcategory-%s.svg' % (
-                exposure['key'] or 'notset'))
+        icon_path = get_image_path(exposure)
         self.lblIconIFCWExposureFromBrowser.setPixmap(QPixmap(icon_path))
 
     @property
