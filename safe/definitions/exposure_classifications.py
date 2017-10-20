@@ -53,6 +53,7 @@ generic_structure_classes = {
                 'house',
                 'residence',
                 'residential',
+                'apartments',
             ],
             'osm_downloader': ['Residential'],
             'citations': [
@@ -95,6 +96,7 @@ generic_structure_classes = {
                 'clinic/doctor',
                 'dentist',
                 'doctor',
+                'doctors',
                 'health',
                 'hospital',
                 'pharmacy',
@@ -184,6 +186,7 @@ generic_structure_classes = {
             'string_defaults': [
                 'accommodation',
                 'atm',
+                'bank',
                 'cafe',
                 'clothes',
                 'commercial',
@@ -278,6 +281,7 @@ generic_structure_classes = {
                 'Any other structure frequently mapped.'),
             'string_defaults': [
                 'animal boarding',
+                'garage',
                 'lighthouse',
                 'other',
                 'utility',
