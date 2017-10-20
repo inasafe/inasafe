@@ -9,11 +9,10 @@ from qgis.core import QgsMapLayerRegistry
 
 from safe import messaging as m
 from safe.definitions.layer_purposes import layer_purpose_exposure
-from safe.gui.tools.wizard.utilities import layers_intersect
+from safe.gui.tools.wizard.utilities import layers_intersect, get_image_path
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.utilities.i18n import tr
-from safe.gui.tools.wizard.utilities import get_image_path
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

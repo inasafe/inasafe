@@ -2,8 +2,8 @@
 """Wizard Utilities Functions"""
 
 import logging
-import sys
 import os
+import sys
 
 from PyQt4 import QtCore
 from PyQt4.QtGui import QWidgetItem, QSpacerItem, QLayout
@@ -21,9 +21,8 @@ from safe.utilities.default_values import get_inasafe_default_value_qsetting
 from safe.utilities.gis import (
     is_raster_layer, is_point_layer, is_polygon_layer)
 from safe.utilities.i18n import tr
-from safe.utilities.utilities import is_keyword_version_supported
 from safe.utilities.resources import resources_path
-
+from safe.utilities.utilities import is_keyword_version_supported
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

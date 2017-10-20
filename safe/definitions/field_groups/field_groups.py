@@ -11,12 +11,8 @@ from safe.definitions.field_groups.age_vulnerability_field_group import (
     age_vulnerability_ratio_group,
     age_vulnerability_count_group,
     age_vulnerability_displaced_count_group)
-from safe.definitions.field_groups.gender_vulnerability_field_group import (
-    gender_vulnerability_ratio_group,
-    gender_vulnerability_count_group,
-    gender_vulnerability_displaced_count_group)
-from safe.definitions.field_groups.\
-    disability_vulnerability_field_group import (
+from safe.definitions.field_groups.disability_vulnerability_field_group \
+    import (
         disability_vulnerability_ratio_group,
         disability_vulnerability_count_group,
         disability_vulnerability_displaced_count_group)
@@ -24,6 +20,10 @@ from safe.definitions.field_groups.gender_field_group import (
     gender_ratio_group,
     gender_count_group,
     gender_displaced_count_group)
+from safe.definitions.field_groups.gender_vulnerability_field_group import (
+    gender_vulnerability_ratio_group,
+    gender_vulnerability_count_group,
+    gender_vulnerability_displaced_count_group)
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"

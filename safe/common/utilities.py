@@ -25,7 +25,6 @@ from safe.common.exceptions import VerificationError
 from safe.utilities.rounding import (
     thousand_separator, decimal_separator, add_separators)
 
-
 LOGGER = logging.getLogger('InaSAFE')
 
 
