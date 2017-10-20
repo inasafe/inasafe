@@ -81,8 +81,7 @@ class TestEarthquakeReport(unittest.TestCase):
         impact_function = ImpactFunction()
         impact_function.exposure = exposure_layer
         impact_function.hazard = hazard_layer
-        impact_function.crs = QgsCoordinateReferenceSystem(
-            4326)
+        impact_function.crs = QgsCoordinateReferenceSystem(4326)
         impact_function.prepare()
         return_code, message = impact_function.run()
 
