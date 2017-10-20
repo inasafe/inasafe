@@ -6,10 +6,10 @@ from PyQt4.QtGui import QPixmap
 
 from safe import messaging as m
 from safe.definitions.layer_purposes import layer_purpose_hazard
+from safe.gui.tools.wizard.utilities import get_image_path
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step_browser import WizardStepBrowser
 from safe.utilities.i18n import tr
-from safe.gui.tools.wizard.utilities import get_image_path
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
