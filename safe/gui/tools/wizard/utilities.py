@@ -3,9 +3,10 @@
 
 import logging
 import sys
+import os
 
 from PyQt4 import QtCore
-from PyQt4.QtGui import QWidgetItem, QSpacerItem, QLayout
+from PyQt4.QtGui import QWidgetItem, QSpacerItem, QLayout, QIcon
 from qgis.core import QgsCoordinateTransform
 
 import safe.gui.tools.wizard.wizard_strings
@@ -21,6 +22,7 @@ from safe.utilities.gis import (
     is_raster_layer, is_point_layer, is_polygon_layer)
 from safe.utilities.i18n import tr
 from safe.utilities.utilities import is_keyword_version_supported
+from safe.utilities.resources import resources_path
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -259,3 +261,21 @@ def skip_inasafe_field(layer, inasafe_fields):
                 if field.type() == inasafe_field['type']:
                     return False
     return True
+
+def get_icon(definition):
+    """Helper function to get icon from a definition in resource directory.
+
+    :param definition: A definition (hazard, exposure).
+    :type definition: dict
+
+    :returns: The definition's icon.
+    :rtype: QIcon
+    """
+    path = resources_path(
+        'img', 'wizard', 'keyword-subcategory-%s.svg' % definition['key'])
+    if os.path.exists(path):
+        return QIcon(path)
+    else:
+        default_path = resources_path(
+        'img', 'wizard', 'keyword-subcategory-notset.svg')
+        return QIcon(default_path)
