@@ -14,11 +14,10 @@ from safe.definitions.layer_purposes import (
     layer_purpose_exposure, layer_purpose_hazard)
 from safe.definitions.styles import (
     available_option_color, unavailable_option_color)
-from safe.gui.tools.wizard.utilities import RoleHazard, RoleExposure
+from safe.gui.tools.wizard.utilities import RoleHazard, RoleExposure, get_icon
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.utilities.i18n import tr
-from safe.utilities.resources import resources_path
 from safe.utilities.settings import setting
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -120,18 +119,14 @@ class StepFcFunctions1(WizardStep, FORM_CLASS):
         for i in range(len(hazards)):
             hazard = hazards[i]
             item = QtGui.QTableWidgetItem()
-            item.setIcon(QtGui.QIcon(
-                resources_path('img', 'wizard', 'keyword-subcategory-%s.svg'
-                               % (hazard['key'] or 'notset'))))
+            item.setIcon(get_icon(hazard))
             item.setText(hazard['name'].capitalize())
+            item.setTextAlignment(QtCore.Qt.AlignLeft)
             self.tblFunctions1.setHorizontalHeaderItem(i, item)
         for i in range(len(exposures)):
             exposure = exposures[i]
             item = QtGui.QTableWidgetItem()
-
-            item.setIcon(QtGui.QIcon(resources_path(
-                'img', 'wizard', 'keyword-subcategory-%s.svg'
-                % (exposure['key'] or 'notset'))))
+            item.setIcon(get_icon(exposure))
             item.setText(exposure['name'].capitalize())
             self.tblFunctions1.setVerticalHeaderItem(i, item)
         developer_mode = setting('developer_mode', False, bool)
