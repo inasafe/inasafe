@@ -2410,8 +2410,12 @@ class ImpactFunction(object):
             self.action_checklist())
 
         # CRS
-        set_provenance(
-            self._provenance, provenance_crs, self.crs.authid())
+        if self.crs:
+            set_provenance(
+                self._provenance, provenance_crs, self.crs.authid())
+        else:
+            set_provenance(
+                self._provenance, provenance_crs, self.crs)
 
         # Debug mode
         set_provenance(
