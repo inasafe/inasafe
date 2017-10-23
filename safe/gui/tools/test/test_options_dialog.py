@@ -74,23 +74,24 @@ class TestOptionsDialog(unittest.TestCase):
         self.assertEqual(
             dialog.leNorthArrowPath.text(), default_north_arrow_path())
         self.assertEqual(
-            dialog.leOrganisationLogoPath.text(), supporters_logo_path())
+            dialog.organisation_logo_path_line_edit.text(),
+            supporters_logo_path())
         self.assertEqual(dialog.leReportTemplatePath.text(), '')
         self.assertEqual(dialog.txtDisclaimer.toPlainText(), disclaimer())
         self.assertEqual(
             dialog.leUserDirectoryPath.text(), temp_dir('impacts'))
 
         self.assertEqual(
-            dialog.iso19115_organization_le.text(),
+            dialog.organisation_line_edit.text(),
             inasafe_default_settings['ISO19115_ORGANIZATION'])
         self.assertEqual(
-            dialog.iso19115_url_le.text(),
+            dialog.website_line_edit.text(),
             inasafe_default_settings['ISO19115_URL'])
         self.assertEqual(
-            dialog.iso19115_email_le.text(),
+            dialog.email_line_edit.text(),
             inasafe_default_settings['ISO19115_EMAIL'])
         self.assertEqual(
-            dialog.iso19115_license_le.text(),
+            dialog.license_line_edit.text(),
             inasafe_default_settings['ISO19115_LICENSE'])
 
     def test_update_settings(self):
@@ -104,7 +105,7 @@ class TestOptionsDialog(unittest.TestCase):
         dialog.cbxVisibleLayersOnly.setChecked(new_state)
 
         new_organization = 'Super Organization'
-        dialog.iso19115_organization_le.setText(new_organization)
+        dialog.organisation_line_edit.setText(new_organization)
 
         # Accept the dialog
         dialog.accept()
@@ -130,7 +131,7 @@ class TestOptionsDialog(unittest.TestCase):
         # Check the state of the dialog after save the settings
         self.assertEqual(new_state, dialog.cbxVisibleLayersOnly.isChecked())
         self.assertEqual(
-            new_organization, dialog.iso19115_organization_le.text())
+            new_organization, dialog.organisation_line_edit.text())
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestOptionsDialog, 'test')
