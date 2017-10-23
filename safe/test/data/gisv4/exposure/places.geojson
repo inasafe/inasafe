@@ -2,17 +2,13 @@
 "type": "FeatureCollection",
 "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
 "features": [
-{ "type": "Feature", "properties": { "exposure_id": 1, "exposure_type": "hogwarts", "fake_field": 666, "absolute": 20, "ratio": 10 }, "geometry": { "type": "Point", "coordinates": [ 106.644120463110625, -6.147015351197105 ] } },
-{ "type": "Feature", "properties": { "exposure_id": 2, "exposure_type": "city", "fake_field": 666, "absolute": 0, "ratio": 0 }, "geometry": { "type": "Point", "coordinates": [ 106.643517753107972, -6.227308050721398 ] } },
-{ "type": "Feature", "properties": { "exposure_id": 3, "exposure_type": "village", "fake_field": 666, "absolute": 20, "ratio": 20 }, "geometry": { "type": "Point", "coordinates": [ 106.754416393596998, -6.230902960241568 ] } },
-{ "type": "Feature", "properties": { "exposure_id": 4, "exposure_type": "airport", "fake_field": 666, "absolute": 15, "ratio": 20 }, "geometry": { "type": "Point", "coordinates": [ 106.741458128539875, -6.197649109363691 ] } },
-{ "type": "Feature", "properties": { "exposure_id": 5, "exposure_type": "town", "fake_field": 666, "absolute": 1, "ratio": 2 }, "geometry": { "type": "Point", "coordinates": [ 106.76556652864619, -6.196750327497575 ] } },
-{ "type": "Feature", "properties": { "exposure_id": 6, "exposure_type": "room", "fake_field": 666, "absolute": 10, "ratio": 10 }, "geometry": { "type": "Point", "coordinates": [ 106.753210973591692, -6.172482639175887 ] } },
-{ "type": "Feature", "properties": { "exposure_id": 7, "exposure_type": "town", "fake_field": 666, "absolute": 5, "ratio": 5 }, "geometry": { "type": "Point", "coordinates": [ 106.754717748598338, -6.289316778482916 ] } },
-{ "type": "Feature", "properties": { "exposure_id": 8, "exposure_type": "city", "fake_field": 666, "absolute": null, "ratio": null }, "geometry": { "type": "Point", "coordinates": [ 106.753813683594359, -6.262956479734641 ] } },
-{ "type": "Feature", "properties": { "exposure_id": 9, "exposure_type": "secret_jail", "fake_field": 666, "absolute": 15, "ratio": 15 }, "geometry": { "type": "Point", "coordinates": [ 106.756827233607638, -6.119749021099483 ] } },
-{ "type": "Feature", "properties": { "exposure_id": 10, "exposure_type": "city", "fake_field": 666, "absolute": 5, "ratio": 2 }, "geometry": { "type": "Point", "coordinates": [ 106.815892813868103, -6.262956479734641 ] } },
-{ "type": "Feature", "properties": { "exposure_id": 11, "exposure_type": null, "fake_field": 666, "absolute": 0, "ratio": 0 }, "geometry": { "type": "Point", "coordinates": [ 106.801427773804321, -6.173081854759827 ] } },
-{ "type": "Feature", "properties": { "exposure_id": 11, "exposure_type": "unknown", "fake_field": 666, "absolute": 0, "ratio": 2 }, "geometry": { "type": "Point", "coordinates": [ 106.893801479188284, -6.118605054148777 ] } }
+{ "type": "Feature", "properties": { "Name": "Alubarna", "Type": "Capital City", "Population": 1000000 }, "geometry": { "type": "Point", "coordinates": [ 106.752992014058449, -6.171999008052889 ] } },
+{ "type": "Feature", "properties": { "Name": "Erumalu", "Type": "City", "Population": 750000 }, "geometry": { "type": "Point", "coordinates": [ 106.643109898069454, -6.226313361963797 ] } },
+{ "type": "Feature", "properties": { "Name": "Nanohana", "Type": "City", "Population": 800000 }, "geometry": { "type": "Point", "coordinates": [ 106.893373728782024, -6.118520259586766 ] } },
+{ "type": "Feature", "properties": { "Name": "Syrup Village", "Type": "Village", "Population": 6000 }, "geometry": { "type": "Point", "coordinates": [ 106.753827619503227, -6.230073586465322 ] } },
+{ "type": "Feature", "properties": { "Name": "Midgard Bus Stop", "Type": "Bus stop", "Population": null }, "geometry": { "type": "Point", "coordinates": [ 106.643109898069454, -6.146930844709394 ] } },
+{ "type": "Feature", "properties": { "Name": "Blue Station", "Type": "Train Station", "Population": null }, "geometry": { "type": "Point", "coordinates": [ 106.801039327133481, -6.172834613497673 ] } },
+{ "type": "Feature", "properties": { "Name": "Galley La Company", "Type": "Commercial", "Population": null }, "geometry": { "type": "Point", "coordinates": [ 106.765108293007799, -6.196231565951602 ] } },
+{ "type": "Feature", "properties": { "Name": "Central City Square", "Type": "Public Area", "Population": null }, "geometry": { "type": "Point", "coordinates": [ 106.740875735109086, -6.196649368673994 ] } }
 ]
 }
