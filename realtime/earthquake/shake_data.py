@@ -185,6 +185,10 @@ class ShakeData(object):
         local_path = os.path.join(self.working_dir, self.event_id)
         source_grid_xml = os.path.join(local_path, 'output', 'grid.xml')
 
+        # Handle for new file organizations
+        if not os.path.exists(source_grid_xml):
+            source_grid_xml = os.path.join(local_path, 'grid.xml')
+
         if force_flag or self.force_flag:
             self.remove_extracted_files()
         elif os.path.exists(final_grid_xml_file):

@@ -3,10 +3,12 @@
 import logging
 
 import os
+import re
 
 from realtime.celery_app import app
 from realtime.celeryconfig import EARTHQUAKE_WORKING_DIRECTORY
 from realtime.earthquake.make_map import process_event
+from realtime.earthquake.notify_new_shake import GRID_FILE_PATTERN
 from realtime.utilities import realtime_logger_name
 
 __author__ = 'Rizky Maulana Nugraha <lana.pcfre@gmail.com>'
@@ -50,8 +52,31 @@ def check_event_exists(event_id=None):
     LOGGER.info('-------------------------------------------')
 
     working_directory = EARTHQUAKE_WORKING_DIRECTORY
-    grid_path = os.path.join(
-        working_directory,
-        event_id,
-        'output/grid.xml')
-    return os.path.exists(grid_path)
+
+    pattern = re.compile(GRID_FILE_PATTERN)
+    shake_dir = os.path.join(working_directory, event_id)
+    for root, dirs, files in os.walk(shake_dir):
+        for name in files:
+            pathname = os.path.join(root, name)
+            if pattern.search(pathname):
+                return True
+    return False
+
+
+@app.task(
+    name='realtime.tasks.earthquake.shake_folder_list',
+    queue='inasafe-realtime')
+def shake_folder_list():
+    LOGGER.info('-------------------------------------------')
+    LOGGER.info('Check Shake Folder List')
+
+    working_directory = EARTHQUAKE_WORKING_DIRECTORY
+
+    # iterate directory
+    dirlist = []
+    for dir in os.listdir(working_directory):
+        if check_event_exists(dir):
+            # collect dir name
+            dirlist.append(dir)
+
+    return dirlist

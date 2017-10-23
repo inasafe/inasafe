@@ -23,6 +23,11 @@ __date__ = '03/09/15'
 LOGGER = logging.getLogger(realtime_logger_name())
 
 
+GRID_FILE_PATTERN = os.environ.get(
+            'GRID_FILE_PATTERN',
+            '(?P<shake_id>\d{14})/grid\.xml$')
+
+
 class ShakemapPushHandler(pyinotify.ProcessEvent):
 
     def __init__(self, working_dir, callback=None):
@@ -42,7 +47,7 @@ class ShakemapPushHandler(pyinotify.ProcessEvent):
         """
         # we only listen to pushed output/grid.xml files
         rel_path = os.path.relpath(event.pathname, self.working_dir)
-        pattern = re.compile('^(?P<shake_id>\d{14})/output/grid\.xml$')
+        pattern = re.compile(GRID_FILE_PATTERN)
         if os.path.exists(event.pathname) and pattern.search(rel_path):
             # if we got grid.xml
             LOGGER.info('Got grid.xml: %s' % rel_path)
