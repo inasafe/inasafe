@@ -47,7 +47,7 @@
       <gmd:citation>
         <gmd:CI_Citation>
           <gmd:title>
-            <gco:CharacterString>places</gco:CharacterString>
+            <gco:CharacterString>Places</gco:CharacterString>
           </gmd:title>
           <gmd:date>
             <gmd:CI_Date>
@@ -155,7 +155,7 @@
       <gmd:resourceConstraints>
         <gmd:MD_Constraints>
           <gmd:useLimitation>
-            <gco:CharacterString/>
+            <gco:CharacterString>Open Data Commons Open Database License (ODbL)</gco:CharacterString>
           </gmd:useLimitation>
         </gmd:MD_Constraints>
       </gmd:resourceConstraints>
@@ -187,7 +187,7 @@
             <gco:CharacterString>4.3</gco:CharacterString>
           </keyword_version>
           <source>
-            <gco:CharacterString>InaSAFE v4 GeoJSON test layer</gco:CharacterString>
+            <gco:CharacterString>Fictional Places</gco:CharacterString>
           </source>
           <layer_geometry>
             <gco:CharacterString>point</gco:CharacterString>
@@ -196,13 +196,13 @@
             <gco:Integer/>
           </active_band>
           <value_map>
-            <gco:Dictionary>{&quot;Town&quot;: [&quot;town&quot;], &quot;city&quot;: [&quot;city&quot;], &quot;airport&quot;: [&quot;airport&quot;], &quot;other&quot;: [&quot;hogwarts&quot;, &quot;secret_jail&quot;], &quot;Village&quot;: [&quot;village&quot;]}</gco:Dictionary>
+            <gco:Dictionary>{&quot;city&quot;: [&quot;City&quot;, &quot;Capital City&quot;], &quot;other&quot;: [&quot;Bus stop&quot;, &quot;Public Area&quot;, &quot;Commercial&quot;, &quot;Train Station&quot;], &quot;Village&quot;: [&quot;Village&quot;]}</gco:Dictionary>
           </value_map>
           <layer_purpose>
             <gco:CharacterString>exposure</gco:CharacterString>
           </layer_purpose>
           <inasafe_fields>
-            <gco:Dictionary>{&quot;exposure_id_field&quot;: &quot;exposure_id&quot;, &quot;exposure_type_field&quot;: &quot;exposure_type&quot;}</gco:Dictionary>
+            <gco:Dictionary>{&quot;exposure_type_field&quot;: &quot;Type&quot;, &quot;exposure_name_field&quot;: &quot;Name&quot;}</gco:Dictionary>
           </inasafe_fields>
           <inasafe_default_values>
             <gco:Dictionary/>
