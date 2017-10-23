@@ -592,36 +592,6 @@
             </widget>
            </item>
            <item>
-            <widget class="QCheckBox" name="custom_org_logo_checkbox">
-             <property name="text">
-              <string>Use custom organisation logo</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QSplitter" name="splitter_org_logo">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <widget class="QLineEdit" name="leOrganisationLogoPath">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                <horstretch>100</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-             </widget>
-             <widget class="QToolButton" name="toolOrganisationLogoPath">
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
-            </widget>
-           </item>
-           <item>
             <widget class="QCheckBox" name="custom_north_arrow_checkbox">
              <property name="text">
               <string>Use custom north arrow image</string>

@@ -35,6 +35,7 @@ from safe.utilities.default_values import (
 from safe.utilities.i18n import tr
 from safe.utilities.resources import get_ui_class, html_header, html_footer
 from safe.utilities.settings import setting, set_setting
+from safe.utilities.unicode import get_unicode
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -100,10 +101,10 @@ class OptionsDialog(QDialog, FORM_CLASS):
         }
         self.text_settings = {
             'keywordCachePath': self.leKeywordCachePath,
-            'ISO19115_ORGANIZATION': self.iso19115_organization_le,
-            'ISO19115_URL': self.iso19115_url_le,
-            'ISO19115_EMAIL': self.iso19115_email_le,
-            'ISO19115_LICENSE': self.iso19115_license_le,
+            'ISO19115_ORGANIZATION': self.organisation_line_edit,
+            'ISO19115_URL': self.website_line_edit,
+            'ISO19115_EMAIL': self.email_line_edit,
+            'ISO19115_LICENSE': self.license_line_edit,
         }
 
         # Set up things for context help
@@ -136,7 +137,7 @@ class OptionsDialog(QDialog, FORM_CLASS):
             self.checkbox_generate_reports.hide()
 
         # Set up listener for various UI
-        self.custom_org_logo_checkbox.toggled.connect(
+        self.custom_organisation_logo_check_box.toggled.connect(
             self.set_organisation_logo)
         self.custom_north_arrow_checkbox.toggled.connect(self.set_north_arrow)
         self.custom_UseUserDirectory_checkbox.toggled.connect(
@@ -224,10 +225,17 @@ class OptionsDialog(QDialog, FORM_CLASS):
             'inasafe/organisation_logo_path',
             supporters_logo_path(),
             type=str)
-        custom_org_logo_flag = (
-            org_logo_path != supporters_logo_path())
-        self.custom_org_logo_checkbox.setChecked(custom_org_logo_flag)
-        self.leOrganisationLogoPath.setText(org_logo_path)
+        # Check if the path is default one or not
+        custom_org_logo_flag = org_logo_path != supporters_logo_path()
+        self.organisation_logo_path_line_edit.setText(org_logo_path)
+        # If it's default path, disable line edit, button, and unchecked the
+        # check box
+        self.organisation_logo_path_line_edit.setEnabled(
+            custom_org_logo_flag)
+        self.open_organisation_logo_path_button.setEnabled(
+            custom_org_logo_flag)
+        self.custom_organisation_logo_check_box.setChecked(
+            custom_org_logo_flag)
 
         # User Directory
         user_directory_path = self.settings.value(
@@ -249,7 +257,7 @@ class OptionsDialog(QDialog, FORM_CLASS):
         default_currency = setting('currency', expected_type=str)
         keys = [currency['key'] for currency in currencies]
         if default_currency not in keys:
-            default_earthquake_function = currencies[0]['key']
+            default_currency = currencies[0]['key']
         index = self.currency_combo_box.findData(default_currency)
         self.currency_combo_box.setCurrentIndex(index)
 
@@ -308,7 +316,7 @@ class OptionsDialog(QDialog, FORM_CLASS):
             self.leNorthArrowPath.text())
         self.settings.setValue(
             'inasafe/organisation_logo_path',
-            self.leOrganisationLogoPath.text())
+            self.organisation_logo_path_line_edit.text())
         self.settings.setValue(
             'inasafe/reportTemplatePath',
             self.leReportTemplatePath.text())
@@ -412,7 +420,7 @@ class OptionsDialog(QDialog, FORM_CLASS):
 
     # noinspection PyPep8Naming
     @pyqtSignature('')  # prevents actions being handled twice
-    def on_toolOrganisationLogoPath_clicked(self):
+    def on_open_organisation_logo_path_button_clicked(self):
         """Auto-connect slot activated when logo file tool button is clicked.
         """
         # noinspection PyCallByClass,PyTypeChecker
@@ -426,7 +434,7 @@ class OptionsDialog(QDialog, FORM_CLASS):
                 'GIF Images (*.gif *.GIF);;'
                 'SVG Images (*.svg *.SVG);;'))
         if file_name != '':
-            self.leOrganisationLogoPath.setText(file_name)
+            self.organisation_logo_path_line_edit.setText(file_name)
 
     # noinspection PyPep8Naming
     @pyqtSignature('')  # prevents actions being handled twice
@@ -443,7 +451,7 @@ class OptionsDialog(QDialog, FORM_CLASS):
 
     def set_organisation_logo(self):
         """Auto-connect slot activated when org logo checkbox is toggled."""
-        is_checked = self.custom_org_logo_checkbox.isChecked()
+        is_checked = self.custom_organisation_logo_check_box.isChecked()
         if is_checked:
             # Use previous org logo path
             path = self.settings.value(
@@ -454,8 +462,9 @@ class OptionsDialog(QDialog, FORM_CLASS):
             # Set organisation path line edit to default one
             path = supporters_logo_path()
 
-        self.leOrganisationLogoPath.setText(path)
-        self.splitter_org_logo.setEnabled(is_checked)
+        self.organisation_logo_path_line_edit.setText(path)
+        self.organisation_logo_path_line_edit.setEnabled(is_checked)
+        self.open_organisation_logo_path_button.setEnabled(is_checked)
 
     def set_north_arrow(self):
         """Auto-connect slot activated when north arrow checkbox is toggled."""
