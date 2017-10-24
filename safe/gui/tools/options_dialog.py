@@ -136,6 +136,8 @@ class OptionsDialog(QDialog, FORM_CLASS):
         if not self.cbxDevMode.isChecked():
             self.checkbox_generate_reports.hide()
 
+        # Connections
+        # Check boxes
         self.custom_north_arrow_checkbox.toggled.connect(self.set_north_arrow)
         self.custom_UseUserDirectory_checkbox.toggled.connect(
             self.set_user_dir)
@@ -145,8 +147,20 @@ class OptionsDialog(QDialog, FORM_CLASS):
             self.set_org_disclaimer)
         self.custom_organisation_logo_check_box.toggled.connect(
             self.toggle_logo_path)
+        # Buttons
+        self.toolKeywordCachePath.clicked.connect(self.open_keyword_cache_path)
+        self.toolUserDirectoryPath.clicked.connect(
+            self.open_user_directory_path)
+        self.toolNorthArrowPath.clicked.connect(self.open_north_arrow_path)
+        self.open_organisation_logo_path_button.clicked.connect(
+            self.open_organisation_logo_path)
+        self.toolReportTemplatePath.clicked.connect(
+            self.open_report_template_path)
+        # Others
         self.organisation_logo_path_line_edit.textChanged.connect(
             self.update_logo_preview)
+        self.earthquake_function.currentIndexChanged.connect(
+            self.update_earthquake_info)
 
         # Set up listener for restore defaults button
         self.restore_defaults = self.button_box_restore_defaults.button(
@@ -162,7 +176,6 @@ class OptionsDialog(QDialog, FORM_CLASS):
         # hide custom template dir toggle
         self.custom_templates_dir_checkbox.hide()
         self.splitter_custom_report.hide()
-        # self.set_organisation_logo()
 
     def save_boolean_setting(self, key, check_box):
         """Save boolean setting according to check_box state.
@@ -259,6 +272,7 @@ class OptionsDialog(QDialog, FORM_CLASS):
             default_earthquake_function = EARTHQUAKE_FUNCTIONS[0]['key']
         index = self.earthquake_function.findData(default_earthquake_function)
         self.earthquake_function.setCurrentIndex(index)
+        self.update_earthquake_info()
 
         # Restore North Arrow Image Path
         north_arrow_path = self.settings.value(
@@ -266,6 +280,7 @@ class OptionsDialog(QDialog, FORM_CLASS):
         custom_north_arrow_flag = (
             north_arrow_path != default_north_arrow_path())
         self.custom_north_arrow_checkbox.setChecked(custom_north_arrow_flag)
+        self.splitter_north_arrow.setEnabled(custom_north_arrow_flag)
         self.leNorthArrowPath.setText(north_arrow_path)
 
         # Restore Report Template Directory Path
@@ -340,11 +355,10 @@ class OptionsDialog(QDialog, FORM_CLASS):
         self.save_state()
         super(OptionsDialog, self).accept()
 
-    # noinspection PyPep8Naming
-    @pyqtSignature('int')  # prevents actions being handled twice
-    def on_earthquake_function_currentIndexChanged(self, current_index):
-        """Auto-connect slot activated when earthquake model is changed."""
+    def update_earthquake_info(self):
+        """Update information about earthquake info"""
         self.label_earthquake_model()
+        current_index = self.earthquake_function.currentIndex()
         model = EARTHQUAKE_FUNCTIONS[current_index]
         notes = ''
         for note in model['notes']:
@@ -371,11 +385,8 @@ class OptionsDialog(QDialog, FORM_CLASS):
             'default fatality model is the {model}.').format(model=model)
         self.label_default_earthquake.setText(help_text)
 
-    # noinspection PyPep8Naming
-    @pyqtSignature('')  # prevents actions being handled twice
-    def on_toolKeywordCachePath_clicked(self):
-        """Auto-connect slot activated when cache file tool button is clicked.
-        """
+    def open_keyword_cache_path(self):
+        """Open File dialog to choose the keyword cache path."""
         # noinspection PyCallByClass,PyTypeChecker
         file_name = QFileDialog.getSaveFileName(
             self,
@@ -384,12 +395,8 @@ class OptionsDialog(QDialog, FORM_CLASS):
             self.tr('Sqlite DB File (*.db)'))
         self.leKeywordCachePath.setText(file_name)
 
-    # noinspection PyPep8Naming
-    @pyqtSignature('')  # prevents actions being handled twice
-    def on_toolUserDirectoryPath_clicked(self):
-        """Auto-connect slot activated when user directory tool button is
-        clicked.
-        """
+    def open_user_directory_path(self):
+        """Open File dialog to choose the user directory path."""
         # noinspection PyCallByClass,PyTypeChecker
         dir_name = QFileDialog.getExistingDirectory(
             self,
@@ -398,11 +405,8 @@ class OptionsDialog(QDialog, FORM_CLASS):
             QFileDialog.ShowDirsOnly)
         self.leUserDirectoryPath.setText(dir_name)
 
-    # noinspection PyPep8Naming
-    @pyqtSignature('')  # prevents actions being handled twice
-    def on_toolNorthArrowPath_clicked(self):
-        """Auto-connect slot activated when north arrow tool button is clicked.
-        """
+    def open_north_arrow_path(self):
+        """Open File dialog to choose the north arrow path."""
         # noinspection PyCallByClass,PyTypeChecker
         file_name = QFileDialog.getOpenFileName(
             self,
@@ -416,11 +420,8 @@ class OptionsDialog(QDialog, FORM_CLASS):
         if file_name != '':
             self.leNorthArrowPath.setText(file_name)
 
-    # noinspection PyPep8Naming
-    @pyqtSignature('')  # prevents actions being handled twice
-    def on_open_organisation_logo_path_button_clicked(self):
-        """Auto-connect slot activated when logo file tool button is clicked.
-        """
+    def open_organisation_logo_path(self):
+        """Open File dialog to choose the organisation logo path."""
         # noinspection PyCallByClass,PyTypeChecker
         file_name = QFileDialog.getOpenFileName(
             self,
@@ -434,11 +435,8 @@ class OptionsDialog(QDialog, FORM_CLASS):
         if file_name != '':
             self.organisation_logo_path_line_edit.setText(file_name)
 
-    # noinspection PyPep8Naming
-    @pyqtSignature('')  # prevents actions being handled twice
-    def on_toolReportTemplatePath_clicked(self):
-        """Auto-connect slot activated when report file tool button is clicked.
-        """
+    def open_report_template_path(self):
+        """Open File dialog to choose the report template path."""
         # noinspection PyCallByClass,PyTypeChecker
         dir_name = QFileDialog.getExistingDirectory(
             self,
