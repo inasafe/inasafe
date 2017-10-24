@@ -284,12 +284,12 @@ class OptionsDialog(QDialog, FORM_CLASS):
         self.leNorthArrowPath.setText(north_arrow_path)
 
         # Restore Report Template Directory Path
-        report_template_dir = self.settings.value(
+        report_template_directory = self.settings.value(
             'inasafe/reportTemplatePath', '', type=str)
-        custom_templates_dir_flag = (report_template_dir != '')
+        custom_templates_dir_flag = (report_template_directory != '')
         self.custom_templates_dir_checkbox.setChecked(
             custom_templates_dir_flag)
-        self.leReportTemplatePath.setText(report_template_dir)
+        self.leReportTemplatePath.setText(report_template_directory)
 
         # Restore Disclaimer
         org_disclaimer = self.settings.value(
@@ -391,19 +391,21 @@ class OptionsDialog(QDialog, FORM_CLASS):
         file_name = QFileDialog.getSaveFileName(
             self,
             self.tr('Set keyword cache file'),
-            inasafe_default_settings['keywordCachePath'],
+            self.leKeywordCachePath.text(),
             self.tr('Sqlite DB File (*.db)'))
-        self.leKeywordCachePath.setText(file_name)
+        if file_name:
+            self.leKeywordCachePath.setText(file_name)
 
     def open_user_directory_path(self):
         """Open File dialog to choose the user directory path."""
         # noinspection PyCallByClass,PyTypeChecker
-        dir_name = QFileDialog.getExistingDirectory(
+        directory_name = QFileDialog.getExistingDirectory(
             self,
             self.tr('Results directory'),
-            '',
+            self.leUserDirectoryPath.text(),
             QFileDialog.ShowDirsOnly)
-        self.leUserDirectoryPath.setText(dir_name)
+        if directory_name:
+            self.leUserDirectoryPath.setText(directory_name)
 
     def open_north_arrow_path(self):
         """Open File dialog to choose the north arrow path."""
@@ -411,13 +413,13 @@ class OptionsDialog(QDialog, FORM_CLASS):
         file_name = QFileDialog.getOpenFileName(
             self,
             self.tr('Set north arrow image file'),
-            '',
+            self.leNorthArrowPath.text(),
             self.tr(
                 'Portable Network Graphics files (*.png *.PNG);;'
                 'JPEG Images (*.jpg *.jpeg);;'
                 'GIF Images (*.gif *.GIF);;'
                 'SVG Images (*.svg *.SVG);;'))
-        if file_name != '':
+        if file_name:
             self.leNorthArrowPath.setText(file_name)
 
     def open_organisation_logo_path(self):
@@ -426,24 +428,25 @@ class OptionsDialog(QDialog, FORM_CLASS):
         file_name = QFileDialog.getOpenFileName(
             self,
             self.tr('Set organisation logo file'),
-            '',
+            self.organisation_logo_path_line_edit.text(),
             self.tr(
                 'Portable Network Graphics files (*.png *.PNG);;'
                 'JPEG Images (*.jpg *.jpeg);;'
                 'GIF Images (*.gif *.GIF);;'
                 'SVG Images (*.svg *.SVG);;'))
-        if file_name != '':
+        if file_name:
             self.organisation_logo_path_line_edit.setText(file_name)
 
     def open_report_template_path(self):
         """Open File dialog to choose the report template path."""
         # noinspection PyCallByClass,PyTypeChecker
-        dir_name = QFileDialog.getExistingDirectory(
+        directory_name = QFileDialog.getExistingDirectory(
             self,
             self.tr('Templates directory'),
-            '',
+            self.leReportTemplatePath.text(),
             QFileDialog.ShowDirsOnly)
-        self.leReportTemplatePath.setText(dir_name)
+        if directory_name:
+            self.leReportTemplatePath.setText(directory_name)
 
     def toggle_logo_path(self):
         """Set state of logo path line edit and button."""
@@ -642,7 +645,8 @@ class OptionsDialog(QDialog, FORM_CLASS):
             # Add to attribute
             self.default_value_parameter_containers.append(parameter_container)
 
-    def age_ratios(self):
+    @staticmethod
+    def age_ratios():
         """Helper to get list of age ratio from the options dialog.
 
         :returns: List of age ratio.
