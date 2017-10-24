@@ -21,6 +21,8 @@ from safe.gis.vector.summary_2_aggregation import aggregation_summary
 from safe.gis.vector.summary_3_analysis import analysis_summary
 from safe.gis.vector.summary_4_exposure_summary_table import (
     exposure_summary_table, summarize_result)
+from safe.gis.vector.summary_5_multi_exposure import (
+    multi_exposure_aggregation_summary, multi_exposure_analysis_summary)
 from safe.gis.sanity_check import check_inasafe_fields
 
 qgis_iface()
@@ -31,7 +33,7 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
-class TestAggregateSummary(unittest.TestCase):
+class TestSummary(unittest.TestCase):
 
     """Summary calculation tests."""
 
@@ -252,3 +254,81 @@ class TestAggregateSummary(unittest.TestCase):
         self.assertIsNotNone(productivity_summary)
         self.assertIsNotNone(production_cost_summary)
         self.assertIsNotNone(production_value_summary)
+
+    def test_aggregation_multi_exposure(self):
+        """Test we can merge two aggregation summary layer."""
+        aggregation_summary_buildings = load_test_vector_layer(
+            'gisv4',
+            'intermediate',
+            'summaries',
+            'multi_exposure_analysis_buildings.geojson'
+        )
+
+        aggregation_summary_roads = load_test_vector_layer(
+            'gisv4',
+            'intermediate',
+            'summaries',
+            'multi_exposure_analysis_roads.geojson'
+        )
+
+        aggregation = load_test_vector_layer(
+            'gisv4',
+            'aggregation',
+            'aggregation_cleaned.geojson',
+            clone=True)
+
+        aggregation = multi_exposure_aggregation_summary(
+            aggregation,
+            [
+                aggregation_summary_buildings,
+                aggregation_summary_roads
+            ]
+        )
+
+    def test_analysis_multi_exposure(self):
+        """Test we can merge two analysis layers."""
+        analysis_summary_buildings = load_test_vector_layer(
+            'gisv4',
+            'intermediate',
+            'summaries',
+            'multi_exposure_analysis_buildings.geojson'
+        )
+
+        analysis_summary_roads = load_test_vector_layer(
+            'gisv4',
+            'intermediate',
+            'summaries',
+            'multi_exposure_analysis_roads.geojson'
+        )
+
+        analysis = load_test_vector_layer(
+            'gisv4', 'impacts', 'multi_exposure_analysis.geojson', clone=True)
+
+        analysis = multi_exposure_analysis_summary(
+            analysis,
+            [
+                analysis_summary_buildings,
+                analysis_summary_roads
+            ]
+        )
+
+        concatenation = []
+
+        iterator = analysis_summary_buildings.getFeatures()
+        feature = next(iterator)
+        attributes = feature.attributes()
+        self.assertEqual(len(attributes), 9)
+        concatenation.extend(attributes[1:])  # We drop analysis_name
+
+        iterator = analysis_summary_roads.getFeatures()
+        feature = next(iterator)
+        attributes = feature.attributes()
+        self.assertEqual(len(attributes), 9)
+        concatenation.extend(attributes[1:])  # We drop analysis_name
+
+        iterator = analysis.getFeatures()
+        feature = next(iterator)
+        attributes = feature.attributes()
+        self.assertEqual(len(attributes), 17)
+        # Concatenation is a subset of attributes
+        self.assertTrue(set(concatenation) < set(attributes))

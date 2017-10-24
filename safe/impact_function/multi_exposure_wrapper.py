@@ -8,21 +8,44 @@ This class will manage how to launch and optimize a multi exposure analysis.
 
 import logging
 from datetime import datetime
+from os import makedirs
+from os.path import join, exists
 
 from safe import messaging as m
+from safe.common.utilities import temp_dir
+from safe.datastore.datastore import DataStore
+from safe.datastore.folder import Folder
 from safe.definitions.constants import (
     PREPARE_SUCCESS,
     PREPARE_FAILED_BAD_INPUT,
     ANALYSIS_FAILED_BAD_INPUT,
     ANALYSIS_SUCCESS,
 )
+from safe.definitions.layer_purposes import (
+    layer_purpose_analysis_impacted,
+    layer_purpose_aggregation_summary,
+)
+from safe.definitions.utilities import get_name
+from safe.gis.tools import geometry_type
+from safe.gis.vector.prepare_vector_layer import prepare_vector_layer
+from safe.gis.vector.summary_5_multi_exposure import (
+    multi_exposure_analysis_summary,
+)
 from safe.gui.widgets.message import generate_input_error_message
+from safe.impact_function.create_extra_layers import create_analysis_layer
 from safe.impact_function.impact_function import ImpactFunction
 from safe.impact_function.impact_function_utilities import check_input_layer
 from safe.utilities.gis import deep_duplicate_layer
 from safe.utilities.i18n import tr
+from safe.utilities.settings import setting
+from safe.utilities.utilities import replace_accentuated_characters
 
 LOGGER = logging.getLogger('InaSAFE')
+
+__copyright__ = "Copyright 2017, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 
 class MultiExposureImpactFunction(object):
@@ -42,13 +65,45 @@ class MultiExposureImpactFunction(object):
         self._impact_functions = []
         self._current_impact_function = None
 
+        # Datastore when to save layers specific to the multi-exposure.
+        # Individual IF will have the default datatstore provided by the IF.
+        self._datastore = None
+
+        # Layers
+        self._aggregation_summary = None
+        self._analysis_summary = None
+
         # Metadata
         self.callback = None
         self.debug = False
+        self._name = None
+        self._unique_name = None
         self._is_ready = False
         self._start_datetime = None
         self._end_datetime = None
         self._duration = 0
+        self.analysis_extent = None
+
+    @property
+    def datastore(self):
+        """Return the current datastore.
+
+        :return: The datastore.
+        :rtype: Datastore.Datastore
+        """
+        return self._datastore
+
+    @datastore.setter
+    def datastore(self, datastore):
+        """Setter for the datastore.
+
+        :param datastore: The datastore.
+        :type datastore: DataStore
+        """
+        if isinstance(datastore, DataStore):
+            self._datastore = datastore
+        else:
+            raise Exception('%s is not a valid datastore.' % datastore)
 
     @property
     def hazard(self):
@@ -214,11 +269,94 @@ class MultiExposureImpactFunction(object):
             message = tr('You need to run `prepare` first.')
             return ANALYSIS_FAILED_BAD_INPUT, message
 
-        for impact_function in self._impact_functions:
+        hazard_name = get_name(self.hazard.keywords.get('hazard'))
+        hazard_geometry_name = get_name(geometry_type(self.hazard))
+        self._name = (
+            u'Multi exposure {hazard_type} {hazard_geometry} On '.format(
+                hazard_type=hazard_name, hazard_geometry=hazard_geometry_name))
+        exposures_strings = []
+        for exposure in self.exposures:
+            exposure_name = get_name(exposure.keywords.get('exposure'))
+            exposure_geometry_name = get_name(geometry_type(exposure))
+            exposures_strings.append(
+                u'{exposure_type} {exposure_geometry}'.format(
+                    exposure_type=exposure_name,
+                    exposure_geometry=exposure_geometry_name))
+        self._name += ', '.join(exposures_strings)
+
+        self._unique_name = self._name.replace(' ', '')
+        self._unique_name = replace_accentuated_characters(self._unique_name)
+        now = datetime.now()
+        date = now.strftime('%d%B%Y').decode('utf8')
+        # We need to add milliseconds to be sure to have a unique name.
+        # Some tests are executed in less than a second.
+        time = now.strftime('%Hh%M-%S.%f').decode('utf8')
+        self._unique_name = '%s_%s_%s' % (self._unique_name, date, time)
+
+        if not self._datastore:
+            # By default, results will go in a temporary folder.
+            # Users are free to set their own datastore with the setter.
+
+            default_user_directory = setting('defaultUserDirectory')
+            if default_user_directory:
+                path = join(default_user_directory, self._unique_name)
+                if not exists(path):
+                    makedirs(path)
+                self._datastore = Folder(path)
+            else:
+                self._datastore = Folder(temp_dir(sub_dir=self._unique_name))
+
+            self._datastore.default_vector_format = 'geojson'
+        LOGGER.info('Datastore : %s' % self.datastore.uri_path)
+
+        self._aggregation_summary = prepare_vector_layer(self.aggregation)
+
+        analysis_layers = []
+
+        for i, impact_function in enumerate(self._impact_functions):
             self._current_impact_function = impact_function
             LOGGER.info('Running %s' % impact_function.name)
+            if isinstance(self._datastore, Folder):
+                # We can include this analysis in the parent datastore.
+                # We can't do that with a geopackage.
+                current_name = impact_function.name.replace(' ', '')
+                current_name = replace_accentuated_characters(current_name)
+                folder = temp_dir(join(self._datastore.uri_path, current_name))
+                if not exists(folder):
+                    makedirs(folder)
+                impact_function.datastore = Folder(folder)
+                impact_function.datastore.default_vector_format = 'geojson'
+
             code, message = impact_function.run()
             if code != ANALYSIS_SUCCESS:
                 return code, message
+
+            if i == 1:
+                self.analysis_extent = impact_function.analysis_extent
+                self._analysis_summary = create_analysis_layer(
+                    self.analysis_extent,
+                    impact_function.exposure.crs(),
+                    self._name)
+
+            analysis_layers.append(impact_function.analysis_impacted)
+
+        self._analysis_summary = multi_exposure_analysis_summary(
+            self._analysis_summary, analysis_layers)
+
+        # Add all layers to the datastore
+        result, name = self._datastore.add_layer(
+            self._aggregation_summary,
+            layer_purpose_aggregation_summary['key'])
+        if not result:
+            raise Exception(
+                tr('Something went wrong with the datastore : '
+                   '{error_message}').format(error_message=name))
+
+        result, name = self._datastore.add_layer(
+            self._analysis_summary, layer_purpose_analysis_impacted['key'])
+        if not result:
+            raise Exception(
+                tr('Something went wrong with the datastore : '
+                   '{error_message}').format(error_message=name))
 
         return ANALYSIS_SUCCESS, None

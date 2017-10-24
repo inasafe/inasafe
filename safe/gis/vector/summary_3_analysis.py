@@ -46,10 +46,10 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
     | haz_id | haz_class | aggr_id | aggr_name | total_feature |
 
     Target layer :
-    | analysis_id |
+    | analysis_name |
 
     Output layer :
-    | analysis_id | count_hazard_class | affected_count | total |
+    | analysis_name | count_hazard_class | affected_count | total |
 
     :param aggregate_hazard: The layer to aggregate vector layer.
     :type aggregate_hazard: QgsVectorLayer
