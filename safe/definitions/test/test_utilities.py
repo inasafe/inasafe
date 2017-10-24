@@ -72,6 +72,7 @@ from safe.definitions.utilities import (
     get_field_groups,
     update_template_component,
     get_name,
+    get_class_name,
     set_provenance,
     get_provenance,
     generate_default_profile,
@@ -110,6 +111,17 @@ class TestDefinitionsUtilities(unittest.TestCase):
         not_exist_key = 'Mega flux capacitor'
         not_found_name = get_name(not_exist_key)
         self.assertEqual(not_exist_key, not_found_name)
+
+    def test_get_class_name(self):
+        """Test get_class_name method."""
+        class_name = get_class_name('high', generic_hazard_classes['key'])
+        self.assertEqual(class_name, generic_hazard_classes['classes'][0][
+            'name'])
+
+        class_name = get_class_name('not a class', generic_hazard_classes[
+            'key'])
+        self.assertEqual(class_name, 'not a class')
+
 
     def test_layer_purpose_for_layer(self):
         """Test for purpose_for_layer method."""
