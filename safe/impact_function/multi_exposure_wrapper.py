@@ -85,6 +85,28 @@ class MultiExposureImpactFunction(object):
         self.analysis_extent = None
 
     @property
+    def name(self):
+        """The name of the impact function.
+
+        :returns: The name.
+        :rtype: basestring
+        """
+        return self._name
+
+    @property
+    def outputs(self):
+        """List of layers containing outputs from the multi exposure IF.
+
+        :returns: A list of vector layers.
+        :rtype: list
+        """
+        outputs = [
+            self._aggregation_summary,
+            self._analysis_summary
+        ]
+        return outputs
+
+    @property
     def datastore(self):
         """Return the current datastore.
 

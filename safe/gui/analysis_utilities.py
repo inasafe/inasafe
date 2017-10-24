@@ -8,6 +8,7 @@ from copy import deepcopy
 
 from PyQt4.QtCore import QDir, Qt
 from qgis.core import (
+    QgsLayerTreeGroup,
     QgsMapLayerRegistry,
     QgsProject,
     QgsRasterLayer,
@@ -123,11 +124,14 @@ def generate_report(impact_function, iface):
     return error_code, message
 
 
-def add_impact_layers_to_canvas(impact_function, iface):
+def add_impact_layers_to_canvas(impact_function, group=None, iface=None):
     """Helper method to add impact layer to QGIS from impact function.
 
     :param impact_function: The impact function used.
     :type impact_function: ImpactFunction
+
+    :param group: An existing group as a parent, optional.
+    :type group: QgsLayerTreeGroup
 
     :param iface: QGIS QGisAppInterface instance.
     :type iface: QGisAppInterface
@@ -135,10 +139,14 @@ def add_impact_layers_to_canvas(impact_function, iface):
     layers = impact_function.outputs
     name = impact_function.name
 
-    # noinspection PyArgumentList
-    root = QgsProject.instance().layerTreeRoot()
-    group_analysis = root.insertGroup(0, name)
-    group_analysis.setVisible(Qt.Checked)
+    if iface:
+        # noinspection PyArgumentList
+        root = QgsProject.instance().layerTreeRoot()
+        group_analysis = root.insertGroup(0, name)
+        group_analysis.setVisible(Qt.Checked)
+    else:
+        group_analysis = group
+
     for layer in layers:
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayer(layer, False)
@@ -161,15 +169,14 @@ def add_impact_layers_to_canvas(impact_function, iface):
         # Let's enable only the more detailed layer. See #2925
         if layer.id() in visible_layers:
             layer_node.setVisible(Qt.Checked)
-        elif is_raster_layer(layer):
-            layer_node.setVisible(Qt.Checked)
         else:
             layer_node.setVisible(Qt.Unchecked)
 
         # we need to set analysis_impacted as an active layer because we need
         # to get all qgis variables that we need from this layer for
         # infographic.
-        iface.setActiveLayer(impact_function.analysis_impacted)
+        if iface:
+            iface.setActiveLayer(impact_function.analysis_impacted)
 
 
 def add_debug_layers_to_canvas(impact_function):
