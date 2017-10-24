@@ -25,10 +25,10 @@ from qgis.core import (
 from safe.datastore.folder import Folder
 from safe.gis.vector.tools import create_memory_layer
 
-__author__ = 'etienne@kartoza.com'
-__date__ = '20/04/2016'
-__copyright__ = (
-    'Copyright 2016, Australia Indonesia Facility for Disaster Reduction')
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 """
 BE CAREFUL :

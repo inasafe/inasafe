@@ -2,6 +2,8 @@
 
 """Definitions relating to fields."""
 
+from copy import deepcopy
+
 from PyQt4.QtCore import QVariant
 
 from safe.definitions import concepts
@@ -2122,6 +2124,56 @@ population_displaced_per_mmi = {
     'replace_null': False
 }
 
+# Multi exposure fields
+# Count for each hazard class, we inherit from hazard_count_field, and we
+# overwrite only the key, name and field_name
+exposure_hazard_count_field = deepcopy(hazard_count_field)
+exposure_hazard_count_field['key'] = '%s_' + hazard_count_field['key']
+exposure_hazard_count_field['name'] = tr('Total %s %s')
+exposure_hazard_count_field['field_name'] = (
+    '%s_' + hazard_count_field['field_name'])
+exposure_hazard_count_field['type'] = QVariant.Double
+
+# Total affected per exposure
+exposure_total_affected_field = deepcopy(total_affected_field)
+exposure_total_affected_field['key'] = '%s_' + total_affected_field['key']
+exposure_total_affected_field['name'] = tr('Total Affected %s')
+exposure_total_affected_field['field_name'] = (
+    '%s_' + total_affected_field['field_name'])
+exposure_total_affected_field['type'] = QVariant.Double
+
+# Total not affected per exposure
+exposure_total_not_affected_field = deepcopy(total_not_affected_field)
+exposure_total_not_affected_field['key'] = (
+    '%s_' + total_not_affected_field['key'])
+exposure_total_not_affected_field['name'] = tr('Total Not Affected %s')
+exposure_total_not_affected_field['field_name'] = (
+    '%s_' + total_not_affected_field['field_name'])
+exposure_total_not_affected_field['type'] = QVariant.Double
+
+# Total exposed per exposure
+exposure_total_exposed_field = deepcopy(total_exposed_field)
+exposure_total_exposed_field['key'] = '%s_' + total_exposed_field['key']
+exposure_total_exposed_field['name'] = tr('Total Exposed %s')
+exposure_total_exposed_field['field_name'] = (
+    '%s_' + total_exposed_field['field_name'])
+exposure_total_exposed_field['type'] = QVariant.Double
+
+# Total not exposed per exposure
+exposure_total_not_exposed_field = deepcopy(total_not_exposed_field)
+exposure_total_not_exposed_field['key'] = (
+    '%s_' + total_not_exposed_field['key'])
+exposure_total_not_exposed_field['name'] = tr('Total Not Exposed %s')
+exposure_total_not_exposed_field['field_name'] = (
+    '%s_' + total_not_exposed_field['field_name'])
+exposure_total_not_exposed_field['type'] = QVariant.Double
+
+# Total per exposure
+exposure_total_field = deepcopy(total_field)
+exposure_total_field['key'] = '%s_' + total_field['key']
+exposure_total_field['name'] = tr('Total %s')
+exposure_total_field['field_name'] = '%s_' + total_field['field_name']
+exposure_total_field['type'] = QVariant.Double
 
 # Productivity field
 productivity_rate_field = {
@@ -2456,6 +2508,16 @@ analysis_fields = [
     total_not_exposed_field,
     total_exposed_field,
     total_field
+]
+
+multiexposure_analysis_fields = [
+    analysis_name_field,
+    exposure_hazard_count_field,
+    exposure_total_affected_field,
+    exposure_total_not_affected_field,
+    exposure_total_exposed_field,
+    exposure_total_not_exposed_field,
+    exposure_total_field,
 ]
 
 # Field that can be used to summarize / aggregate the result in exposure

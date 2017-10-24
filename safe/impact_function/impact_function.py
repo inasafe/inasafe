@@ -1957,6 +1957,10 @@ class ImpactFunction(object):
         self._analysis_impacted = create_analysis_layer(
             self.analysis_extent, self.aggregation.crs(), self.name)
         self.debug_layer(self._analysis_impacted)
+        self._analysis_impacted.keywords['exposure_keywords'] = (
+            copy_layer_keywords(self.exposure.keywords))
+        self._analysis_impacted.keywords['hazard_keywords'] = (
+            copy_layer_keywords(self.hazard.keywords))
 
     @profile
     def hazard_preparation(self):
@@ -2633,30 +2637,35 @@ class ImpactFunction(object):
         if exposure_summary_path:
             impact_function._exposure_summary = load_layer(
                 exposure_summary_path)[0]
+
         # aggregate_hazard_impacted
         aggregate_hazard_impacted_path = get_provenance(
             provenance, provenance_layer_aggregate_hazard_impacted)
         if aggregate_hazard_impacted_path:
             impact_function._aggregate_hazard_impacted = load_layer(
                 aggregate_hazard_impacted_path)[0]
+
         # aggregation_summary
         aggregation_summary_path = get_provenance(
             provenance, provenance_layer_aggregation_summary)
         if aggregation_summary_path:
             impact_function._aggregation_summary = load_layer(
                 aggregation_summary_path)[0]
+
         # analysis_impacted
         analysis_impacted_path = get_provenance(
             provenance, provenance_layer_analysis_impacted)
         if analysis_impacted_path:
             impact_function._analysis_impacted = load_layer(
                 analysis_impacted_path)[0]
+
         # exposure_summary_table
         exposure_summary_table_path = get_provenance(
             provenance, provenance_layer_exposure_summary_table)
         if exposure_summary_table_path:
             impact_function._exposure_summary_table = load_layer(
                 exposure_summary_table_path)[0]
+
         # profiling
         # Skip if it's debug mode
         if not impact_function.debug_mode:

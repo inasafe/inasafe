@@ -26,7 +26,7 @@ __revision__ = '$Format:%H$'
 qgis_iface()
 
 
-class TestImpactFunction(unittest.TestCase):
+class TestMultiExposureImpactFunction(unittest.TestCase):
 
     """Test Multi Exposure Impact Function."""
 

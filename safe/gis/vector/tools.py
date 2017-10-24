@@ -251,7 +251,7 @@ def create_spatial_index(layer):
     return spatial_index
 
 
-def create_field_from_definition(field_definition, name=None):
+def create_field_from_definition(field_definition, name=None, sub_name=None):
     """Helper to create a field from definition.
 
     :param field_definition: The definition of the field.
@@ -261,6 +261,10 @@ def create_field_from_definition(field_definition, name=None):
         string formatting.
     :type name: basestring
 
+    :param sub_name: The name is required if the field name is dynamic and need
+        a string formatting.
+    :type sub_name: basestring
+
     :return: The new field.
     :rtype: QgsField
     """
@@ -269,8 +273,13 @@ def create_field_from_definition(field_definition, name=None):
     if isinstance(name, QPyNullVariant):
         name = 'NULL'
 
-    if name:
+    if isinstance(sub_name, QPyNullVariant):
+        sub_name = 'NULL'
+
+    if name and not sub_name:
         field.setName(field_definition['field_name'] % name)
+    elif name and sub_name:
+        field.setName(field_definition['field_name'] % (name, sub_name))
     else:
         field.setName(field_definition['field_name'])
 
