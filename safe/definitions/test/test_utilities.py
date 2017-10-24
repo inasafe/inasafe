@@ -73,7 +73,8 @@ from safe.definitions.utilities import (
     update_template_component,
     get_name,
     set_provenance,
-    get_provenance
+    get_provenance,
+    generate_default_profile,
 )
 
 from safe.utilities.resources import resources_path
@@ -510,6 +511,12 @@ class TestDefinitionsUtilities(unittest.TestCase):
             provenance_collection, provenance_user))
         self.assertIsNone(
             get_provenance(provenance_collection, provenance_crs))
+
+    def test_generate_default_profile(self):
+        """Test for generate_default_profile method."""
+        default_profile = generate_default_profile()
+        from  pprint import pprint
+        pprint(default_profile)
 
 
 if __name__ == '__main__':
