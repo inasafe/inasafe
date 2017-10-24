@@ -54,9 +54,10 @@ from safe.definitions.layer_purposes import (
     layer_purpose_exposure,
     layer_purpose_aggregation)
 from safe.definitions.reports.components import (
-    standard_impact_report_metadata_pdf, map_report)
+    standard_impact_report_metadata_pdf,
+    map_report,
+    all_default_report_components)
 from safe.definitions.utilities import update_template_component
-from safe.gui.analysis_utilities import generate_report
 from safe.gui.tools.help.batch_help import batch_help
 from safe.impact_function.impact_function import ImpactFunction
 from safe.messaging import styles
@@ -501,8 +502,9 @@ class BatchDialog(QDialog, FORM_CLASS):
 
                         # generate map report and impact report
                         try:
-                            error_code, message = generate_report(
-                                impact_function, self.iface)
+                            error_code, message = (
+                                impact_function.generate_report(
+                                    all_default_report_components))
 
                             # this line is to save the report in user specified
                             # directory.

@@ -23,8 +23,8 @@ from safe.definitions.constants import (
     HAZARD_EXPOSURE_VIEW,
     HAZARD_EXPOSURE_BOUNDINGBOX
 )
-from safe.gui.analysis_utilities import (
-    add_impact_layers_to_canvas, generate_report)
+from safe.definitions.reports.components import all_default_report_components
+from safe.gui.analysis_utilities import add_impact_layers_to_canvas
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.widgets.message import enable_messaging
@@ -184,7 +184,8 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
             legend = self.iface.legendInterface()
             legend.setLayerVisible(qgis_exposure, False)
 
-        error_code, message = generate_report(self.impact_function, self.iface)
+        error_code, message = self.impact_function.generate_report(
+            all_default_report_components)
 
         if error_code == ImpactReport.REPORT_GENERATION_FAILED:
             self.hide_busy()

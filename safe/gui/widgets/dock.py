@@ -63,15 +63,15 @@ from safe.definitions.reports import (
 from safe.definitions.reports.components import (
     standard_impact_report_metadata_pdf,
     map_report,
-    infographic_report)
+    infographic_report,
+    all_default_report_components)
 from safe.definitions.utilities import (
     update_template_component,
     get_name,
     definition)
 from safe.gui.analysis_utilities import (
     add_impact_layers_to_canvas,
-    add_debug_layers_to_canvas,
-    generate_report)
+    add_debug_layers_to_canvas)
 from safe.gui.gui_utilities import layer_from_combo, add_ordered_combo_item
 from safe.gui.tools.about_dialog import AboutDialog
 from safe.gui.tools.help_dialog import HelpDialog
@@ -1190,8 +1190,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             legend.setLayerVisible(qgis_exposure, False)
 
         if setting('generate_report', True, bool):
-            error_code, message = generate_report(
-                self.impact_function, self.iface)
+            error_code, message = self.impact_function.generate_report(
+                all_default_report_components)
 
             if error_code == ImpactReport.REPORT_GENERATION_FAILED:
                 self.hide_busy()

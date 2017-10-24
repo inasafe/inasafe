@@ -5,13 +5,14 @@
 import getpass
 import logging
 from collections import OrderedDict
+from copy import deepcopy
 from datetime import datetime
 from os import makedirs
 from os.path import join, exists, dirname
 from socket import gethostname
 
 from PyQt4.Qt import PYQT_VERSION_STR
-from PyQt4.QtCore import QT_VERSION_STR, QSettings
+from PyQt4.QtCore import QT_VERSION_STR, QSettings, QDir
 from osgeo import gdal
 from qgis.core import (
     QgsGeometry,
@@ -21,7 +22,9 @@ from qgis.core import (
     QgsVectorLayer,
     QGis,
     QgsMapLayer,
+    QgsRasterLayer,
 )
+from qgis.utils import iface
 
 from safe import messaging as m
 from safe.common.exceptions import (
@@ -49,7 +52,7 @@ from safe.definitions.constants import (
     PREPARE_FAILED_BAD_LAYER,
     PREPARE_FAILED_BAD_CODE)
 from safe.definitions.earthquake import EARTHQUAKE_FUNCTIONS
-from safe.definitions.exposure import indivisible_exposure
+from safe.definitions.exposure import indivisible_exposure, exposure_population
 from safe.definitions.fields import (
     size_field,
     exposure_class_field,
@@ -112,6 +115,8 @@ from safe.definitions.provenance import (
     provenance_crs,
     provenance_debug_mode,
 )
+from safe.definitions.reports.components import infographic_report, map_report
+from safe.definitions.reports.infographic import map_overview
 from safe.definitions.styles import (
     aggregation_color,
     aggregation_width,
@@ -122,7 +127,8 @@ from safe.definitions.utilities import (
     get_non_compulsory_fields,
     get_name,
     set_provenance,
-    get_provenance
+    get_provenance,
+    update_template_component
 )
 from safe.gis.raster.clip_bounding_box import clip_by_extent
 from safe.gis.raster.polygonize import polygonize
@@ -150,6 +156,8 @@ from safe.gis.vector.summary_4_exposure_summary_table import (
 from safe.gis.vector.tools import remove_fields
 from safe.gis.vector.union import union
 from safe.gis.vector.update_value_map import update_value_map
+from safe.gui.analysis_utilities import (
+    add_layer_to_canvas, remove_layer_from_canvas)
 from safe.gui.widgets.message import generate_input_error_message
 from safe.impact_function.create_extra_layers import (
     create_analysis_layer,
@@ -170,6 +178,8 @@ from safe.impact_function.style import (
 )
 from safe.messaging import styles
 from safe.utilities.default_values import get_inasafe_default_value_qsetting
+from safe.report.impact_report import ImpactReport
+from safe.report.report_metadata import ReportMetadata
 from safe.utilities.gis import (
     is_vector_layer, is_raster_layer, wkt_to_rectangle)
 from safe.utilities.gis import qgis_version
@@ -2677,3 +2687,89 @@ class ImpactFunction(object):
             impact_function._crs = None
 
         return impact_function
+
+    def generate_report(self, components):
+        """Generate Impact Report independently by the Impact Function.
+
+        :param components: Report components to be generated.
+        :type components: list
+        """
+        # don't generate infographic if exposure is not population
+        exposure_type = definition(
+            self.provenance['exposure_keywords']['exposure'])
+        map_overview_layer = None
+
+        generated_components = deepcopy(components)
+        if exposure_type != exposure_population and (
+                infographic_report in generated_components):
+            generated_components.remove(infographic_report)
+        else:
+            map_overview_layer = QgsRasterLayer(
+                map_overview['path'], 'Overview')
+            add_layer_to_canvas(
+                map_overview_layer, map_overview['id'], self)
+
+        extra_layers = []
+        print_atlas = setting('print_atlas_report', False, bool)
+
+        hazard_type = definition(
+            self.provenance['hazard_keywords']['hazard'])
+        aggregation_summary_layer = self.aggregation_summary
+
+        if print_atlas:
+            extra_layers.append(aggregation_summary_layer)
+
+        for component in generated_components:
+            # create impact report instance
+
+            if component['key'] == map_report['key']:
+                report_metadata = ReportMetadata(
+                    metadata_dict=update_template_component(
+                        component=component,
+                        hazard=hazard_type,
+                        exposure=exposure_type))
+            else:
+                report_metadata = ReportMetadata(
+                    metadata_dict=update_template_component(component))
+
+            impact_report = ImpactReport(
+                iface,
+                report_metadata,
+                impact_function=self,
+                extra_layers=extra_layers)
+
+            # Get other setting
+            logo_path = setting('organisation_logo_path', None, str)
+            impact_report.inasafe_context.organisation_logo = logo_path
+
+            disclaimer_text = setting('reportDisclaimer', None, str)
+            impact_report.inasafe_context.disclaimer = disclaimer_text
+
+            north_arrow_path = setting('north_arrow_path', None, str)
+            impact_report.inasafe_context.north_arrow = north_arrow_path
+
+            # get the extent of impact layer
+            impact_report.qgis_composition_context.extent = \
+                self.impact.extent()
+
+            # generate report folder
+
+            # no other option for now
+            # TODO: retrieve the information from data store
+            if isinstance(self.datastore.uri, QDir):
+                layer_dir = self.datastore.uri.absolutePath()
+            else:
+                # No other way for now
+                return
+
+            # We will generate it on the fly without storing it after datastore
+            # supports
+            impact_report.output_folder = join(layer_dir, 'output')
+            error_code, message = impact_report.process_components()
+            if error_code == ImpactReport.REPORT_GENERATION_FAILED:
+                break
+
+        if map_overview_layer:
+            remove_layer_from_canvas(map_overview_layer, self)
+
+        return error_code, message
