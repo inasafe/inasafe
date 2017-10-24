@@ -2,6 +2,7 @@
 """InaSAFE Profile Widget."""
 
 from PyQt4.QtGui import QTreeWidget, QTreeWidgetItem, QCheckBox, QDoubleSpinBox
+from safe.definitions.utilities import get_name, get_class_name
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
@@ -32,25 +33,25 @@ class ProfileWidget(QTreeWidget, object):
         widget_items = []
         for hazard, classifications in self.data.items():
             hazard_widget_item = QTreeWidgetItem()
-            hazard_widget_item.setText(0, hazard)
+            hazard_widget_item.setText(0, get_name(hazard))
             for classification, classes in classifications.items():
                 classification_widget_item = QTreeWidgetItem()
-                classification_widget_item.setText(0, classification)
+                classification_widget_item.setText(0, get_name(classification))
                 hazard_widget_item.addChild(classification_widget_item)
                 for the_class, the_value in classes.items():
                     the_class_widget_item = QTreeWidgetItem()
-                    the_class_widget_item.setText(0, the_class)
+                    the_class_widget_item.setText(
+                        0, get_class_name(the_class, classification))
                     classification_widget_item.addChild(the_class_widget_item)
                     # Adding widget must be happened after addChild
                     affected_check_box = QCheckBox(self)
                     affected_check_box.setChecked(the_value['affected'])
                     self.setItemWidget(
                         the_class_widget_item, 1, affected_check_box)
-                    displacement_rate_spinbox = QDoubleSpinBox(self)
-                    displacement_rate_spinbox.setMinimum(0.0)
-                    displacement_rate_spinbox.setMinimum(1.0)
+                    displacement_rate_spinbox = PercentageSpinBox(self)
                     displacement_rate_spinbox.setValue(
                         the_value['displacement_rate'])
+                    displacement_rate_spinbox.setEnabled(the_value['affected'])
                     self.setItemWidget(
                         the_class_widget_item, 2, displacement_rate_spinbox)
                     # Behaviour when the check box is checked
@@ -62,9 +63,25 @@ class ProfileWidget(QTreeWidget, object):
 
         return widget_items
 
-#
-# class CustomTreeWidgetItem(QTreeWidgetItem):
-#
-#     """Custom Tree Widget Item with Checkbox and Double Spinbox."""
-#
-#     def __init__(self, parent):
+
+class PercentageSpinBox(QDoubleSpinBox):
+
+    """Custom Spinbox for percentage 0 % - 100 %."""
+
+    def __init__(self, parent):
+        """Constructor."""
+        super(PercentageSpinBox, self).__init__(parent)
+        self.setRange(0.0, 1.0)
+        self.setSingleStep(0.01)
+        # noinspection PyUnresolvedReferences
+
+    def textFromValue(self, value):
+        """Modify text representation to get percentage representation.
+
+        :param value: The real value.
+        :type value: float
+
+        :returns: The percentage representation.
+        :rtype: str
+        """
+        return '%d %%' % (value * 100)

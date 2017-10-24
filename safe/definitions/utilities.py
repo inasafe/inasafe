@@ -289,7 +289,7 @@ def definition(keyword, key=None):
     return None
 
 
-def get_name(keyword):
+def get_name(key):
     """Given a keyword, try to get the name of it.
 
     .. versionadded:: 4.2
@@ -302,17 +302,36 @@ def get_name(keyword):
     name = kio.get_name(keyword)
     print name
 
-    :param keyword: A keyword key.
-    :type keyword: str
+    :param key: A keyword key.
+    :type key: str
 
     :returns: The name of the keyword
     :rtype: str
     """
-    definition_dict = definition(keyword)
+    definition_dict = definition(key)
     if definition_dict:
-        return definition_dict.get('name', keyword)
+        return definition_dict.get('name', key)
     # Else, return the keyword
-    return keyword
+    return key
+
+
+def get_class_name(class_key, classification_key):
+    """Helper to get class name from a class_key of a classification.
+
+    :param class_key: The key of the class.
+    :type class_key: str
+
+    :type classification_key: The key of a classification.
+    :param classification_key: str
+
+    :returns: The name of the class.
+    :rtype: str
+    """
+    classification = definition(classification_key)
+    for the_class in classification['classes']:
+        if the_class.get('key') == class_key:
+            return the_class.get('name', class_key)
+    return class_key
 
 
 def get_allowed_geometries(layer_purpose_key):
@@ -579,7 +598,8 @@ def get_provenance(provenance_collection, provenance_dict):
     """
     return provenance_collection.get(provenance_dict['provenance_key'])
 
-#TODO(IS): Add parameter to get from setting, or just get it from setting
+
+# TODO(IS): Add parameter to get from setting, or just get it from setting
 def generate_default_profile():
     """Helper to create data format from default definitions.
     Example:
