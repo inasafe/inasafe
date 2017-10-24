@@ -74,7 +74,7 @@
           <attribute name="title">
            <string>Organisation Profile</string>
           </attribute>
-          <widget class="QWidget" name="">
+          <widget class="QWidget" name="layoutWidget">
            <property name="geometry">
             <rect>
              <x>22</x>
@@ -174,15 +174,21 @@
               <item>
                <widget class="QLabel" name="organisation_logo_label">
                 <property name="sizePolicy">
-                 <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-                  <horstretch>100</horstretch>
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
                   <verstretch>0</verstretch>
                  </sizepolicy>
                 </property>
                 <property name="minimumSize">
                  <size>
-                  <width>100</width>
-                  <height>0</height>
+                  <width>358</width>
+                  <height>85</height>
+                 </size>
+                </property>
+                <property name="baseSize">
+                 <size>
+                  <width>358</width>
+                  <height>83</height>
                  </size>
                 </property>
                 <property name="frameShape">

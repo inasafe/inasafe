@@ -2,14 +2,15 @@
 """InaSAFE Options Dialog"""
 
 import logging
+import os
 
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
 import qgis  # NOQA pylint: disable=unused-import
-from PyQt4.QtCore import pyqtSignature, pyqtSlot, QVariant, QSettings
+from PyQt4.QtCore import pyqtSignature, pyqtSlot, QVariant, QSettings, Qt
 from PyQt4.QtGui import (
     QDialog, QFileDialog, QDialogButtonBox, QGroupBox, QVBoxLayout,
-    QScrollArea, QWidget)
+    QScrollArea, QWidget, QPixmap,)
 from parameters.float_parameter import FloatParameter
 from parameters.integer_parameter import IntegerParameter
 from parameters.qt_widgets.parameter_container import ParameterContainer
@@ -35,7 +36,6 @@ from safe.utilities.default_values import (
 from safe.utilities.i18n import tr
 from safe.utilities.resources import get_ui_class, html_header, html_footer
 from safe.utilities.settings import setting, set_setting
-from safe.utilities.unicode import get_unicode
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -136,9 +136,6 @@ class OptionsDialog(QDialog, FORM_CLASS):
         if not self.cbxDevMode.isChecked():
             self.checkbox_generate_reports.hide()
 
-        # Set up listener for various UI
-        self.custom_organisation_logo_check_box.toggled.connect(
-            self.set_organisation_logo)
         self.custom_north_arrow_checkbox.toggled.connect(self.set_north_arrow)
         self.custom_UseUserDirectory_checkbox.toggled.connect(
             self.set_user_dir)
@@ -146,6 +143,10 @@ class OptionsDialog(QDialog, FORM_CLASS):
             self.set_templates_dir)
         self.custom_org_disclaimer_checkbox.toggled.connect(
             self.set_org_disclaimer)
+        self.custom_organisation_logo_check_box.toggled.connect(
+            self.toggle_logo_path)
+        self.organisation_logo_path_line_edit.textChanged.connect(
+            self.update_logo_preview)
 
         # Set up listener for restore defaults button
         self.restore_defaults = self.button_box_restore_defaults.button(
@@ -161,6 +162,7 @@ class OptionsDialog(QDialog, FORM_CLASS):
         # hide custom template dir toggle
         self.custom_templates_dir_checkbox.hide()
         self.splitter_custom_report.hide()
+        # self.set_organisation_logo()
 
     def save_boolean_setting(self, key, check_box):
         """Save boolean setting according to check_box state.
@@ -219,23 +221,6 @@ class OptionsDialog(QDialog, FORM_CLASS):
         # Restore text setting as line edit.
         for key, line_edit in self.text_settings.items():
             self.restore_text_setting(key, line_edit)
-
-        # Restore Organisation Logo Path
-        org_logo_path = self.settings.value(
-            'inasafe/organisation_logo_path',
-            supporters_logo_path(),
-            type=str)
-        # Check if the path is default one or not
-        custom_org_logo_flag = org_logo_path != supporters_logo_path()
-        self.organisation_logo_path_line_edit.setText(org_logo_path)
-        # If it's default path, disable line edit, button, and unchecked the
-        # check box
-        self.organisation_logo_path_line_edit.setEnabled(
-            custom_org_logo_flag)
-        self.open_organisation_logo_path_button.setEnabled(
-            custom_org_logo_flag)
-        self.custom_organisation_logo_check_box.setChecked(
-            custom_org_logo_flag)
 
         # User Directory
         user_directory_path = self.settings.value(
@@ -298,6 +283,19 @@ class OptionsDialog(QDialog, FORM_CLASS):
         self.custom_org_disclaimer_checkbox.setChecked(
             custom_org_disclaimer_flag)
         self.txtDisclaimer.setPlainText(org_disclaimer)
+
+        # Restore Organisation Logo Path
+        org_logo_path = self.settings.value(
+            'inasafe/organisation_logo_path',
+            supporters_logo_path(),
+            type=str)
+        # Check if the path is default one or not
+        custom_org_logo_flag = org_logo_path != supporters_logo_path()
+        self.organisation_logo_path_line_edit.setText(org_logo_path)
+        self.custom_organisation_logo_check_box.setChecked(
+            custom_org_logo_flag)
+        # Manually call here
+        self.update_logo_preview()
 
         # Restore InaSAFE default values
         self.restore_default_values_page()
@@ -449,8 +447,8 @@ class OptionsDialog(QDialog, FORM_CLASS):
             QFileDialog.ShowDirsOnly)
         self.leReportTemplatePath.setText(dir_name)
 
-    def set_organisation_logo(self):
-        """Auto-connect slot activated when org logo checkbox is toggled."""
+    def toggle_logo_path(self):
+        """Set state of logo path line edit and button."""
         is_checked = self.custom_organisation_logo_check_box.isChecked()
         if is_checked:
             # Use previous org logo path
@@ -465,6 +463,20 @@ class OptionsDialog(QDialog, FORM_CLASS):
         self.organisation_logo_path_line_edit.setText(path)
         self.organisation_logo_path_line_edit.setEnabled(is_checked)
         self.open_organisation_logo_path_button.setEnabled(is_checked)
+
+    def update_logo_preview(self):
+        """Update logo based on the current logo path."""
+        logo_path = self.organisation_logo_path_line_edit.text()
+        if os.path.exists(logo_path):
+            icon = QPixmap(logo_path)
+            label_size = self.organisation_logo_label.size()
+            label_size.setHeight(label_size.height() - 2)
+            label_size.setWidth(label_size.width() - 2)
+            scaled_icon = icon.scaled(
+                label_size, Qt.KeepAspectRatio)
+            self.organisation_logo_label.setPixmap(scaled_icon)
+        else:
+            self.organisation_logo_label.setText(tr("Logo not found"))
 
     def set_north_arrow(self):
         """Auto-connect slot activated when north arrow checkbox is toggled."""
