@@ -3,6 +3,7 @@
 
 from copy import deepcopy
 from os import listdir
+from collections import OrderedDict
 from os.path import join, exists, splitext
 
 from qgis.core import QgsApplication
@@ -24,7 +25,8 @@ from safe.definitions import (
     layer_purpose_hazard,
     layer_purpose_exposure,
     layer_purpose_aggregation,
-    layer_purpose_exposure_summary
+    layer_purpose_exposure_summary,
+    exposure_population,
 )
 from safe.report.report_metadata import QgisComposerComponentsMetadata
 
@@ -576,3 +578,43 @@ def get_provenance(provenance_collection, provenance_dict):
     :rtype value: object
     """
     return provenance_collection.get(provenance_dict['provenance_key'])
+
+#TODO(IS): Add parameter to get from setting, or just get it from setting
+def generate_default_profile():
+    """Helper to create data format from default definitions.
+    Example:
+
+        Flood:
+            - Flood classification A
+                - Flood class 1: affected, displacement_rate
+                - Flood class 2: affected, displacement_rate
+            - Flood classification B
+                - Flood class 1: affected, displacement_rate
+                - Flood class 2: affected, displacement_rate
+        Earthquake:
+            - EQ classification A
+                - EQ class 1: affected, displacement_rate
+                - EQ class 2: affected, displacement_rate
+            - EQ classification B
+                - EQ class 1: affected, displacement_rate
+                - EQ class 2: affected, displacement_rate
+
+    :returns: A dictionary like the format above.
+    :rtype: dict
+    """
+    data_format = {}
+    for hazard in hazard_all:
+        if exposure_population in hazard['disabled_exposures']:
+            continue
+        data_format[hazard['key']] = {}
+        for classification in hazard['classifications']:
+            data_format[hazard['key']][classification['key']] = OrderedDict()
+            for the_class in classification['classes']:
+                entry = {
+                    'affected': the_class['affected'],
+                    'displacement_rate': the_class['displacement_rate'],
+                }
+                data_format[hazard['key']][classification['key']][the_class[
+                    'key']] = entry
+
+    return data_format
