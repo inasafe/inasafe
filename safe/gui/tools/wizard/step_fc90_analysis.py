@@ -171,7 +171,8 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         LOGGER.info(tr('The impact function could run without errors.'))
 
         # Add result layer to QGIS
-        add_impact_layers_to_canvas(self.impact_function, self.parent.iface)
+        add_impact_layers_to_canvas(
+            self.impact_function, iface=self.parent.iface)
 
         # Some if-s i.e. zoom, debug, hide exposure
         if self.zoom_to_impact_flag:

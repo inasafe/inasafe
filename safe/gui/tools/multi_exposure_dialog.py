@@ -5,8 +5,17 @@
 import logging
 
 from PyQt4.QtGui import (
-    QDialog, QComboBox, QLabel, QDialogButtonBox, QApplication, QSizePolicy)
-from qgis.core import QgsMapLayerRegistry
+    QDialog,
+    QComboBox,
+    QLabel,
+    QDialogButtonBox,
+    QApplication,
+    QSizePolicy,
+)
+from PyQt4.QtCore import (
+    Qt,
+)
+from qgis.core import QgsMapLayerRegistry, QgsProject
 from qgis.utils import iface
 
 from safe import messaging as m
@@ -235,8 +244,20 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
         code, message = self._multi_exposure_if.run()
         # self.assertEqual(code, ANALYSIS_MULTI_SUCCESS, message)
 
+        root = QgsProject.instance().layerTreeRoot()
+        group_analysis = root.insertGroup(0, self._multi_exposure_if.name)
+        group_analysis.setVisible(Qt.Checked)
+
+        for layer in self._multi_exposure_if.outputs:
+            QgsMapLayerRegistry.instance().addMapLayer(layer, False)
+            layer_node = group_analysis.addLayer(layer)
+            layer_node.setVisible(Qt.Unchecked)
+
         for analysis in self._multi_exposure_if.impact_functions:
-            add_impact_layers_to_canvas(analysis, iface)
+            detailed_group = group_analysis.insertGroup(0, analysis.name)
+            detailed_group.setVisible(Qt.Checked)
+            add_impact_layers_to_canvas(analysis, group=detailed_group)
+
         disable_busy_cursor()
         self.done(QDialog.Accepted)
 
