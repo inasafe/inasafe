@@ -10,7 +10,7 @@ import qgis  # NOQA pylint: disable=unused-import
 from PyQt4.QtCore import pyqtSignature, pyqtSlot, QVariant, QSettings, Qt
 from PyQt4.QtGui import (
     QDialog, QFileDialog, QDialogButtonBox, QGroupBox, QVBoxLayout,
-    QScrollArea, QWidget, QPixmap,)
+    QScrollArea, QWidget, QPixmap, QLabel)
 from parameters.float_parameter import FloatParameter
 from parameters.integer_parameter import IntegerParameter
 from parameters.qt_widgets.parameter_container import ParameterContainer
@@ -127,16 +127,19 @@ class OptionsDialog(QDialog, FORM_CLASS):
         self.adjustSize()
 
         # Profile Preference Tab
-        self.preference_scroll_area = QScrollArea()
-        self.preference_scroll_area.setWidgetResizable(True)
-        self.preference_widget_container = QWidget()
-        self.preference_scroll_area.setWidget(self.preference_widget_container)
-        self.preference_container_layout = QVBoxLayout()
-        self.preference_widget_container.setLayout(
-            self.preference_container_layout)
-        self.preference_layout.addWidget(self.preference_scroll_area)
+        self.preference_label = QLabel()
+        self.preference_label.setText(tr(
+            'Please set your affected and displacement rate for each hazard, '
+            'classification, and its class below. The value of displacement '
+            'rate is from 1% to 100%.'
+        ))
+        self.preference_layout.addWidget(self.preference_label)
 
         # Demographic tab
+        self.demographic_label = QLabel()
+        self.demographic_label.setText(tr(
+            'Please set the global default demographic ratio below.'))
+        self.default_values_layout.addWidget(self.demographic_label)
         self.scroll_area = QScrollArea()
         self.scroll_area.setWidgetResizable(True)
         self.widget_container = QWidget()
@@ -668,7 +671,7 @@ class OptionsDialog(QDialog, FORM_CLASS):
         """Setup UI for preference page from setting."""
         data = generate_default_profile()
         self.profile_widget = ProfileWidget(parent=self, data=data)
-        self.preference_container_layout.addWidget(self.profile_widget)
+        self.preference_layout.addWidget(self.profile_widget)
 
     @staticmethod
     def age_ratios():
