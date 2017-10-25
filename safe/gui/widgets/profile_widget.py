@@ -2,8 +2,10 @@
 """InaSAFE Profile Widget."""
 
 from PyQt4.QtGui import QTreeWidget, QTreeWidgetItem, QCheckBox, QDoubleSpinBox
+from PyQt4.QtCore import Qt
 from safe.definitions.utilities import get_name, get_class_name
 from safe.utilities.i18n import tr
+from collections import OrderedDict
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -33,18 +35,19 @@ class ProfileWidget(QTreeWidget, object):
         widget_items = []
         for hazard, classifications in self.data.items():
             hazard_widget_item = QTreeWidgetItem()
-            hazard_widget_item.setData(0, 0, hazard)
+            hazard_widget_item.setData(0, Qt.UserRole, hazard)
             hazard_widget_item.setText(0, get_name(hazard))
             for classification, classes in classifications.items():
                 classification_widget_item = QTreeWidgetItem()
+                classification_widget_item.setData(
+                    0, Qt.UserRole, classification)
                 classification_widget_item.setText(0, get_name(classification))
-                classification_widget_item.setData(0, 0, classification)
                 hazard_widget_item.addChild(classification_widget_item)
                 for the_class, the_value in classes.items():
                     the_class_widget_item = QTreeWidgetItem()
+                    the_class_widget_item.setData(0, Qt.UserRole, the_class)
                     the_class_widget_item.setText(
                         0, get_class_name(the_class, classification))
-                    the_class_widget_item.setData(0, 0, the_class)
                     classification_widget_item.addChild(the_class_widget_item)
                     # Adding widget must be happened after addChild
                     affected_check_box = QCheckBox(self)
@@ -74,21 +77,21 @@ class ProfileWidget(QTreeWidget, object):
         """
         data = {}
         for hazard_item in self.widget_items:
-            hazard = hazard_item.data(0, 0)
+            hazard = hazard_item.data(0, Qt.UserRole)
             data[hazard] = {}
             classification_items = [
                 hazard_item.child(i) for i in range(hazard_item.childCount())
             ]
             for classification_item in classification_items:
-                classification = classification_item.data(0, 0)
-                data[hazard][classification] = {}
+                classification = classification_item.data(0, Qt.UserRole)
+                data[hazard][classification] = OrderedDict()
                 class_items = [
                     classification_item.child(i) for i in range(
                         classification_item.childCount()
                     )
                 ]
                 for the_class_item in class_items:
-                    the_class = the_class_item.data(0, 0)
+                    the_class = the_class_item.data(0, Qt.UserRole)
                     affected_check_box = self.itemWidget(the_class_item, 1)
                     displacement_rate_spin_box = self.itemWidget(
                         the_class_item, 2)
