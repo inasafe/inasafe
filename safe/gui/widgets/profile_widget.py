@@ -24,8 +24,8 @@ class ProfileWidget(QTreeWidget, object):
         self.header = QTreeWidgetItem(
             [tr('Classification'), tr('Affected'), tr('Displacement Rate')])
         self.setHeaderItem(self.header)
-        widget_items = self.generate_tree_model()
-        self.addTopLevelItems(widget_items)
+        self.widget_items = self.generate_tree_model()
+        self.addTopLevelItems(self.widget_items)
         self.expandAll()
 
     def generate_tree_model(self):
@@ -33,15 +33,18 @@ class ProfileWidget(QTreeWidget, object):
         widget_items = []
         for hazard, classifications in self.data.items():
             hazard_widget_item = QTreeWidgetItem()
+            hazard_widget_item.setData(0, 0, hazard)
             hazard_widget_item.setText(0, get_name(hazard))
             for classification, classes in classifications.items():
                 classification_widget_item = QTreeWidgetItem()
                 classification_widget_item.setText(0, get_name(classification))
+                classification_widget_item.setData(0, 0, classification)
                 hazard_widget_item.addChild(classification_widget_item)
                 for the_class, the_value in classes.items():
                     the_class_widget_item = QTreeWidgetItem()
                     the_class_widget_item.setText(
                         0, get_class_name(the_class, classification))
+                    the_class_widget_item.setData(0, 0, the_class)
                     classification_widget_item.addChild(the_class_widget_item)
                     # Adding widget must be happened after addChild
                     affected_check_box = QCheckBox(self)
@@ -62,6 +65,38 @@ class ProfileWidget(QTreeWidget, object):
             widget_items.append(hazard_widget_item)
 
         return widget_items
+
+    def get_data(self):
+        """Get the data from the current state of widgets.
+
+        :returns: Profile data in dictionary.
+        :rtype: dict
+        """
+        data = {}
+        for hazard_item in self.widget_items:
+            hazard = hazard_item.data(0, 0)
+            data[hazard] = {}
+            classification_items = [
+                hazard_item.child(i) for i in range(hazard_item.childCount())
+            ]
+            for classification_item in classification_items:
+                classification = classification_item.data(0, 0)
+                data[hazard][classification] = {}
+                class_items = [
+                    classification_item.child(i) for i in range(
+                        classification_item.childCount()
+                    )
+                ]
+                for the_class_item in class_items:
+                    the_class = the_class_item.data(0, 0)
+                    affected_check_box = self.itemWidget(the_class_item, 1)
+                    displacement_rate_spin_box = self.itemWidget(
+                        the_class_item, 2)
+                    data[hazard][classification][the_class] = {
+                        'affected': affected_check_box.isChecked(),
+                        'displacement_rate': displacement_rate_spin_box.value()
+                    }
+        return data
 
 
 class PercentageSpinBox(QDoubleSpinBox):
