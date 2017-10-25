@@ -42,8 +42,8 @@ def main():
 
     widget.setLayout(layout)
 
-    widget.setFixedHeight(500)
-    widget.setFixedWidth(500)
+    widget.setFixedHeight(600)
+    widget.setFixedWidth(800)
     widget.show()
 
     sys.exit(app.exec_())

@@ -1,7 +1,8 @@
 # coding=utf-8
 """InaSAFE Profile Widget."""
 
-from PyQt4.QtGui import QTreeWidget, QTreeWidgetItem, QCheckBox, QDoubleSpinBox
+from PyQt4.QtGui import (
+    QTreeWidget, QTreeWidgetItem, QCheckBox, QDoubleSpinBox, QFont)
 from PyQt4.QtCore import Qt
 from safe.definitions.utilities import get_name, get_class_name
 from safe.utilities.i18n import tr
@@ -23,12 +24,23 @@ class ProfileWidget(QTreeWidget, object):
 
         # Attributes
         self.data = data
+        # Set header
         self.header = QTreeWidgetItem(
             [tr('Classification'), tr('Affected'), tr('Displacement Rate')])
+        header_font = QFont()
+        header_font.setBold(True)
+        header_font.setPointSize(14)
+        self.header.setFont(0, header_font)
+        self.header.setFont(1, header_font)
+        self.header.setFont(2, header_font)
         self.setHeaderItem(self.header)
+
         self.widget_items = self.generate_tree_model()
         self.addTopLevelItems(self.widget_items)
         self.expandAll()
+        self.resizeColumnToContents(0)
+        self.resizeColumnToContents(1)
+        self.resizeColumnToContents(2)
 
     def generate_tree_model(self):
         """Generate tree model for the data."""
