@@ -29,13 +29,15 @@ from safe.definitions.fields import (
     elderly_ratio_field
 )
 from safe.definitions.messages import disclaimer
-from safe.definitions.utilities import all_default_fields
+from safe.definitions.utilities import (
+    all_default_fields, generate_default_profile)
 from safe.gui.tools.help.options_help import options_help
 from safe.utilities.default_values import (
     set_inasafe_default_value_qsetting, get_inasafe_default_value_qsetting)
 from safe.utilities.i18n import tr
 from safe.utilities.resources import get_ui_class, html_header, html_footer
 from safe.utilities.settings import setting, set_setting
+from safe.gui.widgets.profile_widget import ProfileWidget
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -82,6 +84,9 @@ class OptionsDialog(QDialog, FORM_CLASS):
         # Flag for restore default values
         self.is_restore_default = False
 
+        # Profile preference
+        self.profile_widget = None
+
         # List of setting key and control
         self.boolean_settings = {
             'visibleLayersOnlyFlag': self.cbxVisibleLayersOnly,
@@ -121,6 +126,16 @@ class OptionsDialog(QDialog, FORM_CLASS):
         self.grpNotImplemented.hide()
         self.adjustSize()
 
+        # Profile Preference Tab
+        self.preference_scroll_area = QScrollArea()
+        self.preference_scroll_area.setWidgetResizable(True)
+        self.preference_widget_container = QWidget()
+        self.preference_scroll_area.setWidget(self.preference_widget_container)
+        self.preference_container_layout = QVBoxLayout()
+        self.preference_widget_container.setLayout(
+            self.preference_container_layout)
+        self.preference_layout.addWidget(self.preference_scroll_area)
+
         # Demographic tab
         self.scroll_area = QScrollArea()
         self.scroll_area.setWidgetResizable(True)
@@ -130,6 +145,7 @@ class OptionsDialog(QDialog, FORM_CLASS):
         self.widget_container.setLayout(self.container_layout)
         self.default_values_layout.addWidget(self.scroll_area)
 
+        # Restore state from setting
         self.restore_state()
 
         # Hide checkbox if not developers
@@ -314,6 +330,9 @@ class OptionsDialog(QDialog, FORM_CLASS):
 
         # Restore InaSAFE default values
         self.restore_default_values_page()
+
+        # Restore Preference
+        self.restore_preference_page()
 
     def save_state(self):
         """Store the options into the user's stored session info."""
@@ -644,6 +663,12 @@ class OptionsDialog(QDialog, FORM_CLASS):
 
             # Add to attribute
             self.default_value_parameter_containers.append(parameter_container)
+
+    def restore_preference_page(self):
+        """Setup UI for preference page from setting."""
+        data = generate_default_profile()
+        self.profile_widget = ProfileWidget(parent=self, data=data)
+        self.preference_container_layout.addWidget(self.profile_widget)
 
     @staticmethod
     def age_ratios():

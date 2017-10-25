@@ -30,7 +30,6 @@ class TestProfileWidget(unittest.TestCase):
         class_item = classification_item.child(0)
         class_key = class_item.data(0, Qt.UserRole)
 
-        print data[hazard_key][classification_key][class_key]
         affected_check_box = profile_widget.itemWidget(class_item, 1)
         displacement_spin_box = profile_widget.itemWidget(class_item, 2)
         # Test changing value
