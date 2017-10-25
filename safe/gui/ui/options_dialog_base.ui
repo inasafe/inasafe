@@ -317,10 +317,10 @@
           </attribute>
           <layout class="QVBoxLayout" name="verticalLayout_7">
            <item>
-            <layout class="QVBoxLayout" name="default_values_layout_5"/>
+            <layout class="QVBoxLayout" name="preference_layout"/>
            </item>
            <item>
-            <widget class="QDialogButtonBox" name="button_box_restore_defaults_3">
+            <widget class="QDialogButtonBox" name="button_box_restore_preference">
              <property name="layoutDirection">
               <enum>Qt::RightToLeft</enum>
              </property>
