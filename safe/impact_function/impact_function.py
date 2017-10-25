@@ -22,6 +22,7 @@ from qgis.core import (
     QgsVectorLayer,
     QGis,
     QgsMapLayer,
+    QgsMapLayerRegistry,
     QgsRasterLayer,
 )
 from qgis.utils import iface
@@ -156,8 +157,7 @@ from safe.gis.vector.summary_4_exposure_summary_table import (
 from safe.gis.vector.tools import remove_fields
 from safe.gis.vector.union import union
 from safe.gis.vector.update_value_map import update_value_map
-from safe.gui.analysis_utilities import (
-    add_layer_to_canvas, remove_layer_from_canvas)
+from safe.gui.analysis_utilities import add_layer_to_canvas
 from safe.gui.widgets.message import generate_input_error_message
 from safe.impact_function.create_extra_layers import (
     create_analysis_layer,
@@ -2697,12 +2697,24 @@ class ImpactFunction(object):
 
         return impact_function
 
-    def generate_report(self, components):
+    def generate_report(self, components, output_folder=None, IFACE=None):
         """Generate Impact Report independently by the Impact Function.
 
         :param components: Report components to be generated.
         :type components: list
+
+        :param output_folder: The output folder.
+        :type output_folder: str
+
+        :returns: Tuple of error code and message
+        :type: tuple
+
+        .. versionadded:: 4.3
         """
+        # iface set up, in case IF run from test
+        if not IFACE:
+            IFACE = iface
+
         # don't generate infographic if exposure is not population
         exposure_type = definition(
             self.provenance['exposure_keywords']['exposure'])
@@ -2716,7 +2728,7 @@ class ImpactFunction(object):
             map_overview_layer = QgsRasterLayer(
                 map_overview['path'], 'Overview')
             add_layer_to_canvas(
-                map_overview_layer, map_overview['id'], self)
+                map_overview_layer, map_overview['id'])
 
         extra_layers = []
         print_atlas = setting('print_atlas_report', False, bool)
@@ -2741,24 +2753,24 @@ class ImpactFunction(object):
                 report_metadata = ReportMetadata(
                     metadata_dict=update_template_component(component))
 
-            impact_report = ImpactReport(
-                iface,
+            self.impact_report = ImpactReport(
+                IFACE,
                 report_metadata,
                 impact_function=self,
                 extra_layers=extra_layers)
 
             # Get other setting
             logo_path = setting('organisation_logo_path', None, str)
-            impact_report.inasafe_context.organisation_logo = logo_path
+            self.impact_report.inasafe_context.organisation_logo = logo_path
 
             disclaimer_text = setting('reportDisclaimer', None, str)
-            impact_report.inasafe_context.disclaimer = disclaimer_text
+            self.impact_report.inasafe_context.disclaimer = disclaimer_text
 
             north_arrow_path = setting('north_arrow_path', None, str)
-            impact_report.inasafe_context.north_arrow = north_arrow_path
+            self.impact_report.inasafe_context.north_arrow = north_arrow_path
 
             # get the extent of impact layer
-            impact_report.qgis_composition_context.extent = \
+            self.impact_report.qgis_composition_context.extent = \
                 self.impact.extent()
 
             # generate report folder
@@ -2773,12 +2785,16 @@ class ImpactFunction(object):
 
             # We will generate it on the fly without storing it after datastore
             # supports
-            impact_report.output_folder = join(layer_dir, 'output')
-            error_code, message = impact_report.process_components()
+            if output_folder:
+                self.impact_report.output_folder = output_folder
+            else:
+                self.impact_report.output_folder = join(layer_dir, 'output')
+
+            error_code, message = self.impact_report.process_components()
             if error_code == ImpactReport.REPORT_GENERATION_FAILED:
                 break
 
         if map_overview_layer:
-            remove_layer_from_canvas(map_overview_layer, self)
+            QgsMapLayerRegistry.instance().removeMapLayer(map_overview_layer)
 
         return error_code, message

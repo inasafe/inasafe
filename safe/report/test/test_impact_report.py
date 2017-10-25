@@ -145,20 +145,14 @@ class TestImpactReport(unittest.TestCase):
 
         self.assertEqual(return_code, ANALYSIS_SUCCESS, message)
 
-        report_metadata = ReportMetadata(
-            metadata_dict=report_metadata)
-
-        impact_report = ImpactReport(
-            IFACE,
-            report_metadata,
-            impact_function=impact_function)
-        impact_report.output_folder = output_folder
-        return_code, message = impact_report.process_components()
+        components = [report_metadata]
+        return_code, message = impact_function.generate_report(
+            components, output_folder=output_folder, IFACE=IFACE)
 
         self.assertEqual(
             return_code, ImpactReport.REPORT_GENERATION_SUCCESS, message)
 
-        return impact_report
+        return impact_function.impact_report
 
     def test_general_report_from_impact_function(self):
         """Test generate analysis result from impact function.

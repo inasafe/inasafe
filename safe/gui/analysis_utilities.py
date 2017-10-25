@@ -56,7 +56,7 @@ def generate_report(impact_function, iface):
         map_overview_layer = QgsRasterLayer(
             map_overview['path'], 'Overview')
         add_layer_to_canvas(
-            map_overview_layer, map_overview['id'], impact_function)
+            map_overview_layer, map_overview['id'])
 
     extra_layers = []
     print_atlas = setting('print_atlas_report', False, bool)
@@ -119,7 +119,7 @@ def generate_report(impact_function, iface):
             break
 
     if map_overview_layer:
-        remove_layer_from_canvas(map_overview_layer, impact_function)
+        QgsMapLayerRegistry.instance().removeMapLayer(map_overview_layer)
 
     return error_code, message
 
@@ -228,7 +228,7 @@ def add_debug_layers_to_canvas(impact_function):
                     hazard_class_style(qgis_layer, classes, True)
 
 
-def add_layer_to_canvas(layer, name, impact_function):
+def add_layer_to_canvas(layer, name):
     """Helper method to add layer to QGIS.
 
     :param layer: The layer.
@@ -237,48 +237,10 @@ def add_layer_to_canvas(layer, name, impact_function):
     :param name: Layer name.
     :type name: str
 
-    :param impact_function: The impact function used.
-    :type impact_function: ImpactFunction
-
-    :param iface: QGIS QGisAppInterface instance.
-    :type iface: QGisAppInterface
     """
-    group_name = impact_function.name
-
-    # noinspection PyArgumentList
-    root = QgsProject.instance().layerTreeRoot()
-    group_analysis = root.findGroup(group_name)
-    group_analysis.setVisible(Qt.Checked)
-
     if qgis_version() >= 21800:
         layer.setName(name)
     else:
         layer.setLayerName(name)
 
     QgsMapLayerRegistry.instance().addMapLayer(layer, False)
-    layer_node = group_analysis.addLayer(layer)
-
-    layer_node.setVisible(Qt.Checked)
-
-
-def remove_layer_from_canvas(layer, impact_function):
-    """Helper method to remove layer from QGIS.
-
-    :param layer: The layer.
-    :type layer: QgsMapLayer
-
-    :param impact_function: The impact function used.
-    :type impact_function: ImpactFunction
-
-    :param iface: QGIS QGisAppInterface instance.
-    :type iface: QGisAppInterface
-    """
-    group_name = impact_function.name
-
-    # noinspection PyArgumentList
-    root = QgsProject.instance().layerTreeRoot()
-    group_analysis = root.findGroup(group_name)
-    group_analysis.setVisible(Qt.Checked)
-
-    QgsMapLayerRegistry.instance().addMapLayer(layer, False)
-    group_analysis.removeLayer(layer)
