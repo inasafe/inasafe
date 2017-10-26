@@ -313,7 +313,7 @@
          </widget>
          <widget class="QWidget" name="preference_tab">
           <attribute name="title">
-           <string>Preference Tab</string>
+           <string>Preferences</string>
           </attribute>
           <layout class="QVBoxLayout" name="verticalLayout_7">
            <item>

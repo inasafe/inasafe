@@ -187,6 +187,9 @@ class OptionsDialog(QDialog, FORM_CLASS):
         self.restore_defaults.setCheckable(True)
         self.restore_defaults.clicked.connect(
             self.restore_defaults_ratio)
+        self.button_box_restore_preference.clicked.connect(
+            self.restore_preference_page
+        )
 
         # TODO: Hide this until behaviour is defined
         # hide template warning toggle
@@ -335,7 +338,7 @@ class OptionsDialog(QDialog, FORM_CLASS):
         self.restore_default_values_page()
 
         # Restore Preference
-        self.restore_preference_page()
+        self.restore_preference_page(global_default=False)
 
     def save_state(self):
         """Store the options into the user's stored session info."""
@@ -371,6 +374,9 @@ class OptionsDialog(QDialog, FORM_CLASS):
 
         # Save InaSAFE default values
         self.save_default_values()
+
+        # Save Profile preference
+        self.save_profile_preference()
 
     def accept(self):
         """Method invoked when OK button is clicked."""
@@ -667,9 +673,21 @@ class OptionsDialog(QDialog, FORM_CLASS):
             # Add to attribute
             self.default_value_parameter_containers.append(parameter_container)
 
-    def restore_preference_page(self):
-        """Setup UI for preference page from setting."""
-        data = generate_default_profile()
+    def restore_preference_page(self, global_default=True):
+        """Setup UI for preference page from setting.
+
+        :param global_default: If True, set to original default (from
+            the value in definitions).
+        :type global_default: bool
+        """
+        if global_default:
+            data = generate_default_profile()
+        else:
+            data = setting('profile', generate_default_profile())
+        if self.profile_widget is not None:
+            self.profile_widget.setParent(None)
+        #TODO(IS) Ideally, we should initialize it once, then only update the
+        # content/tree widget.
         self.profile_widget = ProfileWidget(parent=self, data=data)
         self.preference_layout.addWidget(self.profile_widget)
 
@@ -789,3 +807,8 @@ class OptionsDialog(QDialog, FORM_CLASS):
 
             parameter.value = qsetting_default_value
         return parameter
+
+    def save_profile_preference(self):
+        """Helper to save profile to QSettings."""
+        profile_data = self.profile_widget.get_data()
+        set_setting('profile', profile_data)
