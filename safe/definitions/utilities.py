@@ -7,6 +7,7 @@ from collections import OrderedDict
 from os.path import join, exists, splitext
 
 from qgis.core import QgsApplication
+from PyQt4.QtCore import QSettings
 
 from safe import definitions
 from safe.definitions import fields
@@ -642,7 +643,8 @@ def generate_default_profile():
     return data_format
 
 
-def get_displacement_rate(hazard, classification, hazard_class):
+def get_displacement_rate(
+        hazard, classification, hazard_class, qsettings=None):
     """Get displacement rate for hazard in classification in hazard class.
 
     :param hazard: The hazard key.
@@ -654,18 +656,23 @@ def get_displacement_rate(hazard, classification, hazard_class):
     :param hazard_class: The hazard class key.
     :type hazard_class: basestring
 
+    :param qsettings: A custom QSettings to use. If it's not defined, it will
+        use the default one.
+    :type qsettings: qgis.PyQt.QtCore.QSettings
+
     :returns: The value of displacement rate. If it's not affected, return 0.
     :rtype: int
     """
-    if not is_affected(hazard, classification, hazard_class):
+    if not is_affected(hazard, classification, hazard_class, qsettings):
         return 0
-    preference_data = setting('profile', generate_default_profile())
+    preference_data = setting(
+        'profile', default=generate_default_profile(), qsettings=qsettings)
     # noinspection PyUnresolvedReferences
     return preference_data.get(hazard, {}).get(classification, {}).get(
         hazard_class, {}).get('displacement_rate', 0)
 
 
-def is_affected(hazard, classification, hazard_class):
+def is_affected(hazard, classification, hazard_class, qsettings=None):
     """Get affected flag for hazard in classification in hazard class.
 
     :param hazard: The hazard key.
@@ -677,10 +684,15 @@ def is_affected(hazard, classification, hazard_class):
     :param hazard_class: The hazard class key.
     :type hazard_class: basestring
 
+    :param qsettings: A custom QSettings to use. If it's not defined, it will
+        use the default one.
+    :type qsettings: qgis.PyQt.QtCore.QSettings
+
     :returns: True if it's affected, else False. Default to False.
     :rtype: bool
     """
-    preference_data = setting('profile', generate_default_profile())
+    preference_data = setting(
+        'profile', default=generate_default_profile(), qsettings=qsettings)
     # noinspection PyUnresolvedReferences
     return preference_data.get(hazard, {}).get(classification, {}).get(
         hazard_class, {}).get('affected', False)
