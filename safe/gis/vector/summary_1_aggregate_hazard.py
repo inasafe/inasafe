@@ -204,7 +204,7 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
         aggregate_hazard.setLayerName(aggregate_hazard.keywords['title'])
     aggregate_hazard.keywords['layer_purpose'] = (
         layer_purpose_aggregate_hazard_impacted['key'])
-
+    aggregate_hazard.keywords['exposure_keywords'] = impact.keywords.copy()
     check_layer(aggregate_hazard)
     return aggregate_hazard
 

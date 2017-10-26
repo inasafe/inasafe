@@ -85,6 +85,9 @@ class TestSummary(unittest.TestCase):
             'intermediate',
             'aggregate_classified_hazard_summary.geojson')
 
+        # Let's add some fake exposure_keywords, not needed for the test.
+        aggregate_hazard.keywords['exposure_keywords'] = {'foo': 'bar'}
+
         aggregation = load_test_vector_layer(
             'gisv4',
             'aggregation',
@@ -261,14 +264,14 @@ class TestSummary(unittest.TestCase):
             'gisv4',
             'intermediate',
             'summaries',
-            'multi_exposure_analysis_buildings.geojson'
+            'multi_exposure_aggregation_buildings.geojson'
         )
 
         aggregation_summary_roads = load_test_vector_layer(
             'gisv4',
             'intermediate',
             'summaries',
-            'multi_exposure_analysis_roads.geojson'
+            'multi_exposure_aggregation_roads.geojson'
         )
 
         aggregation = load_test_vector_layer(
@@ -284,6 +287,28 @@ class TestSummary(unittest.TestCase):
                 aggregation_summary_roads
             ]
         )
+
+        concatenation = []
+
+        # This test checks only the first row of each layer. Not the best test.
+        iterator = aggregation_summary_buildings.getFeatures()
+        feature = next(iterator)
+        attributes = feature.attributes()
+        self.assertEqual(len(attributes), 10)
+        concatenation.extend(attributes[3:])  # We drop female, aggr id, name
+
+        iterator = aggregation_summary_roads.getFeatures()
+        feature = next(iterator)
+        attributes = feature.attributes()
+        self.assertEqual(len(attributes), 6)
+        concatenation.extend(attributes[3:])  # We drop female, aggr id, name
+
+        iterator = aggregation.getFeatures()
+        feature = next(iterator)
+        attributes = feature.attributes()
+        self.assertEqual(len(attributes), 12)
+        # Concatenation is a subset of attributes
+        self.assertTrue(set(concatenation) < set(attributes))
 
     def test_analysis_multi_exposure(self):
         """Test we can merge two analysis layers."""

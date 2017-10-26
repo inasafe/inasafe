@@ -5,6 +5,8 @@
 from qgis.core import QgsFeatureRequest
 
 from safe.definitions.fields import (
+    affected_exposure_count_field,
+    exposure_affected_exposure_type_count_field,
     hazard_count_field,
     exposure_hazard_count_field,
     total_affected_field,
@@ -151,35 +153,68 @@ def multi_exposure_analysis_summary(analysis, intermediate_analysis):
     return analysis
 
 
-def multi_exposure_aggregation_summary(aggregation, intermediate_aggregations):
+def multi_exposure_aggregation_summary(aggregation, intermediate_layers):
     """Merge intermediate aggregations into one aggregation summary.
 
     Source layer :
-    | haz_id | haz_class | aggr_id | aggr_name | total_feature |
+    | aggr_id | aggr_name | count of affected features per exposure type
 
     Target layer :
-    | analysis_id |
+    | aggregation_id | aggregation_name |
 
     Output layer :
-    | analysis_id | count_hazard_class | affected_count | total |
+    | aggr_id | aggr_name | count of affected per exposure type for each
 
-    :param aggregate_hazard: The layer to aggregate vector layer.
-    :type aggregate_hazard: QgsVectorLayer
+    :param aggregation: The target vector layer where to write statistics.
+    :type aggregation: QgsVectorLayer
 
-    :param analysis: The target vector layer where to write statistics.
-    :type analysis: QgsVectorLayer
-
-    :param callback: A function to all to indicate progress. The function
-        should accept params 'current' (int), 'maximum' (int) and 'step' (str).
-        Defaults to None.summary_5_multi_exposure.py
-    :type callback: function
+    :param intermediate_layers: List of aggregation layer for a single exposure
+    :type intermediate_layers: list
 
     :return: The new target layer with summary.
     :rtype: QgsVectorLayer
 
     .. versionadded:: 4.3
     """
-    # output_layer_name = summary_3_analysis_steps['output_layer_name']  # NOQA
-    # processing_step = summary_3_analysis_steps['step_name']  # NOQA
+    aggregation.startEditing()
 
+    request = QgsFeatureRequest()
+    request.setFlags(QgsFeatureRequest.NoGeometry)
+    for layer in intermediate_layers:
+        source_fields = layer.keywords['inasafe_fields']
+        exposure = layer.keywords['exposure_keywords']['exposure']
+        unique_exposure = read_dynamic_inasafe_field(
+            source_fields,
+            affected_exposure_count_field,
+            [total_affected_field])
+        field_map = {}
+
+        for exposure_class in unique_exposure:
+            field = create_field_from_definition(
+                exposure_affected_exposure_type_count_field,
+                name=exposure, sub_name=exposure_class
+            )
+            aggregation.addAttribute(field)
+            source_field_index = layer.fieldNameIndex(
+                affected_exposure_count_field['field_name'] % exposure_class)
+            target_field_index = aggregation.fieldNameIndex(field.name())
+            field_map[source_field_index] = target_field_index
+
+        # Total affected field
+        field = create_field_from_definition(
+            exposure_total_not_affected_field, exposure)
+        aggregation.addAttribute(field)
+        source_field_index = layer.fieldNameIndex(
+            total_affected_field['field_name'])
+        target_field_index = aggregation.fieldNameIndex(field.name())
+        field_map[source_field_index] = target_field_index
+
+        for source_feature in layer.getFeatures(request):
+            for source_field, target_field in field_map.iteritems():
+                aggregation.changeAttributeValue(
+                    source_feature.id(),
+                    target_field,
+                    source_feature[source_field])
+
+    aggregation.commitChanges()
     return aggregation

@@ -2002,7 +2002,7 @@ exposure_count_field = {
 affected_exposure_count_field = {
     'key': '%s_affected_field',
     'name': tr('Affected %s'),
-    'field_name': '%s_affected',
+    'field_name': '%s_affected',  # Be careful, same as total_affected_field
     'type': QVariant.Double,
     'length': default_field_length,
     'precision': default_field_precision,
@@ -2174,6 +2174,19 @@ exposure_total_field['key'] = '%s_' + total_field['key']
 exposure_total_field['name'] = tr('Total %s')
 exposure_total_field['field_name'] = '%s_' + total_field['field_name']
 exposure_total_field['type'] = QVariant.Double
+
+# Like roads_residential_affected_field
+# or roads_other_affected_field
+# or buildings_other_affected_field
+# might in the same layer
+exposure_affected_exposure_type_count_field = deepcopy(
+    affected_exposure_count_field)
+exposure_affected_exposure_type_count_field['key'] = (
+    '%s_' + affected_exposure_count_field['key'])
+exposure_affected_exposure_type_count_field['name'] = tr('Affected %s %s')
+exposure_affected_exposure_type_count_field['field_name'] = (
+    '%s_' + affected_exposure_count_field['field_name'])
+exposure_affected_exposure_type_count_field['type'] = QVariant.Double
 
 # Productivity field
 productivity_rate_field = {
@@ -2508,6 +2521,13 @@ analysis_fields = [
     total_not_exposed_field,
     total_exposed_field,
     total_field
+]
+
+multiexposure_aggregation_fields = [
+    aggregation_id_field,
+    aggregation_name_field,
+    exposure_affected_exposure_type_count_field,
+    exposure_total_affected_field,
 ]
 
 multiexposure_analysis_fields = [

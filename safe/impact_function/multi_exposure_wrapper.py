@@ -30,6 +30,7 @@ from safe.gis.tools import geometry_type
 from safe.gis.vector.prepare_vector_layer import prepare_vector_layer
 from safe.gis.vector.summary_5_multi_exposure import (
     multi_exposure_analysis_summary,
+    multi_exposure_aggregation_summary,
 )
 from safe.gui.widgets.message import generate_input_error_message
 from safe.impact_function.create_extra_layers import create_analysis_layer
@@ -334,6 +335,7 @@ class MultiExposureImpactFunction(object):
         self._aggregation_summary = prepare_vector_layer(self.aggregation)
 
         analysis_layers = []
+        aggregation_layers = []
 
         for i, impact_function in enumerate(self._impact_functions):
             self._current_impact_function = impact_function
@@ -361,7 +363,11 @@ class MultiExposureImpactFunction(object):
                     self._name)
 
             analysis_layers.append(impact_function.analysis_impacted)
+            aggregation_layers.append(impact_function.aggregation_summary)
 
+        # Sum up layers
+        self._aggregation_summary = multi_exposure_aggregation_summary(
+            self._aggregation_summary, aggregation_layers)
         self._analysis_summary = multi_exposure_analysis_summary(
             self._analysis_summary, analysis_layers)
 
