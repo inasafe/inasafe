@@ -36,6 +36,7 @@ __revision__ = '$Format:%H$'
 
 
 class ShakemapConverterDialog(QDialog, FORM_CLASS):
+
     """Importer for shakemap grid.xml files."""
 
     def __init__(self, parent=None, iface=None, dock_widget=None):
