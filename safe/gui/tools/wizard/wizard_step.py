@@ -1,5 +1,5 @@
 # coding=utf-8
-"""Wizard Step Abstract Class"""
+"""Wizard Step Abstract Class."""
 
 import os
 import re

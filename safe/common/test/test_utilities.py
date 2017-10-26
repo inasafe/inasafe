@@ -197,7 +197,7 @@ class TestUtilities(unittest.TestCase):
         self.assertEqual(result, expected)
 
     def test_get_utm_epsg(self):
-        """Test we can get correct epsg code"""
+        """Test we can get correct epsg code."""
         # North semisphere in geographic coordinates:
         self.assertEqual(get_utm_epsg(-178, 10), 32601)
         self.assertEqual(get_utm_epsg(178, 20), 32660)

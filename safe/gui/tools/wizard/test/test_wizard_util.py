@@ -17,7 +17,7 @@ __revision__ = '$Format:%H$'
 
 
 class TestWizardUtil(unittest.TestCase):
-    """Test Wizard Utils"""
+    """Test Wizard Utils."""
 
     def test_get_missing_question_text(self):
         """Test how the wizard copes with importing missing texts."""

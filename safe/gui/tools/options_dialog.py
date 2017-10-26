@@ -1,5 +1,5 @@
 # coding=utf-8
-"""InaSAFE Options Dialog"""
+"""InaSAFE Options Dialog."""
 
 import logging
 import os
@@ -356,7 +356,7 @@ class OptionsDialog(QDialog, FORM_CLASS):
         super(OptionsDialog, self).accept()
 
     def update_earthquake_info(self):
-        """Update information about earthquake info"""
+        """Update information about earthquake info."""
         self.label_earthquake_model()
         current_index = self.earthquake_function.currentIndex()
         model = EARTHQUAKE_FUNCTIONS[current_index]

@@ -36,7 +36,7 @@ def population_chart_legend_extractor(impact_report, component_metadata):
 
     context['inasafe_resources_base_dir'] = resources_path()
 
-    """Population Charts"""
+    """Population Charts."""
 
     population_donut_path = impact_report.component_absolute_output_path(
         'population-chart-png')

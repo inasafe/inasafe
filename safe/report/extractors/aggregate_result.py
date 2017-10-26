@@ -42,7 +42,7 @@ def aggregation_result_extractor(impact_report, component_metadata):
     """
     context = {}
 
-    """Initializations"""
+    """Initializations."""
 
     extra_args = component_metadata.extra_args
     # Find out aggregation report type
@@ -62,7 +62,7 @@ def aggregation_result_extractor(impact_report, component_metadata):
     if not use_aggregation:
         return context
 
-    """Filtering report sections"""
+    """Filtering report sections."""
 
     # Only process for applicable exposure types
     # Get exposure type definition
@@ -79,7 +79,7 @@ def aggregation_result_extractor(impact_report, component_metadata):
     if exposure_type not in itemizable_exposures_all:
         return context
 
-    """Generating type name for columns"""
+    """Generating type name for columns."""
 
     type_fields = read_dynamic_inasafe_field(
         aggregation_summary_fields, affected_exposure_count_field)
@@ -115,7 +115,7 @@ def aggregation_result_extractor(impact_report, component_metadata):
         type_label = tr(type_name.capitalize())
         type_header_labels.append(type_label)
 
-    """Generating values for rows"""
+    """Generating values for rows."""
 
     # generate rows of values for values of each column
     rows = []
@@ -154,7 +154,7 @@ def aggregation_result_extractor(impact_report, component_metadata):
         item['type_values'] = type_values
         rows.append(item)
 
-    """Generate total for footers"""
+    """Generate total for footers."""
 
     # calculate total values for each type. Taken from exposure summary table
     type_total_values = []
@@ -211,7 +211,7 @@ def aggregation_result_extractor(impact_report, component_metadata):
                 continue
             type_total_values.append(affected_value_string_formatted)
 
-    """Get the super total affected"""
+    """Get the super total affected."""
 
     # total for affected (super total)
     analysis_feature = analysis_layer.getFeatures().next()
@@ -221,7 +221,7 @@ def aggregation_result_extractor(impact_report, component_metadata):
         analysis_feature[field_index],
         enable_rounding=is_rounded)
 
-    """Generate and format the context"""
+    """Generate and format the context."""
     aggregation_area_default_header = resolve_from_dictionary(
         extra_args, 'aggregation_area_default_header')
     header_label = (

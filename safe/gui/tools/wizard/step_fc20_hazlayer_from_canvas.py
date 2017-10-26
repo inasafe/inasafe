@@ -106,7 +106,7 @@ class StepFcHazLayerFromCanvas(WizardStep, FORM_CLASS):
             list_widget.addItem(item)
 
     def set_widgets(self):
-        """Set widgets on the Hazard Layer From TOC tab"""
+        """Set widgets on the Hazard Layer From TOC tab."""
         # The list is already populated in the previous step, but now we
         # need to do it again in case we're back from the Keyword Wizard.
         # First, preserve self.parent.layer before clearing the list

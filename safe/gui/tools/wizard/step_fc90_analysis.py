@@ -1,5 +1,5 @@
 # coding=utf-8
-"""InaSAFE Wizard Step Analysis"""
+"""InaSAFE Wizard Step Analysis."""
 
 import logging
 import os
@@ -55,7 +55,7 @@ FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 class StepFcAnalysis(WizardStep, FORM_CLASS):
 
-    """InaSAFE Wizard Step Analysis"""
+    """InaSAFE Wizard Step Analysis."""
 
     def __init__(self, parent):
         """Init method."""

@@ -1,5 +1,5 @@
 # coding=utf-8
-"""InaSAFE Wizard Step for Choosing Layer Geometry"""
+"""InaSAFE Wizard Step for Choosing Layer Geometry."""
 
 import logging
 

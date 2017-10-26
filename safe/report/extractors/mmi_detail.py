@@ -64,7 +64,7 @@ def mmi_detail_extractor(impact_report, component_metadata):
 
     reported_fields = resolve_from_dictionary(extra_args, 'reported_fields')
 
-    """Generate headers"""
+    """Generate headers."""
     table_header = [
         resolve_from_dictionary(extra_args, 'mmi_header')
     ] + [v['header'] for v in reported_fields]
@@ -106,7 +106,7 @@ def mmi_detail_extractor(impact_report, component_metadata):
 
         rows.append(columns)
 
-    """Extract total"""
+    """Extract total."""
     total_footer = [
         resolve_from_dictionary(extra_args, 'total_header')
     ]

@@ -1,5 +1,5 @@
 # coding=utf-8
-"""Plugin Initialization"""
+"""Plugin Initialization."""
 
 __copyright__ = "Copyright 2011, The InaSAFE Project"
 __license__ = "GPL version 3"

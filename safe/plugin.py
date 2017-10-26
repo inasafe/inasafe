@@ -909,7 +909,7 @@ class Plugin(object):
         dialog.exec_()  # modal
 
     def save_scenario(self):
-        """Save current scenario to text file"""
+        """Save current scenario to text file."""
         from safe.gui.tools.save_scenario import SaveScenarioDialog
 
         dialog = SaveScenarioDialog(

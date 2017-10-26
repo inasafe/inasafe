@@ -44,7 +44,7 @@ def population_chart_extractor(impact_report, component_metadata):
     hazard_keywords = provenance['hazard_keywords']
     exposure_keywords = provenance['exposure_keywords']
 
-    """Generate Donut chart for affected population"""
+    """Generate Donut chart for affected population."""
 
     # create context for the donut chart
 

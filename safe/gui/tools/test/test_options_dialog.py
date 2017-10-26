@@ -1,5 +1,5 @@
 # coding=utf-8
-"""Test InaSAFE Options Dialog"""
+"""Test InaSAFE Options Dialog."""
 
 import unittest
 import logging
@@ -24,10 +24,10 @@ __revision__ = '$Format:%H$'
 
 class TestOptionsDialog(unittest.TestCase):
 
-    """Test Options Dialog"""
+    """Test Options Dialog."""
 
     def setUp(self):
-        """Fixture run before all tests"""
+        """Fixture run before all tests."""
         self.qsetting = QSettings('InaSAFETest')
         self.qsetting.clear()
 

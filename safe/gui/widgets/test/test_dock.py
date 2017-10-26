@@ -168,7 +168,7 @@ class TestDock(unittest.TestCase):
         self.assertFalse(os.path.isfile(new_xml_filepath), '%s xml' % message)
 
     def test_cbo_aggregation_empty_project(self):
-        """Aggregation combo changes properly according on no loaded layers"""
+        """Aggregation combo changes properly according on no loaded layers."""
         self.tearDown()
         message = (
             'The aggregation combobox should have only the "Entire '
