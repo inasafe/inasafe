@@ -10,7 +10,17 @@ from qgis.core import (
     QgsField,
     QGis
 )
-from safe.gis.vector.tools import create_memory_layer
+from safe.definitions.fields import (
+    distance_field,
+    bearing_from_field,
+    direction_field,
+    place_mmi_field
+)
+from safe.gis.vector.tools import (
+    create_memory_layer,
+    create_field_from_definition
+)
+from safe.utilities.i18n import tr
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -63,7 +73,7 @@ def get_direction_distance(hazard_point, places_layer):
 
     # memory layer to save new place layer
     output_layer = create_memory_layer(
-        'Nearby Places', QGis.Point, places_layer.crs(), fields
+        tr('Nearby Places'), QGis.Point, places_layer.crs(), fields
     )
     output_provider = output_layer.dataProvider()
     # get features from place layer and add it to the memory layer
@@ -71,30 +81,24 @@ def get_direction_distance(hazard_point, places_layer):
     for feature in places_layer.getFeatures():
         feature_list.append(feature)
     output_provider.addFeatures(feature_list)
-    # define new field name
-    distance_field = 'distance'
-    bearing_to_field = 'bearing_to'
-    bearing_from_field = 'bearing_fr'
-    direction_to_field = 'dir_to'
-    direction_from_field = 'dir_from'
-    mmi_field = 'mmi'
     # create new fields to store the calculation result
+    field_distance = create_field_from_definition(distance_field)
+    field_bearing = create_field_from_definition(bearing_from_field)
+    field_mmi = create_field_from_definition(place_mmi_field)
+    field_direction = create_field_from_definition(direction_field)
+    print field_distance, field_bearing, field_mmi, field_direction
     output_provider.addAttributes([
-        QgsField(distance_field, QVariant.Double),
-        QgsField(bearing_to_field, QVariant.Double),
-        QgsField(direction_to_field, QVariant.String),
-        QgsField(bearing_from_field, QVariant.Double),
-        QgsField(direction_from_field, QVariant.String),
-        QgsField(mmi_field, QVariant.Double)
+        field_distance,
+        field_bearing,
+        field_direction,
+        field_mmi
     ])
     output_layer.updateFields()
     # get field index
-    output_fields = output_provider.fields()
-    distance_index = output_fields.indexFromName(distance_field)
-    bearing_to_index = output_fields.indexFromName(bearing_to_field)
-    dir_to_index = output_fields.indexFromName(direction_to_field)
-    bearing_fr_index = output_fields.indexFromName(bearing_from_field)
-    dir_from_index = output_fields.indexFromName(direction_from_field)
+    distance_index = output_layer.fields().indexFromName('distance')
+    bearing_fr_index = output_layer.fields().indexFromName('bearing_fr')
+    dir_from_index = output_layer.fields().indexFromName('dir_from')
+    # place_mmi_index = output_layer.fields().indexFromName('place_mmi')
     # start calculating distance and get cardinality
     output_layer.startEditing()
     for feature in output_layer.getFeatures():
@@ -103,16 +107,14 @@ def get_direction_distance(hazard_point, places_layer):
         # get distance
         distance = find_distance.measureLine(hazard_point, city_point)
         # hazard angle
-        bearing_to = hazard_point.azimuth(city_point)
         bearing_from = city_point.azimuth(hazard_point)
         # get direction of the bearing angle
-        direction_to = bearing_to_cardinal(bearing_to)
         direction_from = bearing_to_cardinal(bearing_from)
         # store the value to attribute table
         output_layer.changeAttributeValue(fid, distance_index, distance)
-        output_layer.changeAttributeValue(fid, bearing_to_index, bearing_to)
-        output_layer.changeAttributeValue(fid, dir_to_index, direction_to)
         output_layer.changeAttributeValue(fid, bearing_fr_index, bearing_from)
         output_layer.changeAttributeValue(fid, dir_from_index, direction_from)
     output_layer.commitChanges()
+    LOGGER.info('Output Layer feature count = %d' %
+                output_layer.featureCount())
     return output_layer
