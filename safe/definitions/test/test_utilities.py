@@ -6,6 +6,10 @@ from tempfile import mkdtemp
 from os.path import join, exists, split
 import shutil
 
+from safe.test.utilities import get_qgis_app
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+from PyQt4.QtCore import QSettings
+
 from safe import definitions
 
 from safe.definitions import (
@@ -81,6 +85,7 @@ from safe.definitions.utilities import (
 )
 
 from safe.utilities.resources import resources_path
+from safe.utilities.settings import set_setting
 
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -124,7 +129,6 @@ class TestDefinitionsUtilities(unittest.TestCase):
             'key'])
         self.assertEqual(class_name, 'not a class')
 
-
     def test_layer_purpose_for_layer(self):
         """Test for purpose_for_layer method."""
         expected = ['aggregation', 'exposure', 'hazard']
@@ -139,8 +143,7 @@ class TestDefinitionsUtilities(unittest.TestCase):
     def test_hazards_for_layer(self):
         """Test for hazards_for_layer"""
         self.maxDiff = None
-        hazards = hazards_for_layer(
-            'polygon', 'single_event')
+        hazards = hazards_for_layer('polygon')
         hazards = [hazard['key'] for hazard in hazards]
         expected = [
             hazard_flood['key'],
@@ -166,8 +169,7 @@ class TestDefinitionsUtilities(unittest.TestCase):
         ]
         self.assertItemsEqual(hazards, expected)
 
-        hazards = hazards_for_layer(
-            'raster', 'single_event')
+        hazards = hazards_for_layer('raster')
         hazards = [hazard['key'] for hazard in hazards]
         expected = [
             hazard_flood['key'],
@@ -542,6 +544,7 @@ class TestDefinitionsUtilities(unittest.TestCase):
         value = get_displacement_rate('foo', 'bar', 'boom')
         self.assertEqual(value, 0)
 
+        # From default values
         default_profile = generate_default_profile()
         class_key = flood_hazard_classes['classes'][0]['key']
         value = is_affected(
@@ -557,6 +560,71 @@ class TestDefinitionsUtilities(unittest.TestCase):
             hazard_flood['key']][flood_hazard_classes['key']][class_key][
             'displacement_rate']
         self.assertEqual(value, expected_value)
+
+    def test_get_displacement_rate_and_affected_with_qsetting(self):
+        """Test for get_displacement_rate and is_affected with QSettings."""
+        # Create custom qsettings
+        qsettings = QSettings('InaSAFETest')
+        qsettings.clear()
+        # Save the default profile to qsettings
+        default_profile = generate_default_profile()
+        set_setting('profile', default_profile, qsettings)
+
+        # Check the default one first
+        default_profile = generate_default_profile()
+        class_key = flood_hazard_classes['classes'][0]['key']
+        value = is_affected(
+            hazard_flood['key'],
+            flood_hazard_classes['key'],
+            class_key,
+            qsettings)
+        expected_value = default_profile[
+            hazard_flood['key']][flood_hazard_classes['key']][class_key][
+            'affected']
+        self.assertEqual(value, expected_value)
+
+        value = get_displacement_rate(
+            hazard_flood['key'],
+            flood_hazard_classes['key'],
+            class_key,
+            qsettings)
+        expected_value = default_profile[
+            hazard_flood['key']][flood_hazard_classes['key']][class_key][
+            'displacement_rate']
+        self.assertEqual(value, expected_value)
+
+        # Change displacement rate
+        new_displacement_rate = 1
+        default_profile[
+            hazard_flood['key']][flood_hazard_classes['key']][class_key][
+            'displacement_rate'] = 1
+        set_setting('profile', default_profile, qsettings)
+        value = get_displacement_rate(
+            hazard_flood['key'],
+            flood_hazard_classes['key'],
+            class_key,
+            qsettings)
+        self.assertEqual(value, new_displacement_rate)
+
+        # Change affected value
+        new_affected = False
+        default_profile[
+            hazard_flood['key']][flood_hazard_classes['key']][class_key][
+            'affected'] = new_affected
+        set_setting('profile', default_profile, qsettings)
+        value = is_affected(
+            hazard_flood['key'],
+            flood_hazard_classes['key'],
+            class_key,
+            qsettings)
+        self.assertEqual(value, new_affected)
+        value = get_displacement_rate(
+            hazard_flood['key'],
+            flood_hazard_classes['key'],
+            class_key,
+            qsettings)
+        # Should be 0 since it's not affected
+        self.assertEqual(value, 0)
 
 
 if __name__ == '__main__':
