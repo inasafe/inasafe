@@ -71,3 +71,6 @@ FIELDS = 'fields'
 STATIC = 'static'
 SINGLE_DYNAMIC = 'single dynamic'
 MULTIPLE_DYNAMIC = 'multiple dynamic'
+
+# Scope for InaSAFE in QSettings
+APPLICATION_NAME = 'inasafe'
