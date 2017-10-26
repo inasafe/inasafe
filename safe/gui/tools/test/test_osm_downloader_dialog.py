@@ -38,7 +38,7 @@ class OsmDownloaderDialogTest(unittest.TestCase):
         self.dialog = OsmDownloaderDialog(PARENT, IFACE)
 
     def test_checked_features(self):
-        """Test checked features"""
+        """Test checked features."""
         self.dialog.roads_flag.setChecked(False)
         self.dialog.buildings_flag.setChecked(False)
         self.dialog.building_points_flag.setChecked(False)

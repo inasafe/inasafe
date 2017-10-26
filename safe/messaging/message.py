@@ -31,7 +31,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 class Message(MessageElement):
-    """Message object to contain a list of MessageElements"""
+    """Message object to contain a list of MessageElements."""
 
     def __init__(self, *args, **kwargs):
         """Creates a message object to contain a list of MessageElements

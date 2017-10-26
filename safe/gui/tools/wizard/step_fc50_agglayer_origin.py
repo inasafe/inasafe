@@ -74,7 +74,7 @@ class StepFcAggLayerOrigin(WizardStep, FORM_CLASS):
         self.parent.pbnNext.setEnabled(True)
 
     def set_widgets(self):
-        """Set widgets on the Aggregation Layer Origin Type tab"""
+        """Set widgets on the Aggregation Layer Origin Type tab."""
         # First, list available layers in order to check if there are
         # any available layers. Note This will be repeated in
         # set_widgets_step_fc_agglayer_from_canvas because we need

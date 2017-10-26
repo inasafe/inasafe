@@ -1,5 +1,5 @@
 # coding=utf-8
-"""Metadata DB IO implementation"""
+"""Metadata DB IO implementation."""
 
 import logging
 import os

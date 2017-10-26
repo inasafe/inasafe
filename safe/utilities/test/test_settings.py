@@ -23,15 +23,15 @@ __revision__ = '$Format:%H$'
 
 
 class TestSettings(unittest.TestCase):
-    """Test Settings"""
+    """Test Settings."""
 
     def setUp(self):
-        """Fixture run before all tests"""
+        """Fixture run before all tests."""
         self.qsettings = QSettings('InaSAFETest')
         self.qsettings.clear()
 
     def tearDown(self):
-        """Fixture run after each test"""
+        """Fixture run after each test."""
         # Make sure it's empty
         self.qsettings.clear()
 

@@ -56,7 +56,7 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
         'sections': OrderedDict()
     }
 
-    """Initializations"""
+    """Initializations."""
 
     extra_args = component_metadata.extra_args
     # Find out aggregation report type
@@ -104,7 +104,7 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
         section_header_format = resolve_from_dictionary(
             extra_args, ['defaults', 'section_header_format_no_aggregation'])
 
-    """Age Groups"""
+    """Age Groups."""
     age_items = {
         'group': age_displaced_count_group,
         'group_header': group_header_format.format(
@@ -153,7 +153,7 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
                 extra_component_args=extra_args)
         )
 
-    """Gender Groups"""
+    """Gender Groups."""
     gender_items = {
         'group': gender_displaced_count_group,
         'group_header': group_header_format.format(
@@ -203,7 +203,7 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
                 extra_component_args=extra_args)
         )
 
-    """Vulnerability Groups"""
+    """Vulnerability Groups."""
     context['sections']['vulnerability'] = []
     for vulnerability_group in vulnerability_displaced_count_groups:
         vulnerability_items = {
@@ -254,7 +254,7 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
                     extra_component_args=extra_args)
             )
 
-    """Minimum Needs"""
+    """Minimum Needs."""
     context['sections']['minimum_needs'] = []
     minimum_needs_section_header = resolve_from_dictionary(
         extra_args, ['sections', 'minimum_needs', 'header'])
@@ -435,7 +435,7 @@ def create_section_with_aggregation(
     if displaced_field['key'] not in aggregation_summary_fields:
         return {}
 
-    """Generating header name for columns"""
+    """Generating header name for columns."""
 
     # First column header is aggregation title
     default_aggregation_header = resolve_from_dictionary(
@@ -496,7 +496,7 @@ def create_section_with_aggregation(
         start_group_header = False
         columns.append(header_dict)
 
-    """Generating values for rows"""
+    """Generating values for rows."""
 
     for feature in aggregation_summary.getFeatures():
 
@@ -540,7 +540,7 @@ def create_section_with_aggregation(
 
         row_values.append(row)
 
-    """Generating total rows """
+    """Generating total rows ."""
 
     total_displaced_field_name = analysis_layer_fields[
         displaced_field['key']]
@@ -643,7 +643,7 @@ def create_section_without_aggregation(
         # no displaced field, can't show result
         return {}
 
-    """Generating header name for columns"""
+    """Generating header name for columns."""
 
     # First column header is aggregation title
     total_population_header = resolve_from_dictionary(
@@ -653,7 +653,7 @@ def create_section_without_aggregation(
         total_population_header,
     ]
 
-    """Generating values for rows"""
+    """Generating values for rows."""
     row_values = []
 
     for idx, output_field in enumerate(postprocessors_fields_found):

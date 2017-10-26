@@ -44,7 +44,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 class ErrorMessage(MessageElement):
-    """Standard error message"""
+    """Standard error message."""
 
     def __init__(
             self,

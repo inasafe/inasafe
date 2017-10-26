@@ -1,6 +1,6 @@
 # coding=utf-8
 
-"""Metadata Constants"""
+"""Metadata Constants."""
 
 import os
 

@@ -61,7 +61,7 @@ class StepFcHazLayerFromBrowser(WizardStepBrowser, FORM_CLASS):
 
     # noinspection PyPep8Naming
     def tvBrowserHazard_selection_changed(self):
-        """Update layer description label"""
+        """Update layer description label."""
         (is_compatible, desc) = self.get_layer_description_from_browser(
             'hazard')
         self.lblDescribeBrowserHazLayer.setText(desc)
@@ -69,7 +69,7 @@ class StepFcHazLayerFromBrowser(WizardStepBrowser, FORM_CLASS):
         self.parent.pbnNext.setEnabled(is_compatible)
 
     def set_widgets(self):
-        """Set widgets on the Hazard Layer From Browser tab"""
+        """Set widgets on the Hazard Layer From Browser tab."""
         self.tvBrowserHazard_selection_changed()
 
         # Set icon

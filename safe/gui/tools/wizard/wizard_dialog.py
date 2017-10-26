@@ -1,5 +1,5 @@
 # coding=utf-8
-"""Wizard Dialog"""
+"""Wizard Dialog."""
 
 import logging
 from sqlite3 import OperationalError

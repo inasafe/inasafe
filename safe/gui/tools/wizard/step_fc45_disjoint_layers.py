@@ -40,7 +40,7 @@ class StepFcDisjointLayers(WizardStep, FORM_CLASS):
         return None
 
     def set_widgets(self):
-        """Set widgets on the Disjoint Layers tab"""
+        """Set widgets on the Disjoint Layers tab."""
         self.lblIconDisjoint_1.setPixmap(
             QPixmap(resources_path('img', 'wizard', 'icon-stop.svg')))
 

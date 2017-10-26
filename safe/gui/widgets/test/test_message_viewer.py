@@ -30,7 +30,7 @@ class MessageViewerTest(unittest.TestCase):
     """Test cases for message viewer module."""
 
     def setUp(self):
-        """Fixture run before all tests"""
+        """Fixture run before all tests."""
         os.environ['LANG'] = 'en'
         self.message_viewer = MessageViewer(None)
         self.message_viewer.show()
@@ -52,7 +52,7 @@ class MessageViewerTest(unittest.TestCase):
             signal=ERROR_MESSAGE_SIGNAL)
 
     def tearDown(self):
-        """Fixture run after each test"""
+        """Fixture run after each test."""
         self.message_viewer = None
 
     def test_dynamic_message(self):

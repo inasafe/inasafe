@@ -1,5 +1,5 @@
 # coding=utf-8
-"""Wizard Help Widget"""
+"""Wizard Help Widget."""
 
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QWidget

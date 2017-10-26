@@ -182,7 +182,7 @@ class TestShakeGrid(unittest.TestCase):
     @unittest.skipIf(
         os.environ.get('ON_TRAVIS', False), 'This test is failing in docker.')
     def test_event_to_contours(self):
-        """Check we can extract contours from the event"""
+        """Check we can extract contours from the event."""
         file_path = SHAKE_GRID.mmi_to_contours(
             force_flag=True, algorithm='invdist')
         self.assertTrue(self.check_feature_count(file_path, 16))

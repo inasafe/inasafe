@@ -36,7 +36,7 @@ class UtilitiesTest(unittest.TestCase):
         pass
 
     def test_get_qgis_version(self):
-        """Test we can get the version of QGIS"""
+        """Test we can get the version of QGIS."""
         version = qgis_version()
         message = 'Got version %s of QGIS, but at least 214000 is needed'
         self.assertTrue(version > 21400, message)

@@ -427,7 +427,7 @@ def qgis_composer_infographic_extractor(impact_report, component_metadata):
 
     context = QGISComposerContext()
 
-    """Image Elements"""
+    """Image Elements."""
 
     # get all image elements with their respective source path
     image_elements = deepcopy(image_item_elements)
@@ -445,7 +445,7 @@ def qgis_composer_infographic_extractor(impact_report, component_metadata):
 
     context.image_elements.append(population_chart)
 
-    """HTML Elements"""
+    """HTML Elements."""
 
     components = resolve_from_dictionary(extra_args, 'components')
     html_elements = deepcopy(html_frame_elements)
@@ -459,7 +459,7 @@ def qgis_composer_infographic_extractor(impact_report, component_metadata):
 
     context.html_frame_elements = html_elements
 
-    """Map Elements"""
+    """Map Elements."""
 
     map_overview_layer = None
     layer_registry = QgsMapLayerRegistry.instance()

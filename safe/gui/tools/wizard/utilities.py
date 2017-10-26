@@ -1,5 +1,5 @@
 # coding=utf-8
-"""Wizard Utilities Functions"""
+"""Wizard Utilities Functions."""
 
 import logging
 import os

@@ -175,7 +175,7 @@ class TestImpactReport(unittest.TestCase):
             hazard_layer, exposure_layer,
             aggregation_layer=aggregation_layer)
 
-        """Checking generated context"""
+        """Checking generated context."""
         empty_component_output_message = 'Empty component output'
 
         # Check Analysis Summary
@@ -318,7 +318,7 @@ class TestImpactReport(unittest.TestCase):
         self.assertTrue(
             notes_assumptions.output, empty_component_output_message)
 
-        """Check output generated"""
+        """Check output generated."""
 
         output_path = impact_report.component_absolute_output_path(
             'impact-report')
@@ -349,7 +349,7 @@ class TestImpactReport(unittest.TestCase):
             hazard_layer, exposure_layer,
             aggregation_layer=aggregation_layer)
 
-        """Checking generated context"""
+        """Checking generated context."""
         empty_component_output_message = 'Empty component output'
 
         # Check Analysis Breakdown
@@ -586,7 +586,7 @@ class TestImpactReport(unittest.TestCase):
         self.assertTrue(
             aggregate_result.output, empty_component_output_message)
 
-        """Check output generated"""
+        """Check output generated."""
 
         output_path = impact_report.component_absolute_output_path(
             'impact-report')
@@ -617,7 +617,7 @@ class TestImpactReport(unittest.TestCase):
             hazard_layer, exposure_layer,
             aggregation_layer=aggregation_layer)
 
-        """Checking generated context"""
+        """Checking generated context."""
         empty_component_output_message = 'Empty component output'
 
         impact_table = impact_report.metadata.component_by_key(
@@ -657,7 +657,7 @@ class TestImpactReport(unittest.TestCase):
         self.assertTrue(
             impact_table.output, empty_component_output_message)
 
-        """Check output generated"""
+        """Check output generated."""
 
         output_path = impact_report.component_absolute_output_path(
             'impact-report')
@@ -688,7 +688,7 @@ class TestImpactReport(unittest.TestCase):
             hazard_layer, exposure_layer,
             aggregation_layer=aggregation_layer)
 
-        """Checking generated context"""
+        """Checking generated context."""
         empty_component_output_message = 'Empty component output'
 
         impact_table = impact_report.metadata.component_by_key(
@@ -930,7 +930,7 @@ class TestImpactReport(unittest.TestCase):
         self.assertTrue(
             impact_table.output, empty_component_output_message)
 
-        """Check output generated"""
+        """Check output generated."""
 
         output_path = impact_report.component_absolute_output_path(
             'impact-report')
@@ -959,7 +959,7 @@ class TestImpactReport(unittest.TestCase):
             standard_impact_report_metadata_html,
             hazard_layer, exposure_layer)
 
-        """Checking generated context"""
+        """Checking generated context."""
         empty_component_output_message = 'Empty component output'
 
         # Check Minimum Needs
@@ -1029,7 +1029,7 @@ class TestImpactReport(unittest.TestCase):
         self.assertEqual(
             expected_context.strip(), actual_context.strip(), message)
 
-        """Check generated report"""
+        """Check generated report."""
 
         output_path = impact_report.component_absolute_output_path(
             'impact-report')
@@ -1062,7 +1062,7 @@ class TestImpactReport(unittest.TestCase):
             standard_impact_report_metadata_html,
             hazard_layer, exposure_layer)
 
-        """Check generated context"""
+        """Check generated context."""
         aggregation_result = impact_report.metadata.component_by_key(
             aggregation_result_component['key'])
         """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
@@ -1107,7 +1107,7 @@ class TestImpactReport(unittest.TestCase):
 
         self.assertFalse(actual_context)
 
-        """Check generated report"""
+        """Check generated report."""
 
         output_path = impact_report.component_absolute_output_path(
             'impact-report')
@@ -1142,7 +1142,7 @@ class TestImpactReport(unittest.TestCase):
             hazard_layer, exposure_layer,
             aggregation_layer=aggregation_layer)
 
-        """Check generated context"""
+        """Check generated context."""
         empty_component_output_message = 'Empty component output'
 
         aggregation_result = impact_report.metadata.component_by_key(
@@ -1199,7 +1199,7 @@ class TestImpactReport(unittest.TestCase):
         self.assertTrue(
             aggregation_result.output, empty_component_output_message)
 
-        """Check generated report"""
+        """Check generated report."""
 
         output_path = impact_report.component_absolute_output_path(
             'impact-report')
@@ -1233,7 +1233,7 @@ class TestImpactReport(unittest.TestCase):
             hazard_layer, exposure_layer,
             aggregation_layer=aggregation_layer)
 
-        """Checking generated context"""
+        """Checking generated context."""
         empty_component_output_message = 'Empty component output'
 
         # Check aggregation-postprocessors
@@ -1390,7 +1390,7 @@ class TestImpactReport(unittest.TestCase):
         self.assertTrue(
             aggregation_postprocessors.output, empty_component_output_message)
 
-        """Check generated report"""
+        """Check generated report."""
 
         output_path = impact_report.component_absolute_output_path(
             'impact-report')
@@ -1427,7 +1427,7 @@ class TestImpactReport(unittest.TestCase):
             hazard_layer, exposure_layer,
             aggregation_layer=aggregation_layer)
 
-        """Checking generated context"""
+        """Checking generated context."""
         empty_component_output_message = 'Empty component output'
 
         # Check aggregation-postprocessors
@@ -1581,7 +1581,7 @@ class TestImpactReport(unittest.TestCase):
         self.assertTrue(
             aggregation_postprocessors.output, empty_component_output_message)
 
-        """Check generated report"""
+        """Check generated report."""
 
         output_path = impact_report.component_absolute_output_path(
             'impact-report')
@@ -1620,7 +1620,7 @@ class TestImpactReport(unittest.TestCase):
             hazard_layer, exposure_layer,
             aggregation_layer=aggregation_layer)
 
-        """Checking generated context"""
+        """Checking generated context."""
         # Check population infographic
         population_infographic = impact_report.metadata.component_by_key(
             population_infographic_component['key']).context
@@ -1798,7 +1798,7 @@ class TestImpactReport(unittest.TestCase):
         self.assertDictEqual(
             expected_context, actual_context)
 
-        """Check generated report"""
+        """Check generated report."""
 
         output_path = impact_report.component_absolute_output_path(
             'infographic-layout')

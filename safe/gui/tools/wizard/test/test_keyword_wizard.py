@@ -70,7 +70,7 @@ layer_title = u'Layer Title'
 # noinspection PyTypeChecker
 class TestKeywordWizard(unittest.TestCase):
 
-    """Test the InaSAFE keyword wizard GUI"""
+    """Test the InaSAFE keyword wizard GUI."""
 
     maxDiff = None
 
@@ -974,7 +974,7 @@ class TestKeywordWizard(unittest.TestCase):
             layer.keywords['value_map'], dialog.get_keywords()['value_map'])
 
     def test_aggregation_keyword(self):
-        """Test Aggregation Keywords"""
+        """Test Aggregation Keywords."""
         layer = load_test_vector_layer(
             'gisv4', 'aggregation', 'small_grid.geojson', clone_to_memory=True)
         layer.keywords = {}
@@ -1131,7 +1131,7 @@ class TestKeywordWizard(unittest.TestCase):
         self.assertDictEqual(real_keywords, expected_keyword)
 
     def test_exposure_population_polygon_keyword(self):
-        """Test exposure population polygon keyword"""
+        """Test exposure population polygon keyword."""
         layer = load_test_vector_layer(
             'exposure', 'census.geojson', clone_to_memory=True)
         layer.keywords = {}

@@ -29,10 +29,10 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class QGISTest(unittest.TestCase):
-    """Test the QGIS Environment"""
+    """Test the QGIS Environment."""
 
     def test_qgis_environment(self):
-        """QGIS environment has the expected providers"""
+        """QGIS environment has the expected providers."""
         # noinspection PyUnresolvedReferences
         r = QgsProviderRegistry.instance()
 

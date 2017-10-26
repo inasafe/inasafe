@@ -62,7 +62,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
     hazard_keywords = provenance['hazard_keywords']
     exposure_keywords = provenance['exposure_keywords']
 
-    """Initializations"""
+    """Initializations."""
 
     # Get hazard classification
     hazard_classification = definition(
@@ -96,7 +96,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
             breakdown_field = field
             break
 
-    """Create detail header"""
+    """Create detail header."""
     headers = []
 
     # breakdown header
@@ -186,7 +186,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
     for report_field in report_fields[2:]:
         headers.append(report_field['name'])
 
-    """Create detail rows"""
+    """Create detail rows."""
     details = []
     for feat in exposure_summary_table.getFeatures():
         row = []
@@ -325,7 +325,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
         # replace class_key with the class name
         row[0] = breakdown_name
 
-    """create total footers"""
+    """create total footers."""
     # create total header
     footers = [total_field['name']]
     # total for hazard

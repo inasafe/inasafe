@@ -64,14 +64,14 @@ class StepFcExpLayerFromBrowser(WizardStepBrowser, FORM_CLASS):
         return new_step
 
     def tvBrowserExposure_selection_changed(self):
-        """Update layer description label"""
+        """Update layer description label."""
         (is_compatible, desc) = self.get_layer_description_from_browser(
             'exposure')
         self.lblDescribeBrowserExpLayer.setText(desc)
         self.parent.pbnNext.setEnabled(is_compatible)
 
     def set_widgets(self):
-        """Set widgets on the Exposure Layer From Browser tab"""
+        """Set widgets on the Exposure Layer From Browser tab."""
         self.tvBrowserExposure_selection_changed()
 
         # Set icon

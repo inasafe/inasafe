@@ -227,7 +227,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         self.output_directory.setText(last_path)
 
     def save_state(self):
-        """ Store current state of GUI to configuration file """
+        """ Store current state of GUI to configuration file ."""
         settings = QSettings()
         settings.setValue('directory', self.output_directory.text())
 

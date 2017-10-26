@@ -1,5 +1,5 @@
 # coding=utf-8
-"""Need Manager Dialog"""
+"""Need Manager Dialog."""
 
 import os
 from os.path import expanduser, basename

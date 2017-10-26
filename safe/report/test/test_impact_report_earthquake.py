@@ -100,7 +100,7 @@ class TestEarthquakeReport(unittest.TestCase):
         self.assertEqual(
             return_code, ImpactReport.REPORT_GENERATION_SUCCESS, message)
 
-        """Checking generated context"""
+        """Checking generated context."""
         empty_component_output_message = 'Empty component output'
 
         # Check Analysis Summary

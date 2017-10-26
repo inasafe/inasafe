@@ -1,5 +1,5 @@
 # coding=utf-8
-"""About Dialog"""
+"""About Dialog."""
 
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences

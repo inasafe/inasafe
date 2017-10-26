@@ -38,7 +38,7 @@ class StepFcSummary(WizardStep, FORM_CLASS):
         return new_step
 
     def set_widgets(self):
-        """Set widgets on the Summary tab"""
+        """Set widgets on the Summary tab."""
         if self.parent.aggregation_layer:
             aggr = self.parent.aggregation_layer.name()
         else:
