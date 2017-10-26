@@ -161,7 +161,7 @@ layer_purpose_exposure_summary_table = {
         'includes totals for affected and not affected status. It is used '
         'to generate reports and can be exported to a spreadsheet for '
         'further analysis.'),
-    'allowed_geometries': [],
+    'allowed_geometries': [],  # It's a table.
     'citations': [
         {
             'text': None,
@@ -179,7 +179,7 @@ layer_purpose_profiling = {
         'sent to the developers of InaSAFE if you encounter long processing '
         'times. They will use the information to identify processing '
         'bottlenecks.'),
-    'allowed_geometries': [],
+    'allowed_geometries': [],  # It's a table.
     'citations': [
         {
             'text': None,
