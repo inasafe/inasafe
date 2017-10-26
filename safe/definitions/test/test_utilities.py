@@ -76,6 +76,8 @@ from safe.definitions.utilities import (
     set_provenance,
     get_provenance,
     generate_default_profile,
+    get_displacement_rate,
+    is_affected,
 )
 
 from safe.utilities.resources import resources_path
@@ -527,8 +529,34 @@ class TestDefinitionsUtilities(unittest.TestCase):
     def test_generate_default_profile(self):
         """Test for generate_default_profile method."""
         default_profile = generate_default_profile()
-        from  pprint import pprint
-        pprint(default_profile)
+        # from pprint import pprint
+        # pprint(default_profile)
+        self.assertIsInstance(default_profile, dict)
+        self.assertIsNotNone(default_profile)
+
+    def test_get_displacement_rate_and_affected(self):
+        """Test for get_displacement_rate and is_affected"""
+        # Random key
+        value = is_affected('foo', 'bar', 'boom')
+        self.assertFalse(value)
+        value = get_displacement_rate('foo', 'bar', 'boom')
+        self.assertEqual(value, 0)
+
+        default_profile = generate_default_profile()
+        class_key = flood_hazard_classes['classes'][0]['key']
+        value = is_affected(
+            hazard_flood['key'], flood_hazard_classes['key'], class_key)
+        expected_value = default_profile[
+            hazard_flood['key']][flood_hazard_classes['key']][class_key][
+            'affected']
+        self.assertEqual(value, expected_value)
+
+        value = get_displacement_rate(
+            hazard_flood['key'], flood_hazard_classes['key'], class_key)
+        expected_value = default_profile[
+            hazard_flood['key']][flood_hazard_classes['key']][class_key][
+            'displacement_rate']
+        self.assertEqual(value, expected_value)
 
 
 if __name__ == '__main__':

@@ -29,6 +29,7 @@ from safe.definitions import (
     exposure_population,
 )
 from safe.report.report_metadata import QgisComposerComponentsMetadata
+from safe.utilities.settings import setting
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -55,14 +56,11 @@ def purposes_for_layer(layer_geometry_key):
     return sorted(return_value)
 
 
-def hazards_for_layer(layer_geometry_key, hazard_category_key=None):
+def hazards_for_layer(layer_geometry_key):
     """Get hazard categories form layer_geometry_key.
 
     :param layer_geometry_key: The geometry id
     :type layer_geometry_key: str
-
-    :param hazard_category_key: The hazard category
-    :type hazard_category_key: str
 
     :returns: List of hazard
     :rtype: list
@@ -167,6 +165,9 @@ def get_fields(
     :param replace_null: If None all fields are returned, if True only if
         it's True, if False only if it's False.
     :type replace_null: None or bool
+
+    :param in_group: Flag to include field in field_groups or not.
+    :type in_group: bool
 
     :returns: List of fields.
     :rtype: list
@@ -448,16 +449,16 @@ def default_classification_value_maps(classification):
 def fields_in_field_groups(field_groups):
     """Obtain list of fields from a list of field groups
 
-    :param layer_purpose: List of field group.
+    :param field_groups: List of field group.
     :type field_groups: list
 
     :returns: List of fields.
     :rtype: list
     """
-    fields = []
+    field_list = []
     for field_group in field_groups:
-        fields += field_group['fields']
-    return fields
+        field_list += field_group['fields']
+    return field_list
 
 
 def get_field_groups(layer_purpose, layer_subcategory=None):
@@ -511,6 +512,7 @@ def update_template_component(
         default_component_keys.append(component['key'])
 
     if not custom_template_dir:
+        # noinspection PyArgumentList
         custom_template_dir = join(
             QgsApplication.qgisSettingsDirPath(), 'inasafe')
 
@@ -638,3 +640,47 @@ def generate_default_profile():
                     'key']] = entry
 
     return data_format
+
+
+def get_displacement_rate(hazard, classification, hazard_class):
+    """Get displacement rate for hazard in classification in hazard class.
+
+    :param hazard: The hazard key.
+    :type hazard: basestring
+
+    :param classification: The classification key.
+    :type classification: basestring
+
+    :param hazard_class: The hazard class key.
+    :type hazard_class: basestring
+
+    :returns: The value of displacement rate. If it's not affected, return 0.
+    :rtype: int
+    """
+    if not is_affected(hazard, classification, hazard_class):
+        return 0
+    preference_data = setting('profile', generate_default_profile())
+    # noinspection PyUnresolvedReferences
+    return preference_data.get(hazard, {}).get(classification, {}).get(
+        hazard_class, {}).get('displacement_rate', 0)
+
+
+def is_affected(hazard, classification, hazard_class):
+    """Get affected flag for hazard in classification in hazard class.
+
+    :param hazard: The hazard key.
+    :type hazard: basestring
+
+    :param classification: The classification key.
+    :type classification: basestring
+
+    :param hazard_class: The hazard class key.
+    :type hazard_class: basestring
+
+    :returns: True if it's affected, else False. Default to False.
+    :rtype: bool
+    """
+    preference_data = setting('profile', generate_default_profile())
+    # noinspection PyUnresolvedReferences
+    return preference_data.get(hazard, {}).get(classification, {}).get(
+        hazard_class, {}).get('affected', False)
