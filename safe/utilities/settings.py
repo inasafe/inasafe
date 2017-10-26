@@ -127,7 +127,7 @@ def setting(key, default=None, expected_type=None, qsettings=None):
 def delete_setting(key, qsettings=None):
     """Delete setting from QSettings under InaSAFE scope.
 
-    :param key: unique key for setting.
+    :param key: Unique key for setting.
     :type key: basestring
 
     :param qsettings: A custom QSettings to use. If it's not defined, it will
