@@ -6,6 +6,7 @@ import logging
 import os
 import shutil
 import sys
+import math
 from datetime import datetime
 from subprocess import call, CalledProcessError
 from xml.dom import minidom
@@ -66,6 +67,7 @@ def data_dir():
 
 
 class ShakeGrid(object):
+
     """A converter for USGS shakemap grid.xml files to geotiff."""
 
     def __init__(
