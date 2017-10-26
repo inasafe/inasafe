@@ -14,6 +14,7 @@ from safe.utilities.settings import (
     set_setting,
     delete_setting
 )
+from safe.definitions.utilities import generate_default_profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -81,6 +82,28 @@ class TestSettings(unittest.TestCase):
         key = 'developer_mode'
         actual_value = inasafe_default_settings.get(key)
         self.assertEqual(actual_value, setting(key, qsettings=self.qsettings))
+
+    def test_read_write_dictionary(self):
+        """Test for reading and writing dictionary in QSettings."""
+        dictionary = {
+            'a': 'a',
+            'b': 1,
+            'c': {
+                'd': True,
+                'e': {
+                    'f': 1.0,
+                    'g': 2
+                }
+            }
+        }
+        set_setting('key', dictionary, self.qsettings)
+        value = setting('key', qsettings=self.qsettings)
+        self.assertDictEqual(dictionary, value)
+
+        profile_dictionary = generate_default_profile()
+        set_setting('profile', profile_dictionary, self.qsettings)
+        value = setting('profile', qsettings=self.qsettings)
+        self.assertDictEqual(profile_dictionary, value)
 
 
 if __name__ == '__main__':
