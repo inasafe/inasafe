@@ -293,7 +293,7 @@ def create_field_from_definition(field_definition, name=None, sub_name=None):
     return field
 
 
-def read_dynamic_inasafe_field(inasafe_fields, dynamic_field):
+def read_dynamic_inasafe_field(inasafe_fields, dynamic_field, black_list=None):
     """Helper to read inasafe_fields using a dynamic field.
 
     :param inasafe_fields: inasafe_fields keywords to use.
@@ -302,15 +302,24 @@ def read_dynamic_inasafe_field(inasafe_fields, dynamic_field):
     :param dynamic_field: The dynamic field to use.
     :type dynamic_field: safe.definitions.fields
 
+    :param black_list: A list of fields which are conflicting with the dynamic
+        field. Same field name pattern.
+
     :return: A list of unique value used in this dynamic field.
     :return: list
     """
     pattern = dynamic_field['key']
     pattern = pattern.replace('%s', '')
+
+    if black_list is None:
+        black_list = []
+
+    black_list = [field['key'] for field in black_list]
+
     unique_exposure = []
-    for key, name_field in inasafe_fields.iteritems():
-        if key.endswith(pattern):
-            unique_exposure.append(key.replace(pattern, ''))
+    for field_key, name_field in inasafe_fields.iteritems():
+        if field_key.endswith(pattern) and field_key not in black_list:
+            unique_exposure.append(field_key.replace(pattern, ''))
 
     return unique_exposure
 

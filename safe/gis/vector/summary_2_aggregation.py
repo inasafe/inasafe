@@ -167,6 +167,8 @@ def aggregation_summary(aggregate_hazard, aggregation, callback=None):
         aggregation.setLayerName(aggregation.keywords['title'])
     aggregation.keywords['layer_purpose'] = (
         layer_purpose_aggregation_summary['key'])
+    aggregation.keywords['exposure_keywords'] = (
+        aggregate_hazard.keywords['exposure_keywords'].copy())
 
     check_layer(aggregation)
     return aggregation
