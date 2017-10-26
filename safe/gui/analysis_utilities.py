@@ -8,7 +8,6 @@ from copy import deepcopy
 
 from PyQt4.QtCore import QDir, Qt
 from qgis.core import (
-    QgsLayerTreeGroup,
     QgsMapLayerRegistry,
     QgsProject,
     QgsRasterLayer,
@@ -24,7 +23,7 @@ from safe.definitions.utilities import definition, update_template_component
 from safe.impact_function.style import hazard_class_style
 from safe.report.impact_report import ImpactReport
 from safe.report.report_metadata import ReportMetadata
-from safe.utilities.gis import is_raster_layer, qgis_version
+from safe.utilities.gis import qgis_version
 from safe.utilities.metadata import active_classification
 from safe.utilities.settings import setting
 

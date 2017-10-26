@@ -3,7 +3,7 @@
 
 import sys
 
-from safe.test.utilities import get_qgis_app, load_test_vector_layer
+from safe.test.utilities import get_qgis_app
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
