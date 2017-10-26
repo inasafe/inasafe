@@ -147,6 +147,8 @@ def add_impact_layers_to_canvas(impact_function, group=None, iface=None):
     else:
         group_analysis = group
 
+    group_analysis.setExpanded(group is None)
+
     for layer in layers:
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayer(layer, False)

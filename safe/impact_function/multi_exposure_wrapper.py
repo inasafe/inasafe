@@ -25,6 +25,12 @@ from safe.definitions.layer_purposes import (
     layer_purpose_analysis_impacted,
     layer_purpose_aggregation_summary,
 )
+from safe.definitions.styles import (
+    aggregation_color,
+    aggregation_width,
+    analysis_color,
+    analysis_width,
+)
 from safe.definitions.utilities import get_name
 from safe.gis.tools import geometry_type
 from safe.gis.vector.prepare_vector_layer import prepare_vector_layer
@@ -35,6 +41,7 @@ from safe.gis.vector.summary_5_multi_exposure import (
 from safe.gui.widgets.message import generate_input_error_message
 from safe.impact_function.create_extra_layers import create_analysis_layer
 from safe.impact_function.impact_function import ImpactFunction
+from safe.impact_function.style import simple_polygon_without_brush
 from safe.impact_function.impact_function_utilities import check_input_layer
 from safe.utilities.gis import deep_duplicate_layer
 from safe.utilities.i18n import tr
@@ -386,5 +393,10 @@ class MultiExposureImpactFunction(object):
             raise Exception(
                 tr('Something went wrong with the datastore : '
                    '{error_message}').format(error_message=name))
+
+        simple_polygon_without_brush(
+            self._aggregation_summary, aggregation_width, aggregation_color)
+        simple_polygon_without_brush(
+            self._analysis_summary, analysis_width, analysis_color)
 
         return ANALYSIS_SUCCESS, None
