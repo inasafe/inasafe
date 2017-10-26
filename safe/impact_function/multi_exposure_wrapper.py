@@ -91,6 +91,7 @@ class MultiExposureImpactFunction(object):
         self._end_datetime = None
         self._duration = 0
         self.analysis_extent = None
+        self._output_layer_expected = None
 
     @property
     def name(self):
@@ -210,6 +211,47 @@ class MultiExposureImpactFunction(object):
         """
         return self._current_impact_function
 
+    def output_layers_expected(self):
+        """Compute the output layers expected that the IF will produce.
+
+        You must call this function between the `prepare` and the `run`.
+        Otherwise you will get an empty dictionary.
+
+        Result:
+        {
+            'multi_exposure_name': [aggregation_summary, analysis_summary]
+            'impact_function_1_name: [impact_layer, aggregate_hazard, ...]
+            'impact_function_2_name: [impact_layer, aggregate_hazard, ...]
+            ...
+        }
+
+        :return: Tree of expected layers.
+        :rtype: dictionary
+        """
+        if not self._is_ready:
+            return {}
+        else:
+            return self._output_layer_expected
+
+    def _compute_output_layer_expected(self):
+        """Compute output layers expected that the IF will produce.
+
+        Be careful when you call this function. It's a private function, better
+        to use the public function `output_layers_expected()`.
+
+        :return: List of expected layer keys.
+        :rtype: list
+        """
+        results = {
+            self._name: [
+                layer_purpose_aggregation_summary['key'],
+                layer_purpose_analysis_impacted['key']
+            ]
+        }
+        for analysis in self._impact_functions:
+            results[analysis.name] = analysis.output_layers_expected()
+        return results
+
     def prepare(self):
         """Method to check if the impact function can be run.
 
@@ -279,6 +321,22 @@ class MultiExposureImpactFunction(object):
 
             self._impact_functions.append(impact_function)
 
+        hazard_name = get_name(self.hazard.keywords.get('hazard'))
+        hazard_geometry_name = get_name(geometry_type(self.hazard))
+        self._name = (
+            u'Multi exposure {hazard_type} {hazard_geometry} On '.format(
+                hazard_type=hazard_name, hazard_geometry=hazard_geometry_name))
+        exposures_strings = []
+        for exposure in self.exposures:
+            exposure_name = get_name(exposure.keywords.get('exposure'))
+            exposure_geometry_name = get_name(geometry_type(exposure))
+            exposures_strings.append(
+                u'{exposure_type} {exposure_geometry}'.format(
+                    exposure_type=exposure_name,
+                    exposure_geometry=exposure_geometry_name))
+        self._name += ', '.join(exposures_strings)
+
+        self._output_layer_expected = self._compute_output_layer_expected()
         self._is_ready = True
         return PREPARE_SUCCESS, None
 
@@ -298,21 +356,6 @@ class MultiExposureImpactFunction(object):
         if not self._is_ready:
             message = tr('You need to run `prepare` first.')
             return ANALYSIS_FAILED_BAD_INPUT, message
-
-        hazard_name = get_name(self.hazard.keywords.get('hazard'))
-        hazard_geometry_name = get_name(geometry_type(self.hazard))
-        self._name = (
-            u'Multi exposure {hazard_type} {hazard_geometry} On '.format(
-                hazard_type=hazard_name, hazard_geometry=hazard_geometry_name))
-        exposures_strings = []
-        for exposure in self.exposures:
-            exposure_name = get_name(exposure.keywords.get('exposure'))
-            exposure_geometry_name = get_name(geometry_type(exposure))
-            exposures_strings.append(
-                u'{exposure_type} {exposure_geometry}'.format(
-                    exposure_type=exposure_name,
-                    exposure_geometry=exposure_geometry_name))
-        self._name += ', '.join(exposures_strings)
 
         self._unique_name = self._name.replace(' ', '')
         self._unique_name = replace_accentuated_characters(self._unique_name)
