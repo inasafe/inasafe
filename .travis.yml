@@ -52,12 +52,13 @@ before_install:
 
 install:
   - pip install --upgrade pip
-  - pip install --upgrade pep8
+  - pip install --upgrade pycodestyle
   - pip install --upgrade pep257
   - pip install --upgrade flake8
   - docker run -d --name qgis-testing-environment -v ${TRAVIS_BUILD_DIR}:/tests_directory -e WITH_PYTHON_PEP=${WITH_PYTHON_PEP} -e ON_TRAVIS=${ON_TRAVIS} -e MUTE_LOGS=${MUTE_LOGS} -e DISPLAY=:99 ${IMAGE}:${QGIS_VERSION_TAG}
   - sleep 10
   - docker exec -it qgis-testing-environment sh -c "qgis_setup.sh inasafe"
+  - docker exec -it qgis-testing-environment sh -c "pip install --upgrade pycodestyle"
   - docker exec -it qgis-testing-environment sh -c "pip install --upgrade pep257"
   - docker exec -it qgis-testing-environment sh -c "pip install --upgrade flake8"
 
