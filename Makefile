@@ -132,10 +132,10 @@ test_suite_all:
 pep8:
 	@echo
 	@echo "-----------"
-	@echo "PEP8 issues"
+	@echo "PEP8 issues, using pycodestyle"
 	@echo "-----------"
-	@pep8 --version
-	@pep8 --repeat --ignore=E121,E402 --exclude venv,pydev,safe_extras,extras,test_*.py  . || true
+	@pycodestyle --version
+	@pycodestyle --repeat --ignore=E121,E402,E722 --exclude venv,pydev,safe_extras,extras,test_*.py  . || true
 
 # Run pep257 style checking
 #http://pypi.python.org/pypi/pep257
