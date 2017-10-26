@@ -44,6 +44,32 @@ class TestSettings(unittest.TestCase):
         self.assertEqual('default', general_setting(
             'key', default='default', qsettings=self.qsettings))
 
+        set_general_setting('key', 'True', self.qsettings)
+        self.assertEqual(
+            'True',
+            general_setting(
+                'key', qsettings=self.qsettings, expected_type=str))
+        self.assertEqual(
+            True,
+            general_setting(
+                'key', qsettings=self.qsettings, expected_type=bool))
+        delete_general_setting('key', qsettings=self.qsettings)
+        self.assertEqual('default', general_setting(
+            'key', default='default', qsettings=self.qsettings))
+
+        set_general_setting('key', 'false', self.qsettings)
+        self.assertEqual(
+            'false',
+            general_setting(
+                'key', qsettings=self.qsettings, expected_type=str))
+        self.assertEqual(
+            False,
+            general_setting(
+                'key', qsettings=self.qsettings, expected_type=bool))
+        delete_general_setting('key', qsettings=self.qsettings)
+        self.assertEqual('default', general_setting(
+            'key', default='default', qsettings=self.qsettings))
+
         # Under InaSAFE scope
         set_setting('key', 'value', self.qsettings)
         self.assertEqual('value', setting('key', qsettings=self.qsettings))
