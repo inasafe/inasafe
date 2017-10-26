@@ -2505,6 +2505,109 @@ affected_production_value_field = {
     'units': currencies,
 }
 
+# # # # # # # # # #
+# Direction and Distance Field
+# # # # # # # # # #
+
+# Count for each exposure type
+distance_field = {
+    'key': 'distance_field',
+    'name': tr('Distance'),
+    'field_name': 'distance',
+    'header_name': tr('Distance'),
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': default_field_precision,
+    'absolute': True,
+    'description': tr(
+        'The distance value between place and hazard point.'
+    ),
+    'help_text': tr(
+        'Distance value between place feature to the epicenter of the hazard. '
+        'The distance is calculated using WGS84 as ellipsoid model. The unit of'
+        'the distance is in meter.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+bearing_from_field = {
+    'key': 'bearing_from_field',
+    'name': tr('Bearing Angle'),
+    'field_name': 'bearing_fr',
+    'header_name': tr('Bearing'),
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': default_field_precision,
+    'absolute': False,
+    'description': tr(
+        'An azimuth angle at a place to a hazard point.'),
+    'help_text': tr(
+        'A bearing angle is an angle measured to a point as observed in current'
+        ' location using north as a reference direction. In this case, "bearing'
+        ' from" refers to an angle calculated at a certain place pointing to a '
+        'hazard location. Positive values indicate it calculates from North '
+        'moving clockwise, and negative values indicate it calculates from '
+        'North moving counterclockwise.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+
+# TODO: Ivan to update
+direction_field = {
+    'key': 'direction_field',
+    'name': tr('Direction'),
+    'field_name': 'dir_from',
+    'header_name': tr('Direction'),
+    'type': QVariant.String,
+    'length': default_field_length,
+    'precision': 0,
+    'description': tr(
+        'Cardinality of a bearing angle.'),
+    'help_text': tr(
+        'If there is a place layer provided while converting the grid xml file,'
+        ' then the MMI value at the location of the place will be added to'
+        'this field.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+
+place_mmi_field = {
+    'key': 'place_mmi_field',
+    'name': tr('Place MMI Value'),
+    'field_name': 'place_mmi',
+    'header_name': tr('Place MMI'),
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': default_field_precision,
+    'absolute': True,
+    'description': tr(
+        'A value attribute for MMI at a certain place.'),
+    'help_text': tr(
+        'If there is a place layer provided while converting the grid xml file,'
+        ' then the MMI value at the location of the place will be added to'
+        'this field.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+
 # Inputs
 exposure_fields = [
     exposure_id_field,

@@ -843,20 +843,20 @@ class ShakeGrid(object):
 
         Get the MMI value on each cities/places from the generated tiff files.
 
-        :param place_layer: Point layer generated from distance calculation
+        :param place_layer: Point layer generated from distance calculation.
         :type place_layer: QgsVectorLayer
 
         :param raster_mmi_path: Path to converted mmi raster.
         :type raster_mmi_path: str
 
-        :return: Modified place layer containing MMI values
+        :return: Modified place layer containing MMI values.
         :rtype: QgsVectorLayer
         """
         shake_raster = QgsRasterLayer(raster_mmi_path, 'shake_raster')
         shake_provider = shake_raster.dataProvider()
 
         place_fields = place_layer.dataProvider().fields()
-        mmi_field_index = place_fields.indexFromName('mmi')
+        mmi_field_index = place_fields.indexFromName('place_mmi')
 
         place_layer.startEditing()
         for feature in place_layer.getFeatures():
@@ -881,11 +881,12 @@ class ShakeGrid(object):
     def generate_locality_info(self, raster_mmi_path):
         """Generate information related to the locality of the hazard.
 
-        :param raster_mmi_path: path to converted raster mmi
+        :param raster_mmi_path: path to converted raster mmi.
         :type raster_mmi_path: str
         """
 
         sort_key = None
+        LOGGER.debug('Locality information requested')
         epicenter = QgsPoint(self.longitude, self.latitude)
         place_layer = self.place_layer
 
@@ -899,9 +900,9 @@ class ShakeGrid(object):
             place = {
                 'name': feature[self.name_field],
                 'distance': feature['distance'],
-                'bearing_to': feature['bearing_to'],
-                'dir_to': feature['dir_to'],
-                'mmi_values': feature['mmi']
+                'bearing_to': feature['bearing_fr'],
+                'dir_to': feature['dir_from'],
+                'mmi_values': feature['place_mmi']
             }
             if self.population_field != '':
                 place['population'] = feature[self.population_field]
