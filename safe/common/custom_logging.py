@@ -21,8 +21,10 @@ safe_extras_dir = os.path.abspath(
 if safe_extras_dir not in sys.path:
     sys.path.append(safe_extras_dir)
 
+# We add "# NOQA" because imports are not done at top of file.
+
 from qgis.core import QgsMessageLog  # NOQA
-from PyQt4.QtCore import QSettings  # NOQA
+from PyQt4.QtCore import QSettings  # NOQA We can't move to our settings class.
 # pylint: disable=F0401
 # noinspection PyUnresolvedReferences,PyPackageRequirements
 from raven.handlers.logging import SentryHandler  # NOQA
@@ -151,8 +153,7 @@ def setup_logger(logger_name, log_file=None, sentry_url=None):
     # We will log exceptions only there. You need to either:
     #  * Set env var 'INASAFE_SENTRY=1' present (value can be anything)
     # before this will be enabled or sentry is enabled in QSettings
-    settings = QSettings()
-    flag = settings.value('inasafe/useSentry', False, type=bool)
+    flag = QSettings().value('inasafe/useSentry', False, type=bool)
     env_inasafe_sentry = 'INASAFE_SENTRY' in os.environ
 
     if env_inasafe_sentry or flag:

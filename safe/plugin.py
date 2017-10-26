@@ -20,7 +20,7 @@ from qgis.core import (
 from PyQt4.QtCore import (
     QCoreApplication,
     Qt,
-    QSettings)
+)
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import (
     QAction,
@@ -44,6 +44,7 @@ from safe.definitions.layer_purposes import (
 )
 from safe.definitions.utilities import get_field_groups
 from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.settings import setting, set_setting
 LOGGER = logging.getLogger('InaSAFE')
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -425,9 +426,7 @@ class Plugin(object):
         self.action_toggle_rubberbands.setWhatsThis(message)
         # Set initial state
         self.action_toggle_rubberbands.setCheckable(True)
-        settings = QSettings()
-        flag = bool(settings.value(
-            'inasafe/showRubberBands', False, type=bool))
+        flag = setting('showRubberBands', False, expected_type=bool)
         self.action_toggle_rubberbands.setChecked(flag)
         # noinspection PyUnresolvedReferences
         self.action_toggle_rubberbands.triggered.connect(
@@ -452,9 +451,8 @@ class Plugin(object):
     def _create_test_layers_action(self):
         """Create action for adding layers (developer mode, non final only)."""
         final_release = inasafe_release_status == 'final'
-        settings = QSettings()
-        self.developer_mode = settings.value(
-            'inasafe/developer_mode', False, type=bool)
+        self.developer_mode = setting(
+            'developer_mode', False, expected_type=bool)
         if not final_release and self.developer_mode:
             icon = resources_path('img', 'icons', 'add-test-layers.svg')
             self.action_add_layers = QAction(
@@ -473,13 +471,12 @@ class Plugin(object):
     def _create_run_test_action(self):
         """Create action for running tests (developer mode, non final only)."""
         final_release = inasafe_release_status == 'final'
-        settings = QSettings()
-        self.developer_mode = settings.value(
-            'inasafe/developer_mode', False, type=bool)
+        self.developer_mode = setting(
+            'developer_mode', False, expected_type=bool)
         if not final_release and self.developer_mode:
 
-            default_package = unicode(settings.value(
-                'inasafe/testPackage', 'safe', type=str))
+            default_package = unicode(
+                setting('testPackage', 'safe', expected_type=str))
             msg = self.tr('Run tests in %s' % default_package)
 
             self.test_button = QToolButton()
@@ -678,10 +675,9 @@ class Plugin(object):
 
     def select_test_package(self):
         """Select the test package."""
-        settings = QSettings()
         default_package = 'safe'
-        user_package = unicode(settings.value(
-            'inasafe/testPackage', default_package, type=str))
+        user_package = unicode(
+            setting('testPackage', default_package, expected_type=str))
 
         test_package, _ = QInputDialog.getText(
             self.iface.mainWindow(),
@@ -693,7 +689,7 @@ class Plugin(object):
         if test_package == '':
             test_package = default_package
 
-        settings.setValue('inasafe/testPackage', test_package)
+        set_setting('testPackage', test_package)
         msg = self.tr('Run tests in %s' % test_package)
         self.action_run_tests.setWhatsThis(msg)
         self.action_run_tests.setText(msg)
@@ -704,9 +700,7 @@ class Plugin(object):
         main_window = self.iface.mainWindow()
         action = main_window.findChild(QAction, 'mActionShowPythonDialog')
         action.trigger()
-        settings = QSettings()
-        package = unicode(settings.value(
-            'inasafe/testPackage', 'safe', type=str))
+        package = unicode(setting('testPackage', 'safe', expected_type=str))
         for child in main_window.findChildren(QDockWidget, 'PythonConsole'):
             if child.objectName() == 'PythonConsole':
                 child.show()
