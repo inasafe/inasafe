@@ -686,7 +686,7 @@ class OptionsDialog(QDialog, FORM_CLASS):
             data = setting('profile', generate_default_profile())
         if self.profile_widget is not None:
             self.profile_widget.setParent(None)
-        #TODO(IS) Ideally, we should initialize it once, then only update the
+        # TODO(IS) Ideally, we should initialize it once, then only update the
         # content/tree widget.
         self.profile_widget = ProfileWidget(parent=self, data=data)
         self.preference_layout.addWidget(self.profile_widget)
