@@ -20,10 +20,15 @@ from safe.definitions.fields import (
     total_field,
     exposure_total_field,
 )
+from safe.definitions.layer_purposes import (
+    layer_purpose_analysis_impacted,
+    layer_purpose_aggregation_summary,
+)
 from safe.gis.vector.tools import (
     create_field_from_definition,
     read_dynamic_inasafe_field,
 )
+from safe.utilities.gis import qgis_version
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -150,6 +155,11 @@ def multi_exposure_analysis_summary(analysis, intermediate_analysis):
         analysis.keywords['inasafe_fields'][key] = value
 
     analysis.commitChanges()
+    analysis.keywords['title'] = layer_purpose_analysis_impacted['name']
+    if qgis_version() >= 21600:
+        analysis.setName(analysis.keywords['title'])
+    else:
+        analysis.setLayerName(analysis.keywords['title'])
     return analysis
 
 
@@ -217,4 +227,9 @@ def multi_exposure_aggregation_summary(aggregation, intermediate_layers):
                     source_feature[source_field])
 
     aggregation.commitChanges()
+    aggregation.keywords['title'] = layer_purpose_aggregation_summary['name']
+    if qgis_version() >= 21600:
+        aggregation.setName(aggregation.keywords['title'])
+    else:
+        aggregation.setLayerName(aggregation.keywords['title'])
     return aggregation
