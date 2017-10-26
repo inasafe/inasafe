@@ -1499,9 +1499,8 @@ class ImpactFunction(object):
             # Users are free to set their own datastore with the setter.
             self.callback(1, step_count, analysis_steps['data_store'])
 
-            settings = QSettings()
-            default_user_directory = settings.value(
-                'inasafe/defaultUserDirectory', defaultValue='')
+            default_user_directory = setting(
+                'defaultUserDirectory', default='')
             if default_user_directory:
                 path = join(default_user_directory, self._unique_name)
                 if not exists(path):

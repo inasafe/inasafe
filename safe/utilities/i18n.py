@@ -8,7 +8,8 @@ import logging
 # noinspection PyUnresolvedReferences
 import qgis  # NOQA pylint: disable=unused-import
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import QCoreApplication, QSettings, QLocale
+from PyQt4.QtCore import QCoreApplication, QSettings, QLocale  # QSettings
+# can't be moved to our internal class
 
 from safe.utilities.unicode import get_unicode
 

@@ -35,7 +35,7 @@ from qgis.gui import QgsMapToolPan
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import QSettings, pyqtSignature, QRegExp, pyqtSlot
+from PyQt4.QtCore import pyqtSignature, QRegExp, pyqtSlot
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import (
     QDialog, QProgressDialog, QMessageBox, QFileDialog, QRegExpValidator)
@@ -59,6 +59,7 @@ from safe.utilities.qgis_utilities import (
     display_warning_message_bar)
 from safe.gui.tools.rectangle_map_tool import RectangleMapTool
 from safe.gui.tools.help.osm_downloader_help import osm_downloader_help
+from safe.utilities.settings import setting, set_setting
 
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -218,18 +219,13 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         self.help_web_view.setHtml(string)
 
     def restore_state(self):
-        """ Read last state of GUI from configuration file."""
-        settings = QSettings()
-        try:
-            last_path = settings.value('directory', type=str)
-        except TypeError:
-            last_path = ''
+        """Read last state of GUI from configuration file."""
+        last_path = setting('directory', '', expected_type=str)
         self.output_directory.setText(last_path)
 
     def save_state(self):
         """ Store current state of GUI to configuration file ."""
-        settings = QSettings()
-        settings.setValue('directory', self.output_directory.text())
+        set_setting('directory', self.output_directory.text())
 
     def update_extent(self, extent):
         """Update extent value in GUI based from an extent.

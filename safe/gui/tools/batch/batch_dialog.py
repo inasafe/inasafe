@@ -26,7 +26,7 @@ from StringIO import StringIO
 from datetime import datetime
 
 from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import pyqtSignature, pyqtSlot, QSettings, Qt
+from PyQt4.QtCore import pyqtSignature, pyqtSlot, Qt
 from PyQt4.QtGui import (
     QAbstractItemView,
     QDialog,
@@ -67,6 +67,7 @@ from safe.utilities.gis import extent_string_to_array
 from safe.utilities.qgis_utilities import display_critical_message_box
 from safe.utilities.resources import (
     html_footer, html_header, get_ui_class)
+from safe.utilities.settings import setting, set_setting
 
 INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
 LOGGER = logging.getLogger('InaSAFE')
@@ -88,9 +89,7 @@ class BatchDialog(QDialog, FORM_CLASS):
         :param dock: A Dock widget needed to run the scenarios with. On
             our road map is to figure out how to get rid of this parameter.
         :type dock: Dock
-
         """
-
         QDialog.__init__(self, parent)
         self.setupUi(self)
         self.setWindowModality(Qt.ApplicationModal)
@@ -161,37 +160,28 @@ class BatchDialog(QDialog, FORM_CLASS):
 
     def restore_state(self):
         """Restore GUI state from configuration file."""
-
-        settings = QSettings()
-
         # restore last source path
-        last_source_path = settings.value(
-            'inasafe/lastSourceDir', self.default_directory, type=str)
+        last_source_path = setting(
+            'lastSourceDir', self.default_directory, expected_type=str)
         self.source_directory.setText(last_source_path)
 
         # restore path pdf output
-        last_output_dir = settings.value(
-            'inasafe/lastOutputDir', self.default_directory, type=str)
+        last_output_dir = setting(
+            'lastOutputDir', self.default_directory, expected_type=str)
         self.output_directory.setText(last_output_dir)
 
         # restore default output dir combo box
-        use_default_output_dir = bool(settings.value(
-            'inasafe/useDefaultOutputDir', True, type=bool))
+        use_default_output_dir = bool(setting(
+            'useDefaultOutputDir', True, expected_type=bool))
         self.scenario_directory_radio.setChecked(
             use_default_output_dir)
 
     def save_state(self):
         """Save current state of GUI to configuration file."""
-
-        settings = QSettings()
-
-        settings.setValue(
-            'inasafe/lastSourceDir', self.source_directory.text())
-        settings.setValue(
-            'inasafe/lastOutputDir', self.output_directory.text())
-        settings.setValue(
-            'inasafe/useDefaultOutputDir',
-            self.scenario_directory_radio.isChecked())
+        set_setting('lastSourceDir', self.source_directory.text())
+        set_setting('lastOutputDir', self.output_directory.text())
+        set_setting(
+            'useDefaultOutputDir', self.scenario_directory_radio.isChecked())
 
     def choose_directory(self, line_edit, title):
         """ Show a directory selection dialog.
@@ -761,7 +751,6 @@ class BatchDialog(QDialog, FORM_CLASS):
     @pyqtSignature('')  # prevents actions being handled twice
     def on_output_directory_chooser_clicked(self):
         """Auto  connect slot activated when tbOutputDiris clicked ."""
-
         title = self.tr('Set the output directory for pdf report files')
         self.choose_directory(self.output_directory, title)
 
@@ -813,7 +802,7 @@ class BatchDialog(QDialog, FORM_CLASS):
 
 
 def read_scenarios(filename):
-    """Read keywords dictionary from file
+    """Read keywords dictionary from file.
 
     :param filename: Name of file holding scenarios .
 
