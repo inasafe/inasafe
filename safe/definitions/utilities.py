@@ -7,7 +7,6 @@ from collections import OrderedDict
 from os.path import join, exists, splitext
 
 from qgis.core import QgsApplication
-from PyQt4.QtCore import QSettings
 
 from safe import definitions
 from safe.definitions import fields

@@ -1,5 +1,5 @@
 [flake8]
-exclude = safe_extras,test_*.py,__init__.py,extras
+exclude = safe_extras,test_*.py,__init__.py,extras,*example.py
 max-line-length = 79
 
 # E12x continuation line indentation
