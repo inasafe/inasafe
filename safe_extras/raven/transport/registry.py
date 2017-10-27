@@ -1,7 +1,22 @@
-from raven.transport.base import HTTPTransport, GeventedHTTPTransport, TwistedHTTPTransport, \
-  TornadoHTTPTransport, UDPTransport
+"""
+raven.transport.registry
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+:copyright: (c) 2010-2012 by the Sentry Team, see AUTHORS for more details.
+:license: BSD, see LICENSE for more details.
+"""
+from __future__ import absolute_import
+
+# TODO(dcramer): we really should need to import all of these by default
+from raven.transport.eventlet import EventletHTTPTransport
 from raven.transport.exceptions import DuplicateScheme
+from raven.transport.http import HTTPTransport
+from raven.transport.gevent import GeventedHTTPTransport
+from raven.transport.requests import RequestsHTTPTransport
 from raven.transport.threaded import ThreadedHTTPTransport
+from raven.transport.threaded_requests import ThreadedRequestsHTTPTransport
+from raven.transport.twisted import TwistedHTTPTransport
+from raven.transport.tornado import TornadoHTTPTransport
 from raven.utils import urlparse
 
 
@@ -16,7 +31,7 @@ class TransportRegistry(object):
                 self.register_transport(transport)
 
     def register_transport(self, transport):
-        if not hasattr(transport, 'scheme') and not hasattr(transport.scheme, '__iter__'):
+        if not hasattr(transport, 'scheme') or not hasattr(transport.scheme, '__iter__'):
             raise AttributeError('Transport %s must have a scheme list', transport.__class__.__name__)
 
         for scheme in transport.scheme:
@@ -36,25 +51,16 @@ class TransportRegistry(object):
     def supported_scheme(self, scheme):
         return scheme in self._schemes
 
-    def get_transport(self, parsed_url):
+    def get_transport(self, parsed_url, **options):
         full_url = parsed_url.geturl()
         if full_url not in self._transports:
-            # Grab options from the querystring to pass to the transport
-            # e.g. ?timeout=30
-            if parsed_url.query:
-                options = dict(q.split('=', 1) for q in parsed_url.query.split('&'))
-            else:
-                options = dict()
+            # Remove the options from the parsed_url
+            parsed_url = urlparse.urlparse(full_url.split('?')[0])
             self._transports[full_url] = self._schemes[parsed_url.scheme](parsed_url, **options)
         return self._transports[full_url]
 
-    def compute_scope(self, url, scope):
-        """
-        Compute a scope dictionary.  This may be overridden by custom
-        transports
-        """
-        transport = self._schemes[url.scheme](url)
-        return transport.compute_scope(url, scope)
+    def get_transport_cls(self, scheme):
+        return self._schemes[scheme]
 
 
 default_transports = [
@@ -62,6 +68,8 @@ default_transports = [
     ThreadedHTTPTransport,
     GeventedHTTPTransport,
     TwistedHTTPTransport,
+    RequestsHTTPTransport,
+    ThreadedRequestsHTTPTransport,
     TornadoHTTPTransport,
-    UDPTransport,
+    EventletHTTPTransport,
 ]
