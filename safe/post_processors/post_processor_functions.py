@@ -6,8 +6,8 @@
 from PyQt4.QtCore import QPyNullVariant
 
 from safe.definitions.hazard_classifications import (
-    not_exposed_class,
-    hazard_classes_all)
+    not_exposed_class, hazard_classes_all)
+from safe.definitions.utilities import get_displacement_rate
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -88,10 +88,10 @@ def post_processor_population_displacement_function(
     """Private function used in the displacement postprocessor.
 
     :param hazard: The hazard to use.
-    :type hazard: dict
+    :type hazard: str
 
     :param classification: The hazard classification to use.
-    :type classification: dict
+    :type classification: str
 
     :param hazard_class: The hazard class of the feature.
     :type hazard_class: str
@@ -104,17 +104,20 @@ def post_processor_population_displacement_function(
     :rtype: float
     """
     _ = population  # NOQA
-    for hazard in hazard_classes_all:
-        if hazard['key'] == classification:
-            classification = hazard['classes']
-            break
+    # for hazard in hazard_classes_all:
+    #     if hazard['key'] == classification:
+    #         classification = hazard['classes']
+    #         break
+    #
+    # for hazard_class_def in classification:
+    #     if hazard_class_def['key'] == hazard_class:
+    #         displaced_ratio = hazard_class_def.get('displacement_rate', 0)
+    #         return displaced_ratio
+    #
+    # return 0
 
-    for hazard_class_def in classification:
-        if hazard_class_def['key'] == hazard_class:
-            displaced_ratio = hazard_class_def.get('displacement_rate', 0)
-            return displaced_ratio
-
-    return 0
+    return get_displacement_rate(
+        hazard, classification, hazard_class)
 
 
 def post_processor_population_fatality_function(
