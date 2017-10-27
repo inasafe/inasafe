@@ -390,7 +390,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
                     display_warning_message_box(
                         self,
                         error_dialog_title,
-                        exception.message)
+                        unicode(exception))
             self.done(QDialog.Accepted)
             self.rectangle_map_tool.reset()
 
@@ -401,7 +401,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         except Exception as exception:  # pylint: disable=broad-except
             # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
             display_warning_message_box(
-                self, error_dialog_title, exception.message)
+                self, error_dialog_title, unicode(exception))
 
             self.progress_dialog.cancel()
 

@@ -31,36 +31,28 @@ class InaSAFEError(RuntimeError):
     suggestion = 'An unspecified error occurred.'
 
     def __init__(self, message=None):
-        """"General constructor.
+        """General constructor.
 
         :param message: The optional error message.
         :type message: str, unicode, MessageElement
-        """""
+        """
         if isinstance(message, unicode):
             super(InaSAFEError, self).__init__(get_string(message))
-            self.message = message
 
         elif isinstance(message, str):
             super(InaSAFEError, self).__init__(message)
-            self.message = get_unicode(message)
 
         elif isinstance(message, MessageElement):
             super(InaSAFEError, self).__init__(message.to_text())
-            self.message = get_unicode(message.to_text())
 
         elif message is None:
             pass
 
         elif isinstance(message, BaseException):
-            super(InaSAFEError, self).__init__(unicode(message))
-            self.message = unicode(message)
+            super(InaSAFEError, self).__init__(get_unicode(message))
         # This shouldn't happen...
         else:
             raise TypeError
-
-    def __unicode__(self):
-        """Get the error message as unicode."""
-        return self.message
 
 
 class ReadLayerError(InaSAFEError):
