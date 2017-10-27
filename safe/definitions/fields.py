@@ -2,8 +2,6 @@
 
 """Definitions relating to fields."""
 
-from copy import deepcopy
-
 from PyQt4.QtCore import QVariant
 
 from safe.definitions import concepts
@@ -2124,69 +2122,129 @@ population_displaced_per_mmi = {
     'replace_null': False
 }
 
+# # # # # # # # # #
 # Multi exposure fields
-# Count for each hazard class, we inherit from hazard_count_field, and we
-# overwrite only the key, name and field_name
-exposure_hazard_count_field = deepcopy(hazard_count_field)
-exposure_hazard_count_field['key'] = '%s_' + hazard_count_field['key']
-exposure_hazard_count_field['name'] = tr('Total %s %s')
-exposure_hazard_count_field['field_name'] = (
-    '%s_' + hazard_count_field['field_name'])
-exposure_hazard_count_field['type'] = QVariant.Double
+# # # # # # # # # #
+
+# Basically, all these multi exposure fields are the same as their parents,
+# but we only add the exposure prefix to the key and field name.
+exposure_hazard_count_field = {
+    'key': '%s_' + hazard_count_field['key'],
+    'name': tr('Total %s %s'),
+    'field_name': '%s_' + hazard_count_field['field_name'],
+    'type': hazard_count_field['type'],
+    'length': hazard_count_field['length'],
+    'precision': hazard_count_field['precision'],
+    'absolute': hazard_count_field['absolute'],
+    'help_text': hazard_count_field['help_text'],
+    'description': hazard_count_field['description'],
+    'citations': hazard_count_field['citations'],
+    # Null value can be replaced by default or not
+    'replace_null': hazard_count_field['replace_null']
+}
 
 # Total affected per exposure
-exposure_total_affected_field = deepcopy(total_affected_field)
-exposure_total_affected_field['key'] = '%s_' + total_affected_field['key']
-exposure_total_affected_field['name'] = tr('Total Affected %s')
-exposure_total_affected_field['field_name'] = (
-    '%s_' + total_affected_field['field_name'])
-exposure_total_affected_field['type'] = QVariant.Double
+exposure_total_affected_field = {
+    'key': '%s_' + total_affected_field['key'],
+    'name': tr('Total Affected %s'),
+    'field_name': '%s_' + total_affected_field['field_name'],
+    'type': total_affected_field['type'],
+    'length': total_affected_field['length'],
+    'precision': total_affected_field['precision'],
+    'absolute': total_affected_field['absolute'],
+    'help_text': total_affected_field['help_text'],
+    'description': total_affected_field['description'],
+    'citations': total_affected_field['citations'],
+    # Null value can be replaced by default or not
+    'replace_null': total_affected_field['replace_null']
+}
 
 # Total not affected per exposure
-exposure_total_not_affected_field = deepcopy(total_not_affected_field)
-exposure_total_not_affected_field['key'] = (
-    '%s_' + total_not_affected_field['key'])
-exposure_total_not_affected_field['name'] = tr('Total Not Affected %s')
-exposure_total_not_affected_field['field_name'] = (
-    '%s_' + total_not_affected_field['field_name'])
-exposure_total_not_affected_field['type'] = QVariant.Double
+exposure_total_not_affected_field = {
+    'key': '%s_' + total_not_affected_field['key'],
+    'name': tr('Total Not Affected %s'),
+    'field_name': '%s_' + total_not_affected_field['field_name'],
+    'type': total_not_affected_field['type'],
+    'length': total_not_affected_field['length'],
+    'precision': total_not_affected_field['precision'],
+    'absolute': total_not_affected_field['absolute'],
+    'help_text': total_not_affected_field['help_text'],
+    'description': total_not_affected_field['description'],
+    'citations': total_not_affected_field['citations'],
+    # Null value can be replaced by default or not
+    'replace_null': total_not_affected_field['replace_null']
+}
 
 # Total exposed per exposure
-exposure_total_exposed_field = deepcopy(total_exposed_field)
-exposure_total_exposed_field['key'] = '%s_' + total_exposed_field['key']
-exposure_total_exposed_field['name'] = tr('Total Exposed %s')
-exposure_total_exposed_field['field_name'] = (
-    '%s_' + total_exposed_field['field_name'])
-exposure_total_exposed_field['type'] = QVariant.Double
+exposure_total_exposed_field = {
+    'key': '%s_' + total_exposed_field['key'],
+    'name': tr('Total Exposed %s'),
+    'field_name': '%s_' + total_exposed_field['field_name'],
+    'type': total_exposed_field['type'],
+    'length': total_exposed_field['length'],
+    'precision': total_exposed_field['precision'],
+    'absolute': total_exposed_field['absolute'],
+    'help_text': total_exposed_field['help_text'],
+    'description': total_exposed_field['description'],
+    'citations': total_exposed_field['citations'],
+    # Null value can be replaced by default or not
+    'replace_null': total_exposed_field['replace_null']
+}
 
 # Total not exposed per exposure
-exposure_total_not_exposed_field = deepcopy(total_not_exposed_field)
-exposure_total_not_exposed_field['key'] = (
-    '%s_' + total_not_exposed_field['key'])
-exposure_total_not_exposed_field['name'] = tr('Total Not Exposed %s')
-exposure_total_not_exposed_field['field_name'] = (
-    '%s_' + total_not_exposed_field['field_name'])
-exposure_total_not_exposed_field['type'] = QVariant.Double
+exposure_total_not_exposed_field = {
+    'key': '%s_' + total_not_exposed_field['key'],
+    'name': tr('Total Not Exposed %s'),
+    'field_name': '%s_' + total_not_exposed_field['field_name'],
+    'type': total_not_exposed_field['type'],
+    'length': total_not_exposed_field['length'],
+    'precision': total_not_exposed_field['precision'],
+    'absolute': total_not_exposed_field['absolute'],
+    'help_text': total_not_exposed_field['help_text'],
+    'description': total_not_exposed_field['description'],
+    'citations': total_not_exposed_field['citations'],
+    # Null value can be replaced by default or not
+    'replace_null': total_not_exposed_field['replace_null']
+}
 
 # Total per exposure
-exposure_total_field = deepcopy(total_field)
-exposure_total_field['key'] = '%s_' + total_field['key']
-exposure_total_field['name'] = tr('Total %s')
-exposure_total_field['field_name'] = '%s_' + total_field['field_name']
-exposure_total_field['type'] = QVariant.Double
+exposure_total_field = {
+    'key': '%s_' + total_field['key'],
+    'name': tr('Total %s'),
+    'field_name': '%s_' + total_field['field_name'],
+    'type': total_field['type'],
+    'length': total_field['length'],
+    'precision': total_field['precision'],
+    'absolute': total_field['absolute'],
+    'help_text': total_field['help_text'],
+    'description': total_field['description'],
+    'citations': total_field['citations'],
+    # Null value can be replaced by default or not
+    'replace_null': total_field['replace_null']
+}
 
 # Like roads_residential_affected_field
 # or roads_other_affected_field
 # or buildings_other_affected_field
-# might in the same layer
-exposure_affected_exposure_type_count_field = deepcopy(
-    affected_exposure_count_field)
-exposure_affected_exposure_type_count_field['key'] = (
-    '%s_' + affected_exposure_count_field['key'])
-exposure_affected_exposure_type_count_field['name'] = tr('Affected %s %s')
-exposure_affected_exposure_type_count_field['field_name'] = (
-    '%s_' + affected_exposure_count_field['field_name'])
-exposure_affected_exposure_type_count_field['type'] = QVariant.Double
+# might be in the same layer
+exposure_affected_exposure_type_count_field = {
+    'key': '%s_' + affected_exposure_count_field['key'],
+    'name': tr('Affected %s %s'),
+    'field_name': '%s_' + affected_exposure_count_field['field_name'],
+    'type': affected_exposure_count_field['type'],
+    'length': affected_exposure_count_field['length'],
+    'precision': affected_exposure_count_field['precision'],
+    'absolute': affected_exposure_count_field['absolute'],
+    'help_text': affected_exposure_count_field['help_text'],
+    'description': affected_exposure_count_field['description'],
+    'citations': affected_exposure_count_field['citations'],
+    # Null value can be replaced by default or not
+    'replace_null': affected_exposure_count_field['replace_null']
+}
+
+# # # # # # # # # #
+# Productivity, ratio and cost
+# # # # # # # # # #
 
 # Productivity field
 productivity_rate_field = {
