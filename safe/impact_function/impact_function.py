@@ -2574,6 +2574,9 @@ class ImpactFunction(object):
         """
         impact_function = ImpactFunction()
         provenance = output_metadata['provenance_data']
+        # Set provenance data
+        impact_function._provenance = provenance
+
         # Set exposure layer
         exposure_path = get_provenance(provenance, provenance_exposure_layer)
         if exposure_path:
@@ -2694,6 +2697,8 @@ class ImpactFunction(object):
             impact_function._crs = QgsCoordinateReferenceSystem(crs)
         else:
             impact_function._crs = None
+
+        impact_function._provenance_ready = True
 
         return impact_function
 

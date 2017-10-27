@@ -75,6 +75,7 @@ from safe.gui.analysis_utilities import (
 from safe.gui.gui_utilities import layer_from_combo, add_ordered_combo_item
 from safe.gui.tools.about_dialog import AboutDialog
 from safe.gui.tools.help_dialog import HelpDialog
+from safe.gui.tools.print_report_dialog import PrintReportDialog
 from safe.gui.widgets.message import (
     show_no_keywords_message,
     show_keyword_version_message,
@@ -249,7 +250,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.help_button.clicked.connect(self.show_help)
         self.run_button.clicked.connect(self.accept)
         self.about_button.clicked.connect(self.about)
-        self.print_button.clicked.connect(self.print_map)
+        self.print_button.clicked.connect(self.show_print_dialog)
         self.hazard_layer_combo.currentIndexChanged.connect(
             self.index_changed_hazard_layer_combo)
         self.exposure_layer_combo.currentIndexChanged.connect(
@@ -744,6 +745,49 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.progress_bar.setMaximum(maximum_value)
         self.progress_bar.setValue(current_value)
         QtGui.QApplication.processEvents()
+
+    def show_print_dialog(self):
+        """Open the print dialog"""
+        if not self.impact_function:
+            # Now try to read the keywords and show them in the dock
+            try:
+                active_layer = self.iface.activeLayer()
+                keywords = self.keyword_io.read_keywords(active_layer)
+
+                provenances = keywords.get('provenance_data', {})
+                if provenances:
+                    self.impact_function = (
+                        ImpactFunction.load_from_output_metadata(keywords))
+
+            except (KeywordNotFoundError,
+                    HashNotFoundError,
+                    InvalidParameterError,
+                    NoKeywordsFoundError,
+                    MetadataReadError,
+                    AttributeError):
+                # Added this check in 3.2 for #1861
+                active_layer = self.iface.activeLayer()
+                if active_layer is None:
+                    if self.conflicting_plugin_detected:
+                        send_static_message(self, conflicting_plugin_message())
+                    else:
+                        send_static_message(self, getting_started_message())
+                else:
+                    show_no_keywords_message(self)
+            except Exception as e:  # pylint: disable=broad-except
+                error_message = get_error_message(e)
+                send_error_message(self, error_message)
+
+        if self.impact_function:
+            dialog = PrintReportDialog(
+                self.impact_function, self.iface, dock=self, parent=self)
+            dialog.show()
+        else:
+            QtGui.QMessageBox.warning(
+                self,
+                self.tr('InaSAFE'),
+                self.tr('Please select a valid layer before printing. '
+                        'No Impact Function found.'))
 
     def show_help(self):
         """Open the help dialog."""
