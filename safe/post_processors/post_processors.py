@@ -11,11 +11,10 @@ from safe.post_processors.post_processor_functions import (
     multiply,
     size,
     post_processor_affected_function)
-from safe.post_processors import (
+from safe.post_processors.post_processor_inputs import (
     geometry_property_input_type,
     layer_property_input_type,
-    size_calculator_input_value)
-from safe.post_processors import (
+    size_calculator_input_value,
     keyword_input_type,
     field_input_type)
 from safe.definitions.fields import (
