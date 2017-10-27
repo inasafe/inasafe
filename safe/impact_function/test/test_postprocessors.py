@@ -26,23 +26,23 @@ from safe.definitions.fields import (
     production_cost_field,
     production_value_field
 )
-from safe.definitions.post_processors import (
+from safe.post_processors import (
     post_processor_size_rate,
     post_processor_size,
     post_processor_affected,
     field_input_type,
     post_processor_additional_rice)
-from safe.definitions.post_processors.post_processor_inputs import (
+from safe.post_processors import (
     dynamic_field_input_type,
     needs_profile_input_type)
-from safe.definitions.post_processors.population_post_processors import (
+from safe.post_processors.population_post_processors import (
     post_processor_male,
     post_processor_female,
     post_processor_hygiene_packs,
     post_processor_youth,
     post_processor_adult,
     post_processor_elderly)
-from safe.definitions.post_processors.productivity_post_processors import (
+from safe.post_processors.productivity_post_processors import (
     post_processor_productivity,
     post_processor_production_cost,
     post_processor_production_value

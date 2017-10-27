@@ -4,12 +4,12 @@
 
 import logging
 
+from safe.post_processors import size
 from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
 from safe.definitions.fields import (
     size_field,
     count_fields,
 )
-from safe.definitions.post_processors import size
 from safe.definitions.processing_steps import (
     recompute_counts_steps)
 from safe.gis.sanity_check import check_layer

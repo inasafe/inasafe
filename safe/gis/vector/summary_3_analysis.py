@@ -7,6 +7,7 @@ from math import isnan
 from PyQt4.QtCore import QPyNullVariant
 from qgis.core import QgsFeatureRequest
 
+from safe.post_processors import post_processor_affected_function
 from safe.definitions.fields import (
     analysis_name_field,
     aggregation_id_field,
@@ -22,7 +23,6 @@ from safe.definitions.fields import (
 )
 from safe.definitions.hazard_classifications import not_exposed_class
 from safe.definitions.layer_purposes import layer_purpose_analysis_impacted
-from safe.definitions.post_processors import post_processor_affected_function
 from safe.definitions.processing_steps import (
     summary_3_analysis_steps)
 from safe.gis.sanity_check import check_layer

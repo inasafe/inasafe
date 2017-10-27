@@ -7,6 +7,9 @@ from collections import OrderedDict
 # noinspection PyUnresolvedReferences
 from PyQt4.QtCore import QPyNullVariant
 
+from safe.post_processors.population_post_processors import (
+    age_postprocessors,
+    gender_postprocessors)
 from safe.common.parameters.resource_parameter import ResourceParameter
 from safe.definitions.exposure import exposure_population
 from safe.definitions.field_groups import (
@@ -18,9 +21,6 @@ from safe.definitions.fields import (
     displaced_field,
     additional_minimum_needs)
 from safe.definitions.minimum_needs import minimum_needs_fields
-from safe.definitions.post_processors.population_post_processors import (
-    age_postprocessors,
-    gender_postprocessors)
 from safe.definitions.utilities import (
     postprocessor_output_field,
     definition)

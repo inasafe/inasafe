@@ -7,10 +7,17 @@
 
 import logging
 
-from post_processor_functions import (
+from safe.post_processors.post_processor_functions import (
     multiply,
     size,
     post_processor_affected_function)
+from safe.post_processors import (
+    geometry_property_input_type,
+    layer_property_input_type,
+    size_calculator_input_value)
+from safe.post_processors import (
+    keyword_input_type,
+    field_input_type)
 from safe.definitions.fields import (
     feature_rate_field,
     feature_value_field,
@@ -19,13 +26,6 @@ from safe.definitions.fields import (
     affected_field
 )
 from safe.definitions.hazard_classifications import not_exposed_class
-from safe.definitions.post_processors.post_processor_inputs import (
-    geometry_property_input_type,
-    layer_property_input_type,
-    size_calculator_input_value)
-from safe.definitions.post_processors.post_processor_inputs import (
-    keyword_input_type,
-    field_input_type)
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

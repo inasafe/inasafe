@@ -2,18 +2,20 @@
 
 """Test for Impact Function."""
 
-from copy import deepcopy
 import getpass
-from socket import gethostname
-from datetime import datetime
-
-import unittest
 import json
-import os
 import logging
-from os.path import join, isfile
+import os
+import unittest
+from copy import deepcopy
+from datetime import datetime
 from os import listdir
+from os.path import join, isfile
+from socket import gethostname
 
+from safe.common.version import get_version
+from safe.datastore.datastore import DataStore
+from safe.definitions.default_values import female_ratio_default_value
 from safe.definitions.fields import (
     exposure_type_field,
     female_ratio_field,
@@ -25,6 +27,15 @@ from safe.definitions.fields import (
     youth_displaced_count_field,
     displaced_field,
 )
+from safe.definitions.layer_purposes import (
+    layer_purpose_profiling,
+    layer_purpose_analysis_impacted,
+    layer_purpose_aggregate_hazard_impacted,
+    layer_purpose_exposure_summary,
+    layer_purpose_exposure_summary_table,
+    layer_purpose_aggregation_summary,
+)
+from safe.definitions.minimum_needs import minimum_needs_fields
 from safe.definitions.provenance import (
     provenance_action_checklist,
     provenance_aggregation_keywords,
@@ -62,17 +73,12 @@ from safe.definitions.provenance import (
     provenance_layer_analysis_impacted,
     provenance_layer_exposure_summary_table
 )
-from safe.definitions.default_values import female_ratio_default_value
-from safe.definitions.layer_purposes import (
-    layer_purpose_profiling,
-    layer_purpose_analysis_impacted,
-    layer_purpose_aggregate_hazard_impacted,
-    layer_purpose_exposure_summary,
-    layer_purpose_exposure_summary_table,
-    layer_purpose_aggregation_summary,
-)
-from safe.definitions.minimum_needs import minimum_needs_fields
 from safe.definitions.utilities import definition
+from safe.impact_function.provenance_utilities import (
+    get_map_title,
+    get_analysis_question,
+)
+from safe.test.debug_helper import print_attribute_table
 from safe.test.utilities import (
     get_control_text,
     load_test_raster_layer,
@@ -80,14 +86,6 @@ from safe.test.utilities import (
     standard_data_path,
     load_test_vector_layer,
     compare_wkt
-)
-from safe.common.version import get_version
-from safe.datastore.datastore import DataStore
-from safe.test.debug_helper import print_attribute_table
-
-from safe.impact_function.provenance_utilities import (
-    get_map_title,
-    get_analysis_question,
 )
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -102,8 +100,8 @@ from qgis.core import (
 from osgeo import gdal
 from PyQt4.QtCore import QT_VERSION_STR
 from PyQt4.Qt import PYQT_VERSION_STR
-from safe.definitions.post_processors import post_processor_size
-from safe.definitions.post_processors.population_post_processors import (
+from safe.post_processors import post_processor_size
+from safe.post_processors.population_post_processors import (
     post_processor_female,
     post_processor_male,
     post_processor_youth,
