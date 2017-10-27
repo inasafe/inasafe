@@ -9,7 +9,8 @@ from os.path import exists
 from PyQt4 import QtCore
 
 import safe.definitions as definitions
-from developer_help import content as developer_help
+import safe.post_processors
+from safe.gui.tools.help.developer_help import content as developer_help
 from safe.post_processors import (
     post_processor_input_types,
     post_processor_input_values)
@@ -694,7 +695,7 @@ def content():
         tr('Post Processor Process Types'),
         heading_level=2)
     table = _create_post_processor_subtable(
-        definitions.post_processor_process_types
+        safe.post_processors.post_processor_process_types
     )
     message.add(table)
 
@@ -704,7 +705,7 @@ def content():
         'post-processors',
         tr('Post Processors'),
         heading_level=2)
-    post_processors = safe.definitions.post_processors
+    post_processors = safe.post_processors.post_processors
     table = m.Table(style_class='table table-condensed table-striped')
     row = m.Row()
     row.add(m.Cell(tr('Name'), header=True))
