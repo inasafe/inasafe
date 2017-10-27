@@ -16,10 +16,10 @@ __revision__ = '$Format:%H$'
 
 class ProfileWidget(QTreeWidget, object):
 
-    """Profile Widget"""
+    """Profile Widget."""
 
     def __init__(self, parent, data):
-        """Constructor"""
+        """Constructor."""
         super(ProfileWidget, self).__init__(parent)
 
         # Attributes

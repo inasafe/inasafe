@@ -26,7 +26,7 @@ from text import PlainText
 
 
 class AbstractList(MessageElement):
-    """A class to model free text in the messaging system ."""
+    """A class to model free text in the messaging system."""
 
     def __init__(self, *args, **kwargs):
         """Creates a Text object to contain a list of Text objects
