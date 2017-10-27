@@ -16,7 +16,8 @@ from qgis.gui import QgsMapLayerProxyModel, QgsFieldProxyModel
 from safe.common.utilities import temp_dir, unique_filename
 from safe.common.version import get_version
 from safe.datastore.folder import Folder
-from safe.definitions import minimum_needs_post_processors
+from safe.post_processors.minimum_needs_post_processors import (
+    minimum_needs_post_processors)
 from safe.definitions.fields import displaced_field, aggregation_name_field
 from safe.definitions.layer_purposes import layer_purpose_aggregation
 from safe.gis.vector.prepare_vector_layer import (

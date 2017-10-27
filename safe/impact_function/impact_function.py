@@ -39,7 +39,8 @@ from safe.common.utilities import temp_dir
 from safe.common.version import get_version
 from safe.datastore.datastore import DataStore
 from safe.datastore.folder import Folder
-from safe.definitions import count_ratio_mapping, post_processors
+from safe.post_processors import post_processors
+from safe.definitions import count_ratio_mapping
 from safe.definitions.analysis_steps import analysis_steps
 from safe.definitions.constants import (
     GLOBAL,
