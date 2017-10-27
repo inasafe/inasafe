@@ -52,6 +52,7 @@ from safe.utilities.resources import (
 from safe.utilities.settings import setting
 from safe.utilities.utilities import (
     is_keyword_version_supported,
+    get_error_message,
 )
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -217,49 +218,57 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
     def accept(self):
         """Launch the multi exposure analysis."""
         enable_busy_cursor()
-        hazard = layer_from_combo(self.cbx_hazard)
-        aggregation = layer_from_combo(self.cbx_aggregation)
-        exposures = []
-        for combo in self.combos_exposures.itervalues():
-            exposures.append(layer_from_combo(combo))
-        exposures = [layer for layer in exposures if layer]
+        try:
+            hazard = layer_from_combo(self.cbx_hazard)
+            aggregation = layer_from_combo(self.cbx_aggregation)
+            exposures = []
+            for combo in self.combos_exposures.itervalues():
+                exposures.append(layer_from_combo(combo))
+            exposures = [layer for layer in exposures if layer]
 
-        self._multi_exposure_if = MultiExposureImpactFunction()
-        self._multi_exposure_if.hazard = hazard
-        self._multi_exposure_if.exposures = exposures
-        self._multi_exposure_if.aggregation = aggregation
-        self._multi_exposure_if.debug = False
-        self._multi_exposure_if.callback = self.progress_callback
+            self._multi_exposure_if = MultiExposureImpactFunction()
+            self._multi_exposure_if.hazard = hazard
+            self._multi_exposure_if.exposures = exposures
+            self._multi_exposure_if.aggregation = aggregation
+            self._multi_exposure_if.debug = False
+            self._multi_exposure_if.callback = self.progress_callback
 
-        status, message = self._multi_exposure_if.prepare()
-        # self.assertEqual(code, PREPARE_MULTI_SUCCESS, message)
-        if status == ANALYSIS_FAILED_BAD_INPUT:
-            self.hide_busy()
-            LOGGER.info(tr(
-                'The impact function could not run because of the inputs.'))
-            send_error_message(self, message)
-            LOGGER.info(message.to_text())
-            return status, message
+            status, message = self._multi_exposure_if.prepare()
+            # self.assertEqual(code, PREPARE_MULTI_SUCCESS, message)
+            if status == ANALYSIS_FAILED_BAD_INPUT:
+                self.hide_busy()
+                LOGGER.info(
+                    'The impact function could not run because of the inputs.')
+                send_error_message(self, message)
+                LOGGER.info(message.to_text())
+            else:
+                code, message = self._multi_exposure_if.run()
+                # self.assertEqual(code, ANALYSIS_MULTI_SUCCESS, message)
 
-        code, message = self._multi_exposure_if.run()
-        # self.assertEqual(code, ANALYSIS_MULTI_SUCCESS, message)
+                root = QgsProject.instance().layerTreeRoot()
+                group_analysis = root.insertGroup(
+                    0, self._multi_exposure_if.name)
+                group_analysis.setVisible(Qt.Checked)
 
-        root = QgsProject.instance().layerTreeRoot()
-        group_analysis = root.insertGroup(0, self._multi_exposure_if.name)
-        group_analysis.setVisible(Qt.Checked)
+                for layer in self._multi_exposure_if.outputs:
+                    QgsMapLayerRegistry.instance().addMapLayer(layer, False)
+                    layer_node = group_analysis.addLayer(layer)
+                    layer_node.setVisible(Qt.Unchecked)
 
-        for layer in self._multi_exposure_if.outputs:
-            QgsMapLayerRegistry.instance().addMapLayer(layer, False)
-            layer_node = group_analysis.addLayer(layer)
-            layer_node.setVisible(Qt.Unchecked)
+                for analysis in self._multi_exposure_if.impact_functions:
+                    detailed_group = group_analysis.insertGroup(
+                        0, analysis.name)
+                    detailed_group.setVisible(Qt.Checked)
+                    add_impact_layers_to_canvas(analysis, group=detailed_group)
+                self.done(QDialog.Accepted)
 
-        for analysis in self._multi_exposure_if.impact_functions:
-            detailed_group = group_analysis.insertGroup(0, analysis.name)
-            detailed_group.setVisible(Qt.Checked)
-            add_impact_layers_to_canvas(analysis, group=detailed_group)
-
-        disable_busy_cursor()
-        self.done(QDialog.Accepted)
+        except Exception as e:
+            error_message = get_error_message(e)
+            send_error_message(self, error_message)
+            LOGGER.exception(e)
+            LOGGER.debug(error_message.to_text())
+        finally:
+            disable_busy_cursor()
 
     def reject(self):
         """Redefinition of the reject method."""
