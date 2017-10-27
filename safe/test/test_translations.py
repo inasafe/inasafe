@@ -45,6 +45,27 @@ class SafeTranslationsTest(unittest.TestCase):
         if 'LANG' in os.environ.iterkeys():
             os.environ.__delitem__('LANG')
 
+    # Skipped because it's not easy to unload qt translation
+    def Xtest_dynamic_translation(self):
+        """Test for dynamic translations for a string."""
+
+        # English
+        function_title = 'Be affected'
+        expected_title = tr('Be affected')
+        message = 'Expected %s but got %s' % (expected_title, function_title)
+        self.assertEqual(function_title, expected_title, message)
+
+        # Indonesia
+        os.environ['LANG'] = 'id'
+        function_title = 'Be affected'
+        real_title = tr(function_title)
+        expected_title = 'Terkena dampak'
+        message = 'expected %s but got %s' % (expected_title, real_title)
+        self.assertEqual(expected_title, real_title, message)
+
+        # Set back to en
+        os.environ['LANG'] = 'en'
+
     def test_impact_summary_words(self):
         """Test specific words from impact summary info shown in doc see #348.
         """

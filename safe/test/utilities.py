@@ -84,6 +84,7 @@ def get_qgis_app():
         from PyQt4 import QtGui, QtCore  # pylint: disable=W0621
         # noinspection PyPackageRequirements
         from PyQt4.QtCore import QCoreApplication, QSettings
+        from safe.test.qgis_interface import QgisInterface
     except ImportError:
         return None, None, None, None
 
@@ -131,8 +132,9 @@ def get_qgis_app():
         CANVAS.resize(QtCore.QSize(400, 400))
 
     if IFACE is None:
-        from qgis.utils import iface as iface_object
-        IFACE = iface_object
+        # QgisInterface is a stub implementation of the QGIS plugin interface
+        # noinspection PyPep8Naming
+        IFACE = QgisInterface(CANVAS)
 
     return QGIS_APP, CANVAS, IFACE, PARENT
 
@@ -475,6 +477,34 @@ def set_jakarta_extent(dock=None):
         dock.define_user_analysis_extent(rect, crs)
 
 
+def set_jakarta_google_extent(dock=None):
+    """Zoom to an area occupied by both Jakarta layers in 900913 crs.
+
+    :param dock: A dock widget - if supplied, the extents will also be
+        set as the user extent and an appropriate CRS set.
+    :type dock: Dock
+    """
+    rect = QgsRectangle(11873524, -695798, 11913804, -675295)
+    CANVAS.setExtent(rect)
+    if dock is not None:
+        crs = QgsCoordinateReferenceSystem('EPSG:3857')
+        dock.define_user_analysis_extent(rect, crs)
+
+
+def set_yogya_extent(dock=None):
+    """Zoom to an area occupied by both Jakarta layers in Geo.
+
+    :param dock: A dock widget - if supplied, the extents will also be
+        set as the user extent and an appropriate CRS set.
+    :type dock: Dock
+    """
+    rect = QgsRectangle(110.348, -7.732, 110.368, -7.716)
+    CANVAS.setExtent(rect)
+    if dock is not None:
+        crs = QgsCoordinateReferenceSystem('EPSG:4326')
+        dock.define_user_analysis_extent(rect, crs)
+
+
 def set_small_jakarta_extent(dock=None):
     """Zoom to an area occupied by both Jakarta layers in Geo.
 
@@ -522,6 +552,53 @@ def compare_two_vector_layers(control_layer, test_layer):
         return True, None
 
 
+class RedirectStreams(object):
+    """Context manager for redirection of stdout and stderr.
+
+    This is from
+    http://stackoverflow.com/questions/6796492/
+    python-temporarily-redirect-stdout-stderr
+
+    In this context, the class is used to get rid of QGIS
+    output in the test suite - BUT IT DOESN'T WORK (Maybe
+    because QGIS starts its providers in a different process?)
+
+    Usage:
+
+    devnull = open(os.devnull, 'w')
+    print('Fubar')
+
+    with RedirectStreams(stdout=devnull, stderr=devnull):
+        print("You'll never see me")
+
+    print("I'm back!")
+    """
+
+    def __init__(self, stdout=None, stderr=None):
+        """
+
+        :param stdout:
+        :param stderr:
+        """
+        self._stdout = stdout or sys.stdout
+        self._stderr = stderr or sys.stderr
+        self.old_stdout = None
+        self.old_stderr = None
+
+    def __enter__(self):
+        self.old_stdout, self.old_stderr = sys.stdout, sys.stderr
+        self.old_stdout.flush()
+        self.old_stderr.flush()
+        sys.stdout, sys.stderr = self._stdout, self._stderr
+
+    # noinspection PyUnusedLocal
+    def __exit__(self, exc_type, exc_value, traceback):
+        self._stdout.flush()
+        self._stderr.flush()
+        sys.stdout = self.old_stdout
+        sys.stderr = self.old_stderr
+
+
 def get_ui_state(dock):
     """Get state of the 3 combos on the DOCK dock.
 
@@ -549,6 +626,19 @@ def get_ui_state(dock):
     return {'Hazard': hazard,
             'Exposure': exposure,
             'Run Button Enabled': run_button}
+
+
+def canvas_list():
+    """Return a string representing the list of canvas layers.
+
+    :returns: The returned string will list layers in correct order but
+        formatted with line breaks between each entry.
+    :rtype: str
+    """
+    list_string = ''
+    for layer in CANVAS.layers():
+        list_string += layer.name() + '\n'
+    return list_string
 
 
 def combos_to_string(dock):
