@@ -65,7 +65,7 @@ class InaSAFEError(RuntimeError):
 
 class ReadLayerError(InaSAFEError):
 
-    """When a layer can't be read"""
+    """When a layer can't be read."""
 
     suggestion = (
         'Check that the file exists and you have permissions to read it')
@@ -73,7 +73,7 @@ class ReadLayerError(InaSAFEError):
 
 class WriteLayerError(InaSAFEError):
 
-    """When a layer can't be written"""
+    """When a layer can't be written."""
 
     suggestion = 'Please ask the developers of InaSAFE to add a suggestion.'
 
@@ -390,7 +390,7 @@ class MetadataLayerConstraintError(InaSAFEError):
 
 class MetadataReadError(InaSAFEError):
 
-    """When a metadata xml is not correctly formatted can't be read"""
+    """When a metadata xml is not correctly formatted can't be read."""
 
     suggestion = (
         'Check that the file is correct')
