@@ -73,6 +73,10 @@ post_processor_displaced_ratio = {
         'A post processor to add the population displacement ratio according '
         'to the hazard class'),
     'input': {
+        'hazard': {
+            'type': keyword_input_type,
+            'value': ['hazard_keywords', 'hazard']
+        },
         # Taking hazard classification
         'classification': {
             'type': keyword_input_type,

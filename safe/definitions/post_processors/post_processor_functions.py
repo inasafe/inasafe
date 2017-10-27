@@ -84,8 +84,11 @@ def post_processor_affected_function(**kwargs):
 
 
 def post_processor_population_displacement_function(
-        classification=None, hazard_class=None, population=None):
+        hazard=None, classification=None, hazard_class=None, population=None):
     """Private function used in the displacement postprocessor.
+
+    :param hazard: The hazard to use.
+    :type hazard: dict
 
     :param classification: The hazard classification to use.
     :type classification: dict
