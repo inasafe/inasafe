@@ -4,7 +4,7 @@
 
 import logging
 
-from safe.post_processors import size
+from safe.post_processors.post_processor_functions import size
 from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
 from safe.definitions.fields import (
     size_field,

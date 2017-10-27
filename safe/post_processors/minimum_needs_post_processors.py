@@ -2,11 +2,11 @@
 
 """Postprocessors about additional items in minimum needs."""
 
-from safe.post_processors import (
+from safe.post_processors.post_processor_inputs import (
     constant_input_type,
     field_input_type,
     needs_profile_input_type)
-from safe.post_processors import (
+from safe.post_processors.post_processors import (
     formula_process,
     multiply,
     function_process)

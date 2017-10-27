@@ -9,10 +9,12 @@ from safe.post_processors.post_processor_functions import (
     post_processor_population_displacement_function,
     post_processor_population_fatality_function,
 )
-from safe.post_processors import \
-    constant_input_type, field_input_type, keyword_input_type
-from safe.post_processors import (
-    dynamic_field_input_type, keyword_value_expected)
+from safe.post_processors.post_processor_inputs import (
+    constant_input_type,
+    field_input_type,
+    keyword_input_type,
+    dynamic_field_input_type,
+    keyword_value_expected)
 from safe.post_processors import (
     function_process,
     formula_process)
