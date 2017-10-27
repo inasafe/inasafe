@@ -13,9 +13,11 @@ from qgis.core import (
     QgsExpression
 )
 
+from safe.post_processors import post_processor_size
 from safe.common.exceptions import (
     InvalidKeywordsForProcessingAlgorithm, NoFeaturesInExtentError)
 from safe.definitions.exposure import indivisible_exposure
+from safe.definitions.exposure_classifications import data_driven_classes
 from safe.definitions.fields import (
     exposure_id_field,
     hazard_id_field,
@@ -30,7 +32,6 @@ from safe.definitions.layer_purposes import (
     layer_purpose_hazard,
     layer_purpose_aggregation
 )
-from safe.definitions.post_processors import post_processor_size
 from safe.definitions.processing_steps import prepare_vector_steps
 from safe.definitions.utilities import (
     get_fields,
@@ -45,7 +46,6 @@ from safe.gis.vector.tools import (
     copy_layer,
     create_field_from_definition
 )
-from safe.definitions.exposure_classifications import data_driven_classes
 from safe.impact_function.postprocessors import run_single_post_processor
 from safe.utilities.i18n import tr
 from safe.utilities.metadata import (

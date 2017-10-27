@@ -7,6 +7,7 @@ from numbers import Number
 from PyQt4.QtCore import QPyNullVariant
 from qgis.core import QGis, QgsFeatureRequest, QgsFeature
 
+from safe.post_processors import post_processor_affected_function
 from safe.definitions.fields import (
     aggregation_id_field,
     aggregation_name_field,
@@ -27,7 +28,6 @@ from safe.definitions.fields import (
 from safe.definitions.hazard_classifications import not_exposed_class
 from safe.definitions.layer_purposes import \
     layer_purpose_exposure_summary_table
-from safe.definitions.post_processors import post_processor_affected_function
 from safe.definitions.processing_steps import (
     summary_4_exposure_summary_table_steps)
 from safe.definitions.utilities import definition

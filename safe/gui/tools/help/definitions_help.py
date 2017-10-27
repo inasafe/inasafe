@@ -9,8 +9,10 @@ from os.path import exists
 from PyQt4 import QtCore
 
 import safe.definitions as definitions
-import safe.definitions.post_processors
 from developer_help import content as developer_help
+from safe.post_processors import (
+    post_processor_input_types,
+    post_processor_input_values)
 from safe import messaging as m
 from safe.definitions.earthquake import current_earthquake_model_name
 from safe.definitions.exposure import exposure_all
@@ -19,9 +21,6 @@ from safe.definitions.field_groups import (
 from safe.definitions.hazard_classifications import hazard_classification_type
 from safe.definitions.hazard_exposure_specifications import (
     specific_notes, specific_actions)
-from safe.definitions.post_processors.post_processor_inputs import (
-    post_processor_input_types,
-    post_processor_input_values)
 from safe.definitions.reports.infographic import html_frame_elements
 from safe.definitions.reports.report_descriptions import all_reports
 from safe.gui.tools.help.batch_help import content as batch_help
