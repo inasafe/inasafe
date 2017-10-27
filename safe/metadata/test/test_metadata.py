@@ -24,7 +24,7 @@ class TestMetadata(TestCase):
             BaseMetadata('random_layer_id')
 
     def test_metadata(self):
-        """Check we can't instantiate with unsupported xml types"""
+        """Check we can't instantiate with unsupported xml types."""
         metadata = OutputLayerMetadata('random_layer_id')
         path = 'gmd:MD_Metadata/gmd:dateStamp/gco:RandomString'
 
@@ -34,7 +34,7 @@ class TestMetadata(TestCase):
             metadata.set('ISO19115_TEST', test_value, path)
 
     def test_insert_xml_element(self):
-        """Check we can't insert custom nested elements"""
+        """Check we can't insert custom nested elements."""
         root = ElementTree.Element('root')
         b = ElementTree.SubElement(root, 'b')
         ElementTree.SubElement(b, 'c')
