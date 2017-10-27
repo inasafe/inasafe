@@ -12,7 +12,7 @@ from safe.gui.widgets.profile_widget import ProfileWidget
 
 
 class TestProfileWidget(unittest.TestCase):
-    """Test Profile Widget"""
+    """Test Profile Widget."""
 
     maxDiff = None
 

@@ -540,7 +540,7 @@ def create_section_with_aggregation(
 
         row_values.append(row)
 
-    """Generating total rows ."""
+    """Generating total rows."""
 
     total_displaced_field_name = analysis_layer_fields[
         displaced_field['key']]

@@ -743,14 +743,14 @@ class BatchDialog(QDialog, FORM_CLASS):
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_source_directory_chooser_clicked(self):
-        """Autoconnect slot activated when tbSourceDir is clicked ."""
+        """Autoconnect slot activated when tbSourceDir is clicked."""
 
         title = self.tr('Set the source directory for script and scenario')
         self.choose_directory(self.source_directory, title)
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_output_directory_chooser_clicked(self):
-        """Auto  connect slot activated when tbOutputDiris clicked ."""
+        """Auto  connect slot activated when tbOutputDiris clicked."""
         title = self.tr('Set the output directory for pdf report files')
         self.choose_directory(self.output_directory, title)
 

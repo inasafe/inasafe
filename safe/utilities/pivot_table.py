@@ -305,7 +305,7 @@ class PivotTable(object):
             self.total_percent_affected = None
 
     def __repr__(self):
-        """ Dump object content in a readable format ."""
+        """Dump object content in a readable format."""
         pivot = '<PivotTable ' \
                 'total=%f\n ' \
                 'total_rows=%s\n ' \

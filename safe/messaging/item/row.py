@@ -28,7 +28,7 @@ from message_element import MessageElement
 
 
 class Row(MessageElement):
-    """A class to model table rows in the messaging system ."""
+    """A class to model table rows in the messaging system."""
 
     def __init__(self, *args, **kwargs):
         """Creates a row object
