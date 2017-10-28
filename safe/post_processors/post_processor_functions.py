@@ -104,20 +104,8 @@ def post_processor_population_displacement_function(
     :rtype: float
     """
     _ = population  # NOQA
-    # for hazard in hazard_classes_all:
-    #     if hazard['key'] == classification:
-    #         classification = hazard['classes']
-    #         break
-    #
-    # for hazard_class_def in classification:
-    #     if hazard_class_def['key'] == hazard_class:
-    #         displaced_ratio = hazard_class_def.get('displacement_rate', 0)
-    #         return displaced_ratio
-    #
-    # return 0
 
-    return get_displacement_rate(
-        hazard, classification, hazard_class)
+    return get_displacement_rate(hazard, classification, hazard_class)
 
 
 def post_processor_population_fatality_function(
