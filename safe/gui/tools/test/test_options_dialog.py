@@ -133,6 +133,65 @@ class TestOptionsDialog(unittest.TestCase):
         self.assertEqual(
             new_organization, dialog.organisation_line_edit.text())
 
+    def test_mode(self):
+        """Test for checking that the state is correct for the mode.
+
+        If your test is failed, perhaps one the following is the cause:
+        1. You add / remove tab in the options.
+        2. You rename the tab's name.
+        3. The function show_welcome_dialog or show_option_dialog is changed
+        """
+        # Welcome mode
+        dialog = OptionsDialog(parent=PARENT, iface=IFACE)
+        dialog.show_welcome_dialog()
+
+        expected_tabs = [
+            dialog.welcome_tab,
+            dialog.organisation_profile_tab,
+            dialog.preference_tab
+        ]
+
+        message = 'Tab count should be %d in welcome dialog.' % len(
+            expected_tabs)
+        self.assertEqual(dialog.tabWidget.count(), len(expected_tabs), message)
+
+        message = 'Current tab index should be 0.'
+        self.assertEqual(dialog.tabWidget.currentIndex(), 0, message)
+
+        for index, expected_tab in enumerate(expected_tabs):
+            dialog.tabWidget.setCurrentIndex(index)
+            message = 'Current tab should be %s.' % expected_tab.objectName()
+            current_tab = dialog.tabWidget.currentWidget()
+            self.assertEqual(current_tab, expected_tab, message)
+
+        # Usual option mode
+        dialog = OptionsDialog(parent=PARENT, iface=IFACE)
+        dialog.show_option_dialog()
+
+        expected_tabs = [
+            dialog.organisation_profile_tab,
+            dialog.preference_tab,
+            dialog.gis_environment_tab,
+            dialog.earthquake_tab,
+            dialog.template_option_tab,
+            dialog.demographic_defaults_tab,
+            dialog.advanced_tab
+        ]
+
+        message = 'Tab count should be %d in welcome dialog.' % len(
+            expected_tabs)
+        self.assertEqual(dialog.tabWidget.count(), len(expected_tabs), message)
+
+        message = 'Current tab index should be 0.'
+        self.assertEqual(dialog.tabWidget.currentIndex(), 0, message)
+
+        for index, expected_tab in enumerate(expected_tabs):
+            dialog.tabWidget.setCurrentIndex(index)
+            message = 'Current tab should be %s.' % expected_tab.objectName()
+            current_tab = dialog.tabWidget.currentWidget()
+            self.assertEqual(current_tab, expected_tab, message)
+
+
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestOptionsDialog, 'test')
     runner = unittest.TextTestRunner(verbosity=2)

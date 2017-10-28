@@ -49,7 +49,7 @@ def heading():
     This method was added so that the text could be reused in the
     other contexts.
 
-    .. versionadded:: 4.1.0
+    .. versionadded:: 4.3
 
     :returns: A heading object.
     :rtype: safe.messaging.heading.Heading
@@ -64,7 +64,7 @@ def content():
     This method was added so that the text could be reused in the
     dock_help module.
 
-    .. versionadded:: 4.1.0
+    .. versionadded:: 4.3
 
     :returns: A message object without brand element.
     :rtype: safe.messaging.message.Message
