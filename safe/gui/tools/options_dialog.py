@@ -829,3 +829,16 @@ class OptionsDialog(QDialog, FORM_CLASS):
         string += message.to_html()
         string += footer
         self.welcome_message.setHtml(string)
+
+    def show_option_dialog(self):
+        """Helper to show usual option dialog (without welcome message tab)."""
+        self.tabWidget.removeTab(0)
+
+    def show_welcome_dialog(self):
+        """Helper to welcome message dialog.
+
+        It will only show welcome, organisation profile, and preference tab.
+        Currently, they are the first 3 tabs.
+        """
+        while self.tabWidget.count() > 3:
+            self.tabWidget.removeTab(self.tabWidget.count() - 1)
