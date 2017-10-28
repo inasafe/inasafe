@@ -33,6 +33,7 @@ from safe.definitions.utilities import (
     all_default_fields, generate_default_profile)
 from safe.gui.tools.help.options_help import options_help
 from safe.gui.widgets.profile_widget import ProfileWidget
+from safe.gui.tools.help.welcome_message import welcome_message
 from safe.utilities.default_values import (
     set_inasafe_default_value_qsetting, get_inasafe_default_value_qsetting)
 from safe.utilities.i18n import tr
@@ -198,6 +199,9 @@ class OptionsDialog(QDialog, FORM_CLASS):
         # hide custom template dir toggle
         self.custom_templates_dir_checkbox.hide()
         self.splitter_custom_report.hide()
+
+        # Welcome message
+        self.set_welcome_message()
 
     def save_boolean_setting(self, key, check_box):
         """Save boolean setting according to check_box state.
@@ -812,3 +816,16 @@ class OptionsDialog(QDialog, FORM_CLASS):
         """Helper to save profile to QSettings."""
         profile_data = self.profile_widget.get_data()
         set_setting('profile', profile_data)
+
+    def set_welcome_message(self):
+        """Setting up welcome message."""
+        header = html_header()
+        footer = html_footer()
+
+        string = header
+
+        message = welcome_message()
+
+        string += message.to_html()
+        string += footer
+        self.welcome_message.setHtml(string)
