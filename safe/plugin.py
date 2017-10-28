@@ -761,6 +761,7 @@ class Plugin(object):
         dialog = OptionsDialog(
             iface=self.iface,
             parent=self.iface.mainWindow())
+        dialog.show_option_dialog()
         if dialog.exec_():  # modal
             self.dock_widget.read_settings()
 
