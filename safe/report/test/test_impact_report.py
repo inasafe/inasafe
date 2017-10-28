@@ -26,6 +26,7 @@ from safe.definitions.field_groups import (
     age_displaced_count_group,
     gender_displaced_count_group)
 from safe.definitions.hazard_classifications import flood_hazard_classes
+from safe.definitions.hazard import hazard_flood
 from safe.impact_function.impact_function import ImpactFunction
 from safe.report.report_metadata import ReportMetadata
 from safe.test.utilities import (
@@ -50,6 +51,9 @@ from safe.definitions.reports.components import (
 from safe.definitions.utilities import update_template_component
 from safe.report.impact_report import ImpactReport
 from safe.utilities.resources import resources_path
+from safe.definitions.utilities import (
+    get_displacement_rate, generate_default_profile)
+from safe.utilities.settings import setting, set_setting, delete_setting
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -93,17 +97,31 @@ class TestImpactReport(unittest.TestCase):
     def setUp(self):
         """Executed before test method."""
         self.maxDiff = None
-        # change displacement rate so the result is easily distinguished
+        self.custom_displacement_rate = 0.90
+
+        # Change displacement rate so the result is easily distinguished
         self.default_displacement_rate = flood_hazard_classes['classes'][0][
             'displacement_rate']
         flood_hazard_classes['classes'][0][
-            'displacement_rate'] = 0.90
+            'displacement_rate'] = self.custom_displacement_rate
+
+        # Preserve profile from setting
+        self.original_profile = setting(key='profile', default='NO_PROFILE')
+        # Set new profile in the QSettings
+        current_profile = generate_default_profile()
+        set_setting(key='profile', value=current_profile)
 
     def tearDown(self):
         """Executed after test method."""
-        # restore displacement rate
+        # Restore displacement rate
         flood_hazard_classes['classes'][0][
             'displacement_rate'] = self.default_displacement_rate
+
+        # Set the profile to the original one
+        if self.original_profile == 'NO_PROFILE':
+            delete_setting('profile')
+        else:
+            set_setting('profile', self.original_profile)
 
     def run_impact_report_scenario(
             self, output_folder,
@@ -945,6 +963,12 @@ class TestImpactReport(unittest.TestCase):
 
         .. versionadded:: 4.0
         """
+        # Make sure that the displacement rate is the correct one that has
+        # been set in setUp method.
+        displacement_rate = get_displacement_rate(
+            hazard_flood['key'], flood_hazard_classes['key'], 'wet')
+        self.assertEqual(displacement_rate, self.custom_displacement_rate)
+
         output_folder = self.fixtures_dir('../output/minimum_needs')
 
         # Minimum needs only occurred when population is displaced
@@ -1214,6 +1238,12 @@ class TestImpactReport(unittest.TestCase):
 
         .. versionadded:: 4.0
         """
+        # Make sure that the displacement rate is the correct one that has
+        # been set in setUp method.
+        displacement_rate = get_displacement_rate(
+            hazard_flood['key'], flood_hazard_classes['key'], 'wet')
+        self.assertEqual(displacement_rate, self.custom_displacement_rate)
+
         output_folder = self.fixtures_dir(
             '../output/aggregate_post_processors')
 
@@ -1408,6 +1438,12 @@ class TestImpactReport(unittest.TestCase):
 
         .. versionadded:: 4.0
         """
+        # Make sure that the displacement rate is the correct one that has
+        # been set in setUp method.
+        displacement_rate = get_displacement_rate(
+            hazard_flood['key'], flood_hazard_classes['key'], 'wet')
+        self.assertEqual(displacement_rate, self.custom_displacement_rate)
+
         output_folder = self.fixtures_dir(
             '../output/aggregate_post_processors')
 
