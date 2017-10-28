@@ -65,11 +65,39 @@
        <item row="0" column="0">
         <widget class="QTabWidget" name="tabWidget">
          <property name="currentIndex">
-          <number>1</number>
+          <number>0</number>
          </property>
          <property name="movable">
           <bool>false</bool>
          </property>
+         <widget class="QWidget" name="welcome_tab">
+          <attribute name="title">
+           <string>Welcome</string>
+          </attribute>
+          <layout class="QVBoxLayout" name="verticalLayout_4">
+           <item>
+            <widget class="MessageViewer" name="welcome_message" native="true">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>50</height>
+              </size>
+             </property>
+             <property name="url" stdset="0">
+              <url>
+               <string>about:blank</string>
+              </url>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
          <widget class="QWidget" name="organisation_profile_tab">
           <attribute name="title">
            <string>Organisation Profile</string>
@@ -837,7 +865,13 @@ p, li { white-space: pre-wrap; }
   <customwidget>
    <class>QWebView</class>
    <extends>QWidget</extends>
-   <header>QtWebKit/QWebView</header>
+   <header location="global">QtWebKit/QWebView</header>
+  </customwidget>
+  <customwidget>
+   <class>MessageViewer</class>
+   <extends>QWidget</extends>
+   <header location="global">safe.gui.widgets.message_viewer</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <tabstops>
