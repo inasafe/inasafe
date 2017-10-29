@@ -1,9 +1,9 @@
 # coding=utf-8
 """Utilities module for helping definitions retrieval."""
 
+from collections import OrderedDict
 from copy import deepcopy
 from os import listdir
-from collections import OrderedDict
 from os.path import join, exists, splitext
 
 from qgis.core import QgsApplication

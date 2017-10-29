@@ -29,9 +29,9 @@ from safe.common.exceptions import InvalidParameterError
 from safe.messaging.message import MessageElement
 from safe.utilities.qt import qt_at_least
 from safe.utilities.resources import html_footer, html_header, resources_path
+from safe.utilities.settings import setting
 from safe.utilities.utilities import (
     html_to_file, open_in_browser, unique_filename)
-from safe.utilities.settings import setting
 
 DYNAMIC_MESSAGE_SIGNAL = 'ImpactFunctionMessage'
 STATIC_MESSAGE_SIGNAL = 'ApplicationMessage'

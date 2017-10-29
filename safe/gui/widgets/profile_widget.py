@@ -1,12 +1,14 @@
 # coding=utf-8
 """InaSAFE Profile Widget."""
 
+from collections import OrderedDict
+
+from PyQt4.QtCore import Qt
 from PyQt4.QtGui import (
     QTreeWidget, QTreeWidgetItem, QCheckBox, QDoubleSpinBox, QFont)
-from PyQt4.QtCore import Qt
+
 from safe.definitions.utilities import get_name, get_class_name
 from safe.utilities.i18n import tr
-from collections import OrderedDict
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"

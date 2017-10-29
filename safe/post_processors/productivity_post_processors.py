@@ -2,9 +2,6 @@
 
 """Definitions relating to productivity post processor.."""
 
-from safe.post_processors import (
-    field_input_type)
-from safe.post_processors import formula_process
 from safe.definitions.fields import (
     size_field,
     productivity_rate_field,
@@ -14,6 +11,9 @@ from safe.definitions.fields import (
     production_cost_field,
     production_value_field
 )
+from safe.post_processors import (
+    field_input_type)
+from safe.post_processors import formula_process
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"

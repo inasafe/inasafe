@@ -7,7 +7,6 @@ from numbers import Number
 from PyQt4.QtCore import QPyNullVariant
 from qgis.core import QGis, QgsFeatureRequest, QgsFeature
 
-from safe.post_processors import post_processor_affected_function
 from safe.definitions.fields import (
     aggregation_id_field,
     aggregation_name_field,
@@ -38,6 +37,7 @@ from safe.gis.vector.tools import (
     create_field_from_definition,
     read_dynamic_inasafe_field,
     create_memory_layer)
+from safe.post_processors import post_processor_affected_function
 from safe.utilities.gis import qgis_version
 from safe.utilities.pivot_table import FlatTable
 from safe.utilities.profiling import profile

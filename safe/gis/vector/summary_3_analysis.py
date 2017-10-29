@@ -7,7 +7,6 @@ from math import isnan
 from PyQt4.QtCore import QPyNullVariant
 from qgis.core import QgsFeatureRequest
 
-from safe.post_processors import post_processor_affected_function
 from safe.definitions.fields import (
     analysis_name_field,
     aggregation_id_field,
@@ -28,6 +27,7 @@ from safe.definitions.processing_steps import (
 from safe.gis.sanity_check import check_layer
 from safe.gis.vector.summary_tools import (
     check_inputs, create_absolute_values_structure, add_fields)
+from safe.post_processors import post_processor_affected_function
 from safe.utilities.gis import qgis_version
 from safe.utilities.pivot_table import FlatTable
 from safe.utilities.profiling import profile

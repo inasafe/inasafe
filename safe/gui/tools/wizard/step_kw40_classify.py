@@ -2,20 +2,20 @@
 """InaSAFE Wizard Step Value Mapping."""
 
 import json
+from copy import deepcopy
 
 import numpy
-from copy import deepcopy
+from PyQt4.QtCore import QPyNullVariant, Qt
 from PyQt4.QtGui import (
     QListWidgetItem, QFont, QAbstractItemView, QTreeWidgetItem)
-from PyQt4.QtCore import QPyNullVariant, Qt
 from osgeo import gdal
 from osgeo.gdalconst import GA_ReadOnly
 
 from safe import messaging as m
+from safe.definitions.exposure_classifications import data_driven_classes
 from safe.definitions.layer_geometry import layer_geometry_raster
 from safe.definitions.layer_purposes import layer_purpose_aggregation
 from safe.definitions.utilities import get_fields, get_compulsory_fields
-from safe.definitions.exposure_classifications import data_driven_classes
 from safe.gui.tools.wizard.utilities import skip_inasafe_field
 from safe.gui.tools.wizard.wizard_step import (
     WizardStep, get_wizard_step_ui_class)

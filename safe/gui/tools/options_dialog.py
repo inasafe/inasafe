@@ -32,12 +32,12 @@ from safe.definitions.messages import disclaimer
 from safe.definitions.utilities import (
     all_default_fields, generate_default_profile)
 from safe.gui.tools.help.options_help import options_help
+from safe.gui.widgets.profile_widget import ProfileWidget
 from safe.utilities.default_values import (
     set_inasafe_default_value_qsetting, get_inasafe_default_value_qsetting)
 from safe.utilities.i18n import tr
 from safe.utilities.resources import get_ui_class, html_header, html_footer
 from safe.utilities.settings import setting, set_setting
-from safe.gui.widgets.profile_widget import ProfileWidget
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
