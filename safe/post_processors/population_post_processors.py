@@ -4,20 +4,6 @@
 
 from collections import OrderedDict
 
-from safe.post_processors.post_processor_functions import (
-    multiply,
-    post_processor_population_displacement_function,
-    post_processor_population_fatality_function,
-)
-from safe.post_processors.post_processor_inputs import (
-    constant_input_type,
-    field_input_type,
-    keyword_input_type,
-    dynamic_field_input_type,
-    keyword_value_expected)
-from safe.post_processors import (
-    function_process,
-    formula_process)
 from safe.definitions.concepts import concepts
 from safe.definitions.exposure import exposure_population
 # Displaced field
@@ -64,6 +50,20 @@ from safe.definitions.fields import (
     over_60_ratio_field,
     disabled_ratio_field)
 from safe.definitions.hazard_classifications import earthquake_mmi_scale
+from safe.post_processors import (
+    function_process,
+    formula_process)
+from safe.post_processors.post_processor_functions import (
+    multiply,
+    post_processor_population_displacement_function,
+    post_processor_population_fatality_function,
+)
+from safe.post_processors.post_processor_inputs import (
+    constant_input_type,
+    field_input_type,
+    keyword_input_type,
+    dynamic_field_input_type,
+    keyword_value_expected)
 from safe.utilities.i18n import tr
 
 # A postprocessor can be defined with a formula or with a python function.

@@ -41,8 +41,8 @@ from safe.gis.vector.summary_5_multi_exposure import (
 from safe.gui.widgets.message import generate_input_error_message
 from safe.impact_function.create_extra_layers import create_analysis_layer
 from safe.impact_function.impact_function import ImpactFunction
-from safe.impact_function.style import simple_polygon_without_brush
 from safe.impact_function.impact_function_utilities import check_input_layer
+from safe.impact_function.style import simple_polygon_without_brush
 from safe.utilities.gis import deep_duplicate_layer
 from safe.utilities.i18n import tr
 from safe.utilities.settings import setting

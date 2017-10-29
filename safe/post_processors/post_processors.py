@@ -7,6 +7,14 @@
 
 import logging
 
+from safe.definitions.fields import (
+    feature_rate_field,
+    feature_value_field,
+    size_field,
+    hazard_class_field,
+    affected_field
+)
+from safe.definitions.hazard_classifications import not_exposed_class
 from safe.post_processors.post_processor_functions import (
     multiply,
     size,
@@ -17,14 +25,6 @@ from safe.post_processors.post_processor_inputs import (
     size_calculator_input_value,
     keyword_input_type,
     field_input_type)
-from safe.definitions.fields import (
-    feature_rate_field,
-    feature_value_field,
-    size_field,
-    hazard_class_field,
-    affected_field
-)
-from safe.definitions.hazard_classifications import not_exposed_class
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

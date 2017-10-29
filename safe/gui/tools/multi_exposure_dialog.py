@@ -4,6 +4,9 @@
 
 import logging
 
+from PyQt4.QtCore import (
+    Qt,
+)
 from PyQt4.QtGui import (
     QDialog,
     QComboBox,
@@ -11,9 +14,6 @@ from PyQt4.QtGui import (
     QDialogButtonBox,
     QApplication,
     QSizePolicy,
-)
-from PyQt4.QtCore import (
-    Qt,
 )
 from qgis.core import QgsMapLayerRegistry, QgsProject
 from qgis.utils import iface

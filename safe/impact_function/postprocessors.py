@@ -6,6 +6,9 @@
 from PyQt4.QtCore import QPyNullVariant
 from qgis.core import QgsFeatureRequest
 
+from safe.definitions.minimum_needs import minimum_needs_parameter
+from safe.gis.vector.tools import (
+    create_field_from_definition, SizeCalculator)
 from safe.post_processors import (
     field_input_type,
     keyword_input_type,
@@ -18,9 +21,6 @@ from safe.post_processors import (
     layer_property_input_type,
     size_calculator_input_value
 )
-from safe.definitions.minimum_needs import minimum_needs_parameter
-from safe.gis.vector.tools import (
-    create_field_from_definition, SizeCalculator)
 from safe.utilities.i18n import tr
 from safe.utilities.profiling import profile
 

@@ -39,7 +39,6 @@ from safe.common.utilities import temp_dir
 from safe.common.version import get_version
 from safe.datastore.datastore import DataStore
 from safe.datastore.folder import Folder
-from safe.post_processors import post_processors
 from safe.definitions import count_ratio_mapping
 from safe.definitions.analysis_steps import analysis_steps
 from safe.definitions.constants import (
@@ -178,9 +177,10 @@ from safe.impact_function.style import (
     simple_polygon_without_brush,
 )
 from safe.messaging import styles
-from safe.utilities.default_values import get_inasafe_default_value_qsetting
+from safe.post_processors import post_processors
 from safe.report.impact_report import ImpactReport
 from safe.report.report_metadata import ReportMetadata
+from safe.utilities.default_values import get_inasafe_default_value_qsetting
 from safe.utilities.gis import (
     is_vector_layer, is_raster_layer, wkt_to_rectangle)
 from safe.utilities.gis import qgis_version

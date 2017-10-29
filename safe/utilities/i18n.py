@@ -8,10 +8,11 @@ import logging
 # noinspection PyUnresolvedReferences
 import qgis  # NOQA pylint: disable=unused-import
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import QCoreApplication, QSettings, QLocale  # QSettings
-# can't be moved to our internal class
+from PyQt4.QtCore import QCoreApplication, QLocale
+from PyQt4.QtCore import QSettings  # QSettings can't be moved to our class
 
 from safe.utilities.unicode import get_unicode
+
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
