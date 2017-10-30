@@ -86,7 +86,6 @@ def get_direction_distance(hazard_point, places_layer):
     field_bearing = create_field_from_definition(bearing_from_field)
     field_mmi = create_field_from_definition(place_mmi_field)
     field_direction = create_field_from_definition(direction_field)
-    print field_distance, field_bearing, field_mmi, field_direction
     output_provider.addAttributes([
         field_distance,
         field_bearing,

@@ -361,7 +361,7 @@ def current_earthquake_model_name():
         settings.
     """
     default_earthquake_function = setting(
-        'earthquake_function', EARTHQUAKE_FUNCTIONS[0]['key'],str)
+        'earthquake_function', EARTHQUAKE_FUNCTIONS[0]['key'], str)
     current_function = None
     for model in EARTHQUAKE_FUNCTIONS:
         if model['key'] == default_earthquake_function:
