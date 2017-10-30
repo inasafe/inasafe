@@ -47,11 +47,13 @@ class ProfileWidget(QTreeWidget, object):
     def generate_tree_model(self):
         """Generate tree model for the data."""
         widget_items = []
-        for hazard, classifications in self.data.items():
+        for hazard in sorted(self.data.keys()):
+            classifications = self.data[hazard]
             hazard_widget_item = QTreeWidgetItem()
             hazard_widget_item.setData(0, Qt.UserRole, hazard)
             hazard_widget_item.setText(0, get_name(hazard))
-            for classification, classes in classifications.items():
+            for classification in sorted(classifications.keys()):
+                classes = classifications[classification]
                 classification_widget_item = QTreeWidgetItem()
                 classification_widget_item.setData(
                     0, Qt.UserRole, classification)
