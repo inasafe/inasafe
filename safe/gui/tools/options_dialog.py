@@ -834,6 +834,7 @@ class OptionsDialog(QDialog, FORM_CLASS):
     def show_option_dialog(self):
         """Helper to show usual option dialog (without welcome message tab)."""
         self.tabWidget.removeTab(0)
+        self.setWindowTitle(self.tr('InaSAFE %s Options' % get_version()))
 
     def show_welcome_dialog(self):
         """Helper to welcome message dialog.
@@ -843,3 +844,4 @@ class OptionsDialog(QDialog, FORM_CLASS):
         """
         while self.tabWidget.count() > 3:
             self.tabWidget.removeTab(self.tabWidget.count() - 1)
+        self.setWindowTitle(self.tr('Welcome to InaSAFE %s' % get_version()))
