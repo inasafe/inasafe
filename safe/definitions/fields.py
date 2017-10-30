@@ -2536,10 +2536,10 @@ distance_field = {
     'replace_null': False
 }
 
-bearing_from_field = {
-    'key': 'bearing_from_field',
+bearing_field = {
+    'key': 'bearing_field',
     'name': tr('Bearing Angle'),
-    'field_name': 'bearing_fr',
+    'field_name': 'bearing',
     'header_name': tr('Bearing'),
     'type': QVariant.Double,
     'length': default_field_length,
@@ -2551,9 +2551,9 @@ bearing_from_field = {
         'A bearing angle is an angle measured to a point as observed in '
         'current location using north as a reference direction. In this case, '
         '"bearing from" refers to an angle calculated at a certain place '
-        'pointing to a hazard location. Positive values indicate it calculates'
-        ' pointing to a moving clockwise, and negative values indicate it '
-        'calculates from North moving counterclockwise.'),
+        'pointing to a hazard location. Positive values indicate it '
+        'calculates from north moving clockwise, and negative values '
+        'indicate it calculates from North moving counterclockwise.'),
     'citations': [
         {
             'text': None,
@@ -2565,7 +2565,7 @@ bearing_from_field = {
 direction_field = {
     'key': 'direction_field',
     'name': tr('Direction'),
-    'field_name': 'dir_from',
+    'field_name': 'direction',
     'header_name': tr('Direction'),
     'type': QVariant.String,
     'length': default_field_length,
@@ -2596,9 +2596,9 @@ place_mmi_field = {
     'description': tr(
         'A value attribute for MMI at a certain place.'),
     'help_text': tr(
-        'If there is a place layer provided while converting the grid xml file'
-        ', then the MMI value at the location of the place will be added to '
-        'this field.'),
+        'If there is a place layer provided while converting the grid xml '
+        'file, then the MMI value at the location of the place will be added '
+        'to this field.'),
     'citations': [
         {
             'text': None,
