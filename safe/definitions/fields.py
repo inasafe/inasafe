@@ -2524,8 +2524,8 @@ distance_field = {
     ),
     'help_text': tr(
         'Distance value between place feature to the epicenter of the hazard. '
-        'The distance is calculated using WGS84 as ellipsoid model. The unit of'
-        'the distance is in meter.'),
+        'The distance is calculated using WGS84 as ellipsoid model. The unit '
+        'of the distance is in meter.'),
     'citations': [
         {
             'text': None,
@@ -2548,12 +2548,12 @@ bearing_from_field = {
     'description': tr(
         'An azimuth angle at a place to a hazard point.'),
     'help_text': tr(
-        'A bearing angle is an angle measured to a point as observed in current'
-        ' location using north as a reference direction. In this case, "bearing'
-        ' from" refers to an angle calculated at a certain place pointing to a '
-        'hazard location. Positive values indicate it calculates from North '
-        'moving clockwise, and negative values indicate it calculates from '
-        'North moving counterclockwise.'),
+        'A bearing angle is an angle measured to a point as observed in '
+        'current location using north as a reference direction. In this case, '
+        '"bearing from" refers to an angle calculated at a certain place '
+        'pointing to a hazard location. Positive values indicate it calculates'
+        ' pointing to a moving clockwise, and negative values indicate it '
+        'calculates from North moving counterclockwise.'),
     'citations': [
         {
             'text': None,
@@ -2562,7 +2562,6 @@ bearing_from_field = {
     ]
 }
 
-# TODO: Ivan to update
 direction_field = {
     'key': 'direction_field',
     'name': tr('Direction'),
@@ -2574,9 +2573,10 @@ direction_field = {
     'description': tr(
         'Cardinality of a bearing angle.'),
     'help_text': tr(
-        'If there is a place layer provided while converting the grid xml file,'
-        ' then the MMI value at the location of the place will be added to'
-        'this field.'),
+        'Cardinality of a bearing angle is an information that indicates the '
+        'direction of the angle. The purpose of this information is so that '
+        'it will be easier to understand than using only a bearing angle.'
+        ),
     'citations': [
         {
             'text': None,
@@ -2597,8 +2597,8 @@ place_mmi_field = {
     'description': tr(
         'A value attribute for MMI at a certain place.'),
     'help_text': tr(
-        'If there is a place layer provided while converting the grid xml file,'
-        ' then the MMI value at the location of the place will be added to'
+        'If there is a place layer provided while converting the grid xml file'
+        ', then the MMI value at the location of the place will be added to '
         'this field.'),
     'citations': [
         {
