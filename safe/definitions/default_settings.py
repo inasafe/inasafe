@@ -28,6 +28,10 @@ inasafe_default_settings = {
     'ISO19115_EMAIL': 'info@inasafe.org',
     'ISO19115_LICENSE': 'Free use with accreditation',
 
+    # Welcome message
+    'always_show_welcome_message': True,
+    'previous_version': '0.0.0',  # It will be set in plugin, no need to worry
+
     'currency': idr['key'],
 
     'keywordCachePath': join(

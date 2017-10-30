@@ -4,6 +4,8 @@
 import sys
 import os
 import logging
+from functools import partial
+from distutils.version import StrictVersion
 
 # noinspection PyUnresolvedReferences
 import qgis  # NOQA pylint: disable=unused-import
@@ -15,7 +17,8 @@ from qgis.core import (
     QgsMapLayerRegistry,
     QgsMapLayer,
     QgsExpression,
-    QgsProject)
+    QgsProject,
+)
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import (
     QCoreApplication,
@@ -29,14 +32,16 @@ from PyQt4.QtGui import (
     QToolButton,
     QMenu,
     QLineEdit,
-    QInputDialog)
+    QInputDialog,
+)
 
 from safe.utilities.expressions import qgis_expressions
-from safe.definitions.versions import inasafe_release_status
+from safe.definitions.versions import inasafe_release_status, inasafe_version
 from safe.common.exceptions import (
     KeywordNotFoundError,
     NoKeywordsFoundError,
-    MetadataReadError)
+    MetadataReadError,
+)
 from safe.utilities.resources import resources_path
 from safe.utilities.gis import is_raster_layer
 from safe.definitions.layer_purposes import (
@@ -578,6 +583,10 @@ class Plugin(object):
         # hidden.
         self.action_dock.setChecked(self.dock_widget.isVisible())
 
+        self.iface.initializationCompleted.connect(
+            partial(self.show_welcome_message)
+        )
+
     def _add_spacer_to_menu(self):
         """Create a spacer to the menu to separate action groups."""
         separator = QAction(self.iface.mainWindow())
@@ -764,6 +773,35 @@ class Plugin(object):
         dialog.show_option_dialog()
         if dialog.exec_():  # modal
             self.dock_widget.read_settings()
+
+    def show_welcome_message(self):
+        """Show the welcome message."""
+        # import here only so that it is AFTER i18n set up
+        from safe.gui.tools.options_dialog import OptionsDialog
+
+        # Do not show by default
+        show_message = False
+
+        previous_version = StrictVersion(setting('previous_version'))
+        current_version = StrictVersion(inasafe_version)
+
+        # Set previous_version to the current inasafe_version
+        set_setting('previous_version', inasafe_version)
+
+        if setting('always_show_welcome_message'):
+            # Show if it the setting said so
+            show_message = True
+        elif previous_version < current_version:
+            # Always show if the user installed new version
+            show_message = True
+
+        if show_message:
+            dialog = OptionsDialog(
+                iface=self.iface,
+                parent=self.iface.mainWindow())
+            dialog.show_welcome_dialog()
+            if dialog.exec_():  # modal
+                self.dock_widget.read_settings()
 
     def show_keywords_wizard(self):
         """Show the keywords creation wizard."""
