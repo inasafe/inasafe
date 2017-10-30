@@ -127,6 +127,10 @@ post_processor_affected = {
             'type': keyword_input_type,
             'value': ['hazard_keywords', 'classification'],
         },
+        'hazard': {
+            'type': keyword_input_type,
+            'value': ['hazard_keywords', 'hazard'],
+        },
     },
     'output': {
         'affected': {
