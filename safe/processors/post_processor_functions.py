@@ -5,9 +5,8 @@
 # noinspection PyUnresolvedReferences
 from PyQt4.QtCore import QPyNullVariant
 
-from safe.definitions.hazard_classifications import (
-    not_exposed_class, hazard_classes_all)
-from safe.definitions.utilities import get_displacement_rate
+from safe.definitions.hazard_classifications import hazard_classes_all
+from safe.definitions.utilities import get_displacement_rate, is_affected
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -67,20 +66,9 @@ def post_processor_affected_function(**kwargs):
     :return: If this hazard class is affected or not. It can be `not exposed`.
     :rtype: bool
     """
-    classification = None
-    for hazard in hazard_classes_all:
-        if hazard['key'] == kwargs['classification']:
-            classification = hazard['classes']
-            break
-
-    for level in classification:
-        if level['key'] == kwargs['hazard_class']:
-            affected = level['affected']
-            break
-    else:
-        affected = not_exposed_class['key']
-
-    return affected
+    return is_affected(
+        kwargs['hazard'], kwargs['classification'], kwargs['hazard_class']
+    )
 
 
 def post_processor_population_displacement_function(

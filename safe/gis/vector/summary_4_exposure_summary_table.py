@@ -139,6 +139,7 @@ def exposure_summary_table(
         exposure_type_field['field_name'])
 
     hazard_keywords = aggregate_hazard.keywords['hazard_keywords']
+    hazard = hazard_keywords['hazard']
     classification = hazard_keywords['classification']
 
     hazard_affected = {}
@@ -152,7 +153,10 @@ def exposure_summary_table(
         tabular.keywords['inasafe_fields'][key] = value
 
         hazard_affected[hazard_class] = post_processor_affected_function(
-            classification=classification, hazard_class=hazard_class)
+            hazard=hazard,
+            classification=classification,
+            hazard_class=hazard_class
+        )
 
     field = create_field_from_definition(total_affected_field)
     tabular.addAttribute(field)

@@ -95,6 +95,7 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
     unique_hazard = aggregate_hazard.uniqueValues(hazard_class_index)
 
     hazard_keywords = aggregate_hazard.keywords['hazard_keywords']
+    hazard = hazard_keywords['hazard']
     classification = hazard_keywords['classification']
 
     total = source_fields[total_field['key']]
@@ -161,7 +162,9 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
             analysis.changeAttributeValue(area.id(), shift + i, sum)
 
             affected = post_processor_affected_function(
-                classification=classification, hazard_class=val)
+                hazard=hazard,
+                classification=classification,
+                hazard_class=val)
             if affected == not_exposed_class['key']:
                 not_exposed_sum += sum
             elif affected:
