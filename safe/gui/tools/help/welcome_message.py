@@ -49,7 +49,7 @@ def heading():
     This method was added so that the text could be reused in the
     other contexts.
 
-    .. versionadded:: 4.3
+    .. versionadded:: 4.3.0
 
     :returns: A heading object.
     :rtype: safe.messaging.heading.Heading
@@ -64,7 +64,7 @@ def content():
     This method was added so that the text could be reused in the
     dock_help module.
 
-    .. versionadded:: 4.3
+    .. versionadded:: 4.3.0
 
     :returns: A message object without brand element.
     :rtype: safe.messaging.message.Message
@@ -74,8 +74,5 @@ def content():
     message.add(m.Paragraph(tr(
         'Tim, please add here your magnificent welcome message for our lovely '
         'InaSAFE users...')))
-    message.add(m.Paragraph(tr(
-        'You can disable this welcome message in InaSAFE Options under GIS '
-        'Environment tab.')))
 
     return message

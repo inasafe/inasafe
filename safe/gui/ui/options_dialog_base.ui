@@ -74,7 +74,7 @@
           <attribute name="title">
            <string>Welcome</string>
           </attribute>
-          <layout class="QVBoxLayout" name="verticalLayout_4">
+          <layout class="QVBoxLayout" name="welcome_layout">
            <item>
             <widget class="MessageViewer" name="welcome_message" native="true">
              <property name="sizePolicy">

@@ -819,29 +819,26 @@ class OptionsDialog(QDialog, FORM_CLASS):
         set_setting('profile', profile_data)
 
     def set_welcome_message(self):
-        """Setting up welcome message."""
-        header = html_header()
-        footer = html_footer()
-
-        string = header
-
-        message = welcome_message()
-
-        string += message.to_html()
-        string += footer
+        """Create and insert welcome message."""
+        string = html_header()
+        string += welcome_message().to_html()
+        string += html_footer()
         self.welcome_message.setHtml(string)
 
     def show_option_dialog(self):
         """Helper to show usual option dialog (without welcome message tab)."""
         self.tabWidget.removeTab(0)
-        self.setWindowTitle(self.tr('InaSAFE %s Options' % get_version()))
 
     def show_welcome_dialog(self):
-        """Helper to welcome message dialog.
+        """Setup for showing welcome message dialog.
 
-        It will only show welcome, organisation profile, and preference tab.
+        This method will setup several things:
+        - Only show welcome, organisation profile, and preference tab.
         Currently, they are the first 3 tabs.
+        - Set the title
+        - Move the check box for always showing welcome message.
         """
+        self.welcome_layout.addWidget(self.welcome_message_check_box)
         while self.tabWidget.count() > 3:
             self.tabWidget.removeTab(self.tabWidget.count() - 1)
         self.setWindowTitle(self.tr('Welcome to InaSAFE %s' % get_version()))
