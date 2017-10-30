@@ -10,7 +10,7 @@ from qgis.core import (
 )
 from safe.definitions.fields import (
     distance_field,
-    bearing_from_field,
+    bearing_field,
     direction_field,
     place_mmi_field
 )
@@ -26,10 +26,10 @@ LOGGER = logging.getLogger('InaSAFE')
 def bearing_to_cardinal(angle):
     """Get cardinality of an angle.
 
-    :param angle: Bearing angle
-    :type angle: angle in degrees
+    :param angle: Bearing angle.
+    :type angle: float
 
-    :return: cardinality of input angle
+    :return: cardinality of input angle.
     :rtype: string
     """
 
@@ -53,13 +53,13 @@ def bearing_to_cardinal(angle):
 def get_direction_distance(hazard_point, places_layer):
     """Calculate distance and bearing angle.
 
-    :param hazard_point: A point indicating hazard location
+    :param hazard_point: A point indicating hazard location.
     :type hazard_point: QgsPoint
 
-    :param places_layer: Vector Layer containing place information
+    :param places_layer: Vector Layer containing place information.
     :type places_layer: QgsVectorLayer
 
-    :return: memory layer of city with direction and distance value
+    :return: memory layer of city with direction and distance value.
     :rtype: QgsVectorLayer
     """
     # define distance
@@ -81,7 +81,7 @@ def get_direction_distance(hazard_point, places_layer):
     output_provider.addFeatures(feature_list)
     # create new fields to store the calculation result
     field_distance = create_field_from_definition(distance_field)
-    field_bearing = create_field_from_definition(bearing_from_field)
+    field_bearing = create_field_from_definition(bearing_field)
     field_mmi = create_field_from_definition(place_mmi_field)
     field_direction = create_field_from_definition(direction_field)
     output_provider.addAttributes([
@@ -93,8 +93,8 @@ def get_direction_distance(hazard_point, places_layer):
     output_layer.updateFields()
     # get field index
     distance_index = output_layer.fields().indexFromName('distance')
-    bearing_fr_index = output_layer.fields().indexFromName('bearing_fr')
-    dir_from_index = output_layer.fields().indexFromName('dir_from')
+    bearing_index = output_layer.fields().indexFromName('bearing')
+    direction_index = output_layer.fields().indexFromName('direction')
     # place_mmi_index = output_layer.fields().indexFromName('place_mmi')
     # start calculating distance and get cardinality
     output_layer.startEditing()
@@ -104,13 +104,13 @@ def get_direction_distance(hazard_point, places_layer):
         # get distance
         distance = find_distance.measureLine(hazard_point, city_point)
         # hazard angle
-        bearing_from = city_point.azimuth(hazard_point)
+        bearing = city_point.azimuth(hazard_point)
         # get direction of the bearing angle
-        direction_from = bearing_to_cardinal(bearing_from)
+        direction = bearing_to_cardinal(bearing)
         # store the value to attribute table
         output_layer.changeAttributeValue(fid, distance_index, distance)
-        output_layer.changeAttributeValue(fid, bearing_fr_index, bearing_from)
-        output_layer.changeAttributeValue(fid, dir_from_index, direction_from)
+        output_layer.changeAttributeValue(fid, bearing_index, bearing)
+        output_layer.changeAttributeValue(fid, direction_index, direction)
     output_layer.commitChanges()
     LOGGER.info('Output Layer feature count = %d' %
                 output_layer.featureCount())

@@ -903,8 +903,8 @@ class ShakeGrid(object):
             place = {
                 'name': feature[self.name_field],
                 'distance': feature['distance'],
-                'bearing_to': feature['bearing_fr'],
-                'dir_to': feature['dir_from'],
+                'bearing': feature['bearing'],
+                'direction': feature['direction'],
                 'mmi_values': feature['place_mmi']
             }
             if self.population_field != '':
@@ -924,8 +924,8 @@ class ShakeGrid(object):
         city_name = str(nearest_place['name'])
         city_distance = nearest_place['distance']
         distance_km = str(math.floor(city_distance / 1000))
-        city_bearing = str(math.floor(nearest_place['bearing_to']))
-        city_direction = str(nearest_place['dir_to'])
+        city_bearing = str(math.floor(nearest_place['bearing']))
+        city_direction = str(nearest_place['direction'])
         self.locality = tr(
             'Located {distance} km, {bearing}° {direction} of {city}.'
         ).format(
