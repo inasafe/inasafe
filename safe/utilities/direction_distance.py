@@ -4,10 +4,8 @@
 
 import logging
 import math
-from PyQt4.QtCore import QVariant
 from qgis.core import (
     QgsDistanceArea,
-    QgsField,
     QGis
 )
 from safe.definitions.fields import (
