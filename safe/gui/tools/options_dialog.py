@@ -103,7 +103,8 @@ class OptionsDialog(QDialog, FORM_CLASS):
                 self.organisation_on_dock_checkbox,
             'developer_mode': self.cbxDevMode,
             'generate_report': self.checkbox_generate_reports,
-            'memory_profile': self.check_box_memory
+            'memory_profile': self.check_box_memory,
+            'always_show_welcome_message': self.welcome_message_check_box
         }
         self.text_settings = {
             'keywordCachePath': self.leKeywordCachePath,

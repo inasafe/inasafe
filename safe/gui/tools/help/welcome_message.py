@@ -73,6 +73,9 @@ def content():
     message.add(m.Paragraph(tr('Lorem ipsum dolot.')))
     message.add(m.Paragraph(tr(
         'Tim, please add here your magnificent welcome message for our lovely '
-        'InaSAFE users..')))
+        'InaSAFE users...')))
+    message.add(m.Paragraph(tr(
+        'You can disable this welcome message in InaSAFE Options under GIS '
+        'Environment tab.')))
 
     return message

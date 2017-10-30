@@ -397,7 +397,7 @@
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_8">
-               <item row="10" column="0" colspan="2">
+               <item row="11" column="0" colspan="2">
                 <layout class="QHBoxLayout" name="horizontalLayout_2">
                  <item>
                   <widget class="QSplitter" name="splitter_user_directory">
@@ -422,20 +422,6 @@
                 </layout>
                </item>
                <item row="9" column="0" colspan="2">
-                <widget class="QCheckBox" name="custom_UseUserDirectory_checkbox">
-                 <property name="text">
-                  <string>Location for results</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="0" colspan="2">
-                <widget class="QCheckBox" name="organisation_on_dock_checkbox">
-                 <property name="text">
-                  <string>Show organisation logo in the InaSAFE dock</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="8" column="0" colspan="2">
                 <widget class="QCheckBox" name="cbxUseSelectedFeaturesOnly">
                  <property name="text">
                   <string>Use selected features only with the aggregation layer</string>
@@ -443,16 +429,6 @@
                 </widget>
                </item>
                <item row="4" column="0" colspan="2">
-                <widget class="QCheckBox" name="cbxHideExposure">
-                 <property name="enabled">
-                  <bool>true</bool>
-                 </property>
-                 <property name="text">
-                  <string>Hide exposure layer on scenario estimate completion</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="0" colspan="2">
                 <widget class="QCheckBox" name="cbxZoomToImpact">
                  <property name="enabled">
                   <bool>true</bool>
@@ -462,7 +438,62 @@
                  </property>
                 </widget>
                </item>
-               <item row="12" column="2">
+               <item row="1" column="0" colspan="2">
+                <widget class="QCheckBox" name="organisation_on_dock_checkbox">
+                 <property name="text">
+                  <string>Show organisation logo in the InaSAFE dock</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="6" column="0" rowspan="2" colspan="2">
+                <widget class="QCheckBox" name="cbx_show_only_impact">
+                 <property name="text">
+                  <string>Show only impact layer on report map</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="8" column="0">
+                <widget class="QCheckBox" name="cbx_print_atlas_report">
+                 <property name="text">
+                  <string>Print atlas report on atlas driven template with the aggregation layer</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0" colspan="2">
+                <widget class="QCheckBox" name="cbxVisibleLayersOnly">
+                 <property name="text">
+                  <string>Only show visible layers in the InaSAFE dock and in the wizard</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="10" column="0" colspan="2">
+                <widget class="QCheckBox" name="custom_UseUserDirectory_checkbox">
+                 <property name="text">
+                  <string>Location for results</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="0" colspan="2">
+                <widget class="QCheckBox" name="cbxSetLayerNameFromTitle">
+                 <property name="enabled">
+                  <bool>true</bool>
+                 </property>
+                 <property name="text">
+                  <string>Set QGIS layer name from 'title' in keywords</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="0" colspan="2">
+                <widget class="QCheckBox" name="cbxHideExposure">
+                 <property name="enabled">
+                  <bool>true</bool>
+                 </property>
+                 <property name="text">
+                  <string>Hide exposure layer on scenario estimate completion</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="13" column="2">
                 <spacer name="verticalSpacer">
                  <property name="orientation">
                   <enum>Qt::Vertical</enum>
@@ -475,38 +506,7 @@
                  </property>
                 </spacer>
                </item>
-               <item row="7" column="0">
-                <widget class="QCheckBox" name="cbx_print_atlas_report">
-                 <property name="text">
-                  <string>Print atlas report on atlas driven template with the aggregation layer</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="0" colspan="2">
-                <widget class="QCheckBox" name="cbxSetLayerNameFromTitle">
-                 <property name="enabled">
-                  <bool>true</bool>
-                 </property>
-                 <property name="text">
-                  <string>Set QGIS layer name from 'title' in keywords</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="5" column="0" rowspan="2" colspan="2">
-                <widget class="QCheckBox" name="cbx_show_only_impact">
-                 <property name="text">
-                  <string>Show only impact layer on report map</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="0" colspan="2">
-                <widget class="QCheckBox" name="cbxVisibleLayersOnly">
-                 <property name="text">
-                  <string>Only show visible layers in the InaSAFE dock and in the wizard</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="11" column="0" colspan="2">
+               <item row="12" column="0" colspan="2">
                 <widget class="QGroupBox" name="grpNotImplemented">
                  <property name="title">
                   <string>Not yet implemented</string>
@@ -575,6 +575,13 @@
                    </layout>
                   </item>
                  </layout>
+                </widget>
+               </item>
+               <item row="0" column="0">
+                <widget class="QCheckBox" name="welcome_message_check_box">
+                 <property name="text">
+                  <string>Always show welcome message when open QGIS</string>
+                 </property>
                 </widget>
                </item>
               </layout>
