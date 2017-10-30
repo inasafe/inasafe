@@ -2575,8 +2575,7 @@ direction_field = {
     'help_text': tr(
         'Cardinality of a bearing angle is an information that indicates the '
         'direction of the angle. The purpose of this information is so that '
-        'it will be easier to understand than using only a bearing angle.'
-        ),
+        'it will be easier to understand than using only a bearing angle.'),
     'citations': [
         {
             'text': None,
