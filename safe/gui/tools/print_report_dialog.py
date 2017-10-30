@@ -469,7 +469,8 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
     def show_help(self):
         """Show usage info to the user.
 
-        .. versionadded: 4.3.0"""
+        .. versionadded: 4.3.0
+        """
         # Read the header and footer html snippets
         self.main_stacked_widget.setCurrentIndex(0)
         header = html_header()

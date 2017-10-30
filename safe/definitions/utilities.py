@@ -4,7 +4,6 @@
 from collections import OrderedDict
 from copy import deepcopy
 from os import listdir
-from collections import OrderedDict
 from os.path import join, exists, splitext, split
 from PyQt4 import QtXml
 from PyQt4.QtXml import QDomNode
