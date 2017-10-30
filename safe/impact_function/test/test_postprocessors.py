@@ -8,6 +8,7 @@ from safe.test.utilities import get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.definitions.exposure import exposure_population
+from safe.definitions.hazard import hazard_generic
 from safe.definitions.hazard_classifications import generic_hazard_classes
 from safe.definitions.fields import (
     male_displaced_count_field,
@@ -318,6 +319,7 @@ class TestPostProcessors(unittest.TestCase):
 
         # Need to add keywords on the fly.
         impact_layer.keywords['hazard_keywords'] = {
+            'hazard': 'flood',
             'classification': 'flood_hazard_classes'
         }
 
@@ -484,6 +486,7 @@ class TestPostProcessors(unittest.TestCase):
                 'hazard_class_field': 'hazard_class'
             },
             'hazard_keywords': {
+                'hazard': hazard_generic['key'],
                 'classification': generic_hazard_classes['key']
             }
         }

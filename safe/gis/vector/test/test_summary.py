@@ -51,6 +51,7 @@ class TestSummary(unittest.TestCase):
             clone=True)
 
         aggregate_hazard.keywords['hazard_keywords'] = {
+            'hazard': 'generic',
             'classification': 'generic_hazard_classes'
         }
         impact.keywords['classification'] = {
@@ -122,6 +123,7 @@ class TestSummary(unittest.TestCase):
             'aggregate_classified_hazard_summary.geojson')
 
         aggregate_hazard.keywords['hazard_keywords'] = {
+            'hazard': 'generic',
             'classification': 'generic_hazard_classes'
         }
 
@@ -160,6 +162,7 @@ class TestSummary(unittest.TestCase):
             'aggregate_classified_hazard_summary.geojson')
 
         aggregate_hazard.keywords['hazard_keywords'] = {
+            'hazard': 'generic',
             'classification': 'generic_hazard_classes'
         }
 
@@ -198,6 +201,7 @@ class TestSummary(unittest.TestCase):
             'land_cover_aggregate_hazard_impacted.geojson')
 
         aggregate_hazard.keywords['hazard_keywords'] = {
+            'hazard': 'generic',
             'classification': 'generic_hazard_classes'
         }
 
