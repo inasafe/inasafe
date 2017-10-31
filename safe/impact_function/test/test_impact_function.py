@@ -210,13 +210,13 @@ def run_scenario(scenario, use_debug=False):
 
     status, message = impact_function.prepare()
     if status != 0:
-        return status, message, None
+        raise Exception(message)
 
     counts = len(impact_function.output_layers_expected())
 
     status, message = impact_function.run()
     if status != 0:
-        return status, message, None
+        raise Exception(message)
 
     for layer in impact_function.outputs:
         if layer.type() == QgsMapLayer.VectorLayer:
@@ -695,8 +695,11 @@ class TestImpactFunction(unittest.TestCase):
             run_scenario(scenario, use_debug))
         self.assertEqual(0, status, steps)
         # self.assertDictEqual(expected_steps, steps, scenario_path)
-        message = "Exception found in " + scenario_path
-        self.assertDictEqual(byteify(expected_steps), byteify(steps), message)
+        try:
+            self.assertDictEqual(byteify(expected_steps), byteify(steps))
+        except AssertionError:
+            LOGGER.info('Exception found in ' + scenario_path)
+            raise
         # - 1 because I added the profiling table, and this table is not
         # counted in the JSON file.
         self.assertEqual(len(outputs) - 1, expected_outputs['count'])
@@ -727,6 +730,7 @@ class TestImpactFunction(unittest.TestCase):
         """
         scenarios = {
             'earthquake_raster_on_raster_population': False,
+            'earthquake_raster_on_vector_places': False,
             'earthquake_raster_on_vector_population': False,
             'polygon_classified_on_line': False,
             'polygon_classified_on_point': False,

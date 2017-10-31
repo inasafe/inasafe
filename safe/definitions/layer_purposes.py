@@ -188,6 +188,19 @@ layer_purpose_profiling = {
     ]
 }
 
+layer_purpose_nearby_places = {
+    'key': 'nearby_places',
+    'name': tr('Nearby Places'),
+    'description': tr('Lorem ipsum on the nearby places layers.'),
+    'allowed_geometries': [layer_geometry_point],
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+
 layer_purpose = {
     'key': 'layer_purpose',
     'name': tr('Purpose'),

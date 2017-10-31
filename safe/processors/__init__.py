@@ -6,6 +6,7 @@ from safe.processors.post_processor_functions import *
 from safe.processors.post_processor_inputs import *
 from safe.processors.post_processors import *
 from safe.processors.productivity_post_processors import *
+from safe.processors.pre_processors import *
 
 # This is the order of execution, so the order is important.
 # For instance, the size post processor must run before size_rate.
@@ -48,4 +49,8 @@ post_processors = [
      gender_vulnerability_postprocessors +
      productivity_post_processors) + [
     post_processor_additional_rice,
+]
+
+pre_processors = [
+    pre_processors_nearby_places,
 ]

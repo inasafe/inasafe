@@ -44,6 +44,19 @@ analysis_steps['data_store'] = {
         }
     ]
 }
+analysis_steps['pre_processing'] = {
+    'key': 'pre_processing',
+    'name': tr('Pre processing'),
+    'description': tr(
+        'During this step we check if we can create some side products based '
+        'on your inputs.'),
+    'citations': [
+        {
+            'text': tr(''),
+            'link': u''
+        }
+    ]
+}
 analysis_steps['hazard_preparation'] = {
     'key': 'hazard_preparation',
     'name': tr('Hazard preparation'),
