@@ -6,7 +6,7 @@ import os
 
 from os.path import join, exists
 from PyQt4 import QtGui, QtCore, QtXml
-from qgis.core import QgsApplication, QgsExpressionContextUtils, QgsComposition
+from qgis.core import QgsApplication, QgsExpressionContextUtils
 
 from safe import messaging as m
 from safe.common.signals import send_error_message, send_static_message
@@ -314,14 +314,7 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
 
             send_static_message(self.dock, status)
 
-        custom_map_report_product = (
-            custom_map_report_metadata.component_by_tags(
-                [final_product_tag, pdf_product_tag]))
-
-        for path in self.retrieve_paths(
-                custom_map_report_product,
-                report_path=report_path,
-                suffix='.pdf'):
+        for path in pdf_output_paths:
             # noinspection PyCallByClass,PyTypeChecker,PyTypeChecker
             QtGui.QDesktopServices.openUrl(
                 QtCore.QUrl.fromLocalFile(path))
@@ -345,18 +338,16 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
                 report_path=report_path,
                 suffix='.qpt'):
 
-            self.composer = self.iface.createNewComposer()
+            composer = self.iface.createNewComposer()
 
             with open(template_path) as template_file:
                 template_content = template_file.read()
 
             document = QtXml.QDomDocument()
             document.setContent(template_content)
-            qgis_composition_context = impact_report.qgis_composition_context
 
             # load composition object
-            composition = QgsComposition(qgis_composition_context.map_settings)
-            load_status = composition.loadFromTemplate(document)
+            load_status = composer.composition().loadFromTemplate(document)
 
             if not load_status:
                 # noinspection PyCallByClass,PyTypeChecker
@@ -366,9 +357,6 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
                     self.tr('Error loading template: %s') % template_path)
 
                 return
-
-            self.composer.setComposition(composition)
-            self.composer.composerWindow().show()
 
     def accept(self):
         """Method invoked when OK button is clicked."""

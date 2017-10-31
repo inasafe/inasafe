@@ -43,7 +43,7 @@
        <item row="0" column="0">
         <widget class="QGroupBox" name="groupBox_2">
          <property name="title">
-          <string>Template to use</string>
+          <string>Choose a map report template</string>
          </property>
          <layout class="QGridLayout" name="gridLayout">
           <item row="1" column="0">
@@ -98,7 +98,7 @@
              </size>
             </property>
             <property name="text">
-             <string>Choose available template...</string>
+             <string>Choose default template...</string>
             </property>
            </widget>
           </item>
