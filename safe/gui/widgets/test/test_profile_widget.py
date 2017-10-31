@@ -21,7 +21,7 @@ class TestProfileWidget(unittest.TestCase):
         data = generate_default_profile()
         profile_widget = ProfileWidget(parent=PARENT, data=data)
 
-        self.assertDictEqual(data, profile_widget.get_data())
+        self.assertDictEqual(data, profile_widget.data)
 
         hazard_item = profile_widget.widget_items[0]
         hazard_key = hazard_item.data(0, Qt.UserRole)
@@ -35,7 +35,7 @@ class TestProfileWidget(unittest.TestCase):
         # Test changing value
         displacement_spin_box.setValue(0.5)
         self.assertEqual(
-            profile_widget.get_data()[hazard_key][classification_key][
+            profile_widget.data[hazard_key][classification_key][
                 class_key]['displacement_rate'],
             0.5
         )

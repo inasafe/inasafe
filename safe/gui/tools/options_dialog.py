@@ -85,9 +85,6 @@ class OptionsDialog(QDialog, FORM_CLASS):
         # Flag for restore default values
         self.is_restore_default = False
 
-        # Profile preference
-        self.profile_widget = None
-
         # List of setting key and control
         self.boolean_settings = {
             'visibleLayersOnlyFlag': self.cbxVisibleLayersOnly,
@@ -129,12 +126,17 @@ class OptionsDialog(QDialog, FORM_CLASS):
         self.adjustSize()
 
         # Profile Preference Tab
+        # Label
         self.preference_label = QLabel()
         self.preference_label.setText(tr(
             'Please set your affected and displacement rate for each hazard, '
             'classification, and its class below.'
         ))
         self.preference_layout.addWidget(self.preference_label)
+
+        # Profile preference widget
+        self.profile_widget = ProfileWidget(self)
+        self.preference_layout.addWidget(self.profile_widget)
 
         # Demographic tab
         self.demographic_label = QLabel()
@@ -688,12 +690,7 @@ class OptionsDialog(QDialog, FORM_CLASS):
             data = generate_default_profile()
         else:
             data = setting('profile', generate_default_profile())
-        if self.profile_widget is not None:
-            self.profile_widget.setParent(None)
-        # TODO(IS) Ideally, we should initialize it once, then only update the
-        # content/tree widget.
-        self.profile_widget = ProfileWidget(parent=self, data=data)
-        self.preference_layout.addWidget(self.profile_widget)
+        self.profile_widget.data = data
 
     @staticmethod
     def age_ratios():
@@ -814,7 +811,7 @@ class OptionsDialog(QDialog, FORM_CLASS):
 
     def save_profile_preference(self):
         """Helper to save profile to QSettings."""
-        profile_data = self.profile_widget.get_data()
+        profile_data = self.profile_widget.data
         set_setting('profile', profile_data)
 
     def set_welcome_message(self):

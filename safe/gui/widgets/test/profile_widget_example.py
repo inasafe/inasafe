@@ -22,23 +22,40 @@ __revision__ = '$Format:%H$'
 def main():
     """Main function to run the example."""
     def print_values(profile_widget):
-        data = profile_widget.get_data()
+        data = profile_widget.data
         from pprint import pprint
         pprint(data)
+
+    def clear_widget(profile_widget):
+        profile_widget.clear()
+
+    def restore_data(profile_widget):
+        profile_widget.clear()
+        profile_widget.data = generate_default_profile()
 
     app = QApplication([])
 
     default_profile = generate_default_profile()
-    profile_widget = ProfileWidget(parent=PARENT, data=default_profile)
+    profile_widget = ProfileWidget(parent=PARENT)
 
-    button = QPushButton('Get result...')
-    button.clicked.connect(
+    get_result_button = QPushButton('Get result...')
+    get_result_button.clicked.connect(
         partial(print_values, profile_widget=profile_widget))
+
+    clear_button = QPushButton('Clear widget...')
+    clear_button.clicked.connect(
+        partial(clear_widget, profile_widget=profile_widget))
+
+    restore_button = QPushButton('Restore data...')
+    restore_button.clicked.connect(
+        partial(restore_data, profile_widget=profile_widget))
 
     widget = QWidget()
     layout = QGridLayout()
     layout.addWidget(profile_widget)
-    layout.addWidget(button)
+    layout.addWidget(restore_button)
+    layout.addWidget(get_result_button)
+    layout.addWidget(clear_button)
 
     widget.setLayout(layout)
 
