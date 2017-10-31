@@ -177,7 +177,7 @@ from safe.impact_function.style import (
     simple_polygon_without_brush,
 )
 from safe.messaging import styles
-from safe.processors import post_processors
+from safe.processors import post_processors, pre_processors
 from safe.report.impact_report import ImpactReport
 from safe.report.report_metadata import ReportMetadata
 from safe.utilities.default_values import get_inasafe_default_value_qsetting
@@ -267,6 +267,8 @@ class ImpactFunction(object):
         self._duration = 0
         self._provenance = {}
         self._output_layer_expected = None
+        self._preprocessors = []  # List of pre-processors which will run
+        self._preprocessors_layers = {}  # List of layers produced
 
         # Environment
         set_provenance(self._provenance, provenance_host_name, gethostname())
@@ -580,6 +582,9 @@ class ImpactFunction(object):
         layers[layer_purpose_exposure_summary_table['key']] = (
             self._exposure_summary_table)
         layers[layer_purpose_profiling['key']] = self._profiling_table
+
+        # Extra layers produced by pre-processing
+        layers.update(self._preprocessors_layers)
 
         for expected_purpose, layer in layers.iteritems():
             if layer:
@@ -1072,6 +1077,10 @@ class ImpactFunction(object):
             else:
                 self._title = tr('be affected')
 
+            for pre_processor in pre_processors:
+                if pre_processor['condition'](self):
+                    self._preprocessors.append(pre_processor)
+
         except Exception as e:
             if self.debug_mode:
                 # We run in debug mode, we do not want to catch the exception.
@@ -1176,6 +1185,11 @@ class ImpactFunction(object):
             # If the exposure doesn't have a classification, such as population
             # census layer, we can't provide an exposure breakdown layer.
             expected.remove(layer_purpose_exposure_summary_table['key'])
+
+        # We add any layers produced by pre-processors
+        for preprocessor in self._preprocessors:
+            if preprocessor['output'].get('type') == 'layer':
+                expected.append(preprocessor['output'].get('value')['key'])
 
         return expected
 
@@ -1522,7 +1536,11 @@ class ImpactFunction(object):
                 self.datastore.add_layer(self.aggregation, 'aggregation')
 
         self._performance_log = profiling_log()
-        self.callback(2, step_count, analysis_steps['aggregation_preparation'])
+
+        self.callback(2, step_count, analysis_steps['pre_processing'])
+        self.pre_process()
+
+        self.callback(3, step_count, analysis_steps['aggregation_preparation'])
         self.aggregation_preparation()
 
         # Special case for earthquake hazard on population. We need to remove
@@ -1545,24 +1563,24 @@ class ImpactFunction(object):
         step_count = len(analysis_steps)
 
         self._performance_log = profiling_log()
-        self.callback(3, step_count, analysis_steps['hazard_preparation'])
+        self.callback(4, step_count, analysis_steps['hazard_preparation'])
         self.hazard_preparation()
 
         self._performance_log = profiling_log()
         self.callback(
-            4, step_count, analysis_steps['aggregate_hazard_preparation'])
+            5, step_count, analysis_steps['aggregate_hazard_preparation'])
         self.aggregate_hazard_preparation()
 
         self._performance_log = profiling_log()
-        self.callback(5, step_count, analysis_steps['exposure_preparation'])
+        self.callback(6, step_count, analysis_steps['exposure_preparation'])
         self.exposure_preparation()
 
         self._performance_log = profiling_log()
-        self.callback(6, step_count, analysis_steps['combine_hazard_exposure'])
+        self.callback(7, step_count, analysis_steps['combine_hazard_exposure'])
         self.intersect_exposure_and_aggregate_hazard()
 
         self._performance_log = profiling_log()
-        self.callback(7, step_count, analysis_steps['post_processing'])
+        self.callback(8, step_count, analysis_steps['post_processing'])
         if is_vector_layer(self._exposure_summary):
             # We post process the exposure summary
             self.post_process(self._exposure_summary)
@@ -1572,7 +1590,7 @@ class ImpactFunction(object):
             self.post_process(self._aggregate_hazard_impacted)
 
         self._performance_log = profiling_log()
-        self.callback(8, step_count, analysis_steps['summary_calculation'])
+        self.callback(9, step_count, analysis_steps['summary_calculation'])
         self.summary_calculation()
 
         self._end_datetime = datetime.now()
@@ -1750,6 +1768,29 @@ class ImpactFunction(object):
         write_iso19115_metadata(
             self.analysis_impacted.publicSource(),
             self.analysis_impacted.keywords)
+
+    @profile
+    def pre_process(self):
+        """Run every pre-processors.
+
+        Preprocessors are creating new layers with a specific layer_purpose.
+        This layer is added then to the datastore.
+
+        :return: Nothing
+        """
+        LOGGER.info('ANALYSIS : Pre processing')
+
+        for pre_processor in self._preprocessors:
+            layer = pre_processor['process']['function'](self)
+            purpose = pre_processor['output'].get('value')['key']
+            result, name = self.datastore.add_layer(layer, purpose)
+            if not result:
+                raise Exception(
+                    tr('Something went wrong with the datastore : '
+                       '{error_message}').format(error_message=name))
+            layer = self.datastore.layer(name)
+            self._preprocessors_layers[purpose] = layer
+            self.debug_layer(layer, add_to_datastore=False)
 
     @profile
     def aggregation_preparation(self):
