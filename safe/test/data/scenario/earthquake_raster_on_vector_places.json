@@ -20,6 +20,12 @@
         "Build the exposure summary table"
       ]
     },
+    "pre_processor": {
+      "info": {},
+      "process": [
+        "Nearby Places Pre Processor"
+      ]
+    },
     "post_processor":{
       "info": {},
       "process":[

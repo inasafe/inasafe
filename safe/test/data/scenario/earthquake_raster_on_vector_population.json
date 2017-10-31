@@ -22,6 +22,10 @@
         "Aggregate the analysis summary"
       ]
     },
+    "pre_processor": {
+      "info": {},
+      "process": []
+    },
     "post_processor":{
       "info": {},
       "process":[
