@@ -32,7 +32,7 @@ post_processor_productivity = {
             'value': productivity_rate_field,
             'type': field_input_type,
         },
-        # In meter square
+        # Size is in hectare for land cover
         'size': {
             'value': size_field,
             'type': field_input_type,
@@ -42,7 +42,7 @@ post_processor_productivity = {
         'productivity': {
             'value': productivity_field,
             'type': formula_process,
-            'formula': 'productivity_rate * size / 10000'
+            'formula': 'productivity_rate * size'
         }
     }
 }
@@ -56,7 +56,7 @@ post_processor_production_cost = {
             'value': production_cost_rate_field,
             'type': field_input_type,
         },
-        # In meter square
+        # Size is in hectare for land cover
         'size': {
             'value': size_field,
             'type': field_input_type,
@@ -66,7 +66,7 @@ post_processor_production_cost = {
         'production_cost': {
             'value': production_cost_field,
             'type': formula_process,
-            'formula': 'production_cost_rate * size / 10000'
+            'formula': 'production_cost_rate * size'
         }
     }
 }
@@ -80,7 +80,7 @@ post_processor_production_value = {
             'value': production_value_rate_field,
             'type': field_input_type,
         },
-        # In meter square
+        # Size is in hectare for land cover
         'size': {
             'value': size_field,
             'type': field_input_type,
@@ -90,7 +90,7 @@ post_processor_production_value = {
         'production_value': {
             'value': production_value_field,
             'type': formula_process,
-            'formula': 'production_value_rate * size / 10000'
+            'formula': 'production_value_rate * size'
         }
     }
 }
