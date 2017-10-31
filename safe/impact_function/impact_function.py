@@ -884,6 +884,10 @@ class ImpactFunction(object):
                 'process': [],
                 'info': {}
             },
+            'pre_processor': {
+                'process': [],
+                'info': {}
+            },
             'post_processor': {
                 'process': [],
                 'info': {}
@@ -1791,6 +1795,9 @@ class ImpactFunction(object):
             layer = self.datastore.layer(name)
             self._preprocessors_layers[purpose] = layer
             self.debug_layer(layer, add_to_datastore=False)
+
+            self.set_state_process('pre_processor', pre_processor['name'])
+            LOGGER.info(u'{name} : Running'.format(name=pre_processor['name']))
 
     @profile
     def aggregation_preparation(self):

@@ -21,6 +21,10 @@
         "Build the exposure summary table"
       ]
     },
+    "pre_processor": {
+      "info": {},
+      "process": []
+    },
     "post_processor":{
       "info": {},
       "process":[
