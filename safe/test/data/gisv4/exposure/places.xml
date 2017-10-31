@@ -47,7 +47,7 @@
       <gmd:citation>
         <gmd:CI_Citation>
           <gmd:title>
-            <gco:CharacterString>earthquake</gco:CharacterString>
+            <gco:CharacterString>places</gco:CharacterString>
           </gmd:title>
           <gmd:date>
             <gmd:CI_Date>
@@ -171,51 +171,48 @@
       </gmd:extent>
       <gmd:supplementalInformation>
         <inasafe>
-          <hazard_category>
-            <gco:CharacterString>single_event</gco:CharacterString>
-          </hazard_category>
-          <thresholds>
-            <gco:Dictionary>{&quot;place&quot;: {&quot;generic_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [7.0, 14.0], &quot;medium&quot;: [6.0, 7.0], &quot;low&quot;: [4.0, 6.0]}}}, &quot;road&quot;: {&quot;earthquake_mmi_scale&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;IX&quot;: [8.5, 9.5], &quot;I&quot;: [0.5, 1.5], &quot;VI&quot;: [5.5, 6.5], &quot;VII&quot;: [6.5, 7.5], &quot;IV&quot;: [3.5, 4.5], &quot;II&quot;: [1.5, 2.5], &quot;VIII&quot;: [7.5, 8.5], &quot;V&quot;: [4.5, 5.5], &quot;X&quot;: [9.5, 10.5], &quot;III&quot;: [2.5, 3.5]}}}, &quot;structure&quot;: {&quot;earthquake_mmi_scale&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;IX&quot;: [8.5, 9.5], &quot;I&quot;: [0.5, 1.5], &quot;VI&quot;: [5.5, 6.5], &quot;VII&quot;: [6.5, 7.5], &quot;IV&quot;: [3.5, 4.5], &quot;II&quot;: [1.5, 2.5], &quot;VIII&quot;: [7.5, 8.5], &quot;V&quot;: [4.5, 5.5], &quot;X&quot;: [9.5, 10.5], &quot;III&quot;: [2.5, 3.5]}}}, &quot;population&quot;: {&quot;earthquake_mmi_scale&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;IX&quot;: [8.5, 9.5], &quot;I&quot;: [0.5, 1.5], &quot;VI&quot;: [5.5, 6.5], &quot;VII&quot;: [6.5, 7.5], &quot;IV&quot;: [3.5, 4.5], &quot;II&quot;: [1.5, 2.5], &quot;VIII&quot;: [7.5, 8.5], &quot;V&quot;: [4.5, 5.5], &quot;X&quot;: [9.5, 10.5], &quot;III&quot;: [2.5, 3.5]}}}}</gco:Dictionary>
-          </thresholds>
-          <continuous_hazard_unit>
-            <gco:CharacterString>mmi</gco:CharacterString>
-          </continuous_hazard_unit>
+          <scale>
+            <gco:CharacterString/>
+          </scale>
+          <layer_mode>
+            <gco:CharacterString>classified</gco:CharacterString>
+          </layer_mode>
+          <exposure_unit>
+            <gco:CharacterString/>
+          </exposure_unit>
+          <classification>
+            <gco:CharacterString>generic_place_classes</gco:CharacterString>
+          </classification>
+          <keyword_version>
+            <gco:CharacterString>4.3</gco:CharacterString>
+          </keyword_version>
+          <source>
+            <gco:CharacterString>InaSAFE v4 GeoJSON test layer</gco:CharacterString>
+          </source>
+          <layer_geometry>
+            <gco:CharacterString>point</gco:CharacterString>
+          </layer_geometry>
+          <active_band>
+            <gco:Integer/>
+          </active_band>
+          <value_map>
+            <gco:Dictionary>{&quot;Town&quot;: [&quot;town&quot;], &quot;city&quot;: [&quot;city&quot;], &quot;airport&quot;: [&quot;airport&quot;], &quot;other&quot;: [&quot;hogwarts&quot;, &quot;secret_jail&quot;], &quot;Village&quot;: [&quot;village&quot;]}</gco:Dictionary>
+          </value_map>
+          <layer_purpose>
+            <gco:CharacterString>exposure</gco:CharacterString>
+          </layer_purpose>
           <inasafe_fields>
-            <gco:Dictionary/>
+            <gco:Dictionary>{&quot;exposure_id_field&quot;: &quot;exposure_id&quot;, &quot;exposure_type_field&quot;: &quot;exposure_type&quot;}</gco:Dictionary>
           </inasafe_fields>
           <inasafe_default_values>
             <gco:Dictionary/>
           </inasafe_default_values>
-          <scale>
-            <gco:CharacterString/>
-          </scale>
-          <source>
-            <gco:CharacterString/>
-          </source>
-          <layer_geometry>
-            <gco:CharacterString>raster</gco:CharacterString>
-          </layer_geometry>
-          <value_map>
-            <gco:Dictionary/>
-          </value_map>
-          <hazard>
-            <gco:CharacterString>earthquake</gco:CharacterString>
-          </hazard>
           <extra_keywords>
             <gco:Dictionary/>
           </extra_keywords>
-          <keyword_version>
-            <gco:CharacterString>4.3</gco:CharacterString>
-          </keyword_version>
-          <layer_purpose>
-            <gco:CharacterString>hazard</gco:CharacterString>
-          </layer_purpose>
-          <active_band>
-            <gco:Integer>1</gco:Integer>
-          </active_band>
-          <layer_mode>
-            <gco:CharacterString>continuous</gco:CharacterString>
-          </layer_mode>
+          <exposure>
+            <gco:CharacterString>place</gco:CharacterString>
+          </exposure>
         </inasafe>
       </gmd:supplementalInformation>
     </gmd:MD_DataIdentification>
