@@ -349,7 +349,7 @@ def write_json(data, filename):
 
     def custom_default(obj):
         if isinstance(obj, QPyNullVariant):
-            return 'Null'
+            return ''
         raise TypeError
 
     with open(filename, 'w') as json_file:

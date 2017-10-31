@@ -1,7 +1,7 @@
 # coding=utf-8
 """Helper function for InaSAFE settings."""
 
-from PyQt4.QtCore import QSettings
+from PyQt4.QtCore import QSettings, QPyNullVariant
 import json
 
 from safe.definitions import APPLICATION_NAME
@@ -164,8 +164,14 @@ def export_setting(file_path, qsettings=None):
     for key in all_keys:
         inasafe_settings[key] = setting(key, qsettings=qsettings)
 
-    with open(file_path, 'w') as f:
-        json.dump(inasafe_settings, f)
+    def custom_default(obj):
+        if isinstance(obj, QPyNullVariant):
+            return ''
+        raise TypeError
+
+    with open(file_path, 'w') as json_file:
+        json.dump(
+            inasafe_settings, json_file, indent=2, default=custom_default)
 
     return inasafe_settings
 
@@ -185,6 +191,9 @@ def import_setting(file_path, qsettings=None):
     """
     with open(file_path, 'r') as f:
         inasafe_settings = json.load(f)
+
+    if not qsettings:
+        qsettings = QSettings()
 
     # Clear the previous setting
     qsettings.beginGroup('inasafe')
