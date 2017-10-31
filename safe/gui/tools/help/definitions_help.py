@@ -9,7 +9,7 @@ from os.path import exists
 from PyQt4 import QtCore
 
 import safe.definitions as definitions
-import safe.post_processors
+import safe.processors
 from safe import messaging as m
 from safe.definitions.earthquake import current_earthquake_model_name
 from safe.definitions.exposure import exposure_all
@@ -37,7 +37,7 @@ from safe.gui.tools.help.peta_bencana_help import content as petabencana_help
 from safe.gui.tools.help.shakemap_converter_help \
     import content as shakemap_help
 from safe.messaging import styles
-from safe.post_processors import (
+from safe.processors import (
     post_processor_input_types,
     post_processor_input_values)
 from safe.utilities.expressions import qgis_expressions
@@ -695,7 +695,7 @@ def content():
         tr('Post Processor Process Types'),
         heading_level=2)
     table = _create_post_processor_subtable(
-        safe.post_processors.post_processor_process_types
+        safe.processors.post_processor_process_types
     )
     message.add(table)
 
@@ -705,7 +705,7 @@ def content():
         'post-processors',
         tr('Post Processors'),
         heading_level=2)
-    post_processors = safe.post_processors.post_processors
+    post_processors = safe.processors.post_processors
     table = m.Table(style_class='table table-condensed table-striped')
     row = m.Row()
     row.add(m.Cell(tr('Name'), header=True))

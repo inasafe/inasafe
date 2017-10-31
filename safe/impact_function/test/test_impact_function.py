@@ -100,8 +100,8 @@ from qgis.core import (
 from osgeo import gdal
 from PyQt4.QtCore import QT_VERSION_STR
 from PyQt4.Qt import PYQT_VERSION_STR
-from safe.post_processors import post_processor_size
-from safe.post_processors.population_post_processors import (
+from safe.processors import post_processor_size
+from safe.processors.population_post_processors import (
     post_processor_female,
     post_processor_male,
     post_processor_youth,

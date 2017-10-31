@@ -21,7 +21,7 @@ from safe.definitions.minimum_needs import minimum_needs_fields
 from safe.definitions.utilities import (
     postprocessor_output_field,
     definition)
-from safe.post_processors.population_post_processors import (
+from safe.processors.population_post_processors import (
     age_postprocessors,
     gender_postprocessors)
 from safe.report.extractors.util import (

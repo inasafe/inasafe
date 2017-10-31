@@ -177,7 +177,7 @@ from safe.impact_function.style import (
     simple_polygon_without_brush,
 )
 from safe.messaging import styles
-from safe.post_processors import post_processors
+from safe.processors import post_processors
 from safe.report.impact_report import ImpactReport
 from safe.report.report_metadata import ReportMetadata
 from safe.utilities.default_values import get_inasafe_default_value_qsetting

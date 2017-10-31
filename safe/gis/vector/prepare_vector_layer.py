@@ -46,7 +46,7 @@ from safe.gis.vector.tools import (
     create_field_from_definition
 )
 from safe.impact_function.postprocessors import run_single_post_processor
-from safe.post_processors import post_processor_size
+from safe.processors import post_processor_size
 from safe.utilities.i18n import tr
 from safe.utilities.metadata import (
     active_thresholds_value_maps, active_classification, copy_layer_keywords)

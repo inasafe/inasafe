@@ -15,11 +15,11 @@ from safe.definitions.fields import (
     affected_field
 )
 from safe.definitions.hazard_classifications import not_exposed_class
-from safe.post_processors.post_processor_functions import (
+from safe.processors.post_processor_functions import (
     multiply,
     size,
     post_processor_affected_function)
-from safe.post_processors.post_processor_inputs import (
+from safe.processors.post_processor_inputs import (
     geometry_property_input_type,
     layer_property_input_type,
     size_calculator_input_value,

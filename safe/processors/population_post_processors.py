@@ -50,15 +50,15 @@ from safe.definitions.fields import (
     over_60_ratio_field,
     disabled_ratio_field)
 from safe.definitions.hazard_classifications import earthquake_mmi_scale
-from safe.post_processors import (
+from safe.processors import (
     function_process,
     formula_process)
-from safe.post_processors.post_processor_functions import (
+from safe.processors.post_processor_functions import (
     multiply,
     post_processor_population_displacement_function,
     post_processor_population_fatality_function,
 )
-from safe.post_processors.post_processor_inputs import (
+from safe.processors.post_processor_inputs import (
     constant_input_type,
     field_input_type,
     keyword_input_type,

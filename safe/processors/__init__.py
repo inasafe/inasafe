@@ -1,11 +1,11 @@
 # coding=utf-8
 
-from safe.post_processors.minimum_needs_post_processors import *
-from safe.post_processors.population_post_processors import *
-from safe.post_processors.post_processor_functions import *
-from safe.post_processors.post_processor_inputs import *
-from safe.post_processors.post_processors import *
-from safe.post_processors.productivity_post_processors import *
+from safe.processors.minimum_needs_post_processors import *
+from safe.processors.population_post_processors import *
+from safe.processors.post_processor_functions import *
+from safe.processors.post_processor_inputs import *
+from safe.processors.post_processors import *
+from safe.processors.productivity_post_processors import *
 
 # This is the order of execution, so the order is important.
 # For instance, the size post processor must run before size_rate.
