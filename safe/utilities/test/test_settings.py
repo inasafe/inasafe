@@ -2,6 +2,7 @@
 """Test for Settings Utilities."""
 
 import unittest
+import os
 from safe.test.utilities import get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from PyQt4.QtCore import QSettings
@@ -12,9 +13,12 @@ from safe.utilities.settings import (
     delete_general_setting,
     setting,
     set_setting,
-    delete_setting
+    delete_setting,
+    export_setting,
+    import_setting,
 )
 from safe.definitions.utilities import generate_default_profile
+from safe.common.utilities import unique_filename
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -76,7 +80,7 @@ class TestSettings(unittest.TestCase):
         self.assertEqual('value', setting('key', qsettings=self.qsettings))
         delete_setting('key', qsettings=self.qsettings)
         self.assertEqual('default', setting(
-            'key',default='default', qsettings=self.qsettings))
+            'key', default='default', qsettings=self.qsettings))
 
         # Using InaSAFE setting default
         key = 'developer_mode'
@@ -104,6 +108,31 @@ class TestSettings(unittest.TestCase):
         set_setting('profile', profile_dictionary, self.qsettings)
         value = setting('profile', qsettings=self.qsettings)
         self.assertDictEqual(profile_dictionary, value)
+
+    def test_export_import_setting(self):
+        """Test for export_setting method."""
+        profile_file = unique_filename(suffix='.json', dir='profile')
+        original_settings = {
+            'key': 'value',
+            'key_bool': True,
+            'profile': generate_default_profile(),
+            'key_int': 1,
+            'key_float': 2.0
+        }
+        # Write
+        for key, value in original_settings.items():
+            set_setting(key, value, self.qsettings)
+        # Export
+        inasafe_settings = export_setting(profile_file, self.qsettings)
+        # Check result
+        self.assertTrue(os.path.exists(profile_file))
+        self.assertEqual(inasafe_settings['key'], 'value')
+        self.assertEqual(
+            inasafe_settings['profile'], generate_default_profile())
+        # Import
+        read_setting = import_setting(profile_file, self.qsettings)
+        self.assertDictEqual(inasafe_settings, read_setting)
+        self.assertDictEqual(original_settings, read_setting)
 
 
 if __name__ == '__main__':
