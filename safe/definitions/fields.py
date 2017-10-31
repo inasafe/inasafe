@@ -889,10 +889,10 @@ size_field = {
     'precision': 2,
     'absolute': True,
     'description': tr(
-        'Attribute where the size of the gemetry is located.'
+        'Attribute where the size of the geometry is located.'
     ),
     'help_text': tr(
-        'Attribute where the size of the gemetry is located.'
+        'Attribute where the size of the geometry is located.'
     ),
     'citations': [
         {

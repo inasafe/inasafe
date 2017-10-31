@@ -24,7 +24,10 @@ from safe.definitions.fields import (
     additional_rice_count_field,
     productivity_field,
     production_cost_field,
-    production_value_field
+    production_value_field,
+    productivity_rate_field,
+    production_cost_rate_field,
+    production_value_rate_field,
 )
 from safe.definitions.post_processors import (
     post_processor_size_rate,
@@ -277,6 +280,34 @@ class TestPostProcessors(unittest.TestCase):
         # Check if new field is added
         impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
         self.assertIn(production_value_field['field_name'], impact_fields)
+
+        # Checking the values.
+        for feature in impact_layer.getFeatures():
+            size_value = feature.attribute(size_field['field_name'])
+
+            # Inputs
+            productivity_rate = feature.attribute(
+                productivity_rate_field['field_name'])
+            production_cost_rate = feature.attribute(
+                production_cost_rate_field['field_name'])
+            production_value_rate = feature.attribute(
+                production_value_rate_field['field_name'])
+
+            # result
+            productivity = feature.attribute(
+                productivity_field['field_name'])
+            production_cost = feature.attribute(
+                production_cost_field['field_name'])
+            production_value = feature.attribute(
+                production_value_field['field_name'])
+
+            # Checking
+            self.assertAlmostEqual(
+                productivity, size_value * productivity_rate)
+            self.assertAlmostEqual(
+                production_cost, size_value * production_cost_rate)
+            self.assertAlmostEqual(
+                production_value, size_value * production_value_rate)
 
     def test_affected_post_processor(self):
         """Test affected  post processor."""
