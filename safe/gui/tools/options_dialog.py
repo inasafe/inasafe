@@ -132,8 +132,7 @@ class OptionsDialog(QDialog, FORM_CLASS):
         self.preference_label = QLabel()
         self.preference_label.setText(tr(
             'Please set your affected and displacement rate for each hazard, '
-            'classification, and its class below. The value of displacement '
-            'rate is from 0 % to 100 %.'
+            'classification, and its class below.'
         ))
         self.preference_layout.addWidget(self.preference_label)
 
