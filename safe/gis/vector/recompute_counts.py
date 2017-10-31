@@ -13,7 +13,7 @@ from safe.definitions.processing_steps import (
     recompute_counts_steps)
 from safe.gis.sanity_check import check_layer
 from safe.gis.vector.tools import SizeCalculator
-from safe.post_processors.post_processor_functions import size
+from safe.processors.post_processor_functions import size
 from safe.utilities.profiling import profile
 
 LOGGER = logging.getLogger('InaSAFE')

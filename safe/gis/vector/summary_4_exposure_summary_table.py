@@ -37,7 +37,7 @@ from safe.gis.vector.tools import (
     create_field_from_definition,
     read_dynamic_inasafe_field,
     create_memory_layer)
-from safe.post_processors import post_processor_affected_function
+from safe.processors import post_processor_affected_function
 from safe.utilities.gis import qgis_version
 from safe.utilities.pivot_table import FlatTable
 from safe.utilities.profiling import profile

@@ -25,7 +25,7 @@ from safe.gis.vector.tools import (
 from safe.gui.tools.help.needs_calculator_help import needs_calculator_help
 from safe.impact_function.postprocessors import run_single_post_processor
 from safe.messaging import styles
-from safe.post_processors.minimum_needs_post_processors import (
+from safe.processors.minimum_needs_post_processors import (
     minimum_needs_post_processors)
 from safe.utilities.qgis_utilities import display_critical_message_box
 from safe.utilities.resources import html_footer, html_header, get_ui_class

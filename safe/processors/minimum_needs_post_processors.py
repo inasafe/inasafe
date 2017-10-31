@@ -7,11 +7,11 @@ from safe.definitions.concepts import concepts
 from safe.definitions.fields import additional_rice_count_field
 from safe.definitions.fields import (
     pregnant_displaced_count_field, lactating_displaced_count_field)
-from safe.post_processors.post_processor_inputs import (
+from safe.processors.post_processor_inputs import (
     constant_input_type,
     field_input_type,
     needs_profile_input_type)
-from safe.post_processors.post_processors import (
+from safe.processors.post_processors import (
     formula_process,
     multiply,
     function_process)
