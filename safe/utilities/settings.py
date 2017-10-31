@@ -2,6 +2,7 @@
 """Helper function for InaSAFE settings."""
 
 from PyQt4.QtCore import QSettings
+import json
 
 from safe.definitions import APPLICATION_NAME
 from safe.definitions.default_settings import inasafe_default_settings
@@ -136,3 +137,61 @@ def delete_setting(key, qsettings=None):
     """
     full_key = '%s/%s' % (APPLICATION_NAME, key)
     delete_general_setting(full_key, qsettings)
+
+
+def export_setting(file_path, qsettings=None):
+    """Export InaSAFE's setting to a file.
+
+    :param file_path: The file to write the exported setting.
+    :type file_path: basestring
+
+    :param qsettings: A custom QSettings to use. If it's not defined, it will
+        use the default one.
+    :type qsettings: qgis.PyQt.QtCore.QSettings
+
+    :returns: A dictionary of the exported settings.
+    :rtype: dict
+    """
+    inasafe_settings = {}
+
+    if not qsettings:
+        qsettings = QSettings()
+
+    qsettings.beginGroup('inasafe')
+    all_keys = qsettings.allKeys()
+    qsettings.endGroup()
+
+    for key in all_keys:
+        inasafe_settings[key] = setting(key, qsettings=qsettings)
+
+    with open(file_path, 'w') as f:
+        json.dump(inasafe_settings, f)
+
+    return inasafe_settings
+
+
+def import_setting(file_path, qsettings=None):
+    """Import InaSAFE's setting from a file.
+
+    :param file_path: The file to read the imported setting.
+    :type file_path: basestring
+
+    :param qsettings: A custom QSettings to use. If it's not defined, it will
+        use the default one.
+    :type qsettings: qgis.PyQt.QtCore.QSettings
+
+    :returns: A dictionary of the imported settings.
+    :rtype: dict
+    """
+    with open(file_path, 'r') as f:
+        inasafe_settings = json.load(f)
+
+    # Clear the previous setting
+    qsettings.beginGroup('inasafe')
+    qsettings.remove('')
+    qsettings.endGroup()
+
+    for key, value in inasafe_settings.items():
+        set_setting(key, value, qsettings=qsettings)
+
+    return inasafe_settings
