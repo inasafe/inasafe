@@ -6,14 +6,13 @@ import os
 
 from os.path import join, exists
 from PyQt4 import QtGui, QtCore, QtXml
-from PyQt4.QtCore import pyqtSignature, pyqtSlot
 from qgis.core import QgsApplication, QgsExpressionContextUtils, QgsComposition
 
 from safe import messaging as m
 from safe.common.signals import send_error_message, send_static_message
 from safe.definitions.constants import ANALYSIS_FAILED_BAD_CODE
-from safe.definitions.reports import pdf_product_tag, final_product_tag, \
-    html_product_tag, qpt_product_tag
+from safe.definitions.reports import (
+    pdf_product_tag, final_product_tag, html_product_tag, qpt_product_tag)
 from safe.definitions.reports.components import (
     map_report, infographic_report, standard_impact_report_metadata_pdf)
 from safe.definitions.utilities import (
@@ -25,8 +24,9 @@ from safe.report.report_metadata import ReportMetadata
 from safe.utilities.i18n import tr
 from safe.utilities.resources import (
     get_ui_class, resources_path, html_header, html_footer)
+from safe.utilities.settings import setting
 
-__copyright__ = "Copyright 2016, The InaSAFE Project"
+__copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
@@ -41,6 +41,7 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
 
     def __init__(self, impact_function, iface, dock=None, parent=None):
         """Constructor for the dialog.
+
         :param iface: A Quantum GIS QGisAppInterface instance.
         :type iface: QGisAppInterface
 
@@ -73,6 +74,7 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
         self.button_box.addButton(
             self.button_open_composer, QtGui.QDialogButtonBox.ActionRole)
 
+        self.template_chooser.clicked.connect(self.template_chooser_clicked)
         self.button_print_pdf.clicked.connect(self.accept)
         self.button_open_composer.clicked.connect(self.accept)
 
@@ -102,18 +104,16 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
             template_dir_path, self.unwanted_templates)
 
         #  ...and user directory
-        settings = QtCore.QSettings()
-        path = settings.value('inasafe/reportTemplatePath', '', type=str)
-
-        if not path:
-            path = join(QgsApplication.qgisSettingsDirPath(), 'inasafe')
+        default_path = join(QgsApplication.qgisSettingsDirPath(), 'inasafe')
+        path = setting(
+            'inasafe/reportTemplatePath', default_path, expected_type=str)
 
         if exists(path):
             self.populate_template_combobox(path)
 
         self.restore_state()
 
-    def populate_template_combobox(self, path, unwanted_templates=[]):
+    def populate_template_combobox(self, path, unwanted_templates=None):
         """Helper method for populating template combobox.
 
         :param unwanted_templates: List of templates that isn't an option.
@@ -128,6 +128,8 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
             QtCore.QDir.NoDotAndDotDot)
         templates_dir.setNameFilters(['*.qpt', '*.QPT'])
         report_files = templates_dir.entryList()
+        if not unwanted_templates:
+            unwanted_templates = []
         for unwanted_template in unwanted_templates:
             if unwanted_template in report_files:
                 report_files.remove(unwanted_template)
@@ -197,11 +199,11 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
         :rtype: list
         """
         paths = []
-        for c in products:
+        for product in products:
             path = ImpactReport.absolute_output_path(
                 os.path.join(report_path, 'output'),
                 products,
-                c.key)
+                product.key)
             if isinstance(path, list):
                 for p in path:
                     paths.append(p)
@@ -257,6 +259,7 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
         ]
 
         def retrieve_components(tags):
+            """Retrieve components from report metadata."""
             products = []
             for report_metadata in standard_report_metadata:
                 products += (report_metadata.component_by_tags(tags))
@@ -413,13 +416,12 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
                 self.create_pdf = False
                 self.open_in_composer()
             self.dock.hide_busy()
-        except Exception as e:
+        except Exception:
             self.dock.hide_busy()
 
         QtGui.QDialog.accept(self)
 
-    @pyqtSignature('')  # prevents actions being handled twice
-    def on_template_chooser_clicked(self):
+    def template_chooser_clicked(self):
         """Auto-connect slot activated when report file tool button is clicked.
 
         .. versionadded: 4.3.0
@@ -442,8 +444,6 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
             self.template_path.setEnabled(True)
             self.template_chooser.setEnabled(True)
 
-    @pyqtSlot()
-    @pyqtSignature('bool')  # prevents actions being handled twice
     def help_toggled(self, flag):
         """Show or hide the help tab in the stacked widget.
 

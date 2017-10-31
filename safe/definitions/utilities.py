@@ -5,8 +5,7 @@ from collections import OrderedDict
 from copy import deepcopy
 from os import listdir
 from os.path import join, exists, splitext, split
-from PyQt4 import QtXml
-from PyQt4.QtXml import QDomNode
+from PyQt4.QtXml import QDomNode, QDomDocument
 
 from qgis.core import QgsApplication
 
@@ -507,6 +506,8 @@ def override_component_template(component, template_path):
                 not exists(template_path)):
         return copy_component
 
+    # we do the import here to avoid circular import when starting
+    # up the plugin
     from safe.definitions.reports.components import (
         map_report_component_boilerplate)
     custom_template_component = deepcopy(
@@ -525,14 +526,14 @@ def override_component_template(component, template_path):
     with open(custom_template_component['template']) as (
             template_file):
         template_content = template_file.read()
-    document = QtXml.QDomDocument()
+    document = QDomDocument()
     document.setContent(template_content)
     root_element = document.namedItem('Composer')
     orientation = None
     if isinstance(root_element, QDomNode):
-        title_atribute_node = root_element.attributes().namedItem('title')
-        if title_atribute_node:
-            template_orientation = title_atribute_node.nodeValue()
+        title_attribute_node = root_element.attributes().namedItem('title')
+        if title_attribute_node:
+            template_orientation = title_attribute_node.nodeValue()
         for _orientation in ['landscape', 'portrait']:
             if _orientation in template_orientation:
                 orientation = _orientation

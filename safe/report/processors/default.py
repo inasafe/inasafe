@@ -561,17 +561,17 @@ def qgis_composer_renderer(impact_report, component):
 
             # set legend
             root_group = legend.modelV2().rootGroup()
-            for l in layers:
+            for layer in layers:
                 # we need to check whether the layer is registered or not
                 registered_layer = (
-                    QgsMapLayerRegistry.instance().mapLayer(l.id()))
+                    QgsMapLayerRegistry.instance().mapLayer(layer.id()))
                 if registered_layer:
-                    if not registered_layer == l:
-                        l = registered_layer
+                    if not registered_layer == layer:
+                        layer = registered_layer
                 else:
-                    QgsMapLayerRegistry.instance().addMapLayer(l)
+                    QgsMapLayerRegistry.instance().addMapLayer(layer)
                 # used for customizations
-                tree_layer = root_group.addLayer(l)
+                tree_layer = root_group.addLayer(layer)
                 QgsLegendRenderer.setNodeLegendStyle(
                     tree_layer, QgsComposerLegendStyle.Hidden)
             legend.synchronizeWithModel()

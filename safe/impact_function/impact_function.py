@@ -2577,7 +2577,7 @@ class ImpactFunction(object):
 
         .. versionadded: 4.3.0
         """
-        for id, layer in layer_registry.mapLayers().items():
+        for _, layer in layer_registry.mapLayers().items():
             if layer.source() == layer_path:
                 return layer
 
@@ -2680,24 +2680,28 @@ class ImpactFunction(object):
         if aggregate_hazard_impacted_path:
             impact_function._aggregate_hazard_impacted = load_layer(
                 aggregate_hazard_impacted_path)[0]
+
         # aggregation_summary
         aggregation_summary_path = get_provenance(
             provenance, provenance_layer_aggregation_summary)
         if aggregation_summary_path:
             impact_function._aggregation_summary = load_layer(
                 aggregation_summary_path)[0]
+
         # analysis_impacted
         analysis_impacted_path = get_provenance(
             provenance, provenance_layer_analysis_impacted)
         if analysis_impacted_path:
             impact_function._analysis_impacted = load_layer(
                 analysis_impacted_path)[0]
+
         # exposure_summary_table
         exposure_summary_table_path = get_provenance(
             provenance, provenance_layer_exposure_summary_table)
         if exposure_summary_table_path:
             impact_function._exposure_summary_table = load_layer(
                 exposure_summary_table_path)[0]
+
         # profiling
         # Skip if it's debug mode
         if not impact_function.debug_mode:

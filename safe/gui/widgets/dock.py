@@ -783,9 +783,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 self.impact_function, self.iface, dock=self, parent=self)
             dialog.show()
         else:
-            QtGui.QMessageBox.warning(
-                self,
-                self.tr('InaSAFE'),
+            display_critical_message_bar(
+                "InaSAFE",
                 self.tr('Please select a valid layer before printing. '
                         'No Impact Function found.'))
 
