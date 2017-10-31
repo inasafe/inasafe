@@ -10,7 +10,7 @@ import qgis  # NOQA pylint: disable=unused-import
 from PyQt4.QtCore import pyqtSignature, pyqtSlot, QVariant, QSettings, Qt
 from PyQt4.QtGui import (
     QDialog, QFileDialog, QDialogButtonBox, QGroupBox, QVBoxLayout,
-    QScrollArea, QWidget, QPixmap, QLabel)
+    QScrollArea, QWidget, QPixmap, QLabel, QPushButton)
 from parameters.float_parameter import FloatParameter
 from parameters.integer_parameter import IntegerParameter
 from parameters.qt_widgets.parameter_container import ParameterContainer
@@ -38,7 +38,12 @@ from safe.utilities.default_values import (
     set_inasafe_default_value_qsetting, get_inasafe_default_value_qsetting)
 from safe.utilities.i18n import tr
 from safe.utilities.resources import get_ui_class, html_header, html_footer
-from safe.utilities.settings import setting, set_setting
+from safe.utilities.settings import (
+    export_setting,
+    import_setting,
+    setting,
+    set_setting,
+)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -113,6 +118,20 @@ class OptionsDialog(QDialog, FORM_CLASS):
             'ISO19115_EMAIL': self.email_line_edit,
             'ISO19115_LICENSE': self.license_line_edit,
         }
+
+        # Export and Import button
+        # Export button
+        self.export_button = QPushButton(tr('Export'))
+        # noinspection PyUnresolvedReferences
+        self.export_button.clicked.connect(self.export_setting)
+        self.button_box.addButton(
+            self.export_button, QDialogButtonBox.ActionRole)
+        # Import button
+        self.import_button = QPushButton(tr('Import'))
+        # noinspection PyUnresolvedReferences
+        self.import_button.clicked.connect(self.import_setting)
+        self.button_box.addButton(
+            self.import_button, QDialogButtonBox.ActionRole)
 
         # Set up things for context help
         self.help_button = self.button_box.button(QDialogButtonBox.Help)
@@ -622,6 +641,11 @@ class OptionsDialog(QDialog, FORM_CLASS):
         if self.default_value_parameter_containers:
             self.default_value_parameter_containers = []
 
+        for i in reversed(range(self.container_layout.count())):
+            widget = self.container_layout.itemAt(i).widget()
+            if widget is not None:
+                widget.setParent(None)
+
         default_fields = all_default_fields()
 
         for field_group in all_field_groups:
@@ -842,3 +866,32 @@ class OptionsDialog(QDialog, FORM_CLASS):
         while self.tabWidget.count() > 3:
             self.tabWidget.removeTab(self.tabWidget.count() - 1)
         self.setWindowTitle(self.tr('Welcome to InaSAFE %s' % get_version()))
+        self.export_button.hide()
+
+    def export_setting(self):
+        """Export setting from an existing file."""
+        LOGGER.debug('Export button clicked')
+        home_directory = os.path.expanduser('~')
+        file_name = self.organisation_line_edit.text().replace(' ', '_')
+        file_path = QFileDialog.getSaveFileName(
+            self,
+            self.tr('Export InaSAFE settings'),
+            os.path.join(home_directory, file_name + '.json'),
+            self.tr('JSON File (*.json)'))
+        if file_path:
+            LOGGER.debug('Exporting to %s' % file_path)
+            export_setting(file_path)
+
+    def import_setting(self):
+        """Import setting to a file."""
+        LOGGER.debug('Import button clicked')
+        home_directory = os.path.expanduser('~')
+        file_path = QFileDialog.getOpenFileName(
+            self,
+            self.tr('Import InaSAFE settings'),
+            home_directory,
+            self.tr('JSON File (*.json)'))
+        if file_path:
+            LOGGER.debug('Import from %s' % file_path)
+            import_setting(file_path)
+            self.restore_state()
