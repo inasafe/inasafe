@@ -173,7 +173,7 @@ hazard_earthquake = {
     'field_groups': [],
     'layer_modes': [layer_mode_classified, layer_mode_continuous],
     'disabled_exposures': [
-        exposure_place,
+        # exposure_place,  We want to be able to run some EQ realtime analysis.
         exposure_land_cover,
     ]
 }
