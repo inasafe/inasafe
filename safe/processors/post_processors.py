@@ -123,6 +123,10 @@ post_processor_affected = {
             'value': hazard_class_field,
             'type': field_input_type,
         },
+        'exposure': {
+            'type': keyword_input_type,
+            'value': ['exposure_keywords', 'exposure'],
+        },
         'classification': {
             'type': keyword_input_type,
             'value': ['hazard_keywords', 'classification'],
