@@ -102,8 +102,6 @@ class TestImpactReport(unittest.TestCase):
         # Change displacement rate so the result is easily distinguished
         self.default_displacement_rate = flood_hazard_classes['classes'][0][
             'displacement_rate']
-        # flood_hazard_classes['classes'][0][
-        #     'displacement_rate'] = self.custom_displacement_rate
 
         # Preserve profile from setting
         self.original_profile = setting(key='population_preference', default='NO_PROFILE')
@@ -1066,7 +1064,7 @@ class TestImpactReport(unittest.TestCase):
         shutil.rmtree(output_folder, ignore_errors=True)
 
     def test_minimum_needs_outputs_modified(self):
-        """Test generate minimum needs section with updated profile
+        """Test generate minimum needs section with updated profile.
 
         .. versionadded: 4.3
         """
@@ -1085,12 +1083,12 @@ class TestImpactReport(unittest.TestCase):
         profile[hazard_flood['key']][flood_hazard_classes['key']][
             'dry']['displacement_rate'] = 0.5
         set_setting(key='profile', value=profile)
-        is_affected_wet = is_affected(
+        wet_is_affected = is_affected(
             hazard_flood['key'],
             flood_hazard_classes['key'],
             'wet'
         )
-        is_affected_dry = is_affected(
+        dry_is_affected = is_affected(
             hazard_flood['key'],
             flood_hazard_classes['key'],
             'dry'
@@ -1100,8 +1098,8 @@ class TestImpactReport(unittest.TestCase):
         displacement_rate_dry = get_displacement_rate(
             hazard_flood['key'], flood_hazard_classes['key'], 'dry')
 
-        self.assertFalse(is_affected_wet)
-        self.assertTrue(is_affected_dry)
+        self.assertFalse(wet_is_affected)
+        self.assertTrue(dry_is_affected)
         self.assertEqual(displacement_rate_dry, 0.5)
         self.assertEqual(displacement_rate_wet, 0)
 
@@ -1209,7 +1207,6 @@ class TestImpactReport(unittest.TestCase):
         self.assertTrue(os.path.exists(output_path))
 
         shutil.rmtree(output_folder, ignore_errors=True)
-
 
     def test_aggregation_area_result_using_entire_area(self):
         """Test generate aggregation area results.
