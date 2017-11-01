@@ -102,13 +102,15 @@ class TestImpactReport(unittest.TestCase):
         # Change displacement rate so the result is easily distinguished
         self.default_displacement_rate = flood_hazard_classes['classes'][0][
             'displacement_rate']
-        flood_hazard_classes['classes'][0][
-            'displacement_rate'] = self.custom_displacement_rate
+        # flood_hazard_classes['classes'][0][
+        #     'displacement_rate'] = self.custom_displacement_rate
 
         # Preserve profile from setting
         self.original_profile = setting(key='population_preference', default='NO_PROFILE')
         # Set new profile in the QSettings
         current_profile = generate_default_profile()
+        current_profile[hazard_flood['key']][flood_hazard_classes['key']][
+            'wet']['displacement_rate'] = self.custom_displacement_rate
         set_setting(key='population_preference', value=current_profile)
 
     def tearDown(self):
