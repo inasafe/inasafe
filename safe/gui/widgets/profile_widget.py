@@ -141,17 +141,25 @@ class PercentageSpinBox(QDoubleSpinBox):
     def __init__(self, parent):
         """Constructor."""
         super(PercentageSpinBox, self).__init__(parent)
-        self.setRange(0.0, 1.0)
-        self.setSingleStep(0.01)
-        # noinspection PyUnresolvedReferences
+        self.setRange(0.0, 100.0)
+        self.setSingleStep(0.1)
+        self.setDecimals(1)
+        self.setSuffix(' %')
 
-    def textFromValue(self, value):
-        """Modify text representation to get percentage representation.
+    def setValue(self, p_float):
+        """Override method to set a value to show it as 0 to 100.
 
-        :param value: The real value.
-        :type value: float
-
-        :returns: The percentage representation.
-        :rtype: str
+        :param p_float: The float number that want to be set.
+        :type p_float: float
         """
-        return '%d %%' % (value * 100)
+        p_float = p_float * 100
+
+        super(PercentageSpinBox, self).setValue(p_float)
+
+    def value(self):
+        """Override method to get a value to to 0.0 to 1.0
+
+        :returns: The float number that want to be set.
+        :rtype: float
+        """
+        return super(PercentageSpinBox, self).value() / 100
