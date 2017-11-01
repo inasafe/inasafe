@@ -105,17 +105,17 @@ class TestSettings(unittest.TestCase):
         self.assertDictEqual(dictionary, value)
 
         profile_dictionary = generate_default_profile()
-        set_setting('profile', profile_dictionary, self.qsettings)
-        value = setting('profile', qsettings=self.qsettings)
+        set_setting('population_preference', profile_dictionary, self.qsettings)
+        value = setting('population_preference', qsettings=self.qsettings)
         self.assertDictEqual(profile_dictionary, value)
 
     def test_export_import_setting(self):
         """Test for export_setting method."""
-        profile_file = unique_filename(suffix='.json', dir='profile')
+        profile_file = unique_filename(suffix='.json', dir='population_preference')
         original_settings = {
             'key': 'value',
             'key_bool': True,
-            'profile': generate_default_profile(),
+            'population_preference': generate_default_profile(),
             'key_int': 1,
             'key_float': 2.0
         }
@@ -128,7 +128,7 @@ class TestSettings(unittest.TestCase):
         self.assertTrue(os.path.exists(profile_file))
         self.assertEqual(inasafe_settings['key'], 'value')
         self.assertEqual(
-            inasafe_settings['profile'], generate_default_profile())
+            inasafe_settings['population_preference'], generate_default_profile())
         # Import
         read_setting = import_setting(profile_file, self.qsettings)
         self.assertDictEqual(inasafe_settings, read_setting)

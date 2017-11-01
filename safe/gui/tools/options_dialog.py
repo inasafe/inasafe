@@ -713,7 +713,7 @@ class OptionsDialog(QDialog, FORM_CLASS):
         if global_default:
             data = generate_default_profile()
         else:
-            data = setting('profile', generate_default_profile())
+            data = setting('population_preference', generate_default_profile())
         self.profile_widget.data = data
 
     @staticmethod
@@ -836,7 +836,7 @@ class OptionsDialog(QDialog, FORM_CLASS):
     def save_profile_preference(self):
         """Helper to save profile to QSettings."""
         profile_data = self.profile_widget.data
-        set_setting('profile', profile_data)
+        set_setting('population_preference', profile_data)
 
     def set_welcome_message(self):
         """Create and insert welcome message."""
