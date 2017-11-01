@@ -188,35 +188,52 @@
             </layout>
            </item>
            <item>
-            <widget class="QLabel" name="organisation_logo_label">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>358</width>
-               <height>85</height>
-              </size>
-             </property>
-             <property name="baseSize">
-              <size>
-               <width>358</width>
-               <height>83</height>
-              </size>
-             </property>
-             <property name="frameShape">
-              <enum>QFrame::Box</enum>
-             </property>
-             <property name="text">
-              <string>Logo</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-            </widget>
+            <layout class="QHBoxLayout" name="horizontalLayout_8">
+             <item>
+              <widget class="QLabel" name="logo_preview_label">
+               <property name="minimumSize">
+                <size>
+                 <width>210</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Logo Preview</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="organisation_logo_label">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>358</width>
+                 <height>85</height>
+                </size>
+               </property>
+               <property name="baseSize">
+                <size>
+                 <width>358</width>
+                 <height>83</height>
+                </size>
+               </property>
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="text">
+                <string>Logo</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </item>
            <item>
             <layout class="QHBoxLayout" name="horizontalLayoutOrganisationProfile_2">
