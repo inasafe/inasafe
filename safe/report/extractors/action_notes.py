@@ -2,6 +2,7 @@
 """Module used to generate context for action and notes sections.
 """
 
+from copy import deepcopy
 from safe.definitions.exposure import exposure_population
 from safe.definitions.utilities import definition
 from safe.report.extractors.composer import QGISComposerContext
@@ -13,6 +14,7 @@ from safe.utilities.resources import (
     resource_url,
     resources_path)
 from safe.utilities.rounding import html_scientific_notation_rate
+from safe.definitions.utilities import get_displacement_rate
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -122,8 +124,14 @@ def notes_assumptions_extractor(impact_report, component_metadata):
             extra_args, 'hazard_displacement_rates_note_format')
         displacement_rates_note = []
         for hazard_class in hazard_classification['classes']:
+            the_hazard_class = deepcopy(hazard_class)
+            the_hazard_class['displacement_rate'] = get_displacement_rate(
+                hazard=hazard_keywords['hazard'],
+                classification=hazard_classification['key'],
+                hazard_class=the_hazard_class['key']
+            )
             displacement_rates_note.append(
-                displacement_rates_note_format.format(**hazard_class))
+                displacement_rates_note_format.format(**the_hazard_class))
 
         rate_description = ', '.join(displacement_rates_note)
 
