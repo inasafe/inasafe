@@ -104,7 +104,8 @@ class TestImpactReport(unittest.TestCase):
             'displacement_rate']
 
         # Preserve profile from setting
-        self.original_profile = setting(key='population_preference', default='NO_PROFILE')
+        self.original_profile = setting(
+            key='population_preference', default='NO_PROFILE')
         # Set new profile in the QSettings
         current_profile = generate_default_profile()
         current_profile[hazard_flood['key']][flood_hazard_classes['key']][
@@ -1075,14 +1076,14 @@ class TestImpactReport(unittest.TestCase):
         self.assertEqual(displacement_rate, self.custom_displacement_rate)
 
         # Change affected
-        profile = setting(key='profile')
+        profile = setting(key='population_preference')
         profile[hazard_flood['key']][flood_hazard_classes['key']][
             'wet']['affected'] = False
         profile[hazard_flood['key']][flood_hazard_classes['key']][
             'dry']['affected'] = True
         profile[hazard_flood['key']][flood_hazard_classes['key']][
             'dry']['displacement_rate'] = 0.5
-        set_setting(key='profile', value=profile)
+        set_setting(key='population_preference', value=profile)
         wet_is_affected = is_affected(
             hazard_flood['key'],
             flood_hazard_classes['key'],
