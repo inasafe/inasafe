@@ -14,7 +14,7 @@ from safe.utilities.resources import (
     resource_url,
     resources_path)
 from safe.utilities.rounding import html_scientific_notation_rate
-from safe.definitions.utilities import get_displacement_rate
+from safe.definitions.utilities import get_displacement_rate, is_affected
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -86,8 +86,18 @@ def notes_assumptions_extractor(impact_report, component_metadata):
     # Check hazard affected class
     affected_classes = []
     for hazard_class in hazard_classification['classes']:
-        if hazard_class.get('affected', False):
-            affected_classes.append(hazard_class)
+        if exposure_keywords['exposure'] == exposure_population['key']:
+            # Taking from profile
+            is_affected_class = is_affected(
+                hazard=hazard_keywords['hazard'],
+                classification=hazard_classification['key'],
+                hazard_class=hazard_class['key'],
+            )
+            if is_affected_class:
+                affected_classes.append(hazard_class)
+        else:
+            if hazard_class.get('affected', False):
+                affected_classes.append(hazard_class)
 
     if affected_classes:
         affected_note_dict = resolve_from_dictionary(
@@ -245,6 +255,7 @@ def action_checklist_report_pdf_extractor(impact_report, component_metadata):
     # - Substitution maps
     # - Element settings, such as icon for picture file or image source
 
+    _ = component_metadata
     context = QGISComposerContext()
 
     # we only have html elements for this
