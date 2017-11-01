@@ -57,6 +57,10 @@ class TestSummary(unittest.TestCase):
         impact.keywords['classification'] = {
             'classification': 'generic_structure_classes'
         }
+        impact.keywords['exposure_keywords'] = {
+            'exposure': 'structure'
+        }
+
 
         number_of_fields = aggregate_hazard.fields().count()
 
@@ -126,6 +130,9 @@ class TestSummary(unittest.TestCase):
             'hazard': 'generic',
             'classification': 'generic_hazard_classes'
         }
+        aggregate_hazard.keywords['exposure_keywords'] = {
+            'exposure': 'structure',
+        }
 
         analysis = load_test_vector_layer(
             'gisv4',
@@ -165,6 +172,9 @@ class TestSummary(unittest.TestCase):
             'hazard': 'generic',
             'classification': 'generic_hazard_classes'
         }
+        aggregate_hazard.keywords['exposure_keywords'] = {
+            'exposure': 'structure',
+        }
 
         # I need the number of unique exposure
         unique_exposure = read_dynamic_inasafe_field(
@@ -203,6 +213,10 @@ class TestSummary(unittest.TestCase):
         aggregate_hazard.keywords['hazard_keywords'] = {
             'hazard': 'generic',
             'classification': 'generic_hazard_classes'
+        }
+
+        aggregate_hazard.keywords['exposure_keywords'] = {
+            'exposure': 'land_cover'
         }
 
         exposure_summary = load_test_vector_layer(
