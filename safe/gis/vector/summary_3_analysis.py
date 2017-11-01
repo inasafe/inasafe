@@ -98,6 +98,9 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
     hazard = hazard_keywords['hazard']
     classification = hazard_keywords['classification']
 
+    exposure_keywords = aggregate_hazard.keywords['exposure_keywords']
+    exposure = exposure_keywords['exposure']
+
     total = source_fields[total_field['key']]
 
     flat_table = FlatTable('hazard_class')
@@ -162,6 +165,7 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
             analysis.changeAttributeValue(area.id(), shift + i, sum)
 
             affected = post_processor_affected_function(
+                exposure=exposure,
                 hazard=hazard,
                 classification=classification,
                 hazard_class=val)

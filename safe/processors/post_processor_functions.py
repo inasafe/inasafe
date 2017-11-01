@@ -5,7 +5,9 @@
 # noinspection PyUnresolvedReferences
 from PyQt4.QtCore import QPyNullVariant
 
-from safe.definitions.hazard_classifications import hazard_classes_all
+from safe.definitions.hazard_classifications import (
+    hazard_classes_all, not_exposed_class)
+from safe.definitions.exposure import exposure_population
 from safe.definitions.utilities import get_displacement_rate, is_affected
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
@@ -55,20 +57,43 @@ def size(size_calculator, geometry):
 
 
 # This postprocessor function is also used in the aggregation_summary
-def post_processor_affected_function(**kwargs):
+def post_processor_affected_function(
+        exposure=None, hazard=None, classification=None, hazard_class=None):
     """Private function used in the affected postprocessor.
 
-    The following are expected in kwargs:
+    :param exposure: The exposure to use.
+    :type exposure: str
 
-    * classification: The hazard classification to use.
-    * hazard_class: The hazard class to check.
+    :param hazard: The hazard to use.
+    :type hazard: str
+
+    :param classification: The hazard classification to use.
+    :type classification: str
+
+    :param hazard_class: The hazard class of the feature.
+    :type hazard_class: str
 
     :return: If this hazard class is affected or not. It can be `not exposed`.
     :rtype: bool
     """
-    return is_affected(
-        kwargs['hazard'], kwargs['classification'], kwargs['hazard_class']
-    )
+    if exposure == exposure_population['key']:
+        affected = is_affected(
+           hazard, classification, hazard_class)
+    else:
+        classes = None
+        for hazard in hazard_classes_all:
+            if hazard['key'] == classification:
+                classes = hazard['classes']
+                break
+
+        for the_class in classes:
+            if the_class['key'] == hazard_class:
+                affected = the_class['affected']
+                break
+        else:
+            affected = not_exposed_class['key']
+
+    return affected
 
 
 def post_processor_population_displacement_function(

@@ -142,6 +142,9 @@ def exposure_summary_table(
     hazard = hazard_keywords['hazard']
     classification = hazard_keywords['classification']
 
+    exposure_keywords = aggregate_hazard.keywords['exposure_keywords']
+    exposure = exposure_keywords['exposure']
+
     hazard_affected = {}
     for hazard_class in unique_hazard:
         if not hazard_class or isinstance(hazard_class, QPyNullVariant):
@@ -153,6 +156,7 @@ def exposure_summary_table(
         tabular.keywords['inasafe_fields'][key] = value
 
         hazard_affected[hazard_class] = post_processor_affected_function(
+            exposure=exposure,
             hazard=hazard,
             classification=classification,
             hazard_class=hazard_class

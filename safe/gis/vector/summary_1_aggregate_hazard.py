@@ -161,6 +161,9 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
     hazard = hazard_keywords['hazard']
     classification = hazard_keywords['classification']
 
+    exposure_keywords = impact.keywords['exposure_keywords']
+    exposure = exposure_keywords['exposure']
+
     for area in aggregate_hazard.getFeatures(request):
         aggregation_value = area[aggregation_id]
         feature_hazard_id = area[hazard_id]
@@ -179,6 +182,7 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
             aggregate_hazard.changeAttributeValue(area.id(), shift + i, sum)
 
         affected = post_processor_affected_function(
+            exposure=exposure,
             hazard=hazard,
             classification=classification,
             hazard_class=feature_hazard_value)
