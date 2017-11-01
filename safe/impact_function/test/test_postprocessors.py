@@ -322,6 +322,9 @@ class TestPostProcessors(unittest.TestCase):
             'hazard': 'flood',
             'classification': 'flood_hazard_classes'
         }
+        impact_layer.keywords['exposure_keywords'] = {
+            'exposure': 'structure'
+        }
 
         result, message = run_single_post_processor(
             impact_layer,
@@ -488,6 +491,9 @@ class TestPostProcessors(unittest.TestCase):
             'hazard_keywords': {
                 'hazard': hazard_generic['key'],
                 'classification': generic_hazard_classes['key']
+            },
+            'exposure_keywords': {
+                'exposure': exposure_population['key']
             }
         }
 
