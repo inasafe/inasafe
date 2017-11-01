@@ -7,11 +7,13 @@ import datetime
 from qgis.core import (
     qgsfunction,
     QgsMapLayerRegistry,
-    QgsExpressionContextUtils,
+    QgsExpressionContextUtils
 )
 
 from safe.definitions.provenance import provenance_layer_analysis_impacted_id
+from safe.gis.tools import load_layer
 from safe.utilities.i18n import tr
+from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.rounding import denomination, round_affected_number
 from safe.utilities.utilities import generate_expression_help
 
@@ -230,3 +232,39 @@ def beautify_time(inasafe_time, feature, parent):
         inasafe_time, '%Y-%m-%dT%H:%M:%S.%f')
     time = datetime_object.strftime('%H:%M')
     return time
+
+
+description = tr(
+    "Given a keyword, it will return the value of the keyword "
+    "from the hazard layer's extra keywords.")
+examples = {
+    "hazard_extra_keyword( 'depth' )": tr(
+        "will return the value of 'depth' in "
+        "current hazard layer's extra keywords")
+}
+help_message = generate_expression_help(description, examples)
+
+
+@qgsfunction(
+    args='auto', group='InaSAFE', usesGeometry=False, referencedColumns=[],
+    help_text=help_message.to_html(), helpText=help_message.to_html())
+def hazard_extra_keyword(keyword, feature, parent):
+    """Given a keyword, it will return the value of the keyword
+    from the hazard layer's extra keywords.
+
+    For instance:
+    *   hazard_extra_keyword( 'depth' ) -> will return the value of 'depth'
+        in current hazard layer's extra keywords.
+    """
+    _ = feature, parent  # NOQA
+    hazard_layer_path = QgsExpressionContextUtils.projectScope().variable(
+        'hazard_layer')
+    hazard_layer = load_layer(hazard_layer_path)[0]
+    keywords = KeywordIO.read_keywords(hazard_layer)
+    extra_keywords = keywords.get(keyword)
+    no_keyword_string = tr('No keyword found')
+    if extra_keywords:
+        value = extra_keywords.get(keyword)
+        if value:
+            return value
+    return no_keyword_string
