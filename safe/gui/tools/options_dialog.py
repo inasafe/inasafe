@@ -10,7 +10,7 @@ import qgis  # NOQA pylint: disable=unused-import
 from PyQt4.QtCore import pyqtSignature, pyqtSlot, QVariant, QSettings, Qt
 from PyQt4.QtGui import (
     QDialog, QFileDialog, QDialogButtonBox, QGroupBox, QVBoxLayout,
-    QScrollArea, QWidget, QPixmap, QLabel, QPushButton)
+    QScrollArea, QWidget, QPixmap, QLabel, QPushButton, QMessageBox)
 from parameters.float_parameter import FloatParameter
 from parameters.integer_parameter import IntegerParameter
 from parameters.qt_widgets.parameter_container import ParameterContainer
@@ -862,7 +862,9 @@ class OptionsDialog(QDialog, FORM_CLASS):
         while self.tabWidget.count() > 3:
             self.tabWidget.removeTab(self.tabWidget.count() - 1)
         self.setWindowTitle(self.tr('Welcome to InaSAFE %s' % get_version()))
+        # Hide the export import button
         self.export_button.hide()
+        self.import_button.hide()
 
     def export_setting(self):
         """Export setting from an existing file."""
@@ -888,6 +890,14 @@ class OptionsDialog(QDialog, FORM_CLASS):
             home_directory,
             self.tr('JSON File (*.json)'))
         if file_path:
-            LOGGER.debug('Import from %s' % file_path)
-            import_setting(file_path)
-            self.restore_state()
+            title = tr('Import InaSAFE Settings.')
+            question = tr(
+                'This action will replace your current InaSAFE settings with '
+                'the setting from the file. This action is not reversible. '
+                'Are you sure to import InaSAFE Setting?')
+            answer = QMessageBox.question(
+                self, title, question, QMessageBox.Yes | QMessageBox.No)
+            if answer == QMessageBox.Yes:
+                LOGGER.debug('Import from %s' % file_path)
+                import_setting(file_path)
+                self.restore_state()
