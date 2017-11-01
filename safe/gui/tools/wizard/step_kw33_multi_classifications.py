@@ -48,6 +48,7 @@ from safe.messaging import styles
 from safe.utilities.gis import is_raster_layer
 from safe.utilities.i18n import tr
 from safe.utilities.resources import html_footer, html_header
+from safe.utilities.settings import setting
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -202,16 +203,17 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         row = 0
         for exposure in exposure_all:
             special_case = False
-            # Filter out unsupported exposure for the hazard
-            if exposure in hazard['disabled_exposures']:
-                # Remove from the storage if the exposure is disabled
-                if self.layer_mode == layer_mode_continuous:
-                    if exposure['key'] in self.thresholds:
-                        self.thresholds.pop(exposure['key'])
-                else:
-                    if exposure['key'] in self.value_maps:
-                        self.value_maps.pop(exposure['key'])
-                continue
+            if not setting('developer_mode'):
+                # Filter out unsupported exposure for the hazard
+                if exposure in hazard['disabled_exposures']:
+                    # Remove from the storage if the exposure is disabled
+                    if self.layer_mode == layer_mode_continuous:
+                        if exposure['key'] in self.thresholds:
+                            self.thresholds.pop(exposure['key'])
+                    else:
+                        if exposure['key'] in self.value_maps:
+                            self.value_maps.pop(exposure['key'])
+                    continue
             # Trick for EQ raster for population #3853
             if exposure == exposure_population and hazard == hazard_earthquake:
                 if is_raster_layer(self.parent.layer):
