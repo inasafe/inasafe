@@ -255,7 +255,6 @@ def action_checklist_report_pdf_extractor(impact_report, component_metadata):
     # - Substitution maps
     # - Element settings, such as icon for picture file or image source
 
-    _ = component_metadata
     context = QGISComposerContext()
 
     # we only have html elements for this
