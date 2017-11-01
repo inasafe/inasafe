@@ -568,7 +568,7 @@ class TestDefinitionsUtilities(unittest.TestCase):
         qsettings.clear()
         # Save the default profile to qsettings
         default_profile = generate_default_profile()
-        set_setting('profile', default_profile, qsettings)
+        set_setting('population_preference', default_profile, qsettings)
 
         # Check the default one first
         default_profile = generate_default_profile()
@@ -598,7 +598,7 @@ class TestDefinitionsUtilities(unittest.TestCase):
         default_profile[
             hazard_flood['key']][flood_hazard_classes['key']][class_key][
             'displacement_rate'] = 1
-        set_setting('profile', default_profile, qsettings)
+        set_setting('population_preference', default_profile, qsettings)
         value = get_displacement_rate(
             hazard_flood['key'],
             flood_hazard_classes['key'],
@@ -611,7 +611,7 @@ class TestDefinitionsUtilities(unittest.TestCase):
         default_profile[
             hazard_flood['key']][flood_hazard_classes['key']][class_key][
             'affected'] = new_affected
-        set_setting('profile', default_profile, qsettings)
+        set_setting('population_preference', default_profile, qsettings)
         value = is_affected(
             hazard_flood['key'],
             flood_hazard_classes['key'],

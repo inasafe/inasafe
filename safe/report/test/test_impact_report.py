@@ -106,10 +106,10 @@ class TestImpactReport(unittest.TestCase):
             'displacement_rate'] = self.custom_displacement_rate
 
         # Preserve profile from setting
-        self.original_profile = setting(key='profile', default='NO_PROFILE')
+        self.original_profile = setting(key='population_preference', default='NO_PROFILE')
         # Set new profile in the QSettings
         current_profile = generate_default_profile()
-        set_setting(key='profile', value=current_profile)
+        set_setting(key='population_preference', value=current_profile)
 
     def tearDown(self):
         """Executed after test method."""
@@ -119,9 +119,9 @@ class TestImpactReport(unittest.TestCase):
 
         # Set the profile to the original one
         if self.original_profile == 'NO_PROFILE':
-            delete_setting('profile')
+            delete_setting('population_preference')
         else:
-            set_setting('profile', self.original_profile)
+            set_setting('population_preference', self.original_profile)
 
     def run_impact_report_scenario(
             self, output_folder,
