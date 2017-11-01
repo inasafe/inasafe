@@ -19,24 +19,25 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
+# noinspection PyUnresolvedReferences
 def main():
     """Main function to run the example."""
-    def print_values(profile_widget):
-        data = profile_widget.data
+    def print_values(the_profile_widget):
+        data = the_profile_widget.data
         from pprint import pprint
         pprint(data)
 
-    def clear_widget(profile_widget):
-        profile_widget.clear()
+    def clear_widget(the_profile_widget):
+        the_profile_widget.clear()
 
-    def restore_data(profile_widget):
-        profile_widget.clear()
-        profile_widget.data = generate_default_profile()
+    def restore_data(the_profile_widget):
+        the_profile_widget.clear()
+        the_profile_widget.data = generate_default_profile()
 
     app = QApplication([])
 
     default_profile = generate_default_profile()
-    profile_widget = ProfileWidget(parent=PARENT)
+    profile_widget = ProfileWidget(parent=PARENT, data=default_profile)
 
     get_result_button = QPushButton('Get result...')
     get_result_button.clicked.connect(
