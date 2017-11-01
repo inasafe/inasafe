@@ -52,7 +52,7 @@ from safe.definitions.utilities import update_template_component
 from safe.report.impact_report import ImpactReport
 from safe.utilities.resources import resources_path
 from safe.definitions.utilities import (
-    get_displacement_rate, generate_default_profile)
+    get_displacement_rate, generate_default_profile, is_affected)
 from safe.utilities.settings import setting, set_setting, delete_setting
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -1064,6 +1064,152 @@ class TestImpactReport(unittest.TestCase):
         self.assertTrue(os.path.exists(output_path))
 
         shutil.rmtree(output_folder, ignore_errors=True)
+
+    def test_minimum_needs_outputs_modified(self):
+        """Test generate minimum needs section with updated profile
+
+        .. versionadded: 4.3
+        """
+        # Make sure that the displacement rate is the correct one that has
+        # been set in setUp method.
+        displacement_rate = get_displacement_rate(
+            hazard_flood['key'], flood_hazard_classes['key'], 'wet')
+        self.assertEqual(displacement_rate, self.custom_displacement_rate)
+
+        # Change affected
+        profile = setting(key='profile')
+        profile[hazard_flood['key']][flood_hazard_classes['key']][
+            'wet']['affected'] = False
+        profile[hazard_flood['key']][flood_hazard_classes['key']][
+            'dry']['affected'] = True
+        profile[hazard_flood['key']][flood_hazard_classes['key']][
+            'dry']['displacement_rate'] = 0.5
+        set_setting(key='profile', value=profile)
+        is_affected_wet = is_affected(
+            hazard_flood['key'],
+            flood_hazard_classes['key'],
+            'wet'
+        )
+        is_affected_dry = is_affected(
+            hazard_flood['key'],
+            flood_hazard_classes['key'],
+            'dry'
+        )
+        displacement_rate_wet = get_displacement_rate(
+            hazard_flood['key'], flood_hazard_classes['key'], 'wet')
+        displacement_rate_dry = get_displacement_rate(
+            hazard_flood['key'], flood_hazard_classes['key'], 'dry')
+
+        self.assertFalse(is_affected_wet)
+        self.assertTrue(is_affected_dry)
+        self.assertEqual(displacement_rate_dry, 0.5)
+        self.assertEqual(displacement_rate_wet, 0)
+
+        output_folder = self.fixtures_dir('../output/minimum_needs')
+
+        # Minimum needs only occurred when population is displaced
+        # so, use flood hazard.
+        hazard_layer = load_test_vector_layer(
+            'hazard', 'flood_multipart_polygons.shp')
+        exposure_layer = load_test_raster_layer(
+            'exposure', 'pop_binary_raster_20_20.asc')
+
+        impact_report = self.run_impact_report_scenario(
+            output_folder,
+            standard_impact_report_metadata_html,
+            hazard_layer, exposure_layer)
+
+        """Checking generated context."""
+        empty_component_output_message = 'Empty component output'
+
+        # Check Minimum Needs
+        minimum_needs = impact_report.metadata.component_by_key(
+            minimum_needs_component['key'])
+        """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
+
+        expected_context = {
+            'header': u'Minimum needs', 'needs': [
+                {
+                    'header': u'Relief items to be provided single',
+                    'needs': [
+                        {
+                            'header': u'Toilets',
+                            'value': '0'
+                        }],
+                    'total_header': u'Total'
+                },
+                {
+                    'header': u'Relief items to be provided weekly',
+                    'needs': [
+                        {
+                            'header': u'Rice [kg]',
+                            'value': '40'
+                        },
+                        {
+                            'header': u'Drinking Water [l]',
+                            'value': '260'
+                        },
+                        {
+                            'header': u'Clean Water [l]',
+                            'value': '970'
+                        },
+                        {
+                            'header': u'Family Kits',
+                            'value': '10'
+                        },
+                        {
+                            'header': u'Hygiene Packs',
+                            'value': '10'
+                        },
+                        {
+                            'header': u'Additional Rice [kg]',
+                            'value': '10'
+                        }],
+                    'total_header': u'Total'
+                }
+            ]
+        }
+        actual_context = minimum_needs.context
+
+        self.assertDictEqual(expected_context, actual_context)
+        self.assertTrue(
+            minimum_needs.output, empty_component_output_message)
+
+        # test displacement rates notes, since it is only showed up when
+        # the rates is used, such as in this minimum needs report
+        notes_assumptions = impact_report.metadata.component_by_key(
+            notes_assumptions_component['key'])
+        """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
+
+        # Affected notes
+        # Dry is set to affected, but Wet is set to not affected.
+        expected_context = (
+            'Exposures in this following hazard classes are considered '
+            'affected: Dry')
+        actual_context = notes_assumptions.context['items'][-2]['item_list'][0]
+        message = expected_context.strip() + '\n' + actual_context.strip()
+        self.assertEqual(
+            expected_context.strip(), actual_context.strip(), message)
+
+        # Displacement rate notes
+        expected_context = (
+            'For this analysis, the following displacement rates were used: '
+            'Wet - 0%, Dry - 50%')
+        actual_context = notes_assumptions.context['items'][-1]['item_list'][0]
+        message = expected_context.strip() + '\n' + actual_context.strip()
+        self.assertEqual(
+            expected_context.strip(), actual_context.strip(), message)
+
+        """Check generated report."""
+
+        output_path = impact_report.component_absolute_output_path(
+            'impact-report')
+
+        # for now, test that output exists
+        self.assertTrue(os.path.exists(output_path))
+
+        shutil.rmtree(output_folder, ignore_errors=True)
+
 
     def test_aggregation_area_result_using_entire_area(self):
         """Test generate aggregation area results.
