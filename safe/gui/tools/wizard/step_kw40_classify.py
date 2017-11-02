@@ -7,11 +7,13 @@ from copy import deepcopy
 import numpy
 from PyQt4.QtCore import QPyNullVariant, Qt
 from PyQt4.QtGui import (
-    QListWidgetItem, QFont, QAbstractItemView, QTreeWidgetItem)
+    QListWidgetItem, QAbstractItemView, QTreeWidgetItem)
 from osgeo import gdal
 from osgeo.gdalconst import GA_ReadOnly
 
 from safe import messaging as m
+
+from safe.definitions.font import bold_font
 from safe.definitions.exposure_classifications import data_driven_classes
 from safe.definitions.layer_geometry import layer_geometry_raster
 from safe.definitions.layer_purposes import layer_purpose_aggregation
@@ -300,10 +302,6 @@ class StepKwClassify(WizardStep, FORM_CLASS):
             self.lstUniqueValues.addItem(list_item)
         # Populate assigned values tree
         self.treeClasses.clear()
-        bold_font = QFont()
-        bold_font.setItalic(True)
-        bold_font.setBold(True)
-        bold_font.setWeight(75)
         self.treeClasses.invisibleRootItem().setFlags(Qt.ItemIsEnabled)
         for default_class in default_classes:
             # Create branch for class

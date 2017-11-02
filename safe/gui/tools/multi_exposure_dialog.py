@@ -14,6 +14,7 @@ from PyQt4.QtGui import (
     QDialogButtonBox,
     QApplication,
     QSizePolicy,
+    QTreeWidgetItem,
 )
 from qgis.core import QgsMapLayerRegistry, QgsProject
 from qgis.utils import iface
@@ -32,6 +33,7 @@ from safe.definitions.constants import (
     entire_area_item_aggregation,
 )
 from safe.definitions.exposure import exposure_all
+from safe.definitions.font import bold_font
 from safe.definitions.layer_purposes import (
     layer_purpose_hazard,
     layer_purpose_exposure,
@@ -80,6 +82,7 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
         QDialog.__init__(self, parent)
         self.parent = parent
         self.setupUi(self)
+        self.tab_widget.setCurrentIndex(0)
         self.combos_exposures = {}
         self.keyword_io = KeywordIO()
         self._create_exposure_combos()
@@ -93,6 +96,57 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
         self.ok_button = self.button_box.button(QDialogButtonBox.Ok)
         self.ok_button.clicked.connect(self.accept)
         self.validate_impact_function()
+        self.tab_widget.currentChanged.connect(self._tab_changed)
+
+    def _tab_changed(self):
+        """Triggered when the current tab is changed."""
+        if self.tab_widget.currentWidget() == self.reportingTab:
+            self._populate_reporting_tab()
+
+    def _populate_reporting_tab(self):
+        """Populate trees about layers."""
+        self.tree.clear()
+        self.tree.setColumnCount(1)
+        self.tree.setRootIsDecorated(False)
+        self.tree.setHeaderHidden(True)
+
+        analysis_branch = QTreeWidgetItem(
+            self.tree.invisibleRootItem(), [tr('Layers from Analysis')])
+        analysis_branch.setFont(0, bold_font)
+        analysis_branch.setExpanded(True)
+
+        if self._multi_exposure_if:
+            expected = self._multi_exposure_if.output_layers_expected()
+            for group, layers in expected.iteritems():
+                group_branch = QTreeWidgetItem(analysis_branch, [group])
+                group_branch.setFont(0, bold_font)
+                group_branch.setExpanded(True)
+
+                for layer in layers:
+                    QTreeWidgetItem(group_branch, [layer])
+
+        canvas_branch = QTreeWidgetItem(
+            self.tree.invisibleRootItem(), [tr('Layers from Canvas')])
+        # canvas_branch.setFlags(Qt.ItemIsDropEnabled | Qt.ItemIsEnabled)
+        canvas_branch.setFont(0, bold_font)
+        canvas_branch.setExpanded(True)
+
+        # List layers from the canvas
+        loaded_layers = QgsMapLayerRegistry.instance().mapLayers().values()
+        canvas_layers = iface.mapCanvas().layers()
+        flag = setting('visibleLayersOnlyFlag', True, bool)
+        for loaded_layer in loaded_layers:
+            if flag and loaded_layer not in canvas_layers:
+                continue
+
+            if qgis_version() >= 21800:
+                title = loaded_layer.name()
+            else:
+                # QGIS 2.14
+                title = loaded_layer.layerName()
+            QTreeWidgetItem(canvas_branch, [title])
+
+        self.tree.resizeColumnToContents(0)
 
     def _create_exposure_combos(self):
         """Create one combobox for each exposure and insert them in the UI."""
@@ -249,8 +303,10 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
             self._multi_exposure_if = multi_exposure_if
             self.button_box.button(QDialogButtonBox.Ok).setEnabled(True)
             send_static_message(self, ready_message())
+            self.tab_widget.setTabEnabled(1, True)
             return
         else:
+            self.tab_widget.setTabEnabled(1, False)
             disable_busy_cursor()
             LOGGER.info(
                 'The impact function could not run because of the inputs.')
