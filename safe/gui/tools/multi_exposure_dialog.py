@@ -28,6 +28,7 @@ from safe.common.signals import send_error_message
 from safe.definitions.constants import (
     inasafe_keyword_version_key,
     ANALYSIS_FAILED_BAD_INPUT,
+    PREPARE_SUCCESS,
     entire_area_item_aggregation,
 )
 from safe.definitions.exposure import exposure_all
@@ -38,7 +39,11 @@ from safe.definitions.layer_purposes import (
 )
 from safe.gui.analysis_utilities import add_impact_layers_to_canvas
 from safe.gui.gui_utilities import layer_from_combo, add_ordered_combo_item
-from safe.gui.widgets.message import enable_messaging, send_static_message
+from safe.gui.widgets.message import (
+    enable_messaging,
+    send_static_message,
+    ready_message,
+)
 from safe.impact_function.multi_exposure_wrapper import (
     MultiExposureImpactFunction)
 from safe.messaging import styles
@@ -87,6 +92,7 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
         cancel_button.clicked.connect(self.reject)
         self.ok_button = self.button_box.button(QDialogButtonBox.Ok)
         self.ok_button.clicked.connect(self.accept)
+        self.validate_impact_function()
 
     def _create_exposure_combos(self):
         """Create one combobox for each exposure and insert them in the UI."""
@@ -176,15 +182,8 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                             combo, title, source)
 
         self.cbx_aggregation.addItem(entire_area_item_aggregation, None)
-
-        # Always set it to False
-        self.button_box.button(QDialogButtonBox.Ok).setEnabled(False)
-
         for combo in self.combos_exposures.itervalues():
-            if combo.count() > 1 and self.cbx_hazard.count():
-                self.button_box.button(QDialogButtonBox.Ok).setEnabled(True)
-            if combo.count() == 1:
-                combo.setEnabled(False)
+            combo.currentIndexChanged.connect(self.validate_impact_function)
 
     def progress_callback(self, current_value, maximum_value, message=None):
         """GUI based callback implementation for showing progress.
@@ -214,6 +213,52 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
         self.progress_bar.setMaximum(maximum_value)
         self.progress_bar.setValue(current_value)
         QApplication.processEvents()
+
+    def validate_impact_function(self):
+        """Check validity of the current impact function."""
+        # Always set it to False
+        self.button_box.button(QDialogButtonBox.Ok).setEnabled(False)
+
+        use_selected_only = setting('useSelectedFeaturesOnly', True, bool)
+
+        for combo in self.combos_exposures.itervalues():
+            # if combo.count() > 1 and self.cbx_hazard.count():
+            #     self.button_box.button(QDialogButtonBox.Ok).setEnabled(True)
+            if combo.count() == 1:
+                combo.setEnabled(False)
+
+        hazard = layer_from_combo(self.cbx_hazard)
+        aggregation = layer_from_combo(self.cbx_aggregation)
+        exposures = []
+        for combo in self.combos_exposures.itervalues():
+            exposures.append(layer_from_combo(combo))
+        exposures = [layer for layer in exposures if layer]
+
+        multi_exposure_if = MultiExposureImpactFunction()
+        multi_exposure_if.hazard = hazard
+        multi_exposure_if.exposures = exposures
+        if aggregation:
+            multi_exposure_if.use_selected_features_only = use_selected_only
+            multi_exposure_if.aggregation = aggregation
+        else:
+            # TODO
+            pass
+
+        status, message = multi_exposure_if.prepare()
+        if status == PREPARE_SUCCESS:
+            self._multi_exposure_if = multi_exposure_if
+            self.button_box.button(QDialogButtonBox.Ok).setEnabled(True)
+            send_static_message(self, ready_message())
+            return
+        else:
+            disable_busy_cursor()
+            LOGGER.info(
+                'The impact function could not run because of the inputs.')
+            send_error_message(self, message)
+            LOGGER.info(message.to_text())
+
+        self._multi_exposure_if = None
+        self.button_box.button(QDialogButtonBox.Ok).setEnabled(False)
 
     def accept(self):
         """Launch the multi exposure analysis."""

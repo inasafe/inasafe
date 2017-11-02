@@ -84,6 +84,7 @@ class MultiExposureImpactFunction(object):
         # Metadata
         self.callback = None
         self.debug = False
+        self.use_selected_features_only = False
         self._name = None
         self._unique_name = None
         self._is_ready = False
@@ -311,6 +312,8 @@ class MultiExposureImpactFunction(object):
             if self._aggregation:
                 impact_function.aggregation = deep_duplicate_layer(
                     self._aggregation)
+                impact_function.use_selected_features_only = (
+                    self.use_selected_features_only)
             else:
                 # TODO
                 pass
