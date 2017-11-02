@@ -70,9 +70,7 @@ FORM_CLASS = get_ui_class('multi_exposure_dialog_base.ui')
 INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
 LOGO_ELEMENT = m.Brand()
 
-LAYER_ORIGIN_ROLE = Qt.UserRole
-LAYER_PARENT_ANALYSIS_ROLE = LAYER_ORIGIN_ROLE + 1
-LAYER_ORIGINAL_NAME_ROLE = LAYER_PARENT_ANALYSIS_ROLE + 1
+LAYER_ORIGIN_ROLE = Qt.UserRole  # Value defined with the following dict.
 FROM_CANVAS = {
     'key': 'FromCanvas',
     'name': tr('Layers from Canvas'),
@@ -81,6 +79,9 @@ FROM_ANALYSIS = {
     'key': 'FromAnalysis',
     'name': tr('Layers from Analysis'),
 }
+
+LAYER_PARENT_ANALYSIS_ROLE = LAYER_ORIGIN_ROLE + 1  # Name of the parent IF
+LAYER_PURPOSE_KEY_OR_ID_ROLE = LAYER_PARENT_ANALYSIS_ROLE + 1  # Layer purpose
 
 
 class MultiExposureDialog(QDialog, FORM_CLASS):
@@ -124,18 +125,48 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
         if self.tab_widget.currentWidget() == self.reportingTab:
             self._populate_reporting_tab()
 
+    def ordered_expected_layers(self):
+        """Get an ordered list of layers according to users input.
+
+        From top to bottom in the legend:
+        [
+            (FromCanvas, layer id, layer name),
+            (FromAnalysis, layer purpose, layer group),
+            ...
+        ]
+
+        :return: An ordered list of layers
+        :rtype: list
+        """
+        layers = []
+        count = self.list_layers_in_map_report.count()
+        for i in range(0, count):
+            layer = self.list_layers_in_map_report.item(i)
+            origin = layer.data(LAYER_ORIGIN_ROLE)
+            if origin == FROM_ANALYSIS['key']:
+                key = layer.data(LAYER_PURPOSE_KEY_OR_ID_ROLE)
+                layers.append(
+                    (FROM_ANALYSIS['key'], definition(key)['name'], key))
+            else:
+                layer_id = layer.data(LAYER_PURPOSE_KEY_OR_ID_ROLE)
+                layers.append((FROM_CANVAS['key'], layer.text(), layer_id))
+        return layers
+
     def _add_layer_clicked(self):
         """Add layer clicked."""
         layer = self.tree.selectedItems()[0]
         origin = layer.data(0, LAYER_ORIGIN_ROLE)
-        if origin == FROM_ANALYSIS:
+        if origin == FROM_ANALYSIS['key']:
             parent = layer.data(0, LAYER_PARENT_ANALYSIS_ROLE)
+            key = layer.data(0, LAYER_PURPOSE_KEY_OR_ID_ROLE)
             item = QListWidgetItem('%s - %s' % (layer.text(0), parent))
             item.setData(LAYER_PARENT_ANALYSIS_ROLE, parent)
+            item.setData(LAYER_PURPOSE_KEY_OR_ID_ROLE, key)
         else:
             item = QListWidgetItem(layer.text(0))
+            layer_id = layer.data(0, LAYER_PURPOSE_KEY_OR_ID_ROLE)
+            item.setData(LAYER_PURPOSE_KEY_OR_ID_ROLE, layer_id)
         item.setData(LAYER_ORIGIN_ROLE, origin)
-        item.setData(LAYER_ORIGINAL_NAME_ROLE, layer.text(0))
         self.list_layers_in_map_report.addItem(item)
         self.tree.invisibleRootItem().removeChild(layer)
         self.tree.clearSelection()
@@ -143,19 +174,21 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
     def _remove_layer_clicked(self):
         """Remove layer clicked."""
         layer = self.list_layers_in_map_report.selectedItems()[0]
-        name = layer.data(LAYER_ORIGINAL_NAME_ROLE)
         origin = layer.data(LAYER_ORIGIN_ROLE)
-        if origin == FROM_ANALYSIS:
+        if origin == FROM_ANALYSIS['key']:
+            key = layer.data(LAYER_PURPOSE_KEY_OR_ID_ROLE)
             parent = layer.data(LAYER_PARENT_ANALYSIS_ROLE)
             parent_item = self.tree.findItems(
                 parent, Qt.MatchContains | Qt.MatchRecursive, 0)[0]
-            item = QTreeWidgetItem(parent_item, [name])
+            item = QTreeWidgetItem(parent_item, [definition(key)['name']])
             item.setData(0, LAYER_PARENT_ANALYSIS_ROLE, parent)
         else:
             parent_item = self.tree.findItems(
                 FROM_CANVAS['name'],
                 Qt.MatchContains | Qt.MatchRecursive, 0)[0]
-            item = QTreeWidgetItem(parent_item, [name])
+            item = QTreeWidgetItem(parent_item, [layer.text()])
+            layer_id = layer.data(0, LAYER_PURPOSE_KEY_OR_ID_ROLE)
+            item.setData(LAYER_PURPOSE_KEY_OR_ID_ROLE, layer_id)
         item.setData(0, LAYER_ORIGIN_ROLE, origin)
         index = self.list_layers_in_map_report.indexFromItem(layer)
         self.list_layers_in_map_report.takeItem(index.row())
@@ -230,9 +263,12 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                     layer = definition(layer)
                     if layer.get('allowed_geometries', None):
                         item = QTreeWidgetItem(
-                            group_branch, [layer.get('name'), layer['key']])
-                        item.setData(0, LAYER_ORIGIN_ROLE, FROM_ANALYSIS)
+                            group_branch, [layer.get('name')])
+                        item.setData(
+                            0, LAYER_ORIGIN_ROLE, FROM_ANALYSIS['key'])
                         item.setData(0, LAYER_PARENT_ANALYSIS_ROLE, group)
+                        item.setData(
+                            0, LAYER_PURPOSE_KEY_OR_ID_ROLE, layer['key'])
                         item.setFlags(Qt.ItemIsEnabled | Qt.ItemIsSelectable)
 
         canvas_branch = QTreeWidgetItem(
@@ -255,7 +291,8 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                 # QGIS 2.14
                 title = loaded_layer.layerName()
             item = QTreeWidgetItem(canvas_branch, [title])
-            item.setData(0, LAYER_ORIGIN_ROLE, FROM_CANVAS)
+            item.setData(0, LAYER_ORIGIN_ROLE, FROM_CANVAS['key'])
+            item.setData(0, LAYER_PURPOSE_KEY_OR_ID_ROLE, loaded_layer.id())
             item.setFlags(Qt.ItemIsEnabled | Qt.ItemIsSelectable)
 
         self.tree.resizeColumnToContents(0)

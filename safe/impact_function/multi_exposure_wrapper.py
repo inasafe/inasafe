@@ -267,10 +267,10 @@ class MultiExposureImpactFunction(object):
                 from the code.
         :rtype: (int, m.Message)
         """
-        if len(self._exposures) < 1:
+        if len(self._exposures) < 2:  # 2 layers minimum.
             message = generate_input_error_message(
                 tr('No exposure layer provided'),
-                m.Paragraph(tr('You need to provide at least one exposure.')))
+                m.Paragraph(tr('You need to provide at least two exposures.')))
             self._is_ready = False
             return PREPARE_FAILED_BAD_INPUT, message
 
