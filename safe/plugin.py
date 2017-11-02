@@ -919,7 +919,7 @@ class Plugin(object):
         """Show InaSAFE Multi Exposure."""
         from safe.gui.tools.multi_exposure_dialog import MultiExposureDialog
         dialog = MultiExposureDialog(self.iface.mainWindow())
-        dialog.show()  # non modal
+        dialog.exec_()  # modal
 
     def add_petabencana_layer(self):
         """Add petabencana layer to the map.
