@@ -146,14 +146,28 @@
           </spacer>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton">
+          <widget class="QPushButton" name="move_up">
+           <property name="text">
+            <string>Up</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="move_down">
+           <property name="text">
+            <string>Down</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="add_layer">
            <property name="text">
             <string>&gt;&gt;</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_2">
+          <widget class="QPushButton" name="remove_layer">
            <property name="text">
             <string>&lt;&lt;</string>
            </property>

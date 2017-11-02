@@ -15,6 +15,7 @@ from PyQt4.QtGui import (
     QApplication,
     QSizePolicy,
     QTreeWidgetItem,
+    QListWidgetItem,
 )
 from qgis.core import QgsMapLayerRegistry, QgsProject
 from qgis.utils import iface
@@ -39,6 +40,7 @@ from safe.definitions.layer_purposes import (
     layer_purpose_exposure,
     layer_purpose_aggregation,
 )
+from safe.definitions.utilities import definition
 from safe.gui.analysis_utilities import add_impact_layers_to_canvas
 from safe.gui.gui_utilities import layer_from_combo, add_ordered_combo_item
 from safe.gui.widgets.message import (
@@ -67,6 +69,18 @@ FORM_CLASS = get_ui_class('multi_exposure_dialog_base.ui')
 
 INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
 LOGO_ELEMENT = m.Brand()
+
+LAYER_ORIGIN_ROLE = Qt.UserRole
+LAYER_PARENT_ANALYSIS_ROLE = LAYER_ORIGIN_ROLE + 1
+LAYER_ORIGINAL_NAME_ROLE = LAYER_PARENT_ANALYSIS_ROLE + 1
+FROM_CANVAS = {
+    'key': 'FromCanvas',
+    'name': tr('Layers from Canvas'),
+}
+FROM_ANALYSIS = {
+    'key': 'FromAnalysis',
+    'name': tr('Layers from Analysis'),
+}
 
 
 class MultiExposureDialog(QDialog, FORM_CLASS):
@@ -97,23 +111,112 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
         self.ok_button.clicked.connect(self.accept)
         self.validate_impact_function()
         self.tab_widget.currentChanged.connect(self._tab_changed)
+        self.tree.itemSelectionChanged.connect(self._tree_selection_changed)
+        self.list_layers_in_map_report.itemSelectionChanged.connect(
+            self._list_selection_changed)
+        self.add_layer.clicked.connect(self._add_layer_clicked)
+        self.remove_layer.clicked.connect(self._remove_layer_clicked)
+        self.move_up.clicked.connect(self.move_layer_up)
+        self.move_down.clicked.connect(self.move_layer_down)
 
     def _tab_changed(self):
         """Triggered when the current tab is changed."""
         if self.tab_widget.currentWidget() == self.reportingTab:
             self._populate_reporting_tab()
 
+    def _add_layer_clicked(self):
+        """Add layer clicked."""
+        layer = self.tree.selectedItems()[0]
+        origin = layer.data(0, LAYER_ORIGIN_ROLE)
+        if origin == FROM_ANALYSIS:
+            parent = layer.data(0, LAYER_PARENT_ANALYSIS_ROLE)
+            item = QListWidgetItem('%s - %s' % (layer.text(0), parent))
+            item.setData(LAYER_PARENT_ANALYSIS_ROLE, parent)
+        else:
+            item = QListWidgetItem(layer.text(0))
+        item.setData(LAYER_ORIGIN_ROLE, origin)
+        item.setData(LAYER_ORIGINAL_NAME_ROLE, layer.text(0))
+        self.list_layers_in_map_report.addItem(item)
+        self.tree.invisibleRootItem().removeChild(layer)
+        self.tree.clearSelection()
+
+    def _remove_layer_clicked(self):
+        """Remove layer clicked."""
+        layer = self.list_layers_in_map_report.selectedItems()[0]
+        name = layer.data(LAYER_ORIGINAL_NAME_ROLE)
+        origin = layer.data(LAYER_ORIGIN_ROLE)
+        if origin == FROM_ANALYSIS:
+            parent = layer.data(LAYER_PARENT_ANALYSIS_ROLE)
+            parent_item = self.tree.findItems(
+                parent, Qt.MatchContains | Qt.MatchRecursive, 0)[0]
+            item = QTreeWidgetItem(parent_item, [name])
+            item.setData(0, LAYER_PARENT_ANALYSIS_ROLE, parent)
+        else:
+            parent_item = self.tree.findItems(
+                FROM_CANVAS['name'],
+                Qt.MatchContains | Qt.MatchRecursive, 0)[0]
+            item = QTreeWidgetItem(parent_item, [name])
+        item.setData(0, LAYER_ORIGIN_ROLE, origin)
+        index = self.list_layers_in_map_report.indexFromItem(layer)
+        self.list_layers_in_map_report.takeItem(index.row())
+        self.list_layers_in_map_report.clearSelection()
+
+    def move_layer_up(self):
+        """Move the layer up."""
+        layer = self.list_layers_in_map_report.selectedItems()[0]
+        index = self.list_layers_in_map_report.indexFromItem(layer).row()
+        item = self.list_layers_in_map_report.takeItem(index)
+        self.list_layers_in_map_report.insertItem(index - 1, item)
+        self.list_layers_in_map_report.clearSelection()
+
+    def move_layer_down(self):
+        """Move the layer down."""
+        layer = self.list_layers_in_map_report.selectedItems()[0]
+        index = self.list_layers_in_map_report.indexFromItem(layer).row()
+        item = self.list_layers_in_map_report.takeItem(index)
+        self.list_layers_in_map_report.insertItem(index + 1, item)
+        self.list_layers_in_map_report.clearSelection()
+
+    def _list_selection_changed(self):
+        """Selection has changed in the list."""
+        items = self.list_layers_in_map_report.selectedItems()
+        self.remove_layer.setEnabled(len(items) >= 1)
+        if len(items) == 1 and self.list_layers_in_map_report.count() >= 2:
+            index = self.list_layers_in_map_report.indexFromItem(items[0])
+            index = index.row()
+            if index == 0:
+                self.move_up.setEnabled(False)
+                self.move_down.setEnabled(True)
+            elif index == self.list_layers_in_map_report.count() - 1:
+                self.move_up.setEnabled(True)
+                self.move_down.setEnabled(False)
+            else:
+                self.move_up.setEnabled(True)
+                self.move_down.setEnabled(True)
+        else:
+            self.move_up.setEnabled(False)
+            self.move_down.setEnabled(False)
+
+    def _tree_selection_changed(self):
+        """Selection has changed in the tree."""
+        self.add_layer.setEnabled(len(self.tree.selectedItems()) >= 1)
+
     def _populate_reporting_tab(self):
         """Populate trees about layers."""
         self.tree.clear()
+        self.add_layer.setEnabled(False)
+        self.remove_layer.setEnabled(False)
+        self.move_up.setEnabled(False)
+        self.move_down.setEnabled(False)
         self.tree.setColumnCount(1)
         self.tree.setRootIsDecorated(False)
         self.tree.setHeaderHidden(True)
 
         analysis_branch = QTreeWidgetItem(
-            self.tree.invisibleRootItem(), [tr('Layers from Analysis')])
+            self.tree.invisibleRootItem(), [FROM_ANALYSIS['name']])
         analysis_branch.setFont(0, bold_font)
         analysis_branch.setExpanded(True)
+        analysis_branch.setFlags(Qt.ItemIsEnabled)
 
         if self._multi_exposure_if:
             expected = self._multi_exposure_if.output_layers_expected()
@@ -121,15 +224,22 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                 group_branch = QTreeWidgetItem(analysis_branch, [group])
                 group_branch.setFont(0, bold_font)
                 group_branch.setExpanded(True)
+                group_branch.setFlags(Qt.ItemIsEnabled)
 
                 for layer in layers:
-                    QTreeWidgetItem(group_branch, [layer])
+                    layer = definition(layer)
+                    if layer.get('allowed_geometries', None):
+                        item = QTreeWidgetItem(
+                            group_branch, [layer.get('name'), layer['key']])
+                        item.setData(0, LAYER_ORIGIN_ROLE, FROM_ANALYSIS)
+                        item.setData(0, LAYER_PARENT_ANALYSIS_ROLE, group)
+                        item.setFlags(Qt.ItemIsEnabled | Qt.ItemIsSelectable)
 
         canvas_branch = QTreeWidgetItem(
-            self.tree.invisibleRootItem(), [tr('Layers from Canvas')])
-        # canvas_branch.setFlags(Qt.ItemIsDropEnabled | Qt.ItemIsEnabled)
+            self.tree.invisibleRootItem(), [FROM_CANVAS['name']])
         canvas_branch.setFont(0, bold_font)
         canvas_branch.setExpanded(True)
+        canvas_branch.setFlags(Qt.ItemIsEnabled)
 
         # List layers from the canvas
         loaded_layers = QgsMapLayerRegistry.instance().mapLayers().values()
@@ -144,7 +254,9 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
             else:
                 # QGIS 2.14
                 title = loaded_layer.layerName()
-            QTreeWidgetItem(canvas_branch, [title])
+            item = QTreeWidgetItem(canvas_branch, [title])
+            item.setData(0, LAYER_ORIGIN_ROLE, FROM_CANVAS)
+            item.setFlags(Qt.ItemIsEnabled | Qt.ItemIsSelectable)
 
         self.tree.resizeColumnToContents(0)
 
