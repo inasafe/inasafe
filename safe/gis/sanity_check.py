@@ -73,7 +73,7 @@ def check_layer(layer, has_geometry=True):
     :param has_geometry: If the layer must have a geometry. True by default.
         If it's a raster layer, we will no check this parameter. If we do not
         want to check the geometry type, we can set it to None.
-    :type has_geometry: bool
+    :type has_geometry: bool,None
 
     :raise: InvalidLayerError
 

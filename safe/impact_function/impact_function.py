@@ -25,7 +25,7 @@ from qgis.core import (
     QgsMapLayerRegistry,
     QgsRasterLayer,
 )
-from qgis.utils import iface
+from qgis.utils import iface as iface_object
 
 from safe import messaging as m
 from safe.common.exceptions import (
@@ -269,6 +269,7 @@ class ImpactFunction(object):
         self._output_layer_expected = None
         self._preprocessors = []  # List of pre-processors which will run
         self._preprocessors_layers = {}  # List of layers produced
+        self._impact_report = None
 
         # Environment
         set_provenance(self._provenance, provenance_host_name, gethostname())
@@ -2745,7 +2746,7 @@ class ImpactFunction(object):
 
         return impact_function
 
-    def generate_report(self, components, output_folder=None, IFACE=None):
+    def generate_report(self, components, output_folder=None, iface=None):
         """Generate Impact Report independently by the Impact Function.
 
         :param components: Report components to be generated.
@@ -2760,8 +2761,8 @@ class ImpactFunction(object):
         .. versionadded:: 4.3
         """
         # iface set up, in case IF run from test
-        if not IFACE:
-            IFACE = iface
+        if not iface:
+            iface = iface_object
 
         # don't generate infographic if exposure is not population
         exposure_type = definition(
@@ -2788,6 +2789,9 @@ class ImpactFunction(object):
         if print_atlas:
             extra_layers.append(aggregation_summary_layer)
 
+        error_code = None
+        message = None
+
         for component in generated_components:
             # create impact report instance
 
@@ -2801,25 +2805,25 @@ class ImpactFunction(object):
                 report_metadata = ReportMetadata(
                     metadata_dict=update_template_component(component))
 
-            self.impact_report = ImpactReport(
-                IFACE,
+            self._impact_report = ImpactReport(
+                iface,
                 report_metadata,
                 impact_function=self,
                 extra_layers=extra_layers)
 
             # Get other setting
             logo_path = setting('organisation_logo_path', None, str)
-            self.impact_report.inasafe_context.organisation_logo = logo_path
+            self._impact_report.inasafe_context.organisation_logo = logo_path
 
             disclaimer_text = setting('reportDisclaimer', None, str)
-            self.impact_report.inasafe_context.disclaimer = disclaimer_text
+            self._impact_report.inasafe_context.disclaimer = disclaimer_text
 
             north_arrow_path = setting('north_arrow_path', None, str)
-            self.impact_report.inasafe_context.north_arrow = north_arrow_path
+            self._impact_report.inasafe_context.north_arrow = north_arrow_path
 
             # get the extent of impact layer
-            self.impact_report.qgis_composition_context.extent = \
-                self.impact.extent()
+            self._impact_report.qgis_composition_context.extent = (
+                self.impact.extent())
 
             # generate report folder
 
@@ -2834,11 +2838,11 @@ class ImpactFunction(object):
             # We will generate it on the fly without storing it after datastore
             # supports
             if output_folder:
-                self.impact_report.output_folder = output_folder
+                self._impact_report.output_folder = output_folder
             else:
-                self.impact_report.output_folder = join(layer_dir, 'output')
+                self._impact_report.output_folder = join(layer_dir, 'output')
 
-            error_code, message = self.impact_report.process_components()
+            error_code, message = self._impact_report.process_components()
             if error_code == ImpactReport.REPORT_GENERATION_FAILED:
                 break
 

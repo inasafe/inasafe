@@ -166,12 +166,12 @@ class TestImpactReport(unittest.TestCase):
 
         components = [report_metadata]
         return_code, message = impact_function.generate_report(
-            components, output_folder=output_folder, IFACE=IFACE)
+            components, output_folder=output_folder, iface=IFACE)
 
         self.assertEqual(
             return_code, ImpactReport.REPORT_GENERATION_SUCCESS, message)
 
-        return impact_function.impact_report
+        return impact_function._impact_report
 
     def test_general_report_from_impact_function(self):
         """Test generate analysis result from impact function.
