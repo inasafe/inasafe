@@ -187,8 +187,8 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                 FROM_CANVAS['name'],
                 Qt.MatchContains | Qt.MatchRecursive, 0)[0]
             item = QTreeWidgetItem(parent_item, [layer.text()])
-            layer_id = layer.data(0, LAYER_PURPOSE_KEY_OR_ID_ROLE)
-            item.setData(LAYER_PURPOSE_KEY_OR_ID_ROLE, layer_id)
+            layer_id = layer.data(LAYER_PURPOSE_KEY_OR_ID_ROLE)
+            item.setData(0, LAYER_PURPOSE_KEY_OR_ID_ROLE, layer_id)
         item.setData(0, LAYER_ORIGIN_ROLE, origin)
         index = self.list_layers_in_map_report.indexFromItem(layer)
         self.list_layers_in_map_report.takeItem(index.row())
@@ -200,7 +200,7 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
         index = self.list_layers_in_map_report.indexFromItem(layer).row()
         item = self.list_layers_in_map_report.takeItem(index)
         self.list_layers_in_map_report.insertItem(index - 1, item)
-        self.list_layers_in_map_report.clearSelection()
+        self.list_layers_in_map_report.item(index - 1).setSelected(True)
 
     def move_layer_down(self):
         """Move the layer down."""
@@ -208,7 +208,7 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
         index = self.list_layers_in_map_report.indexFromItem(layer).row()
         item = self.list_layers_in_map_report.takeItem(index)
         self.list_layers_in_map_report.insertItem(index + 1, item)
-        self.list_layers_in_map_report.clearSelection()
+        self.list_layers_in_map_report.item(index + 1).setSelected(True)
 
     def _list_selection_changed(self):
         """Selection has changed in the list."""
