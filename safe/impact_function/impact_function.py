@@ -122,7 +122,7 @@ from safe.definitions.provenance import (
     provenance_layer_exposure_summary_id,
     provenance_crs,
     provenance_debug_mode,
-)
+    provenance_multi_exposure_impact_function_name)
 from safe.definitions.reports.components import infographic_report, map_report
 from safe.definitions.reports.infographic import map_overview
 from safe.definitions.styles import (
@@ -259,6 +259,7 @@ class ImpactFunction(object):
         self._name = None  # e.g. Flood Raster on Building Polygon
         self._title = None  # be affected
         self._unique_name = None  # EXP + On + Haz + DDMMMMYYYY + HHhMM.SS.ms
+        self._multi_exposure_name = None
 
         # Datastore when to save layers
         self._datastore = None
@@ -786,6 +787,24 @@ class ImpactFunction(object):
         :rtype: basestring
         """
         return self._name
+
+    @property
+    def multi_exposure_name(self):
+        """The name of the multi exposure impact function.
+
+        :return: The multi exposure name.
+        :rtype: basestring
+        """
+        return self._multi_exposure_name
+
+    @multi_exposure_name.setter
+    def multi_exposure_name(self, name):
+        """Setter for multi exposure name.
+
+        :param name: The multi exposure name.
+        :type name: basestring
+        """
+        self._multi_exposure_name = name
 
     @property
     def title(self):
@@ -2477,6 +2496,10 @@ class ImpactFunction(object):
             self._provenance, provenance_impact_function_name, self.name)
         set_provenance(
             self._provenance, provenance_impact_function_title, self.title)
+        set_provenance(
+            self._provenance,
+            provenance_multi_exposure_impact_function_name,
+            self.multi_exposure_name)
 
         # Map title
         set_provenance(

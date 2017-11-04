@@ -108,6 +108,11 @@ provenance_impact_function_name = {
     'name': tr('Impact Function Name'),
     'provenance_key': 'impact_function_name'
 }
+provenance_multi_exposure_impact_function_name = {
+    'key': 'provenance_multi_exposure_impact_function_name',
+    'name': tr('Multi Exposure Impact Function Name'),
+    'provenance_key': 'multi_exposure_impact_function_name'
+}
 provenance_impact_function_title = {
     'key': 'provenance_impact_function_title',
     'name': tr('Impact Function Title'),
@@ -249,6 +254,8 @@ provenance_layer_profiling_id = {
     'provenance_key': layer_purpose_profiling['key'] + '_id'
 }
 
+
+# Mapping to global variable in QGIS
 provenance_list = [
     provenance_action_checklist,
     provenance_aggregation_keywords,
@@ -269,6 +276,7 @@ provenance_list = [
     provenance_hazard_layer_id,
     provenance_host_name,
     provenance_impact_function_name,
+    provenance_multi_exposure_impact_function_name,
     provenance_impact_function_title,
     provenance_inasafe_version,
     provenance_map_legend_title,
@@ -296,8 +304,6 @@ provenance_list = [
     provenance_layer_exposure_summary_table_id,
     provenance_layer_profiling_id,
 ]
-
-# Mapping to global variable in QGIS
 duplicated_global_variables = {
     provenance_os['provenance_key']: 'qgis_os_name'
 }

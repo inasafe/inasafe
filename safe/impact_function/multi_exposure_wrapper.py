@@ -299,6 +299,21 @@ class MultiExposureImpactFunction(object):
             if status != PREPARE_SUCCESS:
                 return status, message
 
+        hazard_name = get_name(self.hazard.keywords.get('hazard'))
+        hazard_geometry_name = get_name(geometry_type(self.hazard))
+        self._name = (
+            u'Multi exposure {hazard_type} {hazard_geometry} On '.format(
+                hazard_type=hazard_name, hazard_geometry=hazard_geometry_name))
+        exposures_strings = []
+        for exposure in self.exposures:
+            exposure_name = get_name(exposure.keywords.get('exposure'))
+            exposure_geometry_name = get_name(geometry_type(exposure))
+            exposures_strings.append(
+                u'{exposure_type} {exposure_geometry}'.format(
+                    exposure_type=exposure_name,
+                    exposure_geometry=exposure_geometry_name))
+        self._name += ', '.join(exposures_strings)
+
         self._impact_functions = []
 
         # We delegate the prepare to the main IF for each exposure
@@ -307,6 +322,7 @@ class MultiExposureImpactFunction(object):
             impact_function.hazard = deep_duplicate_layer(self._hazard)
             impact_function.exposure = exposure
             impact_function.debug_mode = self.debug
+            impact_function.multi_exposure_name = self._name
             if self.callback:
                 impact_function.callback = self.callback
             if self._aggregation:
@@ -323,21 +339,6 @@ class MultiExposureImpactFunction(object):
                 return code, message
 
             self._impact_functions.append(impact_function)
-
-        hazard_name = get_name(self.hazard.keywords.get('hazard'))
-        hazard_geometry_name = get_name(geometry_type(self.hazard))
-        self._name = (
-            u'Multi exposure {hazard_type} {hazard_geometry} On '.format(
-                hazard_type=hazard_name, hazard_geometry=hazard_geometry_name))
-        exposures_strings = []
-        for exposure in self.exposures:
-            exposure_name = get_name(exposure.keywords.get('exposure'))
-            exposure_geometry_name = get_name(geometry_type(exposure))
-            exposures_strings.append(
-                u'{exposure_type} {exposure_geometry}'.format(
-                    exposure_type=exposure_name,
-                    exposure_geometry=exposure_geometry_name))
-        self._name += ', '.join(exposures_strings)
 
         self._output_layer_expected = self._compute_output_layer_expected()
         self._is_ready = True

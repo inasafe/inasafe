@@ -42,6 +42,7 @@ from safe.definitions.layer_purposes import (
     layer_purpose_exposure,
     layer_purpose_aggregation,
 )
+from safe.definitions.reports.components import all_default_report_components
 from safe.definitions.utilities import definition
 from safe.gui.analysis_utilities import (
     add_impact_layers_to_canvas,
@@ -63,6 +64,7 @@ from safe.impact_function.impact_function_utilities import (
 from safe.impact_function.multi_exposure_wrapper import (
     MultiExposureImpactFunction)
 from safe.messaging import styles
+from safe.report.impact_report import ImpactReport
 from safe.utilities.gis import qgis_version, is_vector_layer
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
@@ -527,26 +529,35 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                 # self.assertEqual(code, ANALYSIS_MULTI_SUCCESS, message)
 
                 root = QgsProject.instance().layerTreeRoot()
-                if len(self.ordered_expected_layers()) == 0:
-                    group_analysis = root.insertGroup(
-                        0, self._multi_exposure_if.name)
-                    group_analysis.setVisible(Qt.Checked)
-                    group_analysis.setCustomProperty(
-                        MULTI_EXPOSURE_ANALYSIS_FLAG, True)
+                group_analysis = root.insertGroup(
+                    0, self._multi_exposure_if.name)
+                group_analysis.setVisible(Qt.Checked)
+                group_analysis.setCustomProperty(
+                    MULTI_EXPOSURE_ANALYSIS_FLAG, True)
 
-                    for layer in self._multi_exposure_if.outputs:
-                        QgsMapLayerRegistry.instance().addMapLayer(
-                            layer, False)
-                        layer_node = group_analysis.addLayer(layer)
-                        layer_node.setVisible(Qt.Unchecked)
+                for layer in self._multi_exposure_if.outputs:
+                    QgsMapLayerRegistry.instance().addMapLayer(
+                        layer, False)
+                    layer_node = group_analysis.addLayer(layer)
+                    layer_node.setVisible(Qt.Unchecked)
 
-                    for analysis in self._multi_exposure_if.impact_functions:
-                        detailed_group = group_analysis.insertGroup(
-                            0, analysis.name)
-                        detailed_group.setVisible(Qt.Checked)
-                        add_impact_layers_to_canvas(
-                            analysis, group=detailed_group)
-                else:
+                for analysis in self._multi_exposure_if.impact_functions:
+                    detailed_group = group_analysis.insertGroup(
+                        0, analysis.name)
+                    detailed_group.setVisible(Qt.Checked)
+                    add_impact_layers_to_canvas(
+                        analysis, group=detailed_group)
+
+                    error_code, message = analysis.generate_report(
+                        all_default_report_components)
+
+                    if error_code == ImpactReport.REPORT_GENERATION_FAILED:
+                        LOGGER.info(tr(
+                            'The impact report could not be generated.'))
+                        send_error_message(self, message)
+                        LOGGER.info(message.to_text())
+                if len(self.ordered_expected_layers()) != 0:
+                    group_analysis.removeAllChildren()
                     add_layers_to_canvas_with_custom_orders(
                         self.ordered_expected_layers(),
                         self._multi_exposure_if)
