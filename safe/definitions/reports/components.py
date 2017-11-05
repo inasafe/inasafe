@@ -20,7 +20,10 @@ from safe.definitions.fields import (
     fatalities_field,
     affected_productivity_field,
     affected_production_cost_field,
-    affected_production_value_field)
+    affected_production_value_field,
+    exposure_total_affected_field,
+    exposure_total_not_affected_field,
+    exposure_total_not_exposed_field)
 from safe.definitions.reports import (
     jinja2_component_type,
     qgis_composer_component_type,
@@ -117,20 +120,24 @@ general_report_component = {
         'hazard_header': tr('Hazard Zone'),
         # Used to customize header.
         # See issue inasafe#3688: remove all 'total' words
+        'reported_fields_header': tr('Exposure status'),
         'reported_fields': [
             {
                 'header': affected_field['name'],
-                'field': total_affected_field
+                'field': total_affected_field,
+                'multi_exposure_field': exposure_total_affected_field
             },
             {
                 # specify it directly since there is no field for
                 # unaffected only.
                 'header': tr('Not Affected'),
-                'field': total_not_affected_field
+                'field': total_not_affected_field,
+                'multi_exposure_field': exposure_total_not_affected_field
             },
             {
                 'header': tr('Not Exposed'),
-                'field': total_not_exposed_field
+                'field': total_not_exposed_field,
+                'multi_exposure_field': exposure_total_not_exposed_field
             },
             {
                 'header': displaced_field['name'],
@@ -685,7 +692,10 @@ standard_impact_report_metadata_pdf = {
                 final_product_tag,
                 table_product_tag,
                 pdf_product_tag
-            ]
+            ],
+            'extra_args': {
+                'html_report_component_key': 'impact-report'
+            }
         },
         # Action Checklist Report PDF
         {
@@ -714,6 +724,74 @@ standard_impact_report_metadata_pdf = {
                 table_product_tag,
                 pdf_product_tag
             ]
+        },
+    ]
+}
+
+# Default multi exposure report components
+multi_exposure_impact_report_component_metadata = [
+    analysis_question_component,
+    general_report_component
+]
+
+# Standard HTML output for multi exposure impact report
+standard_multi_exposure_impact_report_metadata_html = {
+    'key': 'multi-exposure-analysis-result-html',
+    'name': 'multi-exposure-analysis-result-html',
+    'template_folder': resources_path('report-templates'),
+    'components': multi_exposure_impact_report_component_metadata + [
+        {
+            'key': 'multi-exposure-impact-report',
+            'type': jinja2_component_type,
+            'processor': jinja2_renderer,
+            'extractor': impact_table_extractor,
+            'output_format': Jinja2ComponentsMetadata.OutputFormat.File,
+            'output_path': 'multi-exposure-impact-report-output.html',
+            'resources': [
+                resources_path('css'),
+                resources_path('js'),
+                resources_path('img')],
+            'template': 'standard-template/'
+                        'jinja2/'
+                        'multi-exposure-impact-report-layout.html',
+            'tags': [
+                final_product_tag,
+                table_product_tag,
+                html_product_tag
+            ],
+            'extra_args': {
+                'components_list': {
+                    'analysis_question': analysis_question_component,
+                    'general_report': general_report_component,
+                }
+            }
+        },
+    ]
+}
+
+# Standard PDF Output for impact report
+standard_multi_exposure_impact_report_metadata_pdf = {
+    'key': 'multi-exposure-analysis-result-pdf',
+    'name': 'multi-exposure-analysis-result-pdf',
+    'template_folder': resources_path('report-templates'),
+    'components': standard_multi_exposure_impact_report_metadata_html[
+                      'components'] + [
+        # Impact Report PDF
+        {
+            'key': 'multi-exposure-impact-report-pdf',
+            'type': qgis_composer_component_type,
+            'processor': qgis_composer_html_renderer,
+            'extractor': impact_table_pdf_extractor,
+            'output_format': QgisComposerComponentsMetadata.OutputFormat.PDF,
+            'output_path': 'multi-exposure-impact-report-output.pdf',
+            'tags': [
+                final_product_tag,
+                table_product_tag,
+                pdf_product_tag
+            ],
+            'extra_args': {
+                'html_report_component_key': 'multi-exposure-impact-report'
+            }
         },
     ]
 }

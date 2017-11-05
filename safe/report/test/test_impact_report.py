@@ -16,7 +16,7 @@ from PyQt4.Qt import PYQT_VERSION_STR
 from PyQt4.QtCore import QT_VERSION_STR
 
 from safe.common.version import get_version
-from safe.definitions.constants import ANALYSIS_SUCCESS
+from safe.definitions.constants import ANALYSIS_SUCCESS, PREPARE_SUCCESS
 from safe.definitions.fields import (
     total_not_affected_field,
     total_affected_field,
@@ -28,6 +28,8 @@ from safe.definitions.field_groups import (
 from safe.definitions.hazard_classifications import flood_hazard_classes
 from safe.definitions.hazard import hazard_flood
 from safe.impact_function.impact_function import ImpactFunction
+from safe.impact_function.multi_exposure_wrapper import \
+    MultiExposureImpactFunction
 from safe.report.report_metadata import ReportMetadata
 from safe.test.utilities import (
     get_qgis_app,
@@ -47,7 +49,8 @@ from safe.definitions.reports.components import (
     aggregation_postprocessors_component,
     population_infographic_component,
     analysis_provenance_details_component,
-    analysis_provenance_details_simplified_component)
+    analysis_provenance_details_simplified_component,
+    standard_multi_exposure_impact_report_metadata_html)
 from safe.definitions.utilities import update_template_component
 from safe.report.impact_report import ImpactReport
 from safe.utilities.resources import resources_path
@@ -172,6 +175,57 @@ class TestImpactReport(unittest.TestCase):
             return_code, ImpactReport.REPORT_GENERATION_SUCCESS, message)
 
         return impact_function._impact_report
+
+    def run_multi_exposure_impact_function_scenario(
+            self, output_folder,
+            report_metadata,
+            hazard_layer,
+            exposure_layers,
+            aggregation_layer=None):
+        """Method to automate scenario runs.
+
+        :param output_folder: the output folder
+        :type output_folder: str
+
+        :param report_metadata: report metadata to generate
+        :type report_metadata: dict
+
+        :param hazard_layer: QgsMapLayer for hazard
+        :type hazard_layer: qgis.core.QgsMapLayer
+
+        :param exposure_layer: List of QgsMapLayer for exposure
+        :type exposure_layer: list
+
+        :return: will return impact_report object
+        :rtype: safe.report.impact_report.ImpactReport
+
+        .. versionadded:: 4.3
+        """
+        # clear folders before use
+        shutil.rmtree(output_folder, ignore_errors=True)
+
+        impact_function = MultiExposureImpactFunction()
+        impact_function.hazard = hazard_layer
+        impact_function.exposures = exposure_layers
+        if aggregation_layer:
+            impact_function.aggregation = aggregation_layer
+        else:
+            impact_function.crs = QgsCoordinateReferenceSystem(4326)
+
+        code, message = impact_function.prepare()
+        self.assertEqual(code, PREPARE_SUCCESS, message)
+
+        code, message = impact_function.run()
+        self.assertEqual(code, ANALYSIS_SUCCESS, message)
+
+        components = [report_metadata]
+        return_code, message = impact_function.generate_report(
+            components, output_folder=output_folder, IFACE=IFACE)
+
+        self.assertEqual(
+            return_code, ImpactReport.REPORT_GENERATION_SUCCESS, message)
+
+        return impact_function.impact_report
 
     def test_general_report_from_impact_function(self):
         """Test generate analysis result from impact function.
@@ -346,6 +400,42 @@ class TestImpactReport(unittest.TestCase):
         self.assertTrue(os.path.exists(output_path))
 
         shutil.rmtree(output_folder, ignore_errors=True)
+
+    def test_general_report_from_multi_exposure_impact_function(self):
+        """Test generate analysis result from multi exposure impact function.
+
+        .. versionadded:: 4.3
+        """
+        output_folder = self.fixtures_dir('../output/general_report')
+
+        hazard_layer = load_test_vector_layer(
+            'gisv4', 'hazard', 'classified_vector.geojson')
+        building_layer = load_test_vector_layer(
+            'gisv4', 'exposure', 'building-points.geojson')
+        population_layer = load_test_vector_layer(
+            'gisv4', 'exposure', 'population.geojson')
+        roads_layer = load_test_vector_layer(
+            'gisv4', 'exposure', 'roads.geojson')
+        aggregation_layer = load_test_vector_layer(
+            'gisv4', 'aggregation', 'small_grid.geojson')
+        exposure_layers = [building_layer, population_layer, roads_layer]
+
+        impact_report = self.run_multi_exposure_impact_function_scenario(
+            output_folder,
+            standard_multi_exposure_impact_report_metadata_html,
+            hazard_layer,
+            exposure_layers,
+            aggregation_layer=aggregation_layer)
+
+        """Checking generated context."""
+        empty_component_output_message = 'Empty component output'
+
+        # Check Analysis Summary
+        analysis_summary = impact_report.metadata.component_by_key(
+            general_report_component['key'])
+        """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
+
+        self.assertTrue(analysis_summary.context)
 
     def test_analysis_detail(self):
         """Test generate analysis breakdown and aggregation report.
