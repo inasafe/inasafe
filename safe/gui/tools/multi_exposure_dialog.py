@@ -42,7 +42,9 @@ from safe.definitions.layer_purposes import (
     layer_purpose_exposure,
     layer_purpose_aggregation,
 )
-from safe.definitions.reports.components import all_default_report_components
+from safe.definitions.reports.components import (
+    all_default_report_components,
+    standard_multi_exposure_impact_report_metadata_pdf)
 from safe.definitions.utilities import definition
 from safe.gui.analysis_utilities import (
     add_impact_layers_to_canvas,
@@ -527,6 +529,15 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
             else:
                 code, message = self._multi_exposure_if.run()
                 # self.assertEqual(code, ANALYSIS_MULTI_SUCCESS, message)
+
+                error_code, message = self._multi_exposure_if.generate_report(
+                    [standard_multi_exposure_impact_report_metadata_pdf])
+
+                if error_code == ImpactReport.REPORT_GENERATION_FAILED:
+                    LOGGER.info(tr(
+                        'The impact report could not be generated.'))
+                    send_error_message(self, message)
+                    LOGGER.info(message.to_text())
 
                 root = QgsProject.instance().layerTreeRoot()
                 group_analysis = root.insertGroup(

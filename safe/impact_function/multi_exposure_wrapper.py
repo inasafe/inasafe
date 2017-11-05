@@ -10,6 +10,9 @@ import logging
 from datetime import datetime
 from os import makedirs
 from os.path import join, exists
+from qgis.utils import iface
+
+from PyQt4.QtCore import QDir
 
 from safe import messaging as m
 from safe.common.utilities import temp_dir
@@ -31,7 +34,7 @@ from safe.definitions.styles import (
     analysis_color,
     analysis_width,
 )
-from safe.definitions.utilities import get_name
+from safe.definitions.utilities import get_name, update_template_component
 from safe.gis.tools import geometry_type
 from safe.gis.vector.prepare_vector_layer import prepare_vector_layer
 from safe.gis.vector.summary_5_multi_exposure import (
@@ -43,6 +46,8 @@ from safe.impact_function.create_extra_layers import create_analysis_layer
 from safe.impact_function.impact_function import ImpactFunction
 from safe.impact_function.impact_function_utilities import check_input_layer
 from safe.impact_function.style import simple_polygon_without_brush
+from safe.report.impact_report import ImpactReport
+from safe.report.report_metadata import ReportMetadata
 from safe.utilities.gis import deep_duplicate_layer
 from safe.utilities.i18n import tr
 from safe.utilities.settings import setting
@@ -115,6 +120,24 @@ class MultiExposureImpactFunction(object):
             self._analysis_summary
         ]
         return outputs
+
+    @property
+    def aggregation_summary(self):
+        """Property for the aggregation summary.
+
+        :returns: A vector layer.
+        :rtype: QgsVectorLayer
+        """
+        return self._aggregation_summary
+
+    @property
+    def analysis_summary(self):
+        """Property for the aggregation summary.
+
+        :returns: A vector layer.
+        :rtype: QgsVectorLayer
+        """
+        return self._analysis_summary
 
     @property
     def datastore(self):
@@ -447,3 +470,55 @@ class MultiExposureImpactFunction(object):
             self._analysis_summary, analysis_width, analysis_color)
 
         return ANALYSIS_SUCCESS, None
+
+    def generate_report(self, components, output_folder=None, IFACE=None):
+        """Generate Impact Report independently by the Impact Function.
+
+        :param components: Report components to be generated.
+        :type components: list
+
+        :param output_folder: The output folder.
+        :type output_folder: str
+
+        :returns: Tuple of error code and message
+        :type: tuple
+
+        .. versionadded:: 4.3
+        """
+        # iface set up, in case IF run from test
+        if not IFACE:
+            IFACE = iface
+
+        for component in components:
+
+            report_metadata = ReportMetadata(
+                metadata_dict=update_template_component(component))
+
+            self.impact_report = ImpactReport(
+                IFACE,
+                report_metadata,
+                multi_exposure_impact_function=self,
+                analysis=self.analysis_summary)
+
+            # generate report folder
+
+            # no other option for now
+            # TODO: retrieve the information from data store
+            if isinstance(self.datastore.uri, QDir):
+                layer_dir = self.datastore.uri.absolutePath()
+            else:
+                # No other way for now
+                return
+
+            # We will generate it on the fly without storing it after datastore
+            # supports
+            if output_folder:
+                self.impact_report.output_folder = output_folder
+            else:
+                self.impact_report.output_folder = join(layer_dir, 'output')
+
+            error_code, message = self.impact_report.process_components()
+            if error_code == ImpactReport.REPORT_GENERATION_FAILED:
+                break
+
+        return error_code, message
