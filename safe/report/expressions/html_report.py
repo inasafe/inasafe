@@ -3,11 +3,24 @@
 """QGIS Expressions which are available in the QGIS GUI interface."""
 
 import codecs
-from qgis.core import qgsfunction, QgsExpressionContextUtils
 from os.path import dirname, join, exists
 
+from qgis.core import (
+    qgsfunction,
+    QgsExpressionContextUtils,
+    QgsProject,
+    QgsLayerTreeGroup,
+    QgsLayerTreeLayer)
+
+from safe.definitions.exposure import (
+    exposure_population,
+    exposure_road,
+    exposure_structure,
+    exposure_place,
+    exposure_land_cover)
 from safe.definitions.provenance import provenance_layer_analysis_impacted
 from safe.utilities.i18n import tr
+from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.utilities import generate_expression_help
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
@@ -37,7 +50,7 @@ help_message = generate_expression_help(description, examples)
 @qgsfunction(
     args='auto', group=group, usesGeometry=False, referencedColumns=[],
     help_text=help_message.to_html(), helpText=help_message.to_html())
-def analysis_summary_report(with_style, feature, parent):
+def analysis_summary_report(feature, parent):
     """Retrieve an HTML table report of current selected analysis.
     """
     _ = feature, parent  # NOQA
@@ -47,6 +60,128 @@ def analysis_summary_report(with_style, feature, parent):
         return None
 
     analysis_dir = dirname(project_context_scope.variable(key))
+    return get_impact_report_as_string(analysis_dir)
+
+
+@qgsfunction(
+    args='auto', group=group, usesGeometry=False, referencedColumns=[],
+    help_text=help_message.to_html(), helpText=help_message.to_html())
+def population_analysis_summary_report(feature, parent):
+    """Retrieve an HTML population analysis table report from a multi exposure
+    analysis.
+    """
+    _ = feature, parent  # NOQA
+    analysis_dir = get_analysis_dir(exposure_population['key'])
+    if analysis_dir:
+        return get_impact_report_as_string(analysis_dir)
+    return None
+
+
+@qgsfunction(
+    args='auto', group=group, usesGeometry=False, referencedColumns=[],
+    help_text=help_message.to_html(), helpText=help_message.to_html())
+def road_analysis_summary_report(feature, parent):
+    """Retrieve an HTML road analysis table report from a multi exposure
+    analysis.
+    """
+    _ = feature, parent  # NOQA
+    analysis_dir = get_analysis_dir(exposure_road['key'])
+    if analysis_dir:
+        return get_impact_report_as_string(analysis_dir)
+    return None
+
+
+@qgsfunction(
+    args='auto', group=group, usesGeometry=False, referencedColumns=[],
+    help_text=help_message.to_html(), helpText=help_message.to_html())
+def structure_analysis_summary_report(feature, parent):
+    """Retrieve an HTML structure analysis table report from a multi exposure
+    analysis.
+    """
+    _ = feature, parent  # NOQA
+    analysis_dir = get_analysis_dir(exposure_structure['key'])
+    if analysis_dir:
+        return get_impact_report_as_string(analysis_dir)
+    return None
+
+
+@qgsfunction(
+    args='auto', group=group, usesGeometry=False, referencedColumns=[],
+    help_text=help_message.to_html(), helpText=help_message.to_html())
+def place_analysis_summary_report(feature, parent):
+    """Retrieve an HTML place analysis table report from a multi exposure
+    analysis.
+    """
+    _ = feature, parent  # NOQA
+    analysis_dir = get_analysis_dir(exposure_place['key'])
+    if analysis_dir:
+        return get_impact_report_as_string(analysis_dir)
+    return None
+
+
+@qgsfunction(
+    args='auto', group=group, usesGeometry=False, referencedColumns=[],
+    help_text=help_message.to_html(), helpText=help_message.to_html())
+def land_cover_analysis_summary_report(feature, parent):
+    """Retrieve an HTML land cover analysis table report from a multi exposure
+    analysis.
+    """
+    _ = feature, parent  # NOQA
+    analysis_dir = get_analysis_dir(exposure_land_cover['key'])
+    if analysis_dir:
+        return get_impact_report_as_string(analysis_dir)
+    return None
+
+
+def get_analysis_dir(exposure_key):
+    """Retrieve an output directory of an analysis/ImpactFunction from a
+    multi exposure analysis/ImpactFunction based on exposure type..
+
+    :param exposure_key: An exposure keyword.
+    :type exposure_key: str
+
+    :return: A directory contains analysis outputs.
+    :rtype: str
+    """
+    keyword_io = KeywordIO()
+    layer_tree_root = QgsProject.instance().layerTreeRoot()
+    all_groups = [
+        child for child in layer_tree_root.children() if (
+            isinstance(child, QgsLayerTreeGroup))]
+    multi_exposure_group = None
+    for group in all_groups:
+        if 'multi exposure' in group.name().lower():
+            multi_exposure_group = group
+            break
+    if multi_exposure_group:
+        exposure_groups = [
+            child for child in multi_exposure_group.children() if (
+                isinstance(child, QgsLayerTreeGroup))]
+        for exposure_group in exposure_groups:
+            tree_layers = [
+                child for child in exposure_group.children() if (
+                    isinstance(child, QgsLayerTreeLayer))]
+            for tree_layer in tree_layers:
+                layer = tree_layer.layer()
+                keywords = keyword_io.read_keywords(layer)
+                provenance = keywords.get('provenance_data')
+                if provenance:
+                    exposure_key_found = (
+                        provenance['exposure_keywords']['exposure'])
+                    if exposure_key == exposure_key_found:
+                        return dirname(layer.source())
+    return None
+
+
+def get_impact_report_as_string(analysis_dir):
+    """Retrieve an html string of table report (impact-report-output.html).
+
+    :param analysis_dir: Directory of where the report located.
+    :type analysis_dir: str
+
+    :return: HTML string of the report.
+    :rtype: str
+    """
     table_report_path = join(analysis_dir, 'output/impact-report-output.html')
     if not exists(table_report_path):
         return None
