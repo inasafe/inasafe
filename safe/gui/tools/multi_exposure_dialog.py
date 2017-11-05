@@ -17,6 +17,7 @@ from PyQt4.QtGui import (
     QTreeWidgetItem,
     QListWidgetItem,
 )
+from PyQt4.QtXml import QDomDocument
 from qgis.core import QgsMapLayerRegistry, QgsProject
 from qgis.utils import iface
 
@@ -41,17 +42,27 @@ from safe.definitions.layer_purposes import (
     layer_purpose_aggregation,
 )
 from safe.definitions.utilities import definition
-from safe.gui.analysis_utilities import add_impact_layers_to_canvas
+from safe.gui.analysis_utilities import (
+    add_impact_layers_to_canvas,
+    add_layers_to_canvas_with_custom_orders,
+)
 from safe.gui.gui_utilities import layer_from_combo, add_ordered_combo_item
 from safe.gui.widgets.message import (
     enable_messaging,
     send_static_message,
     ready_message,
 )
+from safe.impact_function.impact_function_utilities import (
+    LAYER_ORIGIN_ROLE,
+    FROM_CANVAS,
+    FROM_ANALYSIS,
+    LAYER_PARENT_ANALYSIS_ROLE,
+    LAYER_PURPOSE_KEY_OR_ID_ROLE,
+)
 from safe.impact_function.multi_exposure_wrapper import (
     MultiExposureImpactFunction)
 from safe.messaging import styles
-from safe.utilities.gis import qgis_version
+from safe.utilities.gis import qgis_version, is_vector_layer
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.qt import disable_busy_cursor, enable_busy_cursor
@@ -69,19 +80,6 @@ FORM_CLASS = get_ui_class('multi_exposure_dialog_base.ui')
 
 INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
 LOGO_ELEMENT = m.Brand()
-
-LAYER_ORIGIN_ROLE = Qt.UserRole  # Value defined with the following dict.
-FROM_CANVAS = {
-    'key': 'FromCanvas',
-    'name': tr('Layers from Canvas'),
-}
-FROM_ANALYSIS = {
-    'key': 'FromAnalysis',
-    'name': tr('Layers from Analysis'),
-}
-
-LAYER_PARENT_ANALYSIS_ROLE = LAYER_ORIGIN_ROLE + 1  # Name of the parent IF
-LAYER_PURPOSE_KEY_OR_ID_ROLE = LAYER_PARENT_ANALYSIS_ROLE + 1  # Layer purpose
 
 
 class MultiExposureDialog(QDialog, FORM_CLASS):
@@ -130,26 +128,53 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
 
         From top to bottom in the legend:
         [
-            (FromCanvas, layer id, layer name),
-            (FromAnalysis, layer purpose, layer group),
+            (FromCanvas, name, source, provider type, qml),
+            (FromCanvas, name, source, None, qml),
+            (FromAnalysis, layer purpose, layer group, None, None),
             ...
         ]
 
-        :return: An ordered list of layers
+        :return: An ordered list of layers following a structure.
         :rtype: list
         """
+        registry = QgsMapLayerRegistry.instance()
         layers = []
         count = self.list_layers_in_map_report.count()
-        for i in range(0, count):
+        for i in reversed(range(0, count)):
             layer = self.list_layers_in_map_report.item(i)
             origin = layer.data(LAYER_ORIGIN_ROLE)
             if origin == FROM_ANALYSIS['key']:
                 key = layer.data(LAYER_PURPOSE_KEY_OR_ID_ROLE)
-                layers.append(
-                    (FROM_ANALYSIS['key'], definition(key)['name'], key))
+                layers.append((
+                    FROM_ANALYSIS['key'],
+                    definition(key)['name'],
+                    key,
+                    None,
+                    None
+                ))
             else:
                 layer_id = layer.data(LAYER_PURPOSE_KEY_OR_ID_ROLE)
-                layers.append((FROM_CANVAS['key'], layer.text(), layer_id))
+                layer = registry.mapLayer(layer_id)
+                style_document = QDomDocument()
+                error = ''
+                layer.exportNamedStyle(style_document, error)
+
+                if is_vector_layer(layer):
+                    layers.append((
+                        FROM_CANVAS['key'],
+                        layer.name(),
+                        layer.source(),
+                        layer.providerType(),
+                        style_document.toString()
+                    ))
+                else:
+                    layers.append((
+                        FROM_CANVAS['key'],
+                        layer.name(),
+                        layer.source(),
+                        None,
+                        style_document.toString()
+                    ))
         return layers
 
     def _add_layer_clicked(self):
@@ -514,8 +539,8 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                         add_impact_layers_to_canvas(
                             analysis, group=detailed_group)
                 else:
-                    # We need to the custom layer order.
-                    pass
+                    add_layers_to_canvas_with_custom_orders(
+                        self.ordered_expected_layers())
                 self.done(QDialog.Accepted)
 
         except Exception as e:

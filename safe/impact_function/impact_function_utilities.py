@@ -2,6 +2,8 @@
 
 """Utilities for Impact Function."""
 
+from PyQt4.QtCore import Qt
+
 from safe import messaging as m
 from safe.common.exceptions import NoKeywordsFoundError, InvalidLayerError
 from safe.definitions.constants import (
@@ -16,6 +18,19 @@ from safe.utilities.gis import is_vector_layer
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.utilities import is_keyword_version_supported
+
+LAYER_ORIGIN_ROLE = Qt.UserRole  # Value defined with the following dict.
+FROM_CANVAS = {
+    'key': 'FromCanvas',
+    'name': tr('Layers from Canvas'),
+}
+FROM_ANALYSIS = {
+    'key': 'FromAnalysis',
+    'name': tr('Layers from Analysis'),
+}
+
+LAYER_PARENT_ANALYSIS_ROLE = LAYER_ORIGIN_ROLE + 1  # Name of the parent IF
+LAYER_PURPOSE_KEY_OR_ID_ROLE = LAYER_PARENT_ANALYSIS_ROLE + 1  # Layer purpose
 
 
 def check_input_layer(layer, purpose):
