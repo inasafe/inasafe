@@ -7,12 +7,15 @@ from collections import OrderedDict
 from copy import deepcopy
 
 from PyQt4.QtCore import QDir, Qt
+from PyQt4.QtXml import QDomDocument
 from qgis.core import (
+    QGis,
+    QgsMapLayer,
     QgsMapLayerRegistry,
     QgsProject,
     QgsRasterLayer,
-    QgsMapLayer,
-    QGis)
+    QgsVectorLayer,
+)
 
 from safe.definitions.exposure import exposure_population
 from safe.definitions.fields import hazard_class_field
@@ -21,6 +24,9 @@ from safe.definitions.reports.components import (
 from safe.definitions.reports.infographic import map_overview
 from safe.definitions.utilities import definition, update_template_component
 from safe.impact_function.style import hazard_class_style
+from safe.impact_function.impact_function_utilities import (
+    FROM_CANVAS,
+)
 from safe.report.impact_report import ImpactReport
 from safe.report.report_metadata import ReportMetadata
 from safe.utilities.gis import qgis_version
@@ -227,6 +233,44 @@ def add_debug_layers_to_canvas(impact_function):
             if qgis_layer.geometryType() != QGis.NoGeometry and classification:
                 if qgis_layer.keywords['inasafe_fields'].get(hazard_class):
                     hazard_class_style(qgis_layer, classes, True)
+
+
+def add_layers_to_canvas_with_custom_orders(order, impact_function):
+    """Helper to add layers to the map canvas following a specific order.
+
+    From top to bottom in the legend:
+        [
+            (FromCanvas, name, source, provider type),
+            (FromCanvas, name, source, None),
+            (FromAnalysis, layer purpose, layer group, None),
+            ...
+        ]
+
+    :param order: Special structure the list of layers to add.
+    :type order: list
+
+    :param impact_function: The multi exposure impact function used.
+    :type impact_function: MultiExposureImpactFunction
+    """
+    # Need to remove all groups  and layers
+    QgsMapLayerRegistry.instance().removeAllMapLayers()
+    root = QgsProject.instance().layerTreeRoot()
+    root.removeAllChildren()
+
+    for layer in order:
+        if layer[0] == FROM_CANVAS['key']:
+            style = QDomDocument()
+            style.setContent(layer[4])
+            if layer[3] is not None:
+                vector_layer = QgsVectorLayer(layer[2], layer[1], layer[3])
+                vector_layer.importNamedStyle(style)
+                QgsMapLayerRegistry.instance().addMapLayer(vector_layer)
+            else:
+                raster_layer = QgsRasterLayer(layer[2], layer[1])
+                raster_layer.importNamedStyle(style)
+                QgsMapLayerRegistry.instance().addMapLayer(raster_layer)
+        else:
+            pass
 
 
 def add_layer_to_canvas(layer, name):
