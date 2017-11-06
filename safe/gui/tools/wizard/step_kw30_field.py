@@ -14,7 +14,12 @@ from safe.definitions.layer_modes import layer_mode_continuous
 from safe.definitions.layer_purposes import (
     layer_purpose_aggregation, layer_purpose_hazard, layer_purpose_exposure)
 from safe.definitions.utilities import (
-    get_fields, get_non_compulsory_fields, get_field_groups, definition)
+    get_fields,
+    get_non_compulsory_fields,
+    get_field_groups,
+    definition,
+    get_compulsory_fields,
+)
 from safe.gui.tools.wizard.utilities import (
     get_question_text, skip_inasafe_field)
 from safe.gui.tools.wizard.wizard_step import (
@@ -79,7 +84,15 @@ class StepKwField(WizardStep, FORM_CLASS):
         # Has layer groups, go to field mapping
         field_groups = get_field_groups(
             layer_purpose['key'], subcategory['key'])
-        if field_groups:
+        compulsory_field = get_compulsory_fields(
+            layer_purpose['key'], subcategory['key'])
+
+        # It's aggregation and has field_groups.
+        if field_groups and layer_purpose == layer_purpose_aggregation:
+            return self.parent.step_kw_fields_mapping
+
+        # It has field_groups and the compulsory field is population count.
+        if field_groups and compulsory_field == population_count_field:
             return self.parent.step_kw_fields_mapping
 
         # Has classifications, go to multi classifications
