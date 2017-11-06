@@ -305,7 +305,7 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
         # List layers from the canvas
         loaded_layers = QgsMapLayerRegistry.instance().mapLayers().values()
         canvas_layers = iface.mapCanvas().layers()
-        flag = setting('visibleLayersOnlyFlag', True, bool)
+        flag = setting('visibleLayersOnlyFlag', expected_type=bool)
         for loaded_layer in loaded_layers:
             if flag and loaded_layer not in canvas_layers:
                 continue
@@ -330,7 +330,8 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
         # MapLayers returns a QMap<QString id, QgsMapLayer layer>
         layers = registry.mapLayers().values()
 
-        show_only_visible_layers = setting('visibleLayersOnlyFlag', True, bool)
+        show_only_visible_layers = setting(
+            'visibleLayersOnlyFlag', expected_type=bool)
 
         # For issue #618
         if len(layers) == 0:
@@ -447,7 +448,8 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
         # Always set it to False
         self.button_box.button(QDialogButtonBox.Ok).setEnabled(False)
 
-        use_selected_only = setting('useSelectedFeaturesOnly', True, bool)
+        use_selected_only = setting(
+            'useSelectedFeaturesOnly', expected_type=bool)
 
         for combo in self.combos_exposures.itervalues():
             # if combo.count() > 1 and self.cbx_hazard.count():
