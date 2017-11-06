@@ -145,10 +145,11 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
             origin = layer.data(LAYER_ORIGIN_ROLE)
             if origin == FROM_ANALYSIS['key']:
                 key = layer.data(LAYER_PURPOSE_KEY_OR_ID_ROLE)
+                parent = layer.data(LAYER_PARENT_ANALYSIS_ROLE)
                 layers.append((
                     FROM_ANALYSIS['key'],
-                    definition(key)['name'],
                     key,
+                    parent,
                     None,
                     None
                 ))
@@ -480,6 +481,7 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
             self.button_box.button(QDialogButtonBox.Ok).setEnabled(True)
             send_static_message(self, ready_message())
             self.tab_widget.setTabEnabled(1, True)
+            self.list_layers_in_map_report.clear()
             return
         else:
             self.tab_widget.setTabEnabled(1, False)
@@ -488,9 +490,8 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                 'The impact function could not run because of the inputs.')
             send_error_message(self, message)
             LOGGER.info(message.to_text())
-
-        self._multi_exposure_if = None
-        self.button_box.button(QDialogButtonBox.Ok).setEnabled(False)
+            self._multi_exposure_if = None
+            self.button_box.button(QDialogButtonBox.Ok).setEnabled(False)
 
     def accept(self):
         """Launch the multi exposure analysis."""
@@ -542,7 +543,8 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                             analysis, group=detailed_group)
                 else:
                     add_layers_to_canvas_with_custom_orders(
-                        self.ordered_expected_layers())
+                        self.ordered_expected_layers(),
+                        self._multi_exposure_if)
                 self.done(QDialog.Accepted)
 
         except Exception as e:

@@ -32,6 +32,7 @@ from safe.report.report_metadata import ReportMetadata
 from safe.utilities.gis import qgis_version
 from safe.utilities.metadata import active_classification
 from safe.utilities.settings import setting
+from safe.utilities.unicode import get_string
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -240,8 +241,8 @@ def add_layers_to_canvas_with_custom_orders(order, impact_function):
 
     From top to bottom in the legend:
         [
-            (FromCanvas, name, source, provider type),
-            (FromCanvas, name, source, None),
+            (FromCanvas, name, source, provider type, qml),
+            (FromCanvas, name, source, None, qml),
             (FromAnalysis, layer purpose, layer group, None),
             ...
         ]
@@ -258,20 +259,38 @@ def add_layers_to_canvas_with_custom_orders(order, impact_function):
     root.removeAllChildren()
 
     # Insert layers in the good order.
-    for layer in order:
-        if layer[0] == FROM_CANVAS['key']:
+    for layer_definition in order:
+        if layer_definition[0] == FROM_CANVAS['key']:
             style = QDomDocument()
-            style.setContent(layer[4])
-            if layer[3] is not None:
-                vector_layer = QgsVectorLayer(layer[2], layer[1], layer[3])
+            style.setContent(get_string(layer_definition[4]))
+            if layer_definition[3] is not None:
+                vector_layer = QgsVectorLayer(
+                    layer_definition[2],
+                    layer_definition[1],
+                    layer_definition[3])
                 vector_layer.importNamedStyle(style)
                 QgsMapLayerRegistry.instance().addMapLayer(vector_layer)
             else:
-                raster_layer = QgsRasterLayer(layer[2], layer[1])
+                raster_layer = QgsRasterLayer(
+                    layer_definition[2], layer_definition[1])
                 raster_layer.importNamedStyle(style)
                 QgsMapLayerRegistry.instance().addMapLayer(raster_layer)
         else:
-            pass
+            if layer_definition[2] == impact_function.name:
+                for layer in impact_function.outputs:
+                    if layer.keywords['layer_purpose'] == layer_definition[1]:
+                        QgsMapLayerRegistry.instance().addMapLayer(
+                            layer)
+            else:
+                for sub_impact_function in impact_function.impact_functions:
+                    # Iterate over each sub impact function used in the
+                    # multi exposure analysis.
+                    if sub_impact_function.name == layer_definition[2]:
+                        for layer in sub_impact_function.outputs:
+                            purpose = layer_definition[1]
+                            if layer.keywords['layer_purpose'] == purpose:
+                                QgsMapLayerRegistry.instance().addMapLayer(
+                                    layer)
 
 
 def add_layer_to_canvas(layer, name):
