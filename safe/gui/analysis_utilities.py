@@ -252,11 +252,12 @@ def add_layers_to_canvas_with_custom_orders(order, impact_function):
     :param impact_function: The multi exposure impact function used.
     :type impact_function: MultiExposureImpactFunction
     """
-    # Need to remove all groups  and layers
+    # Need to remove all groups and layers
     QgsMapLayerRegistry.instance().removeAllMapLayers()
     root = QgsProject.instance().layerTreeRoot()
     root.removeAllChildren()
 
+    # Insert layers in the good order.
     for layer in order:
         if layer[0] == FROM_CANVAS['key']:
             style = QDomDocument()

@@ -6,7 +6,6 @@ from qgis.core import QgsApplication
 
 from safe.definitions.currencies import idr
 
-# from safe.utilities.resources import resources_path
 
 inasafe_default_settings = {
     'visibleLayersOnlyFlag': True,
