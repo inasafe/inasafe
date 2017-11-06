@@ -265,56 +265,56 @@ class TestImpactReport(unittest.TestCase):
                     'header_label': u'Hazard Zone',
                     'rows': [
                         {
-                            'value': '4',
+                            'numbers': ['4'],
                             'name': u'High',
                             'key': 'high'
                         },
                         {
-                            'value': '1',
+                            'numbers': ['1'],
                             'name': u'Medium',
                             'key': 'medium'
                         },
                         {
-                            'value': 0,
+                            'numbers': ['0'],
                             'name': u'Low',
                             'key': 'low'
                         },
                         {
-                            'value': '5',
+                            'numbers': ['5'],
                             'name': u'Total Exposed',
                             'as_header': True,
                             'key': total_exposed_field['key']
                         }
                     ],
-                    'value_label': u'Count'
+                    'value_labels': [u'Count']
                 },
                 {
                     'header_label': u'Structures',
                     'rows': [
                         {
-                            'value': '5',
+                            'numbers': ['5'],
                             'name': u'Affected',
                             'key': total_affected_field['key']
                         },
                         {
-                            'value': '0',
+                            'numbers': ['0'],
                             'name': u'Not Affected',
                             'key': total_not_affected_field['key']
                         },
                         {
-                            'value': '4',
+                            'numbers': ['4'],
                             'name': u'Not Exposed',
                             'key': total_not_exposed_field['key']
                         }
                     ],
-                    'value_label': u'Count'
+                    'value_labels': [u'Count']
                 }
             ],
             'notes': [
-                'Affected: An exposure element (e.g. people, roads, '
-                'buildings, land cover) that experiences a hazard (e.g. '
-                'tsunami, flood, earthquake) and endures consequences (e.g. '
-                'damage, evacuation, displacement, death) due to that hazard.'
+                u'Affected: An exposure element (e.g. people, roads, '
+                u'buildings, land cover) that experiences a hazard (e.g. '
+                u'tsunami, flood, earthquake) and endures consequences (e.g. '
+                u'damage, evacuation, displacement, death) due to that hazard.'
             ]
         }
         actual_context = analysis_summary.context

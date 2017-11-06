@@ -774,26 +774,31 @@ standard_multi_exposure_impact_report_metadata_pdf = {
     'key': 'multi-exposure-analysis-result-pdf',
     'name': 'multi-exposure-analysis-result-pdf',
     'template_folder': resources_path('report-templates'),
-    'components': standard_multi_exposure_impact_report_metadata_html[
-                      'components'] + [
-        # Impact Report PDF
-        {
-            'key': 'multi-exposure-impact-report-pdf',
-            'type': qgis_composer_component_type,
-            'processor': qgis_composer_html_renderer,
-            'extractor': impact_table_pdf_extractor,
-            'output_format': QgisComposerComponentsMetadata.OutputFormat.PDF,
-            'output_path': 'multi-exposure-impact-report-output.pdf',
-            'tags': [
-                final_product_tag,
-                table_product_tag,
-                pdf_product_tag
-            ],
-            'extra_args': {
-                'html_report_component_key': 'multi-exposure-impact-report'
-            }
-        },
-    ]
+    'components': (
+        standard_multi_exposure_impact_report_metadata_html['components'] + (
+            [
+                # Impact Report PDF
+                {
+                    'key': 'multi-exposure-impact-report-pdf',
+                    'type': qgis_composer_component_type,
+                    'processor': qgis_composer_html_renderer,
+                    'extractor': impact_table_pdf_extractor,
+                    'output_format': (
+                        QgisComposerComponentsMetadata.OutputFormat.PDF),
+                    'output_path': 'multi-exposure-impact-report-output.pdf',
+                    'tags': [
+                        final_product_tag,
+                        table_product_tag,
+                        pdf_product_tag
+                    ],
+                    'extra_args': {
+                        'html_report_component_key': (
+                            'multi-exposure-impact-report')
+                    }
+                },
+            ]
+        )
+    )
 }
 
 map_report_extra_args = {
