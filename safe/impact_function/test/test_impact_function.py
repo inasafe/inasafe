@@ -272,7 +272,7 @@ class TestImpactFunction(unittest.TestCase):
             fields
         )
         # We check that this key exists in the dictionary.
-        exposure_layer.keywords['inasafe_fields']
+        self.assertIn('inasafe_fields', exposure_layer.keywords.keys())
 
     def test_impact_function_behaviour(self):
         """Test behaviour of impact function."""
