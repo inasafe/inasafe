@@ -17,6 +17,7 @@ from qgis.core import (
     QgsVectorLayer,
 )
 
+from safe.definitions.constants import MULTI_EXPOSURE_ANALYSIS_FLAG
 from safe.definitions.exposure import exposure_population
 from safe.definitions.fields import hazard_class_field
 from safe.definitions.reports.components import (
@@ -258,6 +259,7 @@ def add_layers_to_canvas_with_custom_orders(order, impact_function):
 
     group_analysis = root.insertGroup(0, impact_function.name)
     group_analysis.setVisible(Qt.Checked)
+    group_analysis.setCustomProperty(MULTI_EXPOSURE_ANALYSIS_FLAG, True)
 
     # Insert layers in the good order in the group.
     for layer_definition in order:

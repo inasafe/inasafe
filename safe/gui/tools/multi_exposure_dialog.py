@@ -33,6 +33,7 @@ from safe.definitions.constants import (
     ANALYSIS_FAILED_BAD_INPUT,
     PREPARE_SUCCESS,
     entire_area_item_aggregation,
+    MULTI_EXPOSURE_ANALYSIS_FLAG,
 )
 from safe.definitions.exposure import exposure_all
 from safe.definitions.font import bold_font
@@ -528,6 +529,8 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                     group_analysis = root.insertGroup(
                         0, self._multi_exposure_if.name)
                     group_analysis.setVisible(Qt.Checked)
+                    group_analysis.setCustomProperty(
+                        MULTI_EXPOSURE_ANALYSIS_FLAG, True)
 
                     for layer in self._multi_exposure_if.outputs:
                         QgsMapLayerRegistry.instance().addMapLayer(

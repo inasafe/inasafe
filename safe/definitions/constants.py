@@ -74,3 +74,6 @@ MULTIPLE_DYNAMIC = 'multiple dynamic'
 
 # Scope for InaSAFE in QSettings
 APPLICATION_NAME = 'inasafe'
+
+# Layer properties
+MULTI_EXPOSURE_ANALYSIS_FLAG = 'multi_exposure_analysis'
