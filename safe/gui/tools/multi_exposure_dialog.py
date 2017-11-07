@@ -318,11 +318,7 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
             if flag and loaded_layer not in canvas_layers:
                 continue
 
-            if qgis_version() >= 21800:
-                title = loaded_layer.name()
-            else:
-                # QGIS 2.14
-                title = loaded_layer.layerName()
+            title = loaded_layer.name()
             item = QTreeWidgetItem(canvas_branch, [title])
             item.setData(0, LAYER_ORIGIN_ROLE, FROM_CANVAS['key'])
             item.setData(0, LAYER_PURPOSE_KEY_OR_ID_ROLE, loaded_layer.id())
