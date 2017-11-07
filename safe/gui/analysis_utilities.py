@@ -242,9 +242,9 @@ def add_layers_to_canvas_with_custom_orders(order, impact_function):
 
     From top to bottom in the legend:
         [
-            (FromCanvas, name, source, provider type, qml),
-            (FromCanvas, name, source, None, qml),
-            (FromAnalysis, layer purpose, layer group, None),
+            ('FromCanvas', layer name, source, vector provider type, QML),
+            ('FromCanvas', layer name, source, None if raster, QML),
+            ('FromAnalysis', layer purpose, layer group, None, None),
             ...
         ]
 

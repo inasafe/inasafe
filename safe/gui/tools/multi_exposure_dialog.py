@@ -19,7 +19,7 @@ from PyQt4.QtGui import (
 )
 from PyQt4.QtXml import QDomDocument
 from qgis.core import QgsMapLayerRegistry, QgsProject
-from qgis.utils import iface
+from qgis.utils import iface as iface_object
 
 from safe import messaging as m
 from safe.common.exceptions import (
@@ -87,14 +87,18 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
 
     """Dialog for multi exposure tool."""
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, iface=iface_object):
         """Constructor for the multi exposure dialog.
 
         :param parent: Parent widget of this dialog.
         :type parent: QWidget
+
+        :param iface: An instance of QGisInterface
+        :type iface: QGisInterface
         """
         QDialog.__init__(self, parent)
         self.parent = parent
+        self.iface = iface
         self.setupUi(self)
         self.tab_widget.setCurrentIndex(0)
         self.combos_exposures = {}
@@ -129,9 +133,9 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
 
         From top to bottom in the legend:
         [
-            (FromCanvas, name, source, provider type, qml),
-            (FromCanvas, name, source, None, qml),
-            (FromAnalysis, layer purpose, layer group, None, None),
+            ('FromCanvas', layer name, source, vector provider type, QML),
+            ('FromCanvas', layer name, source, None if raster, QML),
+            ('FromAnalysis', layer purpose, layer group, None, None),
             ...
         ]
 
@@ -306,7 +310,7 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
 
         # List layers from the canvas
         loaded_layers = QgsMapLayerRegistry.instance().mapLayers().values()
-        canvas_layers = iface.mapCanvas().layers()
+        canvas_layers = self.iface.mapCanvas().layers()
         flag = setting('visibleLayersOnlyFlag', expected_type=bool)
         for loaded_layer in loaded_layers:
             if flag and loaded_layer not in canvas_layers:
@@ -328,7 +332,7 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
         """Create one combobox for each exposure and insert them in the UI."""
         # Map registry may be invalid if QGIS is shutting down
         registry = QgsMapLayerRegistry.instance()
-        canvas_layers = iface.mapCanvas().layers()
+        canvas_layers = self.iface.mapCanvas().layers()
         # MapLayers returns a QMap<QString id, QgsMapLayer layer>
         layers = registry.mapLayers().values()
 

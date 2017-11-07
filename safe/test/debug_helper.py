@@ -12,7 +12,7 @@ InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
 
 from tempfile import mkdtemp
 
-from PyQt4.QtCore import QVariant
+from PyQt4.QtCore import QVariant, Qt
 from qgis.core import (
     QgsMapLayerRegistry,
     QGis,
@@ -156,4 +156,29 @@ def print_attribute_table(layer, limit=-1):
         attributes.extend(feature.attributes())
         data.append(attributes)
 
+    print pretty_table(data, headers)
+
+
+def print_combobox(combo, role=Qt.UserRole):
+    """Helper to print a combobox with the current item.
+
+    :param combo: The combobox.
+    :type combo: QCombobox
+
+    :param role: A Role to display. Default to Qt.UserRole.
+        You can give a list of role.
+    :type role: int, list
+    """
+    headers = ['Text', 'Selected']
+    if isinstance(role, list):
+        headers.extend(['Role %s' % i for i in role])
+    else:
+        headers.append('Role %s' % role)
+        role = [role]
+    data = []
+    for i in range(0, combo.count()):
+        selected = 'YES' if i == combo.currentIndex() else ''
+        attributes = [combo.itemText(i), selected]
+        attributes.extend([str(combo.itemData(i, j)) for j in role])
+        data.append(attributes)
     print pretty_table(data, headers)
