@@ -253,12 +253,13 @@ def add_layers_to_canvas_with_custom_orders(order, impact_function):
     :param impact_function: The multi exposure impact function used.
     :type impact_function: MultiExposureImpactFunction
     """
-    # Need to remove all groups and layers
-    QgsMapLayerRegistry.instance().removeAllMapLayers()
     root = QgsProject.instance().layerTreeRoot()
-    root.removeAllChildren()
+    root.setVisible(False)  # Make all layers hidden.
 
-    # Insert layers in the good order.
+    group_analysis = root.insertGroup(0, impact_function.name)
+    group_analysis.setVisible(Qt.Checked)
+
+    # Insert layers in the good order in the group.
     for layer_definition in order:
         if layer_definition[0] == FROM_CANVAS['key']:
             style = QDomDocument()
@@ -269,18 +270,24 @@ def add_layers_to_canvas_with_custom_orders(order, impact_function):
                     layer_definition[1],
                     layer_definition[3])
                 vector_layer.importNamedStyle(style)
-                QgsMapLayerRegistry.instance().addMapLayer(vector_layer)
+                QgsMapLayerRegistry.instance().addMapLayer(vector_layer, False)
+                layer_node = group_analysis.addLayer(vector_layer)
+                layer_node.setVisible(Qt.Checked)
             else:
                 raster_layer = QgsRasterLayer(
                     layer_definition[2], layer_definition[1])
                 raster_layer.importNamedStyle(style)
-                QgsMapLayerRegistry.instance().addMapLayer(raster_layer)
+                QgsMapLayerRegistry.instance().addMapLayer(raster_layer, False)
+                layer_node = group_analysis.addLayer(raster_layer)
+                layer_node.setVisible(Qt.Checked)
         else:
             if layer_definition[2] == impact_function.name:
                 for layer in impact_function.outputs:
                     if layer.keywords['layer_purpose'] == layer_definition[1]:
                         QgsMapLayerRegistry.instance().addMapLayer(
-                            layer)
+                            layer, False)
+                        layer_node = group_analysis.addLayer(layer)
+                        layer_node.setVisible(Qt.Checked)
             else:
                 for sub_impact_function in impact_function.impact_functions:
                     # Iterate over each sub impact function used in the
@@ -290,7 +297,10 @@ def add_layers_to_canvas_with_custom_orders(order, impact_function):
                             purpose = layer_definition[1]
                             if layer.keywords['layer_purpose'] == purpose:
                                 QgsMapLayerRegistry.instance().addMapLayer(
+                                    layer, False)
+                                layer_node = group_analysis.addLayer(
                                     layer)
+                                layer_node.setVisible(Qt.Checked)
 
 
 def add_layer_to_canvas(layer, name):
