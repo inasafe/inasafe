@@ -534,8 +534,8 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                     [standard_multi_exposure_impact_report_metadata_pdf])
 
                 if error_code == ImpactReport.REPORT_GENERATION_FAILED:
-                    LOGGER.info(tr(
-                        'The impact report could not be generated.'))
+                    LOGGER.info(
+                        'The impact report could not be generated.')
                     send_error_message(self, message)
                     LOGGER.info(message.to_text())
 
@@ -563,8 +563,8 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                         all_default_report_components)
 
                     if error_code == ImpactReport.REPORT_GENERATION_FAILED:
-                        LOGGER.info(tr(
-                            'The impact report could not be generated.'))
+                        LOGGER.info(
+                            'The impact report could not be generated.')
                         send_error_message(self, message)
                         LOGGER.info(message.to_text())
                 if len(self.ordered_expected_layers()) != 0:

@@ -54,6 +54,7 @@ from safe.utilities.settings import setting
 from safe.utilities.utilities import replace_accentuated_characters
 
 LOGGER = logging.getLogger('InaSAFE')
+IFACE = iface
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -322,21 +323,6 @@ class MultiExposureImpactFunction(object):
             if status != PREPARE_SUCCESS:
                 return status, message
 
-        hazard_name = get_name(self.hazard.keywords.get('hazard'))
-        hazard_geometry_name = get_name(geometry_type(self.hazard))
-        self._name = (
-            u'Multi exposure {hazard_type} {hazard_geometry} On '.format(
-                hazard_type=hazard_name, hazard_geometry=hazard_geometry_name))
-        exposures_strings = []
-        for exposure in self.exposures:
-            exposure_name = get_name(exposure.keywords.get('exposure'))
-            exposure_geometry_name = get_name(geometry_type(exposure))
-            exposures_strings.append(
-                u'{exposure_type} {exposure_geometry}'.format(
-                    exposure_type=exposure_name,
-                    exposure_geometry=exposure_geometry_name))
-        self._name += ', '.join(exposures_strings)
-
         self._impact_functions = []
 
         # We delegate the prepare to the main IF for each exposure
@@ -345,7 +331,6 @@ class MultiExposureImpactFunction(object):
             impact_function.hazard = deep_duplicate_layer(self._hazard)
             impact_function.exposure = exposure
             impact_function.debug_mode = self.debug
-            impact_function.multi_exposure_name = self._name
             if self.callback:
                 impact_function.callback = self.callback
             if self._aggregation:
@@ -362,6 +347,21 @@ class MultiExposureImpactFunction(object):
                 return code, message
 
             self._impact_functions.append(impact_function)
+
+        hazard_name = get_name(self.hazard.keywords.get('hazard'))
+        hazard_geometry_name = get_name(geometry_type(self.hazard))
+        self._name = (
+            u'Multi exposure {hazard_type} {hazard_geometry} On '.format(
+                hazard_type=hazard_name, hazard_geometry=hazard_geometry_name))
+        exposures_strings = []
+        for exposure in self.exposures:
+            exposure_name = get_name(exposure.keywords.get('exposure'))
+            exposure_geometry_name = get_name(geometry_type(exposure))
+            exposures_strings.append(
+                u'{exposure_type} {exposure_geometry}'.format(
+                    exposure_type=exposure_name,
+                    exposure_geometry=exposure_geometry_name))
+        self._name += ', '.join(exposures_strings)
 
         self._output_layer_expected = self._compute_output_layer_expected()
         self._is_ready = True
@@ -471,7 +471,7 @@ class MultiExposureImpactFunction(object):
 
         return ANALYSIS_SUCCESS, None
 
-    def generate_report(self, components, output_folder=None, IFACE=None):
+    def generate_report(self, components, output_folder=None, iface=None):
         """Generate Impact Report independently by the Impact Function.
 
         :param components: Report components to be generated.
@@ -486,8 +486,8 @@ class MultiExposureImpactFunction(object):
         .. versionadded:: 4.3
         """
         # iface set up, in case IF run from test
-        if not IFACE:
-            IFACE = iface
+        if not iface:
+            iface = IFACE
 
         for component in components:
 
@@ -495,7 +495,7 @@ class MultiExposureImpactFunction(object):
                 metadata_dict=update_template_component(component))
 
             self.impact_report = ImpactReport(
-                IFACE,
+                iface,
                 report_metadata,
                 multi_exposure_impact_function=self,
                 analysis=self.analysis_summary)

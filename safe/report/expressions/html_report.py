@@ -135,7 +135,7 @@ def land_cover_analysis_summary_report(feature, parent):
 
 def get_analysis_dir(exposure_key):
     """Retrieve an output directory of an analysis/ImpactFunction from a
-    multi exposure analysis/ImpactFunction based on exposure type..
+    multi exposure analysis/ImpactFunction based on exposure type.
 
     :param exposure_key: An exposure keyword.
     :type exposure_key: str
@@ -154,13 +154,15 @@ def get_analysis_dir(exposure_key):
             multi_exposure_group = group
             break
     if multi_exposure_group:
+
+        multi_exposure_tree_layers = [
+            child for child in multi_exposure_group.children() if (
+                isinstance(child, QgsLayerTreeLayer))]
         exposure_groups = [
             child for child in multi_exposure_group.children() if (
                 isinstance(child, QgsLayerTreeGroup))]
-        for exposure_group in exposure_groups:
-            tree_layers = [
-                child for child in exposure_group.children() if (
-                    isinstance(child, QgsLayerTreeLayer))]
+
+        def get_report_ready_layer(tree_layers):
             for tree_layer in tree_layers:
                 layer = tree_layer.layer()
                 keywords = keyword_io.read_keywords(layer)
@@ -169,7 +171,21 @@ def get_analysis_dir(exposure_key):
                     exposure_key_found = (
                         provenance['exposure_keywords']['exposure'])
                     if exposure_key == exposure_key_found:
-                        return dirname(layer.source())
+                        return layer
+            return None
+
+        layer = get_report_ready_layer(multi_exposure_tree_layers)
+
+        if not layer:
+            for exposure_group in exposure_groups:
+                tree_layers = [
+                    child for child in exposure_group.children() if (
+                        isinstance(child, QgsLayerTreeLayer))]
+                layer = get_report_ready_layer(tree_layers)
+
+        if layer:
+            return dirname(layer.source())
+
     return None
 
 
@@ -182,8 +198,18 @@ def get_impact_report_as_string(analysis_dir):
     :return: HTML string of the report.
     :rtype: str
     """
-    table_report_path = join(analysis_dir, 'output/impact-report-output.html')
-    if not exists(table_report_path):
+    html_report_products = [
+        'impact-report-output.html',
+        'multi-exposure-impact-report-output.html']
+    output_dir_path = join(analysis_dir, 'output')
+
+    for html_report_product in html_report_products:
+        table_report_path = join(output_dir_path, html_report_product)
+        if exists(table_report_path):
+            break
+        table_report_path = None
+
+    if not table_report_path:
         return None
 
     # We can display an impact report.

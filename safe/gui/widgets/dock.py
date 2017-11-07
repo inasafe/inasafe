@@ -913,19 +913,20 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
             show_keywords = True
             if keywords.get('layer_purpose') in impacted_layer:
-                report_dir_path = os.path.dirname(layer.source())
-                report_path = os.path.join(
-                    report_dir_path, 'output/impact-report-output.html')
-                multi_exposure_report_path = os.path.join(
-                    report_dir_path,
-                    'output/multi-exposure-impact-report-output.html')
+                analysis_dir = os.path.dirname(layer.source())
+                output_dir_path = os.path.join(analysis_dir, 'output')
 
-                if os.path.exists(report_path):
-                    show_keywords = False
-                    self.show_impact(report_path)
-                elif os.path.exists(multi_exposure_report_path):
-                    show_keywords = False
-                    self.show_impact(multi_exposure_report_path)
+                html_report_products = [
+                    'impact-report-output.html',
+                    'multi-exposure-impact-report-output.html']
+
+                for html_report_product in html_report_products:
+                    table_report_path = os.path.join(
+                        output_dir_path, html_report_product)
+                    if os.path.exists(table_report_path):
+                        show_keywords = False
+                        self.show_impact(table_report_path)
+                        break
 
             if show_keywords:
                 if inasafe_keyword_version_key not in keywords.keys():

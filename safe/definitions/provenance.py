@@ -254,8 +254,6 @@ provenance_layer_profiling_id = {
     'provenance_key': layer_purpose_profiling['key'] + '_id'
 }
 
-
-# Mapping to global variable in QGIS
 provenance_list = [
     provenance_action_checklist,
     provenance_aggregation_keywords,
@@ -304,6 +302,8 @@ provenance_list = [
     provenance_layer_exposure_summary_table_id,
     provenance_layer_profiling_id,
 ]
+
+# Mapping to global variable in QGIS
 duplicated_global_variables = {
     provenance_os['provenance_key']: 'qgis_os_name'
 }
