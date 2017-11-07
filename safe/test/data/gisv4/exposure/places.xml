@@ -196,13 +196,13 @@
             <gco:Integer/>
           </active_band>
           <value_map>
-            <gco:Dictionary>{&quot;city&quot;: [&quot;City&quot;, &quot;Capital City&quot;], &quot;other&quot;: [&quot;Bus stop&quot;, &quot;Public Area&quot;, &quot;Commercial&quot;, &quot;Train Station&quot;], &quot;Village&quot;: [&quot;Village&quot;]}</gco:Dictionary>
+            <gco:Dictionary>{&quot;city&quot;: [&quot;Capital City&quot;, &quot;City&quot;], &quot;other&quot;: [&quot;Bus stop&quot;, &quot;Commercial&quot;, &quot;Public Area&quot;, &quot;Train Station&quot;], &quot;Village&quot;: [&quot;Village&quot;]}</gco:Dictionary>
           </value_map>
           <layer_purpose>
             <gco:CharacterString>exposure</gco:CharacterString>
           </layer_purpose>
           <inasafe_fields>
-            <gco:Dictionary>{&quot;exposure_type_field&quot;: &quot;Type&quot;, &quot;exposure_name_field&quot;: &quot;Name&quot;}</gco:Dictionary>
+            <gco:Dictionary>{&quot;population_count_field&quot;: &quot;Population&quot;, &quot;female_count_field&quot;: [&quot;Female&quot;], &quot;exposure_type_field&quot;: &quot;Type&quot;, &quot;exposure_name_field&quot;: &quot;Name&quot;, &quot;male_count_field&quot;: [&quot;Male&quot;]}</gco:Dictionary>
           </inasafe_fields>
           <inasafe_default_values>
             <gco:Dictionary/>
