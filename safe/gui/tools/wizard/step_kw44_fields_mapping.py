@@ -69,14 +69,16 @@ class StepKwFieldsMapping(WizardStep, FORM_CLASS):
         if subcategory.get('classifications'):
             if layer_purpose == layer_purpose_hazard:
                 return self.parent.step_kw_multi_classifications
-            elif layer_purpose == layer_purpose_exposure:
-                return self.parent.step_kw_classification
 
         # Check if it can go to inasafe field step
         non_compulsory_fields = get_non_compulsory_fields(
             layer_purpose['key'], subcategory['key'])
         if not skip_inasafe_field(self.parent.layer, non_compulsory_fields):
-            return self.parent.step_kw_inasafe_fields
+            # Do not go to InaSAFE Field step if we already visited it.
+            # For example in place exposure.
+            if (self.parent.step_kw_inasafe_fields not in
+                    self.parent.keyword_steps):
+                return self.parent.step_kw_inasafe_fields
 
         # Check if it can go to inasafe default field step
         default_inasafe_fields = get_fields(

@@ -369,7 +369,7 @@ exposure_place = {
     'classifications': [generic_place_classes, data_driven_classes],
     'compulsory_fields': [exposure_type_field],
     'fields': exposure_fields,
-    'extra_fields': [exposure_name_field],
+    'extra_fields': [exposure_name_field, population_count_field],
     'field_groups': population_field_groups,
     'layer_modes': [layer_mode_classified],
     'display_not_exposed': True,
