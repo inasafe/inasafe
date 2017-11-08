@@ -3,7 +3,7 @@
 import unittest
 
 from safe.test.utilities import (
-    load_test_vector_layer, qgis_iface)
+    load_test_vector_layer, qgis_app)
 
 from safe.definitions.fields import (
     total_field,
@@ -25,12 +25,12 @@ from safe.gis.vector.summary_5_multi_exposure import (
     multi_exposure_aggregation_summary, multi_exposure_analysis_summary)
 from safe.gis.sanity_check import check_inasafe_fields
 
-qgis_iface()
-
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
+
+qgis_app()
 
 
 class TestSummary(unittest.TestCase):
