@@ -6,9 +6,8 @@ import logging
 import os
 import shutil
 import sys
-import math
+
 from datetime import datetime
-from operator import itemgetter
 from subprocess import call, CalledProcessError
 from xml.dom import minidom
 
@@ -20,11 +19,9 @@ from osgeo import gdal, ogr
 from osgeo.gdalconst import GA_ReadOnly
 from pytz import timezone
 from qgis.core import (
-    QgsPoint,
     QgsVectorLayer,
     QgsFeatureRequest,
     QgsRectangle,
-    QgsRaster,
     QgsRasterLayer)
 
 from safe.common.exceptions import (
@@ -34,7 +31,6 @@ from safe.common.exceptions import (
     InvalidLayerError,
     CallGDALError)
 from safe.common.utilities import which, romanise
-from safe.datastore.folder import Folder
 from safe.definitions.hazard import hazard_earthquake
 from safe.definitions.hazard_category import hazard_category_single_event
 from safe.definitions.hazard_classifications import earthquake_mmi_scale
@@ -43,7 +39,6 @@ from safe.definitions.layer_modes import layer_mode_continuous
 from safe.definitions.layer_purposes import layer_purpose_hazard
 from safe.definitions.units import unit_mmi
 from safe.definitions.versions import inasafe_keyword_version
-from safe.utilities.direction_distance import get_direction_distance
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.styling import mmi_colour
@@ -76,9 +71,6 @@ class ShakeGrid(object):
             title,
             source,
             grid_xml_path,
-            place_layer=None,
-            name_field=None,
-            population_field=None,
             output_dir=None,
             output_basename=None,
             algorithm_filename_flag=True):
@@ -146,11 +138,6 @@ class ShakeGrid(object):
         self.algorithm_name = algorithm_filename_flag
         self.grid_xml_path = grid_xml_path
         self.parse_grid_xml()
-        self.place_layer = place_layer
-        self.name_field = name_field
-        self.population_field = population_field
-        self.locality = None
-        self.nearby_cities = None
 
     def extract_date_time(self, the_time_stamp):
         """Extract the parts of a date given a timestamp as per below example.
@@ -559,10 +546,6 @@ class ShakeGrid(object):
         if 'invdist' in algorithm:
             algorithm = 'invdist'
 
-        # Generate the locality if place layer and name are given
-        if self.place_layer is not None:
-            if self.name_field != '':
-                self.generate_locality_info(tif_path)
         # copy the keywords file from fixtures for this layer
         self.create_keyword_file(algorithm)
 
@@ -841,103 +824,6 @@ class ShakeGrid(object):
 
         layer.commitChanges()
 
-    def mmi_point_sampling(self, place_layer, raster_mmi_path):
-        """Get MMI information from ShakeMap Tiff on place location.
-
-        Get the MMI value on each cities/places from the generated tiff files.
-
-        :param place_layer: Point layer generated from distance calculation.
-        :type place_layer: QgsVectorLayer
-
-        :param raster_mmi_path: Path to converted mmi raster.
-        :type raster_mmi_path: str
-
-        :return: Modified place layer containing MMI values.
-        :rtype: QgsVectorLayer
-        """
-        shake_raster = QgsRasterLayer(raster_mmi_path, 'shake_raster')
-        shake_provider = shake_raster.dataProvider()
-
-        place_fields = place_layer.dataProvider().fields()
-        mmi_field_index = place_fields.indexFromName('place_mmi')
-
-        place_layer.startEditing()
-        for feature in place_layer.getFeatures():
-            fid = feature.id()
-            point = feature.geometry().asPoint()
-            mmi_identify = shake_provider.identify(
-                point,
-                QgsRaster.IdentifyFormatValue
-            )
-            mmi = mmi_identify.results()[1]
-            place_layer.changeAttributeValue(fid, mmi_field_index, mmi)
-        place_layer.commitChanges()
-        return place_layer
-
-    def generate_locality_info(self, raster_mmi_path):
-        """Generate information related to the locality of the hazard.
-
-        :param raster_mmi_path: path to converted raster mmi.
-        :type raster_mmi_path: str
-        """
-
-        sort_key = None
-        LOGGER.debug('Locality information requested')
-        epicenter = QgsPoint(self.longitude, self.latitude)
-        place_layer = self.place_layer
-
-        measured_place_layer = get_direction_distance(epicenter, place_layer)
-        mmi_point_layer = self.mmi_point_sampling(
-            measured_place_layer,
-            raster_mmi_path
-        )
-        places = []
-        for feature in mmi_point_layer.getFeatures():
-            place = {
-                'name': feature[self.name_field],
-                'distance': feature['distance'],
-                'bearing': feature['bearing'],
-                'direction': feature['direction'],
-                'mmi_values': feature['place_mmi']
-            }
-            if self.population_field != '':
-                place['population'] = feature[self.population_field]
-                sort_key = itemgetter('mmi_values', 'population')
-            else:
-                sort_key = itemgetter('mmi_values')
-            places.append(place)
-        # sort the place by mmi and by population
-        sorted_places = sorted(
-            places,
-            key=sort_key,
-            reverse=True
-        )
-        nearest_place = sorted_places[0]
-        self.nearby_cities = sorted_places[:5]
-        # save the memory place layer
-        data_store = Folder(self.output_dir)
-        data_store.default_vector_format = 'geojson'
-        data_store.add_layer(
-            mmi_point_layer,
-            '%s-nearby-places' % self.output_basename
-        )
-        for city in self.nearby_cities:
-            LOGGER.info(city)
-        # combine locality text
-        city_name = str(nearest_place['name'])
-        city_distance = nearest_place['distance']
-        distance_km = str(math.floor(city_distance / 1000))
-        city_bearing = str(math.floor(nearest_place['bearing']))
-        city_direction = str(nearest_place['direction'])
-        self.locality = tr(
-            'Located {distance} km, {bearing}° {direction} of {city}.'
-        ).format(
-            distance=distance_km,
-            bearing=city_bearing,
-            direction=city_direction,
-            city=city_name
-        )
-
     def create_keyword_file(self, algorithm):
         """Create keyword file for the raster file created.
 
@@ -966,7 +852,6 @@ class ShakeGrid(object):
             'depth': self.depth,
             'description': self.description,
             'location': self.location,
-            'locality': self.locality,
             # 'day': self.day,
             # 'month': self.month,
             # 'year': self.year,
@@ -1028,9 +913,6 @@ def convert_mmi_data(
         grid_xml_path,
         title,
         source,
-        place_layer=None,
-        place_name=None,
-        place_population=None,
         output_path=None,
         algorithm=None,
         algorithm_filename_flag=True):
@@ -1082,9 +964,6 @@ def convert_mmi_data(
         title,
         source,
         grid_xml_path,
-        place_layer,
-        place_name,
-        place_population,
         output_dir=output_dir,
         output_basename=output_basename,
         algorithm_filename_flag=algorithm_filename_flag)
