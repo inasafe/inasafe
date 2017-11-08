@@ -147,7 +147,7 @@ def exposure_summary_table(
 
     hazard_affected = {}
     for hazard_class in unique_hazard:
-        if not hazard_class or isinstance(hazard_class, QPyNullVariant):
+        if hazard_class == '' or isinstance(hazard_class, QPyNullVariant):
             hazard_class = 'NULL'
         field = create_field_from_definition(hazard_count_field, hazard_class)
         tabular.addAttribute(field)
@@ -216,7 +216,7 @@ def exposure_summary_table(
         total_not_exposed = 0
         total = 0
         for hazard_class in unique_hazard:
-            if not hazard_class or isinstance(hazard_class, QPyNullVariant):
+            if hazard_class == '' or isinstance(hazard_class, QPyNullVariant):
                 hazard_class = 'NULL'
             value = flat_table.get_value(
                 hazard_class=hazard_class,
