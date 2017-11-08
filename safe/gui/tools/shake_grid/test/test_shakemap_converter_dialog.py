@@ -60,12 +60,6 @@ class TestShakemapImporter(unittest.TestCase):
             '20131105060809',
             'output',
             'grid.xml')
-        place_path = standard_data_path(
-            'exposure',
-            'places_shakemap.shp'
-        )
-        place_name_field = 'Name'
-        place_population_field = 'Population'
         output_raster = unique_filename(
             prefix='result_grid',
             suffix='.tif',
@@ -73,9 +67,6 @@ class TestShakemapImporter(unittest.TestCase):
         dialog.load_result.setEnabled(True)
         dialog.load_result.setChecked(False)
         dialog.input_path.setText(grid_path)
-        dialog.input_place.setText(place_path)
-        dialog.name_field.setField(place_name_field)
-        dialog.population_field.setField(place_population_field)
         dialog.output_path.setText(output_raster)
         button = dialog.button_box.button(QDialogButtonBox.Ok)
         button.click()

@@ -65,7 +65,6 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         self.on_output_path_textChanged()
         self.update_warning()
         self.output_layer = None
-        self.place_layer = None
 
         # Event register
         # noinspection PyUnresolvedReferences
@@ -73,7 +72,6 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
             self.get_output_from_input)
         # noinspection PyUnresolvedReferences
         self.input_path.textChanged.connect(self.on_input_path_textChanged)
-        self.input_place.textChanged.connect(self.prepare_place_layer)
         # noinspection PyUnresolvedReferences
         self.output_path.textChanged.connect(self.on_output_path_textChanged)
         self.load_result.clicked.connect(self.load_result_toggled)
@@ -197,9 +195,6 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
             input_path,
             input_title,
             input_source,
-            self.place_layer,
-            self.name_field.currentText(),
-            self.population_field.currentText(),
             output_path,
             algorithm=algorithm,
             algorithm_filename_flag=True)
