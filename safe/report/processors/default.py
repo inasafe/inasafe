@@ -31,7 +31,6 @@ from qgis.core import (
     QgsComposerLegend,
     QgsCoordinateTransform,
     QgsProject,
-    QgsMapLayerRegistry,
     PROJECT_SCALES
 )
 
@@ -561,17 +560,9 @@ def qgis_composer_renderer(impact_report, component):
 
             # set legend
             root_group = legend.modelV2().rootGroup()
-            for layer in layers:
-                # we need to check whether the layer is registered or not
-                registered_layer = (
-                    QgsMapLayerRegistry.instance().mapLayer(layer.id()))
-                if registered_layer:
-                    if not registered_layer == layer:
-                        layer = registered_layer
-                else:
-                    QgsMapLayerRegistry.instance().addMapLayer(layer)
+            for l in layers:
                 # used for customizations
-                tree_layer = root_group.addLayer(layer)
+                tree_layer = root_group.addLayer(l)
                 QgsLegendRenderer.setNodeLegendStyle(
                     tree_layer, QgsComposerLegendStyle.Hidden)
             legend.synchronizeWithModel()

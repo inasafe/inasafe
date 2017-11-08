@@ -2612,27 +2612,6 @@ class ImpactFunction(object):
         keywords.update(ISO19115_keywords)
 
     @staticmethod
-    def load_layer_from_registry(layer_registry, layer_path):
-        """Helper method to load a layer from registry if its already there.
-
-        :param layer_registry: A qgis map layer registry.
-        :type layer_registry: QgsMapLayerRegistry
-
-        :param layer_path: Layer source path.
-        :type layer_path: str
-
-        :return: Vector layer
-        :rtype: QgsVectorLayer
-
-        .. versionadded: 4.3.0
-        """
-        for _, layer in layer_registry.mapLayers().items():
-            if layer.source() == layer_path:
-                return layer
-
-        return load_layer(layer_path)[0]
-
-    @staticmethod
     def load_from_output_metadata(output_metadata):
         """Set Impact Function based on an output of an analysis's metadata.
 
@@ -2644,10 +2623,6 @@ class ImpactFunction(object):
         """
         impact_function = ImpactFunction()
         provenance = output_metadata['provenance_data']
-        # Set provenance data
-        impact_function._provenance = provenance
-        layer_registry = QgsMapLayerRegistry.instance()
-
         # Set exposure layer
         exposure_path = get_provenance(provenance, provenance_exposure_layer)
         if exposure_path:
@@ -2719,9 +2694,8 @@ class ImpactFunction(object):
         exposure_summary_path = get_provenance(
             provenance, provenance_layer_exposure_summary)
         if exposure_summary_path:
-            impact_function._exposure_summary = (
-                ImpactFunction.load_layer_from_registry(
-                    layer_registry, exposure_summary_path))
+            impact_function._exposure_summary = load_layer(
+                exposure_summary_path)[0]
 
         # aggregate_hazard_impacted
         aggregate_hazard_impacted_path = get_provenance(
@@ -2769,8 +2743,6 @@ class ImpactFunction(object):
             impact_function._crs = QgsCoordinateReferenceSystem(crs)
         else:
             impact_function._crs = None
-
-        impact_function._provenance_ready = True
 
         return impact_function
 
