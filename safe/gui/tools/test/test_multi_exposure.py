@@ -1,21 +1,15 @@
 # coding=utf-8
 
 import unittest
-import qgis  # NOQA
 
 from qgis.core import QgsMapLayerRegistry, QgsProject
 from qgis.gui import QgsMapCanvasLayer
-from qgis.utils import iface
 from PyQt4.QtGui import QDialogButtonBox
-from qgis.testing import start_app
 
 from safe.definitions.exposure import exposure_road, exposure_population
 from safe.gui.tools.multi_exposure_dialog import (
     MultiExposureDialog)
-from safe.test.utilities import load_test_vector_layer, qgis_iface
-
-if not iface:
-    start_app()
+from safe.test.utilities import load_test_vector_layer, qgis_app
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -26,7 +20,7 @@ __revision__ = '$Format:%H$'
 class MultiExposureDialogTest(unittest.TestCase):
 
     def setUp(self):
-        self.iface = qgis_iface()
+        _, self.iface = qgis_app()
 
     def test_custom_order(self):
         """Test we can set a custom order after the analysis."""
