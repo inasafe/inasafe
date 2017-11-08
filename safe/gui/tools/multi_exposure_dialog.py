@@ -105,6 +105,8 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
         self.keyword_io = KeywordIO()
         self._create_exposure_combos()
         self._multi_exposure_if = None
+        self.template_path.setDialogTitle(tr('Template file'))
+        self.template_path.setFilter(tr('QGIS Template file (*.qpt)'))
 
         enable_messaging(self.message_viewer, self)
 
