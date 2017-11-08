@@ -872,13 +872,6 @@ class ShakeGrid(object):
             mmi = mmi_identify.results()[1]
             place_layer.changeAttributeValue(fid, mmi_field_index, mmi)
         place_layer.commitChanges()
-        # save the memory place layer
-        data_store = Folder(self.output_dir)
-        data_store.default_vector_format = 'geojson'
-        data_store.add_layer(
-            place_layer,
-            '%s-nearby-places' % self.output_basename
-        )
         return place_layer
 
     def generate_locality_info(self, raster_mmi_path):
@@ -920,6 +913,16 @@ class ShakeGrid(object):
             reverse=True
         )
         nearest_place = sorted_places[0]
+        self.nearby_cities = sorted_places[:5]
+        # save the memory place layer
+        data_store = Folder(self.output_dir)
+        data_store.default_vector_format = 'geojson'
+        data_store.add_layer(
+            mmi_point_layer,
+            '%s-nearby-places' % self.output_basename
+        )
+        for city in self.nearby_cities:
+            LOGGER.info(city)
         # combine locality text
         city_name = str(nearest_place['name'])
         city_distance = nearest_place['distance']
