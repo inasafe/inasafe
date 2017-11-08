@@ -4,6 +4,7 @@
 
 from qgis.core import QgsFeatureRequest
 
+from safe.definitions.constants import MULTI_EXPOSURE_ANALYSIS_FLAG
 from safe.definitions.fields import (
     affected_exposure_count_field,
     exposure_affected_exposure_type_count_field,
@@ -157,6 +158,7 @@ def multi_exposure_analysis_summary(analysis, intermediate_analysis):
     analysis.commitChanges()
     analysis.keywords['title'] = layer_purpose_analysis_impacted['name']
     analysis.keywords['layer_purpose'] = layer_purpose_analysis_impacted['key']
+    analysis.keywords['exposure_keywords'] = MULTI_EXPOSURE_ANALYSIS_FLAG
     if qgis_version() >= 21600:
         analysis.setName(analysis.keywords['title'])
     else:
@@ -231,6 +233,7 @@ def multi_exposure_aggregation_summary(aggregation, intermediate_layers):
     aggregation.keywords['title'] = layer_purpose_aggregation_summary['name']
     aggregation.keywords['layer_purpose'] = (
         layer_purpose_aggregation_summary['key'])
+    aggregation.keywords['exposure_keywords'] = MULTI_EXPOSURE_ANALYSIS_FLAG
     if qgis_version() >= 21600:
         aggregation.setName(aggregation.keywords['title'])
     else:

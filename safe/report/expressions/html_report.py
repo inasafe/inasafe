@@ -12,6 +12,7 @@ from qgis.core import (
     QgsLayerTreeGroup,
     QgsLayerTreeLayer)
 
+from safe.definitions.constants import MULTI_EXPOSURE_ANALYSIS_FLAG
 from safe.definitions.exposure import (
     exposure_population,
     exposure_road,
@@ -63,6 +64,14 @@ def analysis_summary_report(feature, parent):
     return get_impact_report_as_string(analysis_dir)
 
 
+description = tr('Retrieve an HTML population analysis table report from '
+                 'a multi exposure analysis.')
+examples = {
+    'population_analysis_summary_report()': None
+}
+help_message = generate_expression_help(description, examples)
+
+
 @qgsfunction(
     args='auto', group=group, usesGeometry=False, referencedColumns=[],
     help_text=help_message.to_html(), helpText=help_message.to_html())
@@ -75,6 +84,14 @@ def population_analysis_summary_report(feature, parent):
     if analysis_dir:
         return get_impact_report_as_string(analysis_dir)
     return None
+
+
+description = tr('Retrieve an HTML road analysis table report from '
+                 'a multi exposure analysis.')
+examples = {
+    'road_analysis_summary_report()': None
+}
+help_message = generate_expression_help(description, examples)
 
 
 @qgsfunction(
@@ -91,6 +108,14 @@ def road_analysis_summary_report(feature, parent):
     return None
 
 
+description = tr('Retrieve an HTML structure analysis table report from '
+                 'a multi exposure analysis.')
+examples = {
+    'structure_analysis_summary_report()': None
+}
+help_message = generate_expression_help(description, examples)
+
+
 @qgsfunction(
     args='auto', group=group, usesGeometry=False, referencedColumns=[],
     help_text=help_message.to_html(), helpText=help_message.to_html())
@@ -103,6 +128,14 @@ def structure_analysis_summary_report(feature, parent):
     if analysis_dir:
         return get_impact_report_as_string(analysis_dir)
     return None
+
+
+description = tr('Retrieve an HTML place analysis table report from '
+                 'a multi exposure analysis.')
+examples = {
+    'place_analysis_summary_report()': None
+}
+help_message = generate_expression_help(description, examples)
 
 
 @qgsfunction(
@@ -119,6 +152,14 @@ def place_analysis_summary_report(feature, parent):
     return None
 
 
+description = tr('Retrieve an HTML land cover analysis table report from '
+                 'a multi exposure analysis.')
+examples = {
+    'land_cover_analysis_summary_report()': None
+}
+help_message = generate_expression_help(description, examples)
+
+
 @qgsfunction(
     args='auto', group=group, usesGeometry=False, referencedColumns=[],
     help_text=help_message.to_html(), helpText=help_message.to_html())
@@ -128,6 +169,26 @@ def land_cover_analysis_summary_report(feature, parent):
     """
     _ = feature, parent  # NOQA
     analysis_dir = get_analysis_dir(exposure_land_cover['key'])
+    if analysis_dir:
+        return get_impact_report_as_string(analysis_dir)
+    return None
+
+
+description = tr('Retrieve an HTML multi exposure analysis table report.')
+examples = {
+    'multi_exposure_analysis_summary_report()': None
+}
+help_message = generate_expression_help(description, examples)
+
+
+@qgsfunction(
+    args='auto', group=group, usesGeometry=False, referencedColumns=[],
+    help_text=help_message.to_html(), helpText=help_message.to_html())
+def multi_exposure_analysis_summary_report(feature, parent):
+    """Retrieve an HTML multi exposure analysis table report.
+    """
+    _ = feature, parent  # NOQA
+    analysis_dir = get_analysis_dir(MULTI_EXPOSURE_ANALYSIS_FLAG)
     if analysis_dir:
         return get_impact_report_as_string(analysis_dir)
     return None
@@ -150,11 +211,11 @@ def get_analysis_dir(exposure_key):
             isinstance(child, QgsLayerTreeGroup))]
     multi_exposure_group = None
     for group in all_groups:
-        if 'multi exposure' in group.name().lower():
+        if group.customProperty(MULTI_EXPOSURE_ANALYSIS_FLAG):
             multi_exposure_group = group
             break
-    if multi_exposure_group:
 
+    if multi_exposure_group:
         multi_exposure_tree_layers = [
             child for child in multi_exposure_group.children() if (
                 isinstance(child, QgsLayerTreeLayer))]
@@ -163,15 +224,26 @@ def get_analysis_dir(exposure_key):
                 isinstance(child, QgsLayerTreeGroup))]
 
         def get_report_ready_layer(tree_layers):
+            """Get a layer which has a report inn its directory.
+
+            :param tree_layers: A list of tree layer nodes (QgsLayerTreeLayer)
+            :type tree_layers: list
+
+            :return: A vector layer
+            :rtype: QgsMapLayer
+            """
             for tree_layer in tree_layers:
                 layer = tree_layer.layer()
                 keywords = keyword_io.read_keywords(layer)
+                exposure_keywords_found = keywords.get('exposure_keywords')
                 provenance = keywords.get('provenance_data')
                 if provenance:
                     exposure_key_found = (
                         provenance['exposure_keywords']['exposure'])
                     if exposure_key == exposure_key_found:
                         return layer
+                if exposure_keywords_found == exposure_key:
+                    return layer
             return None
 
         layer = get_report_ready_layer(multi_exposure_tree_layers)

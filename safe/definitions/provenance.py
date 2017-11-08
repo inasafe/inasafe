@@ -108,11 +108,6 @@ provenance_impact_function_name = {
     'name': tr('Impact Function Name'),
     'provenance_key': 'impact_function_name'
 }
-provenance_multi_exposure_impact_function_name = {
-    'key': 'provenance_multi_exposure_impact_function_name',
-    'name': tr('Multi Exposure Impact Function Name'),
-    'provenance_key': 'multi_exposure_impact_function_name'
-}
 provenance_impact_function_title = {
     'key': 'provenance_impact_function_title',
     'name': tr('Impact Function Title'),
@@ -274,7 +269,6 @@ provenance_list = [
     provenance_hazard_layer_id,
     provenance_host_name,
     provenance_impact_function_name,
-    provenance_multi_exposure_impact_function_name,
     provenance_impact_function_title,
     provenance_inasafe_version,
     provenance_map_legend_title,
