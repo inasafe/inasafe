@@ -114,7 +114,7 @@ def aggregation_summary(aggregate_hazard, aggregation, callback=None):
         # We summarize every absolute values.
         for field, field_definition in absolute_values.iteritems():
             value = area[field]
-            if not value or isinstance(value, QPyNullVariant):
+            if value == '' or isinstance(value, QPyNullVariant):
                 value = 0
             field_definition[0].add_value(
                 value,

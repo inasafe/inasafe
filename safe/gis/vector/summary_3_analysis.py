@@ -113,10 +113,10 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
     for area in aggregate_hazard.getFeatures():
         hazard_value = area[hazard_class_index]
         value = area[total]
-        if not value or isinstance(value, QPyNullVariant) or isnan(value):
+        if value == '' or isinstance(value, QPyNullVariant) or isnan(value):
             # For isnan, see ticket #3812
             value = 0
-        if not hazard_value or isinstance(hazard_value, QPyNullVariant):
+        if hazard_value == '' or isinstance(hazard_value, QPyNullVariant):
             hazard_value = 'NULL'
         flat_table.add_value(
             value,
@@ -126,7 +126,7 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
         # We summarize every absolute values.
         for field, field_definition in absolute_values.iteritems():
             value = area[field]
-            if not value or isinstance(value, QPyNullVariant):
+            if value == '' or isinstance(value, QPyNullVariant):
                 value = 0
             field_definition[0].add_value(
                 value,
@@ -158,7 +158,7 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
     for area in analysis.getFeatures(request):
         total = 0
         for i, val in enumerate(unique_hazard):
-            if not val or isinstance(val, QPyNullVariant):
+            if val == '' or isinstance(val, QPyNullVariant):
                 val = 'NULL'
             sum = flat_table.get_value(hazard_class=val)
             total += sum

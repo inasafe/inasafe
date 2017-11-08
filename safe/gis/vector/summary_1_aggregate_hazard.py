@@ -133,10 +133,10 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
 
         aggregation_value = feature[aggregation_id]
         hazard_value = feature[hazard_id]
-        if not hazard_value or isinstance(hazard_value, QPyNullVariant):
+        if hazard_value == '' or isinstance(hazard_value, QPyNullVariant):
             hazard_value = not_exposed_class['key']
         exposure_value = feature[exposure_class]
-        if not exposure_value or isinstance(exposure_value, QPyNullVariant):
+        if exposure_value == '' or isinstance(exposure_value, QPyNullVariant):
             exposure_value = 'NULL'
 
         flat_table.add_value(
@@ -149,7 +149,7 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
         # We summarize every absolute values.
         for field, field_definition in absolute_values.iteritems():
             value = feature[field]
-            if not value or isinstance(value, QPyNullVariant):
+            if value == '' or isinstance(value, QPyNullVariant):
                 value = 0
             field_definition[0].add_value(
                 value,
@@ -167,7 +167,7 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
     for area in aggregate_hazard.getFeatures(request):
         aggregation_value = area[aggregation_id]
         feature_hazard_id = area[hazard_id]
-        if not feature_hazard_id or isinstance(
+        if feature_hazard_id == '' or isinstance(
                 feature_hazard_id, QPyNullVariant):
             feature_hazard_id = not_exposed_class['key']
         feature_hazard_value = area[hazard_class]

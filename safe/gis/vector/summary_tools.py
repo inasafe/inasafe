@@ -83,7 +83,7 @@ def add_fields(
     :param static_fields
     """
     for column in dynamic_values:
-        if not column or isinstance(column, QPyNullVariant):
+        if column == '' or isinstance(column, QPyNullVariant):
             column = 'NULL'
         field = create_field_from_definition(dynamic_field, column)
         layer.addAttribute(field)
