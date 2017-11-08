@@ -384,7 +384,7 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
             infographic_report
         ]
         error_code, message = self.impact_function.generate_report(
-            generated_components, IFACE=self.iface)
+            generated_components, iface=self.iface)
 
         if error_code == ImpactReport.REPORT_GENERATION_FAILED:
             self.dock.hide_busy()
