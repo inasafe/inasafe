@@ -4,7 +4,8 @@
 from collections import OrderedDict
 from copy import deepcopy
 from os import listdir
-from os.path import join, exists, splitext
+from os.path import join, exists, splitext, split
+from PyQt4.QtXml import QDomNode, QDomDocument
 
 from qgis.core import QgsApplication
 
@@ -485,6 +486,69 @@ def get_field_groups(layer_purpose, layer_subcategory=None):
     return field_groups
 
 
+def override_component_template(component, template_path):
+    """Override a default component with a new component with given template.
+
+    :param component: Component as dictionary.
+    :type component: dict
+
+    :param template_path: Custom template path that will be used.
+    :type template_path: str
+
+    :returns: New report component.
+    :rtype: dict
+    """
+    copy_component = deepcopy(component)
+    template_directory, template_filename = split(template_path)
+    file_name, file_format = splitext(template_filename)
+    if file_format[1:] != (
+            QgisComposerComponentsMetadata.OutputFormat.QPT) or (
+                not exists(template_path)):
+        return copy_component
+
+    # we do the import here to avoid circular import when starting
+    # up the plugin
+    from safe.definitions.reports.components import (
+        map_report_component_boilerplate)
+    custom_template_component = deepcopy(
+        map_report_component_boilerplate)
+
+    # we need to update several items in this component
+    pdf_output_file = '{file_name}.pdf'.format(file_name=file_name)
+    qpt_output_file = '{file_name}.qpt'.format(file_name=file_name)
+
+    custom_template_component['key'] = file_name
+    custom_template_component['template'] = template_path
+    custom_template_component['output_path']['template'] = qpt_output_file
+    custom_template_component['output_path']['map'] = pdf_output_file
+
+    # we need to update the orientation of the custom template
+    with open(custom_template_component['template']) as (
+            template_file):
+        template_content = template_file.read()
+    document = QDomDocument()
+    document.setContent(template_content)
+    root_element = document.namedItem('Composer')
+    orientation = None
+    if isinstance(root_element, QDomNode):
+        title_attribute_node = root_element.attributes().namedItem('title')
+        if title_attribute_node:
+            template_orientation = title_attribute_node.nodeValue()
+        for _orientation in ['landscape', 'portrait']:
+            if _orientation in template_orientation:
+                orientation = _orientation
+                break
+
+    if orientation:
+        custom_template_component['orientation'] = orientation
+        del custom_template_component['page_width']
+        del custom_template_component['page_height']
+
+    copy_component['components'] = [custom_template_component]
+
+    return copy_component
+
+
 def update_template_component(
         component, custom_template_dir=None, hazard=None, exposure=None):
     """Get a component based on custom qpt if exists
@@ -547,13 +611,16 @@ def update_template_component(
                     map_report_component_boilerplate)
 
                 # we need to update several items in this component
-                map_report_file = '{file_name}.pdf'.format(file_name=file_name)
+                pdf_output_file = '{file_name}.pdf'.format(file_name=file_name)
+                qpt_output_file = '{file_name}.qpt'.format(file_name=file_name)
+
                 hazard_exposure_component['key'] = file_name
                 hazard_exposure_component['template'] = join(
                     custom_template_dir, filename)
-                hazard_exposure_component['output_path']['template'] = filename
+                hazard_exposure_component['output_path']['template'] = (
+                    qpt_output_file)
                 hazard_exposure_component['output_path']['map'] = (
-                    map_report_file)
+                    pdf_output_file)
 
                 # add this hazard-exposure component to the returned component
                 copy_component['components'].append(hazard_exposure_component)
