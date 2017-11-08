@@ -70,9 +70,24 @@ def content():
     :rtype: safe.messaging.message.Message
     """
     message = m.Message()
-    message.add(m.Paragraph(tr('Lorem ipsum dolot.')))
     message.add(m.Paragraph(tr(
-        'Tim, please add here your magnificent welcome message for our lovely '
-        'InaSAFE users...')))
+        'Welcome to InaSAFE. Before you begin using InaSAFE, we would '
+        'like to encourage you to review some options that will by InaSAFE. '
+        'On the "Organisation Profile" tab you can set the name of your '
+        'organisation, your organisation logo and other options related to '
+        'your organisation.'
+    )))
+    message.add(m.Paragraph(tr(
+        'The "parameters" tab is used to determine '
+        'whether people are affected and the displacement rates that apply '
+        'to people exposed to different types of hazards and at different '
+        'hazard intensities. We really encourage you to consider these '
+        'parameters carefully and to choose appropriate values for your '
+        'local situation based on past events and expert knowledge.')))
+    message.add(m.Paragraph(tr(
+        'You can return to these options any time by using the Plugins -> '
+        'InaSAFE -> Options menu.'
+    )))
+
 
     return message
