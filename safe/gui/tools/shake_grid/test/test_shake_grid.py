@@ -134,7 +134,17 @@ class TestShakeGrid(unittest.TestCase):
     def test_mmi_to_delimited_text(self):
         """Test mmi_to_delimited_text works."""
         delimited_string = SHAKE_GRID.mmi_to_delimited_text()
-        self.assertEqual(204869, len(delimited_string))
+        number_of_line = len(SHAKE_GRID.mmi_data) + 1  # Add 1 for header
+        substring = (
+            'lon,lat,mmi\n'
+            '139.37,-1.1813,1.0\n'
+            '139.395,-1.1813,1.0\n'
+            '139.42,-1.1813,1.0\n'
+            '139.445,-1.1813,1.0\n'
+        )
+        self.assertTrue(delimited_string.startswith(substring))
+        self.assertEqual(delimited_string.count(','), number_of_line * 2)
+        self.assertEqual(delimited_string.count('\n'), number_of_line)
 
     def test_mmi_to_delimited_file(self):
         """Test mmi_to_delimited_file works."""

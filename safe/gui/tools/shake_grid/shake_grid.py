@@ -51,6 +51,7 @@ __revision__ = '$Format:%H$'
 
 LOGGER = logging.getLogger('InaSAFE')
 
+
 def gaussian_filter(Z, sigma):
     """
 
@@ -347,8 +348,6 @@ class ShakeGrid(object):
 
             # zip lists as list of tuples
             self.mmi_data = zip(lon_list, lat_list, mmi_list)
-
-
 
         except Exception, e:
             LOGGER.exception('Event parse failed')
