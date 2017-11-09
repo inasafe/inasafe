@@ -3,7 +3,7 @@
 """Tools for vector layers."""
 
 import logging
-from math import isnan
+from math import isnan, floor
 from uuid import uuid4
 
 from PyQt4.QtCore import QPyNullVariant
@@ -324,6 +324,47 @@ def read_dynamic_inasafe_field(inasafe_fields, dynamic_field, black_list=None):
     return unique_exposure
 
 
+def measure_bearing(point_a, point_b):
+    """Measure the bearing angle between two points.
+
+    :param point_a: First Point.
+    :type point_a: QgsPoint
+
+    :param point_b: Second Point.
+    :type point_b: QgsPoint
+
+    :return: The distance between input points.
+    :rtype: float
+    """
+    return point_b.azimuth(point_a)
+
+
+def measure_cardinality(bearing_angle):
+    """Get cardinality of an angle.
+
+    :param bearing_angle: Bearing angle.
+    :type bearing_angle: float
+
+    :return: Cardinality text.
+    :rtype: str
+    """
+    # this method could still be improved later, since the acquisition interval
+    # is a bit strange, i.e the input angle of 22.499° will return `N` even
+    # though 22.5° is the direction for `NNE`
+    direction_list = [
+        'N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE',
+        'SSE', 'S', 'SSW', 'SW', 'WSW', 'W',
+        'WNW', 'NW', 'NNW'
+    ]
+
+    bearing = float(bearing_angle)
+    direction_count = len(direction_list)
+    direction_interval = 360. / direction_count
+    index = int(floor(bearing / direction_interval))
+    index %= direction_count
+    return direction_list[index]
+
+
 class SizeCalculator(object):
 
     """Special object to handle size calculation with an output unit."""
@@ -357,6 +398,22 @@ class SizeCalculator(object):
         if exposure_key:
             exposure_definition = definition(exposure_key)
             self.output_unit = exposure_definition['size_unit']
+
+    def measure_distance(self, point_a, point_b):
+        """Measure the distance between two points.
+
+        This is added here since QgsDistanceArea object is already called here.
+
+        :param point_a: First Point.
+        :type point_a: QgsPoint
+
+        :param point_b: Second Point.
+        :type point_b: QgsPoint
+
+        :return: The distance between input points.
+        :rtype: float
+        """
+        return self.calculator.measureLine(point_a, point_b)
 
     def measure(self, geometry):
         """Measure the length or the area of a geometry.
