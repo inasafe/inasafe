@@ -42,7 +42,8 @@ class TestShakeGrid(unittest.TestCase):
         """Class method called after tests on this class have run."""
         shutil.rmtree(temp_dir(__name__))
 
-    def check_feature_count(self, path, count):
+    @staticmethod
+    def check_feature_count(path, count):
         """Method to check the features number of a vector layer.
 
         :param path: Path to vector layer.
@@ -237,6 +238,6 @@ class TestShakeGrid(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(ShakeGridTest)
+    suite = unittest.makeSuite(TestShakeGrid)
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

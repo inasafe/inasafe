@@ -325,7 +325,7 @@ class ShakeGrid(object):
         self.algorithm_name = algorithm_filename_flag
         self.grid_xml_path = grid_xml_path
         self.smoothed = smoothed
-        self.smooth_sigma = smooth_sigma
+        self.smoothing_sigma = smooth_sigma
 
         self.parse_grid_xml()
 
@@ -495,6 +495,7 @@ class ShakeGrid(object):
                 mmi_list.append(float(mmi))
 
             if self.smoothed:
+                LOGGER.debug('We are using smoothing')
                 ncols = len(np.where(np.array(lon_list) == lon_list[0])[0])
                 nrows = len(np.where(np.array(lat_list) == lat_list[0])[0])
 
@@ -504,7 +505,7 @@ class ShakeGrid(object):
                 # smooth MMI matrix
                 # Help from Hadi Ghasemi
                 # mmi_list = gaussian_filter(Z, self.smooth_sigma)
-                mmi_list = convolve(Z, gaussian_kernel(self.smooth_sigma))
+                mmi_list = convolve(Z, gaussian_kernel(self.smoothing_sigma))
 
                 # reshape array back to 1D longl list of mmi
                 mmi_list = np.reshape(mmi_list, ncols * nrows)
