@@ -79,7 +79,7 @@ def calculate_distance(
     :return: distance
     :rtype: float
     """
-    epicenter= QgsPoint(longitude, latitude)
+    epicenter = QgsPoint(longitude, latitude)
     place_point = place_geometry.asPoint()
     distance = distance_calculator.measure_distance(epicenter, place_point)
     return distance
@@ -124,6 +124,7 @@ def calculate_cardinality(cardinality_function, angle):
     """
     cardinality = cardinality_function(angle)
     return cardinality
+
 
 # This postprocessor function is also used in the aggregation_summary
 def post_processor_affected_function(
