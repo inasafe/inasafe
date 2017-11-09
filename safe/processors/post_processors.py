@@ -96,6 +96,9 @@ post_processor_distance = {
             'type': layer_property_input_type,
             'value': size_calculator_input_value,
         },
+        'place_geometry': {
+            'type': geometry_property_input_type
+        },
         'latitude': {
             'type': keyword_input_type,
             'value': ['hazard_keywords', 'extra_keywords', 'latitude']
@@ -103,9 +106,6 @@ post_processor_distance = {
         'longitude': {
             'type': keyword_input_type,
             'value': ['hazard_keywords', 'extra_keywords', 'longitude']
-        },
-        'geometry': {
-            'type': geometry_property_input_type
         }
     },
     'output': {
@@ -113,6 +113,55 @@ post_processor_distance = {
             'value': distance_field,
             'type': function_process,
             'function': calculate_distance
+        }
+    }
+}
+
+post_processor_bearing = {
+    'key': 'post_processor_bearing',
+    'name': tr('Bearing Angle Post Processor'),
+    'description': tr(
+        u'A post processor to calculate the bearing angle between two points.'
+        ),
+    'input': {
+        'place_geometry': {
+            'type': geometry_property_input_type
+        },
+        'latitude': {
+            'type': keyword_input_type,
+            'value': ['hazard_keywords', 'extra_keywords', 'latitude']
+        },
+        'longitude': {
+            'type': keyword_input_type,
+            'value': ['hazard_keywords', 'extra_keywords', 'longitude']
+        }
+    },
+    'output': {
+        'size': {
+            'value': bearing_field,
+            'type': function_process,
+            'function': calculate_bearing
+        }
+    }
+}
+
+post_processor_cardinality = {
+    'key': 'post_processor_cardinality',
+    'name': tr('Cardinality Post Processor'),
+    'description': tr(
+        u'A post processor to calculate the cardinality of an angle.'
+        ),
+    'input': {
+        'angle': {
+            'type': field_input_type,
+            'value': bearing_field
+        }
+    },
+    'output': {
+        'size': {
+            'value': direction_field,
+            'type': function_process,
+            'function': calculate_cardinality
         }
     }
 }

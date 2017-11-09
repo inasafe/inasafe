@@ -41,6 +41,8 @@ post_processors = [
     post_processor_displaced_ratio,
     post_processor_displaced,
     post_processor_distance,
+    post_processor_bearing,
+    post_processor_cardinality
 ] + (gender_postprocessors +
      female_postprocessors +
      age_postprocessors +
