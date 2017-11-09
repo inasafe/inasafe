@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tab_widget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="analysisTab">
       <attribute name="title">
@@ -110,7 +110,7 @@
        <item>
         <widget class="QLabel" name="label_6">
          <property name="text">
-          <string>You can set some layers in the right panel to set a custom order in the report. This will make all your other layers hidden. If you let the right panel empty, the default legend will be used.</string>
+          <string>You can set some layers in the right panel to set a custom order in the report. Doing this will hide all existing layers in your project. If you leave the right panel empty, the default legend will be used.</string>
          </property>
          <property name="wordWrap">
           <bool>true</bool>
