@@ -6,6 +6,7 @@
 from PyQt4.QtCore import QPyNullVariant
 
 from qgis.core import QgsPoint
+from math import floor
 from safe.definitions.hazard_classifications import (
     hazard_classes_all, not_exposed_class)
 from safe.definitions.exposure import exposure_population
@@ -59,9 +60,9 @@ def size(size_calculator, geometry):
 
 def calculate_distance(
         distance_calculator,
+        place_geometry,
         latitude,
-        longitude,
-        place_geometry):
+        longitude):
     """Simple postprocessor where we compute the distance between two points.
 
     :param distance_calculator: The size calculator.
@@ -85,12 +86,12 @@ def calculate_distance(
     return distance
 
 
-def calculate_bearing(bearing_function, latitude, longitude, place_geometry):
+def calculate_bearing(place_geometry, latitude, longitude):
     """Simple postprocessor where we compute the bearing angle between two
     points.
 
-    :param bearing_function: The size calculator.
-    :type bearing_function: safe.gis.vector.tools.measure_bearing
+    :param place_geometry: Geometry of place.
+    :type place_geometry: QgsGeometry
 
     :param latitude: The latitude to use.
     :type latitude: float
@@ -98,23 +99,17 @@ def calculate_bearing(bearing_function, latitude, longitude, place_geometry):
     :param longitude: The longitude to use.
     :type longitude: float
 
-    :param place_geometry: Geometry of place.
-    :type place_geometry: QgsGeometry
-
     :return: Bearing angle
-    :rtype:
+    :rtype: float
     """
     epicenter = QgsPoint(longitude, latitude)
     place_point = place_geometry.asPoint()
-    bearing = bearing_function(epicenter, place_point)
+    bearing = place_point.azimuth(epicenter)
     return bearing
 
 
-def calculate_cardinality(cardinality_function, angle):
-    """Simple postprocessor where we compute the distance between two points.
-
-    :param cardinality_function: The cardinality function.
-    :type cardinality_function: safe.gis.vector.tools.measure_cardinality
+def calculate_cardinality(angle):
+    """Simple postprocessor where we compute the cardinality of an angle.
 
     :param angle: Bearing angle.
     :type angle: float
@@ -122,8 +117,21 @@ def calculate_cardinality(cardinality_function, angle):
     :return: Cardinality text.
     :rtype: str
     """
-    cardinality = cardinality_function(angle)
-    return cardinality
+    # this method could still be improved later, since the acquisition interval
+    # is a bit strange, i.e the input angle of 22.499° will return `N` even
+    # though 22.5° is the direction for `NNE`
+    direction_list = [
+        'N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE',
+        'SSE', 'S', 'SSW', 'SW', 'WSW', 'W',
+        'WNW', 'NW', 'NNW'
+    ]
+
+    bearing = float(angle)
+    direction_count = len(direction_list)
+    direction_interval = 360. / direction_count
+    index = int(floor(bearing / direction_interval))
+    index %= direction_count
+    return direction_list[index]
 
 
 # This postprocessor function is also used in the aggregation_summary

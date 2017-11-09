@@ -3,7 +3,7 @@
 """Tools for vector layers."""
 
 import logging
-from math import isnan, floor
+from math import isnan
 from uuid import uuid4
 
 from PyQt4.QtCore import QPyNullVariant
@@ -322,47 +322,6 @@ def read_dynamic_inasafe_field(inasafe_fields, dynamic_field, black_list=None):
             unique_exposure.append(field_key.replace(pattern, ''))
 
     return unique_exposure
-
-
-def measure_bearing(point_a, point_b):
-    """Measure the bearing angle between two points.
-
-    :param point_a: First Point.
-    :type point_a: QgsPoint
-
-    :param point_b: Second Point.
-    :type point_b: QgsPoint
-
-    :return: The distance between input points.
-    :rtype: float
-    """
-    return point_b.azimuth(point_a)
-
-
-def measure_cardinality(bearing_angle):
-    """Get cardinality of an angle.
-
-    :param bearing_angle: Bearing angle.
-    :type bearing_angle: float
-
-    :return: Cardinality text.
-    :rtype: str
-    """
-    # this method could still be improved later, since the acquisition interval
-    # is a bit strange, i.e the input angle of 22.499° will return `N` even
-    # though 22.5° is the direction for `NNE`
-    direction_list = [
-        'N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE',
-        'SSE', 'S', 'SSW', 'SW', 'WSW', 'W',
-        'WNW', 'NW', 'NNW'
-    ]
-
-    bearing = float(bearing_angle)
-    direction_count = len(direction_list)
-    direction_interval = 360. / direction_count
-    index = int(floor(bearing / direction_interval))
-    index %= direction_count
-    return direction_list[index]
 
 
 class SizeCalculator(object):
