@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tab_widget">
      <property name="currentIndex">
-      <number>2</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="analysisTab">
       <attribute name="title">
@@ -33,7 +33,7 @@
        <item>
         <widget class="QLabel" name="label">
          <property name="text">
-          <string>This tool allows you to run an multi-exposure analysis. By selecting one or many exposures, the impact function will aggregate the results in one report.</string>
+          <string>This tool allows you to run a multi-exposure analysis. Select a hazard, two or more exposures and an aggregation layer. The impact function will aggregate the results of all the hazard / exposure combinations in one report. Use the reporting options tab to specify which layers should be included and visible in the report. You can also set the report layer order and set a template on the reporting options tab for producing a printed report. The status tab will show the progress of the analysis as it runs.</string>
          </property>
          <property name="wordWrap">
           <bool>true</bool>
@@ -110,7 +110,7 @@
        <item>
         <widget class="QLabel" name="label_6">
          <property name="text">
-          <string>You can set some layers in the right panel to set a custom order in the report. This will make all your other layers hidden. If you let the right panel empty, the default legend will be used.</string>
+          <string>You can set some layers in the right panel to set a custom order in the report. Doing this will hide all existing layers in your project. If you leave the right panel empty, the default legend will be used.</string>
          </property>
          <property name="wordWrap">
           <bool>true</bool>
