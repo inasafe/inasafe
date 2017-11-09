@@ -158,7 +158,14 @@ def multi_exposure_analysis_summary(analysis, intermediate_analysis):
     analysis.commitChanges()
     analysis.keywords['title'] = layer_purpose_analysis_impacted['name']
     analysis.keywords['layer_purpose'] = layer_purpose_analysis_impacted['key']
-    analysis.keywords['exposure_keywords'] = MULTI_EXPOSURE_ANALYSIS_FLAG
+
+    # Set up the extra keywords so everyone knows it's a
+    # multi exposure analysis result.
+    extra_keywords = {
+        'analysis_type': MULTI_EXPOSURE_ANALYSIS_FLAG
+    }
+    analysis.keywords['extra_keywords'] = extra_keywords
+
     if qgis_version() >= 21600:
         analysis.setName(analysis.keywords['title'])
     else:
@@ -233,7 +240,14 @@ def multi_exposure_aggregation_summary(aggregation, intermediate_layers):
     aggregation.keywords['title'] = layer_purpose_aggregation_summary['name']
     aggregation.keywords['layer_purpose'] = (
         layer_purpose_aggregation_summary['key'])
-    aggregation.keywords['exposure_keywords'] = MULTI_EXPOSURE_ANALYSIS_FLAG
+
+    # Set up the extra keywords so everyone knows it's a
+    # multi exposure analysis result.
+    extra_keywords = {
+        'analysis_type': MULTI_EXPOSURE_ANALYSIS_FLAG
+    }
+    aggregation.keywords['extra_keywords'] = extra_keywords
+
     if qgis_version() >= 21600:
         aggregation.setName(aggregation.keywords['title'])
     else:

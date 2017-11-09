@@ -225,7 +225,7 @@ class TestImpactReport(unittest.TestCase):
         self.assertEqual(
             return_code, ImpactReport.REPORT_GENERATION_SUCCESS, message)
 
-        return impact_function.impact_report
+        return impact_function._impact_report
 
     def test_general_report_from_impact_function(self):
         """Test generate analysis result from impact function.

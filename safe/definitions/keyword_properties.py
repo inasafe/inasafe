@@ -332,5 +332,6 @@ property_extra_keywords = {
         'x_maximum': tr('X maximum'),
         'y_minimum': tr('Y minimum'),
         'y_maximum': tr('Y maximum'),
+        'analysis_type': tr('Analysis type')
     }
 }

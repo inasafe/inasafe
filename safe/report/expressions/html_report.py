@@ -188,13 +188,13 @@ def multi_exposure_analysis_summary_report(feature, parent):
     """Retrieve an HTML multi exposure analysis table report.
     """
     _ = feature, parent  # NOQA
-    analysis_dir = get_analysis_dir(MULTI_EXPOSURE_ANALYSIS_FLAG)
+    analysis_dir = get_analysis_dir()
     if analysis_dir:
         return get_impact_report_as_string(analysis_dir)
     return None
 
 
-def get_analysis_dir(exposure_key):
+def get_analysis_dir(exposure_key=None):
     """Retrieve an output directory of an analysis/ImpactFunction from a
     multi exposure analysis/ImpactFunction based on exposure type.
 
@@ -235,14 +235,16 @@ def get_analysis_dir(exposure_key):
             for tree_layer in tree_layers:
                 layer = tree_layer.layer()
                 keywords = keyword_io.read_keywords(layer)
-                exposure_keywords_found = keywords.get('exposure_keywords')
+                extra_keywords_found = keywords.get('extra_keywords')
                 provenance = keywords.get('provenance_data')
                 if provenance:
                     exposure_key_found = (
                         provenance['exposure_keywords']['exposure'])
                     if exposure_key == exposure_key_found:
                         return layer
-                if exposure_keywords_found == exposure_key:
+                if not exposure_key and extra_keywords_found and (
+                        extra_keywords_found['analysis_type'] == (
+                            MULTI_EXPOSURE_ANALYSIS_FLAG)):
                     return layer
             return None
 
@@ -254,6 +256,8 @@ def get_analysis_dir(exposure_key):
                     child for child in exposure_group.children() if (
                         isinstance(child, QgsLayerTreeLayer))]
                 layer = get_report_ready_layer(tree_layers)
+                if layer:
+                    break
 
         if layer:
             return dirname(layer.source())

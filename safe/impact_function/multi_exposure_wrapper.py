@@ -100,6 +100,9 @@ class MultiExposureImpactFunction(object):
         self.analysis_extent = None
         self._output_layer_expected = None
 
+        # Impact Report
+        self._impact_report = None
+
     @property
     def name(self):
         """The name of the impact function.
@@ -456,6 +459,7 @@ class MultiExposureImpactFunction(object):
             raise Exception(
                 tr('Something went wrong with the datastore : '
                    '{error_message}').format(error_message=name))
+        self._aggregation_summary = self.datastore.layer(name)
 
         result, name = self._datastore.add_layer(
             self._analysis_summary, layer_purpose_analysis_impacted['key'])
@@ -463,6 +467,7 @@ class MultiExposureImpactFunction(object):
             raise Exception(
                 tr('Something went wrong with the datastore : '
                    '{error_message}').format(error_message=name))
+        self._analysis_summary = self.datastore.layer(name)
 
         simple_polygon_without_brush(
             self._aggregation_summary, aggregation_width, aggregation_color)
@@ -494,7 +499,7 @@ class MultiExposureImpactFunction(object):
             report_metadata = ReportMetadata(
                 metadata_dict=update_template_component(component))
 
-            self.impact_report = ImpactReport(
+            self._impact_report = ImpactReport(
                 iface,
                 report_metadata,
                 multi_exposure_impact_function=self,
@@ -513,11 +518,11 @@ class MultiExposureImpactFunction(object):
             # We will generate it on the fly without storing it after datastore
             # supports
             if output_folder:
-                self.impact_report.output_folder = output_folder
+                self._impact_report.output_folder = output_folder
             else:
-                self.impact_report.output_folder = join(layer_dir, 'output')
+                self._impact_report.output_folder = join(layer_dir, 'output')
 
-            error_code, message = self.impact_report.process_components()
+            error_code, message = self._impact_report.process_components()
             if error_code == ImpactReport.REPORT_GENERATION_FAILED:
                 break
 
