@@ -40,6 +40,7 @@ post_processors = [
     post_processor_fatalities,
     post_processor_displaced_ratio,
     post_processor_displaced,
+    post_processor_distance,
 ] + (gender_postprocessors +
      female_postprocessors +
      age_postprocessors +

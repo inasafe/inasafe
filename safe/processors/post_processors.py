@@ -8,6 +8,9 @@
 import logging
 
 from safe.definitions.fields import (
+    bearing_field,
+    direction_field,
+    distance_field,
     feature_rate_field,
     feature_value_field,
     size_field,
@@ -16,6 +19,9 @@ from safe.definitions.fields import (
 )
 from safe.definitions.hazard_classifications import not_exposed_class
 from safe.processors.post_processor_functions import (
+    calculate_bearing,
+    calculate_cardinality,
+    calculate_distance,
     multiply,
     size,
     post_processor_affected_function)
@@ -75,6 +81,38 @@ post_processor_size = {
             'value': size_field,
             'type': function_process,
             'function': size
+        }
+    }
+}
+
+post_processor_distance = {
+    'key': 'post_processor_distance',
+    'name': tr('Distance Post Processor'),
+    'description': tr(
+        u'A post processor to calculate the distance between two points. The '
+        u'unit is defined in the exposure definition.'),
+    'input': {
+        'distance_calculator': {
+            'type': layer_property_input_type,
+            'value': size_calculator_input_value,
+        },
+        'latitude': {
+            'type': keyword_input_type,
+            'value': ['hazard_keywords', 'extra_keywords', 'latitude']
+        },
+        'longitude': {
+            'type': keyword_input_type,
+            'value': ['hazard_keywords', 'extra_keywords', 'longitude']
+        },
+        'geometry': {
+            'type': geometry_property_input_type
+        }
+    },
+    'output': {
+        'size': {
+            'value': distance_field,
+            'type': function_process,
+            'function': calculate_distance
         }
     }
 }

@@ -5,6 +5,7 @@
 # noinspection PyUnresolvedReferences
 from PyQt4.QtCore import QPyNullVariant
 
+from qgis.core import QgsPoint
 from safe.definitions.hazard_classifications import (
     hazard_classes_all, not_exposed_class)
 from safe.definitions.exposure import exposure_population
@@ -55,6 +56,74 @@ def size(size_calculator, geometry):
     feature_size = size_calculator.measure(geometry)
     return feature_size
 
+
+def calculate_distance(
+        distance_calculator,
+        latitude,
+        longitude,
+        place_geometry):
+    """Simple postprocessor where we compute the distance between two points.
+
+    :param distance_calculator: The size calculator.
+    :type distance_calculator: safe.gis.vector.tools.SizeCalculator
+
+    :param latitude: The latitude to use.
+    :type latitude: float
+
+    :param longitude: The longitude to use.
+    :type longitude: float
+
+    :param place_geometry: Geometry of place.
+    :type place_geometry: QgsGeometry
+
+    :return: distance
+    :rtype: float
+    """
+    epicenter= QgsPoint(longitude, latitude)
+    place_point = place_geometry.asPoint()
+    distance = distance_calculator.measure_distance(epicenter, place_point)
+    return distance
+
+
+def calculate_bearing(bearing_function, latitude, longitude, place_geometry):
+    """Simple postprocessor where we compute the bearing angle between two
+    points.
+
+    :param bearing_function: The size calculator.
+    :type bearing_function: safe.gis.vector.tools.measure_bearing
+
+    :param latitude: The latitude to use.
+    :type latitude: float
+
+    :param longitude: The longitude to use.
+    :type longitude: float
+
+    :param place_geometry: Geometry of place.
+    :type place_geometry: QgsGeometry
+
+    :return: Bearing angle
+    :rtype:
+    """
+    epicenter = QgsPoint(longitude, latitude)
+    place_point = place_geometry.asPoint()
+    bearing = bearing_function(epicenter, place_point)
+    return bearing
+
+
+def calculate_cardinality(cardinality_function, angle):
+    """Simple postprocessor where we compute the distance between two points.
+
+    :param cardinality_function: The cardinality function.
+    :type cardinality_function: safe.gis.vector.tools.measure_cardinality
+
+    :param angle: Bearing angle.
+    :type angle: float
+
+    :return: Cardinality text.
+    :rtype: str
+    """
+    cardinality = cardinality_function(angle)
+    return cardinality
 
 # This postprocessor function is also used in the aggregation_summary
 def post_processor_affected_function(
