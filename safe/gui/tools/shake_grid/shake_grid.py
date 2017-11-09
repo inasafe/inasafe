@@ -10,6 +10,7 @@ import sys
 from datetime import datetime
 from subprocess import call, CalledProcessError
 from xml.dom import minidom
+import numpy as np
 
 import pytz
 # This import is required to enable PyQt API v2
@@ -50,6 +51,18 @@ __revision__ = '$Format:%H$'
 
 LOGGER = logging.getLogger('InaSAFE')
 
+def gaussian_filter(Z, sigma):
+    """
+
+    :param Z:
+    :type Z:
+    :param sigma:
+    :type sigma:
+    :return:
+    :rtype:
+    """
+    return []
+
 
 def data_dir():
     """Return the path to the standard data dir for e.g. geonames data
@@ -73,7 +86,10 @@ class ShakeGrid(object):
             grid_xml_path,
             output_dir=None,
             output_basename=None,
-            algorithm_filename_flag=True):
+            algorithm_filename_flag=True,
+            smoothed=False,
+            smooth_sigma=0.9
+    ):
         """Constructor.
 
         :param title: The title of the earthquake that will be also added to
@@ -96,6 +112,14 @@ class ShakeGrid(object):
         :param algorithm_filename_flag: Flag whether to use the algorithm in
             the output file's name.
         :type algorithm_filename_flag: bool
+
+        :param smoothed: Flag whether to use the smoothing functions for
+            the mmi contours.
+        :type smoothed: bool
+
+        :param smooth_sigma: parameter for gaussian filter used in smoothing
+            function.
+        :type smooth_sigma: float
 
         :returns: The instance of the class.
         :rtype: ShakeGrid
@@ -137,6 +161,9 @@ class ShakeGrid(object):
             self.output_basename = output_basename
         self.algorithm_name = algorithm_filename_flag
         self.grid_xml_path = grid_xml_path
+        self.smoothed = smoothed
+        self.smooth_sigma = smooth_sigma
+
         self.parse_grid_xml()
 
     def extract_date_time(self, the_time_stamp):
@@ -290,7 +317,9 @@ class ShakeGrid(object):
             longitude_column = 0
             latitude_column = 1
             mmi_column = 4
-            self.mmi_data = []
+            lon_list = []
+            lat_list = []
+            mmi_list = []
             for line in data.split('\n'):
                 if not line:
                     continue
@@ -298,8 +327,28 @@ class ShakeGrid(object):
                 longitude = tokens[longitude_column]
                 latitude = tokens[latitude_column]
                 mmi = tokens[mmi_column]
-                mmi_tuple = (longitude, latitude, mmi)
-                self.mmi_data.append(mmi_tuple)
+                lon_list.append(float(longitude))
+                lat_list.append(float(latitude))
+                mmi_list.append(float(mmi))
+
+            if self.smoothed:
+                ncols = len(np.where(np.array(lon_list) == lon_list[0])[0])
+                nrows = len(np.where(np.array(lat_list) == lat_list[0])[0])
+
+                # reshape mmi_list to 2D array to apply gaussian filter
+                Z = np.reshape(mmi_list, (nrows, ncols))
+
+                # smooth MMI matrix
+                # Help from Hadi Ghasemi
+                mmi_list = gaussian_filter(Z, self.smooth_sigma)
+
+                # reshape array back to 1D longl list of mmi
+                mmi_list = np.reshape(mmi_list, ncols * nrows)
+
+            # zip lists as list of tuples
+            self.mmi_data = zip(lon_list, lat_list, mmi_list)
+
+
 
         except Exception, e:
             LOGGER.exception('Event parse failed')
