@@ -18,6 +18,7 @@ from qgis.core import (
     QgsGeometry,
     QgsCoordinateTransform,
     QgsCoordinateReferenceSystem,
+    QgsFeatureRequest,
     QgsRectangle,
     QgsVectorLayer,
     QGis,
@@ -53,12 +54,18 @@ from safe.definitions.constants import (
     PREPARE_FAILED_BAD_LAYER,
     PREPARE_FAILED_BAD_CODE)
 from safe.definitions.earthquake import EARTHQUAKE_FUNCTIONS
-from safe.definitions.exposure import indivisible_exposure, exposure_population
+from safe.definitions.exposure import (
+    indivisible_exposure,
+    exposure_population,
+    exposure_place,
+)
 from safe.definitions.fields import (
     size_field,
     exposure_class_field,
     hazard_class_field,
+    distance_field,
 )
+from safe.definitions.hazard import hazard_earthquake
 from safe.definitions.hazard_exposure_specifications import (
     specific_actions, specific_notes)
 from safe.definitions.layer_purposes import (
@@ -154,7 +161,7 @@ from safe.gis.vector.summary_2_aggregation import aggregation_summary
 from safe.gis.vector.summary_3_analysis import analysis_summary
 from safe.gis.vector.summary_4_exposure_summary_table import (
     exposure_summary_table)
-from safe.gis.vector.tools import remove_fields
+from safe.gis.vector.tools import remove_fields, create_memory_layer
 from safe.gis.vector.union import union
 from safe.gis.vector.update_value_map import update_value_map
 from safe.gui.analysis_utilities import add_layer_to_canvas
@@ -1551,8 +1558,9 @@ class ImpactFunction(object):
         # Special case for earthquake hazard on population. We need to remove
         # the fatality model.
         earthquake_on_population = False
-        if self.hazard.keywords.get('hazard') == 'earthquake':
-            if self.exposure.keywords.get('exposure') == 'population':
+        if self.hazard.keywords.get('hazard') == hazard_earthquake['key']:
+            if self.exposure.keywords.get('exposure') == \
+                    exposure_population['key']:
                 earthquake_on_population = True
         if not earthquake_on_population:
             # This is not a EQ raster on raster population. We need to set it
@@ -1593,6 +1601,29 @@ class ImpactFunction(object):
             # We post process the aggregate hazard.
             # Raster continuous exposure.
             self.post_process(self._aggregate_hazard_impacted)
+
+        # Quick hack if EQ on places, we do some ordering on the distance.
+        if self.exposure.keywords.get('exposure') == exposure_place['key']:
+            if self.hazard.keywords.get('hazard') == hazard_earthquake['key']:
+                if is_vector_layer(self._exposure_summary):
+                    field = distance_field['field_name']
+                    if self._exposure_summary.fieldNameIndex(field) != -1:
+                        layer = create_memory_layer(
+                            'ordered',
+                            self._exposure_summary.geometryType(),
+                            self._exposure_summary.crs(),
+                            self._exposure_summary.fields())
+                        layer.startEditing()
+                        layer.keywords = copy_layer_keywords(
+                            self._exposure_summary.keywords)
+                        request = QgsFeatureRequest()
+                        request.addOrderBy('"%s"' % field, True, False)
+                        iterator = self._exposure_summary.getFeatures(request)
+                        for feature in iterator:
+                            layer.addFeature(feature)
+                        layer.commitChanges()
+                        self._exposure_summary = layer
+                        self.debug_layer(self._exposure_summary)
 
         self._performance_log = profiling_log()
         self.callback(9, step_count, analysis_steps['summary_calculation'])
