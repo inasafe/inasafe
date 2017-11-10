@@ -10,6 +10,7 @@ import sys
 from datetime import datetime
 from subprocess import call, CalledProcessError
 from xml.dom import minidom
+import numpy as np
 
 import pytz
 # This import is required to enable PyQt API v2
@@ -51,6 +52,181 @@ __revision__ = '$Format:%H$'
 LOGGER = logging.getLogger('InaSAFE')
 
 
+def gaussian_kernel(sigma, truncate=4.0):
+    """Return Gaussian that truncates at the given number of std deviations.
+
+    Adapted from https://github.com/nicjhan/gaussian-filter
+    """
+
+    sigma = float(sigma)
+    radius = int(truncate * sigma + 0.5)
+
+    x, y = np.mgrid[-radius:radius + 1, -radius:radius + 1]
+    sigma = sigma ** 2
+
+    k = 2 * np.exp(-0.5 * (x ** 2 + y ** 2) / sigma)
+    k = k / np.sum(k)
+
+    return k
+
+
+def tile_and_reflect(input):
+    """Make 3x3 tiled array.
+
+    Central area is 'input', surrounding areas are reflected.
+
+    Adapted from https://github.com/nicjhan/gaussian-filter
+    """
+
+    tiled_input = np.tile(input, (3, 3))
+
+    rows = input.shape[0]
+    cols = input.shape[1]
+
+    # Now we have a 3x3 tiles - do the reflections.
+    # All those on the sides need to be flipped left-to-right.
+    for i in range(3):
+        # Left hand side tiles
+        tiled_input[i * rows:(i + 1) * rows, 0:cols] = \
+            np.fliplr(tiled_input[i * rows:(i + 1) * rows, 0:cols])
+        # Right hand side tiles
+        tiled_input[i * rows:(i + 1) * rows, -cols:] = \
+            np.fliplr(tiled_input[i * rows:(i + 1) * rows, -cols:])
+
+    # All those on the top and bottom need to be flipped up-to-down
+    for i in range(3):
+        # Top row
+        tiled_input[0:rows, i * cols:(i + 1) * cols] = \
+            np.flipud(tiled_input[0:rows, i * cols:(i + 1) * cols])
+        # Bottom row
+        tiled_input[-rows:, i * cols:(i + 1) * cols] = \
+            np.flipud(tiled_input[-rows:, i * cols:(i + 1) * cols])
+
+    # The central array should be unchanged.
+    assert (np.array_equal(input, tiled_input[rows:2 * rows, cols:2 * cols]))
+
+    # All sides of the middle array should be the same as those bordering them.
+    # Check this starting at the top and going around clockwise. This can be
+    # visually checked by plotting the 'tiled_input' array.
+    assert (np.array_equal(input[0, :], tiled_input[rows - 1, cols:2 * cols]))
+    assert (np.array_equal(input[:, -1], tiled_input[rows:2 * rows, 2 * cols]))
+    assert (np.array_equal(input[-1, :], tiled_input[2 * rows, cols:2 * cols]))
+    assert (np.array_equal(input[:, 0], tiled_input[rows:2 * rows, cols - 1]))
+
+    return tiled_input
+
+
+def convolve(input, weights, mask=None, slow=False):
+    """2 dimensional convolution.
+
+    This is a Python implementation of what will be written in Fortran.
+
+    Borders are handled with reflection.
+
+    Masking is supported in the following way:
+        * Masked points are skipped.
+        * Parts of the input which are masked have weight 0 in the kernel.
+        * Since the kernel as a whole needs to have value 1, the weights of the
+          masked parts of the kernel are evenly distributed over the non-masked
+          parts.
+
+    Adapted from https://github.com/nicjhan/gaussian-filter
+    """
+
+    assert (len(input.shape) == 2)
+    assert (len(weights.shape) == 2)
+
+    # Only one reflection is done on each side so the weights array cannot be
+    # bigger than width/height of input +1.
+    assert (weights.shape[0] < input.shape[0] + 1)
+    assert (weights.shape[1] < input.shape[1] + 1)
+
+    if mask is not None:
+        # The slow convolve does not support masking.
+        assert (not slow)
+        assert (input.shape == mask.shape)
+        tiled_mask = tile_and_reflect(mask)
+
+    output = np.copy(input)
+    tiled_input = tile_and_reflect(input)
+
+    rows = input.shape[0]
+    cols = input.shape[1]
+    # Stands for half weights row.
+    hw_row = weights.shape[0] / 2
+    hw_col = weights.shape[1] / 2
+
+    # Now do convolution on central array.
+    # Iterate over tiled_input.
+    for i, io in zip(range(rows, rows * 2), range(rows)):
+        for j, jo in zip(range(cols, cols * 2), range(cols)):
+            # The current central pixel is at (i, j)
+
+            # Skip masked points.
+            if mask is not None and tiled_mask[i, j]:
+                continue
+
+            average = 0.0
+            if slow:
+                # Iterate over weights/kernel.
+                for k in range(weights.shape[0]):
+                    for l in range(weights.shape[1]):
+                        # Get coordinates of tiled_input array that match given
+                        # weights
+                        m = i + k - hw_row
+                        n = j + l - hw_col
+
+                        average += tiled_input[m, n] * weights[k, l]
+            else:
+                # Find the part of the tiled_input array that overlaps with the
+                # weights array.
+                overlapping = tiled_input[
+                    i - hw_row:i + hw_row + 1,
+                    j - hw_col:j + hw_col + 1]
+                assert (overlapping.shape == weights.shape)
+
+                # If any of 'overlapping' is masked then set the corrosponding
+                # points in the weights matrix to 0 and redistribute these to
+                # non-masked points.
+                if mask is not None:
+                    overlapping_mask = tiled_mask[
+                        i - hw_row:i + hw_row + 1,
+                        j - hw_col:j + hw_col + 1]
+                    assert (overlapping_mask.shape == weights.shape)
+
+                    # Total value and number of weights clobbered by the mask.
+                    clobber_total = np.sum(weights[overlapping_mask])
+                    remaining_num = np.sum(np.logical_not(overlapping_mask))
+                    # This is impossible since at least i, j is not masked.
+                    assert (remaining_num > 0)
+                    correction = clobber_total / remaining_num
+
+                    # It is OK if nothing is masked - the weights will not be
+                    #  changed.
+                    if correction == 0:
+                        assert (not overlapping_mask.any())
+
+                    # Redistribute to non-masked points.
+                    tmp_weights = np.copy(weights)
+                    tmp_weights[overlapping_mask] = 0.0
+                    tmp_weights[np.where(tmp_weights != 0)] += correction
+
+                    # Should be very close to 1. May not be exact due to
+                    # rounding.
+                    assert (abs(np.sum(tmp_weights) - 1) < 1e-15)
+
+                else:
+                    tmp_weights = weights
+
+                merged = tmp_weights[:] * overlapping
+                average = np.sum(merged)
+
+            # Set new output value.
+            output[io, jo] = average
+
+    return output
+
+
 def data_dir():
     """Return the path to the standard data dir for e.g. geonames data
 
@@ -73,7 +249,9 @@ class ShakeGrid(object):
             grid_xml_path,
             output_dir=None,
             output_basename=None,
-            algorithm_filename_flag=True):
+            algorithm_filename_flag=True,
+            smoothed=False,
+            smooth_sigma=0.9):
         """Constructor.
 
         :param title: The title of the earthquake that will be also added to
@@ -96,6 +274,15 @@ class ShakeGrid(object):
         :param algorithm_filename_flag: Flag whether to use the algorithm in
             the output file's name.
         :type algorithm_filename_flag: bool
+
+        :param smoothed: Flag whether to use the smoothing functions for
+            the mmi contours.
+        :type smoothed: bool
+
+        :param smooth_sigma: parameter for gaussian filter used in smoothing
+            function.
+        :type smooth_sigma:
+
 
         :returns: The instance of the class.
         :rtype: ShakeGrid
@@ -137,6 +324,11 @@ class ShakeGrid(object):
             self.output_basename = output_basename
         self.algorithm_name = algorithm_filename_flag
         self.grid_xml_path = grid_xml_path
+        self.smooothed = smoothed
+        if smoothed:
+            # Used for gaussian filter
+            self.sigma = smooth_sigma
+
         self.parse_grid_xml()
 
     def extract_date_time(self, the_time_stamp):
@@ -291,6 +483,9 @@ class ShakeGrid(object):
             latitude_column = 1
             mmi_column = 4
             self.mmi_data = []
+            lon_list = []
+            lat_list = []
+            mmi_list = []
             for line in data.split('\n'):
                 if not line:
                     continue
@@ -300,6 +495,27 @@ class ShakeGrid(object):
                 mmi = tokens[mmi_column]
                 mmi_tuple = (longitude, latitude, mmi)
                 self.mmi_data.append(mmi_tuple)
+                lon_list.append(float(longitude))
+                lat_list.append(float(latitude))
+                mmi_list.append(float(mmi))
+
+            if self.smooothed:
+                ncols = len(np.where(np.array(lon_list) == lon_list[0])[0])
+                nrows = len(np.where(np.array(lat_list) == lat_list[0])[0])
+
+                # reshape mmi_list to 2D array to apply gaussian filter
+                Z = np.reshape(mmi_list, (nrows, ncols))
+
+                # smooth MMI matrix
+                # Help from Hadi Ghasemi
+                # mmi_list = gaussian_filter(Z, self.sigma)
+                mmi_list = convolve(Z, gaussian_kernel(self.sigma))
+
+                # reshape array back to 1D longl list of mmi
+                mmi_list = np.reshape(mmi_list, ncols * nrows)
+
+            # zip lists as list of tuples
+            self.mmi_data = zip(lon_list, lat_list, mmi_list)
 
         except Exception, e:
             LOGGER.exception('Event parse failed')
@@ -362,7 +578,7 @@ class ShakeGrid(object):
         LOGGER.debug('mmi_to_delimited_text requested.')
 
         csv_path = os.path.join(
-            self.output_dir, 'mmi.csv')
+            self.output_dir, self.output_basename)
         # short circuit if the csv is already created.
         if os.path.exists(csv_path) and force_flag is not True:
             return csv_path
@@ -406,13 +622,13 @@ class ShakeGrid(object):
 
         vrt_string = (
             '<OGRVRTDataSource>'
-            '  <OGRVRTLayer name="mmi">'
+            '  <OGRVRTLayer name="%s">'
             '    <SrcDataSource>%s</SrcDataSource>'
             '    <GeometryType>wkbPoint</GeometryType>'
             '    <GeometryField encoding="PointFromColumns"'
             '                      x="lon" y="lat" z="mmi"/>'
             '  </OGRVRTLayer>'
-            '</OGRVRTDataSource>' % csv_path)
+            '</OGRVRTDataSource>' % (self.output_basename, csv_path))
 
         with codecs.open(vrt_path, 'w', encoding='utf-8') as f:
             f.write(vrt_string)
@@ -521,9 +737,10 @@ class ShakeGrid(object):
             (
                 '%(gdal_grid)s -a %(alg)s -zfield "mmi" -txe %(xMin)s '
                 '%(xMax)s -tye %(yMin)s %(yMax)s -outsize %(dimX)i '
-                '%(dimY)i -of GTiff -ot Float16 -a_srs EPSG:4326 -l mmi '
+                '%(dimY)i -of GTiff -ot Float16 -a_srs EPSG:4326 -l %(layer)s '
                 '"%(vrt)s" "%(tif)s"'
             ) % {
+                'layer': self.output_basename,
                 'gdal_grid': which('gdal_grid')[0],
                 'alg': algorithm,
                 'xMin': self.x_minimum,
