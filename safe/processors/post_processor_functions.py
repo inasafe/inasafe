@@ -158,7 +158,7 @@ def calculate_cardinality(
     _ = earthquake_hazard, place_exposure # NOQA
 
     direction_list = tr(
-        'N, NNE, NE, ENE, E, ESE, SE, SSE, S, SSW, SW, WSW, W, WNW, NW, NNW'
+        'N,NNE,NE,ENE,E,ESE,SE,SSE,S,SSW,SW,WSW,W,WNW,NW,NNW'
     ).split(',')
 
     bearing = float(angle)
