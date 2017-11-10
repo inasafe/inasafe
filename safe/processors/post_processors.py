@@ -7,6 +7,7 @@
 
 import logging
 
+from safe.definitions.exposure import exposure_place
 from safe.definitions.fields import (
     bearing_field,
     direction_field,
@@ -17,6 +18,7 @@ from safe.definitions.fields import (
     hazard_class_field,
     affected_field
 )
+from safe.definitions.hazard import hazard_earthquake
 from safe.definitions.hazard_classifications import not_exposed_class
 from safe.processors.post_processor_functions import (
     calculate_bearing,
@@ -30,7 +32,8 @@ from safe.processors.post_processor_inputs import (
     layer_property_input_type,
     size_calculator_input_value,
     keyword_input_type,
-    field_input_type)
+    field_input_type,
+    keyword_value_expected)
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -89,8 +92,7 @@ post_processor_distance = {
     'key': 'post_processor_distance',
     'name': tr('Distance Post Processor'),
     'description': tr(
-        u'A post processor to calculate the distance between two points. The '
-        u'unit is defined in the exposure definition.'),
+        'A post processor to calculate the distance between two points.'),
     'input': {
         'distance_calculator': {
             'type': layer_property_input_type,
@@ -106,6 +108,16 @@ post_processor_distance = {
         'longitude': {
             'type': keyword_input_type,
             'value': ['hazard_keywords', 'extra_keywords', 'longitude']
+        },
+        'earthquake_hazard': {
+            'type': keyword_value_expected,
+            'value': ['hazard_keywords', 'hazard'],
+            'expected_value': hazard_earthquake['key']
+        },
+        'place_exposure': {
+            'type': keyword_value_expected,
+            'value': ['exposure_keywords', 'exposure'],
+            'expected_value': exposure_place['key']
         }
     },
     'output': {
@@ -121,7 +133,7 @@ post_processor_bearing = {
     'key': 'post_processor_bearing',
     'name': tr('Bearing Angle Post Processor'),
     'description': tr(
-        u'A post processor to calculate the bearing angle between two points.'
+        'A post processor to calculate the bearing angle between two points.'
         ),
     'input': {
         'place_geometry': {
@@ -134,6 +146,16 @@ post_processor_bearing = {
         'longitude': {
             'type': keyword_input_type,
             'value': ['hazard_keywords', 'extra_keywords', 'longitude']
+        },
+        'earthquake_hazard': {
+            'type': keyword_value_expected,
+            'value': ['hazard_keywords', 'hazard'],
+            'expected_value': hazard_earthquake['key']
+        },
+        'place_exposure': {
+            'type': keyword_value_expected,
+            'value': ['exposure_keywords', 'exposure'],
+            'expected_value': exposure_place['key']
         }
     },
     'output': {
@@ -149,12 +171,22 @@ post_processor_cardinality = {
     'key': 'post_processor_cardinality',
     'name': tr('Cardinality Post Processor'),
     'description': tr(
-        u'A post processor to calculate the cardinality of an angle.'
+        'A post processor to calculate the cardinality of an angle.'
         ),
     'input': {
         'angle': {
             'type': field_input_type,
             'value': bearing_field
+        },
+        'earthquake_hazard': {
+            'type': keyword_value_expected,
+            'value': ['hazard_keywords', 'hazard'],
+            'expected_value': hazard_earthquake['key']
+        },
+        'place_exposure': {
+            'type': keyword_value_expected,
+            'value': ['exposure_keywords', 'exposure'],
+            'expected_value': exposure_place['key']
         }
     },
     'output': {

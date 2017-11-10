@@ -17,6 +17,9 @@ from safe.processors.pre_processors import *
 # |--- size
 # |   |--- size rate  disabled in V4.0, ET 13/02/17
 # |   `--- productivity
+# |--- distance
+# |--- bearing angle
+# |   |--- cardinality
 # |--- affected
 # |--- displaced ratio
 # |--- fatality ratio
