@@ -134,7 +134,7 @@ post_processor_bearing = {
     'name': tr('Bearing Angle Post Processor'),
     'description': tr(
         'A post processor to calculate the bearing angle between two points.'
-        ),
+    ),
     'input': {
         'place_geometry': {
             'type': geometry_property_input_type
@@ -172,7 +172,7 @@ post_processor_cardinality = {
     'name': tr('Cardinality Post Processor'),
     'description': tr(
         'A post processor to calculate the cardinality of an angle.'
-        ),
+    ),
     'input': {
         'angle': {
             'type': field_input_type,
