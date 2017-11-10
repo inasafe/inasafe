@@ -613,6 +613,24 @@ class ImpactFunction(object):
         return self._outputs()[0]
 
     @property
+    def impact_report(self):
+        """Property for an impact report.
+
+        :return: An impact report object.
+        :rtype: ImpactReport
+        """
+        return self._impact_report
+
+    @impact_report.setter
+    def impact_report(self, impact_report):
+        """Setter for the impact report.
+
+        :param impact_report: The impact report object.
+        :type impact_report: ImpactReport
+        """
+        self._impact_report = impact_report
+
+    @property
     def exposure_summary(self):
         """Property for the exposure summary.
 
