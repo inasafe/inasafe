@@ -2,8 +2,20 @@
 
 """QGIS Expressions which are available in the QGIS GUI interface."""
 
-from qgis.core import qgsfunction, QgsCoordinateReferenceSystem
+from qgis.core import (
+    qgsfunction,
+    QgsCoordinateReferenceSystem,
+    QgsMapLayerRegistry,
+    QgsExpressionContextUtils,
+)
 
+from safe.definitions.fields import (
+    bearing_field,
+    distance_field,
+    direction_field,
+    exposure_name_field,
+)
+from safe.definitions.provenance import provenance_layer_exposure_summary_id
 from safe.definitions.reports.map_report import (
     legend_title_header,
     disclaimer_title_header,
@@ -60,6 +72,162 @@ def legend_title_header_element(feature, parent):
     _ = feature, parent  # NOQA
     header = legend_title_header['string_format']
     return header.capitalize()
+
+
+description = tr(
+    'If the impact layer has a distance field, it will return the distance to '
+    'the nearest place in metres.')
+examples = {
+    'distance_to_nearest_place()': '1234'
+}
+help_message = generate_expression_help(description, examples)
+
+
+@qgsfunction(
+    args='auto', group=label_group, usesGeometry=False, referencedColumns=[],
+    help_text=help_message.to_html(), helpText=help_message.to_html())
+def distance_to_nearest_place(feature, parent):
+    """If the impact layer has a distance field, it will return the distance to
+    the nearest place in metres.
+
+    e.g. distance_to_nearest_place() -> 1234
+    """
+    _ = feature, parent  # NOQA
+    project_context_scope = QgsExpressionContextUtils.projectScope()
+    registry = QgsMapLayerRegistry.instance()
+
+    key = provenance_layer_exposure_summary_id['provenance_key']
+    if not project_context_scope.hasVariable(key):
+        return None
+
+    layer = registry.mapLayer(project_context_scope.variable(key))
+
+    if not layer:
+        return None
+
+    index = layer.fieldNameIndex(distance_field['field_name'])
+    if index < 0:
+        return None
+
+    feature = layer.getFeatures().next()
+    return feature[index]
+
+
+description = tr(
+    'If the impact layer has a distance field, it will return the direction '
+    'to the nearest place.')
+examples = {
+    'direction_to_nearest_place()': tr('NW')
+}
+help_message = generate_expression_help(description, examples)
+
+
+@qgsfunction(
+    args='auto', group=label_group, usesGeometry=False, referencedColumns=[],
+    help_text=help_message.to_html(), helpText=help_message.to_html())
+def direction_to_nearest_place(feature, parent):
+    """If the impact layer has a distance field, it will return the direction
+    to the nearest place.
+
+    e.g. direction_to_nearest_place() -> NW
+    """
+    _ = feature, parent  # NOQA
+    project_context_scope = QgsExpressionContextUtils.projectScope()
+    registry = QgsMapLayerRegistry.instance()
+
+    key = provenance_layer_exposure_summary_id['provenance_key']
+    if not project_context_scope.hasVariable(key):
+        return None
+
+    layer = registry.mapLayer(project_context_scope.variable(key))
+
+    if not layer:
+        return None
+
+    index = layer.fieldNameIndex(direction_field['field_name'])
+    if index < 0:
+        return None
+
+    feature = layer.getFeatures().next()
+    return feature[index]
+
+
+description = tr(
+    'If the impact layer has a distance field, it will return the bearing '
+    'to the nearest place in degrees.')
+examples = {
+    'bearing_to_nearest_place()': tr('280')
+}
+help_message = generate_expression_help(description, examples)
+
+
+@qgsfunction(
+    args='auto', group=label_group, usesGeometry=False, referencedColumns=[],
+    help_text=help_message.to_html(), helpText=help_message.to_html())
+def bearing_to_nearest_place(feature, parent):
+    """If the impact layer has a distance field, it will return the bearing
+    to the nearest place in degrees.
+
+    e.g. bearing_to_nearest_place() -> 280
+    """
+    _ = feature, parent  # NOQA
+    project_context_scope = QgsExpressionContextUtils.projectScope()
+    registry = QgsMapLayerRegistry.instance()
+
+    key = provenance_layer_exposure_summary_id['provenance_key']
+    if not project_context_scope.hasVariable(key):
+        return None
+
+    layer = registry.mapLayer(project_context_scope.variable(key))
+
+    if not layer:
+        return None
+
+    index = layer.fieldNameIndex(bearing_field['field_name'])
+    if index < 0:
+        return None
+
+    feature = layer.getFeatures().next()
+    return feature[index]
+
+
+description = tr(
+    'If the impact layer has a distance field, it will return the name '
+    'of the nearest place.')
+examples = {
+    'name_of_the_nearest_place()': tr('Tokyo')
+}
+help_message = generate_expression_help(description, examples)
+
+
+@qgsfunction(
+    args='auto', group=label_group, usesGeometry=False, referencedColumns=[],
+    help_text=help_message.to_html(), helpText=help_message.to_html())
+def name_of_the_nearest_place(feature, parent):
+    """If the impact layer has a distance field, it will return the name
+    of the nearest place.
+
+    e.g. name_of_the_nearest_place() -> Tokyo
+    """
+    _ = feature, parent  # NOQA
+    project_context_scope = QgsExpressionContextUtils.projectScope()
+    registry = QgsMapLayerRegistry.instance()
+
+    key = provenance_layer_exposure_summary_id['provenance_key']
+    if not project_context_scope.hasVariable(key):
+        return None
+
+    layer = registry.mapLayer(project_context_scope.variable(key))
+
+    if not layer:
+        return None
+
+    index = layer.fieldNameIndex(exposure_name_field['field_name'])
+    if index < 0:
+        return None
+
+    feature = layer.getFeatures().next()
+    return feature[index]
 
 
 description = tr(
