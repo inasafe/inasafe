@@ -242,8 +242,7 @@ def add_layers_to_canvas_with_custom_orders(order, impact_function):
 
     From top to bottom in the legend:
         [
-            ('FromCanvas', layer name, source, vector provider type, QML),
-            ('FromCanvas', layer name, source, None if raster, QML),
+            ('FromCanvas', layer name, source, provider type, QML),
             ('FromAnalysis', layer purpose, layer group, None, None),
             ...
         ]
@@ -266,7 +265,7 @@ def add_layers_to_canvas_with_custom_orders(order, impact_function):
         if layer_definition[0] == FROM_CANVAS['key']:
             style = QDomDocument()
             style.setContent(get_string(layer_definition[4]))
-            if layer_definition[3] is not None:
+            if layer_definition[3] != 'gdal':
                 vector_layer = QgsVectorLayer(
                     layer_definition[2],
                     layer_definition[1],
