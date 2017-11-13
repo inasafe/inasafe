@@ -286,7 +286,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                     InvalidParameterError,
                     UnsupportedProviderError,
                     MetadataReadError):
-                self.existing_keywords = None
+                self.existing_keywords = {}
         self.set_mode_label_to_keywords_creation()
 
         step = self.step_kw_purpose
@@ -832,6 +832,11 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         if inasafe_default_values:
             keywords['inasafe_default_values'] = inasafe_default_values
+
+        # Do not update extra keywords
+        extra_keywords = self.existing_keywords.get('extra_keywords')
+        if extra_keywords:
+            keywords['extra_keywords'] = extra_keywords
 
         return keywords
 
