@@ -135,8 +135,7 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
 
         From top to bottom in the legend:
         [
-            ('FromCanvas', layer name, source, vector provider type, QML),
-            ('FromCanvas', layer name, source, None if raster, QML),
+            ('FromCanvas', layer name, source, provider type, QML),
             ('FromAnalysis', layer purpose, layer group, None, None),
             ...
         ]
@@ -167,22 +166,14 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                 error = ''
                 layer.exportNamedStyle(style_document, error)
 
-                if is_vector_layer(layer):
-                    layers.append((
-                        FROM_CANVAS['key'],
-                        layer.name(),
-                        layer.source(),
-                        layer.providerType(),
-                        style_document.toString()
-                    ))
-                else:
-                    layers.append((
-                        FROM_CANVAS['key'],
-                        layer.name(),
-                        layer.source(),
-                        None,
-                        style_document.toString()
-                    ))
+                # For a raster, the provider type is 'gdal'
+                layers.append((
+                    FROM_CANVAS['key'],
+                    layer.name(),
+                    layer.source(),
+                    layer.providerType(),
+                    style_document.toString()
+                ))
         return layers
 
     def _add_layer_clicked(self):
