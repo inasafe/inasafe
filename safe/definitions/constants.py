@@ -77,3 +77,9 @@ APPLICATION_NAME = 'inasafe'
 
 # Layer properties
 MULTI_EXPOSURE_ANALYSIS_FLAG = 'multi_exposure_analysis'
+
+
+# Smoothing mode
+NONE_SMOOTHING = 'none_smoothing'
+NUMPY_SMOOTHING = 'numpy_smoothing'
+SCIPY_SMOOTHING = 'scipy_smoothing'
