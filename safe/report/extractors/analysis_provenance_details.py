@@ -10,9 +10,11 @@ from safe.definitions.provenance import (
     provenance_hazard_layer,
     provenance_aggregation_layer,
 )
+from safe.gis.tools import decode_full_layer_uri
 from safe.report.extractors.composer import QGISComposerContext
-from safe.report.extractors.util import resolve_from_dictionary, \
-    jinja2_output_as_string
+from safe.report.extractors.util import (
+    resolve_from_dictionary,
+    jinja2_output_as_string)
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.resources import resource_url, resources_path
 
@@ -75,8 +77,9 @@ def analysis_provenance_details_extractor(impact_report, component_metadata):
 
     # hazard_keywords doesn't have hazard_layer path information
     hazard_layer = QgsDataSourceURI.removePassword(
-        impact_report.impact_function.provenance.get(
-            provenance_hazard_layer['provenance_key']))
+        decode_full_layer_uri(
+            impact_report.impact_function.provenance.get(
+                provenance_hazard_layer['provenance_key']))[0])
     hazard_keywords['hazard_layer'] = hazard_layer
 
     # keep only value maps with IF exposure
@@ -106,8 +109,9 @@ def analysis_provenance_details_extractor(impact_report, component_metadata):
 
     # exposure_keywords doesn't have exposure_layer path information
     exposure_layer = QgsDataSourceURI.removePassword(
-        impact_report.impact_function.provenance.get(
-            provenance_exposure_layer['provenance_key']))
+        decode_full_layer_uri(
+            impact_report.impact_function.provenance.get(
+                provenance_exposure_layer['provenance_key']))[0])
     exposure_keywords['exposure_layer'] = exposure_layer
 
     header = resolve_from_dictionary(
@@ -141,8 +145,9 @@ def analysis_provenance_details_extractor(impact_report, component_metadata):
 
         # aggregation_keywords doesn't have aggregation_layer path information
         aggregation_layer = QgsDataSourceURI.removePassword(
-            impact_report.impact_function.provenance.get(
-                provenance_aggregation_layer['provenance_key']))
+            decode_full_layer_uri(
+                impact_report.impact_function.provenance.get(
+                    provenance_aggregation_layer['provenance_key']))[0])
         aggregation_keywords['aggregation_layer'] = aggregation_layer
 
         aggregation_provenance['provenances'] = headerize(
@@ -255,7 +260,8 @@ def analysis_provenance_details_simplified_extractor(
         'provenance': provenance_format.format(
             layer_name=hazard_keywords.get('title'),
             source=QgsDataSourceURI.removePassword(
-                hazard_keywords.get('source') or default_source))
+                decode_full_layer_uri(hazard_keywords.get('source'))[0] or
+                default_source))
     }
 
     exposure_keywords = impact_report.impact_function.provenance[
@@ -269,7 +275,8 @@ def analysis_provenance_details_simplified_extractor(
         'provenance': provenance_format.format(
             layer_name=exposure_keywords.get('title'),
             source=QgsDataSourceURI.removePassword(
-                exposure_keywords.get('source') or default_source))
+                decode_full_layer_uri(exposure_keywords.get('source'))[0] or
+                default_source))
     }
 
     aggregation_keywords = impact_report.impact_function.provenance[
@@ -283,7 +290,8 @@ def analysis_provenance_details_simplified_extractor(
         provenance_string = provenance_format.format(
             layer_name=aggregation_keywords.get('title'),
             source=QgsDataSourceURI.removePassword(
-                aggregation_keywords.get('source') or default_source))
+                decode_full_layer_uri(aggregation_keywords.get('source'))[0] or
+                default_source))
     else:
         aggregation_not_used = resolve_from_dictionary(
             extra_args, ['defaults', 'aggregation_not_used'])

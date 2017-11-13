@@ -142,7 +142,12 @@ from safe.gis.raster.polygonize import polygonize
 from safe.gis.raster.reclassify import reclassify as reclassify_raster
 from safe.gis.raster.zonal_statistics import zonal_stats
 from safe.gis.sanity_check import check_inasafe_fields, check_layer
-from safe.gis.tools import geometry_type, load_layer, load_layer_from_registry
+from safe.gis.tools import (
+    geometry_type,
+    load_layer,
+    load_layer_from_registry,
+    full_layer_uri,
+)
 from safe.gis.vector.assign_highest_value import assign_highest_value
 from safe.gis.vector.clean_geometry import clean_layer
 from safe.gis.vector.clip import clip
@@ -1031,7 +1036,7 @@ class ImpactFunction(object):
 
                 status, message = check_input_layer(
                     self.aggregation, 'aggregation')
-                aggregation_source = self.aggregation.publicSource()
+                aggregation_source = full_layer_uri(self.aggregation)
                 aggregation_keywords = copy_layer_keywords(
                     self.aggregation.keywords)
 
@@ -1128,7 +1133,7 @@ class ImpactFunction(object):
             set_provenance(
                 self._provenance,
                 provenance_exposure_layer,
-                self.exposure.publicSource())
+                full_layer_uri(self.exposure))
             # reference to original layer being used
             set_provenance(
                 self._provenance,
@@ -1141,7 +1146,7 @@ class ImpactFunction(object):
             set_provenance(
                 self._provenance,
                 provenance_hazard_layer,
-                self.hazard.publicSource())
+                full_layer_uri(self.hazard))
             # reference to original layer being used
             set_provenance(
                 self._provenance,
@@ -1423,7 +1428,7 @@ class ImpactFunction(object):
             self._profiling_table = self.datastore.layer(name)
             self.profiling.keywords['provenance_data'] = self.provenance
             write_iso19115_metadata(
-                self.profiling.publicSource(),
+                self.profiling.source(),
                 self.profiling.keywords)
 
             # Style all output layers.
@@ -1695,7 +1700,7 @@ class ImpactFunction(object):
             self.debug_layer(self._exposure_summary, add_to_datastore=False)
 
             output_layer_provenance[provenance_layer_exposure_summary[
-                'provenance_key']] = self._exposure_summary.publicSource()
+                'provenance_key']] = full_layer_uri(self._exposure_summary)
             output_layer_provenance[provenance_layer_exposure_summary_id[
                 'provenance_key']] = self._exposure_summary.id()
 
@@ -1718,7 +1723,7 @@ class ImpactFunction(object):
 
             output_layer_provenance[
                 provenance_layer_aggregate_hazard_impacted['provenance_key']
-            ] = self.aggregate_hazard_impacted.publicSource()
+            ] = full_layer_uri(self.aggregate_hazard_impacted)
             output_layer_provenance[
                 provenance_layer_aggregate_hazard_impacted_id['provenance_key']
             ] = self.aggregate_hazard_impacted.id()
@@ -1742,7 +1747,7 @@ class ImpactFunction(object):
 
             output_layer_provenance[
                 provenance_layer_exposure_summary_table['provenance_key']
-            ] = self._exposure_summary_table.publicSource()
+            ] = full_layer_uri(self._exposure_summary_table)
             output_layer_provenance[
                 provenance_layer_exposure_summary_table_id['provenance_key']
             ] = self._exposure_summary_table.id()
@@ -1761,7 +1766,7 @@ class ImpactFunction(object):
         self.debug_layer(self._aggregation_summary, add_to_datastore=False)
 
         output_layer_provenance[provenance_layer_aggregation_summary[
-            'provenance_key']] = self._aggregation_summary.publicSource()
+            'provenance_key']] = full_layer_uri(self._aggregation_summary)
         output_layer_provenance[provenance_layer_aggregation_summary_id[
             'provenance_key']] = self._aggregation_summary.id()
 
@@ -1777,7 +1782,7 @@ class ImpactFunction(object):
         self._analysis_impacted = self.datastore.layer(name)
         self.debug_layer(self._analysis_impacted, add_to_datastore=False)
         output_layer_provenance[provenance_layer_analysis_impacted[
-            'provenance_key']] = self._analysis_impacted.publicSource()
+            'provenance_key']] = full_layer_uri(self._analysis_impacted)
         output_layer_provenance[provenance_layer_analysis_impacted_id[
             'provenance_key']] = self._analysis_impacted.id()
 
@@ -1785,7 +1790,7 @@ class ImpactFunction(object):
         # FIXME(IS): Very hacky
         if not self.debug_mode:
             profiling_path = join(dirname(
-                self._analysis_impacted.publicSource()),
+                self._analysis_impacted.source()),
                 layer_purpose_profiling['name'] + '.csv')
             output_layer_provenance[
                 provenance_layer_profiling['provenance_key']] = profiling_path
@@ -1796,29 +1801,29 @@ class ImpactFunction(object):
             self._exposure_summary.keywords[
                 'provenance_data'] = self.provenance
             write_iso19115_metadata(
-                self._exposure_summary.publicSource(),
+                self._exposure_summary.source(),
                 self._exposure_summary.keywords)
         if self._aggregate_hazard_impacted:
             self._aggregate_hazard_impacted.keywords[
                 'provenance_data'] = self.provenance
             write_iso19115_metadata(
-                self._aggregate_hazard_impacted.publicSource(),
+                self._aggregate_hazard_impacted.source(),
                 self._aggregate_hazard_impacted.keywords)
         if self._exposure_summary_table:
             self._exposure_summary_table.keywords[
                 'provenance_data'] = self.provenance
             write_iso19115_metadata(
-                self._exposure_summary_table.publicSource(),
+                self._exposure_summary_table.source(),
                 self._exposure_summary_table.keywords)
 
         self.aggregation_summary.keywords['provenance_data'] = self.provenance
         write_iso19115_metadata(
-            self.aggregation_summary.publicSource(),
+            self.aggregation_summary.source(),
             self.aggregation_summary.keywords)
 
         self.analysis_impacted.keywords['provenance_data'] = self.provenance
         write_iso19115_metadata(
-            self.analysis_impacted.publicSource(),
+            self.analysis_impacted.source(),
             self.analysis_impacted.keywords)
 
     @profile

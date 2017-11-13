@@ -892,14 +892,15 @@ class TestImpactFunction(unittest.TestCase):
             provenance_qt_version['provenance_key']: QT_VERSION_STR,
             provenance_inasafe_version['provenance_key']: get_version(),
             provenance_aggregation_layer['provenance_key']:
-                aggregation_layer.source(),
+                aggregation_layer.source() + '|qgis_provider=ogr',
             provenance_aggregation_layer_id['provenance_key']:
                 aggregation_layer.id(),
             provenance_exposure_layer['provenance_key']:
-                exposure_layer.source(),
+                exposure_layer.source() + '|qgis_provider=ogr',
             provenance_exposure_layer_id['provenance_key']:
                 exposure_layer.id(),
-            provenance_hazard_layer['provenance_key']: hazard_layer.source(),
+            provenance_hazard_layer['provenance_key']:
+                hazard_layer.source() + '|qgis_provider=ogr',
             provenance_hazard_layer_id['provenance_key']: hazard_layer.id(),
             provenance_analysis_question['provenance_key']:
                 get_analysis_question(hazard, exposure),
@@ -1005,10 +1006,11 @@ class TestImpactFunction(unittest.TestCase):
             provenance_aggregation_layer['provenance_key']: None,
             provenance_aggregation_layer_id['provenance_key']: None,
             provenance_exposure_layer['provenance_key']:
-                exposure_layer.source(),
+                exposure_layer.source() + '|qgis_provider=ogr',
             provenance_exposure_layer_id['provenance_key']:
                 exposure_layer.id(),
-            provenance_hazard_layer['provenance_key']: hazard_layer.source(),
+            provenance_hazard_layer['provenance_key']:
+                hazard_layer.source() + '|qgis_provider=ogr',
             provenance_hazard_layer_id['provenance_key']: hazard_layer.id(),
             provenance_analysis_question['provenance_key']:
                 get_analysis_question(hazard, exposure),

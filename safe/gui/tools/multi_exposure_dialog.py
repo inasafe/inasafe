@@ -45,6 +45,7 @@ from safe.definitions.reports.components import (
     all_default_report_components,
     standard_multi_exposure_impact_report_metadata_pdf)
 from safe.definitions.utilities import definition
+from safe.gis.tools import full_layer_uri
 from safe.gui.analysis_utilities import (
     add_impact_layers_to_canvas,
     add_layers_to_canvas_with_custom_orders,
@@ -66,7 +67,7 @@ from safe.impact_function.multi_exposure_wrapper import (
     MultiExposureImpactFunction)
 from safe.messaging import styles
 from safe.report.impact_report import ImpactReport
-from safe.utilities.gis import qgis_version, is_vector_layer
+from safe.utilities.gis import qgis_version
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.qt import disable_busy_cursor, enable_busy_cursor
@@ -159,11 +160,12 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
 
         From top to bottom in the legend:
         [
-            ('FromCanvas', layer name, source, vector provider type, QML),
-            ('FromCanvas', layer name, source, None if raster, QML),
-            ('FromAnalysis', layer purpose, layer group, None, None),
+            ('FromCanvas', layer name, full layer URI, QML),
+            ('FromAnalysis', layer purpose, layer group, None),
             ...
         ]
+
+        The full layer URI is coming from our helper.
 
         :return: An ordered list of layers following a structure.
         :rtype: list
@@ -181,7 +183,6 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                     FROM_ANALYSIS['key'],
                     key,
                     parent,
-                    None,
                     None
                 ))
             else:
@@ -191,22 +192,13 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                 error = ''
                 layer.exportNamedStyle(style_document, error)
 
-                if is_vector_layer(layer):
-                    layers.append((
-                        FROM_CANVAS['key'],
-                        layer.name(),
-                        layer.source(),
-                        layer.providerType(),
-                        style_document.toString()
-                    ))
-                else:
-                    layers.append((
-                        FROM_CANVAS['key'],
-                        layer.name(),
-                        layer.source(),
-                        None,
-                        style_document.toString()
-                    ))
+                # For a raster, the provider type is 'gdal'
+                layers.append((
+                    FROM_CANVAS['key'],
+                    layer.name(),
+                    full_layer_uri(layer),
+                    style_document.toString()
+                ))
         return layers
 
     def _add_layer_clicked(self):

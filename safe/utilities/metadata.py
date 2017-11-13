@@ -187,6 +187,7 @@ def read_iso19115_metadata(layer_uri, keyword=None, version_35=False):
 
     :param keyword: The key of keyword that want to be read. If None, return
         all keywords in dictionary.
+    :type keyword: basestring
 
     :returns: Dictionary of keywords or value of key as string.
     :rtype: dict, basestring

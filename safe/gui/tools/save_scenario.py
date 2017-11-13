@@ -113,8 +113,8 @@ class SaveScenarioDialog(QDialog):
             extent = viewport_geo_array(self.iface.mapCanvas())
         extent_string = ', '.join(('%f' % x) for x in extent)
 
-        exposure_path = self.exposure_layer.publicSource()
-        hazard_path = self.hazard_layer.publicSource()
+        exposure_path = self.exposure_layer.source()
+        hazard_path = self.hazard_layer.source()
         title = self.keyword_io.read_keywords(self.hazard_layer, 'title')
         title = tr(title)
         default_filename = title.replace(
@@ -150,7 +150,7 @@ class SaveScenarioDialog(QDialog):
                 'extent_crs',
                 self.dock.extent.crs.authid())
         if self.aggregation_layer is not None:
-            aggregation_path = self.aggregation_layer.publicSource()
+            aggregation_path = self.aggregation_layer.source()
             relative_aggregation_path = self.relative_path(
                 scenario_file_path, aggregation_path)
             parser.set(title, 'aggregation', relative_aggregation_path)
