@@ -30,6 +30,7 @@ from safe.utilities.i18n import tr
 
 try:
     import scipy  # NOQA
+    from scipy.ndimage.filters import gaussian_filter  # NOQA
     HAS_SCIPY = True
 except ImportError:
     HAS_SCIPY = False
@@ -209,11 +210,11 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
             algorithm = 'invdist'
 
         # Smoothing
-        smoothing = NONE_SMOOTHING
+        smoothing_method = NONE_SMOOTHING
         if self.numpy_smoothing.isChecked():
-            smoothing = NUMPY_SMOOTHING
+            smoothing_method = NUMPY_SMOOTHING
         if self.scipy_smoothing.isChecked():
-            smoothing = SCIPY_SMOOTHING
+            smoothing_method = SCIPY_SMOOTHING
 
         # noinspection PyUnresolvedReferences
         QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
@@ -224,7 +225,9 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
             input_source,
             output_path,
             algorithm=algorithm,
-            algorithm_filename_flag=True)
+            algorithm_filename_flag=True,
+            smoothing_method=smoothing_method
+        )
 
         # reclassify raster
         file_info = QFileInfo(file_name)

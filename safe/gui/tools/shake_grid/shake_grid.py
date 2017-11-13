@@ -38,6 +38,9 @@ from safe.definitions.hazard_classifications import earthquake_mmi_scale
 from safe.definitions.layer_geometry import layer_geometry_raster
 from safe.definitions.layer_modes import layer_mode_continuous
 from safe.definitions.layer_purposes import layer_purpose_hazard
+from safe.definitions.constants import (
+    NONE_SMOOTHING, NUMPY_SMOOTHING, SCIPY_SMOOTHING
+)
 from safe.definitions.units import unit_mmi
 from safe.definitions.versions import inasafe_keyword_version
 from safe.utilities.i18n import tr
@@ -250,7 +253,7 @@ class ShakeGrid(object):
             output_dir=None,
             output_basename=None,
             algorithm_filename_flag=True,
-            smoothed=False,
+            smoothing_method=NONE_SMOOTHING,
             smooth_sigma=0.9
     ):
         """Constructor.
@@ -276,9 +279,8 @@ class ShakeGrid(object):
             the output file's name.
         :type algorithm_filename_flag: bool
 
-        :param smoothed: Flag whether to use the smoothing functions for
-            the mmi contours.
-        :type smoothed: bool
+        :param smoothing_method: Smoothing method. One of None, Numpy, Scipy.
+        :type smoothing_method: basestring
 
         :param smooth_sigma: parameter for gaussian filter used in smoothing
             function.
@@ -324,7 +326,7 @@ class ShakeGrid(object):
             self.output_basename = output_basename
         self.algorithm_name = algorithm_filename_flag
         self.grid_xml_path = grid_xml_path
-        self.smoothed = smoothed
+        self.smoothing_method = smoothing_method
         self.smoothing_sigma = smooth_sigma
 
         self.parse_grid_xml()
@@ -494,7 +496,7 @@ class ShakeGrid(object):
                 lat_list.append(float(latitude))
                 mmi_list.append(float(mmi))
 
-            if self.smoothed:
+            if self.smoothing_method == NUMPY_SMOOTHING:
                 LOGGER.debug('We are using smoothing')
                 ncols = len(np.where(np.array(lon_list) == lon_list[0])[0])
                 nrows = len(np.where(np.array(lat_list) == lat_list[0])[0])
@@ -506,6 +508,21 @@ class ShakeGrid(object):
                 # Help from Hadi Ghasemi
                 # mmi_list = gaussian_filter(Z, self.smooth_sigma)
                 mmi_list = convolve(Z, gaussian_kernel(self.smoothing_sigma))
+
+                # reshape array back to 1D longl list of mmi
+                mmi_list = np.reshape(mmi_list, ncols * nrows)
+
+            elif self.smoothing_method == SCIPY_SMOOTHING:
+                from scipy.ndimage.filters import gaussian_filter
+                ncols = len(np.where(np.array(lon_list) == lon_list[0])[0])
+                nrows = len(np.where(np.array(lat_list) == lat_list[0])[0])
+
+                # reshape mmi_list to 2D array to apply gaussian filter
+                Z = np.reshape(mmi_list, (nrows, ncols))
+
+                # smooth MMI matrix
+                # Help from Hadi Ghasemi
+                mmi_list = gaussian_filter(Z, self.smoothing_sigma)
 
                 # reshape array back to 1D longl list of mmi
                 mmi_list = np.reshape(mmi_list, ncols * nrows)
@@ -1127,7 +1144,9 @@ def convert_mmi_data(
         source,
         output_path=None,
         algorithm=None,
-        algorithm_filename_flag=True):
+        algorithm_filename_flag=True,
+        smoothing_method=NONE_SMOOTHING,
+        smooth_sigma=0.9):
     """Convenience function to convert a single file.
 
     :param grid_xml_path: Path to the xml shake grid file.
@@ -1159,6 +1178,13 @@ def convert_mmi_data(
         output file's name.
     :type algorithm_filename_flag: bool
 
+    :param smoothing_method: Smoothing method. One of None, Numpy, Scipy.
+    :type smoothing_method: basestring
+
+    :param smooth_sigma: parameter for gaussian filter used in smoothing
+        function.
+    :type smooth_sigma: float
+
     :returns: A path to the resulting raster file.
     :rtype: str
     """
@@ -1178,5 +1204,8 @@ def convert_mmi_data(
         grid_xml_path,
         output_dir=output_dir,
         output_basename=output_basename,
-        algorithm_filename_flag=algorithm_filename_flag)
+        algorithm_filename_flag=algorithm_filename_flag,
+        smoothing_method=smoothing_method,
+        smooth_sigma=smooth_sigma
+    )
     return converter.mmi_to_raster(force_flag=True, algorithm=algorithm)
