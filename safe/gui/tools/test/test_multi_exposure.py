@@ -90,7 +90,7 @@ class MultiExposureDialogTest(unittest.TestCase):
         self.assertEqual(
             dialog.ordered_expected_layers(),
             [('FromAnalysis', u'impact_analysis',
-              u'Generic Hazard Polygon On Population Polygon', None, None)])
+              u'Generic Hazard Polygon On Population Polygon', None)])
         self.assertFalse(dialog.move_down.isEnabled())
         self.assertFalse(dialog.move_up.isEnabled())
         self.assertFalse(dialog.add_layer.isEnabled())
@@ -102,9 +102,9 @@ class MultiExposureDialogTest(unittest.TestCase):
             dialog.ordered_expected_layers(),
             [
                 ('FromAnalysis', u'impact_analysis',
-                 u'Generic Hazard Polygon On Roads Line', None, None),
+                 u'Generic Hazard Polygon On Roads Line', None),
                 ('FromAnalysis', u'impact_analysis',
-                 u'Generic Hazard Polygon On Population Polygon', None, None)
+                 u'Generic Hazard Polygon On Population Polygon', None)
             ])
 
         # Test move up/down
@@ -119,9 +119,9 @@ class MultiExposureDialogTest(unittest.TestCase):
             dialog.ordered_expected_layers(),
             [
                 ('FromAnalysis', u'impact_analysis',
-                 u'Generic Hazard Polygon On Population Polygon', None, None),
+                 u'Generic Hazard Polygon On Population Polygon', None),
                 ('FromAnalysis', u'impact_analysis',
-                 u'Generic Hazard Polygon On Roads Line', None, None),
+                 u'Generic Hazard Polygon On Roads Line', None),
             ])
 
         # Let's add a layer from canvas
@@ -144,17 +144,19 @@ class MultiExposureDialogTest(unittest.TestCase):
         self.assertEqual(custom_order[0][0], 'FromCanvas')
         self.assertEqual(custom_order[0][1], 'classified_vector')
         self.assertTrue(
-            custom_order[0][2].endswith('classified_vector.geojson'))
-        self.assertEqual(custom_order[0][3], 'ogr')
-        self.assertTrue(custom_order[0][4].endswith('</qgis>\n'))
+            custom_order[0][2].endswith(
+                'classified_vector.geojson|qgis_provider=ogr'),
+            custom_order[0][2]
+        )
+        self.assertTrue(custom_order[0][3].endswith('</qgis>\n'))
 
         self.assertEqual(
             custom_order[1],
             ('FromAnalysis', u'impact_analysis',
-             u'Generic Hazard Polygon On Population Polygon', None, None),
+             u'Generic Hazard Polygon On Population Polygon', None),
         )
         self.assertEqual(
             custom_order[2],
             ('FromAnalysis', u'impact_analysis',
-             u'Generic Hazard Polygon On Roads Line', None, None),
+             u'Generic Hazard Polygon On Roads Line', None),
         )

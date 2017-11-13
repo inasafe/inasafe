@@ -190,7 +190,7 @@ class KeywordIO(QObject):
             table.add(row)
             # Next the data source
             keyword = tr('Layer source')
-            value = self.layer.source()
+            value = self.layer.publicSource()  # Hide password
             row = self._keyword_to_row(keyword, value, wrap_slash=True)
             table.add(row)
 

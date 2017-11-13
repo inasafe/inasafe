@@ -2632,6 +2632,8 @@ class TestKeywordWizard(unittest.TestCase):
 
         self.assertDictEqual(real_keywords, expected_keyword)
 
+    # @unittest.skip(
+    #     'This test is hanging for a unknown reason since a few times.')
     def test_auto_select_one_item(self):
         """Test auto select if there is only one item in a list."""
         layer = clone_shp_layer(
@@ -2645,6 +2647,7 @@ class TestKeywordWizard(unittest.TestCase):
         self.assertEquals(
             dialog.step_kw_subcategory.lstSubcategories.currentRow(), 2)
         num_item = dialog.step_kw_subcategory.lstSubcategories.count()
+        dialog.close()
         self.assertTrue(num_item == 3)
 
     def test_earthquake_raster(self):

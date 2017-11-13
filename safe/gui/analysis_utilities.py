@@ -14,7 +14,6 @@ from qgis.core import (
     QgsMapLayerRegistry,
     QgsProject,
     QgsRasterLayer,
-    QgsVectorLayer,
 )
 
 from safe.definitions.constants import MULTI_EXPOSURE_ANALYSIS_FLAG
@@ -24,6 +23,7 @@ from safe.definitions.reports.components import (
     map_report, all_default_report_components, infographic_report)
 from safe.definitions.reports.infographic import map_overview
 from safe.definitions.utilities import definition, update_template_component
+from safe.gis.tools import load_layer
 from safe.impact_function.style import hazard_class_style
 from safe.impact_function.impact_function_utilities import (
     FROM_CANVAS,
@@ -242,11 +242,12 @@ def add_layers_to_canvas_with_custom_orders(order, impact_function):
 
     From top to bottom in the legend:
         [
-            ('FromCanvas', layer name, source, vector provider type, QML),
-            ('FromCanvas', layer name, source, None if raster, QML),
-            ('FromAnalysis', layer purpose, layer group, None, None),
+            ('FromCanvas', layer name, full layer URI, QML),
+            ('FromAnalysis', layer purpose, layer group, None),
             ...
         ]
+
+        The full layer URI is coming from our helper.
 
     :param order: Special structure the list of layers to add.
     :type order: list
@@ -266,22 +267,11 @@ def add_layers_to_canvas_with_custom_orders(order, impact_function):
         if layer_definition[0] == FROM_CANVAS['key']:
             style = QDomDocument()
             style.setContent(get_string(layer_definition[4]))
-            if layer_definition[3] is not None:
-                vector_layer = QgsVectorLayer(
-                    layer_definition[2],
-                    layer_definition[1],
-                    layer_definition[3])
-                vector_layer.importNamedStyle(style)
-                QgsMapLayerRegistry.instance().addMapLayer(vector_layer, False)
-                layer_node = group_analysis.addLayer(vector_layer)
-                layer_node.setVisible(Qt.Checked)
-            else:
-                raster_layer = QgsRasterLayer(
-                    layer_definition[2], layer_definition[1])
-                raster_layer.importNamedStyle(style)
-                QgsMapLayerRegistry.instance().addMapLayer(raster_layer, False)
-                layer_node = group_analysis.addLayer(raster_layer)
-                layer_node.setVisible(Qt.Checked)
+            layer = load_layer(layer_definition[2], layer_definition[1])[0]
+            layer.importNamedStyle(style)
+            QgsMapLayerRegistry.instance().addMapLayer(layer, False)
+            layer_node = group_analysis.addLayer(layer)
+            layer_node.setVisible(Qt.Checked)
         else:
             if layer_definition[2] == impact_function.name:
                 for layer in impact_function.outputs:
