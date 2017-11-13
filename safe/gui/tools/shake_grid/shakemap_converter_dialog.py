@@ -16,6 +16,8 @@ from qgis.utils import iface
 from safe import messaging as m
 from safe.common.version import get_version
 from safe.definitions.hazard_classifications import earthquake_mmi_scale
+from safe.definitions.constants import (
+    NUMPY_SMOOTHING, SCIPY_SMOOTHING, NONE_SMOOTHING)
 from safe.gis.raster.reclassify import reclassify
 from safe.gui.tools.help.shakemap_converter_help import shakemap_converter_help
 from safe.gui.tools.shake_grid.shake_grid import convert_mmi_data
@@ -205,6 +207,13 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
             algorithm = 'nearest'
         else:
             algorithm = 'invdist'
+
+        # Smoothing
+        smoothing = NONE_SMOOTHING
+        if self.numpy_smoothing.isChecked():
+            smoothing = NUMPY_SMOOTHING
+        if self.scipy_smoothing.isChecked():
+            smoothing = SCIPY_SMOOTHING
 
         # noinspection PyUnresolvedReferences
         QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
