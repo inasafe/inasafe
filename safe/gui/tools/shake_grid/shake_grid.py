@@ -496,8 +496,10 @@ class ShakeGrid(object):
                 lat_list.append(float(latitude))
                 mmi_list.append(float(mmi))
 
+            from datetime import datetime
+            start = datetime.now()
             if self.smoothing_method == NUMPY_SMOOTHING:
-                LOGGER.debug('We are using smoothing')
+                LOGGER.debug('We are using NUMPY smoothing')
                 ncols = len(np.where(np.array(lon_list) == lon_list[0])[0])
                 nrows = len(np.where(np.array(lat_list) == lat_list[0])[0])
 
@@ -505,14 +507,13 @@ class ShakeGrid(object):
                 Z = np.reshape(mmi_list, (nrows, ncols))
 
                 # smooth MMI matrix
-                # Help from Hadi Ghasemi
-                # mmi_list = gaussian_filter(Z, self.smooth_sigma)
                 mmi_list = convolve(Z, gaussian_kernel(self.smoothing_sigma))
 
-                # reshape array back to 1D longl list of mmi
+                # reshape array back to 1D long list of mmi
                 mmi_list = np.reshape(mmi_list, ncols * nrows)
 
             elif self.smoothing_method == SCIPY_SMOOTHING:
+                LOGGER.debug('We are using SCIPY smoothing')
                 from scipy.ndimage.filters import gaussian_filter
                 ncols = len(np.where(np.array(lon_list) == lon_list[0])[0])
                 nrows = len(np.where(np.array(lat_list) == lat_list[0])[0])
@@ -524,8 +525,11 @@ class ShakeGrid(object):
                 # Help from Hadi Ghasemi
                 mmi_list = gaussian_filter(Z, self.smoothing_sigma)
 
-                # reshape array back to 1D longl list of mmi
+                # reshape array back to 1D long list of mmi
                 mmi_list = np.reshape(mmi_list, ncols * nrows)
+            end = datetime.now()
+            duration = end - start
+            LOGGER.debug('Duration : %s' % duration.total_seconds())
 
             # zip lists as list of tuples
             self.mmi_data = zip(lon_list, lat_list, mmi_list)
