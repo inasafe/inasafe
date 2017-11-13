@@ -30,7 +30,7 @@ SOURCE_PATH = standard_data_path(
 GRID_PATH = os.path.join(temp_dir(__name__), 'grid.xml')
 shutil.copyfile(SOURCE_PATH, GRID_PATH)
 
-SHAKE_GRID = ShakeGrid('Test Title', 'Test Source', GRID_PATH, smoothed=True)
+SHAKE_GRID = ShakeGrid('Test Title', 'Test Source', GRID_PATH, smoothing_method=True)
 
 
 class TestShakeGrid(unittest.TestCase):
