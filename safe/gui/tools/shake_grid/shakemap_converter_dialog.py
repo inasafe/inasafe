@@ -27,7 +27,7 @@ from safe.utilities.styling import mmi_ramp_roman
 from safe.utilities.i18n import tr
 
 try:
-    import scipy
+    import scipy  # NOQA
     HAS_SCIPY = True
 except ImportError:
     HAS_SCIPY = False
@@ -66,7 +66,7 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         self.dock_widget = dock_widget
         self.setupUi(self)
         self.setWindowTitle(
-            self.tr('InaSAFE %s Shakemap Converter' % get_version()))
+            tr('InaSAFE %s Shakemap Converter' % get_version()))
         self.warning_text = set()
         self.on_input_path_textChanged()
         self.on_output_path_textChanged()
@@ -102,12 +102,11 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
             self.scipy_smoothing.setEnabled(True)
             self.scipy_smoothing.setToolTip('')
 
-
     # noinspection PyPep8Naming
     def on_output_path_textChanged(self):
         """Action when output file name is changed."""
         output_path = self.output_path.text()
-        output_not_xml_msg = self.tr('output file is not .tif')
+        output_not_xml_msg = tr('output file is not .tif')
         if output_path and not output_path.endswith('.tif'):
             self.warning_text.add(output_not_xml_msg)
         elif output_path and output_not_xml_msg in self.warning_text:
@@ -118,7 +117,7 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
     def on_input_path_textChanged(self):
         """Action when input file name is changed."""
         input_path = self.input_path.text()
-        input_not_grid_msg = self.tr('input file is not .xml')
+        input_not_grid_msg = tr('input file is not .xml')
 
         if input_path and not input_path.endswith('.xml'):
             self.warning_text.add(input_not_grid_msg)
@@ -135,7 +134,7 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         if os.path.exists(self.input_place.text()):
             self.place_layer = QgsVectorLayer(
                 self.input_place.text(),
-                self.tr('Nearby Cities'),
+                tr('Nearby Cities'),
                 'ogr'
             )
             if self.place_layer.isValid():
@@ -155,7 +154,7 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         header = html_header()
         footer = html_footer()
         string = header
-        heading = m.Heading(self.tr('Shakemap Grid Importer'), **INFO_STYLE)
+        heading = m.Heading(tr('Shakemap Grid Importer'), **INFO_STYLE)
         tips = m.BulletedList()
         message = m.Message()
         message.add(heading)
@@ -192,14 +191,14 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
             # noinspection PyArgumentList,PyCallByClass,PyTypeChecker
             QMessageBox.warning(
                 self,
-                self.tr('InaSAFE'),
-                (self.tr('Output file name must be tif file')))
+                tr('InaSAFE'),
+                tr('Output file name must be tif file'))
         if not os.path.exists(input_path):
             # noinspection PyArgumentList,PyCallByClass,PyTypeChecker
             QMessageBox.warning(
                 self,
-                self.tr('InaSAFE'),
-                (self.tr('Input file does not exist')))
+                tr('InaSAFE'),
+                tr('Input file does not exist'))
             return
 
         if self.nearest_mode.isChecked():
@@ -259,8 +258,7 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         """
         # noinspection PyCallByClass,PyTypeChecker
         filename = QFileDialog.getOpenFileName(
-            self, self.tr('Input file'), 'grid.xml',
-            self.tr('Raw grid file (*.xml)'))
+            self, tr('Input file'), 'grid.xml', tr('Raw grid file (*.xml)'))
         self.input_path.setText(filename)
 
     @pyqtSignature('')  # prevents actions being handled twice
@@ -269,15 +267,13 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         """
         # noinspection PyCallByClass,PyTypeChecker
         filename = QFileDialog.getSaveFileName(
-            self, self.tr('Output file'), 'grid.tif',
-            self.tr('Raster file (*.tif)'))
+            self, tr('Output file'), 'grid.tif', tr('Raster file (*.tif)'))
         self.output_path.setText(filename)
 
     @pyqtSignature('')
     def on_open_place_tool_clicked(self):
         filename = QFileDialog.getOpenFileName(
-            self, self.tr('Input place layer'), '',
-            self.tr('All Files (*.*)'))
+            self, tr('Input place layer'), '', tr('All Files (*.*)'))
         self.input_place.setText(filename)
 
     def load_result_toggled(self):
@@ -296,10 +292,10 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         :type flag: bool
         """
         if flag:
-            self.help_button.setText(self.tr('Hide Help'))
+            self.help_button.setText(tr('Hide Help'))
             self.show_help()
         else:
-            self.help_button.setText(self.tr('Show Help'))
+            self.help_button.setText(tr('Show Help'))
             self.hide_help()
 
     def hide_help(self):
