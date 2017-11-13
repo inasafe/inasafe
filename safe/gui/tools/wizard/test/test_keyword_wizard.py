@@ -556,6 +556,10 @@ class TestKeywordWizard(unittest.TestCase):
                         u'classes': default_classes
                     }
                 }
+            },
+            'extra_keywords': {
+                'depth': 10,
+                'magnitude': 7.8
             }
         }
 
@@ -563,7 +567,7 @@ class TestKeywordWizard(unittest.TestCase):
 
         # noinspection PyTypeChecker
         dialog = WizardDialog(iface=IFACE)
-        dialog.set_keywords_creation_mode(layer)
+        dialog.set_keywords_creation_mode(layer, keywords)
 
         # Check if in select purpose step
         self.check_current_step(dialog.step_kw_purpose)
@@ -682,6 +686,8 @@ class TestKeywordWizard(unittest.TestCase):
 
         self.assertDictEqual(
             keywords['value_maps'], dialog.get_keywords()['value_maps'])
+
+        self.assertDictEqual(keywords, dialog.get_keywords())
 
     def test_exposure_structure_polygon_keyword(self):
         """Test keyword wizard for exposure structure polygon."""
