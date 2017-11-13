@@ -445,7 +445,11 @@ class ImpactReport(object):
 
     @property
     def multi_exposure_impact_function(self):
-        """Getter for impact function instance to use.
+        """Getter for multi impact function instance to use.
+
+        We define this property because we want to avoid the usage of
+        impact_function property when there is multi exposure impact function
+        being used.
 
         :rtype: MultiExposureImpactFunction
         """

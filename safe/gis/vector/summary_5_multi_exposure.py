@@ -5,6 +5,7 @@
 from qgis.core import QgsFeatureRequest
 
 from safe.definitions.constants import MULTI_EXPOSURE_ANALYSIS_FLAG
+from safe.definitions.extra_keywords import extra_keyword_analysis_type
 from safe.definitions.fields import (
     affected_exposure_count_field,
     exposure_affected_exposure_type_count_field,
@@ -162,7 +163,7 @@ def multi_exposure_analysis_summary(analysis, intermediate_analysis):
     # Set up the extra keywords so everyone knows it's a
     # multi exposure analysis result.
     extra_keywords = {
-        'analysis_type': MULTI_EXPOSURE_ANALYSIS_FLAG
+        extra_keyword_analysis_type['key']: MULTI_EXPOSURE_ANALYSIS_FLAG
     }
     analysis.keywords['extra_keywords'] = extra_keywords
 
@@ -244,7 +245,7 @@ def multi_exposure_aggregation_summary(aggregation, intermediate_layers):
     # Set up the extra keywords so everyone knows it's a
     # multi exposure analysis result.
     extra_keywords = {
-        'analysis_type': MULTI_EXPOSURE_ANALYSIS_FLAG
+        extra_keyword_analysis_type['key']: MULTI_EXPOSURE_ANALYSIS_FLAG
     }
     aggregation.keywords['extra_keywords'] = extra_keywords
 

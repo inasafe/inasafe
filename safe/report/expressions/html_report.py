@@ -19,6 +19,7 @@ from safe.definitions.exposure import (
     exposure_structure,
     exposure_place,
     exposure_land_cover)
+from safe.definitions.extra_keywords import extra_keyword_analysis_type
 from safe.definitions.provenance import provenance_layer_analysis_impacted
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
@@ -243,8 +244,9 @@ def get_analysis_dir(exposure_key=None):
                     if exposure_key == exposure_key_found:
                         return layer
                 if not exposure_key and extra_keywords_found and (
-                        extra_keywords_found['analysis_type'] == (
-                            MULTI_EXPOSURE_ANALYSIS_FLAG)):
+                        extra_keywords_found[
+                            extra_keyword_analysis_type['key']] == (
+                                MULTI_EXPOSURE_ANALYSIS_FLAG)):
                     return layer
             return None
 
