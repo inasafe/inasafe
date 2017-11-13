@@ -24,6 +24,13 @@ from safe.messaging import styles
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.resources import html_footer, html_header, get_ui_class
 from safe.utilities.styling import mmi_ramp_roman
+from safe.utilities.i18n import tr
+
+try:
+    import scipy
+    HAS_SCIPY = True
+except ImportError:
+    HAS_SCIPY = False
 
 INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
 LOGGER = logging.getLogger('InaSAFE')
@@ -83,6 +90,18 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         self.help_button.toggled.connect(self.help_toggled)
         self.main_stacked_widget.setCurrentIndex(1)
         self.update_warning()
+
+        if not HAS_SCIPY:
+            if self.scipy_smoothing.isChecked:
+                self.none_smoothing.setChecked(True)
+            self.scipy_smoothing.setToolTip(tr(
+                'You can not use select this option since you do not have '
+                'scipy installed in you system.'))
+            self.scipy_smoothing.setEnabled(False)
+        else:
+            self.scipy_smoothing.setEnabled(True)
+            self.scipy_smoothing.setToolTip('')
+
 
     # noinspection PyPep8Naming
     def on_output_path_textChanged(self):
