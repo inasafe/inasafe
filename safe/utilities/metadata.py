@@ -31,6 +31,13 @@ from safe.metadata import (
     OutputLayerMetadata,
     GenericLayerMetadata)
 
+from safe.definitions.fields import (
+    adult_ratio_field,
+    elderly_ratio_field,
+    youth_ratio_field,
+    female_ratio_field
+)
+
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
@@ -223,3 +230,72 @@ def copy_layer_keywords(layer_keywords):
             copy_keywords[key] = deepcopy(value)
 
     return copy_keywords
+
+
+def convert_metadata(keywords, **converter_parameters):
+    """Convert metadata from version 4.3 to 3.5
+
+    :param keywords: Metadata to be converted, in version 4.3.
+    :type keywords: dict
+
+    :param converter_parameters: Collection of parameters to convert the
+        metadata properly.
+    :type converter_parameters: dict
+
+    :returns: A metadata version 3.5.
+    :rtype: dict
+    """
+    new_keywords = {}
+    # Properties that have the same concepts / values in both 3.5 and 4.3
+    same_properties = [
+        'organisation',
+        'email',
+        'date',
+        'abstract',
+        'title',
+        'license',
+        'url',
+        'layer_purpose',
+        'layer_mode',
+        'layer_geometry',
+        'keyword_version',
+        'scale',
+        'source',
+        'exposure',
+        'exposure_unit',
+        'hazard',
+        'hazard_category',
+        'continuous_hazard_unit',
+    ]
+    for same_property in same_properties:
+        if keywords.get(same_property):
+            new_keywords[same_property] = keywords.get(same_property)
+
+    # datatype
+    if converter_parameters.get('datatype'):
+        new_keywords['datatype'] = converter_parameters.get('datatype')
+
+    # No need to set value for multipart polygon and resolution
+    layer_purpose = keywords.get('layer_purpose')
+    inasafe_fields = keywords.get('inasafe_fields')
+    inasafe_default_values = keywords.get('inasafe_default_values')
+    if layer_purpose == layer_purpose_exposure['key']:
+        pass
+    elif layer_purpose == layer_purpose_hazard['key']:
+        pass
+    elif layer_purpose == layer_purpose_aggregation['key']:
+        if inasafe_default_values.get(adult_ratio_field['key']):
+            new_keywords['adult ratio attribute'] = inasafe_default_values[
+                adult_ratio_field['key']]
+        if inasafe_default_values.get(elderly_ratio_field['key']):
+            new_keywords['elderly ratio attribute'] = inasafe_default_values[
+                elderly_ratio_field['key']]
+        if inasafe_default_values.get(youth_ratio_field['key']):
+            new_keywords['youth ratio attribute'] = inasafe_default_values[
+                youth_ratio_field['key']]
+        if inasafe_default_values.get(female_ratio_field['key']):
+            new_keywords['female ratio attribute'] = inasafe_default_values[
+                female_ratio_field['key']]
+
+
+    return new_keywords
