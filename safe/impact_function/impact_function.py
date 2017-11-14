@@ -142,7 +142,7 @@ from safe.gis.raster.polygonize import polygonize
 from safe.gis.raster.reclassify import reclassify as reclassify_raster
 from safe.gis.raster.zonal_statistics import zonal_stats
 from safe.gis.sanity_check import check_inasafe_fields, check_layer
-from safe.gis.tools import geometry_type, load_layer
+from safe.gis.tools import geometry_type, load_layer, load_layer_from_registry
 from safe.gis.vector.assign_highest_value import assign_highest_value
 from safe.gis.vector.clean_geometry import clean_layer
 from safe.gis.vector.clip import clip
@@ -2660,29 +2660,11 @@ class ImpactFunction(object):
         keywords.update(ISO19115_keywords)
 
     @staticmethod
-    def load_layer_from_registry(layer_registry, layer_path):
-        """Helper method to load a layer from registry if its already there.
-
-        :param layer_registry: A qgis map layer registry.
-        :type layer_registry: QgsMapLayerRegistry
-
-        :param layer_path: Layer source path.
-        :type layer_path: str
-
-        :return: Vector layer
-        :rtype: QgsVectorLayer
-
-        .. versionadded: 4.3.0
-        """
-        for _, layer in layer_registry.mapLayers().items():
-            if layer.source() == layer_path:
-                return layer
-
-        return load_layer(layer_path)[0]
-
-    @staticmethod
     def load_from_output_metadata(output_metadata):
         """Set Impact Function based on an output of an analysis's metadata.
+
+        If possible, we will try to use layers already in the legend and to not
+        recreating new ones. We will keep the style for instance.
 
         :param output_metadata: Metadata from an output layer.
         :type output_metadata: OutputLayerMetadata
@@ -2694,7 +2676,6 @@ class ImpactFunction(object):
         provenance = output_metadata['provenance_data']
         # Set provenance data
         impact_function._provenance = provenance
-        layer_registry = QgsMapLayerRegistry.instance()
 
         # Set exposure layer
         exposure_path = get_provenance(provenance, provenance_exposure_layer)
@@ -2767,37 +2748,36 @@ class ImpactFunction(object):
         exposure_summary_path = get_provenance(
             provenance, provenance_layer_exposure_summary)
         if exposure_summary_path:
-            impact_function._exposure_summary = (
-                ImpactFunction.load_layer_from_registry(
-                    layer_registry, exposure_summary_path))
+            impact_function._exposure_summary = load_layer_from_registry(
+                exposure_summary_path)
 
         # aggregate_hazard_impacted
         aggregate_hazard_impacted_path = get_provenance(
             provenance, provenance_layer_aggregate_hazard_impacted)
         if aggregate_hazard_impacted_path:
-            impact_function._aggregate_hazard_impacted = load_layer(
-                aggregate_hazard_impacted_path)[0]
+            impact_function._aggregate_hazard_impacted = (
+                load_layer_from_registry(aggregate_hazard_impacted_path))
 
         # aggregation_summary
         aggregation_summary_path = get_provenance(
             provenance, provenance_layer_aggregation_summary)
         if aggregation_summary_path:
-            impact_function._aggregation_summary = load_layer(
-                aggregation_summary_path)[0]
+            impact_function._aggregation_summary = load_layer_from_registry(
+                aggregation_summary_path)
 
         # analysis_impacted
         analysis_impacted_path = get_provenance(
             provenance, provenance_layer_analysis_impacted)
         if analysis_impacted_path:
-            impact_function._analysis_impacted = load_layer(
-                analysis_impacted_path)[0]
+            impact_function._analysis_impacted = load_layer_from_registry(
+                analysis_impacted_path)
 
         # exposure_summary_table
         exposure_summary_table_path = get_provenance(
             provenance, provenance_layer_exposure_summary_table)
         if exposure_summary_table_path:
-            impact_function._exposure_summary_table = load_layer(
-                exposure_summary_table_path)[0]
+            impact_function._exposure_summary_table = load_layer_from_registry(
+                exposure_summary_table_path)
 
         # profiling
         # Skip if it's debug mode
@@ -2805,8 +2785,8 @@ class ImpactFunction(object):
             profiling_path = get_provenance(
                 provenance, provenance_layer_profiling)
             if profiling_path:
-                impact_function._profiling_table = load_layer(
-                    profiling_path)[0]
+                impact_function._profiling_table = load_layer_from_registry(
+                    profiling_path)
 
         impact_function._output_layer_expected = \
             impact_function._compute_output_layer_expected()
@@ -2830,6 +2810,9 @@ class ImpactFunction(object):
 
         :param output_folder: The output folder.
         :type output_folder: str
+
+        :param iface: A QGIS App interface
+        :type iface: QgsInterface
 
         :returns: Tuple of error code and message
         :type: tuple
