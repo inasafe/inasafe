@@ -30,7 +30,7 @@ SOURCE_PATH = standard_data_path(
 GRID_PATH = os.path.join(temp_dir(__name__), 'grid.xml')
 shutil.copyfile(SOURCE_PATH, GRID_PATH)
 
-SHAKE_GRID = ShakeGrid('Test Title', 'Test Source', GRID_PATH)
+SHAKE_GRID = ShakeGrid('Test Title', 'Test Source', GRID_PATH, smoothing_method=True)
 
 
 class TestShakeGrid(unittest.TestCase):
@@ -42,7 +42,8 @@ class TestShakeGrid(unittest.TestCase):
         """Class method called after tests on this class have run."""
         shutil.rmtree(temp_dir(__name__))
 
-    def check_feature_count(self, path, count):
+    @staticmethod
+    def check_feature_count(path, count):
         """Method to check the features number of a vector layer.
 
         :param path: Path to vector layer.
@@ -134,7 +135,17 @@ class TestShakeGrid(unittest.TestCase):
     def test_mmi_to_delimited_text(self):
         """Test mmi_to_delimited_text works."""
         delimited_string = SHAKE_GRID.mmi_to_delimited_text()
-        self.assertEqual(204869, len(delimited_string))
+        number_of_line = len(SHAKE_GRID.mmi_data) + 1  # Add 1 for header
+        substring = (
+            'lon,lat,mmi\n'
+            '139.37,-1.1813,1.0\n'
+            '139.395,-1.1813,1.0\n'
+            '139.42,-1.1813,1.0\n'
+            '139.445,-1.1813,1.0\n'
+        )
+        self.assertTrue(delimited_string.startswith(substring))
+        self.assertEqual(delimited_string.count(','), number_of_line * 2)
+        self.assertEqual(delimited_string.count('\n'), number_of_line)
 
     def test_mmi_to_delimited_file(self):
         """Test mmi_to_delimited_file works."""
@@ -227,6 +238,6 @@ class TestShakeGrid(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(ShakeGridTest)
+    suite = unittest.makeSuite(TestShakeGrid)
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

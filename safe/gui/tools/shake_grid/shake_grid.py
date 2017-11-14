@@ -6,11 +6,11 @@ import logging
 import os
 import shutil
 import sys
-import math
+
 from datetime import datetime
-from operator import itemgetter
 from subprocess import call, CalledProcessError
 from xml.dom import minidom
+import numpy as np
 
 import pytz
 # This import is required to enable PyQt API v2
@@ -20,11 +20,9 @@ from osgeo import gdal, ogr
 from osgeo.gdalconst import GA_ReadOnly
 from pytz import timezone
 from qgis.core import (
-    QgsPoint,
     QgsVectorLayer,
     QgsFeatureRequest,
     QgsRectangle,
-    QgsRaster,
     QgsRasterLayer)
 
 from safe.common.exceptions import (
@@ -34,16 +32,17 @@ from safe.common.exceptions import (
     InvalidLayerError,
     CallGDALError)
 from safe.common.utilities import which, romanise
-from safe.datastore.folder import Folder
 from safe.definitions.hazard import hazard_earthquake
 from safe.definitions.hazard_category import hazard_category_single_event
 from safe.definitions.hazard_classifications import earthquake_mmi_scale
 from safe.definitions.layer_geometry import layer_geometry_raster
 from safe.definitions.layer_modes import layer_mode_continuous
 from safe.definitions.layer_purposes import layer_purpose_hazard
+from safe.definitions.constants import (
+    NONE_SMOOTHING, NUMPY_SMOOTHING, SCIPY_SMOOTHING
+)
 from safe.definitions.units import unit_mmi
 from safe.definitions.versions import inasafe_keyword_version
-from safe.utilities.direction_distance import get_direction_distance
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.styling import mmi_colour
@@ -54,6 +53,181 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 LOGGER = logging.getLogger('InaSAFE')
+
+
+def gaussian_kernel(sigma, truncate=4.0):
+    """Return Gaussian that truncates at the given number of std deviations.
+
+    Adapted from https://github.com/nicjhan/gaussian-filter
+    """
+
+    sigma = float(sigma)
+    radius = int(truncate * sigma + 0.5)
+
+    x, y = np.mgrid[-radius:radius + 1, -radius:radius + 1]
+    sigma = sigma ** 2
+
+    k = 2 * np.exp(-0.5 * (x ** 2 + y ** 2) / sigma)
+    k = k / np.sum(k)
+
+    return k
+
+
+def tile_and_reflect(input):
+    """Make 3x3 tiled array.
+
+    Central area is 'input', surrounding areas are reflected.
+
+    Adapted from https://github.com/nicjhan/gaussian-filter
+    """
+
+    tiled_input = np.tile(input, (3, 3))
+
+    rows = input.shape[0]
+    cols = input.shape[1]
+
+    # Now we have a 3x3 tiles - do the reflections.
+    # All those on the sides need to be flipped left-to-right.
+    for i in range(3):
+        # Left hand side tiles
+        tiled_input[i * rows:(i + 1) * rows, 0:cols] = \
+            np.fliplr(tiled_input[i * rows:(i + 1) * rows, 0:cols])
+        # Right hand side tiles
+        tiled_input[i * rows:(i + 1) * rows, -cols:] = \
+            np.fliplr(tiled_input[i * rows:(i + 1) * rows, -cols:])
+
+    # All those on the top and bottom need to be flipped up-to-down
+    for i in range(3):
+        # Top row
+        tiled_input[0:rows, i * cols:(i + 1) * cols] = \
+            np.flipud(tiled_input[0:rows, i * cols:(i + 1) * cols])
+        # Bottom row
+        tiled_input[-rows:, i * cols:(i + 1) * cols] = \
+            np.flipud(tiled_input[-rows:, i * cols:(i + 1) * cols])
+
+    # The central array should be unchanged.
+    assert (np.array_equal(input, tiled_input[rows:2 * rows, cols:2 * cols]))
+
+    # All sides of the middle array should be the same as those bordering them.
+    # Check this starting at the top and going around clockwise. This can be
+    # visually checked by plotting the 'tiled_input' array.
+    assert (np.array_equal(input[0, :], tiled_input[rows - 1, cols:2 * cols]))
+    assert (np.array_equal(input[:, -1], tiled_input[rows:2 * rows, 2 * cols]))
+    assert (np.array_equal(input[-1, :], tiled_input[2 * rows, cols:2 * cols]))
+    assert (np.array_equal(input[:, 0], tiled_input[rows:2 * rows, cols - 1]))
+
+    return tiled_input
+
+
+def convolve(input, weights, mask=None, slow=False):
+    """2 dimensional convolution.
+
+    This is a Python implementation of what will be written in Fortran.
+
+    Borders are handled with reflection.
+
+    Masking is supported in the following way:
+        * Masked points are skipped.
+        * Parts of the input which are masked have weight 0 in the kernel.
+        * Since the kernel as a whole needs to have value 1, the weights of the
+          masked parts of the kernel are evenly distributed over the non-masked
+          parts.
+
+    Adapted from https://github.com/nicjhan/gaussian-filter
+    """
+
+    assert (len(input.shape) == 2)
+    assert (len(weights.shape) == 2)
+
+    # Only one reflection is done on each side so the weights array cannot be
+    # bigger than width/height of input +1.
+    assert (weights.shape[0] < input.shape[0] + 1)
+    assert (weights.shape[1] < input.shape[1] + 1)
+
+    if mask is not None:
+        # The slow convolve does not support masking.
+        assert (not slow)
+        assert (input.shape == mask.shape)
+        tiled_mask = tile_and_reflect(mask)
+
+    output = np.copy(input)
+    tiled_input = tile_and_reflect(input)
+
+    rows = input.shape[0]
+    cols = input.shape[1]
+    # Stands for half weights row.
+    hw_row = weights.shape[0] / 2
+    hw_col = weights.shape[1] / 2
+
+    # Now do convolution on central array.
+    # Iterate over tiled_input.
+    for i, io in zip(range(rows, rows * 2), range(rows)):
+        for j, jo in zip(range(cols, cols * 2), range(cols)):
+            # The current central pixel is at (i, j)
+
+            # Skip masked points.
+            if mask is not None and tiled_mask[i, j]:
+                continue
+
+            average = 0.0
+            if slow:
+                # Iterate over weights/kernel.
+                for k in range(weights.shape[0]):
+                    for l in range(weights.shape[1]):
+                        # Get coordinates of tiled_input array that match given
+                        # weights
+                        m = i + k - hw_row
+                        n = j + l - hw_col
+
+                        average += tiled_input[m, n] * weights[k, l]
+            else:
+                # Find the part of the tiled_input array that overlaps with the
+                # weights array.
+                overlapping = tiled_input[
+                    i - hw_row:i + hw_row + 1,
+                    j - hw_col:j + hw_col + 1]
+                assert (overlapping.shape == weights.shape)
+
+                # If any of 'overlapping' is masked then set the corrosponding
+                # points in the weights matrix to 0 and redistribute these to
+                # non-masked points.
+                if mask is not None:
+                    overlapping_mask = tiled_mask[
+                        i - hw_row:i + hw_row + 1,
+                        j - hw_col:j + hw_col + 1]
+                    assert (overlapping_mask.shape == weights.shape)
+
+                    # Total value and number of weights clobbered by the mask.
+                    clobber_total = np.sum(weights[overlapping_mask])
+                    remaining_num = np.sum(np.logical_not(overlapping_mask))
+                    # This is impossible since at least i, j is not masked.
+                    assert (remaining_num > 0)
+                    correction = clobber_total / remaining_num
+
+                    # It is OK if nothing is masked - the weights will not be
+                    #  changed.
+                    if correction == 0:
+                        assert (not overlapping_mask.any())
+
+                    # Redistribute to non-masked points.
+                    tmp_weights = np.copy(weights)
+                    tmp_weights[overlapping_mask] = 0.0
+                    tmp_weights[np.where(tmp_weights != 0)] += correction
+
+                    # Should be very close to 1. May not be exact due to
+                    # rounding.
+                    assert (abs(np.sum(tmp_weights) - 1) < 1e-15)
+
+                else:
+                    tmp_weights = weights
+
+                merged = tmp_weights[:] * overlapping
+                average = np.sum(merged)
+
+            # Set new output value.
+            output[io, jo] = average
+
+    return output
 
 
 def data_dir():
@@ -76,12 +250,12 @@ class ShakeGrid(object):
             title,
             source,
             grid_xml_path,
-            place_layer=None,
-            name_field=None,
-            population_field=None,
             output_dir=None,
             output_basename=None,
-            algorithm_filename_flag=True):
+            algorithm_filename_flag=True,
+            smoothing_method=NONE_SMOOTHING,
+            smooth_sigma=0.9
+    ):
         """Constructor.
 
         :param title: The title of the earthquake that will be also added to
@@ -104,6 +278,13 @@ class ShakeGrid(object):
         :param algorithm_filename_flag: Flag whether to use the algorithm in
             the output file's name.
         :type algorithm_filename_flag: bool
+
+        :param smoothing_method: Smoothing method. One of None, Numpy, Scipy.
+        :type smoothing_method: basestring
+
+        :param smooth_sigma: parameter for gaussian filter used in smoothing
+            function.
+        :type smooth_sigma: float
 
         :returns: The instance of the class.
         :rtype: ShakeGrid
@@ -145,12 +326,10 @@ class ShakeGrid(object):
             self.output_basename = output_basename
         self.algorithm_name = algorithm_filename_flag
         self.grid_xml_path = grid_xml_path
+        self.smoothing_method = smoothing_method
+        self.smoothing_sigma = smooth_sigma
+
         self.parse_grid_xml()
-        self.place_layer = place_layer
-        self.name_field = name_field
-        self.population_field = population_field
-        self.locality = None
-        self.nearby_cities = None
 
     def extract_date_time(self, the_time_stamp):
         """Extract the parts of a date given a timestamp as per below example.
@@ -303,7 +482,9 @@ class ShakeGrid(object):
             longitude_column = 0
             latitude_column = 1
             mmi_column = 4
-            self.mmi_data = []
+            lon_list = []
+            lat_list = []
+            mmi_list = []
             for line in data.split('\n'):
                 if not line:
                     continue
@@ -311,8 +492,47 @@ class ShakeGrid(object):
                 longitude = tokens[longitude_column]
                 latitude = tokens[latitude_column]
                 mmi = tokens[mmi_column]
-                mmi_tuple = (longitude, latitude, mmi)
-                self.mmi_data.append(mmi_tuple)
+                lon_list.append(float(longitude))
+                lat_list.append(float(latitude))
+                mmi_list.append(float(mmi))
+
+            from datetime import datetime
+            start = datetime.now()
+            if self.smoothing_method == NUMPY_SMOOTHING:
+                LOGGER.debug('We are using NUMPY smoothing')
+                ncols = len(np.where(np.array(lon_list) == lon_list[0])[0])
+                nrows = len(np.where(np.array(lat_list) == lat_list[0])[0])
+
+                # reshape mmi_list to 2D array to apply gaussian filter
+                Z = np.reshape(mmi_list, (nrows, ncols))
+
+                # smooth MMI matrix
+                mmi_list = convolve(Z, gaussian_kernel(self.smoothing_sigma))
+
+                # reshape array back to 1D long list of mmi
+                mmi_list = np.reshape(mmi_list, ncols * nrows)
+
+            elif self.smoothing_method == SCIPY_SMOOTHING:
+                LOGGER.debug('We are using SCIPY smoothing')
+                from scipy.ndimage.filters import gaussian_filter
+                ncols = len(np.where(np.array(lon_list) == lon_list[0])[0])
+                nrows = len(np.where(np.array(lat_list) == lat_list[0])[0])
+
+                # reshape mmi_list to 2D array to apply gaussian filter
+                Z = np.reshape(mmi_list, (nrows, ncols))
+
+                # smooth MMI matrix
+                # Help from Hadi Ghasemi
+                mmi_list = gaussian_filter(Z, self.smoothing_sigma)
+
+                # reshape array back to 1D long list of mmi
+                mmi_list = np.reshape(mmi_list, ncols * nrows)
+            end = datetime.now()
+            duration = end - start
+            LOGGER.debug('Duration : %s' % duration.total_seconds())
+
+            # zip lists as list of tuples
+            self.mmi_data = zip(lon_list, lat_list, mmi_list)
 
         except Exception, e:
             LOGGER.exception('Event parse failed')
@@ -559,10 +779,6 @@ class ShakeGrid(object):
         if 'invdist' in algorithm:
             algorithm = 'invdist'
 
-        # Generate the locality if place layer and name are given
-        if self.place_layer is not None:
-            if self.name_field != '':
-                self.generate_locality_info(tif_path)
         # copy the keywords file from fixtures for this layer
         self.create_keyword_file(algorithm)
 
@@ -841,100 +1057,6 @@ class ShakeGrid(object):
 
         layer.commitChanges()
 
-    def mmi_point_sampling(self, place_layer, raster_mmi_path):
-        """Get MMI information from ShakeMap Tiff on place location.
-
-        Get the MMI value on each cities/places from the generated tiff files.
-
-        :param place_layer: Point layer generated from distance calculation.
-        :type place_layer: QgsVectorLayer
-
-        :param raster_mmi_path: Path to converted mmi raster.
-        :type raster_mmi_path: str
-
-        :return: Modified place layer containing MMI values.
-        :rtype: QgsVectorLayer
-        """
-        shake_raster = QgsRasterLayer(raster_mmi_path, 'shake_raster')
-        shake_provider = shake_raster.dataProvider()
-
-        place_fields = place_layer.dataProvider().fields()
-        mmi_field_index = place_fields.indexFromName('place_mmi')
-
-        place_layer.startEditing()
-        for feature in place_layer.getFeatures():
-            fid = feature.id()
-            point = feature.geometry().asPoint()
-            mmi_identify = shake_provider.identify(
-                point,
-                QgsRaster.IdentifyFormatValue
-            )
-            mmi = mmi_identify.results()[1]
-            place_layer.changeAttributeValue(fid, mmi_field_index, mmi)
-        place_layer.commitChanges()
-        # save the memory place layer
-        data_store = Folder(self.output_dir)
-        data_store.default_vector_format = 'geojson'
-        data_store.add_layer(
-            place_layer,
-            '%s-nearby-places' % self.output_basename
-        )
-        return place_layer
-
-    def generate_locality_info(self, raster_mmi_path):
-        """Generate information related to the locality of the hazard.
-
-        :param raster_mmi_path: path to converted raster mmi.
-        :type raster_mmi_path: str
-        """
-
-        sort_key = None
-        LOGGER.debug('Locality information requested')
-        epicenter = QgsPoint(self.longitude, self.latitude)
-        place_layer = self.place_layer
-
-        measured_place_layer = get_direction_distance(epicenter, place_layer)
-        mmi_point_layer = self.mmi_point_sampling(
-            measured_place_layer,
-            raster_mmi_path
-        )
-        places = []
-        for feature in mmi_point_layer.getFeatures():
-            place = {
-                'name': feature[self.name_field],
-                'distance': feature['distance'],
-                'bearing': feature['bearing'],
-                'direction': feature['direction'],
-                'mmi_values': feature['place_mmi']
-            }
-            if self.population_field != '':
-                place['population'] = feature[self.population_field]
-                sort_key = itemgetter('mmi_values', 'population')
-            else:
-                sort_key = itemgetter('mmi_values')
-            places.append(place)
-        # sort the place by mmi and by population
-        sorted_places = sorted(
-            places,
-            key=sort_key,
-            reverse=True
-        )
-        nearest_place = sorted_places[0]
-        # combine locality text
-        city_name = str(nearest_place['name'])
-        city_distance = nearest_place['distance']
-        distance_km = str(math.floor(city_distance / 1000))
-        city_bearing = str(math.floor(nearest_place['bearing']))
-        city_direction = str(nearest_place['direction'])
-        self.locality = tr(
-            'Located {distance} km, {bearing}° {direction} of {city}.'
-        ).format(
-            distance=distance_km,
-            bearing=city_bearing,
-            direction=city_direction,
-            city=city_name
-        )
-
     def create_keyword_file(self, algorithm):
         """Create keyword file for the raster file created.
 
@@ -963,7 +1085,6 @@ class ShakeGrid(object):
             'depth': self.depth,
             'description': self.description,
             'location': self.location,
-            'locality': self.locality,
             # 'day': self.day,
             # 'month': self.month,
             # 'year': self.year,
@@ -1025,12 +1146,11 @@ def convert_mmi_data(
         grid_xml_path,
         title,
         source,
-        place_layer=None,
-        place_name=None,
-        place_population=None,
         output_path=None,
         algorithm=None,
-        algorithm_filename_flag=True):
+        algorithm_filename_flag=True,
+        smoothing_method=NONE_SMOOTHING,
+        smooth_sigma=0.9):
     """Convenience function to convert a single file.
 
     :param grid_xml_path: Path to the xml shake grid file.
@@ -1062,6 +1182,13 @@ def convert_mmi_data(
         output file's name.
     :type algorithm_filename_flag: bool
 
+    :param smoothing_method: Smoothing method. One of None, Numpy, Scipy.
+    :type smoothing_method: basestring
+
+    :param smooth_sigma: parameter for gaussian filter used in smoothing
+        function.
+    :type smooth_sigma: float
+
     :returns: A path to the resulting raster file.
     :rtype: str
     """
@@ -1079,10 +1206,10 @@ def convert_mmi_data(
         title,
         source,
         grid_xml_path,
-        place_layer,
-        place_name,
-        place_population,
         output_dir=output_dir,
         output_basename=output_basename,
-        algorithm_filename_flag=algorithm_filename_flag)
+        algorithm_filename_flag=algorithm_filename_flag,
+        smoothing_method=smoothing_method,
+        smooth_sigma=smooth_sigma
+    )
     return converter.mmi_to_raster(force_flag=True, algorithm=algorithm)

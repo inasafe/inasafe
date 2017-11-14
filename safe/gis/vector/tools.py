@@ -358,6 +358,22 @@ class SizeCalculator(object):
             exposure_definition = definition(exposure_key)
             self.output_unit = exposure_definition['size_unit']
 
+    def measure_distance(self, point_a, point_b):
+        """Measure the distance between two points.
+
+        This is added here since QgsDistanceArea object is already called here.
+
+        :param point_a: First Point.
+        :type point_a: QgsPoint
+
+        :param point_b: Second Point.
+        :type point_b: QgsPoint
+
+        :return: The distance between input points.
+        :rtype: float
+        """
+        return self.calculator.measureLine(point_a, point_b)
+
     def measure(self, geometry):
         """Measure the length or the area of a geometry.
 

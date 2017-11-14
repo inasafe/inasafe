@@ -17,6 +17,9 @@ from safe.processors.pre_processors import *
 # |--- size
 # |   |--- size rate  disabled in V4.0, ET 13/02/17
 # |   `--- productivity
+# |--- distance
+# |--- bearing angle
+# |   |--- cardinality
 # |--- affected
 # |--- displaced ratio
 # |--- fatality ratio
@@ -40,6 +43,9 @@ post_processors = [
     post_processor_fatalities,
     post_processor_displaced_ratio,
     post_processor_displaced,
+    post_processor_distance,
+    post_processor_bearing,
+    post_processor_cardinality
 ] + (gender_postprocessors +
      female_postprocessors +
      age_postprocessors +
