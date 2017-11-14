@@ -116,69 +116,69 @@ class TestEarthquakeReport(unittest.TestCase):
                 {
                     'header_label': u'Hazard Zone',
                     'rows': [
-                        {'value': 0, 'name': u'X', 'key': 'X'},
-                        {'value': 0, 'name': u'IX', 'key': 'IX'},
-                        {'value': '200', 'name': u'VIII', 'key': 'VIII'},
-                        {'value': 0, 'name': u'VII', 'key': 'VII'},
-                        {'value': 0, 'name': u'VI', 'key': 'VI'},
-                        {'value': 0, 'name': u'V', 'key': 'V'},
-                        {'value': 0, 'name': u'IV', 'key': 'IV'},
-                        {'value': 0, 'name': u'III', 'key': 'III'},
-                        {'value': 0, 'name': u'II', 'key': 'II'},
-                        {'value': 0, 'name': u'I', 'key': 'I'},
+                        {'numbers': ['0'], 'name': u'X', 'key': 'X'},
+                        {'numbers': ['0'], 'name': u'IX', 'key': 'IX'},
+                        {'numbers': ['200'], 'name': u'VIII', 'key': 'VIII'},
+                        {'numbers': ['0'], 'name': u'VII', 'key': 'VII'},
+                        {'numbers': ['0'], 'name': u'VI', 'key': 'VI'},
+                        {'numbers': ['0'], 'name': u'V', 'key': 'V'},
+                        {'numbers': ['0'], 'name': u'IV', 'key': 'IV'},
+                        {'numbers': ['0'], 'name': u'III', 'key': 'III'},
+                        {'numbers': ['0'], 'name': u'II', 'key': 'II'},
+                        {'numbers': ['0'], 'name': u'I', 'key': 'I'},
                         {
                             'as_header': True,
                             'key': 'total_exposed_field',
                             'name': u'Total Exposed',
-                            'value': '200'
+                            'numbers': ['200']
                         }
                     ],
-                    'value_label': u'Count'
+                    'value_labels': [u'Count']
                 },
                 {
                     'header_label': u'Population',
                     'rows': [
                         {
-                            'value': '200',
+                            'numbers': ['200'],
                             'name': u'Affected',
                             'key': 'total_affected_field',
                         }, {
                             'key': 'total_not_affected_field',
                             'name': u'Not Affected',
-                            'value': '0'
+                            'numbers': ['0']
                         }, {
                             'key': 'total_not_exposed_field',
                             'name': u'Not Exposed',
-                            'value': '0'},
+                            'numbers': ['0']},
                         {
-                            'value': '200',
+                            'numbers': ['200'],
                             'name': u'Displaced',
                             'key': 'displaced_field'
                         }, {
-                            'value': '0 - 100',
+                            'numbers': ['0 - 100'],
                             'name': u'Fatalities',
                             'key': 'fatalities_field'
                         }],
-                    'value_label': u'Count'
+                    'value_labels': [u'Count']
                 }
             ],
             'notes': [
-                'Exposed People: People who are present in hazard zones and '
-                'are thereby subject to potential losses. In InaSAFE, people '
-                'who are exposed are those people who are within the extent '
-                'of the hazard.',
-                'Affected People: People who are affected by a hazardous '
-                'event. People can be affected directly or indirectly. '
-                'Affected people may experience short-term or long-term '
-                'consequences to their lives, livelihoods or health and in '
-                'the economic, physical, social, cultural and environmental '
-                'assets. In InaSAFE, people who are killed during the event '
-                'are also considered affected.',
-                'Displaced People: Displaced people are people who, for '
-                'different reasons and circumstances because of risk or '
-                'disaster, have to leave their place of residence. '
-                'In InaSAFE, demographic and minimum needs reports are based '
-                'on displaced / evacuated people.'
+                u'Exposed People: People who are present in hazard zones and '
+                u'are thereby subject to potential losses. In InaSAFE, people '
+                u'who are exposed are those people who are within the extent '
+                u'of the hazard.',
+                u'Affected People: People who are affected by a hazardous '
+                u'event. People can be affected directly or indirectly. '
+                u'Affected people may experience short-term or long-term '
+                u'consequences to their lives, livelihoods or health and in '
+                u'the economic, physical, social, cultural and environmental '
+                u'assets. In InaSAFE, people who are killed during the event '
+                u'are also considered affected.',
+                u'Displaced People: Displaced people are people who, for '
+                u'different reasons and circumstances because of risk or '
+                u'disaster, have to leave their place of residence. '
+                u'In InaSAFE, demographic and minimum needs reports are based '
+                u'on displaced / evacuated people.'
             ]
         }
         actual_context = analysis_summary.context

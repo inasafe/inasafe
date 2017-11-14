@@ -121,8 +121,7 @@ from safe.definitions.provenance import (
     provenance_layer_analysis_impacted_id,
     provenance_layer_exposure_summary_id,
     provenance_crs,
-    provenance_debug_mode,
-)
+    provenance_debug_mode)
 from safe.definitions.reports.components import infographic_report, map_report
 from safe.definitions.reports.infographic import map_overview
 from safe.definitions.styles import (

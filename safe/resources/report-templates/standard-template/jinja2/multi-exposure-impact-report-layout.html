@@ -1,0 +1,10 @@
+{% extends 'standard-template/jinja2/base.html' %}
+
+{% block content %}
+    <div class="branding">
+        <img src="{{ brand_logo }}" title="InaSAFE" alt="InaSAFE" />
+    </div>
+
+    {{ analysis_question }}
+    {{ general_report }}
+{% endblock content %}

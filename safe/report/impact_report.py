@@ -283,7 +283,8 @@ class ImpactReport(object):
             exposure_summary_table=None,
             aggregation_summary=None,
             extra_layers=None,
-            minimum_needs_profile=None):
+            minimum_needs_profile=None,
+            multi_exposure_impact_function=None):
         """Constructor for the Composition Report class.
 
         :param iface: Reference to the QGIS iface object.
@@ -302,7 +303,8 @@ class ImpactReport(object):
         self._iface = iface
         self._metadata = template_metadata
         self._output_folder = None
-        self._impact_function = impact_function
+        self._impact_function = impact_function or (
+            multi_exposure_impact_function.impact_functions[0])
         self._hazard = hazard or self._impact_function.hazard
         self._exposure = (
             exposure or self._impact_function.exposure)
@@ -319,6 +321,7 @@ class ImpactReport(object):
             extra_layers = []
         self._extra_layers = extra_layers
         self._minimum_needs = minimum_needs_profile
+        self._multi_exposure_impact_function = multi_exposure_impact_function
         self._extent = self._iface.mapCanvas().extent()
         self._inasafe_context = InaSAFEReportContext()
 
@@ -439,6 +442,18 @@ class ImpactReport(object):
         :rtype: safe.impact_function.impact_function.ImpactFunction
         """
         return self._impact_function
+
+    @property
+    def multi_exposure_impact_function(self):
+        """Getter for multi impact function instance to use.
+
+        We define this property because we want to avoid the usage of
+        impact_function property when there is multi exposure impact function
+        being used.
+
+        :rtype: MultiExposureImpactFunction
+        """
+        return self._multi_exposure_impact_function
 
     def _check_layer_count(self, layer):
         """Check for the validity of the layer.

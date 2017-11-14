@@ -16,6 +16,7 @@ from qgis.core import (
     QgsMapLayerRegistry,
     QgsCoordinateReferenceSystem,
     QgsExpressionContextUtils,
+    QgsLayerTreeLayer
 )
 
 from safe import messaging as m
@@ -907,17 +908,25 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             ]
 
             provenances = keywords.get('provenance_data', {})
-            self.set_provenance_to_project_variables(provenances)
+            if provenances:
+                self.set_provenance_to_project_variables(provenances)
 
             show_keywords = True
             if keywords.get('layer_purpose') in impacted_layer:
-                report_path = os.path.dirname(layer.source())
-                report_path = os.path.join(
-                    report_path, 'output/impact-report-output.html')
+                analysis_dir = os.path.dirname(layer.source())
+                output_dir_path = os.path.join(analysis_dir, 'output')
 
-                if os.path.exists(report_path):
-                    show_keywords = False
-                    self.show_impact(report_path)
+                html_report_products = [
+                    'impact-report-output.html',
+                    'multi-exposure-impact-report-output.html']
+
+                for html_report_product in html_report_products:
+                    table_report_path = os.path.join(
+                        output_dir_path, html_report_product)
+                    if os.path.exists(table_report_path):
+                        show_keywords = False
+                        self.show_impact(table_report_path)
+                        break
 
             if show_keywords:
                 if inasafe_keyword_version_key not in keywords.keys():
@@ -1139,6 +1148,36 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         """
         layer = self.iface.activeLayer()
         return layer is not None
+
+    def _has_active_group(self):
+        """Check if there is an active group in the legend.
+
+        :returns: True if there is a hightlighted group in the legend.
+        :rtype: bool
+
+        .. versionadded:: 4.3
+        """
+        selected_nodes = self.iface.layerTreeView().selectedNodes()
+        return len(selected_nodes) != 0
+
+    def _search_inasafe_layer(self):
+        """Search for an inasafe layer in an active group.
+
+        :returns: A valid layer.
+        :rtype: QgsMapLayer
+
+        .. versionadded:: 4.3
+        """
+        selected_nodes = self.iface.layerTreeView().selectedNodes()
+        for selected_node in selected_nodes:
+            tree_layers = [
+                child for child in selected_node.children() if (
+                    isinstance(child, QgsLayerTreeLayer))]
+            for tree_layer in tree_layers:
+                layer = tree_layer.layer()
+                keywords = self.keyword_io.read_keywords(layer)
+                if keywords.get('inasafe_fields'):
+                    return layer
 
     def _layer_count(self):
         """Return the count of layers in the legend.

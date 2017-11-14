@@ -2,5 +2,7 @@
     <i class="icon-info-sign icon-white"></i> {{ header|capitalize }}
 </h5>
 <p>
-    <h5>{{ analysis_question }}</h5>
+    {% for analysis_question in analysis_questions %}
+        <h5>{{ analysis_question }}</h5>
+    {% endfor %}
 </p>
