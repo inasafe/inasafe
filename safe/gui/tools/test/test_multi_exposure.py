@@ -4,7 +4,6 @@ import unittest
 
 from qgis.core import QgsMapLayerRegistry, QgsProject
 from qgis.gui import QgsMapCanvasLayer
-from PyQt4.QtGui import QDialogButtonBox
 
 from safe.definitions.exposure import exposure_road, exposure_population
 from safe.gui.tools.multi_exposure_dialog import (
@@ -42,20 +41,20 @@ class MultiExposureDialogTest(unittest.TestCase):
 
         dialog = MultiExposureDialog(iface=self.iface)
         self.assertFalse(
-            dialog.button_box.button(QDialogButtonBox.Ok).isEnabled(),
+            dialog.btn_run.isEnabled(),
             dialog.message_viewer.page_to_text())
         self.assertFalse(
-            dialog.tab_widget.isTabEnabled(1),
+            dialog.btn_run.isEnabled(),
             dialog.message_viewer.page_to_text())
 
         dialog.combos_exposures[exposure_road['key']].setCurrentIndex(1)
         dialog.combos_exposures[exposure_population['key']].setCurrentIndex(1)
 
         self.assertTrue(
-            dialog.button_box.button(QDialogButtonBox.Ok).isEnabled(),
+            dialog.btn_run.isEnabled(),
             dialog.message_viewer.page_to_text())
         self.assertTrue(
-            dialog.tab_widget.isTabEnabled(1),
+            dialog.btn_run.isEnabled(),
             dialog.message_viewer.page_to_text())
 
         dialog.tab_widget.setCurrentIndex(1)

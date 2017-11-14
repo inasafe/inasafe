@@ -11,7 +11,6 @@ from PyQt4.QtGui import (
     QDialog,
     QComboBox,
     QLabel,
-    QDialogButtonBox,
     QApplication,
     QSizePolicy,
     QTreeWidgetItem,
@@ -109,16 +108,13 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
         self.keyword_io = KeywordIO()
         self._create_exposure_combos()
         self._multi_exposure_if = None
-        self.template_path.setDialogTitle(tr('Template file'))
-        self.template_path.setFilter(tr('QGIS Template file (*.qpt)'))
 
         enable_messaging(self.message_viewer, self)
 
-        # Fix for issue 1699 - cancel button does nothing
-        cancel_button = self.button_box.button(QDialogButtonBox.Cancel)
-        cancel_button.clicked.connect(self.reject)
-        self.ok_button = self.button_box.button(QDialogButtonBox.Ok)
-        self.ok_button.clicked.connect(self.accept)
+        self.btn_back.clicked.connect(self.back_clicked)
+        self.btn_next.clicked.connect(self.next_clicked)
+        self.btn_cancel.clicked.connect(self.reject)
+        self.btn_run.clicked.connect(self.accept)
         self.validate_impact_function()
         self.tab_widget.currentChanged.connect(self._tab_changed)
         self.tree.itemSelectionChanged.connect(self._tree_selection_changed)
@@ -128,11 +124,35 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
         self.remove_layer.clicked.connect(self._remove_layer_clicked)
         self.move_up.clicked.connect(self.move_layer_up)
         self.move_down.clicked.connect(self.move_layer_down)
+        self.cbx_hazard.currentIndexChanged.connect(
+            self.validate_impact_function)
+        self.cbx_aggregation.currentIndexChanged.connect(
+            self.validate_impact_function)
+        self.tab_widget.setCurrentIndex(0)
 
     def _tab_changed(self):
         """Triggered when the current tab is changed."""
-        if self.tab_widget.currentWidget() == self.reportingTab:
+        current = self.tab_widget.currentWidget()
+        if current == self.analysisTab:
+            self.btn_back.setEnabled(False)
+            self.btn_next.setEnabled(True)
+        elif current == self.reportingTab:
             self._populate_reporting_tab()
+            self.reporting_options_layout.setEnabled(
+                self._multi_exposure_if is not None)
+            self.btn_back.setEnabled(True)
+            self.btn_next.setEnabled(True)
+        else:
+            self.btn_back.setEnabled(True)
+            self.btn_next.setEnabled(False)
+
+    def back_clicked(self):
+        """Back button clicked."""
+        self.tab_widget.setCurrentIndex(self.tab_widget.currentIndex() - 1)
+
+    def next_clicked(self):
+        """Next button clicked."""
+        self.tab_widget.setCurrentIndex(self.tab_widget.currentIndex() + 1)
 
     def ordered_expected_layers(self):
         """Get an ordered list of layers according to users input.
@@ -454,7 +474,7 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
     def validate_impact_function(self):
         """Check validity of the current impact function."""
         # Always set it to False
-        self.button_box.button(QDialogButtonBox.Ok).setEnabled(False)
+        self.btn_run.setEnabled(False)
 
         use_selected_only = setting(
             'useSelectedFeaturesOnly', expected_type=bool)
@@ -479,29 +499,42 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
             multi_exposure_if.use_selected_features_only = use_selected_only
             multi_exposure_if.aggregation = aggregation
         else:
-            # TODO
+            # self.extent.crs is the map canvas CRS.
+            # multi_exposure_if.crs = self.extent.crs
+            # mode = setting('analysis_extents_mode')
+            # if self.extent.user_extent:
+            #     # This like a hack to transform a geometry to a rectangle.
+            #     # self.extent.user_extent is a QgsGeometry.
+            #     # impact_function.requested_extent needs a QgsRectangle.
+            #     wkt = self.extent.user_extent.exportToWkt()
+            #     multi_exposure_if.requested_extent = wkt_to_rectangle(wkt)
+            #
+            # elif mode == EXPOSURE:
+            #     multi_exposure_if.use_exposure_view_only = True
+            #
+            # elif mode == HAZARD_EXPOSURE_VIEW:
+            #     multi_exposure_if.requested_extent = (
+            #         self.iface.mapCanvas().extent())
             pass
 
         status, message = multi_exposure_if.prepare()
         if status == PREPARE_SUCCESS:
             self._multi_exposure_if = multi_exposure_if
-            self.button_box.button(QDialogButtonBox.Ok).setEnabled(True)
+            self.btn_run.setEnabled(True)
             send_static_message(self, ready_message())
-            self.tab_widget.setTabEnabled(1, True)
             self.list_layers_in_map_report.clear()
             return
         else:
-            self.tab_widget.setTabEnabled(1, False)
             disable_busy_cursor()
             LOGGER.info(
                 'The impact function could not run because of the inputs.')
             send_error_message(self, message)
             LOGGER.info(message.to_text())
             self._multi_exposure_if = None
-            self.button_box.button(QDialogButtonBox.Ok).setEnabled(False)
 
     def accept(self):
         """Launch the multi exposure analysis."""
+        self.tab_widget.setCurrentIndex(2)
         enable_busy_cursor()
         try:
             hazard = layer_from_combo(self.cbx_hazard)
