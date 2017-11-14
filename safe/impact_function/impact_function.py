@@ -1038,7 +1038,7 @@ class ImpactFunction(object):
                 aggregation_source = None
                 aggregation_keywords = None
 
-                if not self.crs:
+                if not self._crs:
                     message = generate_input_error_message(
                         tr('Error with the requested CRS'),
                         m.Paragraph(tr(
@@ -1270,9 +1270,9 @@ class ImpactFunction(object):
             if self.requested_extent:
                 user_bounding_box = QgsGeometry.fromRect(self.requested_extent)
 
-                if self.crs != self.exposure.crs():
+                if self._crs != self.exposure.crs():
                     crs_transform = QgsCoordinateTransform(
-                        self.crs, self.exposure.crs())
+                        self._crs, self.exposure.crs())
                     user_bounding_box.transform(crs_transform)
 
                 if not hazard_exposure.intersects(user_bounding_box):
@@ -1863,7 +1863,7 @@ class ImpactFunction(object):
                 'aggregation',
                 'Convert bbox aggregation to polygon layer with keywords')
             self.aggregation = create_virtual_aggregation(
-                self.analysis_extent, self.crs)
+                self.analysis_extent, self._crs)
             self.debug_layer(self.aggregation)
 
             exposure = definition(self.exposure.keywords['exposure'])
@@ -2522,12 +2522,12 @@ class ImpactFunction(object):
             self.action_checklist())
 
         # CRS
-        if self.crs:
+        if self._crs:
             set_provenance(
-                self._provenance, provenance_crs, self.crs.authid())
+                self._provenance, provenance_crs, self._crs.authid())
         else:
             set_provenance(
-                self._provenance, provenance_crs, self.crs)
+                self._provenance, provenance_crs, self._crs)
 
         # Debug mode
         set_provenance(
