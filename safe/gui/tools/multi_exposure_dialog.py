@@ -585,6 +585,16 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                     layer_node = group_analysis.addLayer(layer)
                     layer_node.setVisible(Qt.Unchecked)
 
+                    # set layer title if any
+                    try:
+                        title = layer.keywords['title']
+                        if qgis_version() >= 21800:
+                            layer.setName(title)
+                        else:
+                            layer.setLayerName(title)
+                    except KeyError:
+                        pass
+
                 for analysis in self._multi_exposure_if.impact_functions:
                     detailed_group = group_analysis.insertGroup(
                         0, analysis.name)
