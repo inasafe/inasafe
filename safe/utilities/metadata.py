@@ -10,7 +10,9 @@ from PyQt4.QtCore import QUrl, QDate, QDateTime, Qt
 from safe.common.exceptions import (
     MetadataReadError,
     KeywordNotFoundError,
-    NoKeywordsFoundError)
+    NoKeywordsFoundError,
+    MetadataConversionError
+)
 from safe.definitions.layer_modes import layer_mode_continuous
 from safe.definitions.layer_purposes import (
     layer_purpose_hazard,
@@ -22,6 +24,11 @@ from safe.definitions.layer_purposes import (
     layer_purpose_exposure_summary_table,
     layer_purpose_aggregation_summary,
     layer_purpose_profiling,
+)
+from safe.definitions.exposure import (
+    exposure_structure,
+    exposure_road,
+    exposure_population
 )
 from safe.definitions.versions import inasafe_keyword_version
 from safe.metadata import (
@@ -280,22 +287,44 @@ def convert_metadata(keywords, **converter_parameters):
     inasafe_fields = keywords.get('inasafe_fields')
     inasafe_default_values = keywords.get('inasafe_default_values')
     if layer_purpose == layer_purpose_exposure['key']:
-        pass
+        exposure = keywords.get('exposure')
+        if not exposure:
+            raise MetadataConversionError(
+                'Layer purpose is exposure but exposure is not set.')
+        if inasafe_fields.get('exposure_class_field'):
+            exposure_class_field = inasafe_fields.get('exposure_class_field')
+            if exposure == exposure_structure['key']:
+                new_keywords['structure_class_field'] = exposure_class_field
+            elif exposure == exposure_road['key']:
+                new_keywords['road_class_field'] = exposure_class_field
     elif layer_purpose == layer_purpose_hazard['key']:
         pass
     elif layer_purpose == layer_purpose_aggregation['key']:
+        # Fields
+        if inasafe_fields.get(adult_ratio_field['key']):
+            new_keywords['adult ratio attribute'] = inasafe_fields[
+                adult_ratio_field['key']]
+        if inasafe_fields.get(elderly_ratio_field['key']):
+            new_keywords['elderly ratio attribute'] = inasafe_fields[
+                elderly_ratio_field['key']]
+        if inasafe_fields.get(youth_ratio_field['key']):
+            new_keywords['youth ratio attribute'] = inasafe_fields[
+                youth_ratio_field['key']]
+        if inasafe_fields.get(female_ratio_field['key']):
+            new_keywords['female ratio attribute'] = inasafe_fields[
+                female_ratio_field['key']]
+        # Default values
         if inasafe_default_values.get(adult_ratio_field['key']):
-            new_keywords['adult ratio attribute'] = inasafe_default_values[
+            new_keywords['adult ratio default'] = inasafe_default_values[
                 adult_ratio_field['key']]
         if inasafe_default_values.get(elderly_ratio_field['key']):
-            new_keywords['elderly ratio attribute'] = inasafe_default_values[
+            new_keywords['elderly ratio default'] = inasafe_default_values[
                 elderly_ratio_field['key']]
         if inasafe_default_values.get(youth_ratio_field['key']):
-            new_keywords['youth ratio attribute'] = inasafe_default_values[
+            new_keywords['youth ratio default'] = inasafe_default_values[
                 youth_ratio_field['key']]
         if inasafe_default_values.get(female_ratio_field['key']):
-            new_keywords['female ratio attribute'] = inasafe_default_values[
+            new_keywords['female ratio default'] = inasafe_default_values[
                 female_ratio_field['key']]
-
 
     return new_keywords
