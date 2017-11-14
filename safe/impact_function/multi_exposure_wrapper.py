@@ -485,6 +485,9 @@ class MultiExposureImpactFunction(object):
         :param output_folder: The output folder.
         :type output_folder: str
 
+        :param iface: A QGIS App interface
+        :type iface: QgsInterface
+
         :returns: Tuple of error code and message
         :type: tuple
 
@@ -493,6 +496,9 @@ class MultiExposureImpactFunction(object):
         # iface set up, in case IF run from test
         if not iface:
             iface = IFACE
+
+        error_code = None
+        message = None
 
         for component in components:
 
