@@ -6,15 +6,20 @@ from datetime import datetime
 from qgis.utils import iface  # pylint: disable=W0621
 from PyQt4.QtCore import QUrl
 
+
 from safe.definitions.versions import inasafe_keyword_version
-from safe.test.utilities import standard_data_path, clone_shp_layer
+from safe.test.utilities import (
+    standard_data_path, clone_shp_layer, load_test_vector_layer, get_qgis_app)
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from safe.utilities.metadata import (
     write_iso19115_metadata,
     read_iso19115_metadata,
     active_classification,
     active_thresholds_value_maps,
-    copy_layer_keywords
+    copy_layer_keywords,
+    convert_metadata,
 )
+from safe.common.exceptions import MetadataConversionError
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -187,6 +192,165 @@ class TestMetadataUtilities(unittest.TestCase):
         self.assertEqual(keywords['url'].toString(), copy_keywords['url'])
         self.assertEqual(
             keywords['date'].date().isoformat(), copy_keywords['date'])
+
+    def test_convert_metadata(self):
+        """Test convert_metadata method."""
+        # layer = load_test_vector_layer(
+        #     'hazard', 'volcano_krb.shp', clone=True)
+        # from pprint import pprint
+        # pprint(layer.keywords)
+        # Not convertible hazard
+        new_keywords = {
+            'hazard': u'earthquake',
+            'hazard_category': u'multiple_event',
+            'inasafe_fields': {u'hazard_value_field': u'h_zone'},
+            'keyword_version': u'4.0',
+            'layer_geometry': u'polygon',
+            'layer_mode': u'classified',
+            'layer_purpose': u'hazard',
+            'title': u'Earthquake Polygon',
+            'value_maps': {
+                u'road': {
+                    u'earthquake_mmi_scale': {
+                        u'active': True,
+                        u'classes': {
+                            u'IX': [u'Low Hazard Zone'],
+                            u'VIII': [u'Medium Hazard Zone'],
+                            u'X': [u'High Hazard Zone']
+                        }
+                    }
+                },
+                u'structure': {
+                    u'earthquake_mmi_scale': {
+                        u'active': True,
+                        u'classes': {
+                            u'IX': [u'Low Hazard Zone'],
+                            u'VIII': [u'Medium Hazard Zone'],
+                            u'X': [u'High Hazard Zone']
+                        }
+                    }
+                }
+            }
+        }
+        with self.assertRaises(MetadataConversionError):
+            convert_metadata(new_keywords, exposure='structure')
+
+        # Aggregation keyword
+        new_keywords = {
+            'inasafe_default_values': {
+                u'adult_ratio_field': 0.659,
+                u'elderly_ratio_field': 0.087,
+                u'youth_ratio_field': 0.254
+            },
+            'inasafe_fields': {u'aggregation_name_field': u'KAB_NAME'},
+            'keyword_version': u'4.0',
+            'layer_geometry': u'polygon',
+            'layer_purpose': u'aggregation',
+            'title': u"D\xedstr\xedct's of Jakarta"
+        }
+
+        old_keyword = convert_metadata(new_keywords)
+        expected_keyword = {
+            'adult ratio default': 0.659,
+            'aggregation attribute': u'KAB_NAME',
+            'elderly ratio default': 0.087,
+            'keyword_version': '3.5',
+            'layer_geometry': u'polygon',
+            'layer_purpose': u'aggregation',
+            'title': u"D\xedstr\xedct's of Jakarta",
+            'youth ratio default': 0.254}
+        self.assertDictEqual(old_keyword, expected_keyword)
+
+        # Convertible hazard
+        new_keywords = {
+            'hazard': u'volcano',
+            'hazard_category': u'multiple_event',
+            'inasafe_fields': {
+                u'hazard_name_field': u'volcano',
+                u'hazard_value_field': u'KRB'
+            },
+            'keyword_version': u'4.0',
+            'layer_geometry': u'polygon',
+            'layer_mode': u'classified',
+            'layer_purpose': u'hazard',
+            'title': u'Volcano KRB',
+            'value_maps': {
+                u'land_cover': {
+                    u'volcano_hazard_classes': {
+                        u'active': True,
+                        u'classes': {
+                            u'high': [u'Kawasan Rawan Bencana III'],
+                            u'low': [u'Kawasan Rawan Bencana I'],
+                            u'medium': [u'Kawasan Rawan Bencana II']
+                        }
+                    }
+                },
+                u'place': {
+                    u'volcano_hazard_classes': {
+                        u'active': True,
+                        u'classes': {
+                            u'high': [u'Kawasan Rawan Bencana III'],
+                            u'low': [u'Kawasan Rawan Bencana I'],
+                            u'medium': [u'Kawasan Rawan Bencana II']
+                        }
+                    }
+                },
+                u'population': {
+                    u'volcano_hazard_classes': {
+                        u'active': True,
+                        u'classes': {
+                            u'high': [u'Kawasan Rawan Bencana III'],
+                            u'low': [u'Kawasan Rawan Bencana I'],
+                            u'medium': [u'Kawasan Rawan Bencana II']
+                        }
+                    }
+                },
+                u'road': {
+                    u'volcano_hazard_classes': {
+                        u'active': True,
+                        u'classes': {
+                            u'high': [u'Kawasan Rawan Bencana III'],
+                            u'low': [u'Kawasan Rawan Bencana I'],
+                            u'medium': [u'Kawasan Rawan Bencana II']
+                        }
+                    }
+                },
+                u'structure': {
+                    u'volcano_hazard_classes': {
+                        u'active': True,
+                        u'classes': {
+                            u'high': [u'Kawasan Rawan Bencana III'],
+                            u'low': [u'Kawasan Rawan Bencana I'],
+                            u'medium': [u'Kawasan Rawan Bencana II']
+                        }
+                    }
+                }
+            }
+        }
+        with self.assertRaises(MetadataConversionError):
+            convert_metadata(new_keywords)
+
+        old_keyword = convert_metadata(new_keywords, exposure='structure')
+        expected_keyword = {
+            'field': u'KRB',
+            'hazard': u'volcano',
+            'hazard_category': u'multiple_event',
+            'keyword_version': '3.5',
+            'layer_geometry': u'polygon',
+            'layer_mode': u'classified',
+            'layer_purpose': u'hazard',
+            'title': u'Volcano KRB',
+            'value_map': {
+                u'high': [u'Kawasan Rawan Bencana III'],
+                u'low': [u'Kawasan Rawan Bencana I'],
+                u'medium': [u'Kawasan Rawan Bencana II']},
+            'vector_hazard_classification': 'volcano_vector_hazard_classes',
+            'volcano_name_field': u'volcano'
+        }
+        self.assertDictEqual(old_keyword, expected_keyword)
+
+
+
 
 if __name__ == '__main__':
     unittest.main()

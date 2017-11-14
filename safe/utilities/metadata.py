@@ -53,6 +53,7 @@ from safe.definitions.fields import (
     population_count_field,
     hazard_name_field,
     hazard_value_field,
+    aggregation_name_field,
 )
 from safe.definitions.hazard_classifications import (
     generic_hazard_classes,
@@ -286,7 +287,15 @@ def convert_metadata(keywords, **converter_parameters):
     :returns: A metadata version 3.5.
     :rtype: dict
     """
-    new_keywords = {}
+    if not keywords.get('keyword_version'):
+        raise MetadataConversionError('No keyword version found.')
+    if not keywords['keyword_version'].startswith('4'):
+        raise MetadataConversionError(
+            'Only able to convert metadata version 4.x. Your version is %s' %
+        keywords['keyword_version'])
+    new_keywords = {
+        'keyword_version': '3.5',
+    }
     # Properties that have the same concepts / values in both 3.5 and 4.3
     same_properties = [
         'organisation',
@@ -299,7 +308,6 @@ def convert_metadata(keywords, **converter_parameters):
         'layer_purpose',
         'layer_mode',
         'layer_geometry',
-        'keyword_version',
         'scale',
         'source',
         'exposure',
@@ -320,7 +328,6 @@ def convert_metadata(keywords, **converter_parameters):
     try:
         layer_purpose = keywords['layer_purpose']
         layer_geometry = keywords['layer_geometry']
-        layer_mode = keywords['layer_mode']
     except KeyError as e:
         raise MetadataConversionError(e)
 
@@ -364,6 +371,7 @@ def convert_metadata(keywords, **converter_parameters):
             new_keywords['value_mapping'] = keywords['value_map']
 
     elif layer_purpose == layer_purpose_hazard['key']:
+        layer_mode = keywords['layer_mode']
         hazard = keywords.get('hazard')
         if not hazard:
             raise MetadataConversionError(
@@ -429,6 +437,10 @@ def convert_metadata(keywords, **converter_parameters):
         if inasafe_fields.get(female_ratio_field['key']):
             new_keywords['female ratio attribute'] = inasafe_fields[
                 female_ratio_field['key']]
+        # Notes(IS) I think people use name for the aggregation attribute
+        if inasafe_fields.get(aggregation_name_field['key']):
+            new_keywords['aggregation attribute'] = inasafe_fields[
+                aggregation_name_field['key']]
         # Default values
         if inasafe_default_values.get(adult_ratio_field['key']):
             new_keywords['adult ratio default'] = inasafe_default_values[
