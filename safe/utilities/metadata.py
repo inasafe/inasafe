@@ -25,6 +25,10 @@ from safe.definitions.layer_purposes import (
     layer_purpose_aggregation_summary,
     layer_purpose_profiling,
 )
+from safe.definitions.layer_geometry import (
+    layer_geometry_raster, layer_geometry_polygon
+)
+from safe.definitions.hazard import hazard_volcano
 from safe.definitions.exposure import (
     exposure_structure,
     exposure_road,
@@ -36,13 +40,33 @@ from safe.metadata import (
     HazardLayerMetadata,
     AggregationLayerMetadata,
     OutputLayerMetadata,
-    GenericLayerMetadata)
+    GenericLayerMetadata
+)
 
 from safe.definitions.fields import (
     adult_ratio_field,
     elderly_ratio_field,
     youth_ratio_field,
-    female_ratio_field
+    female_ratio_field,
+    exposure_name_field,
+    exposure_id_field,
+    population_count_field,
+    hazard_name_field,
+    hazard_value_field,
+)
+from safe.definitions.hazard_classifications import (
+    generic_hazard_classes,
+    flood_hazard_classes,
+    flood_petabencana_hazard_classes,
+    earthquake_mmi_scale,
+    tsunami_hazard_classes,
+    tsunami_hazard_population_classes,
+    tsunami_hazard_classes_ITB,
+    tsunami_hazard_population_classes_ITB,
+    volcano_hazard_classes,
+    ash_hazard_classes,
+    cyclone_au_bom_hazard_classes,
+    cyclone_sshws_hazard_classes,
 )
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -64,6 +88,16 @@ METADATA_CLASSES = {
     layer_purpose_profiling['key']: OutputLayerMetadata,
 }
 
+vector_classification_conversion = {
+    generic_hazard_classes['key']: 'generic_vector_hazard_classes',
+    flood_hazard_classes['key']: 'flood_vector_hazard_classes',
+    volcano_hazard_classes['key']: 'volcano_vector_hazard_classes',
+}
+raster_classification_conversion = {
+    generic_hazard_classes['key']: 'generic_raster_hazard_classes',
+    flood_hazard_classes['key']: 'flood_raster_hazard_classes',
+    tsunami_hazard_classes_ITB['key']: 'tsunami_hazard_classes_ITB',
+}
 
 def write_iso19115_metadata(layer_uri, keywords):
     """Create metadata  object from a layer path and keywords dictionary.
@@ -247,7 +281,7 @@ def convert_metadata(keywords, **converter_parameters):
 
     :param converter_parameters: Collection of parameters to convert the
         metadata properly.
-    :type converter_parameters: dict
+    :type converter_parameters: str
 
     :returns: A metadata version 3.5.
     :rtype: dict
@@ -282,10 +316,17 @@ def convert_metadata(keywords, **converter_parameters):
     if converter_parameters.get('datatype'):
         new_keywords['datatype'] = converter_parameters.get('datatype')
 
+    # Mandatory keywords
+    try:
+        layer_purpose = keywords['layer_purpose']
+        layer_geometry = keywords['layer_geometry']
+        layer_mode = keywords['layer_mode']
+    except KeyError as e:
+        raise MetadataConversionError(e)
+
     # No need to set value for multipart polygon and resolution
-    layer_purpose = keywords.get('layer_purpose')
-    inasafe_fields = keywords.get('inasafe_fields')
-    inasafe_default_values = keywords.get('inasafe_default_values')
+    inasafe_fields = keywords.get('inasafe_fields', {})
+    inasafe_default_values = keywords.get('inasafe_default_values', {})
     if layer_purpose == layer_purpose_exposure['key']:
         exposure = keywords.get('exposure')
         if not exposure:
@@ -297,8 +338,83 @@ def convert_metadata(keywords, **converter_parameters):
                 new_keywords['structure_class_field'] = exposure_class_field
             elif exposure == exposure_road['key']:
                 new_keywords['road_class_field'] = exposure_class_field
+            else:
+                new_keywords['field'] = exposure_class_field
+        # Data type is only used in population exposure and in v4.x it is
+        # always count
+        if (exposure == exposure_population['key'] and layer_geometry ==
+                layer_geometry_raster['key']):
+            new_keywords['datatype'] = 'count'
+        if (exposure == exposure_population['key'] and layer_geometry ==
+            layer_geometry_polygon['key']):
+            if inasafe_fields.get(exposure_name_field['key']):
+                new_keywords['area_name_field'] = inasafe_fields[
+                    exposure_name_field['key']]
+            if inasafe_fields.get(exposure_id_field['key']):
+                new_keywords['area_id_field'] = inasafe_fields[
+                    exposure_id_field['key']]
+        if inasafe_fields.get(population_count_field['key']):
+            new_keywords['population_field'] = inasafe_fields[
+                population_count_field['key']]
+        if inasafe_fields.get(exposure_name_field['key']):
+            new_keywords['name_field'] = inasafe_fields[
+                exposure_name_field['key']]
+
+        if keywords.get('value_map'):
+            new_keywords['value_mapping'] = keywords['value_map']
+
     elif layer_purpose == layer_purpose_hazard['key']:
-        pass
+        hazard = keywords.get('hazard')
+        if not hazard:
+            raise MetadataConversionError(
+                'Layer purpose is hazard but hazard is not set.')
+        if hazard == hazard_volcano['key']:
+            if inasafe_fields.get(hazard_name_field['key']):
+                new_keywords['volcano_name_field'] = inasafe_fields[
+                    hazard_name_field['key']]
+        if inasafe_fields.get(hazard_value_field['key']):
+            new_keywords['field'] = inasafe_fields[hazard_value_field['key']]
+
+        # Classification and value map (depends on the exposure)
+        try:
+            target_exposure = converter_parameters['exposure']
+        except KeyError:
+            raise MetadataConversionError(
+                'You should supply target exposure for this hazard.'
+            )
+        if layer_mode == layer_mode_continuous['key']:
+            pass
+        # Classified
+        else:
+            classification = active_classification(keywords, target_exposure)
+            value_map = active_thresholds_value_maps(keywords, target_exposure)
+            if layer_geometry == layer_geometry_raster['key']:
+                raster_classification = raster_classification_conversion.get(
+                    classification
+                )
+                if raster_classification:
+                    new_keywords[
+                        'raster_hazard_classification'] = raster_classification
+                    new_keywords['value_map'] = value_map
+                else:
+                    raise MetadataConversionError(
+                        'Could not convert %s to version 3.5 '
+                        'raster hazard classification' % classification
+                    )
+            else:
+                vector_classification = vector_classification_conversion.get(
+                    classification
+                )
+                if vector_classification:
+                    new_keywords[
+                        'vector_hazard_classification'] = vector_classification
+                    new_keywords['value_map'] = value_map
+                else:
+                    raise MetadataConversionError(
+                        'Could not convert %s to version 3.5 '
+                        'vector hazard  classification' % classification
+                    )
+
     elif layer_purpose == layer_purpose_aggregation['key']:
         # Fields
         if inasafe_fields.get(adult_ratio_field['key']):
