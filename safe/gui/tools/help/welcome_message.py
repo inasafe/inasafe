@@ -89,5 +89,4 @@ def content():
         'InaSAFE -> Options menu.'
     )))
 
-
     return message
