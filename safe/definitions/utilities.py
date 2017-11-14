@@ -29,6 +29,8 @@ from safe.definitions import (
     layer_purpose_exposure_summary,
     exposure_population,
 )
+from safe.definitions.reports.report_descriptions import (
+    landscape_map_report_description, portrait_map_report_description)
 from safe.report.report_metadata import QgisComposerComponentsMetadata
 from safe.utilities.settings import setting
 
@@ -529,17 +531,26 @@ def override_component_template(component, template_path):
     document = QDomDocument()
     document.setContent(template_content)
     root_element = document.namedItem('Composer')
+    all_orientations = [
+        landscape_map_report_description['orientation'],
+        portrait_map_report_description['orientation']
+    ]
     orientation = None
     if isinstance(root_element, QDomNode):
         title_attribute_node = root_element.attributes().namedItem('title')
         if title_attribute_node:
             template_orientation = title_attribute_node.nodeValue()
-        for _orientation in ['landscape', 'portrait']:
+        for _orientation in all_orientations:
             if _orientation in template_orientation:
                 orientation = _orientation
                 break
 
-    if orientation:
+    # By default, the component is landscape oriented, So if we found that
+    # the custom template is portrait, we need to delete the information about
+    # orientation in the component because in the report metadata, if there is
+    # no specification about the orientation, then they will set it
+    # to portrait.
+    if orientation == portrait_map_report_description['orientation']:
         custom_template_component['orientation'] = orientation
         del custom_template_component['page_width']
         del custom_template_component['page_height']
