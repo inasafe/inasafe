@@ -6,7 +6,7 @@ import logging
 import os
 
 from PyQt4.QtCore import QPyNullVariant
-from qgis.core import QgsRasterLayer, QgsVectorLayer
+from qgis.core import QgsRasterLayer, QgsVectorLayer, QgsMapLayerRegistry
 
 from safe.common.exceptions import NoKeywordsFoundError
 from safe.definitions.layer_geometry import (
@@ -47,6 +47,28 @@ def geometry_type(layer):
         return layer_geometry_polygon['key']
     else:
         return None
+
+
+def load_layer_from_registry(layer_path):
+    """Helper method to load a layer from registry if its already there.
+
+    If the layer is not loaded yet, it will create the QgsMapLayer on the fly.
+
+    :param layer_path: Layer source path.
+    :type layer_path: str
+
+    :return: Vector layer
+    :rtype: QgsVectorLayer
+
+    .. versionadded: 4.3.0
+    """
+    layers = QgsMapLayerRegistry.instance().mapLayers()
+    for _, layer in layers.items():
+        if layer.source() == layer_path:
+            monkey_patch_keywords(layer)
+            return layer
+
+    return load_layer(layer_path)[0]
 
 
 def reclassify_value(one_value, ranges):
