@@ -25,21 +25,12 @@
      </property>
      <widget class="QWidget" name="page">
       <layout class="QGridLayout" name="gridLayout">
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
+       <property name="margin">
         <number>0</number>
        </property>
        <item row="0" column="0">
-        <widget class="QWebView" name="help_web_view" native="true">
-         <property name="url" stdset="0">
+        <widget class="QWebView" name="help_web_view">
+         <property name="url">
           <url>
            <string>about:blank</string>
           </url>
@@ -50,16 +41,7 @@
      </widget>
      <widget class="QWidget" name="page_1">
       <layout class="QGridLayout" name="gridLayout_5">
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
+       <property name="margin">
         <number>0</number>
        </property>
        <item row="0" column="0">
@@ -75,6 +57,9 @@
            <string>Welcome</string>
           </attribute>
           <layout class="QVBoxLayout" name="welcome_layout">
+           <property name="margin">
+            <number>0</number>
+           </property>
            <item>
             <widget class="MessageViewer" name="welcome_message" native="true">
              <property name="sizePolicy">
@@ -358,9 +343,21 @@
          </widget>
          <widget class="QWidget" name="preference_tab">
           <attribute name="title">
-           <string>Preferences</string>
+           <string>Parameters</string>
           </attribute>
           <layout class="QVBoxLayout" name="verticalLayout_7">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>12</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
            <item>
             <layout class="QVBoxLayout" name="preference_layout"/>
            </item>
@@ -381,16 +378,7 @@
            <string>GIS Environment</string>
           </attribute>
           <layout class="QGridLayout" name="gridLayout_4">
-           <property name="leftMargin">
-            <number>0</number>
-           </property>
-           <property name="topMargin">
-            <number>0</number>
-           </property>
-           <property name="rightMargin">
-            <number>0</number>
-           </property>
-           <property name="bottomMargin">
+           <property name="margin">
             <number>0</number>
            </property>
            <item row="0" column="0">
@@ -889,7 +877,7 @@ p, li { white-space: pre-wrap; }
   <customwidget>
    <class>QWebView</class>
    <extends>QWidget</extends>
-   <header location="global">QtWebKit/QWebView</header>
+   <header>QtWebKit/QWebView</header>
   </customwidget>
   <customwidget>
    <class>MessageViewer</class>
