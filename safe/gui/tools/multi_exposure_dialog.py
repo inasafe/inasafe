@@ -564,14 +564,18 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                 code, message = self._multi_exposure_if.run()
                 # self.assertEqual(code, ANALYSIS_MULTI_SUCCESS, message)
 
-                error_code, message = self._multi_exposure_if.generate_report(
-                    [standard_multi_exposure_impact_report_metadata_pdf])
+                if setting('generate_report', True, bool):
+                    report = (
+                        [standard_multi_exposure_impact_report_metadata_pdf])
+                    error_code, message = (
+                        self._multi_exposure_if.generate_report(
+                            report))
 
-                if error_code == ImpactReport.REPORT_GENERATION_FAILED:
-                    LOGGER.info(
-                        'The impact report could not be generated.')
-                    send_error_message(self, message)
-                    LOGGER.info(message.to_text())
+                    if error_code == ImpactReport.REPORT_GENERATION_FAILED:
+                        LOGGER.info(
+                            'The impact report could not be generated.')
+                        send_error_message(self, message)
+                        LOGGER.info(message.to_text())
 
                 # We always create the multi exposure group because we need
                 # reports to be generated.
@@ -604,14 +608,15 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                     add_impact_layers_to_canvas(
                         analysis, group=detailed_group)
 
-                    error_code, message = analysis.generate_report(
-                        all_default_report_components)
+                    if setting('generate_report', True, bool):
+                        error_code, message = analysis.generate_report(
+                            all_default_report_components)
 
-                    if error_code == ImpactReport.REPORT_GENERATION_FAILED:
-                        LOGGER.info(
-                            'The impact report could not be generated.')
-                        send_error_message(self, message)
-                        LOGGER.info(message.to_text())
+                        if error_code == ImpactReport.REPORT_GENERATION_FAILED:
+                            LOGGER.info(
+                                'The impact report could not be generated.')
+                            send_error_message(self, message)
+                            LOGGER.info(message.to_text())
 
                 # If the user has a custom order
                 if len(self.ordered_expected_layers()) != 0:
