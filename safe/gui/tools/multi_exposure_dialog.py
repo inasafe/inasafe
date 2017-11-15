@@ -535,6 +535,7 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
     def accept(self):
         """Launch the multi exposure analysis."""
         self.tab_widget.setCurrentIndex(2)
+        self.set_enabled_buttons(False)
         enable_busy_cursor()
         try:
             hazard = layer_from_combo(self.cbx_hazard)
@@ -572,6 +573,8 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                     send_error_message(self, message)
                     LOGGER.info(message.to_text())
 
+                # We always create the multi exposure group because we need
+                # reports to be generated.
                 root = QgsProject.instance().layerTreeRoot()
                 group_analysis = root.insertGroup(
                     0, self._multi_exposure_if.name)
@@ -580,8 +583,7 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                     MULTI_EXPOSURE_ANALYSIS_FLAG, True)
 
                 for layer in self._multi_exposure_if.outputs:
-                    QgsMapLayerRegistry.instance().addMapLayer(
-                        layer, False)
+                    QgsMapLayerRegistry.instance().addMapLayer(layer, False)
                     layer_node = group_analysis.addLayer(layer)
                     layer_node.setVisible(Qt.Unchecked)
 
@@ -610,8 +612,11 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                             'The impact report could not be generated.')
                         send_error_message(self, message)
                         LOGGER.info(message.to_text())
+
+                # If the user has a custom order
                 if len(self.ordered_expected_layers()) != 0:
-                    group_analysis.removeAllChildren()
+                    # The helper will create the group again.
+                    root.removeChildNode(group_analysis)
                     add_layers_to_canvas_with_custom_orders(
                         self.ordered_expected_layers(),
                         self._multi_exposure_if)
@@ -624,7 +629,14 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
             LOGGER.debug(error_message.to_text())
         finally:
             disable_busy_cursor()
+            self.set_enabled_buttons(True)
 
     def reject(self):
         """Redefinition of the reject method."""
         super(MultiExposureDialog, self).reject()
+
+    def set_enabled_buttons(self, enabled):
+        self.btn_cancel.setEnabled(enabled)
+        self.btn_back.setEnabled(enabled)
+        self.btn_next.setEnabled(enabled)
+        self.btn_run.setEnabled(enabled)
