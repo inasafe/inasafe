@@ -143,10 +143,15 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
         if keywords['layer_purpose'] == layer_purpose_hazard['key']:
             self.target_exposure_label.setEnabled(True)
             self.target_exposure_combo_box.setEnabled(True)
-            hazard_layer_mode = keywords['layer_mode']
+            self.target_exposure_combo_box.clear()
+            for exposure in exposure_all:
+                self.target_exposure_combo_box.addItem(
+                    exposure['name'], exposure['key'])
         else:
             self.target_exposure_label.setEnabled(False)
             self.target_exposure_combo_box.setEnabled(False)
+            self.target_exposure_combo_box.clear()
+            self.target_exposure_combo_box.addItem(tr("Not Applicable"))
 
     def help_toggled(self, flag):
         """Show or hide the help tab in the stacked widget.
@@ -188,9 +193,19 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
 
     def convert_metadata(self):
         """Method invoked when OK button is clicked."""
+        # Converter parameter
+        converter_parameter = {}
+        # Target exposure
+        if self.target_exposure_combo_box.isEnabled():
+            exposure_index = self.target_exposure_combo_box.currentIndex()
+            exposure_key = self.target_exposure_combo_box.itemData(
+                exposure_index, Qt.UserRole)
+            converter_parameter['exposure'] = exposure_key
+
         # Metadata
         current_metadata = self.keyword_io.read_keywords(self.layer)
-        old_metadata = convert_metadata(current_metadata)
+        old_metadata = convert_metadata(
+            current_metadata, **converter_parameter)
 
         # Input
         input_layer_path = self.layer.source()
