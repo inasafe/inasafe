@@ -379,9 +379,9 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
         self.dock.show_busy()
 
         generated_components = [
+            infographic_report,
             override_component_template(
-                map_report, self.selected_template_path),
-            infographic_report
+                map_report, self.selected_template_path)
         ]
         error_code, message = self.impact_function.generate_report(
             generated_components, iface=self.iface)
