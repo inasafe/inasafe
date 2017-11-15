@@ -3,30 +3,29 @@
 import logging
 import os
 
-from PyQt4.QtCore import pyqtSignature, pyqtSlot, Qt
+from PyQt4.QtCore import Qt, QFile
 from PyQt4.QtGui import (
     QDialog, QHBoxLayout, QLabel, QDialogButtonBox, QMessageBox, QFileDialog)
 from parameters.parameter_exceptions import InvalidValidationException
-from qgis.gui import QgsMapLayerComboBox
-
 from safe.common.exceptions import (
     NoKeywordsFoundError,
     KeywordNotFoundError,
     MetadataReadError,
     InaSAFEError)
-from safe.definitions.constants import RECENT
 from safe.definitions.layer_purposes import (
     layer_purpose_exposure, layer_purpose_hazard, layer_purpose_aggregation)
 from safe.definitions.layer_modes import (
     layer_mode_continuous, layer_mode_classified)
-from safe.gui.widgets.field_mapping_widget import FieldMappingWidget
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.qgis_utilities import display_warning_message_box
 from safe.utilities.resources import (
     get_ui_class, html_footer, html_header)
-from safe.utilities.unicode import get_string
+from safe.definitions.layer_geometry import layer_geometry_raster
 from safe.utilities.utilities import get_error_message
+from safe.utilities.metadata import (
+    convert_metadata, write_iso19115_metadata
+)
 
 FORM_CLASS = get_ui_class('metadata_converter_dialog_base.ui')
 
@@ -98,6 +97,11 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
         if self.input_layer_combo_box.currentLayer():
             self.set_layer(self.input_layer_combo_box.currentLayer())
 
+        # Set output path
+        home_directory = os.path.expanduser('~')
+        default_path = os.path.join(home_directory, 'temp.g')
+        self.output_path_line_edit.setText(file_path)
+
         # Signals
         self.input_layer_combo_box.layerChanged.connect(self.set_layer)
         self.output_path_tool.clicked.connect(self.select_output_directory)
@@ -131,7 +135,7 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
         if layer:
             self.layer = layer
         else:
-            self.layer = self.layer_combo_box.currentLayer()
+            self.layer = self.input_layer_combo_box.currentLayer()
         if not self.layer:
             return
 
@@ -220,14 +224,54 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
                     'An error was encountered when saving the following '
                     'keywords:\n %s') % error_message.to_html())))
 
+
+    def convert_metadata(self):
+        """Method invoked when OK button is clicked."""
+        # Metadata
+        current_metadata = self.keyword_io.read_keywords(self.layer)
+        old_metadata = convert_metadata(current_metadata)
+
+        # Input
+        input_layer_path = self.layer.source()
+        input_directory_path = os.path.dirname(input_layer_path)
+        input_file_name = os.path.basename(input_layer_path)
+        input_base_name = os.path.splitext(input_file_name)[0]
+
+        output_path = self.output_path_line_edit.text()
+        output_directory_path = os.path.dirname(output_path)
+        output_file_name = os.path.basename(output_path)
+        output_base_name = os.path.splitext(output_file_name)[0]
+
+        # Copy all related files, if exists
+        extensions = [
+            # Vector layer
+            '.shp', '.geojson', '.qml', '.shx', '.dbf', '.prj', 'qpj',
+            # Raster layer
+            '.tif', '.tiff', '.asc',
+            # Metadata
+            # '.xml',
+        ]
+        for extension in extensions:
+            source_path = os.path.join(
+                input_directory_path, input_base_name + extension)
+            if not os.path.exists(source_path):
+                continue
+            target_path = os.path.join(
+                output_directory_path, output_base_name + extension)
+            QFile.copy(source_path, target_path)
+
+        # Replace the metadata with the old one
+        write_iso19115_metadata(output_path, old_metadata, version_35=True)
+
     def accept(self):
         """Method invoked when OK button is clicked."""
+        self.convert_metadata()
         super(MetadataConverterDialog, self).accept()
 
     def select_output_directory(self):
         """Select output directory"""
         LOGGER.debug('Output path clicked')
-        current_file_path = self.ouput_path_line_edit.text()
+        current_file_path = self.output_path_line_edit.text()
         if not current_file_path or not os.path.exists(current_file_path):
             home_directory = os.path.expanduser('~')
             current_file_path = home_directory
@@ -240,4 +284,4 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
         )
         if file_path:
             LOGGER.debug('Output file set to %s' % file_path)
-            self.ouput_path_line_edit.setText(file_path)
+            self.output_path_line_edit.setText(file_path)
