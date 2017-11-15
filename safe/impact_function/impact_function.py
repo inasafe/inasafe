@@ -192,7 +192,11 @@ from safe.utilities.gis import (
 from safe.utilities.gis import qgis_version
 from safe.utilities.i18n import tr
 from safe.utilities.metadata import (
-    active_thresholds_value_maps, copy_layer_keywords, write_iso19115_metadata)
+    active_thresholds_value_maps,
+    copy_layer_keywords,
+    write_iso19115_metadata,
+    append_ISO19115_keywords,
+)
 from safe.utilities.profiling import (
     profile, clear_prof_data, profiling_log)
 from safe.utilities.settings import setting
@@ -1422,7 +1426,7 @@ class ImpactFunction(object):
                 self.profiling.publicSource(),
                 self.profiling.keywords)
 
-            # Later, we should move this call.
+            # Style all output layers.
             self.style()
 
             # End of the impact function. We need to set this IF not ready.
@@ -1657,16 +1661,11 @@ class ImpactFunction(object):
 
         # Update provenance with output layer path
         output_layer_provenance = {
-            provenance_layer_exposure_summary[
-                'provenance_key']: None,
-            provenance_layer_aggregate_hazard_impacted[
-                'provenance_key']: None,
-            provenance_layer_aggregation_summary[
-                'provenance_key']: None,
-            provenance_layer_analysis_impacted[
-                'provenance_key']: None,
-            provenance_layer_exposure_summary_table[
-                'provenance_key']: None,
+            provenance_layer_exposure_summary['provenance_key']: None,
+            provenance_layer_aggregate_hazard_impacted['provenance_key']: None,
+            provenance_layer_aggregation_summary['provenance_key']: None,
+            provenance_layer_analysis_impacted['provenance_key']: None,
+            provenance_layer_exposure_summary_table['provenance_key']: None,
             provenance_layer_profiling['provenance_key']: None,
             provenance_layer_exposure_summary_id['provenance_key']: None,
             provenance_layer_aggregate_hazard_impacted_id[
@@ -1683,7 +1682,7 @@ class ImpactFunction(object):
         if self._exposure_summary:
             self._exposure_summary.keywords[
                 'provenance_data'] = self.provenance
-            self.append_ISO19115_keywords(
+            append_ISO19115_keywords(
                 self._exposure_summary.keywords)
             result, name = self.datastore.add_layer(
                 self._exposure_summary,
@@ -1704,7 +1703,7 @@ class ImpactFunction(object):
         if self.aggregate_hazard_impacted:
             self.aggregate_hazard_impacted.keywords[
                 'provenance_data'] = self.provenance
-            self.append_ISO19115_keywords(
+            append_ISO19115_keywords(
                 self.aggregate_hazard_impacted.keywords)
             result, name = self.datastore.add_layer(
                 self._aggregate_hazard_impacted,
@@ -1728,7 +1727,7 @@ class ImpactFunction(object):
         if self._exposure.keywords.get('classification'):
             self._exposure_summary_table.keywords[
                 'provenance_data'] = self.provenance
-            self.append_ISO19115_keywords(
+            append_ISO19115_keywords(
                 self._exposure_summary_table.keywords)
             result, name = self.datastore.add_layer(
                 self._exposure_summary_table,
@@ -1750,7 +1749,7 @@ class ImpactFunction(object):
 
         # Aggregation summary
         self.aggregation_summary.keywords['provenance_data'] = self.provenance
-        self.append_ISO19115_keywords(self.aggregation_summary.keywords)
+        append_ISO19115_keywords(self.aggregation_summary.keywords)
         result, name = self.datastore.add_layer(
             self._aggregation_summary,
             layer_purpose_aggregation_summary['key'])
@@ -1768,7 +1767,7 @@ class ImpactFunction(object):
 
         # Analysis impacted
         self.analysis_impacted.keywords['provenance_data'] = self.provenance
-        self.append_ISO19115_keywords(self.analysis_impacted.keywords)
+        append_ISO19115_keywords(self.analysis_impacted.keywords)
         result, name = self.datastore.add_layer(
             self._analysis_impacted, layer_purpose_analysis_impacted['key'])
         if not result:
@@ -2526,7 +2525,7 @@ class ImpactFunction(object):
                 self._provenance, provenance_crs, self._crs.authid())
         else:
             set_provenance(
-                self._provenance, provenance_crs, self._crs)
+                self._provenance, provenance_crs, None)
 
         # Debug mode
         set_provenance(
@@ -2637,27 +2636,6 @@ class ImpactFunction(object):
 
         actions.extend(specific_actions(hazard, exposure))
         return actions
-
-    # noinspection PyPep8Naming
-    @staticmethod
-    def append_ISO19115_keywords(keywords):
-        """Append ISO19115 from setting to keywords.
-
-        :param keywords: The keywords destination.
-        :type keywords: dict
-        """
-        # Map setting's key and metadata key
-        ISO19115_mapping = {
-            'ISO19115_ORGANIZATION': 'organisation',
-            'ISO19115_URL': 'url',
-            'ISO19115_EMAIL': 'email',
-            'ISO19115_LICENSE': 'license'
-        }
-        ISO19115_keywords = {}
-        # Getting value from setting.
-        for key, value in ISO19115_mapping.items():
-            ISO19115_keywords[value] = setting(key, expected_type=str)
-        keywords.update(ISO19115_keywords)
 
     @staticmethod
     def load_from_output_metadata(output_metadata):
