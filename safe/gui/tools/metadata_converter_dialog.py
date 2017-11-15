@@ -1,10 +1,11 @@
 # coding=utf-8
 """Metadata Converter Dialog Implementation."""
 import logging
+import os
 
-from PyQt4.QtCore import pyqtSignature, pyqtSlot
+from PyQt4.QtCore import pyqtSignature, pyqtSlot, Qt
 from PyQt4.QtGui import (
-    QDialog, QHBoxLayout, QLabel, QDialogButtonBox, QMessageBox)
+    QDialog, QHBoxLayout, QLabel, QDialogButtonBox, QMessageBox, QFileDialog)
 from parameters.parameter_exceptions import InvalidValidationException
 from qgis.gui import QgsMapLayerComboBox
 
@@ -62,6 +63,7 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
                'hazard layer, you need to choose what exposure that you want '
                'to work with.')
         )
+        self.header_label.setAlignment(Qt.AlignJustify)
 
         # Setup input layer combo box
         # Filter our layers
@@ -98,6 +100,7 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
 
         # Signals
         self.input_layer_combo_box.layerChanged.connect(self.set_layer)
+        self.output_path_tool.clicked.connect(self.select_output_directory)
 
         # Set widget to show the main page (not help page)
         self.main_stacked_widget.setCurrentIndex(1)
@@ -220,3 +223,21 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
     def accept(self):
         """Method invoked when OK button is clicked."""
         super(MetadataConverterDialog, self).accept()
+
+    def select_output_directory(self):
+        """Select output directory"""
+        LOGGER.debug('Output path clicked')
+        current_file_path = self.ouput_path_line_edit.text()
+        if not current_file_path or not os.path.exists(current_file_path):
+            home_directory = os.path.expanduser('~')
+            current_file_path = home_directory
+        # TODO(IS) Set to the same file name as the layer input.
+        file_path = QFileDialog.getSaveFileName(
+            self,
+            tr('Output File'),
+            current_file_path,
+            tr('All Files (*.*)')
+        )
+        if file_path:
+            LOGGER.debug('Output file set to %s' % file_path)
+            self.ouput_path_line_edit.setText(file_path)
