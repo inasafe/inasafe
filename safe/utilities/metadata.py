@@ -42,6 +42,13 @@ from safe.metadata import (
     OutputLayerMetadata,
     GenericLayerMetadata
 )
+# 3.5 metadata
+from safe.metadata35 import GenericLayerMetadata as GenericLayerMetadata35
+from safe.metadata35 import ExposureLayerMetadata as ExposureLayerMetadata35
+from safe.metadata35 import HazardLayerMetadata as HazardLayerMetadata35
+from safe.metadata35 import (
+    AggregationLayerMetadata as AggregationLayerMetadata35)
+
 
 from safe.definitions.fields import (
     adult_ratio_field,
@@ -81,6 +88,12 @@ METADATA_CLASSES = {
     layer_purpose_profiling['key']: OutputLayerMetadata,
 }
 
+METADATA_CLASSES35 = {
+    layer_purpose_exposure['key']: ExposureLayerMetadata35,
+    layer_purpose_hazard['key']: HazardLayerMetadata35,
+    layer_purpose_aggregation['key']: AggregationLayerMetadata35,
+}
+
 vector_classification_conversion = {
     generic_hazard_classes['key']: 'generic_vector_hazard_classes',
     flood_hazard_classes['key']: 'flood_vector_hazard_classes',
@@ -93,7 +106,7 @@ raster_classification_conversion = {
 }
 
 
-def write_iso19115_metadata(layer_uri, keywords):
+def write_iso19115_metadata(layer_uri, keywords, version_35=False):
     """Create metadata  object from a layer path and keywords dictionary.
 
     :param layer_uri: Uri to layer.
@@ -102,22 +115,33 @@ def write_iso19115_metadata(layer_uri, keywords):
     :param keywords: Dictionary of keywords.
     :type keywords: dict
     """
+    active_metadata_classes = METADATA_CLASSES
+    if version_35:
+        active_metadata_classes = METADATA_CLASSES35
 
     if 'layer_purpose' in keywords:
-        if keywords['layer_purpose'] in METADATA_CLASSES:
-            metadata = METADATA_CLASSES[keywords['layer_purpose']](layer_uri)
+        if keywords['layer_purpose'] in active_metadata_classes:
+            metadata = active_metadata_classes[
+                keywords['layer_purpose']](layer_uri)
         else:
             LOGGER.info(
                 'The layer purpose is not supported explicitly. It will use '
                 'generic metadata. The layer purpose is %s' %
                 keywords['layer_purpose'])
-            metadata = GenericLayerMetadata(layer_uri)
+            if version_35:
+                metadata = GenericLayerMetadata35(layer_uri)
+            else:
+                metadata = GenericLayerMetadata(layer_uri)
     else:
-        metadata = GenericLayerMetadata(layer_uri)
+        if version_35:
+            metadata = GenericLayerMetadata35(layer_uri)
+        else:
+            metadata = GenericLayerMetadata(layer_uri)
 
     metadata.update_from_dict(keywords)
     # Always set keyword_version to the latest one.
-    metadata.update_from_dict({'keyword_version': inasafe_keyword_version})
+    if not version_35:
+        metadata.update_from_dict({'keyword_version': inasafe_keyword_version})
 
     if metadata.layer_is_file_based:
         xml_file_path = os.path.splitext(layer_uri)[0] + '.xml'
@@ -128,7 +152,7 @@ def write_iso19115_metadata(layer_uri, keywords):
     return metadata
 
 
-def read_iso19115_metadata(layer_uri, keyword=None):
+def read_iso19115_metadata(layer_uri, keyword=None, version_35=False):
     """Retrieve keywords from a metadata object
 
     :param layer_uri: Uri to layer.
@@ -152,8 +176,18 @@ def read_iso19115_metadata(layer_uri, keyword=None):
         message += 'Layer path: %s.' % layer_uri
         raise NoKeywordsFoundError(message)
     metadata = GenericLayerMetadata(layer_uri, xml_uri)
-    if metadata.layer_purpose in METADATA_CLASSES:
-        metadata = METADATA_CLASSES[metadata.layer_purpose](layer_uri, xml_uri)
+    if version_35:
+        metadata = GenericLayerMetadata35(layer_uri, xml_uri)
+    else:
+        metadata = GenericLayerMetadata(layer_uri, xml_uri)
+
+    active_metadata_classes = METADATA_CLASSES
+    if version_35:
+        active_metadata_classes = METADATA_CLASSES35
+
+    if metadata.layer_purpose in active_metadata_classes:
+        metadata = active_metadata_classes[
+            metadata.layer_purpose](layer_uri, xml_uri)
 
     # dictionary comprehension
     keywords = {

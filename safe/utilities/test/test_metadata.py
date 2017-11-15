@@ -53,6 +53,27 @@ class TestMetadataUtilities(unittest.TestCase):
         metadata = write_iso19115_metadata(exposure_layer.source(), keywords)
         self.assertEqual(metadata.exposure, 'structure')
 
+        # Version 3.5
+        exposure_layer = clone_shp_layer(
+            name='buildings',
+            include_keywords=False,
+            source_directory=standard_data_path('exposure'))
+        keywords = {
+            'date': '26-03-2015 14:03',
+            'exposure': 'structure',
+            'keyword_version': '3.2',
+            'layer_geometry': 'polygon',
+            'layer_mode': 'classified',
+            'layer_purpose': 'exposure',
+            'license': 'Open Data Commons Open Database License (ODbL)',
+            'source': 'OpenStreetMap - www.openstreetmap.org',
+            'structure_class_field': 'TYPE',
+            'title': 'Buildings'
+        }
+        metadata = write_iso19115_metadata(
+            exposure_layer.source(), keywords, version_35=True)
+        self.assertEqual(metadata.exposure, 'structure')
+
     def test_read_iso19115_metadata(self):
         """Test for read_iso19115_metadata method."""
         exposure_layer = clone_shp_layer(
@@ -73,6 +94,38 @@ class TestMetadataUtilities(unittest.TestCase):
         write_iso19115_metadata(exposure_layer.source(), keywords)
 
         read_metadata = read_iso19115_metadata(exposure_layer.source())
+
+        for key in set(keywords.keys()) & set(read_metadata.keys()):
+            self.assertEqual(read_metadata[key], keywords[key])
+        for key in set(keywords.keys()) - set(read_metadata.keys()):
+            message = 'key %s is not found in ISO metadata' % key
+            self.assertEqual(read_metadata[key], keywords[key], message)
+        for key in set(read_metadata.keys()) - set(keywords.keys()):
+            message = 'key %s is not found in old keywords' % key
+            self.assertEqual(read_metadata[key], keywords[key], message)
+
+        # Version 3.5
+        exposure_layer = clone_shp_layer(
+            name='buildings',
+            include_keywords=False,
+            source_directory=standard_data_path('exposure'))
+        keywords = {
+            # 'date': '26-03-2015 14:03',
+            'exposure': 'structure',
+            'keyword_version': inasafe_keyword_version,
+            'layer_geometry': 'polygon',
+            'layer_mode': 'classified',
+            'layer_purpose': 'exposure',
+            'license': 'Open Data Commons Open Database License (ODbL)',
+            'source': 'OpenStreetMap - www.openstreetmap.org',
+            'structure_class_field': 'TYPE',
+            'title': 'Buildings'
+        }
+        metadata = write_iso19115_metadata(
+            exposure_layer.source(), keywords, version_35=True)
+
+        read_metadata = read_iso19115_metadata(
+            exposure_layer.source(), version_35=True)
 
         for key in set(keywords.keys()) & set(read_metadata.keys()):
             self.assertEqual(read_metadata[key], keywords[key])
@@ -108,6 +161,27 @@ class TestMetadataUtilities(unittest.TestCase):
         write_iso19115_metadata(layer.source(), keywords)
 
         read_metadata = read_iso19115_metadata(layer.source())
+        self.assertDictEqual(keywords, read_metadata)
+
+        # Version 3.5
+        keywords = {
+            # 'date': '26-03-2015 14:03',
+            'exposure': 'structure',
+            'keyword_version': '3.2',
+            'layer_geometry': 'polygon',
+            'layer_mode': 'classified',
+            'layer_purpose': 'exposure',
+            'license': 'Open Data Commons Open Database License (ODbL)',
+            'source': 'OpenStreetMap - www.openstreetmap.org',
+            'structure_class_field': 'TYPE',
+            'title': 'Buildings'
+        }
+        layer = clone_shp_layer(
+            name='buildings',
+            include_keywords=False,
+            source_directory=standard_data_path('exposure'))
+        write_iso19115_metadata(layer.source(), keywords, version_35=True)
+        read_metadata = read_iso19115_metadata(layer.source(), version_35=True)
         self.assertDictEqual(keywords, read_metadata)
 
     def test_active_classification_thresholds_value_maps(self):
