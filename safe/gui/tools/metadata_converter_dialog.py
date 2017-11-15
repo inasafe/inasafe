@@ -98,9 +98,9 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
             self.set_layer(self.input_layer_combo_box.currentLayer())
 
         # Set output path
-        home_directory = os.path.expanduser('~')
-        default_path = os.path.join(home_directory, 'temp.g')
-        self.output_path_line_edit.setText(file_path)
+        # home_directory = os.path.expanduser('~')
+        # default_path = os.path.join(home_directory, 'temp.g')
+        # self.output_path_line_edit.setText(file_path)
 
         # Signals
         self.input_layer_combo_box.layerChanged.connect(self.set_layer)
@@ -236,6 +236,7 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
         input_directory_path = os.path.dirname(input_layer_path)
         input_file_name = os.path.basename(input_layer_path)
         input_base_name = os.path.splitext(input_file_name)[0]
+        input_extension = os.path.splitext(input_file_name)[1]
 
         output_path = self.output_path_line_edit.text()
         output_directory_path = os.path.dirname(output_path)
@@ -261,10 +262,23 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
             QFile.copy(source_path, target_path)
 
         # Replace the metadata with the old one
-        write_iso19115_metadata(output_path, old_metadata, version_35=True)
+        output_file_path = os.path.join(
+            output_directory_path, output_base_name + input_extension
+        )
+        LOGGER.debug('output file path: ' + output_file_path)
+        write_iso19115_metadata(
+            output_file_path, old_metadata, version_35=True)
 
     def accept(self):
         """Method invoked when OK button is clicked."""
+        if not self.output_path_line_edit.text():
+            display_warning_message_box(
+                self,
+                tr('Empty Output Path'),
+                tr('Output path can not be empty'))
+            return
+        else:
+            LOGGER.debug('Output path : ' + self.output_path_line_edit.text())
         self.convert_metadata()
         super(MetadataConverterDialog, self).accept()
 
