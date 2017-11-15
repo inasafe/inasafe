@@ -16,6 +16,8 @@ from safe.common.exceptions import (
 from safe.definitions.constants import RECENT
 from safe.definitions.layer_purposes import (
     layer_purpose_exposure, layer_purpose_hazard, layer_purpose_aggregation)
+from safe.definitions.layer_modes import (
+    layer_mode_continuous, layer_mode_classified)
 from safe.gui.widgets.field_mapping_widget import FieldMappingWidget
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
@@ -51,6 +53,15 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
 
         self.keyword_io = KeywordIO()
         self.layer = None
+
+        # Setup header label
+        self.header_label.setText(
+            tr('In this tool, you can convert a metadata 4.x of a layer to '
+               'metadata 3.5. You will get a directory contains all the files '
+               'of the layer and the new 3.5 metadata. If you want to convert '
+               'hazard layer, you need to choose what exposure that you want '
+               'to work with.')
+        )
 
         # Setup input layer combo box
         # Filter our layers
@@ -120,6 +131,17 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
             self.layer = self.layer_combo_box.currentLayer()
         if not self.layer:
             return
+
+        keywords = self.keyword_io.read_keywords(layer)
+
+        # TODO(IS): Show only possible exposure target
+        if keywords['layer_purpose'] == layer_purpose_hazard['key']:
+            self.target_exposure_label.setEnabled(True)
+            self.target_exposure_combo_box.setEnabled(True)
+            hazard_layer_mode = keywords['layer_mode']
+        else:
+            self.target_exposure_label.setEnabled(False)
+            self.target_exposure_combo_box.setEnabled(False)
 
     def help_toggled(self, flag):
         """Show or hide the help tab in the stacked widget.
