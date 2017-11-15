@@ -22,6 +22,7 @@ from safe.utilities.metadata import (
     convert_metadata, write_iso19115_metadata
 )
 from safe.definitions.exposure import exposure_all
+from safe.gui.tools.help.metadata_converter_help import metadata_converter_help
 
 FORM_CLASS = get_ui_class('metadata_converter_dialog_base.ui')
 
@@ -174,12 +175,10 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
         self.main_stacked_widget.setCurrentIndex(0)
         header = html_header()
         footer = html_footer()
+        message = metadata_converter_help()
 
         string = header
-
-        # message = field_mapping_help()
-
-        # string += message.to_html()
+        string += message.to_html()
         string += footer
 
         self.help_web_view.setHtml(string)
