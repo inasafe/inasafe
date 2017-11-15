@@ -26,6 +26,7 @@ from safe.utilities.utilities import get_error_message
 from safe.utilities.metadata import (
     convert_metadata, write_iso19115_metadata
 )
+from safe.definitions.exposure import exposure_all
 
 FORM_CLASS = get_ui_class('metadata_converter_dialog_base.ui')
 
@@ -96,11 +97,6 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
         # Set current layer as the active layer
         if self.input_layer_combo_box.currentLayer():
             self.set_layer(self.input_layer_combo_box.currentLayer())
-
-        # Set output path
-        # home_directory = os.path.expanduser('~')
-        # default_path = os.path.join(home_directory, 'temp.g')
-        # self.output_path_line_edit.setText(file_path)
 
         # Signals
         self.input_layer_combo_box.layerChanged.connect(self.set_layer)
@@ -188,43 +184,6 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
 
         self.help_web_view.setHtml(string)
 
-    def save_metadata(self):
-        """Save metadata based on the field mapping state."""
-        metadata = self.field_mapping_widget.get_field_mapping()
-        for key, value in metadata['fields'].items():
-            # Delete the key if it's set to None
-            if key in self.metadata['inasafe_default_values']:
-                self.metadata['inasafe_default_values'].pop(key)
-            if value is None or value == []:
-                if key in self.metadata['inasafe_fields']:
-                    self.metadata['inasafe_fields'].pop(key)
-            else:
-                self.metadata['inasafe_fields'][key] = value
-
-        for key, value in metadata['values'].items():
-            # Delete the key if it's set to None
-            if key in self.metadata['inasafe_fields']:
-                self.metadata['inasafe_fields'].pop(key)
-            if value is None:
-                if key in self.metadata['inasafe_default_values']:
-                    self.metadata['inasafe_default_values'].pop(key)
-            else:
-                self.metadata['inasafe_default_values'][key] = value
-
-        # Save metadata
-        try:
-            self.keyword_io.write_keywords(
-                layer=self.layer, keywords=self.metadata)
-        except InaSAFEError, e:
-            error_message = get_error_message(e)
-            # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
-            QMessageBox.warning(
-                self, self.tr('InaSAFE'),
-                ((self.tr(
-                    'An error was encountered when saving the following '
-                    'keywords:\n %s') % error_message.to_html())))
-
-
     def convert_metadata(self):
         """Method invoked when OK button is clicked."""
         # Metadata
@@ -238,6 +197,7 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
         input_base_name = os.path.splitext(input_file_name)[0]
         input_extension = os.path.splitext(input_file_name)[1]
 
+        # Output
         output_path = self.output_path_line_edit.text()
         output_directory_path = os.path.dirname(output_path)
         output_file_name = os.path.basename(output_path)
@@ -249,8 +209,6 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
             '.shp', '.geojson', '.qml', '.shx', '.dbf', '.prj', 'qpj',
             # Raster layer
             '.tif', '.tiff', '.asc',
-            # Metadata
-            # '.xml',
         ]
         for extension in extensions:
             source_path = os.path.join(
@@ -265,7 +223,6 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
         output_file_path = os.path.join(
             output_directory_path, output_base_name + input_extension
         )
-        LOGGER.debug('output file path: ' + output_file_path)
         write_iso19115_metadata(
             output_file_path, old_metadata, version_35=True)
 
@@ -284,17 +241,30 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
 
     def select_output_directory(self):
         """Select output directory"""
-        LOGGER.debug('Output path clicked')
+        # Input layer
+        input_layer_path = self.layer.source()
+        input_file_name = os.path.basename(input_layer_path)
+        input_extension = os.path.splitext(input_file_name)[1]
+
+        # Get current path
         current_file_path = self.output_path_line_edit.text()
         if not current_file_path or not os.path.exists(current_file_path):
-            home_directory = os.path.expanduser('~')
-            current_file_path = home_directory
-        # TODO(IS) Set to the same file name as the layer input.
+            current_file_path = input_layer_path
+
+        # Filtering based on input layer
+        extension_mapping = {
+            '.shp': tr('Shapefile (*.shp);;'),
+            '.geojson': tr('GeoJSON (*.geojson);;'),
+            '.tif': tr('Raster TIF/TIFF (*.tif, *.tiff);;'),
+            '.tiff': tr('Raster TIF/TIFF (*.tiff, *.tiff);;'),
+            '.asc': tr('Raster ASCII File (*.asc);;'),
+        }
+        # Open File Dialog
         file_path = QFileDialog.getSaveFileName(
             self,
             tr('Output File'),
             current_file_path,
-            tr('All Files (*.*)')
+            extension_mapping[input_extension]
         )
         if file_path:
             LOGGER.debug('Output file set to %s' % file_path)
