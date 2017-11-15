@@ -42,9 +42,9 @@ group = tr('InaSAFE - Infographic Elements')
 # helpText is used for QGIS 3 : https://github.com/qgis/QGIS/pull/5059
 ##
 
-description = tr('Retrieve the full path of inasafe-logo-white.svg.')
+description = tr('Retrieve a header name of the field name from definitions.')
 examples = {
-    'inasafe_logo_white_path()': None
+    'inasafe_field_header(\'minimum_needs__clean_water\')': tr('Clean water')
 }
 help_message = generate_expression_help(description, examples)
 

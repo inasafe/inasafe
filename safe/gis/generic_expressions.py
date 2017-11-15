@@ -10,6 +10,7 @@ from qgis.core import (
     QgsExpressionContextUtils
 )
 
+from safe.definitions.extra_keywords import all_extra_keywords_description
 from safe.definitions.provenance import provenance_layer_analysis_impacted_id
 from safe.gis.tools import load_layer
 from safe.utilities.i18n import tr
@@ -242,7 +243,12 @@ examples = {
         "will return the value of 'depth' in "
         "current hazard layer's extra keywords")
 }
-help_message = generate_expression_help(description, examples)
+extra_information = {
+    'title': tr("Available keywords:"),
+    'detail': all_extra_keywords_description
+}
+help_message = generate_expression_help(
+    description, examples, extra_information=extra_information)
 
 
 @qgsfunction(
