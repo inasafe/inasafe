@@ -1,12 +1,12 @@
 # coding=utf-8
-"""Field Mapping Dialog Implementation."""
+"""Metadata Converter Dialog Implementation."""
 import logging
 
-from PyQt4.QtCore import pyqtSignature, pyqtSlot, QSettings
+from PyQt4.QtCore import pyqtSignature, pyqtSlot
 from PyQt4.QtGui import (
     QDialog, QHBoxLayout, QLabel, QDialogButtonBox, QMessageBox)
 from parameters.parameter_exceptions import InvalidValidationException
-from qgis.gui import QgsMapLayerComboBox, QgsMapLayerProxyModel
+from qgis.gui import QgsMapLayerComboBox
 
 from safe.common.exceptions import (
     NoKeywordsFoundError,
@@ -16,10 +16,7 @@ from safe.common.exceptions import (
 from safe.definitions.constants import RECENT
 from safe.definitions.layer_purposes import (
     layer_purpose_exposure, layer_purpose_hazard, layer_purpose_aggregation)
-from safe.definitions.utilities import get_field_groups
-from safe.gui.tools.help.field_mapping_help import field_mapping_help
 from safe.gui.widgets.field_mapping_widget import FieldMappingWidget
-from safe.utilities.default_values import set_inasafe_default_value_qsetting
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.qgis_utilities import display_warning_message_box
@@ -41,9 +38,9 @@ accepted_layer_purposes = [
 
 class MetadataConverterDialog(QDialog, FORM_CLASS):
 
-    """Dialog implementation class for the InaSAFE field mapping tool."""
+    """Dialog implementation class for the InaSAFE metadata converter tool."""
 
-    def __init__(self, parent=None, iface=None, setting=None):
+    def __init__(self, parent=None, iface=None):
         """Constructor."""
         QDialog.__init__(self, parent)
         self.setupUi(self)
@@ -51,60 +48,48 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
         self.setWindowTitle(self.tr('InaSAFE Metadata Converter'))
         self.parent = parent
         self.iface = iface
-        if setting is None:
-            setting = QSettings()
-        self.setting = setting
 
         self.keyword_io = KeywordIO()
-
         self.layer = None
-        self.metadata = {}
 
-        self.layer_input_layout = QHBoxLayout()
-        self.layer_label = QLabel(tr('Layer'))
-        self.layer_combo_box = QgsMapLayerComboBox()
-
-        # Filter out a layer that don't have layer groups
+        # Setup input layer combo box
+        # Filter our layers
         excepted_layers = []
-        for i in range(self.layer_combo_box.count()):
-            layer = self.layer_combo_box.layer(i)
+        for i in range(self.input_layer_combo_box.count()):
+            layer = self.input_layer_combo_box.layer(i)
             try:
                 keywords = self.keyword_io.read_keywords(layer)
             except (KeywordNotFoundError, NoKeywordsFoundError):
+                # Filter out if no keywords
                 excepted_layers.append(layer)
                 continue
             layer_purpose = keywords.get('layer_purpose')
             if not layer_purpose:
+                # Filter out if no layer purpose
                 excepted_layers.append(layer)
                 continue
             if layer_purpose not in accepted_layer_purposes:
+                # Filter out if not aggregation, hazard, or exposure layer
                 excepted_layers.append(layer)
                 continue
-        self.layer_combo_box.setExceptedLayerList(excepted_layers)
+        self.input_layer_combo_box.setExceptedLayerList(excepted_layers)
 
         # Select the active layer.
         if self.iface.activeLayer():
-            found = self.layer_combo_box.findText(
+            found = self.input_layer_combo_box.findText(
                 self.iface.activeLayer().name())
             if found > -1:
-                self.layer_combo_box.setLayer(self.iface.activeLayer())
+                self.input_layer_combo_box.setLayer(self.iface.activeLayer())
 
+        # Set current layer as the active layer
+        if self.input_layer_combo_box.currentLayer():
+            self.set_layer(self.input_layer_combo_box.currentLayer())
+
+        # Signals
+        self.input_layer_combo_box.layerChanged.connect(self.set_layer)
+
+        # Set widget to show the main page (not help page)
         self.main_stacked_widget.setCurrentIndex(1)
-
-        # Input
-        self.layer_input_layout.addWidget(self.layer_label)
-        self.layer_input_layout.addWidget(self.layer_combo_box)
-
-        self.header_label = QLabel()
-        self.header_label.setWordWrap(True)
-        self.main_layout.addWidget(self.header_label)
-        self.main_layout.addLayout(self.layer_input_layout)
-
-        # Signal
-        self.layer_combo_box.layerChanged.connect(self.set_layer)
-
-        if self.layer_combo_box.currentLayer():
-            self.set_layer(self.layer_combo_box.currentLayer())
 
         # Set up things for context help
         self.help_button = self.button_box.button(QDialogButtonBox.Help)
@@ -129,8 +114,6 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
         :param keywords: Keywords for the layer.
         :type keywords: dict, None
         """
-        if True:
-            return
         if layer:
             self.layer = layer
         else:
@@ -138,51 +121,6 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
         if not self.layer:
             return
 
-        if keywords is not None:
-            self.metadata = keywords
-        else:
-            # Always read from metadata file.
-            try:
-                self.metadata = self.keyword_io.read_keywords(self.layer)
-            except (
-                    NoKeywordsFoundError,
-                    KeywordNotFoundError,
-                    MetadataReadError) as e:
-                raise e
-        if 'inasafe_default_values' not in self.metadata:
-            self.metadata['inasafe_default_values'] = {}
-        if 'inasafe_fields' not in self.metadata:
-            self.metadata['inasafe_fields'] = {}
-        self.field_mapping_widget = FieldMappingWidget(
-            parent=self, iface=self.iface)
-        self.field_mapping_widget.set_layer(self.layer, self.metadata)
-        self.field_mapping_widget.show()
-        self.main_layout.addWidget(self.field_mapping_widget)
-
-        # Set header label
-        group_names = [
-            self.field_mapping_widget.tabText(i) for i in range(
-                self.field_mapping_widget.count())]
-        if len(group_names) == 0:
-            header_text = tr(
-                'There is no field group for this layer. Please select '
-                'another layer.')
-            self.header_label.setText(header_text)
-            return
-        elif len(group_names) == 1:
-            pretty_group_name = group_names[0]
-        elif len(group_names) == 2:
-            pretty_group_name = group_names[0] + tr(' and ') + group_names[1]
-        else:
-            pretty_group_name = ', '.join(group_names[:-1])
-            pretty_group_name += tr(', and {0}').format(group_names[-1])
-        header_text = tr(
-            'Please fill the information for every tab to determine the '
-            'attribute for {0} group.').format(pretty_group_name)
-        self.header_label.setText(header_text)
-
-    @pyqtSlot()
-    @pyqtSignature('bool')  # prevents actions being handled twice
     def help_toggled(self, flag):
         """Show or hide the help tab in the stacked widget.
 
@@ -256,13 +194,6 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
                 ((self.tr(
                     'An error was encountered when saving the following '
                     'keywords:\n %s') % error_message.to_html())))
-
-        # Update setting fir recent value
-        if self.metadata.get('inasafe_default_values'):
-            for key, value in \
-                    self.metadata['inasafe_default_values'].items():
-                set_inasafe_default_value_qsetting(
-                    self.setting, key, RECENT, value)
 
     def accept(self):
         """Method invoked when OK button is clicked."""
