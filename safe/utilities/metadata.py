@@ -68,6 +68,7 @@ from safe.definitions.hazard_classifications import (
     tsunami_hazard_classes_ITB,
     volcano_hazard_classes,
 )
+from safe.utilities.settings import setting
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -106,8 +107,34 @@ raster_classification_conversion = {
 }
 
 
+# noinspection PyPep8Naming
+def append_ISO19115_keywords(keywords):
+    """Append ISO19115 from setting to keywords.
+
+    :param keywords: The keywords destination.
+    :type keywords: dict
+    """
+    # Map setting's key and metadata key
+    ISO19115_mapping = {
+        'ISO19115_ORGANIZATION': 'organisation',
+        'ISO19115_URL': 'url',
+        'ISO19115_EMAIL': 'email',
+        'ISO19115_LICENSE': 'license'
+    }
+    ISO19115_keywords = {}
+    # Getting value from setting.
+    for key, value in ISO19115_mapping.items():
+        ISO19115_keywords[value] = setting(key, expected_type=str)
+    keywords.update(ISO19115_keywords)
+
+
 def write_iso19115_metadata(layer_uri, keywords, version_35=False):
     """Create metadata  object from a layer path and keywords dictionary.
+
+    This function will save these keywords to the file system or the database.
+
+    :param version_35: If we write keywords version 3.5. Default to False.
+    :type version_35: bool
 
     :param layer_uri: Uri to layer.
     :type layer_uri: basestring

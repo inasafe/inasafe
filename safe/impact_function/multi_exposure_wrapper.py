@@ -6,16 +6,21 @@ Multi-exposure wrapper.
 This class will manage how to launch and optimize a multi exposure analysis.
 """
 
+import getpass
 import logging
 from datetime import datetime
 from os import makedirs
 from os.path import join, exists
-from qgis.utils import iface
+from socket import gethostname
 
-from PyQt4.QtCore import QDir
+from osgeo import gdal
+from qgis.utils import iface
+from PyQt4.Qt import PYQT_VERSION_STR
+from PyQt4.QtCore import QDir, QT_VERSION_STR
 
 from safe import messaging as m
 from safe.common.utilities import temp_dir
+from safe.common.version import get_version
 from safe.datastore.datastore import DataStore
 from safe.datastore.folder import Folder
 from safe.definitions.constants import (
@@ -28,13 +33,46 @@ from safe.definitions.layer_purposes import (
     layer_purpose_analysis_impacted,
     layer_purpose_aggregation_summary,
 )
+from safe.definitions.provenance import (
+    provenance_aggregation_keywords,
+    provenance_aggregation_layer,
+    provenance_aggregation_layer_id,
+    provenance_analysis_extent,
+    provenance_data_store_uri,
+    provenance_duration,
+    provenance_end_datetime,
+    provenance_gdal_version,
+    provenance_multi_exposure_keywords,
+    provenance_multi_exposure_layers,
+    provenance_multi_exposure_layers_id,
+    provenance_hazard_keywords,
+    provenance_hazard_layer,
+    provenance_hazard_layer_id,
+    provenance_host_name,
+    provenance_impact_function_name,
+    provenance_inasafe_version,
+    provenance_os,
+    provenance_pyqt_version,
+    provenance_qgis_version,
+    provenance_qt_version,
+    provenance_start_datetime,
+    provenance_user,
+    provenance_layer_aggregation_summary,
+    provenance_layer_analysis_impacted,
+    provenance_layer_aggregation_summary_id,
+    provenance_layer_analysis_impacted_id,
+    provenance_debug_mode)
 from safe.definitions.styles import (
     aggregation_color,
     aggregation_width,
     analysis_color,
     analysis_width,
 )
-from safe.definitions.utilities import get_name, update_template_component
+from safe.definitions.utilities import (
+    get_name,
+    set_provenance,
+    update_template_component,
+)
 from safe.gis.tools import geometry_type
 from safe.gis.vector.prepare_vector_layer import prepare_vector_layer
 from safe.gis.vector.summary_5_multi_exposure import (
@@ -50,8 +88,17 @@ from safe.report.impact_report import ImpactReport
 from safe.report.report_metadata import ReportMetadata
 from safe.utilities.gis import deep_duplicate_layer
 from safe.utilities.i18n import tr
+from safe.utilities.gis import qgis_version
+from safe.utilities.metadata import (
+    copy_layer_keywords,
+    write_iso19115_metadata,
+    append_ISO19115_keywords,
+)
 from safe.utilities.settings import setting
-from safe.utilities.utilities import replace_accentuated_characters
+from safe.utilities.utilities import (
+    replace_accentuated_characters,
+    readable_os_version,
+)
 
 LOGGER = logging.getLogger('InaSAFE')
 IFACE = iface
@@ -64,7 +111,10 @@ __revision__ = '$Format:%H$'
 
 class MultiExposureImpactFunction(object):
 
-    """Multi-exposure wrapper."""
+    """Multi-exposure wrapper.
+
+    .. versionadded:: 4.3
+    """
 
     def __init__(self):
         """Constructor."""
@@ -87,6 +137,9 @@ class MultiExposureImpactFunction(object):
         self._aggregation_summary = None
         self._analysis_summary = None
 
+        # Use debug to store intermediate results
+        self.debug_mode = False
+
         # Metadata
         self.callback = None
         self.debug = False
@@ -99,9 +152,26 @@ class MultiExposureImpactFunction(object):
         self._duration = 0
         self.analysis_extent = None
         self._output_layer_expected = None
+        self._provenance_ready = False
+        self._provenance = {}
 
         # Impact Report
         self._impact_report = None
+
+        # Environment
+        set_provenance(self._provenance, provenance_host_name, gethostname())
+        set_provenance(self._provenance, provenance_user, getpass.getuser())
+        set_provenance(
+            self._provenance, provenance_qgis_version, qgis_version())
+        set_provenance(
+            self._provenance, provenance_gdal_version, gdal.__version__)
+        set_provenance(self._provenance, provenance_qt_version, QT_VERSION_STR)
+        set_provenance(
+            self._provenance, provenance_pyqt_version, PYQT_VERSION_STR)
+        set_provenance(
+            self._provenance, provenance_os, readable_os_version())
+        set_provenance(
+            self._provenance, provenance_inasafe_version, get_version())
 
     @property
     def name(self):
@@ -111,6 +181,37 @@ class MultiExposureImpactFunction(object):
         :rtype: basestring
         """
         return self._name
+
+    @property
+    def start_datetime(self):
+        """The timestamp when the impact function start to run.
+
+        :return: The start timestamp.
+        :rtype: datetime
+        """
+        return self._start_datetime
+
+    @property
+    def end_datetime(self):
+        """The timestamp when the impact function finish the run process.
+
+        :return: The start timestamp.
+        :rtype: datetime
+        """
+        return self._end_datetime
+
+    @property
+    def duration(self):
+        """The duration of running the impact function in seconds.
+
+        Return 0 if the start or end datetime is None.
+
+        :return: The duration.
+        :rtype: float
+        """
+        if self.end_datetime is None or self.start_datetime is None:
+            return 0
+        return (self.end_datetime - self.start_datetime).total_seconds()
 
     @property
     def outputs(self):
@@ -280,6 +381,55 @@ class MultiExposureImpactFunction(object):
             results[analysis.name] = analysis.output_layers_expected()
         return results
 
+    @property
+    def provenance(self):
+        """Helper method to gather provenance for aggregation summary layer.
+
+        If the impact function is not ready (has not called prepare method),
+        it will return empty dict to avoid miss information.
+
+        The impact function will call generate_provenance at the end of the IF.
+
+        List of keys (for quick lookup): safe/definitions/provenance.py
+
+        :returns: Dictionary that contains all provenance.
+        :rtype: dict
+        """
+        if self._provenance_ready:
+            return self._provenance
+        else:
+            return {}
+
+    def _generate_provenance(self):
+        """Function to generate provenance at the end of the IF."""
+        # InaSAFE
+        set_provenance(
+            self._provenance, provenance_impact_function_name, self.name)
+
+        set_provenance(
+            self._provenance,
+            provenance_analysis_extent,
+            self.analysis_extent.exportToWkt())
+
+        set_provenance(
+            self._provenance,
+            provenance_data_store_uri,
+            self.datastore.uri_path)
+
+        # CRS
+        # if self._crs:
+        #     set_provenance(
+        #         self._provenance, provenance_crs, self._crs.authid())
+        # else:
+        #     set_provenance(
+        #         self._provenance, provenance_crs, self._crs)
+
+        # Debug mode
+        set_provenance(
+            self._provenance, provenance_debug_mode, self.debug_mode)
+
+        self._provenance_ready = True
+
     def prepare(self):
         """Method to check if the impact function can be run.
 
@@ -294,9 +444,10 @@ class MultiExposureImpactFunction(object):
                 from the code.
         :rtype: (int, m.Message)
         """
+        self._provenance_ready = False
         if len(self._exposures) < 2:  # 2 layers minimum.
             message = generate_input_error_message(
-                tr('No exposure layer provided'),
+                tr('Not enough exposure layer'),
                 m.Paragraph(tr('You need to provide at least two exposures.')))
             self._is_ready = False
             return PREPARE_FAILED_BAD_INPUT, message
@@ -331,6 +482,7 @@ class MultiExposureImpactFunction(object):
         # We delegate the prepare to the main IF for each exposure
         for exposure in self._exposures:
             impact_function = ImpactFunction()
+            impact_function.debug_mode = self.debug_mode
             impact_function.hazard = deep_duplicate_layer(self._hazard)
             impact_function.exposure = exposure
             impact_function.debug_mode = self.debug
@@ -367,6 +519,63 @@ class MultiExposureImpactFunction(object):
         self._name += ', '.join(exposures_strings)
 
         self._output_layer_expected = self._compute_output_layer_expected()
+
+        # Set provenance
+        set_provenance(
+            self._provenance,
+            provenance_multi_exposure_layers,
+            [l.source() for l in self._exposures])
+        # reference to original layer being used
+        set_provenance(
+            self._provenance,
+            provenance_multi_exposure_layers_id,
+            [l.id() for l in self._exposures])
+        set_provenance(
+            self._provenance,
+            provenance_multi_exposure_keywords,
+            {l.keywords['exposure']: copy_layer_keywords(l.keywords)
+                for l in self.exposures})
+        set_provenance(
+            self._provenance,
+            provenance_hazard_layer,
+            self.hazard.publicSource())
+        # reference to original layer being used
+        set_provenance(
+            self._provenance,
+            provenance_hazard_layer_id,
+            self.hazard.id())
+        set_provenance(
+            self._provenance,
+            provenance_hazard_keywords,
+            copy_layer_keywords(self.hazard.keywords))
+        # reference to original layer being used
+        if self.aggregation:
+            set_provenance(
+                self._provenance,
+                provenance_aggregation_layer_id,
+                self.aggregation.id())
+            set_provenance(
+                self._provenance,
+                provenance_aggregation_layer,
+                self.aggregation.source())
+            set_provenance(
+                self._provenance,
+                provenance_aggregation_keywords,
+                copy_layer_keywords(self.aggregation.keywords))
+        else:
+            set_provenance(
+                self._provenance,
+                provenance_aggregation_layer_id,
+                None)
+            set_provenance(
+                self._provenance,
+                provenance_aggregation_layer,
+                None)
+            set_provenance(
+                self._provenance,
+                provenance_aggregation_keywords,
+                None)
+
         self._is_ready = True
         return PREPARE_SUCCESS, None
 
@@ -451,7 +660,23 @@ class MultiExposureImpactFunction(object):
         self._analysis_summary = multi_exposure_analysis_summary(
             self._analysis_summary, analysis_layers)
 
+        # End of the impact function
+        self._end_datetime = datetime.now()
+        set_provenance(
+            self._provenance, provenance_start_datetime, self.start_datetime)
+        set_provenance(
+            self._provenance, provenance_end_datetime, self.end_datetime)
+        set_provenance(
+            self._provenance, provenance_duration, self.duration)
+
+        self._generate_provenance()
+
+        output_layer_provenance = {}
+
         # Add all layers to the datastore
+        # Aggregation summary
+        self._aggregation_summary.keywords['provenance_data'] = self.provenance
+        append_ISO19115_keywords(self._aggregation_summary.keywords)
         result, name = self._datastore.add_layer(
             self._aggregation_summary,
             layer_purpose_aggregation_summary['key'])
@@ -460,7 +685,14 @@ class MultiExposureImpactFunction(object):
                 tr('Something went wrong with the datastore : '
                    '{error_message}').format(error_message=name))
         self._aggregation_summary = self.datastore.layer(name)
+        output_layer_provenance[provenance_layer_aggregation_summary[
+            'provenance_key']] = self._aggregation_summary.source()
+        output_layer_provenance[provenance_layer_aggregation_summary_id[
+            'provenance_key']] = self._aggregation_summary.id()
 
+        # Analysis summary
+        self._analysis_summary.keywords['provenance_data'] = self.provenance
+        append_ISO19115_keywords(self._analysis_summary.keywords)
         result, name = self._datastore.add_layer(
             self._analysis_summary, layer_purpose_analysis_impacted['key'])
         if not result:
@@ -468,7 +700,24 @@ class MultiExposureImpactFunction(object):
                 tr('Something went wrong with the datastore : '
                    '{error_message}').format(error_message=name))
         self._analysis_summary = self.datastore.layer(name)
+        output_layer_provenance[provenance_layer_analysis_impacted[
+            'provenance_key']] = self._analysis_summary.source()
+        output_layer_provenance[provenance_layer_analysis_impacted_id[
+            'provenance_key']] = self._analysis_summary.id()
+        self._provenance.update(output_layer_provenance)
 
+        # Update provenance data with output layers URI
+        self._provenance.update(output_layer_provenance)
+        self._aggregation_summary.keywords['provenance_data'] = self.provenance
+        write_iso19115_metadata(
+            self._aggregation_summary.source(),
+            self._aggregation_summary.keywords)
+        self._analysis_summary.keywords['provenance_data'] = self.provenance
+        write_iso19115_metadata(
+            self._analysis_summary.source(),
+            self._analysis_summary.keywords)
+
+        # Quick style
         simple_polygon_without_brush(
             self._aggregation_summary, aggregation_width, aggregation_color)
         simple_polygon_without_brush(
