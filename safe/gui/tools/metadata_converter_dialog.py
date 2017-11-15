@@ -11,7 +11,9 @@ from safe.common.exceptions import (
     NoKeywordsFoundError,
     KeywordNotFoundError,
     MetadataReadError,
-    InaSAFEError)
+    InaSAFEError,
+    MetadataConversionError,
+)
 from safe.definitions.layer_purposes import (
     layer_purpose_exposure, layer_purpose_hazard, layer_purpose_aggregation)
 from safe.definitions.layer_modes import (
@@ -236,7 +238,14 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
             return
         else:
             LOGGER.debug('Output path : ' + self.output_path_line_edit.text())
-        self.convert_metadata()
+        try:
+            self.convert_metadata()
+        except MetadataConversionError as e:
+            display_warning_message_box(
+                self,
+                tr('Metadata Conversion Failed'),
+                e.message)
+            return
         super(MetadataConverterDialog, self).accept()
 
     def select_output_directory(self):
