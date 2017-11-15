@@ -140,7 +140,7 @@ def humanise_seconds(seconds):
             days, hours, minutes))
 
 
-def generate_expression_help(description, examples):
+def generate_expression_help(description, examples, extra_information=None):
     """Generate the help message for QGIS Expressions.
 
     It will format nicely the help string with some examples.
@@ -148,24 +148,46 @@ def generate_expression_help(description, examples):
     :param description: A description of the expression.
     :type description: basestring
 
-    :param examples: A dictionnary of examples
+    :param examples: A dictionary of examples
     :type examples: dict
+
+    :param extra_information: A dictionary of extra information.
+    :type extra_information: dict
 
     :return: A message object.
     :rtype: message
     """
+    def populate_bullet_list(message, information):
+        """Populate a message object with bullet list.
+
+        :param message: The message object.
+        :type message: Message
+
+        :param information: A dictionary of information.
+        :type information: dict
+
+        :return: A message object that has been updated.
+        :rtype: Message
+        """
+        bullets = m.BulletedList()
+        for key, item in information.iteritems():
+            if item:
+                bullets.add(
+                    m.Text(m.ImportantText(key), m.Text('→'), m.Text(item)))
+            else:
+                bullets.add(m.Text(m.ImportantText(key)))
+        message.add(bullets)
+        return message
+
     help = m.Message()
     help.add(m.Paragraph(description))
     help.add(m.Paragraph(tr('Examples:')))
-    bullets = m.BulletedList()
-    for expression, result in examples.iteritems():
-        if result:
-            bullets.add(
-                m.Text(
-                    m.ImportantText(expression), m.Text('→'), m.Text(result)))
-        else:
-            bullets.add(m.Text(m.ImportantText(expression)))
-    help.add(bullets)
+    help = populate_bullet_list(help, examples)
+
+    if extra_information:
+        help.add(m.Paragraph(extra_information['title']))
+        help = populate_bullet_list(help, extra_information['detail'])
+
     return help
 
 
