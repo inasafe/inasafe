@@ -5,26 +5,19 @@ import os
 
 from PyQt4.QtCore import Qt, QFile
 from PyQt4.QtGui import (
-    QDialog, QHBoxLayout, QLabel, QDialogButtonBox, QMessageBox, QFileDialog)
-from parameters.parameter_exceptions import InvalidValidationException
+    QDialog, QDialogButtonBox, QFileDialog)
 from safe.common.exceptions import (
     NoKeywordsFoundError,
     KeywordNotFoundError,
-    MetadataReadError,
-    InaSAFEError,
     MetadataConversionError,
 )
 from safe.definitions.layer_purposes import (
     layer_purpose_exposure, layer_purpose_hazard, layer_purpose_aggregation)
-from safe.definitions.layer_modes import (
-    layer_mode_continuous, layer_mode_classified)
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.qgis_utilities import display_warning_message_box
 from safe.utilities.resources import (
     get_ui_class, html_footer, html_header)
-from safe.definitions.layer_geometry import layer_geometry_raster
-from safe.utilities.utilities import get_error_message
 from safe.utilities.metadata import (
     convert_metadata, write_iso19115_metadata
 )
