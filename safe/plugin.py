@@ -104,6 +104,7 @@ class Plugin(object):
         self.action_shake_converter = None
         self.action_show_definitions = None
         self.action_toggle_rubberbands = None
+        self.action_metadata_converter = None
 
         self.translator = None
         self.toolbar = None
@@ -367,6 +368,23 @@ class Plugin(object):
             self.action_show_definitions,
             add_to_toolbar=True)
 
+    def _create_metadata_converter_action(self):
+        """Create action for showing metadata converter qdialog."""
+        icon = resources_path('img', 'icons', 'show-inasafe-help.svg')
+        self.action_metadata_converter = QAction(
+            QIcon(icon),
+            self.tr('InaSAFE Metadata Converter'),
+            self.iface.mainWindow())
+        self.action_metadata_converter.setStatusTip(self.tr(
+            'Convert metadata from version 4.3 to version 3.5.'))
+        self.action_metadata_converter.setWhatsThis(self.tr(
+            'Use this tool to convert metadata 4.3 to version 3.5'))
+        self.action_metadata_converter.triggered.connect(
+            self.show_metadata_converter)
+        self.add_action(
+            self.action_metadata_converter,
+            add_to_toolbar=True)
+
     def _create_field_mapping_action(self):
         """Create action for showing field mapping dialog."""
         icon = resources_path('img', 'icons', 'show-mapping-tool.svg')
@@ -561,6 +579,7 @@ class Plugin(object):
         self._add_spacer_to_menu()
         self._create_field_mapping_action()
         self._create_mutli_exposure_action()
+        self._create_metadata_converter_action()
         self._create_osm_downloader_action()
         self._create_add_osm_layer_action()
         self._create_add_petabencana_layer_action()
@@ -914,6 +933,16 @@ class Plugin(object):
             self.dock_widget.layer_changed(self.iface.activeLayer())
         else:
             LOGGER.debug('Show field mapping not accepted')
+
+    def show_metadata_converter(self):
+        """Show InaSAFE Metadata Converter."""
+        from safe.gui.tools.metadata_converter_dialog import (
+            MetadataConverterDialog)
+        dialog = MetadataConverterDialog(
+            parent=self.iface.mainWindow(),
+            iface=self.iface,
+        )
+        dialog.exec_()
 
     def show_multi_exposure(self):
         """Show InaSAFE Multi Exposure."""
