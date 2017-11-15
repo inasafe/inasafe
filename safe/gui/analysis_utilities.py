@@ -290,6 +290,7 @@ def add_layers_to_canvas_with_custom_orders(order, impact_function):
                             layer, False)
                         layer_node = group_analysis.addLayer(layer)
                         layer_node.setVisible(Qt.Checked)
+                        break
             else:
                 for sub_impact_function in impact_function.impact_functions:
                     # Iterate over each sub impact function used in the
@@ -303,6 +304,7 @@ def add_layers_to_canvas_with_custom_orders(order, impact_function):
                                 layer_node = group_analysis.addLayer(
                                     layer)
                                 layer_node.setVisible(Qt.Checked)
+                                break
 
 
 def add_layer_to_canvas(layer, name):
