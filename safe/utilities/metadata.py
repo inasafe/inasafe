@@ -58,16 +58,8 @@ from safe.definitions.fields import (
 from safe.definitions.hazard_classifications import (
     generic_hazard_classes,
     flood_hazard_classes,
-    flood_petabencana_hazard_classes,
-    earthquake_mmi_scale,
-    tsunami_hazard_classes,
-    tsunami_hazard_population_classes,
     tsunami_hazard_classes_ITB,
-    tsunami_hazard_population_classes_ITB,
     volcano_hazard_classes,
-    ash_hazard_classes,
-    cyclone_au_bom_hazard_classes,
-    cyclone_sshws_hazard_classes,
 )
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -99,6 +91,7 @@ raster_classification_conversion = {
     flood_hazard_classes['key']: 'flood_raster_hazard_classes',
     tsunami_hazard_classes_ITB['key']: 'tsunami_hazard_classes_ITB',
 }
+
 
 def write_iso19115_metadata(layer_uri, keywords):
     """Create metadata  object from a layer path and keywords dictionary.
@@ -287,12 +280,38 @@ def convert_metadata(keywords, **converter_parameters):
     :returns: A metadata version 3.5.
     :rtype: dict
     """
+    def single_field(field, field_definition):
+        """Returning single field as string.
+
+        :param field: The field property. Can be string or list of string.
+        :type field: basestring, list
+
+        :param field_definition: The definition of field.
+        :type field_definition: dict
+
+        :returns: The first element of list if only one, or the string if
+            it's string.
+        :rtype: basestring
+        """
+        if isinstance(field, list):
+            if len(field) == 1:
+                return field[0]
+            elif len(field) == 0:
+                return None
+            else:
+                raise MetadataConversionError(
+                    'Can not convert keyword with multiple field mapping. The '
+                    'field concept is %s\nThe fields are %s'
+                    % (field_definition['key'], ', '.join(field))
+                )
+        else:
+            return field
     if not keywords.get('keyword_version'):
         raise MetadataConversionError('No keyword version found.')
     if not keywords['keyword_version'].startswith('4'):
         raise MetadataConversionError(
             'Only able to convert metadata version 4.x. Your version is %s' %
-        keywords['keyword_version'])
+            keywords['keyword_version'])
     new_keywords = {
         'keyword_version': '3.5',
     }
@@ -320,10 +339,6 @@ def convert_metadata(keywords, **converter_parameters):
         if keywords.get(same_property):
             new_keywords[same_property] = keywords.get(same_property)
 
-    # datatype
-    if converter_parameters.get('datatype'):
-        new_keywords['datatype'] = converter_parameters.get('datatype')
-
     # Mandatory keywords
     try:
         layer_purpose = keywords['layer_purpose']
@@ -339,8 +354,8 @@ def convert_metadata(keywords, **converter_parameters):
         if not exposure:
             raise MetadataConversionError(
                 'Layer purpose is exposure but exposure is not set.')
-        if inasafe_fields.get('exposure_class_field'):
-            exposure_class_field = inasafe_fields.get('exposure_class_field')
+        if inasafe_fields.get('exposure_type_field'):
+            exposure_class_field = inasafe_fields.get('exposure_type_field')
             if exposure == exposure_structure['key']:
                 new_keywords['structure_class_field'] = exposure_class_field
             elif exposure == exposure_road['key']:
@@ -352,8 +367,8 @@ def convert_metadata(keywords, **converter_parameters):
         if (exposure == exposure_population['key'] and layer_geometry ==
                 layer_geometry_raster['key']):
             new_keywords['datatype'] = 'count'
-        if (exposure == exposure_population['key'] and layer_geometry ==
-            layer_geometry_polygon['key']):
+        if (exposure == exposure_population['key'] and
+                layer_geometry == layer_geometry_polygon['key']):
             if inasafe_fields.get(exposure_name_field['key']):
                 new_keywords['area_name_field'] = inasafe_fields[
                     exposure_name_field['key']]
@@ -361,8 +376,10 @@ def convert_metadata(keywords, **converter_parameters):
                 new_keywords['area_id_field'] = inasafe_fields[
                     exposure_id_field['key']]
         if inasafe_fields.get(population_count_field['key']):
-            new_keywords['population_field'] = inasafe_fields[
+            population_field = inasafe_fields[
                 population_count_field['key']]
+            new_keywords['population_field'] = single_field(
+                population_field, population_count_field)
         if inasafe_fields.get(exposure_name_field['key']):
             new_keywords['name_field'] = inasafe_fields[
                 exposure_name_field['key']]
@@ -426,17 +443,20 @@ def convert_metadata(keywords, **converter_parameters):
     elif layer_purpose == layer_purpose_aggregation['key']:
         # Fields
         if inasafe_fields.get(adult_ratio_field['key']):
-            new_keywords['adult ratio attribute'] = inasafe_fields[
-                adult_ratio_field['key']]
+            new_keywords['adult ratio attribute'] = single_field(
+                inasafe_fields[adult_ratio_field['key']], adult_ratio_field)
         if inasafe_fields.get(elderly_ratio_field['key']):
-            new_keywords['elderly ratio attribute'] = inasafe_fields[
-                elderly_ratio_field['key']]
+            new_keywords['elderly ratio attribute'] = single_field(
+                inasafe_fields[elderly_ratio_field['key']],
+                elderly_ratio_field)
         if inasafe_fields.get(youth_ratio_field['key']):
-            new_keywords['youth ratio attribute'] = inasafe_fields[
-                youth_ratio_field['key']]
+            new_keywords['youth ratio attribute'] = single_field(
+                inasafe_fields[youth_ratio_field['key']],
+                youth_ratio_field)
         if inasafe_fields.get(female_ratio_field['key']):
-            new_keywords['female ratio attribute'] = inasafe_fields[
-                female_ratio_field['key']]
+            new_keywords['female ratio attribute'] = single_field(
+                inasafe_fields[female_ratio_field['key']],
+                female_ratio_field)
         # Notes(IS) I think people use name for the aggregation attribute
         if inasafe_fields.get(aggregation_name_field['key']):
             new_keywords['aggregation attribute'] = inasafe_fields[

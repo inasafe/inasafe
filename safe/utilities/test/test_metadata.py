@@ -9,7 +9,7 @@ from PyQt4.QtCore import QUrl
 
 from safe.definitions.versions import inasafe_keyword_version
 from safe.test.utilities import (
-    standard_data_path, clone_shp_layer, load_test_vector_layer, get_qgis_app)
+    standard_data_path, clone_shp_layer, get_qgis_app)
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from safe.utilities.metadata import (
     write_iso19115_metadata,
@@ -195,10 +195,6 @@ class TestMetadataUtilities(unittest.TestCase):
 
     def test_convert_metadata(self):
         """Test convert_metadata method."""
-        # layer = load_test_vector_layer(
-        #     'hazard', 'volcano_krb.shp', clone=True)
-        # from pprint import pprint
-        # pprint(layer.keywords)
         # Not convertible hazard
         new_keywords = {
             'hazard': u'earthquake',
@@ -235,7 +231,7 @@ class TestMetadataUtilities(unittest.TestCase):
         with self.assertRaises(MetadataConversionError):
             convert_metadata(new_keywords, exposure='structure')
 
-        # Aggregation keyword
+        # Aggregation keyword with field mapping and default values
         new_keywords = {
             'inasafe_default_values': {
                 u'adult_ratio_field': 0.659,
@@ -248,8 +244,6 @@ class TestMetadataUtilities(unittest.TestCase):
             'layer_purpose': u'aggregation',
             'title': u"D\xedstr\xedct's of Jakarta"
         }
-
-        old_keyword = convert_metadata(new_keywords)
         expected_keyword = {
             'adult ratio default': 0.659,
             'aggregation attribute': u'KAB_NAME',
@@ -259,6 +253,35 @@ class TestMetadataUtilities(unittest.TestCase):
             'layer_purpose': u'aggregation',
             'title': u"D\xedstr\xedct's of Jakarta",
             'youth ratio default': 0.254}
+        old_keyword = convert_metadata(new_keywords)
+        self.assertDictEqual(old_keyword, expected_keyword)
+
+        new_keywords = {
+            'inasafe_default_values': {
+                u'lactating_ratio_field': 0.03,
+                u'pregnant_ratio_field': 0.02
+            },
+            'inasafe_fields': {
+                u'aggregation_id_field': u'area_id',
+                u'aggregation_name_field': u'area_name',
+                u'female_ratio_field': [u'ratio_female']},
+            'keyword_version': u'4.1',
+            'layer_geometry': u'polygon',
+            'layer_purpose': u'aggregation',
+            'source': u'InaSAFE v4 GeoJSON test layer',
+            'title': u'small grid'
+        }
+        expected_keyword = {
+            'aggregation attribute': u'area_name',
+            'female ratio attribute': u'ratio_female',
+            'keyword_version': '3.5',
+            'layer_geometry': u'polygon',
+            'layer_purpose': u'aggregation',
+            'source': u'InaSAFE v4 GeoJSON test layer',
+            'title': u'small grid'
+        }
+
+        old_keyword = convert_metadata(new_keywords)
         self.assertDictEqual(old_keyword, expected_keyword)
 
         # Convertible hazard
@@ -327,10 +350,10 @@ class TestMetadataUtilities(unittest.TestCase):
                 }
             }
         }
+        # Without exposure target, must raise exception
         with self.assertRaises(MetadataConversionError):
             convert_metadata(new_keywords)
-
-        old_keyword = convert_metadata(new_keywords, exposure='structure')
+        # With exposure target
         expected_keyword = {
             'field': u'KRB',
             'hazard': u'volcano',
@@ -347,9 +370,156 @@ class TestMetadataUtilities(unittest.TestCase):
             'vector_hazard_classification': 'volcano_vector_hazard_classes',
             'volcano_name_field': u'volcano'
         }
+        old_keyword = convert_metadata(new_keywords, exposure='structure')
         self.assertDictEqual(old_keyword, expected_keyword)
 
+        # Exposure structure
+        new_keywords = {
+            'classification': u'generic_structure_classes',
+            'exposure': u'structure',
+            'inasafe_fields': {u'exposure_type_field': u'TYPE'},
+            'keyword_version': u'4.0',
+            'layer_geometry': u'polygon',
+            'layer_mode': u'classified',
+            'layer_purpose': u'exposure',
+            'license': u'Open Data Commons Open Database License (ODbL)',
+            'source': u'OpenStreetMap - www.openstreetmap.org',
+            'title': u'Buildings',
+            'value_map': {
+                u'commercial': [u'Commercial', u'Industrial'],
+                u'education': [u'School'],
+                u'government': [u'Government'],
+                u'health': [u'Clinic/Doctor'],
+                u'place of worship': [u'Place of Worship - Islam'],
+                u'residential': [u'Residential']
+            }
+        }
+        expected_keyword = {
+            'exposure': u'structure',
+            'keyword_version': '3.5',
+            'layer_geometry': u'polygon',
+            'layer_mode': u'classified',
+            'layer_purpose': u'exposure',
+            'license': u'Open Data Commons Open Database License (ODbL)',
+            'source': u'OpenStreetMap - www.openstreetmap.org',
+            'structure_class_field': u'TYPE',
+            'title': u'Buildings',
+            'value_mapping': {
+                u'commercial': [u'Commercial', u'Industrial'],
+                u'education': [u'School'],
+                u'government': [u'Government'],
+                u'health': [u'Clinic/Doctor'],
+                u'place of worship': [u'Place of Worship - Islam'],
+                u'residential': [u'Residential']
+            }
+        }
+        old_keyword = convert_metadata(new_keywords)
+        self.assertDictEqual(old_keyword, expected_keyword)
 
+        # Exposure population polygon
+        new_keywords = {'exposure': u'population',
+         'exposure_unit': u'count',
+         'inasafe_fields': {u'population_count_field': u'population'},
+         'keyword_version': u'4.0',
+         'layer_geometry': u'polygon',
+         'layer_mode': u'continuous',
+         'layer_purpose': u'exposure',
+         'source': u'NBS',
+         'title': u'Census',
+         'url': u'http://nbs.go.tz'}
+        expected_keyword = {
+            'exposure': u'population',
+            'exposure_unit': u'count',
+            'keyword_version': '3.5',
+            'layer_geometry': u'polygon',
+            'layer_mode': u'continuous',
+            'layer_purpose': u'exposure',
+            'population_field': u'population',
+            'source': u'NBS',
+            'title': u'Census',
+            'url': u'http://nbs.go.tz'
+        }
+        old_keyword = convert_metadata(new_keywords)
+        self.assertDictEqual(old_keyword, expected_keyword)
+
+        # Exposure population raster
+        new_keywords = {
+            'exposure': u'population',
+            'exposure_unit': u'count',
+            'inasafe_fields': {},
+            'keyword_version': u'4.2',
+            'layer_geometry': u'raster',
+            'layer_mode': u'continuous',
+            'layer_purpose': u'exposure',
+            'source': u'HKV',
+            'title': u'People allow resampling'
+        }
+        expected_keyword = {
+            'datatype': 'count',
+            'exposure': u'population',
+            'exposure_unit': u'count',
+            'keyword_version': '3.5',
+            'layer_geometry': u'raster',
+            'layer_mode': u'continuous',
+            'layer_purpose': u'exposure',
+            'source': u'HKV',
+            'title': u'People allow resampling'
+        }
+        old_keyword = convert_metadata(new_keywords)
+        self.assertDictEqual(old_keyword, expected_keyword)
+
+        # Exposure place
+        new_keywords = {
+            'classification': u'generic_place_classes',
+            'exposure': u'place',
+            'inasafe_fields': {
+                u'exposure_name_field': u'Name',
+                u'exposure_type_field': u'Type',
+                u'female_count_field': [u'Female'],
+                u'male_count_field': [u'Male'],
+                u'population_count_field': u'Population'
+            },
+            'keyword_version': u'4.3',
+            'layer_geometry': u'point',
+            'layer_mode': u'classified',
+            'layer_purpose': u'exposure',
+            'license': u'Open Data Commons Open Database License (ODbL)',
+            'source': u'Fictional Places',
+            'title': u'Places',
+            'value_map': {
+                u'Village': [u'Village'],
+                u'city': [u'Capital City', u'City'],
+                u'other': [
+                    u'Bus stop',
+                    u'Commercial',
+                    u'Public Area',
+                    u'Train Station']
+            }
+        }
+        expected_keyword = {
+            'exposure': u'place',
+            'field': u'Type',
+            'keyword_version': '3.5',
+            'layer_geometry': u'point',
+            'layer_mode': u'classified',
+            'layer_purpose': u'exposure',
+            'license': u'Open Data Commons Open Database License (ODbL)',
+            'name_field': u'Name',
+            'population_field': u'Population',
+            'source': u'Fictional Places',
+            'title': u'Places',
+            'value_mapping': {
+                u'Village': [u'Village'],
+                u'city': [u'Capital City', u'City'],
+                u'other': [
+                    u'Bus stop',
+                    u'Commercial',
+                    u'Public Area',
+                    u'Train Station']
+            }
+        }
+        old_keyword = convert_metadata(new_keywords)
+        self.assertDictEqual(old_keyword, expected_keyword)
 
 
 if __name__ == '__main__':
