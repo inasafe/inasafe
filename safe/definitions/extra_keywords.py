@@ -109,4 +109,5 @@ for extra_keyword in all_extra_keywords:
     if description:
         all_extra_keywords_description[extra_keyword['key']] = description
     else:
-        all_extra_keywords_name[extra_keyword['key']] = extra_keyword['name']
+        all_extra_keywords_description[extra_keyword['key']] = (
+            extra_keyword['name'])
