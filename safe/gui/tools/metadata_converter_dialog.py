@@ -25,6 +25,7 @@ from safe.utilities.metadata import (
 from safe.definitions.exposure import exposure_all
 from safe.gui.tools.help.metadata_converter_help import metadata_converter_help
 from safe.utilities.utilities import is_keyword_version_supported
+from safe.utilities.metadata import active_classification
 
 FORM_CLASS = get_ui_class('metadata_converter_dialog_base.ui')
 
@@ -151,8 +152,10 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
             self.target_exposure_combo_box.setEnabled(True)
             self.target_exposure_combo_box.clear()
             for exposure in exposure_all:
-                self.target_exposure_combo_box.addItem(
-                    exposure['name'], exposure['key'])
+                # Only show exposure that has active classification
+                if active_classification(keywords, exposure['key']):
+                    self.target_exposure_combo_box.addItem(
+                        exposure['name'], exposure['key'])
         else:
             self.target_exposure_label.setEnabled(False)
             self.target_exposure_combo_box.setEnabled(False)
