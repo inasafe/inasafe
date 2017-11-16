@@ -1,0 +1,256 @@
+{
+  "properties": {
+    "ISO19115_FLOAT": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "ISO19115_FLOAT",
+      "python_type": "float",
+      "value": 1234.5678,
+      "xml_path": "gmd:MD_Metadata/gmd:dateStamp/gco:CharacterString"
+    },
+    "ISO19115_INT": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "ISO19115_INT",
+      "python_type": "int",
+      "value": 1234,
+      "xml_path": "gmd:MD_Metadata/gmd:dateStamp/gco:CharacterString"
+    },
+    "ISO19115_STR": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "ISO19115_STR",
+      "python_type": "unicode",
+      "value": "Random string",
+      "xml_path": "gmd:MD_Metadata/gmd:dateStamp/gco:CharacterString"
+    },
+    "abstract": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "abstract",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract/gco:CharacterString"
+    },
+    "datatype": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "datatype",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/datatype/gco:CharacterString"
+    },
+    "date": {
+      "allowed_python_types": [
+        "QDate",
+        "datetime",
+        "date",
+        "NoneType",
+        "QDateTime"
+      ],
+      "name": "date",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:dateStamp/gco:Date"
+    },
+    "email": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "email",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:contact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:electronicMailAddress/gco:CharacterString"
+    },
+    "keyword_version": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "keyword_version",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/keyword_version/gco:CharacterString"
+    },
+    "layer_geometry": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "layer_geometry",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/layer_geometry/gco:CharacterString"
+    },
+    "layer_mode": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "layer_mode",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/layer_mode/gco:CharacterString"
+    },
+    "layer_purpose": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "layer_purpose",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/layer_purpose/gco:CharacterString"
+    },
+    "license": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "license",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints/gmd:MD_Constraints/gmd:useLimitation/gco:CharacterString"
+    },
+    "multipart_polygon": {
+      "allowed_python_types": [
+        "bool",
+        "NoneType"
+      ],
+      "name": "multipart_polygon",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/multipart_polygon/gco:Boolean"
+    },
+    "organisation": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "organisation",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:contact/gmd:CI_ResponsibleParty/gmd:organisationName/gco:CharacterString"
+    },
+    "report": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "report",
+      "python_type": "unicode",
+      "value": "My super report",
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/report/gco:CharacterString"
+    },
+    "resolution": {
+      "allowed_python_types": [
+        "float",
+        "tuple",
+        "NoneType"
+      ],
+      "name": "resolution",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/resolution/gco:FloatTuple"
+    },
+    "scale": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "scale",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/scale/gco:CharacterString"
+    },
+    "source": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "source",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/source/gco:CharacterString"
+    },
+    "title": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "title",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:title/gco:CharacterString"
+    },
+    "url": {
+      "allowed_python_types": [
+        "QUrl",
+        "NoneType"
+      ],
+      "name": "url",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource/gmd:linkage/gmd:URL"
+    }
+  }
+}
