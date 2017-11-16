@@ -457,3 +457,10 @@ class AlignRastersError(Exception):
     """Raised if alignment of hazard and exposure rasters failed."""
 
     pass
+
+
+class MetadataConversionError(InaSAFEError):
+
+    """When failed to convert metadata."""
+
+    pass

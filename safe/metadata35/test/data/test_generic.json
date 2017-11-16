@@ -1,0 +1,45 @@
+{
+  "layer_uri": "random_layer_id",
+  "properties": {
+    "ISO19115_FLOAT": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float"
+      ],
+      "name": "ISO19115_FLOAT",
+      "python_type": "float",
+      "value": 1234.5678,
+      "xml_path": "gmd:MD_Metadata/gmd:dateStamp/",
+      "xml_type": "gco:CharacterString"
+    },
+    "ISO19115_INT": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float"
+      ],
+      "name": "ISO19115_INT",
+      "python_type": "int",
+      "value": 1234,
+      "xml_path": "gmd:MD_Metadata/gmd:dateStamp/",
+      "xml_type": "gco:CharacterString"
+    },
+    "ISO19115_STR": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float"
+      ],
+      "name": "ISO19115_STR",
+      "python_type": "str",
+      "value": "Random string",
+      "xml_path": "gmd:MD_Metadata/gmd:dateStamp/",
+      "xml_type": "gco:CharacterString"
+    }
+  },
+  "report": "My super report"
+}
