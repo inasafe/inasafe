@@ -27,6 +27,7 @@ from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.resources import html_footer, html_header, get_ui_class
 from safe.utilities.styling import mmi_ramp_roman
 from safe.utilities.i18n import tr
+from safe.utilities.settings import setting
 
 try:
     import scipy  # NOQA
@@ -93,6 +94,9 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         self.help_button.toggled.connect(self.help_toggled)
         self.main_stacked_widget.setCurrentIndex(1)
         self.update_warning()
+
+        if not setting('developer_mode'):
+            self.smoothing_group_box.hide()
 
         if not HAS_SCIPY:
             if self.scipy_smoothing.isChecked:
