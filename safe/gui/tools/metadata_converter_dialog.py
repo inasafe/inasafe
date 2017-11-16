@@ -15,7 +15,8 @@ from safe.definitions.layer_purposes import (
     layer_purpose_exposure, layer_purpose_hazard, layer_purpose_aggregation)
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
-from safe.utilities.qgis_utilities import display_warning_message_box
+from safe.utilities.qgis_utilities import (
+    display_warning_message_box, display_success_message_bar)
 from safe.utilities.resources import (
     get_ui_class, html_footer, html_header)
 from safe.utilities.metadata import (
@@ -248,7 +249,8 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
 
     def accept(self):
         """Method invoked when OK button is clicked."""
-        if not self.output_path_line_edit.text():
+        output_path = self.output_path_line_edit.text()
+        if not output_path:
             display_warning_message_box(
                 self,
                 tr('Empty Output Path'),
@@ -262,6 +264,18 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
                 tr('Metadata Conversion Failed'),
                 e.message)
             return
+
+        if not os.path.exists(output_path):
+            display_warning_message_box(
+                self,
+                tr('Metadata Conversion Failed'),
+                tr('Result file is not found.'))
+            return
+
+        display_success_message_bar(
+            tr('Metadata Conversion Success'),
+            tr('You can find your copied layer with metadata version 3.5 in '
+               '%s' % output_path))
         super(MetadataConverterDialog, self).accept()
 
     def select_output_directory(self):
