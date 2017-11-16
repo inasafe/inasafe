@@ -378,7 +378,9 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
 
         self.dock.show_busy()
 
+        # The order of the components are matter.
         generated_components = [
+            standard_impact_report_metadata_pdf,
             infographic_report,
             override_component_template(
                 map_report, self.selected_template_path)

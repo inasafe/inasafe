@@ -788,7 +788,8 @@ class ImpactReport(object):
                             target_dir = os.path.join(
                                 dirname, 'resources', target_resource)
                             # copy here
-                            shutil.copytree(resource, target_dir)
+                            if not os.path.exists(target_dir):
+                                shutil.copytree(resource, target_dir)
                     component.output = output
                 except Exception as e:  # pylint: disable=broad-except
                     generation_error_code = self.REPORT_GENERATION_FAILED
