@@ -602,23 +602,27 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                         detailed_group.setVisible(Qt.Checked)
                         add_impact_layers_to_canvas(
                             analysis, group=detailed_group)
+                else:
+                    add_layers_to_canvas_with_custom_orders(
+                        self.ordered_expected_layers(),
+                        self._multi_exposure_if)
 
-                    if setting('generate_report', True, bool):
+                if setting('generate_report', True, bool):
+                    for analysis in self._multi_exposure_if.impact_functions:
                         # we only want to generate non pdf/qpt report
                         html_components = [
                             standard_impact_report_metadata_html]
                         error_code, message = (
                             analysis.generate_report(html_components))
 
-                        if error_code == ImpactReport.REPORT_GENERATION_FAILED:
+                        if error_code == (
+                                ImpactReport.REPORT_GENERATION_FAILED):
                             LOGGER.info(
-                                'The impact report could not be generated.')
+                                'The impact report could not be '
+                                'generated.')
                             send_error_message(self, message)
                             LOGGER.info(message.to_text())
-                else:
-                    add_layers_to_canvas_with_custom_orders(
-                        self.ordered_expected_layers(),
-                        self._multi_exposure_if)
+
                 self.done(QDialog.Accepted)
 
         except Exception as e:
