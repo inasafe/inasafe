@@ -23,6 +23,7 @@ from safe.utilities.metadata import (
 )
 from safe.definitions.exposure import exposure_all
 from safe.gui.tools.help.metadata_converter_help import metadata_converter_help
+from safe.utilities.utilities import is_keyword_version_supported
 
 FORM_CLASS = get_ui_class('metadata_converter_dialog_base.ui')
 
@@ -59,7 +60,6 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
                'hazard layer, you need to choose what exposure that you want '
                'to work with.')
         )
-        self.header_label.setAlignment(Qt.AlignJustify)
 
         # Setup input layer combo box
         # Filter our layers
@@ -81,6 +81,16 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
                 # Filter out if not aggregation, hazard, or exposure layer
                 excepted_layers.append(layer)
                 continue
+            keyword_version = keywords.get('keyword_version')
+            if not keyword_version:
+                # Filter out if no keyword version
+                excepted_layers.append(layer)
+                continue
+            if not is_keyword_version_supported(keyword_version):
+                # Filter out if the version is not supported (4.x)
+                excepted_layers.append(layer)
+                continue
+
         self.input_layer_combo_box.setExceptedLayerList(excepted_layers)
 
         # Select the active layer.
@@ -132,6 +142,7 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
             return
 
         keywords = self.keyword_io.read_keywords(layer)
+        self.show_current_metadata()
 
         # TODO(IS): Show only possible exposure target
         if keywords['layer_purpose'] == layer_purpose_hazard['key']:
@@ -243,8 +254,6 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
                 tr('Empty Output Path'),
                 tr('Output path can not be empty'))
             return
-        else:
-            LOGGER.debug('Output path : ' + self.output_path_line_edit.text())
         try:
             self.convert_metadata()
         except MetadataConversionError as e:
@@ -283,5 +292,12 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
             extension_mapping[input_extension]
         )
         if file_path:
-            LOGGER.debug('Output file set to %s' % file_path)
             self.output_path_line_edit.setText(file_path)
+
+    def show_current_metadata(self):
+        """Show metadata of the current selected layer."""
+        LOGGER.debug('Showing layer: ' + self.layer.name())
+        keywords = KeywordIO(self.layer)
+        content_html = keywords.to_message().to_html()
+        full_html = html_header() + content_html + html_footer()
+        self.metadata_preview_web_view.setHtml(full_html)
