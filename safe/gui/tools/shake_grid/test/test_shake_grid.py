@@ -11,6 +11,7 @@ from safe.test.utilities import standard_data_path, get_qgis_app
 from safe.gui.tools.shake_grid.shake_grid import (
     ShakeGrid, convert_mmi_data)
 from safe.utilities.metadata import read_iso19115_metadata
+from safe.definitions.constants import NUMPY_SMOOTHING
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -30,7 +31,9 @@ SOURCE_PATH = standard_data_path(
 GRID_PATH = os.path.join(temp_dir(__name__), 'grid.xml')
 shutil.copyfile(SOURCE_PATH, GRID_PATH)
 
-SHAKE_GRID = ShakeGrid('Test Title', 'Test Source', GRID_PATH, smoothing_method=True)
+
+SHAKE_GRID = ShakeGrid(
+    'Test Title', 'Test Source', GRID_PATH, smoothing_method=NUMPY_SMOOTHING)
 
 
 class TestShakeGrid(unittest.TestCase):
@@ -209,8 +212,6 @@ class TestShakeGrid(unittest.TestCase):
             force_flag=True, algorithm='average')
         self.assertTrue(self.check_feature_count(file_path, 132))
 
-    @unittest.skipIf(
-        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_convert_grid_to_raster(self):
         """Test converting grid.xml to raster (tif file)"""
         grid_title = 'Earthquake'
