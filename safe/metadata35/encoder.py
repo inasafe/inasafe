@@ -23,6 +23,9 @@ __copyright__ = 'imajimatika@gmail.com'
 
 
 class MetadataEncoder(json.JSONEncoder):
+
+    """Metadata Encoder."""
+
     def default(self, obj):
         if isinstance(obj, datetime):
             return obj.date().isoformat()

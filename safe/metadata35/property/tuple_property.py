@@ -26,8 +26,9 @@ from safe.metadata35.property import BaseProperty
 
 
 class TupleProperty(BaseProperty):
-    """A property that accepts tuple input
-    """
+
+    """A property that accepts tuple input."""
+
     # if you edit this you need to adapt accordingly xml_value and is_valid
     _allowed_python_types = [tuple, NoneType]
 
