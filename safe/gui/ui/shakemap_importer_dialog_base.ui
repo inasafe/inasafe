@@ -59,7 +59,7 @@
         <number>0</number>
        </property>
        <item row="4" column="0">
-        <widget class="QGroupBox" name="groupBox_4">
+        <widget class="QGroupBox" name="smoothing_group_box">
          <property name="title">
           <string>Smoothing</string>
          </property>
@@ -155,6 +155,12 @@
        </item>
        <item row="3" column="0">
         <widget class="QGroupBox" name="groupBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="title">
           <string>Algorithm</string>
          </property>
