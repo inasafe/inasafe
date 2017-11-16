@@ -910,6 +910,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             provenances = keywords.get('provenance_data', {})
             if provenances:
                 self.set_provenance_to_project_variables(provenances)
+                self.impact_function = (
+                    ImpactFunction.load_from_output_metadata(keywords))
 
             show_keywords = True
             if keywords.get('layer_purpose') in impacted_layer:
