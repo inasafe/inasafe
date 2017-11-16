@@ -14,11 +14,13 @@ from os.path import join, exists
 from socket import gethostname
 
 from osgeo import gdal
+from qgis.core import QgsGeometry, QgsCoordinateReferenceSystem
 from qgis.utils import iface
 from PyQt4.Qt import PYQT_VERSION_STR
 from PyQt4.QtCore import QDir, QT_VERSION_STR
 
 from safe import messaging as m
+from safe.common.exceptions import InvalidExtentError
 from safe.common.utilities import temp_dir
 from safe.common.version import get_version
 from safe.datastore.datastore import DataStore
@@ -38,6 +40,7 @@ from safe.definitions.provenance import (
     provenance_aggregation_layer,
     provenance_aggregation_layer_id,
     provenance_analysis_extent,
+    provenance_crs,
     provenance_data_store_uri,
     provenance_duration,
     provenance_end_datetime,
@@ -80,7 +83,8 @@ from safe.gis.vector.summary_5_multi_exposure import (
     multi_exposure_aggregation_summary,
 )
 from safe.gui.widgets.message import generate_input_error_message
-from safe.impact_function.create_extra_layers import create_analysis_layer
+from safe.impact_function.create_extra_layers import (
+    create_analysis_layer, create_virtual_aggregation)
 from safe.impact_function.impact_function import ImpactFunction
 from safe.impact_function.impact_function_utilities import check_input_layer
 from safe.impact_function.style import simple_polygon_without_brush
@@ -129,6 +133,12 @@ class MultiExposureImpactFunction(object):
         self._impact_functions = []
         self._current_impact_function = None
 
+        # The current extent defined by the impact function. Read-only.
+        # The CRS is the aggregation CRS or the crs property if no
+        # aggregation.
+        self._analysis_extent = None
+        self._crs = None
+
         # Datastore when to save layers specific to the multi-exposure.
         # Individual IF will have the default datatstore provided by the IF.
         self._datastore = None
@@ -150,7 +160,6 @@ class MultiExposureImpactFunction(object):
         self._start_datetime = None
         self._end_datetime = None
         self._duration = 0
-        self.analysis_extent = None
         self._output_layer_expected = None
         self._provenance_ready = False
         self._provenance = {}
@@ -212,6 +221,40 @@ class MultiExposureImpactFunction(object):
         if self.end_datetime is None or self.start_datetime is None:
             return 0
         return (self.end_datetime - self.start_datetime).total_seconds()
+
+    @property
+    def crs(self):
+        """Property for the extent CRS of impact function analysis.
+
+        This property must be null if we use an aggregation layer.
+        Otherwise, this parameter must be set. It will be the analysis CRS.
+
+        :return crs: The coordinate reference system for the analysis boundary.
+        :rtype: QgsCoordinateReferenceSystem
+        """
+        return self._crs
+
+    @crs.setter
+    def crs(self, crs):
+        """Setter for extent_crs property.
+
+        :param crs: The coordinate reference system for the analysis boundary.
+        :type crs: QgsCoordinateReferenceSystem
+        """
+        if isinstance(crs, QgsCoordinateReferenceSystem):
+            self._crs = crs
+            self._is_ready = False
+        else:
+            raise InvalidExtentError('%s is not a valid CRS object.' % crs)
+
+    @property
+    def analysis_extent(self):
+        """Property for the analysis extent.
+
+        :returns: A polygon.
+        :rtype: QgsGeometry
+        """
+        return self._analysis_extent
 
     @property
     def outputs(self):
@@ -409,7 +452,7 @@ class MultiExposureImpactFunction(object):
         set_provenance(
             self._provenance,
             provenance_analysis_extent,
-            self.analysis_extent.exportToWkt())
+            self._analysis_extent.exportToWkt())
 
         set_provenance(
             self._provenance,
@@ -417,12 +460,12 @@ class MultiExposureImpactFunction(object):
             self.datastore.uri_path)
 
         # CRS
-        # if self._crs:
-        #     set_provenance(
-        #         self._provenance, provenance_crs, self._crs.authid())
-        # else:
-        #     set_provenance(
-        #         self._provenance, provenance_crs, self._crs)
+        if self._crs:
+            set_provenance(
+                self._provenance, provenance_crs, self._crs.authid())
+        else:
+            set_provenance(
+                self._provenance, provenance_crs, None)
 
         # Debug mode
         set_provenance(
@@ -477,6 +520,29 @@ class MultiExposureImpactFunction(object):
             if status != PREPARE_SUCCESS:
                 return status, message
 
+            if self._crs:
+                message = generate_input_error_message(
+                    tr('Error with the requested CRS'),
+                    m.Paragraph(tr(
+                        'Requested CRS must be null when an '
+                        'aggregation is provided in the multiexposure '
+                        'analysis.'))
+                )
+                return PREPARE_FAILED_BAD_INPUT, message
+        else:
+            if not self._crs:
+                message = generate_input_error_message(
+                    tr('Error with the requested CRS'),
+                    m.Paragraph(tr(
+                        'CRS must be set when you don\'t use an '
+                        'aggregation layer. It will be used for the '
+                        'analysis CRS in the multiexposue analysis..'))
+                )
+                return PREPARE_FAILED_BAD_INPUT, message
+
+        # We let other checks like extent,... to the first single exposure IF.
+        # The prepare step will fail if needed and the stop the multiexposure.
+
         self._impact_functions = []
 
         # We delegate the prepare to the main IF for each exposure
@@ -494,8 +560,7 @@ class MultiExposureImpactFunction(object):
                 impact_function.use_selected_features_only = (
                     self.use_selected_features_only)
             else:
-                # TODO
-                pass
+                impact_function.crs = self._crs
 
             code, message = impact_function.prepare()
             if code != PREPARE_SUCCESS:
@@ -621,10 +686,13 @@ class MultiExposureImpactFunction(object):
             self._datastore.default_vector_format = 'geojson'
         LOGGER.info('Datastore : %s' % self.datastore.uri_path)
 
-        self._aggregation_summary = prepare_vector_layer(self.aggregation)
+        if self._aggregation:
+            self._crs = self.aggregation.crs()
+            self._aggregation_summary = prepare_vector_layer(self.aggregation)
 
         analysis_layers = []
         aggregation_layers = []
+        list_geometries = []
 
         for i, impact_function in enumerate(self._impact_functions):
             self._current_impact_function = impact_function
@@ -644,15 +712,20 @@ class MultiExposureImpactFunction(object):
             if code != ANALYSIS_SUCCESS:
                 return code, message
 
-            if i == 1:
-                self.analysis_extent = impact_function.analysis_extent
-                self._analysis_summary = create_analysis_layer(
-                    self.analysis_extent,
-                    impact_function.exposure.crs(),
-                    self._name)
+            if (self._aggregation and i == 1) or not self._aggregation:
+                list_geometries.append(impact_function.analysis_extent)
 
             analysis_layers.append(impact_function.analysis_impacted)
             aggregation_layers.append(impact_function.aggregation_summary)
+
+        self._analysis_extent = QgsGeometry.unaryUnion(list_geometries)
+
+        if not self._aggregation:
+            self._aggregation_summary = create_virtual_aggregation(
+                self._analysis_extent, self._crs)
+
+        self._analysis_summary = create_analysis_layer(
+            self._analysis_extent, self._crs, self._name)
 
         # Sum up layers
         self._aggregation_summary = multi_exposure_aggregation_summary(

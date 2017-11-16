@@ -31,6 +31,7 @@ from safe.definitions.constants import (
     inasafe_keyword_version_key,
     ANALYSIS_FAILED_BAD_INPUT,
     PREPARE_SUCCESS,
+    ANALYSIS_FAILED_BAD_CODE,
     entire_area_item_aggregation,
     MULTI_EXPOSURE_ANALYSIS_FLAG,
 )
@@ -491,23 +492,8 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
             multi_exposure_if.use_selected_features_only = use_selected_only
             multi_exposure_if.aggregation = aggregation
         else:
-            # self.extent.crs is the map canvas CRS.
-            # multi_exposure_if.crs = self.extent.crs
-            # mode = setting('analysis_extents_mode')
-            # if self.extent.user_extent:
-            #     # This like a hack to transform a geometry to a rectangle.
-            #     # self.extent.user_extent is a QgsGeometry.
-            #     # impact_function.requested_extent needs a QgsRectangle.
-            #     wkt = self.extent.user_extent.exportToWkt()
-            #     multi_exposure_if.requested_extent = wkt_to_rectangle(wkt)
-            #
-            # elif mode == EXPOSURE:
-            #     multi_exposure_if.use_exposure_view_only = True
-            #
-            # elif mode == HAZARD_EXPOSURE_VIEW:
-            #     multi_exposure_if.requested_extent = (
-            #         self.iface.mapCanvas().extent())
-            pass
+            multi_exposure_if.crs = (
+                self.iface.mapCanvas().mapSettings().destinationCrs())
 
         status, message = multi_exposure_if.prepare()
         if status == PREPARE_SUCCESS:
@@ -518,10 +504,7 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
             return
         else:
             disable_busy_cursor()
-            LOGGER.info(
-                'The impact function could not run because of the inputs.')
             send_error_message(self, message)
-            LOGGER.info(message.to_text())
             self._multi_exposure_if = None
 
     def accept(self):
@@ -540,21 +523,43 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
             self._multi_exposure_if = MultiExposureImpactFunction()
             self._multi_exposure_if.hazard = hazard
             self._multi_exposure_if.exposures = exposures
-            self._multi_exposure_if.aggregation = aggregation
+            if aggregation:
+                self._multi_exposure_if.aggregation = aggregation
+            else:
+                self._multi_exposure_if.crs = (
+                    self.iface.mapCanvas().mapSettings().destinationCrs())
             self._multi_exposure_if.debug = False
             self._multi_exposure_if.callback = self.progress_callback
 
             status, message = self._multi_exposure_if.prepare()
-            # self.assertEqual(code, PREPARE_MULTI_SUCCESS, message)
             if status == ANALYSIS_FAILED_BAD_INPUT:
                 self.hide_busy()
                 LOGGER.info(
                     'The impact function could not run because of the inputs.')
                 send_error_message(self, message)
                 LOGGER.info(message.to_text())
-            else:
+
+            elif status == PREPARE_SUCCESS:
                 code, message = self._multi_exposure_if.run()
-                # self.assertEqual(code, ANALYSIS_MULTI_SUCCESS, message)
+                if status == ANALYSIS_FAILED_BAD_INPUT:
+                    self.hide_busy()
+                    LOGGER.info(tr(
+                        'The impact function could not run because of the '
+                        'inputs.'))
+                    send_error_message(self, message)
+                    LOGGER.info(message.to_text())
+                    disable_busy_cursor()
+                    self.set_enabled_buttons(True)
+                    return status, message
+                elif status == ANALYSIS_FAILED_BAD_CODE:
+                    self.hide_busy()
+                    LOGGER.exception(tr(
+                        'The impact function could not run because of a bug.'))
+                    LOGGER.exception(message.to_text())
+                    send_error_message(self, message)
+                    disable_busy_cursor()
+                    self.set_enabled_buttons(True)
+                    return status, message
 
                 if setting('generate_report', True, bool):
                     report = (
@@ -624,6 +629,11 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                             LOGGER.info(message.to_text())
 
                 self.done(QDialog.Accepted)
+            else:
+                LOGGER.exception(tr(
+                    'The impact function could not run because of a bug.'))
+                LOGGER.exception(message.to_text())
+                send_error_message(self, message)
 
         except Exception as e:
             error_message = get_error_message(e)
