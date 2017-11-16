@@ -383,7 +383,7 @@ class Plugin(object):
             self.show_metadata_converter)
         self.add_action(
             self.action_metadata_converter,
-            add_to_toolbar=True)
+            add_to_toolbar=False)
 
     def _create_field_mapping_action(self):
         """Create action for showing field mapping dialog."""
@@ -418,7 +418,7 @@ class Plugin(object):
             self.show_multi_exposure)
         self.add_action(
             self.action_multi_exposure,
-            add_to_toolbar=True)
+            add_to_toolbar=False)
 
     def _create_add_petabencana_layer_action(self):
         """Create action for import OSM Dialog."""
