@@ -418,9 +418,7 @@ def monkey_patch_keywords(layer):
     except (NoKeywordsFoundError, MetadataReadError):
         layer.keywords = {}
 
-    try:
-        layer.keywords['inasafe_fields']
-    except KeyError:
+    if not layer.keywords.get('inasafe_fields'):
         layer.keywords['inasafe_fields'] = {}
 
 
