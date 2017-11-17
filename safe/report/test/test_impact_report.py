@@ -2137,26 +2137,15 @@ class TestImpactReport(unittest.TestCase):
         layer_registry = QgsMapLayerRegistry.instance()
         layer_registry.addMapLayers(
             [hazard_layer, exposure_layer, aggregation_layer])
-        rendered_layer = impact_function.impact
         layer_registry.addMapLayers(impact_function.outputs)
 
-        # Create impact report
-        report_metadata = ReportMetadata(
-            metadata_dict=update_template_component(map_report))
-
-        impact_report = ImpactReport(
-            IFACE,
-            report_metadata,
-            impact_function=impact_function)
-        impact_report.output_folder = output_folder
-
-        impact_report.qgis_composition_context.extent = \
-            rendered_layer.extent()
-
-        return_code, message = impact_report.process_components()
+        return_code, message = impact_function.generate_report(
+            [map_report], output_folder=output_folder, iface=IFACE)
 
         self.assertEqual(
             return_code, ImpactReport.REPORT_GENERATION_SUCCESS, message)
+
+        impact_report = impact_function.impact_report
 
         output_path = impact_report.component_absolute_output_path(
             'inasafe-map-report-portrait')

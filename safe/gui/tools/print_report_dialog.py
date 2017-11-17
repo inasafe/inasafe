@@ -14,7 +14,10 @@ from safe.definitions.constants import ANALYSIS_FAILED_BAD_CODE
 from safe.definitions.reports import (
     pdf_product_tag, final_product_tag, html_product_tag, qpt_product_tag)
 from safe.definitions.reports.components import (
-    map_report, infographic_report, standard_impact_report_metadata_pdf)
+    map_report,
+    infographic_report,
+    standard_impact_report_metadata_pdf,
+    all_default_report_components)
 from safe.definitions.utilities import (
     override_component_template, definition, update_template_component)
 from safe.gui.tools.help.impact_report_help import impact_report_help
@@ -378,11 +381,10 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
 
         self.dock.show_busy()
 
-        generated_components = [
+        # The order of the components are matter.
+        generated_components = all_default_report_components + [
             override_component_template(
-                map_report, self.selected_template_path),
-            infographic_report
-        ]
+                map_report, self.selected_template_path)]
         error_code, message = self.impact_function.generate_report(
             generated_components, iface=self.iface)
 

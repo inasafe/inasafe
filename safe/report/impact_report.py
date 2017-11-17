@@ -788,6 +788,8 @@ class ImpactReport(object):
                             target_dir = os.path.join(
                                 dirname, 'resources', target_resource)
                             # copy here
+                            if os.path.exists(target_dir):
+                                shutil.rmtree(target_dir)
                             shutil.copytree(resource, target_dir)
                     component.output = output
                 except Exception as e:  # pylint: disable=broad-except

@@ -65,7 +65,7 @@ from safe.definitions.reports.components import (
     standard_impact_report_metadata_pdf,
     map_report,
     infographic_report,
-    all_default_report_components)
+    standard_impact_report_metadata_html)
 from safe.definitions.utilities import (
     update_template_component,
     get_name,
@@ -910,6 +910,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             provenances = keywords.get('provenance_data', {})
             if provenances:
                 self.set_provenance_to_project_variables(provenances)
+                self.impact_function = (
+                    ImpactFunction.load_from_output_metadata(keywords))
 
             show_keywords = True
             if keywords.get('layer_purpose') in impacted_layer:
@@ -1272,8 +1274,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             legend.setLayerVisible(qgis_exposure, False)
 
         if setting('generate_report', True, bool):
+            # we only want to generate non pdf/qpt report
+            html_components = [standard_impact_report_metadata_html]
             error_code, message = self.impact_function.generate_report(
-                all_default_report_components)
+                html_components)
 
             if error_code == ImpactReport.REPORT_GENERATION_FAILED:
                 self.hide_busy()

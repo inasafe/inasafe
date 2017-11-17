@@ -42,8 +42,8 @@ from safe.definitions.layer_purposes import (
     layer_purpose_aggregation,
 )
 from safe.definitions.reports.components import (
-    all_default_report_components,
-    standard_multi_exposure_impact_report_metadata_pdf)
+    standard_multi_exposure_impact_report_metadata_pdf,
+    standard_impact_report_metadata_html)
 from safe.definitions.utilities import definition
 from safe.gis.tools import full_layer_uri
 from safe.gui.analysis_utilities import (
@@ -572,51 +572,57 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                 # We always create the multi exposure group because we need
                 # reports to be generated.
                 root = QgsProject.instance().layerTreeRoot()
-                group_analysis = root.insertGroup(
-                    0, self._multi_exposure_if.name)
-                group_analysis.setVisible(Qt.Checked)
-                group_analysis.setCustomProperty(
-                    MULTI_EXPOSURE_ANALYSIS_FLAG, True)
 
-                for layer in self._multi_exposure_if.outputs:
-                    QgsMapLayerRegistry.instance().addMapLayer(layer, False)
-                    layer_node = group_analysis.addLayer(layer)
-                    layer_node.setVisible(Qt.Unchecked)
+                if len(self.ordered_expected_layers()) == 0:
+                    group_analysis = root.insertGroup(
+                        0, self._multi_exposure_if.name)
+                    group_analysis.setVisible(Qt.Checked)
+                    group_analysis.setCustomProperty(
+                        MULTI_EXPOSURE_ANALYSIS_FLAG, True)
 
-                    # set layer title if any
-                    try:
-                        title = layer.keywords['title']
-                        if qgis_version() >= 21800:
-                            layer.setName(title)
-                        else:
-                            layer.setLayerName(title)
-                    except KeyError:
-                        pass
+                    for layer in self._multi_exposure_if.outputs:
+                        QgsMapLayerRegistry.instance().addMapLayer(
+                            layer, False)
+                        layer_node = group_analysis.addLayer(layer)
+                        layer_node.setVisible(Qt.Unchecked)
 
-                for analysis in self._multi_exposure_if.impact_functions:
-                    detailed_group = group_analysis.insertGroup(
-                        0, analysis.name)
-                    detailed_group.setVisible(Qt.Checked)
-                    add_impact_layers_to_canvas(
-                        analysis, group=detailed_group)
+                        # set layer title if any
+                        try:
+                            title = layer.keywords['title']
+                            if qgis_version() >= 21800:
+                                layer.setName(title)
+                            else:
+                                layer.setLayerName(title)
+                        except KeyError:
+                            pass
 
-                    if setting('generate_report', True, bool):
-                        error_code, message = analysis.generate_report(
-                            all_default_report_components)
-
-                        if error_code == ImpactReport.REPORT_GENERATION_FAILED:
-                            LOGGER.info(
-                                'The impact report could not be generated.')
-                            send_error_message(self, message)
-                            LOGGER.info(message.to_text())
-
-                # If the user has a custom order
-                if len(self.ordered_expected_layers()) != 0:
-                    # The helper will create the group again.
-                    root.removeChildNode(group_analysis)
+                    for analysis in self._multi_exposure_if.impact_functions:
+                        detailed_group = group_analysis.insertGroup(
+                            0, analysis.name)
+                        detailed_group.setVisible(Qt.Checked)
+                        add_impact_layers_to_canvas(
+                            analysis, group=detailed_group)
+                else:
                     add_layers_to_canvas_with_custom_orders(
                         self.ordered_expected_layers(),
                         self._multi_exposure_if)
+
+                if setting('generate_report', True, bool):
+                    for analysis in self._multi_exposure_if.impact_functions:
+                        # we only want to generate non pdf/qpt report
+                        html_components = [
+                            standard_impact_report_metadata_html]
+                        error_code, message = (
+                            analysis.generate_report(html_components))
+
+                        if error_code == (
+                                ImpactReport.REPORT_GENERATION_FAILED):
+                            LOGGER.info(
+                                'The impact report could not be '
+                                'generated.')
+                            send_error_message(self, message)
+                            LOGGER.info(message.to_text())
+
                 self.done(QDialog.Accepted)
 
         except Exception as e:
