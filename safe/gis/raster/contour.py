@@ -18,6 +18,7 @@ from safe.common.exceptions import (
 from safe.definitions.constants import (
     NONE_SMOOTHING, NUMPY_SMOOTHING, SCIPY_SMOOTHING
 )
+from safe.utilities.resources import resources_path
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -25,17 +26,6 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 LOGGER = logging.getLogger('InaSAFE')
-
-
-def data_dir():
-    """Return the path to the standard data dir for e.g. geonames data
-
-    :returns: Returns the default data directory.
-    :rtype: str
-    """
-    dir_path = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), 'converter_data'))
-    return dir_path
 
 
 def gaussian_kernel(sigma, truncate=4.0):
@@ -329,15 +319,16 @@ def create_contour(
 
     # Copy over the standard .prj file since ContourGenerate does not
     # create a projection definition
-    projection_file_path = os.path.join(
+    projection_path = os.path.join(
         output_directory, output_base_name + '.prj')
-    source_qml = os.path.join(data_dir(), 'mmi-contours.prj')
-    shutil.copyfile(source_qml, projection_file_path)
+    source_projection_path = resources_path(
+        'converter_data', 'mmi-contours.prj')
+    shutil.copyfile(source_projection_path, projection_path)
 
     # Lastly copy over the standard qml (QGIS Style file)
-    qml_file_path = os.path.join(
+    qml_path = os.path.join(
         output_directory, output_base_name + '.qml')
-    source_qml = os.path.join(data_dir(), 'mmi-contours.qml')
-    shutil.copyfile(source_qml, qml_file_path)
+    source_qml_path = resources_path('converter_data', 'mmi-contours.qml')
+    shutil.copyfile(source_qml_path, qml_path)
 
     return output_file_path

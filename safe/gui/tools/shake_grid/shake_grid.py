@@ -46,6 +46,7 @@ from safe.definitions.versions import inasafe_keyword_version
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.styling import mmi_colour
+from safe.utilities.resources import resources_path
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -53,17 +54,6 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 LOGGER = logging.getLogger('InaSAFE')
-
-
-def data_dir():
-    """Return the path to the standard data dir for e.g. geonames data
-
-    :returns: Returns the default data directory.
-    :rtype: str
-    """
-    dir_path = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), 'converter_data'))
-    return dir_path
 
 
 class ShakeGrid(object):
@@ -612,7 +602,7 @@ class ShakeGrid(object):
         else:
             qml_path = os.path.join(
                 self.output_dir, '%s.qml' % self.output_basename)
-        qml_source_path = os.path.join(data_dir(), 'mmi.qml')
+        qml_source_path = resources_path('converter_data', 'mmi.qml')
         shutil.copyfile(qml_source_path, qml_path)
         return tif_path
 
@@ -668,7 +658,7 @@ class ShakeGrid(object):
         # Lastly copy over the standard qml (QGIS Style file) for the mmi.tif
         qml_path = os.path.join(
             self.output_dir, '%s-points.qml' % self.output_basename)
-        source_qml = os.path.join(data_dir(), 'mmi-shape.qml')
+        source_qml = resources_path('converter_data', 'mmi-shape.qml')
         shutil.copyfile(source_qml, qml_path)
         return shp_path
 
@@ -788,18 +778,19 @@ class ShakeGrid(object):
 
         # Copy over the standard .prj file since ContourGenerate does not
         # create a projection definition
-        qml_path = os.path.join(
+        projection_path = os.path.join(
             self.output_dir,
             '%s-contours-%s.prj' % (self.output_basename, algorithm))
-        source_qml = os.path.join(data_dir(), 'mmi-contours.prj')
-        shutil.copyfile(source_qml, qml_path)
+        source_projection_path = resources_path(
+            'converter_data', 'mmi-contours.prj')
+        shutil.copyfile(source_projection_path, projection_path)
 
         # Lastly copy over the standard qml (QGIS Style file)
         qml_path = os.path.join(
             self.output_dir,
             '%s-contours-%s.qml' % (self.output_basename, algorithm))
-        source_qml = os.path.join(data_dir(), 'mmi-contours.qml')
-        shutil.copyfile(source_qml, qml_path)
+        source_qml_path = resources_path('converter_data', 'mmi-contours.qml')
+        shutil.copyfile(source_qml_path, qml_path)
 
         # Now update the additional columns - X,Y, ROMAN and RGB
         try:
