@@ -14,7 +14,8 @@ from os.path import join, exists
 from socket import gethostname
 
 from osgeo import gdal
-from qgis.core import QgsGeometry, QgsCoordinateReferenceSystem
+from qgis.core import (
+    QgsGeometry, QgsCoordinateReferenceSystem, QgsMapLayer, QgsVectorLayer)
 from qgis.utils import iface
 from PyQt4.Qt import PYQT_VERSION_STR
 from PyQt4.QtCore import QDir, QT_VERSION_STR
@@ -73,10 +74,11 @@ from safe.definitions.styles import (
 )
 from safe.definitions.utilities import (
     get_name,
+    get_provenance,
     set_provenance,
     update_template_component,
 )
-from safe.gis.tools import geometry_type
+from safe.gis.tools import geometry_type, load_layer_from_registry
 from safe.gis.vector.prepare_vector_layer import prepare_vector_layer
 from safe.gis.vector.summary_5_multi_exposure import (
     multi_exposure_analysis_summary,
@@ -99,6 +101,7 @@ from safe.utilities.metadata import (
     append_ISO19115_keywords,
 )
 from safe.utilities.settings import setting
+from safe.utilities.unicode import get_unicode, byteify
 from safe.utilities.utilities import (
     replace_accentuated_characters,
     readable_os_version,
@@ -346,6 +349,15 @@ class MultiExposureImpactFunction(object):
         self._exposures = layers
         self._is_ready = False
 
+    def add_exposure(self, layer):
+        """Add an exposure layer in the analysis.
+
+        :param layer: An exposure layer to be used for the analysis.
+        :type layer: QgsMapLayer
+        """
+        self._exposures.append(layer)
+        self._is_ready = False
+
     @property
     def aggregation(self):
         """Property for the aggregation layer to be used for the analysis.
@@ -472,6 +484,157 @@ class MultiExposureImpactFunction(object):
             self._provenance, provenance_debug_mode, self.debug_mode)
 
         self._provenance_ready = True
+
+    def __eq__(self, other):
+        """Operator overloading for equal (=).
+
+        :param other: Other Impact Function to be compared.
+        :type other: ImpactFunction
+
+        :returns: True if both are the same IF, other wise False.
+        :rtype: bool
+        """
+        return self.is_equal(other)[0]
+
+    def is_equal(self, other):
+        """Equality checker with message
+
+        :param other: Other Impact Function to be compared.
+        :type other: ImpactFunction
+
+        :returns: True if both are the same IF, other wise False and the
+            message.
+        :rtype: bool, str
+        """
+        def check_qgs_map_layers(layer_a, layer_b, if_property):
+            """Internal function to check two layers
+
+            :param layer_a: Layer A
+            :type layer_a: QgsMapLayer
+            :param layer_b: Layer B
+            :type layer_b: QgsMapLayer
+
+            :param if_property: Property currently checked
+            :type if_property: basestring
+
+            :return: Tuple with bool and error message if needed
+            :rtype: (bool, basestring)
+            """
+            if byteify(layer_a.keywords) != byteify(
+                    layer_b.keywords):
+                message = (
+                    'Keyword Layer is not equal is %s' % if_property)
+                return False, message
+            if isinstance(layer_a, QgsVectorLayer):
+                fields_a = [f.name() for f in layer_a.fields()]
+                fields_b = [f.name() for f in layer_b.fields()]
+                if fields_a != fields_b:
+                    message = (
+                        'Layer fields is not equal for %s' %
+                        if_property)
+                    return False, message
+                if (layer_a.featureCount() !=
+                        layer_b.featureCount()):
+                    message = (
+                        'Feature count is not equal for %s' %
+                        if_property)
+                    return False, message
+            return True, None
+
+        properties = [
+            'debug_mode',
+            'crs',
+            'analysis_extent',
+            'datastore',
+            'name',
+            'start_datetime',
+            'end_datetime',
+            'duration',
+            'hazard',
+            'aggregation',
+            'exposures',
+            'aggregation_summary',
+            'analysis_summary',
+            # 'impact_functions'
+        ]
+        for if_property in properties:
+            try:
+                property_a = getattr(self, if_property)
+                property_b = getattr(other, if_property)
+                if type(property_a) != type(property_b):
+                    message = (
+                        'Different type of property %s.\nA: %s\nB: %s' % (
+                            if_property, type(property_a), type(property_b)))
+                    return False, message
+                if isinstance(property_a, QgsMapLayer):
+                    status, message = check_qgs_map_layers(
+                        property_a, property_b, if_property)
+                    if not status:
+                        return status, message
+                elif isinstance(property_a, QgsGeometry):
+                    if not property_a.equals(property_b):
+                        string_a = property_a.exportToWkt()
+                        string_b = property_b.exportToWkt()
+                        message = (
+                            '[Non Layer] The not equal property is %s.\n'
+                            'A: %s\nB: %s' % (if_property, string_a, string_b))
+                        return False, message
+                elif isinstance(property_a, DataStore):
+                    if property_a.uri_path != property_b.uri_path:
+                        string_a = property_a.uri_path
+                        string_b = property_b.uri_path
+                        message = (
+                            '[Non Layer] The not equal property is %s.\n'
+                            'A: %s\nB: %s' % (if_property, string_a, string_b))
+                        return False, message
+                elif (isinstance(property_a, tuple) or
+                        isinstance(property_a, list)):
+                    if len(property_a) == len(property_b) == 0:
+                        continue
+                    elif len(property_a) and \
+                            isinstance(property_a[0], QgsMapLayer):
+                        for layer_a, layer_b in zip(property_a, property_b):
+                            status, message = check_qgs_map_layers(
+                                layer_a, layer_b, if_property)
+                            if not status:
+                                return status, message
+                    elif len(property_a) and \
+                            isinstance(property_a[0], ImpactFunction):
+                        # Need to check if it's necessary
+                        pass
+                    else:
+                        message = (
+                            '[Non Layer] The not equal property is %s.\n'
+                            'A: %s\nB: %s' % (
+                                if_property, property_a, property_b))
+                        return False, message
+                else:
+                    if property_a != property_b:
+                        string_a = get_unicode(property_a)
+                        string_b = get_unicode(property_b)
+                        message = (
+                            '[Non Layer] The not equal property is %s.\n'
+                            'A: %s\nB: %s' % (if_property, string_a, string_b))
+                        return False, message
+            except AttributeError as e:
+                message = (
+                    'Property %s is not found. The exception is %s' % (
+                        if_property, e))
+                return False, message
+            except IndexError as e:
+                if if_property == 'impact':
+                    continue
+                else:
+                    message = (
+                        'Property %s is out of index. The exception is %s' % (
+                            if_property, e))
+                    return False, message
+            except Exception as e:
+                message = (
+                    'Error on %s with error message %s' % (if_property, e))
+                return False, message
+
+        return True, ''
 
     def prepare(self):
         """Method to check if the impact function can be run.
@@ -718,6 +881,7 @@ class MultiExposureImpactFunction(object):
             analysis_layers.append(impact_function.analysis_impacted)
             aggregation_layers.append(impact_function.aggregation_summary)
 
+        self._current_impact_function = None
         self._analysis_extent = QgsGeometry.unaryUnion(list_geometries)
 
         if not self._aggregation:
@@ -796,6 +960,21 @@ class MultiExposureImpactFunction(object):
         simple_polygon_without_brush(
             self._analysis_summary, analysis_width, analysis_color)
 
+        # Set back input layers.
+        self.hazard = load_layer_from_registry(
+            get_provenance(self.provenance, provenance_hazard_layer))
+        exposures = get_provenance(
+            self.provenance, provenance_multi_exposure_layers)
+        self._exposures = []
+        for exposure in exposures:
+            self.add_exposure(load_layer_from_registry(exposure))
+        aggregation_path = get_provenance(
+            self.provenance, provenance_aggregation_layer)
+        if aggregation_path:
+            self.aggregation = load_layer_from_registry(aggregation_path)
+        else:
+            self.aggregation = None
+
         return ANALYSIS_SUCCESS, None
 
     def generate_report(self, components, output_folder=None, iface=None):
@@ -855,3 +1034,91 @@ class MultiExposureImpactFunction(object):
                 break
 
         return error_code, message
+
+    @staticmethod
+    def load_from_output_metadata(output_metadata):
+        """Set Impact Function based on an output of an analysis's metadata.
+
+        If possible, we will try to use layers already in the legend and to not
+        recreating new ones. We will keep the style for instance.
+
+        :param output_metadata: Metadata from an output layer.
+        :type output_metadata: OutputLayerMetadata
+
+        :returns: Impact Function based on the metadata.
+        :rtype: ImpactFunction
+        """
+        impact_function = MultiExposureImpactFunction()
+        provenance = output_metadata['provenance_data']
+        # Set provenance data
+        impact_function._provenance = provenance
+
+        # Set exposure layer
+        paths = get_provenance(provenance, provenance_multi_exposure_layers)
+        if paths:
+            for path in paths:
+                impact_function.add_exposure(load_layer_from_registry(path))
+
+        # Set hazard layer
+        path = get_provenance(provenance, provenance_hazard_layer)
+        if path:
+            impact_function.hazard = load_layer_from_registry(path)
+
+        # Set aggregation layer
+        path = get_provenance(provenance, provenance_aggregation_layer)
+        if path:
+            impact_function.aggregation = load_layer_from_registry(path)
+
+        # Analysis extent
+        extent = get_provenance(provenance, provenance_analysis_extent)
+        if extent:
+            impact_function._analysis_extent = QgsGeometry.fromWkt(extent)
+
+        # Data store
+        data_store_uri = get_provenance(provenance, provenance_data_store_uri)
+        if data_store_uri:
+            impact_function.datastore = Folder(data_store_uri)
+
+        # Name
+        name = get_provenance(provenance, provenance_impact_function_name)
+        impact_function._name = name
+
+        # Start date time
+        start_datetime = get_provenance(provenance, provenance_start_datetime)
+        impact_function._start_datetime = start_datetime
+
+        # End date time
+        end_datetime = get_provenance(provenance, provenance_end_datetime)
+        impact_function._end_datetime = end_datetime
+
+        # Duration
+        duration = get_provenance(provenance, provenance_duration)
+        impact_function._duration = duration
+
+        # Debug mode
+        debug_mode = get_provenance(provenance, provenance_debug_mode)
+        impact_function.debug_mode = debug_mode
+
+        # Output layers
+        # aggregation_summary
+        path = get_provenance(provenance, provenance_layer_aggregation_summary)
+        if path:
+            impact_function._aggregation_summary = load_layer_from_registry(
+                path)
+
+        # analysis_impacted
+        path = get_provenance(provenance, provenance_layer_analysis_impacted)
+        if path:
+            impact_function._analysis_summary = load_layer_from_registry(path)
+
+        impact_function._output_layer_expected = \
+            impact_function._compute_output_layer_expected()
+
+        # crs
+        crs = get_provenance(provenance, provenance_crs)
+        if crs:
+            impact_function._crs = QgsCoordinateReferenceSystem(crs)
+
+        impact_function._provenance_ready = True
+
+        return impact_function

@@ -79,6 +79,23 @@ class TestMultiExposureImpactFunction(unittest.TestCase):
 
     """Test Multi Exposure Impact Function."""
 
+    def assertEqualImpactFunction(self, first, second, msg=None):
+        """Special assert for impact function equality."""
+        if not isinstance(first, MultiExposureImpactFunction):
+            message = (
+                'First object is not an ImpactFunction object, but a %s' %
+                type(second))
+            self.fail(self._formatMessage(msg, message))
+        if not isinstance(second, MultiExposureImpactFunction):
+            message = (
+                'Second object is not an ImpactFunction object, but a %s' %
+                type(second))
+            self.fail(self._formatMessage(msg, message))
+
+        equal, message = first.is_equal(second)
+        if not equal:
+            self.fail(self._formatMessage('%s\n%s' % (msg, message), message))
+
     def test_bad_multi(self):
         """Test that the 'prepare' state can failed."""
         hazard_layer = load_test_vector_layer(
@@ -141,6 +158,12 @@ class TestMultiExposureImpactFunction(unittest.TestCase):
         }
         self.assertDictEqual(
             expected_layers, impact_function.output_layers_expected())
+
+    def test_equality(self):
+        """Testing IF equal operator."""
+        new_impact_function = MultiExposureImpactFunction()
+        self.assertEqualImpactFunction(
+            new_impact_function, new_impact_function)
 
     def test_multi_exposure(self):
         """Test we can run a multi exposure analysis."""
@@ -227,3 +250,10 @@ class TestMultiExposureImpactFunction(unittest.TestCase):
 
         for key in output_layer_provenance_keys:
             self.assertIn(key, impact_function.provenance.keys())
+
+        # Test serialization/deserialization
+        output_metadata = impact_function.aggregation_summary.keywords
+        new_impact_function = MultiExposureImpactFunction. \
+            load_from_output_metadata(output_metadata)
+        self.assertEqualImpactFunction(
+            impact_function, new_impact_function)
