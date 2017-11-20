@@ -13,12 +13,15 @@ from safe.common.exceptions import (
     GridXmlParseError,
     ContourCreationError,
     InvalidLayerError,
-    CallGDALError)
+    CallGDALError,
+    FileNotFoundError,
+)
 
 from safe.definitions.constants import (
     NONE_SMOOTHING, NUMPY_SMOOTHING, SCIPY_SMOOTHING
 )
 from safe.utilities.resources import resources_path
+from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -236,10 +239,14 @@ def create_contour(
         output_file_path = os.path.join(
             input_directory, input_base_name + '-contour' + '.geojson'
         )
+    output_directory = os.path.dirname(output_file_path)
+    output_file_name = os.path.basename(output_file_path)
+    output_base_name = os.path.splitext(output_file_name)[0]
+
     # convert to numpy
-    raster_file = gdal.Open(shakemap_layer.source())
+    shakemap_file = gdal.Open(shakemap_layer.source())
     shakemap_array = np.array(
-        raster_file.GetRasterBand(active_band).ReadAsArray())
+        shakemap_file.GetRasterBand(active_band).ReadAsArray())
 
     # do smoothing
     if smoothing_method == NUMPY_SMOOTHING:
@@ -248,7 +255,32 @@ def create_contour(
     else:
         smoothed_array = shakemap_array
 
-    # create contour
+    # Create smoothed shakemap raster layer
+    smoothed_shakemap_path = os.path.join(
+        output_directory, output_base_name + '-smoothed.tiff'
+    )
+    driver = gdal.GetDriverByName('GTiff')
+    smoothed_shakemap_file = driver.Create(
+        smoothed_shakemap_path,
+        shakemap_file.RasterXSize,
+        shakemap_file.RasterYSize,
+        1)
+    smoothed_shakemap_file.GetRasterBand(1).WriteArray(smoothed_array)
+
+    # CRS
+    smoothed_shakemap_file.SetProjection(shakemap_file.GetProjection())
+    smoothed_shakemap_file.SetGeoTransform(shakemap_file.GetGeoTransform())
+    smoothed_shakemap_file.FlushCache()
+
+    # del smoothed_shakemap_file
+
+    if not os.path.isfile(smoothed_shakemap_path):
+        raise FileNotFoundError(tr(
+            'The smoothed shakemap is not created. It should be at '
+            '{smoothed_shakemap_path}'.format(
+                smoothed_shakemap_path=smoothed_shakemap_path)))
+
+    # create contour from the smoothed tif
     # Based largely on
     # http://svn.osgeo.org/gdal/trunk/autotest/alg/contour.py
     driver = ogr.GetDriverByName('ESRI Shapefile')
@@ -298,7 +330,7 @@ def create_contour(
     elevation_field = 1  # second (MMI) field defined above
     try:
         gdal.ContourGenerate(
-            smoothed_array,
+            smoothed_shakemap_file.GetRasterBand(active_band),
             contour_interval,
             contour_base,
             fixed_level_list,
@@ -313,10 +345,6 @@ def create_contour(
     finally:
         ogr_dataset.Release()
 
-    output_directory = os.path.dirname(output_file_path)
-    output_file_name = os.path.basename(output_file_path)
-    output_base_name = os.path.splitext(output_file_name)[0]
-
     # Copy over the standard .prj file since ContourGenerate does not
     # create a projection definition
     projection_path = os.path.join(
@@ -330,5 +358,7 @@ def create_contour(
         output_directory, output_base_name + '.qml')
     source_qml_path = resources_path('converter_data', 'mmi-contours.qml')
     shutil.copyfile(source_qml_path, qml_path)
+
+    del smoothed_shakemap_file
 
     return output_file_path
