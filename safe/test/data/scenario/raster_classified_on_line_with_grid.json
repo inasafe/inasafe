@@ -11,7 +11,9 @@
   },
   "expected_steps":{
     "impact function":{
-      "info": {},
+      "info": {
+        "crs": "EPSG:3857"
+      },
       "process":[
         "Make aggregate hazard layer valid",
         "Intersect divisible features with the aggregate hazard",

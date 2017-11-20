@@ -11,7 +11,9 @@
   },
   "expected_steps":{
     "impact function":{
-      "info": {},
+      "info": {
+        "crs": "EPSG:3857"
+      },
       "process":[
         "Highest class of hazard is assigned to the exposure",
         "Aggregate the impact summary",

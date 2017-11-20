@@ -472,12 +472,8 @@ class MultiExposureImpactFunction(object):
             self.datastore.uri_path)
 
         # CRS
-        if self._crs:
-            set_provenance(
-                self._provenance, provenance_crs, self._crs.authid())
-        else:
-            set_provenance(
-                self._provenance, provenance_crs, None)
+        set_provenance(
+            self._provenance, provenance_crs, self._crs.authid())
 
         # Debug mode
         set_provenance(

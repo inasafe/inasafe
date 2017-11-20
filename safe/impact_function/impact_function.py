@@ -251,6 +251,8 @@ class ImpactFunction(object):
         # Requested extent to use (according to the CRS property).
         self._requested_extent = None
         # Analysis CRS if no aggregation layer.
+        # If an aggregation layer is provider, it has to be None at, the Impact
+        # Function will set it automatically
         self._crs = None
         # Use exposure view only
         self.use_exposure_view_only = False
@@ -1861,6 +1863,7 @@ class ImpactFunction(object):
             LOGGER.info(
                 'The aggregation layer is not provided. We are going to '
                 'create it from the analysis extent and the expected CRS.')
+            self.set_state_info('impact function', 'crs', self._crs.authid())
 
             self.set_state_process(
                 'aggregation',
@@ -1933,6 +1936,8 @@ class ImpactFunction(object):
 
         else:
             self.set_state_info('aggregation', 'provided', True)
+            self._crs = self._aggregation.crs()
+            self.set_state_info('impact function', 'crs', self._crs.authid())
 
             self.set_state_process(
                 'aggregation', 'Cleaning the aggregation layer')
@@ -2066,7 +2071,7 @@ class ImpactFunction(object):
             'aggregation',
             'Convert the aggregation layer to the analysis layer')
         self._analysis_impacted = create_analysis_layer(
-            self.analysis_extent, self.aggregation.crs(), self.name)
+            self.analysis_extent, self._crs, self.name)
         self.debug_layer(self._analysis_impacted)
         self._analysis_impacted.keywords['exposure_keywords'] = (
             copy_layer_keywords(self.exposure.keywords))
@@ -2079,7 +2084,7 @@ class ImpactFunction(object):
         LOGGER.info('ANALYSIS : Hazard preparation')
 
         use_same_projection = (
-            self.hazard.crs().authid() == self.aggregation.crs().authid())
+            self.hazard.crs().authid() == self._crs.authid())
         self.set_state_info(
             'hazard',
             'use_same_projection_as_aggregation',
@@ -2090,7 +2095,7 @@ class ImpactFunction(object):
             extent = self._analysis_impacted.extent()
             if not use_same_projection:
                 transform = QgsCoordinateTransform(
-                    self.analysis_impacted.crs(), self.hazard.crs())
+                    self._crs, self.hazard.crs())
                 extent = transform.transform(extent)
 
             self.set_state_process(
@@ -2118,7 +2123,7 @@ class ImpactFunction(object):
                 'hazard',
                 'Reproject hazard layer to aggregation CRS')
             # noinspection PyTypeChecker
-            self.hazard = reproject(self.hazard, self.aggregation.crs())
+            self.hazard = reproject(self.hazard, self._crs)
             self.debug_layer(self.hazard, check_fields=False)
 
         self.set_state_process(
@@ -2177,7 +2182,7 @@ class ImpactFunction(object):
         LOGGER.info('ANALYSIS : Exposure preparation')
 
         use_same_projection = (
-            self.exposure.crs().authid() == self.aggregation.crs().authid())
+            self.exposure.crs().authid() == self._crs.authid())
         self.set_state_info(
             'exposure',
             'use_same_projection_as_aggregation',
@@ -2223,7 +2228,7 @@ class ImpactFunction(object):
                 'Reproject exposure layer to aggregation CRS')
             # noinspection PyTypeChecker
             self.exposure = reproject(
-                self.exposure, self.aggregation.crs())
+                self.exposure, self._crs)
             self.debug_layer(self.exposure)
 
         self.set_state_process('exposure', 'Compute ratios from counts')
@@ -2525,12 +2530,8 @@ class ImpactFunction(object):
             self.action_checklist())
 
         # CRS
-        if self._crs:
-            set_provenance(
-                self._provenance, provenance_crs, self._crs.authid())
-        else:
-            set_provenance(
-                self._provenance, provenance_crs, None)
+        set_provenance(
+            self._provenance, provenance_crs, self._crs.authid())
 
         # Debug mode
         set_provenance(
@@ -2663,18 +2664,19 @@ class ImpactFunction(object):
         # Set exposure layer
         exposure_path = get_provenance(provenance, provenance_exposure_layer)
         if exposure_path:
-            impact_function.exposure = load_layer(exposure_path)[0]
+            impact_function.exposure = load_layer_from_registry(exposure_path)
 
         # Set hazard layer
         hazard_path = get_provenance(provenance, provenance_hazard_layer)
         if hazard_path:
-            impact_function.hazard = load_layer(hazard_path)[0]
+            impact_function.hazard = load_layer_from_registry(hazard_path)
 
         # Set aggregation layer
         aggregation_path = get_provenance(
             provenance, provenance_aggregation_layer)
         if aggregation_path:
-            impact_function.aggregation = load_layer(aggregation_path)[0]
+            impact_function.aggregation = (
+                load_layer_from_registry(aggregation_path))
 
         # Requested extent
         requested_extent = get_provenance(
@@ -2776,10 +2778,10 @@ class ImpactFunction(object):
 
         # crs
         crs = get_provenance(provenance, provenance_crs)
-        if crs:
+        if crs and not aggregation_path:
             impact_function._crs = QgsCoordinateReferenceSystem(crs)
-        else:
-            impact_function._crs = None
+        if aggregation_path:
+            impact_function._crs = impact_function.aggregation.crs()
 
         impact_function._provenance_ready = True
 
