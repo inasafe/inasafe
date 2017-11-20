@@ -287,7 +287,7 @@ notes_assumptions_component = {
         'affected_note_format': {
             'item_header': tr('affected notes'),
             'item_list': [
-                tr('Exposures in this following hazard classes are considered '
+                tr('Exposures in the following hazard classes are considered '
                    'affected: {hazard_classes}')
             ]
         },

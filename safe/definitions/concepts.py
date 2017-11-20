@@ -422,7 +422,7 @@ concepts['elderly'] = {
     'group': tr('Demographics'),
     'key': 'elderly',
     'description': tr(
-        'Persons aged 64 years and over.'),
+        'Persons aged 65 years and over.'),
     'citations': [
         {
             'text': tr(
