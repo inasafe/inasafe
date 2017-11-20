@@ -333,8 +333,7 @@ class Plugin(object):
         self.action_import_dialog.setWhatsThis(self.tr(
             'OpenStreetMap Downloader'))
         self.action_import_dialog.triggered.connect(self.show_osm_downloader)
-        self.add_action(
-            self.action_import_dialog, add_to_toolbar=self.full_toolbar)
+        self.add_action(self.action_import_dialog, add_to_toolbar=True)
 
     def _create_add_osm_layer_action(self):
         """Create action for import OSM Dialog."""
@@ -349,8 +348,7 @@ class Plugin(object):
             'Use this to add an OSM layer to your map. '
             'It needs internet access to function.'))
         self.action_add_osm_layer.triggered.connect(self.add_osm_layer)
-        self.add_action(
-            self.action_add_osm_layer, add_to_toolbar=self.full_toolbar)
+        self.add_action(self.action_add_osm_layer, add_to_toolbar=True)
 
     def _create_show_definitions_action(self):
         """Create action for showing definitions / help."""
