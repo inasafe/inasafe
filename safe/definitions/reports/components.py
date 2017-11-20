@@ -597,8 +597,7 @@ standard_impact_report_metadata_html = {
             'output_path': 'impact-report-output.html',
             'resources': [
                 resources_path('css'),
-                resources_path('js'),
-                resources_path('img')],
+                resources_path('js')],
             'template': 'standard-template/'
                         'jinja2/'
                         'impact-report-layout.html',
@@ -749,8 +748,7 @@ standard_multi_exposure_impact_report_metadata_html = {
             'output_path': 'multi-exposure-impact-report-output.html',
             'resources': [
                 resources_path('css'),
-                resources_path('js'),
-                resources_path('img')],
+                resources_path('js')],
             'template': 'standard-template/'
                         'jinja2/'
                         'multi-exposure-impact-report-layout.html',
