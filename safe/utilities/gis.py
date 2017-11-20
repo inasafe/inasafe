@@ -3,6 +3,7 @@
 
 from osgeo import gdal
 from qgis.core import (
+    QgsFeatureRequest,
     QgsMapLayer,
     QgsPoint,
     QgsGeometry,
@@ -169,8 +170,11 @@ def validate_geo_array(extent):
     return True
 
 
-def deep_duplicate_layer(layer):
+def clone_layer(layer, keep_selection=True):
     """Duplicate the layer by taking the same source and copying keywords.
+
+    :param keep_selection: If we should keep the selection. Default to true.
+    :type keep_selection: bool
 
     :param layer: Layer to be duplicated.
     :type layer: QgsMapLayer
@@ -181,8 +185,15 @@ def deep_duplicate_layer(layer):
     if is_vector_layer(layer):
         new_layer = QgsVectorLayer(
             layer.source(), layer.name(), layer.providerType())
+        if keep_selection and layer.selectedFeatureCount() > 0:
+            request = QgsFeatureRequest()
+            request.setFilterFids(layer.selectedFeaturesIds())
+            request.setFlags(QgsFeatureRequest.NoGeometry)
+            iterator = layer.getFeatures(request)
+            new_layer.setSelectedFeatures([k.id() for k in iterator])
     else:
-        new_layer = QgsRasterLayer(layer.source(), layer.name())
+        new_layer = QgsRasterLayer(
+            layer.source(), layer.name(), layer.providerType())
 
     new_layer.keywords = copy_layer_keywords(layer.keywords)
 

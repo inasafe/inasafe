@@ -488,6 +488,8 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
         multi_exposure_if = MultiExposureImpactFunction()
         multi_exposure_if.hazard = hazard
         multi_exposure_if.exposures = exposures
+        multi_exposure_if.debug = False
+        multi_exposure_if.callback = self.progress_callback
         if aggregation:
             multi_exposure_if.use_selected_features_only = use_selected_only
             multi_exposure_if.aggregation = aggregation
@@ -509,131 +511,101 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
 
     def accept(self):
         """Launch the multi exposure analysis."""
+        if not isinstance(
+                self._multi_exposure_if, MultiExposureImpactFunction):
+            # This should not happen as the "accept" button must be disabled if
+            # the impact function is not ready.
+            return ANALYSIS_FAILED_BAD_CODE, None
+
         self.tab_widget.setCurrentIndex(2)
         self.set_enabled_buttons(False)
         enable_busy_cursor()
         try:
-            hazard = layer_from_combo(self.cbx_hazard)
-            aggregation = layer_from_combo(self.cbx_aggregation)
-            exposures = []
-            for combo in self.combos_exposures.itervalues():
-                exposures.append(layer_from_combo(combo))
-            exposures = [layer for layer in exposures if layer]
-
-            self._multi_exposure_if = MultiExposureImpactFunction()
-            self._multi_exposure_if.hazard = hazard
-            self._multi_exposure_if.exposures = exposures
-            if aggregation:
-                self._multi_exposure_if.aggregation = aggregation
-            else:
-                self._multi_exposure_if.crs = (
-                    self.iface.mapCanvas().mapSettings().destinationCrs())
-            self._multi_exposure_if.debug = False
-            self._multi_exposure_if.callback = self.progress_callback
-
-            status, message = self._multi_exposure_if.prepare()
-            if status == ANALYSIS_FAILED_BAD_INPUT:
+            code, message = self._multi_exposure_if.run()
+            if code == ANALYSIS_FAILED_BAD_INPUT:
                 self.hide_busy()
-                LOGGER.info(
-                    'The impact function could not run because of the inputs.')
+                LOGGER.info(tr(
+                    'The impact function could not run because of the inputs.'
+                ))
                 send_error_message(self, message)
                 LOGGER.info(message.to_text())
-
-            elif status == PREPARE_SUCCESS:
-                code, message = self._multi_exposure_if.run()
-                if status == ANALYSIS_FAILED_BAD_INPUT:
-                    self.hide_busy()
-                    LOGGER.info(tr(
-                        'The impact function could not run because of the '
-                        'inputs.'))
-                    send_error_message(self, message)
-                    LOGGER.info(message.to_text())
-                    disable_busy_cursor()
-                    self.set_enabled_buttons(True)
-                    return status, message
-                elif status == ANALYSIS_FAILED_BAD_CODE:
-                    self.hide_busy()
-                    LOGGER.exception(tr(
-                        'The impact function could not run because of a bug.'))
-                    LOGGER.exception(message.to_text())
-                    send_error_message(self, message)
-                    disable_busy_cursor()
-                    self.set_enabled_buttons(True)
-                    return status, message
-
-                if setting('generate_report', True, bool):
-                    report = (
-                        [standard_multi_exposure_impact_report_metadata_pdf])
-                    error_code, message = (
-                        self._multi_exposure_if.generate_report(
-                            report))
-
-                    if error_code == ImpactReport.REPORT_GENERATION_FAILED:
-                        LOGGER.info(
-                            'The impact report could not be generated.')
-                        send_error_message(self, message)
-                        LOGGER.info(message.to_text())
-
-                # We always create the multi exposure group because we need
-                # reports to be generated.
-                root = QgsProject.instance().layerTreeRoot()
-
-                if len(self.ordered_expected_layers()) == 0:
-                    group_analysis = root.insertGroup(
-                        0, self._multi_exposure_if.name)
-                    group_analysis.setVisible(Qt.Checked)
-                    group_analysis.setCustomProperty(
-                        MULTI_EXPOSURE_ANALYSIS_FLAG, True)
-
-                    for layer in self._multi_exposure_if.outputs:
-                        QgsMapLayerRegistry.instance().addMapLayer(
-                            layer, False)
-                        layer_node = group_analysis.addLayer(layer)
-                        layer_node.setVisible(Qt.Unchecked)
-
-                        # set layer title if any
-                        try:
-                            title = layer.keywords['title']
-                            if qgis_version() >= 21800:
-                                layer.setName(title)
-                            else:
-                                layer.setLayerName(title)
-                        except KeyError:
-                            pass
-
-                    for analysis in self._multi_exposure_if.impact_functions:
-                        detailed_group = group_analysis.insertGroup(
-                            0, analysis.name)
-                        detailed_group.setVisible(Qt.Checked)
-                        add_impact_layers_to_canvas(
-                            analysis, group=detailed_group)
-                else:
-                    add_layers_to_canvas_with_custom_orders(
-                        self.ordered_expected_layers(),
-                        self._multi_exposure_if)
-
-                if setting('generate_report', True, bool):
-                    for analysis in self._multi_exposure_if.impact_functions:
-                        # we only want to generate non pdf/qpt report
-                        html_components = [
-                            standard_impact_report_metadata_html]
-                        error_code, message = (
-                            analysis.generate_report(html_components))
-
-                        if error_code == (
-                                ImpactReport.REPORT_GENERATION_FAILED):
-                            LOGGER.info(
-                                'The impact report could not be '
-                                'generated.')
-                            send_error_message(self, message)
-                            LOGGER.info(message.to_text())
-
-                self.done(QDialog.Accepted)
-            else:
+                disable_busy_cursor()
+                self.set_enabled_buttons(True)
+                return code, message
+            elif code == ANALYSIS_FAILED_BAD_CODE:
+                self.hide_busy()
                 LOGGER.exception(tr(
                     'The impact function could not run because of a bug.'))
                 LOGGER.exception(message.to_text())
                 send_error_message(self, message)
+                disable_busy_cursor()
+                self.set_enabled_buttons(True)
+                return code, message
+
+            if setting('generate_report', True, bool):
+                report = ([standard_multi_exposure_impact_report_metadata_pdf])
+                error_code, message = (
+                    self._multi_exposure_if.generate_report(
+                        report))
+
+                if error_code == ImpactReport.REPORT_GENERATION_FAILED:
+                    LOGGER.info(
+                        'The impact report could not be generated.')
+                    send_error_message(self, message)
+                    LOGGER.info(message.to_text())
+
+            # We always create the multi exposure group because we need
+            # reports to be generated.
+            root = QgsProject.instance().layerTreeRoot()
+
+            if len(self.ordered_expected_layers()) == 0:
+                group_analysis = root.insertGroup(
+                    0, self._multi_exposure_if.name)
+                group_analysis.setVisible(Qt.Checked)
+                group_analysis.setCustomProperty(
+                    MULTI_EXPOSURE_ANALYSIS_FLAG, True)
+
+                for layer in self._multi_exposure_if.outputs:
+                    QgsMapLayerRegistry.instance().addMapLayer(layer, False)
+                    layer_node = group_analysis.addLayer(layer)
+                    layer_node.setVisible(Qt.Unchecked)
+
+                    # set layer title if any
+                    try:
+                        title = layer.keywords['title']
+                        if qgis_version() >= 21800:
+                            layer.setName(title)
+                        else:
+                            layer.setLayerName(title)
+                    except KeyError:
+                        pass
+
+                for analysis in self._multi_exposure_if.impact_functions:
+                    detailed_group = group_analysis.insertGroup(
+                        0, analysis.name)
+                    detailed_group.setVisible(Qt.Checked)
+                    add_impact_layers_to_canvas(analysis, group=detailed_group)
+            else:
+                add_layers_to_canvas_with_custom_orders(
+                    self.ordered_expected_layers(),
+                    self._multi_exposure_if)
+
+            if setting('generate_report', True, bool):
+                for analysis in self._multi_exposure_if.impact_functions:
+                    # we only want to generate non pdf/qpt report
+                    html_components = [standard_impact_report_metadata_html]
+                    error_code, message = (
+                        analysis.generate_report(html_components))
+
+                    if error_code == (
+                            ImpactReport.REPORT_GENERATION_FAILED):
+                        LOGGER.info(
+                            'The impact report could not be '
+                            'generated.')
+                        send_error_message(self, message)
+                        LOGGER.info(message.to_text())
+
+            self.done(QDialog.Accepted)
 
         except Exception as e:
             error_message = get_error_message(e)
