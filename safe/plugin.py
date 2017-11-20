@@ -401,7 +401,7 @@ class Plugin(object):
         self.add_action(
             self.action_field_mapping, add_to_toolbar=self.full_toolbar)
 
-    def _create_mutli_exposure_action(self):
+    def _create_multi_exposure_action(self):
         """Create action for showing the multi exposure tool."""
         self.action_multi_exposure = QAction(
             QIcon(resources_path('img', 'icons', 'show-multi-exposure.svg')),
@@ -574,7 +574,7 @@ class Plugin(object):
         self._create_analysis_wizard_action()
         self._add_spacer_to_menu()
         self._create_field_mapping_action()
-        self._create_mutli_exposure_action()
+        self._create_multi_exposure_action()
         self._create_metadata_converter_action()
         self._create_osm_downloader_action()
         self._create_add_osm_layer_action()
@@ -1001,20 +1001,20 @@ class Plugin(object):
 
                     if not layer_purpose:
                         enable_field_mapping_tool = False
-
-                    if layer_purpose == layer_purpose_exposure['key']:
-                        layer_subcategory = keywords.get('exposure')
-                    elif layer_purpose == layer_purpose_hazard['key']:
-                        layer_subcategory = keywords.get('hazard')
                     else:
-                        layer_subcategory = None
-                    field_groups = get_field_groups(
-                        layer_purpose, layer_subcategory)
-                    if len(field_groups) == 0:
-                        # No field group, disable field mapping tool.
-                        enable_field_mapping_tool = False
-                    else:
-                        enable_field_mapping_tool = True
+                        if layer_purpose == layer_purpose_exposure['key']:
+                            layer_subcategory = keywords.get('exposure')
+                        elif layer_purpose == layer_purpose_hazard['key']:
+                            layer_subcategory = keywords.get('hazard')
+                        else:
+                            layer_subcategory = None
+                        field_groups = get_field_groups(
+                            layer_purpose, layer_subcategory)
+                        if len(field_groups) == 0:
+                            # No field group, disable field mapping tool.
+                            enable_field_mapping_tool = False
+                        else:
+                            enable_field_mapping_tool = True
             else:
                 enable_field_mapping_tool = False
         except (KeywordNotFoundError, NoKeywordsFoundError, MetadataReadError):
