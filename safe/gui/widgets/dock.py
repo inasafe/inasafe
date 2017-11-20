@@ -650,13 +650,12 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     (layer not in canvas_layers)):
                 continue
 
-            #    store uuid in user property of list widget for layers
-
-            name = layer.name()
+            # store uuid in user property of list widget for layers
             source = layer.id()
+            title = None
+
             # See if there is a title for this layer, if not,
             # fallback to the layer's filename
-
             # noinspection PyBroadException
             try:
                 title = self.keyword_io.read_keywords(layer, 'title')
