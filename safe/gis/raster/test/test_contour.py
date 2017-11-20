@@ -2,9 +2,10 @@
 """Test Contour."""
 
 import os
+import hashlib
 from safe.test.utilities import load_test_raster_layer, qgis_app
 import unittest
-from safe.gis.raster.contour import create_contour
+from safe.gis.raster.contour import create_contour, smooth_shake_map
 from safe.common.utilities import temp_dir, unique_filename
 
 APP, IFACE = qgis_app()
@@ -38,6 +39,32 @@ class TestContour(unittest.TestCase):
             shake_map_layer,
             output_file_path=output_file_path
         )
+
+    def test_smoothing(self):
+        """Test smoothing method."""
+        # Load shake map layer
+        shake_map_layer = load_test_raster_layer(
+            'hazard',
+            'shake_data',
+            '20131105060809',
+            'output',
+            'grid-nearest.tif')
+        expected_shakemap_path = shake_map_layer.source()
+        expected_shakemap_path = expected_shakemap_path.replace(
+            'grid-nearest.tif', 'grid-smoothing-nearest.tif')
+
+        print shake_map_layer.source()
+        print expected_shakemap_path
+
+        smoothed_shakemap_path =  smooth_shake_map(shake_map_layer)
+
+        print smoothed_shakemap_path
+
+        hash_smoothed = hashlib.md5(
+            open(smoothed_shakemap_path, 'rb').read()).hexdigest()
+        expected_hash = hashlib.md5(
+            open(expected_shakemap_path, 'rb').read()).hexdigest()
+        self.assertEqual(hash_smoothed, expected_hash)
 
 
 if __name__ == '__main__':
