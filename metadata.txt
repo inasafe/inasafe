@@ -26,6 +26,8 @@ status=final
 # Optional items:
 
 changelog=
+    Version 4.2.4:
+    - Fix bug Exception reading keywods #4632
     Version 4.2.4
     - Move resources and translation to safe package.
     - Fix bug Analysis Detail from Landcover Impact Report not shown in Bahasa version #4487
