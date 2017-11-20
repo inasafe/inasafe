@@ -16,7 +16,7 @@ from safe.common.exceptions import (
     CallGDALError,
     FileNotFoundError,
 )
-
+from safe.common.utilities import unique_filename, temp_dir
 from safe.definitions.constants import (
     NONE_SMOOTHING, NUMPY_SMOOTHING, SCIPY_SMOOTHING
 )
@@ -360,5 +360,69 @@ def create_contour(
     shutil.copyfile(source_qml_path, qml_path)
 
     del smoothed_shakemap_file
+
+    return output_file_path
+
+
+def smooth_shake_map(
+        shakemap_layer,
+        output_file_path='',
+        active_band=1,
+        smoothing_method=NUMPY_SMOOTHING,
+        smoothing_sigma=0.9):
+    """Make a smoother shakemap layer from a shake map.
+
+    :param shakemap_layer: The shake map raster layer.
+    :type shakemap_layer: QgsRasterLayer
+
+    :param active_band: The band which the data located, default to 1.
+    :type active_band: int
+
+    :param smoothing_method: The smoothing method that wanted to be used.
+    :type smoothing_method: NONE_SMOOTHING, NUMPY_SMOOTHING, SCIPY_SMOOTHING
+
+    :param smooth_sigma: parameter for gaussian filter used in smoothing
+        function.
+    :type smooth_sigma: float
+
+    :returns: The contour of the shake map layer.
+    :rtype: QgsRasterLayer
+    """
+    # Set output path
+    if not output_file_path:
+        output_file_path = unique_filename(suffix='.tiff', dir=temp_dir())
+
+    # convert to numpy
+    shakemap_file = gdal.Open(shakemap_layer.source())
+    shakemap_array = np.array(
+        shakemap_file.GetRasterBand(active_band).ReadAsArray())
+
+    # do smoothing
+    if smoothing_method == NUMPY_SMOOTHING:
+        smoothed_array = convolve(shakemap_array, gaussian_kernel(
+            smoothing_sigma))
+    else:
+        smoothed_array = shakemap_array
+
+    # Create smoothed shakemap raster layer
+    driver = gdal.GetDriverByName('GTiff')
+    smoothed_shakemap_file = driver.Create(
+        output_file_path,
+        shakemap_file.RasterXSize,
+        shakemap_file.RasterYSize,
+        1)
+    smoothed_shakemap_file.GetRasterBand(1).WriteArray(smoothed_array)
+
+    # CRS
+    smoothed_shakemap_file.SetProjection(shakemap_file.GetProjection())
+    smoothed_shakemap_file.SetGeoTransform(shakemap_file.GetGeoTransform())
+    smoothed_shakemap_file.FlushCache()
+
+    del smoothed_shakemap_file
+
+    if not os.path.isfile(output_file_path):
+        raise FileNotFoundError(tr(
+            'The smoothed shakemap is not created. It should be at '
+            '{output_file_path}'.format(output_file_path=output_file_path)))
 
     return output_file_path
