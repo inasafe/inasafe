@@ -92,7 +92,7 @@ from safe.impact_function.impact_function_utilities import check_input_layer
 from safe.impact_function.style import simple_polygon_without_brush
 from safe.report.impact_report import ImpactReport
 from safe.report.report_metadata import ReportMetadata
-from safe.utilities.gis import deep_duplicate_layer
+from safe.utilities.gis import clone_layer
 from safe.utilities.i18n import tr
 from safe.utilities.gis import qgis_version
 from safe.utilities.metadata import (
@@ -712,13 +712,13 @@ class MultiExposureImpactFunction(object):
         for exposure in self._exposures:
             impact_function = ImpactFunction()
             impact_function.debug_mode = self.debug_mode
-            impact_function.hazard = deep_duplicate_layer(self._hazard)
+            impact_function.hazard = clone_layer(self._hazard)
             impact_function.exposure = exposure
             impact_function.debug_mode = self.debug
             if self.callback:
                 impact_function.callback = self.callback
             if self._aggregation:
-                impact_function.aggregation = deep_duplicate_layer(
+                impact_function.aggregation = clone_layer(
                     self._aggregation)
                 impact_function.use_selected_features_only = (
                     self.use_selected_features_only)
