@@ -1273,7 +1273,7 @@ class TestImpactReport(unittest.TestCase):
         # Affected notes
         # Dry is set to affected, but Wet is set to not affected.
         expected_context = (
-            'Exposures in this following hazard classes are considered '
+            'Exposures in the following hazard classes are considered '
             'affected: Dry')
         actual_context = notes_assumptions.context['items'][-2]['item_list'][0]
         message = expected_context.strip() + '\n' + actual_context.strip()
