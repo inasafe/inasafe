@@ -65,6 +65,10 @@ class AbstractList(MessageElement):
         elif isinstance(item, QPyNullVariant):
             self.items.append(PlainText(
                 tr('Null (PyQt4.QtCore.QPyNullVariant) found from the data.')))
+        elif isinstance(item, tuple) or isinstance(item, list):
+            for i in item:
+                # Recursive call
+                self.add(i)
         else:
             raise InvalidMessageItemError(item, item.__class__)
 
