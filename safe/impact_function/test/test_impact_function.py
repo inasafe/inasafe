@@ -704,6 +704,9 @@ class TestImpactFunction(unittest.TestCase):
         # counted in the JSON file.
         self.assertEqual(len(outputs) - 1, expected_outputs['count'])
         self.assertEqual(len(outputs), computed_nb_outputs)
+        self.assertEqual(
+            impact_function.crs.authid(),
+            impact_function.impact.crs().authid())
 
         # Test deserialization
         if test_loader:
