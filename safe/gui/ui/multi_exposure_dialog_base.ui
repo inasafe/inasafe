@@ -33,7 +33,7 @@
        <item>
         <widget class="QLabel" name="label">
          <property name="text">
-          <string>This tool allows you to run a multi-exposure analysis. Select a hazard, two or more exposures and an aggregation layer. The impact function will aggregate the results of all the hazard / exposure combinations in one report. Use the reporting options tab to specify which layers should be included and visible in the report. You can also set the report layer order on the reporting options tab for producing a printed report. The status tab will show the progress of the analysis as it runs.</string>
+          <string>This tool allows you to run a multi-exposure analysis. Select a hazard, two or more exposures and an aggregation layer. The impact function will combine the results of all the hazard / exposure combinations in one report. Use the reporting options tab to specify which layers should be included and visible in the report. You can also set the report layer order on the reporting options tab for producing a printed report. The status tab will show the progress of the analysis as it runs.</string>
          </property>
          <property name="wordWrap">
           <bool>true</bool>
@@ -110,7 +110,7 @@
        <item>
         <widget class="QLabel" name="label_6">
          <property name="text">
-          <string>You can set some layers in the right panel to set a custom order in the report. Doing this will hide all existing layers in your project. If you leave the right panel empty, the default legend will be used.</string>
+          <string>You can choose some of the available layers from the left panel to include in the map report by dragging them to the right panel. You can also control the order of layers in the map report. All layers remaining in the left panel will be turned off in your map report. If you leave the right panel empty, the default legend will be used.</string>
          </property>
          <property name="wordWrap">
           <bool>true</bool>
