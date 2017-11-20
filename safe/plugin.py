@@ -257,8 +257,7 @@ class Plugin(object):
             'Open InaSAFE multi buffer'))
         self.action_multi_buffer.setWhatsThis(self.tr(
             'Open InaSAFE multi buffer'))
-        self.action_multi_buffer.triggered.connect(
-            self.show_multi_buffer)
+        self.action_multi_buffer.triggered.connect(self.show_multi_buffer)
         self.add_action(
             self.action_multi_buffer,
             add_to_toolbar=self.full_toolbar)
@@ -334,7 +333,8 @@ class Plugin(object):
         self.action_import_dialog.setWhatsThis(self.tr(
             'OpenStreetMap Downloader'))
         self.action_import_dialog.triggered.connect(self.show_osm_downloader)
-        self.add_action(self.action_import_dialog)
+        self.add_action(
+            self.action_import_dialog, add_to_toolbar=self.full_toolbar)
 
     def _create_add_osm_layer_action(self):
         """Create action for import OSM Dialog."""
@@ -349,7 +349,8 @@ class Plugin(object):
             'Use this to add an OSM layer to your map. '
             'It needs internet access to function.'))
         self.action_add_osm_layer.triggered.connect(self.add_osm_layer)
-        self.add_action(self.action_add_osm_layer)
+        self.add_action(
+            self.action_add_osm_layer, add_to_toolbar=self.full_toolbar)
 
     def _create_show_definitions_action(self):
         """Create action for showing definitions / help."""
@@ -382,8 +383,7 @@ class Plugin(object):
         self.action_metadata_converter.triggered.connect(
             self.show_metadata_converter)
         self.add_action(
-            self.action_metadata_converter,
-            add_to_toolbar=False)
+            self.action_metadata_converter, add_to_toolbar=self.full_toolbar)
 
     def _create_field_mapping_action(self):
         """Create action for showing field mapping dialog."""
@@ -397,11 +397,9 @@ class Plugin(object):
         self.action_field_mapping.setWhatsThis(self.tr(
             'Use this tool to assign field mapping in layer.'))
         self.action_field_mapping.setEnabled(False)
-        self.action_field_mapping.triggered.connect(
-            self.show_field_mapping)
+        self.action_field_mapping.triggered.connect(self.show_field_mapping)
         self.add_action(
-            self.action_field_mapping,
-            add_to_toolbar=True)
+            self.action_field_mapping, add_to_toolbar=self.full_toolbar)
 
     def _create_mutli_exposure_action(self):
         """Create action for showing the multi exposure tool."""
@@ -414,11 +412,9 @@ class Plugin(object):
         self.action_multi_exposure.setWhatsThis(self.tr(
             'Open the multi exposure tool.'))
         self.action_multi_exposure.setEnabled(True)
-        self.action_multi_exposure.triggered.connect(
-            self.show_multi_exposure)
+        self.action_multi_exposure.triggered.connect(self.show_multi_exposure)
         self.add_action(
-            self.action_multi_exposure,
-            add_to_toolbar=False)
+            self.action_multi_exposure, add_to_toolbar=self.full_toolbar)
 
     def _create_add_petabencana_layer_action(self):
         """Create action for import OSM Dialog."""
@@ -436,7 +432,7 @@ class Plugin(object):
             self.add_petabencana_layer)
         self.add_action(
             self.action_add_petabencana_layer,
-            add_to_toolbar=False)
+            add_to_toolbar=self.full_toolbar)
 
     def _create_rubber_bands_action(self):
         """Create action for toggling rubber bands."""
