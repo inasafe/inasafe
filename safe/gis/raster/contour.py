@@ -8,6 +8,12 @@ from osgeo import gdal, ogr
 from osgeo.gdalconst import GA_ReadOnly
 import logging
 
+from qgis.core import (
+    QgsVectorLayer,
+    QgsFeatureRequest,
+)
+from safe.common.utilities import romanise
+from safe.utilities.styling import mmi_colour
 from safe.common.exceptions import (
     GridXmlFileNotFoundError,
     GridXmlParseError,
@@ -426,3 +432,187 @@ def smooth_shake_map(
             '{output_file_path}'.format(output_file_path=output_file_path)))
 
     return output_file_path
+
+
+def shakemap_contour(shakemap_layer, output_file_path='', active_band=1):
+    """Creating contour from a shakemap layer.
+
+    :param shakemap_layer: The shake map raster layer.
+    :type shakemap_layer: QgsRasterLayer
+
+    :param output_file_path: The path where the contour will be saved.
+    :type output_file_path: basestring
+
+    :param active_band: The band which the data located, default to 1.
+    :type active_band: int
+
+    :returns: The contour of the shake map layer.
+    :rtype: QgsVectorLayer
+    """
+    # Set output path
+    if not output_file_path:
+        output_file_path = unique_filename(suffix='.shp', dir=temp_dir())
+
+    output_directory = os.path.dirname(output_file_path)
+    output_file_name = os.path.basename(output_file_path)
+    output_base_name = os.path.splitext(output_file_name)[0]
+
+    # Based largely on
+    # http://svn.osgeo.org/gdal/trunk/autotest/alg/contour.py
+    driver = ogr.GetDriverByName('ESRI Shapefile')
+    ogr_dataset = driver.CreateDataSource(output_file_path)
+    if ogr_dataset is None:
+        # Probably the file existed and could not be overriden
+        raise ContourCreationError(
+            'Could not create datasource for:\n%s. Check that the file '
+            'does not already exist and that you do not have file system '
+            'permissions issues' % output_file_path)
+    layer = ogr_dataset.CreateLayer('contour')
+    field_definition = ogr.FieldDefn('ID', ogr.OFTInteger)
+    layer.CreateField(field_definition)
+    field_definition = ogr.FieldDefn('MMI', ogr.OFTReal)
+    layer.CreateField(field_definition)
+    # So we can fix the x pos to the same x coord as centroid of the
+    # feature so labels line up nicely vertically
+    field_definition = ogr.FieldDefn('X', ogr.OFTReal)
+    layer.CreateField(field_definition)
+    # So we can fix the y pos to the min y coord of the whole contour so
+    # labels line up nicely vertically
+    field_definition = ogr.FieldDefn('Y', ogr.OFTReal)
+    layer.CreateField(field_definition)
+    # So that we can set the html hex colour based on its MMI class
+    field_definition = ogr.FieldDefn('RGB', ogr.OFTString)
+    layer.CreateField(field_definition)
+    # So that we can set the label in it roman numeral form
+    field_definition = ogr.FieldDefn('ROMAN', ogr.OFTString)
+    layer.CreateField(field_definition)
+    # So that we can set the label horizontal alignment
+    field_definition = ogr.FieldDefn('ALIGN', ogr.OFTString)
+    layer.CreateField(field_definition)
+    # So that we can set the label vertical alignment
+    field_definition = ogr.FieldDefn('VALIGN', ogr.OFTString)
+    layer.CreateField(field_definition)
+    # So that we can set feature length to filter out small features
+    field_definition = ogr.FieldDefn('LEN', ogr.OFTReal)
+    layer.CreateField(field_definition)
+
+    shakemap_data = gdal.Open(shakemap_layer.source(), GA_ReadOnly)
+    # see http://gdal.org/java/org/gdal/gdal/gdal.html for these options
+    contour_interval = 0.5
+    contour_base = 0
+    fixed_level_list = []
+    use_no_data_flag = 0
+    no_data_value = -9999
+    id_field = 0  # first field defined above
+    elevation_field = 1  # second (MMI) field defined above
+    try:
+        gdal.ContourGenerate(
+            shakemap_data.GetRasterBand(active_band),
+            contour_interval,
+            contour_base,
+            fixed_level_list,
+            use_no_data_flag,
+            no_data_value,
+            layer,
+            id_field,
+            elevation_field)
+    except Exception, e:
+        LOGGER.exception('Contour creation failed')
+        raise ContourCreationError(str(e))
+    finally:
+        ogr_dataset.Release()
+
+    # Copy over the standard .prj file since ContourGenerate does not
+    # create a projection definition
+    projection_path = os.path.join(
+        output_directory, output_base_name + '.prj')
+    source_projection_path = resources_path(
+        'converter_data', 'mmi-contours.prj')
+    shutil.copyfile(source_projection_path, projection_path)
+
+    # Lastly copy over the standard qml (QGIS Style file)
+    qml_path = os.path.join(
+        output_directory, output_base_name + '.qml')
+    source_qml_path = resources_path('converter_data', 'mmi-contours.qml')
+    shutil.copyfile(source_qml_path, qml_path)
+
+    # Now update the additional columns - X,Y, ROMAN and RGB
+    try:
+        set_contour_properties(output_file_path)
+    except InvalidLayerError:
+        raise
+
+    del shakemap_data
+
+    return output_file_path
+
+
+def set_contour_properties(contour_file_path):
+    """Set the X, Y, RGB, ROMAN attributes of the contour layer.
+
+    :param contour_file_path: Path of the contour layer.
+    :type contour_file_path: str
+
+    :raise: InvalidLayerError if anything is amiss with the layer.
+    """
+    LOGGER.debug('set_contour_properties requested for %s.' % contour_file_path)
+    layer = QgsVectorLayer(contour_file_path, 'mmi-contours', "ogr")
+    if not layer.isValid():
+        raise InvalidLayerError(contour_file_path)
+
+    layer.startEditing()
+    # Now loop through the db adding selected features to mem layer
+    request = QgsFeatureRequest()
+    fields = layer.fields()
+
+    for feature in layer.getFeatures(request):
+        if not feature.isValid():
+            LOGGER.debug('Skipping feature')
+            continue
+        # Work out x and y
+        line = feature.geometry().asPolyline()
+        y = line[0].y()
+
+        x_max = line[0].x()
+        x_min = x_max
+        for point in line:
+            if point.y() < y:
+                y = point.y()
+            x = point.x()
+            if x < x_min:
+                x_min = x
+            if x > x_max:
+                x_max = x
+        x = x_min + ((x_max - x_min) / 2)
+
+        # Get length
+        length = feature.geometry().length()
+
+        mmi_value = float(feature['MMI'])
+        # We only want labels on the whole number contours
+        if mmi_value != round(mmi_value):
+            roman = ''
+        else:
+            roman = romanise(mmi_value)
+
+        # RGB from http://en.wikipedia.org/wiki/Mercalli_intensity_scale
+        rgb = mmi_colour(mmi_value)
+
+        # Now update the feature
+        feature_id = feature.id()
+        layer.changeAttributeValue(
+            feature_id, fields.indexFromName('X'), x)
+        layer.changeAttributeValue(
+            feature_id, fields.indexFromName('Y'), y)
+        layer.changeAttributeValue(
+            feature_id, fields.indexFromName('RGB'), rgb)
+        layer.changeAttributeValue(
+            feature_id, fields.indexFromName('ROMAN'), roman)
+        layer.changeAttributeValue(
+            feature_id, fields.indexFromName('ALIGN'), 'Center')
+        layer.changeAttributeValue(
+            feature_id, fields.indexFromName('VALIGN'), 'HALF')
+        layer.changeAttributeValue(
+            feature_id, fields.indexFromName('LEN'), length)
+
+    layer.commitChanges()
