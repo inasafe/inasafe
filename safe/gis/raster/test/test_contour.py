@@ -67,38 +67,43 @@ class TestContour(unittest.TestCase):
             open(expected_shakemap_path, 'rb').read()).hexdigest()
         self.assertEqual(hash_smoothed, expected_hash)
 
-    @unittest.skip('Fix me first')
+    # @unittest.skip('Fix me first')
     def test_contour_shakemap(self):
         """Test for contour creation."""
-        # Original
-        normal_shakemap_layer_path = standard_data_path(
-            'hazard',
-            'shake_data',
-            '20131105060809',
-            'output',
-            'grid-nearest.tif')
-        normal_contour_path = shakemap_contour(normal_shakemap_layer_path)
-        print 'Normal: ', normal_contour_path
+        # ASCII
+        path = '/var/folders/h7/k16m33695_g2ptlzy0z8vxb00000gp/T/inasafe/2017-11-21/ismailsunni/normal/mmi.asc'
+        test_contour_ascii = shakemap_contour(path)
+        print test_contour_ascii
 
-        # Smoothed
-        smoothed_shakemap_layer_path = standard_data_path(
-            'hazard',
-            'shake_data',
-            '20131105060809',
-            'output',
-            'grid-smoothing-nearest.tif')
-        smoothed_contour_path = shakemap_contour(smoothed_shakemap_layer_path)
-        print 'Smoothed', smoothed_contour_path
-
-        # Together
-        smoothed_contour_path_2 = create_contour(normal_shakemap_layer_path)
-        print 'Smoothed (2)', smoothed_contour_path_2
-
-        hash_smoothed = hashlib.md5(
-            open(smoothed_contour_path, 'rb').read()).hexdigest()
-        hash_smoothed_2 = hashlib.md5(
-            open(smoothed_contour_path_2, 'rb').read()).hexdigest()
-        self.assertEqual(hash_smoothed, hash_smoothed_2)
+        # # Original
+        # normal_shakemap_layer_path = standard_data_path(
+        #     'hazard',
+        #     'shake_data',
+        #     '20131105060809',
+        #     'output',
+        #     'grid-nearest.tif')
+        # normal_contour_path = shakemap_contour(normal_shakemap_layer_path)
+        # print 'Normal: ', normal_contour_path
+        #
+        # # Smoothed
+        # smoothed_shakemap_layer_path = standard_data_path(
+        #     'hazard',
+        #     'shake_data',
+        #     '20131105060809',
+        #     'output',
+        #     'grid-smoothing-nearest.tif')
+        # smoothed_contour_path = shakemap_contour(smoothed_shakemap_layer_path)
+        # print 'Smoothed', smoothed_contour_path
+        #
+        # # Together
+        # smoothed_contour_path_2 = create_contour(normal_shakemap_layer_path)
+        # print 'Smoothed (2)', smoothed_contour_path_2
+        #
+        # hash_smoothed = hashlib.md5(
+        #     open(smoothed_contour_path, 'rb').read()).hexdigest()
+        # hash_smoothed_2 = hashlib.md5(
+        #     open(smoothed_contour_path_2, 'rb').read()).hexdigest()
+        # self.assertEqual(hash_smoothed, hash_smoothed_2)
 
 
 if __name__ == '__main__':
