@@ -262,6 +262,14 @@ class TestShakeGrid(unittest.TestCase):
             exists,
             'File result : %s does not exist' % result[:-3] + 'qml')
 
+    def test_convert_grid_to_ascii(self):
+        """Test converting grid.xml to raster (asc file)."""
+        print NORMAL_SHAKE_GRID.mmi_to_ascii(True)
+        self.assertTrue(os.path.exists(
+            os.path.join(
+                NORMAL_SHAKE_GRID.output_dir,
+                '%s.asc' % NORMAL_SHAKE_GRID.output_basename)))
+
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestShakeGrid)

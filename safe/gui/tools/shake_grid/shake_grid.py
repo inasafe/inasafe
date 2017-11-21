@@ -281,10 +281,10 @@ class ShakeGrid(object):
                 specification_element.attributes['lat_max'].nodeValue)
             self.grid_bounding_box = QgsRectangle(
                 self.x_minimum, self.y_maximum, self.x_maximum, self.y_minimum)
-            self.rows = float(
-                specification_element.attributes['nlat'].nodeValue)
-            self.columns = float(
-                specification_element.attributes['nlon'].nodeValue)
+            self.rows = int(float(
+                specification_element.attributes['nlat'].nodeValue))
+            self.columns = int(float(
+                specification_element.attributes['nlon'].nodeValue))
             data_element = document.getElementsByTagName(
                 'grid_data')
             data_element = data_element[0]
@@ -949,7 +949,36 @@ class ShakeGrid(object):
 
         keyword_io.write_keywords(hazard_layer, keywords)
 
+    def mmi_to_ascii(self, force_flag=False):
+        """Convert grid.xml mmi column to a ascii raster file."""
+        ascii_path = os.path.join(
+            self.output_dir, '%s.asc' % self.output_basename)
+        # Short circuit if the tif is already created.
+        if os.path.exists(ascii_path) and force_flag is not True:
+            return ascii_path
 
+        cell_size = (self.x_maximum - self.x_minimum) / (self.rows - 1)
+        asc_file = open(ascii_path, 'w')
+        asc_file.write('ncols %d\n' % self.columns)
+        asc_file.write('nrows %d\n' % self.rows)
+        asc_file.write('xllcorner %.3f\n' % self.x_minimum)
+        asc_file.write('yllcorner %.3f\n' % self.y_minimum)
+        asc_file.write('cellsize %.3f\n' % cell_size)
+        asc_file.write('nodata_value -9999\n')
+
+        cell_string = ''
+        cell_values = np.reshape(
+            [v[2] for v in self.mmi_data], (self.rows, self.columns))
+        for i in range(self.rows):
+            for j in range(self.columns):
+                cell_string += '%.3f ' % cell_values[i][j]
+            cell_string += '\n'
+
+        asc_file.write(cell_string)
+
+        asc_file.close()
+
+        return ascii_path
 def convert_mmi_data(
         grid_xml_path,
         title,
