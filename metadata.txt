@@ -37,7 +37,15 @@ changelog=
     - New multi exposure tool where you can run one hazard on many exposures at the same time and get a combined report
     - Special tool for reporting in the multi exposure dialog to set a custom layer order
     - Improve code layout (Flake8, PEP 257, PEP8, SideCI ...)
-    - Fix various bugs, like in summary calculation
+    - Fix various bugs, like in summary calculation, keyword wizard, productivity post processors
+    - Add metadata converter to version 3.5 to make it work with GeoSAFE
+    - Add InaSAFE Profile to set custom affected and displacement rate
+    - Impact Function serialization
+    - Add welcome message
+    - Support population count and demographic mapping in place exposure
+    - Tidy up metadata (remove unused properties)
+    - Tidy up settings dialog
+    - Use numpy to create contour for shakemap
 
 # tags are comma separated with spaces allowed
 tags=contingency planning, impact assessments, disaster scenarios, natural hazards,risk
