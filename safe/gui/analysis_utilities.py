@@ -266,7 +266,7 @@ def add_layers_to_canvas_with_custom_orders(order, impact_function):
     for layer_definition in order:
         if layer_definition[0] == FROM_CANVAS['key']:
             style = QDomDocument()
-            style.setContent(get_string(layer_definition[4]))
+            style.setContent(get_string(layer_definition[3]))
             layer = load_layer(layer_definition[2], layer_definition[1])[0]
             layer.importNamedStyle(style)
             QgsMapLayerRegistry.instance().addMapLayer(layer, False)
