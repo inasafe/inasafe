@@ -236,150 +236,38 @@ def create_contour(
     :returns: The contour of the shake map layer.
     :rtype: QgsRasterLayer
     """
-    # Set output path
-    if not output_file_path:
-        input_layer_path = shakemap_layer.source()
-        input_directory = os.path.dirname(input_layer_path)
-        input_file_name = os.path.basename(input_layer_path)
-        input_base_name = os.path.splitext(input_file_name)[0]
-        output_file_path = os.path.join(
-            input_directory, input_base_name + '-contour' + '.geojson'
-        )
-    output_directory = os.path.dirname(output_file_path)
-    output_file_name = os.path.basename(output_file_path)
-    output_base_name = os.path.splitext(output_file_name)[0]
+    from datetime import datetime
+    timestamp = datetime.now()
+    temp_smoothed_shakemap_path = unique_filename(
+        prefix='temp-shake-map' + timestamp.strftime('%Y%m%d-%H%M%S'),
+        suffix='.tif',
+        dir=temp_dir('temp'))
 
-    # convert to numpy
-    shakemap_file = gdal.Open(shakemap_layer.source())
-    shakemap_array = np.array(
-        shakemap_file.GetRasterBand(active_band).ReadAsArray())
-
-    # do smoothing
-    if smoothing_method == NUMPY_SMOOTHING:
-        smoothed_array = convolve(shakemap_array, gaussian_kernel(
-            smoothing_sigma))
-    else:
-        smoothed_array = shakemap_array
-
-    # Create smoothed shakemap raster layer
-    smoothed_shakemap_path = os.path.join(
-        output_directory, output_base_name + '-smoothed.tiff'
+    temp_smoothed_shakemap_path = smooth_shake_map(
+        shakemap_layer,
+        output_file_path=temp_smoothed_shakemap_path,
+        active_band=active_band,
+        smoothing_method=smoothing_method,
+        smoothing_sigma=smoothing_sigma
     )
-    driver = gdal.GetDriverByName('GTiff')
-    smoothed_shakemap_file = driver.Create(
-        smoothed_shakemap_path,
-        shakemap_file.RasterXSize,
-        shakemap_file.RasterYSize,
-        1)
-    smoothed_shakemap_file.GetRasterBand(1).WriteArray(smoothed_array)
 
-    # CRS
-    smoothed_shakemap_file.SetProjection(shakemap_file.GetProjection())
-    smoothed_shakemap_file.SetGeoTransform(shakemap_file.GetGeoTransform())
-    smoothed_shakemap_file.FlushCache()
-
-    # del smoothed_shakemap_file
-
-    if not os.path.isfile(smoothed_shakemap_path):
-        raise FileNotFoundError(tr(
-            'The smoothed shakemap is not created. It should be at '
-            '{smoothed_shakemap_path}'.format(
-                smoothed_shakemap_path=smoothed_shakemap_path)))
-
-    # create contour from the smoothed tif
-    # Based largely on
-    # http://svn.osgeo.org/gdal/trunk/autotest/alg/contour.py
-    driver = ogr.GetDriverByName('ESRI Shapefile')
-    ogr_dataset = driver.CreateDataSource(output_file_path)
-    if ogr_dataset is None:
-        # Probably the file existed and could not be overriden
-        raise ContourCreationError(
-            'Could not create datasource for:\n%s. Check that the file '
-            'does not already exist and that you do not have file system '
-            'permissions issues' % output_file_path)
-    layer = ogr_dataset.CreateLayer('contour')
-    field_definition = ogr.FieldDefn('ID', ogr.OFTInteger)
-    layer.CreateField(field_definition)
-    field_definition = ogr.FieldDefn('MMI', ogr.OFTReal)
-    layer.CreateField(field_definition)
-    # So we can fix the x pos to the same x coord as centroid of the
-    # feature so labels line up nicely vertically
-    field_definition = ogr.FieldDefn('X', ogr.OFTReal)
-    layer.CreateField(field_definition)
-    # So we can fix the y pos to the min y coord of the whole contour so
-    # labels line up nicely vertically
-    field_definition = ogr.FieldDefn('Y', ogr.OFTReal)
-    layer.CreateField(field_definition)
-    # So that we can set the html hex colour based on its MMI class
-    field_definition = ogr.FieldDefn('RGB', ogr.OFTString)
-    layer.CreateField(field_definition)
-    # So that we can set the label in it roman numeral form
-    field_definition = ogr.FieldDefn('ROMAN', ogr.OFTString)
-    layer.CreateField(field_definition)
-    # So that we can set the label horizontal alignment
-    field_definition = ogr.FieldDefn('ALIGN', ogr.OFTString)
-    layer.CreateField(field_definition)
-    # So that we can set the label vertical alignment
-    field_definition = ogr.FieldDefn('VALIGN', ogr.OFTString)
-    layer.CreateField(field_definition)
-    # So that we can set feature length to filter out small features
-    field_definition = ogr.FieldDefn('LEN', ogr.OFTReal)
-    layer.CreateField(field_definition)
-
-    # see http://gdal.org/java/org/gdal/gdal/gdal.html for these options
-    contour_interval = 0.5
-    contour_base = 0
-    fixed_level_list = []
-    use_no_data_flag = 0
-    no_data_value = -9999
-    id_field = 0  # first field defined above
-    elevation_field = 1  # second (MMI) field defined above
-    try:
-        gdal.ContourGenerate(
-            smoothed_shakemap_file.GetRasterBand(active_band),
-            contour_interval,
-            contour_base,
-            fixed_level_list,
-            use_no_data_flag,
-            no_data_value,
-            layer,
-            id_field,
-            elevation_field)
-    except Exception, e:
-        LOGGER.exception('Contour creation failed')
-        raise ContourCreationError(str(e))
-    finally:
-        ogr_dataset.Release()
-
-    # Copy over the standard .prj file since ContourGenerate does not
-    # create a projection definition
-    projection_path = os.path.join(
-        output_directory, output_base_name + '.prj')
-    source_projection_path = resources_path(
-        'converter_data', 'mmi-contours.prj')
-    shutil.copyfile(source_projection_path, projection_path)
-
-    # Lastly copy over the standard qml (QGIS Style file)
-    qml_path = os.path.join(
-        output_directory, output_base_name + '.qml')
-    source_qml_path = resources_path('converter_data', 'mmi-contours.qml')
-    shutil.copyfile(source_qml_path, qml_path)
-
-    del smoothed_shakemap_file
-
-    return output_file_path
+    return shakemap_contour(
+        temp_smoothed_shakemap_path,
+        output_file_path=output_file_path,
+        active_band=active_band
+    )
 
 
 def smooth_shake_map(
-        shakemap_layer,
+        shakemap_layer_path,
         output_file_path='',
         active_band=1,
         smoothing_method=NUMPY_SMOOTHING,
         smoothing_sigma=0.9):
     """Make a smoother shakemap layer from a shake map.
 
-    :param shakemap_layer: The shake map raster layer.
-    :type shakemap_layer: QgsRasterLayer
+    :param shakemap_layer_path: The shake map raster layer path.
+    :type shakemap_layer_path: basestring
 
     :param active_band: The band which the data located, default to 1.
     :type active_band: int
@@ -399,7 +287,7 @@ def smooth_shake_map(
         output_file_path = unique_filename(suffix='.tiff', dir=temp_dir())
 
     # convert to numpy
-    shakemap_file = gdal.Open(shakemap_layer.source())
+    shakemap_file = gdal.Open(shakemap_layer_path)
     shakemap_array = np.array(
         shakemap_file.GetRasterBand(active_band).ReadAsArray())
 
@@ -434,11 +322,11 @@ def smooth_shake_map(
     return output_file_path
 
 
-def shakemap_contour(shakemap_layer, output_file_path='', active_band=1):
+def shakemap_contour(shakemap_layer_path, output_file_path='', active_band=1):
     """Creating contour from a shakemap layer.
 
-    :param shakemap_layer: The shake map raster layer.
-    :type shakemap_layer: QgsRasterLayer
+    :param shakemap_layer_path: The shake map raster layer path.
+    :type shakemap_layer_path: basestring
 
     :param output_file_path: The path where the contour will be saved.
     :type output_file_path: basestring
@@ -496,7 +384,7 @@ def shakemap_contour(shakemap_layer, output_file_path='', active_band=1):
     field_definition = ogr.FieldDefn('LEN', ogr.OFTReal)
     layer.CreateField(field_definition)
 
-    shakemap_data = gdal.Open(shakemap_layer.source(), GA_ReadOnly)
+    shakemap_data = gdal.Open(shakemap_layer_path, GA_ReadOnly)
     # see http://gdal.org/java/org/gdal/gdal/gdal.html for these options
     contour_interval = 0.5
     contour_base = 0

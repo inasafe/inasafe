@@ -3,7 +3,8 @@
 
 import os
 import hashlib
-from safe.test.utilities import load_test_raster_layer, qgis_app
+from safe.test.utilities import (
+    load_test_raster_layer, qgis_app, standard_data_path)
 import unittest
 from safe.gis.raster.contour import (
     create_contour, smooth_shake_map, shakemap_contour)
@@ -71,7 +72,7 @@ class TestContour(unittest.TestCase):
     def test_contour_shakemap(self):
         """Test for contour creation."""
         # Original
-        shakemap_layer = load_test_raster_layer(
+        shakemap_layer = standard_data_path(
             'hazard',
             'shake_data',
             '20131105060809',
@@ -81,7 +82,7 @@ class TestContour(unittest.TestCase):
         print contour_path
 
         # Smoothed
-        shakemap_layer = load_test_raster_layer(
+        shakemap_layer = standard_data_path(
             'hazard',
             'shake_data',
             '20131105060809',
