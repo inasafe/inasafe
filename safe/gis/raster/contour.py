@@ -8,24 +8,16 @@ from osgeo import gdal, ogr
 from osgeo.gdalconst import GA_ReadOnly
 import logging
 
-from qgis.core import (
-    QgsVectorLayer,
-    QgsFeatureRequest,
-)
+from qgis.core import QgsVectorLayer, QgsFeatureRequest
 from safe.common.utilities import romanise
 from safe.utilities.styling import mmi_colour
 from safe.common.exceptions import (
-    GridXmlFileNotFoundError,
-    GridXmlParseError,
     ContourCreationError,
     InvalidLayerError,
-    CallGDALError,
     FileNotFoundError,
 )
 from safe.common.utilities import unique_filename, temp_dir
-from safe.definitions.constants import (
-    NONE_SMOOTHING, NUMPY_SMOOTHING, SCIPY_SMOOTHING
-)
+from safe.definitions.constants import NUMPY_SMOOTHING
 from safe.utilities.resources import resources_path
 from safe.utilities.i18n import tr
 
@@ -334,8 +326,8 @@ def shakemap_contour(shakemap_layer_path, output_file_path='', active_band=1):
     :param active_band: The band which the data located, default to 1.
     :type active_band: int
 
-    :returns: The contour of the shake map layer.
-    :rtype: QgsVectorLayer
+    :returns: The contour of the shake map layer path.
+    :rtype: basestring
     """
     # Set output path
     if not output_file_path:
@@ -443,7 +435,8 @@ def set_contour_properties(contour_file_path):
 
     :raise: InvalidLayerError if anything is amiss with the layer.
     """
-    LOGGER.debug('set_contour_properties requested for %s.' % contour_file_path)
+    LOGGER.debug(
+        'Set_contour_properties requested for %s.' % contour_file_path)
     layer = QgsVectorLayer(contour_file_path, 'mmi-contours', "ogr")
     if not layer.isValid():
         raise InvalidLayerError(contour_file_path)
