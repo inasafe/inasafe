@@ -27,8 +27,17 @@ status=alpha
 
 changelog=
     Version 4.3:
-    - Add extra keywords for supporting rich reporting (e.g. earthquake's
-    epicenter location, depth)
+    - Add extra keywords for supporting rich reporting (e.g. earthquake's epicenter location, depth)
+    - Use aggregation CRS instead of exposure CRS or map canvas CRS if no aggregation layer is provided
+    - Add total exposed field
+    - Add bearing, distance and cardinality postprocessors if we run an earthquake on places
+    - The impact layer from an earthquake on places is ordered by distance
+    - Add new QGIS expressions to fetch information in QGIS Impact layers or keywords
+    - Add a warning if another plugin is conflicting with InaSAFE on the file system
+    - New multi exposure tool where you can run one hazard on many exposures at the same time and get a combined report
+    - Special tool for reporting in the multi exposure dialog to set a custom layer order
+    - Improve code layout (Flake8, PEP 257, PEP8, SideCI ...)
+    - Fix various bugs, like in summary calculation
 
 # tags are comma separated with spaces allowed
 tags=contingency planning, impact assessments, disaster scenarios, natural hazards,risk
