@@ -308,8 +308,6 @@ class ShakeGrid(object):
                 lat_list.append(float(latitude))
                 mmi_list.append(float(mmi))
 
-            from datetime import datetime
-            start = datetime.now()
             if self.smoothing_method == NUMPY_SMOOTHING:
                 LOGGER.debug('We are using NUMPY smoothing')
                 ncols = len(np.where(np.array(lon_list) == lon_list[0])[0])
@@ -339,9 +337,6 @@ class ShakeGrid(object):
 
                 # reshape array back to 1D long list of mmi
                 mmi_list = np.reshape(mmi_list, ncols * nrows)
-            end = datetime.now()
-            duration = end - start
-            LOGGER.debug('Duration : %s' % duration.total_seconds())
 
             # zip lists as list of tuples
             self.mmi_data = zip(lon_list, lat_list, mmi_list)
