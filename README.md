@@ -74,6 +74,16 @@ System Requirements
    or newer, our supported version is the latest Long Term Release version
    of QGIS.
 
+Running tests
+-------------------
+
+ - InaSAFE is using the Unittest Python framework.
+ - Different ways that you can run tests:
+   - On Travis using a Pull Request
+   - In QGIS Desktop if you enable `developer mode` in Plugins -> InaSAFE -> Options -> Advanced, restart QGIS and then click the run tests button.
+   - Using docker `make docker-test`
+   - Using PyCharm if you set up the dev environment with the qgis_prefix_path
+
 History
 =======
 
