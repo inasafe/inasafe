@@ -931,7 +931,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 self.impact_function = (
                     MultiExposureImpactFunction.load_from_output_metadata(
                         keywords))
-            else:
+            elif provenances:
                 self.impact_function = (
                     ImpactFunction.load_from_output_metadata(
                         keywords))
