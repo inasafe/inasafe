@@ -368,8 +368,8 @@ class Plugin(object):
             add_to_toolbar=True)
 
     def _create_metadata_converter_action(self):
-        """Create action for showing metadata converter qdialog."""
-        icon = resources_path('img', 'icons', 'show-inasafe-help.svg')
+        """Create action for showing metadata converter dialog."""
+        icon = resources_path('img', 'icons', 'show-metadata-converter.svg')
         self.action_metadata_converter = QAction(
             QIcon(icon),
             self.tr('InaSAFE Metadata Converter'),
