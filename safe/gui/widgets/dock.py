@@ -44,6 +44,7 @@ from safe.definitions.constants import (
     PREPARE_SUCCESS,
     entire_area_item_aggregation,
     MULTI_EXPOSURE_ANALYSIS_FLAG)
+from safe.definitions.extra_keywords import extra_keyword_analysis_type
 from safe.definitions.layer_purposes import (
     layer_purpose_hazard,
     layer_purpose_exposure,
@@ -760,8 +761,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 provenances = keywords.get('provenance_data', {})
                 extra_keywords = keywords.get('extra_keywords', {})
                 is_multi_exposure = (
-                    extra_keywords.get(
-                        'analysis_type') == MULTI_EXPOSURE_ANALYSIS_FLAG)
+                    extra_keywords.get(extra_keyword_analysis_type['key']) == (
+                        MULTI_EXPOSURE_ANALYSIS_FLAG))
 
                 if provenances and is_multi_exposure:
                     self.impact_function = (
@@ -921,8 +922,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             provenances = keywords.get('provenance_data', {})
             extra_keywords = keywords.get('extra_keywords', {})
             is_multi_exposure = (
-                extra_keywords.get(
-                    'analysis_type') == MULTI_EXPOSURE_ANALYSIS_FLAG)
+                extra_keywords.get(extra_keyword_analysis_type['key']) == (
+                    MULTI_EXPOSURE_ANALYSIS_FLAG))
 
             if provenances:
                 self.set_provenance_to_project_variables(provenances)
@@ -951,6 +952,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                         show_keywords = False
                         self.show_impact(table_report_path)
                         break
+
+            if isinstance(self.impact_function, MultiExposureImpactFunction):
+                self.print_button.setEnabled(False)
 
             if show_keywords:
                 if inasafe_keyword_version_key not in keywords.keys():
