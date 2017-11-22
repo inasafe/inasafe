@@ -5,7 +5,13 @@ from collections import OrderedDict
 
 from PyQt4.QtCore import Qt
 from PyQt4.QtGui import (
-    QTreeWidget, QTreeWidgetItem, QCheckBox, QDoubleSpinBox, QFont)
+    QTreeWidget,
+    QTreeWidgetItem,
+    QCheckBox,
+    QDoubleSpinBox,
+    QFont,
+    QHeaderView,
+)
 
 from safe.definitions.utilities import get_name, get_class_name
 from safe.utilities.i18n import tr
@@ -30,15 +36,18 @@ class ProfileWidget(QTreeWidget, object):
         if data:
             self.data = data
         # Set header
-        self.header = QTreeWidgetItem(
+        self.header_tree_widget = QTreeWidgetItem(
             [tr('Classification'), tr('Affected'), tr('Displacement Rate')])
         header_font = QFont()
         header_font.setBold(True)
         header_font.setPointSize(14)
-        self.header.setFont(0, header_font)
-        self.header.setFont(1, header_font)
-        self.header.setFont(2, header_font)
-        self.setHeaderItem(self.header)
+        self.header_tree_widget.setFont(0, header_font)
+        self.header_tree_widget.setFont(1, header_font)
+        self.header_tree_widget.setFont(2, header_font)
+        self.setHeaderItem(self.header_tree_widget)
+        self.header().setResizeMode(0, QHeaderView.Stretch)
+        self.header().setResizeMode(2, QHeaderView.ResizeToContents)
+        self.header().setStretchLastSection(False)
 
     @property
     def data(self):
