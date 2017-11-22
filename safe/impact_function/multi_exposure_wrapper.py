@@ -585,7 +585,7 @@ class MultiExposureImpactFunction(object):
             'aggregation',
             'exposures',
             'aggregation_summary',
-            'analysis_summary',
+            'analysis_impacted',
             # 'impact_functions'
         ]
         for if_property in properties:
