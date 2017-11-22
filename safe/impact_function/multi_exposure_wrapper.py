@@ -296,7 +296,7 @@ class MultiExposureImpactFunction(object):
         return self._aggregation_summary
 
     @property
-    def analysis_summary(self):
+    def analysis_impacted(self):
         """Property for the analysis summary.
 
         :returns: A vector layer.
@@ -1122,7 +1122,7 @@ class MultiExposureImpactFunction(object):
                 iface,
                 report_metadata,
                 multi_exposure_impact_function=self,
-                analysis=self.analysis_summary,
+                analysis=self.analysis_impacted,
                 extra_layers=extra_layers)
 
             # generate report folder
