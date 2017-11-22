@@ -41,15 +41,15 @@ def main():
 
     get_result_button = QPushButton('Get result...')
     get_result_button.clicked.connect(
-        partial(print_values, profile_widget=profile_widget))
+        partial(print_values, profile_widget))
 
     clear_button = QPushButton('Clear widget...')
     clear_button.clicked.connect(
-        partial(clear_widget, profile_widget=profile_widget))
+        partial(clear_widget, profile_widget))
 
     restore_button = QPushButton('Restore data...')
     restore_button.clicked.connect(
-        partial(restore_data, profile_widget=profile_widget))
+        partial(restore_data, profile_widget))
 
     widget = QWidget()
     layout = QGridLayout()

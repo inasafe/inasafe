@@ -148,8 +148,8 @@ class OptionsDialog(QDialog, FORM_CLASS):
         # Label
         self.preference_label = QLabel()
         self.preference_label.setText(tr(
-            'Please set your affected and displacement rate for each hazard, '
-            'classification, and its class below.'
+            'Please set parameters for population exposed to each hazard '
+            'class below.'
         ))
         self.preference_layout.addWidget(self.preference_label)
 
