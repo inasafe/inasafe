@@ -43,8 +43,8 @@ from safe.definitions.layer_purposes import (
     layer_purpose_aggregation,
 )
 from safe.definitions.reports.components import (
-    standard_multi_exposure_impact_report_metadata_pdf,
-    standard_impact_report_metadata_html)
+    standard_impact_report_metadata_html,
+    standard_multi_exposure_impact_report_metadata_html)
 from safe.definitions.utilities import definition
 from safe.gis.tools import full_layer_uri
 from safe.gui.analysis_utilities import (
@@ -546,7 +546,7 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                 return code, message
 
             if setting('generate_report', True, bool):
-                report = ([standard_multi_exposure_impact_report_metadata_pdf])
+                report = [standard_multi_exposure_impact_report_metadata_html]
                 error_code, message = (
                     self._multi_exposure_if.generate_report(
                         report))
