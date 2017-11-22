@@ -14,6 +14,9 @@ from qgis.core import QgsMapLayerRegistry
 
 from safe.common.version import get_version
 from safe.definitions.fields import analysis_name_field
+from safe.definitions.provenance import (
+    provenance_exposure_layer_id,
+    provenance_multi_exposure_layers_id)
 from safe.definitions.reports.infographic import (
     html_frame_elements,
     population_chart,
@@ -270,10 +273,20 @@ def qgis_composer_extractor(impact_report, component_metadata):
         # check hide exposure settings
         hide_exposure_flag = setting('setHideExposureFlag', expected_type=bool)
         if not hide_exposure_flag:
+            exposure_layers_id = []
+            if provenance.get(provenance_exposure_layer_id['provenance_key']):
+                exposure_layers_id.append(
+                    provenance.get(
+                        provenance_exposure_layer_id['provenance_key']))
+            elif provenance.get(
+                    provenance_multi_exposure_layers_id['provenance_key']):
+                exposure_layers_id = provenance.get(
+                    provenance_multi_exposure_layers_id['provenance_key'])
+
             # place exposure at the bottom
-            exposure_layer = layer_registry.mapLayers().get(
-                provenance['exposure_layer_id'])
-            layers.append(exposure_layer)
+            for layer_id in exposure_layers_id:
+                exposure_layer = layer_registry.mapLayers().get(layer_id)
+                layers.append(exposure_layer)
 
     # default extent is analysis extent
     if not qgis_context.extent:
