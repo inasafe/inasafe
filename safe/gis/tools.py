@@ -80,7 +80,7 @@ def load_layer_from_registry(layer_path):
     """
     layers = QgsMapLayerRegistry.instance().mapLayers()
     for _, layer in layers.items():
-        if layer.source() == layer_path:
+        if full_layer_uri(layer) == layer_path:
             monkey_patch_keywords(layer)
             return layer
 
