@@ -953,9 +953,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                         self.show_impact(table_report_path)
                         break
 
-            if isinstance(self.impact_function, MultiExposureImpactFunction):
-                self.print_button.setEnabled(False)
-
             if show_keywords:
                 if inasafe_keyword_version_key not in keywords.keys():
                     show_keyword_version_message(

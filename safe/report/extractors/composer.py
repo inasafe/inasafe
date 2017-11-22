@@ -242,10 +242,18 @@ def qgis_composer_extractor(impact_report, component_metadata):
 
     # Define the layers for the impact map.
     if not impact_report.multi_exposure_impact_function:  # single IF
+        layers = [impact_report.impact] + impact_report.extra_layers
+    else:  # multi-exposure IF
+        layers = [] + impact_report.extra_layers
+
+    add_supplementary_layers = (
+        not impact_report.multi_exposure_impact_function or not (
+            impact_report.multi_exposure_impact_function.output_layers_ordered)
+    )
+    if add_supplementary_layers:
         # Check show only impact.
         show_only_impact = setting(
             'set_show_only_impact_on_report', False, bool)
-        layers = [impact_report.impact] + impact_report.extra_layers
         layer_registry = QgsMapLayerRegistry.instance()
         if not show_only_impact:
             hazard_layer = layer_registry.mapLayers().get(
@@ -266,8 +274,6 @@ def qgis_composer_extractor(impact_report, component_metadata):
             exposure_layer = layer_registry.mapLayers().get(
                 provenance['exposure_layer_id'])
             layers.append(exposure_layer)
-    else:  # multi-exposure IF
-        layers = impact_report.extra_layers
 
     # default extent is analysis extent
     if not qgis_context.extent:
@@ -287,7 +293,7 @@ def qgis_composer_extractor(impact_report, component_metadata):
     if not impact_report.multi_exposure_impact_function:  # single IF
         layers = [impact_report.impact]
     else:  # multi-exposure IF
-        layers = [impact_report.extra_layers[0]]
+        layers = [] + impact_report.extra_layers
     symbol_count = 0
     for l in layers:
         layer = l

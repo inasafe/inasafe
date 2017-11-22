@@ -572,8 +572,9 @@ def qgis_composer_renderer(impact_report, component):
                     QgsMapLayerRegistry.instance().addMapLayer(layer)
                 # used for customizations
                 tree_layer = root_group.addLayer(layer)
-                QgsLegendRenderer.setNodeLegendStyle(
-                    tree_layer, QgsComposerLegendStyle.Hidden)
+                if not impact_report.multi_exposure_impact_function:
+                    QgsLegendRenderer.setNodeLegendStyle(
+                        tree_layer, QgsComposerLegendStyle.Hidden)
             legend.synchronizeWithModel()
 
     # process to output

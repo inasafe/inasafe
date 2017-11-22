@@ -42,7 +42,7 @@ from safe.definitions.constants import (
 from safe.definitions.layer_purposes import (
     layer_purpose_analysis_impacted,
     layer_purpose_aggregation_summary,
-)
+    layer_purpose_exposure_summary)
 from safe.definitions.provenance import (
     provenance_aggregation_keywords,
     provenance_aggregation_layer,
@@ -1096,7 +1096,19 @@ class MultiExposureImpactFunction(object):
                     child for child in multi_exposure_group.children() if (
                         isinstance(child, QgsLayerTreeGroup))]
 
-                if not exposure_groups:
+                if exposure_groups:
+                    extra_layers = []
+                    for exposure_group in exposure_groups:
+                        tree_layers = [
+                            child for child in exposure_group.children() if (
+                                isinstance(child, QgsLayerTreeLayer))]
+                        for tree_layer in tree_layers:
+                            layer_purpose = KeywordIO.read_keywords(
+                                tree_layer.layer(), 'layer_purpose')
+                            if layer_purpose == (
+                                    layer_purpose_exposure_summary['key']):
+                                extra_layers.append(tree_layer.layer())
+                else:
                     extra_layers = [
                         tree_layer.layer() for tree_layer in (
                             multi_exposure_tree_layers)]
