@@ -71,19 +71,23 @@ def content():
     """
     message = m.Message()
     message.add(m.Paragraph(tr(
-        'Welcome to InaSAFE. Before you begin using InaSAFE, we would '
-        'like to encourage you to review some options that will by InaSAFE. '
-        'On the "Organisation Profile" tab you can set the name of your '
-        'organisation, your organisation logo and other options related to '
-        'your organisation.'
+        'Welcome to InaSAFE. Before you begin using InaSAFE, we would like to '
+        'encourage you to review some options that will used by InaSAFE. On '
+        'the "Organisation Profile" tab you can set options related to your '
+        'organisation such as: the name and logo.'
     )))
     message.add(m.Paragraph(tr(
-        'The "parameters" tab is used to determine '
-        'whether people are affected and the displacement rates that apply '
-        'to people exposed to different types of hazards and at different '
-        'hazard intensities. We really encourage you to consider these '
-        'parameters carefully and to choose appropriate values for your '
-        'local situation based on past events and expert knowledge.')))
+        'The "parameters" tab is used to define some parameters that will be '
+        'used by InaSAFE in the analysis of exposed population. You have the '
+        'option to change the parameters for whether exposed people are '
+        'considered to be "affected" by each hazard type and class and the '
+        'displacement rate that will be used for those affected people.')))
+    message.add(m.Paragraph(tr(
+        'Please refer to the InaSAFE manual for concept definitions and more '
+        'information on the source of hazard classifications and default '
+        'settings. We really encourage you to consider these parameters '
+        'carefully and to choose appropriate values for your local situation '
+        'based on past events and expert knowledge.')))
     message.add(m.Paragraph(tr(
         'You can return to these options any time by using the Plugins -> '
         'InaSAFE -> Options menu.'

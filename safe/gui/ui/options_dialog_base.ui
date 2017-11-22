@@ -25,12 +25,21 @@
      </property>
      <widget class="QWidget" name="page">
       <layout class="QGridLayout" name="gridLayout">
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item row="0" column="0">
-        <widget class="QWebView" name="help_web_view">
-         <property name="url">
+        <widget class="QWebView" name="help_web_view" native="true">
+         <property name="url" stdset="0">
           <url>
            <string>about:blank</string>
           </url>
@@ -41,13 +50,22 @@
      </widget>
      <widget class="QWidget" name="page_1">
       <layout class="QGridLayout" name="gridLayout_5">
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item row="0" column="0">
         <widget class="QTabWidget" name="tabWidget">
          <property name="currentIndex">
-          <number>0</number>
+          <number>3</number>
          </property>
          <property name="movable">
           <bool>false</bool>
@@ -57,7 +75,16 @@
            <string>Welcome</string>
           </attribute>
           <layout class="QVBoxLayout" name="welcome_layout">
-           <property name="margin">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
             <number>0</number>
            </property>
            <item>
@@ -378,7 +405,16 @@
            <string>GIS Environment</string>
           </attribute>
           <layout class="QGridLayout" name="gridLayout_4">
-           <property name="margin">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
             <number>0</number>
            </property>
            <item row="0" column="0">
@@ -585,7 +621,7 @@
                <item row="0" column="0">
                 <widget class="QCheckBox" name="welcome_message_check_box">
                  <property name="text">
-                  <string>Always show welcome message when open QGIS</string>
+                  <string>Always show welcome message when opening QGIS with InaSAFE</string>
                  </property>
                 </widget>
                </item>
@@ -877,12 +913,12 @@ p, li { white-space: pre-wrap; }
   <customwidget>
    <class>QWebView</class>
    <extends>QWidget</extends>
-   <header>QtWebKit/QWebView</header>
+   <header location="global">QtWebKit/QWebView</header>
   </customwidget>
   <customwidget>
    <class>MessageViewer</class>
    <extends>QWidget</extends>
-   <header location="global">safe.gui.widgets.message_viewer</header>
+   <header>safe.gui.widgets.message_viewer</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
