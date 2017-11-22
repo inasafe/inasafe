@@ -6,7 +6,7 @@ import os
 
 from os.path import join, exists
 from PyQt4 import QtGui, QtCore, QtXml
-from qgis.core import QgsApplication, QgsExpressionContextUtils
+from qgis.core import QgsApplication
 
 from safe import messaging as m
 from safe.common.signals import send_error_message, send_static_message
@@ -17,7 +17,8 @@ from safe.definitions.reports.components import (
     map_report,
     infographic_report,
     standard_impact_report_metadata_pdf,
-    all_default_report_components)
+    all_default_report_components,
+    standard_multi_exposure_impact_report_metadata_pdf)
 from safe.definitions.utilities import (
     override_component_template, definition, update_template_component)
 from safe.gui.tools.help.impact_report_help import impact_report_help
@@ -25,6 +26,7 @@ from safe.messaging import styles
 from safe.report.impact_report import ImpactReport
 from safe.report.report_metadata import ReportMetadata
 from safe.utilities.i18n import tr
+from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.resources import (
     get_ui_class, resources_path, html_header, html_footer)
 from safe.utilities.settings import setting
@@ -233,15 +235,23 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
         report_path = os.path.dirname(impact_layer.source())
 
         # Get the hazard and exposure definition used in current IF
-        hazard = definition(
-            QgsExpressionContextUtils.projectScope().variable(
-                'hazard_keywords__hazard'))
-        exposure = definition(
-            QgsExpressionContextUtils.projectScope().variable(
-                'exposure_keywords__exposure'))
+        hazard_keywords = KeywordIO.read_keywords(
+            impact_layer, 'hazard_keywords')
+        exposure_keywords = KeywordIO.read_keywords(
+            impact_layer, 'exposure_keywords')
+        hazard = hazard_keywords.get('hazard', None)
+        exposure = exposure_keywords.get('exposure', None)
+        if hazard and exposure:
+            hazard = definition(hazard)
+            exposure = definition(exposure)
+        else:
+            hazard = None
+            exposure = None
 
         standard_impact_report_metadata = ReportMetadata(
             metadata_dict=standard_impact_report_metadata_pdf)
+        standard_multi_exposure_impact_report_metadata = ReportMetadata(
+            metadata_dict=standard_multi_exposure_impact_report_metadata_pdf)
         standard_map_report_metadata = ReportMetadata(
             metadata_dict=update_template_component(
                 component=map_report,
@@ -256,6 +266,7 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
 
         standard_report_metadata = [
             standard_impact_report_metadata,
+            standard_multi_exposure_impact_report_metadata,
             standard_map_report_metadata,
             standard_infographic_report_metadata,
             custom_map_report_metadata

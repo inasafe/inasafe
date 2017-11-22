@@ -174,7 +174,7 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
         registry = QgsMapLayerRegistry.instance()
         layers = []
         count = self.list_layers_in_map_report.count()
-        for i in range(0, count):
+        for i in range(count):
             layer = self.list_layers_in_map_report.item(i)
             origin = layer.data(LAYER_ORIGIN_ROLE)
             if origin == FROM_ANALYSIS['key']:

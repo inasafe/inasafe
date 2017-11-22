@@ -73,8 +73,8 @@ from safe.definitions.provenance import (
     provenance_layer_aggregation_summary_id,
     provenance_layer_analysis_impacted_id,
     provenance_debug_mode,
-    provenance_layer_exposure_summary,
-    provenance_map_title)
+    provenance_map_title,
+    provenance_multi_exposure_summary_layers)
 from safe.definitions.reports.components import (
     standard_impact_report_metadata_pdf, infographic_report)
 from safe.definitions.styles import (
@@ -89,7 +89,8 @@ from safe.definitions.utilities import (
     set_provenance,
     update_template_component,
 )
-from safe.gis.tools import geometry_type, load_layer_from_registry
+from safe.gis.tools import (
+    geometry_type, load_layer_from_registry, full_layer_uri)
 from safe.gis.vector.prepare_vector_layer import prepare_vector_layer
 from safe.gis.vector.summary_5_multi_exposure import (
     multi_exposure_analysis_summary,
@@ -411,7 +412,7 @@ class MultiExposureImpactFunction(object):
 
     @property
     def output_layers_ordered(self):
-        """Return the custom order inout from user.
+        """Return the custom order input from user.
 
         :return: List of layer order tuples.
         :rtype: list
@@ -426,6 +427,24 @@ class MultiExposureImpactFunction(object):
         :type layers: list
         """
         self._output_layers_ordered = layers
+
+    @property
+    def impact_report(self):
+        """Property for an impact report.
+
+        :return: An impact report object.
+        :rtype: ImpactReport
+        """
+        return self._impact_report
+
+    @impact_report.setter
+    def impact_report(self, impact_report):
+        """Setter for the impact report.
+
+        :param impact_report: The impact report object.
+        :type impact_report: ImpactReport
+        """
+        self._impact_report = impact_report
 
     def output_layers_expected(self):
         """Compute the output layers expected that the IF will produce.
@@ -913,11 +932,11 @@ class MultiExposureImpactFunction(object):
             analysis_layers.append(impact_function.analysis_impacted)
             aggregation_layers.append(impact_function.aggregation_summary)
             list_of_analysis_path.append(
-                impact_function.analysis_impacted.source())
+                full_layer_uri(impact_function.analysis_impacted))
 
         set_provenance(
             self._provenance,
-            provenance_layer_exposure_summary,
+            provenance_multi_exposure_summary_layers,
             list_of_analysis_path)
 
         self._current_impact_function = None
@@ -1225,7 +1244,7 @@ class MultiExposureImpactFunction(object):
             impact_function._analysis_summary = load_layer_from_registry(path)
 
         list_of_exposure_summary = get_provenance(
-            provenance, provenance_layer_exposure_summary)
+            provenance, provenance_multi_exposure_summary_layers)
         for exposure_summary in list_of_exposure_summary:
             layer = load_layer_from_registry(exposure_summary)
             keywords = KeywordIO.read_keywords(layer)
