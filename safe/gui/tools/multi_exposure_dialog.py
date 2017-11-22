@@ -174,7 +174,7 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
         registry = QgsMapLayerRegistry.instance()
         layers = []
         count = self.list_layers_in_map_report.count()
-        for i in reversed(range(0, count)):
+        for i in range(0, count):
             layer = self.list_layers_in_map_report.item(i)
             origin = layer.data(LAYER_ORIGIN_ROLE)
             if origin == FROM_ANALYSIS['key']:
@@ -496,6 +496,9 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
         else:
             multi_exposure_if.crs = (
                 self.iface.mapCanvas().mapSettings().destinationCrs())
+        if len(self.ordered_expected_layers()) != 0:
+            self._multi_exposure_if.output_layers_ordered = (
+                self.ordered_expected_layers())
 
         status, message = multi_exposure_if.prepare()
         if status == PREPARE_SUCCESS:

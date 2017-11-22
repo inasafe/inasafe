@@ -304,19 +304,20 @@ class ImpactReport(object):
         self._metadata = template_metadata
         self._output_folder = None
         self._impact_function = impact_function or (
-            multi_exposure_impact_function.impact_functions[0])
+            multi_exposure_impact_function)
         self._hazard = hazard or self._impact_function.hazard
-        self._exposure = (
-            exposure or self._impact_function.exposure)
-        self._impact = (
-            impact or self._impact_function.impact)
         self._analysis = (analysis or self._impact_function.analysis_impacted)
-        self._exposure_summary_table = (
-            exposure_summary_table or
-            self._impact_function.exposure_summary_table)
-        self._aggregation_summary = (
-            aggregation_summary or
-            self._impact_function.aggregation_summary)
+        if impact_function:
+            self._exposure = (
+                exposure or self._impact_function.exposure)
+            self._impact = (
+                impact or self._impact_function.impact)
+            self._exposure_summary_table = (
+                exposure_summary_table or
+                self._impact_function.exposure_summary_table)
+            self._aggregation_summary = (
+                aggregation_summary or
+                self._impact_function.aggregation_summary)
         if extra_layers is None:
             extra_layers = []
         self._extra_layers = extra_layers
