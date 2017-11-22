@@ -467,7 +467,7 @@ def qgis_composer_renderer(impact_report, component):
                 qurl = QUrl.fromLocalFile(url)
                 html_element.setUrl(qurl)
 
-    original_crs = impact_report.impact_function.impact.crs()
+    original_crs = impact_report.impact_function.crs
     destination_crs = qgis_composition_context.map_settings.destinationCrs()
     coord_transform = QgsCoordinateTransform(original_crs, destination_crs)
 

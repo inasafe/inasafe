@@ -929,4 +929,7 @@ infographic_report = {
 }
 
 all_default_report_components = [
-    standard_impact_report_metadata_pdf, map_report, infographic_report]
+    standard_impact_report_metadata_pdf,
+    standard_multi_exposure_impact_report_metadata_pdf,
+    map_report,
+    infographic_report]

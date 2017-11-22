@@ -122,7 +122,10 @@ from safe.definitions.provenance import (
     provenance_layer_exposure_summary_id,
     provenance_crs,
     provenance_debug_mode)
-from safe.definitions.reports.components import infographic_report, map_report
+from safe.definitions.reports.components import (
+    infographic_report,
+    map_report,
+    standard_multi_exposure_impact_report_metadata_pdf)
 from safe.definitions.reports.infographic import map_overview
 from safe.definitions.styles import (
     aggregation_color,
@@ -2814,6 +2817,11 @@ class ImpactFunction(object):
         map_overview_layer = None
 
         generated_components = deepcopy(components)
+        # remove unnecessary components
+        if standard_multi_exposure_impact_report_metadata_pdf in (
+                generated_components):
+            generated_components.remove(
+                standard_multi_exposure_impact_report_metadata_pdf)
         if exposure_type != exposure_population and (
                 infographic_report in generated_components):
             generated_components.remove(infographic_report)

@@ -8,6 +8,7 @@ This class will manage how to launch and optimize a multi exposure analysis.
 
 import getpass
 import logging
+from copy import deepcopy
 from datetime import datetime
 from os import makedirs
 from os.path import join, exists
@@ -15,7 +16,13 @@ from socket import gethostname
 
 from osgeo import gdal
 from qgis.core import (
-    QgsGeometry, QgsCoordinateReferenceSystem, QgsMapLayer, QgsVectorLayer)
+    QgsGeometry,
+    QgsCoordinateReferenceSystem,
+    QgsMapLayer,
+    QgsVectorLayer,
+    QgsProject,
+    QgsLayerTreeGroup,
+    QgsLayerTreeLayer)
 from qgis.utils import iface
 from PyQt4.Qt import PYQT_VERSION_STR
 from PyQt4.QtCore import QDir, QT_VERSION_STR
@@ -31,7 +38,7 @@ from safe.definitions.constants import (
     PREPARE_FAILED_BAD_INPUT,
     ANALYSIS_FAILED_BAD_INPUT,
     ANALYSIS_SUCCESS,
-)
+    MULTI_EXPOSURE_ANALYSIS_FLAG)
 from safe.definitions.layer_purposes import (
     layer_purpose_analysis_impacted,
     layer_purpose_aggregation_summary,
@@ -65,7 +72,11 @@ from safe.definitions.provenance import (
     provenance_layer_analysis_impacted,
     provenance_layer_aggregation_summary_id,
     provenance_layer_analysis_impacted_id,
-    provenance_debug_mode)
+    provenance_debug_mode,
+    provenance_layer_exposure_summary,
+    provenance_map_title)
+from safe.definitions.reports.components import (
+    standard_impact_report_metadata_pdf, infographic_report)
 from safe.definitions.styles import (
     aggregation_color,
     aggregation_width,
@@ -88,13 +99,15 @@ from safe.gui.widgets.message import generate_input_error_message
 from safe.impact_function.create_extra_layers import (
     create_analysis_layer, create_virtual_aggregation)
 from safe.impact_function.impact_function import ImpactFunction
-from safe.impact_function.impact_function_utilities import check_input_layer
+from safe.impact_function.impact_function_utilities import (
+    check_input_layer, FROM_CANVAS)
 from safe.impact_function.style import simple_polygon_without_brush
 from safe.report.impact_report import ImpactReport
 from safe.report.report_metadata import ReportMetadata
 from safe.utilities.gis import clone_layer
 from safe.utilities.i18n import tr
 from safe.utilities.gis import qgis_version
+from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.metadata import (
     copy_layer_keywords,
     write_iso19115_metadata,
@@ -164,6 +177,7 @@ class MultiExposureImpactFunction(object):
         self._end_datetime = None
         self._duration = 0
         self._output_layer_expected = None
+        self._output_layers_ordered = None
         self._provenance_ready = False
         self._provenance = {}
 
@@ -283,7 +297,7 @@ class MultiExposureImpactFunction(object):
 
     @property
     def analysis_summary(self):
-        """Property for the aggregation summary.
+        """Property for the analysis summary.
 
         :returns: A vector layer.
         :rtype: QgsVectorLayer
@@ -395,6 +409,24 @@ class MultiExposureImpactFunction(object):
         """
         return self._current_impact_function
 
+    @property
+    def output_layers_ordered(self):
+        """Return the custom order inout from user.
+
+        :return: List of layer order tuples.
+        :rtype: list
+        """
+        return self._output_layers_ordered
+
+    @output_layers_ordered.setter
+    def output_layers_ordered(self, layers):
+        """Setter for custom layer order property.
+
+        :param layers: List of layer order tuples.
+        :type layers: list
+        """
+        self._output_layers_ordered = layers
+
     def output_layers_expected(self):
         """Compute the output layers expected that the IF will produce.
 
@@ -470,6 +502,9 @@ class MultiExposureImpactFunction(object):
             self._provenance,
             provenance_data_store_uri,
             self.datastore.uri_path)
+
+        # Map title
+        set_provenance(self._provenance, provenance_map_title, self.name)
 
         # CRS
         set_provenance(
@@ -852,6 +887,7 @@ class MultiExposureImpactFunction(object):
         analysis_layers = []
         aggregation_layers = []
         list_geometries = []
+        list_of_analysis_path = []
 
         for i, impact_function in enumerate(self._impact_functions):
             self._current_impact_function = impact_function
@@ -876,6 +912,13 @@ class MultiExposureImpactFunction(object):
 
             analysis_layers.append(impact_function.analysis_impacted)
             aggregation_layers.append(impact_function.aggregation_summary)
+            list_of_analysis_path.append(
+                impact_function.analysis_impacted.source())
+
+        set_provenance(
+            self._provenance,
+            provenance_layer_exposure_summary,
+            list_of_analysis_path)
 
         self._current_impact_function = None
         self._analysis_extent = QgsGeometry.unaryUnion(list_geometries)
@@ -997,7 +1040,68 @@ class MultiExposureImpactFunction(object):
         error_code = None
         message = None
 
-        for component in components:
+        generated_components = deepcopy(components)
+        # remove unnecessary components
+        if standard_impact_report_metadata_pdf in generated_components:
+            generated_components.remove(standard_impact_report_metadata_pdf)
+        if infographic_report in generated_components:
+            generated_components.remove(infographic_report)
+
+        # Define the extra layers because multi-exposure IF has its own
+        # layer order, whether it's coming from the user custom layer order
+        # or not.
+        extra_layers = []
+        if self._output_layers_ordered:
+            for layer_definition in self.output_layers_ordered:
+                if layer_definition[0] == FROM_CANVAS['key']:
+                    layer_path = layer_definition[2]
+                    extra_layer = load_layer_from_registry(layer_path)
+                else:
+                    if layer_definition[2] == self.name:
+                        for layer in self.outputs:
+                            if layer.keywords['layer_purpose'] == (
+                                    layer_definition[1]):
+                                extra_layer = layer
+                                break
+                    else:
+                        for sub_impact_function in self.impact_functions:
+                            # Iterate over each sub impact function used in the
+                            # multi exposure analysis.
+                            if sub_impact_function.name == layer_definition[2]:
+                                for layer in sub_impact_function.outputs:
+                                    purpose = layer_definition[1]
+                                    if layer.keywords['layer_purpose'] == (
+                                            purpose):
+                                        extra_layer = layer
+                                        break
+                extra_layers.append(extra_layer)
+
+        if not extra_layers:
+            # We need to find out about the layers order manually.
+            layer_tree_root = QgsProject.instance().layerTreeRoot()
+            all_groups = [
+                child for child in layer_tree_root.children() if (
+                    isinstance(child, QgsLayerTreeGroup))]
+            multi_exposure_group = None
+            for group in all_groups:
+                if group.customProperty(MULTI_EXPOSURE_ANALYSIS_FLAG):
+                    multi_exposure_group = group
+                    break
+
+            if multi_exposure_group:
+                multi_exposure_tree_layers = [
+                    child for child in multi_exposure_group.children() if (
+                        isinstance(child, QgsLayerTreeLayer))]
+                exposure_groups = [
+                    child for child in multi_exposure_group.children() if (
+                        isinstance(child, QgsLayerTreeGroup))]
+
+                if not exposure_groups:
+                    extra_layers = [
+                        tree_layer.layer() for tree_layer in (
+                            multi_exposure_tree_layers)]
+
+        for component in generated_components:
 
             report_metadata = ReportMetadata(
                 metadata_dict=update_template_component(component))
@@ -1006,7 +1110,8 @@ class MultiExposureImpactFunction(object):
                 iface,
                 report_metadata,
                 multi_exposure_impact_function=self,
-                analysis=self.analysis_summary)
+                analysis=self.analysis_summary,
+                extra_layers=extra_layers)
 
             # generate report folder
 
@@ -1106,6 +1211,16 @@ class MultiExposureImpactFunction(object):
         path = get_provenance(provenance, provenance_layer_analysis_impacted)
         if path:
             impact_function._analysis_summary = load_layer_from_registry(path)
+
+        list_of_exposure_summary = get_provenance(
+            provenance, provenance_layer_exposure_summary)
+        for exposure_summary in list_of_exposure_summary:
+            layer = load_layer_from_registry(exposure_summary)
+            keywords = KeywordIO.read_keywords(layer)
+            serialized_impact_function = (
+                ImpactFunction.load_from_output_metadata(keywords))
+            impact_function._impact_functions.append(
+                serialized_impact_function)
 
         impact_function._output_layer_expected = \
             impact_function._compute_output_layer_expected()
