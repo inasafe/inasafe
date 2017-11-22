@@ -97,6 +97,12 @@ provenance_multi_exposure_layers_id = {
     'description': tr('A list of exposure layer IDs.'),
     'provenance_key': 'multi_exposure_layers_id'
 }
+provenance_multi_exposure_summary_layers = {
+    'key': 'provenance_multi_exposure_summary_layers',
+    'name': tr('Multi Exposure Summary Layers'),
+    'description': tr('A list of exposure summary layers.'),
+    'provenance_key': 'multi_exposure_summary_layers'
+}
 provenance_gdal_version = {
     'key': 'provenance_gdal_version',
     'name': tr('GDAL Version'),

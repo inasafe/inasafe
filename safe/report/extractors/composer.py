@@ -253,7 +253,7 @@ def qgis_composer_extractor(impact_report, component_metadata):
     if add_supplementary_layers:
         # Check show only impact.
         show_only_impact = setting(
-            'set_show_only_impact_on_report', False, bool)
+            'set_show_only_impact_on_report', expected_type=bool)
         layer_registry = QgsMapLayerRegistry.instance()
         if not show_only_impact:
             hazard_layer = layer_registry.mapLayers().get(
@@ -268,7 +268,7 @@ def qgis_composer_extractor(impact_report, component_metadata):
             layers.append(hazard_layer)
 
         # check hide exposure settings
-        hide_exposure_flag = setting('setHideExposureFlag', False, bool)
+        hide_exposure_flag = setting('setHideExposureFlag', expected_type=bool)
         if not hide_exposure_flag:
             # place exposure at the bottom
             exposure_layer = layer_registry.mapLayers().get(
