@@ -42,9 +42,12 @@ class TestRecomputeCounts(unittest.TestCase):
 
         # Check that each feature has correct ratio
         for feature in layer.getFeatures():
-            manual_ratio = feature[female_count_field['field_name']] / feature[
-                population_count_field['field_name']]
-            diff = abs(
-                manual_ratio - feature[female_ratio_field['field_name']])
+            female_count = feature[female_count_field['field_name']]
+            population_count = feature[population_count_field['field_name']]
+            manual_ratio = female_count / float(population_count)
 
-            self.assertTrue(diff < 10 ** -2, diff)
+            computing_ratio = feature[female_ratio_field['field_name']]
+            diff = abs(manual_ratio - computing_ratio)
+
+            message = 'The ratio difference is too big, diff = %s' % diff
+            self.assertTrue(diff < 10 ** -2, message)
