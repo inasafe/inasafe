@@ -93,6 +93,8 @@ def recompute_counts(layer, callback=None):
                 new_value = new_size * old_count / old_size
             except TypeError:
                 new_value = ''
+            except ZeroDivisionError:
+                new_value = 0
             layer.changeAttributeValue(feature.id(), index, new_value)
 
     layer.commitChanges()

@@ -100,6 +100,8 @@ def from_counts_to_ratios(layer, callback=None):
                 new_value = count / total_count
             except TypeError:
                 new_value = ''
+            except ZeroDivisionError:
+                new_value = 0
             layer.changeAttributeValue(feature.id(), index, new_value)
 
     layer.commitChanges()
