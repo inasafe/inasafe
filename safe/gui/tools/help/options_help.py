@@ -62,7 +62,7 @@ def content():
     paragraph = m.Paragraph(
         m.Image(
             'file:///%s/img/screenshots/'
-            'inasafe-options-screenshot.png' % resources_path()),
+            'inasafe-options-organisation-screenshot.png' % resources_path()),
         style_class='text-center'
     )
     message.add(paragraph)
@@ -73,14 +73,111 @@ def content():
         'page on which they occur.'
     )))
 
-    header = m.Heading(tr('Basic options tab'), **INFO_STYLE)
+    header = m.Heading(tr('Organisation Profile tab'), **INFO_STYLE)
     message.add(header)
 
     message.add(m.Paragraph(tr(
-        'The basic options tab provides several general settings:'
+        'The Organisation Profile tab provides several general settings:'
+    )))
+    bullets = m.BulletedList()
+    bullets.add(m.Text(
+        m.ImportantText(tr(
+            'Organisation')),
+        tr(' - Use this option to specify the name of your organisation.')))
+    bullets.add(m.Text(
+        m.ImportantText(tr(
+            'Contact email')),
+        tr(' - Use this option to specify the contact person\'s email '
+           'address to use in the generated metadata document.')))
+    bullets.add(m.Text(
+        m.ImportantText(tr(
+            'Website')),
+        tr(' - Use this option to set the website address to be used in '
+           'the generated metadata document.')))
+    bullets.add(m.Text(
+        m.ImportantText(tr(
+            'Use custom organisation logo')),
+        tr(' - By default, InaSAFE will add the supporters logo to each '
+           'map template. The supporters logo is also used at tbe bottom '
+           'of the dock panel if the \'show organisation logo in dock\' '
+           'option is enabled. You can use this option to replace the '
+           'organisation logo with that of your own organisation. The logo '
+           'will be rescaled automatically to fill the space provided.')))
+    bullets.add(m.Text(
+        m.ImportantText(tr(
+            'Currency')),
+        tr(' - InaSAFE will use the selected currency for the analysis.')))
+    bullets.add(m.Text(
+        m.ImportantText(tr(
+            'Analysis license')),
+        tr(' - Use this to set the usage and redistribution license for the '
+           'generated impact layer.')))
+    message.add(bullets)
+
+
+    header = m.Heading(tr('Parameters tab'), **INFO_STYLE)
+    message.add(header)
+
+    message.add(m.Paragraph(tr(
+        'In this tab you can define some parameters that will be used by '
+        'InaSAFE in the analysis of exposed population. You have the option '
+        'to change the parameters for whether exposed people are considered '
+        'to be affected by each hazard type and class and the displacement '
+        'rate that will be used for those affected people.'
+    )))
+    message = m.Message()
+    paragraph = m.Paragraph(
+        m.Image(
+            'file:///%s/img/screenshots/'
+            'inasafe-options-parameters-screenshot.png' % resources_path()),
+        style_class='text-center'
+    )
+    bullets = m.BulletedList()
+    bullets.add(m.Text(
+        m.ImportantText(tr(
+            'Affected')),
+        tr(
+            ' - When this option is checked, people exposed to the relevant'
+            'hazard classification will be included in the count of affected'
+            'people.')))
+
+    bullets.add(m.Text(
+        m.ImportantText(tr(
+            'Displacement Rate')),
+        tr(
+            ' - The displacement rate is used to estimate the number of '
+            'people displaced for each hazard class.')))
+    message.add(bullets)
+    message.add(m.Paragraph(tr(
+        'Please refer to the InaSAFE manual for concept definitions and '
+        'more information on the source of hazard classifications and '
+        'default settings. We really encourage you to consider these '
+        'parameters carefully and to choose appropriate values for your '
+        'local situation based on past events and expert knowledge.'
     )))
 
+    header = m.Heading(tr('GIS Environment tab'), **INFO_STYLE)
+    message.add(header)
+
+    message.add(m.Paragraph(tr(
+        'The GIS Environment tab provides several general settings:'
+    )))
+    message = m.Message()
+    paragraph = m.Paragraph(
+        m.Image(
+            'file:///%s/img/screenshots/'
+            'inasafe-options-environment-screenshot.png' % resources_path()),
+        style_class='text-center'
+    )
+    message.add(paragraph)
     bullets = m.BulletedList()
+    bullets.add(m.Text(
+        m.ImportantText(tr(
+            'Always show welcome message when opening QGIS with InaSAFE')),
+        tr(
+            ' - When this option is enabled, the welcome message will be '
+            'enabled when opening QGIS with InaSAFE. By default the Welcome '
+            'message will be displayed.')))
     bullets.add(m.Text(
         m.ImportantText(tr(
             'Show organisation logo in InaSAFE dock')),
@@ -145,7 +242,7 @@ def content():
         tr('InaSAFE will use the selected currency for the analysis.')))
     message.add(bullets)
 
-    header = m.Heading(tr('Earthquake options tab'), **INFO_STYLE)
+    header = m.Heading(tr('Earthquake tab'), **INFO_STYLE)
     message.add(header)
     paragraph = m.Paragraph(
         m.Image(
@@ -168,7 +265,7 @@ def content():
     ))
     message.add(paragraph)
 
-    header = m.Heading(tr('Template options tab'), **INFO_STYLE)
+    header = m.Heading(tr('Template Options tab'), **INFO_STYLE)
     message.add(header)
     paragraph = m.Paragraph(
         m.Image(
@@ -185,15 +282,7 @@ def content():
     )))
 
     bullets = m.BulletedList()
-    bullets.add(m.Text(
-        m.ImportantText(tr(
-            'Use custom organisation logo')),
-        tr(' - By default, InaSAFE will add the supporters logo to each '
-           'map template. The supporters logo is also used at tbe bottom '
-           'of the dock panel if the \'show organisation logo in dock\' '
-           'option is enabled. You can use this option to replace the '
-           'organisation logo with that of your own organisation. The logo '
-           'will be rescaled automatically to fill the space provided.')))
+
     bullets.add(m.Text(
         m.ImportantText(tr(
             'Use custom north arrow image')),
@@ -203,66 +292,12 @@ def content():
            'this option.')))
     bullets.add(m.Text(
         m.ImportantText(tr(
-            'Additional template directory')),
-        tr(' - When generating a print report, InaSAFE will offer a number '
-           'of pre-defined templates for you to use. For example there '
-           'is an A4 variant, an A3 variant and so on. You can use this '
-           'option to specify additional search directories to be used '
-           'when presenting a list of available templates. This is useful '
-           'in cases where you have created your own custom map templates '
-           'and you wish to use them for report production.')))
-    bullets.add(m.Text(
-        m.ImportantText(tr(
             'Use custom disclaimer text')),
         tr(' - By default, InaSAFE will display a disclaimer on reports '
            'advising readers of the report to exercise caution when '
            'interpreting the outputs presented. You can override this '
            'text using this option, though we do advise that you include '
            'a similar statement of caution in your overridden text.')))
-    message.add(bullets)
-
-    header = m.Heading(tr('ISO 19115 metadata tab'), **INFO_STYLE)
-    message.add(header)
-    paragraph = m.Paragraph(
-        m.Image(
-            'file:///%s/img/screenshots/'
-            'inasafe-options-metadata-screenshot.png' %
-            resources_path()),
-        style_class='text-center'
-    )
-    message.add(paragraph)
-
-    message.add(m.Paragraph(tr(
-        'This tab is used to define various options related to the '
-        'automated generation of ISO 19115 metadata which is associated with '
-        'hazard, exposure, aggregation and impact layers.'
-    )))
-
-    bullets = m.BulletedList()
-    bullets.add(m.Text(
-        m.ImportantText(tr(
-            'Organisation')),
-        tr(' - Use this option to specify the name of your organisation.')))
-    bullets.add(m.Text(
-        m.ImportantText(tr(
-            'Contact email')),
-        tr(' - Use this option to specify the contact person\'s email '
-           'address to use in the generated metadata document.')))
-    bullets.add(m.Text(
-        m.ImportantText(tr(
-            'Website')),
-        tr(' - Use this option to set the website address to be used in '
-           'the generated metadata document.')))
-    bullets.add(m.Text(
-        m.ImportantText(tr(
-            'Analysis title')),
-        tr(' - Use this to set the title value for the generated metadata '
-           'document.')))
-    bullets.add(m.Text(
-        m.ImportantText(tr(
-            'Analysis license')),
-        tr(' - Use this to set the usage and redistribution license for the '
-           'generated impact layer.')))
     message.add(bullets)
 
     header = m.Heading(tr('Demographic Defaults tab'), **INFO_STYLE)
