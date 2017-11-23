@@ -23,6 +23,7 @@ from safe.definitions.reports.map_report import (
     crs_text)
 from safe.utilities.i18n import tr
 from safe.utilities.utilities import generate_expression_help
+from safe.utilities.settings import setting
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -92,8 +93,7 @@ help_message = generate_expression_help(description, examples)
 def disclaimer_text_element(feature, parent):
     """Retrieve disclaimer text string from definitions."""
     _ = feature, parent  # NOQA
-    text = disclaimer_text['string_format']
-    return text
+    return setting(disclaimer_text['setting_key'])
 
 
 description = tr(
@@ -348,7 +348,7 @@ help_message = generate_expression_help(description, examples)
 def north_arrow_path(feature, parent):
     """Retrieve the full path of default north arrow logo."""
     _ = feature, parent  # NOQA
-    return inasafe_north_arrow_path['path']
+    return setting(inasafe_north_arrow_path['setting_key'])
 
 
 description = tr(
@@ -365,4 +365,4 @@ help_message = generate_expression_help(description, examples)
 def organisation_logo_path(feature, parent):
     """Retrieve the full path of used specified organisation logo."""
     _ = feature, parent  # NOQA
-    return inasafe_organisation_logo_path['path']
+    return setting(inasafe_organisation_logo_path['setting_key'])
