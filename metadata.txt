@@ -30,6 +30,7 @@ changelog=
     - Fix bug Exception reading keywords #4632
     - Fix bug ratio = 0 when the data is integer #4669
     - Fix using custom disclaimer, north arrow, and logo #4671
+    - Fix bug when population == 0 #4659
     Version 4.2.4
     - Move resources and translation to safe package.
     - Fix bug Analysis Detail from Landcover Impact Report not shown in Bahasa version #4487
