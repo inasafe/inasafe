@@ -13,10 +13,11 @@ from safe.common.signals import (
     ERROR_MESSAGE_SIGNAL,
     send_static_message
 )
-from safe.definitions.messages import limitations, disclaimer
+from safe.definitions.messages import limitations
 from safe.messaging import styles
 from safe.utilities.i18n import tr
 from safe.utilities.resources import resources_path
+from safe.utilities.settings import setting
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -154,8 +155,8 @@ def getting_started_message():
     message.add(caveat_list)
 
     message.add(m.Heading(tr('Disclaimer'), **WARNING_STYLE))
-    message.add(m.Paragraph(disclaimer()))
-
+    disclaimer = setting('reportDisclaimer')
+    message.add(m.Paragraph(disclaimer))
     return message
 
 
@@ -187,6 +188,9 @@ def show_keyword_version_message(sender, keyword_version, inasafe_version):
     """Show a message indicating that the keywords version is mismatch
 
     .. versionadded: 3.2
+
+    :param sender: Sender of the message signal. Default to Any object.
+    :type sender: object
 
     :param keyword_version: The version of the layer's keywords
     :type keyword_version: str
@@ -224,6 +228,9 @@ def show_keywords_need_review_message(sender, message=None):
     """Show a message keywords are not adequate to run an analysis.
 
     .. versionadded: 4.0
+
+    :param sender: Sender of the message signal. Default to Any object.
+    :type sender: object
 
     :param message: Additional message to display.
     :type message: str
