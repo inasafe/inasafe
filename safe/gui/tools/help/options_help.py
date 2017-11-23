@@ -71,9 +71,9 @@ def content():
 
     paragraph = m.Paragraph(
         m.Image(
-        'file:///%s/img/screenshots/'
-        'inasafe-options-organisation-screenshot.png' %
-        resources_path()),
+            'file:///%s/img/screenshots/'
+            'inasafe-options-organisation-screenshot.png' %
+            resources_path()),
         style_class='text-center'
     )
 
