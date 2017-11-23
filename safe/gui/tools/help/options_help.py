@@ -70,11 +70,11 @@ def content():
     message.add(header)
 
     paragraph = m.Paragraph(
-    m.Image(
+        m.Image(
         'file:///%s/img/screenshots/'
         'inasafe-options-organisation-screenshot.png' %
         resources_path()),
-    style_class='text-center'
+        style_class='text-center'
     )
 
     message.add(paragraph)
@@ -115,7 +115,6 @@ def content():
         tr(' - Use this to set the usage and redistribution license for the '
            'generated impact layer.')))
     message.add(bullets)
-
 
     header = m.Heading(tr('Parameters tab'), **INFO_STYLE)
     message.add(header)
