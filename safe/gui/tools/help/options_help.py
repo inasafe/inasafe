@@ -129,10 +129,10 @@ def content():
 
     message.add(m.Paragraph(tr(
         'In this tab you can define some parameters that will be used by '
-        'InaSAFE in the analysis of exposed population. You have the option '
-        'to change the parameters for whether exposed people are considered '
-        'to be affected by each hazard type and class and the displacement '
-        'rate that will be used for those affected people.'
+        'InaSAFE in the analysis of exposed features. You have the option '
+        'to change the parameters for whether exposed features are considered '
+        'to be affected by each hazard type and class, and the displacement '
+        'rate that will be used for affected people.'
     )))
 
     bullets = m.BulletedList()
@@ -140,20 +140,20 @@ def content():
         m.ImportantText(tr(
             'Affected')),
         tr(
-            ' - When this option is checked, people exposed to the relevant '
-            'hazard classification will be included in the count of affected '
-            'people.')))
+            ' - When this option is checked, features exposed to the hazard '
+            'class will be included in the count of affected features.')))
 
     bullets.add(m.Text(
         m.ImportantText(tr(
             'Displacement Rate')),
         tr(
             ' - The displacement rate is used to estimate the number of '
-            'people displaced for each hazard class.')))
+            'people displaced for each hazard class. People must be affected '
+            'before they can be displaced. ')))
     message.add(bullets)
     message.add(m.Paragraph(tr(
         'Please refer to the InaSAFE manual for concept definitions and '
-        'more information on the source of hazard classifications and '
+        'more information on the source of the hazard classifications and '
         'default settings. We really encourage you to consider these '
         'parameters carefully and to choose appropriate values for your '
         'local situation based on past events and expert knowledge.'
