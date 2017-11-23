@@ -140,8 +140,8 @@ def content():
         m.ImportantText(tr(
             'Affected')),
         tr(
-            ' - When this option is checked, people exposed to the relevant'
-            'hazard classification will be included in the count of affected'
+            ' - When this option is checked, people exposed to the relevant '
+            'hazard classification will be included in the count of affected '
             'people.')))
 
     bullets.add(m.Text(
@@ -254,10 +254,10 @@ def content():
     )
     message.add(paragraph)
     paragraph = m.Paragraph(tr(
-        'In this tab you can select which model to use when calculating '
-        'earthquake fatalities and displacements. This option is global - '
-        'it will affect all subsequent earthquake analyses carried out in '
-        'InaSAFE.'
+        'In this tab you can select which earthquake fatality model to use '
+        'when estimating earthquake impact on population. This option is '
+        'global - it will affect all subsequent earthquake analyses carried '
+        'out in InaSAFE.'
     ))
     message.add(paragraph)
     paragraph = m.Paragraph(tr(
@@ -278,8 +278,9 @@ def content():
     message.add(paragraph)
 
     message.add(m.Paragraph(tr(
-        'This tab has options relating to the printing of reports and the '
-        'generation of map composer templates.'
+        'This tab has options relating to the generation of map composer '
+        'templates and how reports will be printed:'
+        '.'
     )))
 
     bullets = m.BulletedList()
@@ -316,9 +317,9 @@ def content():
         'for demographic groups. There is more detailed help on demographic '
         'groups within the main help page for InaSAFE in the Field Mapping '
         'Tool section. Essentially default ratios for demographic groups '
-        'determine what proportion of the population are within a each '
-        'population segment (e.g. infants versus children etc.). The options '
-        'defined in this tab be used in cases where you choose to use the '
+        'determine what proportion of the population are within each '
+        'population group (e.g. infants versus children etc.). The options '
+        'defined in this tab are used in cases where you choose to use the '
         'global default ratios while configuring the keywords for an '
         'aggregation layer as shown below.'
     ))
@@ -349,7 +350,7 @@ def content():
     message.add(paragraph)
 
     message.add(m.Paragraph(tr(
-        'This tab contains options intended for advanced users only.'
+        'This tab contains options intended for advanced users only: '
     )))
 
     bullets = m.BulletedList()
@@ -379,11 +380,15 @@ def content():
            'widget in the dock will allow you to debug the generated HTML. '
            'In addition, if the metadata.txt for the running InaSAFE is '
            'set to \'alpha\', an additional icon will be added to the '
-           'toolbar to add test layers to the QGIS project.'),
-        m.Image(
-            'file:///%s/img/icons/'
-            'add-test-layers.svg' % resources_path(),
-            **SMALL_ICON_STYLE)))
+           'toolbar to add test layers to the QGIS project.')))
+    bullets.add(m.Text(
+       m.ImportantText(tr('Generate reports')),
+       tr(' - When this option is enabled, InaSAFE will generate reports. ')))
+    bullets.add(m.Text(
+       m.ImportantText(tr('Show memory profile')),
+       tr(' - When this option is enabled, InaSAFE will display the memory '
+       'profile when it runs. ')))
+
     message.add(bullets)
 
     return message
