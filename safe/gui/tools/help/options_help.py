@@ -238,10 +238,7 @@ def content():
            'systems, these temporary files will be deleted on each reboot. '
            'If you wish to, you can specify an alternative directory '
            'to use for storing these temporary files.')))
-    bullets.add(m.Text(
-        m.ImportantText(tr('Currency')),
-        tr('InaSAFE will use the selected currency for the analysis.')))
-    message.add(bullets)
+
 
     header = m.Heading(tr('Earthquake tab'), **INFO_STYLE)
     message.add(header)
