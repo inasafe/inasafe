@@ -32,7 +32,8 @@ disclaimer_title_header = {
 
 disclaimer_text = {
     'id': 'disclaimer',
-    'string_format': setting('reportDisclaimer')
+    'string_format': setting('reportDisclaimer'),
+    'setting_key': 'reportDisclaimer'
 }
 
 information_title_header = {
@@ -124,14 +125,16 @@ black_inasafe_logo_path = {
 
 inasafe_north_arrow_path = {
     'id': 'north-arrow-logo',
-    'path': setting('north_arrow_path')
+    'path': setting('north_arrow_path'),
+    'setting_key': 'north_arrow_path'
 }
 
 inasafe_organisation_logo_path = {
     'id': 'organisation-logo',
     # We default to the supporters logo, but an org can change to their logo
     # in options ...
-    'path': setting('organisation_logo_path')
+    'path': setting('organisation_logo_path'),
+    'setting_key': 'organisation_logo_path'
 }
 
 image_variable_elements = [
