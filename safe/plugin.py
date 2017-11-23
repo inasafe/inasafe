@@ -38,7 +38,9 @@ from safe.definitions.versions import inasafe_release_status
 from safe.common.exceptions import (
     KeywordNotFoundError,
     NoKeywordsFoundError,
-    MetadataReadError)
+    MetadataReadError,
+)
+from safe.common.signals import send_static_message
 from safe.utilities.resources import resources_path
 from safe.utilities.gis import is_raster_layer
 from safe.definitions.layer_purposes import (
@@ -751,6 +753,8 @@ class Plugin(object):
             parent=self.iface.mainWindow())
         if dialog.exec_():  # modal
             self.dock_widget.read_settings()
+            from safe.gui.widgets.message import getting_started_message
+            send_static_message(self.dock_widget, getting_started_message())
 
     def show_keywords_wizard(self):
         """Show the keywords creation wizard."""
