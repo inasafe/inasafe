@@ -3,10 +3,13 @@
 
 from PyQt4.QtCore import QSettings, QPyNullVariant
 import json
+import logging
 
 from safe.definitions import APPLICATION_NAME
 from safe.definitions.default_settings import inasafe_default_settings
 
+
+LOGGER = logging.getLogger("InaSAFE")
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
@@ -57,12 +60,17 @@ def general_setting(key, default=None, expected_type=None, qsettings=None):
     In PyQt we can specify the expected type.
     See: http://pyqt.sourceforge.net/Docs/PyQt4/qsettings.html#value
     """
-    if not qsettings:
+    if qsettings is None:
         qsettings = QSettings()
+    try:
+        if isinstance(expected_type, type):
+            return qsettings.value(key, default, type=expected_type)
+        else:
+            return qsettings.value(key, default)
 
-    if isinstance(expected_type, type):
-        return qsettings.value(key, default, expected_type)
-    else:
+    except TypeError as e:
+        LOGGER.debug('exception %s' % e)
+        LOGGER.debug('%s %s %s' % (key, default, expected_type))
         return qsettings.value(key, default)
 
 
