@@ -158,11 +158,6 @@ def content():
 
     header = m.Heading(tr('GIS Environment tab'), **INFO_STYLE)
     message.add(header)
-
-    message.add(m.Paragraph(tr(
-        'The GIS Environment tab provides several general settings:'
-    )))
-    message = m.Message()
     paragraph = m.Paragraph(
         m.Image(
             'file:///%s/img/screenshots/'
@@ -170,7 +165,13 @@ def content():
         style_class='text-center'
     )
     message.add(paragraph)
+
+    message.add(m.Paragraph(tr(
+        'The GIS Environment tab provides several general settings:'
+    )))
+
     bullets = m.BulletedList()
+
     bullets.add(m.Text(
         m.ImportantText(tr(
             'Always show welcome message when opening QGIS with InaSAFE')),
