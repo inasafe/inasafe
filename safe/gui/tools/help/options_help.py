@@ -118,6 +118,14 @@ def content():
     header = m.Heading(tr('Parameters tab'), **INFO_STYLE)
     message.add(header)
 
+    paragraph = m.Paragraph(
+        m.Image(
+            'file:///%s/img/screenshots/'
+            'inasafe-options-parameters-screenshot.png' % resources_path()),
+        style_class='text-center'
+    )
+    message.add(paragraph)
+
     message.add(m.Paragraph(tr(
         'In this tab you can define some parameters that will be used by '
         'InaSAFE in the analysis of exposed population. You have the option '
@@ -125,13 +133,7 @@ def content():
         'to be affected by each hazard type and class and the displacement '
         'rate that will be used for those affected people.'
     )))
-    message = m.Message()
-    paragraph = m.Paragraph(
-        m.Image(
-            'file:///%s/img/screenshots/'
-            'inasafe-options-parameters-screenshot.png' % resources_path()),
-        style_class='text-center'
-    )
+
     bullets = m.BulletedList()
     bullets.add(m.Text(
         m.ImportantText(tr(
