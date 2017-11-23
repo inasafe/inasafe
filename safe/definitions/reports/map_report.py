@@ -32,7 +32,7 @@ disclaimer_title_header = {
 
 disclaimer_text = {
     'id': 'disclaimer',
-    'string_format': disclaimer()
+    'string_format': setting('reportDisclaimer')
 }
 
 information_title_header = {
