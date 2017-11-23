@@ -27,7 +27,9 @@ status=final
 
 changelog=
     Version 4.2.5:
-    - Fix bug Exception reading keywods #4632
+    - Fix bug Exception reading keywords #4632
+    - Fix bug ratio = 0 when the data is integer #4669
+    - Fix using custom disclaimer, north arrow, and logo #4671
     Version 4.2.4
     - Move resources and translation to safe package.
     - Fix bug Analysis Detail from Landcover Impact Report not shown in Bahasa version #4487
