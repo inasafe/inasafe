@@ -387,7 +387,7 @@ def content():
     bullets.add(m.Text(
        m.ImportantText(tr('Show memory profile')),
        tr(' - When this option is enabled, InaSAFE will display the memory '
-       'profile when it runs. ')))
+          'profile when it runs. ')))
 
     message.add(bullets)
 
