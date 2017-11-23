@@ -59,7 +59,12 @@ def content():
     :rtype: safe.messaging.message.Message
     """
     message = m.Message()
-
+    paragraph = m.Paragraph(
+        m.Image(
+            'file:///%s/img/screenshots/'
+            'inasafe-options-organisation-screenshot.png' % resources_path()),
+        style_class='text-center'
+    )
     message.add(paragraph)
     message.add(m.Paragraph(tr(
         'The InaSAFE options dialog is used to control various aspects of '
@@ -70,15 +75,6 @@ def content():
 
     header = m.Heading(tr('Organisation Profile tab'), **INFO_STYLE)
     message.add(header)
-
-
-    paragraph = m.Paragraph(
-        m.Image(
-            'file:///%s/img/screenshots/'
-            'inasafe-options-organisation-screenshot.png' % resources_path()),
-        style_class='text-center'
-    )
-    message.add(paragraph)
 
     message.add(m.Paragraph(tr(
         'The Organisation Profile tab provides several general settings:'
