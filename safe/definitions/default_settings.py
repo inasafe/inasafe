@@ -5,6 +5,8 @@ from os.path import join
 from qgis.core import QgsApplication
 
 from safe.definitions.currencies import idr
+from safe.definitions.messages import disclaimer
+from safe.defaults import supporters_logo_path, default_north_arrow_path
 
 
 inasafe_default_settings = {
@@ -34,14 +36,12 @@ inasafe_default_settings = {
     'currency': idr['key'],
 
     'keywordCachePath': join(
-        QgsApplication.qgisSettingsDirPath(), 'inasafe', 'metadata.db')
+        QgsApplication.qgisSettingsDirPath(), 'inasafe', 'metadata.db'),
 
     # Make sure first to not have cyclic import
-    # 'organisation_logo_path': resources_path(
-    #     'img', 'logos', 'supporters.png'),
-    # 'north_arrow_path': resources_path(
-    #     'img', 'north_arrows', 'simple_north_arrow.png'),
+    'organisation_logo_path': supporters_logo_path(),
+    'north_arrow_path': default_north_arrow_path(),
     # 'defaultUserDirectory': '',
     # 'reportTemplatePath': '',
-    # 'reportDisclaimer': ''
+    'reportDisclaimer': disclaimer()
 }
