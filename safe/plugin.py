@@ -801,7 +801,7 @@ class Plugin(object):
         # Set previous_version to the current inasafe_version
         set_setting('previous_version', inasafe_version)
 
-        if setting('always_show_welcome_message'):
+        if setting('always_show_welcome_message', expected_type=bool):
             # Show if it the setting said so
             show_message = True
         elif previous_version < current_version:
