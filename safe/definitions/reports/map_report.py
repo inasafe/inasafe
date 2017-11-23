@@ -5,9 +5,7 @@
 from safe.defaults import (
     black_inasafe_logo_path,
     white_inasafe_logo_path,
-    default_north_arrow_path,
-    supporters_logo_path)
-from safe.definitions.messages import disclaimer
+)
 from safe.utilities.i18n import tr
 from safe.utilities.settings import setting
 
