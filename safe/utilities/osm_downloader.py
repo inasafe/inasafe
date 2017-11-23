@@ -27,7 +27,9 @@ __revision__ = '$Format:%H$'
 final_release = inasafe_release_status == 'final'
 developer_mode = setting('developer_mode', False, expected_type=bool)
 if not final_release and developer_mode:
-    URL_OSM_PREFIX = 'http://staging.osm.kartoza.com/'
+    # Disable as no more dev on the staging instance
+    # URL_OSM_PREFIX = 'http://staging.osm.kartoza.com/'
+    URL_OSM_PREFIX = 'http://osm.inasafe.org/'
 else:
     URL_OSM_PREFIX = 'http://osm.inasafe.org/'
 URL_OSM_SUFFIX = '-shp'
