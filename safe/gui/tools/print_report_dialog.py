@@ -11,6 +11,8 @@ from qgis.core import QgsApplication
 from safe import messaging as m
 from safe.common.signals import send_error_message, send_static_message
 from safe.definitions.constants import ANALYSIS_FAILED_BAD_CODE
+from safe.definitions.provenance import (
+    provenance_hazard_keywords, provenance_exposure_keywords)
 from safe.definitions.reports import (
     pdf_product_tag, final_product_tag, html_product_tag, qpt_product_tag)
 from safe.definitions.reports.components import (
@@ -235,10 +237,12 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
         report_path = os.path.dirname(impact_layer.source())
 
         # Get the hazard and exposure definition used in current IF
-        hazard_keywords = KeywordIO.read_keywords(
-            impact_layer, 'hazard_keywords')
-        exposure_keywords = KeywordIO.read_keywords(
-            impact_layer, 'exposure_keywords')
+        provenance = KeywordIO.read_keywords(
+            impact_layer, 'provenance_data')
+        hazard_keywords = provenance.get(
+            provenance_hazard_keywords['provenance_key'], {})
+        exposure_keywords = provenance.get(
+            provenance_exposure_keywords['provenance_key'], {})
         hazard = hazard_keywords.get('hazard', None)
         exposure = exposure_keywords.get('exposure', None)
         if hazard and exposure:
