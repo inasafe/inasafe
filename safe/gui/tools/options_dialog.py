@@ -714,7 +714,20 @@ class OptionsDialog(QDialog, FORM_CLASS):
             data = generate_default_profile()
         else:
             data = setting('population_preference', generate_default_profile())
-        self.profile_widget.data = data
+        if not isinstance(data, dict):
+            LOGGER.debug(
+                'population preference is not a dictionary. InaSAFE will use '
+                'the default one.')
+            data = generate_default_profile()
+        try:
+            self.profile_widget.data = data
+        except KeyError as e:
+            LOGGER.debug(
+                'Population preference is not in correct format. InaSAFE will '
+                'use the default one.')
+            LOGGER.debug(e)
+            data = generate_default_profile()
+            self.profile_widget.data = data
 
     @staticmethod
     def age_ratios():
