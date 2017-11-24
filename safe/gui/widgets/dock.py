@@ -788,6 +788,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                         send_static_message(self, getting_started_message())
                 else:
                     show_no_keywords_message(self)
+                    raise
             except Exception as e:  # pylint: disable=broad-except
                 error_message = get_error_message(e)
                 send_error_message(self, error_message)
@@ -991,6 +992,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             else:
                 show_no_keywords_message(self)
                 self.print_button.setEnabled(False)
+                raise
         except Exception as e:  # pylint: disable=broad-except
             error_message = get_error_message(e)
             send_error_message(self, error_message)
