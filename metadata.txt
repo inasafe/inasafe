@@ -40,12 +40,16 @@ changelog=
     - Fix various bugs, like in summary calculation, keyword wizard, productivity post processors
     - Add metadata converter to version 3.5 to make it work with GeoSAFE
     - Add InaSAFE Profile to set custom affected and displacement rate
-    - Impact Function serialization
+    - Impact Function and Multi-Exposure Impact Function serialization
     - Add welcome message
     - Support population count and demographic mapping in place exposure
     - Tidy up metadata (remove unused properties)
     - Tidy up settings dialog
     - Use numpy to create contour for shakemap
+    - Add new method to generate a report in ImpactFunction object
+    - Bring back the old behaviour of generating report. (option to choose custom template)
+    - Map report and general report for Multi-Exposure Impact Function.
+    - HTML expressions for reporting usage.
 
 # tags are comma separated with spaces allowed
 tags=contingency planning, impact assessments, disaster scenarios, natural hazards,risk
