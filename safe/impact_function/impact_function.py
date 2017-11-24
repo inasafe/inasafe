@@ -2509,7 +2509,7 @@ class ImpactFunction(object):
             set_provenance(
                 self._provenance,
                 provenance_requested_extent,
-                self.requested_extent.asWktCoordinates())
+                self.requested_extent.asWktPolygon())
         else:
             set_provenance(
                 self._provenance,
