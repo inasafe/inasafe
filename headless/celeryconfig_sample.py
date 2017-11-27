@@ -17,14 +17,16 @@ BROKER_URL = os.environ.get('INASAFE_HEADLESS_BROKER_HOST')
 CELERY_RESULT_BACKEND = BROKER_URL
 
 CELERY_ROUTES = {
-    'headless.tasks.inasafe_wrapper': {
+    'headless.tasks.inasafe_wrapper.filter_impact_function': {
         'queue': 'inasafe-headless'
     },
-    'headless.tasks.inasafe_wrapper.read_keywords_iso_metadata': {
-        'queue': 'inasafe-headless'
-    },
+
     'headless.tasks.inasafe_wrapper.run_analysis': {
         'queue': 'inasafe-headless-analysis'
+    },
+
+    'headless.tasks.inasafe_wrapper.read_keywords_iso_metadata': {
+        'queue': 'inasafe-headless'
     }
 }
 
@@ -45,6 +47,11 @@ CELERY_ROUTES = {
 # http://docs.celeryproject.org/en/latest/configuration.html#celeryd-concurrency
 CELERYD_CONCURRENCY = 1
 CELERYD_PREFETCH_MULTIPLIER = 1
+
+# Celery config
+CELERY_TASK_SERIALIZER = 'pickle'
+CELERY_ACCEPT_CONTENT = {'pickle'}
+CELERY_RESULT_SERIALIZER = 'pickle'
 
 CELERY_ALWAYS_EAGER = strtobool(os.environ.get('CELERY_ALWAYS_EAGER', 'False'))
 
