@@ -78,10 +78,10 @@ def content():
     )))
     message.add(m.Paragraph(tr(
         'The "parameters" tab is used to define some parameters that will be '
-        'used by InaSAFE in the analysis of exposed population. You have the '
-        'option to change the parameters for whether exposed people are '
+        'used by InaSAFE in the analysis of exposed features. You have the '
+        'option to change the parameters for whether exposed features are '
         'considered to be "affected" by each hazard type and class and the '
-        'displacement rate that will be used for those affected people.')))
+        'displacement rate that will be used for affected people.')))
     message.add(m.Paragraph(tr(
         'Please refer to the InaSAFE manual for concept definitions and more '
         'information on the source of hazard classifications and default '
