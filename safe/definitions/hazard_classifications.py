@@ -718,7 +718,7 @@ inundation_classes = {
             'key': 'inundation_1',
             'value': 1,
             'color': yellow,
-            'name': tr('Inundation Class 3 (Daerah Bahaya 3)'),
+            'name': tr('Inundation Class 1 (Daerah Bahaya 1)'),
             'affected': False,
             'description': tr('No water encountered above ground height.'),
             'string_defaults': ['dry', '0', 'No', 'n', 'no', 'false'],
