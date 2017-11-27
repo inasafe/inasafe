@@ -778,7 +778,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     InvalidParameterError,
                     NoKeywordsFoundError,
                     MetadataReadError,
-                    AttributeError):
+                    # AttributeError  This is hiding some real error. ET
+                    ):
                 # Added this check in 3.2 for #1861
                 active_layer = self.iface.activeLayer()
                 if active_layer is None:

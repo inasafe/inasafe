@@ -237,7 +237,8 @@ def add_debug_layers_to_canvas(impact_function):
                     hazard_class_style(qgis_layer, classes, True)
 
 
-def add_layers_to_canvas_with_custom_orders(order, impact_function):
+def add_layers_to_canvas_with_custom_orders(
+        order, impact_function, iface=None):
     """Helper to add layers to the map canvas following a specific order.
 
     From top to bottom in the legend:
@@ -254,6 +255,9 @@ def add_layers_to_canvas_with_custom_orders(order, impact_function):
 
     :param impact_function: The multi exposure impact function used.
     :type impact_function: MultiExposureImpactFunction
+
+    :param iface: QGIS QGisAppInterface instance.
+    :type iface: QGisAppInterface
     """
     root = QgsProject.instance().layerTreeRoot()
     root.setVisible(False)  # Make all layers hidden.
@@ -280,6 +284,14 @@ def add_layers_to_canvas_with_custom_orders(order, impact_function):
                             layer, False)
                         layer_node = group_analysis.addLayer(layer)
                         layer_node.setVisible(Qt.Checked)
+                        try:
+                            title = layer.keywords['title']
+                            if qgis_version() >= 21800:
+                                layer.setName(title)
+                            else:
+                                layer.setLayerName(title)
+                        except KeyError:
+                            pass
                         break
             else:
                 for sub_impact_function in impact_function.impact_functions:
@@ -294,7 +306,18 @@ def add_layers_to_canvas_with_custom_orders(order, impact_function):
                                 layer_node = group_analysis.addLayer(
                                     layer)
                                 layer_node.setVisible(Qt.Checked)
+                                try:
+                                    title = layer.keywords['title']
+                                    if qgis_version() >= 21800:
+                                        layer.setName(title)
+                                    else:
+                                        layer.setLayerName(title)
+                                except KeyError:
+                                    pass
                                 break
+
+    if iface:
+        iface.setActiveLayer(impact_function.analysis_impacted)
 
 
 def add_layer_to_canvas(layer, name):

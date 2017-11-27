@@ -193,7 +193,6 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                 error = ''
                 layer.exportNamedStyle(style_document, error)
 
-                # For a raster, the provider type is 'gdal'
                 layers.append((
                     FROM_CANVAS['key'],
                     layer.name(),
@@ -546,16 +545,19 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                 return code, message
 
             if setting('generate_report', True, bool):
+                # Report for the multi exposure
                 report = [standard_multi_exposure_impact_report_metadata_html]
-                error_code, message = (
-                    self._multi_exposure_if.generate_report(
-                        report))
+                error_code, message = (self._multi_exposure_if.generate_report(
+                    report))
 
                 if error_code == ImpactReport.REPORT_GENERATION_FAILED:
                     LOGGER.info(
                         'The impact report could not be generated.')
                     send_error_message(self, message)
                     LOGGER.info(message.to_text())
+                    disable_busy_cursor()
+                    self.set_enabled_buttons(True)
+                    return error_code, message
 
             # We always create the multi exposure group because we need
             # reports to be generated.
@@ -588,12 +590,18 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                         0, analysis.name)
                     detailed_group.setVisible(Qt.Checked)
                     add_impact_layers_to_canvas(analysis, group=detailed_group)
+
+                if self.iface:
+                    self.iface.setActiveLayer(
+                        self._multi_exposure_if.analysis_impacted)
             else:
                 add_layers_to_canvas_with_custom_orders(
                     self.ordered_expected_layers(),
-                    self._multi_exposure_if)
+                    self._multi_exposure_if,
+                    self.iface)
 
             if setting('generate_report', True, bool):
+                # Report for the single exposure with hazard
                 for analysis in self._multi_exposure_if.impact_functions:
                     # we only want to generate non pdf/qpt report
                     html_components = [standard_impact_report_metadata_html]
@@ -603,10 +611,24 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                     if error_code == (
                             ImpactReport.REPORT_GENERATION_FAILED):
                         LOGGER.info(
-                            'The impact report could not be '
-                            'generated.')
+                            'The impact report could not be generated.')
                         send_error_message(self, message)
                         LOGGER.info(message.to_text())
+                        disable_busy_cursor()
+                        self.set_enabled_buttons(True)
+                        return error_code, message
+
+            # If zoom to impact is enabled
+            if setting(
+                    'setZoomToImpactFlag', expected_type=bool):
+                self.iface.zoomToActiveLayer()
+
+            # If hide exposure layers
+            if setting('setHideExposureFlag', expected_type=bool):
+                legend = self.iface.legendInterface()
+                for combo in self.combos_exposures.itervalues():
+                    layer = layer_from_combo(combo)
+                    legend.setLayerVisible(layer, False)
 
             self.done(QDialog.Accepted)
 
