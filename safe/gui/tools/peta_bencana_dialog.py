@@ -34,7 +34,6 @@ from PyQt4.QtNetwork import QNetworkReply
 # noinspection PyUnresolvedReferences
 # pylint: disable=unused-import
 from qgis.core import (
-    QGis,  # NOQA pylint: disable=unused-import
     QgsMapLayerRegistry,
     QgsVectorLayer,
     QgsVectorFileWriter,
@@ -50,7 +49,7 @@ from safe.gui.tools.help.peta_bencana_help import peta_bencana_help
 from safe.utilities.file_downloader import FileDownloader
 from safe.utilities.qgis_utilities import (
     display_warning_message_box,
-    display_warning_message_bar)
+)
 from safe.utilities.qt import disable_busy_cursor
 from safe.utilities.resources import (
     html_footer, html_header, get_ui_class, resources_path)
@@ -537,18 +536,7 @@ class PetaBencanaDialog(QDialog, FORM_CLASS):
         canvas_srid = self.canvas.mapSettings().destinationCrs().srsid()
         on_the_fly_projection = self.canvas.hasCrsTransformEnabled()
         if canvas_srid != 4326 and not on_the_fly_projection:
-            if QGis.QGIS_VERSION_INT >= 20400:
-                self.canvas.setCrsTransformEnabled(True)
-            else:
-                display_warning_message_bar(
-                    self.iface,
-                    self.tr('Enable \'on the fly\''),
-                    self.tr(
-                        'Your current projection is different than EPSG:4326. '
-                        'You should enable \'on the fly\' to display '
-                        'correctly your layers'
-                    )
-                )
+            self.canvas.setCrsTransformEnabled(True)
 
     def reject(self):
         """Redefinition of the method.
