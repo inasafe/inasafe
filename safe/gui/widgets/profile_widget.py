@@ -8,11 +8,12 @@ from PyQt4.QtGui import (
     QTreeWidget,
     QTreeWidgetItem,
     QCheckBox,
-    QDoubleSpinBox,
     QFont,
     QHeaderView,
 )
 
+from safe.common.parameters.percentage_parameter_widget import (
+    PercentageSpinBox)
 from safe.definitions.utilities import get_name, get_class_name
 from safe.utilities.i18n import tr
 
@@ -141,34 +142,3 @@ class ProfileWidget(QTreeWidget, object):
         """Clear method to clear the widget items and the tree widget."""
         super(ProfileWidget, self).clear()
         self.widget_items = []
-
-
-class PercentageSpinBox(QDoubleSpinBox):
-
-    """Custom Spinbox for percentage 0 % - 100 %."""
-
-    def __init__(self, parent):
-        """Constructor."""
-        super(PercentageSpinBox, self).__init__(parent)
-        self.setRange(0.0, 100.0)
-        self.setSingleStep(0.1)
-        self.setDecimals(1)
-        self.setSuffix(' %')
-
-    def setValue(self, p_float):
-        """Override method to set a value to show it as 0 to 100.
-
-        :param p_float: The float number that want to be set.
-        :type p_float: float
-        """
-        p_float = p_float * 100
-
-        super(PercentageSpinBox, self).setValue(p_float)
-
-    def value(self):
-        """Override method to get a value to to 0.0 to 1.0
-
-        :returns: The float number that want to be set.
-        :rtype: float
-        """
-        return super(PercentageSpinBox, self).value() / 100
