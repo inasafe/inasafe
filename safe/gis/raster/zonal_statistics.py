@@ -12,11 +12,16 @@ from safe.definitions.layer_purposes import (
     layer_purpose_aggregate_hazard_impacted)
 from safe.definitions.processing_steps import zonal_stats_steps
 from safe.gis.sanity_check import check_layer
-from safe.gis.vector.prepare_vector_layer import copy_fields, remove_fields
 from safe.gis.vector.reproject import reproject
 from safe.gis.vector.tools import (
-    copy_layer, create_memory_layer, create_field_from_definition)
+    copy_layer,
+    copy_fields,
+    remove_fields,
+    rename_fields,
+    create_memory_layer,
+    create_field_from_definition)
 from safe.utilities.i18n import tr
+from safe.utilities.gis import qgis_version
 from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -107,8 +112,11 @@ def zonal_stats(raster, vector, callback=None):
         fields_to_rename = {
             'exposure_sum': output_field
         }
-        copy_fields(layer, fields_to_rename)
-        remove_fields(layer, fields_to_rename.keys())
+        if qgis_version() >= 21600:
+            rename_fields(layer, fields_to_rename)
+        else:
+            copy_fields(layer, fields_to_rename)
+            remove_fields(layer, fields_to_rename.keys())
         layer.commitChanges()
 
     # The zonal stats is producing some None values. We need to fill these
