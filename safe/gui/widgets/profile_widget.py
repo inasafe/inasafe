@@ -14,7 +14,8 @@ from PyQt4.QtGui import (
 
 from safe.common.parameters.percentage_parameter_widget import (
     PercentageSpinBox)
-from safe.definitions.utilities import get_name, get_class_name
+from safe.definitions.utilities import get_name, get_class_name, definition
+from safe.definitions.exposure import exposure_population
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
@@ -29,7 +30,7 @@ class ProfileWidget(QTreeWidget, object):
 
     def __init__(self, parent, data=None):
         """Constructor."""
-        super(ProfileWidget, self).__init__(parent)
+        super(ProfileWidget, self).__init__()
 
         # Attributes
         self.widget_items = []
@@ -101,6 +102,15 @@ class ProfileWidget(QTreeWidget, object):
             hazard_widget_item.setData(0, Qt.UserRole, hazard)
             hazard_widget_item.setText(0, get_name(hazard))
             for classification in sorted(classifications.keys()):
+                # Filter out classification that doesn't support population.
+                # TODO(IS): This is not the best place to put the filtering.
+                # It's more suitable in the generate_default_profile method
+                # in safe/definitions/utilities.
+                classification_definition = definition(classification)
+                supported_exposures = classification_definition.get(
+                    'exposures', [])
+                if exposure_population not in supported_exposures:
+                    continue
                 classes = classifications[classification]
                 classification_widget_item = QTreeWidgetItem()
                 classification_widget_item.setData(
@@ -128,8 +138,8 @@ class ProfileWidget(QTreeWidget, object):
                     # noinspection PyUnresolvedReferences
                     affected_check_box.stateChanged.connect(
                         displacement_rate_spinbox.setEnabled)
-
-            self.widget_items.append(hazard_widget_item)
+            if hazard_widget_item.childCount() > 0:
+                self.widget_items.append(hazard_widget_item)
 
         self.addTopLevelItems(self.widget_items)
 
