@@ -11,7 +11,6 @@ from distutils.version import StrictVersion
 import qgis  # NOQA pylint: disable=unused-import
 # Import the PyQt and QGIS libraries
 from qgis.core import (
-    QGis,
     QgsRectangle,
     QgsRasterLayer,
     QgsMapLayerRegistry,
@@ -895,12 +894,7 @@ class Plugin(object):
         layer = QgsRasterLayer(path, self.tr('OpenStreetMap'))
         registry = QgsMapLayerRegistry.instance()
 
-        # For older versions we just add directly to the top of legend
-        if QGis.QGIS_VERSION_INT < 20400:
-            # True flag adds layer directly to legend
-            registry.addMapLayer(layer, True)
-            return
-        # Otherwise try to add it as the last layer in the list
+        # Try to add it as the last layer in the list
         # False flag prevents layer being added to legend
         registry.addMapLayer(layer, False)
         root = QgsProject.instance().layerTreeRoot()
