@@ -28,6 +28,10 @@ class PercentageParameterWidget(FloatParameterWidget):
 
         self._input = PercentageSpinBox(self)
         self._input.setValue(self._parameter.value)
+        if 1 > self._parameter.minimum_allowed_value > 0:
+            self._input.setMinimum(self._parameter.minimum_allowed_value)
+        if 1 > self._parameter.maximum_allowed_value > 0:
+            self._input.setMaximum(self._parameter.maximum_allowed_value)
         self._input.setSizePolicy(self._spin_box_size_policy)
 
         self.inner_input_layout.addWidget(self._input)
