@@ -11,38 +11,21 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-__author__ = 'bungcip@gmail.com'
-__revision__ = '$Format:%H$'
-__date__ = '4/12/2012'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
 
 import logging
 import os
 
-# noinspection PyUnresolvedReferences
-# pylint: disable=unused-import
-from qgis.core import QGis, QgsRectangle  # force sip2 api
-
-try:
-    from qgis.core import QgsExpressionContextUtils
-except ImportError:
-    # We don't need this class if QGIS < 2.14. We'll check later.
-    pass
+from qgis.core import QgsRectangle, QgsExpressionContextUtils
 from qgis.gui import QgsMapToolPan
-# pylint: enable=unused-import
 
-# noinspection PyPackageRequirements
 from PyQt4 import QtGui
-# noinspection PyPackageRequirements
-from PyQt4.QtCore import pyqtSignature, QRegExp, pyqtSlot
-# noinspection PyPackageRequirements
+from PyQt4.QtCore import QRegExp
 from PyQt4.QtGui import (
     QDialog, QProgressDialog, QMessageBox, QFileDialog, QRegExpValidator)
 
 import json
 
-from safe.utilities.gis import qgis_version
+from safe.common.utilities import temp_dir
 from safe.common.exceptions import (
     CanceledImportDialogError,
     FileMissingError)
@@ -56,10 +39,15 @@ from safe.utilities.resources import (
 
 from safe.utilities.qgis_utilities import (
     display_warning_message_box,
-    display_warning_message_bar)
+)
 from safe.gui.tools.rectangle_map_tool import RectangleMapTool
 from safe.gui.tools.help.osm_downloader_help import osm_downloader_help
 from safe.utilities.settings import setting, set_setting
+
+__copyright__ = "Copyright 2012, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -73,10 +61,10 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
     def __init__(self, parent=None, iface=None):
         """Constructor for import dialog.
 
-        :param parent: Optional widget to use as parent
+        :param parent: Optional widget to use as parent.
         :type parent: QWidget
 
-        :param iface: An instance of QGisInterface
+        :param iface: An instance of QGisInterface.
         :type iface: QGisInterface
         """
         QDialog.__init__(self, parent)
@@ -87,7 +75,6 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
 
         self.iface = iface
 
-        self.help_context = 'openstreetmap_downloader'
         # creating progress dialog for download
         self.progress_dialog = QProgressDialog(self)
         self.progress_dialog.setAutoClose(False)
@@ -100,6 +87,11 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         self.help_button.setCheckable(True)
         self.help_button.toggled.connect(self.help_toggled)
         self.main_stacked_widget.setCurrentIndex(1)
+
+        # Output directory
+        self.directory_button.clicked.connect(self.directory_button_clicked)
+        self.output_directory.setPlaceholderText(
+            self.tr('[Create a temporary layer]'))
 
         # Disable boundaries group box until boundary checkbox is ticked
         self.boundary_group.setEnabled(False)
@@ -179,8 +171,6 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
 
         self.update_helper_political_level()
 
-    @pyqtSlot()
-    @pyqtSignature('bool')  # prevents actions being handled twice
     def help_toggled(self, flag):
         """Show or hide the help tab in the stacked widget.
 
@@ -286,8 +276,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
             extent = rectangle_geo_array(rectangle, self.iface.mapCanvas())
             self.update_extent(extent)
 
-    @pyqtSignature('')  # prevents actions being handled twice
-    def on_directory_button_clicked(self):
+    def directory_button_clicked(self):
         """Show a dialog to choose directory."""
         # noinspection PyCallByClass,PyTypeChecker
         self.output_directory.setText(QFileDialog.getExistingDirectory(
@@ -367,6 +356,8 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
             for feature_type in feature_types:
 
                 output_directory = self.output_directory.text()
+                if output_directory == '':
+                    output_directory = temp_dir(sub_dir='work')
                 output_prefix = self.filename_prefix.text()
                 overwrite = self.overwrite_flag.isChecked()
                 output_base_file_path = self.get_output_base_path(
@@ -493,6 +484,10 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         """
         path = self.output_directory.text()
 
+        if path == '':
+            # If let empty, we create an temporary directory
+            return
+
         if os.path.exists(path):
             return
 
@@ -539,8 +534,8 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
 
         layer = self.iface.addVectorLayer(path, feature_type, 'ogr')
 
-        # Check if it's a building layer and if it's QGIS 2.14 about the 2.5D
-        if qgis_version() >= 21400 and feature_type == 'buildings':
+        # Check if it's a building layer about the 2.5D
+        if feature_type == 'buildings':
             layer_scope = QgsExpressionContextUtils.layerScope(layer)
             if not layer_scope.variable('qgis_25d_height'):
                 QgsExpressionContextUtils.setLayerVariable(
@@ -552,17 +547,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         canvas_srid = self.canvas.mapSettings().destinationCrs().srsid()
         on_the_fly_projection = self.canvas.hasCrsTransformEnabled()
         if canvas_srid != 4326 and not on_the_fly_projection:
-            if QGis.QGIS_VERSION_INT >= 20400:
-                self.canvas.setCrsTransformEnabled(True)
-            else:
-                display_warning_message_bar(
-                    self.iface,
-                    self.tr('Enable \'on the fly\''),
-                    self.tr(
-                        'Your current projection is different than EPSG:4326. '
-                        'You should enable \'on the fly\' to display '
-                        'correctly your layers')
-                )
+            self.canvas.setCrsTransformEnabled(True)
 
     def reject(self):
         """Redefinition of the method to remove the rectangle selection tool.
