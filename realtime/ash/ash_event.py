@@ -376,7 +376,7 @@ class AshEvent(QObject):
         potential_impact_header = [
             self.tr('Potential Impact'),
             self.tr('Impact on health (respiration), livestock, and contamination of water supply.'),
-            self.tr('Damage to transportation routes (e.g. airports, roads, railways); damage to critical infrastructur (e.g. electricity supply); damage to more vulnerable agricultural crops (e.g. rice fields)'),
+            self.tr('Damage to transportation routes (e.g. airports, roads, railways); damage to critical infrastructure (e.g. electricity supply); damage to more vulnerable agricultural crops (e.g. rice fields)'),
             self.tr('Damage to less vulnerable agricultural crops (e.g. tea plantations) and destruction of more vulnerable crops; destruction of critical infrastructure; cosmetic (non-structural) damage to buildings'),
             self.tr('Dry loading on buildings causing structural damage but not collapse; Wet loading on buildings (i.e. ash loading + heavy rainfall) causing structural collapse.'),
             self.tr('Dry loading on buildings causing structural collapse.')
@@ -384,7 +384,7 @@ class AshEvent(QObject):
 
         context = {
             'table_header': table_header,
-            'affected_header': self.tr('Estimated of People Affected'),
+            'affected_header': self.tr('Estimated People Affected'),
             'potential_impact_header': potential_impact_header,
             'ash_thickness_header': self.tr('Ash Thickness Range (cm)')
         }

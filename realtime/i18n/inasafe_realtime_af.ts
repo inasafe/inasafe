@@ -2,237 +2,237 @@
 <context>
     <name>AshEvent</name>
     <message>
-        <location filename="ash_event.py" line="255"/>
+        <location filename="ash_event.py" line="262"/>
         <source>Volcanic Ash Impact</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="256"/>
+        <location filename="ash_event.py" line="263"/>
         <source>Volcano: %s, %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="259"/>
+        <location filename="ash_event.py" line="266"/>
         <source>Province: %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="260"/>
+        <location filename="ash_event.py" line="267"/>
         <source>Alert Level: %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="264"/>
+        <location filename="ash_event.py" line="271"/>
         <source>Position: %s, %s; Eruption Column Height (a.s.l) - %d m</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="267"/>
+        <location filename="ash_event.py" line="274"/>
         <source>Elapsed time since event: %s hour(s) and %s minute(s)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="269"/>
+        <location filename="ash_event.py" line="276"/>
         <source>Potential impact at each fallout level</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="271"/>
+        <location filename="ash_event.py" line="278"/>
         <source>Nearby places</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="272"/>
+        <location filename="ash_event.py" line="279"/>
         <source>Land Cover Impact</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="273"/>
+        <location filename="ash_event.py" line="280"/>
         <source>The impact estimation is automatically generated and only takes into account the population, cities and land cover affected by different levels of volcanic ash fallout at surface level. The estimate is based on volcanic ash fallout data from Badan Geologi, population count data derived by DMInnovation from worldpop.org.uk, place information and land cover classification data provided by Indonesian Geospatial Portal at http://portal.ina-sdi.or.id and software developed by BNPB. Limitation in the estimates of surface fallout, population and place names datasets may result in a significant misrepresentation of the on-the-surface situation in the figures shown here. Consequently, decisions should not be made solely on the information presented here and should always be verified by ground truthing and other reliable information sources.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="290"/>
+        <location filename="ash_event.py" line="297"/>
         <source>This report was created using InaSAFE version %s. Visit http://inasafe.org for more information. </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="293"/>
+        <location filename="ash_event.py" line="300"/>
         <source>Supported by DMInnovation, Geoscience Australia and the World Bank-GFDRR</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="784"/>
+        <location filename="ash_event.py" line="791"/>
         <source>People Affected</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="598"/>
+        <location filename="ash_event.py" line="605"/>
         <source>Fallout Level</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="466"/>
+        <location filename="ash_event.py" line="473"/>
         <source>Very Low</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="467"/>
+        <location filename="ash_event.py" line="474"/>
         <source>Low</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="468"/>
+        <location filename="ash_event.py" line="475"/>
         <source>Moderate</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="469"/>
+        <location filename="ash_event.py" line="476"/>
         <source>High</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="470"/>
+        <location filename="ash_event.py" line="477"/>
         <source>Very High</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="370"/>
+        <location filename="ash_event.py" line="377"/>
         <source>Potential Impact</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="371"/>
+        <location filename="ash_event.py" line="378"/>
         <source>Impact on health (respiration), livestock, and contamination of water supply.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="372"/>
-        <source>Damage to transportation routes (e.g. airports, roads, railways); damage to critical infrastructur (e.g. electricity supply); damage to more vulnerable agricultural crops (e.g. rice fields)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="ash_event.py" line="373"/>
+        <location filename="ash_event.py" line="380"/>
         <source>Damage to less vulnerable agricultural crops (e.g. tea plantations) and destruction of more vulnerable crops; destruction of critical infrastructure; cosmetic (non-structural) damage to buildings</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="374"/>
+        <location filename="ash_event.py" line="381"/>
         <source>Dry loading on buildings causing structural damage but not collapse; Wet loading on buildings (i.e. ash loading + heavy rainfall) causing structural collapse.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="375"/>
+        <location filename="ash_event.py" line="382"/>
         <source>Dry loading on buildings causing structural collapse.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="382"/>
+        <location filename="ash_event.py" line="389"/>
         <source>Ash Thickness Range (cm)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="445"/>
+        <location filename="ash_event.py" line="452"/>
         <source>Land Cover Type</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="446"/>
+        <location filename="ash_event.py" line="453"/>
         <source>Area affected (km&lt;sup&gt;2&lt;/sup&gt;)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="596"/>
+        <location filename="ash_event.py" line="603"/>
         <source>Name</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="597"/>
+        <location filename="ash_event.py" line="604"/>
         <source>People (x1000)/ Airport affected</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="424"/>
+        <location filename="ash_event.py" line="431"/>
         <source>Forest</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="425"/>
+        <location filename="ash_event.py" line="432"/>
         <source>Plantation</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="426"/>
+        <location filename="ash_event.py" line="433"/>
         <source>Water Supply</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="427"/>
+        <location filename="ash_event.py" line="434"/>
         <source>Settlement</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="428"/>
+        <location filename="ash_event.py" line="435"/>
         <source>Rice Field</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="380"/>
-        <source>Estimated of People Affected</source>
+        <location filename="ash_event.py" line="379"/>
+        <source>Damage to transportation routes (e.g. airports, roads, railways); damage to critical infrastructure (e.g. electricity supply); damage to more vulnerable agricultural crops (e.g. rice fields)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="387"/>
+        <source>Estimated People Affected</source>
         <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>FloodEvent</name>
     <message>
-        <location filename="flood_event.py" line="604"/>
+        <location filename="flood_event.py" line="610"/>
         <source>THE GOVERNMENT OF DKI JAKARTA PROVINCE
 REGIONAL DISASTER MANAGEMENT AGENCY
 </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="flood_event.py" line="607"/>
+        <location filename="flood_event.py" line="613"/>
         <source>FLOOD IMPACT REPORT FOR POPULATION</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="flood_event.py" line="608"/>
+        <location filename="flood_event.py" line="614"/>
         <source>Based on flood %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="flood_event.py" line="611"/>
+        <location filename="flood_event.py" line="617"/>
         <source>Legend</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="flood_event.py" line="612"/>
+        <location filename="flood_event.py" line="618"/>
         <source>InaSAFE Analysis Result</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="flood_event.py" line="613"/>
+        <location filename="flood_event.py" line="619"/>
         <source>Data Source</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="flood_event.py" line="614"/>
+        <location filename="flood_event.py" line="620"/>
         <source>Contact</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="flood_event.py" line="615"/>
+        <location filename="flood_event.py" line="621"/>
         <source>Supported by</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="flood_event.py" line="616"/>
+        <location filename="flood_event.py" line="622"/>
         <source>Disclaimer</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="flood_event.py" line="617"/>
+        <location filename="flood_event.py" line="623"/>
         <source>Data Sources:
 1. Hazard Data
    Flood: BPBD DKI Jakarta / PetaJakarta.org
@@ -242,12 +242,12 @@ REGIONAL DISASTER MANAGEMENT AGENCY
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="flood_event.py" line="623"/>
+        <location filename="flood_event.py" line="629"/>
         <source>This impact estimate is automatically generated and only takes into account the population affected by flood hazard in Jakarta. The estimate is based on flood hazard data from BPBD DKI Jakarta and population exposure data from the Population Agency, DKI Jakarta Province. Limitations in the estimates of flood hazard and population may result in significant misrepresentation of the on-the-surface situation in the figures shown here. Consequently, decisions should not be made solely on the information presented here and should always be verified with other reliable information sources.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="flood_event.py" line="637"/>
+        <location filename="flood_event.py" line="643"/>
         <source>Pusat Pengendalian Operasi (Pusdalops)
 BPBD Provinsi DKI Jakarta
 Gedung Dinas Teknis Lt. 5
@@ -256,32 +256,32 @@ Jl. Abdul Muis No. 66, Telp. 121
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="flood_event.py" line="656"/>
+        <location filename="flood_event.py" line="662"/>
         <source>%s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="flood_event.py" line="658"/>
+        <location filename="flood_event.py" line="664"/>
         <source>Total affected population (people)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="flood_event.py" line="663"/>
+        <location filename="flood_event.py" line="669"/>
         <source>Estimates of IDP (people)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="flood_event.py" line="669"/>
+        <location filename="flood_event.py" line="675"/>
         <source>Relief items to be provided %s :</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="flood_event.py" line="752"/>
+        <location filename="flood_event.py" line="758"/>
         <source>People Affected</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="flood_event.py" line="760"/>
+        <location filename="flood_event.py" line="766"/>
         <source>Flood Depth (cm)</source>
         <translation type="unfinished"/>
     </message>
