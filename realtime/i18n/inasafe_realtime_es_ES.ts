@@ -4,22 +4,22 @@
     <message>
         <location filename="ash_event.py" line="255"/>
         <source>Volcanic Ash Impact</source>
-        <translation type="unfinished"/>
+        <translation>Impacto de ceniza volcánica</translation>
     </message>
     <message>
         <location filename="ash_event.py" line="256"/>
         <source>Volcano: %s, %s</source>
-        <translation type="unfinished"/>
+        <translation>Volcán: %s, %s</translation>
     </message>
     <message>
         <location filename="ash_event.py" line="259"/>
         <source>Province: %s</source>
-        <translation type="unfinished"/>
+        <translation>Provincia: %s</translation>
     </message>
     <message>
         <location filename="ash_event.py" line="260"/>
         <source>Alert Level: %s</source>
-        <translation type="unfinished"/>
+        <translation>Nivel de alerta: %s</translation>
     </message>
     <message>
         <location filename="ash_event.py" line="264"/>
@@ -39,12 +39,12 @@
     <message>
         <location filename="ash_event.py" line="271"/>
         <source>Nearby places</source>
-        <translation type="unfinished"/>
+        <translation>Lugares cercanos</translation>
     </message>
     <message>
         <location filename="ash_event.py" line="272"/>
         <source>Land Cover Impact</source>
-        <translation type="unfinished"/>
+        <translation>Impacto en la cubierta del suelo</translation>
     </message>
     <message>
         <location filename="ash_event.py" line="273"/>
@@ -62,123 +62,123 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="786"/>
+        <location filename="ash_event.py" line="784"/>
         <source>People Affected</source>
-        <translation type="unfinished"/>
+        <translation>Persona afectada</translation>
     </message>
     <message>
-        <location filename="ash_event.py" line="600"/>
+        <location filename="ash_event.py" line="598"/>
         <source>Fallout Level</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="468"/>
+        <location filename="ash_event.py" line="466"/>
         <source>Very Low</source>
-        <translation type="unfinished"/>
+        <translation>Muy Bajo</translation>
     </message>
     <message>
-        <location filename="ash_event.py" line="469"/>
+        <location filename="ash_event.py" line="467"/>
         <source>Low</source>
         <translation>Bajo</translation>
     </message>
     <message>
-        <location filename="ash_event.py" line="470"/>
+        <location filename="ash_event.py" line="468"/>
         <source>Moderate</source>
         <translation>Moderado</translation>
     </message>
     <message>
-        <location filename="ash_event.py" line="471"/>
+        <location filename="ash_event.py" line="469"/>
         <source>High</source>
         <translation>Alto</translation>
     </message>
     <message>
-        <location filename="ash_event.py" line="472"/>
+        <location filename="ash_event.py" line="470"/>
         <source>Very High</source>
-        <translation type="unfinished"/>
+        <translation>Muy alto</translation>
     </message>
     <message>
-        <location filename="ash_event.py" line="372"/>
+        <location filename="ash_event.py" line="370"/>
         <source>Potential Impact</source>
-        <translation type="unfinished"/>
+        <translation>Impacto potencial</translation>
     </message>
     <message>
-        <location filename="ash_event.py" line="373"/>
+        <location filename="ash_event.py" line="371"/>
         <source>Impact on health (respiration), livestock, and contamination of water supply.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="374"/>
+        <location filename="ash_event.py" line="372"/>
         <source>Damage to transportation routes (e.g. airports, roads, railways); damage to critical infrastructur (e.g. electricity supply); damage to more vulnerable agricultural crops (e.g. rice fields)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="375"/>
+        <location filename="ash_event.py" line="373"/>
         <source>Damage to less vulnerable agricultural crops (e.g. tea plantations) and destruction of more vulnerable crops; destruction of critical infrastructure; cosmetic (non-structural) damage to buildings</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="376"/>
+        <location filename="ash_event.py" line="374"/>
         <source>Dry loading on buildings causing structural damage but not collapse; Wet loading on buildings (i.e. ash loading + heavy rainfall) causing structural collapse.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="377"/>
+        <location filename="ash_event.py" line="375"/>
         <source>Dry loading on buildings causing structural collapse.</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="ash_event.py" line="382"/>
-        <source>People Affected (x1000)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="ash_event.py" line="384"/>
         <source>Ash Thickness Range (cm)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="447"/>
+        <location filename="ash_event.py" line="445"/>
         <source>Land Cover Type</source>
-        <translation type="unfinished"/>
+        <translation>Tipo de cubierta del suelo</translation>
     </message>
     <message>
-        <location filename="ash_event.py" line="448"/>
+        <location filename="ash_event.py" line="446"/>
         <source>Area affected (km&lt;sup&gt;2&lt;/sup&gt;)</source>
-        <translation type="unfinished"/>
+        <translation>Área afectada (km&lt;sup&gt;2&lt;/sup&gt;)</translation>
     </message>
     <message>
-        <location filename="ash_event.py" line="598"/>
+        <location filename="ash_event.py" line="596"/>
         <source>Name</source>
         <translation>Nombre</translation>
     </message>
     <message>
-        <location filename="ash_event.py" line="599"/>
+        <location filename="ash_event.py" line="597"/>
         <source>People (x1000)/ Airport affected</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="426"/>
+        <location filename="ash_event.py" line="424"/>
         <source>Forest</source>
-        <translation type="unfinished"/>
+        <translation>Bosque</translation>
     </message>
     <message>
-        <location filename="ash_event.py" line="427"/>
+        <location filename="ash_event.py" line="425"/>
         <source>Plantation</source>
-        <translation type="unfinished"/>
+        <translation>Plantación</translation>
     </message>
     <message>
-        <location filename="ash_event.py" line="428"/>
+        <location filename="ash_event.py" line="426"/>
         <source>Water Supply</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="429"/>
+        <location filename="ash_event.py" line="427"/>
         <source>Settlement</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="ash_event.py" line="430"/>
+        <location filename="ash_event.py" line="428"/>
         <source>Rice Field</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="380"/>
+        <source>Estimated of People Affected</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -209,22 +209,22 @@ REGIONAL DISASTER MANAGEMENT AGENCY
     <message>
         <location filename="flood_event.py" line="612"/>
         <source>InaSAFE Analysis Result</source>
-        <translation type="unfinished"/>
+        <translation>Resultado de los análisis InaSAFE</translation>
     </message>
     <message>
         <location filename="flood_event.py" line="613"/>
         <source>Data Source</source>
-        <translation type="unfinished"/>
+        <translation>Fuente de datos</translation>
     </message>
     <message>
         <location filename="flood_event.py" line="614"/>
         <source>Contact</source>
-        <translation type="unfinished"/>
+        <translation>Contacto</translation>
     </message>
     <message>
         <location filename="flood_event.py" line="615"/>
         <source>Supported by</source>
-        <translation type="unfinished"/>
+        <translation>Apoyado por</translation>
     </message>
     <message>
         <location filename="flood_event.py" line="616"/>
@@ -258,7 +258,7 @@ Jl. Abdul Muis No. 66, Telp. 121
     <message>
         <location filename="flood_event.py" line="656"/>
         <source>%s</source>
-        <translation type="unfinished"/>
+        <translation>%s</translation>
     </message>
     <message>
         <location filename="flood_event.py" line="658"/>
@@ -278,7 +278,7 @@ Jl. Abdul Muis No. 66, Telp. 121
     <message>
         <location filename="flood_event.py" line="752"/>
         <source>People Affected</source>
-        <translation type="unfinished"/>
+        <translation>Persona afectada</translation>
     </message>
     <message>
         <location filename="flood_event.py" line="760"/>
@@ -376,7 +376,7 @@ Jl. Abdul Muis No. 66, Telp. 121
     <message>
         <location filename="shake_event.py" line="1007"/>
         <source>People Exposed (x 1000)</source>
-        <translation type="unfinished"/>
+        <translation>Gente expuesta (x 1000)</translation>
     </message>
     <message>
         <location filename="shake_event.py" line="1011"/>
@@ -436,7 +436,7 @@ Jl. Abdul Muis No. 66, Telp. 121
     <message>
         <location filename="shake_event.py" line="1721"/>
         <source>bearing</source>
-        <translation type="unfinished"/>
+        <translation>orientación</translation>
     </message>
     <message>
         <location filename="shake_event.py" line="1737"/>

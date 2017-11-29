@@ -326,8 +326,6 @@ class AshEvent(QObject):
             if val not in population_dict:
                 population_dict[val] = 0
             else:
-                # divide per 1000 people (unit used in the report)
-                population_dict[val] /= 1000
                 population_dict[val] = format_int(
                     population_rounding(population_dict[val]))
 
@@ -379,7 +377,7 @@ class AshEvent(QObject):
 
         context = {
             'table_header': table_header,
-            'affected_header': self.tr('People Affected (x1000)'),
+            'affected_header': self.tr('Estimated of People Affected'),
             'potential_impact_header': potential_impact_header,
             'ash_thickness_header': self.tr('Ash Thickness Range (cm)')
         }
