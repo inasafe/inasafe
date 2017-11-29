@@ -257,7 +257,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerShape>
-  <ComposerMap mapRotation="0" keepLayerSet="true" id="0" previewMode="Rectangle" drawCanvasItems="true">
+  <ComposerMap mapRotation="0" keepLayerSet="true" id="0" previewMode="Render" drawCanvasItems="true">
    <Extent ymin="-0.9765967900000001" xmin="100.33454304485572095" ymax="-0.91769250999998986" xmax="100.40082705514082306"/>
    <LayerSet>
     <Layer>Padang_Village_Boundary_WGS8420150910151542377</Layer>
