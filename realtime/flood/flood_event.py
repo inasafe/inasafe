@@ -81,6 +81,7 @@ class FloodEvent(QObject):
             hour,
             duration,
             level,
+            template_path=None,
             dummy_report_folder=None):
 
         QObject.__init__(self)
@@ -126,6 +127,11 @@ class FloodEvent(QObject):
 
         if not os.path.exists(self.report_path):
             os.makedirs(self.report_path)
+
+        if template_path:
+            self.template_path = template_path
+        else:
+            self.template_path = self.flood_fixtures_dir('realtime-flood.qpt')
 
         self.hazard_path = os.path.join(self.report_path, 'flood_data.json')
         self.hazard_layer = None

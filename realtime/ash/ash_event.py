@@ -61,6 +61,7 @@ class AshEvent(QObject):
             alert_level=None,
             locale=None,
             working_dir=None,
+            template_path=None,
             hazard_path=None,
             overview_path=None,
             highlight_base_path=None,
@@ -79,6 +80,7 @@ class AshEvent(QObject):
         :param alert_level:
         :param locale:
         :param working_dir:
+        :param template_path: path to custom Ash Report template
         :param hazard_path: It can be a url or local file path
         :param population_path:
         :param landcover_path:
@@ -118,6 +120,11 @@ class AshEvent(QObject):
         self.working_dir = working_dir
         if not os.path.exists(self.working_dir_path()):
             os.makedirs(self.working_dir_path())
+
+        if template_path:
+            self.template_path = template_path
+        else:
+            self.template_path = self.ash_fixtures_dir('realtime-ash.qpt')
 
         dateformat = '%Y%m%d%H%M%S'
         timestring = self.time.strftime(dateformat)
@@ -794,7 +801,9 @@ class AshEvent(QObject):
         CANVAS.setExtent(hazard_layer.extent())
         CANVAS.refresh()
 
-        template_path = self.ash_fixtures_dir('realtime-ash.qpt')
+        # try to get template path from environment variable
+
+        template_path = self.template_path
 
         with open(template_path) as f:
             template_content = f.read()

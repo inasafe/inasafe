@@ -30,6 +30,7 @@ def process_event(
     """
 
     :param working_dir: The working directory of floodmaps report
+    :param template_path: custom Ash Report template path
     :param locale_option: the locale of the report
     :param event_time:
     :param volcano_name:
@@ -47,6 +48,7 @@ def process_event(
     volcano_path = os.environ['INASAFE_ASH_VOLCANO_PATH']
     highlight_base_path = os.environ['INASAFE_ASH_HIGHLIGHT_BASE_PATH']
     overview_path = os.environ['INASAFE_ASH_OVERVIEW_PATH']
+    template_path = os.environ.get('INASAFE_ASH_TEMPLATE_PATH')
 
     # We always want to generate en products too so we manipulate the locale
     # list and loop through them:
@@ -58,6 +60,7 @@ def process_event(
         LOGGER.info('Creating Ash Event for locale %s.' % locale)
         event = AshEvent(
             working_dir=working_dir,
+            template_path=template_path,
             locale=locale,
             event_time=event_time,
             volcano_name=volcano_name,

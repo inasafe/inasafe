@@ -31,6 +31,7 @@ def process_event(working_directory, locale_option='en', dummy_folder=None):
     :return:
     """
     population_path = os.environ['INASAFE_FLOOD_POPULATION_PATH']
+    template_path = os.environ.get('INASAFE_FLOOD_TEMPLATE_PATH')
 
     # check settings file
     settings_file = os.path.join(
@@ -79,6 +80,7 @@ def process_event(working_directory, locale_option='en', dummy_folder=None):
         try:
             event = FloodEvent(
                 working_dir=working_directory,
+                template_path=template_path,
                 locale=locale,
                 population_path=population_path,
                 duration=duration,
