@@ -161,6 +161,7 @@ exposure_population = {
         }
     ],
     'allowed_geometries': [
+        'point',  # See feature request #4592
         'polygon',
         'raster'
     ],
