@@ -101,13 +101,13 @@ def generate_impact_map_report(impact_function, iface):
         extra_layers=extra_layers)
 
     # Get other setting
-    logo_path = setting('organisation_logo_path', None, str)
+    logo_path = setting('organisation_logo_path', None, basestring)
     impact_report.inasafe_context.organisation_logo = logo_path
 
-    disclaimer_text = setting('reportDisclaimer', None, str)
+    disclaimer_text = setting('reportDisclaimer', None, basestring)
     impact_report.inasafe_context.disclaimer = disclaimer_text
 
-    north_arrow_path = setting('north_arrow_path', None, str)
+    north_arrow_path = setting('north_arrow_path', None, basestring)
     impact_report.inasafe_context.north_arrow = north_arrow_path
 
     # get the extent of impact layer
