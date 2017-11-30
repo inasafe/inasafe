@@ -35,8 +35,7 @@ def main():
     app, iface = qgis_app()
 
     default_profile = generate_default_profile()
-    profile_widget = ProfileWidget(
-        parent=iface.mainWindow(), data=default_profile)
+    profile_widget = ProfileWidget(data=default_profile)
 
     get_result_button = QPushButton('Get result...')
     get_result_button.clicked.connect(

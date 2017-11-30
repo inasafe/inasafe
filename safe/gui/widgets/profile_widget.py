@@ -28,7 +28,7 @@ class ProfileWidget(QTreeWidget, object):
 
     """Profile Widget."""
 
-    def __init__(self, parent, data=None):
+    def __init__(self, data=None):
         """Constructor."""
         super(ProfileWidget, self).__init__()
 
