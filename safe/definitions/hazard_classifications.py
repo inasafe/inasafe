@@ -664,7 +664,7 @@ inundation_classes = {
         'This is a binary classification for an area. The area is either '
         '<b>wet</b> (affected by flood water) or <b>dry</b> (not affected '
         'by flood water). This unit does not describe how <b>wet</b> or '
-        '<b>dry</b> an area is.'), # ask
+        '<b>dry</b> an area is.'),
     'type': hazard_classification_type,
     'citations': [
         {
@@ -678,11 +678,11 @@ inundation_classes = {
             'value': 3,
             'color': red,
             'name': tr('Inundation Class 3 (Daerah Bahaya 3)'),
-            'affected': True, # ask
-            'description': tr('Water is present above ground height.'), # ask
-            'string_defaults': ['wet', '1', 'YES', 'y', 'yes', 'true'], # ask
+            'affected': True,
+            'description': tr('Water is present above ground height.'),
+            'string_defaults': ['wet', '1', 'YES', 'y', 'yes', 'true'],
             'fatality_rate': None,
-            'displacement_rate': 0.01, # ask
+            'displacement_rate': 0.01,
             'numeric_default_min': 1.5,
             'numeric_default_max': big_number,
             'citations': [
