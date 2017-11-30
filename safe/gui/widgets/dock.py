@@ -1300,6 +1300,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             legend.setLayerVisible(qgis_exposure, False)
 
         if setting('generate_report', True, bool):
+            LOGGER.info('Reports are going to be generated the analysis.')
             # we only want to generate non pdf/qpt report
             html_components = [standard_impact_report_metadata_html]
             error_code, message = self.impact_function.generate_report(
@@ -1312,6 +1313,13 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 send_error_message(self, message)
                 LOGGER.info(message.to_text())
                 return ANALYSIS_FAILED_BAD_CODE, message
+        else:
+            LOGGER.info(
+                'Reports are not generated because of your settings.')
+            display_warning_message_bar(
+                tr('Reports'),
+                tr('Reports are not going to be generated because of your '
+                   'InaSAFE settings.'))
 
         if self.impact_function.debug_mode:
             add_debug_layers_to_canvas(self.impact_function)
