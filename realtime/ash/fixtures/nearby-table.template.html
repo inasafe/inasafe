@@ -79,7 +79,7 @@
 			{% else %}
 			<tr>
 				<td colspan="3" class="center">
-					No nearby cities or airport affected
+					{{ empty_rows|safe }}
 				</td>
 			</tr>
 			{% endfor %}

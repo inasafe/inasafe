@@ -47,7 +47,7 @@
    {% else %}
      <tr>
         <td colspan="2" class="center">
-         No area affected
+            {{ empty_rows|safe }}
         </td>
      </tr>
    {% endfor %}
