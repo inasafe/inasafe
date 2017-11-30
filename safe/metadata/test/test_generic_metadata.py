@@ -1,24 +1,5 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool developed by AusAid -
-**Exception Classes.**
-
-Custom exception classes for the IS application.
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
-
-__author__ = 'marco@opengis.ch'
-__revision__ = '$Format:%H$'
-__date__ = '12/10/2014'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
+"""Test Generic Metadata."""
 
 import os
 import uuid
@@ -32,8 +13,15 @@ from safe.metadata.test import (
     EXISTING_GENERIC_JSON,
     EXISTING_NO_METADATA)
 
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
+
 
 class TestGenericMetadata(TestCase):
+
+    maxDiff = None
 
     def test_json_write(self):
         with open(EXISTING_GENERIC_JSON) as f:
@@ -45,7 +33,7 @@ class TestGenericMetadata(TestCase):
         with open(filename) as f:
             written_json = f.read()
 
-        self.assertEquals(expected_json, written_json)
+        self.assertMultiLineEqual(expected_json, written_json)
 
     def test_json_write_no_metadata(self):
         """Test write metadata for no metadata layer file."""
@@ -73,7 +61,7 @@ class TestGenericMetadata(TestCase):
         with open(EXISTING_GENERIC_JSON) as f:
             expected_metadata = f.read()
 
-        self.assertEquals(expected_metadata, metadata.json)
+        self.assertMultiLineEqual(expected_metadata, metadata.json)
 
         # With filtering
         FILTERED_PATH = (

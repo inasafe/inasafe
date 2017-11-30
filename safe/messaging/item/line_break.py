@@ -22,7 +22,7 @@ from text import Text
 
 
 class LineBreak(Text):
-    """A class to model line breaks in text the messaging system """
+    """A class to model line breaks in text the messaging system."""
 
     def to_html(self, **kwargs):
         """Render as html

@@ -1,24 +1,10 @@
 # coding=utf-8
-"""
-Impact Layer Merge Dialog.
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
-
-__author__ = 'Christian Christelis christian@kartoza.com'
-__revision__ = '$Format:%H$'
-__date__ = '27/10/2014'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
+"""Need Manager Dialog."""
 
 import os
-from PyQt4 import QtGui
 from os.path import expanduser, basename
 
+from PyQt4 import QtGui
 from PyQt4.QtCore import pyqtSignature, pyqtSlot
 from PyQt4.QtGui import (
     QDialog,
@@ -29,11 +15,6 @@ from PyQt4.QtGui import (
     QMessageBox,
     QIcon
 )
-# This import must come first to force sip2 api
-# noinspection PyUnresolvedReferences
-# pylint: disable=unused-import
-from qgis.core import QGis  # force sip2 api
-
 from parameters.float_parameter import FloatParameter
 from parameters.parameter_exceptions import (
     ValueOutOfBounds,
@@ -43,6 +24,9 @@ from parameters.qt_widgets.parameter_container import (
     ParameterContainer)
 from parameters.string_parameter import StringParameter
 from parameters.text_parameter import TextParameter
+# This import must come first to force sip2 api
+# noinspection PyUnresolvedReferences
+from qgis.core import QGis  # NOQA pylint: disable=unused-import
 
 from safe.common.parameters.resource_parameter import ResourceParameter
 from safe.gui.tools.help.needs_manager_help import needs_manager_helps
@@ -51,6 +35,12 @@ from safe.messaging import styles
 from safe.utilities.i18n import tr
 from safe.utilities.resources import (
     resources_path, get_ui_class, html_footer, html_header)
+
+__copyright__ = "Copyright 2014, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
+
 
 INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
 FORM_CLASS = get_ui_class('needs_manager_dialog_base.ui')
@@ -650,9 +640,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         file_name_dialog.setAcceptMode(QtGui.QFileDialog.AcceptOpen)
         file_name_dialog.setNameFilter(self.tr('JSON files (*.json *.JSON)'))
         file_name_dialog.setDefaultSuffix('json')
-        current_directory = os.path.dirname(__file__)
-        path_name = os.path.join(
-            current_directory, '..', '..', 'resources', 'minimum_needs')
+        path_name = resources_path('minimum_needs')
         file_name_dialog.setDirectory(path_name)
         if file_name_dialog.exec_():
             file_name = file_name_dialog.selectedFiles()[0]

@@ -1,28 +1,36 @@
 # coding=utf-8
 """InaSAFE Wizard Step Field."""
 
+import logging
 import re
+from copy import deepcopy
 
-from PyQt4 import QtCore
+from PyQt4.QtCore import QVariant, Qt
 from PyQt4.QtGui import QListWidgetItem, QAbstractItemView
 
-from safe.utilities.i18n import tr
 from safe import messaging as m
-
+from safe.definitions.fields import population_count_field
+from safe.definitions.layer_modes import layer_mode_continuous
 from safe.definitions.layer_purposes import (
     layer_purpose_aggregation, layer_purpose_hazard, layer_purpose_exposure)
-from safe.definitions.layer_modes import layer_mode_continuous
+from safe.definitions.utilities import (
+    get_fields,
+    get_non_compulsory_fields,
+    get_field_groups,
+    definition,
+    get_compulsory_fields,
+)
+from safe.gui.tools.wizard.utilities import (
+    get_question_text, skip_inasafe_field)
 from safe.gui.tools.wizard.wizard_step import (
     WizardStep, get_wizard_step_ui_class)
 from safe.gui.tools.wizard.wizard_strings import (
     field_question_subcategory_unit,
     field_question_subcategory_classified,
     field_question_aggregation)
-from safe.gui.tools.wizard.utilities import (
-    get_question_text, skip_inasafe_field)
-from safe.definitions.utilities import (
-    get_fields, get_non_compulsory_fields, get_field_groups)
-from safe.definitions.fields import population_count_field
+from safe.utilities.i18n import tr
+
+LOGGER = logging.getLogger('InaSAFE')
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -76,7 +84,15 @@ class StepKwField(WizardStep, FORM_CLASS):
         # Has layer groups, go to field mapping
         field_groups = get_field_groups(
             layer_purpose['key'], subcategory['key'])
-        if field_groups:
+        compulsory_field = get_compulsory_fields(
+            layer_purpose['key'], subcategory['key'])
+
+        # It's aggregation and has field_groups.
+        if field_groups and layer_purpose == layer_purpose_aggregation:
+            return self.parent.step_kw_fields_mapping
+
+        # It has field_groups and the compulsory field is population count.
+        if field_groups and compulsory_field == population_count_field:
             return self.parent.step_kw_fields_mapping
 
         # Has classifications, go to multi classifications
@@ -126,7 +142,7 @@ class StepKwField(WizardStep, FORM_CLASS):
         field_descriptions = ''
         feature_count = self.parent.layer.featureCount()
         for field_name in field_names:
-            layer_fields = self.parent.layer.dataProvider().fields()
+            layer_fields = self.parent.layer.fields()
             field_index = layer_fields.indexFromName(field_name)
             # Exit if the selected field_names comes from a previous wizard run
             if field_index < 0:
@@ -146,7 +162,7 @@ class StepKwField(WizardStep, FORM_CLASS):
                 '<br><b>Field type</b>: {field_type}').format(
                 field_type=field_type)
             if (feature_count != -1 and (
-                        layer_purpose == layer_purpose_aggregation)):
+                    layer_purpose == layer_purpose_aggregation)):
                 if len(unique_values) == feature_count:
                     unique = tr('Yes')
                 else:
@@ -189,19 +205,30 @@ class StepKwField(WizardStep, FORM_CLASS):
         purpose = self.parent.step_kw_purpose.selected_purpose()
         subcategory = self.parent.step_kw_subcategory.selected_subcategory()
         unit = self.parent.step_kw_unit.selected_unit()
+        layer_mode = self.parent.step_kw_layermode.selected_layermode()
 
         # Set mode
         # Notes(IS) I hard coded this one, need to fix it after it's working.
-        if (self.parent.field_keyword_for_the_layer() ==
-                population_count_field['key']):
+        field_key = self.parent.field_keyword_for_the_layer()
+        if field_key == population_count_field['key']:
             self.mode = MULTI_MODE
         else:
             self.mode = SINGLE_MODE
 
+        # Filtering based on field type
+        layer_field = definition(field_key)
+        layer_field_types = deepcopy(layer_field['type'])
+        if not isinstance(layer_field_types, list):
+            layer_field_types = [layer_field_types]
+
+        # Remove string for continuous layer
+        if layer_mode == layer_mode_continuous and unit:
+            if QVariant.String in layer_field_types:
+                layer_field_types.remove(QVariant.String)
+
         if purpose == layer_purpose_aggregation:
             question_text = field_question_aggregation
-        elif self.parent.step_kw_layermode.\
-                selected_layermode() == layer_mode_continuous and unit:
+        elif layer_mode == layer_mode_continuous and unit:
             subcategory_unit_relation = get_question_text(
                 '%s_%s_question' % (subcategory['key'], unit['key']))
             if 'MISSING' in subcategory_unit_relation:
@@ -230,10 +257,13 @@ class StepKwField(WizardStep, FORM_CLASS):
         self.lstFields.clear()
 
         default_item = None
-        for field in self.parent.layer.dataProvider().fields():
+        for field in self.parent.layer.fields():
+            # Skip if it's not in the field types requirement
+            if field.type() not in layer_field_types:
+                continue
             field_name = field.name()
             item = QListWidgetItem(field_name, self.lstFields)
-            item.setData(QtCore.Qt.UserRole, field_name)
+            item.setData(Qt.UserRole, field_name)
             # Select the item if it match the unit's default_attribute
             if unit and 'default_attribute' in unit \
                     and field_name == unit['default_attribute']:
@@ -242,8 +272,7 @@ class StepKwField(WizardStep, FORM_CLASS):
             if self.parent.step_kw_layermode.\
                     selected_layermode() == layer_mode_continuous and unit:
                 field_type = field.type()
-                if field_type > 9 or re.match(
-                        '.{0,2}id$', field_name, re.I):
+                if field_type > 9 or re.match('.{0,2}id$', field_name, re.I):
                     continue  # Don't show unmatched field type
 
         if default_item:

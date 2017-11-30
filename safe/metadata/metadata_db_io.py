@@ -1,13 +1,14 @@
 # coding=utf-8
-"""Metadata DB IO implementation"""
+"""Metadata DB IO implementation."""
 
-import os
 import logging
+import os
 import sqlite3 as sqlite
 from sqlite3 import OperationalError
 
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import QObject
+
 from safe.common.exceptions import (
     HashNotFoundError, UnsupportedProviderError)
 from safe.definitions.default_settings import inasafe_default_settings

@@ -27,7 +27,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 class OsmDownloaderDialogTest(unittest.TestCase):
 
-    """Test Osm Downloader Dialog widget
+    """Test Osm Downloader Dialog widget.
 
     .. versionchanged:: 3.2
     """
@@ -38,7 +38,7 @@ class OsmDownloaderDialogTest(unittest.TestCase):
         self.dialog = OsmDownloaderDialog(PARENT, IFACE)
 
     def test_checked_features(self):
-        """Test checked features"""
+        """Test checked features."""
         self.dialog.roads_flag.setChecked(False)
         self.dialog.buildings_flag.setChecked(False)
         self.dialog.building_points_flag.setChecked(False)
@@ -102,8 +102,10 @@ class OsmDownloaderDialogTest(unittest.TestCase):
 
     def test_populate_countries(self):
         """Test if items are in the combobox.
-        For instance every admin_level from 1 to 11 and
-        the first and last country (alphabetical order)."""
+
+        For instance every admin_level from 1 to 11 and the first and last
+        country (alphabetical order).
+        """
         self.assertTrue(self.dialog.admin_level_comboBox.count() == 11)
         self.assertTrue(
             self.dialog.country_comboBox.itemText(0) == 'Afghanistan')
@@ -146,15 +148,15 @@ class OsmDownloaderDialogTest(unittest.TestCase):
         message = "Index for existing files is wrong."
 
         result = self.dialog.get_unique_file_path_suffix(one_file)
-        assert result == 2, message
+        self.assertEqual(result, 2, message)
 
         os.remove(other_file)
         result = self.dialog.get_unique_file_path_suffix(one_file)
-        assert result == 1, message
+        self.assertEqual(result, 1, message)
 
         os.remove(one_file)
         result = self.dialog.get_unique_file_path_suffix(one_file)
-        assert result == 0, message
+        self.assertEqual(result, 0, message)
 
         # cleanup
         shutil.rmtree(path)

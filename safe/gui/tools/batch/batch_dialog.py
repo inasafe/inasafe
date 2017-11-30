@@ -18,14 +18,22 @@ __date__ = '01/10/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+import logging
 import os
 import sys
-import logging
+from ConfigParser import ConfigParser, MissingSectionHeaderError, ParsingError
+from StringIO import StringIO
 from datetime import datetime
 
-from StringIO import StringIO
-from ConfigParser import ConfigParser, MissingSectionHeaderError, ParsingError
-
+from PyQt4 import QtGui, QtCore
+from PyQt4.QtCore import pyqtSignature, pyqtSlot, Qt
+from PyQt4.QtGui import (
+    QAbstractItemView,
+    QDialog,
+    QFileDialog,
+    QTableWidgetItem,
+    QPushButton,
+    QDialogButtonBox)
 from qgis.core import (
     QgsRectangle,
     QgsCoordinateReferenceSystem,
@@ -34,16 +42,8 @@ from qgis.core import (
     QgsVectorLayer,
     QgsRasterLayer)
 
-from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import pyqtSignature, pyqtSlot, QSettings, Qt
-from PyQt4.QtGui import (
-    QAbstractItemView,
-    QDialog,
-    QFileDialog,
-    QTableWidgetItem,
-    QPushButton,
-    QDialogButtonBox)
-
+from safe.common.signals import send_error_message
+from safe.common.utilities import temp_dir
 from safe.definitions.constants import (
     ANALYSIS_SUCCESS,
     PREPARE_SUCCESS,
@@ -53,24 +53,21 @@ from safe.definitions.layer_purposes import (
     layer_purpose_hazard,
     layer_purpose_exposure,
     layer_purpose_aggregation)
-from safe.definitions.utilities import update_template_component
 from safe.definitions.reports.components import (
     standard_impact_report_metadata_pdf,
-    map_report)
-from safe.utilities.gis import extent_string_to_array
-from safe.common.utilities import temp_dir
-from safe.common.signals import send_error_message
-from safe.utilities.resources import (
-    html_footer, html_header, get_ui_class)
-from safe.messaging import styles
+    map_report,
+    all_default_report_components)
+from safe.definitions.utilities import update_template_component
 from safe.gui.tools.help.batch_help import batch_help
 from safe.impact_function.impact_function import ImpactFunction
-from safe.report.report_metadata import ReportMetadata
+from safe.messaging import styles
 from safe.report.impact_report import ImpactReport
-from safe.gui.analysis_utilities import (
-    generate_impact_report,
-    generate_impact_map_report)
+from safe.report.report_metadata import ReportMetadata
+from safe.utilities.gis import extent_string_to_array
 from safe.utilities.qgis_utilities import display_critical_message_box
+from safe.utilities.resources import (
+    html_footer, html_header, get_ui_class)
+from safe.utilities.settings import setting, set_setting
 
 INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
 LOGGER = logging.getLogger('InaSAFE')
@@ -92,9 +89,7 @@ class BatchDialog(QDialog, FORM_CLASS):
         :param dock: A Dock widget needed to run the scenarios with. On
             our road map is to figure out how to get rid of this parameter.
         :type dock: Dock
-
         """
-
         QDialog.__init__(self, parent)
         self.setupUi(self)
         self.setWindowModality(Qt.ApplicationModal)
@@ -164,38 +159,29 @@ class BatchDialog(QDialog, FORM_CLASS):
         self.restore_state()
 
     def restore_state(self):
-        """Restore GUI state from configuration file"""
-
-        settings = QSettings()
-
+        """Restore GUI state from configuration file."""
         # restore last source path
-        last_source_path = settings.value(
-            'inasafe/lastSourceDir', self.default_directory, type=str)
+        last_source_path = setting(
+            'lastSourceDir', self.default_directory, expected_type=str)
         self.source_directory.setText(last_source_path)
 
         # restore path pdf output
-        last_output_dir = settings.value(
-            'inasafe/lastOutputDir', self.default_directory, type=str)
+        last_output_dir = setting(
+            'lastOutputDir', self.default_directory, expected_type=str)
         self.output_directory.setText(last_output_dir)
 
         # restore default output dir combo box
-        use_default_output_dir = bool(settings.value(
-            'inasafe/useDefaultOutputDir', True, type=bool))
+        use_default_output_dir = bool(setting(
+            'useDefaultOutputDir', True, expected_type=bool))
         self.scenario_directory_radio.setChecked(
             use_default_output_dir)
 
     def save_state(self):
-        """Save current state of GUI to configuration file"""
-
-        settings = QSettings()
-
-        settings.setValue(
-            'inasafe/lastSourceDir', self.source_directory.text())
-        settings.setValue(
-            'inasafe/lastOutputDir', self.output_directory.text())
-        settings.setValue(
-            'inasafe/useDefaultOutputDir',
-            self.scenario_directory_radio.isChecked())
+        """Save current state of GUI to configuration file."""
+        set_setting('lastSourceDir', self.source_directory.text())
+        set_setting('lastOutputDir', self.output_directory.text())
+        set_setting(
+            'useDefaultOutputDir', self.scenario_directory_radio.isChecked())
 
     def choose_directory(self, line_edit, title):
         """ Show a directory selection dialog.
@@ -447,8 +433,8 @@ class BatchDialog(QDialog, FORM_CLASS):
                 # set status to 'fail'
                 status_item.setText(self.tr('Script Fail'))
 
-                LOGGER.exception('Running macro failed. The exception: ' +
-                    str(e))
+                LOGGER.exception(
+                    'Running macro failed. The exception: ' + str(e))
                 result = False
         elif isinstance(value, dict):
             # start in new project if toggle is active
@@ -476,7 +462,7 @@ class BatchDialog(QDialog, FORM_CLASS):
                     parameters[layer_purpose_aggregation['key']])
             elif parameters['extent']:
                 impact_function.requested_extent = parameters['extent']
-                impact_function.requested_extent_crs = parameters['crs']
+                impact_function.crs = parameters['crs']
             prepare_status, prepare_message = impact_function.prepare()
             if prepare_status == PREPARE_SUCCESS:
                 LOGGER.info('Impact function ready')
@@ -506,18 +492,14 @@ class BatchDialog(QDialog, FORM_CLASS):
 
                         # generate map report and impact report
                         try:
-                            # this line is to save the impact report in default
-                            # InaSAFE directory.
-                            generate_impact_report(impact_function, self.iface)
-                            generate_impact_map_report(
-                                impact_function,
-                                self.iface)
+                            error_code, message = (
+                                impact_function.generate_report(
+                                    all_default_report_components))
+
                             # this line is to save the report in user specified
                             # directory.
                             self.generate_pdf_report(
-                                impact_function,
-                                self.iface,
-                                group_name)
+                                impact_function, self.iface, group_name)
                         except:
                             status_item.setText(
                                 self.tr('Report failed to generate.'))
@@ -728,8 +710,9 @@ class BatchDialog(QDialog, FORM_CLASS):
             # noinspection PyTypeChecker,PyCallByClass,PyArgumentList
             QtGui.QDesktopServices.openUrl(url)
         else:
-            report = open(report_path).read()
+            # report = open(report_path).read()
             # LOGGER.info(report)
+            pass
 
     def update_default_output_dir(self):
         """Update output dir if set to default."""
@@ -760,15 +743,14 @@ class BatchDialog(QDialog, FORM_CLASS):
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_source_directory_chooser_clicked(self):
-        """Autoconnect slot activated when tbSourceDir is clicked """
+        """Autoconnect slot activated when tbSourceDir is clicked."""
 
         title = self.tr('Set the source directory for script and scenario')
         self.choose_directory(self.source_directory, title)
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_output_directory_chooser_clicked(self):
-        """Auto  connect slot activated when tbOutputDiris clicked """
-
+        """Auto  connect slot activated when tbOutputDiris clicked."""
         title = self.tr('Set the output directory for pdf report files')
         self.choose_directory(self.output_directory, title)
 
@@ -820,7 +802,7 @@ class BatchDialog(QDialog, FORM_CLASS):
 
 
 def read_scenarios(filename):
-    """Read keywords dictionary from file
+    """Read keywords dictionary from file.
 
     :param filename: Name of file holding scenarios .
 

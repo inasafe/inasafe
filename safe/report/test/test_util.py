@@ -26,9 +26,9 @@ from safe.report.extractors.util import (
     resolve_from_dictionary,
     retrieve_exposure_classes_lists)
 from safe.test.utilities import (
-    load_layer,
     standard_data_path,
     get_qgis_app)
+from safe.gis.tools import load_layer
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -187,7 +187,7 @@ class TestReportUtil(unittest.TestCase):
                 layer_paths, expected_classes_lists):
             path = standard_data_path(*layer_path)
             layer, _ = load_layer(path)
-            actual_classes = retrieve_exposure_classes_lists(layer)
+            actual_classes = retrieve_exposure_classes_lists(layer.keywords)
             try:
                 self.assertEqual(
                     expected_classes, actual_classes)

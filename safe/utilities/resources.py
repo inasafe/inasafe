@@ -1,12 +1,12 @@
 # coding=utf-8
 """This module contains utilities for locating application resources (img etc).
 """
-import os
 import codecs
+import os
 
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=unused-import
+import qgis  # NOQA pylint: disable=unused-import
 from PyQt4 import QtCore, uic
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -22,7 +22,7 @@ def html_footer():
         and including the body close tag.
     :rtype: str
     """
-    file_path = os.path.join(resources_path(), 'footer.html')
+    file_path = resources_path('footer.html')
     with file(file_path) as header_file:
         content = header_file.read()
     return content
@@ -35,7 +35,7 @@ def html_header():
         including the body open tag.
     :rtype: str
     """
-    file_path = os.path.join(resources_path(), 'header.html')
+    file_path = resources_path('header.html')
 
     with codecs.open(file_path, 'r', encoding='utf8') as header_file:
         content = header_file.read()
@@ -55,7 +55,7 @@ def html_help_header():
         including the body open tag.
     :rtype: str
     """
-    file_path = os.path.join(resources_path(), 'header-help.html')
+    file_path = resources_path('header-help.html')
 
     with codecs.open(file_path, 'r', encoding='utf8') as header_file:
         content = header_file.read()
@@ -79,7 +79,7 @@ def resources_path(*args):
     """
     path = os.path.dirname(__file__)
     path = os.path.abspath(
-        os.path.join(path, os.path.pardir, os.path.pardir, 'resources'))
+        os.path.join(path, os.path.pardir, 'resources'))
     for item in args:
         path = os.path.abspath(os.path.join(path, item))
 

@@ -1,12 +1,12 @@
 # coding=utf-8
-"""Wizard Utilities Functions"""
+"""Wizard Utilities Functions."""
 
 import logging
-import re
+import os
 import sys
+
 from PyQt4 import QtCore
 from PyQt4.QtGui import QWidgetItem, QSpacerItem, QLayout
-
 from qgis.core import QgsCoordinateTransform
 
 import safe.gui.tools.wizard.wizard_strings
@@ -14,12 +14,15 @@ from safe.common.version import get_version
 from safe.definitions.constants import RECENT, GLOBAL
 from safe.definitions.layer_modes import layer_mode_classified
 from safe.definitions.layer_purposes import (
+    layer_geometry_line, layer_geometry_point, layer_geometry_polygon)
+from safe.definitions.layer_purposes import (
     layer_purpose_exposure, layer_purpose_hazard)
+from safe.utilities.default_values import get_inasafe_default_value_qsetting
 from safe.utilities.gis import (
     is_raster_layer, is_point_layer, is_polygon_layer)
 from safe.utilities.i18n import tr
+from safe.utilities.resources import resources_path
 from safe.utilities.utilities import is_keyword_version_supported
-from safe.utilities.default_values import get_inasafe_default_value_qsetting
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -35,6 +38,10 @@ RoleHazardConstraint = QtCore.Qt.UserRole + 3
 RoleExposureConstraint = QtCore.Qt.UserRole + 4
 
 LOGGER = logging.getLogger('InaSAFE')
+
+
+not_set_image_path = resources_path(
+    'img', 'wizard', 'keyword-subcategory-notset.svg')
 
 
 def get_question_text(constant):
@@ -116,7 +123,7 @@ def layer_description_html(layer, keywords=None):
             unit = '<tr><td><b>%s</b>: </td><td>%s</td></tr>' % (
                 tr('Unit'), unit)
 
-        desc = """
+        description = """
             <table border="0" width="100%%">
             <tr><td><b>%s</b>: </td><td>%s</td></tr>
             <tr><td><b>%s</b>: </td><td>%s</td></tr>
@@ -132,7 +139,7 @@ def layer_description_html(layer, keywords=None):
     elif keywords:
         # The layer has keywords, but the version is wrong
         layer_version = keyword_version or tr('No Version')
-        desc = tr(
+        description = tr(
             'Your layer\'s keyword\'s version ({layer_version}) does not '
             'match with your InaSAFE version ({inasafe_version}). If you wish '
             'to use it as an exposure, hazard, or aggregation layer in an '
@@ -142,15 +149,15 @@ def layer_description_html(layer, keywords=None):
     else:
         # The layer is keywordless
         if is_point_layer(layer):
-            geom_type = 'point'
+            geom_type = layer_geometry_point['key']
         elif is_polygon_layer(layer):
-            geom_type = 'polygon'
+            geom_type = layer_geometry_polygon['key']
         else:
-            geom_type = 'line'
+            geom_type = layer_geometry_line['key']
 
         # hide password in the layer source
         source = layer.publicSource()
-        desc = """
+        description = """
             %s<br/><br/>
             <b>%s</b>: %s<br/>
             <b>%s</b>: %s<br/><br/>
@@ -161,7 +168,7 @@ def layer_description_html(layer, keywords=None):
                'vector (%s)' % geom_type,
                tr('In the next step you will be able' +
                   ' to assign keywords to this layer.'))
-    return desc
+    return description
 
 
 def get_inasafe_default_value_fields(qsetting, field_key):
@@ -247,10 +254,9 @@ def skip_inasafe_field(layer, inasafe_fields):
     :returns: True if there are no specified field type.
     :rtype: bool
     """
-    layer_data_provider = layer.dataProvider()
     # Iterate through all inasafe fields
     for inasafe_field in inasafe_fields:
-        for field in layer_data_provider.fields():
+        for field in layer.fields():
             # Check the field type
             if isinstance(inasafe_field['type'], list):
                 if field.type() in inasafe_field['type']:
@@ -259,3 +265,20 @@ def skip_inasafe_field(layer, inasafe_fields):
                 if field.type() == inasafe_field['type']:
                     return False
     return True
+
+
+def get_image_path(definition):
+    """Helper to get path of image from a definition in resource directory.
+
+    :param definition: A definition (hazard, exposure).
+    :type definition: dict
+
+    :returns: The definition's image path.
+    :rtype: str
+    """
+    path = resources_path(
+        'img', 'wizard', 'keyword-subcategory-%s.svg' % definition['key'])
+    if os.path.exists(path):
+        return path
+    else:
+        return not_set_image_path

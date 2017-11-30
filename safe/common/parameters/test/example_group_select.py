@@ -3,18 +3,20 @@
 
 import sys
 from collections import OrderedDict
+
 from safe.test.utilities import get_qgis_app
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from PyQt4.QtGui import QApplication, QWidget, QGridLayout
+from PyQt4.QtGui import QApplication, QWidget, QGridLayout  # NOQA
 
-from parameters.qt_widgets.parameter_container import ParameterContainer
+from parameters.qt_widgets.parameter_container import (
+    ParameterContainer)  # NOQA
 
 from safe.common.parameters.group_select_parameter import (
-    GroupSelectParameter)
+    GroupSelectParameter)  # NOQA
 from safe.common.parameters.group_select_parameter_widget import (
-    GroupSelectParameterWidget)
+    GroupSelectParameterWidget)  # NOQA
 from safe.definitions.constants import (
     DO_NOT_REPORT,
     CUSTOM_VALUE,
@@ -22,7 +24,7 @@ from safe.definitions.constants import (
     FIELDS,
     STATIC,
     SINGLE_DYNAMIC,
-    MULTIPLE_DYNAMIC)
+    MULTIPLE_DYNAMIC)  # NOQA
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"

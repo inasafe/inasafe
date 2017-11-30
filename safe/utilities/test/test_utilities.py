@@ -17,14 +17,15 @@ from safe.utilities.utilities import (
     humanise_seconds,
     impact_attribution,
     replace_accentuated_characters,
+    is_plugin_installed,
     is_keyword_version_supported
 )
 from safe.utilities.gis import qgis_version
 
 
 class UtilitiesTest(unittest.TestCase):
-    """Tests for reading and writing of raster and vector data
-    """
+
+    """Tests for reading and writing of raster and vector data."""
 
     def setUp(self):
         """Test setup."""
@@ -35,10 +36,10 @@ class UtilitiesTest(unittest.TestCase):
         pass
 
     def test_get_qgis_version(self):
-        """Test we can get the version of QGIS"""
+        """Test we can get the version of QGIS."""
         version = qgis_version()
-        message = 'Got version %s of QGIS, but at least 107000 is needed'
-        assert version > 10700, message
+        message = 'Got version %s of QGIS, but at least 214000 is needed'
+        self.assertTrue(version > 21400, message)
 
     def test_humanize_seconds(self):
         """Test that humanise seconds works."""
@@ -98,6 +99,15 @@ class UtilitiesTest(unittest.TestCase):
         self.assertTrue(is_keyword_version_supported('3.2.1-alpha', '3.2'))
         self.assertTrue(is_keyword_version_supported('3.2.1', '3.3'))
         self.assertFalse(is_keyword_version_supported('3.02.1', '3.2'))
+
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False),
+        'The plugin is not installed under the same directory in Travis.')
+    def test_if_plugin_is_installed(self):
+        """Test if we can know if a plugin is installed."""
+        self.assertTrue(is_plugin_installed('inasafe'))
+        self.assertFalse(is_plugin_installed('inasafeZ'))
+
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(UtilitiesTest)

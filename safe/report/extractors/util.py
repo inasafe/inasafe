@@ -1,7 +1,7 @@
 # coding=utf-8
 """Module that contains helper function for report context extraction."""
-import os
 import codecs
+import os
 
 from jinja2.exceptions import TemplateError
 
@@ -155,20 +155,19 @@ def resolve_from_dictionary(dictionary, key_list, default_value=None):
         return default_value
 
 
-def retrieve_exposure_classes_lists(exposure_layer):
+def retrieve_exposure_classes_lists(exposure_keywords):
     """Retrieve exposures classes.
 
     Only if the exposure has some classifications.
 
-    :param exposure_layer: exposure layer
-    :type exposure_layer: qgis.core.QgsMapLayer
+    :param exposure_keywords: exposure keywords
+    :type exposure_keywords: dict
 
     :return: lists of classes used in the classifications.
     :rtype: list(dict)
     """
     # return None in case exposure doesn't have classifications
-    keywords = exposure_layer.keywords
-    classification = keywords.get('classification')
+    classification = exposure_keywords.get('classification')
     if not classification:
         return None
     # retrieve classes definitions

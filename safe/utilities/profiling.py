@@ -6,12 +6,13 @@ This code was taken from http://stackoverflow.com/a/3620972
 
 """
 
-import time
+
 import inspect
+import time
 from functools import wraps
+
 from safe.utilities.memory_checker import get_free_memory
 from safe.utilities.settings import setting
-
 
 __copyright__ = "Vadim Shender (original poster in stack overflow), InaSAFE"
 __license__ = "Creative Commons"
@@ -20,6 +21,8 @@ __revision__ = '$Format:%H$'
 
 
 class Tree(object):
+    """Internal representation of the tree."""
+
     def __init__(self, key):
 
         # Name of the current function
@@ -98,6 +101,7 @@ class Tree(object):
         step = step.capitalize()
 
         return step
+
 
 ROOT = None
 

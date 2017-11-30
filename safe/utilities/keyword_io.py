@@ -7,12 +7,11 @@ from datetime import datetime
 
 from PyQt4.QtCore import QObject
 from PyQt4.QtCore import QUrl, QDateTime
-
 from qgis.core import QgsMapLayer
 
-from safe.definitions.utilities import definition
 from safe import messaging as m
-
+from safe.definitions.keyword_properties import property_extra_keywords
+from safe.definitions.utilities import definition
 from safe.messaging import styles
 from safe.utilities.i18n import tr
 from safe.utilities.metadata import (
@@ -153,6 +152,7 @@ class KeywordIO(QObject):
             'scale',
             'license',
             'date',
+            'extra_keywords',
             'keyword_version'
         ]  # everything else in arbitrary order
         report = m.Message()
@@ -190,7 +190,7 @@ class KeywordIO(QObject):
             table.add(row)
             # Next the data source
             keyword = tr('Layer source')
-            value = self.layer.source()
+            value = self.layer.publicSource()  # Hide password
             row = self._keyword_to_row(keyword, value, wrap_slash=True)
             table.add(row)
 
@@ -256,6 +256,8 @@ class KeywordIO(QObject):
                 'inasafe_fields',
                 'inasafe_default_values']:
             value = self._dict_to_row(value)
+        elif keyword == 'extra_keywords':
+            value = self._dict_to_row(value, property_extra_keywords)
         elif keyword == 'value_maps':
             value = self._value_maps_row(value)
         elif keyword == 'thresholds':
@@ -410,7 +412,7 @@ class KeywordIO(QObject):
             table.add(header)
             classes = active_classification.get('classes')
             # Sort by value, put the lowest first
-            classes = sorted(classes, key=lambda k: k['value'])
+            classes = sorted(classes, key=lambda the_key: the_key['value'])
             for the_class in classes:
                 threshold = classifications[active_classification['key']][
                     'classes'][the_class['key']]
@@ -430,7 +432,7 @@ class KeywordIO(QObject):
         return table
 
     @staticmethod
-    def _dict_to_row(keyword_value):
+    def _dict_to_row(keyword_value, keyword_property=None):
         """Helper to make a message row from a keyword where value is a dict.
 
         .. versionadded:: 3.2
@@ -454,19 +456,30 @@ class KeywordIO(QObject):
             be a string representation of a dict, or a dict.
         :type keyword_value: basestring, dict
 
+        :param keyword_property: The definition of the keyword property.
+        :type keyword_property: dict, None
+
         :returns: A table to be added into a cell in the keywords table.
         :rtype: safe.messaging.items.table
         """
         if isinstance(keyword_value, basestring):
             keyword_value = literal_eval(keyword_value)
         table = m.Table(style_class='table table-condensed')
-        for key, value in keyword_value.items():
+        # Sorting the key
+        for key in sorted(keyword_value.keys()):
+            value = keyword_value[key]
             row = m.Row()
             # First the heading
-            if definition(key):
-                name = definition(key)['name']
+            if keyword_property is None:
+                if definition(key):
+                    name = definition(key)['name']
+                else:
+                    name = tr(key.replace('_', ' ').capitalize())
             else:
-                name = tr(key.capitalize())
+                default_name = tr(key.replace('_', ' ').capitalize())
+                name = keyword_property.get('member_names', {}).get(
+                    key, default_name)
+
             row.add(m.Cell(m.ImportantText(name)))
             # Then the value. If it contains more than one element we
             # present it as a bullet list, otherwise just as simple text

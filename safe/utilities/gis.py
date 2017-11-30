@@ -3,20 +3,19 @@
 
 from osgeo import gdal
 from qgis.core import (
+    QgsFeatureRequest,
     QgsMapLayer,
-    QgsField,
-    QgsFeature,
     QgsPoint,
     QgsGeometry,
-    QgsSpatialIndex,
-    QgsVectorFileWriter,
     QgsCoordinateReferenceSystem,
     QgsCoordinateTransform,
     QGis,
     QgsRectangle,
-    QgsPoint,
     QgsVectorLayer,
-    QgsRasterLayer)
+    QgsRasterLayer,
+)
+
+from safe.utilities.metadata import copy_layer_keywords
 from safe.utilities.utilities import LOGGER
 
 
@@ -169,6 +168,36 @@ def validate_geo_array(extent):
         return False
 
     return True
+
+
+def clone_layer(layer, keep_selection=True):
+    """Duplicate the layer by taking the same source and copying keywords.
+
+    :param keep_selection: If we should keep the selection. Default to true.
+    :type keep_selection: bool
+
+    :param layer: Layer to be duplicated.
+    :type layer: QgsMapLayer
+
+    :return: The new QgsMapLayer object.
+    :rtype: QgsMapLayer
+    """
+    if is_vector_layer(layer):
+        new_layer = QgsVectorLayer(
+            layer.source(), layer.name(), layer.providerType())
+        if keep_selection and layer.selectedFeatureCount() > 0:
+            request = QgsFeatureRequest()
+            request.setFilterFids(layer.selectedFeaturesIds())
+            request.setFlags(QgsFeatureRequest.NoGeometry)
+            iterator = layer.getFeatures(request)
+            new_layer.setSelectedFeatures([k.id() for k in iterator])
+    else:
+        new_layer = QgsRasterLayer(
+            layer.source(), layer.name(), layer.providerType())
+
+    new_layer.keywords = copy_layer_keywords(layer.keywords)
+
+    return layer
 
 
 def is_raster_layer(layer):

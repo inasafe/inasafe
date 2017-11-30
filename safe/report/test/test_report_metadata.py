@@ -23,7 +23,7 @@ class TestReportMetadata(unittest.TestCase):
         sample_report_metadata_dict = {
             'key': 'analysis-result-html',
             'name': 'analysis-result-html',
-            'template_folder': '../resources/report-templates/',
+            'template_folder': 'resources/report-templates/',
             'components': [
                 {
                     'key': 'general-report',

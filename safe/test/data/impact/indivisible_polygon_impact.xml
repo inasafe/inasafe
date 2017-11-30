@@ -170,7 +170,6 @@
                 </gmd:EX_Extent>
       </gmd:extent>
       <gmd:supplementalInformation>
-        <inasafe_keywords/>
         <inasafe>
           <multipart_polygon>
             <gco:Boolean/>
@@ -274,24 +273,6 @@
             <gco:CharacterString/>
           </impact_summary>
         </inasafe>
-        <inasafe_provenance>
-          <provenance_step timestamp="2016-09-17T09:36:40.323172">
-            <title>Initialize Impact Function</title>
-            <description>Impact function is being initialized</description>
-          </provenance_step>
-          <provenance_step timestamp="2016-09-17T09:36:40.351591">
-            <title>Validating Step</title>
-            <description>Impact function is validating the inputs.</description>
-          </provenance_step>
-          <provenance_step timestamp="2016-09-17T09:36:40.369190">
-            <title>Preparation Step</title>
-            <description>Impact function is being prepared to run the analysis.</description>
-          </provenance_step>
-          <provenance_step timestamp="2016-09-17T09:36:41.709980">
-            <title>Calculating Step</title>
-            <description>Impact function is calculating the impact.</description>
-          </provenance_step>
-        </inasafe_provenance>
       </gmd:supplementalInformation>
     </gmd:MD_DataIdentification>
   </gmd:identificationInfo>

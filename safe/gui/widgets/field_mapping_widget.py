@@ -1,17 +1,17 @@
 # coding=utf-8
 """InaSAFE Field Mapping Widget."""
 
-from PyQt4.QtGui import QTabWidget
 import logging
 
-from safe.utilities.i18n import tr
+from PyQt4.QtGui import QTabWidget
+
 from safe.common.exceptions import KeywordNotFoundError
-from safe.definitions.utilities import get_field_groups
 from safe.definitions.layer_purposes import (
     layer_purpose_exposure, layer_purpose_hazard)
-from safe.utilities.keyword_io import KeywordIO
-
+from safe.definitions.utilities import get_field_groups
 from safe.gui.widgets.field_mapping_tab import FieldMappingTab
+from safe.utilities.i18n import tr
+from safe.utilities.keyword_io import KeywordIO
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"

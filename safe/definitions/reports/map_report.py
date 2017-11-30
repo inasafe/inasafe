@@ -2,10 +2,12 @@
 
 """Definitions relating to map report template elements."""
 
-from safe.defaults import white_inasafe_logo_path, default_north_arrow_path, \
-    supporters_logo_path
-from safe.definitions.messages import disclaimer
+from safe.defaults import (
+    black_inasafe_logo_path,
+    white_inasafe_logo_path,
+)
 from safe.utilities.i18n import tr
+from safe.utilities.settings import setting
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -13,7 +15,7 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
-"""Text elements"""
+"""Text elements."""
 
 
 legend_title_header = {
@@ -28,7 +30,8 @@ disclaimer_title_header = {
 
 disclaimer_text = {
     'id': 'disclaimer',
-    'string_format': disclaimer()
+    'string_format': setting('reportDisclaimer'),
+    'setting_key': 'reportDisclaimer'
 }
 
 information_title_header = {
@@ -106,27 +109,36 @@ text_variable_elements = [
     aggregation_not_used_text,
     crs_text]
 
-"""Image elements"""
-
+"""Image elements."""
 
 white_inasafe_logo_path = {
     'id': 'inasafe-logo-white',
     'path': white_inasafe_logo_path()
 }
 
-north_arrow_path = {
-    'id': 'north-arrow-logo',
-    'path': default_north_arrow_path()
+black_inasafe_logo_path = {
+    'id': 'inasafe-logo-black',
+    'path': black_inasafe_logo_path()
 }
 
-organisation_logo_path = {
+inasafe_north_arrow_path = {
+    'id': 'north-arrow-logo',
+    'path': setting('north_arrow_path'),
+    'setting_key': 'north_arrow_path'
+}
+
+inasafe_organisation_logo_path = {
     'id': 'organisation-logo',
-    'path': supporters_logo_path()
+    # We default to the supporters logo, but an org can change to their logo
+    # in options ...
+    'path': setting('organisation_logo_path'),
+    'setting_key': 'organisation_logo_path'
 }
 
 image_variable_elements = [
+    black_inasafe_logo_path,
     white_inasafe_logo_path,
-    north_arrow_path,
-    organisation_logo_path]
+    inasafe_north_arrow_path,
+    inasafe_organisation_logo_path]
 
 all_variable_elements = text_variable_elements + image_variable_elements

@@ -1,5 +1,5 @@
 # coding=utf-8
-"""Plugin Initialization"""
+"""Plugin Initialization."""
 
 __copyright__ = "Copyright 2011, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -53,7 +53,7 @@ os.environ['LANG'] = str(locale_name)
 
 root = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 translation_path = os.path.join(
-    root, 'i18n',
+    root, 'safe', 'i18n',
     'inasafe_' + str(locale_name) + '.qm')
 
 if os.path.exists(translation_path):
@@ -66,7 +66,6 @@ if os.path.exists(translation_path):
     QCoreApplication.installTranslator(translator)
 
 
-# noinspection PyDocstring
 # noinspection PyDocstring,PyPep8Naming
 def classFactory(iface):
     """Load Plugin class from file Plugin."""

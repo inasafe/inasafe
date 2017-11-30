@@ -5,19 +5,17 @@
 from PyQt4 import QtCore
 from PyQt4.QtGui import QListWidgetItem
 
-from safe.utilities.i18n import tr
 from safe import messaging as m
-
-from safe.definitions.layer_purposes import layer_purpose_hazard
-from safe.definitions.exposure import exposure_population
-from safe.definitions.units import exposure_unit
 from safe.definitions.hazard import continuous_hazard_unit
+from safe.definitions.layer_purposes import layer_purpose_hazard
+from safe.definitions.units import exposure_unit
 from safe.definitions.utilities import (
     definition, hazard_units, exposure_units, get_classifications)
 from safe.gui.tools.wizard.wizard_step import (
     get_wizard_step_ui_class, WizardStep)
 from safe.gui.tools.wizard.wizard_strings import unit_question
 from safe.utilities.gis import is_raster_layer
+from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

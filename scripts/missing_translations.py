@@ -23,7 +23,7 @@ if __name__ == '__main__':
     locales = sys.argv[2:]
 
     for locale in locales:
-        relative_path = os.path.join('i18n', 'inasafe_%s.ts' % locale)
+        relative_path = os.path.join('safe', 'i18n', 'inasafe_%s.ts' % locale)
         absolute_path = os.path.join(root, relative_path)
         command = 'lrelease %s' % absolute_path
 

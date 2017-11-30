@@ -2,12 +2,14 @@
 """Help text for the dock widget."""
 
 import logging
+
 from safe import messaging as m
-from safe.messaging import styles
-from safe.definitions import units
-from safe.definitions import hazard_classifications
 from safe.definitions import hazard
+from safe.definitions import hazard_classifications
+from safe.definitions import units
+from safe.messaging import styles
 from safe.utilities.i18n import tr
+
 LOGGER = logging.getLogger('InaSAFE')
 # For chapter sections
 # Items marked as numbered below will show section numbering in HTML render
@@ -134,7 +136,7 @@ def content():
             'v4 is the default codebase. In the next sections we will show '
             'each file that needs to be extended in order to add a new hazard '
             'type.'
-    ))
+        ))
     message.add(paragraph)
 
     # Setting up units

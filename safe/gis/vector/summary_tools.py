@@ -1,14 +1,14 @@
 # coding=utf-8
 
+"""Some helpers about the summary calculation."""
+
 from PyQt4.QtCore import QPyNullVariant
 
-
+from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
 from safe.definitions.fields import count_fields
 from safe.definitions.utilities import definition
-from safe.utilities.pivot_table import FlatTable
-from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
 from safe.gis.vector.tools import create_field_from_definition
-
+from safe.utilities.pivot_table import FlatTable
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -83,7 +83,7 @@ def add_fields(
     :param static_fields
     """
     for column in dynamic_values:
-        if not column or isinstance(column, QPyNullVariant):
+        if column == '' or isinstance(column, QPyNullVariant):
             column = 'NULL'
         field = create_field_from_definition(dynamic_field, column)
         layer.addAttribute(field)

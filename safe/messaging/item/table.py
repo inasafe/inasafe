@@ -1,31 +1,24 @@
-"""
-InaSAFE Disaster risk assessment tool developed by AusAid - **Table**
+# coding=utf-8
 
-Contact : ole.moller.nielsen@gmail.com
+"""Table."""
 
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-"""
-from safe.messaging.item.cell import Cell
-
-__author__ = 'marco@opengis.ch'
-__revision__ = '$Format:%H$'
-__date__ = '04/06/2013'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
+from exceptions import InvalidMessageItemError
 
 from message_element import MessageElement
-from exceptions import InvalidMessageItemError
 from row import Row
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 
 class Table(MessageElement):
-    """A class to model tables in the messaging system """
+
+    """A class to model tables in the messaging system."""
 
     def __init__(self, *args, **kwargs):
-        """Creates a table object
+        """Creates a table object.
 
         :param *args: args can be list or Row
         :type *args: list, row
@@ -48,7 +41,7 @@ class Table(MessageElement):
     def add(self, item):
         """Add a row to the table.
 
-        List can be passed and are automatically converted to Rows
+        List can be passed and are automatically converted to Rows.
 
         :param item: Item an element to add to the rows can be list or Row
             object
@@ -63,7 +56,7 @@ class Table(MessageElement):
             raise InvalidMessageItemError(item, item.__class__)
 
     def to_html(self):
-        """Render a Table MessageElement as html
+        """Render a Table MessageElement as html.
 
         :returns: The html representation of the Table MessageElement
         :rtype: basestring
@@ -89,7 +82,7 @@ class Table(MessageElement):
         return table
 
     def to_text(self):
-        """Render a Table MessageElement as plain text
+        """Render a Table MessageElement as plain text.
 
         :returns: The text representation of the Table MessageElement
         :rtype: basestring
@@ -104,7 +97,7 @@ class Table(MessageElement):
         return table
 
     def to_markdown(self):
-        """Render a Table queue as markdown
+        """Render a Table queue as markdown.
 
         :returns: Markdown representation of the Text Table.
         :rtype: str
@@ -112,7 +105,7 @@ class Table(MessageElement):
         raise NotImplementedError('Please Implement this method')
 
     def to_dict(self):
-        """Render a MessageElement as python dict
+        """Render a MessageElement as python dict.
 
         :return: Python dict representation
         :rtype: dict

@@ -1,0 +1,524 @@
+{
+  "properties": {
+    "ISO19115_FLOAT": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "ISO19115_FLOAT",
+      "python_type": "float",
+      "value": 1234.5678,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gco:CharacterString"
+    },
+    "ISO19115_INT": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "ISO19115_INT",
+      "python_type": "int",
+      "value": 1234,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gco:CharacterString"
+    },
+    "ISO19115_STR": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "ISO19115_STR",
+      "python_type": "unicode",
+      "value": "Random string",
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gco:CharacterString"
+    },
+    "abstract": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "abstract",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract/gco:CharacterString"
+    },
+    "datatype": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "datatype",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/datatype/gco:CharacterString"
+    },
+    "date": {
+      "allowed_python_types": [
+        "QDate",
+        "datetime",
+        "date",
+        "NoneType",
+        "QDateTime"
+      ],
+      "name": "date",
+      "python_type": "datetime",
+      "value": "2016-02-18",
+      "xml_path": "gmd:dateStamp/gco:Date"
+    },
+    "elapsed_time": {
+      "allowed_python_types": [
+        "int",
+        "NoneType"
+      ],
+      "name": "elapsed_time",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/elapsed_time/gco:Integer"
+    },
+    "email": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "email",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:contact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:electronicMailAddress/gco:CharacterString"
+    },
+    "exposure_source": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "exposure_source",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/exposure_source/gco:CharacterString"
+    },
+    "exposure_title": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "exposure_title",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/exposure_title/gco:CharacterString"
+    },
+    "hazard_source": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "hazard_source",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/hazard_source/gco:CharacterString"
+    },
+    "hazard_title": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "hazard_title",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/hazard_title/gco:CharacterString"
+    },
+    "host_name": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "host_name",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/host_name/gco:CharacterString"
+    },
+    "impact_summary": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "impact_summary",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/impact_summary/gco:CharacterString"
+    },
+    "impact_table": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "impact_table",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/impact_table/gco:CharacterString"
+    },
+    "keyword_version": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "keyword_version",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/keyword_version/gco:CharacterString"
+    },
+    "layer_geometry": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "layer_geometry",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/layer_geometry/gco:CharacterString"
+    },
+    "layer_mode": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "layer_mode",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/layer_mode/gco:CharacterString"
+    },
+    "layer_purpose": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "layer_purpose",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/layer_purpose/gco:CharacterString"
+    },
+    "legend_notes": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "legend_notes",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/legend_notes/gco:CharacterString"
+    },
+    "legend_title": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "legend_title",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/legend_title/gco:CharacterString"
+    },
+    "legend_units": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "legend_units",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/legend_units/gco:CharacterString"
+    },
+    "license": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "license",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints/gmd:MD_Constraints/gmd:useLimitation/gco:CharacterString"
+    },
+    "map_title": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "map_title",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/map_title/gco:CharacterString"
+    },
+    "multipart_polygon": {
+      "allowed_python_types": [
+        "bool",
+        "NoneType"
+      ],
+      "name": "multipart_polygon",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/multipart_polygon/gco:Boolean"
+    },
+    "organisation": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "organisation",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:contact/gmd:CI_ResponsibleParty/gmd:organisationName/gco:CharacterString"
+    },
+    "postprocessing_report": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "postprocessing_report",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/postprocessing_report/gco:CharacterString"
+    },
+    "report": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "report",
+      "python_type": "unicode",
+      "value": "My super report",
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/report/gco:CharacterString"
+    },
+    "resolution": {
+      "allowed_python_types": [
+        "float",
+        "tuple",
+        "NoneType"
+      ],
+      "name": "resolution",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/resolution/gco:FloatTuple"
+    },
+    "scale": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "scale",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/scale/gco:CharacterString"
+    },
+    "source": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "source",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/source/gco:CharacterString"
+    },
+    "target_field": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "target_field",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/target_field/gco:CharacterString"
+    },
+    "time_stamp": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "time_stamp",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/time_stamp/gco:CharacterString"
+    },
+    "title": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "title",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:title/gco:CharacterString"
+    },
+    "url": {
+      "allowed_python_types": [
+        "QUrl",
+        "NoneType"
+      ],
+      "name": "url",
+      "python_type": "QUrl",
+      "value": "http://inasafe.org",
+      "xml_path": "gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource/gmd:linkage/gmd:URL"
+    },
+    "user": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "user",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/user/gco:CharacterString"
+    }
+  },
+  "provenance": [
+    {
+      "data": null,
+      "description": "Description of step 1",
+      "time": "2015-06-25T13:14:24.508974",
+      "title": "Title 1"
+    },
+    {
+      "data": null,
+      "description": "Description of step 2",
+      "time": "2015-06-25T13:14:24.508980",
+      "title": "Title 2"
+    },
+    {
+      "data": null,
+      "description": "Description of step 3",
+      "time": "2015-06-25T13:14:24.508984",
+      "title": "Title 3"
+    },
+    {
+      "data": {
+        "actual_extent": [
+          0,
+          1,
+          2,
+          2
+        ],
+        "actual_extent_crs": "EPSG: 4326",
+        "exposure_layer": "path/to/exposure/layer",
+        "exposure_pixel_size": "0.1",
+        "finish_time": "20140714_061255",
+        "gdal_version": "1.9.1",
+        "hazard_layer": "path/to/hazard/layer",
+        "hazard_pixel_size": "0.2",
+        "host_name": "my_computer",
+        "impact_function_id": "IF_id",
+        "impact_function_version": "2.1",
+        "impact_pixel_size": "0.1",
+        "inasafe_version": "2.1",
+        "os": "ubuntu 12.04",
+        "parameter": {},
+        "pyqt_version": "5.1",
+        "qgis_version": "2.4",
+        "qt_version": "4.5",
+        "requested_extent": [
+          0,
+          1,
+          2,
+          2
+        ],
+        "requested_extent_crs": "EPSG: 4326",
+        "start_time": "20140714_060955",
+        "user": "my_user"
+      },
+      "description": "IF Provenance",
+      "time": "2015-06-25T13:14:24.510000",
+      "title": "IF Provenance"
+    }
+  ],
+  "summary_data": {
+    "res1": 1234,
+    "res2": 4321
+  }
+}

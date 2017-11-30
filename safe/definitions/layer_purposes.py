@@ -2,15 +2,14 @@
 
 """Definitions relating to exposure."""
 from safe.definitions.concepts import concepts
+from safe.definitions.field_groups import aggregation_field_groups
+from safe.definitions.keyword_properties import property_layer_purpose
 from safe.definitions.layer_geometry import (
     layer_geometry_raster,
     layer_geometry_line,
     layer_geometry_point,
     layer_geometry_polygon
 )
-from safe.definitions.field_groups import (
-    aggregation_field_groups, population_field_groups)
-from safe.definitions.keyword_properties import property_layer_purpose
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -162,7 +161,7 @@ layer_purpose_exposure_summary_table = {
         'includes totals for affected and not affected status. It is used '
         'to generate reports and can be exported to a spreadsheet for '
         'further analysis.'),
-    'allowed_geometries': [],
+    'allowed_geometries': [],  # It's a table.
     'citations': [
         {
             'text': None,
@@ -180,7 +179,20 @@ layer_purpose_profiling = {
         'sent to the developers of InaSAFE if you encounter long processing '
         'times. They will use the information to identify processing '
         'bottlenecks.'),
-    'allowed_geometries': [],
+    'allowed_geometries': [],  # It's a table.
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+
+layer_purpose_nearby_places = {
+    'key': 'nearby_places',
+    'name': tr('Nearby Places'),
+    'description': tr('Lorem ipsum on the nearby places layers.'),
+    'allowed_geometries': [layer_geometry_point],
     'citations': [
         {
             'text': None,

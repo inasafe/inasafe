@@ -6,7 +6,7 @@ from PyQt4.QtCore import QVariant
 
 from safe.definitions import concepts
 from safe.definitions.constants import (
-    qvariant_whole_numbers, qvariant_numbers)
+    qvariant_whole_numbers, qvariant_numbers, qvariant_all)
 from safe.definitions.currencies import currencies
 from safe.definitions.default_values import (
     female_ratio_default_value,
@@ -24,7 +24,7 @@ from safe.definitions.default_values import (
     pregnant_ratio_default_value,
     lactating_ratio_default_value
 )
-from safe.definitions.units import unit_quintal
+from safe.definitions.units import unit_hundred_kilograms
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -195,11 +195,12 @@ hazard_name_field = {
 }
 
 # Hazard Value
+
 hazard_value_field = {
     'key': 'hazard_value_field',
     'name': tr('Hazard Value'),
     'field_name': 'hazard_value',
-    'type': [QVariant.String, QVariant.Int, QVariant.Double],
+    'type': qvariant_all,
     'length': default_field_length,
     'precision': 0,
     'help_text': tr(
@@ -223,7 +224,6 @@ hazard_value_field = {
     # Null value can be replaced by default or not
     'replace_null': False
 }
-
 # Hazard Class
 hazard_class_field = {
     'key': 'hazard_class_field',
@@ -303,26 +303,6 @@ aggregation_name_field = {
 # # # # # # # # # #
 # Analysis
 # # # # # # # # # #
-
-analysis_id_field = {
-    'key': 'analysis_id_field',
-    'name': tr('Analysis ID'),
-    'field_name': 'analysis_id',
-    'type': qvariant_whole_numbers,
-    'length': default_field_length,
-    'precision': 0,
-    'absolute': False,
-    'description': tr(  # short description
-        'An ID attribute in the analysis layer.'),
-    'help_text': tr(
-        'A unique identifier for each analysis feature.'),
-    'citations': [
-        {
-            'text': None,
-            'link': None
-        }
-    ]
-}
 
 analysis_name_field = {
     'key': 'analysis_name_field',
@@ -889,10 +869,10 @@ size_field = {
     'precision': 2,
     'absolute': True,
     'description': tr(
-        'Attribute where the size of the gemetry is located.'
+        'Attribute where the size of the geometry is located.'
     ),
     'help_text': tr(
-        'Attribute where the size of the gemetry is located.'
+        'Attribute where the size of the geometry is located.'
     ),
     'citations': [
         {
@@ -1956,6 +1936,34 @@ total_not_exposed_field = {
     'replace_null': False
 }
 
+# Total exposed field
+total_exposed_field = {
+    'key': 'total_exposed_field',
+    'name': tr('Total Exposed'),
+    'field_name': 'total_exposed',
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': 2,
+    'absolute': True,
+    'description': tr(
+        'The total exposed field stores the cumulative total number of '
+        'exposed features or entities.'),
+    'help_text': tr(
+        'The total exposed field is added to the analysis layer, '
+        'aggregate impact layer and aggregate hazard impact layer during the '
+        'impact analysis. It represents the cumulative count of exposed '
+        'exposure features (e.g. buildings) or entities (e.g. people) for '
+        'each area.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
 # # # # # # # # # #
 # Count, dynamics, outputs (Absolute values)
 # # # # # # # # # #
@@ -1992,7 +2000,7 @@ exposure_count_field = {
 affected_exposure_count_field = {
     'key': '%s_affected_field',
     'name': tr('Affected %s'),
-    'field_name': '%s_affected',
+    'field_name': '%s_affected',  # Be careful, same as total_affected_field
     'type': QVariant.Double,
     'length': default_field_length,
     'precision': default_field_precision,
@@ -2114,6 +2122,129 @@ population_displaced_per_mmi = {
     'replace_null': False
 }
 
+# # # # # # # # # #
+# Multi exposure fields
+# # # # # # # # # #
+
+# Basically, all these multi exposure fields are the same as their parents,
+# but we only add the exposure prefix to the key and field name.
+exposure_hazard_count_field = {
+    'key': '%s_' + hazard_count_field['key'],
+    'name': tr('Total %s %s'),
+    'field_name': '%s_' + hazard_count_field['field_name'],
+    'type': hazard_count_field['type'],
+    'length': hazard_count_field['length'],
+    'precision': hazard_count_field['precision'],
+    'absolute': hazard_count_field['absolute'],
+    'help_text': hazard_count_field['help_text'],
+    'description': hazard_count_field['description'],
+    'citations': hazard_count_field['citations'],
+    # Null value can be replaced by default or not
+    'replace_null': hazard_count_field['replace_null']
+}
+
+# Total affected per exposure
+exposure_total_affected_field = {
+    'key': '%s_' + total_affected_field['key'],
+    'name': tr('Total Affected %s'),
+    'field_name': '%s_' + total_affected_field['field_name'],
+    'type': total_affected_field['type'],
+    'length': total_affected_field['length'],
+    'precision': total_affected_field['precision'],
+    'absolute': total_affected_field['absolute'],
+    'help_text': total_affected_field['help_text'],
+    'description': total_affected_field['description'],
+    'citations': total_affected_field['citations'],
+    # Null value can be replaced by default or not
+    'replace_null': total_affected_field['replace_null']
+}
+
+# Total not affected per exposure
+exposure_total_not_affected_field = {
+    'key': '%s_' + total_not_affected_field['key'],
+    'name': tr('Total Not Affected %s'),
+    'field_name': '%s_' + total_not_affected_field['field_name'],
+    'type': total_not_affected_field['type'],
+    'length': total_not_affected_field['length'],
+    'precision': total_not_affected_field['precision'],
+    'absolute': total_not_affected_field['absolute'],
+    'help_text': total_not_affected_field['help_text'],
+    'description': total_not_affected_field['description'],
+    'citations': total_not_affected_field['citations'],
+    # Null value can be replaced by default or not
+    'replace_null': total_not_affected_field['replace_null']
+}
+
+# Total exposed per exposure
+exposure_total_exposed_field = {
+    'key': '%s_' + total_exposed_field['key'],
+    'name': tr('Total Exposed %s'),
+    'field_name': '%s_' + total_exposed_field['field_name'],
+    'type': total_exposed_field['type'],
+    'length': total_exposed_field['length'],
+    'precision': total_exposed_field['precision'],
+    'absolute': total_exposed_field['absolute'],
+    'help_text': total_exposed_field['help_text'],
+    'description': total_exposed_field['description'],
+    'citations': total_exposed_field['citations'],
+    # Null value can be replaced by default or not
+    'replace_null': total_exposed_field['replace_null']
+}
+
+# Total not exposed per exposure
+exposure_total_not_exposed_field = {
+    'key': '%s_' + total_not_exposed_field['key'],
+    'name': tr('Total Not Exposed %s'),
+    'field_name': '%s_' + total_not_exposed_field['field_name'],
+    'type': total_not_exposed_field['type'],
+    'length': total_not_exposed_field['length'],
+    'precision': total_not_exposed_field['precision'],
+    'absolute': total_not_exposed_field['absolute'],
+    'help_text': total_not_exposed_field['help_text'],
+    'description': total_not_exposed_field['description'],
+    'citations': total_not_exposed_field['citations'],
+    # Null value can be replaced by default or not
+    'replace_null': total_not_exposed_field['replace_null']
+}
+
+# Total per exposure
+exposure_total_field = {
+    'key': '%s_' + total_field['key'],
+    'name': tr('Total %s'),
+    'field_name': '%s_' + total_field['field_name'],
+    'type': total_field['type'],
+    'length': total_field['length'],
+    'precision': total_field['precision'],
+    'absolute': total_field['absolute'],
+    'help_text': total_field['help_text'],
+    'description': total_field['description'],
+    'citations': total_field['citations'],
+    # Null value can be replaced by default or not
+    'replace_null': total_field['replace_null']
+}
+
+# Like roads_residential_affected_field
+# or roads_other_affected_field
+# or buildings_other_affected_field
+# might be in the same layer
+exposure_affected_exposure_type_count_field = {
+    'key': '%s_' + affected_exposure_count_field['key'],
+    'name': tr('Affected %s %s'),
+    'field_name': '%s_' + affected_exposure_count_field['field_name'],
+    'type': affected_exposure_count_field['type'],
+    'length': affected_exposure_count_field['length'],
+    'precision': affected_exposure_count_field['precision'],
+    'absolute': affected_exposure_count_field['absolute'],
+    'help_text': affected_exposure_count_field['help_text'],
+    'description': affected_exposure_count_field['description'],
+    'citations': affected_exposure_count_field['citations'],
+    # Null value can be replaced by default or not
+    'replace_null': affected_exposure_count_field['replace_null']
+}
+
+# # # # # # # # # #
+# Productivity, ratio and cost
+# # # # # # # # # #
 
 # Productivity field
 productivity_rate_field = {
@@ -2200,7 +2331,7 @@ affected_productivity_field = {
     ],
     # Null value can be replaced by default or not
     'replace_null': False,
-    'units': [unit_quintal]
+    'units': [unit_hundred_kilograms]
 }
 
 # Production cost field
@@ -2374,6 +2505,108 @@ affected_production_value_field = {
     'units': currencies,
 }
 
+# # # # # # # # # #
+# Direction and Distance Field
+# # # # # # # # # #
+
+# Count for each exposure type
+distance_field = {
+    'key': 'distance_field',
+    'name': tr('Distance'),
+    'field_name': 'distance',
+    'header_name': tr('Distance'),
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': default_field_precision,
+    'absolute': True,
+    'description': tr(
+        'The distance value between place and hazard point.'
+    ),
+    'help_text': tr(
+        'Distance value between place feature to the epicenter of the hazard. '
+        'The distance is calculated using WGS84 as ellipsoid model. The unit '
+        'of the distance is in meter.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+bearing_field = {
+    'key': 'bearing_field',
+    'name': tr('Bearing Angle'),
+    'field_name': 'bearing',
+    'header_name': tr('Bearing'),
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': default_field_precision,
+    'absolute': False,
+    'description': tr(
+        'An azimuth angle at a place to a hazard point.'),
+    'help_text': tr(
+        'A bearing angle is an angle measured to a point as observed in '
+        'current location using north as a reference direction. In this case, '
+        '"bearing from" refers to an angle calculated at a certain place '
+        'pointing to a hazard location. Positive values indicate it '
+        'calculates from north moving clockwise, and negative values '
+        'indicate it calculates from North moving counterclockwise.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+
+direction_field = {
+    'key': 'direction_field',
+    'name': tr('Direction'),
+    'field_name': 'direction',
+    'header_name': tr('Direction'),
+    'type': QVariant.String,
+    'length': default_field_length,
+    'precision': 0,
+    'description': tr(
+        'Cardinality of a bearing angle.'),
+    'help_text': tr(
+        'Cardinality of a bearing angle is an information that indicates the '
+        'direction of the angle. The purpose of this information is so that '
+        'it will be easier to understand than using only a bearing angle.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+
+place_mmi_field = {
+    'key': 'place_mmi_field',
+    'name': tr('Place MMI Value'),
+    'field_name': 'place_mmi',
+    'header_name': tr('Place MMI'),
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': default_field_precision,
+    'absolute': True,
+    'description': tr(
+        'A value attribute for MMI at a certain place.'),
+    'help_text': tr(
+        'If there is a place layer provided while converting the grid xml '
+        'file, then the MMI value at the location of the place will be added '
+        'to this field.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+
 # Inputs
 exposure_fields = [
     exposure_id_field,
@@ -2441,13 +2674,30 @@ exposure_summary_table_fields = [
 ]
 
 analysis_fields = [
-    analysis_id_field,
     analysis_name_field,
     hazard_count_field,
     total_affected_field,
     total_not_affected_field,
     total_not_exposed_field,
+    total_exposed_field,
     total_field
+]
+
+multiexposure_aggregation_fields = [
+    aggregation_id_field,
+    aggregation_name_field,
+    exposure_affected_exposure_type_count_field,
+    exposure_total_affected_field,
+]
+
+multiexposure_analysis_fields = [
+    analysis_name_field,
+    exposure_hazard_count_field,
+    exposure_total_affected_field,
+    exposure_total_not_affected_field,
+    exposure_total_exposed_field,
+    exposure_total_not_exposed_field,
+    exposure_total_field,
 ]
 
 # Field that can be used to summarize / aggregate the result in exposure

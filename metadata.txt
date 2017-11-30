@@ -16,9 +16,9 @@ description=InaSAFE is free software that allows disaster managers to study real
 about=Developed for the Indonesian Government - BNPB, Australian Government - AIFDR and DMInnovation and, and World Bank - GFDRR
 
 # If you change version and status here, please also change in safe/definitions/versions.py
-version=4.2.0
+version=4.3.0
 # alpha, beta, rc or final
-status=final
+status=alpha
 
 
 # end of mandatory metadata
@@ -26,19 +26,30 @@ status=final
 # Optional items:
 
 changelog=
-    Version 4.2
-    - Reporting : Expose provenance; as project variables for easy reporting
-    - Reporting : Re-implemented infographics as composer templates
-    - Reporting : Enable atlas generation on reporting
-    - Reporting : Added many custom InaSAFE specific QGIS Expressions to make reporting easier.
-    - Reporting : Fixed bug where maps in report were blank when using OTFP
-    - Impact Functions : Support for Land Cover economic impact calculations
-    - Impact Functions : Added support for working with multi-band rasters
-    - Impact Functions : Removed separate workflow for Earthquake impact functions
-    - Impact Functions : Allow exposure data driven classification
-    - Tools : PR #4379 Show uniquness in the aggregation ID field in keyword wizard
-    - Documentation : Wizards now have context sensitive help
-    - Code Internals : Command line and 'headless' code moved to their own repos
+    Version 4.3:
+    - Add extra keywords for supporting rich reporting (e.g. earthquake's epicenter location, depth)
+    - Use aggregation CRS instead of exposure CRS or map canvas CRS if no aggregation layer is provided
+    - Add total exposed field
+    - Add bearing, distance and cardinality postprocessors if we run an earthquake on places
+    - The impact layer from an earthquake on places is ordered by distance
+    - Add new QGIS expressions to fetch information in QGIS Impact layers or keywords
+    - Add a warning if another plugin is conflicting with InaSAFE on the file system
+    - New multi exposure tool where you can run one hazard on many exposures at the same time and get a combined report
+    - Special tool for reporting in the multi exposure dialog to set a custom layer order
+    - Improve code layout (Flake8, PEP 257, PEP8, SideCI ...)
+    - Fix various bugs, like in summary calculation, keyword wizard, productivity post processors
+    - Add metadata converter to version 3.5 to make it work with GeoSAFE
+    - Add InaSAFE Profile to set custom affected and displacement rate
+    - Impact Function and Multi-Exposure Impact Function serialization
+    - Add welcome message
+    - Support population count and demographic mapping in place exposure
+    - Tidy up metadata (remove unused properties)
+    - Tidy up settings dialog
+    - Use numpy to create contour for shakemap
+    - Add new method to generate a report in ImpactFunction object
+    - Bring back the old behaviour of generating report. (option to choose custom template)
+    - Map report and general report for Multi-Exposure Impact Function.
+    - HTML expressions for reporting usage.
 
 # tags are comma separated with spaces allowed
 tags=contingency planning, impact assessments, disaster scenarios, natural hazards,risk

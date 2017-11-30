@@ -11,7 +11,9 @@
   },
   "expected_steps":{
     "impact function":{
-      "info": {},
+      "info": {
+        "crs": "EPSG:4326"
+      },
       "process":[
         "Make aggregate hazard layer valid",
         "Intersect divisible features with the aggregate hazard",
@@ -20,6 +22,10 @@
         "Aggregate the analysis summary",
         "Build the exposure summary table"
       ]
+    },
+    "pre_processor": {
+      "info": {},
+      "process": []
     },
     "post_processor":{
       "info": {},
@@ -40,10 +46,10 @@
     },
     "hazard":{
       "info": {
-        "use_same_projection":false
+        "use_same_projection_as_aggregation":false
       },
       "process":[
-        "Reproject hazard layer to exposure CRS",
+        "Reproject hazard layer to aggregation CRS",
         "Clip and mask hazard polygons with the analysis layer",
         "Cleaning the vector hazard attribute table",
         "Classify continuous hazard and assign class names",
@@ -51,7 +57,9 @@
       ]
     },
     "exposure":{
-      "info": {},
+      "info": {
+        "use_same_projection_as_aggregation":true
+      },
       "process":[
         "Smart clip",
         "Cleaning the vector exposure attribute table",

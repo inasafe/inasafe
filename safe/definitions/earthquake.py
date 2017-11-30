@@ -113,6 +113,7 @@ def itb_bayesian_fatality_rates():
     }
     return fatality_rate
 
+
 EARTHQUAKE_FUNCTIONS = (
     {
         'key': 'itb_bayesian_fatality_rates',
@@ -360,7 +361,7 @@ def current_earthquake_model_name():
         settings.
     """
     default_earthquake_function = setting(
-        'earthquake_function', expected_type=str)
+        'earthquake_function', EARTHQUAKE_FUNCTIONS[0]['key'], str)
     current_function = None
     for model in EARTHQUAKE_FUNCTIONS:
         if model['key'] == default_earthquake_function:

@@ -53,7 +53,7 @@ class FlatTable(object):
         return self.data[key]
 
     def group_values(self, group_name):
-        """Return all distinct group values for given group"""
+        """Return all distinct group values for given group."""
         group_index = self.groups.index(group_name)
         values = set()
         for key in self.data:
@@ -305,7 +305,7 @@ class PivotTable(object):
             self.total_percent_affected = None
 
     def __repr__(self):
-        """ Dump object content in a readable format """
+        """Dump object content in a readable format."""
         pivot = '<PivotTable ' \
                 'total=%f\n ' \
                 'total_rows=%s\n ' \

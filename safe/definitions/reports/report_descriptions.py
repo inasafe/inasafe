@@ -1,5 +1,7 @@
 # coding=utf-8
 
+"""Definitions about InaSAFE reports."""
+
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -36,6 +38,7 @@ impact_report_description = {
 }
 portrait_map_report_description = {
   'name': tr('Portrait map'),
+  'orientation': 'portrait',
   'customisable': True,
   'description': tr(
     'A standard map report is produced in a portrait layout '
@@ -59,6 +62,7 @@ portrait_map_report_description = {
 }
 landscape_map_report_description = {
   'name': tr('Landscape map'),
+  'orientation': 'landscape',
   'customisable': True,
   'description': tr(
     'A standard map report is produced in a landscape layout. '

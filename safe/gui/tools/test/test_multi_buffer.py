@@ -1,8 +1,7 @@
 import unittest
 import os
 
-from qgis.core import QgsVectorLayer, QgsMapLayerRegistry
-from safe.datastore.folder import Folder
+from qgis.core import QgsMapLayerRegistry
 from safe.definitions.fields import buffer_distance_field, hazard_class_field
 from safe.test.utilities import (
     load_test_vector_layer,
@@ -22,11 +21,6 @@ class MultiBufferTest(unittest.TestCase):
         """Test initialisation run before each test."""
         self.output_path = standard_data_path(
             'hazard', 'volcano_point_multi_buffer.geojson')
-        pass
-
-    def tearDown(self):
-        """Run after each test."""
-        pass
 
     def multi_buffer_test(self, output_path):
         """Function to test the functionality of multi buffer tool.
@@ -76,6 +70,14 @@ class MultiBufferTest(unittest.TestCase):
         new_field_names = actual_field_names[-2:]
 
         self.assertEqual(expected_fields_name, new_field_names)
+
+        # We need to clean generated files
+        try:
+            os.remove(self.output_path)
+            os.remove(self.output_path.replace('.geojson', '.xml'))
+        except OSError:
+            # With the test_temp_output test, these files don't exist.
+            pass
 
     def test_temp_output(self):
         """Test the multi buffer tool if user do not provide

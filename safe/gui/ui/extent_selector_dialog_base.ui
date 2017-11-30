@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>621</width>
-    <height>375</height>
+    <height>420</height>
    </rect>
   </property>
   <property name="font">
@@ -23,9 +23,13 @@
     <normaloff>:/plugins/inasafe/icon.svg</normaloff>:/plugins/inasafe/icon.svg</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout_3">
-   <property name="margin">
-    <number>0</number>
-   </property>
+   <item row="1" column="0">
+    <widget class="QDialogButtonBox" name="button_box">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Help|QDialogButtonBox::Ok|QDialogButtonBox::Reset</set>
+     </property>
+    </widget>
+   </item>
    <item row="0" column="0">
     <widget class="QStackedWidget" name="main_stacked_widget">
      <property name="currentIndex">
@@ -37,14 +41,14 @@
         <number>0</number>
        </property>
        <item row="0" column="0">
-        <widget class="QWebView" name="help_web_view">
+        <widget class="QWebView" name="help_web_view" native="true">
          <property name="minimumSize">
           <size>
            <width>200</width>
            <height>200</height>
           </size>
          </property>
-         <property name="url">
+         <property name="url" stdset="0">
           <url>
            <string>about:blank</string>
           </url>
@@ -54,223 +58,298 @@
       </layout>
      </widget>
      <widget class="QWidget" name="page_1">
-      <layout class="QGridLayout" name="gridLayout">
-       <property name="margin">
-        <number>0</number>
-       </property>
+      <layout class="QGridLayout" name="gridLayout_5">
        <item row="0" column="0">
-        <widget class="QLabel" name="label">
-         <property name="text">
+        <widget class="QGroupBox" name="groupBox">
+         <property name="font">
+          <font>
+           <pointsize>10</pointsize>
+           <weight>50</weight>
+           <italic>false</italic>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="title">
           <string>When carrying out an analysis without an aggregation layer, which clipping behaviour should be used?</string>
          </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QRadioButton" name="hazard_exposure_only">
-         <property name="text">
-          <string>Use intersection of hazard and exposure layers</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0">
-        <widget class="QRadioButton" name="hazard_exposure_bookmark">
-         <property name="text">
-          <string>Use intersection of hazard, exposure and this bookmark</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0">
-        <widget class="QComboBox" name="bookmarks_list">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="0">
-        <widget class="QRadioButton" name="hazard_exposure_user_extent">
-         <property name="text">
-          <string>Use intersection of hazard, exposure and this bounding box</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0">
-        <widget class="QRadioButton" name="hazard_exposure_view_extent">
-         <property name="text">
-          <string>Use intersection of hazard, exposure and current view extent</string>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="0">
-        <layout class="QGridLayout" name="gridLayout_2">
-         <property name="sizeConstraint">
-          <enum>QLayout::SetDefaultConstraint</enum>
-         </property>
-         <property name="margin">
-          <number>1</number>
-         </property>
-         <property name="spacing">
-          <number>1</number>
-         </property>
-         <item row="1" column="0">
-          <widget class="QDoubleSpinBox" name="x_minimum">
-           <property name="font">
-            <font>
-             <pointsize>12</pointsize>
-            </font>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-           <property name="buttonSymbols">
-            <enum>QAbstractSpinBox::NoButtons</enum>
-           </property>
-           <property name="prefix">
-            <string>West: </string>
-           </property>
-           <property name="decimals">
-            <number>7</number>
-           </property>
-           <property name="minimum">
-            <double>-999999999.000000000000000</double>
-           </property>
-           <property name="maximum">
-            <double>999999999.000000000000000</double>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QDoubleSpinBox" name="y_maximum">
-           <property name="font">
-            <font>
-             <pointsize>12</pointsize>
-            </font>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-           <property name="buttonSymbols">
-            <enum>QAbstractSpinBox::NoButtons</enum>
-           </property>
-           <property name="prefix">
-            <string>North: </string>
-           </property>
-           <property name="decimals">
-            <number>7</number>
-           </property>
-           <property name="minimum">
-            <double>-999999999.000000000000000</double>
-           </property>
-           <property name="maximum">
-            <double>999999999.000000000000000</double>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QPushButton" name="capture_button">
-           <property name="text">
-            <string>Drag on map</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QDoubleSpinBox" name="y_minimum">
-           <property name="font">
-            <font>
-             <pointsize>12</pointsize>
-            </font>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-           <property name="buttonSymbols">
-            <enum>QAbstractSpinBox::NoButtons</enum>
-           </property>
-           <property name="prefix">
-            <string>South: </string>
-           </property>
-           <property name="decimals">
-            <number>7</number>
-           </property>
-           <property name="minimum">
-            <double>-999999999.000000000000000</double>
-           </property>
-           <property name="maximum">
-            <double>999999999.000000000000000</double>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="2">
-          <widget class="QDoubleSpinBox" name="x_maximum">
-           <property name="font">
-            <font>
-             <pointsize>12</pointsize>
-            </font>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-           <property name="buttonSymbols">
-            <enum>QAbstractSpinBox::NoButtons</enum>
-           </property>
-           <property name="prefix">
-            <string>East: </string>
-           </property>
-           <property name="decimals">
-            <number>7</number>
-           </property>
-           <property name="minimum">
-            <double>-999999999.000000000000000</double>
-           </property>
-           <property name="maximum">
-            <double>999999999.000000000000000</double>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item row="7" column="0">
-        <widget class="QLabel" name="create_bookmarks_label">
-         <property name="text">
-          <string>To use a bookmark, first create one using the QGIS bookmark tool</string>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="11" column="0">
-        <widget class="QCheckBox" name="show_confirmations">
-         <property name="text">
-          <string>Show confirmation message when extents are valid</string>
-         </property>
-        </widget>
-       </item>
-       <item row="10" column="0">
-        <widget class="QCheckBox" name="show_warnings">
-         <property name="text">
-          <string>Show warning when analysis extent is invalid</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QRadioButton" name="exposure_only">
-         <property name="text">
-          <string>Use extent of exposure layer</string>
-         </property>
+         <layout class="QGridLayout" name="gridLayout_7">
+          <item row="10" column="0">
+           <layout class="QGridLayout" name="gridLayout">
+            <property name="sizeConstraint">
+             <enum>QLayout::SetDefaultConstraint</enum>
+            </property>
+            <property name="margin">
+             <number>1</number>
+            </property>
+            <property name="spacing">
+             <number>1</number>
+            </property>
+            <item row="1" column="0">
+             <widget class="QDoubleSpinBox" name="x_minimum">
+              <property name="font">
+               <font>
+                <pointsize>12</pointsize>
+                <weight>50</weight>
+                <italic>false</italic>
+                <bold>false</bold>
+               </font>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+              <property name="buttonSymbols">
+               <enum>QAbstractSpinBox::NoButtons</enum>
+              </property>
+              <property name="prefix">
+               <string>West: </string>
+              </property>
+              <property name="decimals">
+               <number>7</number>
+              </property>
+              <property name="minimum">
+               <double>-999999999.000000000000000</double>
+              </property>
+              <property name="maximum">
+               <double>999999999.000000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QDoubleSpinBox" name="y_maximum">
+              <property name="font">
+               <font>
+                <pointsize>12</pointsize>
+                <weight>50</weight>
+                <italic>false</italic>
+                <bold>false</bold>
+               </font>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+              <property name="buttonSymbols">
+               <enum>QAbstractSpinBox::NoButtons</enum>
+              </property>
+              <property name="prefix">
+               <string>North: </string>
+              </property>
+              <property name="decimals">
+               <number>7</number>
+              </property>
+              <property name="minimum">
+               <double>-999999999.000000000000000</double>
+              </property>
+              <property name="maximum">
+               <double>999999999.000000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QPushButton" name="capture_button">
+              <property name="font">
+               <font>
+                <weight>50</weight>
+                <italic>false</italic>
+                <bold>false</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>Drag on map</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QDoubleSpinBox" name="y_minimum">
+              <property name="font">
+               <font>
+                <pointsize>12</pointsize>
+                <weight>50</weight>
+                <italic>false</italic>
+                <bold>false</bold>
+               </font>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+              <property name="buttonSymbols">
+               <enum>QAbstractSpinBox::NoButtons</enum>
+              </property>
+              <property name="prefix">
+               <string>South: </string>
+              </property>
+              <property name="decimals">
+               <number>7</number>
+              </property>
+              <property name="minimum">
+               <double>-999999999.000000000000000</double>
+              </property>
+              <property name="maximum">
+               <double>999999999.000000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QDoubleSpinBox" name="x_maximum">
+              <property name="font">
+               <font>
+                <pointsize>12</pointsize>
+                <weight>50</weight>
+                <italic>false</italic>
+                <bold>false</bold>
+               </font>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+              <property name="buttonSymbols">
+               <enum>QAbstractSpinBox::NoButtons</enum>
+              </property>
+              <property name="prefix">
+               <string>East: </string>
+              </property>
+              <property name="decimals">
+               <number>7</number>
+              </property>
+              <property name="minimum">
+               <double>-999999999.000000000000000</double>
+              </property>
+              <property name="maximum">
+               <double>999999999.000000000000000</double>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="11" column="0">
+           <widget class="QCheckBox" name="show_warnings">
+            <property name="font">
+             <font>
+              <weight>50</weight>
+              <italic>false</italic>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Show warning when analysis extent is invalid</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="0">
+           <widget class="QRadioButton" name="hazard_exposure_bookmark">
+            <property name="font">
+             <font>
+              <weight>50</weight>
+              <italic>false</italic>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Use intersection of hazard, exposure and this bookmark</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QRadioButton" name="hazard_exposure_only">
+            <property name="font">
+             <font>
+              <weight>50</weight>
+              <italic>false</italic>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Use intersection of hazard and exposure layers</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QRadioButton" name="hazard_exposure_view_extent">
+            <property name="font">
+             <font>
+              <weight>50</weight>
+              <italic>false</italic>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Use intersection of hazard, exposure and current view extent</string>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="0">
+           <widget class="QComboBox" name="bookmarks_list">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="9" column="0">
+           <widget class="QRadioButton" name="hazard_exposure_user_extent">
+            <property name="font">
+             <font>
+              <weight>50</weight>
+              <italic>false</italic>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Use intersection of hazard, exposure and this bounding box</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="0">
+           <widget class="QLabel" name="create_bookmarks_label">
+            <property name="font">
+             <font>
+              <weight>50</weight>
+              <italic>false</italic>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>To use a bookmark, first create one using the QGIS bookmark tool</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QRadioButton" name="exposure_only">
+            <property name="font">
+             <font>
+              <weight>50</weight>
+              <italic>false</italic>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Use extent of exposure layer</string>
+            </property>
+           </widget>
+          </item>
+          <item row="12" column="0">
+           <widget class="QCheckBox" name="show_confirmations">
+            <property name="font">
+             <font>
+              <weight>50</weight>
+              <italic>false</italic>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Show confirmation message when extents are valid</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
       </layout>
      </widget>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QDialogButtonBox" name="button_box">
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Help|QDialogButtonBox::Ok|QDialogButtonBox::Reset</set>
-     </property>
     </widget>
    </item>
   </layout>
@@ -282,135 +361,6 @@
    <header>QtWebKit/QWebView</header>
   </customwidget>
  </customwidgets>
- <tabstops>
-  <tabstop>hazard_exposure_only</tabstop>
-  <tabstop>hazard_exposure_view_extent</tabstop>
-  <tabstop>hazard_exposure_bookmark</tabstop>
-  <tabstop>bookmarks_list</tabstop>
-  <tabstop>hazard_exposure_user_extent</tabstop>
-  <tabstop>y_maximum</tabstop>
-  <tabstop>x_minimum</tabstop>
-  <tabstop>x_maximum</tabstop>
-  <tabstop>y_minimum</tabstop>
-  <tabstop>capture_button</tabstop>
-  <tabstop>show_warnings</tabstop>
-  <tabstop>show_confirmations</tabstop>
-  <tabstop>button_box</tabstop>
-  <tabstop>help_web_view</tabstop>
- </tabstops>
  <resources/>
- <connections>
-  <connection>
-   <sender>hazard_exposure_bookmark</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>bookmarks_list</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>92</x>
-     <y>97</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>50</x>
-     <y>125</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>hazard_exposure_user_extent</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>x_minimum</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>80</x>
-     <y>149</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>88</x>
-     <y>205</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>hazard_exposure_user_extent</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>y_maximum</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>174</x>
-     <y>151</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>239</x>
-     <y>172</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>hazard_exposure_user_extent</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>x_maximum</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>123</x>
-     <y>146</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>451</x>
-     <y>198</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>hazard_exposure_user_extent</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>y_minimum</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>153</x>
-     <y>151</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>242</x>
-     <y>220</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>hazard_exposure_user_extent</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>capture_button</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>114</x>
-     <y>151</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>245</x>
-     <y>200</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>button_box</sender>
-   <signal>rejected()</signal>
-   <receiver>ExtentSelectorDialogBase</receiver>
-   <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>494</x>
-     <y>332</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>620</x>
-     <y>289</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

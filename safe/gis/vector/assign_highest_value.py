@@ -3,21 +3,20 @@
 """Assign the highest value to an exposure according to a hazard layer."""
 
 import logging
+
 from qgis.core import (
-    QGis,
     QgsFeatureRequest,
     QgsGeometry,
-    QgsWKBTypes,
 )
 
 from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
-from safe.definitions.layer_purposes import layer_purpose_exposure_summary
 from safe.definitions.fields import hazard_class_field
 from safe.definitions.hazard_classifications import (
     hazard_classification, not_exposed_class)
+from safe.definitions.layer_purposes import layer_purpose_exposure_summary
 from safe.definitions.processing_steps import assign_highest_value_steps
-from safe.gis.vector.tools import create_spatial_index
 from safe.gis.sanity_check import check_layer
+from safe.gis.vector.tools import create_spatial_index
 from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -60,7 +59,7 @@ def assign_highest_value(exposure, hazard, callback=None):
     .. versionadded:: 4.0
     """
     output_layer_name = assign_highest_value_steps['output_layer_name']
-    processing_step = assign_highest_value_steps['step_name']
+    processing_step = assign_highest_value_steps['step_name']  # NOQA
 
     hazard_inasafe_fields = hazard.keywords['inasafe_fields']
 

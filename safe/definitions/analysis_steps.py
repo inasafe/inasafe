@@ -4,6 +4,7 @@
 """
 
 from collections import OrderedDict
+
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -36,6 +37,19 @@ analysis_steps['data_store'] = {
         'In this phase we create a data store. The data store is a '
         'folder or GeoPackage containing all of the working data '
         'used for and produced by this analysis.'),
+    'citations': [
+        {
+            'text': tr(''),
+            'link': u''
+        }
+    ]
+}
+analysis_steps['pre_processing'] = {
+    'key': 'pre_processing',
+    'name': tr('Pre processing'),
+    'description': tr(
+        'During this step we check if we can create some side products based '
+        'on your inputs.'),
     'citations': [
         {
             'text': tr(''),

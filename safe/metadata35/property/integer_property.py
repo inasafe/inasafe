@@ -1,0 +1,58 @@
+# -*- coding: utf-8 -*-
+"""
+InaSAFE Disaster risk assessment tool developed by AusAid -
+**metadata module.**
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+"""
+
+__author__ = 'ismail@kartoza.com'
+__revision__ = '$Format:%H$'
+__date__ = '07/12/15'
+__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
+                 'Disaster Reduction')
+
+
+import json
+from types import NoneType
+
+
+from safe.common.exceptions import MetadataCastError
+from safe.metadata35.property import BaseProperty
+
+
+class IntegerProperty(BaseProperty):
+
+    """A property that accepts integer input."""
+
+    # if you edit this you need to adapt accordingly xml_value and is_valid
+    _allowed_python_types = [int, NoneType]
+
+    def __init__(self, name, value, xml_path):
+        super(IntegerProperty, self).__init__(
+            name, value, xml_path, self._allowed_python_types)
+
+    @classmethod
+    def is_valid(cls, value):
+        return True
+
+    def cast_from_str(self, value):
+        try:
+            return int(value)
+        except ValueError as e:
+            raise MetadataCastError(e)
+
+    @property
+    def xml_value(self):
+        if self.python_type is int:
+            return str(self.value)
+        elif self.python_type is NoneType:
+            return ''
+        else:
+            raise RuntimeError('self._allowed_python_types and self.xml_value'
+                               'are out of sync. This should never happen')

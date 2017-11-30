@@ -2,31 +2,33 @@
 
 """Utilities module."""
 
-import re
 import codecs
 import json
 import logging
 import platform
+import re
 import sys
 import traceback
 import unicodedata
 import webbrowser
+from os.path import join, isdir
 
 from PyQt4.QtCore import QPyNullVariant
+from qgis.core import QgsApplication
 
+from safe import messaging as m
 from safe.common.exceptions import NoKeywordsFoundError, MetadataReadError
+from safe.common.utilities import unique_filename
+from safe.common.version import get_version
+from safe.definitions.messages import disclaimer
 from safe.definitions.versions import (
     inasafe_keyword_version,
     keyword_version_compatibilities)
-from safe.definitions.messages import disclaimer
-from safe import messaging as m
-from safe.common.utilities import unique_filename
-from safe.common.version import get_version
 from safe.messaging import styles, Message
 from safe.messaging.error_message import ErrorMessage
 from safe.utilities.i18n import tr
-from safe.utilities.unicode import get_unicode
 from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.unicode import get_unicode
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -138,6 +140,57 @@ def humanise_seconds(seconds):
             days, hours, minutes))
 
 
+def generate_expression_help(description, examples, extra_information=None):
+    """Generate the help message for QGIS Expressions.
+
+    It will format nicely the help string with some examples.
+
+    :param description: A description of the expression.
+    :type description: basestring
+
+    :param examples: A dictionary of examples
+    :type examples: dict
+
+    :param extra_information: A dictionary of extra information.
+    :type extra_information: dict
+
+    :return: A message object.
+    :rtype: message
+    """
+    def populate_bullet_list(message, information):
+        """Populate a message object with bullet list.
+
+        :param message: The message object.
+        :type message: Message
+
+        :param information: A dictionary of information.
+        :type information: dict
+
+        :return: A message object that has been updated.
+        :rtype: Message
+        """
+        bullets = m.BulletedList()
+        for key, item in information.iteritems():
+            if item:
+                bullets.add(
+                    m.Text(m.ImportantText(key), m.Text('→'), m.Text(item)))
+            else:
+                bullets.add(m.Text(m.ImportantText(key)))
+        message.add(bullets)
+        return message
+
+    help = m.Message()
+    help.add(m.Paragraph(description))
+    help.add(m.Paragraph(tr('Examples:')))
+    help = populate_bullet_list(help, examples)
+
+    if extra_information:
+        help.add(m.Paragraph(extra_information['title']))
+        help = populate_bullet_list(help, extra_information['detail'])
+
+    return help
+
+
 def impact_attribution(keywords, inasafe_flag=False):
     """Make a little table for attribution of data sources used in impact.
 
@@ -204,38 +257,10 @@ def impact_attribution(keywords, inasafe_flag=False):
         inasafe_phrase = tr(
             'This report was created using InaSAFE version %s. Visit '
             'http://inasafe.org to get your free copy of this software! %s'
-            ) % (get_version(), disclaimer())
+        ) % (get_version(), disclaimer())
 
         report.add(m.Paragraph(m.Text(inasafe_phrase)))
     return report
-
-
-def add_ordered_combo_item(combo, text, data=None):
-    """Add a combo item ensuring that all items are listed alphabetically.
-
-    Although QComboBox allows you to set an InsertAlphabetically enum
-    this only has effect when a user interactively adds combo items to
-    an editable combo. This we have this little function to ensure that
-    combos are always sorted alphabetically.
-
-    :param combo: Combo box receiving the new item.
-    :type combo: QComboBox
-
-    :param text: Display text for the combo.
-    :type text: str
-
-    :param data: Optional UserRole data to be associated with the item.
-    :type data: QVariant, str
-    """
-    size = combo.count()
-    for combo_index in range(0, size):
-        item_text = combo.itemText(combo_index)
-        # see if text alphabetically precedes item_text
-        if cmp(text.lower(), item_text.lower()) < 0:
-            combo.insertItem(combo_index, text, data)
-            return
-        # otherwise just add it to the end
-    combo.insertItem(size, text, data)
 
 
 def open_in_browser(file_path):
@@ -346,7 +371,7 @@ def write_json(data, filename):
 
     def custom_default(obj):
         if isinstance(obj, QPyNullVariant):
-            return 'Null'
+            return ''
         raise TypeError
 
     with open(filename, 'w') as json_file:
@@ -393,9 +418,7 @@ def monkey_patch_keywords(layer):
     except (NoKeywordsFoundError, MetadataReadError):
         layer.keywords = {}
 
-    try:
-        layer.keywords['inasafe_fields']
-    except KeyError:
+    if not layer.keywords.get('inasafe_fields'):
         layer.keywords['inasafe_fields'] = {}
 
 
@@ -411,3 +434,16 @@ def readable_os_version():
         return ' {version}'.format(version=platform.mac_ver()[0])
     elif platform.system() == 'Windows':
         return platform.platform()
+
+
+def is_plugin_installed(name):
+    """Check if a plugin is installed, even if it's not enabled.
+
+    :param name: Name of the plugin to check.
+    :type name: string
+
+    :return: If the plugin is installed.
+    :rtype: bool
+    """
+    directory = QgsApplication.qgisSettingsDirPath()
+    return isdir(join(directory, 'python', 'plugins', name))

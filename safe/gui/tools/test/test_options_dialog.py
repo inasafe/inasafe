@@ -1,5 +1,5 @@
 # coding=utf-8
-"""Test InaSAFE Options Dialog"""
+"""Test InaSAFE Options Dialog."""
 
 import unittest
 import logging
@@ -24,10 +24,10 @@ __revision__ = '$Format:%H$'
 
 class TestOptionsDialog(unittest.TestCase):
 
-    """Test Options Dialog"""
+    """Test Options Dialog."""
 
     def setUp(self):
-        """Fixture run before all tests"""
+        """Fixture run before all tests."""
         self.qsetting = QSettings('InaSAFETest')
         self.qsetting.clear()
 
@@ -74,23 +74,24 @@ class TestOptionsDialog(unittest.TestCase):
         self.assertEqual(
             dialog.leNorthArrowPath.text(), default_north_arrow_path())
         self.assertEqual(
-            dialog.leOrganisationLogoPath.text(), supporters_logo_path())
+            dialog.organisation_logo_path_line_edit.text(),
+            supporters_logo_path())
         self.assertEqual(dialog.leReportTemplatePath.text(), '')
         self.assertEqual(dialog.txtDisclaimer.toPlainText(), disclaimer())
         self.assertEqual(
             dialog.leUserDirectoryPath.text(), temp_dir('impacts'))
 
         self.assertEqual(
-            dialog.iso19115_organization_le.text(),
+            dialog.organisation_line_edit.text(),
             inasafe_default_settings['ISO19115_ORGANIZATION'])
         self.assertEqual(
-            dialog.iso19115_url_le.text(),
+            dialog.website_line_edit.text(),
             inasafe_default_settings['ISO19115_URL'])
         self.assertEqual(
-            dialog.iso19115_email_le.text(),
+            dialog.email_line_edit.text(),
             inasafe_default_settings['ISO19115_EMAIL'])
         self.assertEqual(
-            dialog.iso19115_license_le.text(),
+            dialog.license_line_edit.text(),
             inasafe_default_settings['ISO19115_LICENSE'])
 
     def test_update_settings(self):
@@ -104,7 +105,7 @@ class TestOptionsDialog(unittest.TestCase):
         dialog.cbxVisibleLayersOnly.setChecked(new_state)
 
         new_organization = 'Super Organization'
-        dialog.iso19115_organization_le.setText(new_organization)
+        dialog.organisation_line_edit.setText(new_organization)
 
         # Accept the dialog
         dialog.accept()
@@ -130,7 +131,66 @@ class TestOptionsDialog(unittest.TestCase):
         # Check the state of the dialog after save the settings
         self.assertEqual(new_state, dialog.cbxVisibleLayersOnly.isChecked())
         self.assertEqual(
-            new_organization, dialog.iso19115_organization_le.text())
+            new_organization, dialog.organisation_line_edit.text())
+
+    def test_mode(self):
+        """Test for checking that the state is correct for the mode.
+
+        If your test is failed, perhaps one the following is the cause:
+        1. You add / remove tab in the options.
+        2. You rename the tab's name.
+        3. The function show_welcome_dialog or show_option_dialog is changed
+        """
+        # Welcome mode
+        dialog = OptionsDialog(parent=PARENT, iface=IFACE)
+        dialog.show_welcome_dialog()
+
+        expected_tabs = [
+            dialog.welcome_tab,
+            dialog.organisation_profile_tab,
+            dialog.preference_tab
+        ]
+
+        message = 'Tab count should be %d in welcome dialog.' % len(
+            expected_tabs)
+        self.assertEqual(dialog.tabWidget.count(), len(expected_tabs), message)
+
+        message = 'Current tab index should be 0.'
+        self.assertEqual(dialog.tabWidget.currentIndex(), 0, message)
+
+        for index, expected_tab in enumerate(expected_tabs):
+            dialog.tabWidget.setCurrentIndex(index)
+            message = 'Current tab should be %s.' % expected_tab.objectName()
+            current_tab = dialog.tabWidget.currentWidget()
+            self.assertEqual(current_tab, expected_tab, message)
+
+        # Usual option mode
+        dialog = OptionsDialog(parent=PARENT, iface=IFACE)
+        dialog.show_option_dialog()
+
+        expected_tabs = [
+            dialog.organisation_profile_tab,
+            dialog.preference_tab,
+            dialog.gis_environment_tab,
+            dialog.earthquake_tab,
+            dialog.template_option_tab,
+            dialog.demographic_defaults_tab,
+            dialog.advanced_tab
+        ]
+
+        message = 'Tab count should be %d in welcome dialog.' % len(
+            expected_tabs)
+        self.assertEqual(dialog.tabWidget.count(), len(expected_tabs), message)
+
+        message = 'Current tab index should be 0.'
+        self.assertEqual(dialog.tabWidget.currentIndex(), 0, message)
+
+        for index, expected_tab in enumerate(expected_tabs):
+            dialog.tabWidget.setCurrentIndex(index)
+            message = 'Current tab should be %s.' % expected_tab.objectName()
+            current_tab = dialog.tabWidget.currentWidget()
+            self.assertEqual(current_tab, expected_tab, message)
+
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestOptionsDialog, 'test')

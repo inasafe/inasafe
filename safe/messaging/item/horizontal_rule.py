@@ -22,7 +22,7 @@ from text import Text
 
 
 class HorizontalRule(Text):
-    """A class to model horizontal rules in text the messaging system """
+    """A class to model horizontal rules in text the messaging system."""
 
     def to_markdown(self):
         """Render as markdown

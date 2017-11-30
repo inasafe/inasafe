@@ -4,6 +4,7 @@
 
 from decimal import Decimal
 from math import ceil, log
+
 from PyQt4.QtCore import QPyNullVariant
 
 from safe.definitions.units import unit_mapping, nominal_mapping

@@ -8,14 +8,14 @@ by Tim Sutton, Oct 2014.
 
 """
 
-from qgis.core import QgsPoint, QgsRectangle, QGis
-# pylint: disable=no-name-in-module
-from qgis.gui import QgsRubberBand, QgsMapTool, QgsMapToolEmitPoint
 # pylint: enable=no-name-in-module
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import pyqtSignal
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QColor
+from qgis.core import QgsPoint, QgsRectangle, QGis
+# pylint: disable=no-name-in-module
+from qgis.gui import QgsRubberBand, QgsMapTool, QgsMapToolEmitPoint
 
 
 class RectangleMapTool(QgsMapToolEmitPoint):
@@ -68,13 +68,12 @@ class RectangleMapTool(QgsMapToolEmitPoint):
         self.show_rectangle(self.start_point, self.end_point)
 
     def canvasReleaseEvent(self, e):
-        """
-        Handle canvas release events  has finished capturing e
+        """Handle canvas release events has finished capturing e.
 
         :param e: A Qt event object.
         :type: QEvent
         """
-        _ = e
+        _ = e  # NOQA
         self.is_emitting_point = False
         self.rectangle_created.emit()
 
@@ -91,8 +90,7 @@ class RectangleMapTool(QgsMapToolEmitPoint):
         self.show_rectangle(self.start_point, self.end_point)
 
     def show_rectangle(self, start_point, end_point):
-        """
-        Show the rectangle on the canvas.
+        """Show the rectangle on the canvas.
 
         :param start_point: QGIS Point object representing the origin (
             top left).
@@ -126,8 +124,7 @@ class RectangleMapTool(QgsMapToolEmitPoint):
         self.rubber_band.show()
 
     def rectangle(self):
-        """
-        Accessor for the rectangle.
+        """Accessor for the rectangle.
 
         :return: A rectangle showing the designed extent.
         :rtype: QgsRectangle

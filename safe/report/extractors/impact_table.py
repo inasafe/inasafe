@@ -5,7 +5,6 @@ This is useful to do layouting.
 """
 from __future__ import absolute_import
 
-from safe.common.utilities import safe_dir
 from safe.report.extractors.composer import QGISComposerContext
 from safe.report.extractors.util import (
     jinja2_output_as_string,
@@ -55,8 +54,7 @@ def impact_table_extractor(impact_report, component_metadata):
         context[key] = jinja2_output_as_string(
             impact_report, component['key'])
 
-    resources_dir = safe_dir(sub_dir='../resources')
-    context['inasafe_resources_base_dir'] = resources_dir
+    context['inasafe_resources_base_dir'] = resources_path()
 
     return context
 
@@ -86,6 +84,10 @@ def impact_table_pdf_extractor(impact_report, component_metadata):
     # - Element settings, such as icon for picture file or image source
 
     context = QGISComposerContext()
+    extra_args = component_metadata.extra_args
+
+    html_report_component_key = resolve_from_dictionary(
+        extra_args, ['html_report_component_key'])
 
     # we only have html elements for this
     html_frame_elements = [
@@ -93,7 +95,7 @@ def impact_table_pdf_extractor(impact_report, component_metadata):
             'id': 'impact-report',
             'mode': 'text',
             'text': jinja2_output_as_string(
-                impact_report, 'impact-report'),
+                impact_report, html_report_component_key),
             'margin_left': 10,
             'margin_top': 10,
         }

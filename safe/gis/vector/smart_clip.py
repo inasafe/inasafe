@@ -3,17 +3,16 @@
 """Clip and mask a hazard layer."""
 
 import logging
+
 from qgis.core import (
-    QGis,
     QgsGeometry,
     QgsFeatureRequest,
-    QgsWKBTypes,
     QgsFeature,
 )
 
 from safe.definitions.processing_steps import smart_clip_steps
-from safe.gis.vector.tools import create_memory_layer
 from safe.gis.sanity_check import check_layer
+from safe.gis.vector.tools import create_memory_layer
 from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -48,7 +47,7 @@ def smart_clip(layer_to_clip, mask_layer, callback=None):
     .. versionadded:: 4.0
     """
     output_layer_name = smart_clip_steps['output_layer_name']
-    processing_step = smart_clip_steps['step_name']
+    processing_step = smart_clip_steps['step_name']  # NOQA
 
     writer = create_memory_layer(
         output_layer_name,

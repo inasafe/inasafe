@@ -2,14 +2,15 @@
 """Example usage of field mapping widget."""
 
 import sys
+
 from safe.test.utilities import get_qgis_app, load_test_vector_layer
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from PyQt4.QtGui import QApplication, QWidget, QGridLayout
+from PyQt4.QtGui import QApplication, QWidget, QGridLayout  # NOQA
 
-from safe.gui.widgets.field_mapping_tab import FieldMappingTab
-from safe.definitions.field_groups import age_ratio_group
+from safe.gui.widgets.field_mapping_tab import FieldMappingTab  # NOQA
+from safe.definitions.field_groups import age_ratio_group  # NOQA
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"

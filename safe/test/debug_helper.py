@@ -11,7 +11,8 @@ InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
 """
 
 from tempfile import mkdtemp
-from PyQt4.QtCore import QVariant
+
+from PyQt4.QtCore import QVariant, Qt
 from qgis.core import (
     QgsMapLayerRegistry,
     QGis,
@@ -21,13 +22,13 @@ from qgis.core import (
     QgsCoordinateReferenceSystem,
 )
 
-from safe.gis.vector.tools import create_memory_layer
 from safe.datastore.folder import Folder
+from safe.gis.vector.tools import create_memory_layer
 
-__author__ = 'etienne@kartoza.com'
-__date__ = '20/04/2016'
-__copyright__ = (
-    'Copyright 2016, Australia Indonesia Facility for Disaster Reduction')
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 """
 BE CAREFUL :
@@ -120,7 +121,7 @@ def pretty_table(iterable, header):
             [
                 str(c) + ' ' * (
                     l - len(str(c))) + '|' for c, l in zip(
-                row, max_len)]) + '\n'
+                    row, max_len)]) + '\n'
     output += '-' * (sum(max_len) + 1) + '\n'
     return output
 
@@ -155,4 +156,29 @@ def print_attribute_table(layer, limit=-1):
         attributes.extend(feature.attributes())
         data.append(attributes)
 
+    print pretty_table(data, headers)
+
+
+def print_combobox(combo, role=Qt.UserRole):
+    """Helper to print a combobox with the current item.
+
+    :param combo: The combobox.
+    :type combo: QCombobox
+
+    :param role: A Role to display. Default to Qt.UserRole.
+        You can give a list of role.
+    :type role: int, list
+    """
+    headers = ['Text', 'Selected']
+    if isinstance(role, list):
+        headers.extend(['Role %s' % i for i in role])
+    else:
+        headers.append('Role %s' % role)
+        role = [role]
+    data = []
+    for i in range(0, combo.count()):
+        selected = 'YES' if i == combo.currentIndex() else ''
+        attributes = [combo.itemText(i), selected]
+        attributes.extend([str(combo.itemData(i, j)) for j in role])
+        data.append(attributes)
     print pretty_table(data, headers)

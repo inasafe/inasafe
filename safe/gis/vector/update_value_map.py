@@ -14,8 +14,8 @@ from safe.definitions.fields import (
 from safe.definitions.layer_purposes import (
     layer_purpose_hazard, layer_purpose_exposure)
 from safe.definitions.processing_steps import assign_inasafe_values_steps
-from safe.gis.vector.tools import remove_fields
 from safe.gis.sanity_check import check_layer
+from safe.gis.vector.tools import remove_fields
 from safe.utilities.metadata import (
     active_thresholds_value_maps, active_classification)
 from safe.utilities.profiling import profile
@@ -47,7 +47,7 @@ def update_value_map(layer, exposure_key=None, callback=None):
     .. versionadded:: 4.0
     """
     output_layer_name = assign_inasafe_values_steps['output_layer_name']
-    processing_step = assign_inasafe_values_steps['step_name']
+    processing_step = assign_inasafe_values_steps['step_name']  # NOQA
     output_layer_name = output_layer_name % layer.keywords['layer_purpose']
 
     keywords = layer.keywords

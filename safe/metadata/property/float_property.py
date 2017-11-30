@@ -1,29 +1,16 @@
 # -*- coding: utf-8 -*-
-"""
-InaSAFE Disaster risk assessment tool developed by AusAid -
-**metadata module.**
 
-Contact : ole.moller.nielsen@gmail.com
+"""Float property."""
 
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-"""
-
-__author__ = 'ismail@kartoza.com'
-__revision__ = '$Format:%H$'
-__date__ = '07/12/15'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
-
-
-import json
 from types import NoneType
-
 
 from safe.common.exceptions import MetadataCastError
 from safe.metadata.property import BaseProperty
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 
 class FloatProperty(BaseProperty):

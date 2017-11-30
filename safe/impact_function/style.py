@@ -3,6 +3,7 @@
 """Styles."""
 
 from collections import OrderedDict
+
 from PyQt4.QtGui import QColor
 from qgis.core import (
     QgsSymbolV2,
@@ -12,10 +13,10 @@ from qgis.core import (
     QgsSymbolLayerV2Registry,
     QgsConditionalStyle,
     QGis,
-    QgsRasterShader,
-    QgsColorRampShader,
 )
 
+from safe.definitions.fields import hazard_class_field, hazard_count_field
+from safe.definitions.hazard_classifications import not_exposed_class
 from safe.definitions.styles import (
     line_width_exposure,
     template_without_thresholds,
@@ -23,12 +24,9 @@ from safe.definitions.styles import (
     template_with_maximum_thresholds,
     template_with_range_thresholds,
 )
-from safe.definitions.fields import hazard_class_field, hazard_count_field
-from safe.definitions.hazard_classifications import not_exposed_class
 from safe.definitions.utilities import definition
 from safe.utilities.gis import is_line_layer
 from safe.utilities.rounding import format_number, coefficient_between_units
-
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

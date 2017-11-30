@@ -1,21 +1,18 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool developed by AusAid -
-**QGIS plugin implementation.**
 
-Contact : ole.moller.nielsen@gmail.com
+"""Fake QGIS Interface."""
 
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
+import logging
 
-.. note:: This source code was copied from the 'postgis viewer' application
-     with original authors:
-     Copyright (c) 2010 by Ivan Mincik, ivan.mincik@gista.sk
-     Copyright (c) 2011 German Carrillo, geotux_tuxman@linuxmail.org
+from PyQt4.QtCore import QObject, pyqtSlot, pyqtSignal
+from qgis.core import QgsMapLayerRegistry, QgsMapLayer, QgsProject
+from qgis.gui import QgsLayerTreeMapCanvasBridge
+# pylint: disable=no-name-in-module
+from qgis.gui import (
+    QgsMapCanvasLayer,
+    QgsMessageBar)
 
-"""
+from safe.test.qgis_legend_interface import QgisLegend
 
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
@@ -25,17 +22,6 @@ __copyright__ = (
     'Copyright (c) 2011 German Carrillo, geotux_tuxman@linuxmail.org'
     'Copyright (c) 2014 Tim Sutton, tim@kartoza.com'
 )
-
-import logging
-
-from qgis.core import QgsMapLayerRegistry, QGis, QgsMapLayer, QgsProject
-# pylint: disable=no-name-in-module
-from qgis.gui import (
-    QgsMapCanvasLayer,
-    QgsMessageBar)
-from PyQt4.QtCore import QObject, pyqtSlot, pyqtSignal
-from safe.test.qgis_legend_interface import QgisLegend
-from qgis.gui import QgsLayerTreeMapCanvasBridge
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -134,7 +120,7 @@ class QgisInterface(QObject):
     def __getattr__(self, *args, **kwargs):
         # It's for processing module
         def dummy(*a, **kwa):
-            _ = a, kwa
+            _ = a, kwa  # NOQA
             return QgisInterface(self.canvas)
         return dummy
 

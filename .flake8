@@ -1,0 +1,7 @@
+[flake8]
+exclude = safe_extras,test_*.py,__init__.py,extras,*example.py,safe/metadata35
+max-line-length = 79
+
+# E12x continuation line indentation
+
+ignore = E121,E722

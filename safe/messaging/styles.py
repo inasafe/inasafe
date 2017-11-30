@@ -18,21 +18,19 @@ text element.
 
 """
 import os
-import urlparse
 import urllib
+import urlparse
+
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=unused-import
-from PyQt4.QtCore import QUrl
-# These all apply to heading elements
+import qgis  # NOQA pylint: disable=unused-import
 
 from safe.utilities.resources import resources_path
 
-__author__ = 'tim@kartoza.com'
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
-__date__ = '06/06/2013'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
 
 
 # Used for section headers in definitions_help.py

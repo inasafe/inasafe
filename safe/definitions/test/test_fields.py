@@ -84,7 +84,7 @@ def check_format(field):
 class TestFieldDefinitions(unittest.TestCase):
     """Test for Field definitions."""
     def test_field_format(self):
-        """Test to check all field is valid"""
+        """Test to check all field is valid."""
         for layer, fields in all_fields.items():
             for field in fields:
                 check = check_format(field)

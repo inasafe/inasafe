@@ -1,30 +1,15 @@
 # coding=utf-8
-"""Wizard Dialog"""
+"""Wizard Dialog."""
 
 import logging
 from sqlite3 import OperationalError
 
 from PyQt4 import QtGui
-from PyQt4.QtCore import pyqtSignature, QSettings
+from PyQt4.QtCore import pyqtSignature, QSettings, pyqtSignal
 from PyQt4.QtGui import QDialog, QPixmap
+from parameters.parameter_exceptions import InvalidValidationException
 from qgis.core import QgsMapLayerRegistry
 
-from parameters.parameter_exceptions import InvalidValidationException
-
-from safe.utilities.i18n import tr
-from safe.definitions.layer_purposes import (
-    layer_purpose_exposure, layer_purpose_aggregation, layer_purpose_hazard)
-from safe.definitions.layer_geometry import (
-    layer_geometry_raster,
-    layer_geometry_line,
-    layer_geometry_point,
-    layer_geometry_polygon)
-from safe.definitions.layer_modes import (
-    layer_mode_continuous, layer_mode_classified)
-from safe.definitions.units import exposure_unit
-from safe.definitions.hazard import continuous_hazard_unit
-from safe.definitions.utilities import get_compulsory_fields
-from safe.definitions.constants import RECENT
 from safe.common.exceptions import (
     HashNotFoundError,
     NoKeywordsFoundError,
@@ -34,23 +19,35 @@ from safe.common.exceptions import (
     InaSAFEError,
     MetadataReadError,
     InvalidWizardStep)
+from safe.definitions.constants import RECENT
+from safe.definitions.hazard import continuous_hazard_unit
+from safe.definitions.layer_geometry import (
+    layer_geometry_raster,
+)
+from safe.definitions.layer_modes import (
+    layer_mode_continuous, layer_mode_classified)
+from safe.definitions.layer_purposes import (
+    layer_purpose_exposure, layer_purpose_aggregation, layer_purpose_hazard)
+from safe.definitions.units import exposure_unit
+from safe.definitions.utilities import get_compulsory_fields
+from safe.gis.tools import geometry_type
+from safe.gui.tools.wizard import STEP_KW, STEP_FC
+from safe.gui.tools.wizard.utilities import layer_description_html
+from safe.gui.tools.wizard.wizard_help import WizardHelp
 from safe.gui.tools.wizard.wizard_strings import (
     category_question_hazard,
     category_question_exposure,
     category_question_aggregation)
-from safe.gui.tools.wizard.utilities import layer_description_html
 from safe.utilities.default_values import set_inasafe_default_value_qsetting
 from safe.utilities.gis import (
-    is_raster_layer,
-    is_point_layer,
     is_polygon_layer)
+from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.qgis_utilities import display_warning_message_box
 from safe.utilities.resources import get_ui_class, resources_path
 from safe.utilities.unicode import get_unicode, get_string
 from safe.utilities.utilities import (
     get_error_message, is_keyword_version_supported)
-from safe.utilities.qgis_utilities import display_warning_message_box
-
 from step_fc00_functions1 import StepFcFunctions1
 from step_fc05_functions2 import StepFcFunctions2
 from step_fc15_hazlayer_origin import StepFcHazLayerOrigin
@@ -67,6 +64,7 @@ from step_fc65_agglayer_disjoint import StepFcAggLayerDisjoint
 from step_fc70_extent import StepFcExtent
 from step_fc75_extent_disjoint import StepFcExtentDisjoint
 from step_fc85_summary import StepFcSummary
+from step_fc90_analysis import StepFcAnalysis
 from step_kw00_purpose import StepKwPurpose
 from step_kw05_subcategory import StepKwSubcategory
 from step_kw10_hazard_category import StepKwHazardCategory
@@ -86,11 +84,6 @@ from step_kw49_inasafe_raster_default_values import (
 from step_kw55_source import StepKwSource
 from step_kw60_title import StepKwTitle
 from step_kw65_summary import StepKwSummary
-from step_fc90_analysis import StepFcAnalysis
-
-from safe.gui.tools.wizard.wizard_help import WizardHelp
-from safe.gui.tools.wizard import STEP_KW, STEP_FC
-
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -104,6 +97,8 @@ FORM_CLASS = get_ui_class('wizard/wizard_dialog_base.ui')
 
 class WizardDialog(QDialog, FORM_CLASS):
     """Dialog implementation class for the InaSAFE wizard."""
+
+    resized = pyqtSignal()
 
     def __init__(self, parent=None, iface=None, dock=None):
         """Constructor for the dialog.
@@ -245,6 +240,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.keyword_steps = []
         self.on_help = False
 
+        self.resized.connect(self.after_resize)
+
     def set_mode_label_to_keywords_creation(self):
         """Set the mode label to the Keywords Creation/Update mode."""
         self.setWindowTitle(self.keyword_creation_wizard_name)
@@ -254,8 +251,8 @@ class WizardDialog(QDialog, FORM_CLASS):
                 layer_name=self.layer.name())
         else:
             mode_name = tr(
-                'Keywords creation wizard for layer <b>%s</b>').format(
-                layer_name=self.layer.name())
+                'Keywords creation wizard for layer <b>{layer_name}</b>'
+            ).format(layer_name=self.layer.name())
         self.lblSubtitle.setText(mode_name)
 
     def set_mode_label_to_ifcw(self):
@@ -289,7 +286,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                     InvalidParameterError,
                     UnsupportedProviderError,
                     MetadataReadError):
-                self.existing_keywords = None
+                self.existing_keywords = {}
         self.set_mode_label_to_keywords_creation()
 
         step = self.step_kw_purpose
@@ -391,8 +388,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         if not keywords:
             try:
                 keywords = self.keyword_io.read_keywords(layer)
-                if ('layer_purpose' not in keywords and
-                        'impact_summary' not in keywords):
+                if 'layer_purpose' not in keywords:
                     keywords = None
             except (HashNotFoundError,
                     OperationalError,
@@ -466,8 +462,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         for layer in self.iface.mapCanvas().layers():
             try:
                 keywords = self.keyword_io.read_keywords(layer)
-                if ('layer_purpose' not in keywords and
-                        'impact_summary' not in keywords):
+                if 'layer_purpose' not in keywords:
                     keywords = None
             except (HashNotFoundError,
                     OperationalError,
@@ -503,14 +498,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         if not layer:
             layer = self.layer
-        if is_raster_layer(layer):
-            return layer_geometry_raster['key']
-        elif is_point_layer(layer):
-            return layer_geometry_point['key']
-        elif is_polygon_layer(layer):
-            return layer_geometry_polygon['key']
-        else:
-            return layer_geometry_line['key']
+        return geometry_type(layer)
 
     def get_existing_keyword(self, keyword):
         """Obtain an existing keyword's value.
@@ -845,6 +833,11 @@ class WizardDialog(QDialog, FORM_CLASS):
         if inasafe_default_values:
             keywords['inasafe_default_values'] = inasafe_default_values
 
+        # Do not update extra keywords
+        extra_keywords = self.existing_keywords.get('extra_keywords')
+        if extra_keywords:
+            keywords['extra_keywords'] = extra_keywords
+
         return keywords
 
     def save_current_keywords(self):
@@ -876,3 +869,19 @@ class WizardDialog(QDialog, FORM_CLASS):
                     current_keywords['inasafe_default_values'].items()):
                 set_inasafe_default_value_qsetting(
                     self.setting, RECENT, key, value)
+
+    # Adapted from https://stackoverflow.com/a/43126946/1198772
+    def resizeEvent(self, event):
+        """Emit custom signal when the window is re-sized.
+
+        :param event: The re-sized event.
+        :type event: QResizeEvent
+        """
+        self.resized.emit()
+        return super(WizardDialog, self).resizeEvent(event)
+
+    def after_resize(self):
+        """Method after resizing the window."""
+        # Reset the max height. 190 is a number that make it pretty
+        max_height = self.height() - 190
+        self.scrollAreaWidgetContents.setMaximumHeight(max_height)

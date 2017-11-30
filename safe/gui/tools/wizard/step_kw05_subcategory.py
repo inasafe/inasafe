@@ -1,26 +1,21 @@
 # coding=utf-8
 """InaSAFE Wizard Step Layer Purpose Type."""
 
-import os
-
 from PyQt4 import QtCore
 from PyQt4.QtGui import QListWidgetItem, QPixmap
 
-from safe.utilities.i18n import tr
 from safe import messaging as m
-
 from safe.definitions.layer_purposes import (
     layer_purpose_exposure, layer_purpose_hazard)
 from safe.definitions.utilities import (
     hazards_for_layer,
     definition,
     exposures_for_layer)
-
+from safe.gui.tools.wizard.utilities import get_question_text, get_image_path
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
-from safe.gui.tools.wizard.utilities import get_question_text
-from safe.utilities.resources import resources_path
 from safe.utilities.gis import is_raster_layer
+from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -89,14 +84,8 @@ class StepKwSubcategory(WizardStep, FORM_CLASS):
         # Set description label
         self.lblDescribeSubcategory.setText(subcategory['description'])
 
-        icon_path = resources_path('img', 'wizard',
-                                   'keyword-subcategory-%s.svg'
-                                   % (subcategory['key'] or 'notset'))
-        if not os.path.exists(icon_path):
-            purpose = self.parent.step_kw_purpose.selected_purpose()
-            icon_path = resources_path('img', 'wizard',
-                                       'keyword-category-%s.svg'
-                                       % (purpose['key']))
+        icon_path = get_image_path(subcategory)
+
         self.lblIconSubcategory.setPixmap(QPixmap(icon_path))
         # Enable the next button
         self.parent.pbnNext.setEnabled(True)

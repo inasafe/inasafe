@@ -22,7 +22,7 @@ from abstract_list import AbstractList
 
 
 class NumberedList(AbstractList):
-    """A class to model free text in the messaging system """
+    """A class to model free text in the messaging system."""
 
     def __init__(self, *args, **kwargs):
         """Creates a Text object to contain a list of Text objects

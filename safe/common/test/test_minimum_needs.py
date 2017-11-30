@@ -26,11 +26,11 @@ from safe.common.minimum_needs import MinimumNeeds
 
 
 class MinimumNeedsTest(unittest.TestCase):
-    """Test the SAFE Table"""
+    """Test the SAFE Table."""
     tmp_dir = None
 
     def setUp(self):
-        """Fixture run before all tests"""
+        """Fixture run before all tests."""
         self.minimum_needs = MinimumNeeds()
         self.minimum_needs.update_minimum_needs({
             'resources': [
@@ -52,7 +52,7 @@ class MinimumNeedsTest(unittest.TestCase):
         })
 
     def tearDown(self):
-        """Fixture run after each test"""
+        """Fixture run after each test."""
         pass
 
     def test_02_needs(self):

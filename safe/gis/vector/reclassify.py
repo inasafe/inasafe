@@ -2,14 +2,14 @@
 
 """Reclassify a continuous vector layer."""
 
-from PyQt4.QtCore import QPyNullVariant
 from qgis.core import QgsField
 
 from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
-from safe.definitions.utilities import definition
 from safe.definitions.fields import hazard_class_field, hazard_value_field
 from safe.definitions.processing_steps import reclassify_vector_steps
+from safe.definitions.utilities import definition
 from safe.gis.sanity_check import check_layer
+from safe.gis.tools import reclassify_value
 from safe.utilities.metadata import (
     active_thresholds_value_maps, active_classification)
 from safe.utilities.profiling import profile
@@ -58,7 +58,7 @@ def reclassify(layer, exposure_key=None, callback=None):
     """
     output_layer_name = reclassify_vector_steps['output_layer_name']
     output_layer_name = output_layer_name % layer.keywords['title']
-    processing_step = reclassify_vector_steps['step_name']
+    processing_step = reclassify_vector_steps['step_name']  # NOQA
 
     # This layer should have this keyword, or it's a mistake from the dev.
     inasafe_fields = layer.keywords['inasafe_fields']
@@ -95,7 +95,7 @@ def reclassify(layer, exposure_key=None, callback=None):
     for feature in layer.getFeatures():
         attributes = feature.attributes()
         source_value = attributes[continuous_index]
-        classified_value = _classified_value(source_value, thresholds)
+        classified_value = reclassify_value(source_value, thresholds)
         if not classified_value:
             layer.deleteFeature(feature.id())
         else:
@@ -120,42 +120,3 @@ def reclassify(layer, exposure_key=None, callback=None):
 
     check_layer(layer)
     return layer
-
-
-def _classified_value(value, ranges):
-    """This function will return the classified value.
-
-    The algorithm will return None if the continuous value has not any class.
-
-    :param value: The continuous value to classify.
-    :type value: float
-
-    :param ranges: Classes
-    :type ranges: OrderedDict
-
-    :return: The classified value or None.
-    :rtype: float or None
-    """
-    if value is None or value == '' or isinstance(value, QPyNullVariant):
-        return None
-
-    for threshold_id, threshold in ranges.iteritems():
-        value_min = threshold[0]
-        value_max = threshold[1]
-
-        # If, eg [0, 0], the value must be equal to 0.
-        if value_min == value_max and value_max == value:
-            return threshold_id
-
-        # If, eg [None, 0], the value must be less or equal than 0.
-        if value_min is None and value <= value_max:
-            return threshold_id
-
-        # If, eg [0, None], the value must be greater than 0.
-        if value_max is None and value > value_min:
-            return threshold_id
-
-        # If, eg [0, 1], the value must be
-        # between 0 excluded and 1 included.
-        if value_min < value <= value_max:
-            return threshold_id

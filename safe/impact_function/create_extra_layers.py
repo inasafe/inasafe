@@ -3,34 +3,32 @@
 """Create extra layers in the impact function."""
 
 import logging
+
 from qgis.core import (
-    QgsCoordinateReferenceSystem,
-    QgsVectorLayer,
     QgsFeature,
     QGis,
 )
 
+from safe.definitions.constants import inasafe_keyword_version_key
 from safe.definitions.fields import (
     aggregation_id_field,
     aggregation_name_field,
-    analysis_id_field,
     analysis_name_field,
     profiling_function_field,
     profiling_time_field,
     profiling_memory_field
 )
-from safe.definitions.constants import inasafe_keyword_version_key
-from safe.definitions.versions import inasafe_keyword_version
 from safe.definitions.layer_purposes import (
     layer_purpose_profiling,
     layer_purpose_aggregation,
     layer_purpose_analysis_impacted,
 )
+from safe.definitions.versions import inasafe_keyword_version
 from safe.gis.vector.tools import (
     create_memory_layer, create_field_from_definition, copy_layer)
 from safe.utilities.gis import qgis_version
-from safe.utilities.profiling import profile
 from safe.utilities.i18n import tr
+from safe.utilities.profiling import profile
 from safe.utilities.settings import setting
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -102,7 +100,6 @@ def create_analysis_layer(analysis_extent, crs, name):
     :rtype: QgsVectorLayer
     """
     fields = [
-        create_field_from_definition(analysis_id_field),
         create_field_from_definition(analysis_name_field)
     ]
     analysis_layer = create_memory_layer(
@@ -113,7 +110,7 @@ def create_analysis_layer(analysis_extent, crs, name):
     feature = QgsFeature()
     # noinspection PyCallByClass,PyArgumentList,PyTypeChecker
     feature.setGeometry(analysis_extent)
-    feature.setAttributes([1, name])
+    feature.setAttributes([name])
     analysis_layer.addFeature(feature)
     analysis_layer.commitChanges()
 
@@ -124,7 +121,6 @@ def create_analysis_layer(analysis_extent, crs, name):
     analysis_layer.keywords[inasafe_keyword_version_key] = (
         inasafe_keyword_version)
     analysis_layer.keywords['inasafe_fields'] = {
-        analysis_id_field['key']: analysis_id_field['field_name'],
         analysis_name_field['key']: analysis_name_field['field_name']
     }
 

@@ -3,20 +3,20 @@
 """Intersect two layers."""
 
 import logging
+
 from qgis.core import (
-    QGis,
     QgsGeometry,
     QgsFeatureRequest,
     QgsWKBTypes,
     QgsFeature,
 )
 
-from safe.utilities.i18n import tr
 from safe.definitions.layer_purposes import layer_purpose_exposure_summary
 from safe.definitions.processing_steps import intersection_steps
+from safe.gis.sanity_check import check_layer
 from safe.gis.vector.tools import (
     create_memory_layer, wkb_type_groups, create_spatial_index)
-from safe.gis.sanity_check import check_layer
+from safe.utilities.i18n import tr
 from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -57,7 +57,7 @@ def intersection(source, mask, callback=None):
     output_layer_name = intersection_steps['output_layer_name']
     output_layer_name = output_layer_name % (
         source.keywords['layer_purpose'])
-    processing_step = intersection_steps['step_name']
+    processing_step = intersection_steps['step_name']  # NOQA
 
     fields = source.fields()
     fields.extend(mask.fields())
@@ -97,7 +97,7 @@ def intersection(source, mask, callback=None):
                 if int_geom.wkbType() == QgsWKBTypes.Unknown\
                         or QgsWKBTypes.flatType(
                         int_geom.geometry().wkbType()) ==\
-                                QgsWKBTypes.GeometryCollection:
+                        QgsWKBTypes.GeometryCollection:
                     int_com = geom.combine(tmp_geom)
                     int_geom = QgsGeometry()
                     if int_com:

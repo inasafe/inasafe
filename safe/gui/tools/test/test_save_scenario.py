@@ -25,7 +25,7 @@ from qgis.core import QgsMapLayerRegistry
 from safe.test.utilities import get_qgis_app, get_dock
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe.utilities.gis import qgis_version
+from safe.gui.gui_utilities import layer_from_combo
 from safe.gui.tools.save_scenario import SaveScenarioDialog
 from safe.test.utilities import (
     setup_scenario,
@@ -61,7 +61,7 @@ class SaveScenarioTest(unittest.TestCase):
         self.save_scenario_dialog = SaveScenarioDialog(IFACE, self.DOCK)
 
     def tearDown(self):
-        """Fixture run after each test"""
+        """Fixture run after each test."""
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().removeAllMapLayers()
         self.DOCK.hazard_layer_combo.clear()
@@ -146,8 +146,10 @@ class SaveScenarioTest(unittest.TestCase):
         fake_dir = standard_data_path()
         scenario_file = unique_filename(
             prefix='scenarioTest', suffix='.txt', dir=fake_dir)
-        exposure_layer = self.DOCK.get_exposure_layer().publicSource()
-        hazard_layer = self.DOCK.get_hazard_layer().publicSource()
+        exposure_layer = layer_from_combo(
+            self.DOCK.exposure_layer_combo).publicSource()
+        hazard_layer = layer_from_combo(
+            self.DOCK.hazard_layer_combo).publicSource()
 
         relative_exposure = self.save_scenario_dialog.relative_path(
             scenario_file, exposure_layer)

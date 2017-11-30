@@ -16,12 +16,12 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import traceback
+
 from safe.messaging import (
     Message,
     ErrorMessage,
     ImportantText,
     Paragraph)
-
 
 DYNAMIC_MESSAGE_SIGNAL = 'ImpactFunctionMessage'
 
@@ -86,6 +86,7 @@ def error_creator5():
             suggestion=Message(ImportantText('Important note')))
         e4.error_message.append(message)
         raise
+
 
 if __name__ == '__main__':
     # best practice non safe style errors

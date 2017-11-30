@@ -1,3 +1,5 @@
+"""Test script."""
+
 from safe.definitions.test.test_fields import all_fields
 
 

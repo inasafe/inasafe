@@ -11,7 +11,7 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
-"""Map elements"""
+"""Map elements."""
 
 
 map_overview = {
@@ -24,7 +24,7 @@ map_overview = {
 }
 
 
-"""HTML frame elements"""
+"""HTML frame elements."""
 
 
 people_section_notes = {
@@ -34,7 +34,7 @@ people_section_notes = {
     'description': tr(
         'If used, the element-id "people-section-notes" in the composer '
         'layout will be replaced by text explaining the different groups '
-        'of people reported on (displaced, exposed etc.).'),
+        'of people reported on (displaced, exposed, etc.).'),
     'component': 'infographic-people-section-notes'
 }
 
@@ -43,16 +43,16 @@ population_chart_legend = {
     'mode': 'text',
     'text': '',
     'description': tr(
-        'Id used, the element-id "population-chart-legend" in the composer '
+        'If used, the element-id "population-chart-legend" in the composer '
         'layout will be replaced by a chart illustrating the number of '
-        'people in different groups (displaced, expose etc.).'),
+        'people in different groups (displaced, exposed, etc.).'),
     'component': 'population-chart-legend'
 }
 
 html_frame_elements = [people_section_notes, population_chart_legend]
 
 
-"""Header label elements"""
+"""Header label elements."""
 
 # Note from Tim: Are these elements not redundant? They could be done
 # Equally well by using normal text elements with expressions e.g.
@@ -149,7 +149,7 @@ minimum_needs_section_notes = {
 }
 
 
-"""Image elements"""
+"""Image elements."""
 
 
 inasafe_logo_white = {

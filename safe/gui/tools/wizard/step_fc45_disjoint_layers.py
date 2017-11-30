@@ -3,13 +3,12 @@
 
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QPixmap
-from safe.utilities.resources import resources_path
-
-from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
-from safe.gui.tools.wizard.wizard_step import WizardStep
 
 from safe import messaging as m
+from safe.gui.tools.wizard.wizard_step import WizardStep
+from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.utilities.i18n import tr
+from safe.utilities.resources import resources_path
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -41,7 +40,7 @@ class StepFcDisjointLayers(WizardStep, FORM_CLASS):
         return None
 
     def set_widgets(self):
-        """Set widgets on the Disjoint Layers tab"""
+        """Set widgets on the Disjoint Layers tab."""
         self.lblIconDisjoint_1.setPixmap(
             QPixmap(resources_path('img', 'wizard', 'icon-stop.svg')))
 

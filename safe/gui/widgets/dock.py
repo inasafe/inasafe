@@ -1,32 +1,34 @@
 # coding=utf-8
 """InaSAFE Dock."""
 
+import codecs
+import logging
 import os
 import shutil
-import logging
-import codecs
 from datetime import datetime
 from numbers import Number
 
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import Qt, pyqtSlot, QPyNullVariant
 from qgis.core import (
-    QgsRectangle,
     QgsGeometry,
     QgsMapLayer,
     QgsMapLayerRegistry,
     QgsCoordinateReferenceSystem,
-    QgsExpressionContextUtils
+    QgsExpressionContextUtils,
+    QgsLayerTreeLayer
 )
 
-from safe.definitions.exposure import exposure_population
-from safe.definitions.layer_purposes import (
-    layer_purpose_exposure_summary,
-    layer_purpose_aggregate_hazard_impacted,
-    layer_purpose_aggregation_summary,
-    layer_purpose_analysis_impacted,
-    layer_purpose_exposure_summary_table,
-)
+from safe import messaging as m
+from safe.common.exceptions import (
+    KeywordNotFoundError,
+    NoKeywordsFoundError,
+    InvalidParameterError,
+    HashNotFoundError,
+    MetadataReadError)
+from safe.common.signals import (send_static_message, send_error_message)
+from safe.common.version import get_version
+from safe.defaults import supporters_logo_path
 from safe.definitions.constants import (
     inasafe_keyword_version_key,
     EXPOSURE,
@@ -40,11 +42,22 @@ from safe.definitions.constants import (
     PREPARE_FAILED_INSUFFICIENT_OVERLAP_REQUESTED_EXTENT,
     PREPARE_FAILED_BAD_LAYER,
     PREPARE_SUCCESS,
+    entire_area_item_aggregation,
+    MULTI_EXPOSURE_ANALYSIS_FLAG)
+from safe.definitions.extra_keywords import extra_keyword_analysis_type
+from safe.definitions.layer_purposes import (
+    layer_purpose_hazard,
+    layer_purpose_exposure,
+    layer_purpose_aggregation,
+    layer_purpose_exposure_summary,
+    layer_purpose_aggregate_hazard_impacted,
+    layer_purpose_aggregation_summary,
+    layer_purpose_analysis_impacted,
+    layer_purpose_profiling,
+    layer_purpose_exposure_summary_table,
 )
-from safe.definitions.provenance import provenance_list
-from safe.definitions.reports.infographic import map_overview
-from safe.definitions.utilities import update_template_component, get_name
-from safe.defaults import supporters_logo_path
+from safe.definitions.provenance import (
+    provenance_list, duplicated_global_variables)
 from safe.definitions.reports import (
     final_product_tag,
     pdf_product_tag,
@@ -52,56 +65,51 @@ from safe.definitions.reports import (
     qpt_product_tag)
 from safe.definitions.reports.components import (
     standard_impact_report_metadata_pdf,
-    map_report, infographic_report)
-from safe.report.extractors.util import layer_definition_type
-from safe.report.impact_report import ImpactReport
-from safe.report.report_metadata import ReportMetadata
-from safe.test.utilities import load_layer
-from safe.utilities.gis import wkt_to_rectangle, qgis_version
-from safe.utilities.i18n import tr
-from safe.utilities.keyword_io import KeywordIO
-from safe.utilities.utilities import (
-    get_error_message,
-    add_ordered_combo_item,
-    is_keyword_version_supported,
-)
-from safe.utilities.settings import setting, set_setting
-from safe.utilities.resources import get_ui_class
-from safe.utilities.qgis_utilities import (
-    display_critical_message_bar,
-    display_warning_message_bar,
-    display_information_message_bar)
-from safe.utilities.extent import Extent
-from safe.utilities.qt import disable_busy_cursor, enable_busy_cursor
-
-from safe.common.version import get_version
-from safe.common.signals import (send_static_message, send_error_message)
-from safe import messaging as m
-from safe.messaging import styles
-from safe.common.exceptions import (
-    KeywordNotFoundError,
-    NoKeywordsFoundError,
-    InvalidParameterError,
-    HashNotFoundError,
-    MetadataReadError)
-from safe.impact_function.impact_function import ImpactFunction
+    map_report,
+    infographic_report,
+    standard_impact_report_metadata_html)
+from safe.definitions.utilities import (
+    update_template_component,
+    get_name,
+    definition)
+from safe.gui.analysis_utilities import (
+    add_impact_layers_to_canvas,
+    add_debug_layers_to_canvas)
+from safe.gui.gui_utilities import layer_from_combo, add_ordered_combo_item
 from safe.gui.tools.about_dialog import AboutDialog
 from safe.gui.tools.help_dialog import HelpDialog
+from safe.gui.tools.print_report_dialog import PrintReportDialog
 from safe.gui.widgets.message import (
     show_no_keywords_message,
     show_keyword_version_message,
     getting_started_message,
+    conflicting_plugin_message,
+    conflicting_plugin_string,
     no_overlap_message,
     ready_message,
     enable_messaging)
-from safe.gui.analysis_utilities import (
-    generate_impact_report,
-    generate_impact_map_report,
-    add_impact_layers_to_canvas,
-    add_debug_layers_to_canvas,
-    generate_infographic_report,
-    add_layer_to_canvas,
-    remove_layer_from_canvas)
+from safe.impact_function.impact_function import ImpactFunction
+from safe.impact_function.multi_exposure_wrapper import (
+    MultiExposureImpactFunction)
+from safe.messaging import styles
+from safe.report.impact_report import ImpactReport
+from safe.report.report_metadata import ReportMetadata
+from safe.utilities.extent import Extent
+from safe.utilities.gis import wkt_to_rectangle, qgis_version
+from safe.utilities.i18n import tr
+from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.qgis_utilities import (
+    display_critical_message_bar,
+    display_warning_message_bar,
+    display_information_message_bar)
+from safe.utilities.qt import disable_busy_cursor, enable_busy_cursor
+from safe.utilities.resources import get_ui_class
+from safe.utilities.settings import setting, set_setting
+from safe.utilities.utilities import (
+    get_error_message,
+    is_keyword_version_supported,
+)
+from safe.utilities.utilities import is_plugin_installed
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -135,13 +143,13 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         :param iface: A QGisAppInterface instance we use to access QGIS via.
         :type iface: QgsAppInterface
-
-        .. note:: We use the multiple inheritance approach from Qt4 so that
-            for elements are directly accessible in the form context and we can
-            use autoconnect to set up slots. See article below:
-            http://doc.qt.nokia.com/4.7-snapshot/designer-using-a-ui-file.html
         """
         QtGui.QDockWidget.__init__(self, None)
+
+        # Dirty hack to display a warning about this plugin.
+        self.conflicting_plugin_detected = is_plugin_installed(
+            'EmergencyMapper')
+
         self.setupUi(self)
         self.show_question_button.setVisible(False)
         self.progress_bar.hide()
@@ -247,7 +255,13 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.help_button.clicked.connect(self.show_help)
         self.run_button.clicked.connect(self.accept)
         self.about_button.clicked.connect(self.about)
-        self.print_button.clicked.connect(self.print_map)
+        self.print_button.clicked.connect(self.show_print_dialog)
+        self.hazard_layer_combo.currentIndexChanged.connect(
+            self.index_changed_hazard_layer_combo)
+        self.exposure_layer_combo.currentIndexChanged.connect(
+            self.index_changed_exposure_layer_combo)
+        self.aggregation_layer_combo.currentIndexChanged.connect(
+            self.index_changed_aggregation_layer_combo)
 
     def about(self):
         """Open the About dialog."""
@@ -489,37 +503,29 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         disable_busy_cursor()
 
-    # noinspection PyPep8Naming
-    @pyqtSlot(int)
-    def on_hazard_layer_combo_currentIndexChanged(self, index):
+    def index_changed_hazard_layer_combo(self, index):
         """Automatic slot executed when the Hazard combo is changed.
 
         This is here so that we can see if the ok button should be enabled.
 
         :param index: The index number of the selected hazard layer.
         """
-        # Add any other logic you might like here...
         del index
         self.toggle_aggregation_layer_combo()
         self.validate_impact_function()
 
-    # noinspection PyPep8Naming
-    @pyqtSlot(int)
-    def on_exposure_layer_combo_currentIndexChanged(self, index):
+    def index_changed_exposure_layer_combo(self, index):
         """Automatic slot executed when the Exposure combo is changed.
 
         This is here so that we can see if the ok button should be enabled.
 
         :param index: The index number of the selected exposure layer.
         """
-        # Add any other logic you might like here...
         del index
         self.toggle_aggregation_layer_combo()
         self.validate_impact_function()
 
-    # noinspection PyPep8Naming
-    @pyqtSlot(int)
-    def on_aggregation_layer_combo_currentIndexChanged(self, index):
+    def index_changed_aggregation_layer_combo(self, index):
         """Automatic slot executed when the Aggregation combo is changed.
 
         :param index: The index number of the selected exposure layer.
@@ -549,7 +555,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             # We have one aggregation layer. We should not display the user
             # extent.
             self.extent.clear_user_analysis_extent()
-            self.aggregation = self.get_aggregation_layer()
+            self.aggregation = layer_from_combo(self.aggregation_layer_combo)
 
         self.validate_impact_function()
 
@@ -559,8 +565,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         Whether the combo is toggled on or off will depend on the current dock
         status.
         """
-        selected_hazard_layer = self.get_hazard_layer()
-        selected_exposure_layer = self.get_exposure_layer()
+        selected_hazard_layer = layer_from_combo(self.hazard_layer_combo)
+        selected_exposure_layer = layer_from_combo(self.exposure_layer_combo)
 
         # more than 1 because No aggregation is always there
         if ((self.aggregation_layer_combo.count() > 1) and
@@ -602,7 +608,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         ..note:: \*args is only used for debugging purposes.
         """
-        _ = args
+        _ = args  # NOQA
         # Prevent recursion
         if self.get_layers_lock:
             return
@@ -615,7 +621,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         # For issue #618
         if len(layers) == 0:
-            send_static_message(self, getting_started_message())
+            if self.conflicting_plugin_detected:
+                send_static_message(self, conflicting_plugin_message())
+            else:
+                send_static_message(self, getting_started_message())
             return
 
         self.get_layers_lock = True
@@ -633,13 +642,12 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     (layer not in canvas_layers)):
                 continue
 
-            #    store uuid in user property of list widget for layers
-
-            name = layer.name()
-            source = layer.id()
+            # store uuid in user property of list widget for layers
+            layer_id = layer.id()
+            # Avoid uninitialized variable
+            title = None
             # See if there is a title for this layer, if not,
             # fallback to the layer's filename
-
             # noinspection PyBroadException
             try:
                 title = self.keyword_io.read_keywords(layer, 'title')
@@ -675,19 +683,20 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 # continue ignoring this layer
                 continue
 
-            if layer_purpose == 'hazard':
+            if layer_purpose == layer_purpose_hazard['key']:
                 add_ordered_combo_item(
-                    self.hazard_layer_combo, title, source)
-            elif layer_purpose == 'exposure':
+                    self.hazard_layer_combo, title, layer_id)
+            elif layer_purpose == layer_purpose_exposure['key']:
                 add_ordered_combo_item(
-                    self.exposure_layer_combo, title, source)
-            elif layer_purpose == 'aggregation':
+                    self.exposure_layer_combo, title, layer_id)
+            elif layer_purpose == layer_purpose_aggregation['key']:
                 add_ordered_combo_item(
-                    self.aggregation_layer_combo, title, source)
+                    self.aggregation_layer_combo, title, layer_id)
 
         self.unblock_signals()
         # handle the aggregation_layer_combo combo
-        self.aggregation_layer_combo.insertItem(0, self.tr('Entire area'))
+        self.aggregation_layer_combo.insertItem(
+            0, entire_area_item_aggregation)
         self.aggregation_layer_combo.setCurrentIndex(0)
         self.toggle_aggregation_layer_combo()
 
@@ -702,61 +711,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # ensure the dock keywords info panel is updated
         # make sure to do this after the lock is released!
         self.layer_changed(self.iface.activeLayer())
-
-    def get_hazard_layer(self):
-        """Get the QgsMapLayer currently selected in the hazard combo.
-
-        Obtain QgsMapLayer id from the userrole of the QtCombo for hazard
-        and return it as a QgsMapLayer.
-
-        :returns: The currently selected map layer in the hazard combo.
-        :rtype: QgsMapLayer
-        """
-        index = self.hazard_layer_combo.currentIndex()
-        if index < 0:
-            return None
-
-        layer_id = self.hazard_layer_combo.itemData(
-            index, QtCore.Qt.UserRole)
-        layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
-        return layer
-
-    def get_exposure_layer(self):
-        """Get the QgsMapLayer currently selected in the exposure combo.
-
-        Obtain QgsMapLayer id from the userrole of the QtCombo for exposure
-        and return it as a QgsMapLayer.
-
-        :returns: Currently selected map layer in the exposure combo.
-        :rtype: QgsMapLayer
-        """
-        index = self.exposure_layer_combo.currentIndex()
-        if index < 0:
-            return None
-
-        layer_id = self.exposure_layer_combo.itemData(
-            index, QtCore.Qt.UserRole)
-        layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
-        return layer
-
-    def get_aggregation_layer(self):
-        """Get the QgsMapLayer currently selected in the post processing combo.
-
-        Obtain QgsMapLayer id from the userrole of the QtCombo for post
-        processing combo return it as a QgsMapLayer.
-
-        :returns: None if no aggregation is selected or aggregation_layer_combo
-            is disabled, otherwise a polygon layer.
-        :rtype: QgsVectorLayer or None
-        """
-        index = self.aggregation_layer_combo.currentIndex()
-        if index < 0:
-            return None
-
-        layer_id = self.aggregation_layer_combo.itemData(
-            index, QtCore.Qt.UserRole)
-        layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
-        return layer
 
     @pyqtSlot('bool')
     def toggle_rubber_bands(self, flag):
@@ -796,6 +750,58 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.progress_bar.setMaximum(maximum_value)
         self.progress_bar.setValue(current_value)
         QtGui.QApplication.processEvents()
+
+    def show_print_dialog(self):
+        """Open the print dialog"""
+        if not self.impact_function:
+            # Now try to read the keywords and show them in the dock
+            try:
+                active_layer = self.iface.activeLayer()
+                keywords = self.keyword_io.read_keywords(active_layer)
+
+                provenances = keywords.get('provenance_data', {})
+                extra_keywords = keywords.get('extra_keywords', {})
+                is_multi_exposure = (
+                    extra_keywords.get(extra_keyword_analysis_type['key']) == (
+                        MULTI_EXPOSURE_ANALYSIS_FLAG))
+
+                if provenances and is_multi_exposure:
+                    self.impact_function = (
+                        MultiExposureImpactFunction.load_from_output_metadata(
+                            keywords))
+                else:
+                    self.impact_function = (
+                        ImpactFunction.load_from_output_metadata(keywords))
+
+            except (KeywordNotFoundError,
+                    HashNotFoundError,
+                    InvalidParameterError,
+                    NoKeywordsFoundError,
+                    MetadataReadError,
+                    # AttributeError  This is hiding some real error. ET
+                    ):
+                # Added this check in 3.2 for #1861
+                active_layer = self.iface.activeLayer()
+                if active_layer is None:
+                    if self.conflicting_plugin_detected:
+                        send_static_message(self, conflicting_plugin_message())
+                    else:
+                        send_static_message(self, getting_started_message())
+                else:
+                    show_no_keywords_message(self)
+            except Exception as e:  # pylint: disable=broad-except
+                error_message = get_error_message(e)
+                send_error_message(self, error_message)
+
+        if self.impact_function:
+            dialog = PrintReportDialog(
+                self.impact_function, self.iface, dock=self, parent=self)
+            dialog.show()
+        else:
+            display_critical_message_bar(
+                "InaSAFE",
+                self.tr('Please select a valid layer before printing. '
+                        'No Impact Function found.'))
 
     def show_help(self):
         """Open the help dialog."""
@@ -890,7 +896,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         # Do nothing if there is no active layer - see #1861
         if not self._has_active_layer():
-            send_static_message(self, getting_started_message())
+            if self.conflicting_plugin_detected:
+                send_static_message(self, conflicting_plugin_message())
+            else:
+                send_static_message(self, getting_started_message())
 
         # Now try to read the keywords and show them in the dock
         try:
@@ -903,6 +912,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 layer_purpose_aggregation_summary['key'],
                 layer_purpose_analysis_impacted['key'],
                 layer_purpose_exposure_summary_table['key'],
+                layer_purpose_profiling['key'],
                 # Legacy from InaSAFE < 4.2. We still want to open old
                 # analysis made with 4.0 an 4.1.
                 # We should remove them later.
@@ -913,17 +923,38 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             ]
 
             provenances = keywords.get('provenance_data', {})
-            self.set_provenance_to_project_variables(provenances)
+            extra_keywords = keywords.get('extra_keywords', {})
+            is_multi_exposure = (
+                extra_keywords.get(extra_keyword_analysis_type['key']) == (
+                    MULTI_EXPOSURE_ANALYSIS_FLAG))
+
+            if provenances:
+                self.set_provenance_to_project_variables(provenances)
+            if is_multi_exposure:
+                self.impact_function = (
+                    MultiExposureImpactFunction.load_from_output_metadata(
+                        keywords))
+            elif provenances:
+                self.impact_function = (
+                    ImpactFunction.load_from_output_metadata(
+                        keywords))
 
             show_keywords = True
             if keywords.get('layer_purpose') in impacted_layer:
-                report_path = os.path.dirname(layer.source())
-                report_path = os.path.join(
-                    report_path, 'output/impact-report-output.html')
+                analysis_dir = os.path.dirname(layer.source())
+                output_dir_path = os.path.join(analysis_dir, 'output')
 
-                if os.path.exists(report_path):
-                    show_keywords = False
-                    self.show_impact(report_path)
+                html_report_products = [
+                    'impact-report-output.html',
+                    'multi-exposure-impact-report-output.html']
+
+                for html_report_product in html_report_products:
+                    table_report_path = os.path.join(
+                        output_dir_path, html_report_product)
+                    if os.path.exists(table_report_path):
+                        show_keywords = False
+                        self.show_impact(table_report_path)
+                        break
 
             if show_keywords:
                 if inasafe_keyword_version_key not in keywords.keys():
@@ -954,7 +985,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             # Added this check in 3.2 for #1861
             active_layer = self.iface.activeLayer()
             if active_layer is None:
-                send_static_message(self, getting_started_message())
+                if self.conflicting_plugin_detected:
+                    send_static_message(self, conflicting_plugin_message())
+                else:
+                    send_static_message(self, getting_started_message())
             else:
                 show_no_keywords_message(self)
                 self.print_button.setEnabled(False)
@@ -1013,12 +1047,24 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # Fetch report for pdfs report
         report_path = os.path.dirname(impact_layer.source())
 
+        # Get the hazard and exposure definition used in current IF
+        hazard = definition(
+            QgsExpressionContextUtils.projectScope().variable(
+                'hazard_keywords__hazard'))
+        exposure = definition(
+            QgsExpressionContextUtils.projectScope().variable(
+                'exposure_keywords__exposure'))
+
         # TODO: temporary hack until Impact Function becomes serializable
         # need to have impact report
         standard_impact_report_metadata = ReportMetadata(
             metadata_dict=standard_impact_report_metadata_pdf)
         standard_map_report_metadata = ReportMetadata(
-            metadata_dict=update_template_component(map_report))
+            metadata_dict=update_template_component(
+                component=map_report,
+                hazard=hazard,
+                exposure=exposure
+            ))
         standard_infographic_report_metadata = ReportMetadata(
             metadata_dict=update_template_component(infographic_report))
 
@@ -1131,6 +1177,36 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         layer = self.iface.activeLayer()
         return layer is not None
 
+    def _has_active_group(self):
+        """Check if there is an active group in the legend.
+
+        :returns: True if there is a hightlighted group in the legend.
+        :rtype: bool
+
+        .. versionadded:: 4.3
+        """
+        selected_nodes = self.iface.layerTreeView().selectedNodes()
+        return len(selected_nodes) != 0
+
+    def _search_inasafe_layer(self):
+        """Search for an inasafe layer in an active group.
+
+        :returns: A valid layer.
+        :rtype: QgsMapLayer
+
+        .. versionadded:: 4.3
+        """
+        selected_nodes = self.iface.layerTreeView().selectedNodes()
+        for selected_node in selected_nodes:
+            tree_layers = [
+                child for child in selected_node.children() if (
+                    isinstance(child, QgsLayerTreeLayer))]
+            for tree_layer in tree_layers:
+                layer = tree_layer.layer()
+                keywords = self.keyword_io.read_keywords(layer)
+                if keywords.get('inasafe_fields'):
+                    return layer
+
     def _layer_count(self):
         """Return the count of layers in the legend.
 
@@ -1168,6 +1244,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         Please update the code in step_fc990_analysis.py in function
         setup_and_run_analysis(). It should follow approximately the same code.
         """
+        if self.conflicting_plugin_detected:
+            display_critical_message_bar(
+                tr('Conflicting plugin'), conflicting_plugin_string())
+
         # Start the analysis
         self.impact_function = self.validate_impact_function()
         if not isinstance(self.impact_function, ImpactFunction):
@@ -1208,21 +1288,22 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         LOGGER.info(tr('The impact function could run without errors.'))
 
         # Add result layer to QGIS
-        add_impact_layers_to_canvas(self.impact_function, self.iface)
+        add_impact_layers_to_canvas(self.impact_function, iface=self.iface)
 
         # execute this before generating report
         if self.zoom_to_impact_flag:
             self.iface.zoomToActiveLayer()
 
-        qgis_exposure = self.get_exposure_layer()
+        qgis_exposure = layer_from_combo(self.exposure_layer_combo)
         if self.hide_exposure_flag:
             legend = self.iface.legendInterface()
             legend.setLayerVisible(qgis_exposure, False)
 
         if setting('generate_report', True, bool):
-            # Generate impact report
-            error_code, message = generate_impact_report(
-                self.impact_function, self.iface)
+            # we only want to generate non pdf/qpt report
+            html_components = [standard_impact_report_metadata_html]
+            error_code, message = self.impact_function.generate_report(
+                html_components)
 
             if error_code == ImpactReport.REPORT_GENERATION_FAILED:
                 self.hide_busy()
@@ -1231,42 +1312,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 send_error_message(self, message)
                 LOGGER.info(message.to_text())
                 return ANALYSIS_FAILED_BAD_CODE, message
-
-            error_code, message = generate_impact_map_report(
-                self.impact_function, self.iface)
-
-            if error_code == ImpactReport.REPORT_GENERATION_FAILED:
-                self.hide_busy()
-                LOGGER.info(tr(
-                    'The impact report could not be generated.'))
-                send_error_message(self, message)
-                LOGGER.info(message.to_text())
-                return ANALYSIS_FAILED_BAD_CODE, message
-
-            # generate infographic if exposure is population
-            exposure_type = layer_definition_type(
-                self.impact_function.exposure)
-            if exposure_type == exposure_population:
-                map_overview_layer, _ = load_layer(map_overview['path'])
-                add_layer_to_canvas(
-                    map_overview_layer,
-                    map_overview['id'],
-                    self.impact_function
-                )
-
-                error_code, message = generate_infographic_report(
-                    self.impact_function, self.iface)
-
-                remove_layer_from_canvas(
-                    map_overview_layer, self.impact_function)
-
-                if error_code == ImpactReport.REPORT_GENERATION_FAILED:
-                    self.hide_busy()
-                    LOGGER.info(tr(
-                        'The impact report could not be generated.'))
-                    send_error_message(self, message)
-                    LOGGER.info(message.to_text())
-                    return ANALYSIS_FAILED_BAD_CODE, message
 
         if self.impact_function.debug_mode:
             add_debug_layers_to_canvas(self.impact_function)
@@ -1308,9 +1353,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         # Finally, we need to check if an IF can run.
         impact_function = ImpactFunction()
-        impact_function.hazard = self.get_hazard_layer()
-        impact_function.exposure = self.get_exposure_layer()
-        aggregation = self.get_aggregation_layer()
+        impact_function.hazard = layer_from_combo(self.hazard_layer_combo)
+        impact_function.exposure = layer_from_combo(self.exposure_layer_combo)
+        aggregation = layer_from_combo(self.aggregation_layer_combo)
 
         if aggregation:
             impact_function.aggregation = aggregation
@@ -1318,13 +1363,15 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 self.use_selected_features_only)
 
             if self.use_selected_features_only and (
-                        aggregation.selectedFeatureCount() > 0):
+                    aggregation.selectedFeatureCount() > 0):
                 self.aggregation_question_label.setText(
                     self.label_with_selection)
             else:
                 self.aggregation_question_label.setText(
                     self.label_without_selection)
         else:
+            # self.extent.crs is the map canvas CRS.
+            impact_function.crs = self.extent.crs
             self.aggregation_question_label.setText(
                 self.label_without_selection)
             mode = setting('analysis_extents_mode')
@@ -1334,7 +1381,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 # impact_function.requested_extent needs a QgsRectangle.
                 wkt = self.extent.user_extent.exportToWkt()
                 impact_function.requested_extent = wkt_to_rectangle(wkt)
-                impact_function.requested_extent_crs = self.extent.crs
 
             elif mode == EXPOSURE:
                 impact_function.use_exposure_view_only = True
@@ -1342,7 +1388,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             elif mode == HAZARD_EXPOSURE_VIEW:
                 impact_function.requested_extent = (
                     self.iface.mapCanvas().extent())
-                impact_function.requested_extent_crs = self.extent.crs
 
         status, message = impact_function.prepare()
         if status == PREPARE_SUCCESS:
@@ -1365,7 +1410,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
             self.extent.set_next_analysis_extent(
                 impact_function.analysis_extent,
-                self.get_exposure_layer().crs())
+                layer_from_combo(self.exposure_layer_combo).crs())
 
             self.run_button.setEnabled(True)
             send_static_message(self, ready_message())
@@ -1441,7 +1486,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         hazard_index = self.hazard_layer_combo.currentIndex()
         exposure_index = self.exposure_layer_combo.currentIndex()
         if hazard_index == -1 or exposure_index == -1:
-            message = getting_started_message()
+            if self.conflicting_plugin_detected:
+                message = conflicting_plugin_message()
+            else:
+                message = getting_started_message()
             return False, message
         else:
             return True, None
@@ -1467,14 +1515,11 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             :param value: A list of dictionary.
             :type value: dict, list, tuple, set
             """
-            if isinstance(value, (list, tuple, set)):
-                for element_index, element_value in enumerate(value):
-                    write_project_variable(
-                        '%s__%s' % (key, element_index), element_value)
-            elif isinstance(value, dict):
-                for dict_key, dict_value in value.items():
-                    write_project_variable(
-                        '%s__%s' % (key, dict_key), dict_value)
+            if key in duplicated_global_variables.keys():
+                return
+            if isinstance(value, (list, tuple, set, dict)):
+                # Skip if the type is too complex.
+                return
             elif isinstance(value, (bool, str, unicode, Number)):
                 # Don't use get_name for field
                 if 'field' in key:
@@ -1503,7 +1548,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 continue
             write_project_variable(key, value)
 
-    def remove_provenance_project_variables(self):
+    @staticmethod
+    def remove_provenance_project_variables():
         """Removing variables from provenance data."""
         project_context_scope = QgsExpressionContextUtils.projectScope()
         existing_variable_names = project_context_scope.variableNames()

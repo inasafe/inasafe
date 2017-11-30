@@ -3,12 +3,12 @@
 """Datastore implementation."""
 
 import logging
-
 from abc import ABCMeta, abstractmethod
-from qgis.core import QgsMapLayer, QgsRasterLayer, QgsVectorLayer, QGis
 
-from safe.utilities.keyword_io import KeywordIO
+from qgis.core import QgsRasterLayer, QgsVectorLayer, QGis
+
 from safe.utilities.i18n import tr
+from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.utilities import monkey_patch_keywords
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

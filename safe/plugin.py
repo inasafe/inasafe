@@ -1,29 +1,28 @@
 # coding=utf-8
-"""InaSAFE Plugin"""
+"""InaSAFE Plugin."""
 
 import sys
 import os
 import logging
-from inspect import getmembers
+from functools import partial
+from distutils.version import StrictVersion
 
 # noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=unused-import
+import qgis  # NOQA pylint: disable=unused-import
 # Import the PyQt and QGIS libraries
 from qgis.core import (
-    QGis,
     QgsRectangle,
     QgsRasterLayer,
     QgsMapLayerRegistry,
     QgsMapLayer,
     QgsExpression,
-    QgsProject)
+    QgsProject,
+)
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import (
-    QLocale,
-    QTranslator,
     QCoreApplication,
     Qt,
-    QSettings)
+)
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import (
     QAction,
@@ -32,15 +31,17 @@ from PyQt4.QtGui import (
     QToolButton,
     QMenu,
     QLineEdit,
-    QInputDialog)
+    QInputDialog,
+)
 
-from safe.report.expressions import infographic, map_report
-from safe.gis import expressions
-from safe.definitions.versions import inasafe_release_status
+from safe.utilities.expressions import qgis_expressions
+from safe.definitions.versions import inasafe_release_status, inasafe_version
 from safe.common.exceptions import (
     KeywordNotFoundError,
     NoKeywordsFoundError,
-    MetadataReadError)
+    MetadataReadError,
+)
+from safe.common.signals import send_static_message
 from safe.utilities.resources import resources_path
 from safe.utilities.gis import is_raster_layer
 from safe.definitions.layer_purposes import (
@@ -48,6 +49,7 @@ from safe.definitions.layer_purposes import (
 )
 from safe.definitions.utilities import get_field_groups
 from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.settings import setting, set_setting
 LOGGER = logging.getLogger('InaSAFE')
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -89,6 +91,7 @@ class Plugin(object):
         self.action_dock = None
         self.action_extent_selector = None
         self.action_field_mapping = None
+        self.action_multi_exposure = None
         self.action_function_centric_wizard = None
         self.action_import_dialog = None
         self.action_keywords_wizard = None
@@ -101,6 +104,7 @@ class Plugin(object):
         self.action_shake_converter = None
         self.action_show_definitions = None
         self.action_toggle_rubberbands = None
+        self.action_metadata_converter = None
 
         self.translator = None
         self.toolbar = None
@@ -253,9 +257,9 @@ class Plugin(object):
             'Open InaSAFE multi buffer'))
         self.action_multi_buffer.setWhatsThis(self.tr(
             'Open InaSAFE multi buffer'))
-        self.action_multi_buffer.triggered.connect(
-            self.show_multi_buffer)
-        self.add_action(self.action_multi_buffer,
+        self.action_multi_buffer.triggered.connect(self.show_multi_buffer)
+        self.add_action(
+            self.action_multi_buffer,
             add_to_toolbar=self.full_toolbar)
 
     def _create_minimum_needs_options_action(self):
@@ -329,7 +333,7 @@ class Plugin(object):
         self.action_import_dialog.setWhatsThis(self.tr(
             'OpenStreetMap Downloader'))
         self.action_import_dialog.triggered.connect(self.show_osm_downloader)
-        self.add_action(self.action_import_dialog)
+        self.add_action(self.action_import_dialog, add_to_toolbar=True)
 
     def _create_add_osm_layer_action(self):
         """Create action for import OSM Dialog."""
@@ -344,7 +348,7 @@ class Plugin(object):
             'Use this to add an OSM layer to your map. '
             'It needs internet access to function.'))
         self.action_add_osm_layer.triggered.connect(self.add_osm_layer)
-        self.add_action(self.action_add_osm_layer)
+        self.add_action(self.action_add_osm_layer, add_to_toolbar=True)
 
     def _create_show_definitions_action(self):
         """Create action for showing definitions / help."""
@@ -363,6 +367,22 @@ class Plugin(object):
             self.action_show_definitions,
             add_to_toolbar=True)
 
+    def _create_metadata_converter_action(self):
+        """Create action for showing metadata converter dialog."""
+        icon = resources_path('img', 'icons', 'show-metadata-converter.svg')
+        self.action_metadata_converter = QAction(
+            QIcon(icon),
+            self.tr('InaSAFE Metadata Converter'),
+            self.iface.mainWindow())
+        self.action_metadata_converter.setStatusTip(self.tr(
+            'Convert metadata from version 4.3 to version 3.5.'))
+        self.action_metadata_converter.setWhatsThis(self.tr(
+            'Use this tool to convert metadata 4.3 to version 3.5'))
+        self.action_metadata_converter.triggered.connect(
+            self.show_metadata_converter)
+        self.add_action(
+            self.action_metadata_converter, add_to_toolbar=self.full_toolbar)
+
     def _create_field_mapping_action(self):
         """Create action for showing field mapping dialog."""
         icon = resources_path('img', 'icons', 'show-mapping-tool.svg')
@@ -375,11 +395,24 @@ class Plugin(object):
         self.action_field_mapping.setWhatsThis(self.tr(
             'Use this tool to assign field mapping in layer.'))
         self.action_field_mapping.setEnabled(False)
-        self.action_field_mapping.triggered.connect(
-            self.show_field_mapping)
+        self.action_field_mapping.triggered.connect(self.show_field_mapping)
         self.add_action(
-            self.action_field_mapping,
-            add_to_toolbar=True)
+            self.action_field_mapping, add_to_toolbar=self.full_toolbar)
+
+    def _create_multi_exposure_action(self):
+        """Create action for showing the multi exposure tool."""
+        self.action_multi_exposure = QAction(
+            QIcon(resources_path('img', 'icons', 'show-multi-exposure.svg')),
+            self.tr('InaSAFE Multi Exposure Tool'),
+            self.iface.mainWindow())
+        self.action_multi_exposure.setStatusTip(self.tr(
+            'Open the multi exposure tool.'))
+        self.action_multi_exposure.setWhatsThis(self.tr(
+            'Open the multi exposure tool.'))
+        self.action_multi_exposure.setEnabled(True)
+        self.action_multi_exposure.triggered.connect(self.show_multi_exposure)
+        self.add_action(
+            self.action_multi_exposure, add_to_toolbar=self.full_toolbar)
 
     def _create_add_petabencana_layer_action(self):
         """Create action for import OSM Dialog."""
@@ -397,7 +430,7 @@ class Plugin(object):
             self.add_petabencana_layer)
         self.add_action(
             self.action_add_petabencana_layer,
-            add_to_toolbar=False)
+            add_to_toolbar=self.full_toolbar)
 
     def _create_rubber_bands_action(self):
         """Create action for toggling rubber bands."""
@@ -410,9 +443,7 @@ class Plugin(object):
         self.action_toggle_rubberbands.setWhatsThis(message)
         # Set initial state
         self.action_toggle_rubberbands.setCheckable(True)
-        settings = QSettings()
-        flag = bool(settings.value(
-            'inasafe/showRubberBands', False, type=bool))
+        flag = setting('showRubberBands', False, expected_type=bool)
         self.action_toggle_rubberbands.setChecked(flag)
         # noinspection PyUnresolvedReferences
         self.action_toggle_rubberbands.triggered.connect(
@@ -437,9 +468,8 @@ class Plugin(object):
     def _create_test_layers_action(self):
         """Create action for adding layers (developer mode, non final only)."""
         final_release = inasafe_release_status == 'final'
-        settings = QSettings()
-        self.developer_mode = settings.value(
-            'inasafe/developer_mode', False, type=bool)
+        self.developer_mode = setting(
+            'developer_mode', False, expected_type=bool)
         if not final_release and self.developer_mode:
             icon = resources_path('img', 'icons', 'add-test-layers.svg')
             self.action_add_layers = QAction(
@@ -458,13 +488,12 @@ class Plugin(object):
     def _create_run_test_action(self):
         """Create action for running tests (developer mode, non final only)."""
         final_release = inasafe_release_status == 'final'
-        settings = QSettings()
-        self.developer_mode = settings.value(
-            'inasafe/developer_mode', False, type=bool)
+        self.developer_mode = setting(
+            'developer_mode', False, expected_type=bool)
         if not final_release and self.developer_mode:
 
-            default_package = unicode(settings.value(
-                'inasafe/testPackage', 'safe', type=str))
+            default_package = unicode(
+                setting('testPackage', 'safe', expected_type=str))
             msg = self.tr('Run tests in %s' % default_package)
 
             self.test_button = QToolButton()
@@ -543,6 +572,8 @@ class Plugin(object):
         self._create_analysis_wizard_action()
         self._add_spacer_to_menu()
         self._create_field_mapping_action()
+        self._create_multi_exposure_action()
+        self._create_metadata_converter_action()
         self._create_osm_downloader_action()
         self._create_add_osm_layer_action()
         self._create_add_petabencana_layer_action()
@@ -564,6 +595,10 @@ class Plugin(object):
         # Also deal with the fact that on start of QGIS dock may already be
         # hidden.
         self.action_dock.setChecked(self.dock_widget.isVisible())
+
+        self.iface.initializationCompleted.connect(
+            partial(self.show_welcome_message)
+        )
 
     def _add_spacer_to_menu(self):
         """Create a spacer to the menu to separate action groups."""
@@ -630,16 +665,7 @@ class Plugin(object):
         self.iface.currentLayerChanged.disconnect(self.layer_changed)
 
         # Unload QGIS expressions loaded by the plugin.
-        qgis_expressions = {
-            fct[0]: fct[1] for fct in getmembers(expressions)
-            if fct[1].__class__.__name__ == 'QgsExpressionFunction'}
-        qgis_expressions.update({
-            fct[0]: fct[1] for fct in getmembers(infographic)
-            if fct[1].__class__.__name__ == 'QgsExpressionFunction'})
-        qgis_expressions.update({
-            fct[0]: fct[1] for fct in getmembers(map_report)
-            if fct[1].__class__.__name__ == 'QgsExpressionFunction'})
-        for qgis_expression in qgis_expressions.keys():
+        for qgis_expression in qgis_expressions().keys():
             QgsExpression.unregisterFunction(qgis_expression)
 
     def toggle_inasafe_action(self, checked):
@@ -671,10 +697,9 @@ class Plugin(object):
 
     def select_test_package(self):
         """Select the test package."""
-        settings = QSettings()
         default_package = 'safe'
-        user_package = unicode(settings.value(
-            'inasafe/testPackage', default_package, type=str))
+        user_package = unicode(
+            setting('testPackage', default_package, expected_type=str))
 
         test_package, _ = QInputDialog.getText(
             self.iface.mainWindow(),
@@ -686,7 +711,7 @@ class Plugin(object):
         if test_package == '':
             test_package = default_package
 
-        settings.setValue('inasafe/testPackage', test_package)
+        set_setting('testPackage', test_package)
         msg = self.tr('Run tests in %s' % test_package)
         self.action_run_tests.setWhatsThis(msg)
         self.action_run_tests.setText(msg)
@@ -697,9 +722,7 @@ class Plugin(object):
         main_window = self.iface.mainWindow()
         action = main_window.findChild(QAction, 'mActionShowPythonDialog')
         action.trigger()
-        settings = QSettings()
-        package = unicode(settings.value(
-            'inasafe/testPackage', 'safe', type=str))
+        package = unicode(setting('testPackage', 'safe', expected_type=str))
         for child in main_window.findChildren(QDockWidget, 'PythonConsole'):
             if child.objectName() == 'PythonConsole':
                 child.show()
@@ -760,8 +783,40 @@ class Plugin(object):
         dialog = OptionsDialog(
             iface=self.iface,
             parent=self.iface.mainWindow())
+        dialog.show_option_dialog()
         if dialog.exec_():  # modal
             self.dock_widget.read_settings()
+            from safe.gui.widgets.message import getting_started_message
+            send_static_message(self.dock_widget, getting_started_message())
+
+    def show_welcome_message(self):
+        """Show the welcome message."""
+        # import here only so that it is AFTER i18n set up
+        from safe.gui.tools.options_dialog import OptionsDialog
+
+        # Do not show by default
+        show_message = False
+
+        previous_version = StrictVersion(setting('previous_version'))
+        current_version = StrictVersion(inasafe_version)
+
+        # Set previous_version to the current inasafe_version
+        set_setting('previous_version', inasafe_version)
+
+        if setting('always_show_welcome_message', expected_type=bool):
+            # Show if it the setting said so
+            show_message = True
+        elif previous_version < current_version:
+            # Always show if the user installed new version
+            show_message = True
+
+        if show_message:
+            dialog = OptionsDialog(
+                iface=self.iface,
+                parent=self.iface.mainWindow())
+            dialog.show_welcome_dialog()
+            if dialog.exec_():  # modal
+                self.dock_widget.read_settings()
 
     def show_keywords_wizard(self):
         """Show the keywords creation wizard."""
@@ -839,12 +894,7 @@ class Plugin(object):
         layer = QgsRasterLayer(path, self.tr('OpenStreetMap'))
         registry = QgsMapLayerRegistry.instance()
 
-        # For older versions we just add directly to the top of legend
-        if QGis.QGIS_VERSION_INT < 20400:
-            # True flag adds layer directly to legend
-            registry.addMapLayer(layer, True)
-            return
-        # Otherwise try to add it as the last layer in the list
+        # Try to add it as the last layer in the list
         # False flag prevents layer being added to legend
         registry.addMapLayer(layer, False)
         root = QgsProject.instance().layerTreeRoot()
@@ -875,6 +925,23 @@ class Plugin(object):
         else:
             LOGGER.debug('Show field mapping not accepted')
 
+    def show_metadata_converter(self):
+        """Show InaSAFE Metadata Converter."""
+        from safe.gui.tools.metadata_converter_dialog import (
+            MetadataConverterDialog)
+        dialog = MetadataConverterDialog(
+            parent=self.iface.mainWindow(),
+            iface=self.iface,
+        )
+        dialog.exec_()
+
+    def show_multi_exposure(self):
+        """Show InaSAFE Multi Exposure."""
+        from safe.gui.tools.multi_exposure_dialog import MultiExposureDialog
+        dialog = MultiExposureDialog(
+            self.iface.mainWindow(), self.iface)
+        dialog.exec_()  # modal
+
     def add_petabencana_layer(self):
         """Add petabencana layer to the map.
 
@@ -896,7 +963,7 @@ class Plugin(object):
         dialog.exec_()  # modal
 
     def save_scenario(self):
-        """Save current scenario to text file"""
+        """Save current scenario to text file."""
         from safe.gui.tools.save_scenario import SaveScenarioDialog
 
         dialog = SaveScenarioDialog(
@@ -929,20 +996,20 @@ class Plugin(object):
 
                     if not layer_purpose:
                         enable_field_mapping_tool = False
-
-                    if layer_purpose == layer_purpose_exposure['key']:
-                        layer_subcategory = keywords.get('exposure')
-                    elif layer_purpose == layer_purpose_hazard['key']:
-                        layer_subcategory = keywords.get('hazard')
                     else:
-                        layer_subcategory = None
-                    field_groups = get_field_groups(
-                        layer_purpose, layer_subcategory)
-                    if len(field_groups) == 0:
-                        # No field group, disable field mapping tool.
-                        enable_field_mapping_tool = False
-                    else:
-                        enable_field_mapping_tool = True
+                        if layer_purpose == layer_purpose_exposure['key']:
+                            layer_subcategory = keywords.get('exposure')
+                        elif layer_purpose == layer_purpose_hazard['key']:
+                            layer_subcategory = keywords.get('hazard')
+                        else:
+                            layer_subcategory = None
+                        field_groups = get_field_groups(
+                            layer_purpose, layer_subcategory)
+                        if len(field_groups) == 0:
+                            # No field group, disable field mapping tool.
+                            enable_field_mapping_tool = False
+                        else:
+                            enable_field_mapping_tool = True
             else:
                 enable_field_mapping_tool = False
         except (KeywordNotFoundError, NoKeywordsFoundError, MetadataReadError):

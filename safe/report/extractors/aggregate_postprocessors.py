@@ -2,28 +2,31 @@
 """Module used to generate context for aggregation postprocessors sections.
 """
 
+from collections import OrderedDict
+
 # noinspection PyUnresolvedReferences
 from PyQt4.QtCore import QPyNullVariant
-from collections import OrderedDict
 
 from safe.common.parameters.resource_parameter import ResourceParameter
 from safe.definitions.exposure import exposure_population
-from safe.definitions.fields import (
-    aggregation_name_field,
-    displaced_field,
-    additional_minimum_needs)
 from safe.definitions.field_groups import (
     age_displaced_count_group,
     gender_displaced_count_group,
     vulnerability_displaced_count_groups)
+from safe.definitions.fields import (
+    aggregation_name_field,
+    displaced_field,
+    additional_minimum_needs)
 from safe.definitions.minimum_needs import minimum_needs_fields
-from safe.definitions.post_processors.population_post_processors import (
+from safe.definitions.utilities import (
+    postprocessor_output_field,
+    definition)
+from safe.processors.population_post_processors import (
     age_postprocessors,
     gender_postprocessors)
-from safe.definitions.utilities import postprocessor_output_field
 from safe.report.extractors.util import (
     value_from_field_name,
-    resolve_from_dictionary, layer_definition_type)
+    resolve_from_dictionary)
 from safe.utilities.rounding import format_number
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -53,20 +56,21 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
         'sections': OrderedDict()
     }
 
-    """Initializations"""
+    """Initializations."""
 
     extra_args = component_metadata.extra_args
     # Find out aggregation report type
-    exposure_layer = impact_report.exposure
     aggregation_summary = impact_report.aggregation_summary
     analysis_layer = impact_report.analysis
     analysis_layer_fields = impact_report.analysis.keywords['inasafe_fields']
     debug_mode = impact_report.impact_function.debug_mode
     use_aggregation = bool(impact_report.impact_function.provenance[
         'aggregation_layer'])
+    provenance = impact_report.impact_function.provenance
+    exposure_keywords = provenance['exposure_keywords']
 
     # Get exposure type definition
-    exposure_type = layer_definition_type(exposure_layer)
+    exposure_type = definition(exposure_keywords['exposure'])
 
     # this entire section is only for population exposure type
     if not exposure_type == exposure_population:
@@ -87,16 +91,20 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
         zero_displaced = False
 
     context['use_aggregation'] = use_aggregation
-    if not use_aggregation:
-        context['header'] = resolve_from_dictionary(
-            extra_args, 'header')
+    context['header'] = resolve_from_dictionary(
+        extra_args, 'header')
 
     group_header_format = resolve_from_dictionary(
         extra_args, ['defaults', 'group_header_format'])
-    section_header_format = resolve_from_dictionary(
-        extra_args, ['defaults', 'section_header_format'])
 
-    """Age Groups"""
+    section_header_format = resolve_from_dictionary(
+        extra_args,
+        ['defaults', 'section_header_format'])
+    if not use_aggregation:
+        section_header_format = resolve_from_dictionary(
+            extra_args, ['defaults', 'section_header_format_no_aggregation'])
+
+    """Age Groups."""
     age_items = {
         'group': age_displaced_count_group,
         'group_header': group_header_format.format(
@@ -145,7 +153,7 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
                 extra_component_args=extra_args)
         )
 
-    """Gender Groups"""
+    """Gender Groups."""
     gender_items = {
         'group': gender_displaced_count_group,
         'group_header': group_header_format.format(
@@ -195,7 +203,7 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
                 extra_component_args=extra_args)
         )
 
-    """Vulnerability Groups"""
+    """Vulnerability Groups."""
     context['sections']['vulnerability'] = []
     for vulnerability_group in vulnerability_displaced_count_groups:
         vulnerability_items = {
@@ -246,7 +254,7 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
                     extra_component_args=extra_args)
             )
 
-    """Minimum Needs"""
+    """Minimum Needs."""
     context['sections']['minimum_needs'] = []
     minimum_needs_section_header = resolve_from_dictionary(
         extra_args, ['sections', 'minimum_needs', 'header'])
@@ -427,7 +435,7 @@ def create_section_with_aggregation(
     if displaced_field['key'] not in aggregation_summary_fields:
         return {}
 
-    """Generating header name for columns"""
+    """Generating header name for columns."""
 
     # First column header is aggregation title
     default_aggregation_header = resolve_from_dictionary(
@@ -488,7 +496,7 @@ def create_section_with_aggregation(
         start_group_header = False
         columns.append(header_dict)
 
-    """Generating values for rows"""
+    """Generating values for rows."""
 
     for feature in aggregation_summary.getFeatures():
 
@@ -532,7 +540,7 @@ def create_section_with_aggregation(
 
         row_values.append(row)
 
-    """Generating total rows """
+    """Generating total rows."""
 
     total_displaced_field_name = analysis_layer_fields[
         displaced_field['key']]
@@ -629,15 +637,13 @@ def create_section_without_aggregation(
 
     # figuring out displaced field
     try:
-        displaced_field_name = analysis_layer_fields[
-            displaced_field['key']]
-        displaced_field_name = aggregation_summary_fields[
-            displaced_field['key']]
+        analysis_layer_fields[displaced_field['key']]
+        aggregation_summary_fields[displaced_field['key']]
     except KeyError:
         # no displaced field, can't show result
         return {}
 
-    """Generating header name for columns"""
+    """Generating header name for columns."""
 
     # First column header is aggregation title
     total_population_header = resolve_from_dictionary(
@@ -647,7 +653,7 @@ def create_section_without_aggregation(
         total_population_header,
     ]
 
-    """Generating values for rows"""
+    """Generating values for rows."""
     row_values = []
 
     for idx, output_field in enumerate(postprocessors_fields_found):

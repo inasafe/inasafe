@@ -3,9 +3,9 @@
 """Prepare layers for InaSAFE."""
 
 import logging
-from PyQt4.QtCore import QPyNullVariant, QVariant
+
+from PyQt4.QtCore import QPyNullVariant
 from qgis.core import (
-    QgsVectorLayer,
     QgsField,
     QgsFeatureRequest,
     QGis,
@@ -15,15 +15,8 @@ from qgis.core import (
 
 from safe.common.exceptions import (
     InvalidKeywordsForProcessingAlgorithm, NoFeaturesInExtentError)
-from safe.gis.vector.tools import (
-    create_memory_layer,
-    remove_fields,
-    copy_fields,
-    copy_layer,
-    create_field_from_definition
-)
-from safe.gis.sanity_check import check_layer
-from safe.definitions.processing_steps import prepare_vector_steps
+from safe.definitions.exposure import indivisible_exposure
+from safe.definitions.exposure_classifications import data_driven_classes
 from safe.definitions.fields import (
     exposure_id_field,
     hazard_id_field,
@@ -33,23 +26,31 @@ from safe.definitions.fields import (
     count_fields,
     displaced_field
 )
-from safe.definitions.exposure import indivisible_exposure
 from safe.definitions.layer_purposes import (
     layer_purpose_exposure,
     layer_purpose_hazard,
     layer_purpose_aggregation
 )
+from safe.definitions.processing_steps import prepare_vector_steps
 from safe.definitions.utilities import (
     get_fields,
     definition,
     get_compulsory_fields,
 )
+from safe.gis.sanity_check import check_layer
+from safe.gis.vector.tools import (
+    create_memory_layer,
+    remove_fields,
+    copy_fields,
+    copy_layer,
+    create_field_from_definition
+)
 from safe.impact_function.postprocessors import run_single_post_processor
-from safe.definitions.post_processors import post_processor_size
+from safe.processors import post_processor_size
 from safe.utilities.i18n import tr
-from safe.utilities.profiling import profile
 from safe.utilities.metadata import (
-    active_thresholds_value_maps, active_classification)
+    active_thresholds_value_maps, active_classification, copy_layer_keywords)
+from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -82,19 +83,17 @@ def prepare_vector_layer(layer, callback=None):
     """
     output_layer_name = prepare_vector_steps['output_layer_name']
     output_layer_name = output_layer_name % layer.keywords['layer_purpose']
-    processing_step = prepare_vector_steps['step_name']
+    processing_step = prepare_vector_steps['step_name']  # NOQA
 
     if not layer.keywords.get('inasafe_fields'):
         msg = 'inasafe_fields is missing in keywords from %s' % layer.name()
         raise InvalidKeywordsForProcessingAlgorithm(msg)
 
-    feature_count = layer.featureCount()
-
     cleaned = create_memory_layer(
         output_layer_name, layer.geometryType(), layer.crs(), layer.fields())
 
     # We transfer keywords to the output.
-    cleaned.keywords = layer.keywords
+    cleaned.keywords = copy_layer_keywords(layer.keywords)
 
     copy_layer(layer, cleaned)
     _remove_features(cleaned)
@@ -168,7 +167,7 @@ def _check_value_mapping(layer, exposure_key=None):
     exposure_classification = definition(classification)
 
     other = None
-    if exposure_classification['key'] != 'data_driven_classes':
+    if exposure_classification['key'] != data_driven_classes['key']:
         other = exposure_classification['classes'][-1]['key']
 
     exposure_mapped = []

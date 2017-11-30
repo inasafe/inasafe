@@ -1,9 +1,9 @@
 # coding=utf-8
 """Impact report help text."""
 
-from safe.utilities.i18n import tr
 from safe import messaging as m
 from safe.messaging import styles
+from safe.utilities.i18n import tr
 
 SUBSECTION_STYLE = styles.SUBSECTION_LEVEL_3_STYLE
 SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE

@@ -2,23 +2,24 @@
 """InaSAFE Wizard Step for Choosing Exposure and Hazard."""
 
 from copy import deepcopy
-from PyQt4 import QtCore, QtGui
-from PyQt4.QtCore import pyqtSignature
 
-from safe.definitions.hazard import hazard_all
+from PyQt4.QtCore import pyqtSignature, Qt
+from PyQt4.QtGui import QIcon, QTableWidgetItem, QBrush, QHeaderView
+
+from safe import messaging as m
 from safe.definitions.exposure import exposure_all
-from safe.definitions.styles import (
-    available_option_color, unavailable_option_color)
 from safe.definitions.font import big_font
-from safe.gui.tools.wizard.wizard_step import WizardStep
-from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
-from safe.gui.tools.wizard.utilities import RoleHazard, RoleExposure
+from safe.definitions.hazard import hazard_all
 from safe.definitions.layer_purposes import (
     layer_purpose_exposure, layer_purpose_hazard)
-from safe.utilities.resources import resources_path
-from safe.utilities.settings import setting
+from safe.definitions.styles import (
+    available_option_color, unavailable_option_color)
+from safe.gui.tools.wizard.utilities import (
+    RoleHazard, RoleExposure, get_image_path)
+from safe.gui.tools.wizard.wizard_step import WizardStep
+from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.utilities.i18n import tr
-from safe import messaging as m
+from safe.utilities.settings import setting
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -118,40 +119,35 @@ class StepFcFunctions1(WizardStep, FORM_CLASS):
         self.tblFunctions1.setRowCount(len(exposures))
         for i in range(len(hazards)):
             hazard = hazards[i]
-            item = QtGui.QTableWidgetItem()
-            item.setIcon(QtGui.QIcon(
-                resources_path('img', 'wizard', 'keyword-subcategory-%s.svg'
-                               % (hazard['key'] or 'notset'))))
+            item = QTableWidgetItem()
+            item.setIcon(QIcon(get_image_path(hazard)))
             item.setText(hazard['name'].capitalize())
+            item.setTextAlignment(Qt.AlignLeft)
             self.tblFunctions1.setHorizontalHeaderItem(i, item)
         for i in range(len(exposures)):
             exposure = exposures[i]
-            item = QtGui.QTableWidgetItem()
-
-            item.setIcon(QtGui.QIcon(resources_path(
-                'img', 'wizard', 'keyword-subcategory-%s.svg'
-                % (exposure['key'] or 'notset'))))
+            item = QTableWidgetItem()
+            item.setIcon(QIcon(get_image_path(exposure)))
             item.setText(exposure['name'].capitalize())
             self.tblFunctions1.setVerticalHeaderItem(i, item)
         developer_mode = setting('developer_mode', False, bool)
         for hazard in hazards:
             for exposure in exposures:
-                item = QtGui.QTableWidgetItem()
+                item = QTableWidgetItem()
                 if (exposure in hazard['disabled_exposures'] and not
                         developer_mode):
                     background_colour = unavailable_option_color
                     # Set it disable and un-selectable
                     item.setFlags(
                         item.flags() & ~
-                        QtCore.Qt.ItemIsEnabled & ~
-                        QtCore.Qt.ItemIsSelectable
+                        Qt.ItemIsEnabled & ~
+                        Qt.ItemIsSelectable
                     )
                 else:
                     background_colour = available_option_color
-                item.setBackground(QtGui.QBrush(background_colour))
+                item.setBackground(QBrush(background_colour))
                 item.setFont(big_font)
-                item.setTextAlignment(
-                    QtCore.Qt.AlignCenter | QtCore.Qt.AlignHCenter)
+                item.setTextAlignment(Qt.AlignCenter | Qt.AlignHCenter)
                 item.setData(RoleHazard, hazard)
                 item.setData(RoleExposure, exposure)
                 self.tblFunctions1.setItem(
@@ -161,9 +157,9 @@ class StepFcFunctions1(WizardStep, FORM_CLASS):
     def set_widgets(self):
         """Set widgets on the Impact Functions Table 1 tab."""
         self.tblFunctions1.horizontalHeader().setResizeMode(
-            QtGui.QHeaderView.Stretch)
+            QHeaderView.Stretch)
         self.tblFunctions1.verticalHeader().setResizeMode(
-            QtGui.QHeaderView.Stretch)
+            QHeaderView.Stretch)
 
         self.populate_function_table_1()
 

@@ -1,0 +1,21 @@
+<style>
+    p {
+	font-family: Ubuntu;
+	font-size: 7pt;
+	color: #8d9196;
+	}
+</style>
+
+<p>
+    {% for note in notes %}
+        {% if note.title %}
+            <b>{{ note.title|capitalize }}</b>:
+        {% endif %}
+        {% if note.description %}
+            {{ note.description }}<br>
+        {% endif %}
+        {% if note.citations %}
+            <i>({{ note.citations }})</i><br>
+        {% endif %}
+    {% endfor %}
+</p>

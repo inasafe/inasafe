@@ -4,27 +4,24 @@
 import copy
 import logging
 import re
-from PyQt4 import QtCore
 from os.path import exists
-from inspect import getmembers
+
+from PyQt4 import QtCore
 
 import safe.definitions as definitions
-import safe.definitions.post_processors
-from safe.definitions.hazard_classifications import hazard_classification_type
-from developer_help import content as developer_help
+import safe.processors
 from safe import messaging as m
 from safe.definitions.earthquake import current_earthquake_model_name
 from safe.definitions.exposure import exposure_all
 from safe.definitions.field_groups import (
     population_field_groups, aggregation_field_groups)
+from safe.definitions.hazard_classifications import hazard_classification_type
 from safe.definitions.hazard_exposure_specifications import (
     specific_notes, specific_actions)
-from safe.definitions.post_processors.post_processor_inputs import (
-    post_processor_input_types,
-    post_processor_input_values)
-from safe.definitions.reports.report_descriptions import all_reports
 from safe.definitions.reports.infographic import html_frame_elements
+from safe.definitions.reports.report_descriptions import all_reports
 from safe.gui.tools.help.batch_help import content as batch_help
+from safe.gui.tools.help.developer_help import content as developer_help
 from safe.gui.tools.help.dock_help import content as dock_help
 from safe.gui.tools.help.extent_selector_help import content as extent_help
 from safe.gui.tools.help.field_mapping_help import content as \
@@ -40,11 +37,13 @@ from safe.gui.tools.help.peta_bencana_help import content as petabencana_help
 from safe.gui.tools.help.shakemap_converter_help \
     import content as shakemap_help
 from safe.messaging import styles
+from safe.processors import (
+    post_processor_input_types,
+    post_processor_input_values)
+from safe.utilities.expressions import qgis_expressions
 from safe.utilities.i18n import tr
 from safe.utilities.resources import resource_url, resources_path
 from safe.utilities.rounding import html_scientific_notation_rate
-from safe.gis import expressions
-from safe.report.expressions import infographic
 
 LOGGER = logging.getLogger('InaSAFE')
 # For chapter sections
@@ -696,7 +695,7 @@ def content():
         tr('Post Processor Process Types'),
         heading_level=2)
     table = _create_post_processor_subtable(
-        definitions.post_processor_process_types
+        safe.processors.post_processor_process_types
     )
     message.add(table)
 
@@ -706,7 +705,7 @@ def content():
         'post-processors',
         tr('Post Processors'),
         heading_level=2)
-    post_processors = safe.definitions.post_processors
+    post_processors = safe.processors.post_processors
     table = m.Table(style_class='table table-condensed table-striped')
     row = m.Row()
     row.add(m.Cell(tr('Name'), header=True))
@@ -819,19 +818,12 @@ def content():
         '.'
     )))
 
-    qgis_expressions = {
-        fct[0]: fct[1] for fct in getmembers(expressions)
-        if fct[1].__class__.__name__ == 'QgsExpressionFunction'}
-    qgis_expressions.update({
-        fct[0]: fct[1] for fct in getmembers(infographic)
-        if fct[1].__class__.__name__ == 'QgsExpressionFunction'})
-
     table = m.Table(style_class='table table-condensed table-striped')
     row = m.Row()
     row.add(m.Cell(tr('Name'), header=True))
     row.add(m.Cell(tr('Description'), header=True))
     table.add(row)
-    for expression_name, expression in sorted(qgis_expressions.iteritems()):
+    for expression_name, expression in sorted(qgis_expressions().iteritems()):
         row = m.Row()
         row.add(m.Cell(expression_name))
         help = expression.helptext()
@@ -864,10 +856,10 @@ def content():
         row.add(m.Cell(item['description']))
         table.add(row)
     message.add(table)
+
     ##
     # Developer documentation
     ##
-
     _create_section_header(
         message,
         table_of_contents,

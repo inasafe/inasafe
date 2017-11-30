@@ -2,16 +2,16 @@
 
 """Actions, notes, questions which are specials for a given hazard/exposure."""
 
-from safe.utilities.i18n import tr, locale
+from safe.definitions.exposure import (
+    exposure_population,
+    exposure_road,
+)
 from safe.definitions.hazard import (
     hazard_volcanic_ash,
     hazard_earthquake,
     hazard_flood,
 )
-from safe.definitions.exposure import (
-    exposure_population,
-    exposure_road,
-)
+from safe.utilities.i18n import tr, locale
 
 # Notes, for the analysis question, this is specific for French. I put the
 # singular and masculine sentence on transifex.

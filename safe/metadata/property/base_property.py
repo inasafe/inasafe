@@ -18,6 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import abc
+
 from safe.common.exceptions import MetadataInvalidPathError, MetadataCastError
 
 

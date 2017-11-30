@@ -7,7 +7,6 @@ from numbers import Number
 from PyQt4.QtCore import QPyNullVariant
 from qgis.core import QGis, QgsFeatureRequest, QgsFeature
 
-from safe.definitions.utilities import definition
 from safe.definitions.fields import (
     aggregation_id_field,
     aggregation_name_field,
@@ -25,22 +24,23 @@ from safe.definitions.fields import (
     summarizer_fields,
     affected_summarizer_fields
 )
-from safe.definitions.processing_steps import (
-    summary_4_exposure_summary_table_steps)
-from safe.definitions.post_processors import post_processor_affected_function
+from safe.definitions.hazard_classifications import not_exposed_class
 from safe.definitions.layer_purposes import \
     layer_purpose_exposure_summary_table
-from safe.definitions.hazard_classifications import not_exposed_class
+from safe.definitions.processing_steps import (
+    summary_4_exposure_summary_table_steps)
+from safe.definitions.utilities import definition
+from safe.gis.sanity_check import check_layer
+from safe.gis.vector.summary_tools import (
+    check_inputs, create_absolute_values_structure)
 from safe.gis.vector.tools import (
     create_field_from_definition,
     read_dynamic_inasafe_field,
     create_memory_layer)
-from safe.gis.sanity_check import check_layer
-from safe.gis.vector.summary_tools import (
-    check_inputs, create_absolute_values_structure)
+from safe.processors import post_processor_affected_function
 from safe.utilities.gis import qgis_version
-from safe.utilities.profiling import profile
 from safe.utilities.pivot_table import FlatTable
+from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -77,7 +77,6 @@ def exposure_summary_table(
     """
     output_layer_name = summary_4_exposure_summary_table_steps[
         'output_layer_name']
-    processing_step = summary_4_exposure_summary_table_steps['step_name']
 
     source_fields = aggregate_hazard.keywords['inasafe_fields']
 
@@ -140,11 +139,15 @@ def exposure_summary_table(
         exposure_type_field['field_name'])
 
     hazard_keywords = aggregate_hazard.keywords['hazard_keywords']
+    hazard = hazard_keywords['hazard']
     classification = hazard_keywords['classification']
+
+    exposure_keywords = aggregate_hazard.keywords['exposure_keywords']
+    exposure = exposure_keywords['exposure']
 
     hazard_affected = {}
     for hazard_class in unique_hazard:
-        if not hazard_class or isinstance(hazard_class, QPyNullVariant):
+        if hazard_class == '' or isinstance(hazard_class, QPyNullVariant):
             hazard_class = 'NULL'
         field = create_field_from_definition(hazard_count_field, hazard_class)
         tabular.addAttribute(field)
@@ -153,7 +156,11 @@ def exposure_summary_table(
         tabular.keywords['inasafe_fields'][key] = value
 
         hazard_affected[hazard_class] = post_processor_affected_function(
-            classification=classification, hazard_class=hazard_class)
+            exposure=exposure,
+            hazard=hazard,
+            classification=classification,
+            hazard_class=hazard_class
+        )
 
     field = create_field_from_definition(total_affected_field)
     tabular.addAttribute(field)
@@ -209,7 +216,7 @@ def exposure_summary_table(
         total_not_exposed = 0
         total = 0
         for hazard_class in unique_hazard:
-            if not hazard_class or isinstance(hazard_class, QPyNullVariant):
+            if hazard_class == '' or isinstance(hazard_class, QPyNullVariant):
                 hazard_class = 'NULL'
             value = flat_table.get_value(
                 hazard_class=hazard_class,
@@ -303,7 +310,7 @@ def summarize_result(exposure_summary, callback=None):
                 continue
             if is_affected:
                 if exposure_class_name not in summarization_dicts[
-                    summarizer_field['key']]:
+                        summarizer_field['key']]:
                     summarization_dicts[summarizer_field['key']][
                         exposure_class_name] = 0
                 value = feature[summarizer_field['field_name']]

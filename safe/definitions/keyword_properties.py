@@ -1,7 +1,7 @@
 # coding=utf-8
 
 """Definitions relating to layer keywords."""
-
+from safe.definitions.extra_keywords import all_extra_keywords_name
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -311,4 +311,14 @@ property_provenance_data = {
     'description': tr(
         'A collection of provenance of the analysis as dictionary.'
     )
+}
+
+property_extra_keywords = {
+    'key': 'extra_keywords',
+    'name': tr('Extra Keywords'),
+    'description': tr(
+        'A collection of extra keyword for creating richer report.'
+    ),
+    # For translation
+    'member_names': all_extra_keywords_name
 }

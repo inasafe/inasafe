@@ -1,17 +1,20 @@
 # coding=utf-8
 """Help text for the dock widget."""
 
-from safe.utilities.i18n import tr
 from safe import messaging as m
-from safe.messaging import styles
-from safe.utilities.resources import resources_path
-from safe.gui.tools.help.function_options_help import content as options
 from safe.gui.tools.help.impact_report_help import content as report
+from safe.messaging import styles
+from safe.utilities.i18n import tr
+from safe.utilities.resources import resources_path
+
 SUBSECTION_STYLE = styles.SUBSECTION_LEVEL_3_STYLE
 INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
 SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
 
-__author__ = 'ismailsunni'
+__copyright__ = "Copyright 2015, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 
 def dock_help():

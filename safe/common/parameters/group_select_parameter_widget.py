@@ -3,12 +3,11 @@
 
 import logging
 
+from PyQt4.QtCore import Qt
 from PyQt4.QtGui import (
     QDoubleSpinBox, QVBoxLayout, QRadioButton, QButtonGroup,
-    QWidget, QLabel, QSizePolicy, QSpacerItem, QListWidget,
-    QGridLayout, QAbstractItemView, QListWidgetItem)
-from PyQt4.QtCore import Qt
-
+    QWidget, QLabel, QSizePolicy, QListWidget, QGridLayout,
+    QAbstractItemView, QListWidgetItem)
 from parameters.qt_widgets.generic_parameter_widget import (
     GenericParameterWidget)
 
@@ -99,7 +98,6 @@ class GroupSelectParameterWidget(GenericParameterWidget):
                     self.radio_button_layout.addWidget(
                         QLabel(str(static_value)), i, 1)
             elif value.get('type') == MULTIPLE_DYNAMIC:
-                selected_fields = value.get('value', [])
                 if self._parameter.selected == key:
                     self.list_widget.setEnabled(True)
                 else:

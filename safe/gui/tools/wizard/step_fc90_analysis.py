@@ -1,18 +1,18 @@
 # coding=utf-8
-"""InaSAFE Wizard Step Analysis"""
+"""InaSAFE Wizard Step Analysis."""
 
 import logging
 import os
+
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature
-
 from qgis.core import (
     QgsGeometry,
     QgsCoordinateReferenceSystem,
     QgsMapLayerRegistry)
 
-from safe.utilities.i18n import tr
-from safe.utilities.extent import Extent
+from safe import messaging as m
+from safe.common.signals import send_static_message, send_error_message
 from safe.definitions.constants import (
     ANALYSIS_FAILED_BAD_INPUT,
     ANALYSIS_FAILED_BAD_CODE,
@@ -23,22 +23,20 @@ from safe.definitions.constants import (
     HAZARD_EXPOSURE_VIEW,
     HAZARD_EXPOSURE_BOUNDINGBOX
 )
-from safe.common.signals import send_static_message, send_error_message
-from safe.gui.widgets.message import enable_messaging
-from safe.utilities.qt import enable_busy_cursor, disable_busy_cursor
-from safe.impact_function.impact_function import ImpactFunction
-from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
+from safe.definitions.reports.components import (
+    standard_impact_report_metadata_html)
+from safe.gui.analysis_utilities import add_impact_layers_to_canvas
 from safe.gui.tools.wizard.wizard_step import WizardStep
-from safe.gui.analysis_utilities import (
-    generate_impact_report,
-    generate_impact_map_report,
-    add_impact_layers_to_canvas,
-)
-from safe import messaging as m
+from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
+from safe.gui.widgets.message import enable_messaging
+from safe.impact_function.impact_function import ImpactFunction
 from safe.messaging import styles
 from safe.report.impact_report import ImpactReport
-from safe.utilities.settings import setting
+from safe.utilities.extent import Extent
 from safe.utilities.gis import wkt_to_rectangle
+from safe.utilities.i18n import tr
+from safe.utilities.qt import enable_busy_cursor, disable_busy_cursor
+from safe.utilities.settings import setting
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -58,7 +56,7 @@ FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 class StepFcAnalysis(WizardStep, FORM_CLASS):
 
-    """InaSAFE Wizard Step Analysis"""
+    """InaSAFE Wizard Step Analysis."""
 
     def __init__(self, parent):
         """Init method."""
@@ -174,7 +172,8 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         LOGGER.info(tr('The impact function could run without errors.'))
 
         # Add result layer to QGIS
-        add_impact_layers_to_canvas(self.impact_function, self.parent.iface)
+        add_impact_layers_to_canvas(
+            self.impact_function, iface=self.parent.iface)
 
         # Some if-s i.e. zoom, debug, hide exposure
         if self.zoom_to_impact_flag:
@@ -187,21 +186,10 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
             legend = self.iface.legendInterface()
             legend.setLayerVisible(qgis_exposure, False)
 
-        # Generate impact report
-        error_code, message = generate_impact_report(
-            self.impact_function, self.parent.iface)
-
-        if error_code == ImpactReport.REPORT_GENERATION_FAILED:
-            self.hide_busy()
-            LOGGER.info(tr(
-                'The impact report could not be generated.'))
-            send_error_message(self, message)
-            LOGGER.info(message.to_text())
-            return ANALYSIS_FAILED_BAD_CODE, message
-
-        # Generate Impact Map Report
-        error_code, message = generate_impact_map_report(
-            self.impact_function, self.iface)
+        # we only want to generate non pdf/qpt report
+        html_components = [standard_impact_report_metadata_html]
+        error_code, message = self.impact_function.generate_report(
+            html_components)
 
         if error_code == ImpactReport.REPORT_GENERATION_FAILED:
             self.hide_busy()
@@ -273,6 +261,8 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
             impact_function.use_selected_features_only = (
                 setting('useSelectedFeaturesOnly', False, bool))
         else:
+            # self.extent.crs is the map canvas CRS.
+            impact_function.crs = self.extent.crs
             mode = setting('analysis_extents_mode')
             if self.extent.user_extent:
                 # This like a hack to transform a geometry to a rectangle.
@@ -280,12 +270,10 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
                 # impact_function.requested_extent needs a QgsRectangle.
                 wkt = self.extent.user_extent.exportToWkt()
                 impact_function.requested_extent = wkt_to_rectangle(wkt)
-                impact_function.requested_extent_crs = self.extent.crs
 
             elif mode == HAZARD_EXPOSURE_VIEW:
                 impact_function.requested_extent = (
                     self.iface.mapCanvas().extent())
-                impact_function.requested_extent_crs = self.extent.crs
 
             elif mode == EXPOSURE:
                 impact_function.use_exposure_view_only = True
@@ -359,8 +347,9 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
             QtGui.QMessageBox.warning(
                 self,
                 'InaSAFE',
-                tr('Please select a valid impact layer before '
-                        'trying to print.'))
+                tr(
+                    'Please select a valid impact layer before trying to '
+                    'print.'))
             return
 
         # Get output path from datastore

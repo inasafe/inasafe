@@ -8,12 +8,15 @@ Particular example are:
 
 """
 import datetime
+from copy import deepcopy
 
 from qgis.core import QgsMapLayerRegistry
-from copy import deepcopy
 
 from safe.common.version import get_version
 from safe.definitions.fields import analysis_name_field
+from safe.definitions.provenance import (
+    provenance_exposure_layer_id,
+    provenance_multi_exposure_layers_id)
 from safe.definitions.reports.infographic import (
     html_frame_elements,
     population_chart,
@@ -240,29 +243,50 @@ def qgis_composer_extractor(impact_report, component_metadata):
 
     # Set default map to resize
 
-    # check show only impact
-    show_only_impact = setting('set_show_only_impact_on_report', False, bool)
-    layers = [impact_report.impact] + impact_report.extra_layers
-    layer_registry = QgsMapLayerRegistry.instance()
-    if not show_only_impact:
-        hazard_layer = layer_registry.mapLayers().get(
-            provenance['hazard_layer_id'], None)
+    # Define the layers for the impact map.
+    if not impact_report.multi_exposure_impact_function:  # single IF
+        layers = [impact_report.impact] + impact_report.extra_layers
+    else:  # multi-exposure IF
+        layers = [] + impact_report.extra_layers
 
-        aggregation_layer_id = provenance['aggregation_layer_id']
-        if aggregation_layer_id:
-            aggregation_layer = layer_registry.mapLayers().get(
-                aggregation_layer_id, None)
-            layers.insert(0, aggregation_layer)
+    add_supplementary_layers = (
+        not impact_report.multi_exposure_impact_function or not (
+            impact_report.multi_exposure_impact_function.output_layers_ordered)
+    )
+    if add_supplementary_layers:
+        # Check show only impact.
+        show_only_impact = setting(
+            'set_show_only_impact_on_report', expected_type=bool)
+        layer_registry = QgsMapLayerRegistry.instance()
+        if not show_only_impact:
+            hazard_layer = layer_registry.mapLayers().get(
+                provenance['hazard_layer_id'], None)
 
-        layers.append(hazard_layer)
+            aggregation_layer_id = provenance['aggregation_layer_id']
+            if aggregation_layer_id:
+                aggregation_layer = layer_registry.mapLayers().get(
+                    aggregation_layer_id, None)
+                layers.append(aggregation_layer)
 
-    # check hide exposure settings
-    hide_exposure_flag = setting('setHideExposureFlag', False, bool)
-    if not hide_exposure_flag:
-        # place exposure at the bottom
-        exposure_layer = layer_registry.mapLayers().get(
-            provenance['exposure_layer_id'])
-        layers.append(exposure_layer)
+            layers.append(hazard_layer)
+
+        # check hide exposure settings
+        hide_exposure_flag = setting('setHideExposureFlag', expected_type=bool)
+        if not hide_exposure_flag:
+            exposure_layers_id = []
+            if provenance.get(provenance_exposure_layer_id['provenance_key']):
+                exposure_layers_id.append(
+                    provenance.get(
+                        provenance_exposure_layer_id['provenance_key']))
+            elif provenance.get(
+                    provenance_multi_exposure_layers_id['provenance_key']):
+                exposure_layers_id = provenance.get(
+                    provenance_multi_exposure_layers_id['provenance_key'])
+
+            # place exposure at the bottom
+            for layer_id in exposure_layers_id:
+                exposure_layer = layer_registry.mapLayers().get(layer_id)
+                layers.append(exposure_layer)
 
     # default extent is analysis extent
     if not qgis_context.extent:
@@ -279,7 +303,10 @@ def qgis_composer_extractor(impact_report, component_metadata):
     context.map_elements = map_elements
 
     # calculate map_legends, only show the legend for impact layer
-    layers = [impact_report.impact]
+    if not impact_report.multi_exposure_impact_function:  # single IF
+        layers = [impact_report.impact]
+    else:  # multi-exposure IF
+        layers = [] + impact_report.extra_layers
     symbol_count = 0
     for l in layers:
         layer = l
@@ -296,7 +323,7 @@ def qgis_composer_extractor(impact_report, component_metadata):
             pass
         symbol_count += 1
 
-    legend_title = provenance['map_legend_title'] or ''
+    legend_title = provenance.get('map_legend_title') or ''
 
     map_legends = [
         {
@@ -324,7 +351,7 @@ def qgis_composer_extractor(impact_report, component_metadata):
     tokens = long_version.split('.')
     version = '%s.%s.%s' % (tokens[0], tokens[1], tokens[2])
     # Get title of the layer
-    title = provenance['map_title']
+    title = provenance.get('map_title') or ''
 
     # Set source
     unknown_source_text = resolve_from_dictionary(
@@ -333,9 +360,11 @@ def qgis_composer_extractor(impact_report, component_metadata):
         extra_args, ['defaults', 'aggregation_not_used'])
 
     hazard_source = (
-        provenance['hazard_keywords'].get('source') or unknown_source_text)
+        provenance.get(
+            'hazard_keywords', {}).get('source') or unknown_source_text)
     exposure_source = (
-        provenance['exposure_keywords'].get('source') or unknown_source_text)
+        provenance.get(
+            'exposure_keywords', {}).get('source') or unknown_source_text)
     if provenance['aggregation_layer']:
         aggregation_source = (
             provenance['aggregation_keywords'].get('source') or
@@ -346,7 +375,7 @@ def qgis_composer_extractor(impact_report, component_metadata):
     spatial_reference_format = resolve_from_dictionary(
         extra_args, 'spatial-reference-format')
     reference_name = spatial_reference_format.format(
-        crs=impact_report.impact_function.impact.crs().authid())
+        crs=impact_report.impact_function.crs.authid())
 
     analysis_layer = impact_report.analysis
     analysis_name = value_from_field_name(
@@ -427,7 +456,7 @@ def qgis_composer_infographic_extractor(impact_report, component_metadata):
 
     context = QGISComposerContext()
 
-    """Image Elements"""
+    """Image Elements."""
 
     # get all image elements with their respective source path
     image_elements = deepcopy(image_item_elements)
@@ -445,7 +474,7 @@ def qgis_composer_infographic_extractor(impact_report, component_metadata):
 
     context.image_elements.append(population_chart)
 
-    """HTML Elements"""
+    """HTML Elements."""
 
     components = resolve_from_dictionary(extra_args, 'components')
     html_elements = deepcopy(html_frame_elements)
@@ -459,7 +488,7 @@ def qgis_composer_infographic_extractor(impact_report, component_metadata):
 
     context.html_frame_elements = html_elements
 
-    """Map Elements"""
+    """Map Elements."""
 
     map_overview_layer = None
     layer_registry = QgsMapLayerRegistry.instance()

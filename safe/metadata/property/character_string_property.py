@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 """
 from types import NoneType
+
 from safe.metadata.property import BaseProperty
 
 __author__ = 'marco@opengis.ch'
@@ -47,7 +48,7 @@ class CharacterStringProperty(BaseProperty):
         if self.python_type is NoneType:
             return ''
         elif (self.python_type in self.allowed_python_types and
-                      self.python_type != unicode):
+                self.python_type != unicode):
             return str(self.value)
         elif self.python_type == unicode:
             return unicode(self.value)
