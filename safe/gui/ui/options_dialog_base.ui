@@ -65,7 +65,7 @@
        <item row="0" column="0">
         <widget class="QTabWidget" name="tabWidget">
          <property name="currentIndex">
-          <number>3</number>
+          <number>0</number>
          </property>
          <property name="movable">
           <bool>false</bool>
@@ -370,7 +370,7 @@
          </widget>
          <widget class="QWidget" name="preference_tab">
           <attribute name="title">
-           <string>Parameters</string>
+           <string>Population Parameters</string>
           </attribute>
           <layout class="QVBoxLayout" name="verticalLayout_7">
            <property name="leftMargin">
