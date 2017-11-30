@@ -20,7 +20,7 @@ class TestProfileWidget(unittest.TestCase):
     def test_setup_profile_widget(self):
         """Test setup profile widget."""
         data = generate_default_profile()
-        profile_widget = ProfileWidget(parent=PARENT, data=data)
+        profile_widget = ProfileWidget(data=data)
 
         # There is filtering happens in the Widget, so we skip this check
         # self.assertDictEqual(data, profile_widget.data)

@@ -160,7 +160,7 @@ class OptionsDialog(QDialog, FORM_CLASS):
         self.preference_layout.addWidget(self.preference_label)
 
         # Profile preference widget
-        self.profile_widget = ProfileWidget(self)
+        self.profile_widget = ProfileWidget()
         self.preference_layout.addWidget(self.profile_widget)
 
         # Demographic tab
