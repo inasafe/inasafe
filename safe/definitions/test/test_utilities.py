@@ -20,6 +20,7 @@ from safe.definitions import (
     hazard_volcanic_ash,
     hazard_generic,
     hazard_cyclone,
+    hazard_dam_break,
     exposure_population,
     exposure_land_cover,
     exposure_road,
@@ -152,7 +153,8 @@ class TestDefinitionsUtilities(unittest.TestCase):
             hazard_volcano['key'],
             hazard_volcanic_ash['key'],
             hazard_cyclone['key'],
-            hazard_generic['key']
+            hazard_generic['key'],
+            hazard_dam_break['key']
         ]
         self.assertItemsEqual(hazards, expected)
 
@@ -165,7 +167,8 @@ class TestDefinitionsUtilities(unittest.TestCase):
             hazard_volcano['key'],
             hazard_volcanic_ash['key'],
             hazard_cyclone['key'],
-            hazard_generic['key']
+            hazard_generic['key'],
+            hazard_dam_break['key']
         ]
         self.assertItemsEqual(hazards, expected)
 
@@ -177,7 +180,8 @@ class TestDefinitionsUtilities(unittest.TestCase):
             hazard_earthquake['key'],
             hazard_volcanic_ash['key'],
             hazard_cyclone['key'],
-            hazard_generic['key']
+            hazard_generic['key'],
+            hazard_dam_break['key']
         ]
         self.assertItemsEqual(hazards, expected)
 

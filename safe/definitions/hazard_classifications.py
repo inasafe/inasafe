@@ -659,7 +659,7 @@ flood_petabencana_hazard_classes = {
 
 inundation_classes = {
     'key': 'inundation_classes',
-    'name': tr('Inundation classes (DAM Failure)'),
+    'name': tr('Inundation classes (Dam Failure)'),
     'description': tr(
         'This is a binary classification for an area. The area is either '
         '<b>wet</b> (affected by flood water) or <b>dry</b> (not affected '

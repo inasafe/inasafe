@@ -234,9 +234,9 @@ hazard_flood = {
 }
 hazard_dam_break = {
     'key': 'dam_break',
-    'name': tr('DAM Break'),
+    'name': tr('Dam Break'),
     'description': tr(
-        'A <b>DAM Break</b> is a catastrophic type of failure '
+        'A <b>Dam Break</b> is a catastrophic type of failure '
         'characterized by the sudden, rapid, and uncontrolled '
         'release of impounded water as a result of structural '
         'failures or deficiencies in the dam. '
