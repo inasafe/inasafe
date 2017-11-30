@@ -48,8 +48,8 @@ class ProfileWidget(QTreeWidget, object):
         self.header_tree_widget.setFont(2, header_font)
         self.setHeaderItem(self.header_tree_widget)
         self.header().setResizeMode(0, QHeaderView.Stretch)
+        self.header().setResizeMode(1, QHeaderView.Fixed)
         self.header().setResizeMode(2, QHeaderView.ResizeToContents)
-        self.header().setStretchLastSection(False)
 
     @property
     def data(self):
@@ -144,9 +144,6 @@ class ProfileWidget(QTreeWidget, object):
         self.addTopLevelItems(self.widget_items)
 
         self.expandAll()
-        self.resizeColumnToContents(0)
-        self.resizeColumnToContents(1)
-        self.resizeColumnToContents(2)
 
     def clear(self):
         """Clear method to clear the widget items and the tree widget."""
