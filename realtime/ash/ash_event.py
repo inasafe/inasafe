@@ -523,7 +523,7 @@ class AshEvent(QObject):
                     'css': haz.lower().replace(' ', '-'),
                     'pop_val': city_pop,
                     'population': format_int(
-                        population_rounding(city_pop / 1000)),
+                        population_rounding(city_pop)),
                     'name': city_name.title(),
                     'type': 'places'
                 }
@@ -601,7 +601,7 @@ class AshEvent(QObject):
         context = {
             'item_list': item_list,
             'name_header': self.tr('Name'),
-            'affected_header': self.tr('People (x1000)/ Airport affected'),
+            'affected_header': self.tr('People / Airport affected'),
             'fallout_header': self.tr('Fallout Level')
         }
         with open(nearby_template) as f:
