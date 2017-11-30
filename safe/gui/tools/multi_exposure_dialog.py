@@ -71,6 +71,7 @@ from safe.report.impact_report import ImpactReport
 from safe.utilities.gis import qgis_version
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.qgis_utilities import display_warning_message_bar
 from safe.utilities.qt import disable_busy_cursor, enable_busy_cursor
 from safe.utilities.resources import (
     get_ui_class,
@@ -545,6 +546,8 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                 return code, message
 
             if setting('generate_report', True, bool):
+                LOGGER.info(
+                    'Reports are going to be generated for the multiexposure.')
                 # Report for the multi exposure
                 report = [standard_multi_exposure_impact_report_metadata_html]
                 error_code, message = (self._multi_exposure_if.generate_report(
@@ -558,6 +561,13 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                     disable_busy_cursor()
                     self.set_enabled_buttons(True)
                     return error_code, message
+            else:
+                LOGGER.info(
+                    'Reports are not generated because of your settings.')
+                display_warning_message_bar(
+                    tr('Reports'),
+                    tr('Reports are not going to be generated because of your '
+                       'InaSAFE settings.'))
 
             # We always create the multi exposure group because we need
             # reports to be generated.
@@ -601,6 +611,9 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                     self.iface)
 
             if setting('generate_report', True, bool):
+                LOGGER.info(
+                    'Reports are going to be generated for each single '
+                    'exposure.')
                 # Report for the single exposure with hazard
                 for analysis in self._multi_exposure_if.impact_functions:
                     # we only want to generate non pdf/qpt report
@@ -617,6 +630,13 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                         disable_busy_cursor()
                         self.set_enabled_buttons(True)
                         return error_code, message
+            else:
+                LOGGER.info(
+                    'Reports are not generated because of your settings.')
+                display_warning_message_bar(
+                    tr('Reports'),
+                    tr('Reports are not going to be generated because of your '
+                       'InaSAFE settings.'))
 
             # If zoom to impact is enabled
             if setting(
