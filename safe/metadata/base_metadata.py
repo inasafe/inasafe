@@ -8,6 +8,7 @@ from datetime import datetime
 from xml.etree import ElementTree
 
 from safe.common.exceptions import MetadataReadError, HashNotFoundError
+from safe.definitions.constants import APPLICATION_NAME
 from safe.definitions.metadata import TYPE_CONVERSIONS, METADATA_XML_TEMPLATE
 from safe.metadata.encoder import MetadataEncoder
 from safe.metadata.metadata_db_io import MetadataDbIO
@@ -199,20 +200,20 @@ class BaseMetadata(object):
         """
         # private members
         self._layer_uri = layer_uri
-        if '|' in layer_uri:
-            clean_uri = layer_uri.split('|')[0]
-        else:
-            clean_uri = layer_uri
+
+        clean_uri = layer_uri.split('|')[0]
 
         self._layer_is_file_based = os.path.exists(clean_uri)
 
         instantiate_metadata_db = False
 
-        path = os.path.splitext(clean_uri)[0]
+        path, extension = os.path.splitext(clean_uri)
 
         if xml_uri is None:
-            if self.layer_is_file_based:
+            if self.layer_is_file_based and extension.lower() != '.gpkg':
                 self._xml_uri = '%s.xml' % path
+            elif self.layer_is_file_based and extension.lower() == '.gpkg':
+                self._xml_uri = layer_uri
             else:
                 # xml should be stored in cacheDB
                 self._xml_uri = None
@@ -592,6 +593,26 @@ class BaseMetadata(object):
         :return: the written metadata
         :rtype: str
         """
+        uri = destination_path.split('|')
+        path, extension = os.path.splitext(uri[0])
+        if extension.lower() == '.gpkg':
+            layer_id = None
+            layer_name = None
+            for item in uri[1:]:
+                if 'layerid=' in item:
+                    layer_id = int(item.split('=')[1])
+                    break
+                if 'layername=' in item:
+                    layer_name = item.split('=')[1]
+                    break
+            metadata = self.get_writable_metadata('xml')
+            # Avoid circular import
+            from safe.datastore.geopackage import GeoPackage
+            geopackage = GeoPackage(uri[0])
+            geopackage.add_metadata(
+                layer_name, layer_id, APPLICATION_NAME, metadata)
+            return metadata
+
         file_format = os.path.splitext(destination_path)[1][1:]
         metadata = self.get_writable_metadata(file_format)
 

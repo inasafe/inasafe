@@ -172,8 +172,8 @@ def write_iso19115_metadata(layer_uri, keywords, version_35=False):
         metadata.update_from_dict({'keyword_version': inasafe_keyword_version})
 
     if metadata.layer_is_file_based:
-        xml_file_path = os.path.splitext(layer_uri)[0] + '.xml'
-        metadata.write_to_file(xml_file_path)
+        # xml_file_path = os.path.splitext(layer_uri)[0] + '.xml'
+        metadata.write_to_file(metadata.xml_uri)
     else:
         metadata.write_to_db()
 
@@ -193,6 +193,9 @@ def read_iso19115_metadata(layer_uri, keyword=None, version_35=False):
     :returns: Dictionary of keywords or value of key as string.
     :rtype: dict, basestring
     """
+    clean_uri = layer_uri.split('|')[0]
+    extension = os.path.splitext(clean_uri)[1]
+
     xml_uri = os.path.splitext(layer_uri)[0] + '.xml'
     # Remove the prefix for local file. For example csv.
     file_prefix = 'file:'
@@ -200,11 +203,13 @@ def read_iso19115_metadata(layer_uri, keyword=None, version_35=False):
         xml_uri = xml_uri[len(file_prefix):]
     if not os.path.exists(xml_uri):
         xml_uri = None
+    if os.path.exists(xml_uri) and extension.lower() == '.gpkg':
+        # Keywords are sitting next to the GPKG, don't take care of it
+        xml_uri = None
     if not xml_uri and os.path.exists(layer_uri):
         message = 'Layer based file but no xml file.\n'
         message += 'Layer path: %s.' % layer_uri
         raise NoKeywordsFoundError(message)
-    metadata = GenericLayerMetadata(layer_uri, xml_uri)
     if version_35:
         metadata = GenericLayerMetadata35(layer_uri, xml_uri)
     else:
