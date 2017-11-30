@@ -2,7 +2,8 @@
 
 import unittest
 
-from safe.test.utilities import qgis_app, standard_data_path
+from safe.test.utilities import standard_data_path
+from safe.test.qgis_app import qgis_app
 from safe.gis.tools import load_layer, full_layer_uri
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"

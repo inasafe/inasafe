@@ -4,7 +4,7 @@
 
 Tim Sutton, 2016
 """
-from safe.test.utilities import qgis_app
+from safe.test.qgis_app import qgis_app
 from safe.gui.tools.help_dialog import HelpDialog
 from safe.gui.tools.help import definitions_help
 

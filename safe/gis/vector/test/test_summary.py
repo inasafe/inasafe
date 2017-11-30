@@ -3,7 +3,8 @@
 import unittest
 
 from safe.test.utilities import (
-    load_test_vector_layer, qgis_app)
+    load_test_vector_layer)
+from safe.test.qgis_app import qgis_app
 
 from safe.definitions.fields import (
     total_field,
