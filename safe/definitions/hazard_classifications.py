@@ -657,7 +657,6 @@ flood_petabencana_hazard_classes = {
     'classification_unit': tr('hazard zone')
 }
 
-# GEO_DAM_BREAK
 inundation_classes = {
     'key': 'inundation_classes',
     'name': tr('Inundation classes (DAM Failure)'),
@@ -1934,7 +1933,7 @@ hazard_classification = {
         generic_hazard_classes,
         flood_hazard_classes,
         flood_petabencana_hazard_classes,
-        inundation_classes, # GEO_DAM_BREAK
+        inundation_classes,
         earthquake_mmi_scale,
         tsunami_hazard_classes,
         tsunami_hazard_population_classes,

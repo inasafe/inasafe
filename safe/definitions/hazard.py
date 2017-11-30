@@ -23,7 +23,7 @@ from safe.definitions.hazard_classifications import (
     ash_hazard_classes,
     cyclone_au_bom_hazard_classes,
     cyclone_sshws_hazard_classes,
-    inundation_classes) # GEO_DAM_BREAK
+    inundation_classes)
 from safe.definitions.layer_modes import (
     layer_mode_classified, layer_mode_continuous)
 from safe.definitions.units import (
@@ -232,7 +232,6 @@ hazard_flood = {
     'layer_modes': [layer_mode_classified, layer_mode_continuous],
     'disabled_exposures': [exposure_place]
 }
-# GEO_DAM_BREAK
 hazard_dam_break = {
     'key': 'dam_break',
     'name': tr('DAM Break'),
@@ -534,7 +533,7 @@ hazard_all = [
     hazard_volcanic_ash,
     hazard_cyclone,
     hazard_generic,
-    hazard_dam_break # GEO_DAM_BREAK
+    hazard_dam_break
 ]
 hazards = {
     'key': 'hazards',
