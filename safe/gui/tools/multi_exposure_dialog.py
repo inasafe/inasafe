@@ -567,7 +567,9 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                 display_warning_message_bar(
                     tr('Reports'),
                     tr('Reports are not going to be generated because of your '
-                       'InaSAFE settings.'))
+                       'InaSAFE settings.'),
+                    duration=10
+                )
 
             # We always create the multi exposure group because we need
             # reports to be generated.
@@ -636,7 +638,9 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                 display_warning_message_bar(
                     tr('Reports'),
                     tr('Reports are not going to be generated because of your '
-                       'InaSAFE settings.'))
+                       'InaSAFE settings.'),
+                    duration=10,
+                )
 
             # If zoom to impact is enabled
             if setting(
