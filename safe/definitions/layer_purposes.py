@@ -115,6 +115,7 @@ layer_purpose_aggregate_hazard_impacted = {
 layer_purpose_aggregation_summary = {
     'key': 'aggregation_summary',
     'name': tr('Aggregation Summary'),
+    'multi_exposure_name': tr('Combined Aggregation Summary'),
     'description': tr(
         "This <b>aggregation summary</b> contains the "
         "analysis results for each exposure type by hazard type, summarised "
@@ -130,9 +131,13 @@ layer_purpose_aggregation_summary = {
     ]
 }
 
+# multi_exposure_name is a special name for the legend if we do a multi
+# exposure analysis
+
 layer_purpose_analysis_impacted = {
     'key': 'analysis_summary',
     'name': tr('Analysis Summary'),
+    'multi_exposure_name': tr('Combined Analysis Summary'),
     'description': tr(
         'An <b>analysis summary</b> layer is the result from InaSAFE '
         'analysis. It contains only one geometry polygon. This geometry is '

@@ -157,7 +157,8 @@ def multi_exposure_analysis_summary(analysis, intermediate_analysis):
         analysis.keywords['inasafe_fields'][key] = value
 
     analysis.commitChanges()
-    analysis.keywords['title'] = layer_purpose_analysis_impacted['name']
+    analysis.keywords['title'] = (
+        layer_purpose_analysis_impacted['multi_exposure_name'])
     analysis.keywords['layer_purpose'] = layer_purpose_analysis_impacted['key']
 
     # Set up the extra keywords so everyone knows it's a
@@ -238,7 +239,8 @@ def multi_exposure_aggregation_summary(aggregation, intermediate_layers):
                     source_feature[source_field])
 
     aggregation.commitChanges()
-    aggregation.keywords['title'] = layer_purpose_aggregation_summary['name']
+    aggregation.keywords['title'] = (
+        layer_purpose_aggregation_summary['multi_exposure_name'])
     aggregation.keywords['layer_purpose'] = (
         layer_purpose_aggregation_summary['key'])
 
