@@ -1319,7 +1319,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             display_warning_message_bar(
                 tr('Reports'),
                 tr('Reports are not going to be generated because of your '
-                   'InaSAFE settings.'))
+                   'InaSAFE settings.'),
+                duration=10
+            )
 
         if self.impact_function.debug_mode:
             add_debug_layers_to_canvas(self.impact_function)
