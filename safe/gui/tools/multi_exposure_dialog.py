@@ -131,7 +131,10 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
             self.validate_impact_function)
         self.cbx_aggregation.currentIndexChanged.connect(
             self.validate_impact_function)
-        self.tab_widget.setCurrentIndex(0)
+
+        # Keep track of the current panel
+        self._current_index = 0
+        self.tab_widget.setCurrentIndex(self._current_index)
 
     def _tab_changed(self):
         """Triggered when the current tab is changed."""
@@ -140,7 +143,9 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
             self.btn_back.setEnabled(False)
             self.btn_next.setEnabled(True)
         elif current == self.reportingTab:
-            self._populate_reporting_tab()
+            if self._current_index == 0:
+                # Only if the user is coming from the first tab
+                self._populate_reporting_tab()
             self.reporting_options_layout.setEnabled(
                 self._multi_exposure_if is not None)
             self.btn_back.setEnabled(True)
@@ -148,6 +153,7 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
         else:
             self.btn_back.setEnabled(True)
             self.btn_next.setEnabled(False)
+        self._current_index = current
 
     def back_clicked(self):
         """Back button clicked."""
@@ -473,8 +479,6 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
             'useSelectedFeaturesOnly', expected_type=bool)
 
         for combo in self.combos_exposures.itervalues():
-            # if combo.count() > 1 and self.cbx_hazard.count():
-            #     self.button_box.button(QDialogButtonBox.Ok).setEnabled(True)
             if combo.count() == 1:
                 combo.setEnabled(False)
 
