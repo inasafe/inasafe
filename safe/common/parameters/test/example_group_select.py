@@ -4,19 +4,17 @@
 import sys
 from collections import OrderedDict
 
-from safe.test.utilities import get_qgis_app
+from safe.test.qgis_app import qgis_app
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-
-from PyQt4.QtGui import QApplication, QWidget, QGridLayout  # NOQA
+from PyQt4.QtGui import QWidget, QGridLayout
 
 from parameters.qt_widgets.parameter_container import (
-    ParameterContainer)  # NOQA
+    ParameterContainer)
 
 from safe.common.parameters.group_select_parameter import (
-    GroupSelectParameter)  # NOQA
+    GroupSelectParameter)
 from safe.common.parameters.group_select_parameter_widget import (
-    GroupSelectParameterWidget)  # NOQA
+    GroupSelectParameterWidget)
 from safe.definitions.constants import (
     DO_NOT_REPORT,
     CUSTOM_VALUE,
@@ -24,7 +22,8 @@ from safe.definitions.constants import (
     FIELDS,
     STATIC,
     SINGLE_DYNAMIC,
-    MULTIPLE_DYNAMIC)  # NOQA
+    MULTIPLE_DYNAMIC)
+
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -34,7 +33,7 @@ __revision__ = '$Format:%H$'
 
 def main():
     """Main function to run the example."""
-    app = QApplication([])
+    app, iface = qgis_app()
 
     options = OrderedDict([
         (DO_NOT_REPORT,
