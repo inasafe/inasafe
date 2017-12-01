@@ -23,7 +23,7 @@ from safe.definitions.hazard_classifications import (
     ash_hazard_classes,
     cyclone_au_bom_hazard_classes,
     cyclone_sshws_hazard_classes,
-    inundation_classes)
+    inundation_dam_class)
 from safe.definitions.layer_modes import (
     layer_mode_classified, layer_mode_continuous)
 from safe.definitions.units import (
@@ -240,9 +240,9 @@ hazard_dam_break = {
         'characterized by the sudden, rapid, and uncontrolled '
         'release of impounded water as a result of structural '
         'failures or deficiencies in the dam. '
-        '<b>DAM Break</b> can range from fairly minor to '
+        '<b>Dam Break</b> can range from fairly minor to '
         'catastrophic, and can possibly harm human life and property '
-        'downstream from the failure. '),
+        'downstream from the failure.'),
     'notes': [
         {
             'item_category': 'dam_break_general',
@@ -278,7 +278,7 @@ hazard_dam_break = {
         'raster'
     ],
     'classifications': [
-        inundation_classes,
+        inundation_dam_class,
         generic_hazard_classes],
     'compulsory_fields': [hazard_value_field],
     'fields': hazard_fields,

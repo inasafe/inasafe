@@ -657,14 +657,14 @@ flood_petabencana_hazard_classes = {
     'classification_unit': tr('hazard zone')
 }
 
-inundation_classes = {
-    'key': 'inundation_classes',
-    'name': tr('Inundation classes (Dam Failure)'),
+inundation_dam_class = {
+    'key': 'inundation_dam_class',
+    'name': tr('Inundation classes'),
     'description': tr(
-        'This is a binary classification for an area. The area is either '
-        '<b>wet</b> (affected by flood water) or <b>dry</b> (not affected '
-        'by flood water). This unit does not describe how <b>wet</b> or '
-        '<b>dry</b> an area is.'),
+        'This type of classification refers to the division of flood areas '
+        'based on the range of water levels. This area is divided into 3 '
+        'areas of inundation including <b>Inundation 1</b>, '
+        '<b>Inundation 2</b>, and <b>Inundation 3</b>.'),
     'type': hazard_classification_type,
     'citations': [
         {
@@ -680,7 +680,7 @@ inundation_classes = {
             'name': tr('Inundation Class 3'),
             'affected': True,
             'description': tr('Water is present above ground height.'),
-            'string_defaults': ['wet', '1', 'YES', 'y', 'yes', 'true'],
+            'string_defaults': ['Inundation 3'],
             'fatality_rate': None,
             'displacement_rate': 0.01,
             'numeric_default_min': 1.5,
@@ -699,7 +699,7 @@ inundation_classes = {
             'name': tr('Inundation Class 2'),
             'affected': False,
             'description': tr('No water encountered above ground height.'),
-            'string_defaults': ['dry', '0', 'No', 'n', 'no', 'false'],
+            'string_defaults': ['Inundation 2'],
             'fatality_rate': None,
             'displacement_rate': 0.0,
             'numeric_default_min': 0.6,
@@ -718,7 +718,7 @@ inundation_classes = {
             'name': tr('Inundation Class 1'),
             'affected': False,
             'description': tr('No water encountered above ground height.'),
-            'string_defaults': ['dry', '0', 'No', 'n', 'no', 'false'],
+            'string_defaults': ['Inundation 1'],
             'fatality_rate': None,
             'displacement_rate': 0.0,
             'numeric_default_min': 0,
@@ -1933,7 +1933,7 @@ hazard_classification = {
         generic_hazard_classes,
         flood_hazard_classes,
         flood_petabencana_hazard_classes,
-        inundation_classes,
+        inundation_dam_class,
         earthquake_mmi_scale,
         tsunami_hazard_classes,
         tsunami_hazard_population_classes,
