@@ -679,7 +679,7 @@ def get_provenance(provenance_collection, provenance_dict):
     return provenance_collection.get(provenance_dict['provenance_key'])
 
 
-# TODO(IS): Add parameter to get from setting, or just get it from setting
+# TODO(IS): Add parameter to filter the exposure
 def generate_default_profile():
     """Helper to create data format from default definitions.
     Example:

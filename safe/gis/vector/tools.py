@@ -179,6 +179,26 @@ def copy_layer(source, target):
 
 
 @profile
+def rename_fields(layer, fields_to_copy):
+    """Rename fields inside an attribute table.
+
+    Only since QGIS 2.16.
+
+    :param layer: The vector layer.
+    :type layer: QgsVectorLayer
+
+    :param fields_to_copy: Dictionary of fields to copy.
+    :type fields_to_copy: dict
+    """
+    for field in fields_to_copy:
+        index = layer.fieldNameIndex(field)
+        if index != -1:
+            layer.startEditing()
+            layer.renameAttribute(index, fields_to_copy[field])
+            layer.commitChanges()
+
+
+@profile
 def copy_fields(layer, fields_to_copy):
     """Copy fields inside an attribute table.
 
@@ -210,7 +230,6 @@ def copy_fields(layer, fields_to_copy):
                     feature.id(), new_index, source_value)
 
             layer.commitChanges()
-            layer.updateFields()
 
 
 @profile

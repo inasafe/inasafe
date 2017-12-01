@@ -9,6 +9,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.definitions.utilities import generate_default_profile
 from safe.gui.widgets.profile_widget import ProfileWidget
+from safe.definitions.hazard_classifications import tsunami_hazard_classes
 
 
 class TestProfileWidget(unittest.TestCase):
@@ -19,9 +20,10 @@ class TestProfileWidget(unittest.TestCase):
     def test_setup_profile_widget(self):
         """Test setup profile widget."""
         data = generate_default_profile()
-        profile_widget = ProfileWidget(parent=PARENT, data=data)
+        profile_widget = ProfileWidget(data=data)
 
-        self.assertDictEqual(data, profile_widget.data)
+        # There is filtering happens in the Widget, so we skip this check
+        # self.assertDictEqual(data, profile_widget.data)
 
         hazard_item = profile_widget.widget_items[0]
         hazard_key = hazard_item.data(0, Qt.UserRole)
@@ -42,6 +44,12 @@ class TestProfileWidget(unittest.TestCase):
         # Test behaviour
         affected_check_box.setChecked(False)
         self.assertFalse(displacement_spin_box.isEnabled())
+
+        data = profile_widget.data
+        # The widget filter out the classification that doesn't support
+        # population.
+        # TODO(IS): We should move this test to generate_default_profile
+        self.assertNotIn(tsunami_hazard_classes['key'], data)
 
 
 if __name__ == '__main__':

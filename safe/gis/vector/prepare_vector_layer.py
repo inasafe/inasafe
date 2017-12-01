@@ -41,6 +41,7 @@ from safe.gis.sanity_check import check_layer
 from safe.gis.vector.tools import (
     create_memory_layer,
     remove_fields,
+    rename_fields,
     copy_fields,
     copy_layer,
     create_field_from_definition
@@ -48,6 +49,7 @@ from safe.gis.vector.tools import (
 from safe.impact_function.postprocessors import run_single_post_processor
 from safe.processors import post_processor_size
 from safe.utilities.i18n import tr
+from safe.utilities.gis import qgis_version
 from safe.utilities.metadata import (
     active_thresholds_value_maps, active_classification, copy_layer_keywords)
 from safe.utilities.profiling import profile
@@ -462,8 +464,12 @@ def sum_fields(layer, output_field_key, input_fields):
     if len(input_fields) == 1:
         # Name is different, copy it
         if input_fields[0] != output_field_name:
-            copy_fields(layer, {
-                input_fields[0]: output_field_name})
+            to_rename = {input_fields[0]: output_field_name}
+            if qgis_version() >= 21600:
+                rename_fields(layer, to_rename)
+            else:
+                # We copy only, it will be deleted later
+                copy_fields(layer, to_rename)
         # Name is same, do nothing
         else:
             return

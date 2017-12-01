@@ -9,8 +9,7 @@ from PyQt4.QtGui import QWidget, QGridLayout, QPushButton
 from functools import partial
 from safe.definitions.utilities import generate_default_profile
 from safe.gui.widgets.profile_widget import ProfileWidget
-from safe.test.utilities import qgis_app
-
+from safe.test.qgis_app import qgis_app
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -36,8 +35,7 @@ def main():
     app, iface = qgis_app()
 
     default_profile = generate_default_profile()
-    profile_widget = ProfileWidget(
-        parent=iface.mainWindow(), data=default_profile)
+    profile_widget = ProfileWidget(data=default_profile)
 
     get_result_button = QPushButton('Get result...')
     get_result_button.clicked.connect(

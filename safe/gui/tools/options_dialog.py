@@ -43,6 +43,12 @@ from safe.utilities.settings import (
     setting,
     set_setting,
 )
+from safe.common.parameters.percentage_parameter_widget import (
+    PercentageParameterWidget)
+
+extra_parameter = [
+    (FloatParameter, PercentageParameterWidget)
+]
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -154,7 +160,7 @@ class OptionsDialog(QDialog, FORM_CLASS):
         self.preference_layout.addWidget(self.preference_label)
 
         # Profile preference widget
-        self.profile_widget = ProfileWidget(self)
+        self.profile_widget = ProfileWidget()
         self.preference_layout.addWidget(self.profile_widget)
 
         # Demographic tab
@@ -694,7 +700,9 @@ class OptionsDialog(QDialog, FORM_CLASS):
                 if parameter:
                     parameters.append(parameter)
             parameter_container = ParameterContainer(
-                parameters, description_text=field_group['description']
+                parameters,
+                description_text=field_group['description'],
+                extra_parameters=extra_parameter
             )
             parameter_container.setup_ui(must_scroll=False)
             group_box_inner_layout = QVBoxLayout()
@@ -716,7 +724,9 @@ class OptionsDialog(QDialog, FORM_CLASS):
                 'these variables.')
             parameter_container = ParameterContainer(
                 self.default_value_parameters,
-                description_text=description_text)
+                description_text=description_text,
+                extra_parameters=extra_parameter
+            )
             parameter_container.setup_ui(must_scroll=False)
             self.other_group_box = QGroupBox(tr('Non-group fields'))
             other_group_inner_layout = QVBoxLayout()

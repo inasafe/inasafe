@@ -58,5 +58,5 @@ post_processors = [
 ]
 
 pre_processors = [
-    pre_processors_nearby_places,
+    # pre_processors_nearby_places, Disabled for now until with have contours
 ]

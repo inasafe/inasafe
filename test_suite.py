@@ -33,7 +33,7 @@ __copyright__ = (
     'Copyright 2012, Australia Indonesia Facility for Disaster Reduction')
 
 
-def _run_tests(test_suite, package_name):
+def _run_tests(test_suite, package_name, with_coverage=False):
     """Core function to test a test suite."""
     count = test_suite.countTestCases()
     print '########'
@@ -43,23 +43,25 @@ def _run_tests(test_suite, package_name):
     print 'QT : %s' % Qt.QT_VERSION
     print 'Run slow tests : %s' % (not os.environ.get('ON_TRAVIS', False))
     print '########'
-    cov = coverage.Coverage(
-        source=['safe/'],
-        omit=['*/test/*', 'safe/definitions/*'],
-    )
-    cov.start()
+    if with_coverage:
+        cov = coverage.Coverage(
+            source=['safe/'],
+            omit=['*/test/*', 'safe/definitions/*'],
+        )
+        cov.start()
+
     unittest.TextTestRunner(verbosity=3, stream=sys.stdout).run(test_suite)
-    cov.stop()
-    cov.save()
-    report = tempfile.NamedTemporaryFile(delete=False)
-    cov.report(file=report)
 
-    # Produce HTML reports in the `htmlcov` folder and open index.html
-    # cov.html_report()
-
-    report.close()
-    with open(report.name, 'r') as fin:
-        print fin.read()
+    if with_coverage:
+        cov.stop()
+        cov.save()
+        report = tempfile.NamedTemporaryFile(delete=False)
+        cov.report(file=report)
+        # Produce HTML reports in the `htmlcov` folder and open index.html
+        # cov.html_report()
+        report.close()
+        with open(report.name, 'r') as fin:
+            print fin.read()
 
 
 def test_package(package='safe'):

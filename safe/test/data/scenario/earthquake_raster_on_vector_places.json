@@ -7,7 +7,7 @@
   },
 
   "expected_outputs":{
-    "count": 6
+    "count": 5
   },
   "expected_steps":{
     "impact function":{
@@ -25,7 +25,6 @@
     "pre_processor": {
       "info": {},
       "process": [
-        "Nearby Places Pre Processor"
       ]
     },
     "post_processor":{
