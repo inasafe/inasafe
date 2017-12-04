@@ -196,6 +196,12 @@ def rename_fields(layer, fields_to_copy):
             layer.startEditing()
             layer.renameAttribute(index, fields_to_copy[field])
             layer.commitChanges()
+            LOGGER.info(
+                'Renaming field %s to %s' % (field, fields_to_copy[field]))
+        else:
+            LOGGER.info(
+                'Field %s not present in the layer while trying to renaming '
+                'it to %s' % (field, fields_to_copy[field]))
 
 
 @profile
