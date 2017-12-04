@@ -771,6 +771,7 @@ class TestKeywordWizard(unittest.TestCase):
             u'commercial': [u'Commercial', u'Industrial'],
             u'recreation': [],
             u'public facility': [],
+            u'evacuation centre': [],
             u'other': []
         }
         dialog.step_kw_classify.populate_classified_values(

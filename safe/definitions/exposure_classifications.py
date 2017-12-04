@@ -275,6 +275,29 @@ generic_structure_classes = {
             ]
         },
         {
+            # IF YOU UPDATE THIS ONE, PLEASE UPDATE THE OTHER ONE TOO
+            'key': 'evacuation centre',
+            'name': tr('Evacuation Centre'),
+            'description': tr(
+                'Evacuation centres provide a place of temporary refuge for '
+                'people evacuated from homes in the vicinity of a disaster '
+                'and for people who may be travelling through the affected '
+                'area but are unable to continue.'),
+            'string_defaults': [
+                'evacuation centre',
+                'evacuation center',
+                'refuge',
+                'idp camp'
+            ],
+            'osm_downloader': [],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
             'key': 'other',
             'name': tr('Other'),
             'description': tr(
@@ -523,6 +546,29 @@ generic_place_classes = {
                 'A smaller rural community typically with fewer than 100-200 '
                 'inhabitants and minimal infrastructure.'),
             'string_defaults': ['hamlet'],
+            'osm_downloader': [],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
+            # IF YOU UPDATE THIS ONE, PLEASE UPDATE THE OTHER ONE TOO
+            'key': 'evacuation centre',
+            'name': tr('Evacuation Centre'),
+            'description': tr(
+                'Evacuation centres provide a place of temporary refuge for '
+                'people evacuated from homes in the vicinity of a disaster '
+                'and for people who may be travelling through the affected '
+                'area but are unable to continue.'),
+            'string_defaults': [
+                'evacuation centre',
+                'evacuation center',
+                'refuge',
+                'idp camp'
+            ],
             'osm_downloader': [],
             'citations': [
                 {

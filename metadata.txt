@@ -31,6 +31,7 @@ changelog=
     - Add extra keywords for supporting rich reporting (e.g. earthquake's epicenter location, depth)
     - Use aggregation CRS instead of exposure CRS or map canvas CRS if no aggregation layer is provided
     - Add total exposed field
+    - Add Evacuation centres in buildings and places classifications
     - Add bearing, distance and cardinality postprocessors if we run an earthquake on places
     - The impact layer from an earthquake on places is ordered by distance
     - Add new QGIS expressions to fetch information in QGIS Impact layers or keywords
