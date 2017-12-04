@@ -27,6 +27,7 @@ status=alpha
 
 changelog=
     Version 4.3:
+    - New Dam break hazard
     - Add extra keywords for supporting rich reporting (e.g. earthquake's epicenter location, depth)
     - Use aggregation CRS instead of exposure CRS or map canvas CRS if no aggregation layer is provided
     - Add total exposed field
