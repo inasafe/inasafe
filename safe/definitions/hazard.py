@@ -22,7 +22,8 @@ from safe.definitions.hazard_classifications import (
     tsunami_hazard_population_classes_ITB,
     ash_hazard_classes,
     cyclone_au_bom_hazard_classes,
-    cyclone_sshws_hazard_classes)
+    cyclone_sshws_hazard_classes,
+    inundation_dam_class)
 from safe.definitions.layer_modes import (
     layer_mode_classified, layer_mode_continuous)
 from safe.definitions.units import (
@@ -231,7 +232,61 @@ hazard_flood = {
     'layer_modes': [layer_mode_classified, layer_mode_continuous],
     'disabled_exposures': [exposure_place]
 }
+hazard_dam_break = {
+    'key': 'dam_break',
+    'name': tr('Dam Break'),
+    'description': tr(
+        'A <b>Dam Break</b> is a catastrophic type of failure '
+        'characterized by the sudden, rapid, and uncontrolled '
+        'release of impounded water as a result of structural '
+        'failures or deficiencies in the dam. '
+        '<b>Dam Break</b> can range from fairly minor to '
+        'catastrophic, and can possibly harm human life and property '
+        'downstream from the failure.'),
+    'notes': [
+        {
+            'item_category': 'dam_break_general',
+            'item_header': tr('dam break general notes'),
+            'item_list': [
+                # additional generic notes for flood
+                caveat_simulation,
+                caveat_local_conditions,
+                caveat_analysis_extent,
+            ]
+        }
+    ],
+    'continuous_notes': [  # notes specific to continuous data
+    ],
+    'classified_notes': [  # notes specific to classified data
+    ],
+    'single_event_notes': [  # notes specific to single event data
+    ],
+    'multi_event_notes': [  # notes specific to multi event data
+    ],
+    'actions': [  # these are additional generic actions
 
+    ],
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    'continuous_hazard_units': [unit_feet, unit_metres, unit_generic],
+    'allowed_geometries': [
+        'polygon',
+        'raster'
+    ],
+    'classifications': [
+        inundation_dam_class,
+        generic_hazard_classes],
+    'compulsory_fields': [hazard_value_field],
+    'fields': hazard_fields,
+    'extra_fields': [],
+    'field_groups': [],
+    'layer_modes': [layer_mode_classified, layer_mode_continuous],
+    'disabled_exposures': [exposure_place]
+}
 hazard_cyclone = {
     'key': 'cyclone',
     'name': tr('Cyclone'),
@@ -479,7 +534,8 @@ hazard_all = [
     hazard_volcano,
     hazard_volcanic_ash,
     hazard_cyclone,
-    hazard_generic
+    hazard_generic,
+    hazard_dam_break
 ]
 hazards = {
     'key': 'hazards',
