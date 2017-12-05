@@ -122,7 +122,7 @@ def content():
     paragraph = m.Paragraph(
         m.Image(
             'file:///%s/img/screenshots/'
-            'inasafe-options-pop-parameters-screenshot.png' % resources_path()),
+            'inasafe-options-population-screenshot.png' % resources_path()),
         style_class='text-center'
     )
     message.add(paragraph)
