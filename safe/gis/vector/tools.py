@@ -236,6 +236,7 @@ def copy_fields(layer, fields_to_copy):
                     feature.id(), new_index, source_value)
 
             layer.commitChanges()
+            layer.updateFields()  # Avoid crash #4729
 
 
 @profile
