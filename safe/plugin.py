@@ -49,6 +49,7 @@ from safe.definitions.layer_purposes import (
 )
 from safe.definitions.utilities import get_field_groups
 from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.utilities import is_keyword_version_supported
 from safe.utilities.settings import setting, set_setting
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -992,24 +993,29 @@ class Plugin(object):
                     enable_field_mapping_tool = False
                 else:
                     keywords = KeywordIO().read_keywords(layer)
-                    layer_purpose = keywords.get('layer_purpose')
-
-                    if not layer_purpose:
+                    supported = is_keyword_version_supported(
+                        keywords.get('keyword_version'))
+                    if not supported:
                         enable_field_mapping_tool = False
                     else:
-                        if layer_purpose == layer_purpose_exposure['key']:
-                            layer_subcategory = keywords.get('exposure')
-                        elif layer_purpose == layer_purpose_hazard['key']:
-                            layer_subcategory = keywords.get('hazard')
-                        else:
-                            layer_subcategory = None
-                        field_groups = get_field_groups(
-                            layer_purpose, layer_subcategory)
-                        if len(field_groups) == 0:
-                            # No field group, disable field mapping tool.
+                        layer_purpose = keywords.get('layer_purpose')
+
+                        if not layer_purpose:
                             enable_field_mapping_tool = False
                         else:
-                            enable_field_mapping_tool = True
+                            if layer_purpose == layer_purpose_exposure['key']:
+                                layer_subcategory = keywords.get('exposure')
+                            elif layer_purpose == layer_purpose_hazard['key']:
+                                layer_subcategory = keywords.get('hazard')
+                            else:
+                                layer_subcategory = None
+                            field_groups = get_field_groups(
+                                layer_purpose, layer_subcategory)
+                            if len(field_groups) == 0:
+                                # No field group, disable field mapping tool.
+                                enable_field_mapping_tool = False
+                            else:
+                                enable_field_mapping_tool = True
             else:
                 enable_field_mapping_tool = False
         except (KeywordNotFoundError, NoKeywordsFoundError, MetadataReadError):
