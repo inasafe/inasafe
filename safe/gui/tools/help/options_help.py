@@ -116,23 +116,23 @@ def content():
            'generated impact layer.')))
     message.add(bullets)
 
-    header = m.Heading(tr('Parameters tab'), **INFO_STYLE)
+    header = m.Heading(tr('Population Parameters tab'), **INFO_STYLE)
     message.add(header)
 
     paragraph = m.Paragraph(
         m.Image(
             'file:///%s/img/screenshots/'
-            'inasafe-options-parameters-screenshot.png' % resources_path()),
+            'inasafe-options-population-screenshot.png' % resources_path()),
         style_class='text-center'
     )
     message.add(paragraph)
 
     message.add(m.Paragraph(tr(
         'In this tab you can define some parameters that will be used by '
-        'InaSAFE in the analysis of exposed features. You have the option '
-        'to change the parameters for whether exposed features are considered '
-        'to be affected by each hazard type and class, and the displacement '
-        'rate that will be used for affected people.'
+        'InaSAFE in the analysis of exposed populations. You have the option '
+        'to change the parameters for whether the exposed population is '
+        'considered to be affected by each hazard type and class, and the '
+        'displacement rate that will be used for affected people.'
     )))
 
     bullets = m.BulletedList()
@@ -140,8 +140,8 @@ def content():
         m.ImportantText(tr(
             'Affected')),
         tr(
-            ' - When this option is checked, features exposed to the hazard '
-            'class will be included in the count of affected features.')))
+            ' - When this option is checked, people exposed to the hazard '
+            'class will be included in the count of affected people.')))
 
     bullets.add(m.Text(
         m.ImportantText(tr(
