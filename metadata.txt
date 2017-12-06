@@ -26,6 +26,8 @@ status=final
 # Optional items:
 
 changelog=
+    Version 4.2.6:
+    - Fix key error #4738
     Version 4.2.5:
     - Fix bug Exception reading keywords #4632
     - Fix bug ratio = 0 when the data is integer #4669
