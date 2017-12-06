@@ -484,7 +484,8 @@ def get_field_groups(layer_purpose, layer_subcategory=None):
             layer_purpose_exposure['key'], layer_purpose_hazard['key']]:
         if layer_subcategory:
             subcategory = definition(layer_subcategory)
-            field_groups += deepcopy(subcategory['field_groups'])
+            if 'field_groups' in subcategory:
+                field_groups += deepcopy(subcategory['field_groups'])
     return field_groups
 
 
