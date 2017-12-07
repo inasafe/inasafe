@@ -176,6 +176,13 @@ class InvalidClipGeometryError(InaSAFEError):
     pass
 
 
+class SpatialIndexCreationError(InaSAFEError):
+
+    """Custom exception for when a spatial index failed to be created."""
+
+    pass
+
+
 class FileNotFoundError(InaSAFEError):
 
     """Custom exception for when a file could not be found."""

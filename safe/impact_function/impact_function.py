@@ -35,6 +35,7 @@ from safe.common.exceptions import (
     WrongEarthquakeFunction,
     NoFeaturesInExtentError,
     ProcessingInstallationError,
+    SpatialIndexCreationError,
 )
 from safe.common.utilities import temp_dir
 from safe.common.version import get_version
@@ -1473,6 +1474,18 @@ class ImpactFunction(object):
             message.add(warning_message)
             message.add(suggestion_heading)
             message.add(suggestion)
+            return ANALYSIS_FAILED_BAD_INPUT, message
+
+        except SpatialIndexCreationError:
+            warning_heading = m.Heading(
+                tr('Layer geometry issue'), **WARNING_STYLE)
+            warning_message = tr(
+                'There is a problem while creating the spatial index. '
+                'Unfortunately, there is nothing you can do. Maybe try '
+                'another area or another aggregation layer.')
+            message = m.Message()
+            message.add(warning_heading)
+            message.add(warning_message)
             return ANALYSIS_FAILED_BAD_INPUT, message
 
         except ProcessingInstallationError:
