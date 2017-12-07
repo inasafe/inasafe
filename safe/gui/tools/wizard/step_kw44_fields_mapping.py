@@ -128,6 +128,9 @@ class StepKwFieldsMapping(WizardStep, FORM_CLASS):
         for k, v in field_mapping['values'].items():
             if not v:
                 field_mapping['values'].pop(k)
+        for k, v in field_mapping['fields'].items():
+            if not v:
+                field_mapping['fields'].pop(k)
         return field_mapping
 
     def clear(self):
