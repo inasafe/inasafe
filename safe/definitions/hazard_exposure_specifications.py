@@ -45,13 +45,19 @@ ITEMS = (
                 'item_list': [
                     tr('Map shows the estimated displaced population. '
                        'People are displaced if they experience and survive '
-                       'a shake level of more than 5 on the MMI scale.'),
+                       'a shake level of more than V on the MMI scale.'),
                     tr('Exposed population varies by the time (day or night, '
                        'weekends, holidays etc.). Such variations are not '
                        'considered in the estimates in the InaSAFE.'),
+                    # notes updated to match fatality reporting as ranges
                     tr('The fatality calculation assumes that no fatalities '
-                       'occur for shake levels below 4 and fatality counts '
-                       'of less than 50 are rounded down.'),
+                       'occur for shake levels of less than or equal to V on '
+                       'the MMI scale.'),
+                    tr('Estimated fatality counts are reported as ranges. The '
+                       'following ranges are used: 0 - 100, 100 - 1,000, '
+                       '1,000 - 10,000, 10,000 - 100,000.'),
+                    tr('Estimated fatality counts of less than 50 are rounded '
+                       'down.'),
                     # notes provided by Hadi Ghasemi
                     tr('Earthquake fatalities are due to a number of factors, '
                        'such as destructive level of ground shaking, tsunami, '
