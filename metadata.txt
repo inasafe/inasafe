@@ -29,6 +29,8 @@ changelog=
     Version 4.2.6:
     - Fix key error #4738
     - Fix storing empty fields in Field Mapping from Keyword Wizard #4739
+    - Fix formula for productivity #4566
+    - Fix Metadata converter's window off the screen #4732
     Version 4.2.5:
     - Fix bug Exception reading keywords #4632
     - Fix bug ratio = 0 when the data is integer #4669
