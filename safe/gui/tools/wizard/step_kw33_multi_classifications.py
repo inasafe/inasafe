@@ -103,6 +103,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
 
         # GUI, good for testing
         self.save_button = None
+        self.restore_default_button = None
 
         # Has default threshold
         # Trick for EQ raster for population #3853
@@ -564,8 +565,10 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             selected_subcategory()
 
         if is_raster_layer(self.parent.layer):
+            active_band = self.parent.step_kw_band_selector.selected_band()
+            layer_extent = self.parent.layer.extent()
             statistics = self.parent.layer.dataProvider().bandStatistics(
-                1, QgsRasterBandStats.All, self.parent.layer.extent(), 0)
+                active_band, QgsRasterBandStats.All, layer_extent, 0)
             description_text = continuous_raster_question % (
                 layer_purpose['name'],
                 layer_subcategory['name'],
@@ -743,27 +746,34 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         :param classification: The current classification.
         :type classification: dict
         """
-        # Note(IS): Until we have good behaviour, we will disable load
-        # default and cancel button.
-        # Add 3 buttons: Load default, Cancel, Save
-        # load_default_button = QPushButton(tr('Load Default'))
-        # cancel_button = QPushButton(tr('Cancel'))
-        self.save_button = QPushButton(tr('Save'))
+        # Note(IS): Until we have good behaviour, we will disable cancel
+        # button.
+        # Add 3 buttons: Restore default, Cancel, Save
 
-        # Action for buttons
+        # Restore default button, only for continuous layer (with threshold)
+        if self.layer_mode == layer_mode_continuous['key']:
+            self.restore_default_button = QPushButton(tr('Restore Default'))
+            self.restore_default_button.clicked.connect(partial(
+                self.restore_default_button_clicked,
+                classification=classification))
+
+        # Cancel button
+        # cancel_button = QPushButton(tr('Cancel'))
         # cancel_button.clicked.connect(self.cancel_button_clicked)
+
+        # Save button
+        self.save_button = QPushButton(tr('Save'))
         self.save_button.clicked.connect(
             partial(self.save_button_clicked, classification=classification))
 
         button_layout = QHBoxLayout()
-        # button_layout.addWidget(load_default_button)
         button_layout.addStretch(1)
-        # button_layout.addWidget(cancel_button)
+        button_layout.addWidget(self.restore_default_button)
         button_layout.addWidget(self.save_button)
 
         button_layout.setStretch(0, 3)
         button_layout.setStretch(1, 1)
-        # button_layout.setStretch(2, 1)
+        button_layout.setStretch(2, 1)
         # button_layout.setStretch(3, 1)
 
         self.right_layout.addLayout(button_layout)
@@ -1068,6 +1078,26 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
                 classification['key']] = classification_class
         # Back to choose mode
         self.cancel_button_clicked()
+
+    def restore_default_button_clicked(self, classification):
+        """Action for restore default button clicked.
+
+        It will set the threshold with default value.
+
+        :param classification: The classification that being edited.
+        :type classification: dict
+        """
+        # Obtain default value
+        class_dict = {}
+        for the_class in classification.get('classes'):
+            class_dict[the_class['key']] = {
+                'numeric_default_min': the_class['numeric_default_min'],
+                'numeric_default_max': the_class['numeric_default_max'],
+            }
+        # Set for all threshold
+        for key, value in self.threshold_classes.items():
+            value[0].setValue(class_dict[key]['numeric_default_min'])
+            value[1].setValue(class_dict[key]['numeric_default_max'])
 
     def get_threshold(self):
         """Return threshold based on current state."""
