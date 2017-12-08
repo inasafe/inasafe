@@ -29,6 +29,7 @@ from safe.common.utilities import temp_dir
 from safe.common.exceptions import (
     CanceledImportDialogError,
     FileMissingError)
+from safe.definitions.osm_downloader import STAGING_SERVER, PRODUCTION_SERVER
 from safe.utilities.osm_downloader import download
 from safe.utilities.gis import (
     viewport_geo_array,
@@ -100,6 +101,11 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         expression = QRegExp('^[A-Za-z0-9-_]*$')
         validator = QRegExpValidator(expression, self.filename_prefix)
         self.filename_prefix.setValidator(validator)
+
+        # Advanced panel
+        self.line_edit_custom.setPlaceholderText(STAGING_SERVER)
+        developer_mode = setting('developer_mode', expected_type=bool)
+        self.group_box_advanced.setVisible(developer_mode)
 
         self.restore_state()
 
@@ -350,6 +356,14 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
             self.bounding_box_group.setEnabled(True)
             return
 
+        if self.radio_custom.isChecked():
+            server_url = self.line_edit_custom.text()
+            if not server_url:
+                # It's the place holder.
+                server_url = STAGING_SERVER
+        else:
+            server_url = PRODUCTION_SERVER
+
         try:
             self.save_state()
             self.require_directory()
@@ -368,7 +382,9 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
                     feature_type,
                     output_base_file_path,
                     extent,
-                    self.progress_dialog)
+                    self.progress_dialog,
+                    server_url
+                )
 
                 try:
                     self.load_shapefile(feature_type, output_base_file_path)
