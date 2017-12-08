@@ -3,7 +3,7 @@
 import logging
 import os
 
-from PyQt4.QtCore import Qt, QFile, pyqtSignal
+from PyQt4.QtCore import Qt, QFile, pyqtSignal, QT_VERSION
 from PyQt4.QtGui import (
     QDialog, QDialogButtonBox, QFileDialog)
 from safe.common.exceptions import (
@@ -129,16 +129,15 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
         self.cancel_button = self.button_box.button(QDialogButtonBox.Cancel)
         self.cancel_button.clicked.connect(self.reject)
 
-        self.resized.connect(self.after_resize)
+        # The bug is fixed in QT 5.4
+        if QT_VERSION < 0x050400:
+            self.resized.connect(self.after_resize)
 
-    def set_layer(self, layer=None, keywords=None):
+    def set_layer(self, layer=None):
         """Set layer and update UI accordingly.
 
         :param layer: A QgsVectorLayer.
         :type layer: QgsVectorLayer
-
-        :param keywords: Keywords for the layer.
-        :type keywords: dict, None
         """
         if layer:
             self.layer = layer
@@ -335,10 +334,7 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
 
     def after_resize(self):
         """Method after resizing the window."""
-        # TODO(IS) this is a QT bug :
         # https://stackoverflow.com/q/25644026/1198772
         # It's fixed in QT 5.4 https://bugreports.qt.io/browse/QTBUG-37673
-        # If you port it to QGIS 3 (which use QT 5.9, please remove this
-        # hack-fix)
         max_height = self.height() - 275  # Magic number, to make it pretty
         self.metadata_preview_web_view.setMaximumHeight(max_height)
