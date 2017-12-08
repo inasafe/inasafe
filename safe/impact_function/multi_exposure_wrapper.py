@@ -880,7 +880,11 @@ class MultiExposureImpactFunction(object):
         """
         self._start_datetime = datetime.now()
         if not self._is_ready:
-            message = tr('You need to run `prepare` first.')
+            message = generate_input_error_message(
+                tr('You need to run `prepare` first.'),
+                m.Paragraph(tr(
+                    'In order to run the analysis, you need to call '
+                    '"prepapre" before this function.')))
             return ANALYSIS_FAILED_BAD_INPUT, message
 
         self._unique_name = self._name.replace(' ', '')

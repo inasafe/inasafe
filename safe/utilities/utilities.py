@@ -19,8 +19,6 @@ from qgis.core import QgsApplication
 from safe import messaging as m
 from safe.common.exceptions import NoKeywordsFoundError, MetadataReadError
 from safe.common.utilities import unique_filename
-from safe.common.version import get_version
-from safe.definitions.messages import disclaimer
 from safe.definitions.versions import (
     inasafe_keyword_version,
     keyword_version_compatibilities)
@@ -38,6 +36,29 @@ __revision__ = '$Format:%H$'
 INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
 
 LOGGER = logging.getLogger('InaSAFE')
+
+
+def basestring_to_message(text):
+    """Convert a basestring to a Message object if needed.
+
+    Avoid using this function, better to create the Message object yourself.
+    This one is very generic.
+
+    This function exists ust in case we get a basestring and we really need a
+    Message object.
+
+    :param text: The text.
+    :type text: basestring, Message
+
+    :return: The message object.
+    :rtype: message
+    """
+    if isinstance(text, Message):
+        return text
+    else:
+        report = m.Message()
+        report.add(text)
+        return report
 
 
 def get_error_message(exception, context=None, suggestion=None):
