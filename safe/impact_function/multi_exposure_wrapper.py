@@ -87,7 +87,6 @@ from safe.definitions.utilities import (
     get_name,
     get_provenance,
     set_provenance,
-    update_template_component,
 )
 from safe.gis.tools import (
     geometry_type, load_layer_from_registry, full_layer_uri)

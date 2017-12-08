@@ -2847,8 +2847,6 @@ class ImpactFunction(object):
         extra_layers = []
         print_atlas = setting('print_atlas_report', False, bool)
 
-        hazard_type = definition(
-            self.provenance['hazard_keywords']['hazard'])
         aggregation_summary_layer = self.aggregation_summary
 
         if print_atlas:

@@ -132,7 +132,7 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
                             QgisComposerComponentsMetadata.OutputFormat.QPT):
                         continue
                     if hazard_type['key'] in file_name and (
-                                exposure_type['key'] in file_name):
+                            exposure_type['key'] in file_name):
                         override_template_found = filename
 
         if override_template_found:
@@ -141,9 +141,9 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
                 string_format.format(template_path=override_template_found))
 
         # additional buttons
-        self.button_print_pdf = QtGui.QPushButton(self.tr('Open as PDF'))
+        self.button_print_pdf = QtGui.QPushButton(tr('Open as PDF'))
         self.button_print_pdf.setObjectName('button_print_pdf')
-        self.button_print_pdf.setToolTip(self.tr(
+        self.button_print_pdf.setToolTip(tr(
             'Write report to PDF and open it in default viewer'))
         self.button_box.addButton(
             self.button_print_pdf, QtGui.QDialogButtonBox.ActionRole)
@@ -153,7 +153,8 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
         self.button_open_composer.clicked.connect(self.accept)
 
         self.no_map_radio.toggled.connect(self.toggle_template_selector)
-        self.no_map_radio.toggled.connect(self.toggle_no_map_radio)
+        self.no_map_radio.toggled.connect(
+            self.button_open_composer.setDisabled)
         self.default_template_radio.toggled.connect(
             self.toggle_template_selector)
         self.override_template_radio.toggled.connect(
@@ -430,8 +431,8 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
                 # noinspection PyCallByClass,PyTypeChecker
                 QtGui.QMessageBox.warning(
                     self,
-                    self.tr('InaSAFE'),
-                    self.tr('Error loading template: %s') % template_path)
+                    tr('InaSAFE'),
+                    tr('Error loading template: %s') % template_path)
 
                 return
 
@@ -439,7 +440,7 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
         """Prepare components that are going to be generated based on
         user options.
 
-        :return: Updated list of components
+        :return: Updated list of components.
         :rtype: dict
         """
         # Register the components based on user option
@@ -495,8 +496,8 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
                 # noinspection PyCallByClass,PyTypeChecker
                 QtGui.QMessageBox.warning(
                     self,
-                    self.tr('InaSAFE'),
-                    self.tr(
+                    tr('InaSAFE'),
+                    tr(
                         'Please select a valid template before printing. '
                         'The template you choose does not exist.'))
 
@@ -564,19 +565,23 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
         QtGui.QDialog.accept(self)
 
     def template_chooser_clicked(self):
-        """Auto-connect slot activated when report file tool button is clicked.
+        """Slot activated when report file tool button is clicked.
 
         .. versionadded: 4.3.0
         """
         # noinspection PyCallByClass,PyTypeChecker
         file_name = QtGui.QFileDialog.getOpenFileName(
             self,
-            self.tr('Select report'),
+            tr('Select report'),
             '',
-            self.tr('QGIS composer templates (*.qpt *.QPT)'))
+            tr('QGIS composer templates (*.qpt *.QPT)'))
         self.template_path.setText(file_name)
 
     def toggle_template_selector(self):
+        """Slot for template selector elements behaviour.
+
+        .. versionadded: 4.3.0
+        """
         if self.search_directory_radio.isChecked():
             self.template_combo.setEnabled(True)
         else:
@@ -589,12 +594,6 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
             self.template_path.setEnabled(False)
             self.template_chooser.setEnabled(False)
 
-    def toggle_no_map_radio(self, checked):
-        if checked:
-            self.button_open_composer.setEnabled(False)
-        else:
-            self.button_open_composer.setEnabled(True)
-
     def help_toggled(self, flag):
         """Show or hide the help tab in the stacked widget.
 
@@ -604,10 +603,10 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
         .. versionadded: 4.3.0
         """
         if flag:
-            self.help_button.setText(self.tr('Hide Help'))
+            self.help_button.setText(tr('Hide Help'))
             self.show_help()
         else:
-            self.help_button.setText(self.tr('Show Help'))
+            self.help_button.setText(tr('Show Help'))
             self.hide_help()
 
     def hide_help(self):
