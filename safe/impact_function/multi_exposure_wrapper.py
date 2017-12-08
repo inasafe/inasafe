@@ -1135,7 +1135,7 @@ class MultiExposureImpactFunction(object):
         for component in generated_components:
 
             report_metadata = ReportMetadata(
-                metadata_dict=update_template_component(component))
+                metadata_dict=component)
 
             self._impact_report = ImpactReport(
                 iface,

@@ -2862,10 +2862,7 @@ class ImpactFunction(object):
 
             if component['key'] == map_report['key']:
                 report_metadata = ReportMetadata(
-                    metadata_dict=update_template_component(
-                        component=component,
-                        hazard=hazard_type,
-                        exposure=exposure_type))
+                    metadata_dict=component)
             else:
                 report_metadata = ReportMetadata(
                     metadata_dict=update_template_component(component))
