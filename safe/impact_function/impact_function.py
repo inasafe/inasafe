@@ -1004,7 +1004,6 @@ class ImpactFunction(object):
                 return PREPARE_FAILED_BAD_INPUT, message
 
             status, message = check_input_layer(self.exposure, 'exposure')
-
             if status != PREPARE_SUCCESS:
                 return status, message
 
@@ -1018,7 +1017,6 @@ class ImpactFunction(object):
                 return PREPARE_FAILED_BAD_INPUT, message
 
             status, message = check_input_layer(self.hazard, 'hazard')
-
             if status != PREPARE_SUCCESS:
                 return status, message
 
@@ -1055,7 +1053,6 @@ class ImpactFunction(object):
                 aggregation_source = full_layer_uri(self.aggregation)
                 aggregation_keywords = copy_layer_keywords(
                     self.aggregation.keywords)
-
                 if status != PREPARE_SUCCESS:
                     return status, message
             else:
@@ -1421,7 +1418,11 @@ class ImpactFunction(object):
         """
         self._start_datetime = datetime.now()
         if not self._is_ready:
-            message = tr('You need to run `prepare` first.')
+            message = generate_input_error_message(
+                tr('You need to run `prepare` first.'),
+                m.Paragraph(tr(
+                    'In order to run the analysis, you need to call '
+                    '"prepapre" before this function.')))
             return ANALYSIS_FAILED_BAD_INPUT, message
 
         try:

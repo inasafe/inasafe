@@ -107,6 +107,7 @@ from safe.utilities.resources import get_ui_class
 from safe.utilities.settings import setting, set_setting
 from safe.utilities.utilities import (
     get_error_message,
+    basestring_to_message,
     is_keyword_version_supported,
 )
 from safe.utilities.utilities import is_plugin_installed
@@ -1263,6 +1264,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.impact_function.debug_mode = self.debug_mode.isChecked()
         try:
             status, message = self.impact_function.run()
+            message = basestring_to_message(message)
         except:
             # We have an exception only if we are in debug mode.
             # We want to display the datastore and then

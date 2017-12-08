@@ -37,6 +37,7 @@ from safe.utilities.gis import wkt_to_rectangle
 from safe.utilities.i18n import tr
 from safe.utilities.qt import enable_busy_cursor, disable_busy_cursor
 from safe.utilities.settings import setting
+from safe.utilities.utilities import basestring_to_message
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -133,6 +134,7 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
 
         # Prepare impact function
         status, message = self.impact_function.prepare()
+        message = basestring_to_message(message)
         # Check status
         if status == PREPARE_FAILED_BAD_INPUT:
             self.hide_busy()
@@ -153,6 +155,7 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
 
         # Start the analysis
         status, message = self.impact_function.run()
+        message = basestring_to_message(message)
         # Check status
         if status == ANALYSIS_FAILED_BAD_INPUT:
             self.hide_busy()
@@ -190,7 +193,7 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         html_components = [standard_impact_report_metadata_html]
         error_code, message = self.impact_function.generate_report(
             html_components)
-
+        message = basestring_to_message(message)
         if error_code == ImpactReport.REPORT_GENERATION_FAILED:
             self.hide_busy()
             LOGGER.info(tr(
