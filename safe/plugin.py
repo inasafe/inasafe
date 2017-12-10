@@ -789,6 +789,9 @@ class Plugin(object):
             self.dock_widget.read_settings()
             from safe.gui.widgets.message import getting_started_message
             send_static_message(self.dock_widget, getting_started_message())
+            # Issue #4734, make sure to update the combobox after update the
+            # InaSAFE option
+            self.dock_widget.get_layers()
 
     def show_welcome_message(self):
         """Show the welcome message."""
