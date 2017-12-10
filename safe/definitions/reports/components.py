@@ -673,57 +673,63 @@ standard_impact_report_metadata_html = {
     ]
 }
 
+# Impact Report PDF
+impact_report_pdf_component = {
+    'key': 'impact-report-pdf',
+    'type': qgis_composer_component_type,
+    'processor': qgis_composer_html_renderer,
+    'extractor': impact_table_pdf_extractor,
+    'output_format': QgisComposerComponentsMetadata.OutputFormat.PDF,
+    'output_path': 'impact-report-output.pdf',
+    'tags': [
+        final_product_tag,
+        table_product_tag,
+        pdf_product_tag
+    ],
+    'extra_args': {
+        'html_report_component_key': 'impact-report'
+    }
+}
+
+# Action Checklist Report PDF
+action_checklist_pdf_component = {
+    'key': 'action-checklist-pdf',
+    'type': qgis_composer_component_type,
+    'processor': qgis_composer_html_renderer,
+    'extractor': action_checklist_report_pdf_extractor,
+    'output_format': QgisComposerComponentsMetadata.OutputFormat.PDF,
+    'output_path': 'action-checklist-output.pdf',
+    'tags': [
+        final_product_tag,
+        table_product_tag,
+        pdf_product_tag
+    ]
+}
+
+# Analysis Provenance Details Report PDF
+analysis_provenance_details_pdf_component = {
+    'key': 'analysis-provenance-details-report-pdf',
+    'type': qgis_composer_component_type,
+    'processor': qgis_composer_html_renderer,
+    'extractor': analysis_provenance_details_pdf_extractor,
+    'output_format': QgisComposerComponentsMetadata.OutputFormat.PDF,
+    'output_path': 'analysis-provenance-details-report-output.pdf',
+    'tags': [
+        final_product_tag,
+        table_product_tag,
+        pdf_product_tag
+    ]
+}
+
 # Standard PDF Output for impact report
 standard_impact_report_metadata_pdf = {
     'key': 'analysis-result-pdf',
     'name': 'analysis-result-pdf',
     'template_folder': resources_path('report-templates'),
     'components': standard_impact_report_metadata_html['components'] + [
-        # Impact Report PDF
-        {
-            'key': 'impact-report-pdf',
-            'type': qgis_composer_component_type,
-            'processor': qgis_composer_html_renderer,
-            'extractor': impact_table_pdf_extractor,
-            'output_format': QgisComposerComponentsMetadata.OutputFormat.PDF,
-            'output_path': 'impact-report-output.pdf',
-            'tags': [
-                final_product_tag,
-                table_product_tag,
-                pdf_product_tag
-            ],
-            'extra_args': {
-                'html_report_component_key': 'impact-report'
-            }
-        },
-        # Action Checklist Report PDF
-        {
-            'key': 'action-checklist-pdf',
-            'type': qgis_composer_component_type,
-            'processor': qgis_composer_html_renderer,
-            'extractor': action_checklist_report_pdf_extractor,
-            'output_format': QgisComposerComponentsMetadata.OutputFormat.PDF,
-            'output_path': 'action-checklist-output.pdf',
-            'tags': [
-                final_product_tag,
-                table_product_tag,
-                pdf_product_tag
-            ]
-        },
-        # Analysis Provenance Details Report PDF
-        {
-            'key': 'analysis-provenance-details-report-pdf',
-            'type': qgis_composer_component_type,
-            'processor': qgis_composer_html_renderer,
-            'extractor': analysis_provenance_details_pdf_extractor,
-            'output_format': QgisComposerComponentsMetadata.OutputFormat.PDF,
-            'output_path': 'analysis-provenance-details-report-output.pdf',
-            'tags': [
-                final_product_tag,
-                table_product_tag,
-                pdf_product_tag
-            ]
-        },
+        impact_report_pdf_component,
+        action_checklist_pdf_component,
+        analysis_provenance_details_pdf_component
     ]
 }
 
