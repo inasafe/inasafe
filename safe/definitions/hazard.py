@@ -48,7 +48,7 @@ __revision__ = '$Format:%H$'
 
 continuous_hazard_unit = {
     'key': 'continuous_hazard_unit',
-    'name': tr('Units'),
+    'name': tr('Unit'),
     'description': tr(
         'Hazard units are used for continuous data. Examples of hazard units '
         'include metres and feet.'),

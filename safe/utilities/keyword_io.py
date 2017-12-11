@@ -391,14 +391,15 @@ class KeywordIO(QObject):
             i += 1
             exposure = definition(exposure_key)
             exposure_row = m.Row()
-            exposure_row.add(m.Cell(m.ImportantText('Exposure')))
+            exposure_row.add(m.Cell(m.ImportantText(tr('Exposure'))))
             exposure_row.add(m.Cell(m.Text(exposure['name'])))
             exposure_row.add(m.Cell(''))
             table.add(exposure_row)
 
             active_classification = None
             classification_row = m.Row()
-            classification_row.add(m.Cell(m.ImportantText('Classification')))
+            classification_row.add(m.Cell(m.ImportantText(tr(
+                'Classification'))))
             for classification, value in classifications.items():
                 if value.get('active'):
                     active_classification = definition(classification)
