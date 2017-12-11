@@ -65,10 +65,10 @@ class StepKwInaSAFEFields(WizardStep, FORM_CLASS):
         else:
             subcategory = {'key': None}
 
-        inasafe_fields = self.get_inasafe_fields()
         # We don't use field mapping for populated place exposure. Use the
         # population point instead.
 
+        # inasafe_fields = self.get_inasafe_fields()
         # If population field is set, must go to field mapping step first.
         # if population_count_field['key'] in inasafe_fields.keys():
         #     return self.parent.step_kw_fields_mapping

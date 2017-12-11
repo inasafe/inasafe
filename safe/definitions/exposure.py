@@ -371,7 +371,7 @@ exposure_place = {
     'compulsory_fields': [exposure_type_field],
     'fields': exposure_fields,
     'extra_fields': [exposure_name_field, population_count_field],
-    'field_groups': population_field_groups,
+    'field_groups': [],
     'layer_modes': [layer_mode_classified],
     'display_not_exposed': True,
     'use_population_rounding': False,
