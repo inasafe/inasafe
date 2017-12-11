@@ -490,6 +490,13 @@ class BatchDialog(QDialog, FORM_CLASS):
                                 self.legend.setLayerVisible(
                                     map_canvas[layer], False)
 
+                        # we need to set analysis_impacted as an active layer
+                        # because we need to get all qgis variables that we
+                        # need from this layer for infographic.
+                        if self.iface:
+                            self.iface.setActiveLayer(
+                                impact_function.analysis_impacted)
+
                         # generate map report and impact report
                         try:
                             error_code, message = (
