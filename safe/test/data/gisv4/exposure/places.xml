@@ -202,7 +202,7 @@
             <gco:CharacterString>exposure</gco:CharacterString>
           </layer_purpose>
           <inasafe_fields>
-            <gco:Dictionary>{&quot;population_count_field&quot;: &quot;Population&quot;, &quot;female_count_field&quot;: [&quot;Female&quot;], &quot;exposure_type_field&quot;: &quot;Type&quot;, &quot;exposure_name_field&quot;: &quot;Name&quot;, &quot;male_count_field&quot;: [&quot;Male&quot;]}</gco:Dictionary>
+            <gco:Dictionary>{&quot;population_count_field&quot;: &quot;Population&quot;, &quot;exposure_type_field&quot;: &quot;Type&quot;, &quot;exposure_name_field&quot;: &quot;Name&quot;}</gco:Dictionary>
           </inasafe_fields>
           <inasafe_default_values>
             <gco:Dictionary/>
