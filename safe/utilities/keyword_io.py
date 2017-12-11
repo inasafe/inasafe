@@ -289,7 +289,16 @@ class KeywordIO(QObject):
         # otherwise just treat the keyword as literal text
         else:
             # Otherwise just directly read the value
-            value = get_string(value)
+            pretty_value = None
+
+            value_definition = definition(value)
+
+            if value_definition:
+                pretty_value = value_definition.get('name')
+
+            if not pretty_value:
+                pretty_value = get_string(value)
+            value = pretty_value
 
         key = m.ImportantText(keyword_definition)
         row.add(m.Cell(key))
