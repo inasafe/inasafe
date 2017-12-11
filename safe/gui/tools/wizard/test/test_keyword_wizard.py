@@ -1907,12 +1907,6 @@ class TestKeywordWizard(unittest.TestCase):
         # Click next to finish set the InaSAFE fields
         dialog.pbnNext.click()
 
-        # Check field mapping steps
-        self.check_current_step(dialog.step_kw_fields_mapping)
-
-        # Click next to continue
-        dialog.pbnNext.click()
-
         # Check if in source step
         self.check_current_step(dialog.step_kw_source)
 
