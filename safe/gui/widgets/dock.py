@@ -1527,9 +1527,13 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             """
             if key in duplicated_global_variables.keys():
                 return
-            if isinstance(value, (list, tuple, set, dict)):
-                # Skip if the type is too complex.
+            if isinstance(value, (list, tuple, set)):
+                # Skip if the type is too complex (list of note, actions)
                 return
+            elif isinstance(value, dict):
+                for dict_key, dict_value in value.items():
+                    write_project_variable(
+                        '%s__%s' % (key, dict_key), dict_value)
             elif isinstance(value, (bool, str, unicode, Number)):
                 # Don't use get_name for field
                 if 'field' in key:
