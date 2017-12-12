@@ -33,7 +33,7 @@ from safe.impact_function.multi_exposure_wrapper import (
 from safe.messaging import styles
 from safe.report.impact_report import ImpactReport
 from safe.report.report_metadata import (
-    ReportMetadata, QgisComposerComponentsMetadata)
+    QgisComposerComponentsMetadata)
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.resources import (
@@ -139,6 +139,8 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
             string_format = tr('*Template override found: {template_path}')
             self.override_template_found_label.setText(
                 string_format.format(template_path=override_template_found))
+        else:
+            self.override_template_radio.setEnabled(False)
 
         # additional buttons
         self.button_print_pdf = QtGui.QPushButton(tr('Open as PDF'))
@@ -319,22 +321,7 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
             hazard = None
             exposure = None
 
-        standard_impact_report_metadata = ReportMetadata(
-            metadata_dict=standard_impact_report_metadata_pdf)
-        standard_multi_exposure_impact_report_metadata = ReportMetadata(
-            metadata_dict=standard_multi_exposure_impact_report_metadata_pdf)
-        standard_infographic_report_metadata = ReportMetadata(
-            metadata_dict=update_template_component(infographic_report))
-
-        impact_report = self.impact_function.impact_report
-        custom_map_report_metadata = impact_report.metadata
-
-        standard_report_metadata = [
-            standard_impact_report_metadata,
-            standard_multi_exposure_impact_report_metadata,
-            standard_infographic_report_metadata,
-            custom_map_report_metadata
-        ]
+        standard_report_metadata = self.impact_function.report_metadata
 
         def retrieve_components(tags):
             """Retrieve components from report metadata."""
@@ -492,7 +479,7 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
                 self.template_combo.currentIndex())
         elif self.search_on_disk_radio.isChecked():
             selected_template_path = self.template_path.text()
-            if not exists(self.selected_template_path):
+            if not exists(selected_template_path):
                 # noinspection PyCallByClass,PyTypeChecker
                 QtGui.QMessageBox.warning(
                     self,

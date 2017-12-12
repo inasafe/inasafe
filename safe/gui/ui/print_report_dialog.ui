@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>610</width>
+    <width>659</width>
     <height>564</height>
    </rect>
   </property>
@@ -125,16 +125,6 @@
                </property>
               </widget>
              </item>
-             <item row="5" column="0">
-              <widget class="QRadioButton" name="search_directory_radio">
-               <property name="text">
-                <string/>
-               </property>
-               <property name="checked">
-                <bool>false</bool>
-               </property>
-              </widget>
-             </item>
              <item row="1" column="1">
               <widget class="QLabel" name="default_template_label">
                <property name="text">
@@ -168,13 +158,6 @@
                </property>
               </widget>
              </item>
-             <item row="7" column="0">
-              <widget class="QRadioButton" name="search_on_disk_radio">
-               <property name="text">
-                <string/>
-               </property>
-              </widget>
-             </item>
              <item row="0" column="1">
               <widget class="QLabel" name="no_map_label">
                <property name="enabled">
@@ -188,7 +171,7 @@
              <item row="2" column="1">
               <widget class="QLabel" name="override_template_label">
                <property name="text">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Print the standard infographics (if applicable) and summary reports. The default landscape, portrait maps will &lt;span style=&quot; font-weight:600;&quot;&gt;NOT&lt;/span&gt; be printed and override template as shown below will be used.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Print the override template as shown below. The default landscape and portrait maps will &lt;span style=&quot; font-weight:600;&quot;&gt;NOT&lt;/span&gt; be printed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                </property>
                <property name="wordWrap">
                 <bool>true</bool>
@@ -211,6 +194,23 @@
                </property>
                <property name="text">
                 <string>Open in composer</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="0" alignment="Qt::AlignTop">
+              <widget class="QRadioButton" name="search_directory_radio">
+               <property name="text">
+                <string/>
+               </property>
+               <property name="checked">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="0" alignment="Qt::AlignTop">
+              <widget class="QRadioButton" name="search_on_disk_radio">
+               <property name="text">
+                <string/>
                </property>
               </widget>
              </item>
@@ -240,7 +240,7 @@
              <item row="3" column="0">
               <widget class="QCheckBox" name="provenance_checkbox">
                <property name="text">
-                <string>Print prevonance report as PDF</string>
+                <string>Print provenance report as PDF</string>
                </property>
               </widget>
              </item>
