@@ -56,8 +56,6 @@ ITEMS = (
                     tr('Estimated fatality counts are reported as ranges. The '
                        'following ranges are used: 0 - 100, 100 - 1,000, '
                        '1,000 - 10,000, 10,000 - 100,000.'),
-                    tr('Estimated fatality counts of less than 50 are rounded '
-                       'down.'),
                     # notes provided by Hadi Ghasemi
                     tr('Earthquake fatalities are due to a number of factors, '
                        'such as destructive level of ground shaking, tsunami, '
