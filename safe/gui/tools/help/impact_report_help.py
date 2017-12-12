@@ -1,6 +1,9 @@
 # coding=utf-8
 """Impact report help text."""
 
+from os.path import join
+from qgis.core import QgsApplication
+
 from safe import messaging as m
 from safe.messaging import styles
 from safe.utilities.i18n import tr
@@ -56,30 +59,31 @@ def content():
     message = m.Message()
 
     message.add(m.Paragraph(tr(
-        'To start report generation you need to click on the Print... '
+        'To start report generation you need to click on the Print '
         'button in the buttons area. This will open the Impact report '
         'dialog which has three main areas.')))
 
     bullets = m.BulletedList()
     bullets.add(m.Text(
-        m.ImportantText(tr('Area to print')),
+        m.ImportantText(tr('Tabular reports')),
         tr(
-            ' - There are two options available. Choose Current extent if '
-            'current canvas extent represents necessary area. Analysis '
-            'extent will set extent of the report map to impact layer '
-            'extent.'
+            ' - There are four checkboxes available which are representing '
+            'the type of report component that will be generated.'
            )))
+    text = tr(
+        ' - Here you can select desired template for your report. All '
+        'templates bundled with InaSAFE are available here, plus '
+        'templates from user-defined template directory (see Options '
+        'for information how to set templates directory) and from qgis '
+        'setting directory ({qgis_directory}). It is also '
+        'possible to select custom template from any location: just '
+        'activate radiobutton under combobox and provide path to template '
+        'using the "..." button.')
+    qgis_directory = join(QgsApplication.qgisSettingsDirPath(), 'inasafe')
     bullets.add(m.Text(
-        m.ImportantText(tr('Template to use')),
-        tr(
-            ' - Here you can select desired template for your report. All '
-            'templates bundled with InaSAFE are available here, plus '
-            'templates from user-defined template directory (see Options '
-            'for information how to set templates directory). It is also '
-            'possible to select custom template from any location: just '
-            'activate radiobutton under combobox and provide path to template '
-            'using the "..." button.'
-           )))
+        m.ImportantText(
+            tr('Custom and map report')),
+        text.format(qgis_directory=qgis_directory)))
     bullets.add(m.Text(
         m.ImportantText(tr('Buttons area')),
         tr(

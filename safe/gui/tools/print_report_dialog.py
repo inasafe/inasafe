@@ -33,7 +33,7 @@ from safe.impact_function.multi_exposure_wrapper import (
 from safe.messaging import styles
 from safe.report.impact_report import ImpactReport
 from safe.report.report_metadata import (
-    ReportMetadata, QgisComposerComponentsMetadata)
+    QgisComposerComponentsMetadata)
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.resources import (
@@ -479,7 +479,7 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
                 self.template_combo.currentIndex())
         elif self.search_on_disk_radio.isChecked():
             selected_template_path = self.template_path.text()
-            if not exists(self.template_path):
+            if not exists(selected_template_path):
                 # noinspection PyCallByClass,PyTypeChecker
                 QtGui.QMessageBox.warning(
                     self,
