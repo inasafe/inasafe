@@ -139,6 +139,8 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
             string_format = tr('*Template override found: {template_path}')
             self.override_template_found_label.setText(
                 string_format.format(template_path=override_template_found))
+        else:
+            self.override_template_radio.setEnabled(False)
 
         # additional buttons
         self.button_print_pdf = QtGui.QPushButton(tr('Open as PDF'))
