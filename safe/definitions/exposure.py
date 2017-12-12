@@ -56,7 +56,7 @@ exposure_population = {
                    'nearest 100 people if more than 1,000 and less than '
                    '100,000; and nearest 1,000 if more than 100,000.'),
                 tr('Rounding is applied to all population values, which may '
-                   'cause discrepancies between subtotals and totals. '),
+                   'cause discrepancies between subtotals and totals.'),
                 concepts['rounding_methodology']['description'],
                 tr('If displacement counts are 0, no minimum needs and '
                    'displaced related postprocessors will be shown.')
@@ -274,7 +274,7 @@ exposure_structure = {
                    'are exposed outside the analysis area.'),
                 tr('Numbers reported for structures have been rounded '
                    'to the nearest 100 if more than 1,000 and less than '
-                   '100,000; and nearest 1000 if more than 100,000. '),
+                   '100,000; and nearest 1000 if more than 100,000.'),
                 tr('Rounding is applied to all structure counts greater than '
                    '1,000 which may cause discrepancies between subtotals '
                    'and totals.'),
@@ -384,7 +384,7 @@ exposure_land_cover = {
     'description': tr(
         'The <b>land cover</b> exposure data describes features on '
         'the surface of the earth that might be exposed to a particular '
-        'hazard. This might include crops, forest and urban areas. '),
+        'hazard. This might include crops, forest and urban areas.'),
     'notes': [
         {
             'item_category': 'land_cover_general',
