@@ -319,22 +319,7 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
             hazard = None
             exposure = None
 
-        standard_impact_report_metadata = ReportMetadata(
-            metadata_dict=standard_impact_report_metadata_pdf)
-        standard_multi_exposure_impact_report_metadata = ReportMetadata(
-            metadata_dict=standard_multi_exposure_impact_report_metadata_pdf)
-        standard_infographic_report_metadata = ReportMetadata(
-            metadata_dict=update_template_component(infographic_report))
-
-        impact_report = self.impact_function.impact_report
-        custom_map_report_metadata = impact_report.metadata
-
-        standard_report_metadata = [
-            standard_impact_report_metadata,
-            standard_multi_exposure_impact_report_metadata,
-            standard_infographic_report_metadata,
-            custom_map_report_metadata
-        ]
+        standard_report_metadata = self.impact_function.report_metadata
 
         def retrieve_components(tags):
             """Retrieve components from report metadata."""
@@ -492,7 +477,7 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
                 self.template_combo.currentIndex())
         elif self.search_on_disk_radio.isChecked():
             selected_template_path = self.template_path.text()
-            if not exists(self.selected_template_path):
+            if not exists(self.template_path):
                 # noinspection PyCallByClass,PyTypeChecker
                 QtGui.QMessageBox.warning(
                     self,
