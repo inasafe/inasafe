@@ -273,11 +273,12 @@ exposure_structure = {
                    'assigned a hazard status lower than that to which they '
                    'are exposed outside the analysis area.'),
                 tr('Numbers reported for structures have been rounded '
-                   'to the nearest 10 if the total is less than 1,000; '
-                   'nearest 100 if more than 1,000 and less than 100,000; '
-                   'and nearest 1000 if more than 100,000.'),
-                tr('Rounding is applied to all structure counts, which may '
-                   'cause discrepancies between subtotals and totals.'),
+                   'to the nearest 100 if more than 1,000 and less than 100,000; '
+                   'and nearest 1000 if more than 100,000. Numbers less than '
+                   '1000 are not rounded.'),
+                tr('Rounding is applied to all structure counts greater than '
+                   '1,000 which may cause discrepancies between subtotals '
+                   'and totals.'),
                 concepts['rounding_methodology']['description'],
             ]
         }
