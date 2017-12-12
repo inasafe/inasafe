@@ -248,7 +248,7 @@ analysis_detail_component = {
             ],
         },
         'place_with_population': {
-            'header': tr('Total population')
+            'header': tr('Total affected population')
         }
     }
 }

@@ -4,6 +4,8 @@
 
 import logging
 
+from copy import deepcopy
+
 from safe.definitions.exposure import (
     exposure_all, exposure_population, exposure_place)
 from safe.definitions.fields import (
@@ -196,7 +198,11 @@ def analysis_detail_extractor(impact_report, component_metadata):
     report_fields += [total_not_exposed_field, total_field]
 
     if is_place_with_population:
-        report_fields.append(population_count_field)
+        # we want to change header name for population
+        duplicated_population_count_field = deepcopy(population_count_field)
+        duplicated_population_count_field['name'] = resolve_from_dictionary(
+            extra_args, ['place_with_population', 'header'])
+        report_fields.append(duplicated_population_count_field)
 
     report_fields_index = -2 + -(int(is_place_with_population))
     for report_field in report_fields[report_fields_index:]:
