@@ -4,14 +4,20 @@
 
 import logging
 
-from safe.definitions.exposure import exposure_all, exposure_population
+from copy import deepcopy
+
+from safe.definitions.exposure import (
+    exposure_all, exposure_population, exposure_place)
 from safe.definitions.fields import (
     exposure_type_field,
     exposure_class_field,
     hazard_count_field,
     total_affected_field,
     total_not_affected_field,
-    total_field, total_not_exposed_field, affected_field)
+    total_field,
+    total_not_exposed_field,
+    affected_field,
+    population_count_field)
 from safe.definitions.utilities import definition
 from safe.report.extractors.util import (
     resolve_from_dictionary,
@@ -74,6 +80,13 @@ def analysis_detail_extractor(impact_report, component_metadata):
     # in debug mode
     is_rounding = not debug_mode
     is_population = exposure_type is exposure_population
+
+    # action for places with poopulation exposure
+    is_place_with_population = False
+    if exposure_type is exposure_place:
+        exposure_fields = exposure_keywords['inasafe_fields']
+        if exposure_fields.get(population_count_field['key']):
+            is_place_with_population = True
 
     # Analysis detail only applicable for breakable exposure types:
     itemizable_exposures_all = [
@@ -168,22 +181,31 @@ def analysis_detail_extractor(impact_report, component_metadata):
         affected_header_index = len(hazard_classification['classes']) + 1
         not_affected_header_index = affected_header_index + 2
 
-    headers.insert(affected_header_index, total_affected_field['name'])
-    headers.insert(not_affected_header_index, total_not_affected_field['name'])
+    report_fields = []
 
+    headers.insert(affected_header_index, total_affected_field['name'])
     header_hazard_group['affected']['total'].append(
         total_affected_field['name'])
+    report_fields.append(total_affected_field)
+
+    headers.insert(not_affected_header_index, total_not_affected_field['name'])
     header_hazard_group['not_affected']['total'].append(
         total_not_affected_field['name'])
+    report_fields.append(total_not_affected_field)
 
-    # affected, not affected, not exposed, total header
-    report_fields = [
-        total_affected_field,
-        total_not_affected_field,
-        total_not_exposed_field,
-        total_field
-    ]
-    for report_field in report_fields[2:]:
+    # affected, not affected, population (if applicable), not exposed,
+    # total header
+    report_fields += [total_not_exposed_field, total_field]
+
+    if is_place_with_population:
+        # we want to change header name for population
+        duplicated_population_count_field = deepcopy(population_count_field)
+        duplicated_population_count_field['name'] = resolve_from_dictionary(
+            extra_args, ['place_with_population', 'header'])
+        report_fields.append(duplicated_population_count_field)
+
+    report_fields_index = -2 + -(int(is_place_with_population))
+    for report_field in report_fields[report_fields_index:]:
         headers.append(report_field['name'])
 
     """Create detail rows."""

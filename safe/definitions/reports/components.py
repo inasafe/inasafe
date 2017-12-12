@@ -247,6 +247,9 @@ analysis_detail_component = {
                 affected_production_value_field,
             ],
         },
+        'place_with_population': {
+            'header': tr('Total affected population')
+        }
     }
 }
 
