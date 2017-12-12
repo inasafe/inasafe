@@ -108,7 +108,7 @@ class TestExpressions(unittest.TestCase):
 
         .. versionadded:: 4.3
         """
-        if not None:
+        if params is None:
             params = default_params
 
         actual_result = func.funcV2(params, feature, parent)

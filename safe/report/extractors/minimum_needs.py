@@ -112,6 +112,7 @@ def minimum_needs_extractor(impact_report, component_metadata):
                 enable_rounding=is_rounding,
                 is_population=True)
 
+            unit_abbreviation = ''
             if field.get('need_parameter'):
                 need_parameter = field['need_parameter']
                 """:type: ResourceParameter"""

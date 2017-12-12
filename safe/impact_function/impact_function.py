@@ -35,6 +35,7 @@ from safe.common.exceptions import (
     WrongEarthquakeFunction,
     NoFeaturesInExtentError,
     ProcessingInstallationError,
+    SpatialIndexCreationError,
 )
 from safe.common.utilities import temp_dir
 from safe.common.version import get_version
@@ -1475,6 +1476,18 @@ class ImpactFunction(object):
             message.add(suggestion)
             return ANALYSIS_FAILED_BAD_INPUT, message
 
+        except SpatialIndexCreationError:
+            warning_heading = m.Heading(
+                tr('Layer geometry issue'), **WARNING_STYLE)
+            warning_message = tr(
+                'There is a problem while creating the spatial index. '
+                'Unfortunately, there is nothing you can do. Maybe try '
+                'another area or another aggregation layer.')
+            message = m.Message()
+            message.add(warning_heading)
+            message.add(warning_message)
+            return ANALYSIS_FAILED_BAD_INPUT, message
+
         except ProcessingInstallationError:
             warning_heading = m.Heading(
                 tr('Configuration issue'), **WARNING_STYLE)
@@ -2834,8 +2847,6 @@ class ImpactFunction(object):
         extra_layers = []
         print_atlas = setting('print_atlas_report', False, bool)
 
-        hazard_type = definition(
-            self.provenance['hazard_keywords']['hazard'])
         aggregation_summary_layer = self.aggregation_summary
 
         if print_atlas:
@@ -2849,10 +2860,7 @@ class ImpactFunction(object):
 
             if component['key'] == map_report['key']:
                 report_metadata = ReportMetadata(
-                    metadata_dict=update_template_component(
-                        component=component,
-                        hazard=hazard_type,
-                        exposure=exposure_type))
+                    metadata_dict=component)
             else:
                 report_metadata = ReportMetadata(
                     metadata_dict=update_template_component(component))

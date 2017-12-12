@@ -3,7 +3,7 @@
 import logging
 import os
 
-from PyQt4.QtCore import Qt, QFile
+from PyQt4.QtCore import Qt, QFile, pyqtSignal, QT_VERSION
 from PyQt4.QtGui import (
     QDialog, QDialogButtonBox, QFileDialog)
 from safe.common.exceptions import (
@@ -42,6 +42,8 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
 
     """Dialog implementation class for the InaSAFE metadata converter tool."""
 
+    resized = pyqtSignal()
+
     def __init__(self, parent=None, iface=None):
         """Constructor."""
         QDialog.__init__(self, parent)
@@ -55,12 +57,12 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
         self.layer = None
 
         # Setup header label
-        self.header_label.setText(
-            tr('In this tool, you can convert a metadata 4.x of a layer to '
-               'metadata 3.5. You will get a directory contains all the files '
-               'of the layer and the new 3.5 metadata. If you want to convert '
-               'hazard layer, you need to choose what exposure that you want '
-               'to work with.')
+        self.header_label.setText(tr(
+            'In this tool, you can convert a metadata 4.x of a layer to '
+            'metadata 3.5. You will get a directory contains all the files of '
+            'the layer and the new 3.5 metadata. If you want to convert '
+            'hazard layer, you need to choose what exposure that you want to '
+            'work with.')
         )
 
         # Setup input layer combo box
@@ -127,14 +129,15 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
         self.cancel_button = self.button_box.button(QDialogButtonBox.Cancel)
         self.cancel_button.clicked.connect(self.reject)
 
-    def set_layer(self, layer=None, keywords=None):
+        # The bug is fixed in QT 5.4
+        if QT_VERSION < 0x050400:
+            self.resized.connect(self.after_resize)
+
+    def set_layer(self, layer=None):
         """Set layer and update UI accordingly.
 
         :param layer: A QgsVectorLayer.
         :type layer: QgsVectorLayer
-
-        :param keywords: Keywords for the layer.
-        :type keywords: dict, None
         """
         if layer:
             self.layer = layer
@@ -318,3 +321,20 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
         content_html = keywords.to_message().to_html()
         full_html = html_header() + content_html + html_footer()
         self.metadata_preview_web_view.setHtml(full_html)
+
+    # Adapted from https://stackoverflow.com/a/43126946/1198772
+    def resizeEvent(self, event):
+        """Emit custom signal when the window is re-sized.
+
+        :param event: The re-sized event.
+        :type event: QResizeEvent
+        """
+        self.resized.emit()
+        return super(MetadataConverterDialog, self).resizeEvent(event)
+
+    def after_resize(self):
+        """Method after resizing the window."""
+        # https://stackoverflow.com/q/25644026/1198772
+        # It's fixed in QT 5.4 https://bugreports.qt.io/browse/QTBUG-37673
+        max_height = self.height() - 275  # Magic number, to make it pretty
+        self.metadata_preview_web_view.setMaximumHeight(max_height)

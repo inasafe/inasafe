@@ -572,7 +572,7 @@ class TestMetadataUtilities(unittest.TestCase):
         }
         expected_keyword = {
             'exposure': u'place',
-            'field': u'Type',
+            'structure_class_field': u'Type',
             'keyword_version': '3.5',
             'layer_geometry': u'point',
             'layer_mode': u'classified',

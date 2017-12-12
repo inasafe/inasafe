@@ -110,7 +110,7 @@ class KeywordIOTest(unittest.TestCase):
         """
         keywords = self.keyword_io.read_keywords(self.vector_layer)
         message = self.keyword_io.to_message(keywords).to_text()
-        self.assertIn('*Exposure*, structure------', message)
+        self.assertIn('*Exposure*, Structures------', message)
 
     def test_layer_to_message(self):
         """Test to show augmented keywords if KeywordsIO ctor passed a layer.

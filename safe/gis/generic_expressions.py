@@ -136,8 +136,13 @@ def inasafe_place_value_coefficient(number, feature, parent):
             enable_rounding=True,
             use_population_rounding=True
         )
-        value, unit = denomination(rounded_number, 1000)
-        return str(round(value, 1))
+        min_number = 1000
+        value, unit = denomination(rounded_number, min_number)
+        if number < min_number:
+            rounded_number = int(round(value, 1))
+        else:
+            rounded_number = round(value, 1)
+        return str(rounded_number)
     else:
         return None
 

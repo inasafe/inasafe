@@ -28,11 +28,12 @@ from safe.definitions.layer_purposes import (
 from safe.definitions.layer_geometry import (
     layer_geometry_raster, layer_geometry_polygon
 )
-from safe.definitions.hazard import hazard_volcano
+from safe.definitions.hazard import hazard_volcano, hazard_generic
 from safe.definitions.exposure import (
     exposure_structure,
     exposure_road,
-    exposure_population
+    exposure_population,
+    exposure_land_cover
 )
 from safe.definitions.versions import inasafe_keyword_version
 from safe.metadata import (
@@ -400,6 +401,10 @@ def convert_metadata(keywords, **converter_parameters):
     for same_property in same_properties:
         if keywords.get(same_property):
             new_keywords[same_property] = keywords.get(same_property)
+            if same_property == layer_purpose_hazard['key']:
+                if keywords.get(same_property) == hazard_generic['key']:
+                    # We use hazard_generic as key for generic hazard
+                    new_keywords[same_property] = 'hazard_generic'
 
     # Mandatory keywords
     try:
@@ -423,7 +428,11 @@ def convert_metadata(keywords, **converter_parameters):
             elif exposure == exposure_road['key']:
                 new_keywords['road_class_field'] = exposure_class_field
             else:
-                new_keywords['field'] = exposure_class_field
+                if exposure == exposure_land_cover['key']:
+                    new_keywords['field'] = exposure_class_field
+                else:
+                    new_keywords['structure_class_field'] = (
+                        exposure_class_field)
         # Data type is only used in population exposure and in v4.x it is
         # always count
         if (exposure == exposure_population['key'] and layer_geometry ==

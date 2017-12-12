@@ -2,9 +2,10 @@
 """This is a dialog to print a custom map report.
 """
 import logging
-import os
 
-from os.path import join, exists
+from copy import deepcopy
+from os import listdir, sep
+from os.path import join, exists, splitext, dirname
 from PyQt4 import QtGui, QtCore, QtXml
 from qgis.core import QgsApplication
 
@@ -20,13 +21,19 @@ from safe.definitions.reports.components import (
     infographic_report,
     standard_impact_report_metadata_pdf,
     all_default_report_components,
-    standard_multi_exposure_impact_report_metadata_pdf)
+    standard_multi_exposure_impact_report_metadata_pdf,
+    impact_report_pdf_component,
+    action_checklist_pdf_component,
+    analysis_provenance_details_pdf_component)
 from safe.definitions.utilities import (
     override_component_template, definition, update_template_component)
 from safe.gui.tools.help.impact_report_help import impact_report_help
+from safe.impact_function.multi_exposure_wrapper import (
+    MultiExposureImpactFunction)
 from safe.messaging import styles
 from safe.report.impact_report import ImpactReport
-from safe.report.report_metadata import ReportMetadata
+from safe.report.report_metadata import (
+    ReportMetadata, QgisComposerComponentsMetadata)
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.resources import (
@@ -65,26 +72,6 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
         QtGui.QDialog.__init__(self, parent)
         self.setupUi(self)
 
-        # additional buttons
-        self.button_print_pdf = QtGui.QPushButton(self.tr('Print as PDF'))
-        self.button_print_pdf.setObjectName('button_print_pdf')
-        self.button_print_pdf.setToolTip(self.tr(
-            'Write report to PDF and open it in default viewer'))
-        self.button_box.addButton(
-            self.button_print_pdf, QtGui.QDialogButtonBox.ActionRole)
-
-        self.button_open_composer = QtGui.QPushButton(
-            self.tr('Open in composer'))
-        self.button_open_composer.setObjectName('button_open_composer')
-        self.button_open_composer.setToolTip(
-            self.tr('Prepare report and open it in QGIS composer'))
-        self.button_box.addButton(
-            self.button_open_composer, QtGui.QDialogButtonBox.ActionRole)
-
-        self.template_chooser.clicked.connect(self.template_chooser_clicked)
-        self.button_print_pdf.clicked.connect(self.accept)
-        self.button_open_composer.clicked.connect(self.accept)
-
         # Save reference to the QGIS interface and parent
         self.iface = iface
         self.parent = parent
@@ -93,8 +80,89 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
 
         self.create_pdf = False
 
+        self.all_checkboxes = {
+            impact_report_pdf_component['key']:
+                self.impact_summary_checkbox,
+            action_checklist_pdf_component['key']:
+                self.action_checklist_checkbox,
+            analysis_provenance_details_pdf_component['key']:
+                self.provenance_checkbox,
+            infographic_report['key']:
+                self.infographic_checkbox
+        }
+
+        # setup checkboxes, all checkboxes are checked by default
+        for checkbox in self.all_checkboxes.values():
+            checkbox.setChecked(True)
+
+        # override template is selected by default
+        self.default_template_radio.setChecked(True)
+
+        self.is_multi_exposure = isinstance(
+            self.impact_function, MultiExposureImpactFunction)
+
+        override_template_found = None
+        if self.is_multi_exposure:
+            self.override_template_radio.setEnabled(False)
+            self.override_template_label.setEnabled(False)
+            self.override_template_found_label.setEnabled(False)
+            # below features are currently not applicable for multi-exposure IF
+            self.action_checklist_checkbox.setEnabled(False)
+            self.action_checklist_checkbox.setChecked(False)
+            self.provenance_checkbox.setEnabled(False)
+            self.provenance_checkbox.setChecked(False)
+            self.infographic_checkbox.setEnabled(False)
+            self.infographic_checkbox.setChecked(False)
+        else:
+            # search for available override template
+            hazard_type = definition(
+                self.impact_function.provenance['hazard_keywords'][
+                    'hazard'])
+            exposure_type = definition(
+                self.impact_function.provenance['exposure_keywords'][
+                    'exposure'])
+            # noinspection PyArgumentList
+            custom_template_dir = join(
+                QgsApplication.qgisSettingsDirPath(), 'inasafe')
+            if exists(custom_template_dir) and hazard_type and exposure_type:
+                for filename in listdir(custom_template_dir):
+
+                    file_name, file_format = splitext(filename)
+                    if file_format[1:] != (
+                            QgisComposerComponentsMetadata.OutputFormat.QPT):
+                        continue
+                    if hazard_type['key'] in file_name and (
+                            exposure_type['key'] in file_name):
+                        override_template_found = filename
+
+        if override_template_found:
+            string_format = tr('*Template override found: {template_path}')
+            self.override_template_found_label.setText(
+                string_format.format(template_path=override_template_found))
+
+        # additional buttons
+        self.button_print_pdf = QtGui.QPushButton(tr('Open as PDF'))
+        self.button_print_pdf.setObjectName('button_print_pdf')
+        self.button_print_pdf.setToolTip(tr(
+            'Write report to PDF and open it in default viewer'))
+        self.button_box.addButton(
+            self.button_print_pdf, QtGui.QDialogButtonBox.ActionRole)
+
+        self.template_chooser.clicked.connect(self.template_chooser_clicked)
+        self.button_print_pdf.clicked.connect(self.accept)
+        self.button_open_composer.clicked.connect(self.accept)
+
+        self.no_map_radio.toggled.connect(self.toggle_template_selector)
+        self.no_map_radio.toggled.connect(
+            self.button_open_composer.setDisabled)
         self.default_template_radio.toggled.connect(
-            self.toggle_template_selectors)
+            self.toggle_template_selector)
+        self.override_template_radio.toggled.connect(
+            self.toggle_template_selector)
+        self.search_directory_radio.toggled.connect(
+            self.toggle_template_selector)
+        self.search_on_disk_radio.toggled.connect(
+            self.toggle_template_selector)
 
         # Set up things for context help
         self.help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
@@ -155,7 +223,6 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
         flag = bool(settings.value(
             'inasafe/useDefaultTemplates', True, type=bool))
         self.default_template_radio.setChecked(flag)
-        self.custom_template_radio.setChecked(not flag)
 
         try:
             default_template_path = resources_path(
@@ -208,7 +275,7 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
         paths = []
         for product in products:
             path = ImpactReport.absolute_output_path(
-                os.path.join(report_path, 'output'),
+                join(report_path, 'output'),
                 products,
                 product.key)
             if isinstance(path, list):
@@ -222,10 +289,10 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
         if suffix:
             paths = [p for p in paths if p.endswith(suffix)]
 
-        paths = [p for p in paths if os.path.exists(p)]
+        paths = [p for p in paths if exists(p)]
         return paths
 
-    def print_as_pdf(self):
+    def open_as_pdf(self):
         """Print the selected report as a PDF product.
 
         .. versionadded: 4.3.0
@@ -234,7 +301,7 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
 
         # Get output path from datastore
         # Fetch report for pdfs report
-        report_path = os.path.dirname(impact_layer.source())
+        report_path = dirname(impact_layer.source())
 
         # Get the hazard and exposure definition used in current IF
         provenance = KeywordIO.read_keywords(
@@ -256,12 +323,6 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
             metadata_dict=standard_impact_report_metadata_pdf)
         standard_multi_exposure_impact_report_metadata = ReportMetadata(
             metadata_dict=standard_multi_exposure_impact_report_metadata_pdf)
-        standard_map_report_metadata = ReportMetadata(
-            metadata_dict=update_template_component(
-                component=map_report,
-                hazard=hazard,
-                exposure=exposure
-            ))
         standard_infographic_report_metadata = ReportMetadata(
             metadata_dict=update_template_component(infographic_report))
 
@@ -271,7 +332,6 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
         standard_report_metadata = [
             standard_impact_report_metadata,
             standard_multi_exposure_impact_report_metadata,
-            standard_map_report_metadata,
             standard_infographic_report_metadata,
             custom_map_report_metadata
         ]
@@ -285,7 +345,7 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
 
         def wrap_output_paths(paths):
             """Make sure the file paths can wrap nicely."""
-            return [p.replace(os.sep, '<wbr>' + os.sep) for p in paths]
+            return [p.replace(sep, '<wbr>' + sep) for p in paths]
 
         pdf_products = retrieve_components(
             [final_product_tag, pdf_product_tag])
@@ -343,7 +403,7 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
         .. versionadded: 4.3.0
         """
         impact_layer = self.impact_function.analysis_impacted
-        report_path = os.path.dirname(impact_layer.source())
+        report_path = dirname(impact_layer.source())
 
         impact_report = self.impact_function.impact_report
         custom_map_report_metadata = impact_report.metadata
@@ -371,37 +431,115 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
                 # noinspection PyCallByClass,PyTypeChecker
                 QtGui.QMessageBox.warning(
                     self,
-                    self.tr('InaSAFE'),
-                    self.tr('Error loading template: %s') % template_path)
+                    tr('InaSAFE'),
+                    tr('Error loading template: %s') % template_path)
 
                 return
+
+    def prepare_components(self):
+        """Prepare components that are going to be generated based on
+        user options.
+
+        :return: Updated list of components.
+        :rtype: dict
+        """
+        # Register the components based on user option
+        # First, tabular report
+        generated_components = deepcopy(all_default_report_components)
+        # Rohmat: I need to define the definitions here, I can't get
+        # the definition using definition helper method.
+        component_definitions = {
+            impact_report_pdf_component['key']:
+                impact_report_pdf_component,
+            action_checklist_pdf_component['key']:
+                action_checklist_pdf_component,
+            analysis_provenance_details_pdf_component['key']:
+                analysis_provenance_details_pdf_component,
+            infographic_report['key']: infographic_report
+        }
+        duplicated_report_metadata = None
+        for key, checkbox in self.all_checkboxes.iteritems():
+            if not checkbox.isChecked():
+                component = component_definitions[key]
+                if component in generated_components:
+                    generated_components.remove(component)
+                    continue
+
+                if self.is_multi_exposure:
+                    impact_report_metadata = (
+                        standard_multi_exposure_impact_report_metadata_pdf)
+                else:
+                    impact_report_metadata = (
+                        standard_impact_report_metadata_pdf)
+
+                if component in impact_report_metadata['components']:
+                    if not duplicated_report_metadata:
+                        duplicated_report_metadata = deepcopy(
+                            impact_report_metadata)
+                    duplicated_report_metadata['components'].remove(
+                        component)
+                    if impact_report_metadata in generated_components:
+                        generated_components.remove(
+                            impact_report_metadata)
+                        generated_components.append(
+                            duplicated_report_metadata)
+
+        # Second, custom and map report
+        # Get selected template path to use
+        selected_template_path = None
+        if self.search_directory_radio.isChecked():
+            selected_template_path = self.template_combo.itemData(
+                self.template_combo.currentIndex())
+        elif self.search_on_disk_radio.isChecked():
+            selected_template_path = self.template_path.text()
+            if not exists(self.selected_template_path):
+                # noinspection PyCallByClass,PyTypeChecker
+                QtGui.QMessageBox.warning(
+                    self,
+                    tr('InaSAFE'),
+                    tr(
+                        'Please select a valid template before printing. '
+                        'The template you choose does not exist.'))
+
+        if map_report in generated_components:
+            if self.no_map_radio.isChecked():
+                generated_components.remove(map_report)
+            elif self.default_template_radio.isChecked():
+                # make sure map report is there
+                generated_components.append(
+                    generated_components.pop(
+                        generated_components.index(map_report)))
+            elif self.override_template_radio.isChecked():
+                hazard_type = definition(
+                    self.impact_function.provenance['hazard_keywords'][
+                        'hazard'])
+                exposure_type = definition(
+                    self.impact_function.provenance['exposure_keywords'][
+                        'exposure'])
+                generated_components.remove(map_report)
+                generated_components.append(
+                    update_template_component(
+                        component=map_report,
+                        hazard=hazard_type,
+                        exposure=exposure_type))
+            elif selected_template_path:
+                generated_components.remove(map_report)
+                generated_components.append(
+                    override_component_template(
+                        map_report, selected_template_path))
+
+        return generated_components
 
     def accept(self):
         """Method invoked when OK button is clicked."""
 
         self.save_state()
-        # Get selected template path to use
-        if self.default_template_radio.isChecked():
-            self.selected_template_path = self.template_combo.itemData(
-                self.template_combo.currentIndex())
-        else:
-            self.selected_template_path = self.template_path.text()
-            if not exists(self.selected_template_path):
-                # noinspection PyCallByClass,PyTypeChecker
-                QtGui.QMessageBox.warning(
-                    self,
-                    self.tr('InaSAFE'),
-                    self.tr('Please select a valid template before printing. '
-                            'The template you choose does not exist.'))
-
         self.dock.show_busy()
 
         # The order of the components are matter.
-        generated_components = all_default_report_components + [
-            override_component_template(
-                map_report, self.selected_template_path)]
+        components = self.prepare_components()
         error_code, message = self.impact_function.generate_report(
-            generated_components, iface=self.iface)
+            components, iface=self.iface)
 
         if error_code == ImpactReport.REPORT_GENERATION_FAILED:
             self.dock.hide_busy()
@@ -416,7 +554,7 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
         try:
             if sender_name == 'button_print_pdf':
                 self.create_pdf = True
-                self.print_as_pdf()
+                self.open_as_pdf()
             else:
                 self.create_pdf = False
                 self.open_in_composer()
@@ -427,27 +565,34 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
         QtGui.QDialog.accept(self)
 
     def template_chooser_clicked(self):
-        """Auto-connect slot activated when report file tool button is clicked.
+        """Slot activated when report file tool button is clicked.
 
         .. versionadded: 4.3.0
         """
         # noinspection PyCallByClass,PyTypeChecker
         file_name = QtGui.QFileDialog.getOpenFileName(
             self,
-            self.tr('Select report'),
+            tr('Select report'),
             '',
-            self.tr('QGIS composer templates (*.qpt *.QPT)'))
+            tr('QGIS composer templates (*.qpt *.QPT)'))
         self.template_path.setText(file_name)
 
-    def toggle_template_selectors(self, checked):
-        if checked:
+    def toggle_template_selector(self):
+        """Slot for template selector elements behaviour.
+
+        .. versionadded: 4.3.0
+        """
+        if self.search_directory_radio.isChecked():
             self.template_combo.setEnabled(True)
-            self.template_path.setEnabled(False)
-            self.template_chooser.setEnabled(False)
         else:
             self.template_combo.setEnabled(False)
+
+        if self.search_on_disk_radio.isChecked():
             self.template_path.setEnabled(True)
             self.template_chooser.setEnabled(True)
+        else:
+            self.template_path.setEnabled(False)
+            self.template_chooser.setEnabled(False)
 
     def help_toggled(self, flag):
         """Show or hide the help tab in the stacked widget.
@@ -458,10 +603,10 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
         .. versionadded: 4.3.0
         """
         if flag:
-            self.help_button.setText(self.tr('Hide Help'))
+            self.help_button.setText(tr('Hide Help'))
             self.show_help()
         else:
-            self.help_button.setText(self.tr('Show Help'))
+            self.help_button.setText(tr('Show Help'))
             self.hide_help()
 
     def hide_help(self):

@@ -289,7 +289,16 @@ class KeywordIO(QObject):
         # otherwise just treat the keyword as literal text
         else:
             # Otherwise just directly read the value
-            value = get_string(value)
+            pretty_value = None
+
+            value_definition = definition(value)
+
+            if value_definition:
+                pretty_value = value_definition.get('name')
+
+            if not pretty_value:
+                pretty_value = get_string(value)
+            value = pretty_value
 
         key = m.ImportantText(keyword_definition)
         row.add(m.Cell(key))
@@ -382,14 +391,15 @@ class KeywordIO(QObject):
             i += 1
             exposure = definition(exposure_key)
             exposure_row = m.Row()
-            exposure_row.add(m.Cell(m.ImportantText('Exposure')))
+            exposure_row.add(m.Cell(m.ImportantText(tr('Exposure'))))
             exposure_row.add(m.Cell(m.Text(exposure['name'])))
             exposure_row.add(m.Cell(''))
             table.add(exposure_row)
 
             active_classification = None
             classification_row = m.Row()
-            classification_row.add(m.Cell(m.ImportantText('Classification')))
+            classification_row.add(m.Cell(m.ImportantText(tr(
+                'Classification'))))
             for classification, value in classifications.items():
                 if value.get('active'):
                     active_classification = definition(classification)
