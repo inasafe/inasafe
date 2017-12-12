@@ -125,16 +125,6 @@
                </property>
               </widget>
              </item>
-             <item row="5" column="0">
-              <widget class="QRadioButton" name="search_directory_radio">
-               <property name="text">
-                <string/>
-               </property>
-               <property name="checked">
-                <bool>false</bool>
-               </property>
-              </widget>
-             </item>
              <item row="1" column="1">
               <widget class="QLabel" name="default_template_label">
                <property name="text">
@@ -165,13 +155,6 @@
               <widget class="QLineEdit" name="template_path">
                <property name="enabled">
                 <bool>false</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="7" column="0">
-              <widget class="QRadioButton" name="search_on_disk_radio">
-               <property name="text">
-                <string/>
                </property>
               </widget>
              </item>
@@ -214,6 +197,23 @@
                </property>
               </widget>
              </item>
+             <item row="4" column="0" alignment="Qt::AlignTop">
+              <widget class="QRadioButton" name="search_directory_radio">
+               <property name="text">
+                <string/>
+               </property>
+               <property name="checked">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="0" alignment="Qt::AlignTop">
+              <widget class="QRadioButton" name="search_on_disk_radio">
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
             </layout>
            </widget>
           </item>
@@ -240,7 +240,7 @@
              <item row="3" column="0">
               <widget class="QCheckBox" name="provenance_checkbox">
                <property name="text">
-                <string>Print prevonance report as PDF</string>
+                <string>Print provenance report as PDF</string>
                </property>
               </widget>
              </item>
