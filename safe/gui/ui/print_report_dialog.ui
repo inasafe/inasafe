@@ -25,8 +25,8 @@
         <number>0</number>
        </property>
        <item row="0" column="0">
-        <widget class="QWebView" name="help_web_view" native="true">
-         <property name="url" stdset="0">
+        <widget class="QWebView" name="help_web_view">
+         <property name="url">
           <url>
            <string>about:blank</string>
           </url>
@@ -164,7 +164,7 @@
                 <bool>true</bool>
                </property>
                <property name="text">
-                <string>Do not print a map report</string>
+                <string>Do not print a map report.</string>
                </property>
               </widget>
              </item>
@@ -223,31 +223,38 @@
              <string>Tabular reports</string>
             </property>
             <layout class="QGridLayout" name="gridLayout_5">
-             <item row="0" column="0">
+             <item row="1" column="0">
               <widget class="QCheckBox" name="impact_summary_checkbox">
                <property name="text">
-                <string>Print impact summary report as PDF</string>
+                <string>Impact summary</string>
                </property>
               </widget>
              </item>
-             <item row="1" column="0">
+             <item row="2" column="0">
               <widget class="QCheckBox" name="action_checklist_checkbox">
                <property name="text">
-                <string>Print action-checklist report as PDF</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="0">
-              <widget class="QCheckBox" name="provenance_checkbox">
-               <property name="text">
-                <string>Print provenance report as PDF</string>
+                <string>Action-checklist</string>
                </property>
               </widget>
              </item>
              <item row="4" column="0">
+              <widget class="QCheckBox" name="provenance_checkbox">
+               <property name="text">
+                <string>Provenance</string>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="0">
               <widget class="QCheckBox" name="infographic_checkbox">
                <property name="text">
-                <string>Print infographic report as PDF</string>
+                <string>Infographic</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="label">
+               <property name="text">
+                <string>Print report as PDF:</string>
                </property>
               </widget>
              </item>
@@ -283,7 +290,7 @@
   <customwidget>
    <class>QWebView</class>
    <extends>QWidget</extends>
-   <header>PyQt4.QtWebKit</header>
+   <header>QtWebKit/QWebView</header>
   </customwidget>
  </customwidgets>
  <resources/>
