@@ -41,7 +41,8 @@
         "Drinking Water Post Processor",
         "Clean Water Post Processor",
         "Family Kits Post Processor",
-        "Toilets Post Processor"
+        "Toilets Post Processor",
+        "Exposed Population Post Processor"
       ]
     },
     "aggregation":{
