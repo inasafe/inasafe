@@ -109,8 +109,10 @@ class ProfileWidget(QTreeWidget, object):
                 classification_definition = definition(classification)
                 supported_exposures = classification_definition.get(
                     'exposures', [])
-                if exposure_population not in supported_exposures:
-                    continue
+                # Empty list means support all exposure
+                if supported_exposures != []:
+                    if exposure_population not in supported_exposures:
+                        continue
                 classes = classifications[classification]
                 classification_widget_item = QTreeWidgetItem()
                 classification_widget_item.setData(
