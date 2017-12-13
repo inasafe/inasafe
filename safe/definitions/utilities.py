@@ -747,9 +747,16 @@ def get_displacement_rate(
         'population_preference',
         default=generate_default_profile(),
         qsettings=qsettings)
+
+    # Use default from the default profile
+    default_profile = generate_default_profile()
+    default_displacement_rate_value = default_profile.get(hazard, {}).get(
+        classification, {}).get(hazard_class, {}).get('displacement_rate', 0)
+
     # noinspection PyUnresolvedReferences
     return preference_data.get(hazard, {}).get(classification, {}).get(
-        hazard_class, {}).get('displacement_rate', 0)
+        hazard_class, {}).get(
+        'displacement_rate', default_displacement_rate_value)
 
 
 def is_affected(hazard, classification, hazard_class, qsettings=None):
@@ -775,6 +782,11 @@ def is_affected(hazard, classification, hazard_class, qsettings=None):
         'population_preference',
         default=generate_default_profile(),
         qsettings=qsettings)
+
+    # Use default from the default profile
+    default_profile = generate_default_profile()
+    default_affected_value = default_profile.get(hazard, {}).get(
+        classification, {}).get(hazard_class, {}).get('affected', False)
     # noinspection PyUnresolvedReferences
     return preference_data.get(hazard, {}).get(classification, {}).get(
-        hazard_class, {}).get('affected', False)
+        hazard_class, {}).get('affected', default_affected_value)
