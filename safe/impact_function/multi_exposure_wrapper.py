@@ -812,10 +812,13 @@ class MultiExposureImpactFunction(object):
             impact_function.exposure = exposure
             impact_function.debug_mode = self.debug
             impact_function.use_rounding = self.use_rounding
+            impact_function.use_selected_features_only = (
+                self.use_selected_features_only)
             if self.callback:
                 impact_function.callback = self.callback
             if self._aggregation:
-                impact_function.aggregation = clone_layer(self._aggregation)
+                impact_function.aggregation = clone_layer(
+                    self._aggregation)
                 impact_function.use_selected_features_only = (
                     self.use_selected_features_only)
             else:

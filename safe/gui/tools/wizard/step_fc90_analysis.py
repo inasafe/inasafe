@@ -257,12 +257,12 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         # Layers
         impact_function.hazard = self.parent.hazard_layer
         impact_function.exposure = self.parent.exposure_layer
+        impact_function.use_selected_features_only = (
+            setting('useSelectedFeaturesOnly', False, bool))
         aggregation = self.parent.aggregation_layer
 
         if aggregation:
             impact_function.aggregation = aggregation
-            impact_function.use_selected_features_only = (
-                setting('useSelectedFeaturesOnly', False, bool))
         else:
             # self.extent.crs is the map canvas CRS.
             impact_function.crs = self.extent.crs

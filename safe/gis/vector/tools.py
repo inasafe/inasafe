@@ -20,6 +20,8 @@ from qgis.core import (
     QgsWKBTypes
 )
 
+from safe.definitions.layer_purposes import (
+    layer_purpose_aggregation, layer_purpose_exposure)
 from safe.common.exceptions import (
     MemoryLayerCreationError,
     # SpatialIndexCreationError,
@@ -158,8 +160,16 @@ def copy_layer(source, target):
 
     request = QgsFeatureRequest()
 
+    aggregation_key = layer_purpose_aggregation['key']
+    purpose_selection_compatible = [
+        aggregation_key,
+        layer_purpose_exposure['key']
+    ]
     aggregation_layer = False
-    if source.keywords.get('layer_purpose') == 'aggregation':
+    if source.keywords.get('layer_purpose') == aggregation_key:
+        aggregation_layer = True
+
+    if source.keywords.get('layer_purpose') in purpose_selection_compatible:
         try:
             use_selected_only = source.use_selected_features_only
         except AttributeError:
@@ -169,8 +179,6 @@ def copy_layer(source, target):
         # is one minimum selected.
         if use_selected_only and source.selectedFeatureCount() > 0:
             request.setFilterFids(source.selectedFeaturesIds())
-
-        aggregation_layer = True
 
     for i, feature in enumerate(source.getFeatures(request)):
         geom = feature.geometry()

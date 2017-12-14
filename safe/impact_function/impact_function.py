@@ -241,6 +241,7 @@ class ImpactFunction(object):
 
         # If there is an aggregation layer provided, do we use selected
         # features only ?
+        # Since 4.4, we can use selected features with the exposure layer too
         self.use_selected_features_only = False
 
         # Output layers
@@ -1268,7 +1269,12 @@ class ImpactFunction(object):
                 from the code.
         :rtype: (int, m.Message)
         """
-        exposure_extent = QgsGeometry.fromRect(self.exposure.extent())
+        if self.use_selected_features_only and is_vector_layer(self.exposure) \
+                and self.exposure.selectedFeatureCount() > 0:
+            exposure_extent = QgsGeometry.fromRect(
+                self.exposure.boundingBoxOfSelected())
+        else:
+            exposure_extent = QgsGeometry.fromRect(self.exposure.extent())
         hazard_extent = QgsGeometry.fromRect(self.hazard.extent())
         if self.aggregation:
             analysis_crs = self.aggregation.crs()
@@ -2255,7 +2261,11 @@ class ImpactFunction(object):
         else:
             mask = reproject(self._analysis_impacted, self.exposure.crs())
         self.set_state_process('exposure', 'Smart clip')
-        self.exposure = smart_clip(self.exposure, mask)
+        # We monkey patch if we use selected features only.
+        self.exposure.use_selected_features_only = (
+            self.use_selected_features_only)
+        self.exposure = smart_clip(
+            self.exposure, mask, check_selected_flag=True)
         self.debug_layer(self.exposure, check_fields=False)
 
         self.set_state_process(
