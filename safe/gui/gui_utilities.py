@@ -6,6 +6,8 @@ from PyQt4.QtCore import Qt
 
 from qgis.core import QgsMapLayerRegistry
 
+from safe.utilities.i18n import tr
+
 
 def layer_from_combo(combo):
     """Get the QgsMapLayer currently selected in a combo.
@@ -25,7 +27,8 @@ def layer_from_combo(combo):
     return layer
 
 
-def add_ordered_combo_item(combo, text, data=None):
+def add_ordered_combo_item(
+        combo, text, data=None, count_selected_features=None):
     """Add a combo item ensuring that all items are listed alphabetically.
 
     Although QComboBox allows you to set an InsertAlphabetically enum
@@ -41,7 +44,14 @@ def add_ordered_combo_item(combo, text, data=None):
 
     :param data: Optional UserRole data to be associated with the item.
     :type data: QVariant, str
+
+    :param count_selected_features: A count to display if the layer has some
+    selected features. Default to None, nothing will be displayed.
+    :type count_selected_features: None, int
     """
+    if count_selected_features is not None:
+        text += ' (' + tr('{count} selected features').format(
+            count=count_selected_features) + ')'
     size = combo.count()
     for combo_index in range(0, size):
         item_text = combo.itemText(combo_index)
