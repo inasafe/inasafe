@@ -17,23 +17,17 @@
    <item>
     <widget class="QTabWidget" name="tab_widget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="analysisTab">
       <attribute name="title">
        <string>Analysis</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_2">
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
        <item>
         <widget class="QLabel" name="label">
          <property name="text">
-          <string>This tool allows you to run a multi-exposure analysis. Select a hazard, two or more exposures and an aggregation layer. The impact function will combine the results of all the hazard / exposure combinations in one report. Use the reporting options tab to specify which layers should be included and visible in the report. You can also set the report layer order on the reporting options tab for producing a printed report. The status tab will show the progress of the analysis as it runs.</string>
+          <string>This tool allows you to run a multi-exposure analysis. Select a hazard, two or more exposures and an aggregation layer. The InaSAFE analysis will combine the results of all the hazard / exposure combinations in one report. Use the reporting options tab to specify which layers should be included and visible in the report. You can also set the report layer order on the reporting options tab for producing a printed report. The status tab will show the progress of the analysis as it runs.</string>
          </property>
          <property name="wordWrap">
           <bool>true</bool>
@@ -101,12 +95,6 @@
        <string>Reporting options</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_6">
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
        <item>
         <widget class="QLabel" name="label_6">
          <property name="text">
