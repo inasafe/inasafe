@@ -103,6 +103,8 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
         :type iface: QGisInterface
         """
         QDialog.__init__(self, parent)
+        self.use_selected_only = setting(
+            'useSelectedFeaturesOnly', expected_type=bool)
         self.parent = parent
         self.iface = iface
         self.setupUi(self)
@@ -420,8 +422,20 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                 add_ordered_combo_item(
                     self.cbx_hazard, title, source)
             elif layer_purpose == layer_purpose_aggregation['key']:
-                add_ordered_combo_item(
-                    self.cbx_aggregation, title, source)
+                if self.use_selected_only:
+                    count_selected = layer.selectedFeatureCount()
+                    if count_selected > 0:
+                        add_ordered_combo_item(
+                            self.cbx_aggregation,
+                            title,
+                            source,
+                            count_selected)
+                    else:
+                        add_ordered_combo_item(
+                            self.cbx_aggregation, title, source, None)
+                else:
+                    add_ordered_combo_item(
+                        self.cbx_aggregation, title, source, None)
             elif layer_purpose == layer_purpose_exposure['key']:
 
                 # fetching the exposure
@@ -475,9 +489,6 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
         # Always set it to False
         self.btn_run.setEnabled(False)
 
-        use_selected_only = setting(
-            'useSelectedFeaturesOnly', expected_type=bool)
-
         for combo in self.combos_exposures.itervalues():
             if combo.count() == 1:
                 combo.setEnabled(False)
@@ -495,7 +506,8 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
         multi_exposure_if.debug = False
         multi_exposure_if.callback = self.progress_callback
         if aggregation:
-            multi_exposure_if.use_selected_features_only = use_selected_only
+            multi_exposure_if.use_selected_features_only = (
+                self.use_selected_only)
             multi_exposure_if.aggregation = aggregation
         else:
             multi_exposure_if.crs = (
