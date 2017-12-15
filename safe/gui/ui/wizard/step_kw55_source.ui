@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>300</height>
+    <height>447</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -185,6 +185,14 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>leSource</tabstop>
+  <tabstop>leSource_url</tabstop>
+  <tabstop>leSource_scale</tabstop>
+  <tabstop>ckbSource_date</tabstop>
+  <tabstop>dtSource_date</tabstop>
+  <tabstop>leSource_license</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
