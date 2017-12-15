@@ -77,17 +77,18 @@ def content():
         'organisation such as: the name and logo.'
     )))
     message.add(m.Paragraph(tr(
-        'The "parameters" tab is used to define some parameters that will be '
-        'used by InaSAFE in the analysis of exposed features. You have the '
-        'option to change the parameters for whether exposed features are '
-        'considered to be "affected" by each hazard type and class and the '
-        'displacement rate that will be used for affected people.')))
+        'The "Population Parameters" tab is used to define some parameters '
+        'that will be used by InaSAFE in the analysis of exposed population. '
+        'You have the option to change the parameters for whether exposed '
+        'population are considered to be "affected" by each hazard type and '
+        'class and the displacement rate that will be used for affected '
+        'people.')))
     message.add(m.Paragraph(tr(
         'Please refer to the InaSAFE manual for concept definitions and more '
         'information on the source of hazard classifications and default '
-        'settings. We really encourage you to consider these parameters '
-        'carefully and to choose appropriate values for your local situation '
-        'based on past events and expert knowledge.')))
+        'settings. We really encourage you to consider these '
+        'population parameters carefully and to choose appropriate values for '
+        'your local situation based on past events and expert knowledge.')))
     message.add(m.Paragraph(tr(
         'You can return to these options any time by using the Plugins -> '
         'InaSAFE -> Options menu.'
