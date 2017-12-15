@@ -372,6 +372,10 @@ class OptionsDialog(QDialog, FORM_CLASS):
         self.organisation_logo_path_line_edit.setText(org_logo_path)
         self.custom_organisation_logo_check_box.setChecked(
             custom_org_logo_flag)
+        self.organisation_logo_path_line_edit.setEnabled(
+            custom_org_logo_flag)
+        self.open_organisation_logo_path_button.setEnabled(
+            custom_org_logo_flag)
         # Manually call here
         self.update_logo_preview()
 
