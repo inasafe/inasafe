@@ -433,8 +433,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>497</width>
-                <height>450</height>
+                <width>834</width>
+                <height>536</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_8">
@@ -923,7 +923,50 @@ p, li { white-space: pre-wrap; }
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>button_box</tabstop>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>organisation_line_edit</tabstop>
+  <tabstop>email_line_edit</tabstop>
+  <tabstop>website_line_edit</tabstop>
+  <tabstop>custom_organisation_logo_check_box</tabstop>
+  <tabstop>organisation_logo_path_line_edit</tabstop>
+  <tabstop>open_organisation_logo_path_button</tabstop>
+  <tabstop>currency_combo_box</tabstop>
+  <tabstop>license_line_edit</tabstop>
+  <tabstop>scrollArea</tabstop>
+  <tabstop>welcome_message_check_box</tabstop>
+  <tabstop>organisation_on_dock_checkbox</tabstop>
+  <tabstop>cbxVisibleLayersOnly</tabstop>
+  <tabstop>cbxSetLayerNameFromTitle</tabstop>
+  <tabstop>cbxZoomToImpact</tabstop>
+  <tabstop>cbxHideExposure</tabstop>
+  <tabstop>cbx_show_only_impact</tabstop>
+  <tabstop>cbx_print_atlas_report</tabstop>
+  <tabstop>cbxUseSelectedFeaturesOnly</tabstop>
+  <tabstop>custom_UseUserDirectory_checkbox</tabstop>
+  <tabstop>leUserDirectoryPath</tabstop>
+  <tabstop>toolUserDirectoryPath</tabstop>
+  <tabstop>cbxBubbleLayersUp</tabstop>
+  <tabstop>lineEdit_4</tabstop>
+  <tabstop>toolButton_4</tabstop>
+  <tabstop>spinBox</tabstop>
+  <tabstop>earthquake_function</tabstop>
+  <tabstop>earthquake_fatality_model_notes</tabstop>
+  <tabstop>template_warning_checkbox</tabstop>
+  <tabstop>custom_north_arrow_checkbox</tabstop>
+  <tabstop>leNorthArrowPath</tabstop>
+  <tabstop>toolNorthArrowPath</tabstop>
+  <tabstop>custom_templates_dir_checkbox</tabstop>
+  <tabstop>leReportTemplatePath</tabstop>
+  <tabstop>toolReportTemplatePath</tabstop>
+  <tabstop>custom_org_disclaimer_checkbox</tabstop>
+  <tabstop>txtDisclaimer</tabstop>
+  <tabstop>leKeywordCachePath</tabstop>
+  <tabstop>toolKeywordCachePath</tabstop>
+  <tabstop>cbxUseSentry</tabstop>
+  <tabstop>textBrowser</tabstop>
+  <tabstop>cbxDevMode</tabstop>
+  <tabstop>checkbox_generate_reports</tabstop>
+  <tabstop>check_box_memory</tabstop>
  </tabstops>
  <resources/>
  <connections>
