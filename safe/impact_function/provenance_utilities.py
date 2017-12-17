@@ -80,6 +80,7 @@ def get_analysis_question(hazard, exposure):
             exposure_name=exposure['name'])
     return question
 
+
 def get_multi_exposure_analysis_question(hazard, exposures):
     """Construct analysis question based on hazard and exposures.
 
@@ -95,8 +96,8 @@ def get_multi_exposure_analysis_question(hazard, exposures):
     exposures_question = ''
     exposure_format = '{exposure_measure} {exposure_name}'
     for index, exposure in enumerate(exposures):
-        if index+1 == len(exposures):
-            if len(exposures) >2:
+        if index + 1 == len(exposures):
+            if len(exposures) > 2:
                 exposures_question += tr(', and ')
             else:
                 exposures_question += tr(' and ')
