@@ -205,11 +205,12 @@ class StepKwClassify(WizardStep, FORM_CLASS):
             assigned = False
             for default_class in default_classes:
                 if 'string_defaults' in default_class:
-                    condition_1 = (
-                        field_type > 9 and
-                        value_as_string in [
-                            c.upper() for c in
-                            default_class['string_defaults']])
+                    # To make it case insensitive
+                    upper_string_defaults = [
+                        c.upper() for c in default_class['string_defaults']]
+                    in_string_default = (
+                        value_as_string in upper_string_defaults)
+                    condition_1 = field_type > 9 and in_string_default
                 else:
                     condition_1 = False
                 condition_2 = (
