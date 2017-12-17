@@ -243,7 +243,7 @@ class StepKwField(WizardStep, FORM_CLASS):
                 subcategory_unit_relation)
         else:
             question_text = field_question_subcategory_classified % (
-                subcategory['name'])
+                subcategory['name'].lower(), subcategory['name'].lower())
         if self.mode == SINGLE_MODE:
             question_text += tr('\nYou can select 1 field only.')
             self.lstFields.setSelectionMode(QAbstractItemView.SingleSelection)
