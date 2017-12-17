@@ -2056,7 +2056,9 @@ class TestKeywordWizard(unittest.TestCase):
                 exposure_land_cover['key']: {
                     flood_hazard_classes['key']: {
                         'active': True,
-                        'classes': {}
+                        'classes': {
+                            'wet': [1.0, 2.0, 3.0]
+                        }
                     }
                 }
             }

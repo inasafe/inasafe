@@ -1197,7 +1197,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
                         'active': True
                     }
                 else:
-                    # Set classes to empty, since we haven't map anything
+                    # Set classes to empty, since we haven't mapped anything
                     target[classification['key']] = {
                         'classes': {},
                         'active': True
