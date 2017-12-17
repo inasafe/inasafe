@@ -29,7 +29,6 @@ from safe.definitions.utilities import (
     get_fields,
     get_non_compulsory_fields,
     default_classification_thresholds,
-    default_classification_value_maps
 )
 from safe.gui.tools.wizard.utilities import clear_layout, skip_inasafe_field
 from safe.gui.tools.wizard.wizard_step import (
@@ -856,11 +855,12 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             assigned = False
             for default_class in default_classes:
                 if 'string_defaults' in default_class:
-                    condition_1 = (
-                        field_type > 9 and
-                        value_as_string in [
-                            c.upper() for c in
-                            default_class['string_defaults']])
+                    # To make it case insensitive
+                    upper_string_defaults = [
+                        c.upper() for c in default_class['string_defaults']]
+                    in_string_default = (
+                        value_as_string in upper_string_defaults)
+                    condition_1 = field_type > 9 and in_string_default
                 else:
                     condition_1 = False
                 condition_2 = (
@@ -872,6 +872,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
                 if condition_1 or condition_2:
                     assigned_values[default_class['key']] += [unique_value]
                     assigned = True
+                    break
             if not assigned:
                 # add to unassigned values list otherwise
                 unassigned_values += [unique_value]
@@ -893,6 +894,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             classification['key'])
         if not current_classification:
             return
+        # Should come from metadata
         current_value_map = current_classification.get('classes')
         if not current_value_map:
             return
@@ -1195,10 +1197,9 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
                         'active': True
                     }
                 else:
-                    default_classes = default_classification_value_maps(
-                        classification)
+                    # Set classes to empty, since we haven't map anything
                     target[classification['key']] = {
-                        'classes': default_classes,
+                        'classes': {},
                         'active': True
                     }
                 return
