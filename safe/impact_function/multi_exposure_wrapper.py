@@ -74,7 +74,8 @@ from safe.definitions.provenance import (
     provenance_layer_analysis_impacted_id,
     provenance_debug_mode,
     provenance_map_title,
-    provenance_multi_exposure_summary_layers)
+    provenance_multi_exposure_summary_layers,
+    provenance_analysis_question)
 from safe.definitions.reports.components import (
     standard_impact_report_metadata_pdf, infographic_report)
 from safe.definitions.styles import (
@@ -87,7 +88,7 @@ from safe.definitions.utilities import (
     get_name,
     get_provenance,
     set_provenance,
-)
+    definition)
 from safe.gis.tools import (
     geometry_type, load_layer_from_registry, full_layer_uri)
 from safe.gis.vector.prepare_vector_layer import prepare_vector_layer
@@ -101,6 +102,8 @@ from safe.impact_function.create_extra_layers import (
 from safe.impact_function.impact_function import ImpactFunction
 from safe.impact_function.impact_function_utilities import (
     check_input_layer, FROM_CANVAS)
+from safe.impact_function.provenance_utilities import (
+    get_multi_exposure_analysis_question)
 from safe.impact_function.style import simple_polygon_without_brush
 from safe.report.impact_report import ImpactReport
 from safe.report.report_metadata import ReportMetadata
@@ -517,6 +520,13 @@ class MultiExposureImpactFunction(object):
 
     def _generate_provenance(self):
         """Function to generate provenance at the end of the IF."""
+        # noinspection PyTypeChecker
+        hazard = definition(
+            self._provenance['hazard_keywords']['hazard'])
+        exposures = [
+            definition(layer.keywords['exposure']) for layer in self.exposures
+        ]
+
         # InaSAFE
         set_provenance(
             self._provenance, provenance_impact_function_name, self.name)
@@ -525,6 +535,11 @@ class MultiExposureImpactFunction(object):
             self._provenance,
             provenance_analysis_extent,
             self._analysis_extent.exportToWkt())
+
+        set_provenance(
+            self._provenance,
+            provenance_analysis_question,
+            get_multi_exposure_analysis_question(hazard, exposures))
 
         set_provenance(
             self._provenance,
