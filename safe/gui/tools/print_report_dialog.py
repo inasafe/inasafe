@@ -12,6 +12,7 @@ from qgis.core import QgsApplication
 from safe import messaging as m
 from safe.common.signals import send_error_message, send_static_message
 from safe.definitions.constants import ANALYSIS_FAILED_BAD_CODE
+from safe.definitions.exposure import exposure_population
 from safe.definitions.provenance import (
     provenance_hazard_keywords, provenance_exposure_keywords)
 from safe.definitions.reports import (
@@ -98,6 +99,7 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
         # override template is selected by default
         self.default_template_radio.setChecked(True)
 
+        self.is_population = False
         self.is_multi_exposure = isinstance(
             self.impact_function, MultiExposureImpactFunction)
 
@@ -134,6 +136,11 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
                     if hazard_type['key'] in file_name and (
                             exposure_type['key'] in file_name):
                         override_template_found = filename
+
+            # check for population exposure
+            self.is_population = isinstance(exposure_type, exposure_population)
+
+        self.infographic_checkbox.setEnabled(self.is_population)
 
         if override_template_found:
             string_format = tr('*Template override found: {template_path}')
@@ -556,11 +563,18 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
 
         .. versionadded: 4.3.0
         """
+        path = self.template_path.text()
+        if not path:
+            path = setting('lastCustomTemplate', '', basestring)
+        if path:
+            directory = dirname(path)
+        else:
+            directory = ''
         # noinspection PyCallByClass,PyTypeChecker
         file_name = QtGui.QFileDialog.getOpenFileName(
             self,
             tr('Select report'),
-            '',
+            directory,
             tr('QGIS composer templates (*.qpt *.QPT)'))
         self.template_path.setText(file_name)
 
