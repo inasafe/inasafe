@@ -23,9 +23,6 @@ from safe.processors.pre_processors import *
 # |--- bearing angle
 # |   |--- cardinality
 # |--- affected
-# |   `--- affected productivity (require productivity)
-# |   `--- affected production cost (needs production cost)
-# |   `--- affected production value (require production value)
 # |--- displaced ratio
 # |--- fatality ratio
 # |   `--- fatality count

@@ -7,6 +7,7 @@ from numbers import Number
 from PyQt4.QtCore import QPyNullVariant
 from qgis.core import QGis, QgsFeatureRequest, QgsFeature
 
+from safe.utilities.i18n import tr
 from safe.definitions.fields import (
     aggregation_id_field,
     aggregation_name_field,
@@ -308,7 +309,7 @@ def summarize_result(exposure_summary, callback=None):
             flag = summarizer_flags[summarizer_field['key']]
             if not flag:
                 continue
-            if is_affected:
+            if is_affected == tr('True'):
                 if exposure_class_name not in summarization_dicts[
                         summarizer_field['key']]:
                     summarization_dicts[summarizer_field['key']][
