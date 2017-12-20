@@ -832,3 +832,32 @@ gender_vulnerability_postprocessors = [
 disabled_vulnerability_postprocessors = [
     post_processor_disability_vulnerability
 ]
+
+all_population_post_processors = (
+    female_postprocessors +
+    age_postprocessors +
+    gender_postprocessors +
+    age_vulnerability_postprocessors +
+    gender_vulnerability_postprocessors +
+    disabled_vulnerability_postprocessors
+) + [
+    post_processor_displaced_ratio,
+    post_processor_displaced,
+    post_processor_fatality_ratio,
+    post_processor_fatalities,
+    post_processor_exposed_population,
+]
+
+# Adding requirement for exposure = population, beside exposed population
+# post processor
+population_exposure_input = {
+    'population_exposure': {
+        'type': keyword_value_expected,
+        'value': ['exposure_keywords', 'exposure'],
+        'expected_value': exposure_population['key']
+    }
+}
+for pp in all_population_post_processors:
+    if pp['key'] == post_processor_exposed_population['key']:
+        continue
+    pp['input'].update(population_exposure_input)
