@@ -5,7 +5,7 @@
 from collections import OrderedDict
 
 from safe.definitions.concepts import concepts
-from safe.definitions.exposure import exposure_population
+from safe.definitions.exposure import exposure_population, exposure_place
 # Displaced field
 from safe.definitions.fields import (
     child_bearing_age_displaced_count_field,
@@ -27,10 +27,13 @@ from safe.definitions.fields import (
     population_count_field,
     exposure_count_field,
     male_displaced_count_field,
-    hygiene_packs_count_field)
+    hygiene_packs_count_field,
+    exposed_population_count_field,
+)
 # Other fields
 from safe.definitions.fields import (
     hazard_class_field,
+    affected_field,
 )
 # Ratio fields
 from safe.definitions.fields import (
@@ -48,7 +51,8 @@ from safe.definitions.fields import (
     elderly_ratio_field,
     under_5_ratio_field,
     over_60_ratio_field,
-    disabled_ratio_field)
+    disabled_ratio_field,
+)
 from safe.definitions.hazard_classifications import earthquake_mmi_scale
 from safe.processors import (
     function_process,
@@ -57,6 +61,7 @@ from safe.processors.post_processor_functions import (
     multiply,
     post_processor_population_displacement_function,
     post_processor_population_fatality_function,
+    post_processor_exposed_population_function
 )
 from safe.processors.post_processor_inputs import (
     constant_input_type,
@@ -768,6 +773,39 @@ post_processor_disability_vulnerability = {
         }
     }
 }
+
+post_processor_exposed_population = {
+    'key': 'post_processor_exposed_population',
+    'name': tr('Exposed Population Post Processor'),
+    'description': tr(
+        'A post processor to calculate the number of exposed people '
+        'who are especially vulnerable because they have disabilities. '
+        '"Exposed people" is defined as: {exposed_people_concept}.').format(
+        exposed_people_concept=concepts['exposed_people']['description']),
+    'input': {
+        'population': {
+            'value': population_count_field,
+            'type': field_input_type,
+        },
+        'affected': {
+            'value': affected_field,
+            'type': field_input_type,
+        },
+        'place_exposure': {
+            'type': keyword_value_expected,
+            'value': ['exposure_keywords', 'exposure'],
+            'expected_value': exposure_place['key']
+        }
+    },
+    'output': {
+        'exposed_population': {
+            'value': exposed_population_count_field,
+            'type': function_process,
+            'function': post_processor_exposed_population_function
+        }
+    }
+}
+
 female_postprocessors = [
     post_processor_hygiene_packs
 ]
