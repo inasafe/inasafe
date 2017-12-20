@@ -2607,6 +2607,29 @@ place_mmi_field = {
     ]
 }
 
+
+# Exposed Population Count
+exposed_population_count_field = {
+    'key': 'exposed_population_count_field',
+    'name': tr('Exposed population count'),
+    'field_name': 'exposed_population',
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'help_text': tr('A count of the exposed population for each feature.'),
+    'description': tr(
+        'The number of exposed population from the hazard.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
 # Inputs
 exposure_fields = [
     exposure_id_field,

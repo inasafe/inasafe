@@ -209,6 +209,32 @@ def post_processor_affected_function(
     return affected
 
 
+def post_processor_exposed_population_function(
+        population=None, affected=None, place_exposure=None):
+    """Private function used in the exposed population function.
+
+    :param population: The population to use
+    :type population: float, int
+
+    :param affected: The affected state to use
+    :type affected: str
+
+    :param place_exposure: The exposure to use.
+    :type place_exposure: str
+
+    :returns: Return the population if it's exposed, otherwise 0 or Null
+    :rtype: int, float
+    """
+    if affected == not_exposed_class['key']:
+        if isinstance(population, QPyNullVariant):
+            return QPyNullVariant
+        else:
+            return 0
+    else:
+        # Exposed, return the population
+        return population
+
+
 def post_processor_population_displacement_function(
         hazard=None, classification=None, hazard_class=None, population=None):
     """Private function used in the displacement postprocessor.
