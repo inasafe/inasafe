@@ -34,7 +34,10 @@
         "Affected Post Processor",
         "Productivity Post Processor",
         "Production Cost Post Processor",
-        "Production Value Post Processor"
+        "Production Value Post Processor",
+        "Affected Productivity Post Processor",
+        "Affected Production Cost Post Processor",
+        "Affected Production Value Post Processor"
       ]
     },
     "aggregation":{
