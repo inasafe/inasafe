@@ -262,6 +262,36 @@ class TestShakeGrid(unittest.TestCase):
             exists,
             'File result : %s does not exist' % result[:-3] + 'qml')
 
+    def test_convert_grid_to_raster_with_ascii(self):
+        """Test converting grid.xml to raster (tif file)"""
+        grid_title = 'Earthquake'
+        grid_source = 'USGS'
+        output_raster = unique_filename(
+            prefix='result_grid',
+            suffix='.tif',
+            dir=temp_dir('test'))
+        result = convert_mmi_data(
+            GRID_PATH,
+            grid_title,
+            grid_source,
+            algorithm='use_ascii',
+            output_path=output_raster)
+        expected_result = output_raster.replace('.tif', '-use_ascii.tif')
+        self.assertEqual(
+            result, expected_result,
+            'Result path not as expected')
+        exists = os.path.exists(result)
+        self.assertTrue(exists, 'File result : %s does not exist' % result)
+        exists = os.path.exists(result[:-3] + 'xml')
+        self.assertTrue(
+            exists,
+            'File result : %s does not exist' % result[:-3] + 'xml')
+        exists = os.path.exists(result[:-3] + 'qml')
+        self.assertTrue(
+            exists,
+            'File result : %s does not exist' % result[:-3] + 'qml')
+        print 'Tiff result : %s' % result
+
     def test_convert_grid_to_ascii(self):
         """Test converting grid.xml to raster (asc file)."""
         print NORMAL_SHAKE_GRID.mmi_to_ascii(True)
