@@ -266,3 +266,21 @@ def post_processor_population_fatality_function(
             return float(displaced_ratio)
 
     return 0.0
+
+
+def post_processor_affected_value_function(affected=None, value=None):
+    """Private function used in the affected field function.
+
+    :param affected: Affected value
+    :type affected: str
+
+    :param value: The value of the feature.
+    :type value: object
+
+    :returns: The value of affected field if affected == True, else Null
+    :rtype: object
+    """
+    if affected == tr('True'):
+        return value
+    else:
+        return 0
