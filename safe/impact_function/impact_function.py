@@ -1422,7 +1422,7 @@ class ImpactFunction(object):
                 tr('You need to run `prepare` first.'),
                 m.Paragraph(tr(
                     'In order to run the analysis, you need to call '
-                    '"prepapre" before this function.')))
+                    '"prepare" before this function.')))
             return ANALYSIS_FAILED_BAD_INPUT, message
 
         try:
