@@ -2703,17 +2703,17 @@ multiexposure_analysis_fields = [
 # Field that can be used to summarize / aggregate the result in exposure
 # summary table
 summarizer_fields = [
-    affected_productivity_field,
-    affected_production_cost_field,
-    affected_production_value_field
+    productivity_field,
+    production_cost_field,
+    production_value_field
 ]
 
 # Mapping between summarizer field and its affected fields in the exposure
 # summary table
 affected_summarizer_fields = {
-    affected_productivity_field['key']: affected_productivity_field,
-    affected_production_cost_field['key']: affected_production_cost_field,
-    affected_production_value_field['key']: affected_production_value_field,
+    productivity_field['key']: affected_productivity_field,
+    production_cost_field['key']: affected_production_cost_field,
+    production_value_field['key']: affected_production_value_field,
 }
 
 # Add also minimum needs fields
