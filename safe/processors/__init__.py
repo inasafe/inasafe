@@ -17,10 +17,15 @@ from safe.processors.pre_processors import *
 # |--- size
 # |   |--- size rate  disabled in V4.0, ET 13/02/17
 # |   `--- productivity
+# |   `--- production cost
+# |   `--- production value
 # |--- distance
 # |--- bearing angle
 # |   |--- cardinality
 # |--- affected
+# |   `--- affected productivity (require productivity)
+# |   `--- affected production cost (needs production cost)
+# |   `--- affected production value (require production value)
 # |--- displaced ratio
 # |--- fatality ratio
 # |   `--- fatality count
