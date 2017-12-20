@@ -508,7 +508,9 @@ def inasafe_logo_white_path(feature, parent):
 
 
 description = tr(
-    'Retrieve the full path of default north arrow logo.')
+    'Retrieve the full path of user specified north arrow image. If the '
+    'custom north arrow logo is not found, it will return the default north '
+    'arrow image.')
 examples = {
     'north_arrow_path()': None
 }
@@ -528,13 +530,15 @@ def north_arrow_path(feature, parent):
     else:
         LOGGER.info(
             'The custom north arrow is not found in {north_arrow_file}. '
-            'Default organisation logo will be used.').format(
+            'Default north arrow will be used.').format(
             north_arrow_file=north_arrow_file)
         return inasafe_default_settings['north_arrow_path']
 
 
 description = tr(
-    'Retrieve the full path of used specified organisation logo.')
+    'Retrieve the full path of user specified organisation logo. If the '
+    'custom organisation logo is not found, it will return the default '
+    'organisation logo.')
 examples = {
     'organisation_logo_path()': None
 }
