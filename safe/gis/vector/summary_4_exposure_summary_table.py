@@ -22,8 +22,7 @@ from safe.definitions.fields import (
     hazard_count_field,
     exposure_count_field,
     exposure_class_field,
-    summarizer_fields,
-    affected_summarizer_fields
+    summary_rules,
 )
 from safe.definitions.hazard_classifications import not_exposed_class
 from safe.definitions.layer_purposes import \
@@ -193,12 +192,12 @@ def exposure_summary_table(
     sorted_keys = sorted(summarization_dicts.keys())
 
     for key in sorted_keys:
-        affected_summarizer_field = affected_summarizer_fields[key]
-        field = create_field_from_definition(affected_summarizer_field)
+        summary_field = summary_rules[key]['summary_field']
+        field = create_field_from_definition(summary_field)
         tabular.addAttribute(field)
         tabular.keywords['inasafe_fields'][
-            affected_summarizer_field['key']] = (
-            affected_summarizer_field['field_name'])
+            summary_field['key']] = (
+            summary_field['field_name'])
 
     # For each absolute values
     for absolute_field in absolute_values.iterkeys():
@@ -294,29 +293,32 @@ def summarize_result(exposure_summary, callback=None):
     summarization_dicts = {}
     summarizer_flags = {}
 
-    for summarizer_field in summarizer_fields:
+    # for summarizer_field in summarizer_fields:
+    for key, summary_rule in summary_rules.items():
+        input_field = summary_rule['input_field']
         if exposure_summary.fieldNameIndex(
-                summarizer_field['field_name']) == -1:
-            summarizer_flags[summarizer_field['key']] = False
+                input_field['field_name']) == -1:
+            summarizer_flags[key] = False
         else:
-            summarizer_flags[summarizer_field['key']] = True
-            summarization_dicts[summarizer_field['key']] = {}
+            summarizer_flags[key] = True
+            summarization_dicts[key] = {}
 
     for feature in exposure_summary.getFeatures():
-        is_affected = feature[affected_field['field_name']]
         exposure_class_name = feature[exposure_class_field['field_name']]
-        for summarizer_field in summarizer_fields:
-            flag = summarizer_flags[summarizer_field['key']]
+        # for summarizer_field in summarizer_fields:
+        for key, summary_rule in summary_rules.items():
+            input_field = summary_rule['input_field']
+            case_field = summary_rule['case_field']
+            case_value = feature[case_field['field_name']]
+
+            flag = summarizer_flags[key]
             if not flag:
                 continue
-            if is_affected == tr('True'):
-                if exposure_class_name not in summarization_dicts[
-                        summarizer_field['key']]:
-                    summarization_dicts[summarizer_field['key']][
-                        exposure_class_name] = 0
-                value = feature[summarizer_field['field_name']]
+            if case_value in summary_rule['case_values']:
+                if exposure_class_name not in summarization_dicts[key]:
+                    summarization_dicts[key][exposure_class_name] = 0
+                value = feature[input_field['field_name']]
                 if isinstance(value, Number):
-                    summarization_dicts[summarizer_field['key']][
-                        exposure_class_name] += value
+                    summarization_dicts[key][exposure_class_name] += value
 
     return summarization_dicts
