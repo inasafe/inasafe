@@ -38,6 +38,29 @@ INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
 LOGGER = logging.getLogger('InaSAFE')
 
 
+def basestring_to_message(text):
+    """Convert a basestring to a Message object if needed.
+
+    Avoid using this function, better to create the Message object yourself.
+    This one is very generic.
+
+    This function exists ust in case we get a basestring and we really need a
+    Message object.
+
+    :param text: The text.
+    :type text: basestring, Message
+
+    :return: The message object.
+    :rtype: message
+    """
+    if isinstance(text, Message):
+        return text
+    else:
+        report = m.Message()
+        report.add(text)
+        return report
+
+
 def get_error_message(exception, context=None, suggestion=None):
     """Convert exception into an ErrorMessage containing a stack trace.
 
