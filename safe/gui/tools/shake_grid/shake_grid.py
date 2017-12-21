@@ -15,7 +15,7 @@ import pytz
 # This import is required to enable PyQt API v2
 # noinspection PyUnresolvedReferences
 import qgis  # NOQA pylint: disable=unused-import
-from osgeo import gdal, ogr
+from osgeo import gdal, ogr, osr
 from osgeo.gdalconst import GA_ReadOnly
 from pytz import timezone
 from qgis.core import (
@@ -564,7 +564,9 @@ class ShakeGrid(object):
             if shakemap_file.GetProjection():
                 shakemap_tif_file.SetProjection(shakemap_file.GetProjection())
             else:
-                shakemap_tif_file.SetProjection('EPSG:4326')
+                srs = osr.SpatialReference()
+                srs.ImportFromEPSG(4326)
+                shakemap_tif_file.SetProjection(srs.ExportToWkt())
             shakemap_tif_file.SetGeoTransform(shakemap_file.GetGeoTransform())
             shakemap_tif_file.FlushCache()
 
