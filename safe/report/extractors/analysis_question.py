@@ -65,16 +65,13 @@ def multi_exposure_analysis_question_extractor(
     extra_args = component_metadata.extra_args
 
     multi_exposure = impact_report.multi_exposure_impact_function
-    provenances = [
-        impact_function.provenance for impact_function in (
-            multi_exposure.impact_functions)]
+    provenance = multi_exposure.provenance
 
     header = resolve_from_dictionary(extra_args, 'header')
-
     analysis_questions = []
-    for provenance in provenances:
-        analysis_question = provenance['analysis_question']
-        analysis_questions.append(analysis_question)
+
+    analysis_question = provenance['analysis_question']
+    analysis_questions.append(analysis_question)
 
     context['header'] = header
     context['analysis_questions'] = analysis_questions
