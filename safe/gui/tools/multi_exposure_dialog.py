@@ -79,7 +79,6 @@ from safe.utilities.resources import (
 from safe.utilities.settings import setting
 from safe.utilities.utilities import (
     is_keyword_version_supported,
-    basestring_to_message,
     get_error_message,
 )
 
@@ -542,7 +541,6 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
         enable_busy_cursor()
         try:
             code, message = self._multi_exposure_if.run()
-            message = basestring_to_message(message)
             if code == ANALYSIS_FAILED_BAD_INPUT:
                 self.hide_busy()
                 LOGGER.info(tr(
@@ -570,7 +568,7 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                 report = [standard_multi_exposure_impact_report_metadata_html]
                 error_code, message = (self._multi_exposure_if.generate_report(
                     report))
-                message = basestring_to_message(message)
+
                 if error_code == ImpactReport.REPORT_GENERATION_FAILED:
                     LOGGER.info(
                         'The impact report could not be generated.')
@@ -640,7 +638,7 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                     html_components = [standard_impact_report_metadata_html]
                     error_code, message = (
                         analysis.generate_report(html_components))
-                    message = basestring_to_message(message)
+
                     if error_code == (
                             ImpactReport.REPORT_GENERATION_FAILED):
                         LOGGER.info(
