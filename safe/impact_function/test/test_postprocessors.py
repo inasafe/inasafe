@@ -359,6 +359,9 @@ class TestPostProcessors(unittest.TestCase):
             'inasafe_fields': {
                 'displaced_field': 'displaced',
                 'female_ratio_field': 'female_r'
+            },
+            'exposure_keywords': {
+                'exposure': exposure_population['key']
             }
         }
         # noinspection PyTypeChecker
