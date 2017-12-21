@@ -122,7 +122,10 @@ def value_from_field_name(field_name, analysis_layer):
     .. versionadded:: 4.0
     """
     field_index = analysis_layer.fieldNameIndex(field_name)
-    return analysis_layer.getFeatures().next()[field_index]
+    if field_index < 0:
+        return None
+    else:
+        return analysis_layer.getFeatures().next()[field_index]
 
 
 def resolve_from_dictionary(dictionary, key_list, default_value=None):
