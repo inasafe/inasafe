@@ -17,6 +17,7 @@ from safe.definitions.fields import (
     total_field,
     total_not_exposed_field,
     affected_field,
+    exposed_population_count_field,
     population_count_field)
 from safe.definitions.utilities import definition
 from safe.report.extractors.util import (
@@ -197,11 +198,13 @@ def analysis_detail_extractor(impact_report, component_metadata):
     # total header
     report_fields += [total_not_exposed_field, total_field]
 
+    place_pop_name = resolve_from_dictionary(
+        extra_args, ['place_with_population', 'header'])
     if is_place_with_population:
         # we want to change header name for population
-        duplicated_population_count_field = deepcopy(population_count_field)
-        duplicated_population_count_field['name'] = resolve_from_dictionary(
-            extra_args, ['place_with_population', 'header'])
+        duplicated_population_count_field = deepcopy(
+            exposed_population_count_field)
+        duplicated_population_count_field['name'] = place_pop_name
         report_fields.append(duplicated_population_count_field)
 
     report_fields_index = -2 + -(int(is_place_with_population))
@@ -406,14 +409,21 @@ def analysis_detail_extractor(impact_report, component_metadata):
     # for footers
     for field in report_fields:
 
+        total_count = value_from_field_name(
+            field['field_name'], analysis_layer)
+
+        if not total_count and field['name'] == place_pop_name:
+            field = population_count_field
+            field['name'] = place_pop_name
+            total_count = value_from_field_name(
+                field['field_name'], analysis_layer)
+
         group_key = None
         for key, group in header_hazard_group.iteritems():
             if field['name'] in group['total']:
                 group_key = key
                 break
 
-        total_count = value_from_field_name(
-            field['field_name'], analysis_layer)
         total_count = format_number(
             total_count,
             enable_rounding=is_rounding,
