@@ -104,6 +104,7 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
             self.impact_function, MultiExposureImpactFunction)
 
         override_template_found = None
+        population_found = False
         if self.is_multi_exposure:
             self.override_template_radio.setEnabled(False)
             self.override_template_label.setEnabled(False)
@@ -113,8 +114,19 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
             self.action_checklist_checkbox.setChecked(False)
             self.provenance_checkbox.setEnabled(False)
             self.provenance_checkbox.setChecked(False)
-            self.infographic_checkbox.setEnabled(False)
-            self.infographic_checkbox.setChecked(False)
+
+            provenances = [
+                analysis.provenance for analysis in (
+                    self.impact_function.impact_functions)]
+            for provenance in provenances:
+                exposure_keywords = provenance['exposure_keywords']
+                exposure_type = definition(exposure_keywords['exposure'])
+                if exposure_type == exposure_population:
+                    population_found = True
+                    break
+            self.infographic_checkbox.setEnabled(population_found)
+            self.infographic_checkbox.setChecked(population_found)
+
         else:
             # search for available override template
             hazard_type = definition(
@@ -140,7 +152,8 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
             # check for population exposure
             self.is_population = exposure_type == exposure_population
 
-        self.infographic_checkbox.setEnabled(self.is_population)
+        self.infographic_checkbox.setEnabled(
+            self.is_population or population_found)
 
         if override_template_found:
             string_format = tr('*Template override found: {template_path}')
@@ -161,9 +174,9 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
         self.button_print_pdf.clicked.connect(self.accept)
         self.button_open_composer.clicked.connect(self.accept)
 
-        self.no_map_radio.toggled.connect(self.toggle_template_selector)
-        self.no_map_radio.toggled.connect(
-            self.button_open_composer.setDisabled)
+        # self.no_map_radio.toggled.connect(self.toggle_template_selector)
+        # self.no_map_radio.toggled.connect(
+        #     self.button_open_composer.setDisabled)
         self.default_template_radio.toggled.connect(
             self.toggle_template_selector)
         self.override_template_radio.toggled.connect(
@@ -496,9 +509,9 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
                         'The template you choose does not exist.'))
 
         if map_report in generated_components:
-            if self.no_map_radio.isChecked():
-                generated_components.remove(map_report)
-            elif self.default_template_radio.isChecked():
+            # if self.no_map_radio.isChecked():
+            #     generated_components.remove(map_report)
+            if self.default_template_radio.isChecked():
                 # make sure map report is there
                 generated_components.append(
                     generated_components.pop(
