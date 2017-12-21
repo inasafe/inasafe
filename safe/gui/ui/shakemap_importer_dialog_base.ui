@@ -312,6 +312,23 @@
    <header>QtWebKit/QWebView</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>input_path</tabstop>
+  <tabstop>open_input_tool</tabstop>
+  <tabstop>line_edit_title</tabstop>
+  <tabstop>line_edit_source</tabstop>
+  <tabstop>use_output_default</tabstop>
+  <tabstop>output_path</tabstop>
+  <tabstop>open_output_tool</tabstop>
+  <tabstop>load_result</tabstop>
+  <tabstop>keyword_wizard_checkbox</tabstop>
+  <tabstop>nearest_mode</tabstop>
+  <tabstop>inverse_distance_mode</tabstop>
+  <tabstop>use_ascii_mode</tabstop>
+  <tabstop>none_smoothing</tabstop>
+  <tabstop>numpy_smoothing</tabstop>
+  <tabstop>scipy_smoothing</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
