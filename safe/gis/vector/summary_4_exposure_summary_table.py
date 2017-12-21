@@ -198,14 +198,17 @@ def exposure_summary_table(
             summary_field['key']] = (
             summary_field['field_name'])
 
-    # For each absolute values
-    for absolute_field in absolute_values.iterkeys():
-        field_definition = definition(absolute_values[absolute_field][1])
-        field = create_field_from_definition(field_definition)
-        tabular.addAttribute(field)
-        key = field_definition['key']
-        value = field_definition['field_name']
-        tabular.keywords['inasafe_fields'][key] = value
+    # Only add absolute value if there is no summarization / no exposure
+    # classification
+    if not summarization_dicts:
+        # For each absolute values
+        for absolute_field in absolute_values.iterkeys():
+            field_definition = definition(absolute_values[absolute_field][1])
+            field = create_field_from_definition(field_definition)
+            tabular.addAttribute(field)
+            key = field_definition['key']
+            value = field_definition['field_name']
+            tabular.keywords['inasafe_fields'][key] = value
 
     for exposure_type in unique_exposure:
         feature = QgsFeature()
@@ -241,12 +244,12 @@ def exposure_summary_table(
             for key in sorted_keys:
                 attributes.append(summarization_dicts[key].get(
                     exposure_type, 0))
-
-        for i, field in enumerate(absolute_values.itervalues()):
-            value = field[0].get_value(
-                all='all'
-            )
-            attributes.append(value)
+        else:
+            for i, field in enumerate(absolute_values.itervalues()):
+                value = field[0].get_value(
+                    all='all'
+                )
+                attributes.append(value)
 
         feature.setAttributes(attributes)
         tabular.addFeature(feature)
