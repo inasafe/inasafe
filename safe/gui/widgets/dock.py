@@ -931,14 +931,17 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
             if provenances:
                 self.set_provenance_to_project_variables(provenances)
-            if is_multi_exposure:
-                self.impact_function = (
-                    MultiExposureImpactFunction.load_from_output_metadata(
-                        keywords))
-            elif provenances:
-                self.impact_function = (
-                    ImpactFunction.load_from_output_metadata(
-                        keywords))
+            try:
+                if is_multi_exposure:
+                    self.impact_function = (
+                        MultiExposureImpactFunction.load_from_output_metadata(
+                            keywords))
+                elif provenances:
+                    self.impact_function = (
+                        ImpactFunction.load_from_output_metadata(
+                            keywords))
+            except Exception:
+                self.impact_function = None
 
             show_keywords = True
             if keywords.get('layer_purpose') in impacted_layer:
