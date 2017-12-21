@@ -268,12 +268,11 @@ class TestSummary(unittest.TestCase):
 
         summarizer_dicts = summarize_result(exposure_summary)
 
-        productivity_summary = summarizer_dicts.get(
-            productivity_field['key'])
+        productivity_summary = summarizer_dicts.get('affected_productivity')
         production_cost_summary = summarizer_dicts.get(
-            production_cost_field['key'])
+            'affected_production_cost')
         production_value_summary = summarizer_dicts.get(
-            production_value_field['key'])
+            'affected_production_value')
 
         self.assertIsNotNone(productivity_summary)
         self.assertIsNotNone(production_cost_summary)

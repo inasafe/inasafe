@@ -118,6 +118,7 @@ from safe.utilities.gis import wkt_to_rectangle
 from safe.utilities.utilities import readable_os_version
 from safe.impact_function.impact_function import ImpactFunction
 from safe.impact_function.impact_function_utilities import check_input_layer
+from safe.definitions.exposure import exposure_population
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -830,7 +831,7 @@ class TestImpactFunction(unittest.TestCase):
             'classification': 'flood_hazard_classes'
         }
         impact_layer.keywords['exposure_keywords'] = {
-            'exposure': 'structure',
+            'exposure': exposure_population['key'],
         }
 
         def debug_layer(layer, add_to_datastore):

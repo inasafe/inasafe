@@ -32,17 +32,9 @@
       "process":[
         "Size Value Post Processor",
         "Affected Post Processor",
-        "Population Displacement Ratio Post Processor",
-        "Displaced Post Processor",
         "Distance Post Processor",
         "Bearing Angle Post Processor",
-        "Cardinality Post Processor",
-        "Rice Post Processor",
-        "Drinking Water Post Processor",
-        "Clean Water Post Processor",
-        "Family Kits Post Processor",
-        "Toilets Post Processor",
-        "Exposed Population Post Processor"
+        "Cardinality Post Processor"
       ]
     },
     "aggregation":{
