@@ -55,6 +55,8 @@ def basestring_to_message(text):
     """
     if isinstance(text, Message):
         return text
+    elif text is None:
+        return ''
     else:
         report = m.Message()
         report.add(text)
