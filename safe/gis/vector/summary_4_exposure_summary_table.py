@@ -7,7 +7,6 @@ from numbers import Number
 from PyQt4.QtCore import QPyNullVariant
 from qgis.core import QGis, QgsFeatureRequest, QgsFeature
 
-from safe.utilities.i18n import tr
 from safe.definitions.fields import (
     aggregation_id_field,
     aggregation_name_field,
