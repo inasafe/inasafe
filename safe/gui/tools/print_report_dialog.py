@@ -138,7 +138,7 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
                         override_template_found = filename
 
             # check for population exposure
-            self.is_population = isinstance(exposure_type, exposure_population)
+            self.is_population = exposure_type == exposure_population
 
         self.infographic_checkbox.setEnabled(self.is_population)
 
