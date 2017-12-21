@@ -95,8 +95,13 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         self.main_stacked_widget.setCurrentIndex(1)
         self.update_warning()
 
-        if not setting('developer_mode'):
+        if not setting('developer_mode', expected_type=bool):
             self.smoothing_group_box.hide()
+
+        self.use_ascii_mode.setToolTip(tr(
+            'This algorithm will convert the grid xml to a ascii raster file. '
+            'If the cell width and height is different, it will use the width '
+            '(length cell in x axis).'))
 
         if not HAS_SCIPY:
             if self.scipy_smoothing.isChecked:
@@ -208,10 +213,13 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
                 tr('Input file does not exist'))
             return
 
+        algorithm = 'nearest'
         if self.nearest_mode.isChecked():
             algorithm = 'nearest'
-        else:
+        elif self.inverse_distance_mode.isChecked():
             algorithm = 'invdist'
+        elif self.use_ascii_mode.isChecked():
+            algorithm = 'use_ascii'
 
         # Smoothing
         smoothing_method = NONE_SMOOTHING
