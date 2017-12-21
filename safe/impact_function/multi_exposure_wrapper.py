@@ -36,6 +36,7 @@ from safe.datastore.folder import Folder
 from safe.definitions.constants import (
     PREPARE_SUCCESS,
     PREPARE_FAILED_BAD_INPUT,
+    ANALYSIS_FAILED_BAD_INPUT,
     ANALYSIS_SUCCESS,
     MULTI_EXPOSURE_ANALYSIS_FLAG)
 from safe.definitions.layer_purposes import (
@@ -884,6 +885,7 @@ class MultiExposureImpactFunction(object):
                 m.Paragraph(tr(
                     'In order to run the analysis, you need to call '
                     '"prepare" before this function.')))
+            return ANALYSIS_FAILED_BAD_INPUT, message
 
         self._unique_name = self._name.replace(' ', '')
         self._unique_name = replace_accentuated_characters(self._unique_name)

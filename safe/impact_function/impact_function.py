@@ -1004,7 +1004,6 @@ class ImpactFunction(object):
                 return PREPARE_FAILED_BAD_INPUT, message
 
             status, message = check_input_layer(self.exposure, 'exposure')
-
             if status != PREPARE_SUCCESS:
                 return status, message
 
@@ -1018,7 +1017,6 @@ class ImpactFunction(object):
                 return PREPARE_FAILED_BAD_INPUT, message
 
             status, message = check_input_layer(self.hazard, 'hazard')
-
             if status != PREPARE_SUCCESS:
                 return status, message
 
@@ -1055,7 +1053,6 @@ class ImpactFunction(object):
                 aggregation_source = full_layer_uri(self.aggregation)
                 aggregation_keywords = copy_layer_keywords(
                     self.aggregation.keywords)
-
                 if status != PREPARE_SUCCESS:
                     return status, message
             else:
