@@ -2,15 +2,12 @@
 <ui version="4.0">
  <class>ImpactReportDialogBase</class>
  <widget class="QDialog" name="ImpactReportDialogBase">
-  <property name="windowModality">
-   <enum>Qt::WindowModal</enum>
-  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>551</width>
-    <height>690</height>
+    <width>659</width>
+    <height>516</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -82,92 +79,9 @@
              </sizepolicy>
             </property>
             <property name="title">
-             <string>Custom and map report</string>
+             <string>Map report</string>
             </property>
             <layout class="QGridLayout" name="gridLayout_4">
-             <item row="4" column="1">
-              <widget class="QLabel" name="search_directory_label">
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>50</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose a specific map template from &lt;span style=&quot; font-weight:600;&quot;&gt;search directories&lt;/span&gt;. The default landscape, portrait maps will &lt;span style=&quot; font-weight:600;&quot;&gt;NOT&lt;/span&gt; be printed, override template will &lt;span style=&quot; font-weight:600;&quot;&gt;NOT&lt;/span&gt; be used and specific template as selected below will be used.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-               </property>
-               <property name="wordWrap">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="5" column="1" colspan="2">
-              <widget class="QComboBox" name="template_combo">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="0">
-              <widget class="QRadioButton" name="override_template_radio">
-               <property name="text">
-                <string/>
-               </property>
-               <property name="checked">
-                <bool>false</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="7" column="2">
-              <widget class="QToolButton" name="template_chooser">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-               <property name="text">
-                <string>...</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="0">
-              <widget class="QRadioButton" name="no_map_radio">
-               <property name="text">
-                <string/>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="1">
-              <widget class="QLabel" name="override_template_found_label">
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>20</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>*Template override not found</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QRadioButton" name="default_template_radio">
-               <property name="text">
-                <string/>
-               </property>
-               <property name="checked">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QLabel" name="default_template_label">
-               <property name="text">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Print the standard landscape and portrait maps. Override template will &lt;span style=&quot; font-weight:600;&quot;&gt;NOT&lt;/span&gt; be used.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-               </property>
-               <property name="wordWrap">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
              <item row="6" column="1">
               <widget class="QLabel" name="search_on_disk_label">
                <property name="maximumSize">
@@ -177,7 +91,7 @@
                 </size>
                </property>
                <property name="text">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose a specific map template by selecting it on your &lt;span style=&quot; font-weight:600;&quot;&gt;disk&lt;/span&gt;. The default landscape, portrait maps will &lt;span style=&quot; font-weight:600;&quot;&gt;NOT&lt;/span&gt; be printed, override template will &lt;span style=&quot; font-weight:600;&quot;&gt;NOT&lt;/span&gt; be used and specific template as selected below will be used.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A specific template on your disk&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                </property>
                <property name="wordWrap">
                 <bool>true</bool>
@@ -188,26 +102,6 @@
               <widget class="QLineEdit" name="template_path">
                <property name="enabled">
                 <bool>false</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QLabel" name="no_map_label">
-               <property name="enabled">
-                <bool>true</bool>
-               </property>
-               <property name="text">
-                <string>Do not print a map report.</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="1">
-              <widget class="QLabel" name="override_template_label">
-               <property name="text">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Print the override template as shown below. The default landscape and portrait maps will &lt;span style=&quot; font-weight:600;&quot;&gt;NOT&lt;/span&gt; be printed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-               </property>
-               <property name="wordWrap">
-                <bool>true</bool>
                </property>
               </widget>
              </item>
@@ -247,6 +141,99 @@
                </property>
               </widget>
              </item>
+             <item row="1" column="0">
+              <widget class="QRadioButton" name="default_template_radio">
+               <property name="text">
+                <string/>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QRadioButton" name="override_template_radio">
+               <property name="text">
+                <string/>
+               </property>
+               <property name="checked">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1">
+              <widget class="QLabel" name="override_template_found_label">
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>20</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>*Template override not found</string>
+               </property>
+              </widget>
+             </item>
+             <item row="7" column="2">
+              <widget class="QToolButton" name="template_chooser">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="text">
+                <string>...</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="1">
+              <widget class="QLabel" name="search_directory_label">
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>50</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A specific template from search directories&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="wordWrap">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="1" colspan="2">
+              <widget class="QComboBox" name="template_combo">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QLabel" name="default_template_label">
+               <property name="text">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The standard landscape and portrait maps.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="wordWrap">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QLabel" name="override_template_label">
+               <property name="text">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The override template&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="wordWrap">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0" colspan="2">
+              <widget class="QLabel" name="label_2">
+               <property name="text">
+                <string>Print the map using:</string>
+               </property>
+              </widget>
+             </item>
             </layout>
            </widget>
           </item>
@@ -259,7 +246,7 @@
              </sizepolicy>
             </property>
             <property name="title">
-             <string>Tabular reports</string>
+             <string>InaSAFE reports</string>
             </property>
             <layout class="QGridLayout" name="gridLayout_5">
              <item row="1" column="0">
@@ -292,12 +279,6 @@
              </item>
              <item row="0" column="0">
               <widget class="QLabel" name="label">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
                <property name="text">
                 <string>Print report as PDF:</string>
                </property>
