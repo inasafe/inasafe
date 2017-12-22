@@ -7,6 +7,7 @@ from qgis.core import QgsFeatureRequest
 from safe.definitions.constants import MULTI_EXPOSURE_ANALYSIS_FLAG
 from safe.definitions.extra_keywords import extra_keyword_analysis_type
 from safe.definitions.fields import (
+    aggregation_id_field,
     affected_exposure_count_field,
     exposure_affected_exposure_type_count_field,
     hazard_count_field,
@@ -198,6 +199,9 @@ def multi_exposure_aggregation_summary(aggregation, intermediate_layers):
 
     .. versionadded:: 4.3
     """
+    target_index_field_name = (
+        aggregation.keywords['inasafe_fields'][aggregation_id_field['key']])
+
     aggregation.startEditing()
 
     request = QgsFeatureRequest()
@@ -231,12 +235,37 @@ def multi_exposure_aggregation_summary(aggregation, intermediate_layers):
         target_field_index = aggregation.fieldNameIndex(field.name())
         field_map[source_field_index] = target_field_index
 
+        # Get Aggregation ID from original feature
+        index = (
+            layer.fieldNameIndex(source_fields[aggregation_id_field['key']]))
+
         for source_feature in layer.getFeatures(request):
+            target_expression = QgsFeatureRequest()
+            target_expression.setFlags(QgsFeatureRequest.NoGeometry)
+            expression = '\"{field_name}\" = {id_value}'.format(
+                field_name=target_index_field_name,
+                id_value=source_feature[index])
+            target_expression.setFilterExpression(expression)
+            iterator = aggregation.getFeatures(target_expression)
+            target_feature = next(iterator)  # It must return only 1 feature.
+
             for source_field, target_field in field_map.iteritems():
                 aggregation.changeAttributeValue(
-                    source_feature.id(),
+                    target_feature.id(),
                     target_field,
                     source_feature[source_field])
+
+            try:
+                next(iterator)
+            except StopIteration:
+                # Everything is fine, it's normal.
+                pass
+            else:
+                # This should never happen ! IDs are duplicated in the
+                # aggregation layer.
+                raise Exception(
+                    'Aggregation IDs are duplicated in the aggregation layer. '
+                    'We can\'t make any joins.')
 
     aggregation.commitChanges()
     aggregation.keywords['title'] = (
