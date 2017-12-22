@@ -174,6 +174,8 @@ def post_processor_affected_function(
         exposure=None, hazard=None, classification=None, hazard_class=None):
     """Private function used in the affected postprocessor.
 
+    It returns a boolean if it's affected or not, or not exposed.
+
     :param exposure: The exposure to use.
     :type exposure: str
 
@@ -187,7 +189,9 @@ def post_processor_affected_function(
     :type hazard_class: str
 
     :return: If this hazard class is affected or not. It can be `not exposed`.
-    :rtype: bool
+        The not exposed value returned is the key defined in
+        `hazard_classification.py` at the top of the file.
+    :rtype: bool,'not exposed'
     """
     if exposure == exposure_population['key']:
         affected = is_affected(
