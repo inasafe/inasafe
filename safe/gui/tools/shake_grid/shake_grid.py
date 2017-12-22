@@ -950,7 +950,8 @@ class ShakeGrid(object):
             'continuous_hazard_unit': unit_mmi['key'],
             'classification': earthquake_mmi_scale['key'],
             'thresholds': classes,
-            'extra_keywords': extra_keywords
+            'extra_keywords': extra_keywords,
+            'active_band': 1
         }
 
         if self.algorithm_name:
