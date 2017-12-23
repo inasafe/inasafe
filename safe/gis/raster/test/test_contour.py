@@ -61,8 +61,9 @@ class TestContour(unittest.TestCase):
             '20131105060809',
             'output',
             'grid-use_ascii.tif')
-        normal_contour_path = shakemap_contour(shakemap_layer_path)
-        self.assertTrue(os.path.exists(normal_contour_path))
+        contour_path = shakemap_contour(shakemap_layer_path)
+        self.assertTrue(os.path.exists(contour_path))
+        print contour_path
 
 
 if __name__ == '__main__':
