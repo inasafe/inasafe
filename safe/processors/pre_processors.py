@@ -3,6 +3,7 @@
 """Definitions relating to pre-processing."""
 
 import logging
+import os
 
 from safe.definitions.exposure import exposure_place
 from safe.definitions.hazard import hazard_earthquake
@@ -11,10 +12,12 @@ from safe.definitions.layer_purposes import (
     layer_purpose_hazard,
     layer_purpose_nearby_places,
     layer_purpose,
+    layer_purpose_earthquake_contour,
 )
 from safe.processors import (
     function_process,
 )
+from safe.definitions.layer_geometry import layer_geometry_raster
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
@@ -77,5 +80,61 @@ pre_processors_nearby_places = {
         'type': 'layer',
         'key': layer_purpose,
         'value': layer_purpose_nearby_places,
+    }
+}
+
+
+def check_earthquake_contour_preprocessor(impact_function):
+    """Checker for the contour preprocessor.
+
+    :param impact_function: Impact function to check.
+    :type impact_function: ImpactFunction
+
+    :return: If the preprocessor can run.
+    :rtype: bool
+    """
+    hazard_key = impact_function.hazard.keywords.get('hazard')
+    is_earthquake = hazard_key == hazard_earthquake['key']
+
+    geometry_key = impact_function.hazard.keywords.get('layer_geometry')
+    is_raster = geometry_key == layer_geometry_raster['key']
+
+    if is_earthquake and is_raster:
+        return True
+    else:
+        return False
+
+
+def earthquake_contour_preprocessor(impact_function):
+    """Preprocessor to create contour from an earthquake
+
+    :param impact_function: Impact function to run.
+    :type impact_function: ImpactFunction
+
+    :return: The contour layer.
+    :rtype: QgsMapLayer
+    """
+    from safe.gis.raster.contour import create_contour
+    contour_path = create_contour(impact_function.hazard)
+
+    if os.path.exists(contour_path):
+        from safe.gis.tools import load_layer
+        return load_layer(contour_path, tr('Contour'), 'ogr')
+
+
+pre_processors_earthquake_contour = {
+    'key': 'pre_processor_earthquake_contour',
+    'name': tr('Earthquake Contour Pre Processor'),
+    'description': tr(
+        'A pre processor to create contour from a hazard earthquake.'),
+    'condition': check_earthquake_contour_preprocessor,
+    'process': {
+        'type': function_process,
+        'function': earthquake_contour_preprocessor,
+    },
+    'output': {
+        'type': 'layer',
+        'key': layer_purpose,
+        'value': layer_purpose_earthquake_contour,
     }
 }

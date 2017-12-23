@@ -206,6 +206,19 @@ layer_purpose_nearby_places = {
     ]
 }
 
+layer_purpose_earthquake_contour = {
+    'key': 'earthquake_contour',
+    'name': tr('Earthquake Contour'),
+    'description': tr('A contour of a hazard earthquake'),
+    'allowed_geometries': [layer_geometry_line],
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+
 layer_purpose = {
     'key': 'layer_purpose',
     'name': tr('Purpose'),

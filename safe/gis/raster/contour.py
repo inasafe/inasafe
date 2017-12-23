@@ -225,8 +225,8 @@ def create_contour(
         function.
     :type smooth_sigma: float
 
-    :returns: The contour of the shake map layer.
-    :rtype: QgsRasterLayer
+    :returns: The contour of the shake map layer path.
+    :rtype: basestring
     """
     from datetime import datetime
     timestamp = datetime.now()
