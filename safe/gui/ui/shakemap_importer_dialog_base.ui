@@ -166,9 +166,9 @@
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_3">
           <item>
-           <widget class="QRadioButton" name="nearest_mode">
+           <widget class="QRadioButton" name="use_ascii_mode">
             <property name="text">
-             <string>Nearest neighbour</string>
+             <string>Use ASCII</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -176,16 +176,19 @@
            </widget>
           </item>
           <item>
-           <widget class="QRadioButton" name="inverse_distance_mode">
+           <widget class="QRadioButton" name="nearest_mode">
             <property name="text">
-             <string>Inverse Distance</string>
+             <string>Nearest neighbour</string>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QRadioButton" name="use_ascii_mode">
+           <widget class="QRadioButton" name="inverse_distance_mode">
             <property name="text">
-             <string>Use ASCII</string>
+             <string>Inverse Distance</string>
             </property>
            </widget>
           </item>
@@ -322,9 +325,9 @@
   <tabstop>open_output_tool</tabstop>
   <tabstop>load_result</tabstop>
   <tabstop>keyword_wizard_checkbox</tabstop>
+  <tabstop>use_ascii_mode</tabstop>
   <tabstop>nearest_mode</tabstop>
   <tabstop>inverse_distance_mode</tabstop>
-  <tabstop>use_ascii_mode</tabstop>
   <tabstop>none_smoothing</tabstop>
   <tabstop>numpy_smoothing</tabstop>
   <tabstop>scipy_smoothing</tabstop>
