@@ -19,7 +19,6 @@ from safe.definitions.hazard_classifications import (
     earthquake_mmi_scale, generic_hazard_classes)
 from safe.definitions.constants import (
     NUMPY_SMOOTHING, SCIPY_SMOOTHING, NONE_SMOOTHING)
-from safe.gis.raster.reclassify import reclassify
 from safe.gui.tools.help.shakemap_converter_help import shakemap_converter_help
 from safe.gui.tools.shake_grid.shake_grid import convert_mmi_data
 from safe.gui.tools.wizard.wizard_dialog import WizardDialog
