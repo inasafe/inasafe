@@ -60,5 +60,6 @@ post_processors = [
 ]
 
 pre_processors = [
-    # pre_processors_nearby_places, Disabled for now until with have contours
+    # pre_processor_earthquake_contour  # Disable now, until we have metadata
+    #  for contour layer
 ]

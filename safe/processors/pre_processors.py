@@ -119,10 +119,10 @@ def earthquake_contour_preprocessor(impact_function):
 
     if os.path.exists(contour_path):
         from safe.gis.tools import load_layer
-        return load_layer(contour_path, tr('Contour'), 'ogr')
+        return load_layer(contour_path, tr('Contour'), 'ogr')[0]
 
 
-pre_processors_earthquake_contour = {
+pre_processor_earthquake_contour = {
     'key': 'pre_processor_earthquake_contour',
     'name': tr('Earthquake Contour Pre Processor'),
     'description': tr(

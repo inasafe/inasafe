@@ -16,7 +16,7 @@ from safe.definitions.hazard import hazard_generic
 from safe.impact_function.impact_function import ImpactFunction
 from safe.test.utilities import load_test_vector_layer, load_test_raster_layer
 from safe.processors.pre_processors import (
-    pre_processors_nearby_places, pre_processors_earthquake_contour)
+    pre_processors_nearby_places, pre_processor_earthquake_contour)
 
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
@@ -75,7 +75,7 @@ class TestPreProcessors(unittest.TestCase):
         self.assertEqual(PREPARE_SUCCESS, status, message)
 
         self.assertTrue(
-            pre_processors_earthquake_contour['condition'](impact_function))
+            pre_processor_earthquake_contour['condition'](impact_function))
 
         hazard_layer = load_test_raster_layer(
             'hazard', 'classified_flood_20_20.asc')
@@ -90,7 +90,7 @@ class TestPreProcessors(unittest.TestCase):
 
         # not ok, since the hazard is flood, not earthquake
         self.assertFalse(
-            pre_processors_earthquake_contour['condition'](impact_function))
+            pre_processor_earthquake_contour['condition'](impact_function))
 
 
 if __name__ == '__main__':
