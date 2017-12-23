@@ -9,7 +9,7 @@ from qgis.core import QgsVectorLayer
 from safe.common.utilities import unique_filename, temp_dir
 from safe.test.utilities import standard_data_path, get_qgis_app
 from safe.gui.tools.shake_grid.shake_grid import (
-    ShakeGrid, convert_mmi_data)
+    ShakeGrid, convert_mmi_data, USE_ASCII, NEAREST_NEIGHBOUR, INVDIST)
 from safe.utilities.metadata import read_iso19115_metadata
 from safe.definitions.constants import NUMPY_SMOOTHING
 
@@ -223,7 +223,7 @@ class TestShakeGrid(unittest.TestCase):
     def test_event_to_contours(self):
         """Check we can extract contours from the event."""
         file_path = SMOOTHED_SHAKE_GRID.mmi_to_contours(
-            force_flag=True, algorithm='invdist')
+            force_flag=True, algorithm=INVDIST)
         self.assertTrue(self.check_feature_count(file_path, 16))
         self.assertTrue(os.path.exists(file_path))
         expected_qml = file_path.replace('shp', 'qml')
@@ -231,7 +231,7 @@ class TestShakeGrid(unittest.TestCase):
         self.assertTrue(os.path.exists(expected_qml), message)
 
         file_path = SMOOTHED_SHAKE_GRID.mmi_to_contours(
-            force_flag=True, algorithm='nearest')
+            force_flag=True, algorithm=NEAREST_NEIGHBOUR)
         self.assertTrue(self.check_feature_count(file_path, 132))
         file_path = SMOOTHED_SHAKE_GRID.mmi_to_contours(
             force_flag=True, algorithm='average')
@@ -247,7 +247,8 @@ class TestShakeGrid(unittest.TestCase):
             dir=temp_dir('test'))
         result = convert_mmi_data(
             GRID_PATH, grid_title, grid_source, output_path=output_raster)
-        expected_result = output_raster.replace('.tif', '-nearest.tif')
+        expected_result = output_raster.replace(
+            '.tif', '-%s.tif' % NEAREST_NEIGHBOUR)
         self.assertEqual(
             result, expected_result,
             'Result path not as expected')
@@ -274,9 +275,9 @@ class TestShakeGrid(unittest.TestCase):
             GRID_PATH,
             grid_title,
             grid_source,
-            algorithm='use_ascii',
+            algorithm=USE_ASCII,
             output_path=output_raster)
-        expected_result = output_raster.replace('.tif', '-use_ascii.tif')
+        expected_result = output_raster.replace('.tif', '-%s.tif' % USE_ASCII)
         self.assertEqual(
             result, expected_result,
             'Result path not as expected')
