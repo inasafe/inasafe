@@ -545,32 +545,24 @@ class ShakeGrid(object):
             return tif_path
 
         if algorithm == 'use_ascii':
+            # Convert to ascii
             ascii_path = self.mmi_to_ascii(True)
-            # Convert ascii to tif
-            shakemap_file = gdal.Open(ascii_path)
-            shakemap_array = np.array(
-                shakemap_file.GetRasterBand(1).ReadAsArray())
 
-            # Create smoothed shakemap raster layer
-            driver = gdal.GetDriverByName('GTiff')
-            shakemap_tif_file = driver.Create(
-                tif_path,
-                shakemap_file.RasterXSize,
-                shakemap_file.RasterYSize,
-                1)
-            shakemap_tif_file.GetRasterBand(1).WriteArray(shakemap_array)
+            # Creating command to convert to tif
+            command = (
+                (
+                    '%(gdal_translate)s -a_srs EPSG:4326 '
+                    '"%(ascii)s" "%(tif)s"'
+                ) % {
+                    'gdal_translate': which('gdal_translate')[0],
+                    'ascii': ascii_path,
+                    'tif': tif_path
+                }
+            )
 
-            # CRS
-            if shakemap_file.GetProjection():
-                shakemap_tif_file.SetProjection(shakemap_file.GetProjection())
-            else:
-                srs = osr.SpatialReference()
-                srs.ImportFromEPSG(4326)
-                shakemap_tif_file.SetProjection(srs.ExportToWkt())
-            shakemap_tif_file.SetGeoTransform(shakemap_file.GetGeoTransform())
-            shakemap_tif_file.FlushCache()
-
-            del shakemap_tif_file
+            LOGGER.info('Created this gdal command:\n%s' % command)
+            # Now run GDAL warp scottie...
+            self._run_command(command)
         else:
             # Ensure the vrt mmi file exists (it will generate csv too if
             # needed)
