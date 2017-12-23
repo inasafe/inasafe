@@ -1,9 +1,10 @@
 # coding=utf-8
 """Test Contour."""
 
-import hashlib
+import os
 from safe.test.utilities import (
-    load_test_raster_layer, qgis_app, standard_data_path)
+    load_test_raster_layer, standard_data_path)
+from safe.test.qgis_app import qgis_app
 import unittest
 from safe.gis.raster.contour import (
     create_contour, smooth_shake_map, shakemap_contour)
@@ -22,25 +23,23 @@ class TestContour(unittest.TestCase):
 
     """Test Contour"""
 
-    @unittest.skip('Fix me first')
     def test_contour(self):
         """Test create contour"""
         output_file_path = unique_filename(suffix='-contour.geojson')
         # Load shake map layer
-        shake_map_layer = load_test_raster_layer(
+        shakemap_layer = load_test_raster_layer(
             'hazard',
             'shake_data',
-            '20150918201057',
+            '20131105060809',
             'output',
-            'grid-nearest.tif')
-        print shake_map_layer.source()
+            'grid-use_ascii.tif')
         print output_file_path
         create_contour(
-            shake_map_layer,
+            shakemap_layer.source(),
             output_file_path=output_file_path
         )
+        self.assertTrue(os.path.exists(output_file_path))
 
-    @unittest.skip('Fix me first')
     def test_smoothing(self):
         """Test smoothing method."""
         # Load shake map layer
@@ -49,61 +48,21 @@ class TestContour(unittest.TestCase):
             'shake_data',
             '20131105060809',
             'output',
-            'grid-nearest.tif')
-        expected_shakemap_path = shakemap_layer.source()
-        expected_shakemap_path = expected_shakemap_path.replace(
-            'grid-nearest.tif', 'grid-smoothing-nearest.tif')
-
-        print shakemap_layer.source()
-        print expected_shakemap_path
-
+            'grid-use_ascii.tif')
         smoothed_shakemap_path = smooth_shake_map(shakemap_layer.source())
+        self.assertTrue(os.path.exists(smoothed_shakemap_path))
 
-        print smoothed_shakemap_path
-
-        hash_smoothed = hashlib.md5(
-            open(smoothed_shakemap_path, 'rb').read()).hexdigest()
-        expected_hash = hashlib.md5(
-            open(expected_shakemap_path, 'rb').read()).hexdigest()
-        self.assertEqual(hash_smoothed, expected_hash)
-
-    # @unittest.skip('Fix me first')
     def test_contour_shakemap(self):
-        """Test for contour creation."""
-        # ASCII
-        path = '/var/folders/h7/k16m33695_g2ptlzy0z8vxb00000gp/T/inasafe/2017-11-21/ismailsunni/normal/mmi.asc'
-        test_contour_ascii = shakemap_contour(path)
-        print test_contour_ascii
-
-        # # Original
-        # normal_shakemap_layer_path = standard_data_path(
-        #     'hazard',
-        #     'shake_data',
-        #     '20131105060809',
-        #     'output',
-        #     'grid-nearest.tif')
-        # normal_contour_path = shakemap_contour(normal_shakemap_layer_path)
-        # print 'Normal: ', normal_contour_path
-        #
-        # # Smoothed
-        # smoothed_shakemap_layer_path = standard_data_path(
-        #     'hazard',
-        #     'shake_data',
-        #     '20131105060809',
-        #     'output',
-        #     'grid-smoothing-nearest.tif')
-        # smoothed_contour_path = shakemap_contour(smoothed_shakemap_layer_path)
-        # print 'Smoothed', smoothed_contour_path
-        #
-        # # Together
-        # smoothed_contour_path_2 = create_contour(normal_shakemap_layer_path)
-        # print 'Smoothed (2)', smoothed_contour_path_2
-        #
-        # hash_smoothed = hashlib.md5(
-        #     open(smoothed_contour_path, 'rb').read()).hexdigest()
-        # hash_smoothed_2 = hashlib.md5(
-        #     open(smoothed_contour_path_2, 'rb').read()).hexdigest()
-        # self.assertEqual(hash_smoothed, hash_smoothed_2)
+        """Test for contour creation (with smoothing)."""
+        # Original
+        shakemap_layer_path = standard_data_path(
+            'hazard',
+            'shake_data',
+            '20131105060809',
+            'output',
+            'grid-use_ascii.tif')
+        normal_contour_path = shakemap_contour(shakemap_layer_path)
+        self.assertTrue(os.path.exists(normal_contour_path))
 
 
 if __name__ == '__main__':
