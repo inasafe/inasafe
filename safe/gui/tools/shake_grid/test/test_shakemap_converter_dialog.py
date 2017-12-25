@@ -67,6 +67,7 @@ class TestShakemapImporter(unittest.TestCase):
         dialog.load_result.setEnabled(True)
         dialog.load_result.setChecked(False)
         dialog.input_path.setText(grid_path)
+        dialog.nearest_mode.setChecked(True)
         dialog.output_path.setText(output_raster)
         button = dialog.button_box.button(QDialogButtonBox.Ok)
         button.click()
