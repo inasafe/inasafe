@@ -246,7 +246,8 @@ class TestShakeGrid(unittest.TestCase):
             suffix='.tif',
             dir=temp_dir('test'))
         result = convert_mmi_data(
-            GRID_PATH, grid_title, grid_source, output_path=output_raster)
+            GRID_PATH, grid_title, grid_source, output_path=output_raster,
+            algorithm=NEAREST_NEIGHBOUR)
         expected_result = output_raster.replace(
             '.tif', '-%s.tif' % NEAREST_NEIGHBOUR)
         self.assertEqual(
