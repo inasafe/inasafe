@@ -24,6 +24,7 @@ from safe.definitions.layer_purposes import layer_purpose_earthquake_contour
 from safe.definitions.layer_geometry import layer_geometry_line
 from safe.definitions.layer_modes import layer_mode_classified
 from safe.utilities.metadata import write_iso19115_metadata
+from safe.definitions.fields import contour_fields
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -512,8 +513,15 @@ def create_contour_metadata(contour_path):
     :type contour_path: basestring
     """
     metadata = {
+        'title': tr('Earthquake Contour'),
         'layer_purpose': layer_purpose_earthquake_contour['key'],
         'layer_geometry': layer_geometry_line['key'],
         'layer_mode': layer_mode_classified['key'],
+        'inasafe_fields': {}
     }
+
+    for contour_field in contour_fields:
+        metadata['inasafe_fields'][contour_field['key']] = contour_field[
+            'field_name']
+
     write_iso19115_metadata(contour_path, metadata)
