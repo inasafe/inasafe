@@ -15,21 +15,16 @@ from qgis.utils import iface
 
 from safe import messaging as m
 from safe.common.version import get_version
-from safe.definitions.hazard_classifications import (
-    earthquake_mmi_scale, generic_hazard_classes)
 from safe.definitions.constants import (
     NUMPY_SMOOTHING, SCIPY_SMOOTHING, NONE_SMOOTHING)
 from safe.gui.tools.help.shakemap_converter_help import shakemap_converter_help
 from safe.gui.tools.shake_grid.shake_grid import convert_mmi_data
 from safe.gui.tools.wizard.wizard_dialog import WizardDialog
 from safe.messaging import styles
-from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.resources import html_footer, html_header, get_ui_class
 from safe.utilities.styling import mmi_ramp_roman
 from safe.utilities.i18n import tr
 from safe.utilities.settings import setting
-from safe.definitions.exposure import exposure_all
-from safe.definitions.utilities import default_classification_thresholds
 
 try:
     import scipy  # NOQA
@@ -246,45 +241,6 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         file_info = QFileInfo(file_name)
         base_name = file_info.baseName()
         self.output_layer = QgsRasterLayer(file_name, base_name)
-        self.output_layer.keywords = KeywordIO.read_keywords(self.output_layer)
-
-        # Set thresholds for each exposure
-        mmi_default_classes = default_classification_thresholds(
-            earthquake_mmi_scale
-        )
-        mmi_default_threshold = {
-            earthquake_mmi_scale['key']: {
-                'active': True,
-                'classes': mmi_default_classes
-            }
-        }
-        generic_default_classes = default_classification_thresholds(
-            generic_hazard_classes
-        )
-        generic_default_threshold = {
-            generic_hazard_classes['key']: {
-                'active': True,
-                'classes': generic_default_classes
-            }
-        }
-
-        threshold_keyword = {}
-        for exposure in exposure_all:
-            # Not all exposure is supported by earthquake_mmi_scale
-            if exposure in earthquake_mmi_scale['exposures']:
-                threshold_keyword[exposure['key']] = mmi_default_threshold
-            else:
-                threshold_keyword[exposure['key']] = generic_default_threshold
-
-        self.output_layer.keywords['thresholds'] = (threshold_keyword)
-
-        keywords = self.output_layer.keywords
-        if self.output_layer.isValid():
-            # self.output_layer = reclassify(
-            #     self.output_layer, overwrite_input=True)
-            KeywordIO.write_keywords(self.output_layer, keywords)
-        else:
-            LOGGER.debug("Failed to load")
 
         # noinspection PyUnresolvedReferences
         QtGui.qApp.restoreOverrideCursor()

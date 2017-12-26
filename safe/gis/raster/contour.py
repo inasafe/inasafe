@@ -3,6 +3,7 @@
 
 import os
 import shutil
+from datetime import datetime
 import numpy as np
 from osgeo import gdal, ogr
 from osgeo.gdalconst import GA_ReadOnly
@@ -204,7 +205,7 @@ def convolve(input, weights, mask=None, slow=False):
     return output
 
 
-def create_contour(
+def create_smooth_contour(
         shakemap_layer,
         output_file_path='',
         active_band=1,
@@ -228,15 +229,14 @@ def create_contour(
     :returns: The contour of the shake map layer path.
     :rtype: basestring
     """
-    from datetime import datetime
     timestamp = datetime.now()
     temp_smoothed_shakemap_path = unique_filename(
         prefix='temp-shake-map' + timestamp.strftime('%Y%m%d-%H%M%S'),
         suffix='.tif',
         dir=temp_dir('temp'))
 
-    temp_smoothed_shakemap_path = smooth_shake_map(
-        shakemap_layer,
+    temp_smoothed_shakemap_path = smooth_shakemap(
+        shakemap_layer.source(),
         output_file_path=temp_smoothed_shakemap_path,
         active_band=active_band,
         smoothing_method=smoothing_method,
@@ -250,7 +250,7 @@ def create_contour(
     )
 
 
-def smooth_shake_map(
+def smooth_shakemap(
         shakemap_layer_path,
         output_file_path='',
         active_band=1,
