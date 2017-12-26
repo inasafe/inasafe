@@ -33,12 +33,15 @@ class TestContour(unittest.TestCase):
             '20131105060809',
             'output',
             'grid-use_ascii.tif')
-        print output_file_path
         create_smooth_contour(
             shakemap_layer,
             output_file_path=output_file_path
         )
         self.assertTrue(os.path.exists(output_file_path))
+        ext = os.path.splitext(output_file_path)[1]
+        metadata_path = output_file_path.replace(ext, '.xml')
+        self.assertTrue(os.path.exists(metadata_path))
+        self.assertTrue(metadata_path.endswith('.xml'))
 
     def test_smoothing(self):
         """Test smoothing method."""
