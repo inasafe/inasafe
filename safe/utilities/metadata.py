@@ -24,6 +24,7 @@ from safe.definitions.layer_purposes import (
     layer_purpose_exposure_summary_table,
     layer_purpose_aggregation_summary,
     layer_purpose_profiling,
+    layer_purpose_earthquake_contour,
 )
 from safe.definitions.layer_geometry import (
     layer_geometry_raster, layer_geometry_polygon
@@ -88,6 +89,7 @@ METADATA_CLASSES = {
     layer_purpose_aggregate_hazard_impacted['key']: OutputLayerMetadata,
     layer_purpose_aggregation_summary['key']: OutputLayerMetadata,
     layer_purpose_profiling['key']: OutputLayerMetadata,
+    layer_purpose_earthquake_contour['key']: OutputLayerMetadata
 }
 
 METADATA_CLASSES35 = {

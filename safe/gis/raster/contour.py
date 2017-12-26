@@ -10,17 +10,20 @@ from osgeo.gdalconst import GA_ReadOnly
 import logging
 
 from qgis.core import QgsVectorLayer, QgsFeatureRequest
-from safe.common.utilities import romanise
+from safe.common.utilities import romanise, unique_filename, temp_dir
 from safe.utilities.styling import mmi_colour
 from safe.common.exceptions import (
     ContourCreationError,
     InvalidLayerError,
     FileNotFoundError,
 )
-from safe.common.utilities import unique_filename, temp_dir
 from safe.definitions.constants import NUMPY_SMOOTHING
 from safe.utilities.resources import resources_path
 from safe.utilities.i18n import tr
+from safe.definitions.layer_purposes import layer_purpose_earthquake_contour
+from safe.definitions.layer_geometry import layer_geometry_line
+from safe.definitions.layer_modes import layer_mode_classified
+from safe.utilities.metadata import write_iso19115_metadata
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -416,6 +419,9 @@ def shakemap_contour(shakemap_layer_path, output_file_path='', active_band=1):
     source_qml_path = resources_path('converter_data', 'mmi-contours.qml')
     shutil.copyfile(source_qml_path, qml_path)
 
+    # Create metadata file
+    create_contour_metadata(output_file_path)
+
     # Now update the additional columns - X,Y, ROMAN and RGB
     try:
         set_contour_properties(output_file_path)
@@ -497,3 +503,17 @@ def set_contour_properties(contour_file_path):
             feature_id, fields.indexFromName('LEN'), length)
 
     layer.commitChanges()
+
+
+def create_contour_metadata(contour_path):
+    """Create metadata file for contour layer.
+
+    :param contour_path: Path where the contour is located.
+    :type contour_path: basestring
+    """
+    metadata = {
+        'layer_purpose': layer_purpose_earthquake_contour['key'],
+        'layer_geometry': layer_geometry_line['key'],
+        'layer_mode': layer_mode_classified['key'],
+    }
+    write_iso19115_metadata(contour_path, metadata)
