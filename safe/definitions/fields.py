@@ -2630,6 +2630,191 @@ exposed_population_count_field = {
     'replace_null': False
 }
 
+# Contour fields
+contour_id_field = {
+    'key': 'contour_id_field',
+    'name': tr('Contour ID Field'),
+    'field_name': 'ID',
+    'type': qvariant_whole_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'help_text': tr('The ID of the contour.'),
+    'description': tr('The ID of the contour.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+contour_mmi_field = {
+    'key': 'contour_mmi_field',
+    'name': tr('Contour MMI Field'),
+    'field_name': 'MMI',
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 1,
+    'absolute': True,
+    'help_text': tr('The MMI level of the contour.'),
+    'description': tr('The MMI level of the contour.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+contour_x_field = {
+    'key': 'contour_x_field',
+    'name': tr('Contour X Coordinate Field'),
+    'field_name': 'X',
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 12,
+    'absolute': True,
+    'help_text': tr('The X coordinate for the contour label.'),
+    'description': tr('The X coordinate for the contour label.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+
+contour_y_field = {
+    'key': 'contour_y_field',
+    'name': tr('Contour Y Coordinate Field'),
+    'field_name': 'Y',
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 12,
+    'absolute': True,
+    'help_text': tr('The Y coordinate for the contour label.'),
+    'description': tr('The Y coordinate for the contour label.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+contour_colour_field = {
+    'key': 'contour_colour_field',
+    'name': tr('Contour Colour Field'),
+    'field_name': 'RGB',
+    'type': QVariant.String,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'help_text': tr('The color for the contour.'),
+    'description': tr(
+        'The color for the contour in hexadecimal format (e.g. #55ffff)'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+contour_roman_field = {
+    'key': 'contour_roman_field',
+    'name': tr('Contour Roman Label Field'),
+    'field_name': 'ROMAN',
+    'type': QVariant.String,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'help_text': tr('The roman for the contour.'),
+    'description': tr(
+        'The roman label for the contour based on MMI level (e.g. IV)'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+contour_halign_field = {
+    'key': 'contour_halign_field',
+    'name': tr('Contour Horizontal Align Field'),
+    'field_name': 'ALIGN',
+    'type': QVariant.String,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'help_text': tr('The horizontal align for the contour label.'),
+    'description': tr('The horizontal align for the contour label.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+contour_valign_field = {
+    'key': 'contour_valign_field',
+    'name': tr('Contour Vertical Align Field'),
+    'field_name': 'VALIGN',
+    'type': QVariant.String,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'help_text': tr('The vertical align for the contour label.'),
+    'description': tr('The vertical align for the contour label.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+contour_length_field = {
+    'key': 'contour_length_field',
+    'name': tr('Contour Length Field'),
+    'field_name': 'LEN',
+    'type': qvariant_numbers,
+    'length': default_field_length,
+    'precision': 12,
+    'absolute': True,
+    'help_text': tr('The contour length.'),
+    'description': tr(
+        'The contour length can be used to filter out small contour'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
 # Inputs
 exposure_fields = [
     exposure_id_field,
@@ -2721,6 +2906,18 @@ multiexposure_analysis_fields = [
     exposure_total_exposed_field,
     exposure_total_not_exposed_field,
     exposure_total_field,
+]
+
+contour_fields = [
+    contour_id_field,
+    contour_mmi_field,
+    contour_x_field,
+    contour_y_field,
+    contour_colour_field,
+    contour_roman_field,
+    contour_halign_field,
+    contour_valign_field,
+    contour_length_field,
 ]
 
 summary_rules = {
