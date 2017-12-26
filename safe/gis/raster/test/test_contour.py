@@ -7,7 +7,7 @@ from safe.test.utilities import (
 from safe.test.qgis_app import qgis_app
 import unittest
 from safe.gis.raster.contour import (
-    create_contour, smooth_shake_map, shakemap_contour)
+    create_smooth_contour, smooth_shakemap, shakemap_contour)
 from safe.common.utilities import unique_filename
 
 APP, IFACE = qgis_app()
@@ -34,8 +34,8 @@ class TestContour(unittest.TestCase):
             'output',
             'grid-use_ascii.tif')
         print output_file_path
-        create_contour(
-            shakemap_layer.source(),
+        create_smooth_contour(
+            shakemap_layer,
             output_file_path=output_file_path
         )
         self.assertTrue(os.path.exists(output_file_path))
@@ -49,7 +49,7 @@ class TestContour(unittest.TestCase):
             '20131105060809',
             'output',
             'grid-use_ascii.tif')
-        smoothed_shakemap_path = smooth_shake_map(shakemap_layer.source())
+        smoothed_shakemap_path = smooth_shakemap(shakemap_layer.source())
         self.assertTrue(os.path.exists(smoothed_shakemap_path))
 
     def test_contour_shakemap(self):

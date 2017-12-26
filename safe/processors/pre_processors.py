@@ -114,8 +114,8 @@ def earthquake_contour_preprocessor(impact_function):
     :return: The contour layer.
     :rtype: QgsMapLayer
     """
-    from safe.gis.raster.contour import create_contour
-    contour_path = create_contour(impact_function.hazard)
+    from safe.gis.raster.contour import create_smooth_contour
+    contour_path = create_smooth_contour(impact_function.hazard)
 
     if os.path.exists(contour_path):
         from safe.gis.tools import load_layer

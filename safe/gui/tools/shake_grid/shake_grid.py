@@ -19,33 +19,34 @@ from osgeo import gdal, ogr
 from osgeo.gdalconst import GA_ReadOnly
 from pytz import timezone
 from qgis.core import (
-    QgsVectorLayer,
-    QgsFeatureRequest,
     QgsRectangle,
     QgsRasterLayer)
 
-from safe.gis.raster.contour import gaussian_kernel, convolve
+from safe.gis.raster.contour import (
+    gaussian_kernel, convolve, set_contour_properties)
 from safe.common.exceptions import (
     GridXmlFileNotFoundError,
     GridXmlParseError,
     ContourCreationError,
     InvalidLayerError,
     CallGDALError)
-from safe.common.utilities import which, romanise
+from safe.common.utilities import which
 from safe.definitions.constants import (
     NONE_SMOOTHING, NUMPY_SMOOTHING, SCIPY_SMOOTHING
 )
 from safe.definitions.hazard import hazard_earthquake
+from safe.definitions.exposure import exposure_all
 from safe.definitions.hazard_category import hazard_category_single_event
-from safe.definitions.hazard_classifications import earthquake_mmi_scale
+from safe.definitions.hazard_classifications import (
+    earthquake_mmi_scale, generic_hazard_classes)
 from safe.definitions.layer_geometry import layer_geometry_raster
 from safe.definitions.layer_modes import layer_mode_continuous
 from safe.definitions.layer_purposes import layer_purpose_hazard
 from safe.definitions.units import unit_mmi
 from safe.definitions.versions import inasafe_keyword_version
+from safe.definitions.utilities import default_classification_thresholds
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
-from safe.utilities.styling import mmi_colour
 from safe.utilities.resources import resources_path
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
@@ -815,81 +816,11 @@ class ShakeGrid(object):
 
         # Now update the additional columns - X,Y, ROMAN and RGB
         try:
-            self.set_contour_properties(output_file)
+            set_contour_properties(output_file)
         except InvalidLayerError:
             raise
 
         return output_file
-
-    def set_contour_properties(self, input_file):
-        """Set the X, Y, RGB, ROMAN attributes of the contour layer.
-
-        :param input_file: (Required) Name of the contour layer.
-        :type input_file: str
-
-        :raise: InvalidLayerError if anything is amiss with the layer.
-        """
-        LOGGER.debug('set_contour_properties requested for %s.' % input_file)
-        layer = QgsVectorLayer(input_file, 'mmi-contours', "ogr")
-        if not layer.isValid():
-            raise InvalidLayerError(input_file)
-
-        layer.startEditing()
-        # Now loop through the db adding selected features to mem layer
-        request = QgsFeatureRequest()
-        fields = layer.fields()
-
-        for feature in layer.getFeatures(request):
-            if not feature.isValid():
-                LOGGER.debug('Skipping feature')
-                continue
-            # Work out x and y
-            line = feature.geometry().asPolyline()
-            y = line[0].y()
-
-            x_max = line[0].x()
-            x_min = x_max
-            for point in line:
-                if point.y() < y:
-                    y = point.y()
-                x = point.x()
-                if x < x_min:
-                    x_min = x
-                if x > x_max:
-                    x_max = x
-            x = x_min + ((x_max - x_min) / 2)
-
-            # Get length
-            length = feature.geometry().length()
-
-            mmi_value = float(feature['MMI'])
-            # We only want labels on the whole number contours
-            if mmi_value != round(mmi_value):
-                roman = ''
-            else:
-                roman = romanise(mmi_value)
-
-            # RGB from http://en.wikipedia.org/wiki/Mercalli_intensity_scale
-            rgb = mmi_colour(mmi_value)
-
-            # Now update the feature
-            feature_id = feature.id()
-            layer.changeAttributeValue(
-                feature_id, fields.indexFromName('X'), x)
-            layer.changeAttributeValue(
-                feature_id, fields.indexFromName('Y'), y)
-            layer.changeAttributeValue(
-                feature_id, fields.indexFromName('RGB'), rgb)
-            layer.changeAttributeValue(
-                feature_id, fields.indexFromName('ROMAN'), roman)
-            layer.changeAttributeValue(
-                feature_id, fields.indexFromName('ALIGN'), 'Center')
-            layer.changeAttributeValue(
-                feature_id, fields.indexFromName('VALIGN'), 'HALF')
-            layer.changeAttributeValue(
-                feature_id, fields.indexFromName('LEN'), length)
-
-        layer.commitChanges()
 
     def create_keyword_file(self, algorithm):
         """Create keyword file for the raster file created.
@@ -907,10 +838,34 @@ class ShakeGrid(object):
         """
         keyword_io = KeywordIO()
 
-        classes = {}
-        for item in earthquake_mmi_scale['classes']:
-            classes[item['key']] = [
-                item['numeric_default_min'], item['numeric_default_max']]
+        # Set thresholds for each exposure
+        mmi_default_classes = default_classification_thresholds(
+            earthquake_mmi_scale
+        )
+        mmi_default_threshold = {
+            earthquake_mmi_scale['key']: {
+                'active': True,
+                'classes': mmi_default_classes
+            }
+        }
+        generic_default_classes = default_classification_thresholds(
+            generic_hazard_classes
+        )
+        generic_default_threshold = {
+            generic_hazard_classes['key']: {
+                'active': True,
+                'classes': generic_default_classes
+            }
+        }
+
+        threshold_keyword = {}
+        for exposure in exposure_all:
+            # Not all exposure is supported by earthquake_mmi_scale
+            if exposure in earthquake_mmi_scale['exposures']:
+                threshold_keyword[exposure['key']] = mmi_default_threshold
+            else:
+                threshold_keyword[
+                    exposure['key']] = generic_default_threshold
 
         extra_keywords = {
             'latitude': self.latitude,
@@ -948,7 +903,7 @@ class ShakeGrid(object):
             'layer_purpose': layer_purpose_hazard['key'],
             'continuous_hazard_unit': unit_mmi['key'],
             'classification': earthquake_mmi_scale['key'],
-            'thresholds': classes,
+            'thresholds': threshold_keyword,
             'extra_keywords': extra_keywords,
             'active_band': 1
         }

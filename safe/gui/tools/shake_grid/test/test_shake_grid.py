@@ -6,8 +6,13 @@ import unittest
 import shutil
 
 from qgis.core import QgsVectorLayer
+
+from safe.definitions.hazard import hazard_earthquake
+from safe.definitions.hazard_classifications import earthquake_mmi_scale
+from safe.definitions.exposure import exposure_population
+
 from safe.common.utilities import unique_filename, temp_dir
-from safe.test.utilities import standard_data_path, get_qgis_app
+from safe.test.utilities import standard_data_path, get_qgis_app, load_layer
 from safe.gui.tools.shake_grid.shake_grid import (
     ShakeGrid, convert_mmi_data, USE_ASCII, NEAREST_NEIGHBOUR, INVDIST)
 from safe.utilities.metadata import read_iso19115_metadata
@@ -292,15 +297,20 @@ class TestShakeGrid(unittest.TestCase):
         self.assertTrue(
             exists,
             'File result : %s does not exist' % result[:-3] + 'qml')
-        print 'Tiff result : %s' % result
+        tif_file = load_layer(result)[0]
+        keywords = tif_file.keywords
+        self.assertEqual(keywords['hazard'], hazard_earthquake['key'])
+        population_classification = keywords['thresholds'][
+            exposure_population['key']].keys()[0]
+        self.assertEqual(
+            population_classification, earthquake_mmi_scale['key'])
 
     def test_convert_grid_to_ascii(self):
         """Test converting grid.xml to raster (asc file)."""
-        print NORMAL_SHAKE_GRID.mmi_to_ascii(True)
-        self.assertTrue(os.path.exists(
-            os.path.join(
+        output_path = os.path.join(
                 NORMAL_SHAKE_GRID.output_dir,
-                '%s.asc' % NORMAL_SHAKE_GRID.output_basename)))
+                '%s.asc' % NORMAL_SHAKE_GRID.output_basename)
+        self.assertTrue(os.path.exists(output_path))
 
 
 if __name__ == '__main__':
