@@ -53,7 +53,8 @@ from safe.definitions import (
     production_value_rate_field,
     provenance_host_name,
     provenance_user,
-    provenance_crs
+    provenance_crs,
+    not_exposed_class,
 )
 from safe.definitions.reports.components import map_report
 
@@ -544,7 +545,7 @@ class TestDefinitionsUtilities(unittest.TestCase):
         """Test for get_displacement_rate and is_affected"""
         # Random key
         value = is_affected('foo', 'bar', 'boom')
-        self.assertFalse(value)
+        self.assertEqual(value, not_exposed_class['key'])
         value = get_displacement_rate('foo', 'bar', 'boom')
         self.assertEqual(value, 0)
 

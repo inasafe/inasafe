@@ -28,6 +28,7 @@ from safe.definitions import (
     layer_purpose_aggregation,
     layer_purpose_exposure_summary,
     exposure_population,
+    not_exposed_class,
 )
 from safe.definitions.reports.report_descriptions import (
     landscape_map_report_description, portrait_map_report_description)
@@ -741,7 +742,11 @@ def get_displacement_rate(
     :returns: The value of displacement rate. If it's not affected, return 0.
     :rtype: int
     """
-    if not is_affected(hazard, classification, hazard_class, qsettings):
+    is_affected_value = is_affected(
+        hazard, classification, hazard_class, qsettings)
+    if is_affected_value == not_exposed_class['key']:
+        return 0  # Just to make it clear
+    elif not is_affected_value:
         return 0
     preference_data = setting(
         'population_preference',
@@ -786,7 +791,8 @@ def is_affected(hazard, classification, hazard_class, qsettings=None):
     # Use default from the default profile
     default_profile = generate_default_profile()
     default_affected_value = default_profile.get(hazard, {}).get(
-        classification, {}).get(hazard_class, {}).get('affected', False)
+        classification, {}).get(hazard_class, {}).get(
+        'affected', not_exposed_class['key'])
     # noinspection PyUnresolvedReferences
     return preference_data.get(hazard, {}).get(classification, {}).get(
         hazard_class, {}).get('affected', default_affected_value)
