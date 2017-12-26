@@ -7,7 +7,7 @@
   },
 
   "expected_outputs":{
-    "count": 3
+    "count": 4
   },
   "expected_steps":{
     "impact function":{
@@ -23,7 +23,7 @@
     },
     "pre_processor": {
       "info": {},
-      "process": []
+      "process": ["Earthquake Contour Pre Processor"]
     },
     "post_processor":{
       "info": {},
