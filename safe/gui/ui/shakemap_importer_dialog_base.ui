@@ -141,7 +141,7 @@
           <item row="0" column="0">
            <widget class="QLabel" name="label">
             <property name="text">
-             <string>Input File (grid.xml)</string>
+             <string>Input file (grid.xml)</string>
             </property>
            </widget>
           </item>
@@ -162,13 +162,13 @@
           </sizepolicy>
          </property>
          <property name="title">
-          <string>Algorithm</string>
+          <string>Interpolation Algorithm</string>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_3">
           <item>
            <widget class="QRadioButton" name="use_ascii_mode">
             <property name="text">
-             <string>Use ASCII</string>
+             <string>None</string>
             </property>
             <property name="checked">
              <bool>true</bool>
