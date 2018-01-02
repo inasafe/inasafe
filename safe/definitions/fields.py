@@ -2655,7 +2655,7 @@ contour_mmi_field = {
     'key': 'contour_mmi_field',
     'name': tr('Contour MMI Field'),
     'field_name': 'MMI',
-    'type': qvariant_numbers,
+    'type': QVariant.Double,
     'length': default_field_length,
     'precision': 1,
     'absolute': True,
@@ -2675,12 +2675,15 @@ contour_x_field = {
     'key': 'contour_x_field',
     'name': tr('Contour X Coordinate Field'),
     'field_name': 'X',
-    'type': qvariant_numbers,
+    'type': QVariant.Double,
     'length': default_field_length,
     'precision': 12,
     'absolute': True,
     'help_text': tr('The X coordinate for the contour label.'),
-    'description': tr('The X coordinate for the contour label.'),
+    'description': tr(
+        'The X coordinate for the contour label so we can fix the x position '
+        'to the same x coordinate as centroid of the feature so labels line '
+        'up nicely vertically'),
     'citations': [
         {
             'text': None,
@@ -2696,12 +2699,15 @@ contour_y_field = {
     'key': 'contour_y_field',
     'name': tr('Contour Y Coordinate Field'),
     'field_name': 'Y',
-    'type': qvariant_numbers,
+    'type': QVariant.Double,
     'length': default_field_length,
     'precision': 12,
     'absolute': True,
     'help_text': tr('The Y coordinate for the contour label.'),
-    'description': tr('The Y coordinate for the contour label.'),
+    'description': tr(
+        'The Y coordinate for the contour label so we can fix the y position '
+        'to the minimum y coordinate of the whole contour so labels line up '
+        'nicely vertically'),
     'citations': [
         {
             'text': None,
@@ -2722,7 +2728,8 @@ contour_colour_field = {
     'absolute': True,
     'help_text': tr('The color for the contour.'),
     'description': tr(
-        'The color for the contour in hexadecimal format (e.g. #55ffff)'),
+        'The color for the contour in hexadecimal format (e.g. #55ffff) based '
+        'on MMI class'),
     'citations': [
         {
             'text': None,
@@ -2798,7 +2805,7 @@ contour_length_field = {
     'key': 'contour_length_field',
     'name': tr('Contour Length Field'),
     'field_name': 'LEN',
-    'type': qvariant_numbers,
+    'type': QVariant.Double,
     'length': default_field_length,
     'precision': 12,
     'absolute': True,

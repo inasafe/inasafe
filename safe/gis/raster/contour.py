@@ -23,8 +23,21 @@ from safe.utilities.i18n import tr
 from safe.definitions.layer_purposes import layer_purpose_earthquake_contour
 from safe.definitions.layer_geometry import layer_geometry_line
 from safe.definitions.layer_modes import layer_mode_classified
+from safe.gis.vector.tools import (
+    create_ogr_field_from_definition, field_index_from_definition)
 from safe.utilities.metadata import write_iso19115_metadata
-from safe.definitions.fields import contour_fields
+from safe.definitions.fields import (
+    contour_fields,
+    contour_x_field,
+    contour_y_field,
+    contour_colour_field,
+    contour_roman_field,
+    contour_halign_field,
+    contour_valign_field,
+    contour_length_field,
+    contour_mmi_field,
+
+)
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -352,33 +365,10 @@ def shakemap_contour(shakemap_layer_path, output_file_path='', active_band=1):
             'does not already exist and that you do not have file system '
             'permissions issues' % output_file_path)
     layer = ogr_dataset.CreateLayer('contour')
-    field_definition = ogr.FieldDefn('ID', ogr.OFTInteger)
-    layer.CreateField(field_definition)
-    field_definition = ogr.FieldDefn('MMI', ogr.OFTReal)
-    layer.CreateField(field_definition)
-    # So we can fix the x pos to the same x coord as centroid of the
-    # feature so labels line up nicely vertically
-    field_definition = ogr.FieldDefn('X', ogr.OFTReal)
-    layer.CreateField(field_definition)
-    # So we can fix the y pos to the min y coord of the whole contour so
-    # labels line up nicely vertically
-    field_definition = ogr.FieldDefn('Y', ogr.OFTReal)
-    layer.CreateField(field_definition)
-    # So that we can set the html hex colour based on its MMI class
-    field_definition = ogr.FieldDefn('RGB', ogr.OFTString)
-    layer.CreateField(field_definition)
-    # So that we can set the label in it roman numeral form
-    field_definition = ogr.FieldDefn('ROMAN', ogr.OFTString)
-    layer.CreateField(field_definition)
-    # So that we can set the label horizontal alignment
-    field_definition = ogr.FieldDefn('ALIGN', ogr.OFTString)
-    layer.CreateField(field_definition)
-    # So that we can set the label vertical alignment
-    field_definition = ogr.FieldDefn('VALIGN', ogr.OFTString)
-    layer.CreateField(field_definition)
-    # So that we can set feature length to filter out small features
-    field_definition = ogr.FieldDefn('LEN', ogr.OFTReal)
-    layer.CreateField(field_definition)
+
+    for contour_field in contour_fields:
+        field_definition = create_ogr_field_from_definition(contour_field)
+        layer.CreateField(field_definition)
 
     shakemap_data = gdal.Open(shakemap_layer_path, GA_ReadOnly)
     # see http://gdal.org/java/org/gdal/gdal/gdal.html for these options
@@ -451,7 +441,6 @@ def set_contour_properties(contour_file_path):
     layer.startEditing()
     # Now loop through the db adding selected features to mem layer
     request = QgsFeatureRequest()
-    fields = layer.fields()
 
     for feature in layer.getFeatures(request):
         if not feature.isValid():
@@ -476,7 +465,7 @@ def set_contour_properties(contour_file_path):
         # Get length
         length = feature.geometry().length()
 
-        mmi_value = float(feature['MMI'])
+        mmi_value = float(feature[contour_mmi_field['field_name']])
         # We only want labels on the whole number contours
         if mmi_value != round(mmi_value):
             roman = ''
@@ -489,19 +478,24 @@ def set_contour_properties(contour_file_path):
         # Now update the feature
         feature_id = feature.id()
         layer.changeAttributeValue(
-            feature_id, fields.indexFromName('X'), x)
+            feature_id, field_index_from_definition(layer, contour_x_field), x)
         layer.changeAttributeValue(
-            feature_id, fields.indexFromName('Y'), y)
+            feature_id, field_index_from_definition(layer, contour_y_field), y)
         layer.changeAttributeValue(
-            feature_id, fields.indexFromName('RGB'), rgb)
+            feature_id,
+            field_index_from_definition(layer, contour_colour_field), rgb)
         layer.changeAttributeValue(
-            feature_id, fields.indexFromName('ROMAN'), roman)
+            feature_id,
+            field_index_from_definition(layer, contour_roman_field), roman)
         layer.changeAttributeValue(
-            feature_id, fields.indexFromName('ALIGN'), 'Center')
+            feature_id,
+            field_index_from_definition(layer, contour_halign_field), 'Center')
         layer.changeAttributeValue(
-            feature_id, fields.indexFromName('VALIGN'), 'HALF')
+            feature_id,
+            field_index_from_definition(layer, contour_valign_field), 'HALF')
         layer.changeAttributeValue(
-            feature_id, fields.indexFromName('LEN'), length)
+            feature_id,
+            field_index_from_definition(layer, contour_length_field), length)
 
     layer.commitChanges()
 
