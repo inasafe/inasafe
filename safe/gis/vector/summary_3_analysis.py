@@ -19,6 +19,7 @@ from safe.definitions.fields import (
     total_exposed_field,
     total_field,
     hazard_count_field,
+    summary_rules,
 )
 from safe.definitions.hazard_classifications import not_exposed_class
 from safe.definitions.layer_purposes import layer_purpose_analysis_impacted
@@ -27,6 +28,7 @@ from safe.definitions.processing_steps import (
 from safe.gis.sanity_check import check_layer
 from safe.gis.vector.summary_tools import (
     check_inputs, create_absolute_values_structure, add_fields)
+from safe.gis.vector.tools import create_field_from_definition
 from safe.processors import post_processor_affected_function
 from safe.utilities.gis import qgis_version
 from safe.utilities.pivot_table import FlatTable
@@ -155,6 +157,24 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
     not_affected_sum = 0
     not_exposed_sum = 0
 
+    # Summarization
+    summary_values = {}
+    for key, summary_rule in summary_rules.items():
+        input_field = summary_rule['input_field']
+        case_field = summary_rule['case_field']
+        if aggregate_hazard.fieldNameIndex(input_field['field_name']) == -1:
+            continue
+        if aggregate_hazard.fieldNameIndex(case_field['field_name']) == -1:
+            continue
+
+        summary_value = 0
+        for area in aggregate_hazard.getFeatures():
+            case_value = area[case_field['field_name']]
+            if case_value in summary_rule['case_values']:
+                summary_value += area[input_field['field_name']]
+
+        summary_values[key] = summary_value
+
     for area in analysis.getFeatures(request):
         total = 0
         for i, val in enumerate(unique_hazard):
@@ -203,6 +223,19 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
             )
             analysis.changeAttributeValue(
                 area.id(), shift + len(unique_hazard) + 5 + i, value)
+
+        # Summarizer of custom attributes
+        for key, summary_value in summary_values.items():
+            summary_field = summary_rules[key]['summary_field']
+            field = create_field_from_definition(summary_field)
+            analysis.addAttribute(field)
+            field_index = analysis.fieldNameIndex(field.name())
+            # noinspection PyTypeChecker
+            analysis.keywords['inasafe_fields'][summary_field['key']] = (
+                summary_field['field_name'])
+
+            analysis.changeAttributeValue(
+                area.id(), field_index, summary_value)
 
     # Sanity check ± 1 to the result. Disabled for now as it seems ± 1 is not
     # enough. ET 13/02/17
