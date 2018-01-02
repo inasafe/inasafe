@@ -149,13 +149,13 @@ class OptionsDialog(QDialog, FORM_CLASS):
         self.grpNotImplemented.hide()
         self.adjustSize()
 
-        # Profile Preference Tab
+        # Population parameter Tab
         # Label
         self.preference_label = QLabel()
         self.preference_label.setText(tr(
-            'Please set parameters for each hazard class below. '
-            'Affected status and displacement rates selected on '
-            'this tab are only applied to exposed populations. '
+            'Please set parameters for each hazard class below. Affected '
+            'status and displacement rates selected on this tab are only '
+            'applied to exposed populations. '
         ))
         self.preference_layout.addWidget(self.preference_label)
 
@@ -210,14 +210,23 @@ class OptionsDialog(QDialog, FORM_CLASS):
             self.update_earthquake_info)
 
         # Set up listener for restore defaults button
-        self.restore_defaults = self.button_box_restore_defaults.button(
-            QDialogButtonBox.RestoreDefaults)
-        self.restore_defaults.setCheckable(True)
-        self.restore_defaults.clicked.connect(
+        self.demographic_restore_defaults = self.button_box_restore_defaults.\
+            button(QDialogButtonBox.RestoreDefaults)
+        self.demographic_restore_defaults.setText(
+            self.demographic_restore_defaults.text().capitalize())
+        self.demographic_restore_defaults.setCheckable(True)
+        self.demographic_restore_defaults.clicked.connect(
             self.restore_defaults_ratio)
-        self.button_box_restore_preference.clicked.connect(
-            self.restore_preference_page
-        )
+
+        # Restore button in population parameter tab
+        self.parameter_population_restore_button = \
+            self.button_box_restore_preference.button(
+                QDialogButtonBox.RestoreDefaults)
+        self.parameter_population_restore_button.setText(
+            self.parameter_population_restore_button.text().capitalize())
+
+        self.parameter_population_restore_button.clicked.connect(
+            self.restore_population_parameters)
 
         # TODO: Hide this until behaviour is defined
         # hide template warning toggle
@@ -382,8 +391,8 @@ class OptionsDialog(QDialog, FORM_CLASS):
         # Restore InaSAFE default values
         self.restore_default_values_page()
 
-        # Restore Preference
-        self.restore_preference_page(global_default=False)
+        # Restore Population Parameter
+        self.restore_population_parameters(global_default=False)
 
     def save_state(self):
         """Store the options into the user's stored session info."""
@@ -423,8 +432,8 @@ class OptionsDialog(QDialog, FORM_CLASS):
         # Save InaSAFE default values
         self.save_default_values()
 
-        # Save Profile preference
-        self.save_profile_preference()
+        # Save population parameters
+        self.save_population_parameters()
 
     def accept(self):
         """Method invoked when OK button is clicked."""
@@ -741,8 +750,8 @@ class OptionsDialog(QDialog, FORM_CLASS):
             # Add to attribute
             self.default_value_parameter_containers.append(parameter_container)
 
-    def restore_preference_page(self, global_default=True):
-        """Setup UI for preference page from setting.
+    def restore_population_parameters(self, global_default=True):
+        """Setup UI for population parameter page from setting.
 
         :param global_default: If True, set to original default (from
             the value in definitions).
@@ -754,14 +763,14 @@ class OptionsDialog(QDialog, FORM_CLASS):
             data = setting('population_preference', generate_default_profile())
         if not isinstance(data, dict):
             LOGGER.debug(
-                'population preference is not a dictionary. InaSAFE will use '
+                'population parameter is not a dictionary. InaSAFE will use '
                 'the default one.')
             data = generate_default_profile()
         try:
             self.profile_widget.data = data
         except KeyError as e:
             LOGGER.debug(
-                'Population preference is not in correct format. InaSAFE will '
+                'Population parameter is not in correct format. InaSAFE will '
                 'use the default one.')
             LOGGER.debug(e)
             data = generate_default_profile()
@@ -884,10 +893,10 @@ class OptionsDialog(QDialog, FORM_CLASS):
             parameter.value = qsetting_default_value
         return parameter
 
-    def save_profile_preference(self):
-        """Helper to save profile to QSettings."""
-        profile_data = self.profile_widget.data
-        set_setting('population_preference', profile_data)
+    def save_population_parameters(self):
+        """Helper to save population parameter to QSettings."""
+        population_parameter = self.profile_widget.data
+        set_setting('population_preference', population_parameter)
 
     def set_welcome_message(self):
         """Create and insert welcome message."""
@@ -904,8 +913,8 @@ class OptionsDialog(QDialog, FORM_CLASS):
         """Setup for showing welcome message dialog.
 
         This method will setup several things:
-        - Only show welcome, organisation profile, and preference tab.
-        Currently, they are the first 3 tabs.
+        - Only show welcome, organisation profile, and population parameter
+            tab. Currently, they are the first 3 tabs.
         - Set the title
         - Move the check box for always showing welcome message.
         """
