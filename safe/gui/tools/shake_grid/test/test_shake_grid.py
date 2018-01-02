@@ -89,11 +89,6 @@ class TestShakeGrid(unittest.TestCase):
         smoothed_shakemap_tif = SMOOTHED_SHAKE_GRID.mmi_to_raster()
         smoothed_contour_shp = SMOOTHED_SHAKE_GRID.mmi_to_contours()
 
-        print normal_shakemap_tif
-        print normal_contour_shp
-        print smoothed_shakemap_tif
-        print smoothed_contour_shp
-
     def test_extract_date_time(self):
         """Test extract_date_time giving the correct output."""
         # Test on SHAKE_GRID
