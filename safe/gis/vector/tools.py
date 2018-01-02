@@ -3,10 +3,11 @@
 """Tools for vector layers."""
 
 import logging
+import ogr
 from math import isnan
 from uuid import uuid4
 
-from PyQt4.QtCore import QPyNullVariant
+from PyQt4.QtCore import QPyNullVariant, QVariant
 from qgis.core import (
     QgsGeometry,
     QgsVectorLayer,
@@ -79,6 +80,14 @@ area_unit = {
     7: 'Square Nautical Miles',
     8: 'Square Degrees',
     9: 'unknown Unit'
+}
+
+# Field type converter from QGIS to OGR
+# Source http://www.gdal.org/ogr__core_8h.html#a787194be
+field_type_converter = {
+    QVariant.String: ogr.OFTString,
+    QVariant.Int: ogr.OFTInteger,
+    QVariant.Double: ogr.OFTReal,
 }
 
 
@@ -299,8 +308,9 @@ def create_spatial_index(layer):
 def create_field_from_definition(field_definition, name=None, sub_name=None):
     """Helper to create a field from definition.
 
-    :param field_definition: The definition of the field.
-    :type field_definition: safe.definitions.fields
+    :param field_definition: The definition of the field (see:
+        safe.definitions.fields).
+    :type field_definition: dict
 
     :param name: The name is required if the field name is dynamic and need a
         string formatting.
@@ -336,6 +346,33 @@ def create_field_from_definition(field_definition, name=None, sub_name=None):
     field.setLength(field_definition['length'])
     field.setPrecision(field_definition['precision'])
     return field
+
+
+def create_ogr_field_from_definition(field_definition):
+    """Helper to create a field from definition.
+
+    :param field_definition: The definition of the field (see:
+        safe.definitions.fields).
+    :type field_definition: dict
+
+    :return: The new ogr field definition.
+    :rtype: ogr.FieldDefn
+    """
+    if isinstance(field_definition['type'], list):
+        # Use the first element in the list of type
+        field_type = field_definition['type'][0]
+    else:
+        field_type = field_definition['type']
+
+    # Conversion to OGR field
+    field_type = field_type_converter.get(field_type, ogr.OFTString)
+
+    return ogr.FieldDefn(field_definition['field_name'], field_type)
+
+
+def field_index_from_definition(layer, field_definition):
+
+    return layer.fieldNameIndex(field_definition['field_name'])
 
 
 def read_dynamic_inasafe_field(inasafe_fields, dynamic_field, black_list=None):

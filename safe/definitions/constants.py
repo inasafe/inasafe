@@ -25,9 +25,7 @@ qvariant_whole_numbers = [
 ]
 
 # Number in QVariant
-qvariant_numbers = qvariant_whole_numbers + [
-    QVariant.Double,
-]
+qvariant_numbers = qvariant_whole_numbers + [QVariant.Double]
 
 qvariant_all = qvariant_numbers + [QVariant.String]
 
