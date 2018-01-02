@@ -17,7 +17,8 @@ from safe.definitions.layer_purposes import (
 from safe.processors import (
     function_process,
 )
-from safe.definitions.layer_geometry import layer_geometry_raster
+from safe.gis.raster.contour import create_smooth_contour
+from safe.utilities.gis import is_raster_layer
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
@@ -96,10 +97,7 @@ def check_earthquake_contour_preprocessor(impact_function):
     hazard_key = impact_function.hazard.keywords.get('hazard')
     is_earthquake = hazard_key == hazard_earthquake['key']
 
-    geometry_key = impact_function.hazard.keywords.get('layer_geometry')
-    is_raster = geometry_key == layer_geometry_raster['key']
-
-    if is_earthquake and is_raster:
+    if is_earthquake and is_raster_layer(impact_function.hazard):
         return True
     else:
         return False
@@ -114,7 +112,6 @@ def earthquake_contour_preprocessor(impact_function):
     :return: The contour layer.
     :rtype: QgsMapLayer
     """
-    from safe.gis.raster.contour import create_smooth_contour
     contour_path = create_smooth_contour(impact_function.hazard)
 
     if os.path.exists(contour_path):
