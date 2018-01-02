@@ -50,6 +50,7 @@ class ProfileWidget(QTreeWidget, object):
         self.header().setResizeMode(0, QHeaderView.Stretch)
         self.header().setResizeMode(1, QHeaderView.Fixed)
         self.header().setResizeMode(2, QHeaderView.ResizeToContents)
+        self.header().setMovable(False)
 
     @property
     def data(self):
