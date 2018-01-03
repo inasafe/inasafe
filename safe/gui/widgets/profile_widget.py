@@ -2,6 +2,7 @@
 """InaSAFE Profile Widget."""
 
 from collections import OrderedDict
+from functools import partial
 
 from PyQt4.QtCore import Qt
 from PyQt4.QtGui import (
@@ -10,6 +11,7 @@ from PyQt4.QtGui import (
     QCheckBox,
     QFont,
     QHeaderView,
+    QPalette
 )
 
 from safe.common.parameters.percentage_parameter_widget import (
@@ -18,11 +20,21 @@ from safe.definitions.utilities import get_name, get_class_name, definition
 from safe.definitions.exposure import exposure_population
 from safe.utilities.i18n import tr
 from safe.definitions.utilities import generate_default_profile
+from safe.common.custom_logging import LOGGER
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
+
+black_text_palette = QPalette()
+black_text_palette.setColor(QPalette.Text, Qt.black)
+
+red_text_palette = QPalette()
+red_text_palette.setColor(QPalette.Text, Qt.red)
+
+green_text_palette = QPalette()
+green_text_palette.setColor(QPalette.Text, Qt.green)
 
 
 class ProfileWidget(QTreeWidget, object):
@@ -150,6 +162,9 @@ class ProfileWidget(QTreeWidget, object):
                     # Set default value
                     displacement_rate_spinbox.default_value = the_value[
                         'displacement_rate']
+                    displacement_rate_spinbox.user_value = profile_value[
+                        'displacement_rate']
+                    set_spin_box_color(displacement_rate_spinbox)
                     self.setItemWidget(
                         the_class_widget_item, 2, displacement_rate_spinbox)
                     # Behaviour when the check box is checked
@@ -157,12 +172,12 @@ class ProfileWidget(QTreeWidget, object):
                     affected_check_box.stateChanged.connect(
                         displacement_rate_spinbox.setEnabled)
 
-                    from functools import partial
                     def is_affected_default(check_box):
                         if check_box.isChecked() == check_box.default_value:
                             print ('affected is default')
                         else:
                             print ('affected is NOT default')
+
                     def is_displacement_rate_default(spin_box):
                         if spin_box.value() == spin_box.default_value:
                             print ('spin box is default')
@@ -174,6 +189,10 @@ class ProfileWidget(QTreeWidget, object):
                     displacement_rate_spinbox.valueChanged.connect(
                         partial(
                             is_displacement_rate_default,
+                            spin_box=displacement_rate_spinbox))
+                    displacement_rate_spinbox.valueChanged.connect(
+                        partial(
+                            set_spin_box_color,
                             spin_box=displacement_rate_spinbox))
 
             if hazard_widget_item.childCount() > 0:
@@ -187,3 +206,19 @@ class ProfileWidget(QTreeWidget, object):
         """Clear method to clear the widget items and the tree widget."""
         super(ProfileWidget, self).clear()
         self.widget_items = []
+
+
+def set_spin_box_color(spin_box):
+    LOGGER.debug('%s %s %s' % (
+        spin_box.value(), spin_box.default_value, spin_box.user_value))
+    if spin_box.value() == spin_box.default_value:
+        LOGGER.debug('Black, default value == value')
+        spin_box.setPalette(black_text_palette)
+    elif spin_box.value() == spin_box.user_value:
+        LOGGER.debug('Green, user value == value')
+        spin_box.setPalette(green_text_palette)
+    else:
+        LOGGER.debug('Red, Edited')
+        spin_box.setPalette(red_text_palette)
+    LOGGER.debug('Result')
+    LOGGER.debug('%s' % spin_box.palette().color(QPalette.Text).name())
