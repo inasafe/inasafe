@@ -17,6 +17,7 @@ from safe.common.parameters.percentage_parameter_widget import (
 from safe.definitions.utilities import get_name, get_class_name, definition
 from safe.definitions.exposure import exposure_population
 from safe.utilities.i18n import tr
+from safe.definitions.utilities import generate_default_profile
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -96,9 +97,10 @@ class ProfileWidget(QTreeWidget, object):
 
         It will replace the previous data.
         """
+        default_profile = generate_default_profile()
         self.clear()
-        for hazard in sorted(profile_data.keys()):
-            classifications = profile_data[hazard]
+        for hazard in sorted(default_profile.keys()):
+            classifications = default_profile[hazard]
             hazard_widget_item = QTreeWidgetItem()
             hazard_widget_item.setData(0, Qt.UserRole, hazard)
             hazard_widget_item.setText(0, get_name(hazard))
@@ -128,13 +130,19 @@ class ProfileWidget(QTreeWidget, object):
                     classification_widget_item.addChild(the_class_widget_item)
                     # Adding widget must be happened after addChild
                     affected_check_box = QCheckBox(self)
-                    affected_check_box.setChecked(the_value['affected'])
+                    # Set from profile_data if exist, else get default
+                    profile_value = profile_data.get(
+                        hazard, {}).get(classification, {}).get(
+                        the_class, the_value)
+
+                    affected_check_box.setChecked(profile_value['affected'])
                     self.setItemWidget(
                         the_class_widget_item, 1, affected_check_box)
                     displacement_rate_spinbox = PercentageSpinBox(self)
                     displacement_rate_spinbox.setValue(
-                        the_value['displacement_rate'])
-                    displacement_rate_spinbox.setEnabled(the_value['affected'])
+                        profile_value['displacement_rate'])
+                    displacement_rate_spinbox.setEnabled(
+                        profile_value['affected'])
                     self.setItemWidget(
                         the_class_widget_item, 2, displacement_rate_spinbox)
                     # Behaviour when the check box is checked
