@@ -65,7 +65,7 @@ def content():
 
     bullets = m.BulletedList()
     bullets.add(m.Text(
-        m.ImportantText(tr('Tabular reports')),
+        m.ImportantText(tr('InaSAFE reports')),
         tr(
             ' - There are four checkboxes available which are representing '
             'the type of report component that will be generated.'
@@ -82,7 +82,7 @@ def content():
     qgis_directory = join(QgsApplication.qgisSettingsDirPath(), 'inasafe')
     bullets.add(m.Text(
         m.ImportantText(
-            tr('Custom and map report')),
+            tr('Map reports')),
         text.format(qgis_directory=qgis_directory)))
     bullets.add(m.Text(
         m.ImportantText(tr('Buttons area')),
@@ -92,6 +92,44 @@ def content():
             'clicking on the help button or using the close button to close '
             'the print dialog.'
         )))
+    message.add(bullets)
+
+    message.add(m.Paragraph(tr(
+        'There are four options on which template would you use to generate '
+        'a map report.')))
+
+    bullets = m.BulletedList()
+    bullets.add(m.Text(
+        m.ImportantText(tr('InaSAFE default templates')),
+        tr(
+            ' - The map report will be generated using InaSAFE default '
+            'landscape and portrait map templates. Override template will '
+            'not be used.')))
+
+    bullets.add(m.Text(
+        m.ImportantText(tr('Override template')),
+        tr(
+            ' - The map report will be generated using override template '
+            'found from qgis setting directory. InaSAFE default map templates '
+            'will not be printed.'
+        )))
+
+    bullets.add(m.Text(
+        m.ImportantText(tr('Template from search directory')),
+        tr(
+            ' - The map report will be generated using selected template on '
+            'template dropdown selector. InaSAFE default map templates will '
+            'not be printed and override template will not be used.'
+        )))
+
+    bullets.add(m.Text(
+        m.ImportantText(tr('Template from file system')),
+        tr(
+            ' - The map report will be generated using selected template on '
+            'file system. InaSAFE default map templates will not be printed '
+            'and override template will not be used.'
+        )))
+
     message.add(bullets)
 
     return message

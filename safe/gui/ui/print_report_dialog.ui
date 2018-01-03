@@ -230,7 +230,7 @@
              <item row="0" column="0" colspan="2">
               <widget class="QLabel" name="label_2">
                <property name="text">
-                <string>Print the map using:</string>
+                <string>Print the map as PDF using:</string>
                </property>
               </widget>
              </item>
