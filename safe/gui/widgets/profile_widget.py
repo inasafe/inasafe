@@ -128,27 +128,54 @@ class ProfileWidget(QTreeWidget, object):
                     the_class_widget_item.setText(
                         0, get_class_name(the_class, classification))
                     classification_widget_item.addChild(the_class_widget_item)
-                    # Adding widget must be happened after addChild
-                    affected_check_box = QCheckBox(self)
                     # Set from profile_data if exist, else get default
                     profile_value = profile_data.get(
                         hazard, {}).get(classification, {}).get(
                         the_class, the_value)
-
+                    # Adding widget must be happened after addChild
+                    # Affected checkbox
+                    affected_check_box = QCheckBox(self)
                     affected_check_box.setChecked(profile_value['affected'])
+                    # Set default value
+                    affected_check_box.default_value = the_value['affected']
                     self.setItemWidget(
                         the_class_widget_item, 1, affected_check_box)
+
+                    # Displacement rate spinbox
                     displacement_rate_spinbox = PercentageSpinBox(self)
                     displacement_rate_spinbox.setValue(
                         profile_value['displacement_rate'])
                     displacement_rate_spinbox.setEnabled(
                         profile_value['affected'])
+                    # Set default value
+                    displacement_rate_spinbox.default_value = the_value[
+                        'displacement_rate']
                     self.setItemWidget(
                         the_class_widget_item, 2, displacement_rate_spinbox)
                     # Behaviour when the check box is checked
                     # noinspection PyUnresolvedReferences
                     affected_check_box.stateChanged.connect(
                         displacement_rate_spinbox.setEnabled)
+
+                    from functools import partial
+                    def is_affected_default(check_box):
+                        if check_box.isChecked() == check_box.default_value:
+                            print ('affected is default')
+                        else:
+                            print ('affected is NOT default')
+                    def is_displacement_rate_default(spin_box):
+                        if spin_box.value() == spin_box.default_value:
+                            print ('spin box is default')
+                        else:
+                            print ('spin box is NOT default')
+                    affected_check_box.stateChanged.connect(
+                        partial(
+                            is_affected_default, check_box=affected_check_box))
+                    displacement_rate_spinbox.valueChanged.connect(
+                        partial(
+                            is_displacement_rate_default,
+                            spin_box=displacement_rate_spinbox))
+
             if hazard_widget_item.childCount() > 0:
                 self.widget_items.append(hazard_widget_item)
 
