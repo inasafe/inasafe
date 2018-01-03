@@ -3,6 +3,7 @@
 
 import logging
 import os
+from functools import partial
 
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
@@ -226,7 +227,7 @@ class OptionsDialog(QDialog, FORM_CLASS):
             self.parameter_population_restore_button.text().capitalize())
 
         self.parameter_population_restore_button.clicked.connect(
-            self.restore_population_parameters)
+            partial(self.restore_population_parameters, global_default=True))
 
         # TODO: Hide this until behaviour is defined
         # hide template warning toggle
@@ -960,4 +961,3 @@ class OptionsDialog(QDialog, FORM_CLASS):
             if answer == QMessageBox.Yes:
                 LOGGER.debug('Import from %s' % file_path)
                 import_setting(file_path)
-                self.restore_state()
