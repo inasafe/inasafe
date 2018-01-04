@@ -19,7 +19,9 @@ from qgis.core import (
     QgsGeometry,
     QgsCoordinateReferenceSystem,
     QgsMapLayer,
+    QgsMapLayerRegistry,
     QgsVectorLayer,
+    QgsRasterLayer,
     QgsProject,
     QgsLayerTreeGroup,
     QgsLayerTreeLayer)
@@ -39,6 +41,7 @@ from safe.definitions.constants import (
     ANALYSIS_FAILED_BAD_INPUT,
     ANALYSIS_SUCCESS,
     MULTI_EXPOSURE_ANALYSIS_FLAG)
+from safe.definitions.exposure import exposure_population
 from safe.definitions.layer_purposes import (
     layer_purpose_analysis_impacted,
     layer_purpose_aggregation_summary,
@@ -78,6 +81,7 @@ from safe.definitions.provenance import (
     provenance_analysis_question)
 from safe.definitions.reports.components import (
     standard_impact_report_metadata_pdf, infographic_report)
+from safe.definitions.reports.infographic import map_overview
 from safe.definitions.styles import (
     aggregation_color,
     aggregation_width,
@@ -96,6 +100,7 @@ from safe.gis.vector.summary_5_multi_exposure import (
     multi_exposure_analysis_summary,
     multi_exposure_aggregation_summary,
 )
+from safe.gui.analysis_utilities import add_layer_to_canvas
 from safe.gui.widgets.message import generate_input_error_message
 from safe.impact_function.create_extra_layers import (
     create_analysis_layer, create_virtual_aggregation)
@@ -1087,11 +1092,21 @@ class MultiExposureImpactFunction(object):
         error_code = None
         message = None
 
+        population_found = False
+        population_impact_function = None
+        for impact_function in self.impact_functions:
+            exposure_keywords = impact_function.provenance['exposure_keywords']
+            exposure_type = definition(exposure_keywords['exposure'])
+            if exposure_type == exposure_population:
+                population_found = True
+                population_impact_function = impact_function
+                break
+
         generated_components = deepcopy(components)
         # remove unnecessary components
         if standard_impact_report_metadata_pdf in generated_components:
             generated_components.remove(standard_impact_report_metadata_pdf)
-        if infographic_report in generated_components:
+        if infographic_report in generated_components and not population_found:
             generated_components.remove(infographic_report)
 
         # Define the extra layers because multi-exposure IF has its own
@@ -1165,13 +1180,30 @@ class MultiExposureImpactFunction(object):
             report_metadata = ReportMetadata(
                 metadata_dict=component)
 
+            map_overview_layer = None
+            if component == infographic_report:
+                if population_impact_function:
+                    map_overview_layer = QgsRasterLayer(
+                        map_overview['path'], 'Overview')
+                    add_layer_to_canvas(
+                        map_overview_layer, map_overview['id'])
+
+                    self._impact_report = ImpactReport(
+                        iface,
+                        report_metadata,
+                        impact_function=population_impact_function,
+                        extra_layers=extra_layers)
+                else:
+                    break
+            else:
+                self._impact_report = ImpactReport(
+                    iface,
+                    report_metadata,
+                    multi_exposure_impact_function=self,
+                    analysis=self.analysis_impacted,
+                    extra_layers=extra_layers)
+
             self._report_metadata.append(report_metadata)
-            self._impact_report = ImpactReport(
-                iface,
-                report_metadata,
-                multi_exposure_impact_function=self,
-                analysis=self.analysis_impacted,
-                extra_layers=extra_layers)
 
             # generate report folder
 
@@ -1193,6 +1225,9 @@ class MultiExposureImpactFunction(object):
             error_code, message = self._impact_report.process_components()
             if error_code == ImpactReport.REPORT_GENERATION_FAILED:
                 break
+
+        if map_overview_layer:
+            QgsMapLayerRegistry.instance().removeMapLayer(map_overview_layer)
 
         return error_code, message
 
