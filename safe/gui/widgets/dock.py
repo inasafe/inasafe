@@ -25,7 +25,8 @@ from safe.common.exceptions import (
     NoKeywordsFoundError,
     InvalidParameterError,
     HashNotFoundError,
-    MetadataReadError)
+    MetadataReadError,
+    InvalidLayerError)
 from safe.common.signals import (send_static_message, send_error_message)
 from safe.common.version import get_version
 from safe.defaults import supporters_logo_path
@@ -105,12 +106,13 @@ from safe.utilities.qgis_utilities import (
 from safe.utilities.qt import disable_busy_cursor, enable_busy_cursor
 from safe.utilities.resources import get_ui_class
 from safe.utilities.settings import setting, set_setting
+from safe.utilities.unicode import get_string
 from safe.utilities.utilities import (
     get_error_message,
     basestring_to_message,
     is_keyword_version_supported,
+    is_plugin_installed
 )
-from safe.utilities.utilities import is_plugin_installed
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -940,7 +942,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     self.impact_function = (
                         ImpactFunction.load_from_output_metadata(
                             keywords))
-            except Exception:
+            except InvalidLayerError as e:
+                display_critical_message_bar(
+                    tr("Invalid Layer"), get_string(e.message))
                 self.impact_function = None
 
             show_keywords = True
