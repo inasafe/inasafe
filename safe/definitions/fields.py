@@ -2683,7 +2683,7 @@ contour_x_field = {
     'description': tr(
         'The X coordinate for the contour label so we can fix the x position '
         'to the same x coordinate as centroid of the feature so labels line '
-        'up nicely vertically'),
+        'up nicely horizontally.'),
     'citations': [
         {
             'text': None,
@@ -2707,7 +2707,7 @@ contour_y_field = {
     'description': tr(
         'The Y coordinate for the contour label so we can fix the y position '
         'to the minimum y coordinate of the whole contour so labels line up '
-        'nicely vertically'),
+        'nicely vertically.'),
     'citations': [
         {
             'text': None,
@@ -2729,7 +2729,7 @@ contour_colour_field = {
     'help_text': tr('The color for the contour.'),
     'description': tr(
         'The color for the contour in hexadecimal format (e.g. #55ffff) based '
-        'on MMI class'),
+        'on MMI class.'),
     'citations': [
         {
             'text': None,
@@ -2750,7 +2750,7 @@ contour_roman_field = {
     'absolute': True,
     'help_text': tr('The roman for the contour.'),
     'description': tr(
-        'The roman label for the contour based on MMI level (e.g. IV)'),
+        'The roman label for the contour based on MMI level (e.g. IV).'),
     'citations': [
         {
             'text': None,
@@ -2811,7 +2811,7 @@ contour_length_field = {
     'absolute': True,
     'help_text': tr('The contour length.'),
     'description': tr(
-        'The contour length can be used to filter out small contour'),
+        'The contour length can be used to filter out small contour.'),
     'citations': [
         {
             'text': None,
