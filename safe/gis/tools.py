@@ -19,7 +19,7 @@ from safe.definitions.constants import (
     OGR_EXTENSIONS,
     GDAL_EXTENSIONS,
 )
-from safe.common.exceptions import NoKeywordsFoundError
+from safe.common.exceptions import NoKeywordsFoundError, InvalidLayerError
 from safe.definitions.layer_geometry import (
     layer_geometry_raster,
     layer_geometry_point,
@@ -214,7 +214,7 @@ def load_layer(full_layer_uri_string, name=None, provider=None):
     if not layer or not layer.isValid():
         message = 'Layer "%s" is not valid' % layer_path
         LOGGER.debug(message)
-        raise Exception(message)
+        raise InvalidLayerError(message)
 
     # Define the name
     if not name:
