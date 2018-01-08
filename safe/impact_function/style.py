@@ -23,6 +23,7 @@ from safe.definitions.styles import (
     template_with_minimum_thresholds,
     template_with_maximum_thresholds,
     template_with_range_thresholds,
+    transparent,
 )
 from safe.definitions.utilities import definition
 from safe.utilities.gis import is_line_layer
@@ -68,6 +69,7 @@ def hazard_class_style(layer, classification, display_null=False):
         style = QgsConditionalStyle()
         style.setName(hazard_class)
         style.setRule("hazard_class='%s'" % hazard_class)
+        style.setBackgroundColor(transparent)
         symbol = QgsSymbolV2.defaultSymbol(QGis.Point)
         symbol.setColor(color)
         symbol.setSize(3)
