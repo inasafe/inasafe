@@ -68,6 +68,7 @@ from safe.impact_function.multi_exposure_wrapper import (
     MultiExposureImpactFunction)
 from safe.messaging import styles
 from safe.report.impact_report import ImpactReport
+from safe.utilities.extent import Extent
 from safe.utilities.gis import qgis_version
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
@@ -114,6 +115,9 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
         self.keyword_io = KeywordIO()
         self._create_exposure_combos()
         self._multi_exposure_if = None
+        self._extent = Extent(iface)
+        self._extent.show_rubber_bands = setting(
+            'showRubberBands', False, bool)
 
         enable_messaging(self.message_viewer, self)
 
@@ -671,6 +675,11 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                 for combo in self.combos_exposures.itervalues():
                     layer = layer_from_combo(combo)
                     legend.setLayerVisible(layer, False)
+
+            # Set last analysis extent
+            self._extent.set_last_analysis_extent(
+                self._multi_exposure_if.analysis_extent,
+                self._multi_exposure_if.crs)
 
             self.done(QDialog.Accepted)
 
