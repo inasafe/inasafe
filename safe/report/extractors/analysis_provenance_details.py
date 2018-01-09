@@ -9,6 +9,7 @@ from safe.definitions.provenance import (
     provenance_exposure_layer,
     provenance_hazard_layer,
     provenance_aggregation_layer,
+    provenance_use_rounding,
 )
 from safe.gis.tools import decode_full_layer_uri
 from safe.report.extractors.composer import QGISComposerContext
@@ -69,6 +70,7 @@ def analysis_provenance_details_extractor(impact_report, component_metadata):
         'aggregation_layer',
         'keywords_version']
 
+    use_rounding = impact_report.impact_function.use_rounding
     debug_mode = impact_report.impact_function.debug_mode
 
     # we define dict here to create a different object of keyword
@@ -166,10 +168,10 @@ def analysis_provenance_details_extractor(impact_report, component_metadata):
     all_provenance_keywords = dict(impact_report.impact_function.provenance)
 
     # we add debug mode information to the provenance
-    if debug_mode:
-        all_provenance_keywords['debug_mode'] = 'On'
-    else:
-        all_provenance_keywords['debug_mode'] = 'Off'
+    all_provenance_keywords[
+        provenance_use_rounding['provenance_key']] = (
+        'On' if use_rounding else 'Off')
+    all_provenance_keywords['debug_mode'] = 'On' if debug_mode else 'Off'
 
     header = resolve_from_dictionary(
         provenance_format_args, 'analysis_environment_header')
@@ -177,6 +179,7 @@ def analysis_provenance_details_extractor(impact_report, component_metadata):
     analysis_environment_provenance_keys = [
         'os',
         'inasafe_version',
+        provenance_use_rounding['provenance_key'],
         'debug_mode',
         'qgis_version',
         'qt_version',

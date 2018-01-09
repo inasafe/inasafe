@@ -40,7 +40,7 @@ def mmi_detail_extractor(impact_report, component_metadata):
     analysis_layer = impact_report.analysis
     analysis_layer_keywords = analysis_layer.keywords
     extra_args = component_metadata.extra_args
-    enable_rounding = not impact_report.impact_function.debug_mode
+    use_rounding = impact_report.impact_function.use_rounding
     provenance = impact_report.impact_function.provenance
     hazard_keywords = provenance['hazard_keywords']
     exposure_keywords = provenance['exposure_keywords']
@@ -100,7 +100,7 @@ def mmi_detail_extractor(impact_report, component_metadata):
                 count = 0
             count = format_number(
                 count,
-                enable_rounding=enable_rounding,
+                use_rounding=use_rounding,
                 is_population=True)
             columns.append(count)
 
@@ -122,7 +122,7 @@ def mmi_detail_extractor(impact_report, component_metadata):
             total = 0
         total = format_number(
             total,
-            enable_rounding=enable_rounding,
+            use_rounding=use_rounding,
             is_population=True)
         total_footer.append(total)
 

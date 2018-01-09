@@ -27,6 +27,7 @@ from safe.definitions.field_groups import (
     gender_displaced_count_group)
 from safe.definitions.hazard_classifications import flood_hazard_classes
 from safe.definitions.hazard import hazard_flood
+from safe.definitions.provenance import provenance_use_rounding
 from safe.impact_function.impact_function import ImpactFunction
 from safe.impact_function.multi_exposure_wrapper import \
     MultiExposureImpactFunction
@@ -1010,6 +1011,9 @@ class TestImpactReport(unittest.TestCase):
                 }), ('inasafe_version', {
                     'content': get_version(),
                     'header': 'InaSAFE Version '
+                }), (provenance_use_rounding['provenance_key'], {
+                    'content': 'On',
+                    'header': provenance_use_rounding['name'] + ' '
                 }), ('debug_mode', {
                     'content': 'Off',
                     'header': 'Debug Mode '

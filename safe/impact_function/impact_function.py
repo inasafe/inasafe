@@ -122,6 +122,7 @@ from safe.definitions.provenance import (
     provenance_layer_analysis_impacted_id,
     provenance_layer_exposure_summary_id,
     provenance_crs,
+    provenance_use_rounding,
     provenance_debug_mode)
 from safe.definitions.reports.components import (
     infographic_report,
@@ -251,6 +252,7 @@ class ImpactFunction(object):
 
         # Use debug to store intermediate results
         self.debug_mode = False
+        self.use_rounding = True
 
         # Requested extent to use (according to the CRS property).
         self._requested_extent = None
@@ -338,6 +340,7 @@ class ImpactFunction(object):
         """
         properties = [
             'debug_mode',
+            'use_rounding',
             'requested_extent',
             'crs',
             'analysis_extent',
@@ -2455,6 +2458,7 @@ class ImpactFunction(object):
             self.analysis_impacted,
             self.exposure,
             self.hazard,
+            self.use_rounding,
             self.debug_mode)
 
         # Let's style layers which have a geometry and have hazard_class
@@ -2559,6 +2563,10 @@ class ImpactFunction(object):
         # CRS
         set_provenance(
             self._provenance, provenance_crs, self._crs.authid())
+
+        # Rounding
+        set_provenance(
+            self._provenance, provenance_use_rounding, self.use_rounding)
 
         # Debug mode
         set_provenance(
@@ -2750,6 +2758,10 @@ class ImpactFunction(object):
         earthquake_function = get_provenance(
             provenance, provenance_earthquake_function)
         impact_function._earthquake_function = earthquake_function
+
+        # Use rounding
+        impact_function.use_rounding = get_provenance(
+            provenance, provenance_use_rounding)
 
         # Debug mode
         debug_mode = get_provenance(provenance, provenance_debug_mode)

@@ -49,14 +49,12 @@ def general_report_extractor(impact_report, component_metadata):
     # figure out analysis report type
     analysis_layer = impact_report.analysis
     provenance = impact_report.impact_function.provenance
-    debug_mode = impact_report.impact_function.debug_mode
+    use_rounding = impact_report.impact_function.use_rounding
     hazard_keywords = provenance['hazard_keywords']
     exposure_keywords = provenance['exposure_keywords']
 
     exposure_type = definition(exposure_keywords['exposure'])
-    # Only round the number when it is population exposure and it is not
-    # in debug mode
-    is_rounded = not debug_mode
+    # Only round the number when it is population exposure and we use rounding
     is_population = exposure_type is exposure_population
 
     # find hazard class
@@ -98,7 +96,7 @@ def general_report_extractor(impact_report, component_metadata):
 
                 hazard_value = format_number(
                     analysis_feature[field_index],
-                    enable_rounding=is_rounded,
+                    use_rounding=use_rounding,
                     is_population=is_population)
                 stats = {
                     'key': hazard_class['key'],
@@ -121,7 +119,7 @@ def general_report_extractor(impact_report, component_metadata):
             field_name = analysis_inasafe_fields[total_exposed_field['key']]
             total = value_from_field_name(field_name, analysis_layer)
             total = format_number(
-                total, enable_rounding=is_rounded, is_population=is_population)
+                total, use_rounding=use_rounding, is_population=is_population)
             stats = {
                 'key': total_exposed_field['key'],
                 'name': total_exposed_field['name'],
@@ -156,7 +154,7 @@ def general_report_extractor(impact_report, component_metadata):
             else:
                 row_value = format_number(
                     analysis_feature[field_index],
-                    enable_rounding=is_rounded,
+                    use_rounding=use_rounding,
                     is_population=is_population)
             row_stats = {
                 'key': field['key'],
@@ -293,7 +291,7 @@ def multi_exposure_general_report_extractor(impact_report, component_metadata):
                     field_index = analysis_layer.fieldNameIndex(field_name)
                     hazard_value = format_number(
                         analysis_feature[field_index],
-                        enable_rounding=is_rounded,
+                        use_rounding=is_rounded,
                         is_population=is_population)
                 except KeyError:
                     # in case the field was not found
@@ -308,7 +306,7 @@ def multi_exposure_general_report_extractor(impact_report, component_metadata):
                 field_name = analysis_inasafe_fields[field_key_name]
                 total = value_from_field_name(field_name, analysis_layer)
                 total = format_number(
-                    total, enable_rounding=is_rounded,
+                    total, use_rounding=is_rounded,
                     is_population=is_population)
                 classification_result[total_exposed_field['key']] = total
             except KeyError:
@@ -331,7 +329,7 @@ def multi_exposure_general_report_extractor(impact_report, component_metadata):
                     field_index = analysis_layer.fieldNameIndex(field_name)
                     row_value = format_number(
                         analysis_feature[field_index],
-                        enable_rounding=is_rounded,
+                        use_rounding=is_rounded,
                         is_population=is_population)
 
             elif field in [displaced_field, fatalities_field]:
@@ -347,7 +345,7 @@ def multi_exposure_general_report_extractor(impact_report, component_metadata):
                     else:
                         row_value = format_number(
                             analysis_feature[field_index],
-                            enable_rounding=is_rounded,
+                            use_rounding=is_rounded,
                             is_population=is_population)
 
             reported_fields_result[field['key']] = row_value

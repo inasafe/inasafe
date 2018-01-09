@@ -63,7 +63,7 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
     aggregation_summary = impact_report.aggregation_summary
     analysis_layer = impact_report.analysis
     analysis_layer_fields = impact_report.analysis.keywords['inasafe_fields']
-    debug_mode = impact_report.impact_function.debug_mode
+    use_rounding = impact_report.impact_function.use_rounding
     use_aggregation = bool(impact_report.impact_function.provenance[
         'aggregation_layer'])
     provenance = impact_report.impact_function.provenance
@@ -149,7 +149,7 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
                 age_items,
                 age_section_header,
                 use_aggregation=use_aggregation,
-                debug_mode=debug_mode,
+                use_rounding=use_rounding,
                 extra_component_args=extra_args)
         )
 
@@ -199,7 +199,7 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
                 gender_items,
                 gender_section_header,
                 use_aggregation=use_aggregation,
-                debug_mode=debug_mode,
+                use_rounding=use_rounding,
                 extra_component_args=extra_args)
         )
 
@@ -250,7 +250,7 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
                     vulnerability_items,
                     vulnerability_section_header,
                     use_aggregation=use_aggregation,
-                    debug_mode=debug_mode,
+                    use_rounding=use_rounding,
                     extra_component_args=extra_args)
             )
 
@@ -300,7 +300,7 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
                 minimum_needs_items,
                 minimum_needs_section_header,
                 units_label=units_label,
-                debug_mode=debug_mode,
+                use_rounding=use_rounding,
                 extra_component_args=extra_args)
         )
     else:
@@ -322,7 +322,7 @@ def create_section(
         section_header,
         use_aggregation=True,
         units_label=None,
-        debug_mode=False,
+        use_rounding=True,
         extra_component_args=None):
     """Create demographic section context.
 
@@ -344,8 +344,8 @@ def create_section(
     :param units_label: Unit label for each column
     :type units_label: list[str]
 
-    :param debug_mode: flag for debug_mode, affect number representations
-    :type debug_mode: bool
+    :param use_rounding: flag for rounding, affect number representations
+    :type use_rounding: bool
 
     :param extra_component_args: extra_args passed from report component
         metadata
@@ -361,14 +361,14 @@ def create_section(
             aggregation_summary, analysis_layer, postprocessor_fields,
             section_header,
             units_label=units_label,
-            debug_mode=debug_mode,
+            use_rounding=use_rounding,
             extra_component_args=extra_component_args)
     else:
         return create_section_without_aggregation(
             aggregation_summary, analysis_layer, postprocessor_fields,
             section_header,
             units_label=units_label,
-            debug_mode=debug_mode,
+            use_rounding=use_rounding,
             extra_component_args=extra_component_args)
 
 
@@ -376,7 +376,7 @@ def create_section_with_aggregation(
         aggregation_summary, analysis_layer, postprocessor_fields,
         section_header,
         units_label=None,
-        debug_mode=False,
+        use_rounding=True,
         extra_component_args=None):
     """Create demographic section context with aggregation breakdown.
 
@@ -395,8 +395,8 @@ def create_section_with_aggregation(
     :param units_label: Unit label for each column
     :type units_label: list[str]
 
-    :param debug_mode: flag for debug_mode, affect number representations
-    :type debug_mode: bool
+    :param use_rounding: flag for rounding, affect number representations
+    :type use_rounding: bool
 
     :param extra_component_args: extra_args passed from report component
         metadata
@@ -411,7 +411,6 @@ def create_section_with_aggregation(
         'inasafe_fields']
     analysis_layer_fields = analysis_layer.keywords[
         'inasafe_fields']
-    enable_rounding = not debug_mode
 
     # retrieving postprocessor
     postprocessors_fields_found = []
@@ -516,7 +515,7 @@ def create_section_with_aggregation(
 
         total_displaced = format_number(
             feature[displaced_field_index],
-            enable_rounding=enable_rounding,
+            use_rounding=use_rounding,
             is_population=True)
 
         row = [
@@ -524,7 +523,7 @@ def create_section_with_aggregation(
             total_displaced,
         ]
 
-        if total_displaced == '0' and not debug_mode:
+        if total_displaced == '0' and not use_rounding:
             continue
 
         for output_field in postprocessors_fields_found:
@@ -534,7 +533,7 @@ def create_section_with_aggregation(
 
             value = format_number(
                 value,
-                enable_rounding=enable_rounding,
+                use_rounding=use_rounding,
                 is_population=True)
             row.append(value)
 
@@ -548,7 +547,7 @@ def create_section_with_aggregation(
         total_displaced_field_name, analysis_layer)
     value = format_number(
         value,
-        enable_rounding=enable_rounding,
+        use_rounding=use_rounding,
         is_population=True)
     total_header = resolve_from_dictionary(
         extra_component_args, ['defaults', 'total_header'])
@@ -561,7 +560,7 @@ def create_section_with_aggregation(
         value = value_from_field_name(field_name, analysis_layer)
         value = format_number(
             value,
-            enable_rounding=enable_rounding,
+            use_rounding=use_rounding,
             is_population=True)
         totals.append(value)
 
@@ -591,7 +590,7 @@ def create_section_without_aggregation(
         aggregation_summary, analysis_layer, postprocessor_fields,
         section_header,
         units_label=None,
-        debug_mode=False,
+        use_rounding=True,
         extra_component_args=None):
     """Create demographic section context without aggregation.
 
@@ -610,8 +609,8 @@ def create_section_without_aggregation(
     :param units_label: Unit label for each column
     :type units_label: list[str]
 
-    :param debug_mode: flag for debug_mode, affect number representations
-    :type debug_mode: bool
+    :param use_rounding: flag for rounding, affect number representations
+    :type use_rounding: bool
 
     :param extra_component_args: extra_args passed from report component
         metadata
@@ -624,7 +623,6 @@ def create_section_without_aggregation(
         'inasafe_fields']
     analysis_layer_fields = analysis_layer.keywords[
         'inasafe_fields']
-    enable_rounding = not debug_mode
 
     # retrieving postprocessor
     postprocessors_fields_found = []
@@ -692,7 +690,7 @@ def create_section_without_aggregation(
             analysis_layer)
         value = format_number(
             value,
-            enable_rounding=enable_rounding,
+            use_rounding=use_rounding,
             is_population=True)
         row.append(value)
 

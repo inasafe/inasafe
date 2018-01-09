@@ -96,7 +96,7 @@ def inasafe_place_value_name(number, feature, parent):
         return None
     rounded_number = round_affected_number(
         number,
-        enable_rounding=True,
+        use_rounding=True,
         use_population_rounding=True
     )
     value, unit = denomination(rounded_number, 1000)
@@ -133,7 +133,7 @@ def inasafe_place_value_coefficient(number, feature, parent):
     if number >= 0:
         rounded_number = round_affected_number(
             number,
-            enable_rounding=True,
+            use_rounding=True,
             use_population_rounding=True
         )
         min_number = 1000

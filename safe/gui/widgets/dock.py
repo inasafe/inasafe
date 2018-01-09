@@ -8,8 +8,17 @@ import shutil
 from datetime import datetime
 from numbers import Number
 
-from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import Qt, pyqtSlot, QPyNullVariant
+from PyQt4.QtCore import Qt, pyqtSlot, QPyNullVariant, QUrl
+from PyQt4.QtGui import (
+    QAction,
+    qApp,
+    QApplication,
+    QDesktopServices,
+    QDockWidget,
+    QMenu,
+    QMessageBox,
+    QPixmap,
+)
 from qgis.core import (
     QgsGeometry,
     QgsMapLayer,
@@ -134,7 +143,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 # noinspection PyArgumentList
 # noinspection PyUnresolvedReferences
-class Dock(QtGui.QDockWidget, FORM_CLASS):
+class Dock(QDockWidget, FORM_CLASS):
 
     """Dock implementation class for the inaSAFE plugin."""
 
@@ -147,7 +156,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         :param iface: A QGisAppInterface instance we use to access QGIS via.
         :type iface: QgsAppInterface
         """
-        QtGui.QDockWidget.__init__(self, None)
+        QDockWidget.__init__(self, None)
 
         # Dirty hack to display a warning about this plugin.
         self.conflicting_plugin_detected = is_plugin_installed(
@@ -208,8 +217,17 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.read_settings()  # get_project_layers called by this
 
         # debug_mode is a check box to know if we run the IF with debug mode.
-        self.debug_mode.setVisible(self.developer_mode)
-        self.debug_mode.setChecked(False)
+        menu = QMenu()
+        self.use_debug_action = QAction(tr('Debug analysis'), self)
+        self.use_debug_action.setCheckable(True)
+        self.use_debug_action.setChecked(False)
+        menu.addAction(self.use_debug_action)
+        self.use_rounding_action = QAction(tr('Use rounding'), self)
+        self.use_rounding_action.setCheckable(True)
+        self.use_rounding_action.setChecked(True)
+        menu.addAction(self.use_rounding_action)
+        self.debug_group_button.setMenu(menu)
+        self.debug_group_button.setVisible(self.developer_mode)
 
         # Check the validity
         self.validate_impact_function()
@@ -277,7 +295,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         dock_width = float(self.width())
         # Don't let the image be more tha 100px height
         maximum_height = 100.0  # px
-        pixmap = QtGui.QPixmap(self.organisation_logo_path)
+        pixmap = QPixmap(self.organisation_logo_path)
         if pixmap.height() < 1 or pixmap.width() < 1:
             return
 
@@ -363,7 +381,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
             # Dont let the image be more than 100px height
             maximum_height = 100.0  # px
-            pixmap = QtGui.QPixmap(self.organisation_logo_path)
+            pixmap = QPixmap(self.organisation_logo_path)
             # it will throw Overflow Error if pixmap.height() == 0
             if pixmap.height() > 0:
 
@@ -403,23 +421,23 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # RM: this is a fix for nonexistent organization logo or zero height
         if logo_not_exist:
             # noinspection PyCallByClass
-            QtGui.QMessageBox.warning(
+            QMessageBox.warning(
                 self, self.tr('InaSAFE %s' % self.inasafe_version),
                 self.tr(
                     'The file for organization logo in %s doesn\'t exists. '
                     'Please check in Plugins -> InaSAFE -> Options that your '
                     'paths are still correct and update them if needed.' %
                     self.organisation_logo_path
-                ), QtGui.QMessageBox.Ok)
+                ), QMessageBox.Ok)
         if invalid_logo_size:
             # noinspection PyCallByClass
-            QtGui.QMessageBox.warning(
+            QMessageBox.warning(
                 self,
                 self.tr('InaSAFE %s' % self.inasafe_version),
                 self.tr(
                     'The file for organization logo has zero height. Please '
                     'provide valid file for organization logo.'
-                ), QtGui.QMessageBox.Ok)
+                ), QMessageBox.Ok)
         if logo_not_exist or invalid_logo_size:
             set_setting('organisation_logo_path', supporters_logo_path())
 
@@ -752,7 +770,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         send_static_message(self, report)
         self.progress_bar.setMaximum(maximum_value)
         self.progress_bar.setValue(current_value)
-        QtGui.QApplication.processEvents()
+        QApplication.processEvents()
 
     def show_print_dialog(self):
         """Open the print dialog"""
@@ -819,7 +837,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.question_group.setVisible(False)
         enable_busy_cursor()
         self.repaint()
-        QtGui.qApp.processEvents()
+        qApp.processEvents()
         self.busy = True
 
     def hide_busy(self, check_next_impact=True):
@@ -1044,7 +1062,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         impact_layer = self.iface.activeLayer()
         if impact_layer is None:
             # noinspection PyCallByClass,PyTypeChecker
-            QtGui.QMessageBox.warning(
+            QMessageBox.warning(
                 self,
                 self.tr('InaSAFE'),
                 self.tr('Please select a valid impact layer before '
@@ -1154,8 +1172,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         for path in pdf_output_paths:
             # noinspection PyCallByClass,PyTypeChecker,PyTypeChecker
-            QtGui.QDesktopServices.openUrl(
-                QtCore.QUrl.fromLocalFile(path))
+            QDesktopServices.openUrl(QUrl.fromLocalFile(path))
 
     @pyqtSlot('QgsRectangle', 'QgsCoordinateReferenceSystem')
     def define_user_analysis_extent(self, extent, crs):
@@ -1268,7 +1285,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         self.show_busy()
         self.impact_function.callback = self.progress_callback
-        self.impact_function.debug_mode = self.debug_mode.isChecked()
+        self.impact_function.debug_mode = self.use_debug_action.isChecked()
+        self.impact_function.use_rounding = (
+            self.use_rounding_action.isChecked())
+
         try:
             status, message = self.impact_function.run()
             message = basestring_to_message(message)
@@ -1556,7 +1576,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             elif isinstance(value, datetime):
                 QgsExpressionContextUtils.setProjectVariable(
                     key, value.isoformat())
-            elif isinstance(value, QtCore.QUrl):
+            elif isinstance(value, QUrl):
                 QgsExpressionContextUtils.setProjectVariable(
                     key, value.toString())
             else:

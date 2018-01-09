@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>422</width>
+    <width>426</width>
     <height>657</height>
    </rect>
   </property>
@@ -228,9 +228,15 @@
        </spacer>
       </item>
       <item>
-       <widget class="QCheckBox" name="debug_mode">
+       <widget class="QToolButton" name="debug_group_button">
         <property name="text">
          <string>Debug</string>
+        </property>
+        <property name="popupMode">
+         <enum>QToolButton::MenuButtonPopup</enum>
+        </property>
+        <property name="toolButtonStyle">
+         <enum>Qt::ToolButtonTextOnly</enum>
         </property>
        </widget>
       </item>

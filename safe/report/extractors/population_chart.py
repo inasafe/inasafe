@@ -80,7 +80,7 @@ def population_chart_extractor(impact_report, component_metadata):
             hazard_value = value_from_field_name(field_name, analysis_layer)
             hazard_value = round_affected_number(
                 hazard_value,
-                enable_rounding=True,
+                use_rounding=True,
                 use_population_rounding=True)
         except KeyError:
             # in case the field was not found
@@ -96,7 +96,7 @@ def population_chart_extractor(impact_report, component_metadata):
         hazard_value = value_from_field_name(field_name, analysis_layer)
         hazard_value = round_affected_number(
             hazard_value,
-            enable_rounding=True,
+            use_rounding=True,
             use_population_rounding=True)
 
         data.append(hazard_value)
