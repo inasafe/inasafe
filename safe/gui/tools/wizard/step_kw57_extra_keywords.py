@@ -2,8 +2,9 @@
 """InaSAFE Wizard Step Extra Keywords."""
 
 from PyQt4.QtGui import (
-    QLabel, QLineEdit, QDateTimeEdit, QDoubleSpinBox, QComboBox, QCheckBox
+    QLineEdit, QDateTimeEdit, QDoubleSpinBox, QComboBox, QCheckBox
 )
+from PyQt4.QtCore import Qt
 from collections import OrderedDict
 
 from datetime import datetime
@@ -20,7 +21,7 @@ from safe.definitions.extra_keywords import (
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.utilities.i18n import tr
-from safe.utilities.unicode import get_unicode
+from safe.common.custom_logging import LOGGER
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -42,6 +43,7 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
 
         """
         WizardStep.__init__(self, parent)
+        self.widgets_dict = OrderedDict()
 
     def is_ready_to_next_step(self):
         """Check if the step is complete. If so, there is
@@ -102,35 +104,37 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
             index = self.timezone_combo_box.findText('Asia/Jakarta')
             self.timezone_combo_box.setCurrentIndex(index)
 
-            widgets_dict = OrderedDict()
-            widgets_dict[extra_keyword_volcano_name['key']] = [
+            self.widgets_dict[extra_keyword_volcano_name['key']] = [
                 self.volcano_name_checkbox,
                 self.volcano_name_line_edit
             ]
-            widgets_dict[extra_keyword_volcano_alert_level['key']] = [
+            self.widgets_dict[extra_keyword_volcano_alert_level['key']] = [
                 self.alert_level_checkbox,
                 self.alert_level_combo_box
             ]
-            widgets_dict[extra_keyword_eruption_height['key']] = [
+            self.widgets_dict[extra_keyword_eruption_height['key']] = [
                 self.eruption_height_checkbox,
                 self.eruption_height_spin_box
             ]
-            widgets_dict[extra_keyword_volcano_eruption_event_time['key']] = [
+            self.widgets_dict[
+                extra_keyword_volcano_eruption_event_time['key']] = [
                 self.event_time_checkbox,
                 self.event_time_picker
             ]
-            widgets_dict[extra_keyword_time_zone['key']] = [
+            self.widgets_dict[extra_keyword_time_zone['key']] = [
                 self.timezone_checkbox,
                 self.timezone_combo_box
             ]
 
             index = 0
-            for key, widgets in widgets_dict.iteritems():
+            for key, widgets in self.widgets_dict.items():
                 self.extra_keywords_layout.addWidget(widgets[0], index, 0)
                 self.extra_keywords_layout.addWidget(widgets[1], index, 1)
                 widgets[0].stateChanged.connect(widgets[1].setEnabled)
                 widgets[0].setChecked(True)
                 index += 1
+
+        self.set_existing_extra_keywords()
 
     @property
     def step_name(self):
@@ -155,3 +159,44 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
             'set some extra keywords for a richer reporting.').format(
             step_name=self.step_name)))
         return message
+
+    def get_extra_keywords(self):
+        """Obtain extra keywords from the current state."""
+        extra_keywords = {}
+        for key, widgets in self.widgets_dict.items():
+            if widgets[0].isChecked():
+                if isinstance(widgets[1], QLineEdit):
+                    extra_keywords[key] = widgets[1].text()
+                elif isinstance(widgets[1], QComboBox):
+                    extra_keywords[key] = widgets[1].currentText()
+                elif isinstance(widgets[1], QDoubleSpinBox):
+                    extra_keywords[key] = widgets[1].value()
+                elif isinstance(widgets[1], QDateTimeEdit):
+                    extra_keywords[key] = widgets[1].dateTime().toString(
+                        Qt.ISODate)
+        return extra_keywords
+
+    def set_existing_extra_keywords(self):
+        """Set extra keywords from the value from metadata."""
+        extra_keywords = self.parent.get_existing_keyword('extra_keywords')
+        for key, widgets in self.widgets_dict.items():
+            value = extra_keywords.get(key)
+            LOGGER.debug('%s : %s' % (key, value))
+            if value is None:
+                widgets[0].setChecked(False)
+            else:
+                widgets[0].setChecked(True)
+                if isinstance(widgets[1], QLineEdit):
+                    widgets[1].setText(value)
+                elif isinstance(widgets[1], QComboBox):
+                    value_index = widgets[1].findText(value)
+                    widgets[1].setCurrentIndex(value_index)
+                elif isinstance(widgets[1], QDoubleSpinBox):
+                    widgets[1].setValue(value)
+                elif isinstance(widgets[1], QDateTimeEdit):
+                    try:
+                        value_datetime = datetime.strptime(
+                            value, "%Y-%m-%dT%H:%M:%S")
+                        widgets[1].setDateTime(value_datetime)
+                    except ValueError:
+                        LOGGER.info('Failed to convert %s to datetime' % value)
