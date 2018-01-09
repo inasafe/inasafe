@@ -82,6 +82,37 @@ extra_keyword_y_maximum = {
     'description': None
 }
 
+extra_keyword_volcano_name = {
+    'key': 'volcano_name',
+    'name': tr('Volcano name'),
+    'description': tr('The name of the volcano.')
+}
+
+extra_keyword_eruption_height = {
+    'key': 'volcano_eruption_height',
+    'name': tr('Eruption height'),
+    'description': tr(
+        'The ash column height. It is calculated from the vent of the volcano '
+        'in metres.')
+}
+
+extra_keyword_volcano_eruption_event_time = {
+    'key': 'volcano_eruption_event_time',
+    'name': tr('Eruption event time'),
+    'description': tr(
+        'The time of the eruption. The data uploaded to the ash realtime is a '
+        'hazard model, and the information usually valid for certain hours '
+        'after the eruption time.')
+}
+
+extra_keyword_volcano_alert_level = {
+    'key': 'volcano_alert_level',
+    'name': tr('Volcano alert level'),
+    'description': tr(
+        'This information shows the estimated severity level of the model. It '
+        'is usually a choice between Normal, Waspada, Siaga or Awas.')
+}
+
 all_extra_keywords = [
     extra_keyword_analysis_type,
     extra_keyword_depth,
