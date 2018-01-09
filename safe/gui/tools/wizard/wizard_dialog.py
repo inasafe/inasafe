@@ -82,6 +82,7 @@ from step_kw47_default_inasafe_fields import StepKwDefaultInaSAFEFields
 from step_kw49_inasafe_raster_default_values import (
     StepKwInaSAFERasterDefaultValues)
 from step_kw55_source import StepKwSource
+from step_kw57_extra_keywords import StepKwExtraKeywords
 from step_kw60_title import StepKwTitle
 from step_kw65_summary import StepKwSummary
 
@@ -170,6 +171,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.step_kw_inasafe_raster_default_values = \
             StepKwInaSAFERasterDefaultValues(self)
         self.step_kw_source = StepKwSource(self)
+        self.step_kw_extra_keywords = StepKwExtraKeywords(self)
         self.step_kw_title = StepKwTitle(self)
         self.step_kw_summary = StepKwSummary(self)
 
@@ -210,8 +212,10 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.stackedWidget.addWidget(
             self.step_kw_inasafe_raster_default_values)
         self.stackedWidget.addWidget(self.step_kw_source)
+        self.stackedWidget.addWidget(self.step_kw_extra_keywords)
         self.stackedWidget.addWidget(self.step_kw_title)
         self.stackedWidget.addWidget(self.step_kw_summary)
+
         self.stackedWidget.addWidget(self.step_fc_functions1)
         self.stackedWidget.addWidget(self.step_fc_functions2)
         self.stackedWidget.addWidget(self.step_fc_hazlayer_origin)

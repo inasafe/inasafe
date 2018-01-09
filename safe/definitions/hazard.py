@@ -39,6 +39,7 @@ from safe.definitions.units import (
     unit_kilometres_per_hour,
     unit_knots,
     unit_metres_per_second)
+from safe.definitions.extra_keywords import ash_extra_keywords
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -417,7 +418,8 @@ hazard_volcanic_ash = {
     'extra_fields': [],
     'field_groups': [],
     'layer_modes': [layer_mode_classified, layer_mode_continuous],
-    'disabled_exposures': []
+    'disabled_exposures': [],
+    'extra_keywords': ash_extra_keywords
 }
 hazard_tsunami = {
     'key': 'tsunami',
