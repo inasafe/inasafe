@@ -837,10 +837,17 @@ class WizardDialog(QDialog, FORM_CLASS):
         if inasafe_default_values:
             keywords['inasafe_default_values'] = inasafe_default_values
 
-        # Do not update extra keywords
-        extra_keywords = self.existing_keywords.get('extra_keywords')
-        if extra_keywords:
-            keywords['extra_keywords'] = extra_keywords
+        if self.step_kw_subcategory.selected_subcategory():
+            subcategory = self.step_kw_subcategory.selected_subcategory()
+            if subcategory.get('extra_keywords'):
+                extra_keywords = self.step_kw_extra_keywords.\
+                    get_extra_keywords()
+                keywords['extra_keywords'] = extra_keywords
+        else:
+            # Do not update extra keywords
+            extra_keywords = self.existing_keywords.get('extra_keywords')
+            if extra_keywords:
+                keywords['extra_keywords'] = extra_keywords
 
         return keywords
 

@@ -556,10 +556,6 @@ class TestKeywordWizard(unittest.TestCase):
                         u'classes': default_classes
                     }
                 }
-            },
-            'extra_keywords': {
-                'depth': 10,
-                'magnitude': 7.8
             }
         }
 

@@ -65,7 +65,7 @@ class StepKwSource(WizardStep, FORM_CLASS):
         :rtype: WizardStep instance or None
         """
         subcategory = self.parent.step_kw_subcategory.selected_subcategory()
-        if subcategory.get('extra_keywords'):
+        if subcategory and subcategory.get('extra_keywords'):
             new_step = self.parent.step_kw_extra_keywords
         else:
             new_step = self.parent.step_kw_title
