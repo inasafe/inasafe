@@ -76,7 +76,7 @@ map_overview_header = {
 population_chart_header = {
     'id': 'population-chart-header',
     'description': tr(''),
-    'string_format': tr('Estimated number of people affected by hazard level')
+    'string_format': tr('Estimated number of people exposed by hazard level')
 }
 
 people_section_header = {
