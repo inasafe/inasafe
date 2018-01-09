@@ -25,7 +25,7 @@ class StepFcHazLayerFromBrowser(WizardStepBrowser, FORM_CLASS):
     def __init__(self, parent=None):
         """Constructor for the tab.
 
-        :param parent: parent - widget to use as parent (Wizad Dialog).
+        :param parent: parent - widget to use as parent (Wizard Dialog).
         :type parent: QWidget
 
         """

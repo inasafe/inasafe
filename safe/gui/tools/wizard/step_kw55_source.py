@@ -22,7 +22,7 @@ class StepKwSource(WizardStep, FORM_CLASS):
     def __init__(self, parent=None):
         """Constructor for the tab.
 
-        :param parent: parent - widget to use as parent (Wizad Dialog).
+        :param parent: parent - widget to use as parent (Wizard Dialog).
         :type parent: QWidget
 
         """
@@ -64,7 +64,11 @@ class StepKwSource(WizardStep, FORM_CLASS):
         :returns: The step to be switched to
         :rtype: WizardStep instance or None
         """
-        new_step = self.parent.step_kw_title
+        subcategory = self.parent.step_kw_subcategory.selected_subcategory()
+        if subcategory.get('extra_keywords'):
+            new_step = self.parent.step_kw_extra_keywords
+        else:
+            new_step = self.parent.step_kw_title
         return new_step
 
     # noinspection PyPep8Naming

@@ -113,6 +113,13 @@ extra_keyword_volcano_alert_level = {
         'is usually a choice between Normal, Waspada, Siaga or Awas.')
 }
 
+ash_extra_keywords = [
+    extra_keyword_volcano_name,
+    extra_keyword_eruption_height,
+    extra_keyword_volcano_eruption_event_time,
+    extra_keyword_volcano_alert_level,
+]
+
 all_extra_keywords = [
     extra_keyword_analysis_type,
     extra_keyword_depth,
