@@ -204,6 +204,12 @@ provenance_crs = {
     'provenance_key': 'crs'
 }
 
+provenance_use_rounding = {
+    'key': 'provenance_use_rounding',
+    'name': tr('Use Rounding'),
+    'provenance_key': 'use_rounding'
+}
+
 provenance_debug_mode = {
     'key': 'provenance_debug_mode',
     'name': tr('Debug Mode'),

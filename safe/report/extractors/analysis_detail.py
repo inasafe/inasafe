@@ -65,7 +65,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
         exposure_summary_table_fields = exposure_summary_table.keywords[
             'inasafe_fields']
     provenance = impact_report.impact_function.provenance
-    debug_mode = impact_report.impact_function.debug_mode
+    use_rounding = impact_report.impact_function.use_rounding
     hazard_keywords = provenance['hazard_keywords']
     exposure_keywords = provenance['exposure_keywords']
 
@@ -77,9 +77,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
 
     # Get exposure type definition
     exposure_type = definition(exposure_keywords['exposure'])
-    # Only round the number when it is population exposure and it is not
-    # in debug mode
-    is_rounding = not debug_mode
+    # Only round the number when it is population exposure and we use rounding
     is_population = exposure_type is exposure_population
 
     # action for places with poopulation exposure
@@ -248,7 +246,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
                 count_value = int(float(feat[field_index]))
                 count_value = format_number(
                     count_value,
-                    enable_rounding=is_rounding,
+                    use_rounding=use_rounding,
                     is_population=is_population)
                 row.append({
                     'value': count_value,
@@ -276,7 +274,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
             total_count = int(float(feat[field_index]))
             total_count = format_number(
                 total_count,
-                enable_rounding=is_rounding,
+                use_rounding=use_rounding,
                 is_population=is_population)
 
             # we comment below code because now we want to show all rows,
@@ -377,7 +375,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
             field_index = analysis_layer.fieldNameIndex(field_name)
             count_value = format_number(
                 analysis_feature[field_index],
-                enable_rounding=is_rounding,
+                use_rounding=use_rounding,
                 is_population=is_population)
         except KeyError:
             # in case the field was not found
@@ -426,7 +424,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
 
         total_count = format_number(
             total_count,
-            enable_rounding=is_rounding,
+            use_rounding=use_rounding,
             is_population=is_population)
         if group_key:
             if field == total_affected_field:
@@ -598,7 +596,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
                     continue
                 total_count = format_number(
                     total_count,
-                    enable_rounding=is_rounding,
+                    use_rounding=use_rounding,
                     is_population=is_population)
                 row.append(total_count)
 

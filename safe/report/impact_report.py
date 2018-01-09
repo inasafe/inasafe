@@ -712,7 +712,7 @@ class ImpactReport(object):
             except Exception as e:  # pylint: disable=broad-except
                 generation_error_code = self.REPORT_GENERATION_FAILED
                 LOGGER.info(e)
-                if self.impact_function.debug_mode:
+                if not self.impact_function.use_rounding:
                     raise
                 else:
                     message.add(failed_find_extractor)
@@ -732,7 +732,7 @@ class ImpactReport(object):
             except Exception as e:  # pylint: disable=broad-except
                 generation_error_code = self.REPORT_GENERATION_FAILED
                 LOGGER.info(e)
-                if self.impact_function.debug_mode:
+                if not self.impact_function.use_rounding:
                     raise
                 else:
                     message.add(failed_extract_context)
@@ -760,7 +760,7 @@ class ImpactReport(object):
             except Exception as e:  # pylint: disable=broad-except
                 generation_error_code = self.REPORT_GENERATION_FAILED
                 LOGGER.info(e)
-                if self.impact_function.debug_mode:
+                if not self.impact_function.use_rounding:
                     raise
                 else:
                     message.add(failed_find_renderer)
@@ -796,7 +796,7 @@ class ImpactReport(object):
                 except Exception as e:  # pylint: disable=broad-except
                     generation_error_code = self.REPORT_GENERATION_FAILED
                     LOGGER.info(e)
-                    if self.impact_function.debug_mode:
+                    if not self.impact_function.use_rounding:
                         raise
                     else:
                         message.add(failed_render_context)

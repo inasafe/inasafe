@@ -56,7 +56,7 @@ def aggregation_result_extractor(impact_report, component_metadata):
     aggregation_summary = impact_report.aggregation_summary
     aggregation_summary_fields = aggregation_summary.keywords[
         'inasafe_fields']
-    debug_mode = impact_report.impact_function.debug_mode
+    use_rounding = impact_report.impact_function.use_rounding
     use_aggregation = bool(
         impact_report.impact_function.provenance['aggregation_layer'])
     if not use_aggregation:
@@ -67,9 +67,7 @@ def aggregation_result_extractor(impact_report, component_metadata):
     # Only process for applicable exposure types
     # Get exposure type definition
     exposure_type = definition(exposure_keywords['exposure'])
-    # Only round the number when it is population exposure and it is not
-    # in debug mode
-    is_rounded = not debug_mode
+    # Only round the number when it is population exposure and we use rounding
     is_population = exposure_type is exposure_population
 
     # For now aggregation report only applicable for breakable exposure types:
@@ -133,7 +131,7 @@ def aggregation_result_extractor(impact_report, component_metadata):
     for feat in aggregation_summary.getFeatures():
         total_affected_value = format_number(
             feat[total_field_index],
-            enable_rounding=is_rounded,
+            use_rounding=use_rounding,
             is_population=is_population)
         if total_affected_value == '0':
             # skip aggregation type if the total affected is zero
@@ -149,7 +147,7 @@ def aggregation_result_extractor(impact_report, component_metadata):
         for idx in type_field_index:
             affected_value = format_number(
                 feat[idx],
-                enable_rounding=is_rounded)
+                use_rounding=use_rounding)
             type_values.append(affected_value)
         item['type_values'] = type_values
         rows.append(item)
@@ -187,7 +185,7 @@ def aggregation_result_extractor(impact_report, component_metadata):
         affected_value = int(float(feat[affected_field_index]))
         affected_value = format_number(
             affected_value,
-            enable_rounding=is_rounded,
+            use_rounding=use_rounding,
             is_population=is_population)
         value_dict[feat[breakdown_field_index]] = affected_value
 
@@ -219,7 +217,7 @@ def aggregation_result_extractor(impact_report, component_metadata):
         total_affected_field['field_name'])
     total_all = format_number(
         analysis_feature[field_index],
-        enable_rounding=is_rounded)
+        use_rounding=use_rounding)
 
     """Generate and format the context."""
     aggregation_area_default_header = resolve_from_dictionary(
