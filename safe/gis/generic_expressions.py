@@ -273,8 +273,7 @@ def hazard_extra_keyword(keyword, feature, parent):
         'hazard_layer')
     hazard_layer = load_layer(hazard_layer_path)[0]
     keywords = KeywordIO.read_keywords(hazard_layer)
-    extra_keywords = keywords.get(keyword)
-    no_keyword_string = tr('No keyword found')
+    extra_keywords = keywords.get('extra_keywords')
     if extra_keywords:
         value = extra_keywords.get(keyword)
         if value:
@@ -282,4 +281,6 @@ def hazard_extra_keyword(keyword, feature, parent):
             if value_definition:
                 return value_definition['name']
             return value
-    return no_keyword_string
+        else:
+            return tr('Keyword %s is not found' % keyword)
+    return tr('No extra keywords found')
