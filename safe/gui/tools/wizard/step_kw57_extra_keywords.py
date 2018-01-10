@@ -80,10 +80,12 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
             # Alert level
             alert_level_checkbox = QCheckBox(tr('Alert Level'))
             alert_level_combo_box = QComboBox()
-            alert_level_combo_box.addItem(tr('Normal'))
-            alert_level_combo_box.addItem(tr('Advisory'))
-            alert_level_combo_box.addItem(tr('Watch'))
-            alert_level_combo_box.addItem(tr('Warning'))
+            for volcano_alert_level in extra_keyword_volcano_alert_level[
+                'options']:
+                alert_level_combo_box.addItem(
+                    volcano_alert_level['name'],
+                    volcano_alert_level['key'],
+                )
             alert_level_combo_box.setCurrentIndex(0)
 
             # Eruption height in metres
@@ -105,30 +107,35 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
             timezone_checkbox = QCheckBox(tr('Timezone'))
             timezone_combo_box = QComboBox()
             for timezone in pytz.common_timezones:
-                timezone_combo_box.addItem(timezone)
+                timezone_combo_box.addItem(timezone, timezone)
             index = timezone_combo_box.findText('Asia/Jakarta')
             timezone_combo_box.setCurrentIndex(index)
 
             self.widgets_dict[extra_keyword_volcano_name['key']] = [
                 volcano_name_checkbox,
-                volcano_name_line_edit
+                volcano_name_line_edit,
+                extra_keyword_volcano_name
             ]
             self.widgets_dict[extra_keyword_volcano_alert_level['key']] = [
                 alert_level_checkbox,
-                alert_level_combo_box
+                alert_level_combo_box,
+                extra_keyword_volcano_alert_level
             ]
             self.widgets_dict[extra_keyword_eruption_height['key']] = [
                 eruption_height_checkbox,
-                eruption_height_spin_box
+                eruption_height_spin_box,
+                extra_keyword_eruption_height
             ]
             self.widgets_dict[
                 extra_keyword_volcano_eruption_event_time['key']] = [
                 event_time_checkbox,
-                event_time_picker
+                event_time_picker,
+                extra_keyword_volcano_eruption_event_time
             ]
             self.widgets_dict[extra_keyword_time_zone['key']] = [
                 timezone_checkbox,
-                timezone_combo_box
+                timezone_combo_box,
+                extra_keyword_time_zone
             ]
 
             index = 0
@@ -173,7 +180,8 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
                 if isinstance(widgets[1], QLineEdit):
                     extra_keywords[key] = widgets[1].text()
                 elif isinstance(widgets[1], QComboBox):
-                    extra_keywords[key] = widgets[1].currentText()
+                    current_index = widgets[1].currentIndex()
+                    extra_keywords[key] = widgets[1].itemData(current_index)
                 elif isinstance(widgets[1], QDoubleSpinBox):
                     extra_keywords[key] = widgets[1].value()
                 elif isinstance(widgets[1], QDateTimeEdit):
@@ -194,7 +202,7 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
                 if isinstance(widgets[1], QLineEdit):
                     widgets[1].setText(value)
                 elif isinstance(widgets[1], QComboBox):
-                    value_index = widgets[1].findText(value)
+                    value_index = widgets[1].findData(value)
                     widgets[1].setCurrentIndex(value_index)
                 elif isinstance(widgets[1], QDoubleSpinBox):
                     widgets[1].setValue(value)

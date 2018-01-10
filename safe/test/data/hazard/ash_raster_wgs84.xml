@@ -202,7 +202,7 @@
             <gco:CharacterString>volcanic_ash</gco:CharacterString>
           </hazard>
           <extra_keywords>
-            <gco:Dictionary>{&quot;volcano_name&quot;: &quot;Pseudo Merapi&quot;, &quot;volcano_eruption_height&quot;: 20000.0, &quot;volcano_eruption_event_time&quot;: &quot;2018-01-09T15:19:50&quot;, &quot;volcano_alert_level&quot;: &quot;Warning&quot;, &quot;time_zone&quot;: &quot;Asia/Jakarta&quot;}</gco:Dictionary>
+            <gco:Dictionary>{&quot;volcano_name&quot;: &quot;Pseudo Merapi&quot;, &quot;volcano_eruption_height&quot;: 20000.0, &quot;volcano_eruption_event_time&quot;: &quot;2018-01-09T15:19:50&quot;, &quot;volcano_alert_level&quot;: &quot;normal&quot;, &quot;time_zone&quot;: &quot;Asia/Jakarta&quot;}</gco:Dictionary>
           </extra_keywords>
           <keyword_version>
             <gco:CharacterString>4.3</gco:CharacterString>
