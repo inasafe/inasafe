@@ -2,6 +2,7 @@
 
 """Definitions relating to extra keywords."""
 
+from datetime import datetime
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
@@ -85,7 +86,8 @@ extra_keyword_y_maximum = {
 extra_keyword_volcano_name = {
     'key': 'volcano_name',
     'name': tr('Volcano name'),
-    'description': tr('The name of the volcano.')
+    'description': tr('The name of the volcano.'),
+    'type': unicode
 }
 
 extra_keyword_eruption_height = {
@@ -93,22 +95,49 @@ extra_keyword_eruption_height = {
     'name': tr('Eruption height'),
     'description': tr(
         'The ash column height. It is calculated from the vent of the volcano '
-        'in metres.')
+        'in metres.'),
+    'type': float
 }
 
 extra_keyword_volcano_eruption_event_time = {
     'key': 'volcano_eruption_event_time',
     'name': tr('Eruption event time'),
     'description': tr(
-        'The time of the eruption of the volcano.')
+        'The time of the eruption of the volcano.'),
+    'type': datetime
 }
+
+volcano_alert_normal = {
+    'key': 'normal',
+    'name': tr('Normal')
+}
+volcano_alert_advisory = {
+    'key': 'advisory',
+    'name': tr('Advisory')
+}
+volcano_alert_watch = {
+    'key': 'watch',
+    'name': tr('Watch')
+}
+volcano_alert_warning = {
+    'key': 'warning',
+    'name': tr('Warning')
+}
+
 
 extra_keyword_volcano_alert_level = {
     'key': 'volcano_alert_level',
     'name': tr('Volcano alert level'),
     'description': tr(
         'This information shows the estimated severity level of the model. It '
-        'is usually a choice between Normal, Advisory, Watch, or Warning.')
+        'is usually a choice between Normal, Advisory, Watch, or Warning.'),
+    'type': unicode,
+    'options': [
+        volcano_alert_normal,
+        volcano_alert_advisory,
+        volcano_alert_watch,
+        volcano_alert_warning,
+    ]
 }
 
 ash_extra_keywords = [
