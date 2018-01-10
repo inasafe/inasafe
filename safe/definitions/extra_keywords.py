@@ -104,7 +104,9 @@ extra_keyword_volcano_eruption_event_time = {
     'name': tr('Eruption event time'),
     'description': tr(
         'The time of the eruption of the volcano.'),
-    'type': datetime
+    'type': datetime,
+    'store_format': '%Y-%m-%dT%H:%M:%S',
+    'show_format': '%H:%M:%S %d %b %Y'
 }
 
 volcano_alert_normal = {
