@@ -12,6 +12,7 @@ from qgis.core import (
 
 from safe.definitions.extra_keywords import all_extra_keywords_description
 from safe.definitions.provenance import provenance_layer_analysis_impacted_id
+from safe.definitions.utilities import definition
 from safe.gis.tools import load_layer
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
@@ -277,5 +278,8 @@ def hazard_extra_keyword(keyword, feature, parent):
     if extra_keywords:
         value = extra_keywords.get(keyword)
         if value:
+            value_definition = definition(value)
+            if value_definition:
+                return value_definition['name']
             return value
     return no_keyword_string
