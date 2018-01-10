@@ -80,8 +80,9 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
             # Alert level
             alert_level_checkbox = QCheckBox(tr('Alert Level'))
             alert_level_combo_box = QComboBox()
-            for volcano_alert_level in extra_keyword_volcano_alert_level[
-                'options']:
+            volcano_alert_level_options = extra_keyword_volcano_alert_level[
+                'options']
+            for volcano_alert_level in volcano_alert_level_options:
                 alert_level_combo_box.addItem(
                     volcano_alert_level['name'],
                     volcano_alert_level['key'],

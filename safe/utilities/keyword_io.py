@@ -504,6 +504,15 @@ class KeywordIO(QObject):
                 else:
                     row.add(m.Cell(value[0]))
             else:
+                if keyword_property == property_extra_keywords:
+                    key_definition = definition(key)
+                    if key_definition and key_definition.get('options'):
+                        value = definition(value).get('name', value)
+                    elif key_definition and key_definition.get(
+                            'type') == datetime:
+                        value = datetime.strptime(value, key_definition[
+                            'store_format'])
+                        value = value.strftime(key_definition['show_format'])
                 row.add(m.Cell(value))
 
             table.add(row)
