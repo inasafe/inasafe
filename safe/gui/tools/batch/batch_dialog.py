@@ -473,6 +473,7 @@ class BatchDialog(QDialog, FORM_CLASS):
                     if impact_layer.isValid():
                         layer_list = [
                             impact_layer,
+                            impact_function.analysis_impacted,
                             parameters[layer_purpose_hazard['key']],
                             parameters[layer_purpose_exposure['key']],
                             parameters[layer_purpose_aggregation['key']]]
@@ -497,16 +498,16 @@ class BatchDialog(QDialog, FORM_CLASS):
                             self.iface.setActiveLayer(
                                 impact_function.analysis_impacted)
 
+                        output_folder = os.path.join(
+                            self.output_directory.text(), group_name)
+
                         # generate map report and impact report
                         try:
                             error_code, message = (
                                 impact_function.generate_report(
-                                    all_default_report_components))
+                                    all_default_report_components,
+                                    output_folder))
 
-                            # this line is to save the report in user specified
-                            # directory.
-                            self.generate_pdf_report(
-                                impact_function, self.iface, group_name)
                         except:
                             status_item.setText(
                                 self.tr('Report failed to generate.'))
