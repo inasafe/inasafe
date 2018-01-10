@@ -507,7 +507,9 @@ class KeywordIO(QObject):
                 if keyword_property == property_extra_keywords:
                     key_definition = definition(key)
                     if key_definition and key_definition.get('options'):
-                        value = definition(value).get('name', value)
+                        value_definition = definition(value)
+                        if value_definition:
+                            value = value_definition.get('name', value)
                     elif key_definition and key_definition.get(
                             'type') == datetime:
                         value = datetime.strptime(value, key_definition[
