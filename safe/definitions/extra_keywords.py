@@ -100,9 +100,7 @@ extra_keyword_volcano_eruption_event_time = {
     'key': 'volcano_eruption_event_time',
     'name': tr('Eruption event time'),
     'description': tr(
-        'The time of the eruption. The data uploaded to the ash realtime is a '
-        'hazard model, and the information usually valid for certain hours '
-        'after the eruption time.')
+        'The time of the eruption of the volcano.')
 }
 
 extra_keyword_volcano_alert_level = {
@@ -110,7 +108,7 @@ extra_keyword_volcano_alert_level = {
     'name': tr('Volcano alert level'),
     'description': tr(
         'This information shows the estimated severity level of the model. It '
-        'is usually a choice between Normal, Waspada, Siaga or Awas.')
+        'is usually a choice between Normal, Advisory, Watch, or Warning.')
 }
 
 ash_extra_keywords = [
