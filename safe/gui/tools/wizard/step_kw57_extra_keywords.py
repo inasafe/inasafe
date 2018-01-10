@@ -1,14 +1,16 @@
 # coding=utf-8
 """InaSAFE Wizard Step Extra Keywords."""
 
+import pytz
+
+from collections import OrderedDict
+from datetime import datetime
+
 from PyQt4.QtGui import (
     QLineEdit, QDateTimeEdit, QDoubleSpinBox, QComboBox, QCheckBox
 )
 from PyQt4.QtCore import Qt
-from collections import OrderedDict
 
-from datetime import datetime
-import pytz
 from safe import messaging as m
 from safe.definitions.hazard import hazard_volcanic_ash
 from safe.definitions.extra_keywords import (
@@ -46,8 +48,9 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
         self.widgets_dict = OrderedDict()
 
     def is_ready_to_next_step(self):
-        """Check if the step is complete. If so, there is
-            no reason to block the Next button.
+        """Check if the step is complete.
+
+        If so, there is no reason to block the Next button.
 
         :returns: True if new step may be enabled.
         :rtype: bool
@@ -65,65 +68,67 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
 
     def set_widgets(self):
         """Set widgets on the extra keywords tab."""
-        self.description_label.setText('Lorem ipsum')
+        self.description_label.setText(
+            'In this step you can set some extra keywords for the layer. This '
+            'keywords can be used for creating richer reporting or map.')
         subcategory = self.parent.step_kw_subcategory.selected_subcategory()
         if subcategory == hazard_volcanic_ash:
             # Volcano name
-            self.volcano_name_checkbox = QCheckBox(tr('Volcano Name'))
-            self.volcano_name_line_edit = QLineEdit()
+            volcano_name_checkbox = QCheckBox(tr('Volcano Name'))
+            volcano_name_line_edit = QLineEdit()
 
             # Alert level
-            self.alert_level_checkbox = QCheckBox(tr('Alert Level'))
-            self.alert_level_combo_box = QComboBox()
-            self.alert_level_combo_box.addItem(tr('Normal'))
-            self.alert_level_combo_box.addItem(tr('Advisory'))
-            self.alert_level_combo_box.addItem(tr('Watch'))
-            self.alert_level_combo_box.addItem(tr('Warning'))
-            self.alert_level_combo_box.setCurrentIndex(0)
+            alert_level_checkbox = QCheckBox(tr('Alert Level'))
+            alert_level_combo_box = QComboBox()
+            alert_level_combo_box.addItem(tr('Normal'))
+            alert_level_combo_box.addItem(tr('Advisory'))
+            alert_level_combo_box.addItem(tr('Watch'))
+            alert_level_combo_box.addItem(tr('Warning'))
+            alert_level_combo_box.setCurrentIndex(0)
 
             # Eruption height in metres
-            self.eruption_height_checkbox = QCheckBox(
+            eruption_height_checkbox = QCheckBox(
                 tr('Eruption height (metres)'))
-            self.eruption_height_spin_box = QDoubleSpinBox()
-            self.eruption_height_spin_box.setMinimum(0)
-            self.eruption_height_spin_box.setMaximum(9999999)
-            self.eruption_height_spin_box.setSuffix(tr(' metres'))
+            eruption_height_spin_box = QDoubleSpinBox()
+            eruption_height_spin_box.setMinimum(0)
+            eruption_height_spin_box.setMaximum(9999999)
+            eruption_height_spin_box.setSuffix(tr(' metres'))
 
             # Event time
-            self.event_time_checkbox = QCheckBox(tr('Event time'))
-            self.event_time_picker = QDateTimeEdit()
-            self.event_time_picker.setCalendarPopup(True)
-            self.event_time_picker.setDisplayFormat('hh:mm:ss, d MMM yyyy')
-            self.event_time_picker.setDateTime(datetime.now())
+            event_time_checkbox = QCheckBox(tr('Event time'))
+            event_time_picker = QDateTimeEdit()
+            event_time_picker.setCalendarPopup(True)
+            event_time_picker.setDisplayFormat('hh:mm:ss, d MMM yyyy')
+            event_time_picker.setDateTime(datetime.now())
 
             # Timezone
-            self.timezone_checkbox = QCheckBox(tr('Timezone'))
-            self.timezone_combo_box = QComboBox()
+            timezone_checkbox = QCheckBox(tr('Timezone'))
+            timezone_combo_box = QComboBox()
             for timezone in pytz.common_timezones:
-                self.timezone_combo_box.addItem(timezone)
-            index = self.timezone_combo_box.findText('Asia/Jakarta')
-            self.timezone_combo_box.setCurrentIndex(index)
+                timezone_combo_box.addItem(timezone)
+            index = timezone_combo_box.findText('Asia/Jakarta')
+            timezone_combo_box.setCurrentIndex(index)
 
             self.widgets_dict[extra_keyword_volcano_name['key']] = [
-                self.volcano_name_checkbox,
-                self.volcano_name_line_edit
+                volcano_name_checkbox,
+                volcano_name_line_edit
             ]
             self.widgets_dict[extra_keyword_volcano_alert_level['key']] = [
-                self.alert_level_checkbox,
-                self.alert_level_combo_box
+                alert_level_checkbox,
+                alert_level_combo_box
             ]
             self.widgets_dict[extra_keyword_eruption_height['key']] = [
-                self.eruption_height_checkbox,
-                self.eruption_height_spin_box
+                eruption_height_checkbox,
+                eruption_height_spin_box
             ]
             self.widgets_dict[
                 extra_keyword_volcano_eruption_event_time['key']] = [
-                self.event_time_checkbox,
-                self.event_time_picker
+                event_time_checkbox,
+                event_time_picker
             ]
             self.widgets_dict[extra_keyword_time_zone['key']] = [
-                self.timezone_checkbox,
-                self.timezone_combo_box
+                timezone_checkbox,
+                timezone_combo_box
             ]
 
             index = 0
