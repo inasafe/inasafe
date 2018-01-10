@@ -110,22 +110,63 @@ extra_keyword_volcano_eruption_event_time = {
 }
 
 volcano_alert_normal = {
-    'key': 'normal',
-    'name': tr('Normal')
+    'key': 'volcano_alert_normal',
+    'name': tr('Normal'),
+    'description': tr(
+        'Volcano is in typical background, noneruptive state'),
+    'citations': [
+        {
+            'text': tr(
+                'Volcanic alert-levels characterize conditions at U.S. '
+                'volcanoes'),
+            'link': 'https://volcanoes.usgs.gov/vhp/about_alerts.html'
+        }
+    ],
 }
 volcano_alert_advisory = {
-    'key': 'advisory',
-    'name': tr('Advisory')
+    'key': 'volcano_alert_advisory',
+    'name': tr('Advisory'),
+    'description': tr(
+        'Volcano is exhibiting signs of elevated unrest above known '
+        'background level.'),
+    'citations': [
+        {
+            'text': tr(
+                'Volcanic alert-levels characterize conditions at U.S. '
+                'volcanoes'),
+            'link': 'https://volcanoes.usgs.gov/vhp/about_alerts.html'
+        }
+    ],
 }
 volcano_alert_watch = {
-    'key': 'watch',
-    'name': tr('Watch')
+    'key': 'volcano_alert_watch',
+    'name': tr('Watch'),
+    'description': tr(
+        'Volcano is exhibiting heightened or escalating unrest with increased '
+        'potential of eruption, timeframe uncertain.'),
+    'citations': [
+        {
+            'text': tr(
+                'Volcanic alert-levels characterize conditions at U.S. '
+                'volcanoes'),
+            'link': 'https://volcanoes.usgs.gov/vhp/about_alerts.html'
+        }
+    ],
 }
 volcano_alert_warning = {
-    'key': 'warning',
-    'name': tr('Warning')
+    'key': 'volcano_alert_warning',
+    'name': tr('Warning'),
+    'description': tr(
+        'Hazardous eruption is imminent, underway, or suspected.'),
+    'citations': [
+        {
+            'text': tr(
+                'Volcanic alert-levels characterize conditions at U.S. '
+                'volcanoes'),
+            'link': 'https://volcanoes.usgs.gov/vhp/about_alerts.html'
+        }
+    ],
 }
-
 
 extra_keyword_volcano_alert_level = {
     'key': 'volcano_alert_level',

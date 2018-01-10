@@ -1007,7 +1007,7 @@ class Dock(QDockWidget, FORM_CLASS):
                 InvalidParameterError,
                 NoKeywordsFoundError,
                 MetadataReadError,
-                AttributeError):
+                AttributeError) as e:
             # Added this check in 3.2 for #1861
             active_layer = self.iface.activeLayer()
             if active_layer is None:
@@ -1016,6 +1016,7 @@ class Dock(QDockWidget, FORM_CLASS):
                 else:
                     send_static_message(self, getting_started_message())
             else:
+                LOGGER.debug(e)
                 show_no_keywords_message(self)
                 self.print_button.setEnabled(False)
         except Exception as e:  # pylint: disable=broad-except
