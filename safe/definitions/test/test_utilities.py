@@ -444,7 +444,6 @@ class TestDefinitionsUtilities(unittest.TestCase):
         for duplicate_key in duplicate_keys:
             message += 'Duplicate key: %s\n' % duplicate_key
             for v in keys[duplicate_key]:
-                print v
                 message += v['name'] + ' ' + v['description'] + '\n'
         self.assertEqual(len(duplicate_keys), 0, message)
 
