@@ -220,14 +220,25 @@ class Dock(QDockWidget, FORM_CLASS):
         menu = QMenu()
         self.use_debug_action = QAction(tr('Debug analysis'), self)
         self.use_debug_action.setCheckable(True)
-        self.use_debug_action.setChecked(False)
+        self.use_debug_action.setChecked(
+            setting('use_debug_analysis', False, bool))
+        self.use_debug_action.toggled.connect(self.debug_group_toggled)
         menu.addAction(self.use_debug_action)
-        self.use_rounding_action = QAction(tr('Use rounding'), self)
-        self.use_rounding_action.setCheckable(True)
-        self.use_rounding_action.setChecked(True)
-        menu.addAction(self.use_rounding_action)
+        self.disable_rounding_action = QAction(tr('Disable rounding'), self)
+        self.disable_rounding_action.setCheckable(True)
+        self.disable_rounding_action.setChecked(
+            setting('disable_rounding', False, bool))
+        self.disable_rounding_action.toggled.connect(self.debug_group_toggled)
+        menu.addAction(self.disable_rounding_action)
         self.debug_group_button.setMenu(menu)
-        self.debug_group_button.setVisible(self.developer_mode)
+        self.debug_group_toggled()
+        if self.developer_mode:
+            self.debug_group_button.setVisible(True)
+        else:
+            # We overwrite the qsettings to be sure.
+            self.debug_group_button.setVisible(False)
+            self.disable_rounding_action.setChecked(False)
+            self.use_debug_action.setChecked(False)
 
         # Check the validity
         self.validate_impact_function()
@@ -610,6 +621,22 @@ class Dock(QDockWidget, FORM_CLASS):
         self.aggregation_layer_combo.blockSignals(True)
         self.exposure_layer_combo.blockSignals(True)
         self.hazard_layer_combo.blockSignals(True)
+
+    def debug_group_toggled(self):
+        """Helper to set a color on the debug button to know if it's debugging.
+
+        If debug analysis is true or if rounding is disabled, it will be
+        orange.
+        """
+        use_debug = self.use_debug_action.isChecked()
+        set_setting('use_debug_analysis', use_debug)
+        disable_rounding = self.disable_rounding_action.isChecked()
+        set_setting('disable_rounding', disable_rounding)
+        if use_debug or disable_rounding:
+            self.debug_group_button.setStyleSheet(
+                'QToolButton{ background: rgb(244, 137, 137);}')
+        else:
+            self.debug_group_button.setStyleSheet('')
 
     # noinspection PyUnusedLocal
     @pyqtSlot('QgsMapLayer')
