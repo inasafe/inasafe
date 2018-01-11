@@ -1,6 +1,6 @@
 ### What does it fix?
 <!---
-If your PR fixes an ticket, add `fix` in front of the ticket number. The ticket will be closed automatically.
+If your PR fixes a ticket, add `fix` in front of the ticket number. The ticket will be closed automatically.
 If your PR doesn't fix entirely the ticket number, just add the ticket reference.
 -->
 * Ticket: #
