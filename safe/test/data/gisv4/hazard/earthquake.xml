@@ -202,7 +202,20 @@
             <gco:CharacterString>earthquake</gco:CharacterString>
           </hazard>
           <extra_keywords>
-            <gco:Dictionary>{&quot;y_minimum&quot;: -11.722, &quot;x_maximum&quot;: 126.62, &quot;time_zone&quot;: &quot;Asia/Jakarta&quot;, &quot;longitude&quot;: 106.7486, &quot;y_maximum&quot;: -7.778, &quot;depth&quot;: 10.0, &quot;magnitude&quot;: 5.0, &quot;x_minimum&quot;: 122.62, &quot;location&quot;: &quot;Test Region&quot;, &quot;latitude&quot;: -6.2078}</gco:Dictionary>
+            <gco:Dictionary>
+              {
+              &quot;earthquake_y_minimum&quot;: -11.722,
+              &quot;earthquake_x_maximum&quot;: 126.62,
+              &quot;time_zone&quot;: &quot;Asia/Jakarta&quot;,
+              &quot;earthquake_longitude&quot;: 106.7486,
+              &quot;earthquake_y_maximum&quot;: -7.778,
+              &quot;earthquake_depth&quot;: 10.0,
+              &quot;earthquake_magnitude&quot;: 5.0,
+              &quot;earthquake_x_minimum&quot;: 122.62,
+              &quot;earthquake_location&quot;: &quot;Test Region&quot;,
+              &quot;earthquake_latitude&quot;: -6.2078
+              }
+            </gco:Dictionary>
           </extra_keywords>
           <keyword_version>
             <gco:CharacterString>4.3</gco:CharacterString>
