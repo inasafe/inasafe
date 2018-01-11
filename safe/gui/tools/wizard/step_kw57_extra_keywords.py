@@ -85,14 +85,14 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
             volcano_longitude_spin_box = QDoubleSpinBox()
             volcano_longitude_spin_box.setMinimum(-180)
             volcano_longitude_spin_box.setMaximum(180)
-            volcano_longitude_spin_box.setSuffix(u' \xb0')  # degree symbol
+            volcano_longitude_spin_box.setSuffix(u'°')  # degree symbol
 
             # Volcano latitude
             volcano_latitude_checkbox = QCheckBox()
             volcano_latitude_spin_box = QDoubleSpinBox()
             volcano_latitude_spin_box.setMinimum(-90)
             volcano_latitude_spin_box.setMaximum(90)
-            volcano_latitude_spin_box.setSuffix(u' \xb0')  # degree symbol
+            volcano_latitude_spin_box.setSuffix(u'°')  # degree symbol
 
             # Volcano region
             volcano_region_checkbox = QCheckBox()
