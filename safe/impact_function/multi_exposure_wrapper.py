@@ -173,6 +173,7 @@ class MultiExposureImpactFunction(object):
 
         # Use debug to store intermediate results
         self.debug_mode = False
+        self.use_rounding = True
 
         # Metadata
         self.callback = None
@@ -794,6 +795,7 @@ class MultiExposureImpactFunction(object):
             impact_function.hazard = clone_layer(self._hazard)
             impact_function.exposure = exposure
             impact_function.debug_mode = self.debug
+            impact_function.use_rounding = self.use_rounding
             if self.callback:
                 impact_function.callback = self.callback
             if self._aggregation:
