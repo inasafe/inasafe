@@ -77,31 +77,29 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
         subcategory = self.parent.step_kw_subcategory.selected_subcategory()
         if subcategory == hazard_volcanic_ash:
             # Volcano name
-            volcano_name_checkbox = QCheckBox(tr('Volcano Name'))
+            volcano_name_checkbox = QCheckBox()
             volcano_name_line_edit = QLineEdit()
 
             # Volcano longitude
-            volcano_longitude_checkbox = QCheckBox(
-                tr('Volcano longitude'))
+            volcano_longitude_checkbox = QCheckBox()
             volcano_longitude_spin_box = QDoubleSpinBox()
             volcano_longitude_spin_box.setMinimum(-180)
             volcano_longitude_spin_box.setMaximum(180)
             volcano_longitude_spin_box.setSuffix(u' \xb0')  # degree symbol
 
             # Volcano latitude
-            volcano_latitude_checkbox = QCheckBox(
-                tr('Volcano latitude'))
+            volcano_latitude_checkbox = QCheckBox()
             volcano_latitude_spin_box = QDoubleSpinBox()
             volcano_latitude_spin_box.setMinimum(-90)
             volcano_latitude_spin_box.setMaximum(90)
             volcano_latitude_spin_box.setSuffix(u' \xb0')  # degree symbol
 
             # Volcano region
-            volcano_region_checkbox = QCheckBox(tr('Volcano Region'))
+            volcano_region_checkbox = QCheckBox()
             volcano_region_line_edit = QLineEdit()
 
             # Alert level
-            alert_level_checkbox = QCheckBox(tr('Alert Level'))
+            alert_level_checkbox = QCheckBox()
             alert_level_combo_box = QComboBox()
             volcano_alert_level_options = extra_keyword_volcano_alert_level[
                 'options']
@@ -113,22 +111,21 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
             alert_level_combo_box.setCurrentIndex(0)
 
             # Eruption height in metres
-            eruption_height_checkbox = QCheckBox(
-                tr('Eruption height (metres)'))
+            eruption_height_checkbox = QCheckBox()
             eruption_height_spin_box = QDoubleSpinBox()
             eruption_height_spin_box.setMinimum(0)
             eruption_height_spin_box.setMaximum(9999999)
             eruption_height_spin_box.setSuffix(tr(' metres'))
 
             # Event time
-            event_time_checkbox = QCheckBox(tr('Event time'))
+            event_time_checkbox = QCheckBox()
             event_time_picker = QDateTimeEdit()
             event_time_picker.setCalendarPopup(True)
             event_time_picker.setDisplayFormat('hh:mm:ss, d MMM yyyy')
             event_time_picker.setDateTime(datetime.now())
 
             # Timezone
-            timezone_checkbox = QCheckBox(tr('Timezone'))
+            timezone_checkbox = QCheckBox()
             timezone_combo_box = QComboBox()
             for timezone in pytz.common_timezones:
                 timezone_combo_box.addItem(timezone, timezone)
@@ -181,6 +178,7 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
             for key, widgets in self.widgets_dict.items():
                 self.extra_keywords_layout.addWidget(widgets[0], index, 0)
                 self.extra_keywords_layout.addWidget(widgets[1], index, 1)
+                widgets[0].setText(widgets[2]['description'])
                 widgets[0].stateChanged.connect(widgets[1].setEnabled)
                 widgets[0].setChecked(True)
                 widgets[0].setToolTip(widgets[2]['description'])
