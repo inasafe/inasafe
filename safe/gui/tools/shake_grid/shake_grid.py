@@ -896,7 +896,7 @@ class ShakeGrid(object):
             # 'minute': self.minute,
             # 'second': self.second,
             extra_keyword_earthquake_event_time['key']: self.time.strftime(
-                '%Y-%m-%dT%H:%M:%S.%f'),
+                '%Y-%m-%dT%H:%M:%S'),
             extra_keyword_time_zone['key']: self.time_zone,
             extra_keyword_earthquake_x_minimum['key']: self.x_minimum,
             extra_keyword_earthquake_x_maximum['key']: self.x_maximum,
