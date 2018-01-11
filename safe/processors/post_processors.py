@@ -34,6 +34,10 @@ from safe.processors.post_processor_inputs import (
     keyword_input_type,
     field_input_type,
     keyword_value_expected)
+from safe.definitions.extra_keywords import (
+    extra_keyword_earthquake_longitude,
+    extra_keyword_earthquake_latitude
+)
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -103,11 +107,19 @@ post_processor_distance = {
         },
         'latitude': {
             'type': keyword_input_type,
-            'value': ['hazard_keywords', 'extra_keywords', 'latitude']
+            'value': [
+                'hazard_keywords',
+                'extra_keywords',
+                extra_keyword_earthquake_latitude['key']
+            ]
         },
         'longitude': {
             'type': keyword_input_type,
-            'value': ['hazard_keywords', 'extra_keywords', 'longitude']
+            'value': [
+                'hazard_keywords',
+                'extra_keywords',
+                extra_keyword_earthquake_longitude['key']
+            ]
         },
         'earthquake_hazard': {
             'type': keyword_value_expected,
@@ -141,11 +153,19 @@ post_processor_bearing = {
         },
         'latitude': {
             'type': keyword_input_type,
-            'value': ['hazard_keywords', 'extra_keywords', 'latitude']
+            'value': [
+                'hazard_keywords',
+                'extra_keywords',
+                extra_keyword_earthquake_latitude['key']
+            ]
         },
         'longitude': {
             'type': keyword_input_type,
-            'value': ['hazard_keywords', 'extra_keywords', 'longitude']
+            'value': [
+                'hazard_keywords',
+                'extra_keywords',
+                extra_keyword_earthquake_longitude['key']
+            ]
         },
         'earthquake_hazard': {
             'type': keyword_value_expected,
