@@ -17,72 +17,86 @@ extra_keyword_analysis_type = {
     'description': tr('')
 }
 
-extra_keyword_latitude = {
-    'key': 'latitude',
-    'name': tr('Latitude'),
-    'description': tr('')
-}
-
-extra_keyword_longitude = {
-    'key': 'longitude',
-    'name': tr('Longitude'),
-    'description': tr('')
-}
-
-extra_keyword_magnitude = {
-    'key': 'magnitude',
-    'name': tr('Magnitude'),
-    'description': tr('')
-}
-
-extra_keyword_depth = {
-    'key': 'depth',
-    'name': tr('Depth'),
-    'description': tr('')
-}
-
-extra_keyword_description = {
-    'key': 'description',
-    'name': tr('Description'),
-    'description': tr('')
-}
-
-extra_keyword_location = {
-    'key': 'location',
-    'name': tr('Location'),
-    'description': tr('')
-}
-
+# Generic Extra Keywords
 extra_keyword_time_zone = {
     'key': 'time_zone',
     'name': tr('Time zone'),
-    'description': tr('')
+    'description': tr('Time zone')
 }
 
-extra_keyword_x_minimum = {
-    'key': 'x_minimum',
+# Earthquake Extra Keywords
+extra_keyword_earthquake_latitude = {
+    'key': 'earthquake_latitude',
+    'name': tr('Latitude'),
+    'description': tr('The latitude of the earthquake epicentre.')
+}
+
+extra_keyword_earthquake_longitude = {
+    'key': 'earthquake_longitude',
+    'name': tr('Longitude'),
+    'description': tr('The longitude of the earthquake epicentre.')
+}
+
+extra_keyword_earthquake_magnitude = {
+    'key': 'earthquake_magnitude',
+    'name': tr('Magnitude'),
+    'description': tr('The magnitude of the earthquake in Richter scale.')
+}
+
+extra_keyword_earthquake_depth = {
+    'key': 'earthquake_depth',
+    'name': tr('Depth'),
+    'description': tr('The depth of earthquake epicentre in kilometre unit.')
+}
+
+extra_keyword_earthquake_description = {
+    'key': 'earthquake_description',
+    'name': tr('Description'),
+    'description': tr('Additional description of the earthquake event.')
+}
+
+extra_keyword_earthquake_location = {
+    'key': 'earthquake_location',
+    'name': tr('Location'),
+    'description': tr(
+        'The location information of the earthquake event. It usually refers '
+        'to the nearest city in the location.')
+}
+
+extra_keyword_earthquake_x_minimum = {
+    'key': 'earthquake_x_minimum',
     'name': tr('X minimum'),
-    'description': tr('')
+    'description': tr(
+        'The minimum value of x coordinate of the shakemaps. It indicates the '
+        'extent of the event.')
 }
 
-extra_keyword_x_maximum = {
-    'key': 'x_maximum',
+extra_keyword_earthquake_x_maximum = {
+    'key': 'earthquake_x_maximum',
     'name': tr('X maximum'),
-    'description': tr('')
+    'description': tr(
+        'The maximum value of x coordinate of the shakemaps. It indicates the '
+        'extent of the event.')
 }
 
-extra_keyword_y_minimum = {
-    'key': 'y_minimum',
+extra_keyword_earthquake_y_minimum = {
+    'key': 'earthquake_y_minimum',
     'name': tr('Y minimum'),
-    'description': tr('')
+    'description': tr(
+        'The minimum value of y coordinate of the shakemaps. It indicates the '
+        'extent of the event.')
 }
 
-extra_keyword_y_maximum = {
-    'key': 'y_maximum',
+extra_keyword_earthquake_y_maximum = {
+    'key': 'earthquake_y_maximum',
     'name': tr('Y maximum'),
-    'description': tr('')
+    'description': tr(
+        'The maximum value of y coordinate of the shakemaps. It indicates the '
+        'extent of the event.')
 }
 
+
+# Volcano Extra Keywords
 extra_keyword_volcano_name = {
     'key': 'volcano_name',
     'name': tr('Volcano name'),
@@ -183,27 +197,48 @@ extra_keyword_volcano_alert_level = {
     ]
 }
 
+earthquake_extra_keywords = [
+    extra_keyword_earthquake_latitude,
+    extra_keyword_earthquake_longitude,
+    extra_keyword_earthquake_magnitude,
+    extra_keyword_earthquake_depth,
+    extra_keyword_earthquake_description,
+    extra_keyword_earthquake_location,
+    extra_keyword_time_zone,
+    extra_keyword_earthquake_x_maximum,
+    extra_keyword_earthquake_x_minimum,
+    extra_keyword_earthquake_y_maximum,
+    extra_keyword_earthquake_y_minimum,
+]
+
 ash_extra_keywords = [
     extra_keyword_volcano_name,
     extra_keyword_eruption_height,
     extra_keyword_volcano_eruption_event_time,
     extra_keyword_volcano_alert_level,
+    extra_keyword_time_zone
 ]
 
 all_extra_keywords = [
     extra_keyword_analysis_type,
-    extra_keyword_depth,
-    extra_keyword_description,
-    extra_keyword_latitude,
-    extra_keyword_location,
-    extra_keyword_longitude,
-    extra_keyword_magnitude,
     extra_keyword_time_zone,
-    extra_keyword_x_maximum,
-    extra_keyword_x_minimum,
-    extra_keyword_y_maximum,
-    extra_keyword_y_minimum,
-] + ash_extra_keywords
+
+    extra_keyword_earthquake_depth,
+    extra_keyword_earthquake_description,
+    extra_keyword_earthquake_latitude,
+    extra_keyword_earthquake_location,
+    extra_keyword_earthquake_longitude,
+    extra_keyword_earthquake_magnitude,
+    extra_keyword_earthquake_x_maximum,
+    extra_keyword_earthquake_x_minimum,
+    extra_keyword_earthquake_y_maximum,
+    extra_keyword_earthquake_y_minimum,
+
+    extra_keyword_volcano_name,
+    extra_keyword_eruption_height,
+    extra_keyword_volcano_eruption_event_time,
+    extra_keyword_volcano_alert_level,
+]
 
 # map all extra keywords to a pair of key and name
 all_extra_keywords_name = {}
