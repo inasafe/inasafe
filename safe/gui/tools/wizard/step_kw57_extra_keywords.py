@@ -20,6 +20,8 @@ from safe.definitions.extra_keywords import (
     extra_keyword_eruption_height,
     extra_keyword_volcano_eruption_event_time,
     extra_keyword_time_zone,
+    extra_keyword_volcano_longitude,
+    extra_keyword_volcano_latitude,
 )
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
@@ -78,6 +80,22 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
             volcano_name_checkbox = QCheckBox(tr('Volcano Name'))
             volcano_name_line_edit = QLineEdit()
 
+            # Volcano longitude
+            volcano_longitude_checkbox = QCheckBox(
+                tr('Volcano longitude'))
+            volcano_longitude_spin_box = QDoubleSpinBox()
+            volcano_longitude_spin_box.setMinimum(-180)
+            volcano_longitude_spin_box.setMaximum(180)
+            volcano_longitude_spin_box.setSuffix(u' \xb0')  # degree symbol
+
+            # Volcano latitude
+            volcano_latitude_checkbox = QCheckBox(
+                tr('Volcano latitude'))
+            volcano_latitude_spin_box = QDoubleSpinBox()
+            volcano_latitude_spin_box.setMinimum(-90)
+            volcano_latitude_spin_box.setMaximum(90)
+            volcano_latitude_spin_box.setSuffix(u' \xb0')  # degree symbol
+
             # Volcano region
             volcano_region_checkbox = QCheckBox(tr('Volcano Region'))
             volcano_region_line_edit = QLineEdit()
@@ -126,6 +144,16 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
                 volcano_region_checkbox,
                 volcano_region_line_edit,
                 extra_keyword_region
+            ]
+            self.widgets_dict[extra_keyword_volcano_longitude['key']] = [
+                volcano_longitude_checkbox,
+                volcano_longitude_spin_box,
+                extra_keyword_volcano_longitude
+            ]
+            self.widgets_dict[extra_keyword_volcano_latitude['key']] = [
+                volcano_latitude_checkbox,
+                volcano_latitude_spin_box,
+                extra_keyword_volcano_latitude
             ]
             self.widgets_dict[extra_keyword_volcano_alert_level['key']] = [
                 alert_level_checkbox,
@@ -215,7 +243,11 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
                     value_index = widgets[1].findData(value)
                     widgets[1].setCurrentIndex(value_index)
                 elif isinstance(widgets[1], QDoubleSpinBox):
-                    widgets[1].setValue(value)
+                    try:
+                        value = float(value)
+                        widgets[1].setValue(value)
+                    except ValueError:
+                        LOGGER.warning('Failed to convert %s to float' % value)
                 elif isinstance(widgets[1], QDateTimeEdit):
                     try:
                         value_datetime = datetime.strptime(
