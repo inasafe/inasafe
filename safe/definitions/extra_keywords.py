@@ -131,6 +131,20 @@ extra_keyword_volcano_eruption_event_time = {
     'show_format': '%H:%M:%S %d %b %Y'
 }
 
+extra_keyword_volcano_latitude = {
+    'key': 'volcano_latitude',
+    'name': tr('Latitude'),
+    'description': tr('The latitude of the volcano.'),
+    'type': float
+}
+
+extra_keyword_volcano_longitude = {
+    'key': 'volcano_longitude',
+    'name': tr('Longitude'),
+    'description': tr('The longitude of the volcano.'),
+    'type': float
+}
+
 volcano_alert_normal = {
     'key': 'volcano_alert_normal',
     'name': tr('Normal'),
@@ -225,7 +239,9 @@ ash_extra_keywords = [
     extra_keyword_eruption_height,
     extra_keyword_volcano_eruption_event_time,
     extra_keyword_volcano_alert_level,
-    extra_keyword_time_zone
+    extra_keyword_time_zone,
+    extra_keyword_volcano_latitude,
+    extra_keyword_volcano_longitude,
 ]
 
 all_extra_keywords = [
@@ -247,6 +263,8 @@ all_extra_keywords = [
     extra_keyword_eruption_height,
     extra_keyword_volcano_eruption_event_time,
     extra_keyword_volcano_alert_level,
+    extra_keyword_volcano_latitude,
+    extra_keyword_volcano_longitude,
 ]
 
 # map all extra keywords to a pair of key and name
