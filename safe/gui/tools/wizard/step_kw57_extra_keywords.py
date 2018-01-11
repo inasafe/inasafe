@@ -15,6 +15,7 @@ from safe import messaging as m
 from safe.definitions.hazard import hazard_volcanic_ash
 from safe.definitions.extra_keywords import (
     extra_keyword_volcano_name,
+    extra_keyword_region,
     extra_keyword_volcano_alert_level,
     extra_keyword_eruption_height,
     extra_keyword_volcano_eruption_event_time,
@@ -77,6 +78,10 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
             volcano_name_checkbox = QCheckBox(tr('Volcano Name'))
             volcano_name_line_edit = QLineEdit()
 
+            # Volcano region
+            volcano_region_checkbox = QCheckBox(tr('Volcano Region'))
+            volcano_region_line_edit = QLineEdit()
+
             # Alert level
             alert_level_checkbox = QCheckBox(tr('Alert Level'))
             alert_level_combo_box = QComboBox()
@@ -116,6 +121,11 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
                 volcano_name_checkbox,
                 volcano_name_line_edit,
                 extra_keyword_volcano_name
+            ]
+            self.widgets_dict[extra_keyword_region['key']] = [
+                volcano_region_checkbox,
+                volcano_region_line_edit,
+                extra_keyword_region
             ]
             self.widgets_dict[extra_keyword_volcano_alert_level['key']] = [
                 alert_level_checkbox,
@@ -195,7 +205,6 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
         extra_keywords = self.parent.get_existing_keyword('extra_keywords')
         for key, widgets in self.widgets_dict.items():
             value = extra_keywords.get(key)
-            LOGGER.debug('%s : %s' % (key, value))
             if value is None:
                 widgets[0].setChecked(False)
             else:
@@ -210,7 +219,13 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
                 elif isinstance(widgets[1], QDateTimeEdit):
                     try:
                         value_datetime = datetime.strptime(
-                            value, "%Y-%m-%dT%H:%M:%S")
+                            value, "%Y-%m-%dT%H:%M:%S.%f")
                         widgets[1].setDateTime(value_datetime)
                     except ValueError:
-                        LOGGER.info('Failed to convert %s to datetime' % value)
+                        try:
+                            value_datetime = datetime.strptime(
+                                value, "%Y-%m-%dT%H:%M:%S")
+                            widgets[1].setDateTime(value_datetime)
+                        except:
+                            LOGGER.info(
+                                'Failed to convert %s to datetime' % value)

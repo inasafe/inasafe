@@ -512,9 +512,19 @@ class KeywordIO(QObject):
                             value = value_definition.get('name', value)
                     elif key_definition and key_definition.get(
                             'type') == datetime:
-                        value = datetime.strptime(value, key_definition[
-                            'store_format'])
-                        value = value.strftime(key_definition['show_format'])
+                        try:
+                            value = datetime.strptime(value, key_definition[
+                                'store_format'])
+                            value = value.strftime(
+                                key_definition['show_format'])
+                        except ValueError:
+                            try:
+                                value = datetime.strptime(
+                                    value, key_definition['store_format2'])
+                                value = value.strftime(
+                                    key_definition['show_format'])
+                            except ValueError:
+                                pass
                 row.add(m.Cell(value))
 
             table.add(row)
