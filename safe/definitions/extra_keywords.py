@@ -21,7 +21,14 @@ extra_keyword_analysis_type = {
 extra_keyword_time_zone = {
     'key': 'time_zone',
     'name': tr('Time zone'),
-    'description': tr('Time zone')
+    'description': tr('Time zone'),
+    'type': unicode
+}
+extra_keyword_region = {
+    'key': 'region',
+    'name': tr('Region'),
+    'description': tr('Region of the event.'),
+    'type': unicode
 }
 
 # Earthquake Extra Keywords
@@ -119,7 +126,8 @@ extra_keyword_volcano_eruption_event_time = {
     'description': tr(
         'The time of the eruption of the volcano.'),
     'type': datetime,
-    'store_format': '%Y-%m-%dT%H:%M:%S',
+    'store_format': '%Y-%m-%dT%H:%M:%S.%f',
+    'store_format2': '%Y-%m-%dT%H:%M:%S',
     'show_format': '%H:%M:%S %d %b %Y'
 }
 
@@ -213,6 +221,7 @@ earthquake_extra_keywords = [
 
 ash_extra_keywords = [
     extra_keyword_volcano_name,
+    extra_keyword_region,
     extra_keyword_eruption_height,
     extra_keyword_volcano_eruption_event_time,
     extra_keyword_volcano_alert_level,
