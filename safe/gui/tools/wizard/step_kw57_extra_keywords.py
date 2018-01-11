@@ -226,6 +226,6 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
                             value_datetime = datetime.strptime(
                                 value, "%Y-%m-%dT%H:%M:%S")
                             widgets[1].setDateTime(value_datetime)
-                        except:
+                        except ValueError:
                             LOGGER.info(
                                 'Failed to convert %s to datetime' % value)

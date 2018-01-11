@@ -207,8 +207,15 @@ def beautify_date(inasafe_time, feature, parent):
         qgis_variable.
     """
     _ = feature, parent  # NOQA
-    datetime_object = datetime.datetime.strptime(
-        inasafe_time, '%Y-%m-%dT%H:%M:%S.%f')
+    try:
+        datetime_object = datetime.datetime.strptime(
+            inasafe_time, '%Y-%m-%dT%H:%M:%S.%f')
+    except ValueError:
+        try:
+            datetime_object = datetime.datetime.strptime(
+                inasafe_time, '%Y-%m-%dT%H:%M:%S')
+        except ValueError:
+            return datetime
     date = datetime_object.strftime('%Y-%m-%d')
     return date
 
@@ -235,8 +242,15 @@ def beautify_time(inasafe_time, feature, parent):
         qgis_variable.
     """
     _ = feature, parent  # NOQA
-    datetime_object = datetime.datetime.strptime(
-        inasafe_time, '%Y-%m-%dT%H:%M:%S.%f')
+    try:
+        datetime_object = datetime.datetime.strptime(
+            inasafe_time, '%Y-%m-%dT%H:%M:%S.%f')
+    except ValueError:
+        try:
+            datetime_object = datetime.datetime.strptime(
+                inasafe_time, '%Y-%m-%dT%H:%M:%S')
+        except ValueError:
+            return datetime
     time = datetime_object.strftime('%H:%M')
     return time
 
