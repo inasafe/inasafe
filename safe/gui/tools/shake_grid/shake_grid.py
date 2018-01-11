@@ -45,6 +45,20 @@ from safe.definitions.layer_purposes import layer_purpose_hazard
 from safe.definitions.units import unit_mmi
 from safe.definitions.versions import inasafe_keyword_version
 from safe.definitions.utilities import default_classification_thresholds
+from safe.definitions.extra_keywords import (
+    extra_keyword_earthquake_latitude,
+    extra_keyword_earthquake_longitude,
+    extra_keyword_earthquake_magnitude,
+    extra_keyword_earthquake_depth,
+    extra_keyword_earthquake_description,
+    extra_keyword_earthquake_location,
+    extra_keyword_time_zone,
+    extra_keyword_earthquake_x_maximum,
+    extra_keyword_earthquake_x_minimum,
+    extra_keyword_earthquake_y_maximum,
+    extra_keyword_earthquake_y_minimum,
+    extra_keyword_earthquake_event_time,
+)
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.resources import resources_path
@@ -868,12 +882,12 @@ class ShakeGrid(object):
                     exposure['key']] = generic_default_threshold
 
         extra_keywords = {
-            'latitude': self.latitude,
-            'longitude': self.longitude,
-            'magnitude': self.magnitude,
-            'depth': self.depth,
-            'description': self.description,
-            'location': self.location,
+            extra_keyword_earthquake_latitude['key']: self.latitude,
+            extra_keyword_earthquake_longitude['key']: self.longitude,
+            extra_keyword_earthquake_magnitude['key']: self.magnitude,
+            extra_keyword_earthquake_depth['key']: self.depth,
+            extra_keyword_earthquake_description['key']: self.description,
+            extra_keyword_earthquake_location['key']: self.location,
             # 'day': self.day,
             # 'month': self.month,
             # 'year': self.year,
@@ -881,11 +895,13 @@ class ShakeGrid(object):
             # 'hour': self.hour,
             # 'minute': self.minute,
             # 'second': self.second,
-            'time_zone': self.time_zone,
-            'x_minimum': self.x_minimum,
-            'x_maximum': self.x_maximum,
-            'y_minimum': self.y_minimum,
-            'y_maximum': self.y_maximum,
+            extra_keyword_earthquake_event_time['key']: self.time.strftime(
+                '%Y-%m-%dT%H:%M:%S.%f'),
+            extra_keyword_time_zone['key']: self.time_zone,
+            extra_keyword_earthquake_x_minimum['key']: self.x_minimum,
+            extra_keyword_earthquake_x_maximum['key']: self.x_maximum,
+            extra_keyword_earthquake_y_minimum['key']: self.y_minimum,
+            extra_keyword_earthquake_y_maximum['key']: self.y_maximum,
         }
         # Delete empty element.
         empty_keys = []

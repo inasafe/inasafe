@@ -70,6 +70,17 @@ extra_keyword_earthquake_location = {
         'to the nearest city in the location.')
 }
 
+extra_keyword_earthquake_event_time = {
+    'key': 'earthquake_event_time',
+    'name': tr('Earthquake event time'),
+    'description': tr(
+        'The time of the earthquake happen.'),
+    'type': datetime,
+    'store_format': '%Y-%m-%dT%H:%M:%S.%f',
+    'store_format2': '%Y-%m-%dT%H:%M:%S',
+    'show_format': '%H:%M:%S %d %b %Y'
+}
+
 extra_keyword_earthquake_x_minimum = {
     'key': 'earthquake_x_minimum',
     'name': tr('X minimum'),
@@ -226,6 +237,7 @@ earthquake_extra_keywords = [
     extra_keyword_earthquake_depth,
     extra_keyword_earthquake_description,
     extra_keyword_earthquake_location,
+    extra_keyword_earthquake_event_time,
     extra_keyword_time_zone,
     extra_keyword_earthquake_x_maximum,
     extra_keyword_earthquake_x_minimum,
@@ -250,6 +262,7 @@ all_extra_keywords = [
 
     extra_keyword_earthquake_depth,
     extra_keyword_earthquake_description,
+    extra_keyword_earthquake_event_time,
     extra_keyword_earthquake_latitude,
     extra_keyword_earthquake_location,
     extra_keyword_earthquake_longitude,
