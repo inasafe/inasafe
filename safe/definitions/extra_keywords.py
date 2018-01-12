@@ -3,6 +3,7 @@
 """Definitions relating to extra keywords."""
 
 from datetime import datetime
+import pytz
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
@@ -17,12 +18,17 @@ extra_keyword_analysis_type = {
     'description': tr('')
 }
 
+timezones_dicts = [
+    {'key': k, 'name': k} for k in pytz.common_timezones
+]
+
 # Generic Extra Keywords
 extra_keyword_time_zone = {
     'key': 'time_zone',
     'name': tr('Time zone'),
     'description': tr('Time zone'),
-    'type': unicode
+    'type': unicode,
+    'options': timezones_dicts
 }
 extra_keyword_region = {
     'key': 'region',
@@ -115,6 +121,18 @@ extra_keyword_earthquake_y_maximum = {
 
 
 # Volcano Extra Keywords
+extra_keyword_volcano_event_id = {
+    'key': 'volcano_event_id',
+    'name': tr('Volcano event ID'),
+    'description': tr(
+        'The ID of the volcano eruption. It is constructed from '
+        'YYYYMMDDHHmm[zoneoffset]_[volcano_name]. YYYYMMDDHHmm is the format '
+        'of the eruption event time. [zone offset] is the of set of its time '
+        'zoen. [volcano_name] is the name of the volcano. For example: '
+        '201712012200+0800_Agung'),
+    'type': unicode
+}
+
 extra_keyword_volcano_name = {
     'key': 'volcano_name',
     'name': tr('Volcano name'),
