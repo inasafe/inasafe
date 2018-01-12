@@ -193,7 +193,7 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
             for key, widgets in self.widgets_dict.items():
                 self.extra_keywords_layout.addWidget(widgets[0], index, 0)
                 self.extra_keywords_layout.addWidget(widgets[1], index, 1)
-                widgets[0].setText(widgets[2]['description'])
+                widgets[0].setText(widgets[2]['name'])
                 widgets[0].stateChanged.connect(widgets[1].setEnabled)
                 widgets[0].setChecked(True)
                 widgets[0].setToolTip(widgets[2]['description'])
