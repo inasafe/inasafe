@@ -230,6 +230,15 @@ extra_keyword_volcano_alert_level = {
     ]
 }
 
+extra_keyword_volcano_height = {
+    'key': 'volcano_height',
+    'name': tr('Volcano height'),
+    'description': tr(
+        'The height of the vent of a volcano. It is calculated from the sea '
+        'level in metres.'),
+    'type': float,
+}
+
 earthquake_extra_keywords = [
     extra_keyword_earthquake_latitude,
     extra_keyword_earthquake_longitude,
@@ -254,6 +263,7 @@ ash_extra_keywords = [
     extra_keyword_time_zone,
     extra_keyword_volcano_latitude,
     extra_keyword_volcano_longitude,
+    extra_keyword_volcano_height
 ]
 
 all_extra_keywords = [
@@ -278,6 +288,7 @@ all_extra_keywords = [
     extra_keyword_volcano_alert_level,
     extra_keyword_volcano_latitude,
     extra_keyword_volcano_longitude,
+    extra_keyword_volcano_height
 ]
 
 # map all extra keywords to a pair of key and name

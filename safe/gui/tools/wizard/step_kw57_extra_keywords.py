@@ -22,6 +22,7 @@ from safe.definitions.extra_keywords import (
     extra_keyword_time_zone,
     extra_keyword_volcano_longitude,
     extra_keyword_volcano_latitude,
+    extra_keyword_volcano_height,
 )
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
@@ -94,6 +95,13 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
             volcano_latitude_spin_box.setMaximum(90)
             volcano_latitude_spin_box.setSuffix(u'°')  # degree symbol
 
+            # Volcano height
+            volcano_height_checkbox = QCheckBox()
+            volcano_height_spin_box = QDoubleSpinBox()
+            volcano_height_spin_box.setMinimum(0)
+            volcano_height_spin_box.setMaximum(9999999)
+            volcano_height_spin_box.setSuffix(tr(' metres'))
+
             # Volcano region
             volcano_region_checkbox = QCheckBox()
             volcano_region_line_edit = QLineEdit()
@@ -151,6 +159,11 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
                 volcano_latitude_checkbox,
                 volcano_latitude_spin_box,
                 extra_keyword_volcano_latitude
+            ]
+            self.widgets_dict[extra_keyword_volcano_height['key']] = [
+                volcano_height_checkbox,
+                volcano_height_spin_box,
+                extra_keyword_volcano_height
             ]
             self.widgets_dict[extra_keyword_volcano_alert_level['key']] = [
                 alert_level_checkbox,
