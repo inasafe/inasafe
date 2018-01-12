@@ -1,10 +1,9 @@
 # coding=utf-8
 """InaSAFE Wizard Step Extra Keywords."""
 
-import pytz
-
 from collections import OrderedDict
 from datetime import datetime
+import pytz
 
 from PyQt4.QtGui import (
     QLineEdit, QDateTimeEdit, QDoubleSpinBox, QComboBox, QCheckBox
@@ -23,6 +22,7 @@ from safe.definitions.extra_keywords import (
     extra_keyword_volcano_longitude,
     extra_keyword_volcano_latitude,
     extra_keyword_volcano_height,
+    extra_keyword_volcano_event_id,
 )
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
@@ -135,8 +135,10 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
             # Timezone
             timezone_checkbox = QCheckBox()
             timezone_combo_box = QComboBox()
-            for timezone in pytz.common_timezones:
-                timezone_combo_box.addItem(timezone, timezone)
+            for timezone in extra_keyword_time_zone['options']:
+                timezone_combo_box.addItem(
+                    timezone['key'], timezone['name']
+                )
             index = timezone_combo_box.findText('Asia/Jakarta')
             timezone_combo_box.setCurrentIndex(index)
 
@@ -239,6 +241,32 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
                 elif isinstance(widgets[1], QDateTimeEdit):
                     extra_keywords[key] = widgets[1].dateTime().toString(
                         Qt.ISODate)
+
+        # Set volcano ash event ID
+        required_keywords = (
+            extra_keyword_volcano_eruption_event_time['key'],
+            extra_keyword_time_zone['key'],
+            extra_keyword_volcano_name['key']
+        )
+        LOGGER.debug(required_keywords)
+        LOGGER.debug(extra_keywords.keys())
+        LOGGER.debug(set(extra_keywords.keys()).issubset(required_keywords))
+        if set(required_keywords).issubset(extra_keywords.keys()):
+            event_time = extra_keywords[
+                extra_keyword_volcano_eruption_event_time['key']]
+            time_zone = extra_keywords[extra_keyword_time_zone['key']]
+            volcano_name = extra_keywords[extra_keyword_volcano_name['key']]
+
+            real_event_time = datetime.strptime(
+                event_time, '%Y-%m-%dT%H:%M:%S')
+            event_time_str = real_event_time.strftime('%Y%m%d%H%M%S')
+
+            zone_offset = datetime.now(pytz.timezone(time_zone)).strftime('%z')
+
+            event_id = event_time_str + zone_offset + '_' + volcano_name
+
+            extra_keywords[extra_keyword_volcano_event_id['key']] = event_id
+
         return extra_keywords
 
     def set_existing_extra_keywords(self):
