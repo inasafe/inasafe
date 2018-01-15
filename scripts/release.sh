@@ -129,4 +129,4 @@ ls /tmp/InaSAFE*.exe
 
 
 make test-translations
-make pep8
+make flake8
