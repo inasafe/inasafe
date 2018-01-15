@@ -18,7 +18,7 @@ about=Developed for the Indonesian Government - BNPB, Australian Government - AI
 # If you change version and status here, please also change in safe/definitions/versions.py
 version=4.3.0
 # alpha, beta, rc or final
-status=alpha
+status=final
 
 
 # end of mandatory metadata
@@ -49,9 +49,9 @@ changelog=
     - Bring back the old behaviour of generating report. (option to choose custom template)
     - Map report and general report for Multi-Exposure Impact Function.
     - Use aggregation CRS instead of exposure CRS or map canvas CRS if no aggregation layer is provided
-    - Add extra keywords for supporting rich reporting (e.g. earthquake's epicenter location, depth)
+    - Add extra keywords for supporting rich reporting (e.g. earthquake's epicenter location, volcanic ash location)
     - Tidy up metadata (remove unused properties)
-    - Use numpy to create contour for shakemap
+    - Creating contour for earthquake as preprocessor.
     - Improve code layout (Flake8, PEP 257, PEP8, SideCI ...)
     - Fix various bugs, like in summary calculation, keyword wizard, productivity post processors, dock
 
