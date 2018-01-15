@@ -436,7 +436,32 @@ class TestImpactReport(unittest.TestCase):
             general_report_component['key'])
         """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
 
-        self.assertTrue(analysis_summary.context)
+        context = analysis_summary.context
+        self.assertTrue(context)
+        self.assertEqual(len(context['summary']), 2)
+
+        """Checking generated context from multi-classifications analysis."""
+
+        hazard_layer = load_test_raster_layer(
+            'gisv4', 'hazard', 'earthquake.asc')
+        place_layer = load_test_vector_layer(
+            'gisv4', 'exposure', 'places.geojson')
+        exposure_layers.append(place_layer)
+
+        impact_report = self.run_multi_exposure_impact_function_scenario(
+            output_folder,
+            standard_multi_exposure_impact_report_metadata_html,
+            hazard_layer,
+            exposure_layers,
+            aggregation_layer=aggregation_layer)
+
+        # Check Analysis Summary
+        analysis_summary = impact_report.metadata.component_by_key(
+            general_report_component['key'])
+
+        context = analysis_summary.context
+        self.assertTrue(context)
+        self.assertEqual(len(context['summary']), 3)
 
     def test_analysis_detail(self):
         """Test generate analysis breakdown and aggregation report.
