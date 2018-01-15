@@ -116,7 +116,9 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
                     volcano_alert_level['name'],
                     volcano_alert_level['key'],
                 )
-            alert_level_combo_box.setCurrentIndex(0)
+            default_option_index = alert_level_combo_box.findData(
+                extra_keyword_volcano_alert_level['key'])
+            alert_level_combo_box.setCurrentIndex(default_option_index)
 
             # Eruption height in metres
             eruption_height_checkbox = QCheckBox()
@@ -139,7 +141,8 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
                 timezone_combo_box.addItem(
                     timezone['key'], timezone['name']
                 )
-            index = timezone_combo_box.findText('Asia/Jakarta')
+            index = timezone_combo_box.findData(
+                extra_keyword_time_zone['default_option'])
             timezone_combo_box.setCurrentIndex(index)
 
             self.widgets_dict[extra_keyword_volcano_name['key']] = [

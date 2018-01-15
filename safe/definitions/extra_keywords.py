@@ -28,7 +28,8 @@ extra_keyword_time_zone = {
     'name': tr('Time zone'),
     'description': tr('Time zone'),
     'type': unicode,
-    'options': timezones_dicts
+    'options': timezones_dicts,
+    'default_option': 'Asia/Jakarta'
 }
 extra_keyword_region = {
     'key': 'region',
@@ -149,7 +150,8 @@ extra_keyword_earthquake_source = {
             'description': tr(
                 'This shakemap is created with extra processing.')
         }
-    ]
+    ],
+    'default_option': 'initial'
 }
 
 
@@ -278,7 +280,8 @@ extra_keyword_volcano_alert_level = {
         volcano_alert_advisory,
         volcano_alert_watch,
         volcano_alert_warning,
-    ]
+    ],
+    'default_option': volcano_alert_normal['key']
 }
 
 extra_keyword_volcano_height = {
