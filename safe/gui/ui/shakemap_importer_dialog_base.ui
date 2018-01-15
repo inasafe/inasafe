@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>526</width>
-    <height>662</height>
+    <height>771</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -97,11 +97,12 @@
           <string>Input</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_4">
-          <item row="5" column="0">
-           <widget class="QLineEdit" name="line_edit_source"/>
-          </item>
-          <item row="3" column="0">
-           <widget class="QLineEdit" name="line_edit_title"/>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Input file (grid.xml)</string>
+            </property>
+           </widget>
           </item>
           <item row="4" column="0">
            <widget class="QLabel" name="label_source">
@@ -110,12 +111,8 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_title">
-            <property name="text">
-             <string>Title</string>
-            </property>
-           </widget>
+          <item row="3" column="0">
+           <widget class="QLineEdit" name="line_edit_title"/>
           </item>
           <item row="1" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -138,10 +135,41 @@
             </item>
            </layout>
           </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label">
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_title">
             <property name="text">
-             <string>Input file (grid.xml)</string>
+             <string>Title</string>
+            </property>
+           </widget>
+          </item>
+          <item row="9" column="0">
+           <widget class="QComboBox" name="combo_box_source_type">
+            <property name="editable">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="0">
+           <widget class="QLineEdit" name="line_edit_shakemap_id">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="0">
+           <widget class="QLabel" name="label_source_type">
+            <property name="text">
+             <string>Source Type</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QLineEdit" name="line_edit_source"/>
+          </item>
+          <item row="6" column="0">
+           <widget class="QCheckBox" name="check_box_custom_shakemap_id">
+            <property name="text">
+             <string>Custom Shakemap ID</string>
             </property>
            </widget>
           </item>
@@ -151,6 +179,10 @@
          <zorder>line_edit_source</zorder>
          <zorder>label</zorder>
          <zorder>label_source</zorder>
+         <zorder>line_edit_shakemap_id</zorder>
+         <zorder>label_source_type</zorder>
+         <zorder>combo_box_source_type</zorder>
+         <zorder>check_box_custom_shakemap_id</zorder>
         </widget>
        </item>
        <item row="3" column="0">
@@ -341,8 +373,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
+     <x>254</x>
+     <y>766</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -357,8 +389,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
+     <x>322</x>
+     <y>766</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
@@ -373,12 +405,12 @@
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>195</x>
-     <y>140</y>
+     <x>220</x>
+     <y>478</y>
     </hint>
     <hint type="destinationlabel">
-     <x>185</x>
-     <y>163</y>
+     <x>213</x>
+     <y>506</y>
     </hint>
    </hints>
   </connection>
@@ -389,12 +421,12 @@
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>195</x>
-     <y>140</y>
+     <x>220</x>
+     <y>478</y>
     </hint>
     <hint type="destinationlabel">
-     <x>371</x>
-     <y>162</y>
+     <x>497</x>
+     <y>507</y>
     </hint>
    </hints>
   </connection>

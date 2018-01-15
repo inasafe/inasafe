@@ -17,6 +17,7 @@ from safe import messaging as m
 from safe.common.version import get_version
 from safe.definitions.constants import (
     NUMPY_SMOOTHING, SCIPY_SMOOTHING, NONE_SMOOTHING)
+from safe.definitions.extra_keywords import extra_keyword_earthquake_source
 from safe.gui.tools.help.shakemap_converter_help import shakemap_converter_help
 from safe.gui.tools.shake_grid.shake_grid import convert_mmi_data
 from safe.gui.tools.wizard.wizard_dialog import WizardDialog
@@ -90,6 +91,16 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         self.help_button.setCheckable(True)
         self.help_button.toggled.connect(self.help_toggled)
         self.main_stacked_widget.setCurrentIndex(1)
+        self.check_box_custom_shakemap_id.toggled.connect(
+            self.line_edit_shakemap_id.setEnabled)
+
+        # Set value for EQ source type combo box
+        self.combo_box_source_type.addItem(tr('N/A'), '')
+        for source_type in extra_keyword_earthquake_source['options']:
+            self.combo_box_source_type.addItem(
+                source_type['name'], source_type['key'])
+        self.combo_box_source_type.setCurrentIndex(0)
+
         self.update_warning()
 
         if not setting('developer_mode', expected_type=bool):
