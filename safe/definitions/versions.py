@@ -7,10 +7,10 @@ __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
-# InaSAFE version (please synchronize with metadata.txt)
+# InaSAFE version (please synchronize with metadata.txt or travis will fail !)
 inasafe_version = '4.3.0'
-# alpha, beta, rc or final
-inasafe_release_status = 'alpha'
+# alpha, beta, rc or final (Travis will fail)
+inasafe_release_status = 'final'
 
 # InaSAFE Keyword Version compatibility.
 inasafe_keyword_version = '4.3'
