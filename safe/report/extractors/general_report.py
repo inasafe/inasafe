@@ -235,6 +235,8 @@ def multi_exposure_general_report_extractor(impact_report, component_metadata):
     hazard_keywords = provenances[0]['hazard_keywords']
     hazard_header = resolve_from_dictionary(extra_args, 'hazard_header')
 
+    reported_fields = resolve_from_dictionary(extra_args, 'reported_fields')
+
     # Summarize every value needed for each exposure and extract later to the
     # context.
     summary = []
@@ -314,11 +316,10 @@ def multi_exposure_general_report_extractor(impact_report, component_metadata):
 
             exposure_stats['classification_result'] = classification_result
 
-        reported_fields = resolve_from_dictionary(
-            extra_args, 'reported_fields')
         for item in reported_fields:
             field = item.get('field')
             multi_exposure_field = item.get('multi_exposure_field')
+            row_value = '-'
             if multi_exposure_field:
                 field_key = (
                     multi_exposure_field['key'] % (exposure_type['key']))
@@ -333,9 +334,7 @@ def multi_exposure_general_report_extractor(impact_report, component_metadata):
                         is_population=is_population)
 
             elif field in [displaced_field, fatalities_field]:
-                if exposure_type != exposure_population:
-                    row_value = '-'
-                elif field['key'] in analysis_inasafe_fields:
+                if field['key'] in analysis_inasafe_fields and is_population:
                     field_index = analysis_layer.fieldNameIndex(field['name'])
                     if field == fatalities_field:
                         # For fatalities field, we show a range of number
@@ -354,14 +353,26 @@ def multi_exposure_general_report_extractor(impact_report, component_metadata):
         exposures_stats.append(exposure_stats)
 
     # After finish summarizing value, then proceed to context extraction.
+
+    # find total value and labels for each exposure
+    value_headers = []
+    total_values = []
+    for exposure_stats in exposures_stats:
+        # label
+        value_header = exposure_stats['value_header']
+        value_headers.append(value_header)
+
+        # total value
+        classification_result = exposure_stats['classification_result']
+        total_value = classification_result[total_exposed_field['key']]
+        total_values.append(total_value)
+
     classifications = hazard_classifications.values()
     is_item_identical = (
         classifications.count(
             classifications[0]) == len(classifications))
     if classifications and is_item_identical:
         hazard_stats = []
-        value_headers = []
-        total_values = []
         for hazard_class in classifications[0]['classes']:
             values = []
             for exposure_stats in exposures_stats:
@@ -374,17 +385,6 @@ def multi_exposure_general_report_extractor(impact_report, component_metadata):
                 'numbers': values
             }
             hazard_stats.append(stats)
-
-        # find total value and labels for each exposure
-        for exposure_stats in exposures_stats:
-            # label
-            value_header = exposure_stats['value_header']
-            value_headers.append(value_header)
-
-            # total value
-            classification_result = exposure_stats['classification_result']
-            total_value = classification_result[total_exposed_field['key']]
-            total_values.append(total_value)
 
         total_stats = {
             'key': total_exposed_field['key'],
@@ -402,9 +402,9 @@ def multi_exposure_general_report_extractor(impact_report, component_metadata):
 
     reported_fields_stats = []
     for item in reported_fields:
+        field = item.get('field')
         values = []
         for exposure_stats in exposures_stats:
-            field = item['field']
             reported_fields_result = exposure_stats['reported_fields_result']
             value = reported_fields_result[field['key']]
             values.append(value)
