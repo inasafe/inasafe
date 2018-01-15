@@ -247,8 +247,6 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
 
         current_index = self.combo_box_source_type.currentIndex()
         source_type = self.combo_box_source_type.itemData(current_index)
-        LOGGER.debug(current_index)
-        LOGGER.debug(source_type)
         if source_type:
             extra_keywords[
                 extra_keyword_earthquake_source['key']] = source_type
