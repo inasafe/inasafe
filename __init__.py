@@ -72,7 +72,7 @@ def classFactory(iface):
     """Load Plugin class from file Plugin."""
     # Try to import submodule to check if there are present.
     try:
-        from safe_extras.parameters.generic_parameter import GenericParameter
+        from parameters.generic_parameter import GenericParameter
     except ImportError:
         # Don't use safe.utilities.i18n.tr as we need to be outside of `safe`.
         # Some safe functions will import safe_extras.parameters
