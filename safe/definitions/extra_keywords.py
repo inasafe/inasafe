@@ -38,6 +38,15 @@ extra_keyword_region = {
 }
 
 # Earthquake Extra Keywords
+extra_keyword_earthquake_event_id = {
+    'key': 'earthquake_event_id',
+    'name': tr('Earthquake event ID'),
+    'description': tr(
+        'The ID of the earthquake event or shakemap. It is constructed from '
+        'the timestamp of the event in YYYYMMDDHHmmSS format.'),
+    'type': unicode
+}
+
 extra_keyword_earthquake_latitude = {
     'key': 'earthquake_latitude',
     'name': tr('Latitude'),
@@ -117,6 +126,32 @@ extra_keyword_earthquake_y_maximum = {
     'description': tr(
         'The maximum value of y coordinate of the shakemaps. It indicates the '
         'extent of the event.')
+}
+
+extra_keyword_earthquake_source = {
+    'key': 'earthquake_source',
+    'name': tr('Source'),
+    'description': tr(
+        'Source of the earthquake, it can be initial or post-processed '
+        '(data-informed).'),
+    'type': unicode,
+    'options': [
+        {
+            'key': 'initial',
+            'name': tr('Initial'),
+            'description': tr(
+                'This shakemap is created in 5 minutes after the earthquake. '
+                'No extra processing happens.')
+        },
+        {
+            'key': 'post-processed',
+            'name': tr('Post processed'),
+            'description': tr(
+                'This shakemap is created after 5 minutes after the '
+                'earthquake. There are some processing happen in this '
+                'shakemap.')
+        }
+    ]
 }
 
 
@@ -258,6 +293,7 @@ extra_keyword_volcano_height = {
 }
 
 earthquake_extra_keywords = [
+    extra_keyword_earthquake_event_id,
     extra_keyword_earthquake_latitude,
     extra_keyword_earthquake_longitude,
     extra_keyword_earthquake_magnitude,
@@ -270,9 +306,11 @@ earthquake_extra_keywords = [
     extra_keyword_earthquake_x_minimum,
     extra_keyword_earthquake_y_maximum,
     extra_keyword_earthquake_y_minimum,
+    extra_keyword_earthquake_source,
 ]
 
 ash_extra_keywords = [
+    extra_keyword_volcano_event_id,
     extra_keyword_volcano_name,
     extra_keyword_region,
     extra_keyword_eruption_height,
@@ -288,6 +326,7 @@ all_extra_keywords = [
     extra_keyword_analysis_type,
     extra_keyword_time_zone,
 
+    extra_keyword_earthquake_event_id,
     extra_keyword_earthquake_depth,
     extra_keyword_earthquake_description,
     extra_keyword_earthquake_event_time,
@@ -299,7 +338,9 @@ all_extra_keywords = [
     extra_keyword_earthquake_x_minimum,
     extra_keyword_earthquake_y_maximum,
     extra_keyword_earthquake_y_minimum,
+    extra_keyword_earthquake_source,
 
+    extra_keyword_volcano_event_id,
     extra_keyword_volcano_name,
     extra_keyword_eruption_height,
     extra_keyword_volcano_eruption_event_time,
