@@ -5,8 +5,8 @@ from collections import OrderedDict
 from copy import deepcopy
 from os import listdir
 from os.path import join, exists, splitext, split
-from PyQt4.QtXml import QDomNode, QDomDocument
 
+from PyQt4.QtXml import QDomNode, QDomDocument
 from qgis.core import QgsApplication
 
 from safe import definitions

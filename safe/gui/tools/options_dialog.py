@@ -12,10 +12,12 @@ from PyQt4.QtCore import pyqtSignature, pyqtSlot, QVariant, QSettings, Qt
 from PyQt4.QtGui import (
     QDialog, QFileDialog, QDialogButtonBox, QGroupBox, QVBoxLayout,
     QScrollArea, QWidget, QPixmap, QLabel, QPushButton, QMessageBox)
+
 from parameters.float_parameter import FloatParameter
 from parameters.integer_parameter import IntegerParameter
 from parameters.qt_widgets.parameter_container import ParameterContainer
-
+from safe.common.parameters.percentage_parameter_widget import (
+    PercentageParameterWidget)
 from safe.common.utilities import temp_dir
 from safe.common.version import get_version
 from safe.defaults import supporters_logo_path, default_north_arrow_path
@@ -32,8 +34,8 @@ from safe.definitions.messages import disclaimer
 from safe.definitions.utilities import (
     all_default_fields, generate_default_profile)
 from safe.gui.tools.help.options_help import options_help
-from safe.gui.widgets.profile_widget import ProfileWidget
 from safe.gui.tools.help.welcome_message import welcome_message
+from safe.gui.widgets.profile_widget import ProfileWidget
 from safe.utilities.default_values import (
     set_inasafe_default_value_qsetting, get_inasafe_default_value_qsetting)
 from safe.utilities.i18n import tr
@@ -44,8 +46,6 @@ from safe.utilities.settings import (
     setting,
     set_setting,
 )
-from safe.common.parameters.percentage_parameter_widget import (
-    PercentageParameterWidget)
 
 extra_parameter = [
     (FloatParameter, PercentageParameterWidget)

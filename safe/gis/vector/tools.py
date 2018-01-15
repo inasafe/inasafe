@@ -3,10 +3,10 @@
 """Tools for vector layers."""
 
 import logging
-import ogr
 from math import isnan
 from uuid import uuid4
 
+import ogr
 from PyQt4.QtCore import QPyNullVariant, QVariant
 from qgis.core import (
     QgsGeometry,

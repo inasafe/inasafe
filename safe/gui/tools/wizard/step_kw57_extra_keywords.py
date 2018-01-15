@@ -3,15 +3,15 @@
 
 from collections import OrderedDict
 from datetime import datetime
-import pytz
 
+import pytz
+from PyQt4.QtCore import Qt
 from PyQt4.QtGui import (
     QLineEdit, QDateTimeEdit, QDoubleSpinBox, QComboBox, QCheckBox
 )
-from PyQt4.QtCore import Qt
 
 from safe import messaging as m
-from safe.definitions.hazard import hazard_volcanic_ash
+from safe.common.custom_logging import LOGGER
 from safe.definitions.extra_keywords import (
     extra_keyword_volcano_name,
     extra_keyword_region,
@@ -24,10 +24,10 @@ from safe.definitions.extra_keywords import (
     extra_keyword_volcano_height,
     extra_keyword_volcano_event_id,
 )
+from safe.definitions.hazard import hazard_volcanic_ash
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.utilities.i18n import tr
-from safe.common.custom_logging import LOGGER
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"

@@ -3,8 +3,10 @@
 """
 
 from copy import deepcopy
+
 from safe.definitions.exposure import exposure_population
 from safe.definitions.utilities import definition
+from safe.definitions.utilities import get_displacement_rate, is_affected
 from safe.report.extractors.composer import QGISComposerContext
 from safe.report.extractors.util import (
     resolve_from_dictionary,
@@ -14,7 +16,6 @@ from safe.utilities.resources import (
     resource_url,
     resources_path)
 from safe.utilities.rounding import html_scientific_notation_rate
-from safe.definitions.utilities import get_displacement_rate, is_affected
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

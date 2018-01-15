@@ -13,6 +13,34 @@ from safe.common.exceptions import (
     NoKeywordsFoundError,
     MetadataConversionError
 )
+from safe.definitions.exposure import (
+    exposure_structure,
+    exposure_road,
+    exposure_population,
+    exposure_land_cover
+)
+from safe.definitions.fields import (
+    adult_ratio_field,
+    elderly_ratio_field,
+    youth_ratio_field,
+    female_ratio_field,
+    exposure_name_field,
+    exposure_id_field,
+    population_count_field,
+    hazard_name_field,
+    hazard_value_field,
+    aggregation_name_field,
+)
+from safe.definitions.hazard import hazard_volcano, hazard_generic
+from safe.definitions.hazard_classifications import (
+    generic_hazard_classes,
+    flood_hazard_classes,
+    tsunami_hazard_classes_ITB,
+    volcano_hazard_classes,
+)
+from safe.definitions.layer_geometry import (
+    layer_geometry_raster, layer_geometry_polygon
+)
 from safe.definitions.layer_modes import layer_mode_continuous
 from safe.definitions.layer_purposes import (
     layer_purpose_hazard,
@@ -26,16 +54,6 @@ from safe.definitions.layer_purposes import (
     layer_purpose_profiling,
     layer_purpose_earthquake_contour,
 )
-from safe.definitions.layer_geometry import (
-    layer_geometry_raster, layer_geometry_polygon
-)
-from safe.definitions.hazard import hazard_volcano, hazard_generic
-from safe.definitions.exposure import (
-    exposure_structure,
-    exposure_road,
-    exposure_population,
-    exposure_land_cover
-)
 from safe.definitions.versions import inasafe_keyword_version
 from safe.metadata import (
     ExposureLayerMetadata,
@@ -44,32 +62,12 @@ from safe.metadata import (
     OutputLayerMetadata,
     GenericLayerMetadata
 )
-# 3.5 metadata
-from safe.metadata35 import GenericLayerMetadata as GenericLayerMetadata35
-from safe.metadata35 import ExposureLayerMetadata as ExposureLayerMetadata35
-from safe.metadata35 import HazardLayerMetadata as HazardLayerMetadata35
 from safe.metadata35 import (
     AggregationLayerMetadata as AggregationLayerMetadata35)
-
-
-from safe.definitions.fields import (
-    adult_ratio_field,
-    elderly_ratio_field,
-    youth_ratio_field,
-    female_ratio_field,
-    exposure_name_field,
-    exposure_id_field,
-    population_count_field,
-    hazard_name_field,
-    hazard_value_field,
-    aggregation_name_field,
-)
-from safe.definitions.hazard_classifications import (
-    generic_hazard_classes,
-    flood_hazard_classes,
-    tsunami_hazard_classes_ITB,
-    volcano_hazard_classes,
-)
+from safe.metadata35 import ExposureLayerMetadata as ExposureLayerMetadata35
+# 3.5 metadata
+from safe.metadata35 import GenericLayerMetadata as GenericLayerMetadata35
+from safe.metadata35 import HazardLayerMetadata as HazardLayerMetadata35
 from safe.utilities.settings import setting
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

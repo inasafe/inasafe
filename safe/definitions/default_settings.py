@@ -4,10 +4,9 @@ from os.path import join
 
 from qgis.core import QgsApplication
 
+from safe.defaults import supporters_logo_path, default_north_arrow_path
 from safe.definitions.currencies import idr
 from safe.definitions.messages import disclaimer
-from safe.defaults import supporters_logo_path, default_north_arrow_path
-
 
 inasafe_default_settings = {
     'visibleLayersOnlyFlag': True,

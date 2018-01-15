@@ -3,7 +3,9 @@
 """Definitions relating to extra keywords."""
 
 from datetime import datetime
+
 import pytz
+
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"

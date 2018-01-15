@@ -20,8 +20,8 @@ from safe.gis.vector.tools import (
     rename_fields,
     create_memory_layer,
     create_field_from_definition)
-from safe.utilities.i18n import tr
 from safe.utilities.gis import qgis_version
+from safe.utilities.i18n import tr
 from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

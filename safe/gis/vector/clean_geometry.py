@@ -2,10 +2,10 @@
 
 """Try to make a layer valid."""
 
+from safe.common.custom_logging import LOGGER
 from safe.definitions.processing_steps import clean_geometry_steps
 from safe.gis.sanity_check import check_layer
 from safe.utilities.profiling import profile
-from safe.common.custom_logging import LOGGER
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

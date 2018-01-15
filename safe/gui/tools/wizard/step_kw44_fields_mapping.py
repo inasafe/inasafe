@@ -4,7 +4,6 @@
 import logging
 
 from parameters.parameter_exceptions import InvalidValidationException
-
 from safe import messaging as m
 from safe.definitions.layer_purposes import (
     layer_purpose_aggregation, layer_purpose_hazard, layer_purpose_exposure)

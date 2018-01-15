@@ -1,31 +1,23 @@
 # coding=utf-8
 """Create contour from shakemap raster layer."""
 
+import logging
 import os
 import shutil
 from datetime import datetime
+
 import numpy as np
 from osgeo import gdal, ogr
 from osgeo.gdalconst import GA_ReadOnly
-import logging
-
 from qgis.core import QgsVectorLayer, QgsFeatureRequest
-from safe.common.utilities import romanise, unique_filename, temp_dir
-from safe.utilities.styling import mmi_colour
+
 from safe.common.exceptions import (
     ContourCreationError,
     InvalidLayerError,
     FileNotFoundError,
 )
+from safe.common.utilities import romanise, unique_filename, temp_dir
 from safe.definitions.constants import NUMPY_SMOOTHING
-from safe.utilities.resources import resources_path
-from safe.utilities.i18n import tr
-from safe.definitions.layer_purposes import layer_purpose_earthquake_contour
-from safe.definitions.layer_geometry import layer_geometry_line
-from safe.definitions.layer_modes import layer_mode_classified
-from safe.gis.vector.tools import (
-    create_ogr_field_from_definition, field_index_from_definition)
-from safe.utilities.metadata import write_iso19115_metadata
 from safe.definitions.fields import (
     contour_fields,
     contour_x_field,
@@ -38,6 +30,15 @@ from safe.definitions.fields import (
     contour_mmi_field,
 
 )
+from safe.definitions.layer_geometry import layer_geometry_line
+from safe.definitions.layer_modes import layer_mode_classified
+from safe.definitions.layer_purposes import layer_purpose_earthquake_contour
+from safe.gis.vector.tools import (
+    create_ogr_field_from_definition, field_index_from_definition)
+from safe.utilities.i18n import tr
+from safe.utilities.metadata import write_iso19115_metadata
+from safe.utilities.resources import resources_path
+from safe.utilities.styling import mmi_colour
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"

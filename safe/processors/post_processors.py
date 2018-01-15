@@ -8,6 +8,10 @@
 import logging
 
 from safe.definitions.exposure import exposure_place
+from safe.definitions.extra_keywords import (
+    extra_keyword_earthquake_longitude,
+    extra_keyword_earthquake_latitude
+)
 from safe.definitions.fields import (
     bearing_field,
     direction_field,
@@ -34,10 +38,6 @@ from safe.processors.post_processor_inputs import (
     keyword_input_type,
     field_input_type,
     keyword_value_expected)
-from safe.definitions.extra_keywords import (
-    extra_keyword_earthquake_longitude,
-    extra_keyword_earthquake_latitude
-)
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

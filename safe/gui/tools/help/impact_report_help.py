@@ -2,6 +2,7 @@
 """Impact report help text."""
 
 from os.path import join
+
 from qgis.core import QgsApplication
 
 from safe import messaging as m

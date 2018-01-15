@@ -14,10 +14,10 @@ from safe.definitions.layer_purposes import (
     layer_purpose,
     layer_purpose_earthquake_contour,
 )
+from safe.gis.raster.contour import create_smooth_contour
 from safe.processors import (
     function_process,
 )
-from safe.gis.raster.contour import create_smooth_contour
 from safe.utilities.gis import is_raster_layer
 from safe.utilities.i18n import tr
 

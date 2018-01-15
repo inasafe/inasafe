@@ -6,26 +6,27 @@ import os
 from PyQt4.QtCore import Qt, QFile, pyqtSignal, QT_VERSION
 from PyQt4.QtGui import (
     QDialog, QDialogButtonBox, QFileDialog)
+
 from safe.common.exceptions import (
     NoKeywordsFoundError,
     KeywordNotFoundError,
     MetadataConversionError,
 )
+from safe.definitions.exposure import exposure_all
 from safe.definitions.layer_purposes import (
     layer_purpose_exposure, layer_purpose_hazard, layer_purpose_aggregation)
+from safe.gui.tools.help.metadata_converter_help import metadata_converter_help
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.metadata import active_classification
+from safe.utilities.metadata import (
+    convert_metadata, write_iso19115_metadata
+)
 from safe.utilities.qgis_utilities import (
     display_warning_message_box, display_success_message_bar)
 from safe.utilities.resources import (
     get_ui_class, html_footer, html_header)
-from safe.utilities.metadata import (
-    convert_metadata, write_iso19115_metadata
-)
-from safe.definitions.exposure import exposure_all
-from safe.gui.tools.help.metadata_converter_help import metadata_converter_help
 from safe.utilities.utilities import is_keyword_version_supported
-from safe.utilities.metadata import active_classification
 
 FORM_CLASS = get_ui_class('metadata_converter_dialog_base.ui')
 

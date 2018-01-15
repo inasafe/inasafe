@@ -2,10 +2,10 @@
 """This is a dialog to print a custom map report.
 """
 import logging
-
 from copy import deepcopy
 from os import listdir, sep
 from os.path import join, exists, splitext, dirname
+
 from PyQt4 import QtGui, QtCore, QtXml
 from qgis.core import QgsApplication
 

@@ -22,8 +22,6 @@ from qgis.core import (
     QgsRectangle,
     QgsRasterLayer)
 
-from safe.gis.raster.contour import (
-    gaussian_kernel, convolve, set_contour_properties)
 from safe.common.exceptions import (
     GridXmlFileNotFoundError,
     GridXmlParseError,
@@ -34,17 +32,7 @@ from safe.common.utilities import which
 from safe.definitions.constants import (
     NONE_SMOOTHING, NUMPY_SMOOTHING, SCIPY_SMOOTHING
 )
-from safe.definitions.hazard import hazard_earthquake
 from safe.definitions.exposure import exposure_all
-from safe.definitions.hazard_category import hazard_category_single_event
-from safe.definitions.hazard_classifications import (
-    earthquake_mmi_scale, generic_hazard_classes)
-from safe.definitions.layer_geometry import layer_geometry_raster
-from safe.definitions.layer_modes import layer_mode_continuous
-from safe.definitions.layer_purposes import layer_purpose_hazard
-from safe.definitions.units import unit_mmi
-from safe.definitions.versions import inasafe_keyword_version
-from safe.definitions.utilities import default_classification_thresholds
 from safe.definitions.extra_keywords import (
     extra_keyword_earthquake_latitude,
     extra_keyword_earthquake_longitude,
@@ -60,6 +48,18 @@ from safe.definitions.extra_keywords import (
     extra_keyword_earthquake_event_time,
     extra_keyword_earthquake_event_id,
 )
+from safe.definitions.hazard import hazard_earthquake
+from safe.definitions.hazard_category import hazard_category_single_event
+from safe.definitions.hazard_classifications import (
+    earthquake_mmi_scale, generic_hazard_classes)
+from safe.definitions.layer_geometry import layer_geometry_raster
+from safe.definitions.layer_modes import layer_mode_continuous
+from safe.definitions.layer_purposes import layer_purpose_hazard
+from safe.definitions.units import unit_mmi
+from safe.definitions.utilities import default_classification_thresholds
+from safe.definitions.versions import inasafe_keyword_version
+from safe.gis.raster.contour import (
+    gaussian_kernel, convolve, set_contour_properties)
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.resources import resources_path

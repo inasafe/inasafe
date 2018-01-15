@@ -1,13 +1,13 @@
 # coding=utf-8
 """Helper function for InaSAFE settings."""
 
-from PyQt4.QtCore import QSettings, QPyNullVariant
 import json
 import logging
 
+from PyQt4.QtCore import QSettings, QPyNullVariant
+
 from safe.definitions import APPLICATION_NAME
 from safe.definitions.default_settings import inasafe_default_settings
-
 
 LOGGER = logging.getLogger("InaSAFE")
 __copyright__ = "Copyright 2016, The InaSAFE Project"
