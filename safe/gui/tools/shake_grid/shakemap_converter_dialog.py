@@ -17,7 +17,8 @@ from safe import messaging as m
 from safe.common.version import get_version
 from safe.definitions.constants import (
     NUMPY_SMOOTHING, SCIPY_SMOOTHING, NONE_SMOOTHING)
-from safe.definitions.extra_keywords import extra_keyword_earthquake_source
+from safe.definitions.extra_keywords import (
+    extra_keyword_earthquake_source, extra_keyword_earthquake_event_id)
 from safe.gui.tools.help.shakemap_converter_help import shakemap_converter_help
 from safe.gui.tools.shake_grid.shake_grid import convert_mmi_data
 from safe.gui.tools.wizard.wizard_dialog import WizardDialog
@@ -239,6 +240,19 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         # noinspection PyUnresolvedReferences
         QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
 
+        extra_keywords = {}
+        if self.check_box_custom_shakemap_id.isChecked():
+            event_id = self.line_edit_shakemap_id.text()
+            extra_keywords[extra_keyword_earthquake_event_id['key']] = event_id
+
+        current_index = self.combo_box_source_type.currentIndex()
+        source_type = self.combo_box_source_type.itemData(current_index)
+        LOGGER.debug(current_index)
+        LOGGER.debug(source_type)
+        if source_type:
+            extra_keywords[
+                extra_keyword_earthquake_source['key']] = source_type
+
         file_name = convert_mmi_data(
             input_path,
             input_title,
@@ -246,7 +260,8 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
             output_path,
             algorithm=algorithm,
             algorithm_filename_flag=True,
-            smoothing_method=smoothing_method
+            smoothing_method=smoothing_method,
+            extra_keywords=extra_keywords
         )
 
         file_info = QFileInfo(file_name)
