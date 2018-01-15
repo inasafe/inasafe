@@ -58,6 +58,7 @@ from safe.definitions.extra_keywords import (
     extra_keyword_earthquake_y_maximum,
     extra_keyword_earthquake_y_minimum,
     extra_keyword_earthquake_event_time,
+    extra_keyword_earthquake_event_id,
 )
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
@@ -89,7 +90,8 @@ class ShakeGrid(object):
             output_basename=None,
             algorithm_filename_flag=True,
             smoothing_method=NONE_SMOOTHING,
-            smooth_sigma=0.9
+            smooth_sigma=0.9,
+            extra_keywords=None
     ):
         """Constructor.
 
@@ -147,6 +149,7 @@ class ShakeGrid(object):
         self.rows = None
         self.columns = None
         self.mmi_data = None
+        self.event_id = None
         if output_dir is None:
             self.output_dir = os.path.dirname(grid_xml_path)
         else:
@@ -159,6 +162,7 @@ class ShakeGrid(object):
         self.grid_xml_path = grid_xml_path
         self.smoothing_method = smoothing_method
         self.smoothing_sigma = smooth_sigma
+        self.extra_keywords = extra_keywords if extra_keywords else {}
 
         self.parse_grid_xml()
 
@@ -268,6 +272,12 @@ class ShakeGrid(object):
         grid_path = self.grid_file_path()
         try:
             document = minidom.parse(grid_path)
+            shakemap_grid_element = document.getElementsByTagName(
+                'shakemap_grid')
+            shakemap_grid_element = shakemap_grid_element[0]
+            self.event_id = shakemap_grid_element.attributes[
+                'event_id'].nodeValue
+
             event_element = document.getElementsByTagName('event')
             event_element = event_element[0]
             self.magnitude = float(
@@ -888,13 +898,6 @@ class ShakeGrid(object):
             extra_keyword_earthquake_depth['key']: self.depth,
             extra_keyword_earthquake_description['key']: self.description,
             extra_keyword_earthquake_location['key']: self.location,
-            # 'day': self.day,
-            # 'month': self.month,
-            # 'year': self.year,
-            # 'time': self.time,
-            # 'hour': self.hour,
-            # 'minute': self.minute,
-            # 'second': self.second,
             extra_keyword_earthquake_event_time['key']: self.time.strftime(
                 '%Y-%m-%dT%H:%M:%S'),
             extra_keyword_time_zone['key']: self.time_zone,
@@ -902,7 +905,11 @@ class ShakeGrid(object):
             extra_keyword_earthquake_x_maximum['key']: self.x_maximum,
             extra_keyword_earthquake_y_minimum['key']: self.y_minimum,
             extra_keyword_earthquake_y_maximum['key']: self.y_maximum,
+            extra_keyword_earthquake_event_id['key']: self.event_id
         }
+        for key, value in self.extra_keywords.items():
+            extra_keywords[key] = value
+
         # Delete empty element.
         empty_keys = []
         for key, value in extra_keywords.items():
@@ -987,7 +994,9 @@ def convert_mmi_data(
         algorithm=None,
         algorithm_filename_flag=True,
         smoothing_method=NONE_SMOOTHING,
-        smooth_sigma=0.9):
+        smooth_sigma=0.9,
+        extra_keywords=None
+):
     """Convenience function to convert a single file.
 
     :param grid_xml_path: Path to the xml shake grid file.
@@ -1047,6 +1056,7 @@ def convert_mmi_data(
         output_basename=output_basename,
         algorithm_filename_flag=algorithm_filename_flag,
         smoothing_method=smoothing_method,
-        smooth_sigma=smooth_sigma
+        smooth_sigma=smooth_sigma,
+        extra_keywords=extra_keywords
     )
     return converter.mmi_to_raster(force_flag=True, algorithm=algorithm)
