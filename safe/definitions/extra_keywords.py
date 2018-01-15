@@ -140,16 +140,14 @@ extra_keyword_earthquake_source = {
             'key': 'initial',
             'name': tr('Initial'),
             'description': tr(
-                'This shakemap is created in 5 minutes after the earthquake. '
-                'No extra processing happens.')
+                'This shakemap is created in just after the earthquake '
+                'without any extra processing happens.')
         },
         {
             'key': 'post-processed',
             'name': tr('Post processed'),
             'description': tr(
-                'This shakemap is created after 5 minutes after the '
-                'earthquake. There are some processing happen in this '
-                'shakemap.')
+                'This shakemap is created with extra processing.')
         }
     ]
 }
@@ -162,8 +160,8 @@ extra_keyword_volcano_event_id = {
     'description': tr(
         'The ID of the volcano eruption. It is constructed from '
         'YYYYMMDDHHmm[zoneoffset]_[volcano_name]. YYYYMMDDHHmm is the format '
-        'of the eruption event time. [zone offset] is the of set of its time '
-        'zoen. [volcano_name] is the name of the volcano. For example: '
+        'of the eruption event time. [zone offset] is the offset of its time '
+        'zone. [volcano_name] is the name of the volcano. For example: '
         '201712012200+0800_Agung'),
     'type': unicode
 }
