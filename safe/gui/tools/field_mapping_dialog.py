@@ -5,9 +5,9 @@ import logging
 from PyQt4.QtCore import pyqtSignature, pyqtSlot, QSettings
 from PyQt4.QtGui import (
     QDialog, QHBoxLayout, QLabel, QDialogButtonBox, QMessageBox)
-from parameters.parameter_exceptions import InvalidValidationException
 from qgis.gui import QgsMapLayerComboBox, QgsMapLayerProxyModel
 
+from parameters.parameter_exceptions import InvalidValidationException
 from safe.common.exceptions import (
     NoKeywordsFoundError,
     KeywordNotFoundError,

@@ -3,6 +3,7 @@
 """QGIS Expressions which are available in the QGIS GUI interface."""
 
 import os
+
 from qgis.core import (
     qgsfunction,
     QgsCoordinateReferenceSystem,
@@ -10,6 +11,8 @@ from qgis.core import (
     QgsExpressionContextUtils,
 )
 
+from safe.common.custom_logging import LOGGER
+from safe.definitions.default_settings import inasafe_default_settings
 from safe.definitions.fields import (
     bearing_field,
     distance_field,
@@ -36,11 +39,9 @@ from safe.definitions.reports.map_report import (
     inasafe_north_arrow_path,
     inasafe_organisation_logo_path,
     crs_text)
-from safe.definitions.default_settings import inasafe_default_settings
 from safe.utilities.i18n import tr
-from safe.utilities.utilities import generate_expression_help
 from safe.utilities.settings import setting
-from safe.common.custom_logging import LOGGER
+from safe.utilities.utilities import generate_expression_help
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

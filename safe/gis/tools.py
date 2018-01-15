@@ -13,13 +13,13 @@ from qgis.core import (
     QgsDataSourceURI,
 )
 
+from safe.common.exceptions import NoKeywordsFoundError, InvalidLayerError
 from safe.definitions.constants import (
     VECTOR_DRIVERS,
     RASTER_DRIVERS,
     OGR_EXTENSIONS,
     GDAL_EXTENSIONS,
 )
-from safe.common.exceptions import NoKeywordsFoundError, InvalidLayerError
 from safe.definitions.layer_geometry import (
     layer_geometry_raster,
     layer_geometry_point,

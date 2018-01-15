@@ -16,8 +16,8 @@ from PyQt4.QtGui import (
     QVBoxLayout,
     QLabel,
     QSizePolicy)
-from parameters.qt_widgets.parameter_container import ParameterContainer
 
+from parameters.qt_widgets.parameter_container import ParameterContainer
 from safe.common.exceptions import KeywordNotFoundError
 from safe.common.parameters.group_select_parameter import (
     GroupSelectParameter)

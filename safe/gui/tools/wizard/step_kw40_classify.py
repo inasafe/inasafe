@@ -12,9 +12,8 @@ from osgeo import gdal
 from osgeo.gdalconst import GA_ReadOnly
 
 from safe import messaging as m
-
-from safe.definitions.font import bold_font
 from safe.definitions.exposure_classifications import data_driven_classes
+from safe.definitions.font import bold_font
 from safe.definitions.layer_geometry import layer_geometry_raster
 from safe.definitions.layer_purposes import layer_purpose_aggregation
 from safe.definitions.utilities import get_fields, get_compulsory_fields

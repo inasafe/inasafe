@@ -15,6 +15,10 @@ from PyQt4.QtGui import (
     QMessageBox,
     QIcon
 )
+# This import must come first to force sip2 api
+# noinspection PyUnresolvedReferences
+from qgis.core import QGis  # NOQA pylint: disable=unused-import
+
 from parameters.float_parameter import FloatParameter
 from parameters.parameter_exceptions import (
     ValueOutOfBounds,
@@ -24,10 +28,6 @@ from parameters.qt_widgets.parameter_container import (
     ParameterContainer)
 from parameters.string_parameter import StringParameter
 from parameters.text_parameter import TextParameter
-# This import must come first to force sip2 api
-# noinspection PyUnresolvedReferences
-from qgis.core import QGis  # NOQA pylint: disable=unused-import
-
 from safe.common.parameters.resource_parameter import ResourceParameter
 from safe.gui.tools.help.needs_manager_help import needs_manager_helps
 from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile

@@ -3,7 +3,6 @@
 """GUI utilities for the dock and the multi Exposure Tool."""
 
 from PyQt4.QtCore import Qt
-
 from qgis.core import QgsMapLayerRegistry
 
 from safe.utilities.i18n import tr

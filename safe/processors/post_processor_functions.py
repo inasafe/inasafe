@@ -2,14 +2,15 @@
 
 """Python functions that we use in postprocessors."""
 
+from math import floor
+
 # noinspection PyUnresolvedReferences
 from PyQt4.QtCore import QPyNullVariant
-
 from qgis.core import QgsPoint
-from math import floor
+
+from safe.definitions.exposure import exposure_population
 from safe.definitions.hazard_classifications import (
     hazard_classes_all, not_exposed_class)
-from safe.definitions.exposure import exposure_population
 from safe.definitions.utilities import get_displacement_rate, is_affected
 from safe.utilities.i18n import tr
 

@@ -3,7 +3,6 @@
 """Module used to generate context for analysis detail section."""
 
 import logging
-
 from copy import deepcopy
 
 from safe.definitions.exposure import (

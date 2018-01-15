@@ -31,7 +31,6 @@ from safe.definitions.fields import (
 )
 # Other fields
 from safe.definitions.fields import hazard_class_field
-
 # Ratio fields
 from safe.definitions.fields import (
     population_displacement_ratio_field,

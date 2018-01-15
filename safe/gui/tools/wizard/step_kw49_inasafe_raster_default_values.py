@@ -5,7 +5,6 @@
 import logging
 
 from parameters.qt_widgets.parameter_container import ParameterContainer
-
 from safe import messaging as m
 from safe.common.parameters.default_value_parameter import (
     DefaultValueParameter)

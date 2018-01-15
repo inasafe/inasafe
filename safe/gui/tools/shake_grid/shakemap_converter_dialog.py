@@ -23,10 +23,10 @@ from safe.gui.tools.help.shakemap_converter_help import shakemap_converter_help
 from safe.gui.tools.shake_grid.shake_grid import convert_mmi_data
 from safe.gui.tools.wizard.wizard_dialog import WizardDialog
 from safe.messaging import styles
-from safe.utilities.resources import html_footer, html_header, get_ui_class
-from safe.utilities.styling import mmi_ramp_roman
 from safe.utilities.i18n import tr
+from safe.utilities.resources import html_footer, html_header, get_ui_class
 from safe.utilities.settings import setting
+from safe.utilities.styling import mmi_ramp_roman
 
 try:
     import scipy  # NOQA

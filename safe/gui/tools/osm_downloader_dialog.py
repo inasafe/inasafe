@@ -12,37 +12,34 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
+import json
 import logging
 import os
-
-from qgis.core import QgsRectangle, QgsExpressionContextUtils
-from qgis.gui import QgsMapToolPan
 
 from PyQt4 import QtGui
 from PyQt4.QtCore import QRegExp
 from PyQt4.QtGui import (
     QDialog, QProgressDialog, QMessageBox, QFileDialog, QRegExpValidator)
+from qgis.core import QgsRectangle, QgsExpressionContextUtils
+from qgis.gui import QgsMapToolPan
 
-import json
-
-from safe.common.utilities import temp_dir
 from safe.common.exceptions import (
     CanceledImportDialogError,
     FileMissingError)
+from safe.common.utilities import temp_dir
 from safe.definitions.osm_downloader import STAGING_SERVER, PRODUCTION_SERVER
-from safe.utilities.osm_downloader import download
+from safe.gui.tools.help.osm_downloader_help import osm_downloader_help
+from safe.gui.tools.rectangle_map_tool import RectangleMapTool
 from safe.utilities.gis import (
     viewport_geo_array,
     rectangle_geo_array,
     validate_geo_array)
-from safe.utilities.resources import (
-    html_footer, html_header, get_ui_class, resources_path)
-
+from safe.utilities.osm_downloader import download
 from safe.utilities.qgis_utilities import (
     display_warning_message_box,
 )
-from safe.gui.tools.rectangle_map_tool import RectangleMapTool
-from safe.gui.tools.help.osm_downloader_help import osm_downloader_help
+from safe.utilities.resources import (
+    html_footer, html_header, get_ui_class, resources_path)
 from safe.utilities.settings import setting, set_setting
 
 __copyright__ = "Copyright 2012, The InaSAFE Project"

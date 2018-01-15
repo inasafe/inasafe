@@ -14,10 +14,10 @@ from PyQt4.QtGui import (
 
 from safe.common.parameters.percentage_parameter_widget import (
     PercentageSpinBox)
-from safe.definitions.utilities import get_name, get_class_name, definition
 from safe.definitions.exposure import exposure_population
-from safe.utilities.i18n import tr
 from safe.definitions.utilities import generate_default_profile
+from safe.definitions.utilities import get_name, get_class_name, definition
+from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"

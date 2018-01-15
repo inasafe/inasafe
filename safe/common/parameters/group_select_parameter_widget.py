@@ -7,11 +7,11 @@ from PyQt4.QtCore import Qt
 from PyQt4.QtGui import (
     QVBoxLayout, QRadioButton, QButtonGroup, QWidget, QLabel, QSizePolicy,
     QListWidget, QGridLayout, QAbstractItemView, QListWidgetItem)
+
 from parameters.qt_widgets.generic_parameter_widget import (
     GenericParameterWidget)
 from safe.common.parameters.percentage_parameter_widget import (
     PercentageSpinBox)
-
 from safe.definitions.constants import STATIC, SINGLE_DYNAMIC, MULTIPLE_DYNAMIC
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"

@@ -24,10 +24,10 @@ from safe.definitions.reports.components import (
 from safe.definitions.reports.infographic import map_overview
 from safe.definitions.utilities import definition, update_template_component
 from safe.gis.tools import load_layer
-from safe.impact_function.style import hazard_class_style
 from safe.impact_function.impact_function_utilities import (
     FROM_CANVAS,
 )
+from safe.impact_function.style import hazard_class_style
 from safe.report.impact_report import ImpactReport
 from safe.report.report_metadata import ReportMetadata
 from safe.utilities.gis import qgis_version

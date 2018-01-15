@@ -6,7 +6,6 @@ import logging
 
 from parameters.qt_widgets.parameter_container import ParameterContainer
 from parameters.select_parameter import SelectParameter
-
 from safe import messaging as m
 from safe.definitions.constants import no_field
 from safe.definitions.layer_geometry import layer_geometry_raster

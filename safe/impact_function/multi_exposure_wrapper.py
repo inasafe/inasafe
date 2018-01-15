@@ -14,6 +14,8 @@ from os import makedirs
 from os.path import join, exists
 from socket import gethostname
 
+from PyQt4.Qt import PYQT_VERSION_STR
+from PyQt4.QtCore import QDir, QT_VERSION_STR
 from osgeo import gdal
 from qgis.core import (
     QgsGeometry,
@@ -26,8 +28,6 @@ from qgis.core import (
     QgsLayerTreeGroup,
     QgsLayerTreeLayer)
 from qgis.utils import iface
-from PyQt4.Qt import PYQT_VERSION_STR
-from PyQt4.QtCore import QDir, QT_VERSION_STR
 
 from safe import messaging as m
 from safe.common.exceptions import InvalidExtentError
@@ -113,8 +113,8 @@ from safe.impact_function.style import simple_polygon_without_brush
 from safe.report.impact_report import ImpactReport
 from safe.report.report_metadata import ReportMetadata
 from safe.utilities.gis import clone_layer
-from safe.utilities.i18n import tr
 from safe.utilities.gis import qgis_version
+from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.metadata import (
     copy_layer_keywords,
