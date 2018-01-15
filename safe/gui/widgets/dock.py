@@ -1315,7 +1315,7 @@ class Dock(QDockWidget, FORM_CLASS):
         self.impact_function.callback = self.progress_callback
         self.impact_function.debug_mode = self.use_debug_action.isChecked()
         self.impact_function.use_rounding = (
-            self.use_rounding_action.isChecked())
+            not self.disable_rounding_action.isChecked())
 
         try:
             status, message = self.impact_function.run()
