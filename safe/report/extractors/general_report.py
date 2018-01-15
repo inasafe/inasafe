@@ -399,6 +399,69 @@ def multi_exposure_general_report_extractor(impact_report, component_metadata):
             'value_labels': value_headers,
             'rows': hazard_stats
         })
+    # if there are different hazard classifications used in the analysis,
+    # we will create a separate table for each hazard classification
+    else:
+        hazard_classification_groups = {}
+        for exposure_key, hazard_classification in (
+                hazard_classifications.iteritems()):
+            exposure_type = definition(exposure_key)
+            if hazard_classification['key'] not in (
+                    hazard_classification_groups):
+                hazard_classification_groups[hazard_classification['key']] = [
+                    exposure_type]
+            else:
+                hazard_classification_groups[
+                    hazard_classification['key']].append(exposure_type)
+
+        for hazard_classification_key, exposures in (
+                hazard_classification_groups.iteritems()):
+            custom_headers = []
+            custom_total_values = []
+            # find total value and labels for each exposure
+            for exposure_stats in exposures_stats:
+                if exposure_stats['exposure'] not in exposures:
+                    continue
+                # label
+                value_header = exposure_stats['value_header']
+                custom_headers.append(value_header)
+
+                # total value
+                classification_result = exposure_stats['classification_result']
+                total_value = classification_result[total_exposed_field['key']]
+                custom_total_values.append(total_value)
+
+            hazard_stats = []
+            hazard_classification = definition(hazard_classification_key)
+            for hazard_class in hazard_classification['classes']:
+                values = []
+                for exposure_stats in exposures_stats:
+                    if exposure_stats['exposure'] not in exposures:
+                        continue
+                    classification_result = exposure_stats[
+                        'classification_result']
+                    value = classification_result[hazard_class['key']]
+                    values.append(value)
+                stats = {
+                    'key': hazard_class['key'],
+                    'name': hazard_class['name'],
+                    'numbers': values
+                }
+                hazard_stats.append(stats)
+
+            total_stats = {
+                'key': total_exposed_field['key'],
+                'name': total_exposed_field['name'],
+                'as_header': True,
+                'numbers': custom_total_values
+            }
+            hazard_stats.append(total_stats)
+
+            summary.append({
+                'header_label': hazard_header,
+                'value_labels': custom_headers,
+                'rows': hazard_stats
+            })
 
     reported_fields_stats = []
     for item in reported_fields:
