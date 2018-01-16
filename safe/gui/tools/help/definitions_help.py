@@ -11,6 +11,7 @@ from PyQt4 import QtCore
 import safe.definitions as definitions
 import safe.processors
 from safe import messaging as m
+from safe.common.version import get_version
 from safe.definitions.earthquake import current_earthquake_model_name
 from safe.definitions.exposure import exposure_all
 from safe.definitions.field_groups import (
@@ -105,7 +106,8 @@ def heading():
     :returns: A heading object.
     :rtype: safe.messaging.heading.Heading
     """
-    message = m.Heading(tr('InaSAFE help'), **TITLE_STYLE)
+    message = m.Heading(
+        '{} {}'.format(tr('InaSAFE help'), get_version()), **TITLE_STYLE)
     return message
 
 
