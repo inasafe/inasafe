@@ -400,6 +400,7 @@ earthquake_mmi_scale = {
         }
     ],
     'exposures': [
+        exposure_place,
         exposure_population,
         exposure_road,
         exposure_structure
