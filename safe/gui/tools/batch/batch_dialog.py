@@ -44,6 +44,7 @@ from qgis.core import (
 
 from safe.common.signals import send_error_message
 from safe.common.utilities import temp_dir
+from safe.datastore.folder import Folder
 from safe.definitions.constants import (
     ANALYSIS_SUCCESS,
     PREPARE_SUCCESS,
@@ -452,8 +453,19 @@ class BatchDialog(QDialog, FORM_CLASS):
                 status_item.setText(self.tr('Please update scenario'))
                 self.disable_busy_cursor()
                 return False
+
+            directory = self.output_directory.text()
+            if self.scenario_directory_radio.isChecked():
+                directory = self.source_directory.text()
+
+            output_directory = os.path.join(directory, group_name)
+            if not os.path.exists(output_directory):
+                os.makedirs(output_directory)
+
             # If impact function parameters loaded successfully, initiate IF.
             impact_function = ImpactFunction()
+            impact_function.datastore = Folder(output_directory)
+            impact_function.datastore.default_vector_format = "geojson"
             impact_function.hazard = parameters[layer_purpose_hazard['key']]
             impact_function.exposure = (
                 parameters[layer_purpose_exposure['key']])
@@ -498,15 +510,15 @@ class BatchDialog(QDialog, FORM_CLASS):
                             self.iface.setActiveLayer(
                                 impact_function.analysis_impacted)
 
-                        output_folder = os.path.join(
-                            self.output_directory.text(), group_name)
+                        report_directory = os.path.join(
+                            output_directory, 'output')
 
                         # generate map report and impact report
                         try:
                             error_code, message = (
                                 impact_function.generate_report(
                                     all_default_report_components,
-                                    output_folder))
+                                    report_directory))
 
                         except:
                             status_item.setText(
