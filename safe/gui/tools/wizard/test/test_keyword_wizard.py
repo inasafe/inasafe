@@ -36,6 +36,7 @@ from safe.definitions.hazard_classifications import (
     cyclone_au_bom_hazard_classes,
     earthquake_mmi_scale)
 from safe.definitions.constants import no_field
+from safe.definitions.extra_keywords import (extra_keyword_earthquake_depth)
 from safe.definitions.fields import (
     aggregation_name_field,
     exposure_type_field,
@@ -2822,6 +2823,9 @@ class TestKeywordWizard(unittest.TestCase):
                             earthquake_mmi_scale)
                     }
                 }
+            },
+            'extra_keywords': {
+                extra_keyword_earthquake_depth['key']: 10
             }
         }
 
@@ -2931,6 +2935,10 @@ class TestKeywordWizard(unittest.TestCase):
             exposure_land_cover['key'],
             real_keywords['thresholds'].keys()
         )
+        # Check if the extra keywords remain
+        extra_keywords = real_keywords['extra_keywords']
+        self.assertDictEqual(
+            extra_keywords, expected_keyword['extra_keywords'])
 
     def test_cyclone_raster(self):
         """Test for cyclone raster keyword wizard when we have many units."""
