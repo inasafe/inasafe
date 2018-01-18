@@ -55,6 +55,9 @@ extra_keyword_earthquake_latitude = {
     'name': tr('Latitude'),
     'description': tr('The latitude of the earthquake epicentre.'),
     'type': float,
+    'minimum': -90,
+    'maximum': 90,
+    'unit_string': u'°'
 }
 
 extra_keyword_earthquake_longitude = {
@@ -62,6 +65,9 @@ extra_keyword_earthquake_longitude = {
     'name': tr('Longitude'),
     'description': tr('The longitude of the earthquake epicentre.'),
     'type': float,
+    'minimum': -180,
+    'maximum': 180,
+    'unit_string': u'°'
 }
 
 extra_keyword_earthquake_magnitude = {
@@ -69,6 +75,9 @@ extra_keyword_earthquake_magnitude = {
     'name': tr('Magnitude'),
     'description': tr('The magnitude of the earthquake in Richter scale.'),
     'type': float,
+    'minimum': 0,
+    'maximum': 12,
+    'unit_string': u''
 }
 
 extra_keyword_earthquake_depth = {
@@ -76,6 +85,9 @@ extra_keyword_earthquake_depth = {
     'name': tr('Depth'),
     'description': tr('The depth of earthquake epicentre in kilometre unit.'),
     'type': float,
+    'minimum': 0,
+    'maximum': 1000,
+    'unit_string': u' km'
 }
 
 extra_keyword_earthquake_description = {
@@ -112,6 +124,9 @@ extra_keyword_earthquake_x_minimum = {
         'The minimum value of x coordinate of the shakemaps. It indicates the '
         'extent of the event.'),
     'type': float,
+    'minimum': -180,
+    'maximum': 180,
+    'unit_string': u'°'
 }
 
 extra_keyword_earthquake_x_maximum = {
@@ -121,6 +136,9 @@ extra_keyword_earthquake_x_maximum = {
         'The maximum value of x coordinate of the shakemaps. It indicates the '
         'extent of the event.'),
     'type': float,
+    'minimum': -180,
+    'maximum': 180,
+    'unit_string': u'°'
 }
 
 extra_keyword_earthquake_y_minimum = {
@@ -130,6 +148,9 @@ extra_keyword_earthquake_y_minimum = {
         'The minimum value of y coordinate of the shakemaps. It indicates the '
         'extent of the event.'),
     'type': float,
+    'minimum': -90,
+    'maximum': 90,
+    'unit_string': u'°'
 }
 
 extra_keyword_earthquake_y_maximum = {
@@ -139,6 +160,9 @@ extra_keyword_earthquake_y_maximum = {
         'The maximum value of y coordinate of the shakemaps. It indicates the '
         'extent of the event.'),
     'type': float,
+    'minimum': -90,
+    'maximum': 90,
+    'unit_string': u'°'
 }
 
 extra_keyword_earthquake_source = {
@@ -193,7 +217,10 @@ extra_keyword_eruption_height = {
     'description': tr(
         'The ash column height. It is calculated from the vent of the volcano '
         'in metres.'),
-    'type': float
+    'type': float,
+    'minimum': 0,
+    'maximum': 100000,
+    'unit_string': ' ' + tr(u'metres')  # with extra space
 }
 
 extra_keyword_volcano_eruption_event_time = {
@@ -211,14 +238,20 @@ extra_keyword_volcano_latitude = {
     'key': 'volcano_latitude',
     'name': tr('Latitude'),
     'description': tr('The latitude of the volcano.'),
-    'type': float
+    'type': float,
+    'minimum': -90,
+    'maximum': 90,
+    'unit_string': u'°'
 }
 
 extra_keyword_volcano_longitude = {
     'key': 'volcano_longitude',
     'name': tr('Longitude'),
     'description': tr('The longitude of the volcano.'),
-    'type': float
+    'type': float,
+    'minimum': -180,
+    'maximum': 180,
+    'unit_string': u'°'
 }
 
 volcano_alert_normal = {
@@ -303,6 +336,9 @@ extra_keyword_volcano_height = {
         'The height of the vent of a volcano. It is calculated from the sea '
         'level in metres.'),
     'type': float,
+    'minimum': 0,
+    'maximum': 10000,
+    'unit_string': u' metres'
 }
 
 earthquake_extra_keywords = [

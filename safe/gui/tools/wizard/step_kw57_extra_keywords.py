@@ -174,9 +174,9 @@ def extra_keywords_to_widgets(extra_keyword_definition):
     # Input widget
     if extra_keyword_definition['type'] == float:
         input_widget = QDoubleSpinBox()
-        input_widget.setMinimum(0)
-        input_widget.setMaximum(9999999)  # make it custom
-        # input_widget.setSuffix(tr(' metres'))  make it custom
+        input_widget.setMinimum(extra_keyword_definition['minimum'])
+        input_widget.setMaximum(extra_keyword_definition['maximum'])
+        input_widget.setSuffix(extra_keyword_definition['unit_string'])
     elif extra_keyword_definition['type'] == unicode:
         if extra_keyword_definition.get('options'):
             input_widget = QComboBox()
