@@ -842,12 +842,8 @@ class WizardDialog(QDialog, FORM_CLASS):
             if subcategory.get('extra_keywords'):
                 extra_keywords = self.step_kw_extra_keywords.\
                     get_extra_keywords()
-                keywords['extra_keywords'] = extra_keywords
-        else:
-            # Do not update extra keywords
-            extra_keywords = self.existing_keywords.get('extra_keywords')
-            if extra_keywords:
-                keywords['extra_keywords'] = extra_keywords
+                if extra_keywords:
+                    keywords['extra_keywords'] = extra_keywords
 
         return keywords
 

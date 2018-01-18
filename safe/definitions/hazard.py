@@ -8,7 +8,8 @@ from safe.definitions.concepts import concepts
 from safe.definitions.earthquake import EARTHQUAKE_FUNCTIONS
 from safe.definitions.exposure import (
     exposure_place, exposure_land_cover, exposure_road)
-from safe.definitions.extra_keywords import ash_extra_keywords
+from safe.definitions.extra_keywords import (
+    ash_extra_keywords, earthquake_extra_keywords)
 from safe.definitions.fields import (
     hazard_name_field, hazard_fields, hazard_value_field)
 from safe.definitions.hazard_classifications import (
@@ -177,7 +178,8 @@ hazard_earthquake = {
     'disabled_exposures': [
         # exposure_place,  We want to be able to run some EQ realtime analysis.
         exposure_land_cover,
-    ]
+    ],
+    'extra_keywords': earthquake_extra_keywords
 }
 hazard_flood = {
     'key': 'flood',
