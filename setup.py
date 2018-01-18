@@ -67,7 +67,7 @@ setup(
     description=('Realistic natural hazard impact scenarios for better '
                  'planning, preparedness and response activities.'),
     install_requires=[
-        "inasafe-parameters==1.0.1",
+        "inasafe-parameters==1.0.2",
         "PyDispatcher==2.0.5",
         "raven==6.1.0",  # This Raven doesn't use simplejson anymore
     ],
