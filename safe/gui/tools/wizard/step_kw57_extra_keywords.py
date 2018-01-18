@@ -58,6 +58,7 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
 
     def set_widgets(self):
         """Set widgets on the extra keywords tab."""
+        self.clear()
         self.description_label.setText(
             'In this step you can set some extra keywords for the layer. This '
             'keywords can be used for creating richer reporting or map.')
@@ -156,6 +157,12 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
                             LOGGER.info(
                                 'Failed to convert %s to datetime' % value)
 
+    def clear(self):
+        """Clear current state."""
+        # Adapted from http://stackoverflow.com/a/13103617/1198772
+        for i in reversed(range(self.extra_keywords_layout.count())):
+            self.extra_keywords_layout.itemAt(i).widget().setParent(None)
+        self.widgets_dict = {}
 
 def extra_keywords_to_widgets(extra_keyword_definition):
     """Create a widget for extra keyword.
