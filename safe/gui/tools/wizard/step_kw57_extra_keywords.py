@@ -162,10 +162,11 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
         # Adapted from http://stackoverflow.com/a/13103617/1198772
         for i in reversed(range(self.extra_keywords_layout.count())):
             self.extra_keywords_layout.itemAt(i).widget().setParent(None)
-        self.widgets_dict = {}
+        self.widgets_dict = OrderedDict()
+
 
 def extra_keywords_to_widgets(extra_keyword_definition):
-    """Create a widget for extra keyword.
+    """Create widgets for extra keyword.
 
     :param extra_keyword_definition: An extra keyword definition.
     :type extra_keyword_definition: dict

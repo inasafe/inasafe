@@ -343,14 +343,18 @@ extra_keyword_volcano_height = {
 
 earthquake_extra_keywords = [
     extra_keyword_earthquake_event_id,
+    extra_keyword_earthquake_description,
+
+    extra_keyword_earthquake_location,
     extra_keyword_earthquake_latitude,
     extra_keyword_earthquake_longitude,
-    extra_keyword_earthquake_magnitude,
-    extra_keyword_earthquake_depth,
-    extra_keyword_earthquake_description,
-    extra_keyword_earthquake_location,
+
     extra_keyword_earthquake_event_time,
     extra_keyword_time_zone,
+
+    extra_keyword_earthquake_magnitude,
+    extra_keyword_earthquake_depth,
+
     extra_keyword_earthquake_x_maximum,
     extra_keyword_earthquake_x_minimum,
     extra_keyword_earthquake_y_maximum,
@@ -361,14 +365,14 @@ earthquake_extra_keywords = [
 ash_extra_keywords = [
     extra_keyword_volcano_event_id,
     extra_keyword_volcano_name,
-    extra_keyword_region,
-    extra_keyword_eruption_height,
-    extra_keyword_volcano_eruption_event_time,
     extra_keyword_volcano_alert_level,
+    extra_keyword_region,
+    extra_keyword_volcano_eruption_event_time,
     extra_keyword_time_zone,
+    extra_keyword_eruption_height,
+    extra_keyword_volcano_height,
     extra_keyword_volcano_latitude,
     extra_keyword_volcano_longitude,
-    extra_keyword_volcano_height
 ]
 
 all_extra_keywords = [
