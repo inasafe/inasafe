@@ -53,31 +53,36 @@ extra_keyword_earthquake_event_id = {
 extra_keyword_earthquake_latitude = {
     'key': 'earthquake_latitude',
     'name': tr('Latitude'),
-    'description': tr('The latitude of the earthquake epicentre.')
+    'description': tr('The latitude of the earthquake epicentre.'),
+    'type': float,
 }
 
 extra_keyword_earthquake_longitude = {
     'key': 'earthquake_longitude',
     'name': tr('Longitude'),
-    'description': tr('The longitude of the earthquake epicentre.')
+    'description': tr('The longitude of the earthquake epicentre.'),
+    'type': float,
 }
 
 extra_keyword_earthquake_magnitude = {
     'key': 'earthquake_magnitude',
     'name': tr('Magnitude'),
-    'description': tr('The magnitude of the earthquake in Richter scale.')
+    'description': tr('The magnitude of the earthquake in Richter scale.'),
+    'type': float,
 }
 
 extra_keyword_earthquake_depth = {
     'key': 'earthquake_depth',
     'name': tr('Depth'),
-    'description': tr('The depth of earthquake epicentre in kilometre unit.')
+    'description': tr('The depth of earthquake epicentre in kilometre unit.'),
+    'type': float,
 }
 
 extra_keyword_earthquake_description = {
     'key': 'earthquake_description',
     'name': tr('Description'),
-    'description': tr('Additional description of the earthquake event.')
+    'description': tr('Additional description of the earthquake event.'),
+    'type': unicode,
 }
 
 extra_keyword_earthquake_location = {
@@ -85,7 +90,8 @@ extra_keyword_earthquake_location = {
     'name': tr('Location'),
     'description': tr(
         'The location information of the earthquake event. It usually refers '
-        'to the nearest city in the location.')
+        'to the nearest city in the location.'),
+    'type': unicode,
 }
 
 extra_keyword_earthquake_event_time = {
@@ -104,7 +110,8 @@ extra_keyword_earthquake_x_minimum = {
     'name': tr('X minimum'),
     'description': tr(
         'The minimum value of x coordinate of the shakemaps. It indicates the '
-        'extent of the event.')
+        'extent of the event.'),
+    'type': float,
 }
 
 extra_keyword_earthquake_x_maximum = {
@@ -112,7 +119,8 @@ extra_keyword_earthquake_x_maximum = {
     'name': tr('X maximum'),
     'description': tr(
         'The maximum value of x coordinate of the shakemaps. It indicates the '
-        'extent of the event.')
+        'extent of the event.'),
+    'type': float,
 }
 
 extra_keyword_earthquake_y_minimum = {
@@ -120,7 +128,8 @@ extra_keyword_earthquake_y_minimum = {
     'name': tr('Y minimum'),
     'description': tr(
         'The minimum value of y coordinate of the shakemaps. It indicates the '
-        'extent of the event.')
+        'extent of the event.'),
+    'type': float,
 }
 
 extra_keyword_earthquake_y_maximum = {
@@ -128,7 +137,8 @@ extra_keyword_earthquake_y_maximum = {
     'name': tr('Y maximum'),
     'description': tr(
         'The maximum value of y coordinate of the shakemaps. It indicates the '
-        'extent of the event.')
+        'extent of the event.'),
+    'type': float,
 }
 
 extra_keyword_earthquake_source = {
