@@ -17,34 +17,27 @@ functions for impact modelling.
 
 Story queue on Waffle:
 
-* [![Stories in Ready](https://badge.waffle.io/AIFDR/inasafe.svg?label=ready&title=Ready)](http://waffle.io/AIFDR/inasafe) 
-* [![Stories in In Progress](https://badge.waffle.io/AIFDR/inasafe.svg?label=in%20progress&title=In%20Progress)](http://waffle.io/AIFDR/inasafe)
+* [![Stories in Ready](https://badge.waffle.io/inasafe/inasafe.svg?label=ready&title=Ready)](http://waffle.io/inasafe/inasafe)
+* [![Stories in In Progress](https://badge.waffle.io/inasafe/inasafe.svg?label=in%20progress&title=In%20Progress)](http://waffle.io/inasafe/inasafe)
 
 [![Throughput Graph](https://graphs.waffle.io/aifdr/inasafe/throughput.svg)](https://waffle.io/aifdr/inasafe/metrics)
 
-* Current test status master: [![Build Status](https://travis-ci.org/inasafe/inasafe.svg?branch=master)](https://travis-ci.org/inasafe/inasafe) and
-[![Code Health](https://landscape.io/github/inasafe/inasafe/master/landscape.svg?style=flat)](https://landscape.io/github/inasafe/inasafe/master)
-
-* Current test status develop: [![Build Status](https://travis-ci.org/inasafe/inasafe.svg?branch=develop)](https://travis-ci.org/inasafe/inasafe) and
-[![Code Health](https://landscape.io/github/inasafe/inasafe/develop/landscape.svg?style=flat)](https://landscape.io/github/inasafe/inasafe/develop)
-
-
-PyPi Downloads for the 'safe' library (currently pip package is unmaintained):
-
-* [![PyPI version](https://badge.fury.io/py/python-safe.svg)](https://badge.fury.io/py/python-safe)
-
-
+* Current Travis test status master: [![Travis Build Status](https://travis-ci.org/inasafe/inasafe.svg?branch=master)](https://travis-ci.org/inasafe/inasafe)
+* Current Landscape code health master: [![Landscape Code Health](https://landscape.io/github/inasafe/inasafe/master/landscape.svg?style=flat)](https://landscape.io/github/inasafe/inasafe/master)
+* Current Travis test status develop: [![Travis Build Status](https://travis-ci.org/inasafe/inasafe.svg?branch=develop)](https://travis-ci.org/inasafe/inasafe)
+* Current Landscape code health develop: [![Code Health](https://landscape.io/github/inasafe/inasafe/develop/landscape.svg?style=flat)](https://landscape.io/github/inasafe/inasafe/develop)
+* PyPi Downloads for InaSAFE: [![PyPI version](https://badge.fury.io/py/inasafe-core.svg)](https://badge.fury.io/py/inasafe-core)
+* PyPi Downloads for the old 'safe' library (currently unmaintained): [![PyPI version](https://badge.fury.io/py/python-safe.svg)](https://badge.fury.io/py/python-safe)
+* Github download: [![Github All Releases](https://img.shields.io/github/downloads/inasafe/inasafe/total.svg)]()
 
 Quick Installation Guide
 ========================
 
-You first need to have [QGIS](http://qgis.org/) installed. Grab your free
-copy from [the QGIS download page](http://download.qgis.org).
+You first need to have [QGIS](http://qgis.org/) installed. Grab your free copy from [the QGIS download page](http://download.qgis.org).
 
-To install the InaSAFE plugin, use the plugin manager in
-[QGIS](http://qgis.org):
+To install the InaSAFE plugin, use the plugin manager in [QGIS](http://qgis.org):
 
-  Plugins → Manage and Install Plugins → Get more tab
+  Plugins → Manage and Install Plugins
 
 Then search for "InaSAFE", select it and click the install button.
 The plugin will now be added to your plugins menu.
