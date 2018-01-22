@@ -1,3 +1,19 @@
+Changelog for version 4.3.1
+================================
+
+07507d0da (HEAD -> version4.3.1) Bump version 4.3.1. and update metadata.
+7551218a9 Update gitignore.
+61ef3321f Tidy up README.md.
+bf49c00ab (inasafe/develop) Use scroll area for extra keywords.
+f6b53d811 Clear widget to avoid adding old widget extra keywords.
+cf055a965 Add minimum, maximum, and unit string for float extra keywords.
+ea27b42ae Generate widget based on extra widget.
+ca8d18b82 Unit test for EQ extra keywords in wizard.
+8cc16e053 Set versionf or parameters.
+5a0a46591 enable earthquake_mmi_scale on place
+3b8435b80 rework on batch runner output layers and reports directory (#4879)
+415e5e643 add version number in the help doc
+
 Changelog for version 4.3
 ================================
 
