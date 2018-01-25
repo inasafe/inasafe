@@ -52,6 +52,17 @@ extra_keyword_flood_event_id = {
     'type': unicode
 }
 
+extra_keyword_flood_event_time = {
+    'key': 'flood_event_time',
+    'name': tr('Flood event time'),
+    'description': tr('The time of the flood event.'),
+    'type': datetime,
+    'store_format': '%Y-%m-%dT%H:%M:%S.%f',
+    'store_format2': '%Y-%m-%dT%H:%M:%S',
+    'show_format': '%H:%M:%S %d %b %Y'
+}
+
+
 # Earthquake Extra Keywords
 extra_keyword_earthquake_event_id = {
     'key': 'earthquake_event_id',
@@ -389,7 +400,7 @@ ash_extra_keywords = [
 
 flood_extra_keywords = [
     extra_keyword_flood_event_id,
-    extra_keyword_volcano_eruption_event_time,
+    extra_keyword_flood_event_time,
 ]
 
 all_extra_keywords = [
@@ -417,7 +428,10 @@ all_extra_keywords = [
     extra_keyword_volcano_alert_level,
     extra_keyword_volcano_latitude,
     extra_keyword_volcano_longitude,
-    extra_keyword_volcano_height
+    extra_keyword_volcano_height,
+
+    extra_keyword_flood_event_id,
+    extra_keyword_flood_event_time,
 ]
 
 # map all extra keywords to a pair of key and name
