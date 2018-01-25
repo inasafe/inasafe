@@ -694,6 +694,7 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
 
     def reject(self):
         """Redefinition of the reject method."""
+        self._populate_reporting_tab()
         super(MultiExposureDialog, self).reject()
 
     def set_enabled_buttons(self, enabled):
