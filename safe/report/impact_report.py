@@ -11,7 +11,7 @@ import logging
 import os
 import shutil
 
-from qgis.core import QgsComposition, QgsRasterLayer
+from qgis.core import QgsComposition, QgsRasterLayer, QgsMapSettings
 
 from safe import messaging as m
 from safe.common.exceptions import (
@@ -323,11 +323,13 @@ class ImpactReport(object):
         self._extra_layers = extra_layers
         self._minimum_needs = minimum_needs_profile
         self._multi_exposure_impact_function = multi_exposure_impact_function
-        self._extent = self._iface.mapCanvas().extent()
         self._inasafe_context = InaSAFEReportContext()
 
         # QgsMapSettings is added in 2.4
-        map_settings = self._iface.mapCanvas().mapSettings()
+        if self._iface:
+            map_settings = self._iface.mapCanvas().mapSettings()
+        else:
+            map_settings = QgsMapSettings()
 
         self._qgis_composition_context = QGISCompositionContext(
             None,
