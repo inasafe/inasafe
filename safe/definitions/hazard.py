@@ -9,7 +9,7 @@ from safe.definitions.earthquake import EARTHQUAKE_FUNCTIONS
 from safe.definitions.exposure import (
     exposure_place, exposure_land_cover, exposure_road)
 from safe.definitions.extra_keywords import (
-    ash_extra_keywords, earthquake_extra_keywords)
+    ash_extra_keywords, earthquake_extra_keywords, flood_extra_keywords)
 from safe.definitions.fields import (
     hazard_name_field, hazard_fields, hazard_value_field)
 from safe.definitions.hazard_classifications import (
@@ -233,7 +233,8 @@ hazard_flood = {
     'extra_fields': [],
     'field_groups': [],
     'layer_modes': [layer_mode_classified, layer_mode_continuous],
-    'disabled_exposures': [exposure_place]
+    'disabled_exposures': [exposure_place],
+    'extra_keywords': flood_extra_keywords,
 }
 hazard_dam_break = {
     'key': 'dam_break',

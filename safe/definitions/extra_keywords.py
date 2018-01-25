@@ -40,6 +40,18 @@ extra_keyword_region = {
     'type': unicode
 }
 
+# Flood Extra Keywords
+extra_keyword_flood_event_id = {
+    'key': 'flood_event_id',
+    'name': tr('Flood event ID'),
+    'description': tr(
+        'The ID of the flood event. It is constructed from the timestamp of '
+        'the flood in YYYYMMDDHH-[extra information]. The extra information '
+        'can be a period and the region level, for example 6-province that '
+        'represent 6 hours period and province level.'),
+    'type': unicode
+}
+
 # Earthquake Extra Keywords
 extra_keyword_earthquake_event_id = {
     'key': 'earthquake_event_id',
@@ -373,6 +385,11 @@ ash_extra_keywords = [
     extra_keyword_volcano_height,
     extra_keyword_volcano_latitude,
     extra_keyword_volcano_longitude,
+]
+
+flood_extra_keywords = [
+    extra_keyword_flood_event_id,
+    extra_keyword_volcano_eruption_event_time,
 ]
 
 all_extra_keywords = [
