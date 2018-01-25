@@ -3,7 +3,7 @@
 """
 import logging
 from copy import deepcopy
-from os import listdir, sep
+from os import listdir
 from os.path import join, exists, splitext, dirname
 
 from PyQt4 import QtGui, QtCore, QtXml
@@ -13,8 +13,6 @@ from safe import messaging as m
 from safe.common.signals import send_error_message, send_static_message
 from safe.definitions.constants import ANALYSIS_FAILED_BAD_CODE
 from safe.definitions.exposure import exposure_population
-from safe.definitions.provenance import (
-    provenance_hazard_keywords, provenance_exposure_keywords)
 from safe.definitions.reports import (
     pdf_product_tag, final_product_tag, html_product_tag, qpt_product_tag)
 from safe.definitions.reports.components import (
@@ -36,7 +34,6 @@ from safe.report.impact_report import ImpactReport
 from safe.report.report_metadata import (
     QgisComposerComponentsMetadata)
 from safe.utilities.i18n import tr
-from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.resources import (
     get_ui_class, resources_path, html_header, html_footer)
 from safe.utilities.settings import setting
@@ -319,55 +316,12 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
 
         .. versionadded: 4.3.0
         """
-        impact_layer = self.impact_function.analysis_impacted
-
         # Get output path from datastore
-        # Fetch report for pdfs report
-        report_path = dirname(impact_layer.source())
+        report_urls = self.impact_function.report_urls()
 
-        # Get the hazard and exposure definition used in current IF
-        provenance = KeywordIO.read_keywords(
-            impact_layer, 'provenance_data')
-        hazard_keywords = provenance.get(
-            provenance_hazard_keywords['provenance_key'], {})
-        exposure_keywords = provenance.get(
-            provenance_exposure_keywords['provenance_key'], {})
-        hazard = hazard_keywords.get('hazard', None)
-        exposure = exposure_keywords.get('exposure', None)
-        if hazard and exposure:
-            hazard = definition(hazard)
-            exposure = definition(exposure)
-        else:
-            hazard = None
-            exposure = None
-
-        standard_report_metadata = self.impact_function.report_metadata
-
-        def retrieve_components(tags):
-            """Retrieve components from report metadata."""
-            products = []
-            for report_metadata in standard_report_metadata:
-                products += (report_metadata.component_by_tags(tags))
-            return products
-
-        def wrap_output_paths(paths):
-            """Make sure the file paths can wrap nicely."""
-            return [p.replace(sep, '<wbr>' + sep) for p in paths]
-
-        pdf_products = retrieve_components(
-            [final_product_tag, pdf_product_tag])
-        pdf_output_paths = self.retrieve_paths(
-            pdf_products, report_path=report_path, suffix='.pdf')
-
-        html_products = retrieve_components(
-            [final_product_tag, html_product_tag])
-        html_output_paths = self.retrieve_paths(
-            html_products, report_path=report_path, suffix='.html')
-
-        qpt_products = retrieve_components(
-            [final_product_tag, qpt_product_tag])
-        qpt_output_paths = self.retrieve_paths(
-            qpt_products, report_path=report_path, suffix='.qpt')
+        # get report urls for each product tag as list
+        for key, value in report_urls.iteritems():
+            report_urls[key] = value.values()
 
         if self.dock:
             # create message to user
@@ -380,26 +334,26 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
                     'The generated pdfs were saved '
                     'as:')))
 
-            for path in wrap_output_paths(pdf_output_paths):
+            for path in report_urls.get(pdf_product_tag['key'], []):
                 status.add(m.Paragraph(path))
 
             status.add(m.Paragraph(
                 m.ImportantText(
                     self.dock.tr('The generated htmls were saved as:'))))
 
-            for path in wrap_output_paths(html_output_paths):
+            for path in report_urls.get(html_product_tag['key'], []):
                 status.add(m.Paragraph(path))
 
             status.add(m.Paragraph(
                 m.ImportantText(
                     self.dock.tr('The generated qpts were saved as:'))))
 
-            for path in wrap_output_paths(qpt_output_paths):
+            for path in report_urls.get(qpt_product_tag['key'], []):
                 status.add(m.Paragraph(path))
 
             send_static_message(self.dock, status)
 
-        for path in pdf_output_paths:
+        for path in report_urls.get(pdf_product_tag['key'], []):
             # noinspection PyCallByClass,PyTypeChecker,PyTypeChecker
             QtGui.QDesktopServices.openUrl(
                 QtCore.QUrl.fromLocalFile(path))
