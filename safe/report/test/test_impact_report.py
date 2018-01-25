@@ -80,8 +80,8 @@ class TestImpactReport(unittest.TestCase):
     @classmethod
     def fixtures_dir(cls, path):
         """Helper to return fixture path."""
-        directory_name = os.path.dirname(__file__)
-        return os.path.join(directory_name, 'fixtures', path)
+        directory_name = os.path.join('fixture', path)
+        return os.path.abspath(directory_name)
 
     def assert_compare_file_control(self, control_path, actual_path):
         """Helper to compare file."""
