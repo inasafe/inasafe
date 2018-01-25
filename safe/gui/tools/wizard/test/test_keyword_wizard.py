@@ -2026,8 +2026,14 @@ class TestKeywordWizard(unittest.TestCase):
         dialog.step_kw_source.dtSource_date.setDateTime(source_date)
         dialog.step_kw_source.leSource_license.setText(source_license)
 
-        # Click next to finish source step and go to title step
+        # Click next to finish source step and go to extra keywords step
         dialog.pbnNext.click()
+
+        self.check_current_step(dialog.step_kw_extra_keywords)
+
+        # Click next to finish extra keywords step and go to title step
+        dialog.pbnNext.click()
+
 
         # Check if in title step
         self.check_current_step(dialog.step_kw_title)
@@ -2176,7 +2182,12 @@ class TestKeywordWizard(unittest.TestCase):
         self.assertEqual(
             dialog.step_kw_source.leSource_license.text(), source_license)
 
-        # Click next to finish source step and go to title step
+        # Click next to finish source step and go to extra keywords step
+        dialog.pbnNext.click()
+
+        self.check_current_step(dialog.step_kw_extra_keywords)
+
+        # Click next to finish extra keywords step and go to title step
         dialog.pbnNext.click()
 
         # Check if in title step
@@ -2298,7 +2309,12 @@ class TestKeywordWizard(unittest.TestCase):
         dialog.step_kw_source.dtSource_date.setDateTime(source_date)
         dialog.step_kw_source.leSource_license.setText(source_license)
 
-        # Click next to finish source step and go to title step
+        # Click next to finish source step and go to extra keywords step
+        dialog.pbnNext.click()
+
+        self.check_current_step(dialog.step_kw_extra_keywords)
+
+        # Click next to finish extra keywords step and go to title step
         dialog.pbnNext.click()
 
         # Check if in title step
@@ -2463,7 +2479,12 @@ class TestKeywordWizard(unittest.TestCase):
         dialog.step_kw_source.dtSource_date.setDateTime(source_date)
         dialog.step_kw_source.leSource_license.setText(source_license)
 
-        # Click next to finish source step and go to title step
+        # Click next to finish source step and go to extra keywords step
+        dialog.pbnNext.click()
+
+        self.check_current_step(dialog.step_kw_extra_keywords)
+
+        # Click next to finish extra keywords step and go to title step
         dialog.pbnNext.click()
 
         # Check if in title step
@@ -2585,7 +2606,12 @@ class TestKeywordWizard(unittest.TestCase):
         dialog.step_kw_source.dtSource_date.setDateTime(source_date)
         dialog.step_kw_source.leSource_license.setText(source_license)
 
-        # Click next to finish source step and go to title step
+        # Click next to finish source step and go to extra keywords step
+        dialog.pbnNext.click()
+
+        self.check_current_step(dialog.step_kw_extra_keywords)
+
+        # Click next to finish extra keywords step and go to title step
         dialog.pbnNext.click()
 
         # Check if in title step
