@@ -16,7 +16,7 @@ description=InaSAFE is free software that allows disaster managers to study real
 about=Developed for the Indonesian Government - BNPB, Australian Government - AIFDR and DMInnovation and, and World Bank - GFDRR
 
 # If you change VERSION and STATUS here, please also change in safe/definitions/versions.py, Travis will FAIL !
-version=4.3.1
+version=4.3.2
 # alpha, beta, rc or final
 status=final
 
@@ -26,6 +26,8 @@ status=final
 # Optional items:
 
 changelog=
+    Version 4.3.2:
+    - Fix multiexposure dialog when you launch it twice.
     Version 4.3.1:
     - Add version number in the help doc #4872.
     - Enable Earthquake MMI scale for place exposure #4875.
