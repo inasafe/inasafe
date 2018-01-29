@@ -2,8 +2,8 @@
 
 """Utilities for Impact Function."""
 
-from PyQt4.QtCore import Qt
 from os.path import exists
+from PyQt4.QtCore import Qt
 
 from safe import messaging as m
 from safe.common.exceptions import NoKeywordsFoundError, InvalidLayerError
