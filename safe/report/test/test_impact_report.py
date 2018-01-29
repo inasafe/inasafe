@@ -2,6 +2,7 @@
 """Unittest for Impact Report generation."""
 
 import io
+import json
 import os
 import shutil
 import unittest
@@ -2188,5 +2189,54 @@ class TestImpactReport(unittest.TestCase):
 
         for path in output_path.itervalues():
             self.assertTrue(os.path.exists(path), msg=path)
+
+        shutil.rmtree(output_folder, ignore_errors=True)
+
+    def test_report_urls_metadata(self):
+        """Test report urls metadata.
+
+        .. versionadded:: 4.3
+        """
+        output_folder = self.fixtures_dir('../output')
+
+        # Classified vector with building-points
+        hazard_layer = load_test_vector_layer(
+            'gisv4', 'hazard', 'classified_vector.geojson')
+        exposure_layer = load_test_vector_layer(
+            'gisv4', 'exposure', 'building-points.geojson')
+        aggregation_layer = load_test_vector_layer(
+            'gisv4', 'aggregation', 'small_grid.geojson')
+
+        _ = self.run_impact_report_scenario(
+            output_folder,
+            standard_impact_report_metadata_html,
+            hazard_layer, exposure_layer,
+            aggregation_layer=aggregation_layer)
+
+        # check the report metadata in output folder
+        report_metadata_path = os.path.join(
+            output_folder, 'report_metadata.json')
+        self.assertTrue(bool(os.path.exists(report_metadata_path)))
+
+        with open(report_metadata_path) as report_metadata_file:
+            actual_report_urls_metadata = json.loads(
+                report_metadata_file.read())
+
+        expected_report_urls_metadata = {
+            u'pdf_product_tag': {},
+            u'html_product_tag': {
+                u'impact-report': os.path.join(
+                    output_folder, 'impact-report-output.html'),
+                u'action-checklist-report': os.path.join(
+                    output_folder, 'action-checklist-output.html'),
+                u'analysis-provenance-details-report': os.path.join(
+                    output_folder,
+                    'analysis-provenance-details-report-output.html')
+            },
+            u'qpt_product_tag': {}
+        }
+
+        self.assertDictEqual(
+            actual_report_urls_metadata, expected_report_urls_metadata)
 
         shutil.rmtree(output_folder, ignore_errors=True)

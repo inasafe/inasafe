@@ -106,7 +106,7 @@ from safe.impact_function.create_extra_layers import (
     create_analysis_layer, create_virtual_aggregation)
 from safe.impact_function.impact_function import ImpactFunction
 from safe.impact_function.impact_function_utilities import (
-    check_input_layer, FROM_CANVAS)
+    check_input_layer, FROM_CANVAS, report_urls)
 from safe.impact_function.provenance_utilities import (
     get_multi_exposure_analysis_question)
 from safe.impact_function.style import simple_polygon_without_brush
@@ -126,7 +126,7 @@ from safe.utilities.unicode import get_unicode, byteify
 from safe.utilities.utilities import (
     replace_accentuated_characters,
     readable_os_version,
-)
+    write_json)
 
 LOGGER = logging.getLogger('InaSAFE')
 IFACE = iface
@@ -1230,6 +1230,11 @@ class MultiExposureImpactFunction(object):
 
         if map_overview_layer:
             QgsMapLayerRegistry.instance().removeMapLayer(map_overview_layer)
+
+        # Create json file for report urls
+        report_path = self._impact_report.output_folder
+        filename = join(report_path, 'report_metadata.json')
+        write_json(report_urls(self), filename)
 
         return error_code, message
 
