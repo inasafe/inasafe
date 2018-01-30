@@ -977,7 +977,7 @@ class Dock(QDockWidget, FORM_CLASS):
                     MULTI_EXPOSURE_ANALYSIS_FLAG))
 
             if provenances:
-                self.set_provenance_to_project_variables(provenances)
+                set_provenance_to_project_variables(provenances)
             try:
                 if is_multi_exposure:
                     self.impact_function = (
@@ -1561,100 +1561,101 @@ class Dock(QDockWidget, FORM_CLASS):
         else:
             return True, None
 
-    def set_provenance_to_project_variables(self, provenances):
-        """Helper method to update / create provenance in project variables.
 
-        :param provenances: Keys and values from provenances.
-        :type provenances: dict
+def set_provenance_to_project_variables(provenances):
+    """Helper method to update / create provenance in project variables.
+
+    :param provenances: Keys and values from provenances.
+    :type provenances: dict
+    """
+    def write_project_variable(key, value):
+        """Helper to write project variable for base_key and value.
+
+        The key will be:
+        - base_key__KEY: value for dictionary.
+        - base_key__INDEX: value for list, tuple, set.
+        - date will be converted to ISO.
+        - None will be converted to ''.
+
+        :param key: The key.
+        :type key: basestring
+
+        :param value: A list of dictionary.
+        :type value: dict, list, tuple, set
         """
-        def write_project_variable(key, value):
-            """Helper to write project variable for base_key and value.
-
-            The key will be:
-            - base_key__KEY: value for dictionary.
-            - base_key__INDEX: value for list, tuple, set.
-            - date will be converted to ISO.
-            - None will be converted to ''.
-
-            :param key: The key.
-            :type key: basestring
-
-            :param value: A list of dictionary.
-            :type value: dict, list, tuple, set
-            """
-            if key in duplicated_global_variables.keys():
-                return
-            if isinstance(value, (list, tuple, set)):
-                # Skip if the type is too complex (list of note, actions)
-                return
-            elif isinstance(value, dict):
-                for dict_key, dict_value in value.items():
-                    write_project_variable(
-                        '%s__%s' % (key, dict_key), dict_value)
-            elif isinstance(value, (bool, str, unicode, Number)):
-                # Don't use get_name for field
-                if 'field' in key:
-                    pretty_value = get_name(value)
-                    QgsExpressionContextUtils.setProjectVariable(
-                        key, pretty_value)
-                else:
-                    QgsExpressionContextUtils.setProjectVariable(key, value)
-            elif isinstance(value, type(None)):
-                QgsExpressionContextUtils.setProjectVariable(key, '')
-            elif isinstance(value, datetime):
+        if key in duplicated_global_variables.keys():
+            return
+        if isinstance(value, (list, tuple, set)):
+            # Skip if the type is too complex (list of note, actions)
+            return
+        elif isinstance(value, dict):
+            for dict_key, dict_value in value.items():
+                write_project_variable(
+                    '%s__%s' % (key, dict_key), dict_value)
+        elif isinstance(value, (bool, str, unicode, Number)):
+            # Don't use get_name for field
+            if 'field' in key:
+                pretty_value = get_name(value)
                 QgsExpressionContextUtils.setProjectVariable(
-                    key, value.isoformat())
-            elif isinstance(value, QUrl):
-                QgsExpressionContextUtils.setProjectVariable(
-                    key, value.toString())
+                    key, pretty_value)
             else:
-                LOGGER.warning('Not handled provenance')
-                LOGGER.warning('Key: %s, Type: %s, Value: %s' % (
-                    key, type(value), value))
+                QgsExpressionContextUtils.setProjectVariable(key, value)
+        elif isinstance(value, type(None)):
+            QgsExpressionContextUtils.setProjectVariable(key, '')
+        elif isinstance(value, datetime):
+            QgsExpressionContextUtils.setProjectVariable(
+                key, value.isoformat())
+        elif isinstance(value, QUrl):
+            QgsExpressionContextUtils.setProjectVariable(
+                key, value.toString())
+        else:
+            LOGGER.warning('Not handled provenance')
+            LOGGER.warning('Key: %s, Type: %s, Value: %s' % (
+                key, type(value), value))
 
-        # Remove old provenance data first
-        self.remove_provenance_project_variables()
-        for key, value in provenances.items():
-            if QgsExpressionContextUtils.globalScope().hasVariable(key):
-                continue
-            write_project_variable(key, value)
+    # Remove old provenance data first
+    remove_provenance_project_variables()
+    for key, value in provenances.items():
+        if QgsExpressionContextUtils.globalScope().hasVariable(key):
+            continue
+        write_project_variable(key, value)
 
-    @staticmethod
-    def remove_provenance_project_variables():
-        """Removing variables from provenance data."""
-        project_context_scope = QgsExpressionContextUtils.projectScope()
-        existing_variable_names = project_context_scope.variableNames()
 
-        # Save the existing variables that's not provenance variable.
-        existing_variables = {}
-        for existing_variable_name in existing_variable_names:
-            existing_variables[existing_variable_name] = \
-                project_context_scope.variable(existing_variable_name)
+def remove_provenance_project_variables():
+    """Removing variables from provenance data."""
+    project_context_scope = QgsExpressionContextUtils.projectScope()
+    existing_variable_names = project_context_scope.variableNames()
+
+    # Save the existing variables that's not provenance variable.
+    existing_variables = {}
+    for existing_variable_name in existing_variable_names:
+        existing_variables[existing_variable_name] = \
+            project_context_scope.variable(existing_variable_name)
+    for the_provenance in provenance_list:
+        if the_provenance['provenance_key'] in existing_variables:
+            existing_variables.pop(the_provenance['provenance_key'])
+
+    # Removing generated key from dictionary (e.g.
+    # action_checklist__0__item_list__0)
+    will_be_removed = []
+    for existing_variable in existing_variables:
         for the_provenance in provenance_list:
-            if the_provenance['provenance_key'] in existing_variables:
-                existing_variables.pop(the_provenance['provenance_key'])
+            if existing_variable.startswith(
+                    the_provenance['provenance_key']):
+                will_be_removed.append(existing_variable)
+                continue
+    for variable in will_be_removed:
+        existing_variables.pop(variable)
 
-        # Removing generated key from dictionary (e.g.
-        # action_checklist__0__item_list__0)
-        will_be_removed = []
-        for existing_variable in existing_variables:
-            for the_provenance in provenance_list:
-                if existing_variable.startswith(
-                        the_provenance['provenance_key']):
-                    will_be_removed.append(existing_variable)
-                    continue
-        for variable in will_be_removed:
-            existing_variables.pop(variable)
+    # Need to change QPyNullVariant to None, to be able to store it back.
+    non_null_existing_variables = {}
+    for k, v in existing_variables.items():
+        if not isinstance(v, QPyNullVariant):
+            non_null_existing_variables[k] = v
+        else:
+            non_null_existing_variables[k] = None
 
-        # Need to change QPyNullVariant to None, to be able to store it back.
-        non_null_existing_variables = {}
-        for k, v in existing_variables.items():
-            if not isinstance(v, QPyNullVariant):
-                non_null_existing_variables[k] = v
-            else:
-                non_null_existing_variables[k] = None
-
-        # This method will set non_null_existing_variables, and remove the
-        # other variable
-        QgsExpressionContextUtils.setProjectVariables(
-            non_null_existing_variables)
+    # This method will set non_null_existing_variables, and remove the
+    # other variable
+    QgsExpressionContextUtils.setProjectVariables(
+        non_null_existing_variables)
