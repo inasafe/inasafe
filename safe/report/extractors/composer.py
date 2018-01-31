@@ -261,11 +261,25 @@ def qgis_composer_extractor(impact_report, component_metadata):
         if not show_only_impact:
             hazard_layer = layer_registry.mapLayers().get(
                 provenance['hazard_layer_id'], None)
+            if not hazard_layer:
+                if impact_report.multi_exposure_impact_function:
+                    hazard_layer = (
+                        impact_report.multi_exposure_impact_function.hazard)
+                else:
+                    hazard_layer = impact_report.impact_function.hazard
 
             aggregation_layer_id = provenance['aggregation_layer_id']
             if aggregation_layer_id:
                 aggregation_layer = layer_registry.mapLayers().get(
                     aggregation_layer_id, None)
+                if not aggregation_layer:
+                    if impact_report.multi_exposure_impact_function:
+                        hazard_layer = (
+                            impact_report.multi_exposure_impact_function.
+                            aggregation)
+                    else:
+                        hazard_layer = (
+                            impact_report.impact_function.aggregation)
                 layers.append(aggregation_layer)
 
             layers.append(hazard_layer)
@@ -273,20 +287,30 @@ def qgis_composer_extractor(impact_report, component_metadata):
         # check hide exposure settings
         hide_exposure_flag = setting('setHideExposureFlag', expected_type=bool)
         if not hide_exposure_flag:
-            exposure_layers_id = []
+            exposure_layers = []
             if provenance.get(provenance_exposure_layer_id['provenance_key']):
-                exposure_layers_id.append(
-                    provenance.get(
-                        provenance_exposure_layer_id['provenance_key']))
+                exposure_layer_id = provenance.get(
+                    provenance_exposure_layer_id['provenance_key'])
+                exposure_layer = (
+                    layer_registry.mapLayers().get(exposure_layer_id, None) or
+                    impact_report.impact_function.exposure)
+                exposure_layers.append(exposure_layer)
             elif provenance.get(
                     provenance_multi_exposure_layers_id['provenance_key']):
                 exposure_layers_id = provenance.get(
                     provenance_multi_exposure_layers_id['provenance_key'])
+                for layer_id in exposure_layers_id:
+                    exposure_layer = layer_registry.mapLayers().get(
+                        layer_id, None)
+                    if exposure_layer:
+                        exposure_layers.append(exposure_layer)
+                    else:
+                        exposure_layers = (
+                            impact_report.multi_exposure_impact_function.
+                            exposures)
 
             # place exposure at the bottom
-            for layer_id in exposure_layers_id:
-                exposure_layer = layer_registry.mapLayers().get(layer_id)
-                layers.append(exposure_layer)
+            layers += exposure_layers
 
     # default extent is analysis extent
     if not qgis_context.extent:
