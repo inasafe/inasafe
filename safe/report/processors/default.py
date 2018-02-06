@@ -478,6 +478,17 @@ def qgis_composer_renderer(impact_report, component):
         layers = map_el.get('layers')
         map_extent_option = map_el.get('extent')
         composer_map = composition_item(composition, item_id, QgsComposerMap)
+
+        for index, layer in enumerate(layers):
+            # we need to check whether the layer is registered or not
+            registered_layer = (
+                QgsMapLayerRegistry.instance().mapLayer(layer.id()))
+            if registered_layer:
+                if not registered_layer == layer:
+                    layers[index] = registered_layer
+            else:
+                QgsMapLayerRegistry.instance().addMapLayer(layer)
+
         """:type: qgis.core.QgsComposerMap"""
         if composer_map:
             composer_map.setKeepLayerSet(True)

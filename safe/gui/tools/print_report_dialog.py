@@ -27,6 +27,7 @@ from safe.definitions.reports.components import (
 from safe.definitions.utilities import (
     override_component_template, definition, update_template_component)
 from safe.gui.tools.help.impact_report_help import impact_report_help
+from safe.impact_function.impact_function_utilities import report_urls
 from safe.impact_function.multi_exposure_wrapper import (
     MultiExposureImpactFunction)
 from safe.messaging import styles
@@ -317,11 +318,11 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
         .. versionadded: 4.3.0
         """
         # Get output path from datastore
-        report_urls = self.impact_function.report_urls()
+        report_urls_dict = report_urls(self.impact_function)
 
         # get report urls for each product tag as list
-        for key, value in report_urls.iteritems():
-            report_urls[key] = value.values()
+        for key, value in report_urls_dict.iteritems():
+            report_urls_dict[key] = value.values()
 
         if self.dock:
             # create message to user
@@ -334,26 +335,26 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
                     'The generated pdfs were saved '
                     'as:')))
 
-            for path in report_urls.get(pdf_product_tag['key'], []):
+            for path in report_urls_dict.get(pdf_product_tag['key'], []):
                 status.add(m.Paragraph(path))
 
             status.add(m.Paragraph(
                 m.ImportantText(
                     self.dock.tr('The generated htmls were saved as:'))))
 
-            for path in report_urls.get(html_product_tag['key'], []):
+            for path in report_urls_dict.get(html_product_tag['key'], []):
                 status.add(m.Paragraph(path))
 
             status.add(m.Paragraph(
                 m.ImportantText(
                     self.dock.tr('The generated qpts were saved as:'))))
 
-            for path in report_urls.get(qpt_product_tag['key'], []):
+            for path in report_urls_dict.get(qpt_product_tag['key'], []):
                 status.add(m.Paragraph(path))
 
             send_static_message(self.dock, status)
 
-        for path in report_urls.get(pdf_product_tag['key'], []):
+        for path in report_urls_dict.get(pdf_product_tag['key'], []):
             # noinspection PyCallByClass,PyTypeChecker,PyTypeChecker
             QtGui.QDesktopServices.openUrl(
                 QtCore.QUrl.fromLocalFile(path))

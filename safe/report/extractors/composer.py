@@ -22,6 +22,7 @@ from safe.definitions.reports.infographic import (
     population_chart,
     inasafe_logo_white,
     image_item_elements, map_overview)
+from safe.gis.tools import load_layer_from_registry, full_layer_uri
 from safe.report.extractors.util import (
     value_from_field_name,
     resolve_from_dictionary,
@@ -241,76 +242,84 @@ def qgis_composer_extractor(impact_report, component_metadata):
     ]
     context.html_frame_elements = html_frame_elements
 
-    # Set default map to resize
+    """Define the layers for the impact map."""
 
-    # Define the layers for the impact map.
-    if not impact_report.multi_exposure_impact_function:  # single IF
-        layers = [impact_report.impact] + impact_report.extra_layers
-    else:  # multi-exposure IF
-        layers = [] + impact_report.extra_layers
+    layer_registry = QgsMapLayerRegistry.instance()
+    layers = []
 
-    add_supplementary_layers = (
-        not impact_report.multi_exposure_impact_function or not (
-            impact_report.multi_exposure_impact_function.output_layers_ordered)
-    )
-    if add_supplementary_layers:
-        # Check show only impact.
-        show_only_impact = setting(
-            'set_show_only_impact_on_report', expected_type=bool)
-        layer_registry = QgsMapLayerRegistry.instance()
-        if not show_only_impact:
-            hazard_layer = layer_registry.mapLayers().get(
-                provenance['hazard_layer_id'], None)
-            if not hazard_layer:
-                if impact_report.multi_exposure_impact_function:
-                    hazard_layer = (
-                        impact_report.multi_exposure_impact_function.hazard)
+    exposure_summary_layers = []
+    if impact_report.multi_exposure_impact_function:
+        exposure_summary_layers = [
+            impact_function.exposure_summary for impact_function in (
+                impact_report.multi_exposure_impact_function.impact_functions)]
+
+    # use custom ordered layer if any
+    if impact_report.ordered_layers:
+        for layer_uri in impact_report.ordered_layers:
+            # layer uri is full uri with provider type
+            layer = load_layer_from_registry(layer_uri)
+            layers.append(layer)
+
+        # make sure at least there is an impact layer
+        if impact_report.multi_exposure_impact_function:
+            additional_layers = []  # for exposure summary layers
+            for exposure_summary in exposure_summary_layers:
+                if exposure_summary not in layers:
+                    layer_uri = full_layer_uri(exposure_summary)
+                    layer = load_layer_from_registry(layer_uri)
+                    additional_layers.append(layer)
                 else:
-                    hazard_layer = impact_report.impact_function.hazard
+                    additional_layers = []
+                    break
+            layers = additional_layers + layers
 
-            aggregation_layer_id = provenance['aggregation_layer_id']
-            if aggregation_layer_id:
-                aggregation_layer = layer_registry.mapLayers().get(
-                    aggregation_layer_id, None)
-                if not aggregation_layer:
-                    if impact_report.multi_exposure_impact_function:
-                        hazard_layer = (
-                            impact_report.multi_exposure_impact_function.
-                            aggregation)
-                    else:
-                        hazard_layer = (
-                            impact_report.impact_function.aggregation)
-                layers.append(aggregation_layer)
+    # use default layer order if no custom ordered layer found
+    else:
+        if not impact_report.multi_exposure_impact_function:  # single IF
+            layers = [impact_report.impact] + impact_report.extra_layers
+        else:  # multi-exposure IF
+            layers = [] + impact_report.extra_layers
 
-            layers.append(hazard_layer)
+        add_supplementary_layers = (
+            not impact_report.multi_exposure_impact_function or not (
+                impact_report.multi_exposure_impact_function.
+                    output_layers_ordered)
+        )
+        if add_supplementary_layers:
+            # Check show only impact.
+            show_only_impact = setting(
+                'set_show_only_impact_on_report', expected_type=bool)
+            if not show_only_impact:
+                hazard_layer = layer_registry.mapLayers().get(
+                    provenance['hazard_layer_id'], None)
 
-        # check hide exposure settings
-        hide_exposure_flag = setting('setHideExposureFlag', expected_type=bool)
-        if not hide_exposure_flag:
-            exposure_layers = []
-            if provenance.get(provenance_exposure_layer_id['provenance_key']):
-                exposure_layer_id = provenance.get(
-                    provenance_exposure_layer_id['provenance_key'])
-                exposure_layer = (
-                    layer_registry.mapLayers().get(exposure_layer_id, None) or
-                    impact_report.impact_function.exposure)
-                exposure_layers.append(exposure_layer)
-            elif provenance.get(
-                    provenance_multi_exposure_layers_id['provenance_key']):
-                exposure_layers_id = provenance.get(
-                    provenance_multi_exposure_layers_id['provenance_key'])
+                aggregation_layer_id = provenance['aggregation_layer_id']
+                if aggregation_layer_id:
+                    aggregation_layer = layer_registry.mapLayers().get(
+                        aggregation_layer_id, None)
+                    layers.append(aggregation_layer)
+
+                layers.append(hazard_layer)
+
+            # check hide exposure settings
+            hide_exposure_flag = setting(
+                'setHideExposureFlag', expected_type=bool)
+            if not hide_exposure_flag:
+                exposure_layers_id = []
+                if provenance.get(
+                        provenance_exposure_layer_id['provenance_key']):
+                    exposure_layers_id.append(
+                        provenance.get(
+                            provenance_exposure_layer_id['provenance_key']))
+                elif provenance.get(
+                        provenance_multi_exposure_layers_id['provenance_key']):
+                    exposure_layers_id = provenance.get(
+                        provenance_multi_exposure_layers_id['provenance_key'])
+
+                # place exposure at the bottom
                 for layer_id in exposure_layers_id:
-                    exposure_layer = layer_registry.mapLayers().get(
-                        layer_id, None)
-                    if exposure_layer:
-                        exposure_layers.append(exposure_layer)
-                    else:
-                        exposure_layers = (
-                            impact_report.multi_exposure_impact_function.
-                            exposures)
-
-            # place exposure at the bottom
-            layers += exposure_layers
+                    exposure_layer = layer_registry.mapLayers().get(layer_id)
+                    layers.append(exposure_layer)
 
     # default extent is analysis extent
     if not qgis_context.extent:
@@ -330,7 +339,7 @@ def qgis_composer_extractor(impact_report, component_metadata):
     if not impact_report.multi_exposure_impact_function:  # single IF
         layers = [impact_report.impact]
     else:  # multi-exposure IF
-        layers = [] + impact_report.extra_layers
+        layers = exposure_summary_layers
     symbol_count = 0
     for l in layers:
         layer = l

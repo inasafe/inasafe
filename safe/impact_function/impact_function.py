@@ -2827,7 +2827,12 @@ class ImpactFunction(object):
 
         return impact_function
 
-    def generate_report(self, components, output_folder=None, iface=None):
+    def generate_report(
+            self,
+            components,
+            output_folder=None,
+            iface=None,
+            ordered_layers=None):
         """Generate Impact Report independently by the Impact Function.
 
         :param components: Report components to be generated.
@@ -2838,6 +2843,9 @@ class ImpactFunction(object):
 
         :param iface: A QGIS App interface
         :type iface: QgsInterface
+
+        :param ordered_layers: A list of full_layer_uri of layers.
+        :type ordered_layers: list
 
         :returns: Tuple of error code and message
         :type: tuple
@@ -2868,6 +2876,9 @@ class ImpactFunction(object):
             add_layer_to_canvas(
                 map_overview_layer, map_overview['id'])
 
+        """Map report layers preparation"""
+
+        # preparing extra layers
         extra_layers = []
         print_atlas = setting('print_atlas_report', False, bool)
 
@@ -2894,7 +2905,8 @@ class ImpactFunction(object):
                 iface,
                 report_metadata,
                 impact_function=self,
-                extra_layers=extra_layers)
+                extra_layers=extra_layers,
+                ordered_layers=ordered_layers)
 
             # Get other setting
             logo_path = setting('organisation_logo_path', None, str)
