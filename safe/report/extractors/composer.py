@@ -283,7 +283,7 @@ def qgis_composer_extractor(impact_report, component_metadata):
         add_supplementary_layers = (
             not impact_report.multi_exposure_impact_function or not (
                 impact_report.multi_exposure_impact_function.
-                    output_layers_ordered)
+                output_layers_ordered)
         )
         if add_supplementary_layers:
             # Check show only impact.
