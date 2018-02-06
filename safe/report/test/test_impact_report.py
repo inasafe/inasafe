@@ -29,6 +29,7 @@ from safe.definitions.field_groups import (
 from safe.definitions.hazard_classifications import flood_hazard_classes
 from safe.definitions.hazard import hazard_flood
 from safe.definitions.provenance import provenance_use_rounding
+from safe.gis.tools import full_layer_uri
 from safe.impact_function.impact_function import ImpactFunction
 from safe.impact_function.multi_exposure_wrapper import \
     MultiExposureImpactFunction
@@ -170,8 +171,15 @@ class TestImpactReport(unittest.TestCase):
         self.assertEqual(return_code, ANALYSIS_SUCCESS, message)
 
         components = [report_metadata]
+        ordered_layers = [
+            full_layer_uri(impact_function.aggregation_summary),
+            full_layer_uri(impact_function.hazard)
+        ]
         return_code, message = impact_function.generate_report(
-            components, output_folder=output_folder, iface=IFACE)
+            components,
+            output_folder=output_folder,
+            iface=IFACE,
+            ordered_layers=ordered_layers)
 
         self.assertEqual(
             return_code, ImpactReport.REPORT_GENERATION_SUCCESS, message)
@@ -221,8 +229,15 @@ class TestImpactReport(unittest.TestCase):
         self.assertEqual(code, ANALYSIS_SUCCESS, message)
 
         components = [report_metadata]
+        ordered_layers = [
+            full_layer_uri(impact_function.aggregation_summary),
+            full_layer_uri(impact_function.hazard)
+        ]
         return_code, message = impact_function.generate_report(
-            components, output_folder=output_folder, iface=IFACE)
+            components,
+            output_folder=output_folder,
+            iface=IFACE,
+            ordered_layers=ordered_layers)
 
         self.assertEqual(
             return_code, ImpactReport.REPORT_GENERATION_SUCCESS, message)
@@ -2176,6 +2191,90 @@ class TestImpactReport(unittest.TestCase):
             return_code, ImpactReport.REPORT_GENERATION_SUCCESS, message)
 
         impact_report = impact_function.impact_report
+
+        output_path = impact_report.component_absolute_output_path(
+            'inasafe-map-report-portrait')
+
+        # for now, test that output exists
+        for path in output_path.itervalues():
+            self.assertTrue(os.path.exists(path), msg=path)
+
+        output_path = impact_report.component_absolute_output_path(
+            'inasafe-map-report-landscape')
+
+        for path in output_path.itervalues():
+            self.assertTrue(os.path.exists(path), msg=path)
+
+        shutil.rmtree(output_folder, ignore_errors=True)
+
+    def test_custom_layer_order_qgis_map_pdf_report(self):
+        """Test generate map report using custom layer order.
+
+        .. versionadded: 4.3.2
+        """
+
+        """Single Exposure ImpactFunction"""
+
+        output_folder = self.fixtures_dir('../output/impact_map_pdf')
+
+        # Classified vector with buildings
+        hazard_layer = load_test_vector_layer(
+            'gisv4', 'hazard', 'classified_vector.geojson')
+        exposure_layer = load_test_vector_layer(
+            'gisv4', 'exposure', 'buildings.geojson')
+        aggregation_layer = load_test_vector_layer(
+            'gisv4', 'aggregation', 'small_grid.geojson')
+
+        impact_report = self.run_impact_report_scenario(
+            output_folder,
+            map_report,
+            hazard_layer,
+            exposure_layer,
+            aggregation_layer=aggregation_layer)
+
+        output_path = impact_report.component_absolute_output_path(
+            'inasafe-map-report-portrait')
+
+        # for now, test that output exists
+        for path in output_path.itervalues():
+            self.assertTrue(os.path.exists(path), msg=path)
+
+        output_path = impact_report.component_absolute_output_path(
+            'inasafe-map-report-landscape')
+
+        for path in output_path.itervalues():
+            self.assertTrue(os.path.exists(path), msg=path)
+
+        shutil.rmtree(output_folder, ignore_errors=True)
+
+    def test_custom_layer_order_qgis_map_pdf_report_multi_exposure(self):
+        """Test generate multi exposure map report using custom layer order.
+
+        .. versionadded: 4.3.2
+        """
+
+        """Multi Exposure ImpactFunction"""
+
+        output_folder = self.fixtures_dir('../output/impact_map_pdf')
+
+        hazard_layer = load_test_vector_layer(
+            'gisv4', 'hazard', 'classified_vector.geojson')
+        building_layer = load_test_vector_layer(
+            'gisv4', 'exposure', 'building-points.geojson')
+        population_layer = load_test_vector_layer(
+            'gisv4', 'exposure', 'population.geojson')
+        roads_layer = load_test_vector_layer(
+            'gisv4', 'exposure', 'roads.geojson')
+        aggregation_layer = load_test_vector_layer(
+            'gisv4', 'aggregation', 'small_grid.geojson')
+        exposure_layers = [building_layer, population_layer, roads_layer]
+
+        impact_report = self.run_multi_exposure_impact_function_scenario(
+            output_folder,
+            map_report,
+            hazard_layer,
+            exposure_layers,
+            aggregation_layer=aggregation_layer)
 
         output_path = impact_report.component_absolute_output_path(
             'inasafe-map-report-portrait')
