@@ -23,6 +23,7 @@ from safe.definitions.reports.infographic import (
     inasafe_logo_white,
     image_item_elements, map_overview)
 from safe.gis.tools import load_layer_from_registry, full_layer_uri
+from safe.gui.analysis_utilities import add_impact_layers_to_canvas
 from safe.report.extractors.util import (
     value_from_field_name,
     resolve_from_dictionary,
@@ -263,15 +264,27 @@ def qgis_composer_extractor(impact_report, component_metadata):
         # make sure at least there is an impact layer
         if impact_report.multi_exposure_impact_function:
             additional_layers = []  # for exposure summary layers
-            for exposure_summary in exposure_summary_layers:
-                if exposure_summary not in layers:
-                    layer_uri = full_layer_uri(exposure_summary)
+            impact_layer_found = False
+            impact_functions = (
+                impact_report.multi_exposure_impact_function.impact_functions)
+            # check for impact layer occurrence
+            for analysis in impact_functions:
+                for index, layer in enumerate(layers):
+                    if analysis.exposure_summary.source() == layer.source():
+                        add_impact_layers_to_canvas(analysis)
+                        layers[index] = analysis.exposure_summary
+                        impact_layer_found = True
+            if not impact_layer_found:
+                for analysis in impact_functions:
+                    add_impact_layers_to_canvas(analysis)
+                    layer_uri = full_layer_uri(analysis.exposure_summary)
                     layer = load_layer_from_registry(layer_uri)
                     additional_layers.append(layer)
-                else:
-                    additional_layers = []
-                    break
             layers = additional_layers + layers
+        else:
+            if impact_report.impact_function.exposure_summary not in layers:
+                layers.insert(
+                    0, impact_report.impact_function.exposure_summary)
 
     # use default layer order if no custom ordered layer found
     else:
