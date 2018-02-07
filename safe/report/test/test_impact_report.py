@@ -249,7 +249,8 @@ class TestImpactReport(unittest.TestCase):
 
         .. versionadded:: 4.0
         """
-        output_folder = self.fixtures_dir('../output/general_report')
+        output_folder = os.path.join('..', 'output', 'general_report')
+        output_folder = self.fixtures_dir(output_folder)
 
         # Classified vector with building-points
         hazard_layer = load_test_vector_layer(
@@ -423,7 +424,8 @@ class TestImpactReport(unittest.TestCase):
 
         .. versionadded:: 4.3
         """
-        output_folder = self.fixtures_dir('../output/general_report')
+        output_folder = os.path.join('..', 'output', 'general_report')
+        output_folder = self.fixtures_dir(output_folder)
 
         hazard_layer = load_test_vector_layer(
             'gisv4', 'hazard', 'classified_vector.geojson')
@@ -484,7 +486,8 @@ class TestImpactReport(unittest.TestCase):
 
         .. versionadded:: 4.0
         """
-        output_folder = self.fixtures_dir('../output/analysis_detail')
+        output_folder = os.path.join('..', 'output', 'analysis_detail')
+        output_folder = self.fixtures_dir(output_folder)
 
         # Classified vector with buildings
         hazard_layer = load_test_vector_layer(
@@ -752,7 +755,8 @@ class TestImpactReport(unittest.TestCase):
 
         .. versionadded: 4.0
         """
-        output_folder = self.fixtures_dir('../output/general_report')
+        output_folder = os.path.join('..', 'output', 'general_report')
+        output_folder = self.fixtures_dir(output_folder)
 
         # Classified vector with building-points
         hazard_layer = load_test_vector_layer(
@@ -823,7 +827,8 @@ class TestImpactReport(unittest.TestCase):
 
         .. versionadded: 4.1
         """
-        output_folder = self.fixtures_dir('../output/general_report')
+        output_folder = os.path.join('..', 'output', 'general_report')
+        output_folder = self.fixtures_dir(output_folder)
 
         # Classified vector with building-points
         hazard_layer = load_test_vector_layer(
@@ -1105,7 +1110,8 @@ class TestImpactReport(unittest.TestCase):
             hazard_flood['key'], flood_hazard_classes['key'], 'wet')
         self.assertEqual(displacement_rate, self.custom_displacement_rate)
 
-        output_folder = self.fixtures_dir('../output/minimum_needs')
+        output_folder = os.path.join('..', 'output', 'minimum_needs')
+        output_folder = self.fixtures_dir(output_folder)
 
         # Minimum needs only occurred when population is displaced
         # so, use flood hazard.
@@ -1239,7 +1245,8 @@ class TestImpactReport(unittest.TestCase):
         self.assertEqual(displacement_rate_dry, 0.5)
         self.assertEqual(displacement_rate_wet, 0)
 
-        output_folder = self.fixtures_dir('../output/minimum_needs')
+        output_folder = os.path.join('..', 'output', 'minimum_needs')
+        output_folder = self.fixtures_dir(output_folder)
 
         # Minimum needs only occurred when population is displaced
         # so, use flood hazard.
@@ -1351,8 +1358,9 @@ class TestImpactReport(unittest.TestCase):
 
         .. versionadded:: 4.0
         """
-        output_folder = self.fixtures_dir(
-            '../output/aggregation_entire_area_result')
+        output_folder = os.path.join(
+            '..', 'output', 'aggregation_entire_area_result')
+        output_folder = self.fixtures_dir(output_folder)
 
         # Only flood and earthquake who deals with evacuated population report
         hazard_layer = load_test_vector_layer(
@@ -1429,8 +1437,8 @@ class TestImpactReport(unittest.TestCase):
 
         .. versionadded:: 4.0
         """
-        output_folder = self.fixtures_dir(
-            '../output/aggregation_area_result')
+        output_folder = os.path.join('..', 'output', 'aggregation_area_result')
+        output_folder = self.fixtures_dir(output_folder)
 
         # Only flood and earthquake who deals with evacuated population report
         hazard_layer = load_test_vector_layer(
@@ -1525,8 +1533,9 @@ class TestImpactReport(unittest.TestCase):
             hazard_flood['key'], flood_hazard_classes['key'], 'wet')
         self.assertEqual(displacement_rate, self.custom_displacement_rate)
 
-        output_folder = self.fixtures_dir(
-            '../output/aggregate_post_processors')
+        output_folder = os.path.join(
+            '..', 'output', 'aggregate_post_processors')
+        output_folder = self.fixtures_dir(output_folder)
 
         # Only flood and earthquake who deals with evacuated population report
         hazard_layer = load_test_vector_layer(
@@ -1725,8 +1734,9 @@ class TestImpactReport(unittest.TestCase):
             hazard_flood['key'], flood_hazard_classes['key'], 'wet')
         self.assertEqual(displacement_rate, self.custom_displacement_rate)
 
-        output_folder = self.fixtures_dir(
-            '../output/aggregate_post_processors')
+        output_folder = os.path.join(
+            '..', 'output', 'aggregate_post_processors')
+        output_folder = self.fixtures_dir(output_folder)
 
         # Only flood and earthquake who deals with evacuated population report
         hazard_layer = load_test_vector_layer(
@@ -1918,8 +1928,8 @@ class TestImpactReport(unittest.TestCase):
 
         .. versionadded:: 4.0
         """
-        output_folder = self.fixtures_dir(
-            '../output/population_infographic')
+        output_folder = os.path.join('..', 'output', 'population_infographic')
+        output_folder = self.fixtures_dir(output_folder)
 
         # Only flood and earthquake who deals with evacuated population report
         hazard_layer = load_test_vector_layer(
@@ -2130,7 +2140,8 @@ class TestImpactReport(unittest.TestCase):
 
         .. versionadded:: 4.0
         """
-        output_folder = self.fixtures_dir('../output/impact_summary_pdf')
+        output_folder = os.path.join('..', 'output', 'impact_summary_pdf')
+        output_folder = self.fixtures_dir(output_folder)
 
         # Classified vector with buildings
         hazard_layer = load_test_vector_layer(
@@ -2159,7 +2170,8 @@ class TestImpactReport(unittest.TestCase):
 
         .. versionadded:: 4.0
         """
-        output_folder = self.fixtures_dir('../output/impact_map_pdf')
+        output_folder = os.path.join('..', 'output', 'impact_map_pdf')
+        output_folder = self.fixtures_dir(output_folder)
 
         # Classified vector with buildings
         hazard_layer = load_test_vector_layer(
@@ -2215,7 +2227,8 @@ class TestImpactReport(unittest.TestCase):
 
         """Single Exposure ImpactFunction"""
 
-        output_folder = self.fixtures_dir('../output/impact_map_pdf')
+        output_folder = os.path.join('..', 'output', 'impact_map_pdf')
+        output_folder = self.fixtures_dir(output_folder)
 
         # Classified vector with buildings
         hazard_layer = load_test_vector_layer(
@@ -2255,7 +2268,8 @@ class TestImpactReport(unittest.TestCase):
 
         """Multi Exposure ImpactFunction"""
 
-        output_folder = self.fixtures_dir('../output/impact_map_pdf')
+        output_folder = os.path.join('..', 'output', 'impact_map_pdf')
+        output_folder = self.fixtures_dir(output_folder)
 
         hazard_layer = load_test_vector_layer(
             'gisv4', 'hazard', 'classified_vector.geojson')
@@ -2296,7 +2310,9 @@ class TestImpactReport(unittest.TestCase):
 
         .. versionadded:: 4.3
         """
-        output_folder = self.fixtures_dir('../output')
+
+        output_folder = os.path.join('..', 'output')
+        output_folder = self.fixtures_dir(output_folder)
 
         # Classified vector with building-points
         hazard_layer = load_test_vector_layer(
