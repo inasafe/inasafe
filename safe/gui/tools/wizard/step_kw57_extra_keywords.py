@@ -6,7 +6,7 @@ from datetime import datetime
 
 from PyQt4.QtCore import Qt
 from PyQt4.QtGui import (
-    QLineEdit, QDateTimeEdit, QDoubleSpinBox, QComboBox, QCheckBox
+    QLineEdit, QDateTimeEdit, QDoubleSpinBox, QComboBox, QCheckBox, QSpinBox
 )
 
 from safe import messaging as m
@@ -115,7 +115,7 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
                 elif isinstance(widgets[1], QComboBox):
                     current_index = widgets[1].currentIndex()
                     extra_keywords[key] = widgets[1].itemData(current_index)
-                elif isinstance(widgets[1], QDoubleSpinBox):
+                elif isinstance(widgets[1], (QDoubleSpinBox, QSpinBox)):
                     extra_keywords[key] = widgets[1].value()
                 elif isinstance(widgets[1], QDateTimeEdit):
                     extra_keywords[key] = widgets[1].dateTime().toString(
@@ -182,6 +182,11 @@ def extra_keywords_to_widgets(extra_keyword_definition):
     # Input widget
     if extra_keyword_definition['type'] == float:
         input_widget = QDoubleSpinBox()
+        input_widget.setMinimum(extra_keyword_definition['minimum'])
+        input_widget.setMaximum(extra_keyword_definition['maximum'])
+        input_widget.setSuffix(extra_keyword_definition['unit_string'])
+    elif extra_keyword_definition['type'] == int:
+        input_widget = QSpinBox()
         input_widget.setMinimum(extra_keyword_definition['minimum'])
         input_widget.setMaximum(extra_keyword_definition['maximum'])
         input_widget.setSuffix(extra_keyword_definition['unit_string'])

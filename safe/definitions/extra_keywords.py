@@ -364,6 +364,20 @@ extra_keyword_volcano_height = {
     'unit_string': u' metres'
 }
 
+extra_keyword_volcano_forecast_duration = {
+    'key': 'volcano_forecast_duration',
+    'name': tr('Volcano Forecast Duration'),
+    'description': tr(
+        'The duration in which the volcanic ash model is valid. It is '
+        'calculated after the model is generated and the value varies between '
+        '1 day or 3 day(s). After this duration, the forecast information in '
+        'the model is expired.'),
+    'type': int,
+    'minimum': 0,
+    'maximum': 10000,
+    'unit_string': u' days'
+}
+
 earthquake_extra_keywords = [
     extra_keyword_earthquake_event_id,
     extra_keyword_earthquake_description,
@@ -396,6 +410,7 @@ ash_extra_keywords = [
     extra_keyword_volcano_height,
     extra_keyword_volcano_latitude,
     extra_keyword_volcano_longitude,
+    extra_keyword_volcano_forecast_duration,
 ]
 
 flood_extra_keywords = [
@@ -429,6 +444,7 @@ all_extra_keywords = [
     extra_keyword_volcano_latitude,
     extra_keyword_volcano_longitude,
     extra_keyword_volcano_height,
+    extra_keyword_volcano_forecast_duration,
 
     extra_keyword_flood_event_id,
     extra_keyword_flood_event_time,
