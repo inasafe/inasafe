@@ -188,7 +188,6 @@ class OsmDownloaderTest(unittest.TestCase):
         # provide Fake QNetworkAccessManager
         self.network_manager = FakeQNetworkAccessManager()
 
-    @unittest.skip('Skip this test until we fix the osm.inasafe.org')
     def test_fetch_zip(self):
         """Test fetch zip method.
 
