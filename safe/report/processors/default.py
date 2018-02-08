@@ -475,7 +475,10 @@ def qgis_composer_renderer(impact_report, component):
     for map_el in context.map_elements:
         item_id = map_el.get('id')
         split_count = map_el.get('grid_split_count')
-        layers = map_el.get('layers')
+        layers = [
+            layer for layer in map_el.get('layers') if isinstance(
+                layer, QgsMapLayer)
+        ]
         map_extent_option = map_el.get('extent')
         composer_map = composition_item(composition, item_id, QgsComposerMap)
 
@@ -551,7 +554,10 @@ def qgis_composer_renderer(impact_report, component):
     for leg_el in context.map_legends:
         item_id = leg_el.get('id')
         title = leg_el.get('title')
-        layers = leg_el.get('layers')
+        layers = [
+            layer for layer in leg_el.get('layers') if isinstance(
+                layer, QgsMapLayer)
+        ]
         symbol_count = leg_el.get('symbol_count')
         column_count = leg_el.get('column_count')
 
