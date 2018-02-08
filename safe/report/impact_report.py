@@ -283,6 +283,7 @@ class ImpactReport(object):
             exposure_summary_table=None,
             aggregation_summary=None,
             extra_layers=None,
+            ordered_layers=None,
             minimum_needs_profile=None,
             multi_exposure_impact_function=None):
         """Constructor for the Composition Report class.
@@ -321,6 +322,7 @@ class ImpactReport(object):
         if extra_layers is None:
             extra_layers = []
         self._extra_layers = extra_layers
+        self._ordered_layers = ordered_layers
         self._minimum_needs = minimum_needs_profile
         self._multi_exposure_impact_function = multi_exposure_impact_function
         self._inasafe_context = InaSAFEReportContext()
@@ -603,6 +605,26 @@ class ImpactReport(object):
         :type extra_layers: list(QgsMapLayer)
         """
         self._extra_layers = extra_layers
+
+    @property
+    def ordered_layers(self):
+        """Getter to ordered layers.
+
+        Ordered layers will determine the layers order on map report.
+        :return:
+        """
+        return self._ordered_layers
+
+    @ordered_layers.setter
+    def ordered_layers(self, ordered_layers):
+        """Set ordered layers.
+
+        Ordered layers will determine the layers order on map report.
+
+        :param ordered_layers:
+        :return:
+        """
+        self._ordered_layers = ordered_layers
 
     @property
     def minimum_needs(self):

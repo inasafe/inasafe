@@ -47,13 +47,13 @@ def add_impact_layers_to_canvas(impact_function, group=None, iface=None):
     layers = impact_function.outputs
     name = impact_function.name
 
-    if iface:
+    if group:
+        group_analysis = group
+    else:
         # noinspection PyArgumentList
         root = QgsProject.instance().layerTreeRoot()
         group_analysis = root.insertGroup(0, name)
         group_analysis.setVisible(Qt.Checked)
-    else:
-        group_analysis = group
 
     group_analysis.setExpanded(group is None)
 

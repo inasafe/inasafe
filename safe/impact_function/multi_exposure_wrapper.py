@@ -1070,7 +1070,12 @@ class MultiExposureImpactFunction(object):
 
         return ANALYSIS_SUCCESS, None
 
-    def generate_report(self, components, output_folder=None, iface=None):
+    def generate_report(
+            self,
+            components,
+            output_folder=None,
+            iface=None,
+            ordered_layers=None):
         """Generate Impact Report independently by the Impact Function.
 
         :param components: Report components to be generated.
@@ -1084,6 +1089,9 @@ class MultiExposureImpactFunction(object):
 
         :returns: Tuple of error code and message
         :type: tuple
+
+        :param ordered_layers: A list of full_layer_uri of layers.
+        :type ordered_layers: list
 
         .. versionadded:: 4.3
         """
@@ -1142,6 +1150,9 @@ class MultiExposureImpactFunction(object):
 
         if not extra_layers:
             # We need to find out about the layers order manually.
+            # The default layers order is a list of available exposure
+            # summary layers.
+            extra_layers = []
             layer_tree_root = QgsProject.instance().layerTreeRoot()
             all_groups = [
                 child for child in layer_tree_root.children() if (
@@ -1161,7 +1172,6 @@ class MultiExposureImpactFunction(object):
                         isinstance(child, QgsLayerTreeGroup))]
 
                 if exposure_groups:
-                    extra_layers = []
                     for exposure_group in exposure_groups:
                         tree_layers = [
                             child for child in exposure_group.children() if (
@@ -1203,7 +1213,8 @@ class MultiExposureImpactFunction(object):
                     report_metadata,
                     multi_exposure_impact_function=self,
                     analysis=self.analysis_impacted,
-                    extra_layers=extra_layers)
+                    extra_layers=extra_layers,
+                    ordered_layers=ordered_layers)
 
             self._report_metadata.append(report_metadata)
 
