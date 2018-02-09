@@ -827,9 +827,10 @@ class Dock(QDockWidget, FORM_CLASS):
                     NoKeywordsFoundError,
                     MetadataReadError,
                     # AttributeError  This is hiding some real error. ET
-                    ):
+                    ) as e:
                 # Added this check in 3.2 for #1861
                 active_layer = self.iface.activeLayer()
+                LOGGER.debug(e)
                 if active_layer is None:
                     if self.conflicting_plugin_detected:
                         send_static_message(self, conflicting_plugin_message())
