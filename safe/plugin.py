@@ -3,7 +3,6 @@
 
 import sys
 import os
-import logging
 from functools import partial
 from distutils.version import StrictVersion
 
@@ -34,6 +33,7 @@ from PyQt4.QtGui import (
     QInputDialog,
 )
 
+from safe.common.custom_logging import LOGGER
 from safe.utilities.expressions import qgis_expressions
 from safe.definitions.versions import inasafe_release_status, inasafe_version
 from safe.common.exceptions import (
@@ -48,10 +48,10 @@ from safe.definitions.layer_purposes import (
     layer_purpose_exposure, layer_purpose_hazard
 )
 from safe.definitions.utilities import get_field_groups
+from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.utilities import is_keyword_version_supported
 from safe.utilities.settings import setting, set_setting
-LOGGER = logging.getLogger('InaSAFE')
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -336,6 +336,17 @@ class Plugin(object):
         self.action_import_dialog.triggered.connect(self.show_osm_downloader)
         self.add_action(self.action_import_dialog, add_to_toolbar=True)
 
+    def _create_geonode_uploader_action(self):
+        """Create action for Geonode uploader dialog."""
+        icon = resources_path('img', 'icons', 'geonode.png')
+        label = tr('Geonode Uploader')
+        self.action_geonode = QAction(
+            QIcon(icon), label, self.iface.mainWindow())
+        self.action_geonode.setStatusTip(label)
+        self.action_geonode.setWhatsThis(label)
+        self.action_geonode.triggered.connect(self.show_geonode_uploader)
+        self.add_action(self.action_geonode, add_to_toolbar=False)
+
     def _create_add_osm_layer_action(self):
         """Create action for import OSM Dialog."""
         icon = resources_path('img', 'icons', 'add-osm-tiles-layer.svg')
@@ -578,6 +589,7 @@ class Plugin(object):
         self._create_osm_downloader_action()
         self._create_add_osm_layer_action()
         self._create_add_petabencana_layer_action()
+        self._create_geonode_uploader_action()
         self._create_shakemap_converter_action()
         self._create_minimum_needs_action()
         self._create_multi_buffer_action()
@@ -886,6 +898,13 @@ class Plugin(object):
         from safe.gui.tools.osm_downloader_dialog import OsmDownloaderDialog
 
         dialog = OsmDownloaderDialog(self.iface.mainWindow(), self.iface)
+        dialog.show()  # non modal
+
+    def show_geonode_uploader(self):
+        """Show the Geonode uploader dialog."""
+        from safe.gui.tools.geonode_uploader import GeonodeUploaderDialog
+
+        dialog = GeonodeUploaderDialog(self.iface.mainWindow())
         dialog.show()  # non modal
 
     def add_osm_layer(self):

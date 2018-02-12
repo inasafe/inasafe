@@ -551,7 +551,6 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
             code, message = self._multi_exposure_if.run()
             message = basestring_to_message(message)
             if code == ANALYSIS_FAILED_BAD_INPUT:
-                self.hide_busy()
                 LOGGER.info(tr(
                     'The impact function could not run because of the inputs.'
                 ))
@@ -561,7 +560,6 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                 self.set_enabled_buttons(True)
                 return code, message
             elif code == ANALYSIS_FAILED_BAD_CODE:
-                self.hide_busy()
                 LOGGER.exception(tr(
                     'The impact function could not run because of a bug.'))
                 LOGGER.exception(message.to_text())

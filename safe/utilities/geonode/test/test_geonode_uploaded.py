@@ -40,9 +40,9 @@ class GeonodeUploadTest(unittest.TestCase):
     def test_credentials_are_not_public(self):
         """Test if we did not publish credentials on github/travis."""
         if os.environ.get('ON_TRAVIS', False):
-            self.assertEqual(LOGIN, '')
-            self.assertEqual(PASSWORD, '')
-            self.assertNotEqual(GEONODE_URL, '')
+            self.assertEqual(LOGIN, '', 'Login must be empty.')
+            self.assertEqual(PASSWORD, '', 'Password must be empty.')
+            self.assertEqual(GEONODE_URL, '', 'URL must be empty.')
 
     @unittest.skipUnless(LOGIN, 'You need to fill LOGIN and PASSWORD above.')
     def test_login_and_upload_layers(self):

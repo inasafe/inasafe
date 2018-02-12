@@ -20,10 +20,10 @@ def display_information_message_box(
     Display an information message box.
 
     :param title: The title of the message box.
-    :type title: str
+    :type title: basestring
 
     :param message: The message inside the message box.
-    :type message: str
+    :type message: basestring
     """
     QMessageBox.information(parent, title, message)
 
@@ -43,16 +43,16 @@ def display_information_message_bar(
     :type iface: QgisInterface
 
     :param title: The title of the message bar.
-    :type title: str
+    :type title: basestring
 
     :param message: The message inside the message bar.
-    :type message: str
+    :type message: basestring
 
     :param more_details: The message inside the 'Show details' button.
-    :type more_details: str
+    :type more_details: basestring
 
     :param button_text: The text of the button if 'more_details' is not empty.
-    :type button_text: str
+    :type button_text: basestring
 
     :param duration: The duration for the display, default is 8 seconds.
     :type duration: int
@@ -86,16 +86,16 @@ def display_success_message_bar(
     :type iface: QgisInterface
 
     :param title: The title of the message bar.
-    :type title: str
+    :type title: basestring
 
     :param message: The message inside the message bar.
-    :type message: str
+    :type message: basestring
 
     :param more_details: The message inside the 'Show details' button.
-    :type more_details: str
+    :type more_details: basestring
 
     :param button_text: The text of the button if 'more_details' is not empty.
-    :type button_text: str
+    :type button_text: basestring
 
     :param duration: The duration for the display, default is 8 seconds.
     :type duration: int
@@ -120,10 +120,10 @@ def display_warning_message_box(parent=None, title=None, message=None):
     Display a warning message box.
 
     :param title: The title of the message box.
-    :type title: str
+    :type title: basestring
 
     :param message: The message inside the message box.
-    :type message: str
+    :type message: basestring
     """
     QMessageBox.warning(parent, title, message)
 
@@ -138,16 +138,16 @@ def display_warning_message_bar(
     Display a warning message bar.
 
     :param title: The title of the message bar.
-    :type title: str
+    :type title: basestring
 
     :param message: The message inside the message bar.
-    :type message: str
+    :type message: basestring
 
     :param more_details: The message inside the 'Show details' button.
-    :type more_details: str
+    :type more_details: basestring
 
     :param button_text: The text of the button if 'more_details' is not empty.
-    :type button_text: str
+    :type button_text: basestring
 
     :param duration: The duration for the display, default is 8 seconds.
     :type duration: int
@@ -172,10 +172,10 @@ def display_critical_message_box(parent=None, title=None, message=None):
     Display a critical message box.
 
     :param title: The title of the message box.
-    :type title: str
+    :type title: basestring
 
     :param message: The message inside the message box.
-    :type message: str
+    :type message: basestring
     """
     QMessageBox.critical(parent, title, message)
 
@@ -190,16 +190,16 @@ def display_critical_message_bar(
     Display a critical message bar.
 
     :param title: The title of the message bar.
-    :type title: str
+    :type title: basestring
 
     :param message: The message inside the message bar.
-    :type message: str
+    :type message: basestring
 
     :param more_details: The message inside the 'Show details' button.
-    :type more_details: str
+    :type more_details: basestring
 
     :param button_text: The text of the button if 'more_details' is not empty.
-    :type button_text: str
+    :type button_text: basestring
 
     :param duration: The duration for the display, default is 8 seconds.
     :type duration: int

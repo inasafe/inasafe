@@ -27,6 +27,7 @@ status=final
 
 changelog=
     Version 4.3.2:
+    - Add the Geonode uploader
     - Fix multiexposure dialog when you launch it twice.
     Version 4.3.1:
     - Add version number in the help doc #4872.
