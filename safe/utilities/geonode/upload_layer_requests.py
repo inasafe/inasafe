@@ -30,6 +30,11 @@ extension_siblings = {
         '.qml': 'application/octet-stream',
         '.xml': 'text/xml',
     },
+    '.tiff': {
+        '.tif': 'application/octet-stream',
+        '.qml': 'application/octet-stream',
+        '.xml': 'text/xml',
+    },
     # '.geojson': [
     #     '.geojson',
     #     '.qml',

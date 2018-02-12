@@ -4,6 +4,7 @@
 from osgeo import gdal
 from qgis.core import (
     QgsFeatureRequest,
+    QgsLayerItem,
     QgsMapLayer,
     QgsPoint,
     QgsGeometry,
@@ -295,6 +296,27 @@ def is_polygon_layer(layer):
             layer.geometryType() == QGis.Polygon)
     except AttributeError:
         return False
+
+
+def layer_icon(layer):
+    """Helper to get the layer icon.
+
+    :param layer: A layer.
+    :type layer: QgsMapLayer
+
+    :returns: The icon for the given layer.
+    :rtype: QIcon
+    """
+    if is_raster_layer(layer):
+        return QgsLayerItem.iconRaster()
+    elif is_point_layer(layer):
+        return QgsLayerItem.iconPoint()
+    elif is_line_layer(layer):
+        return QgsLayerItem.iconLine()
+    elif is_polygon_layer(layer):
+        return QgsLayerItem.iconPolygon()
+    else:
+        return QgsLayerItem.iconDefault()
 
 
 def wkt_to_rectangle(extent):
