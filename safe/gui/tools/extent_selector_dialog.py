@@ -9,7 +9,7 @@ from PyQt4 import QtGui
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import pyqtSignal, pyqtSlot, pyqtSignature
 # noinspection PyPackageRequirements
-from PyQt4.QtGui import QDialog
+from PyQt4.QtGui import QDialog, QIcon
 # noinspection PyUnresolvedReferences
 # pylint: disable=unused-import
 # force sip2 api
@@ -33,7 +33,8 @@ from safe.gui.tools.help.extent_selector_help import extent_selector_help
 from safe.gui.tools.rectangle_map_tool import RectangleMapTool
 from safe.messaging import styles
 from safe.utilities.gis import wkt_to_rectangle
-from safe.utilities.resources import html_header, html_footer, get_ui_class
+from safe.utilities.resources import (
+    html_header, html_footer, get_ui_class, resources_path)
 from safe.utilities.settings import setting, set_setting
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
@@ -71,6 +72,9 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
         """
         QDialog.__init__(self, parent)
         self.setupUi(self)
+
+        icon = resources_path('img', 'icons', 'set-extents-tool.svg')
+        self.setWindowIcon(QIcon(icon))
 
         self.iface = iface
         self.parent = parent

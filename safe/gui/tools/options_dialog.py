@@ -10,7 +10,7 @@ from functools import partial
 import qgis  # NOQA pylint: disable=unused-import
 from PyQt4.QtCore import pyqtSignature, pyqtSlot, QVariant, QSettings, Qt
 from PyQt4.QtGui import (
-    QDialog, QFileDialog, QDialogButtonBox, QGroupBox, QVBoxLayout,
+    QDialog, QFileDialog, QDialogButtonBox, QGroupBox, QVBoxLayout, QIcon,
     QScrollArea, QWidget, QPixmap, QLabel, QPushButton, QMessageBox)
 
 from parameters.float_parameter import FloatParameter
@@ -39,7 +39,8 @@ from safe.gui.widgets.profile_widget import ProfileWidget
 from safe.utilities.default_values import (
     set_inasafe_default_value_qsetting, get_inasafe_default_value_qsetting)
 from safe.utilities.i18n import tr
-from safe.utilities.resources import get_ui_class, html_header, html_footer
+from safe.utilities.resources import (
+    get_ui_class, html_header, html_footer, resources_path, )
 from safe.utilities.settings import (
     export_setting,
     import_setting,
@@ -79,7 +80,8 @@ class OptionsDialog(QDialog, FORM_CLASS):
         """
         QDialog.__init__(self, parent)
         self.setupUi(self)
-
+        icon = resources_path('img', 'icons', 'configure-inasafe.svg')
+        self.setWindowIcon(QIcon(icon))
         self.setWindowTitle(self.tr('InaSAFE %s Options' % get_version()))
         # Save reference to the QGIS interface and parent
         self.iface = iface

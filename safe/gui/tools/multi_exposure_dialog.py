@@ -10,6 +10,7 @@ from PyQt4.QtCore import (
 from PyQt4.QtGui import (
     QDialog,
     QComboBox,
+    QIcon,
     QLabel,
     QApplication,
     QSizePolicy,
@@ -75,7 +76,7 @@ from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.qgis_utilities import display_warning_message_bar
 from safe.utilities.qt import disable_busy_cursor, enable_busy_cursor
 from safe.utilities.resources import (
-    get_ui_class,
+    get_ui_class, resources_path,
 )
 from safe.utilities.settings import setting
 from safe.utilities.utilities import (
@@ -110,6 +111,8 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
         self.parent = parent
         self.iface = iface
         self.setupUi(self)
+        icon = resources_path('img', 'icons', 'show-multi-exposure.svg')
+        self.setWindowIcon(QIcon(icon))
         self.tab_widget.setCurrentIndex(0)
         self.combos_exposures = {}
         self.keyword_io = KeywordIO()

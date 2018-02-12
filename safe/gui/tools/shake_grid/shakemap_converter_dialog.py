@@ -24,7 +24,8 @@ from safe.gui.tools.shake_grid.shake_grid import convert_mmi_data
 from safe.gui.tools.wizard.wizard_dialog import WizardDialog
 from safe.messaging import styles
 from safe.utilities.i18n import tr
-from safe.utilities.resources import html_footer, html_header, get_ui_class
+from safe.utilities.resources import (
+    html_footer, html_header, get_ui_class, resources_path)
 from safe.utilities.settings import setting
 from safe.utilities.styling import mmi_ramp_roman
 
@@ -70,6 +71,8 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         self.setupUi(self)
         self.setWindowTitle(
             tr('InaSAFE %s Shakemap Converter' % get_version()))
+        icon = resources_path('img', 'icons', 'show-converter-tool.svg')
+        self.setWindowIcon(QtGui.QIcon(icon))
         self.warning_text = set()
         self.on_input_path_textChanged()
         self.on_output_path_textChanged()

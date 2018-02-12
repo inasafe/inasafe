@@ -92,6 +92,8 @@ class PetaBencanaDialog(QDialog, FORM_CLASS):
 
         title = self.tr('PetaBencana Downloader')
         self.setWindowTitle(title)
+        icon = resources_path('img', 'icons', 'add-petabencana-layer.svg')
+        self.setWindowIcon(QtGui.QIcon(icon))
 
         self.iface = iface
 

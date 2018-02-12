@@ -6,7 +6,7 @@ from sqlite3 import OperationalError
 
 from PyQt4 import QtGui
 from PyQt4.QtCore import pyqtSignature, QSettings, pyqtSignal
-from PyQt4.QtGui import QDialog, QPixmap
+from PyQt4.QtGui import QDialog, QPixmap, QIcon
 from qgis.core import QgsMapLayerRegistry
 
 from parameters.parameter_exceptions import InvalidValidationException
@@ -122,6 +122,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         QDialog.__init__(self, parent)
         self.setupUi(self)
         self.setWindowTitle('InaSAFE')
+        icon = resources_path('img', 'icons', 'icon.png')
+        self.setWindowIcon(QIcon(icon))
         # Constants
         self.keyword_creation_wizard_name = tr(
             'InaSAFE Keywords Creation Wizard')
