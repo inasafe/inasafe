@@ -68,15 +68,16 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         QDialog.__init__(self, parent)
         self.parent = parent
         self.setupUi(self)
-
-        self.setWindowTitle(self.tr('InaSAFE OpenStreetMap Downloader'))
+        icon = resources_path('img', 'icons', 'show-osm-download.svg')
+        self.setWindowIcon(QtGui.QIcon(icon))
+        title = self.tr('InaSAFE OpenStreetMap Downloader')
+        self.setWindowTitle(title)
 
         self.iface = iface
 
         # creating progress dialog for download
         self.progress_dialog = QProgressDialog(self)
         self.progress_dialog.setAutoClose(False)
-        title = self.tr('InaSAFE OpenStreetMap Downloader')
         self.progress_dialog.setWindowTitle(title)
 
         # Set up things for context help

@@ -18,6 +18,7 @@ from safe.gui.gui_utilities import layer_from_combo
 from safe.utilities.gis import extent_to_array, viewport_geo_array
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.resources import resources_path
 from safe.utilities.settings import setting, set_setting
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -43,6 +44,9 @@ class SaveScenarioDialog(QDialog):
         self.hazard_layer = None
         self.aggregation_layer = None
         self.keyword_io = KeywordIO()
+
+        icon = resources_path('img', 'icons', 'save-as-scenario.svg')
+        self.setWindowIcon(QtGui.QIcon(icon))
 
         # Calling some init methods
         self.restore_state()

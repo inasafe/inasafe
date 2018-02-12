@@ -34,6 +34,9 @@ class AboutDialog(QtGui.QDialog, FORM_CLASS):
         self.setWindowTitle(self.tr('About InaSAFE %s' % get_version()))
         self.parent = parent
 
+        icon = resources_path('img', 'icons', 'icon.png')
+        self.setWindowIcon(QtGui.QIcon(icon))
+
         # Set Limitations Text
         limitations_text = ''
         for index, limitation in enumerate(limitations()):

@@ -5,7 +5,7 @@ import os
 
 from PyQt4.QtCore import Qt, QFile, pyqtSignal, QT_VERSION
 from PyQt4.QtGui import (
-    QDialog, QDialogButtonBox, QFileDialog)
+    QDialog, QDialogButtonBox, QFileDialog, QIcon, )
 
 from safe.common.exceptions import (
     NoKeywordsFoundError,
@@ -25,7 +25,7 @@ from safe.utilities.metadata import (
 from safe.utilities.qgis_utilities import (
     display_warning_message_box, display_success_message_bar)
 from safe.utilities.resources import (
-    get_ui_class, html_footer, html_header)
+    get_ui_class, html_footer, html_header, resources_path)
 from safe.utilities.utilities import is_keyword_version_supported
 
 FORM_CLASS = get_ui_class('metadata_converter_dialog_base.ui')
@@ -49,7 +49,8 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
         """Constructor."""
         QDialog.__init__(self, parent)
         self.setupUi(self)
-
+        icon = resources_path('img', 'icons', 'show-metadata-converter.svg')
+        self.setWindowIcon(QIcon(icon))
         self.setWindowTitle(self.tr('InaSAFE Metadata Converter'))
         self.parent = parent
         self.iface = iface

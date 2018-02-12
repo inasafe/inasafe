@@ -4,7 +4,7 @@ import logging
 
 from PyQt4.QtCore import pyqtSignature, pyqtSlot, QSettings
 from PyQt4.QtGui import (
-    QDialog, QHBoxLayout, QLabel, QDialogButtonBox, QMessageBox)
+    QDialog, QHBoxLayout, QLabel, QDialogButtonBox, QMessageBox, QIcon)
 from qgis.gui import QgsMapLayerComboBox, QgsMapLayerProxyModel
 
 from parameters.parameter_exceptions import InvalidValidationException
@@ -24,7 +24,7 @@ from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.qgis_utilities import display_warning_message_box
 from safe.utilities.resources import (
-    get_ui_class, html_footer, html_header)
+    get_ui_class, html_footer, html_header, resources_path)
 from safe.utilities.unicode import get_string
 from safe.utilities.utilities import get_error_message
 
@@ -43,6 +43,8 @@ class FieldMappingDialog(QDialog, FORM_CLASS):
         self.setupUi(self)
 
         self.setWindowTitle(self.tr('InaSAFE Field Mapping Tool'))
+        icon = resources_path('img', 'icons', 'show-mapping-tool.svg')
+        self.setWindowIcon(QIcon(icon))
         self.parent = parent
         self.iface = iface
         if setting is None:

@@ -41,6 +41,8 @@ class MultiBufferDialog(QtGui.QDialog, FORM_CLASS):
         QtGui.QDialog.__init__(self, parent)
         self.setupUi(self)
         self.setWindowTitle(self.tr('InaSAFE Multi Buffer Tool'))
+        icon = resources_path('img', 'icons', 'show-multi-buffer.svg')
+        self.setWindowIcon(QtGui.QIcon(icon))
         self.parent = parent
         self.iface = iface
         self.dock_widget = dock_widget

@@ -77,6 +77,8 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         }
 
         self.setupUi(self)
+        icon = resources_path('img', 'icons', 'show-minimum-needs.svg')
+        self.setWindowIcon(QtGui.QIcon(icon))
         self.dock = dock
         # These are in the little button bar at the bottom
         # 'Remove resource' button

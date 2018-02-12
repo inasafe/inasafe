@@ -28,7 +28,8 @@ from safe.messaging import styles
 from safe.processors.minimum_needs_post_processors import (
     minimum_needs_post_processors)
 from safe.utilities.qgis_utilities import display_critical_message_box
-from safe.utilities.resources import html_footer, html_header, get_ui_class
+from safe.utilities.resources import (
+    html_footer, html_header, get_ui_class, resources_path, )
 from safe.utilities.utilities import humanise_exception
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -55,6 +56,8 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         self.setupUi(self)
         self.setWindowTitle(self.tr(
             'InaSAFE %s Minimum Needs Calculator' % get_version()))
+        icon = resources_path('img', 'icons', 'show-minimum-needs.svg')
+        self.setWindowIcon(QtGui.QIcon(icon))
 
         self.result_layer = None
         self.button_box.button(QtGui.QDialogButtonBox.Ok).setEnabled(False)
