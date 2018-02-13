@@ -105,7 +105,7 @@ from safe.messaging import styles
 from safe.report.impact_report import ImpactReport
 from safe.report.report_metadata import ReportMetadata
 from safe.utilities.extent import Extent
-from safe.utilities.gis import wkt_to_rectangle, qgis_version
+from safe.utilities.gis import wkt_to_rectangle, qgis_version, layer_icon
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.qgis_utilities import (
@@ -731,15 +731,17 @@ class Dock(QDockWidget, FORM_CLASS):
                 # continue ignoring this layer
                 continue
 
+            icon = layer_icon(layer)
+
             if layer_purpose == layer_purpose_hazard['key']:
                 add_ordered_combo_item(
-                    self.hazard_layer_combo, title, layer_id)
+                    self.hazard_layer_combo, title, layer_id, icon=icon)
             elif layer_purpose == layer_purpose_exposure['key']:
                 add_ordered_combo_item(
-                    self.exposure_layer_combo, title, layer_id)
+                    self.exposure_layer_combo, title, layer_id, icon=icon)
             elif layer_purpose == layer_purpose_aggregation['key']:
                 add_ordered_combo_item(
-                    self.aggregation_layer_combo, title, layer_id)
+                    self.aggregation_layer_combo, title, layer_id, icon=icon)
 
         self.unblock_signals()
         # handle the aggregation_layer_combo combo
