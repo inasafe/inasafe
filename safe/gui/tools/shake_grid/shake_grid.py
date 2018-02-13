@@ -216,9 +216,9 @@ class ShakeGrid(object):
             self.day,
             self.hour,
             self.minute,
-            self.second,
-            # For now realtime always uses Indonesia Time
-            tzinfo=tzinfo)
+            self.second)
+        # For now realtime always uses Western Indonesia Time
+        self.time = tzinfo.localize(self.time)
 
     def parse_grid_xml(self):
         """Parse the grid xyz and calculate the bounding box of the event.
