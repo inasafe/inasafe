@@ -27,7 +27,7 @@ def layer_from_combo(combo):
 
 
 def add_ordered_combo_item(
-        combo, text, data=None, count_selected_features=None):
+        combo, text, data=None, count_selected_features=None, icon=None):
     """Add a combo item ensuring that all items are listed alphabetically.
 
     Although QComboBox allows you to set an InsertAlphabetically enum
@@ -47,6 +47,9 @@ def add_ordered_combo_item(
     :param count_selected_features: A count to display if the layer has some
     selected features. Default to None, nothing will be displayed.
     :type count_selected_features: None, int
+
+    :param icon: Icon to display in the combobox.
+    :type icon: QIcon
     """
     if count_selected_features is not None:
         text += ' (' + tr('{count} selected features').format(
@@ -56,7 +59,14 @@ def add_ordered_combo_item(
         item_text = combo.itemText(combo_index)
         # see if text alphabetically precedes item_text
         if cmp(text.lower(), item_text.lower()) < 0:
-            combo.insertItem(combo_index, text, data)
+            if icon:
+                combo.insertItem(combo_index, icon, text, data)
+            else:
+                combo.insertItem(combo_index, text, data)
             return
-        # otherwise just add it to the end
-    combo.insertItem(size, text, data)
+
+    # otherwise just add it to the end
+    if icon:
+        combo.insertItem(size, icon, text, data)
+    else:
+        combo.insertItem(size, text, data)

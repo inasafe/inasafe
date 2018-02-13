@@ -70,7 +70,7 @@ from safe.impact_function.multi_exposure_wrapper import (
 from safe.messaging import styles
 from safe.report.impact_report import ImpactReport
 from safe.utilities.extent import Extent
-from safe.utilities.gis import qgis_version
+from safe.utilities.gis import qgis_version, layer_icon
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.qgis_utilities import display_warning_message_bar
@@ -426,9 +426,11 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
 
             source = layer.id()
 
+            icon = layer_icon(layer)
+
             if layer_purpose == layer_purpose_hazard['key']:
                 add_ordered_combo_item(
-                    self.cbx_hazard, title, source)
+                    self.cbx_hazard, title, source, icon=icon)
             elif layer_purpose == layer_purpose_aggregation['key']:
                 if self.use_selected_only:
                     count_selected = layer.selectedFeatureCount()
@@ -437,13 +439,15 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                             self.cbx_aggregation,
                             title,
                             source,
-                            count_selected)
+                            count_selected,
+                            icon=icon
+                        )
                     else:
                         add_ordered_combo_item(
-                            self.cbx_aggregation, title, source, None)
+                            self.cbx_aggregation, title, source, None, icon)
                 else:
                     add_ordered_combo_item(
-                        self.cbx_aggregation, title, source, None)
+                        self.cbx_aggregation, title, source, None, icon)
             elif layer_purpose == layer_purpose_exposure['key']:
 
                 # fetching the exposure
@@ -457,7 +461,7 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                 for key, combo in self.combos_exposures.iteritems():
                     if key == exposure_type:
                         add_ordered_combo_item(
-                            combo, title, source)
+                            combo, title, source, icon=icon)
 
         self.cbx_aggregation.addItem(entire_area_item_aggregation, None)
         for combo in self.combos_exposures.itervalues():
