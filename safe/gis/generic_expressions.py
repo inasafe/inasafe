@@ -11,7 +11,9 @@ from qgis.core import (
 )
 
 from safe.definitions.extra_keywords import all_extra_keywords_description
-from safe.definitions.provenance import provenance_layer_analysis_impacted_id
+from safe.definitions.provenance import (
+    provenance_layer_analysis_impacted_id,
+    provenance_multi_exposure_analysis_summary_layers_id)
 from safe.definitions.utilities import definition
 from safe.gis.tools import load_layer
 from safe.utilities.i18n import tr
@@ -68,6 +70,46 @@ def inasafe_analysis_summary_field_value(field, feature, parent):
         return None
 
     feature = layer.getFeatures().next()
+    return feature[index]
+
+
+description = tr('Retrieve a value from a field in the sub impact analysis '
+                 'layer from a multi exposure analysis layer.')
+examples = {
+    'inasafe_multi_exposure_field_value('
+    '\'population\', \'total_not_exposed\')': 3
+}
+help_message = generate_expression_help(description, examples)
+
+
+@qgsfunction(
+    args='auto', group='InaSAFE', usesGeometry=False, referencedColumns=[],
+    help_text=help_message.to_html(), helpText=help_message.to_html())
+def inasafe_multi_exposure_field_value(exposure_key, field, feature, parent):
+    """Retrieve a value from field in the specified exposure analysis layer.
+
+    """
+    _ = feature, parent  # NOQA
+    project_context_scope = QgsExpressionContextUtils.projectScope()
+    registry = QgsMapLayerRegistry.instance()
+
+    key = ('{provenance}__{exposure}').format(
+        provenance=provenance_multi_exposure_analysis_summary_layers_id[
+            'provenance_key'],
+        exposure=exposure_key)
+    if not project_context_scope.hasVariable(key):
+        return None
+
+    analysis_summary_layer = registry.mapLayer(
+        project_context_scope.variable(key))
+    if not analysis_summary_layer:
+        return None
+
+    index = analysis_summary_layer.fieldNameIndex(field)
+    if index < 0:
+        return None
+
+    feature = analysis_summary_layer.getFeatures().next()
     return feature[index]
 
 

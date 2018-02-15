@@ -19,7 +19,8 @@ from safe.definitions.fields import (
     direction_field,
     exposure_name_field,
 )
-from safe.definitions.provenance import provenance_layer_exposure_summary_id
+from safe.definitions.provenance import (
+    provenance_multi_exposure_summary_layers_id)
 from safe.definitions.reports.map_report import (
     legend_title_header,
     disclaimer_title_header,
@@ -91,7 +92,7 @@ help_message = generate_expression_help(description, examples)
 @qgsfunction(
     args='auto', group=label_group, usesGeometry=False, referencedColumns=[],
     help_text=help_message.to_html(), helpText=help_message.to_html())
-def distance_to_nearest_place(feature, parent):
+def distance_to_nearest_place(exposure_key, feature, parent):
     """If the impact layer has a distance field, it will return the distance to
     the nearest place in metres.
 
@@ -101,20 +102,23 @@ def distance_to_nearest_place(feature, parent):
     project_context_scope = QgsExpressionContextUtils.projectScope()
     registry = QgsMapLayerRegistry.instance()
 
-    key = provenance_layer_exposure_summary_id['provenance_key']
+    key = ('{provenance}__{exposure}').format(
+        provenance=provenance_multi_exposure_summary_layers_id[
+            'provenance_key'],
+        exposure=exposure_key)
     if not project_context_scope.hasVariable(key):
         return None
 
-    layer = registry.mapLayer(project_context_scope.variable(key))
-
-    if not layer:
+    exposure_summary_layer = registry.mapLayer(
+        project_context_scope.variable(key))
+    if not exposure_summary_layer:
         return None
 
-    index = layer.fieldNameIndex(distance_field['field_name'])
+    index = exposure_summary_layer.fieldNameIndex(distance_field['field_name'])
     if index < 0:
         return None
 
-    feature = layer.getFeatures().next()
+    feature = exposure_summary_layer.getFeatures().next()
     return feature[index]
 
 
@@ -130,7 +134,7 @@ help_message = generate_expression_help(description, examples)
 @qgsfunction(
     args='auto', group=label_group, usesGeometry=False, referencedColumns=[],
     help_text=help_message.to_html(), helpText=help_message.to_html())
-def direction_to_nearest_place(feature, parent):
+def direction_to_nearest_place(exposure_key, feature, parent):
     """If the impact layer has a distance field, it will return the direction
     to the nearest place.
 
@@ -140,20 +144,24 @@ def direction_to_nearest_place(feature, parent):
     project_context_scope = QgsExpressionContextUtils.projectScope()
     registry = QgsMapLayerRegistry.instance()
 
-    key = provenance_layer_exposure_summary_id['provenance_key']
+    key = ('{provenance}__{exposure}').format(
+        provenance=provenance_multi_exposure_summary_layers_id[
+            'provenance_key'],
+        exposure=exposure_key)
     if not project_context_scope.hasVariable(key):
         return None
 
-    layer = registry.mapLayer(project_context_scope.variable(key))
-
-    if not layer:
+    exposure_summary_layer = registry.mapLayer(
+        project_context_scope.variable(key))
+    if not exposure_summary_layer:
         return None
 
-    index = layer.fieldNameIndex(direction_field['field_name'])
+    index = exposure_summary_layer.fieldNameIndex(
+        direction_field['field_name'])
     if index < 0:
         return None
 
-    feature = layer.getFeatures().next()
+    feature = exposure_summary_layer.getFeatures().next()
     return feature[index]
 
 
@@ -169,7 +177,7 @@ help_message = generate_expression_help(description, examples)
 @qgsfunction(
     args='auto', group=label_group, usesGeometry=False, referencedColumns=[],
     help_text=help_message.to_html(), helpText=help_message.to_html())
-def bearing_to_nearest_place(feature, parent):
+def bearing_to_nearest_place(exposure_key, feature, parent):
     """If the impact layer has a distance field, it will return the bearing
     to the nearest place in degrees.
 
@@ -179,20 +187,23 @@ def bearing_to_nearest_place(feature, parent):
     project_context_scope = QgsExpressionContextUtils.projectScope()
     registry = QgsMapLayerRegistry.instance()
 
-    key = provenance_layer_exposure_summary_id['provenance_key']
+    key = ('{provenance}__{exposure}').format(
+        provenance=provenance_multi_exposure_summary_layers_id[
+            'provenance_key'],
+        exposure=exposure_key)
     if not project_context_scope.hasVariable(key):
         return None
 
-    layer = registry.mapLayer(project_context_scope.variable(key))
-
-    if not layer:
+    exposure_summary_layer = registry.mapLayer(
+        project_context_scope.variable(key))
+    if not exposure_summary_layer:
         return None
 
-    index = layer.fieldNameIndex(bearing_field['field_name'])
+    index = exposure_summary_layer.fieldNameIndex(bearing_field['field_name'])
     if index < 0:
         return None
 
-    feature = layer.getFeatures().next()
+    feature = exposure_summary_layer.getFeatures().next()
     return feature[index]
 
 
@@ -208,7 +219,7 @@ help_message = generate_expression_help(description, examples)
 @qgsfunction(
     args='auto', group=label_group, usesGeometry=False, referencedColumns=[],
     help_text=help_message.to_html(), helpText=help_message.to_html())
-def name_of_the_nearest_place(feature, parent):
+def name_of_the_nearest_place(exposure_key, feature, parent):
     """If the impact layer has a distance field, it will return the name
     of the nearest place.
 
@@ -218,20 +229,24 @@ def name_of_the_nearest_place(feature, parent):
     project_context_scope = QgsExpressionContextUtils.projectScope()
     registry = QgsMapLayerRegistry.instance()
 
-    key = provenance_layer_exposure_summary_id['provenance_key']
+    key = ('{provenance}__{exposure}').format(
+        provenance=provenance_multi_exposure_summary_layers_id[
+            'provenance_key'],
+        exposure=exposure_key)
     if not project_context_scope.hasVariable(key):
         return None
 
-    layer = registry.mapLayer(project_context_scope.variable(key))
-
-    if not layer:
+    exposure_summary_layer = registry.mapLayer(
+        project_context_scope.variable(key))
+    if not exposure_summary_layer:
         return None
 
-    index = layer.fieldNameIndex(exposure_name_field['field_name'])
+    index = exposure_summary_layer.fieldNameIndex(
+        exposure_name_field['field_name'])
     if index < 0:
         return None
 
-    feature = layer.getFeatures().next()
+    feature = exposure_summary_layer.getFeatures().next()
     return feature[index]
 
 

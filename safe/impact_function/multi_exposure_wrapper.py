@@ -78,7 +78,10 @@ from safe.definitions.provenance import (
     provenance_debug_mode,
     provenance_map_title,
     provenance_multi_exposure_summary_layers,
-    provenance_analysis_question)
+    provenance_analysis_question,
+    provenance_multi_exposure_summary_layers_id,
+    provenance_multi_exposure_analysis_summary_layers,
+    provenance_multi_exposure_analysis_summary_layers_id)
 from safe.definitions.reports.components import (
     standard_impact_report_metadata_pdf, infographic_report)
 from safe.definitions.reports.infographic import map_overview
@@ -941,7 +944,10 @@ class MultiExposureImpactFunction(object):
         analysis_layers = []
         aggregation_layers = []
         list_geometries = []
-        list_of_analysis_path = []
+        dict_of_exposure_summary_path = {}
+        dict_of_exposure_summary_id = {}
+        dict_of_analysis_summary_path = {}
+        dict_of_analysis_summary_id = {}
 
         for i, impact_function in enumerate(self._impact_functions):
             self._current_impact_function = impact_function
@@ -966,13 +972,36 @@ class MultiExposureImpactFunction(object):
 
             analysis_layers.append(impact_function.analysis_impacted)
             aggregation_layers.append(impact_function.aggregation_summary)
-            list_of_analysis_path.append(
-                full_layer_uri(impact_function.analysis_impacted))
+            exposure_key = (
+                impact_function.provenance['exposure_keywords']['exposure'])
+            dict_of_exposure_summary_path[exposure_key] = full_layer_uri(
+                impact_function.exposure_summary)
+            dict_of_exposure_summary_id[exposure_key] = (
+                impact_function.exposure_summary.id())
+            dict_of_analysis_summary_path[exposure_key] = full_layer_uri(
+                impact_function.analysis_impacted)
+            dict_of_analysis_summary_id[exposure_key] = (
+                impact_function.analysis_impacted.id())
 
         set_provenance(
             self._provenance,
             provenance_multi_exposure_summary_layers,
-            list_of_analysis_path)
+            dict_of_exposure_summary_path)
+
+        set_provenance(
+            self._provenance,
+            provenance_multi_exposure_summary_layers_id,
+            dict_of_exposure_summary_id)
+
+        set_provenance(
+            self._provenance,
+            provenance_multi_exposure_analysis_summary_layers,
+            dict_of_analysis_summary_path)
+
+        set_provenance(
+            self._provenance,
+            provenance_multi_exposure_analysis_summary_layers_id,
+            dict_of_analysis_summary_id)
 
         self._current_impact_function = None
         self._analysis_extent = QgsGeometry.unaryUnion(list_geometries)

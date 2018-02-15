@@ -100,8 +100,26 @@ provenance_multi_exposure_layers_id = {
 provenance_multi_exposure_summary_layers = {
     'key': 'provenance_multi_exposure_summary_layers',
     'name': tr('Multi Exposure Summary Layers'),
-    'description': tr('A list of exposure summary layers.'),
+    'description': tr('A dictionary of exposure summary layers.'),
     'provenance_key': 'multi_exposure_summary_layers'
+}
+provenance_multi_exposure_summary_layers_id = {
+    'key': 'provenance_multi_exposure_summary_layers_id',
+    'name': tr('Multi Exposure Summary Layers Id'),
+    'description': tr('A dictionary of exposure summary layer IDs.'),
+    'provenance_key': 'multi_exposure_summary_layers_id'
+}
+provenance_multi_exposure_analysis_summary_layers = {
+    'key': 'provenance_multi_exposure_analysis_summary_layers',
+    'name': tr('Multi Exposure Analysis Summary Layers'),
+    'description': tr('A dictionary of exposure analysis summary layers.'),
+    'provenance_key': 'multi_exposure_analysis_summary_layers'
+}
+provenance_multi_exposure_analysis_summary_layers_id = {
+    'key': 'provenance_multi_exposure_analysis_summary_layers_id',
+    'name': tr('Multi Exposure Analysis Summary Layers Id'),
+    'description': tr('A dictionary of exposure analysis summary layer IDs.'),
+    'provenance_key': 'multi_exposure_analysis_summary_layers_id'
 }
 provenance_gdal_version = {
     'key': 'provenance_gdal_version',
