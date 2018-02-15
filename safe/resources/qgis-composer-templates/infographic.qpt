@@ -112,7 +112,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerPicture>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_percentage(  inasafe_impact_analysis_field_value( 'lactating_displaced' ),  inasafe_impact_analysis_field_value( 'displaced' ) )%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_percentage(  inasafe_analysis_summary_field_value( 'lactating_displaced' ),  inasafe_analysis_summary_field_value( 'displaced' ) )%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,16,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="220" blue="244" green="238"/>
    <ComposerItem pagey="79.9499" page="2" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="242.898" y="299.95" visibility="1" zValue="146" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.8771" outlineWidth="0.3" excludeFromExports="0" uuid="{f27f70e1-5bbf-4945-9884-8dd2b1c45fc1}" height="6.8749" itemRotation="0" frame="false" pagex="242.898">
@@ -121,7 +121,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_name(  inasafe_impact_analysis_field_value( 'minimum_needs__toilets' ) )%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_name(  inasafe_analysis_summary_field_value( 'minimum_needs__toilets' ) )%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,11,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="47" blue="166" green="135"/>
    <ComposerItem pagey="163.73" page="2" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="153.395" y="383.73" visibility="1" zValue="145" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.877" outlineWidth="0.3" excludeFromExports="0" uuid="{84dd2784-2fab-4208-9e8e-3f11f9bf7d99}" height="6.28776" itemRotation="0" frame="false" pagex="153.395">
@@ -130,7 +130,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[%if (inasafe_place_value_coefficient(  inasafe_impact_analysis_field_value( 'minimum_needs__toilets' ) ), inasafe_place_value_coefficient(  inasafe_impact_analysis_field_value( 'minimum_needs__toilets' ) ), '-')%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[%if (inasafe_place_value_coefficient(  inasafe_analysis_summary_field_value( 'minimum_needs__toilets' ) ), inasafe_place_value_coefficient(  inasafe_analysis_summary_field_value( 'minimum_needs__toilets' ) ), '-')%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,18,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="47" blue="166" green="135"/>
    <ComposerItem pagey="157.137" page="2" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="153.395" y="377.137" visibility="1" zValue="144" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.8769" outlineWidth="0.3" excludeFromExports="0" uuid="{d837ba22-dc47-4ef3-8b01-6c0d79cce6ed}" height="7.30315" itemRotation="0" frame="false" pagex="153.395">
@@ -139,7 +139,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_percentage(  inasafe_impact_analysis_field_value( 'under_5_displaced' ),  inasafe_impact_analysis_field_value( 'displaced' ) )%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_percentage(  inasafe_analysis_summary_field_value( 'under_5_displaced' ),  inasafe_analysis_summary_field_value( 'displaced' ) )%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,16,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="220" blue="244" green="238"/>
    <ComposerItem pagey="79.9499" page="2" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="10.0069" y="299.95" visibility="1" zValue="143" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.8771" outlineWidth="0.3" excludeFromExports="0" uuid="{a69d4ae7-76f7-414d-a105-da6bde259c55}" height="6.8749" itemRotation="0" frame="false" pagex="10.0069">
@@ -148,7 +148,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_name(  inasafe_impact_analysis_field_value( 'lactating_displaced' ) )%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_name(  inasafe_analysis_summary_field_value( 'lactating_displaced' ) )%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,11,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="47" blue="166" green="135"/>
    <ComposerItem pagey="74.0905" page="2" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="243.049" y="294.091" visibility="1" zValue="142" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.877" outlineWidth="0.3" excludeFromExports="0" uuid="{eb7ae58a-de16-4913-9abc-2c5673c25703}" height="5.2904" itemRotation="0" frame="false" pagex="243.049">
@@ -166,7 +166,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[%if (inasafe_place_value_coefficient(  inasafe_impact_analysis_field_value( 'lactating_displaced' ) ), inasafe_place_value_coefficient(  inasafe_impact_analysis_field_value( 'lactating_displaced' ) ), '-')%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[%if (inasafe_place_value_coefficient(  inasafe_analysis_summary_field_value( 'lactating_displaced' ) ), inasafe_place_value_coefficient(  inasafe_analysis_summary_field_value( 'lactating_displaced' ) ), '-')%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,18,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="47" blue="166" green="135"/>
    <ComposerItem pagey="67.4978" page="2" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="243.049" y="287.498" visibility="1" zValue="140" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.8769" outlineWidth="0.3" excludeFromExports="0" uuid="{a7acc58c-cddd-4ef0-a696-c6d1e9546320}" height="7.30315" itemRotation="0" frame="false" pagex="243.049">
@@ -191,7 +191,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerPicture>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_percentage(  inasafe_impact_analysis_field_value( 'pregnant_displaced' ),  inasafe_impact_analysis_field_value( 'displaced' ) )%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_percentage(  inasafe_analysis_summary_field_value( 'pregnant_displaced' ),  inasafe_analysis_summary_field_value( 'displaced' ) )%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,16,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="220" blue="244" green="238"/>
    <ComposerItem pagey="79.9499" page="2" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="200.809" y="299.95" visibility="1" zValue="137" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.8771" outlineWidth="0.3" excludeFromExports="0" uuid="{08e12afd-0cec-4026-b73a-8e83e44383a1}" height="6.8749" itemRotation="0" frame="false" pagex="200.809">
@@ -200,7 +200,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_name(  inasafe_impact_analysis_field_value( 'pregnant_displaced' ) )%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_name(  inasafe_analysis_summary_field_value( 'pregnant_displaced' ) )%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,11,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="47" blue="166" green="135"/>
    <ComposerItem pagey="74.0905" page="2" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="200.809" y="294.091" visibility="1" zValue="136" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.877" outlineWidth="0.3" excludeFromExports="0" uuid="{990f86cb-83b4-4058-bc7c-ab0664a5620c}" height="5.2904" itemRotation="0" frame="false" pagex="200.809">
@@ -218,7 +218,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[%if (inasafe_place_value_coefficient(  inasafe_impact_analysis_field_value( 'pregnant_displaced' ) ), inasafe_place_value_coefficient(  inasafe_impact_analysis_field_value( 'pregnant_displaced' ) ), '-')%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[%if (inasafe_place_value_coefficient(  inasafe_analysis_summary_field_value( 'pregnant_displaced' ) ), inasafe_place_value_coefficient(  inasafe_analysis_summary_field_value( 'pregnant_displaced' ) ), '-')%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,18,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="47" blue="166" green="135"/>
    <ComposerItem pagey="67.4978" page="2" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="200.809" y="287.498" visibility="1" zValue="134" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.8769" outlineWidth="0.3" excludeFromExports="0" uuid="{ea3231b5-a106-4b96-a552-2f723b395c05}" height="7.30315" itemRotation="0" frame="false" pagex="200.809">
@@ -227,7 +227,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_name(  inasafe_impact_analysis_field_value( 'hygiene_packs' ) )%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_name(  inasafe_analysis_summary_field_value( 'hygiene_packs' ) )%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,11,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="47" blue="166" green="135"/>
    <ComposerItem pagey="163.73" page="2" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="251.92" y="383.73" visibility="1" zValue="133" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.877" outlineWidth="0.3" excludeFromExports="0" uuid="{95dac681-0078-49a3-ab8d-34da88624ebc}" height="6.28776" itemRotation="0" frame="false" pagex="251.92">
@@ -245,7 +245,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[%if (inasafe_place_value_coefficient(  inasafe_impact_analysis_field_value( 'hygiene_packs' ) ), inasafe_place_value_coefficient(  inasafe_impact_analysis_field_value( 'hygiene_packs' ) ), '-')%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[%if (inasafe_place_value_coefficient(  inasafe_analysis_summary_field_value( 'hygiene_packs' ) ), inasafe_place_value_coefficient(  inasafe_analysis_summary_field_value( 'hygiene_packs' ) ), '-')%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,18,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="47" blue="166" green="135"/>
    <ComposerItem pagey="157.137" page="2" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="251.92" y="377.137" visibility="1" zValue="131" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.8769" outlineWidth="0.3" excludeFromExports="0" uuid="{a8319d3a-4f02-4384-9945-9b4b93785f8a}" height="7.30315" itemRotation="0" frame="false" pagex="251.92">
@@ -271,7 +271,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerPicture>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_name(  inasafe_impact_analysis_field_value( 'minimum_needs__family_kits' ) )%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_name(  inasafe_analysis_summary_field_value( 'minimum_needs__family_kits' ) )%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,11,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="47" blue="166" green="135"/>
    <ComposerItem pagey="163.73" page="2" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="113.005" y="383.73" visibility="1" zValue="128" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.877" outlineWidth="0.3" excludeFromExports="0" uuid="{2b264df4-5f25-461d-adf2-b176cb0163d2}" height="6.28776" itemRotation="0" frame="false" pagex="113.005">
@@ -289,7 +289,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[%if (inasafe_place_value_coefficient(  inasafe_impact_analysis_field_value( 'minimum_needs__family_kits' ) ), inasafe_place_value_coefficient(  inasafe_impact_analysis_field_value( 'minimum_needs__family_kits' ) ), '-')%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[%if (inasafe_place_value_coefficient(  inasafe_analysis_summary_field_value( 'minimum_needs__family_kits' ) ), inasafe_place_value_coefficient(  inasafe_analysis_summary_field_value( 'minimum_needs__family_kits' ) ), '-')%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,18,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="47" blue="166" green="135"/>
    <ComposerItem pagey="157.137" page="2" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="113.005" y="377.137" visibility="1" zValue="126" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.8769" outlineWidth="0.3" excludeFromExports="0" uuid="{79c7579b-68d3-46d0-8d8e-9561f016fe4b}" height="7.30315" itemRotation="0" frame="false" pagex="113.005">
@@ -298,7 +298,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_name(  inasafe_impact_analysis_field_value( 'over_60_displaced' ) )%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_name(  inasafe_analysis_summary_field_value( 'over_60_displaced' ) )%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,11,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="47" blue="166" green="135"/>
    <ComposerItem pagey="74.0905" page="2" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="9.9069" y="294.091" visibility="1" zValue="125" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.877" outlineWidth="0.3" excludeFromExports="0" uuid="{d962a012-d6df-4d53-b588-d6f8d987cfd8}" height="5.2904" itemRotation="0" frame="false" pagex="9.9069">
@@ -332,7 +332,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerPicture>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_percentage(  inasafe_impact_analysis_field_value( 'child_bearing_age_displaced' ),  inasafe_impact_analysis_field_value( 'displaced' ) )%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_percentage(  inasafe_analysis_summary_field_value( 'child_bearing_age_displaced' ),  inasafe_analysis_summary_field_value( 'displaced' ) )%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,16,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="220" blue="244" green="238"/>
    <ComposerItem pagey="79.9499" page="2" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="160.032" y="299.95" visibility="1" zValue="121" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.8771" outlineWidth="0.3" excludeFromExports="0" uuid="{1d9b0a00-e0e6-4ebc-a2fe-1c212a8a07b9}" height="6.8749" itemRotation="0" frame="false" pagex="160.032">
@@ -349,7 +349,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerPicture>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[%if (inasafe_place_value_coefficient(  inasafe_impact_analysis_field_value( 'under_5_displaced' ) ), inasafe_place_value_coefficient(  inasafe_impact_analysis_field_value( 'under_5_displaced' ) ), '-')%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[%if (inasafe_place_value_coefficient(  inasafe_analysis_summary_field_value( 'under_5_displaced' ) ), inasafe_place_value_coefficient(  inasafe_analysis_summary_field_value( 'under_5_displaced' ) ), '-')%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,18,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="47" blue="166" green="135"/>
    <ComposerItem pagey="67.4978" page="2" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="9.9069" y="287.498" visibility="1" zValue="119" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.8769" outlineWidth="0.3" excludeFromExports="0" uuid="{27cfca96-c635-41c2-a344-8779299a75c5}" height="7.30315" itemRotation="0" frame="false" pagex="9.9069">
@@ -358,7 +358,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_percentage(  inasafe_impact_analysis_field_value( 'female_displaced' ),  inasafe_impact_analysis_field_value( 'displaced' ) )%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_percentage(  inasafe_analysis_summary_field_value( 'female_displaced' ),  inasafe_analysis_summary_field_value( 'displaced' ) )%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,16,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="220" blue="244" green="238"/>
    <ComposerItem pagey="175.592" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="261.909" y="175.592" visibility="1" zValue="118" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.8771" outlineWidth="0.3" excludeFromExports="0" uuid="{cd7a6bec-6664-499f-b01e-c830de0b2734}" height="6.8749" itemRotation="0" frame="false" pagex="261.909">
@@ -367,7 +367,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_name(  inasafe_impact_analysis_field_value( 'child_bearing_age_displaced' ) )%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_name(  inasafe_analysis_summary_field_value( 'child_bearing_age_displaced' ) )%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,11,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="47" blue="166" green="135"/>
    <ComposerItem pagey="74.0905" page="2" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="160.032" y="294.091" visibility="1" zValue="117" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.877" outlineWidth="0.3" excludeFromExports="0" uuid="{7a1cb394-2ba7-4373-a6af-2960e8c9306f}" height="5.2904" itemRotation="0" frame="false" pagex="160.032">
@@ -376,7 +376,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_name(  inasafe_impact_analysis_field_value( 'female_displaced' ) )%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_name(  inasafe_analysis_summary_field_value( 'female_displaced' ) )%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,11,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="47" blue="166" green="135"/>
    <ComposerItem pagey="170.302" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="261.909" y="170.302" visibility="1" zValue="116" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.877" outlineWidth="0.3" excludeFromExports="0" uuid="{5d3bb880-f84b-4c4b-91bb-31a0de6afb94}" height="5.2904" itemRotation="0" frame="false" pagex="261.909">
@@ -403,7 +403,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[%if (inasafe_place_value_coefficient(  inasafe_impact_analysis_field_value( 'child_bearing_age_displaced' ) ), inasafe_place_value_coefficient(  inasafe_impact_analysis_field_value( 'child_bearing_age_displaced' ) ), '-')%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[%if (inasafe_place_value_coefficient(  inasafe_analysis_summary_field_value( 'child_bearing_age_displaced' ) ), inasafe_place_value_coefficient(  inasafe_analysis_summary_field_value( 'child_bearing_age_displaced' ) ), '-')%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,18,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="47" blue="166" green="135"/>
    <ComposerItem pagey="67.4978" page="2" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="160.032" y="287.498" visibility="1" zValue="113" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.8769" outlineWidth="0.3" excludeFromExports="0" uuid="{dad34b42-092d-4768-9261-dc1fb3966e85}" height="7.30315" itemRotation="0" frame="false" pagex="160.032">
@@ -420,7 +420,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerPicture>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[%if (inasafe_place_value_coefficient(  inasafe_impact_analysis_field_value( 'female_displaced' ) ), inasafe_place_value_coefficient(  inasafe_impact_analysis_field_value( 'female_displaced' ) ), '-')%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[%if (inasafe_place_value_coefficient(  inasafe_analysis_summary_field_value( 'female_displaced' ) ), inasafe_place_value_coefficient(  inasafe_analysis_summary_field_value( 'female_displaced' ) ), '-')%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,18,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="47" blue="166" green="135"/>
    <ComposerItem pagey="162.998" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="261.91" y="162.998" visibility="1" zValue="111" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.8769" outlineWidth="0.3" excludeFromExports="0" uuid="{5fa1ff3b-927f-41bb-8256-bd22156ab8ca}" height="7.30315" itemRotation="0" frame="false" pagex="261.91">
@@ -429,7 +429,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_percentage(  inasafe_impact_analysis_field_value( 'male_displaced' ),  inasafe_impact_analysis_field_value( 'displaced' ) )%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_percentage(  inasafe_analysis_summary_field_value( 'male_displaced' ),  inasafe_analysis_summary_field_value( 'displaced' ) )%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,16,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="220" blue="244" green="238"/>
    <ComposerItem pagey="175.592" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="233.213" y="175.592" visibility="1" zValue="110" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.8771" outlineWidth="0.3" excludeFromExports="0" uuid="{39899893-ed95-47f6-a323-3e8b062238c4}" height="6.8749" itemRotation="0" frame="false" pagex="233.213">
@@ -438,7 +438,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_name(  inasafe_impact_analysis_field_value( 'male_displaced' ) )%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_name(  inasafe_analysis_summary_field_value( 'male_displaced' ) )%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,11,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="47" blue="166" green="135"/>
    <ComposerItem pagey="170.302" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="233.213" y="170.302" visibility="1" zValue="109" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.877" outlineWidth="0.3" excludeFromExports="0" uuid="{a5b05247-8094-4dc6-8bdc-dc38938a5c6a}" height="5.2904" itemRotation="0" frame="false" pagex="233.213">
@@ -447,7 +447,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_name(  inasafe_impact_analysis_field_value( 'additional_rice' ) )%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_name(  inasafe_analysis_summary_field_value( 'additional_rice' ) )%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,11,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="47" blue="166" green="135"/>
    <ComposerItem pagey="163.73" page="2" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="213.289" y="383.73" visibility="1" zValue="108" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.877" outlineWidth="0.3" excludeFromExports="0" uuid="{241d45fc-f0aa-4a2d-8727-2966489e51d6}" height="6.28776" itemRotation="0" frame="false" pagex="213.289">
@@ -474,7 +474,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[%if (inasafe_place_value_coefficient(  inasafe_impact_analysis_field_value( 'male_displaced' ) ), inasafe_place_value_coefficient(  inasafe_impact_analysis_field_value( 'male_displaced' ) ), '-')%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[%if (inasafe_place_value_coefficient(  inasafe_analysis_summary_field_value( 'male_displaced' ) ), inasafe_place_value_coefficient(  inasafe_analysis_summary_field_value( 'male_displaced' ) ), '-')%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,18,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="47" blue="166" green="135"/>
    <ComposerItem pagey="162.998" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="233.214" y="162.998" visibility="1" zValue="105" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.8769" outlineWidth="0.3" excludeFromExports="0" uuid="{439b1644-775c-4e64-8dbb-4182fc1f589a}" height="7.30315" itemRotation="0" frame="false" pagex="233.214">
@@ -483,7 +483,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[%if (inasafe_place_value_coefficient(  inasafe_impact_analysis_field_value( 'additional_rice' ) ), inasafe_place_value_coefficient(  inasafe_impact_analysis_field_value( 'additional_rice' ) ), '-')%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[%if (inasafe_place_value_coefficient(  inasafe_analysis_summary_field_value( 'additional_rice' ) ), inasafe_place_value_coefficient(  inasafe_analysis_summary_field_value( 'additional_rice' ) ), '-')%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,18,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="47" blue="166" green="135"/>
    <ComposerItem pagey="157.137" page="2" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="213.289" y="377.137" visibility="1" zValue="104" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.8769" outlineWidth="0.3" excludeFromExports="0" uuid="{70b84c5f-1ef5-4fa6-aa70-a052681da074}" height="7.30315" itemRotation="0" frame="false" pagex="213.289">
@@ -500,7 +500,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerPicture>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_percentage(  inasafe_impact_analysis_field_value( 'elderly_displaced' ),  inasafe_impact_analysis_field_value( 'displaced' ) )%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_percentage(  inasafe_analysis_summary_field_value( 'elderly_displaced' ),  inasafe_analysis_summary_field_value( 'displaced' ) )%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,16,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="220" blue="244" green="238"/>
    <ComposerItem pagey="175.592" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="201.909" y="175.592" visibility="1" zValue="102" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.8771" outlineWidth="0.3" excludeFromExports="0" uuid="{6bb4b7b7-1091-4594-bdec-c6cb9dae2dde}" height="6.8749" itemRotation="0" frame="false" pagex="201.909">
@@ -509,7 +509,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_name(  inasafe_impact_analysis_field_value( 'elderly_displaced' ) )%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_name(  inasafe_analysis_summary_field_value( 'elderly_displaced' ) )%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,11,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="47" blue="166" green="135"/>
    <ComposerItem pagey="170.302" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="201.909" y="170.302" visibility="1" zValue="101" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.877" outlineWidth="0.3" excludeFromExports="0" uuid="{c062cbe6-95c1-4f9f-8802-0a131eff88f9}" height="5.2904" itemRotation="0" frame="false" pagex="201.909">
@@ -518,7 +518,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_percentage(  inasafe_impact_analysis_field_value( 'disabled_displaced' ),  inasafe_impact_analysis_field_value( 'displaced' ) )%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_percentage(  inasafe_analysis_summary_field_value( 'disabled_displaced' ),  inasafe_analysis_summary_field_value( 'displaced' ) )%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,16,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="220" blue="244" green="238"/>
    <ComposerItem pagey="79.9499" page="2" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="107.611" y="299.95" visibility="1" zValue="100" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.8771" outlineWidth="0.3" excludeFromExports="0" uuid="{44223314-aee6-4fa0-8dfa-efca6502208d}" height="6.8749" itemRotation="0" frame="false" pagex="107.611">
@@ -536,7 +536,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_name(  inasafe_impact_analysis_field_value( 'disabled_displaced' ) )%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_name(  inasafe_analysis_summary_field_value( 'disabled_displaced' ) )%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,11,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="47" blue="166" green="135"/>
    <ComposerItem pagey="74.0905" page="2" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="107.611" y="294.091" visibility="1" zValue="98" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.877" outlineWidth="0.3" excludeFromExports="0" uuid="{f20e465b-0057-4f5c-991a-edbfa6d44e2d}" height="5.2904" itemRotation="0" frame="false" pagex="107.611">
@@ -545,7 +545,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[%if (inasafe_place_value_coefficient(  inasafe_impact_analysis_field_value( 'elderly_displaced' ) ), inasafe_place_value_coefficient(  inasafe_impact_analysis_field_value( 'elderly_displaced' ) ), '-')%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[%if (inasafe_place_value_coefficient(  inasafe_analysis_summary_field_value( 'elderly_displaced' ) ), inasafe_place_value_coefficient(  inasafe_analysis_summary_field_value( 'elderly_displaced' ) ), '-')%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,18,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="47" blue="166" green="135"/>
    <ComposerItem pagey="162.998" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="201.91" y="162.998" visibility="1" zValue="97" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.8769" outlineWidth="0.3" excludeFromExports="0" uuid="{fb8d1308-a76d-4df4-8cf8-e7798401b72a}" height="7.30315" itemRotation="0" frame="false" pagex="201.91">
@@ -571,7 +571,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerPicture>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[%if (inasafe_place_value_coefficient(  inasafe_impact_analysis_field_value( 'disabled_displaced' ) ), inasafe_place_value_coefficient(  inasafe_impact_analysis_field_value( 'disabled_displaced' ) ), '-')%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[%if (inasafe_place_value_coefficient(  inasafe_analysis_summary_field_value( 'disabled_displaced' ) ), inasafe_place_value_coefficient(  inasafe_analysis_summary_field_value( 'disabled_displaced' ) ), '-')%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,18,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="47" blue="166" green="135"/>
    <ComposerItem pagey="67.4978" page="2" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="107.611" y="287.498" visibility="1" zValue="94" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.8769" outlineWidth="0.3" excludeFromExports="0" uuid="{290d45f7-ad45-42a5-8ba0-86be06f02188}" height="7.30315" itemRotation="0" frame="false" pagex="107.611">
@@ -588,7 +588,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerPicture>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_percentage(  inasafe_impact_analysis_field_value( 'child_displaced' ),  inasafe_impact_analysis_field_value( 'displaced' ) )%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_percentage(  inasafe_analysis_summary_field_value( 'child_displaced' ),  inasafe_analysis_summary_field_value( 'displaced' ) )%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,16,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="220" blue="244" green="238"/>
    <ComposerItem pagey="175.635" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="143.778" y="175.635" visibility="1" zValue="92" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.8771" outlineWidth="0.3" excludeFromExports="0" uuid="{f796aa93-29b4-45cf-8a3d-35c48737f081}" height="6.8749" itemRotation="0" frame="false" pagex="143.778">
@@ -597,7 +597,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_name(  inasafe_impact_analysis_field_value( 'minimum_needs__clean_water' ) )%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_name(  inasafe_analysis_summary_field_value( 'minimum_needs__clean_water' ) )%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,11,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="47" blue="166" green="135"/>
    <ComposerItem pagey="163.73" page="2" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="77.8925" y="383.73" visibility="1" zValue="91" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.877" outlineWidth="0.3" excludeFromExports="0" uuid="{d0d8d266-e755-45bd-b78c-5327b40ffd50}" height="6.28776" itemRotation="0" frame="false" pagex="77.8925">
@@ -606,7 +606,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_name(  inasafe_impact_analysis_field_value( 'child_displaced' ) )%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_name(  inasafe_analysis_summary_field_value( 'child_displaced' ) )%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,11,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="47" blue="166" green="135"/>
    <ComposerItem pagey="170.345" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="143.778" y="170.345" visibility="1" zValue="90" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.877" outlineWidth="0.3" excludeFromExports="0" uuid="{d0b0ae19-0eda-4870-8cfa-92200497d1a4}" height="5.2904" itemRotation="0" frame="false" pagex="143.778">
@@ -633,7 +633,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[%if (inasafe_place_value_coefficient(  inasafe_impact_analysis_field_value( 'minimum_needs__clean_water' ) ), inasafe_place_value_coefficient(  inasafe_impact_analysis_field_value( 'minimum_needs__clean_water' ) ), '-')%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[%if (inasafe_place_value_coefficient(  inasafe_analysis_summary_field_value( 'minimum_needs__clean_water' ) ), inasafe_place_value_coefficient(  inasafe_analysis_summary_field_value( 'minimum_needs__clean_water' ) ), '-')%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,18,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="47" blue="166" green="135"/>
    <ComposerItem pagey="157.137" page="2" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="77.8925" y="377.137" visibility="1" zValue="87" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.8769" outlineWidth="0.3" excludeFromExports="0" uuid="{b12ac087-ed0f-48ed-a32d-b2d4273fe1de}" height="7.30315" itemRotation="0" frame="false" pagex="77.8925">
@@ -642,7 +642,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[%if (inasafe_place_value_coefficient(  inasafe_impact_analysis_field_value( 'child_displaced' ) ), inasafe_place_value_coefficient(  inasafe_impact_analysis_field_value( 'child_displaced' ) ), '-')%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[%if (inasafe_place_value_coefficient(  inasafe_analysis_summary_field_value( 'child_displaced' ) ), inasafe_place_value_coefficient(  inasafe_analysis_summary_field_value( 'child_displaced' ) ), '-')%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,18,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="47" blue="166" green="135"/>
    <ComposerItem pagey="163.041" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="143.779" y="163.041" visibility="1" zValue="86" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.8769" outlineWidth="0.3" excludeFromExports="0" uuid="{209d3cc6-ad62-46f4-b4bb-7075fd1eaf11}" height="7.30315" itemRotation="0" frame="false" pagex="143.779">
@@ -651,7 +651,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_percentage(  inasafe_impact_analysis_field_value( 'adult_displaced' ),  inasafe_impact_analysis_field_value( 'displaced' ) )%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_percentage(  inasafe_analysis_summary_field_value( 'adult_displaced' ),  inasafe_analysis_summary_field_value( 'displaced' ) )%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,16,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="220" blue="244" green="238"/>
    <ComposerItem pagey="175.592" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="172.605" y="175.592" visibility="1" zValue="85" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.8771" outlineWidth="0.3" excludeFromExports="0" uuid="{74ba6134-34b6-47e1-aef3-f0681b17adcb}" height="6.8749" itemRotation="0" frame="false" pagex="172.605">
@@ -660,7 +660,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_name(  inasafe_impact_analysis_field_value( 'minimum_needs__drinking_water' ) )%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_name(  inasafe_analysis_summary_field_value( 'minimum_needs__drinking_water' ) )%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,11,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="47" blue="166" green="135"/>
    <ComposerItem pagey="163.73" page="2" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="43.0055" y="383.73" visibility="1" zValue="84" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.877" outlineWidth="0.3" excludeFromExports="0" uuid="{947644e0-c864-4f1c-a171-5eefafb91adc}" height="6.28776" itemRotation="0" frame="false" pagex="43.0055">
@@ -669,7 +669,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_name(  inasafe_impact_analysis_field_value( 'adult_displaced' ) )%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_name(  inasafe_analysis_summary_field_value( 'adult_displaced' ) )%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,11,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="47" blue="166" green="135"/>
    <ComposerItem pagey="170.302" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="172.605" y="170.302" visibility="1" zValue="83" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.877" outlineWidth="0.3" excludeFromExports="0" uuid="{aafbcfb0-c17d-41c3-b70e-9b976496574d}" height="5.2904" itemRotation="0" frame="false" pagex="172.605">
@@ -696,7 +696,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[%if (inasafe_place_value_coefficient(  inasafe_impact_analysis_field_value( 'minimum_needs__drinking_water' ) ), inasafe_place_value_coefficient(  inasafe_impact_analysis_field_value( 'minimum_needs__drinking_water' ) ), '-')%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[%if (inasafe_place_value_coefficient(  inasafe_analysis_summary_field_value( 'minimum_needs__drinking_water' ) ), inasafe_place_value_coefficient(  inasafe_analysis_summary_field_value( 'minimum_needs__drinking_water' ) ), '-')%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,18,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="47" blue="166" green="135"/>
    <ComposerItem pagey="157.137" page="2" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="43.0055" y="377.137" visibility="1" zValue="80" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.8769" outlineWidth="0.3" excludeFromExports="0" uuid="{5c610f70-54fb-4f2c-aae5-2074ed533e9b}" height="7.30315" itemRotation="0" frame="false" pagex="43.0055">
@@ -705,7 +705,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[%if (inasafe_place_value_coefficient(  inasafe_impact_analysis_field_value( 'adult_displaced' ) ), inasafe_place_value_coefficient(  inasafe_impact_analysis_field_value( 'adult_displaced' ) ), '-')%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[%if (inasafe_place_value_coefficient(  inasafe_analysis_summary_field_value( 'adult_displaced' ) ), inasafe_place_value_coefficient(  inasafe_analysis_summary_field_value( 'adult_displaced' ) ), '-')%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,18,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="47" blue="166" green="135"/>
    <ComposerItem pagey="162.998" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="172.606" y="162.998" visibility="1" zValue="79" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.8769" outlineWidth="0.3" excludeFromExports="0" uuid="{6420ec3f-a983-4595-b771-044eb8691bec}" height="7.30315" itemRotation="0" frame="false" pagex="172.606">
@@ -731,7 +731,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerPicture>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_percentage(  inasafe_impact_analysis_field_value( 'over_60_displaced' ),  inasafe_impact_analysis_field_value( 'displaced' ) )%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_percentage(  inasafe_analysis_summary_field_value( 'over_60_displaced' ),  inasafe_analysis_summary_field_value( 'displaced' ) )%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,16,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="220" blue="244" green="238"/>
    <ComposerItem pagey="79.9499" page="2" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="58.4" y="299.95" visibility="1" zValue="76" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.8771" outlineWidth="0.3" excludeFromExports="0" uuid="{2755a82e-cc15-4186-855d-a60b296b3d69}" height="6.8749" itemRotation="0" frame="false" pagex="58.4">
@@ -740,7 +740,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_percentage(  inasafe_impact_analysis_field_value( 'infant_displaced' ),  inasafe_impact_analysis_field_value( 'displaced' ) )%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_percentage(  inasafe_analysis_summary_field_value( 'infant_displaced' ),  inasafe_analysis_summary_field_value( 'displaced' ) )%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,16,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="220" blue="244" green="238"/>
    <ComposerItem pagey="175.592" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="115.997" y="175.592" visibility="1" zValue="75" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.8771" outlineWidth="0.3" excludeFromExports="0" uuid="{3851796f-1263-49da-8cf9-f0a5a1297e5c}" height="6.8749" itemRotation="0" frame="false" pagex="115.997">
@@ -749,7 +749,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_name(  inasafe_impact_analysis_field_value( 'over_60_displaced' ) )%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_name(  inasafe_analysis_summary_field_value( 'over_60_displaced' ) )%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,11,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="47" blue="166" green="135"/>
    <ComposerItem pagey="74.0905" page="2" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="58.4" y="294.091" visibility="1" zValue="74" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.877" outlineWidth="0.3" excludeFromExports="0" uuid="{c1b5841a-f2f2-4cef-bff4-262b9c92adef}" height="5.2904" itemRotation="0" frame="false" pagex="58.4">
@@ -758,7 +758,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_name(  inasafe_impact_analysis_field_value( 'infant_displaced' ) )%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_name(  inasafe_analysis_summary_field_value( 'infant_displaced' ) )%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,11,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="47" blue="166" green="135"/>
    <ComposerItem pagey="170.302" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="115.997" y="170.302" visibility="1" zValue="73" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.877" outlineWidth="0.3" excludeFromExports="0" uuid="{bdaa73e6-7e8e-4fcd-a1d3-80556929da09}" height="5.2904" itemRotation="0" frame="false" pagex="115.997">
@@ -785,7 +785,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[%if (inasafe_place_value_coefficient(  inasafe_impact_analysis_field_value( 'over_60_displaced' ) ), inasafe_place_value_coefficient(  inasafe_impact_analysis_field_value( 'over_60_displaced' ) ), '-')%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[%if (inasafe_place_value_coefficient(  inasafe_analysis_summary_field_value( 'over_60_displaced' ) ), inasafe_place_value_coefficient(  inasafe_analysis_summary_field_value( 'over_60_displaced' ) ), '-')%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,18,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="47" blue="166" green="135"/>
    <ComposerItem pagey="67.4978" page="2" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="58.4" y="287.498" visibility="1" zValue="70" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.8769" outlineWidth="0.3" excludeFromExports="0" uuid="{74e8484b-2022-48ed-b487-6572cf2c755d}" height="7.30315" itemRotation="0" frame="false" pagex="58.4">
@@ -802,7 +802,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerPicture>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[%if (inasafe_place_value_coefficient(  inasafe_impact_analysis_field_value( 'infant_displaced' ) ), inasafe_place_value_coefficient(  inasafe_impact_analysis_field_value( 'infant_displaced' ) ), '-')%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[%if (inasafe_place_value_coefficient(  inasafe_analysis_summary_field_value( 'infant_displaced' ) ), inasafe_place_value_coefficient(  inasafe_analysis_summary_field_value( 'infant_displaced' ) ), '-')%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,18,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="47" blue="166" green="135"/>
    <ComposerItem pagey="162.998" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="115.997" y="162.998" visibility="1" zValue="68" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.8769" outlineWidth="0.3" excludeFromExports="0" uuid="{09be8981-8e10-4467-b33e-5916a851b5bf}" height="7.30315" itemRotation="0" frame="false" pagex="115.997">
@@ -820,7 +820,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_name(  inasafe_impact_analysis_field_value( 'minimum_needs__rice' ) )%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_name(  inasafe_analysis_summary_field_value( 'minimum_needs__rice' ) )%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,11,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="47" blue="166" green="135"/>
    <ComposerItem pagey="163.73" page="2" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="9.36483" y="383.73" visibility="1" zValue="66" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.877" outlineWidth="0.3" excludeFromExports="0" uuid="{6f141dee-1827-4d07-b000-098826e07cd2}" height="6.28776" itemRotation="0" frame="false" pagex="9.36483">
@@ -869,7 +869,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[%if (inasafe_place_value_coefficient(  inasafe_impact_analysis_field_value( 'minimum_needs__rice' ) ), inasafe_place_value_coefficient(  inasafe_impact_analysis_field_value( 'minimum_needs__rice' ) ), '-')%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[%if (inasafe_place_value_coefficient(  inasafe_analysis_summary_field_value( 'minimum_needs__rice' ) ), inasafe_place_value_coefficient(  inasafe_analysis_summary_field_value( 'minimum_needs__rice' ) ), '-')%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,18,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="47" blue="166" green="135"/>
    <ComposerItem pagey="157.137" page="2" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="9.36483" y="377.137" visibility="1" zValue="62" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="24.8769" outlineWidth="0.3" excludeFromExports="0" uuid="{33358354-0a17-4825-b16c-677777e4215d}" height="7.30315" itemRotation="0" frame="false" pagex="9.36483">
@@ -1265,7 +1265,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerShape>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_name(  inasafe_impact_analysis_field_value( 'displaced' ) )%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_name(  inasafe_analysis_summary_field_value( 'displaced' ) )%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,13,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="47" blue="166" green="135"/>
    <ComposerItem pagey="60.0719" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="219.059" y="60.0719" visibility="1" zValue="39" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="26.6569" outlineWidth="0.3" excludeFromExports="0" uuid="{c589496b-dd5c-49f6-9816-207f9e63de1b}" height="9.561" itemRotation="0" frame="false" pagex="219.059">
@@ -1314,7 +1314,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_name( inasafe_impact_analysis_field_value( 'total_affected' ) )%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[% inasafe_place_value_name( inasafe_analysis_summary_field_value( 'total_affected' ) )%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,13,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="47" blue="166" green="135"/>
    <ComposerItem pagey="60.0719" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="142.219" y="60.0719" visibility="1" zValue="35" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="26.6569" outlineWidth="0.3" excludeFromExports="0" uuid="{9e577377-9bd7-4030-934b-c83a4579127f}" height="9.561" itemRotation="0" frame="false" pagex="142.219">
@@ -1354,7 +1354,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerShape>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[%if (inasafe_place_value_coefficient(  inasafe_impact_analysis_field_value( 'displaced' ) ), inasafe_place_value_coefficient(  inasafe_impact_analysis_field_value( 'displaced' ) ), '-')%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[%if (inasafe_place_value_coefficient(  inasafe_analysis_summary_field_value( 'displaced' ) ), inasafe_place_value_coefficient(  inasafe_analysis_summary_field_value( 'displaced' ) ), '-')%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,20,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="47" blue="166" green="135"/>
    <ComposerItem pagey="52.457" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="219.091" y="52.457" visibility="1" zValue="32" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="26.594" outlineWidth="0.3" excludeFromExports="0" uuid="{63c09777-18cf-44aa-92da-ac56c6b9de93}" height="9.561" itemRotation="0" frame="false" pagex="219.091">
@@ -1416,7 +1416,7 @@
     <customproperties/>
    </ComposerItem>
   </ComposerShape>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[%if (inasafe_place_value_coefficient(  inasafe_impact_analysis_field_value( 'total_affected' ) ), inasafe_place_value_coefficient(  inasafe_impact_analysis_field_value( 'total_affected' ) ), '-')%]" htmlState="0" halign="4">
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[%if (inasafe_place_value_coefficient(  inasafe_analysis_summary_field_value( 'total_affected' ) ), inasafe_place_value_coefficient(  inasafe_analysis_summary_field_value( 'total_affected' ) ), '-')%]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,20,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="47" blue="166" green="135"/>
    <ComposerItem pagey="52.457" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="141.504" y="52.457" visibility="1" zValue="28" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="28.0874" outlineWidth="0.3" excludeFromExports="0" uuid="{4fbec592-3d22-4b36-acb8-adca2eb10fb0}" height="9.561" itemRotation="0" frame="false" pagex="141.504">

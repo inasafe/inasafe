@@ -34,9 +34,10 @@ __revision__ = '$Format:%H$'
 # helpText is used for QGIS 3 : https://github.com/qgis/QGIS/pull/5059
 ##
 
-description = tr('Retrieve a value from a field in the impact analysis layer.')
+description = tr(
+    'Retrieve a value from a field in the analysis summary layer.')
 examples = {
-    'inasafe_impact_analysis_field_value(\'total_not_exposed\')': 3
+    'inasafe_analysis_summary_field_value(\'total_not_exposed\')': 3
 }
 help_message = generate_expression_help(description, examples)
 
@@ -44,10 +45,10 @@ help_message = generate_expression_help(description, examples)
 @qgsfunction(
     args='auto', group='InaSAFE', usesGeometry=False, referencedColumns=[],
     help_text=help_message.to_html(), helpText=help_message.to_html())
-def inasafe_impact_analysis_field_value(field, feature, parent):
-    """Retrieve a value from a field in the impact analysis layer.
+def inasafe_analysis_summary_field_value(field, feature, parent):
+    """Retrieve a value from a field in the analysis summary layer.
 
-    e.g. inasafe_impact_analysis_field_value('total_not_exposed') -> 3
+    e.g. inasafe_analysis_summary_field_value('total_not_exposed') -> 3
     """
     _ = feature, parent  # NOQA
     project_context_scope = QgsExpressionContextUtils.projectScope()
@@ -152,9 +153,9 @@ description = tr(
     'Given a number and total, it will return the percentage of the number to '
     'the total.')
 examples = {
-    'inasafe_place_value_percentage(inasafe_impact_analysis_field_value('
+    'inasafe_place_value_percentage(inasafe_analysis_summary_field_value('
     '\'female_displaced\'), '
-    'inasafe_impact_analysis_field_value(\'displaced\'))': tr(
+    'inasafe_analysis_summary_field_value(\'displaced\'))': tr(
         'will calculate the percentage of female displaced count to total '
         'displaced count.'),
     'inasafe_place_value_percentage(50,100)': '50.0%'
@@ -170,8 +171,8 @@ def inasafe_place_value_percentage(number, total, feature, parent):
     to the total.
 
     For instance:
-    *   inasafe_place_value_percentage(inasafe_impact_analysis_field_value(
-        'female_displaced'), inasafe_impact_analysis_field_value('displaced'))
+    *   inasafe_place_value_percentage(inasafe_analysis_summary_field_value(
+        'female_displaced'), inasafe_analysis_summary_field_value('displaced'))
         -> will calculate the percentage of female displaced count to total
         displaced count.
 
