@@ -14,7 +14,7 @@ from qgis.core import (
 )
 
 from safe.common.exceptions import (
-    InvalidKeywordsForProcessingAlgorithm, NoFeaturesInExtentError)
+    InvalidKeywordsForProcessingAlgorithm)
 from safe.definitions.exposure import indivisible_exposure
 from safe.definitions.exposure_classifications import data_driven_classes
 from safe.definitions.fields import (
@@ -107,7 +107,9 @@ def prepare_vector_layer(layer, callback=None):
         LOGGER.warning(
             tr('No feature has been found in the {purpose}'
                 .format(purpose=layer.keywords['layer_purpose'])))
-        raise NoFeaturesInExtentError
+        # Realtime may have no data in the extent when doing a multiexposure
+        # analysis. We still want the IF. I disabled the exception. ET 19/02/18
+        # raise NoFeaturesInExtentError
 
     _add_id_column(cleaned)
     clean_inasafe_fields(cleaned)
