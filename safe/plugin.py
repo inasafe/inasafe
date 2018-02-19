@@ -1015,8 +1015,12 @@ class Plugin(object):
                     enable_field_mapping_tool = False
                 else:
                     keywords = KeywordIO().read_keywords(layer)
-                    supported = is_keyword_version_supported(
-                        keywords.get('keyword_version'))
+                    keywords_version = keywords.get('keyword_version')
+                    if not keywords_version:
+                        supported = False
+                    else:
+                        supported = (
+                            is_keyword_version_supported(keywords_version))
                     if not supported:
                         enable_field_mapping_tool = False
                     else:
