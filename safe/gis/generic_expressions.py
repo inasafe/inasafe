@@ -73,10 +73,10 @@ def inasafe_analysis_summary_field_value(field, feature, parent):
     return feature[index]
 
 
-description = tr('Retrieve a value from a field in the sub impact analysis '
+description = tr('Retrieve a value from a field in the sub analysis summary '
                  'layer from a multi exposure analysis layer.')
 examples = {
-    'inasafe_multi_exposure_field_value('
+    'inasafe_sub_analysis_summary_field_value('
     '\'population\', \'total_not_exposed\')': 3
 }
 help_message = generate_expression_help(description, examples)
@@ -85,7 +85,7 @@ help_message = generate_expression_help(description, examples)
 @qgsfunction(
     args='auto', group='InaSAFE', usesGeometry=False, referencedColumns=[],
     help_text=help_message.to_html(), helpText=help_message.to_html())
-def inasafe_multi_exposure_field_value(exposure_key, field, feature, parent):
+def inasafe_sub_analysis_summary_field_value(exposure_key, field, feature, parent):
     """Retrieve a value from field in the specified exposure analysis layer.
 
     """
