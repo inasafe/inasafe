@@ -58,7 +58,9 @@ portrait_map_report_description = {
     'your home directory, (hazard) by the class of hazard, and (exposure) '
     'by the class of exposure).'),
   # place thumbs in resources/img/screenshots for them to appear in help
-  'thumbnail': 'portrait-map-report-thumbnail.png'
+  'thumbnail': 'portrait-map-report-thumbnail.png',
+  'width': 210,
+  'height': 297
 }
 landscape_map_report_description = {
   'name': tr('Landscape map'),
@@ -82,7 +84,9 @@ landscape_map_report_description = {
     'your home directory, (hazard) by the class of hazard, and (exposure) '
     'by the class of exposure).'),
   # place thumbs in resources/img/screenshots for them to appear in help
-  'thumbnail': 'lanscape-map-report-thumbnail.png'
+  'thumbnail': 'lanscape-map-report-thumbnail.png',
+  'width': 297,
+  'height': 210
 }
 analysis_provenance_report_description = {
   'name': tr('Analysis provenance'),

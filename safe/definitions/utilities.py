@@ -533,18 +533,21 @@ def override_component_template(component, template_path):
     document = QDomDocument()
     document.setContent(template_content)
     root_element = document.namedItem('Composer')
+    composition_element = root_element.namedItem('Composition')
     all_orientations = [
-        landscape_map_report_description['orientation'],
-        portrait_map_report_description['orientation']
+        landscape_map_report_description,
+        portrait_map_report_description
     ]
     orientation = None
     if isinstance(root_element, QDomNode):
-        title_attribute_node = root_element.attributes().namedItem('title')
-        if title_attribute_node:
-            template_orientation = title_attribute_node.nodeValue()
+        paper_width = composition_element.attributes().namedItem(
+            'paperWidth').nodeValue()
+        paper_height = composition_element.attributes().namedItem(
+            'paperHeight').nodeValue()
         for _orientation in all_orientations:
-            if _orientation in template_orientation:
-                orientation = _orientation
+            if _orientation['width'] == int(paper_width) and (
+                    _orientation['height'] == int(paper_height)):
+                orientation = _orientation['orientation']
                 break
 
     # By default, the component is landscape oriented, So if we found that
