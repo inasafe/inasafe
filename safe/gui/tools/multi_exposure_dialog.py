@@ -552,7 +552,7 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
         self.set_enabled_buttons(False)
         enable_busy_cursor()
         try:
-            code, message = self._multi_exposure_if.run()
+            code, message, exposure = self._multi_exposure_if.run()
             message = basestring_to_message(message)
             if code == ANALYSIS_FAILED_BAD_INPUT:
                 LOGGER.info(tr(

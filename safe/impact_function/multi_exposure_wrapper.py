@@ -892,13 +892,17 @@ class MultiExposureImpactFunction(object):
         """Run the whole impact function.
 
         :return: A tuple with the status of the IF and an error message if
-            needed.
+            needed. If the status is FAILED, and if the error is related to a
+            single exposure impact function, the current failed exposure
+            key will be returned. The exposure key is None if the error is
+            raised by the multi exposure impact function.
+
             The status is ANALYSIS_SUCCESS if everything was fine.
             The status is ANALYSIS_FAILED_BAD_INPUT if the client should fix
-                something.
+                something. The exposure key is returned if needed.
             The status is ANALYSIS_FAILED_BAD_CODE if something went wrong
-                from the code.
-        :rtype: (int, m.Message)
+                from the code. The exposure key is returned if needed.
+        :rtype: (int, m.Message, str)
         """
         self._start_datetime = datetime.now()
         if not self._is_ready:
@@ -907,7 +911,7 @@ class MultiExposureImpactFunction(object):
                 m.Paragraph(tr(
                     'In order to run the analysis, you need to call '
                     '"prepare" before this function.')))
-            return ANALYSIS_FAILED_BAD_INPUT, message
+            return ANALYSIS_FAILED_BAD_INPUT, message, None
 
         self._unique_name = self._name.replace(' ', '')
         self._unique_name = replace_accentuated_characters(self._unique_name)
@@ -959,7 +963,9 @@ class MultiExposureImpactFunction(object):
 
             code, message = impact_function.run()
             if code != ANALYSIS_SUCCESS:
-                return code, message
+                current_exposure = (
+                    impact_function.exposure.keywords['exposure'])
+                return code, message, current_exposure
 
             if (self._aggregation and i == 1) or not self._aggregation:
                 list_geometries.append(impact_function.analysis_extent)
@@ -1068,7 +1074,7 @@ class MultiExposureImpactFunction(object):
         else:
             self.aggregation = None
 
-        return ANALYSIS_SUCCESS, None
+        return ANALYSIS_SUCCESS, None, None
 
     def generate_report(
             self,
