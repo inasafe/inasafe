@@ -225,7 +225,7 @@ class TestImpactReport(unittest.TestCase):
         code, message = impact_function.prepare()
         self.assertEqual(code, PREPARE_SUCCESS, message)
 
-        code, message = impact_function.run()
+        code, message, exposure = impact_function.run()
         self.assertEqual(code, ANALYSIS_SUCCESS, message)
 
         components = [report_metadata]
