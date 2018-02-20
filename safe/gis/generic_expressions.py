@@ -85,7 +85,8 @@ help_message = generate_expression_help(description, examples)
 @qgsfunction(
     args='auto', group='InaSAFE', usesGeometry=False, referencedColumns=[],
     help_text=help_message.to_html(), helpText=help_message.to_html())
-def inasafe_sub_analysis_summary_field_value(exposure_key, field, feature, parent):
+def inasafe_sub_analysis_summary_field_value(
+        exposure_key, field, feature, parent):
     """Retrieve a value from field in the specified exposure analysis layer.
 
     """

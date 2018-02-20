@@ -1357,9 +1357,9 @@ class MultiExposureImpactFunction(object):
         if path:
             impact_function._analysis_summary = load_layer_from_registry(path)
 
-        list_of_exposure_summary = get_provenance(
+        dict_of_exposure_summary = get_provenance(
             provenance, provenance_multi_exposure_summary_layers)
-        for exposure_summary in list_of_exposure_summary:
+        for exposure_summary in dict_of_exposure_summary.values():
             layer = load_layer_from_registry(exposure_summary)
             keywords = KeywordIO.read_keywords(layer)
             serialized_impact_function = (

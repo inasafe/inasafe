@@ -10,7 +10,6 @@ from qgis.core import (
     QgsMapLayerRegistry,
     QgsExpressionContextUtils,
 )
-from qgis.utils import iface
 
 from safe.common.custom_logging import LOGGER
 from safe.definitions.default_settings import inasafe_default_settings
