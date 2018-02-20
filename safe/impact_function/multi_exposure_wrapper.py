@@ -974,14 +974,17 @@ class MultiExposureImpactFunction(object):
             aggregation_layers.append(impact_function.aggregation_summary)
             exposure_key = (
                 impact_function.provenance['exposure_keywords']['exposure'])
-            dict_of_exposure_summary_path[exposure_key] = full_layer_uri(
-                impact_function.exposure_summary)
-            dict_of_exposure_summary_id[exposure_key] = (
-                impact_function.exposure_summary.id())
             dict_of_analysis_summary_path[exposure_key] = full_layer_uri(
                 impact_function.analysis_impacted)
             dict_of_analysis_summary_id[exposure_key] = (
                 impact_function.analysis_impacted.id())
+
+            # eq raster on pop raster might not having this
+            if impact_function.exposure_summary:
+                dict_of_exposure_summary_path[exposure_key] = full_layer_uri(
+                    impact_function.exposure_summary)
+                dict_of_exposure_summary_id[exposure_key] = (
+                    impact_function.exposure_summary.id())
 
         set_provenance(
             self._provenance,
