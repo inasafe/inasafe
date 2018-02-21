@@ -45,7 +45,8 @@ from safe.definitions.exposure import exposure_population
 from safe.definitions.layer_purposes import (
     layer_purpose_analysis_impacted,
     layer_purpose_aggregation_summary,
-    layer_purpose_exposure_summary)
+    layer_purpose_exposure_summary,
+    layer_purpose_aggregate_hazard_impacted)
 from safe.definitions.provenance import (
     provenance_aggregation_keywords,
     provenance_aggregation_layer,
@@ -945,7 +946,7 @@ class MultiExposureImpactFunction(object):
             self._crs = self.aggregation.crs()
             self._aggregation_summary = prepare_vector_layer(self.aggregation)
 
-        analysis_layers = []
+        impact_layers = []
         aggregation_layers = []
         list_geometries = []
         dict_of_exposure_summary_path = {}
@@ -976,7 +977,7 @@ class MultiExposureImpactFunction(object):
             if (self._aggregation and i == 1) or not self._aggregation:
                 list_geometries.append(impact_function.analysis_extent)
 
-            analysis_layers.append(impact_function.analysis_impacted)
+            impact_layers.append(impact_function.analysis_impacted)
             aggregation_layers.append(impact_function.aggregation_summary)
             exposure_key = (
                 impact_function.provenance['exposure_keywords']['exposure'])
@@ -985,12 +986,14 @@ class MultiExposureImpactFunction(object):
             dict_of_analysis_summary_id[exposure_key] = (
                 impact_function.analysis_impacted.id())
 
-            # eq raster on pop raster might not having this
-            if impact_function.exposure_summary:
-                dict_of_exposure_summary_path[exposure_key] = full_layer_uri(
-                    impact_function.exposure_summary)
-                dict_of_exposure_summary_id[exposure_key] = (
-                    impact_function.exposure_summary.id())
+            # Exposure summary layer might not exist for exposure continuous
+            # raster layer.
+            impact_layer = impact_function.exposure_summary or (
+                impact_function.aggregate_hazard_impacted)
+            dict_of_exposure_summary_path[exposure_key] = full_layer_uri(
+                impact_layer)
+            dict_of_exposure_summary_id[exposure_key] = (
+                impact_layer.id())
 
         set_provenance(
             self._provenance,
@@ -1026,7 +1029,7 @@ class MultiExposureImpactFunction(object):
         self._aggregation_summary = multi_exposure_aggregation_summary(
             self._aggregation_summary, aggregation_layers)
         self._analysis_summary = multi_exposure_analysis_summary(
-            self._analysis_summary, analysis_layers)
+            self._analysis_summary, impact_layers)
 
         # End of the impact function
         self._end_datetime = datetime.now()
@@ -1211,6 +1214,7 @@ class MultiExposureImpactFunction(object):
 
                 if exposure_groups:
                     for exposure_group in exposure_groups:
+                        impact_layer = None
                         tree_layers = [
                             child for child in exposure_group.children() if (
                                 isinstance(child, QgsLayerTreeLayer))]
@@ -1219,7 +1223,20 @@ class MultiExposureImpactFunction(object):
                                 tree_layer.layer(), 'layer_purpose')
                             if layer_purpose == (
                                     layer_purpose_exposure_summary['key']):
-                                extra_layers.append(tree_layer.layer())
+                                impact_layer = tree_layer.layer()
+                                break
+                        # Exposure summary layer might not exist for exposure
+                        # continuous raster layer.
+                        if not impact_layer:
+                            for tree_layer in tree_layers:
+                                layer_purpose = KeywordIO.read_keywords(
+                                    tree_layer.layer(), 'layer_purpose')
+                                if layer_purpose == (
+                                    layer_purpose_aggregate_hazard_impacted[
+                                        'key']):
+                                    impact_layer = tree_layer.layer()
+                                    break
+                        extra_layers.append(impact_layer)
                 else:
                     extra_layers = [
                         tree_layer.layer() for tree_layer in (
