@@ -46,7 +46,7 @@ def clean_layer(layer, callback=None):
             count += 1
             layer.deleteFeature(feature.id())
 
-    LOGGER.info(
+    LOGGER.critical(
         '%s features have been removed from %s because of invalid geometries.'
         % (count, layer.name()))
 
