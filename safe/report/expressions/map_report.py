@@ -13,13 +13,21 @@ from qgis.core import (
 
 from safe.common.custom_logging import LOGGER
 from safe.definitions.default_settings import inasafe_default_settings
+from safe.definitions.exposure import exposure_place
+from safe.definitions.extra_keywords import extra_keyword_analysis_type
 from safe.definitions.fields import (
     bearing_field,
     distance_field,
     direction_field,
     exposure_name_field,
 )
-from safe.definitions.provenance import provenance_layer_exposure_summary_id
+from safe.definitions.keyword_properties import property_extra_keywords
+from safe.definitions.provenance import (
+    provenance_multi_exposure_summary_layers_id,
+    provenance_multi_exposure_summary_layers,
+    provenance_layer_exposure_summary_id,
+    provenance_layer_exposure_summary,
+    provenance_layer_analysis_impacted_id, provenance_layer_analysis_impacted)
 from safe.definitions.reports.map_report import (
     legend_title_header,
     disclaimer_title_header,
@@ -39,7 +47,9 @@ from safe.definitions.reports.map_report import (
     inasafe_north_arrow_path,
     inasafe_organisation_logo_path,
     crs_text)
+from safe.gis.tools import load_layer
 from safe.utilities.i18n import tr
+from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.settings import setting
 from safe.utilities.utilities import generate_expression_help
 
@@ -101,20 +111,51 @@ def distance_to_nearest_place(feature, parent):
     project_context_scope = QgsExpressionContextUtils.projectScope()
     registry = QgsMapLayerRegistry.instance()
 
+    key = provenance_layer_analysis_impacted_id['provenance_key']
+    analysis_summary_layer = registry.mapLayer(
+        project_context_scope.variable(key))
+    if not analysis_summary_layer:
+        key = provenance_layer_analysis_impacted['provenance_key']
+        if project_context_scope.hasVariable(key):
+            analysis_summary_layer = load_layer(
+                project_context_scope.variable(key))[0]
+
+    if not analysis_summary_layer:
+        return None
+
+    keywords = KeywordIO.read_keywords(analysis_summary_layer)
+    extra_keywords = keywords.get(property_extra_keywords['key'], {})
+    is_multi_exposure = extra_keywords.get(extra_keyword_analysis_type['key'])
+
     key = provenance_layer_exposure_summary_id['provenance_key']
+    if is_multi_exposure:
+        key = ('{provenance}__{exposure}').format(
+            provenance=provenance_multi_exposure_summary_layers_id[
+                'provenance_key'],
+            exposure=exposure_place['key'])
     if not project_context_scope.hasVariable(key):
         return None
 
-    layer = registry.mapLayer(project_context_scope.variable(key))
+    exposure_summary_layer = registry.mapLayer(
+        project_context_scope.variable(key))
+    if not exposure_summary_layer:
+        key = provenance_layer_exposure_summary['provenance_key']
+        if is_multi_exposure:
+            key = ('{provenance}__{exposure}').format(
+                provenance=provenance_multi_exposure_summary_layers[
+                    'provenance_key'],
+                exposure=exposure_place['key'])
+        if project_context_scope.hasVariable(key):
+            exposure_summary_layer = load_layer(
+                project_context_scope.variable(key))[0]
+        else:
+            return None
 
-    if not layer:
-        return None
-
-    index = layer.fieldNameIndex(distance_field['field_name'])
+    index = exposure_summary_layer.fieldNameIndex(distance_field['field_name'])
     if index < 0:
         return None
 
-    feature = layer.getFeatures().next()
+    feature = exposure_summary_layer.getFeatures().next()
     return feature[index]
 
 
@@ -140,20 +181,52 @@ def direction_to_nearest_place(feature, parent):
     project_context_scope = QgsExpressionContextUtils.projectScope()
     registry = QgsMapLayerRegistry.instance()
 
+    key = provenance_layer_analysis_impacted_id['provenance_key']
+    analysis_summary_layer = registry.mapLayer(
+        project_context_scope.variable(key))
+    if not analysis_summary_layer:
+        key = provenance_layer_analysis_impacted['provenance_key']
+        if project_context_scope.hasVariable(key):
+            analysis_summary_layer = load_layer(
+                project_context_scope.variable(key))[0]
+
+    if not analysis_summary_layer:
+        return None
+
+    keywords = KeywordIO.read_keywords(analysis_summary_layer)
+    extra_keywords = keywords.get(property_extra_keywords['key'], {})
+    is_multi_exposure = extra_keywords.get(extra_keyword_analysis_type['key'])
+
     key = provenance_layer_exposure_summary_id['provenance_key']
+    if is_multi_exposure:
+        key = ('{provenance}__{exposure}').format(
+            provenance=provenance_multi_exposure_summary_layers_id[
+                'provenance_key'],
+            exposure=exposure_place['key'])
     if not project_context_scope.hasVariable(key):
         return None
 
-    layer = registry.mapLayer(project_context_scope.variable(key))
+    exposure_summary_layer = registry.mapLayer(
+        project_context_scope.variable(key))
+    if not exposure_summary_layer:
+        key = provenance_layer_exposure_summary['provenance_key']
+        if is_multi_exposure:
+            key = ('{provenance}__{exposure}').format(
+                provenance=provenance_multi_exposure_summary_layers[
+                    'provenance_key'],
+                exposure=exposure_place['key'])
+        if project_context_scope.hasVariable(key):
+            exposure_summary_layer = load_layer(
+                project_context_scope.variable(key))[0]
+        else:
+            return None
 
-    if not layer:
-        return None
-
-    index = layer.fieldNameIndex(direction_field['field_name'])
+    index = exposure_summary_layer.fieldNameIndex(
+        direction_field['field_name'])
     if index < 0:
         return None
 
-    feature = layer.getFeatures().next()
+    feature = exposure_summary_layer.getFeatures().next()
     return feature[index]
 
 
@@ -179,20 +252,51 @@ def bearing_to_nearest_place(feature, parent):
     project_context_scope = QgsExpressionContextUtils.projectScope()
     registry = QgsMapLayerRegistry.instance()
 
+    key = provenance_layer_analysis_impacted_id['provenance_key']
+    analysis_summary_layer = registry.mapLayer(
+        project_context_scope.variable(key))
+    if not analysis_summary_layer:
+        key = provenance_layer_analysis_impacted['provenance_key']
+        if project_context_scope.hasVariable(key):
+            analysis_summary_layer = load_layer(
+                project_context_scope.variable(key))[0]
+
+    if not analysis_summary_layer:
+        return None
+
+    keywords = KeywordIO.read_keywords(analysis_summary_layer)
+    extra_keywords = keywords.get(property_extra_keywords['key'], {})
+    is_multi_exposure = extra_keywords.get(extra_keyword_analysis_type['key'])
+
     key = provenance_layer_exposure_summary_id['provenance_key']
+    if is_multi_exposure:
+        key = ('{provenance}__{exposure}').format(
+            provenance=provenance_multi_exposure_summary_layers_id[
+                'provenance_key'],
+            exposure=exposure_place['key'])
     if not project_context_scope.hasVariable(key):
         return None
 
-    layer = registry.mapLayer(project_context_scope.variable(key))
+    exposure_summary_layer = registry.mapLayer(
+        project_context_scope.variable(key))
+    if not exposure_summary_layer:
+        key = provenance_layer_exposure_summary['provenance_key']
+        if is_multi_exposure:
+            key = ('{provenance}__{exposure}').format(
+                provenance=provenance_multi_exposure_summary_layers[
+                    'provenance_key'],
+                exposure=exposure_place['key'])
+        if project_context_scope.hasVariable(key):
+            exposure_summary_layer = load_layer(
+                project_context_scope.variable(key))[0]
+        else:
+            return None
 
-    if not layer:
-        return None
-
-    index = layer.fieldNameIndex(bearing_field['field_name'])
+    index = exposure_summary_layer.fieldNameIndex(bearing_field['field_name'])
     if index < 0:
         return None
 
-    feature = layer.getFeatures().next()
+    feature = exposure_summary_layer.getFeatures().next()
     return feature[index]
 
 
@@ -218,20 +322,52 @@ def name_of_the_nearest_place(feature, parent):
     project_context_scope = QgsExpressionContextUtils.projectScope()
     registry = QgsMapLayerRegistry.instance()
 
+    key = provenance_layer_analysis_impacted_id['provenance_key']
+    analysis_summary_layer = registry.mapLayer(
+        project_context_scope.variable(key))
+    if not analysis_summary_layer:
+        key = provenance_layer_analysis_impacted['provenance_key']
+        if project_context_scope.hasVariable(key):
+            analysis_summary_layer = load_layer(
+                project_context_scope.variable(key))[0]
+
+    if not analysis_summary_layer:
+        return None
+
+    keywords = KeywordIO.read_keywords(analysis_summary_layer)
+    extra_keywords = keywords.get(property_extra_keywords['key'], {})
+    is_multi_exposure = extra_keywords.get(extra_keyword_analysis_type['key'])
+
     key = provenance_layer_exposure_summary_id['provenance_key']
+    if is_multi_exposure:
+        key = ('{provenance}__{exposure}').format(
+            provenance=provenance_multi_exposure_summary_layers_id[
+                'provenance_key'],
+            exposure=exposure_place['key'])
     if not project_context_scope.hasVariable(key):
         return None
 
-    layer = registry.mapLayer(project_context_scope.variable(key))
+    exposure_summary_layer = registry.mapLayer(
+        project_context_scope.variable(key))
+    if not exposure_summary_layer:
+        key = provenance_layer_exposure_summary['provenance_key']
+        if is_multi_exposure:
+            key = ('{provenance}__{exposure}').format(
+                provenance=provenance_multi_exposure_summary_layers[
+                    'provenance_key'],
+                exposure=exposure_place['key'])
+        if project_context_scope.hasVariable(key):
+            exposure_summary_layer = load_layer(
+                project_context_scope.variable(key))[0]
+        else:
+            return None
 
-    if not layer:
-        return None
-
-    index = layer.fieldNameIndex(exposure_name_field['field_name'])
+    index = exposure_summary_layer.fieldNameIndex(
+        exposure_name_field['field_name'])
     if index < 0:
         return None
 
-    feature = layer.getFeatures().next()
+    feature = exposure_summary_layer.getFeatures().next()
     return feature[index]
 
 
