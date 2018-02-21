@@ -250,9 +250,11 @@ def qgis_composer_extractor(impact_report, component_metadata):
 
     exposure_summary_layers = []
     if impact_report.multi_exposure_impact_function:
-        exposure_summary_layers = [
-            impact_function.exposure_summary for impact_function in (
-                impact_report.multi_exposure_impact_function.impact_functions)]
+        for impact_function in (
+                impact_report.multi_exposure_impact_function.impact_functions):
+            impact_layer = impact_function.exposure_summary or (
+                impact_function.aggregate_hazard_impacted)
+            exposure_summary_layers.append(impact_layer)
 
     # use custom ordered layer if any
     if impact_report.ordered_layers:
@@ -267,10 +269,12 @@ def qgis_composer_extractor(impact_report, component_metadata):
             impact_layer_found = False
             impact_functions = (
                 impact_report.multi_exposure_impact_function.impact_functions)
-            # check for impact layer occurrence
+            # check for impact layer occurrences
             for analysis in impact_functions:
+                impact_layer = analysis.exposure_summary or (
+                    analysis.aggregate_hazard_impacted)
                 for index, layer in enumerate(layers):
-                    if analysis.exposure_summary.source() == layer.source():
+                    if impact_layer.source() == layer.source():
                         add_impact_layers_to_canvas(analysis)
                         layers[index] = analysis.exposure_summary
                         impact_layer_found = True
@@ -282,9 +286,11 @@ def qgis_composer_extractor(impact_report, component_metadata):
                     additional_layers.append(layer)
             layers = additional_layers + layers
         else:
-            if impact_report.impact_function.exposure_summary not in layers:
-                layers.insert(
-                    0, impact_report.impact_function.exposure_summary)
+            impact_layer = (
+                impact_report.impact_function.exposure_summary or (
+                    impact_report.impact_function.aggregate_hazard_impacted))
+            if impact_layer not in layers:
+                layers.insert(0, impact_layer)
 
     # use default layer order if no custom ordered layer found
     else:
