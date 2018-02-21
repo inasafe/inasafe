@@ -21,7 +21,9 @@ from qgis.core import (
 )
 
 from safe.common.exceptions import (
-    MemoryLayerCreationError, SpatialIndexCreationError)
+    MemoryLayerCreationError,
+    # SpatialIndexCreationError,
+)
 from safe.definitions.units import unit_metres, unit_square_metres
 from safe.definitions.utilities import definition
 from safe.gis.vector.clean_geometry import geometry_checker, clean_layer
@@ -289,19 +291,30 @@ def create_spatial_index(layer):
         # Spatial index is creating an unknown exception.
         # https://github.com/inasafe/inasafe/issues/4304
         # or https://gitter.im/inasafe/inasafe?at=5a2903d487680e6230e0359a
-        LOGGER.info(
+        LOGGER.warning(
             'An Exception has been raised from the spatial index creation. '
             'We will clean your layer and try again.')
         new_layer = clean_layer(layer)
         try:
             spatial_index = QgsSpatialIndex(new_layer.getFeatures())
         except BaseException:
-            # We tried one time to clean the layer, we can't do more.
-            LOGGER.info(
-                'An Exception has been raised from the spatial index '
-                'creation. Unfortunately, we already try to clean your layer. '
-                'We will stop here the process.')
-            raise SpatialIndexCreationError
+            # We got another exception.
+            # We try now to insert feature by feature.
+            # It's slower than the using the feature iterator.
+            spatial_index = QgsSpatialIndex()
+            for feature in new_layer.getFeatures():
+                try:
+                    spatial_index.insertFeature(feature)
+                except BaseException:
+                    LOGGER.critical(
+                        'A feature has been removed from the spatial index.')
+
+            # # We tried one time to clean the layer, we can't do more.
+            # LOGGER.critical(
+            #     'An Exception has been raised from the spatial index '
+            #     'creation. Unfortunately, we already try to clean your '
+            #     'layer. We will stop here the process.')
+            # raise SpatialIndexCreationError
     return spatial_index
 
 
