@@ -276,12 +276,12 @@ def qgis_composer_extractor(impact_report, component_metadata):
                 for index, layer in enumerate(layers):
                     if impact_layer.source() == layer.source():
                         add_impact_layers_to_canvas(analysis)
-                        layers[index] = analysis.exposure_summary
+                        layers[index] = impact_layer
                         impact_layer_found = True
             if not impact_layer_found:
                 for analysis in impact_functions:
                     add_impact_layers_to_canvas(analysis)
-                    layer_uri = full_layer_uri(analysis.exposure_summary)
+                    layer_uri = full_layer_uri(impact_layer)
                     layer = load_layer_from_registry(layer_uri)
                     additional_layers.append(layer)
             layers = additional_layers + layers
