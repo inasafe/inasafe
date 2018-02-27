@@ -2480,6 +2480,10 @@ class ImpactFunction(object):
         simple_polygon_without_brush(
             self.analysis_impacted, analysis_width, analysis_color)
 
+        # Styling is finished, save them as QML
+        for layer in self._outputs():
+            layer.saveDefaultStyle()
+
     @property
     def provenance(self):
         """Helper method to gather provenance for exposure_summary layer.
