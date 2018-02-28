@@ -281,6 +281,8 @@ def qgis_composer_extractor(impact_report, component_metadata):
             if not impact_layer_found:
                 for analysis in impact_functions:
                     add_impact_layers_to_canvas(analysis)
+                    impact_layer = analysis.exposure_summary or (
+                        analysis.aggregate_hazard_impacted)
                     layer_uri = full_layer_uri(impact_layer)
                     layer = load_layer_from_registry(layer_uri)
                     additional_layers.append(layer)
