@@ -4,6 +4,7 @@
 
 import datetime
 
+from dateutil.parser import parse
 from qgis.core import (
     qgsfunction,
     QgsMapLayerRegistry,
@@ -252,14 +253,21 @@ def beautify_date(inasafe_time, feature, parent):
     """
     _ = feature, parent  # NOQA
     try:
-        datetime_object = datetime.datetime.strptime(
-            inasafe_time, '%Y-%m-%dT%H:%M:%S.%f')
-    except ValueError:
+        gmt_offset_str = inasafe_time[-6:-4]
+    except:
+        gmt_offset_str = ''
+    if '+' in gmt_offset_str or '-' in gmt_offset_str:
+        datetime_object = parse(inasafe_time)
+    else:
         try:
             datetime_object = datetime.datetime.strptime(
-                inasafe_time, '%Y-%m-%dT%H:%M:%S')
+                inasafe_time, '%Y-%m-%dT%H:%M:%S.%f')
         except ValueError:
-            return datetime
+            try:
+                datetime_object = datetime.datetime.strptime(
+                    inasafe_time, '%Y-%m-%dT%H:%M:%S')
+            except ValueError:
+                return datetime
     date = datetime_object.strftime('%Y-%m-%d')
     return date
 
@@ -287,14 +295,21 @@ def beautify_time(inasafe_time, feature, parent):
     """
     _ = feature, parent  # NOQA
     try:
-        datetime_object = datetime.datetime.strptime(
-            inasafe_time, '%Y-%m-%dT%H:%M:%S.%f')
-    except ValueError:
+        gmt_offset_str = inasafe_time[-6:-4]
+    except:
+        gmt_offset_str = ''
+    if '+' in gmt_offset_str or '-' in gmt_offset_str:
+        datetime_object = parse(inasafe_time)
+    else:
         try:
             datetime_object = datetime.datetime.strptime(
-                inasafe_time, '%Y-%m-%dT%H:%M:%S')
+                inasafe_time, '%Y-%m-%dT%H:%M:%S.%f')
         except ValueError:
-            return datetime
+            try:
+                datetime_object = datetime.datetime.strptime(
+                    inasafe_time, '%Y-%m-%dT%H:%M:%S')
+            except ValueError:
+                return datetime
     time = datetime_object.strftime('%H:%M')
     return time
 
