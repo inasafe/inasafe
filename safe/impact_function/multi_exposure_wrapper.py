@@ -1273,6 +1273,10 @@ class MultiExposureImpactFunction(object):
 
             self._report_metadata.append(report_metadata)
 
+            # get the extent of impact layer
+            self._impact_report.qgis_composition_context.extent = (
+                self.analysis_impacted.extent())
+
             # generate report folder
 
             # no other option for now
