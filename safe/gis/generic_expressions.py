@@ -2,8 +2,6 @@
 
 """QGIS Expressions which are available in the QGIS GUI interface."""
 
-import datetime
-
 from dateutil.parser import parse
 from qgis.core import (
     qgsfunction,
@@ -252,22 +250,7 @@ def beautify_date(inasafe_time, feature, parent):
         qgis_variable.
     """
     _ = feature, parent  # NOQA
-    try:
-        gmt_offset_str = inasafe_time[-6:-4]
-    except:
-        gmt_offset_str = ''
-    if '+' in gmt_offset_str or '-' in gmt_offset_str:
-        datetime_object = parse(inasafe_time)
-    else:
-        try:
-            datetime_object = datetime.datetime.strptime(
-                inasafe_time, '%Y-%m-%dT%H:%M:%S.%f')
-        except ValueError:
-            try:
-                datetime_object = datetime.datetime.strptime(
-                    inasafe_time, '%Y-%m-%dT%H:%M:%S')
-            except ValueError:
-                return datetime
+    datetime_object = parse(inasafe_time)
     date = datetime_object.strftime('%Y-%m-%d')
     return date
 
@@ -294,22 +277,7 @@ def beautify_time(inasafe_time, feature, parent):
         qgis_variable.
     """
     _ = feature, parent  # NOQA
-    try:
-        gmt_offset_str = inasafe_time[-6:-4]
-    except:
-        gmt_offset_str = ''
-    if '+' in gmt_offset_str or '-' in gmt_offset_str:
-        datetime_object = parse(inasafe_time)
-    else:
-        try:
-            datetime_object = datetime.datetime.strptime(
-                inasafe_time, '%Y-%m-%dT%H:%M:%S.%f')
-        except ValueError:
-            try:
-                datetime_object = datetime.datetime.strptime(
-                    inasafe_time, '%Y-%m-%dT%H:%M:%S')
-            except ValueError:
-                return datetime
+    datetime_object = parse(inasafe_time)
     time = datetime_object.strftime('%H:%M')
     return time
 
