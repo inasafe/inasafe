@@ -22,8 +22,7 @@ from safe.definitions.reports.infographic import (
     population_chart,
     inasafe_logo_white,
     image_item_elements, map_overview)
-from safe.gis.tools import load_layer_from_registry, full_layer_uri
-from safe.gui.analysis_utilities import add_impact_layers_to_canvas
+from safe.gis.tools import load_layer_from_registry
 from safe.report.extractors.util import (
     value_from_field_name,
     resolve_from_dictionary,
@@ -263,34 +262,39 @@ def qgis_composer_extractor(impact_report, component_metadata):
             layer = load_layer_from_registry(layer_uri)
             layers.append(layer)
 
-        # make sure at least there is an impact layer
-        if impact_report.multi_exposure_impact_function:
-            additional_layers = []  # for exposure summary layers
-            impact_layer_found = False
-            impact_functions = (
-                impact_report.multi_exposure_impact_function.impact_functions)
-            # check for impact layer occurrences
-            for analysis in impact_functions:
-                impact_layer = analysis.exposure_summary or (
-                    analysis.aggregate_hazard_impacted)
-                for index, layer in enumerate(layers):
-                    if impact_layer.source() == layer.source():
-                        add_impact_layers_to_canvas(analysis)
-                        layers[index] = impact_layer
-                        impact_layer_found = True
-            if not impact_layer_found:
-                for analysis in impact_functions:
-                    add_impact_layers_to_canvas(analysis)
-                    layer_uri = full_layer_uri(impact_layer)
-                    layer = load_layer_from_registry(layer_uri)
-                    additional_layers.append(layer)
-            layers = additional_layers + layers
-        else:
-            impact_layer = (
-                impact_report.impact_function.exposure_summary or (
-                    impact_report.impact_function.aggregate_hazard_impacted))
-            if impact_layer not in layers:
-                layers.insert(0, impact_layer)
+        # We are keeping this if we want to enable below behaviour again.
+        # Currently realtime might have layer order without impact layer in it.
+
+        # # make sure at least there is an impact layer
+        # if impact_report.multi_exposure_impact_function:
+        #     additional_layers = []  # for exposure summary layers
+        #     impact_layer_found = False
+        #     impact_functions = (
+        #        impact_report.multi_exposure_impact_function.impact_functions)
+        #     # check for impact layer occurrences
+        #     for analysis in impact_functions:
+        #         impact_layer = analysis.exposure_summary or (
+        #             analysis.aggregate_hazard_impacted)
+        #         for index, layer in enumerate(layers):
+        #             if impact_layer.source() == layer.source():
+        #                 add_impact_layers_to_canvas(analysis)
+        #                 layers[index] = impact_layer
+        #                 impact_layer_found = True
+        #     if not impact_layer_found:
+        #         for analysis in impact_functions:
+        #             add_impact_layers_to_canvas(analysis)
+        #             impact_layer = analysis.exposure_summary or (
+        #                 analysis.aggregate_hazard_impacted)
+        #             layer_uri = full_layer_uri(impact_layer)
+        #             layer = load_layer_from_registry(layer_uri)
+        #             additional_layers.append(layer)
+        #     layers = additional_layers + layers
+        # else:
+        #     impact_layer = (
+        #         impact_report.impact_function.exposure_summary or (
+        #             impact_report.impact_function.aggregate_hazard_impacted))
+        #     if impact_layer not in layers:
+        #         layers.insert(0, impact_layer)
 
     # use default layer order if no custom ordered layer found
     else:
