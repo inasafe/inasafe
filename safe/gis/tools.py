@@ -78,13 +78,15 @@ def load_layer_from_registry(layer_path):
 
     .. versionadded: 4.3.0
     """
+    # reload the layer in case the layer path has no provider information
+    the_layer = load_layer(layer_path)[0]
     layers = QgsMapLayerRegistry.instance().mapLayers()
     for _, layer in layers.items():
-        if full_layer_uri(layer) == layer_path:
+        if full_layer_uri(layer) == full_layer_uri(the_layer):
             monkey_patch_keywords(layer)
             return layer
 
-    return load_layer(layer_path)[0]
+    return the_layer
 
 
 def reclassify_value(one_value, ranges):
