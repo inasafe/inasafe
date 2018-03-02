@@ -284,6 +284,7 @@ class ImpactReport(object):
             aggregation_summary=None,
             extra_layers=None,
             ordered_layers=None,
+            legend_layers=None,
             minimum_needs_profile=None,
             multi_exposure_impact_function=None):
         """Constructor for the Composition Report class.
@@ -323,6 +324,7 @@ class ImpactReport(object):
             extra_layers = []
         self._extra_layers = extra_layers
         self._ordered_layers = ordered_layers
+        self._legend_layers = legend_layers
         self._minimum_needs = minimum_needs_profile
         self._multi_exposure_impact_function = multi_exposure_impact_function
         self._inasafe_context = InaSAFEReportContext()
@@ -625,6 +627,28 @@ class ImpactReport(object):
         :return:
         """
         self._ordered_layers = ordered_layers
+
+    @property
+    def legend_layers(self):
+        """Getter to legend layers.
+
+        Legend layers will determine the legend on map report.
+
+        :return: List of legend layers.
+        :rtype: list
+        """
+        return self._legend_layers
+
+    @legend_layers.setter
+    def legend_layers(self, legend_layers):
+        """Set legend layers.
+
+        Legend layers will determine the legend on map report.
+
+        :param legend_layers: List of legend layers.
+        :type legend_layers: list
+        """
+        self._legend_layers = legend_layers
 
     @property
     def minimum_needs(self):

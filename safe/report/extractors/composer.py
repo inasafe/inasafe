@@ -22,7 +22,6 @@ from safe.definitions.reports.infographic import (
     population_chart,
     inasafe_logo_white,
     image_item_elements, map_overview)
-from safe.gis.tools import load_layer_from_registry
 from safe.report.extractors.util import (
     value_from_field_name,
     resolve_from_dictionary,
@@ -257,9 +256,7 @@ def qgis_composer_extractor(impact_report, component_metadata):
 
     # use custom ordered layer if any
     if impact_report.ordered_layers:
-        for layer_uri in impact_report.ordered_layers:
-            # layer uri is full uri with provider type
-            layer = load_layer_from_registry(layer_uri)
+        for layer in impact_report.ordered_layers:
             layers.append(layer)
 
         # We are keeping this if we want to enable below behaviour again.
@@ -359,10 +356,12 @@ def qgis_composer_extractor(impact_report, component_metadata):
     context.map_elements = map_elements
 
     # calculate map_legends, only show the legend for impact layer
-    if not impact_report.multi_exposure_impact_function:  # single IF
-        layers = [impact_report.impact]
-    else:  # multi-exposure IF
+    if impact_report.legend_layers:  # use requested legend if any
+        layers = impact_report.legend_layers
+    elif impact_report.multi_exposure_impact_function:  # multi-exposure IF
         layers = exposure_summary_layers
+    else:  # single IF
+        layers = [impact_report.impact]
     symbol_count = 0
     for l in layers:
         layer = l

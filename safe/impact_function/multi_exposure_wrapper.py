@@ -1116,7 +1116,8 @@ class MultiExposureImpactFunction(object):
             components,
             output_folder=None,
             iface=None,
-            ordered_layers=None):
+            ordered_layers_uri=None,
+            legend_layers_uri=None):
         """Generate Impact Report independently by the Impact Function.
 
         :param components: Report components to be generated.
@@ -1131,8 +1132,11 @@ class MultiExposureImpactFunction(object):
         :returns: Tuple of error code and message
         :type: tuple
 
-        :param ordered_layers: A list of full_layer_uri of layers.
-        :type ordered_layers: list
+        :param ordered_layers_uri: A list of layers uri for map.
+        :type ordered_layers_uri: list
+
+        :param legend_layers_uri: A list of layers uri for map legend.
+        :type legend_layers_uri: list
 
         .. versionadded:: 4.3
         """
@@ -1159,6 +1163,18 @@ class MultiExposureImpactFunction(object):
             generated_components.remove(standard_impact_report_metadata_pdf)
         if infographic_report in generated_components and not population_found:
             generated_components.remove(infographic_report)
+
+        # Define the layers for layer order and legend
+        ordered_layers = None
+        legend_layers = None
+        if ordered_layers_uri:
+            ordered_layers = [
+                load_layer_from_registry(layer_path) for (
+                    layer_path) in ordered_layers_uri]
+        if legend_layers_uri:
+            legend_layers = [
+                load_layer_from_registry(layer_path) for (
+                    layer_path) in legend_layers_uri]
 
         # Define the extra layers because multi-exposure IF has its own
         # layer order, whether it's coming from the user custom layer order
@@ -1269,7 +1285,8 @@ class MultiExposureImpactFunction(object):
                     multi_exposure_impact_function=self,
                     analysis=self.analysis_impacted,
                     extra_layers=extra_layers,
-                    ordered_layers=ordered_layers)
+                    ordered_layers=ordered_layers,
+                    legend_layers=legend_layers)
 
             self._report_metadata.append(report_metadata)
 

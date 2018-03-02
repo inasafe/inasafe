@@ -2836,7 +2836,8 @@ class ImpactFunction(object):
             components,
             output_folder=None,
             iface=None,
-            ordered_layers=None):
+            ordered_layers_uri=None,
+            legend_layers_uri=None):
         """Generate Impact Report independently by the Impact Function.
 
         :param components: Report components to be generated.
@@ -2848,8 +2849,11 @@ class ImpactFunction(object):
         :param iface: A QGIS App interface
         :type iface: QgsInterface
 
-        :param ordered_layers: A list of full_layer_uri of layers.
-        :type ordered_layers: list
+        :param ordered_layers_uri: A list of layers uri for map.
+        :type ordered_layers_uri: list
+
+        :param legend_layers_uri: A list of layers uri for map legend.
+        :type legend_layers_uri: list
 
         :returns: Tuple of error code and message
         :type: tuple
@@ -2888,6 +2892,18 @@ class ImpactFunction(object):
 
         aggregation_summary_layer = self.aggregation_summary
 
+        # Define the layers for layer order and legend
+        ordered_layers = None
+        legend_layers = None
+        if ordered_layers_uri:
+            ordered_layers = [
+                load_layer_from_registry(layer_path) for (
+                    layer_path) in ordered_layers_uri]
+        if legend_layers_uri:
+            legend_layers = [
+                load_layer_from_registry(layer_path) for (
+                    layer_path) in legend_layers_uri]
+
         if print_atlas:
             extra_layers.append(aggregation_summary_layer)
 
@@ -2910,7 +2926,8 @@ class ImpactFunction(object):
                 report_metadata,
                 impact_function=self,
                 extra_layers=extra_layers,
-                ordered_layers=ordered_layers)
+                ordered_layers=ordered_layers,
+                legend_layers=legend_layers)
 
             # Get other setting
             logo_path = setting('organisation_logo_path', None, str)
