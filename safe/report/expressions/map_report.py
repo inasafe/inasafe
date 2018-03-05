@@ -89,25 +89,10 @@ def legend_title_header_element(feature, parent):
     return header.capitalize()
 
 
-description = tr(
-    'If the impact layer has a distance field, it will return the distance to '
-    'the nearest place in metres.')
-examples = {
-    'distance_to_nearest_place()': '1234'
-}
-help_message = generate_expression_help(description, examples)
-
-
-@qgsfunction(
-    args='auto', group=label_group, usesGeometry=False, referencedColumns=[],
-    help_text=help_message.to_html(), helpText=help_message.to_html())
-def distance_to_nearest_place(feature, parent):
-    """If the impact layer has a distance field, it will return the distance to
-    the nearest place in metres.
-
-    e.g. distance_to_nearest_place() -> 1234
-    """
-    _ = feature, parent  # NOQA
+def get_exposure_summary_layer():
+    """Helper method for retrieving exposure summary layer from current
+    analysis. If the analysis is multi-exposure, then it will return
+    the exposure summary layer from place exposure analysis."""
     project_context_scope = QgsExpressionContextUtils.projectScope()
     registry = QgsMapLayerRegistry.instance()
 
@@ -151,7 +136,35 @@ def distance_to_nearest_place(feature, parent):
         else:
             return None
 
-    index = exposure_summary_layer.fieldNameIndex(distance_field['field_name'])
+    return exposure_summary_layer
+
+
+description = tr(
+    'If the impact layer has a distance field, it will return the distance to '
+    'the nearest place in metres.')
+examples = {
+    'distance_to_nearest_place()': '1234'
+}
+help_message = generate_expression_help(description, examples)
+
+
+@qgsfunction(
+    args='auto', group=label_group, usesGeometry=False, referencedColumns=[],
+    help_text=help_message.to_html(), helpText=help_message.to_html())
+def distance_to_nearest_place(feature, parent):
+    """If the impact layer has a distance field, it will return the distance to
+    the nearest place in metres.
+
+    e.g. distance_to_nearest_place() -> 1234
+    """
+    _ = feature, parent  # NOQA
+
+    exposure_summary_layer = get_exposure_summary_layer()
+    if not exposure_summary_layer:
+        return None
+
+    index = exposure_summary_layer.fieldNameIndex(
+        distance_field['field_name'])
     if index < 0:
         return None
 
@@ -178,48 +191,10 @@ def direction_to_nearest_place(feature, parent):
     e.g. direction_to_nearest_place() -> NW
     """
     _ = feature, parent  # NOQA
-    project_context_scope = QgsExpressionContextUtils.projectScope()
-    registry = QgsMapLayerRegistry.instance()
 
-    key = provenance_layer_analysis_impacted_id['provenance_key']
-    analysis_summary_layer = registry.mapLayer(
-        project_context_scope.variable(key))
-    if not analysis_summary_layer:
-        key = provenance_layer_analysis_impacted['provenance_key']
-        if project_context_scope.hasVariable(key):
-            analysis_summary_layer = load_layer(
-                project_context_scope.variable(key))[0]
-
-    if not analysis_summary_layer:
-        return None
-
-    keywords = KeywordIO.read_keywords(analysis_summary_layer)
-    extra_keywords = keywords.get(property_extra_keywords['key'], {})
-    is_multi_exposure = extra_keywords.get(extra_keyword_analysis_type['key'])
-
-    key = provenance_layer_exposure_summary_id['provenance_key']
-    if is_multi_exposure:
-        key = ('{provenance}__{exposure}').format(
-            provenance=provenance_multi_exposure_summary_layers_id[
-                'provenance_key'],
-            exposure=exposure_place['key'])
-    if not project_context_scope.hasVariable(key):
-        return None
-
-    exposure_summary_layer = registry.mapLayer(
-        project_context_scope.variable(key))
+    exposure_summary_layer = get_exposure_summary_layer()
     if not exposure_summary_layer:
-        key = provenance_layer_exposure_summary['provenance_key']
-        if is_multi_exposure:
-            key = ('{provenance}__{exposure}').format(
-                provenance=provenance_multi_exposure_summary_layers[
-                    'provenance_key'],
-                exposure=exposure_place['key'])
-        if project_context_scope.hasVariable(key):
-            exposure_summary_layer = load_layer(
-                project_context_scope.variable(key))[0]
-        else:
-            return None
+        return None
 
     index = exposure_summary_layer.fieldNameIndex(
         direction_field['field_name'])
@@ -249,50 +224,13 @@ def bearing_to_nearest_place(feature, parent):
     e.g. bearing_to_nearest_place() -> 280
     """
     _ = feature, parent  # NOQA
-    project_context_scope = QgsExpressionContextUtils.projectScope()
-    registry = QgsMapLayerRegistry.instance()
 
-    key = provenance_layer_analysis_impacted_id['provenance_key']
-    analysis_summary_layer = registry.mapLayer(
-        project_context_scope.variable(key))
-    if not analysis_summary_layer:
-        key = provenance_layer_analysis_impacted['provenance_key']
-        if project_context_scope.hasVariable(key):
-            analysis_summary_layer = load_layer(
-                project_context_scope.variable(key))[0]
-
-    if not analysis_summary_layer:
-        return None
-
-    keywords = KeywordIO.read_keywords(analysis_summary_layer)
-    extra_keywords = keywords.get(property_extra_keywords['key'], {})
-    is_multi_exposure = extra_keywords.get(extra_keyword_analysis_type['key'])
-
-    key = provenance_layer_exposure_summary_id['provenance_key']
-    if is_multi_exposure:
-        key = ('{provenance}__{exposure}').format(
-            provenance=provenance_multi_exposure_summary_layers_id[
-                'provenance_key'],
-            exposure=exposure_place['key'])
-    if not project_context_scope.hasVariable(key):
-        return None
-
-    exposure_summary_layer = registry.mapLayer(
-        project_context_scope.variable(key))
+    exposure_summary_layer = get_exposure_summary_layer()
     if not exposure_summary_layer:
-        key = provenance_layer_exposure_summary['provenance_key']
-        if is_multi_exposure:
-            key = ('{provenance}__{exposure}').format(
-                provenance=provenance_multi_exposure_summary_layers[
-                    'provenance_key'],
-                exposure=exposure_place['key'])
-        if project_context_scope.hasVariable(key):
-            exposure_summary_layer = load_layer(
-                project_context_scope.variable(key))[0]
-        else:
-            return None
+        return None
 
-    index = exposure_summary_layer.fieldNameIndex(bearing_field['field_name'])
+    index = exposure_summary_layer.fieldNameIndex(
+        bearing_field['field_name'])
     if index < 0:
         return None
 
@@ -319,48 +257,10 @@ def name_of_the_nearest_place(feature, parent):
     e.g. name_of_the_nearest_place() -> Tokyo
     """
     _ = feature, parent  # NOQA
-    project_context_scope = QgsExpressionContextUtils.projectScope()
-    registry = QgsMapLayerRegistry.instance()
 
-    key = provenance_layer_analysis_impacted_id['provenance_key']
-    analysis_summary_layer = registry.mapLayer(
-        project_context_scope.variable(key))
-    if not analysis_summary_layer:
-        key = provenance_layer_analysis_impacted['provenance_key']
-        if project_context_scope.hasVariable(key):
-            analysis_summary_layer = load_layer(
-                project_context_scope.variable(key))[0]
-
-    if not analysis_summary_layer:
-        return None
-
-    keywords = KeywordIO.read_keywords(analysis_summary_layer)
-    extra_keywords = keywords.get(property_extra_keywords['key'], {})
-    is_multi_exposure = extra_keywords.get(extra_keyword_analysis_type['key'])
-
-    key = provenance_layer_exposure_summary_id['provenance_key']
-    if is_multi_exposure:
-        key = ('{provenance}__{exposure}').format(
-            provenance=provenance_multi_exposure_summary_layers_id[
-                'provenance_key'],
-            exposure=exposure_place['key'])
-    if not project_context_scope.hasVariable(key):
-        return None
-
-    exposure_summary_layer = registry.mapLayer(
-        project_context_scope.variable(key))
+    exposure_summary_layer = get_exposure_summary_layer()
     if not exposure_summary_layer:
-        key = provenance_layer_exposure_summary['provenance_key']
-        if is_multi_exposure:
-            key = ('{provenance}__{exposure}').format(
-                provenance=provenance_multi_exposure_summary_layers[
-                    'provenance_key'],
-                exposure=exposure_place['key'])
-        if project_context_scope.hasVariable(key):
-            exposure_summary_layer = load_layer(
-                project_context_scope.variable(key))[0]
-        else:
-            return None
+        return None
 
     index = exposure_summary_layer.fieldNameIndex(
         exposure_name_field['field_name'])
