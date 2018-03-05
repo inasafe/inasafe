@@ -119,6 +119,11 @@ class Plugin(object):
         # For enable/disable the keyword editor icon
         self.iface.currentLayerChanged.connect(self.layer_changed)
 
+        developer_mode = setting(
+            'developer_mode', False, expected_type=bool)
+        self.hide_developer_buttons = (
+            inasafe_release_status == 'final' and not developer_mode)
+
     # noinspection PyMethodMayBeStatic
     def tr(self, message):
         """Get the translation for a string using Qt translation API.
@@ -338,6 +343,8 @@ class Plugin(object):
 
     def _create_geonode_uploader_action(self):
         """Create action for Geonode uploader dialog."""
+        if self.hide_developer_buttons:
+            return
         icon = resources_path('img', 'icons', 'geonode.png')
         label = tr('Geonode Uploader')
         self.action_geonode = QAction(
@@ -479,69 +486,59 @@ class Plugin(object):
 
     def _create_test_layers_action(self):
         """Create action for adding layers (developer mode, non final only)."""
-        final_release = inasafe_release_status == 'final'
-        self.developer_mode = setting(
-            'developer_mode', False, expected_type=bool)
-        if not final_release and self.developer_mode:
-            icon = resources_path('img', 'icons', 'add-test-layers.svg')
-            self.action_add_layers = QAction(
-                QIcon(icon),
-                self.tr('Add Test Layers'),
-                self.iface.mainWindow())
-            self.action_add_layers.setStatusTip(self.tr(
-                'Add test layers'))
-            self.action_add_layers.setWhatsThis(self.tr(
-                'Add test layers'))
-            self.action_add_layers.triggered.connect(
-                self.add_test_layers)
+        if self.hide_developer_buttons:
+            return
 
-            self.add_action(self.action_add_layers)
+        icon = resources_path('img', 'icons', 'add-test-layers.svg')
+        self.action_add_layers = QAction(
+            QIcon(icon),
+            self.tr('Add Test Layers'),
+            self.iface.mainWindow())
+        self.action_add_layers.setStatusTip(self.tr(
+            'Add test layers'))
+        self.action_add_layers.setWhatsThis(self.tr(
+            'Add test layers'))
+        self.action_add_layers.triggered.connect(
+            self.add_test_layers)
+
+        self.add_action(self.action_add_layers)
 
     def _create_run_test_action(self):
         """Create action for running tests (developer mode, non final only)."""
-        final_release = inasafe_release_status == 'final'
-        self.developer_mode = setting(
-            'developer_mode', False, expected_type=bool)
-        if not final_release and self.developer_mode:
+        if self.hide_developer_buttons:
+            return
 
-            default_package = unicode(
-                setting('testPackage', 'safe', expected_type=str))
-            msg = self.tr('Run tests in %s' % default_package)
+        default_package = unicode(
+            setting('testPackage', 'safe', expected_type=str))
+        msg = self.tr('Run tests in %s' % default_package)
 
-            self.test_button = QToolButton()
-            self.test_button.setMenu(QMenu())
-            self.test_button.setPopupMode(QToolButton.MenuButtonPopup)
+        self.test_button = QToolButton()
+        self.test_button.setMenu(QMenu())
+        self.test_button.setPopupMode(QToolButton.MenuButtonPopup)
 
-            icon = resources_path('img', 'icons', 'run-tests.svg')
-            self.action_run_tests = QAction(
-                QIcon(icon),
-                msg,
-                self.iface.mainWindow())
+        icon = resources_path('img', 'icons', 'run-tests.svg')
+        self.action_run_tests = QAction(
+            QIcon(icon), msg, self.iface.mainWindow())
 
-            self.action_run_tests.setStatusTip(msg)
-            self.action_run_tests.setWhatsThis(msg)
-            self.action_run_tests.triggered.connect(
-                self.run_tests)
+        self.action_run_tests.setStatusTip(msg)
+        self.action_run_tests.setWhatsThis(msg)
+        self.action_run_tests.triggered.connect(self.run_tests)
 
-            self.test_button.menu().addAction(self.action_run_tests)
-            self.test_button.setDefaultAction(self.action_run_tests)
+        self.test_button.menu().addAction(self.action_run_tests)
+        self.test_button.setDefaultAction(self.action_run_tests)
 
-            self.action_select_package = QAction(
-                QIcon(icon),
-                self.tr('Select package'),
-                self.iface.mainWindow())
+        self.action_select_package = QAction(
+            QIcon(icon), self.tr('Select package'), self.iface.mainWindow())
 
-            self.action_select_package.setStatusTip(self.tr(
-                'Select Test Package'))
-            self.action_select_package.setWhatsThis(self.tr(
-                'Select Test Package'))
-            self.action_select_package.triggered.connect(
-                self.select_test_package)
-            self.test_button.menu().addAction(self.action_select_package)
-            self.toolbar.addWidget(self.test_button)
+        self.action_select_package.setStatusTip(self.tr('Select Test Package'))
+        self.action_select_package.setWhatsThis(self.tr('Select Test Package'))
+        self.action_select_package.triggered.connect(
+            self.select_test_package)
+        self.test_button.menu().addAction(self.action_select_package)
+        self.toolbar.addWidget(self.test_button)
 
-            self.add_action(self.action_run_tests, add_to_toolbar=False)
-            self.add_action(self.action_select_package, add_to_toolbar=False)
+        self.add_action(self.action_run_tests, add_to_toolbar=False)
+        self.add_action(self.action_select_package, add_to_toolbar=False)
 
     def _create_dock(self):
         """Create dockwidget and tabify it with the legend."""
