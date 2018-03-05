@@ -15,9 +15,11 @@ from safe.definitions.provenance import (
     provenance_multi_exposure_analysis_summary_layers_id)
 from safe.definitions.utilities import definition
 from safe.gis.tools import load_layer
+from safe.report.expressions.map_report import exposure_summary_layer
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.rounding import denomination, round_affected_number
+from safe.utilities.unicode import get_string
 from safe.utilities.utilities import generate_expression_help
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -111,6 +113,38 @@ def inasafe_sub_analysis_summary_field_value(
 
     feature = analysis_summary_layer.getFeatures().next()
     return feature[index]
+
+
+description = tr(
+    'Retrieve all values from a field in the exposure summary layer.')
+examples = {
+    'inasafe_exposure_summary_field_values(\'exposure_name\')': '[\'jakarta\']'
+}
+help_message = generate_expression_help(description, examples)
+
+
+@qgsfunction(
+    args='auto', group='InaSAFE', usesGeometry=False, referencedColumns=[],
+    help_text=help_message.to_html(), helpText=help_message.to_html())
+def inasafe_exposure_summary_field_values(field, feature, parent):
+    """Retrieve all values from a field in the exposure summary layer.
+    """
+    _ = feature, parent  # NOQA
+
+    layer = exposure_summary_layer()
+    if not layer:
+        return None
+
+    index = layer.fieldNameIndex(field)
+    if index < 0:
+        return None
+
+    values = []
+    for feat in layer.getFeatures():
+        value = get_string(feat[index])
+        values.append(value)
+
+    return str(values)
 
 
 description = tr(

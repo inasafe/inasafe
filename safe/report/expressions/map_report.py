@@ -89,10 +89,12 @@ def legend_title_header_element(feature, parent):
     return header.capitalize()
 
 
-def get_exposure_summary_layer():
-    """Helper method for retrieving exposure summary layer from current
-    analysis. If the analysis is multi-exposure, then it will return
-    the exposure summary layer from place exposure analysis."""
+def exposure_summary_layer():
+    """Helper method for retrieving exposure summary layer.
+
+    If the analysis is multi-exposure, then it will return the exposure
+    summary layer from place exposure analysis.
+    """
     project_context_scope = QgsExpressionContextUtils.projectScope()
     registry = QgsMapLayerRegistry.instance()
 
@@ -159,16 +161,16 @@ def distance_to_nearest_place(feature, parent):
     """
     _ = feature, parent  # NOQA
 
-    exposure_summary_layer = get_exposure_summary_layer()
-    if not exposure_summary_layer:
+    layer = exposure_summary_layer()
+    if not layer:
         return None
 
-    index = exposure_summary_layer.fieldNameIndex(
+    index = layer.fieldNameIndex(
         distance_field['field_name'])
     if index < 0:
         return None
 
-    feature = exposure_summary_layer.getFeatures().next()
+    feature = layer.getFeatures().next()
     return feature[index]
 
 
@@ -192,16 +194,16 @@ def direction_to_nearest_place(feature, parent):
     """
     _ = feature, parent  # NOQA
 
-    exposure_summary_layer = get_exposure_summary_layer()
-    if not exposure_summary_layer:
+    layer = exposure_summary_layer()
+    if not layer:
         return None
 
-    index = exposure_summary_layer.fieldNameIndex(
+    index = layer.fieldNameIndex(
         direction_field['field_name'])
     if index < 0:
         return None
 
-    feature = exposure_summary_layer.getFeatures().next()
+    feature = layer.getFeatures().next()
     return feature[index]
 
 
@@ -225,16 +227,16 @@ def bearing_to_nearest_place(feature, parent):
     """
     _ = feature, parent  # NOQA
 
-    exposure_summary_layer = get_exposure_summary_layer()
-    if not exposure_summary_layer:
+    layer = exposure_summary_layer()
+    if not layer:
         return None
 
-    index = exposure_summary_layer.fieldNameIndex(
+    index = layer.fieldNameIndex(
         bearing_field['field_name'])
     if index < 0:
         return None
 
-    feature = exposure_summary_layer.getFeatures().next()
+    feature = layer.getFeatures().next()
     return feature[index]
 
 
@@ -258,16 +260,16 @@ def name_of_the_nearest_place(feature, parent):
     """
     _ = feature, parent  # NOQA
 
-    exposure_summary_layer = get_exposure_summary_layer()
-    if not exposure_summary_layer:
+    layer = exposure_summary_layer()
+    if not layer:
         return None
 
-    index = exposure_summary_layer.fieldNameIndex(
+    index = layer.fieldNameIndex(
         exposure_name_field['field_name'])
     if index < 0:
         return None
 
-    feature = exposure_summary_layer.getFeatures().next()
+    feature = layer.getFeatures().next()
     return feature[index]
 
 
