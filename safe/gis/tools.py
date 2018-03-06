@@ -85,6 +85,7 @@ def load_layer_from_registry(layer_path):
         if full_layer_uri(layer) == full_layer_uri(the_layer):
             monkey_patch_keywords(layer)
             return layer
+
     return the_layer
 
 
