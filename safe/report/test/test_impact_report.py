@@ -179,7 +179,7 @@ class TestImpactReport(unittest.TestCase):
             components,
             output_folder=output_folder,
             iface=IFACE,
-            ordered_layers=ordered_layers)
+            ordered_layers_uri=ordered_layers)
 
         self.assertEqual(
             return_code, ImpactReport.REPORT_GENERATION_SUCCESS, message)
@@ -237,7 +237,7 @@ class TestImpactReport(unittest.TestCase):
             components,
             output_folder=output_folder,
             iface=IFACE,
-            ordered_layers=ordered_layers)
+            ordered_layers_uri=ordered_layers)
 
         self.assertEqual(
             return_code, ImpactReport.REPORT_GENERATION_SUCCESS, message)

@@ -573,7 +573,7 @@ def qgis_composer_renderer(impact_report, component):
                 legend.setColumnCount(symbol_count / 7 + 1)
 
             # set legend title
-            if title is not None:
+            if title is not None and not impact_report.legend_layers:
                 legend.setTitle(title)
 
             # set legend
@@ -589,7 +589,8 @@ def qgis_composer_renderer(impact_report, component):
                     QgsMapLayerRegistry.instance().addMapLayer(layer)
                 # used for customizations
                 tree_layer = root_group.addLayer(layer)
-                if not impact_report.multi_exposure_impact_function:
+                if impact_report.legend_layers or (
+                        not impact_report.multi_exposure_impact_function):
                     QgsLegendRenderer.setNodeLegendStyle(
                         tree_layer, QgsComposerLegendStyle.Hidden)
             legend.synchronizeWithModel()
