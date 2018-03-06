@@ -194,6 +194,13 @@ class MultiExposureImpactFunction(object):
         self._provenance_ready = False
         self._provenance = {}
 
+        # Somehow, in the celery environment, the original keywords for the
+        # hazard layer are overwritten during the single impact function.
+        # We keep one reference and we insert it in every single IF before the
+        # 'run'. It doesn't happen on Desktop, only in Celery, even if keywords
+        # are cloned.
+        self._hazard_keywords = None
+
         # Impact Report
         self._impact_report = None
         self._report_metadata = []
@@ -791,6 +798,7 @@ class MultiExposureImpactFunction(object):
         # The prepare step will fail if needed and the stop the multiexposure.
 
         self._impact_functions = []
+        self._hazard_keywords = copy_layer_keywords(self.hazard.keywords)
 
         # We delegate the prepare to the main IF for each exposure
         for exposure in self._exposures:
@@ -803,8 +811,7 @@ class MultiExposureImpactFunction(object):
             if self.callback:
                 impact_function.callback = self.callback
             if self._aggregation:
-                impact_function.aggregation = clone_layer(
-                    self._aggregation)
+                impact_function.aggregation = clone_layer(self._aggregation)
                 impact_function.use_selected_features_only = (
                     self.use_selected_features_only)
             else:
@@ -968,6 +975,8 @@ class MultiExposureImpactFunction(object):
                 impact_function.datastore = Folder(folder)
                 impact_function.datastore.default_vector_format = 'geojson'
 
+            impact_function.hazard.keywords = copy_layer_keywords(
+                self._hazard_keywords)
             code, message = impact_function.run()
             if code != ANALYSIS_SUCCESS:
                 current_exposure = (
