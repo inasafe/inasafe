@@ -412,6 +412,33 @@ class TestImpactFunction(unittest.TestCase):
             message
         )
 
+    def test_not_exposed_exposure(self):
+        """Test if we can run 0 exposed features over a raster hazard."""
+        hazard_layer = load_test_raster_layer(
+            'gisv4', 'hazard', 'earthquake.asc')
+        exposure_layer = load_test_vector_layer(
+            'gisv4', 'exposure', 'airport_outside_of_extent.geojson')
+        crs = QgsCoordinateReferenceSystem(4326)
+        impact_function = ImpactFunction()
+        impact_function.exposure = exposure_layer
+        impact_function.hazard = hazard_layer
+        impact_function.crs = crs
+        impact_function.debug_mode = False
+        status, message = impact_function.prepare()
+        message = message.to_text() if message is not None else message
+        self.assertEqual(PREPARE_SUCCESS, status, message)
+
+        # Test extent, as the hazard extent is smaller than the exposure,
+        # extent must be equal to the hazard extent
+        # self.assertTrue(
+        #     compare_wkt(
+        #         hazard_layer.extent().asWktPolygon(),
+        #         impact_function.analysis_extent.exportToWkt()))
+
+        status, message = impact_function.run()
+        message = message.to_text() if message is not None else message
+        self.assertEqual(ANALYSIS_SUCCESS, status, message)
+
     def test_ratios_with_vector_exposure(self):
         """Test if we can add defaults to a vector exposure."""
         # First test, if we do not provide an aggregation,

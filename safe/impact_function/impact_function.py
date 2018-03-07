@@ -1380,7 +1380,13 @@ class ImpactFunction(object):
         check_layer(layer, has_geometry=None)
 
         if isinstance(layer, QgsVectorLayer) and check_fields:
-            check_inasafe_fields(layer)
+            is_geojson = '.geojson' in layer.source().lower()
+            if layer.featureCount() == 0 and is_geojson:
+                # https://issues.qgis.org/issues/18370
+                # We can't check a geojson file with 0 feature.
+                pass
+            else:
+                check_inasafe_fields(layer)
 
         # Be careful, add_to_datastore can be None, True or False.
         # None means we let debug_mode to choose for us.
