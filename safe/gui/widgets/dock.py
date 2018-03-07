@@ -1386,9 +1386,12 @@ class Dock(QDockWidget, FORM_CLASS):
         if self.impact_function.debug_mode:
             add_debug_layers_to_canvas(self.impact_function)
 
-        self.extent.set_last_analysis_extent(
-            self.impact_function.analysis_extent,
-            qgis_exposure.crs())
+        if self.aggregation:
+            crs = self.aggregation.crs()
+        else:
+            crs = self.extent.crs
+        self.extent.set_next_analysis_extent(
+            self.impact_function.analysis_extent, crs)
 
         # We do not want to check the state of the next IF
         self.hide_busy(check_next_impact=False)
@@ -1478,9 +1481,12 @@ class Dock(QDockWidget, FORM_CLASS):
                     self.tr('More info ...'),
                     2)
 
+            if self.aggregation:
+                crs = self.aggregation.crs()
+            else:
+                crs = self.extent.crs
             self.extent.set_next_analysis_extent(
-                impact_function.analysis_extent,
-                layer_from_combo(self.exposure_layer_combo).crs())
+                impact_function.analysis_extent, crs)
 
             self.run_button.setEnabled(True)
             send_static_message(self, ready_message())
