@@ -17,10 +17,16 @@ from tempfile import mkdtemp
 from os.path import join, normpath, normcase
 
 from safe.test.utilities import qgis_iface
-from PyQt4.QtCore import QDir
+from PyQt4.QtCore import QDir, QVariant
+from qgis.core import (
+    QgsCoordinateReferenceSystem,
+    QgsField,
+    QGis,
+)
 
-from safe.test.utilities import load_test_raster_layer, load_test_vector_layer
 from safe.datastore.folder import Folder
+from safe.gis.vector.tools import create_memory_layer
+from safe.test.utilities import load_test_raster_layer, load_test_vector_layer
 
 qgis_iface()
 
@@ -108,6 +114,40 @@ class TestFolder(unittest.TestCase):
         self.assertIsNotNone(
             data_store.layer_keyword('layer_purpose', 'hazard')
         )
+
+    def test_empty_layer(self):
+        """Test if we import an empty layer."""
+        layer = create_memory_layer(
+            'test',
+            QGis.Polygon,
+            QgsCoordinateReferenceSystem(3857),
+            [
+                QgsField('my_field_1', QVariant.Int),
+                QgsField('my_field_2', QVariant.Double),
+                QgsField('my_field_3', QVariant.String)
+            ]
+        )
+        self.assertTrue(layer.isValid())
+        self.assertEqual(len(layer.fields()), 3)
+
+        # These following tests doesn't work if we add 'geosjon' in the formats
+        # list. https://issues.qgis.org/issues/18370
+        formats = ['shp']
+        for extension in formats:
+            path = QDir(mkdtemp())
+            data_store = Folder(path)
+            data_store.default_vector_format = extension
+            name = 'test'
+            result, message = data_store.add_layer(layer, name)
+            self.assertTrue(result, message)
+
+            # Fetch the layer
+            imported_layer = data_store.layer(name)
+            self.assertTrue(imported_layer.isValid())
+            self.assertListEqual(
+                [f.name() for f in imported_layer.fields()],
+                ['my_field_1', 'my_field_2', 'my_field_3'])
+
 
 if __name__ == '__main__':
     unittest.main()
