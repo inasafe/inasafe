@@ -877,6 +877,16 @@ def compare_wkt(a, b, tol=0.000001):
     """
     r = re.compile(r'-?\d+(?:\.\d+)?(?:[eE]\d+)?')
 
+    # Text might upper or lower case
+    a = a.upper()
+    b = b.upper()
+
+    # Might have a space between the text and coordinates
+    geometry_type = a.split('(', 1)
+    a = geometry_type[0].replace(' ', '') + '('.join(geometry_type[1:])
+    geometry_type = b.split('(', 1)
+    b = geometry_type[0].replace(' ', '') + '('.join(geometry_type[1:])
+
     # compare the structure
     a0 = r.sub("#", a)
     b0 = r.sub("#", b)
