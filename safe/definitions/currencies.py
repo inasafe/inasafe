@@ -42,10 +42,26 @@ zar = {
     'symbol': 'R'
 }
 
+top = {
+    'key': 'TOP',
+    'name': 'Tongan Pa\'anga',
+    'short name': 'Pa\'anga',
+    'symbol': 'TS$'
+}
+
+fjd = {
+    'key': 'FJD',
+    'name': 'Fijian Dollar',
+    'short name': 'Dollar',
+    'symbol': 'FJ$'
+}
+
 currencies = [
     aud,
     eur,
     idr,
     usd,
-    zar
+    zar,
+    top,
+    fjd,
 ]
