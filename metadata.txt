@@ -27,8 +27,9 @@ status=final
 
 changelog=
     Version 4.3.2:
-    - Add the Geonode uploader
-    - Fix multiexposure dialog when you launch it twice.
+    - Run the impact function if we have 0 feature exposed
+    - Fix multiexposure dialog when you launch it twice
+    - Add more extra keywords for flood hazard
     Version 4.3.1:
     - Add version number in the help doc #4872.
     - Enable Earthquake MMI scale for place exposure #4875.
