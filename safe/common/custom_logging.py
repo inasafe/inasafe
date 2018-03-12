@@ -15,6 +15,8 @@ import logging
 import os
 import sys
 
+from osgeo import gdal
+
 # This is ugly but we dont have a better solution yet...
 safe_extras_dir = os.path.abspath(
     os.path.join(os.path.dirname(__file__), '..', '..', 'safe_extras'))
@@ -24,15 +26,22 @@ if safe_extras_dir not in sys.path:
 # We add "# NOQA" because imports are not done at top of file.
 
 from qgis.core import QgsMessageLog  # NOQA
-from PyQt4.QtCore import QSettings  # NOQA We can't move to our settings class.
-# pylint: disable=F0401
-# noinspection PyUnresolvedReferences,PyPackageRequirements
+from PyQt4.QtCore import QT_VERSION_STR, QSettings  # NOQA We can't move to
+# our settings class.
+
 from raven.handlers.logging import SentryHandler  # NOQA
-# noinspection PyUnresolvedReferences,PyPackageRequirements
-from raven import Client  # NOQA
-# pylint: enable=F0401
 from safe.common.utilities import log_file_path  # NOQA
+from safe.common.version import get_version  # NOQA
+from safe.definitions.provenance import (
+    provenance_gdal_version,
+    provenance_os,
+    provenance_qgis_version,
+    provenance_qt_version,
+)  # NOQA
+from safe.definitions.sentry import PRODUCTION_SERVER  # NOQA
 from safe.utilities.i18n import tr  # NOQA
+from safe.utilities.gis import qgis_version  # NOQA
+from safe.utilities.utilities import readable_os_version  # NOQA
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -98,9 +107,8 @@ def setup_logger(logger_name, log_file=None, sentry_url=None):
     :type log_file: str
 
     :param sentry_url: Optional url to sentry api for remote
-        logging. Defaults to http://c64a83978732474ea751d432ab943a6b:
-        d9d8e08786174227b9dcd8a4c3f6e9da@sentry.linfiniti.com/5 which is the
-        sentry project for InaSAFE desktop.
+        logging. Defaults to URL defined in safe.definitions.sentry.py
+        which is the sentry project for InaSAFE desktop.
     :type sentry_url: str
 
     Borrowed heavily from this:
@@ -148,8 +156,8 @@ def setup_logger(logger_name, log_file=None, sentry_url=None):
     add_logging_handler_once(logger, qgis_handler)
 
     # Sentry handler - this is optional hence the localised import
-    # It will only log if pip install raven. If raven is available
-    # logging messages will be sent to http://sentry.linfiniti.com
+    # If raven is available logging messages will be sent to
+    # http://sentry.kartoza.com
     # We will log exceptions only there. You need to either:
     #  * Set env var 'INASAFE_SENTRY=1' present (value can be anything)
     # before this will be enabled or sentry is enabled in QSettings
@@ -158,12 +166,18 @@ def setup_logger(logger_name, log_file=None, sentry_url=None):
 
     if env_inasafe_sentry or flag:
         if sentry_url is None:
-            client = Client(
-                'http://11b7c9cb73874f97807ebc1934575e92'
-                ':920cd274632443ccaa868246de202531@sentry.kartoza.com/5')
-        else:
-            client = Client(sentry_url)
-        sentry_handler = SentryHandler(client)
+            sentry_url = PRODUCTION_SERVER
+
+        sentry_handler = SentryHandler(
+            dsn=sentry_url,
+            release=get_version(),
+            tags={
+                provenance_gdal_version['provenance_key']: gdal.__version__,
+                provenance_os['provenance_key']: readable_os_version(),
+                provenance_qgis_version['provenance_key']: qgis_version(),
+                provenance_qt_version['provenance_key']: QT_VERSION_STR,
+            }
+        )
         sentry_handler.setFormatter(formatter)
         sentry_handler.setLevel(logging.ERROR)
         if add_logging_handler_once(logger, sentry_handler):

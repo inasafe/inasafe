@@ -1,243 +1,50 @@
 """
-raven.transport.builtins
-~~~~~~~~~~~~~~~~~~~~~~~~
+raven.transport.base
+~~~~~~~~~~~~~~~~~~~~
 
-:copyright: (c) 2010 by the Sentry Team, see AUTHORS for more details.
+:copyright: (c) 2010-2012 by the Sentry Team, see AUTHORS for more details.
 :license: BSD, see LICENSE for more details.
 """
+from __future__ import absolute_import
 
-import logging
-import sys
-import urllib2
-from socket import socket, AF_INET, SOCK_DGRAM, error as socket_error
 
-try:
-    import gevent
-    import gevent.coros
-    has_gevent = True
-except:
-    has_gevent = None
-
-try:
-    import twisted.web.client
-    has_twisted = True
-except:
-    has_twisted = False
-
-try:
-    from tornado import ioloop
-    from tornado.httpclient import AsyncHTTPClient, HTTPClient
-    has_tornado = True
-except:
-    has_tornado = False
-
-from raven.conf import defaults
-from raven.transport.exceptions import InvalidScheme
+# Helper for external transports
+has_newstyle_transports = True
 
 
 class Transport(object):
     """
     All transport implementations need to subclass this class
 
-    You must implement a send method and the compute_scope method.
-
-    Please see the HTTPTransport class for an example of a
-    compute_scope implementation.
+    You must implement a send method (or an async_send method if
+    sub-classing AsyncTransport).
     """
-    def check_scheme(self, url):
-        if url.scheme not in self.scheme:
-            raise InvalidScheme()
 
-    def send(self, data, headers):
+    is_async = False
+    scheme = []
+
+    def send(self, url, data, headers):
         """
         You need to override this to do something with the actual
         data. Usually - this is sending to a server
         """
         raise NotImplementedError
 
-    def compute_scope(self, url, scope):
+
+class AsyncTransport(Transport):
+    """
+    All asynchronous transport implementations should subclass this
+    class.
+
+    You must implement a async_send method.
+    """
+
+    is_async = True
+
+    def async_send(self, url, data, headers, success_cb, error_cb):
         """
-        You need to override this to compute the SENTRY specific
-        additions to the variable scope.  See the HTTPTransport for an
-        example.
+        Override this method for asynchronous transports. Call
+        `success_cb()` if the send succeeds or `error_cb(exception)`
+        if the send fails.
         """
         raise NotImplementedError
-
-
-class UDPTransport(Transport):
-
-    scheme = ['udp']
-
-    def __init__(self, parsed_url):
-        self.check_scheme(parsed_url)
-
-        self._parsed_url = parsed_url
-
-    def send(self, data, headers):
-        auth_header = headers.get('X-Sentry-Auth')
-
-        if auth_header is None:
-            # silently ignore attempts to send messages without an auth header
-            return
-
-        host, port = self._parsed_url.netloc.split(':')
-
-        udp_socket = None
-        try:
-            udp_socket = socket(AF_INET, SOCK_DGRAM)
-            udp_socket.setblocking(False)
-            udp_socket.sendto(auth_header + '\n\n' + data, (host, int(port)))
-        except socket_error:
-            # as far as I understand things this simply can't happen,
-            # but still, it can't hurt
-            pass
-        finally:
-            # Always close up the socket when we're done
-            if udp_socket is not None:
-                udp_socket.close()
-                udp_socket = None
-
-    def compute_scope(self, url, scope):
-        path_bits = url.path.rsplit('/', 1)
-        if len(path_bits) > 1:
-            path = path_bits[0]
-        else:
-            path = ''
-        project = path_bits[-1]
-
-        if not all([url.port, project, url.username, url.password]):
-            raise ValueError('Invalid Sentry DSN: %r' % url.geturl())
-
-        netloc = url.hostname
-        netloc += ':%s' % url.port
-
-        server = '%s://%s%s/api/store/' % (url.scheme, netloc, path)
-        scope.update({
-            'SENTRY_SERVERS': [server],
-            'SENTRY_PROJECT': project,
-            'SENTRY_PUBLIC_KEY': url.username,
-            'SENTRY_SECRET_KEY': url.password,
-        })
-        return scope
-
-
-class HTTPTransport(Transport):
-
-    scheme = ['http', 'https']
-
-    def __init__(self, parsed_url, timeout=defaults.TIMEOUT):
-        self.check_scheme(parsed_url)
-
-        self._parsed_url = parsed_url
-        self._url = parsed_url.geturl()
-        self.timeout = timeout
-
-    def send(self, data, headers):
-        """
-        Sends a request to a remote webserver using HTTP POST.
-        """
-        req = urllib2.Request(self._url, headers=headers)
-
-        if sys.version_info < (2, 6):
-            response = urllib2.urlopen(req, data).read()
-        else:
-            response = urllib2.urlopen(req, data, self.timeout).read()
-        return response
-
-    def compute_scope(self, url, scope):
-        netloc = url.hostname
-        if url.port and (url.scheme, url.port) not in \
-                (('http', 80), ('https', 443)):
-            netloc += ':%s' % url.port
-
-        path_bits = url.path.rsplit('/', 1)
-        if len(path_bits) > 1:
-            path = path_bits[0]
-        else:
-            path = ''
-        project = path_bits[-1]
-
-        if not all([netloc, project, url.username, url.password]):
-            raise ValueError('Invalid Sentry DSN: %r' % url.geturl())
-
-        server = '%s://%s%s/api/store/' % (url.scheme, netloc, path)
-        scope.update({
-            'SENTRY_SERVERS': [server],
-            'SENTRY_PROJECT': project,
-            'SENTRY_PUBLIC_KEY': url.username,
-            'SENTRY_SECRET_KEY': url.password,
-        })
-        return scope
-
-
-class GeventedHTTPTransport(HTTPTransport):
-
-    scheme = ['gevent+http', 'gevent+https']
-
-    def __init__(self, parsed_url, maximum_outstanding_requests=100):
-        if not has_gevent:
-            raise ImportError('GeventedHTTPTransport requires gevent.')
-        self._lock = gevent.coros.Semaphore(maximum_outstanding_requests)
-
-        super(GeventedHTTPTransport, self).__init__(parsed_url)
-
-        # remove the gevent+ from the protocol, as it is not a real protocol
-        self._url = self._url.split('+', 1)[-1]
-
-    def send(self, data, headers):
-        """
-        Spawn an async request to a remote webserver.
-        """
-        # this can be optimized by making a custom self.send that does not
-        # read the response since we don't use it.
-        self._lock.acquire()
-        return gevent.spawn(super(GeventedHTTPTransport, self).send, data, headers).link(self._done, self)
-
-    def _done(self, *args):
-        self._lock.release()
-
-
-class TwistedHTTPTransport(HTTPTransport):
-
-    scheme = ['twisted+http']
-
-    def __init__(self, parsed_url):
-        if not has_twisted:
-            raise ImportError('TwistedHTTPTransport requires twisted.web.')
-
-        super(TwistedHTTPTransport, self).__init__(parsed_url)
-        self.logger = logging.getLogger('sentry.errors')
-
-        # remove the twisted+ from the protocol, as it is not a real protocol
-        self._url = self._url.split('+', 1)[-1]
-
-    def send(self, data, headers):
-        d = twisted.web.client.getPage(self._url, method='POST', postdata=data, headers=headers)
-        d.addErrback(lambda f: self.logger.error(
-            'Cannot send error to sentry: %s', f.getTraceback()))
-
-
-class TornadoHTTPTransport(HTTPTransport):
-
-    scheme = ['tornado+http']
-
-    def __init__(self, parsed_url):
-        if not has_tornado:
-            raise ImportError('TornadoHTTPTransport requires tornado.')
-
-        super(TornadoHTTPTransport, self).__init__(parsed_url)
-
-        # remove the tornado+ from the protocol, as it is not a real protocol
-        self._url = self._url.split('+', 1)[-1]
-
-    def send(self, data, headers):
-        kwargs = dict(method='POST', headers=headers, body=data)
-
-        # only use async if ioloop is running, otherwise it will never send
-        if ioloop.IOLoop.initialized():
-            client = AsyncHTTPClient()
-            kwargs['callback'] = None
-        else:
-            client = HTTPClient()
-
-        client.fetch(self._url, **kwargs)
