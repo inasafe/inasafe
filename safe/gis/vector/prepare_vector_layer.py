@@ -361,9 +361,14 @@ def _remove_features(layer):
             # TODO We need to add more tests
             # like checking if the value is in the value_mapping.
         layer.commitChanges()
-        LOGGER.debug(tr(
-            'Features which have been removed from %s : %s'
-            % (layer.keywords['layer_purpose'], i)))
+        if i:
+            LOGGER.critical(
+                'Features which have been removed from %s : %s'
+                % (layer.keywords['layer_purpose'], i))
+        else:
+            LOGGER.info(
+                'No feature has been removed from %s during the vector layer '
+                'preparation' % layer.keywords['layer_purpose'])
 
 
 @profile
