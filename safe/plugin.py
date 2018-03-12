@@ -343,8 +343,6 @@ class Plugin(object):
 
     def _create_geonode_uploader_action(self):
         """Create action for Geonode uploader dialog."""
-        if self.hide_developer_buttons:
-            return
         icon = resources_path('img', 'icons', 'geonode.png')
         label = tr('Geonode Uploader')
         self.action_geonode = QAction(
