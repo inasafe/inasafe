@@ -16,9 +16,9 @@ description=InaSAFE is free software that allows disaster managers to study real
 about=Developed for the Indonesian Government - BNPB, Australian Government - AIFDR and DMInnovation and, and World Bank - GFDRR
 
 # If you change VERSION and STATUS here, please also change in safe/definitions/versions.py, Travis will FAIL !
-version=4.3.2
+version=4.4.0
 # alpha, beta, rc or final
-status=final
+status=beta
 
 
 # end of mandatory metadata
@@ -26,43 +26,10 @@ status=final
 # Optional items:
 
 changelog=
-    Version 4.3.2:
-    - Run the impact function if we have 0 feature exposed
-    - Fix multiexposure dialog when you launch it twice
-    - Add more extra keywords for flood hazard
-    Version 4.3.1:
-    - Add version number in the help doc #4872.
-    - Enable Earthquake MMI scale for place exposure #4875.
-    - Fix the behaviour of batch runner output directory.
-    - Fix missing earthquake extra keywords in wizard.
-    Version 4.3:
-    - New multi exposure tool where you can run one hazard on many exposures at the same time and get a combined report
-    - New dam break hazard
-    - Add metadata converter tool to version 3.5 to make it work with GeoSAFE
-    - Add InaSAFE Profile to set custom affected and displacement rate
-    - Add a warning if another plugin is conflicting with InaSAFE on the file system
-    - Special tool for reporting in the multi exposure dialog to set a custom layer order
-    - Add InaSAFE welcome message
-    - Add a warning if another plugin is conflicting with InaSAFE on the file system
-    - Tidy up settings dialog
-    - Support population count in place exposure
-    - Use percentage for ratio in the GUI
-    - Add total exposed field
-    - Add Evacuation centres in buildings and places classifications
-    - Add bearing, distance and cardinality postprocessors if we run an earthquake on places
-    - The impact layer from an earthquake on places is ordered by distance
-    - Add new QGIS expressions to fetch information in QGIS Impact layers or keywords
-    - HTML expressions for reporting usage.
-    - Impact Function and Multi-Exposure Impact Function serialization
-    - Add new method to generate a report in ImpactFunction object
-    - Bring back the old behaviour of generating report. (option to choose custom template)
-    - Map report and general report for Multi-Exposure Impact Function.
-    - Use aggregation CRS instead of exposure CRS or map canvas CRS if no aggregation layer is provided
-    - Add extra keywords for supporting rich reporting (e.g. earthquake's epicenter location, volcanic ash location)
-    - Tidy up metadata (remove unused properties)
-    - Creating contour for earthquake as preprocessor.
-    - Improve code layout (Flake8, PEP 257, PEP8, SideCI ...)
-    - Fix various bugs, like in summary calculation, keyword wizard, productivity post processors, dock
+    Version 4.4.0:
+    - Add Geonode uploader
+    - Allow selection on the exposure layer
+    - Add back Sentry configuration (need to be enabled in your settings)
 
 # tags are comma separated with spaces allowed
 tags=contingency planning, impact assessments, disaster scenarios, natural hazards,risk
