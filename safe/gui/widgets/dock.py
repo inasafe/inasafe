@@ -275,12 +275,18 @@ class Dock(QDockWidget, FORM_CLASS):
         """
         # We need to disconnect first.
         if is_vector_layer(self._exposure) and self.use_selected_features_only:
-            self._exposure.selectionChanged.disconnect(
-                self.validate_impact_function)
+            # noinspection PyBroadException
+            try:
+                self._exposure.selectionChanged.disconnect(
+                    self.validate_impact_function)
+            except Exception:
+                # It was not connected. If the user change his settings while
+                # selection only feature was not enabled before.
+                pass
 
         self._exposure = layer
 
-        if self.use_selected_features_only and is_vector_layer(layer):
+        if is_vector_layer(layer) and self.use_selected_features_only:
             self._exposure.selectionChanged.connect(
                 self.validate_impact_function)
 
